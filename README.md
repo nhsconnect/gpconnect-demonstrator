@@ -2,10 +2,9 @@ OpenEHR POC
 =========
 
 
-Building OpenEHR POC
----------
+###Building OpenEHR POC
 
-###TODO:
+####TODO:
 * npm instructions
 * ordering of command line snippets
 

@@ -1,0 +1,295 @@
+html, body, #wrapper, #page-wrapper, .section-content {
+  height: 100%;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.voffset  { margin-top: 2px; }
+.voffset1 { margin-top: 5px; }
+.voffset2 { margin-top: 10px; }
+.voffset3 { margin-top: 15px; }
+.voffset4 { margin-top: 30px; }
+.voffset5 { margin-top: 40px; }
+.voffset6 { margin-top: 60px; }
+.voffset7 { margin-top: 80px; }
+.voffset8 { margin-top: 100px; }
+.voffset9 { margin-top: 150px; }
+
+.section {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.section-north {
+  min-height: 74px;
+  border: 1px solid #fff;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+#page-wrapper {
+  padding: 0;
+  padding-top: 51px;
+  margin-top: -51px;
+  min-height: 0;
+}
+
+.section-north h3 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.col-right {
+  border-right: 1px solid #e7e7e7;
+  overflow-y: scroll;
+  height: 100%;
+}
+
+.col-left {
+  overflow-y: scroll;
+  height: 100%;
+}
+
+.section-main, .section-detail {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  height: 568px;
+}
+
+.section-content {
+  padding-top: 74px;
+  margin-top: -74px;
+}
+
+.section-row {
+  height: 100%;
+}
+
+tr[ng-click] {
+  cursor: pointer;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group .help-block,
+.form-group .input-group {
+  margin-bottom: 0;
+}
+
+.notifications {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 400px;
+  z-index: 2000;
+}
+
+.notifications .alert {
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+.animate-fade {
+  height: 20px;
+  -moz-transition: height 0.2s ease-in-out;
+  -o-transition: height 0.2s ease-in-out;
+  -webkit-transition: height 0.2s ease-in-out;
+  transition: height 0.2s ease-in-out;
+}
+
+.animate-fade.ng-hide {
+  height: 0;
+}
+
+.primary-nav {
+  background-color: #20408d;
+  border-bottom: 0;
+}
+
+.primary-nav .navbar-brand {
+  color: #fff;
+}
+
+.primary-nav .navbar-brand:hover, .primary-nav .navbar-brand:focus {
+  color: #bbb;
+}
+
+.primary-nav .navbar-top-links > li > a {
+  color: #fff;
+}
+
+.primary-nav .navbar-top-links > li > a:hover, .primary-nav .navbar-top-links > li > a:focus {
+  background-color: transparent;
+  color: #bbb;
+}
+
+.btn {
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #20408d;
+  border-color: #20408d;
+}
+
+.btn-info {
+  background-color: #1191ca;
+  border-color: #1191ca;
+  color: #fff;
+}
+
+.btn-success {
+  background-color: #17aa4e;
+  border-color: #17aa4e;
+  padding-left: 22px;
+  padding-right: 22px;
+}
+
+label {
+  font-weight: normal;
+  color: #888;
+  font-size: 12px;
+}
+
+.form-control-static {
+  min-height: 20px;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .form-horizontal .form-group-sm .control-label {
+    padding-top: 2px;
+  }
+}
+
+.form-horizontal .radio, .form-horizontal .checkbox, .form-horizontal .radio-inline, .form-horizontal .checkbox-inline {
+  padding-top: 1px;
+}
+
+.radio label, .checkbox label {
+  color: #555;
+}
+
+.radio input[type="radio"], .checkbox input[type="checkbox"] {
+  margin-top: 2px
+}
+
+.panel-default > .panel-heading {
+  color: #fff;
+  padding: 2px 8px 4px 8px;
+}
+
+.panel-body {
+  padding: 7px 10px 3px 10px;
+}
+
+.panel {
+  border-radius: 0;
+}
+
+.panel-default {
+  border-color: #56008c;
+  border-width: 2px;
+}
+
+.panel-default > .panel-heading {
+  background-color: #56008c;
+  border-radius: 0;
+  border-bottom: 0;
+}
+
+.panel-title {
+  line-height: 1.42857143;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.modal-header {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.modal-title {
+  padding: 4px 10px;
+  font-weight: bold;
+  background-color: #20408d;
+  color: #fff;
+}
+
+.modal-footer {
+  padding-top: 0;
+  border-top: 0;
+}
+
+fieldset {
+  position: relative;
+  padding: 54px 10px 10px 10px;
+  border: 1px solid #ddd;
+}
+
+legend {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #eee;
+  padding: 4px 10px;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.panel-patient {
+  margin-bottom: 0;
+}
+
+.panel-patient .list-inline {
+  margin-bottom: 0;
+  margin-top: 2px;
+}
+
+.panel-patient .list-inline label {
+  color: #bbb;
+}
+
+.panel-patient .panel-body {
+  padding: 0;
+}
+
+.panel-patient .table {
+  margin: 0;
+}
+
+.panel-dotted {
+  border-style: dashed;
+}
+
+.panel-patient.panel-dotted .table > tbody > tr > td {
+  border-right: 1px dashed;
+  background-color: #eee;
+}
+
+.panel-patient .table > thead > tr > th,
+.panel-patient .table > tbody > tr > th,
+.panel-patient .table > tfoot > tr > th,
+.panel-patient .table > thead > tr > td,
+.panel-patient .table > tbody > tr > td,
+.panel-patient .table > tfoot > tr > td {
+  border-top: 0;
+  padding-top: 7px;
+  padding-bottom: 3px;
+  border-right: 1px solid;
+}
+
+.panel-patient .table > thead > tr > th:last-child,
+.panel-patient .table > tbody > tr > th:last-child,
+.panel-patient .table > tfoot > tr > th:last-child,
+.panel-patient .table > thead > tr > td:last-child,
+.panel-patient .table > tbody > tr > td:last-child,
+.panel-patient .table > tfoot > tr > td:last-child {
+  border-right: 0;
+}

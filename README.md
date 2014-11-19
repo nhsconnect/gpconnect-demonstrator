@@ -1,4 +1,1 @@
-open-ehr
-========
-
-openEHR POC
+openEHR

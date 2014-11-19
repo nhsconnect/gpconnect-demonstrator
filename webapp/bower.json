@@ -1,0 +1,25 @@
+{
+  "name": "openehr-poc",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "1.2.16",
+    "json3": "~3.3.1",
+    "es5-shim": "~3.1.0",
+    "bootstrap": "~3.2.0",
+    "angular-resource": "1.2.16",
+    "angular-touch": "1.2.16",
+    "font-awesome": "~4.1.0",
+    "angular-ui-router": "~0.2.10",
+    "angular-ui-bootstrap-bower": "~0.11.0",
+    "angular-loading-bar": "~0.5.0",
+    "morrisjs": "~0.5.1",
+    "underscore": "~1.6.0",
+    "angular-growl-notifications": "~0.7.0",
+    "angular-animate": "~1.2.21"
+  },
+  "devDependencies": {
+    "angular-mocks": "1.2.16",
+    "angular-scenario": "1.2.16"
+  },
+  "appPath": "app"
+}

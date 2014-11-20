@@ -46,6 +46,7 @@ angular.module('openehrPocApp')
         Diagnosis.updateByPatient($scope.patient.id, diagnosis).then(function (result) {
           growlNotifications.add('<strong>'+ $scope.patient.fullname() + ':</strong> Diagnosis updated', 'success', 10000);
           $scope.diagnosis = result.data;
+          $location.path('/patients/' + $scope.patient.id + '/diagnoses/' + $scope.diagnosis.id);
         });
       });
     };

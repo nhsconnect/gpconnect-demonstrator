@@ -9,5 +9,9 @@
  */
 angular.module('openehrPocApp')
   .controller('PatientsDetailCtrl', function ($scope, $stateParams, $location, Patient) {
-    $scope.patient = Patient.get($stateParams.patientId);
+
+    Patient.get($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient;
+    });
+
   });

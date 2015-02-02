@@ -9,7 +9,9 @@
  */
 angular.module('openehrPocApp')
   .controller('PatientsChartsCtrl', function ($scope, Patient) {
-    $scope.patients = Patient.all();
+    Patient.all().then(function (patients) {
+      $scope.patients = patients;
+    });
 
     $scope.age = {
       ykeys: ['value'],

@@ -9,7 +9,9 @@
  */
 angular.module('openehrPocApp')
   .controller('PatientsListCtrl', function ($scope, $location, Patient) {
-    $scope.patients = Patient.all();
+    Patient.all().then(function (patients) {
+      $scope.patients = patients;
+    });
 
     $scope.go = function (path) {
       $location.path(path);

@@ -12,10 +12,12 @@
 angular.module('openehrPocApp')
   .factory('Diagnosis', function ($http, $q) {
 
+    var patientIdOveride = 746;
+
     var byPatient = function (patientId) {
       var defer = $q.defer();
 
-      $http.get('/openEHR/api/patients/' + patientId + '/diagnoses').success(function (result) {
+      $http.get('/openEHR/api/patients/' + (patientIdOveride || patientId) + '/diagnoses').success(function (result) {
         defer.resolve(result);
       });
 
@@ -25,7 +27,7 @@ angular.module('openehrPocApp')
     var findByPatient = function (patientId, diagnosisId) {
       var defer = $q.defer();
 
-      $http.get('/openEHR/api/patients/' + patientId + '/diagnoses/' + diagnosisId).success(function (result) {
+      $http.get('/openEHR/api/patients/' + (patientIdOveride || patientId) + '/diagnoses/' + diagnosisId).success(function (result) {
         defer.resolve(result);
       });
 
@@ -33,12 +35,12 @@ angular.module('openehrPocApp')
     };
 
     var updateByPatient = function (patientId, diagnosis) {
-      return $http.put('/openEHR/api/patients/' + patientId + '/diagnoses/' + diagnosis.id, diagnosis);
+      return $http.put('/openEHR/api/patients/' + (patientIdOveride || patientId) + '/diagnoses/' + diagnosis.id, diagnosis);
     };
 
     var createByPatient = function (patientId, diagnosis) {
-      diagnosis.patientId = patientId;
-      return $http.post('/openEHR/api/patients/' + patientId + '/diagnoses', diagnosis);
+      diagnosis.patientId = (patientIdOveride || patientId);
+      return $http.post('/openEHR/api/patients/' + (patientIdOveride || patientId) + '/diagnoses', diagnosis);
     };
 
     return {

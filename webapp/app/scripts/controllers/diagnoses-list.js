@@ -9,10 +9,13 @@
  */
 angular.module('openehrPocApp')
   .controller('DiagnosesListCtrl', function ($scope, $stateParams, $location, $modal, Patient, Diagnosis, growlNotifications) {
-    $scope.patient = Patient.get($stateParams.patientId);
 
-    Diagnosis.byPatient($scope.patient.id).then(function (result) {
-      $scope.patient.diagnoses = result;
+    Patient.get($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient;
+
+      Diagnosis.byPatient($scope.patient.id).then(function (result) {
+        $scope.patient.diagnoses = result;
+      });
     });
 
     $scope.go = function (path) {
@@ -45,7 +48,7 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (diagnosis) {
         Diagnosis.createByPatient($scope.patient.id, diagnosis).then(function (result) {
-          growlNotifications.add('<strong>'+ $scope.patient.fullname() + ':</strong> Diagnosis updated', 'success', 10000);
+          growlNotifications.add('<strong>'+ $scope.patient.fullname + ':</strong> Diagnosis updated', 'success', 10000);
           $scope.patient.diagnoses.push(result.data);
           console.log(result);
         });

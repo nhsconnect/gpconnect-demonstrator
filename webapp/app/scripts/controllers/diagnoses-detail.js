@@ -14,10 +14,12 @@ angular.module('openehrPocApp')
       'handi.ehrscape.com'
     ];
 
-    $scope.patient = Patient.get($stateParams.patientId);
+    Patient.get($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient;
 
-    Diagnosis.findByPatient($scope.patient.id, $stateParams.diagnosisId).then(function (result) {
-      $scope.diagnosis = result;
+      Diagnosis.findByPatient($scope.patient.id, $stateParams.diagnosisId).then(function (result) {
+        $scope.diagnosis = result;
+      });
     });
 
     $scope.formDisabled = true;
@@ -44,7 +46,7 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (diagnosis) {
         Diagnosis.updateByPatient($scope.patient.id, diagnosis).then(function (result) {
-          growlNotifications.add('<strong>'+ $scope.patient.fullname() + ':</strong> Diagnosis updated', 'success', 10000);
+          growlNotifications.add('<strong>'+ $scope.patient.fullname + ':</strong> Diagnosis updated', 'success', 10000);
           $scope.diagnosis = result.data;
           $location.path('/patients/' + $scope.patient.id + '/diagnoses/' + $scope.diagnosis.id);
         });

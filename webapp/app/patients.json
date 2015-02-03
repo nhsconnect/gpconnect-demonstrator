@@ -13,7 +13,8 @@
     "gender": "Male",
     "nhsNo": 9999999000,
     "gpDetails": "Goff, Carolyn D.",
-    "pasNo": 9999000
+    "pasNo": 9999000,
+    "department": "Outpatient"
   },
   {
     "id": 101,
@@ -29,7 +30,8 @@
     "gender": "Male",
     "nhsNo": 9999999001,
     "gpDetails": "Cash, Claire F.",
-    "pasNo": 9999001
+    "pasNo": 9999001,
+    "department": "Emergency"
   },
   {
     "id": 102,
@@ -45,7 +47,8 @@
     "gender": "Female",
     "nhsNo": 9999999002,
     "gpDetails": "Spencer, Hyacinth A.",
-    "pasNo": 9999002
+    "pasNo": 9999002,
+    "department": "Inpatient"
   },
   {
     "id": 103,
@@ -61,7 +64,8 @@
     "gender": "Female",
     "nhsNo": 9999999003,
     "gpDetails": "Bailey, Demetrius B.",
-    "pasNo": 9999003
+    "pasNo": 9999003,
+    "department": "Inpatient"
   },
   {
     "id": 104,
@@ -77,7 +81,8 @@
     "gender": "Male",
     "nhsNo": 9999999004,
     "gpDetails": "Guthrie, Indigo D.",
-    "pasNo": 9999004
+    "pasNo": 9999004,
+    "department": "Inpatient"
   },
   {
     "id": 105,
@@ -93,7 +98,8 @@
     "gender": "Male",
     "nhsNo": 9999999005,
     "gpDetails": "Hudson, Inez G.",
-    "pasNo": 9999005
+    "pasNo": 9999005,
+    "department": "Inpatient"
   },
   {
     "id": 106,
@@ -109,7 +115,8 @@
     "gender": "Male",
     "nhsNo": 9999999006,
     "gpDetails": "Joseph, May N.",
-    "pasNo": 9999006
+    "pasNo": 9999006,
+    "department": "Inpatient"
   },
   {
     "id": 107,
@@ -125,7 +132,8 @@
     "gender": "Female",
     "nhsNo": 9999999007,
     "gpDetails": "Calderon, Mollie Y.",
-    "pasNo": 9999007
+    "pasNo": 9999007,
+    "department": "Inpatient"
   },
   {
     "id": 108,
@@ -141,7 +149,8 @@
     "gender": "Female",
     "nhsNo": 9999999008,
     "gpDetails": "Mcclain, Ocean Q.",
-    "pasNo": 9999008
+    "pasNo": 9999008,
+    "department": "Inpatient"
   },
   {
     "id": 109,
@@ -157,7 +166,8 @@
     "gender": "Female",
     "nhsNo": 9999999009,
     "gpDetails": "Key, Dawn A.",
-    "pasNo": 9999009
+    "pasNo": 9999009,
+    "department": "Inpatient"
   },
   {
     "id": 110,
@@ -173,7 +183,8 @@
     "gender": "Male",
     "nhsNo": 9999999010,
     "gpDetails": "Boyer, Isaac Q.",
-    "pasNo": 9999010
+    "pasNo": 9999010,
+    "department": "Outpatient"
   },
   {
     "id": 111,
@@ -189,7 +200,8 @@
     "gender": "Female",
     "nhsNo": 9999999011,
     "gpDetails": "Hobbs, Neil S.",
-    "pasNo": 9999011
+    "pasNo": 9999011,
+    "department": "Emergency"
   },
   {
     "id": 112,
@@ -205,7 +217,8 @@
     "gender": "Female",
     "nhsNo": 9999999012,
     "gpDetails": "Sullivan, Bruno Z.",
-    "pasNo": 9999012
+    "pasNo": 9999012,
+    "department": "Inpatient"
   },
   {
     "id": 113,
@@ -221,7 +234,8 @@
     "gender": "Female",
     "nhsNo": 9999999013,
     "gpDetails": "Roach, Solomon H.",
-    "pasNo": 9999013
+    "pasNo": 9999013,
+    "department": "Inpatient"
   },
   {
     "id": 114,
@@ -237,7 +251,8 @@
     "gender": "Female",
     "nhsNo": 9999999014,
     "gpDetails": "Cooke, Kelsey T.",
-    "pasNo": 9999014
+    "pasNo": 9999014,
+    "department": "Inpatient"
   },
   {
     "id": 115,
@@ -253,7 +268,8 @@
     "gender": "Female",
     "nhsNo": 9999999015,
     "gpDetails": "Howard, Megan D.",
-    "pasNo": 9999015
+    "pasNo": 9999015,
+    "department": "Inpatient"
   },
   {
     "id": 116,
@@ -269,7 +285,8 @@
     "gender": "Female",
     "nhsNo": 9999999016,
     "gpDetails": "Hampton, Hamish H.",
-    "pasNo": 9999016
+    "pasNo": 9999016,
+    "department": "Inpatient"
   },
   {
     "id": 117,
@@ -285,7 +302,8 @@
     "gender": "Male",
     "nhsNo": 9999999017,
     "gpDetails": "Valenzuela, Jesse M.",
-    "pasNo": 9999017
+    "pasNo": 9999017,
+    "department": "Inpatient"
   },
   {
     "id": 118,
@@ -301,7 +319,8 @@
     "gender": "Female",
     "nhsNo": 9999999018,
     "gpDetails": "Joseph, Cameron J.",
-    "pasNo": 9999018
+    "pasNo": 9999018,
+    "department": "Inpatient"
   },
   {
     "id": 119,
@@ -317,7 +336,8 @@
     "gender": "Female",
     "nhsNo": 9999999019,
     "gpDetails": "Garrett, Illana I.",
-    "pasNo": 9999019
+    "pasNo": 9999019,
+    "department": "Inpatient"
   },
   {
     "id": 120,
@@ -333,7 +353,8 @@
     "gender": "Male",
     "nhsNo": 9999999020,
     "gpDetails": "Morris, Lucian X.",
-    "pasNo": 9999020
+    "pasNo": 9999020,
+    "department": "Outpatient"
   },
   {
     "id": 121,
@@ -349,7 +370,8 @@
     "gender": "Male",
     "nhsNo": 9999999021,
     "gpDetails": "Moran, August H.",
-    "pasNo": 9999021
+    "pasNo": 9999021,
+    "department": "Emergency"
   },
   {
     "id": 122,
@@ -365,7 +387,8 @@
     "gender": "Female",
     "nhsNo": 9999999022,
     "gpDetails": "Church, Rebecca N.",
-    "pasNo": 9999022
+    "pasNo": 9999022,
+    "department": "Inpatient"
   },
   {
     "id": 123,
@@ -381,7 +404,8 @@
     "gender": "Female",
     "nhsNo": 9999999023,
     "gpDetails": "Reynolds, Moana A.",
-    "pasNo": 9999023
+    "pasNo": 9999023,
+    "department": "Inpatient"
   },
   {
     "id": 124,
@@ -397,7 +421,8 @@
     "gender": "Female",
     "nhsNo": 9999999024,
     "gpDetails": "Butler, Keaton I.",
-    "pasNo": 9999024
+    "pasNo": 9999024,
+    "department": "Inpatient"
   },
   {
     "id": 125,
@@ -413,7 +438,8 @@
     "gender": "Female",
     "nhsNo": 9999999025,
     "gpDetails": "Caldwell, Constance B.",
-    "pasNo": 9999025
+    "pasNo": 9999025,
+    "department": "Inpatient"
   },
   {
     "id": 126,
@@ -429,7 +455,8 @@
     "gender": "Female",
     "nhsNo": 9999999026,
     "gpDetails": "Blackburn, Eve O.",
-    "pasNo": 9999026
+    "pasNo": 9999026,
+    "department": "Inpatient"
   },
   {
     "id": 127,
@@ -445,7 +472,8 @@
     "gender": "Male",
     "nhsNo": 9999999027,
     "gpDetails": "Long, Inga C.",
-    "pasNo": 9999027
+    "pasNo": 9999027,
+    "department": "Inpatient"
   },
   {
     "id": 128,
@@ -461,7 +489,8 @@
     "gender": "Male",
     "nhsNo": 9999999028,
     "gpDetails": "Briggs, Kenneth M.",
-    "pasNo": 9999028
+    "pasNo": 9999028,
+    "department": "Inpatient"
   },
   {
     "id": 129,
@@ -477,7 +506,8 @@
     "gender": "Male",
     "nhsNo": 9999999029,
     "gpDetails": "Blackburn, Wang R.",
-    "pasNo": 9999029
+    "pasNo": 9999029,
+    "department": "Inpatient"
   },
   {
     "id": 130,
@@ -493,7 +523,8 @@
     "gender": "Male",
     "nhsNo": 9999999030,
     "gpDetails": "Marquez, Pandora C.",
-    "pasNo": 9999030
+    "pasNo": 9999030,
+    "department": "Outpatient"
   },
   {
     "id": 131,
@@ -509,7 +540,8 @@
     "gender": "Male",
     "nhsNo": 9999999031,
     "gpDetails": "Ellison, Rhiannon B.",
-    "pasNo": 9999031
+    "pasNo": 9999031,
+    "department": "Emergency"
   },
   {
     "id": 132,
@@ -525,7 +557,8 @@
     "gender": "Male",
     "nhsNo": 9999999032,
     "gpDetails": "Osborne, Bo T.",
-    "pasNo": 9999032
+    "pasNo": 9999032,
+    "department": "Inpatient"
   },
   {
     "id": 133,
@@ -541,7 +574,8 @@
     "gender": "Female",
     "nhsNo": 9999999033,
     "gpDetails": "Richmond, Daniel E.",
-    "pasNo": 9999033
+    "pasNo": 9999033,
+    "department": "Inpatient"
   },
   {
     "id": 134,
@@ -557,7 +591,8 @@
     "gender": "Female",
     "nhsNo": 9999999034,
     "gpDetails": "Waters, Martina P.",
-    "pasNo": 9999034
+    "pasNo": 9999034,
+    "department": "Inpatient"
   },
   {
     "id": 135,
@@ -573,7 +608,8 @@
     "gender": "Female",
     "nhsNo": 9999999035,
     "gpDetails": "Cherry, Calista Y.",
-    "pasNo": 9999035
+    "pasNo": 9999035,
+    "department": "Inpatient"
   },
   {
     "id": 136,
@@ -589,7 +625,8 @@
     "gender": "Male",
     "nhsNo": 9999999036,
     "gpDetails": "Faulkner, Cassady Q.",
-    "pasNo": 9999036
+    "pasNo": 9999036,
+    "department": "Inpatient"
   },
   {
     "id": 137,
@@ -605,7 +642,8 @@
     "gender": "Male",
     "nhsNo": 9999999037,
     "gpDetails": "Garrett, Cullen J.",
-    "pasNo": 9999037
+    "pasNo": 9999037,
+    "department": "Inpatient"
   },
   {
     "id": 138,
@@ -621,7 +659,8 @@
     "gender": "Female",
     "nhsNo": 9999999038,
     "gpDetails": "Simpson, Grant Y.",
-    "pasNo": 9999038
+    "pasNo": 9999038,
+    "department": "Inpatient"
   },
   {
     "id": 139,
@@ -637,7 +676,8 @@
     "gender": "Male",
     "nhsNo": 9999999039,
     "gpDetails": "Bernard, Kieran O.",
-    "pasNo": 9999039
+    "pasNo": 9999039,
+    "department": "Inpatient"
   },
   {
     "id": 140,
@@ -653,7 +693,8 @@
     "gender": "Male",
     "nhsNo": 9999999040,
     "gpDetails": "Slater, Dane R.",
-    "pasNo": 9999040
+    "pasNo": 9999040,
+    "department": "Outpatient"
   },
   {
     "id": 141,
@@ -669,7 +710,8 @@
     "gender": "Female",
     "nhsNo": 9999999041,
     "gpDetails": "Cohen, Amity G.",
-    "pasNo": 9999041
+    "pasNo": 9999041,
+    "department": "Emergency"
   },
   {
     "id": 142,
@@ -685,7 +727,8 @@
     "gender": "Male",
     "nhsNo": 9999999042,
     "gpDetails": "Patel, Josephine K.",
-    "pasNo": 9999042
+    "pasNo": 9999042,
+    "department": "Inpatient"
   },
   {
     "id": 143,
@@ -701,7 +744,8 @@
     "gender": "Female",
     "nhsNo": 9999999043,
     "gpDetails": "Young, Brian W.",
-    "pasNo": 9999043
+    "pasNo": 9999043,
+    "department": "Inpatient"
   },
   {
     "id": 144,
@@ -717,7 +761,8 @@
     "gender": "Male",
     "nhsNo": 9999999044,
     "gpDetails": "Spence, Kay Z.",
-    "pasNo": 9999044
+    "pasNo": 9999044,
+    "department": "Inpatient"
   },
   {
     "id": 145,
@@ -733,7 +778,8 @@
     "gender": "Female",
     "nhsNo": 9999999045,
     "gpDetails": "Guzman, Kimberley M.",
-    "pasNo": 9999045
+    "pasNo": 9999045,
+    "department": "Inpatient"
   },
   {
     "id": 146,
@@ -749,7 +795,8 @@
     "gender": "Male",
     "nhsNo": 9999999046,
     "gpDetails": "May, Solomon V.",
-    "pasNo": 9999046
+    "pasNo": 9999046,
+    "department": "Inpatient"
   },
   {
     "id": 147,
@@ -765,7 +812,8 @@
     "gender": "Female",
     "nhsNo": 9999999047,
     "gpDetails": "Finley, Carson Q.",
-    "pasNo": 9999047
+    "pasNo": 9999047,
+    "department": "Inpatient"
   },
   {
     "id": 148,
@@ -781,7 +829,8 @@
     "gender": "Male",
     "nhsNo": 9999999048,
     "gpDetails": "Carver, Rhiannon A.",
-    "pasNo": 9999048
+    "pasNo": 9999048,
+    "department": "Inpatient"
   },
   {
     "id": 149,
@@ -797,7 +846,8 @@
     "gender": "Male",
     "nhsNo": 9999999049,
     "gpDetails": "Horn, Ramona D.",
-    "pasNo": 9999049
+    "pasNo": 9999049,
+    "department": "Inpatient"
   },
   {
     "id": 150,
@@ -813,7 +863,8 @@
     "gender": "Female",
     "nhsNo": 9999999050,
     "gpDetails": "Hawkins, Sonya T.",
-    "pasNo": 9999050
+    "pasNo": 9999050,
+    "department": "Outpatient"
   },
   {
     "id": 151,
@@ -829,7 +880,8 @@
     "gender": "Female",
     "nhsNo": 9999999051,
     "gpDetails": "Greer, Belle W.",
-    "pasNo": 9999051
+    "pasNo": 9999051,
+    "department": "Emergency"
   },
   {
     "id": 152,
@@ -845,7 +897,8 @@
     "gender": "Male",
     "nhsNo": 9999999052,
     "gpDetails": "Reed, Melyssa H.",
-    "pasNo": 9999052
+    "pasNo": 9999052,
+    "department": "Inpatient"
   },
   {
     "id": 153,
@@ -861,7 +914,8 @@
     "gender": "Male",
     "nhsNo": 9999999053,
     "gpDetails": "Trujillo, Dieter M.",
-    "pasNo": 9999053
+    "pasNo": 9999053,
+    "department": "Inpatient"
   },
   {
     "id": 154,
@@ -877,7 +931,8 @@
     "gender": "Male",
     "nhsNo": 9999999054,
     "gpDetails": "George, Isadora Y.",
-    "pasNo": 9999054
+    "pasNo": 9999054,
+    "department": "Inpatient"
   },
   {
     "id": 155,
@@ -893,7 +948,8 @@
     "gender": "Female",
     "nhsNo": 9999999055,
     "gpDetails": "Strickland, Ferdinand B.",
-    "pasNo": 9999055
+    "pasNo": 9999055,
+    "department": "Inpatient"
   },
   {
     "id": 156,
@@ -909,7 +965,8 @@
     "gender": "Male",
     "nhsNo": 9999999056,
     "gpDetails": "Joseph, Kenyon U.",
-    "pasNo": 9999056
+    "pasNo": 9999056,
+    "department": "Inpatient"
   },
   {
     "id": 157,
@@ -925,7 +982,8 @@
     "gender": "Female",
     "nhsNo": 9999999057,
     "gpDetails": "Mcintyre, Barbara Y.",
-    "pasNo": 9999057
+    "pasNo": 9999057,
+    "department": "Inpatient"
   },
   {
     "id": 158,
@@ -941,7 +999,8 @@
     "gender": "Male",
     "nhsNo": 9999999058,
     "gpDetails": "Oconnor, Kevin Y.",
-    "pasNo": 9999058
+    "pasNo": 9999058,
+    "department": "Inpatient"
   },
   {
     "id": 159,
@@ -957,7 +1016,8 @@
     "gender": "Male",
     "nhsNo": 9999999059,
     "gpDetails": "Floyd, Desirae R.",
-    "pasNo": 9999059
+    "pasNo": 9999059,
+    "department": "Inpatient"
   },
   {
     "id": 160,
@@ -973,7 +1033,8 @@
     "gender": "Male",
     "nhsNo": 9999999060,
     "gpDetails": "Massey, Armand T.",
-    "pasNo": 9999060
+    "pasNo": 9999060,
+    "department": "Outpatient"
   },
   {
     "id": 161,
@@ -989,7 +1050,8 @@
     "gender": "Male",
     "nhsNo": 9999999061,
     "gpDetails": "Daniels, Yvonne C.",
-    "pasNo": 9999061
+    "pasNo": 9999061,
+    "department": "Emergency"
   },
   {
     "id": 162,
@@ -1005,7 +1067,8 @@
     "gender": "Female",
     "nhsNo": 9999999062,
     "gpDetails": "Guerra, Dai C.",
-    "pasNo": 9999062
+    "pasNo": 9999062,
+    "department": "Inpatient"
   },
   {
     "id": 163,
@@ -1021,7 +1084,8 @@
     "gender": "Female",
     "nhsNo": 9999999063,
     "gpDetails": "Dotson, Merrill T.",
-    "pasNo": 9999063
+    "pasNo": 9999063,
+    "department": "Inpatient"
   },
   {
     "id": 164,
@@ -1037,7 +1101,8 @@
     "gender": "Female",
     "nhsNo": 9999999064,
     "gpDetails": "Gordon, Quin P.",
-    "pasNo": 9999064
+    "pasNo": 9999064,
+    "department": "Inpatient"
   },
   {
     "id": 165,
@@ -1053,7 +1118,8 @@
     "gender": "Male",
     "nhsNo": 9999999065,
     "gpDetails": "Bird, Darrel L.",
-    "pasNo": 9999065
+    "pasNo": 9999065,
+    "department": "Inpatient"
   },
   {
     "id": 166,
@@ -1069,7 +1135,8 @@
     "gender": "Male",
     "nhsNo": 9999999066,
     "gpDetails": "Webster, Uta A.",
-    "pasNo": 9999066
+    "pasNo": 9999066,
+    "department": "Inpatient"
   },
   {
     "id": 167,
@@ -1085,7 +1152,8 @@
     "gender": "Female",
     "nhsNo": 9999999067,
     "gpDetails": "Hooper, Tate K.",
-    "pasNo": 9999067
+    "pasNo": 9999067,
+    "department": "Inpatient"
   },
   {
     "id": 168,
@@ -1101,7 +1169,8 @@
     "gender": "Female",
     "nhsNo": 9999999068,
     "gpDetails": "Parsons, Melissa A.",
-    "pasNo": 9999068
+    "pasNo": 9999068,
+    "department": "Inpatient"
   },
   {
     "id": 169,
@@ -1117,7 +1186,8 @@
     "gender": "Female",
     "nhsNo": 9999999069,
     "gpDetails": "Schultz, Kane E.",
-    "pasNo": 9999069
+    "pasNo": 9999069,
+    "department": "Inpatient"
   },
   {
     "id": 170,
@@ -1133,7 +1203,8 @@
     "gender": "Female",
     "nhsNo": 9999999070,
     "gpDetails": "Ortiz, Whitney X.",
-    "pasNo": 9999070
+    "pasNo": 9999070,
+    "department": "Outpatient"
   },
   {
     "id": 171,
@@ -1149,7 +1220,8 @@
     "gender": "Male",
     "nhsNo": 9999999071,
     "gpDetails": "Horn, Bevis E.",
-    "pasNo": 9999071
+    "pasNo": 9999071,
+    "department": "Emergency"
   },
   {
     "id": 172,
@@ -1165,7 +1237,8 @@
     "gender": "Female",
     "nhsNo": 9999999072,
     "gpDetails": "Jacobson, Amir O.",
-    "pasNo": 9999072
+    "pasNo": 9999072,
+    "department": "Inpatient"
   },
   {
     "id": 173,
@@ -1181,7 +1254,8 @@
     "gender": "Male",
     "nhsNo": 9999999073,
     "gpDetails": "Craig, Keane W.",
-    "pasNo": 9999073
+    "pasNo": 9999073,
+    "department": "Inpatient"
   },
   {
     "id": 174,
@@ -1197,7 +1271,8 @@
     "gender": "Male",
     "nhsNo": 9999999074,
     "gpDetails": "Oneal, Jackson C.",
-    "pasNo": 9999074
+    "pasNo": 9999074,
+    "department": "Inpatient"
   },
   {
     "id": 175,
@@ -1213,7 +1288,8 @@
     "gender": "Female",
     "nhsNo": 9999999075,
     "gpDetails": "Richardson, Brett F.",
-    "pasNo": 9999075
+    "pasNo": 9999075,
+    "department": "Inpatient"
   },
   {
     "id": 176,
@@ -1229,7 +1305,8 @@
     "gender": "Female",
     "nhsNo": 9999999076,
     "gpDetails": "Solis, Ariana C.",
-    "pasNo": 9999076
+    "pasNo": 9999076,
+    "department": "Inpatient"
   },
   {
     "id": 177,
@@ -1245,7 +1322,8 @@
     "gender": "Male",
     "nhsNo": 9999999077,
     "gpDetails": "Frederick, Nash E.",
-    "pasNo": 9999077
+    "pasNo": 9999077,
+    "department": "Inpatient"
   },
   {
     "id": 178,
@@ -1261,7 +1339,8 @@
     "gender": "Female",
     "nhsNo": 9999999078,
     "gpDetails": "Ferguson, Keaton Y.",
-    "pasNo": 9999078
+    "pasNo": 9999078,
+    "department": "Inpatient"
   },
   {
     "id": 179,
@@ -1277,7 +1356,8 @@
     "gender": "Male",
     "nhsNo": 9999999079,
     "gpDetails": "Jacobson, Lyle N.",
-    "pasNo": 9999079
+    "pasNo": 9999079,
+    "department": "Inpatient"
   },
   {
     "id": 180,
@@ -1293,7 +1373,8 @@
     "gender": "Male",
     "nhsNo": 9999999080,
     "gpDetails": "Reed, Remedios H.",
-    "pasNo": 9999080
+    "pasNo": 9999080,
+    "department": "Outpatient"
   },
   {
     "id": 181,
@@ -1309,7 +1390,8 @@
     "gender": "Male",
     "nhsNo": 9999999081,
     "gpDetails": "Kim, Charles Q.",
-    "pasNo": 9999081
+    "pasNo": 9999081,
+    "department": "Emergency"
   },
   {
     "id": 182,
@@ -1325,7 +1407,8 @@
     "gender": "Male",
     "nhsNo": 9999999082,
     "gpDetails": "Lott, Ferdinand V.",
-    "pasNo": 9999082
+    "pasNo": 9999082,
+    "department": "Inpatient"
   },
   {
     "id": 183,
@@ -1341,7 +1424,8 @@
     "gender": "Female",
     "nhsNo": 9999999083,
     "gpDetails": "Forbes, Merritt P.",
-    "pasNo": 9999083
+    "pasNo": 9999083,
+    "department": "Inpatient"
   },
   {
     "id": 184,
@@ -1357,7 +1441,8 @@
     "gender": "Male",
     "nhsNo": 9999999084,
     "gpDetails": "Combs, Susan J.",
-    "pasNo": 9999084
+    "pasNo": 9999084,
+    "department": "Inpatient"
   },
   {
     "id": 185,
@@ -1373,7 +1458,8 @@
     "gender": "Female",
     "nhsNo": 9999999085,
     "gpDetails": "Slater, Yael U.",
-    "pasNo": 9999085
+    "pasNo": 9999085,
+    "department": "Inpatient"
   },
   {
     "id": 186,
@@ -1389,7 +1475,8 @@
     "gender": "Male",
     "nhsNo": 9999999086,
     "gpDetails": "Pierce, Ulric Q.",
-    "pasNo": 9999086
+    "pasNo": 9999086,
+    "department": "Inpatient"
   },
   {
     "id": 187,
@@ -1405,7 +1492,8 @@
     "gender": "Female",
     "nhsNo": 9999999087,
     "gpDetails": "Hickman, Mikayla F.",
-    "pasNo": 9999087
+    "pasNo": 9999087,
+    "department": "Inpatient"
   },
   {
     "id": 188,
@@ -1421,7 +1509,8 @@
     "gender": "Female",
     "nhsNo": 9999999088,
     "gpDetails": "Guy, Victoria I.",
-    "pasNo": 9999088
+    "pasNo": 9999088,
+    "department": "Inpatient"
   },
   {
     "id": 189,
@@ -1437,7 +1526,8 @@
     "gender": "Male",
     "nhsNo": 9999999089,
     "gpDetails": "Higgins, Quintessa N.",
-    "pasNo": 9999089
+    "pasNo": 9999089,
+    "department": "Inpatient"
   },
   {
     "id": 190,
@@ -1453,7 +1543,8 @@
     "gender": "Female",
     "nhsNo": 9999999090,
     "gpDetails": "Bernard, Frances Z.",
-    "pasNo": 9999090
+    "pasNo": 9999090,
+    "department": "Outpatient"
   },
   {
     "id": 191,
@@ -1469,7 +1560,8 @@
     "gender": "Female",
     "nhsNo": 9999999091,
     "gpDetails": "Ortiz, Ezra A.",
-    "pasNo": 9999091
+    "pasNo": 9999091,
+    "department": "Emergency"
   },
   {
     "id": 192,
@@ -1485,7 +1577,8 @@
     "gender": "Male",
     "nhsNo": 9999999092,
     "gpDetails": "Slater, Kibo B.",
-    "pasNo": 9999092
+    "pasNo": 9999092,
+    "department": "Inpatient"
   },
   {
     "id": 193,
@@ -1501,7 +1594,8 @@
     "gender": "Male",
     "nhsNo": 9999999093,
     "gpDetails": "Best, Sylvia U.",
-    "pasNo": 9999093
+    "pasNo": 9999093,
+    "department": "Inpatient"
   },
   {
     "id": 194,
@@ -1517,7 +1611,8 @@
     "gender": "Female",
     "nhsNo": 9999999094,
     "gpDetails": "Gilbert, Nichole P.",
-    "pasNo": 9999094
+    "pasNo": 9999094,
+    "department": "Inpatient"
   },
   {
     "id": 195,
@@ -1533,7 +1628,8 @@
     "gender": "Male",
     "nhsNo": 9999999095,
     "gpDetails": "Cortez, Anjolie Q.",
-    "pasNo": 9999095
+    "pasNo": 9999095,
+    "department": "Inpatient"
   },
   {
     "id": 196,
@@ -1549,7 +1645,8 @@
     "gender": "Female",
     "nhsNo": 9999999096,
     "gpDetails": "Mccray, Trevor I.",
-    "pasNo": 9999096
+    "pasNo": 9999096,
+    "department": "Inpatient"
   },
   {
     "id": 197,
@@ -1565,7 +1662,8 @@
     "gender": "Female",
     "nhsNo": 9999999097,
     "gpDetails": "Sweet, Illiana H.",
-    "pasNo": 9999097
+    "pasNo": 9999097,
+    "department": "Inpatient"
   },
   {
     "id": 198,
@@ -1581,7 +1679,8 @@
     "gender": "Female",
     "nhsNo": 9999999098,
     "gpDetails": "Boone, Aretha M.",
-    "pasNo": 9999098
+    "pasNo": 9999098,
+    "department": "Inpatient"
   },
   {
     "id": 199,
@@ -1597,6 +1696,7 @@
     "gender": "Male",
     "nhsNo": 9999999099,
     "gpDetails": "Aguilar, Phoebe A.",
-    "pasNo": 9999099
+    "pasNo": 9999099,
+    "department": "Inpatient"
   }
 ]

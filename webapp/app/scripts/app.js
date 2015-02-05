@@ -26,7 +26,7 @@ angular
 
     $stateProvider
       .state('patients-list', {
-        url: '/patients?ageRange&department',
+        url: '/patients?ageRange&department&order&reverse',
         views: {
           'actions': { templateUrl: 'views/patients/patients-list-sidebar.html' },
           'main': { templateUrl: 'views/patients/patients-list.html', controller: 'PatientsListCtrl' }

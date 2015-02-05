@@ -293,3 +293,13 @@ legend {
 .panel-patient .table > tfoot > tr > td:last-child {
   border-right: 0;
 }
+
+.sort-asc:after {
+  padding-left: 5px;
+  content:'\25BC'
+}
+
+.sort-desc:after {
+  padding-left: 5px;
+  content:'\25B2'
+}

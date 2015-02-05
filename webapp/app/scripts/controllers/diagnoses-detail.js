@@ -8,13 +8,13 @@
  * Controller of the openehrPocApp
  */
 angular.module('openehrPocApp')
-  .controller('DiagnosesDetailCtrl', function ($scope, $stateParams, $location, $modal, Patient, Diagnosis, growlNotifications) {
+  .controller('DiagnosesDetailCtrl', function ($scope, $stateParams, $location, $modal, PatientService, Diagnosis, growlNotifications) {
 
     $scope.UnlockedSources = [
       'handi.ehrscape.com'
     ];
 
-    Patient.get($stateParams.patientId).then(function (patient) {
+    PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
 
       Diagnosis.findByPatient($scope.patient.id, $stateParams.diagnosisId).then(function (result) {

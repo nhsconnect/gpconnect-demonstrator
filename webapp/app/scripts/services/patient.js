@@ -10,7 +10,7 @@
  * Controller of the openehrPocApp
  */
 angular.module('openehrPocApp')
-  .factory('Patient', function ($http, $q) {
+  .factory('PatientService', function ($http, $q, Patient) {
 
     var loadPatients = function () {
       var patients = [];
@@ -18,8 +18,7 @@ angular.module('openehrPocApp')
 
       $http.get('/patients.json', { cache: true }).then(function (result) {
         angular.forEach(result.data, function (patient) {
-          patient.fullname = getFullname(patient);
-          patient.address = getAddress(patient);
+          patient = new Patient(patient);
           patients.push(patient);
         });
 
@@ -50,18 +49,44 @@ angular.module('openehrPocApp')
       angular.extend(diagnosis, updatedDiagnosis);
     };
 
-    var getFullname = function (patient) {
-      return patient.lastname.toUpperCase() + ', ' + patient.firstname + (patient.title ? (' (' + patient.title + ')') : '');
-    };
+    var summaries = function () {
+      var deferred = $q.defer();
 
-    var getAddress = function (patient) {
-      return [patient.address1, patient.address2, patient.address4].join(', ');
+      loadPatients().then(function (patients) {
+        var summaries = {};
+
+        var ageSummaries = _.countBy(patients, function (patient) { return patient.ageRange; });
+
+        summaries.age = _.map(ageSummaries, function (value, key) {
+            return { series: key, value: value };
+        });
+
+        summaries.age = _.sortBy(summaries.age, function (value) {
+          return value.age;
+        });
+
+        var departmentSummaries = _.countBy(patients, function (patient) { return patient.department; });
+        departmentSummaries.All = patients.length;
+
+        summaries.department = _.map(departmentSummaries, function (value, key) {
+            return { series: key, value: value };
+        });
+
+        summaries.department = _.sortBy(summaries.department, function (value) {
+          return value.department;
+        });
+
+        deferred.resolve(summaries);
+      });
+
+      return deferred.promise;
     };
 
     return {
       all: all,
       get: get,
-      update: update
+      update: update,
+      summaries: summaries
     };
 
   });

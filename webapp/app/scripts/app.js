@@ -17,11 +17,12 @@ angular
     'ui.router',
     'ui.bootstrap',
     'angular-loading-bar',
-    'growlNotifications'
+    'growlNotifications',
+    'angularUtils.directives.dirPagination'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/patients');
+    $urlRouterProvider.otherwise('/');
 
     $stateProvider
       .state('patients-list', {
@@ -32,7 +33,7 @@ angular
         }
       })
       .state('patients-charts', {
-        url: '/patients/charts',
+        url: '/',
         views: {
           'actions': { templateUrl: 'views/patients/patients-list-sidebar.html' },
           'main': { templateUrl: 'views/patients/patients-charts.html', controller: 'PatientsChartsCtrl' }
@@ -65,27 +66,6 @@ angular
     datepickerPopupConfig.datepickerPopup = 'dd-MMM-yyyy';
     cfpLoadingBarProvider.includeSpinner  = false;
   })
-  .directive('morrisBar', function(){
-  return {
-    restrict: 'E',
-    template: '<div></div>',
-    replace: true,
-    scope: {
-        data: '=',
-        xkey: '=',
-        ykeys: '=',
-        config: '='
-    },
-    link: function (scope, element){
-      var config = {
-        element: element,
-        data: scope.data,
-        xkey: scope.xkey,
-        ykeys: scope.ykeys
-      };
-
-      _.extend(config, scope.config);
-      new window.Morris.Bar(config);
-     }
-    };
+  .config(function(paginationTemplateProvider) {
+    paginationTemplateProvider.setPath('views/dirPagination.tpl.html');
   });

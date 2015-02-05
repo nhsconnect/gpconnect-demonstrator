@@ -17,11 +17,19 @@ public class LegacyDataConfig {
 	@Bean(destroyMethod="close")
 	public DataSource legacyDataSource() {
 
+		String envConfig = System.getenv("CLEARDB_DATABASE_URL");
+
+		URI dbUri = new URI(envConfig);
+    String username = dbUri.getUserInfo().split(":")[0];
+    String password = dbUri.getUserInfo().split(":")[1];
+    String dbUrl = "jdbc:mysql://" + dbUri.getHost() + dbUri.getPath();
+
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName(com.mysql.jdbc.Driver.class.getName());
-		dataSource.setUrl("jdbc:mysql://localhost:3306/poc_legacy");
-		dataSource.setUsername("root");
-		dataSource.setPassword(null);
+		dataSource.setUrl(dbUrl);
+		dataSource.setUsername(username);
+		dataSource.setPassword(password);
+
 		return dataSource;
 	}
 

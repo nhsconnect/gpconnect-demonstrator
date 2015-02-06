@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 @Configuration
 public class LegacyDataConfig {
 
@@ -15,20 +18,23 @@ public class LegacyDataConfig {
 	private Environment environment;
 
 	@Bean(destroyMethod="close")
-	public DataSource legacyDataSource() {
-
-		String envConfig = System.getenv("CLEARDB_DATABASE_URL");
-
-		URI dbUri = new URI(envConfig);
-    String username = dbUri.getUserInfo().split(":")[0];
-    String password = dbUri.getUserInfo().split(":")[1];
-    String dbUrl = "jdbc:mysql://" + dbUri.getHost() + dbUri.getPath();
+	public DataSource legacyDataSource() throws URISyntaxException {
 
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName(com.mysql.jdbc.Driver.class.getName());
-		dataSource.setUrl(dbUrl);
-		dataSource.setUsername(username);
-		dataSource.setPassword(password);
+
+		String envString = System.getenv("CLEARDB_DATABASE_URL");
+
+		if (envString != null) {
+			URI dbUri = new URI(envString);
+			dataSource.setUrl("jdbc:mysql://" + dbUri.getHost() + dbUri.getPath());
+			dataSource.setUsername(dbUri.getUserInfo().split(":")[0]);
+			dataSource.setPassword(dbUri.getUserInfo().split(":")[1]);
+		} else {
+			dataSource.setUrl("jdbc:mysql://localhost:3306/poc_legacy");
+			dataSource.setUsername("root");
+			dataSource.setPassword(null);
+		}
 
 		return dataSource;
 	}

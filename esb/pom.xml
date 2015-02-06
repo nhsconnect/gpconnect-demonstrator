@@ -123,7 +123,7 @@
 
             <properties>
                 <!-- tomcat -->
-                <tomcat.path>/openEHR</tomcat.path>
+                <tomcat.path>/</tomcat.path>
                 <tomcat.port>19191</tomcat.port>
             </properties>
 

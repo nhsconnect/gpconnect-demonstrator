@@ -74,7 +74,7 @@ module.exports = function (grunt) {
       },
       proxies: [
         {
-          context: '/openEHR/api',
+          context: '/api',
           host: 'localhost',
           port: 19191,
           https: false,

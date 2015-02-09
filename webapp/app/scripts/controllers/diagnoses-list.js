@@ -8,7 +8,7 @@
  * Controller of the openehrPocApp
  */
 angular.module('openehrPocApp')
-  .controller('DiagnosesListCtrl', function ($scope, $stateParams, $location, $modal, PatientService, Diagnosis, growlNotifications) {
+  .controller('DiagnosesListCtrl', function ($scope, $stateParams, $location, $modal, PatientService, Diagnosis) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -48,7 +48,6 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (diagnosis) {
         Diagnosis.createByPatient($scope.patient.id, diagnosis).then(function (result) {
-          growlNotifications.add('<strong>'+ $scope.patient.fullname + ':</strong> Diagnosis updated', 'success', 10000);
           $scope.patient.diagnoses.push(result.data);
           console.log(result);
         });

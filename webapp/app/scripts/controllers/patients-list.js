@@ -13,10 +13,9 @@ angular.module('openehrPocApp')
       $scope.patients = patients;
     });
 
-    $scope.department = $stateParams.department;
-    $scope.ageRange = $stateParams.ageRange;
     $scope.order = $stateParams.order || 'lastname';
     $scope.reverse = $stateParams.reverse === 'true';
+    $scope.filters = { department: $stateParams.department, ageRange: $stateParams.ageRange };
 
     $scope.sort = function (field) {
       var reverse = $scope.reverse;
@@ -25,7 +24,7 @@ angular.module('openehrPocApp')
         reverse = !reverse;
       }
 
-      $state.transitionTo($state.current, { order: field, reverse: reverse });
+      $state.transitionTo($state.current, _.extend($stateParams, { order: field, reverse: reverse }));
     };
 
     $scope.sortClass = function (field) {
@@ -36,5 +35,17 @@ angular.module('openehrPocApp')
 
     $scope.go = function (patient) {
       $state.go('diagnoses-list', { patientId: patient.id });
+    };
+
+    $scope.patientFilter = function (patient) {
+      if ($scope.filters.department) {
+        return (patient.department === $scope.filters.department);
+      }
+
+      if ($scope.filters.ageRange) {
+        return (patient.ageRange === $scope.filters.ageRange);
+      }
+
+      return true;
     };
   });

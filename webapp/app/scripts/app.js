@@ -12,7 +12,6 @@ angular
   .module('openehrPocApp', [
     'ngResource',
     'ngTouch',
-    'ngSanitize',
     'ngAnimate',
     'ui.router',
     'ui.bootstrap',

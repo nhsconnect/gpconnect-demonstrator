@@ -1,12 +1,5 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name openehrPocApp.controller:PatientsCtrl
- * @description
- * # PatientsCtrl
- * Controller of the openehrPocApp
- */
 angular.module('openehrPocApp')
   .controller('PatientsListCtrl', function ($scope, $state, $stateParams, PatientService) {
     PatientService.all().then(function (patients) {

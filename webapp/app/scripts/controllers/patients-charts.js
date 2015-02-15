@@ -1,12 +1,5 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name openehrPocApp.controller:PatientsChartsCtrl
- * @description
- * # PatientsChartsCtrl
- * Controller of the openehrPocApp
- */
 angular.module('openehrPocApp')
   .controller('PatientsChartsCtrl', function ($scope, $window, $state, PatientService) {
 
@@ -23,7 +16,7 @@ angular.module('openehrPocApp')
         xkey: 'series',
         labels: ['Patients'],
         hideHover: true
-      }).on('click', function(i, row){
+      }).on('click', function (i, row) {
         $state.go('patients-list', { ageRange: row.series });
       });
     };
@@ -37,7 +30,7 @@ angular.module('openehrPocApp')
         labels: ['Patients'],
         hideHover: true,
         barColors: ['#0BA462']
-      }).on('click', function(i, row) {
+      }).on('click', function (i, row) {
         if (row.series === 'All') {
           row.series = null;
         }

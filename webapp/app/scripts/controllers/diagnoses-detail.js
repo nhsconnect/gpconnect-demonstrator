@@ -1,12 +1,5 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name openehrPocApp.controller:PatientsDetailCtrl
- * @description
- * # PatientsDetailCtrl
- * Controller of the openehrPocApp
- */
 angular.module('openehrPocApp')
   .controller('DiagnosesDetailCtrl', function ($scope, $stateParams, $location, $modal, PatientService, Diagnosis) {
 
@@ -18,7 +11,7 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
 
       Diagnosis.findByPatient($scope.patient.id, $stateParams.diagnosisId).then(function (result) {
-        $scope.diagnosis = result;
+        $scope.diagnosis = result.data;
       });
     });
 
@@ -53,7 +46,7 @@ angular.module('openehrPocApp')
     };
 
     $scope.isLocked = function (diagnosis) {
-      if (! (diagnosis && diagnosis.id)) {
+      if (!(diagnosis && diagnosis.id)) {
         return true;
       }
       var diagnosisIdSegments = diagnosis.id.toString().split('::');

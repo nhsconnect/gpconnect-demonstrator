@@ -1,37 +1,16 @@
-/* jshint bitwise: false */
-
 'use strict';
 
-/**
- * @ngdoc function
- * @name openehrPocApp.factory:Diagnosis
- * @description
- * # Diagnosis
- * Controller of the openehrPocApp
- */
 angular.module('openehrPocApp')
-  .factory('Diagnosis', function ($http, $q) {
+  .factory('Diagnosis', function ($http) {
 
     var patientIdOveride = 746;
 
     var byPatient = function (patientId) {
-      var defer = $q.defer();
-
-      $http.get('/api/patients/' + (patientIdOveride || patientId) + '/diagnoses').success(function (result) {
-        defer.resolve(result);
-      });
-
-      return defer.promise;
+      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/diagnoses');
     };
 
     var findByPatient = function (patientId, diagnosisId) {
-      var defer = $q.defer();
-
-      $http.get('/api/patients/' + (patientIdOveride || patientId) + '/diagnoses/' + diagnosisId).success(function (result) {
-        defer.resolve(result);
-      });
-
-      return defer.promise;
+      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/diagnoses/' + diagnosisId);
     };
 
     var updateByPatient = function (patientId, diagnosis) {

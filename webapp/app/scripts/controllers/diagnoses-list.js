@@ -1,12 +1,5 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name openehrPocApp.controller:DiagnosesListCtrl
- * @description
- * # DiagnosesListCtrl
- * Controller of the openehrPocApp
- */
 angular.module('openehrPocApp')
   .controller('DiagnosesListCtrl', function ($scope, $stateParams, $location, $modal, PatientService, Diagnosis) {
 
@@ -14,7 +7,7 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
 
       Diagnosis.byPatient($scope.patient.id).then(function (result) {
-        $scope.patient.diagnoses = result;
+        $scope.patient.diagnoses = result.data;
       });
     });
 

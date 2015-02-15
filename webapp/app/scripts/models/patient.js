@@ -24,19 +24,19 @@ angular.module('openehrPocApp')
 
         switch (true) {
           case (age >= 0 && age <= 10):
-              return '0-10';
+            return '0-10';
           case (age >= 11 && age <= 18):
-              return '11-18';
+            return '11-18';
           case (age >= 19 && age <= 30):
-              return '19-30';
+            return '19-30';
           case (age >= 31 && age <= 60):
-              return '31-60';
+            return '31-60';
           case (age >= 60 && age <= 80):
-              return '60-80';
+            return '60-80';
           case (age > 80):
-              return '>80';
+            return '>80';
           default:
-              return;
+            return;
         }
       })();
     };

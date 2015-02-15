@@ -1,13 +1,5 @@
 'use strict';
 
-/**
- * @ngdoc overview
- * @name openehrPocApp
- * @description
- * # openehrPocApp
- *
- * Main module of the application.
- */
 angular
   .module('openehrPocApp', [
     'ngResource',
@@ -27,34 +19,53 @@ angular
       .state('patients-list', {
         url: '/patients?ageRange&department&order&reverse',
         views: {
-          'actions': { templateUrl: 'views/patients/patients-list-sidebar.html' },
-          'main': { templateUrl: 'views/patients/patients-list.html', controller: 'PatientsListCtrl' }
+          actions: { templateUrl: 'views/patients/patients-list-sidebar.html' },
+          main: { templateUrl: 'views/patients/patients-list.html', controller: 'PatientsListCtrl' }
         }
       })
       .state('patients-charts', {
         url: '/',
         views: {
-          'actions': { templateUrl: 'views/patients/patients-list-sidebar.html' },
-          'main': { templateUrl: 'views/patients/patients-charts.html', controller: 'PatientsChartsCtrl' }
+          actions: { templateUrl: 'views/patients/patients-list-sidebar.html' },
+          main: { templateUrl: 'views/patients/patients-charts.html', controller: 'PatientsChartsCtrl' }
         }
       })
 
       .state('diagnoses-list', {
-        url: '/patients/:patientId/diagnoses',
+        url: '/patients/{patientId:int}/diagnoses',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
-          'actions': { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          'main': { templateUrl: 'views/diagnoses/diagnoses-list.html', controller: 'DiagnosesListCtrl' }
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/diagnoses/diagnoses-list.html', controller: 'DiagnosesListCtrl' }
+        }
+      })
+
+      .state('allergies', {
+        url: '/patients/{patientId:int}/allergies',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/allergies/allergies-list.html', controller: 'AllergiesListCtrl' }
+        }
+      })
+
+      .state('allergies-detail', {
+        url: '/patients/{patientId:int}/allergies/{allergyId:int}',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/allergies/allergies-list.html', controller: 'AllergiesListCtrl' },
+          detail: { templateUrl: 'views/allergies/allergies-detail.html', controller: 'AllergiesDetailCtrl' }
         }
       })
 
       .state('diagnoses-detail', {
-        url: '/patients/:patientId/diagnoses/:diagnosisId',
+        url: '/patients/{patientId:int}/diagnoses/{diagnosisId}',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
-          'actions': { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          'main': { templateUrl: 'views/diagnoses/diagnoses-list.html', controller: 'DiagnosesListCtrl' },
-          'detail': { templateUrl: 'views/diagnoses/diagnoses-detail.html', controller: 'DiagnosesDetailCtrl' }
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/diagnoses/diagnoses-list.html', controller: 'DiagnosesListCtrl' },
+          detail: { templateUrl: 'views/diagnoses/diagnoses-detail.html', controller: 'DiagnosesDetailCtrl' }
         }
       });
 
@@ -65,6 +76,6 @@ angular
     datepickerPopupConfig.datepickerPopup = 'dd-MMM-yyyy';
     cfpLoadingBarProvider.includeSpinner  = false;
   })
-  .config(function(paginationTemplateProvider) {
+  .config(function (paginationTemplateProvider) {
     paginationTemplateProvider.setPath('views/dirPagination.tpl.html');
   });

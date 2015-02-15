@@ -70,6 +70,10 @@ tr[ng-click] {
   cursor: pointer;
 }
 
+a[ui-sref] {
+  cursor: pointer;
+}
+
 .form-group {
   margin-bottom: 10px;
 }

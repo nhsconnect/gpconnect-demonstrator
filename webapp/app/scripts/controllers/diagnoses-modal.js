@@ -18,7 +18,7 @@ angular.module('openehrPocApp')
       $modalInstance.dismiss('cancel');
     };
 
-    $scope.openDatepicker = function($event, name) {
+    $scope.openDatepicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();
 

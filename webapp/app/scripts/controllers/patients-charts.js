@@ -15,7 +15,9 @@ angular.module('openehrPocApp')
         ykeys: ['value'],
         xkey: 'series',
         labels: ['Patients'],
-        hideHover: true
+        hideHover: true,
+        ymin: 0,
+        ymax: 40
       }).on('click', function (i, row) {
         $state.go('patients-list', { ageRange: row.series });
       });
@@ -29,7 +31,9 @@ angular.module('openehrPocApp')
         xkey: 'series',
         labels: ['Patients'],
         hideHover: true,
-        barColors: ['#0BA462']
+        barColors: ['#0BA462'],
+        ymin: 0,
+        ymax: 40
       }).on('click', function (i, row) {
         if (row.series === 'All') {
           row.series = null;

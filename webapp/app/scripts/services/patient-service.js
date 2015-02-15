@@ -30,26 +30,19 @@ angular.module('openehrPocApp')
     var summaries = function () {
       return all().then(function (patients) {
         var summaries = {};
-        var ageSummaries = _.countBy(patients, function (patient) { return patient.ageRange; });
 
-        summaries.age = _.map(ageSummaries, function (value, key) {
-          return { series: key, value: value };
-        });
+        summaries.age = _.chain(patients)
+          .countBy(function (patient) { return patient.ageRange; })
+          .map(function (value, key) { return { series: key, value: value }; })
+          .sortBy(function (value) { return value.ageRange; })
+          .reverse()
+          .value();
 
-        summaries.age = _.sortBy(summaries.age, function (value) {
-          return value.age;
-        });
-
-        var departmentSummaries = _.countBy(patients, function (patient) { return patient.department; });
-        departmentSummaries.All = patients.length;
-
-        summaries.department = _.map(departmentSummaries, function (value, key) {
-          return { series: key, value: value };
-        });
-
-        summaries.department = _.sortBy(summaries.department, function (value) {
-          return value.department;
-        });
+        summaries.department = _.chain(patients)
+          .countBy(function (patient) { return patient.department; })
+          .map(function (value, key) { return { series: key, value: value }; })
+          .sortBy(function (value) { return value.department; })
+          .value();
 
         return summaries;
       });

@@ -14,7 +14,7 @@
     "nhsNo": 9999999000,
     "gpDetails": "Goff, Carolyn D.",
     "pasNo": 9999000,
-    "department": "Outpatient"
+    "department": "Neighbourhood"
   },
   {
     "id": 101,
@@ -31,7 +31,7 @@
     "nhsNo": 9999999001,
     "gpDetails": "Cash, Claire F.",
     "pasNo": 9999001,
-    "department": "Emergency"
+    "department": "Neighbourhood"
   },
   {
     "id": 102,
@@ -48,7 +48,7 @@
     "nhsNo": 9999999002,
     "gpDetails": "Spencer, Hyacinth A.",
     "pasNo": 9999002,
-    "department": "Inpatient"
+    "department": "Hospital"
   },
   {
     "id": 103,
@@ -65,7 +65,7 @@
     "nhsNo": 9999999003,
     "gpDetails": "Bailey, Demetrius B.",
     "pasNo": 9999003,
-    "department": "Inpatient"
+    "department": "Neighbourhood"
   },
   {
     "id": 104,
@@ -82,7 +82,7 @@
     "nhsNo": 9999999004,
     "gpDetails": "Guthrie, Indigo D.",
     "pasNo": 9999004,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 105,
@@ -99,7 +99,7 @@
     "nhsNo": 9999999005,
     "gpDetails": "Hudson, Inez G.",
     "pasNo": 9999005,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 106,
@@ -116,7 +116,7 @@
     "nhsNo": 9999999006,
     "gpDetails": "Joseph, May N.",
     "pasNo": 9999006,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 107,
@@ -133,7 +133,7 @@
     "nhsNo": 9999999007,
     "gpDetails": "Calderon, Mollie Y.",
     "pasNo": 9999007,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 108,
@@ -150,7 +150,7 @@
     "nhsNo": 9999999008,
     "gpDetails": "Mcclain, Ocean Q.",
     "pasNo": 9999008,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 109,
@@ -167,7 +167,7 @@
     "nhsNo": 9999999009,
     "gpDetails": "Key, Dawn A.",
     "pasNo": 9999009,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 110,
@@ -184,7 +184,7 @@
     "nhsNo": 9999999010,
     "gpDetails": "Boyer, Isaac Q.",
     "pasNo": 9999010,
-    "department": "Outpatient"
+    "department": "Neighbourhood"
   },
   {
     "id": 111,
@@ -201,7 +201,7 @@
     "nhsNo": 9999999011,
     "gpDetails": "Hobbs, Neil S.",
     "pasNo": 9999011,
-    "department": "Emergency"
+    "department": "Neighbourhood"
   },
   {
     "id": 112,
@@ -218,7 +218,7 @@
     "nhsNo": 9999999012,
     "gpDetails": "Sullivan, Bruno Z.",
     "pasNo": 9999012,
-    "department": "Inpatient"
+    "department": "Hospital"
   },
   {
     "id": 113,
@@ -235,7 +235,7 @@
     "nhsNo": 9999999013,
     "gpDetails": "Roach, Solomon H.",
     "pasNo": 9999013,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 114,
@@ -252,7 +252,7 @@
     "nhsNo": 9999999014,
     "gpDetails": "Cooke, Kelsey T.",
     "pasNo": 9999014,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 115,
@@ -269,7 +269,7 @@
     "nhsNo": 9999999015,
     "gpDetails": "Howard, Megan D.",
     "pasNo": 9999015,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 116,
@@ -286,7 +286,7 @@
     "nhsNo": 9999999016,
     "gpDetails": "Hampton, Hamish H.",
     "pasNo": 9999016,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 117,
@@ -303,7 +303,7 @@
     "nhsNo": 9999999017,
     "gpDetails": "Valenzuela, Jesse M.",
     "pasNo": 9999017,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 118,
@@ -320,7 +320,7 @@
     "nhsNo": 9999999018,
     "gpDetails": "Joseph, Cameron J.",
     "pasNo": 9999018,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 119,
@@ -337,7 +337,7 @@
     "nhsNo": 9999999019,
     "gpDetails": "Garrett, Illana I.",
     "pasNo": 9999019,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 120,
@@ -354,7 +354,7 @@
     "nhsNo": 9999999020,
     "gpDetails": "Morris, Lucian X.",
     "pasNo": 9999020,
-    "department": "Outpatient"
+    "department": "Neighbourhood"
   },
   {
     "id": 121,
@@ -371,7 +371,7 @@
     "nhsNo": 9999999021,
     "gpDetails": "Moran, August H.",
     "pasNo": 9999021,
-    "department": "Emergency"
+    "department": "Neighbourhood"
   },
   {
     "id": 122,
@@ -388,7 +388,7 @@
     "nhsNo": 9999999022,
     "gpDetails": "Church, Rebecca N.",
     "pasNo": 9999022,
-    "department": "Inpatient"
+    "department": "Hospital"
   },
   {
     "id": 123,
@@ -405,7 +405,7 @@
     "nhsNo": 9999999023,
     "gpDetails": "Reynolds, Moana A.",
     "pasNo": 9999023,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 124,
@@ -422,7 +422,7 @@
     "nhsNo": 9999999024,
     "gpDetails": "Butler, Keaton I.",
     "pasNo": 9999024,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 125,
@@ -439,7 +439,7 @@
     "nhsNo": 9999999025,
     "gpDetails": "Caldwell, Constance B.",
     "pasNo": 9999025,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 126,
@@ -456,7 +456,7 @@
     "nhsNo": 9999999026,
     "gpDetails": "Blackburn, Eve O.",
     "pasNo": 9999026,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 127,
@@ -473,7 +473,7 @@
     "nhsNo": 9999999027,
     "gpDetails": "Long, Inga C.",
     "pasNo": 9999027,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 128,
@@ -490,7 +490,7 @@
     "nhsNo": 9999999028,
     "gpDetails": "Briggs, Kenneth M.",
     "pasNo": 9999028,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 129,
@@ -507,7 +507,7 @@
     "nhsNo": 9999999029,
     "gpDetails": "Blackburn, Wang R.",
     "pasNo": 9999029,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 130,
@@ -524,7 +524,7 @@
     "nhsNo": 9999999030,
     "gpDetails": "Marquez, Pandora C.",
     "pasNo": 9999030,
-    "department": "Outpatient"
+    "department": "Neighbourhood"
   },
   {
     "id": 131,
@@ -541,7 +541,7 @@
     "nhsNo": 9999999031,
     "gpDetails": "Ellison, Rhiannon B.",
     "pasNo": 9999031,
-    "department": "Emergency"
+    "department": "Neighbourhood"
   },
   {
     "id": 132,
@@ -558,7 +558,7 @@
     "nhsNo": 9999999032,
     "gpDetails": "Osborne, Bo T.",
     "pasNo": 9999032,
-    "department": "Inpatient"
+    "department": "Hospital"
   },
   {
     "id": 133,
@@ -575,7 +575,7 @@
     "nhsNo": 9999999033,
     "gpDetails": "Richmond, Daniel E.",
     "pasNo": 9999033,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 134,
@@ -592,7 +592,7 @@
     "nhsNo": 9999999034,
     "gpDetails": "Waters, Martina P.",
     "pasNo": 9999034,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 135,
@@ -609,7 +609,7 @@
     "nhsNo": 9999999035,
     "gpDetails": "Cherry, Calista Y.",
     "pasNo": 9999035,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 136,
@@ -626,7 +626,7 @@
     "nhsNo": 9999999036,
     "gpDetails": "Faulkner, Cassady Q.",
     "pasNo": 9999036,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 137,
@@ -643,7 +643,7 @@
     "nhsNo": 9999999037,
     "gpDetails": "Garrett, Cullen J.",
     "pasNo": 9999037,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 138,
@@ -660,7 +660,7 @@
     "nhsNo": 9999999038,
     "gpDetails": "Simpson, Grant Y.",
     "pasNo": 9999038,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 139,
@@ -677,7 +677,7 @@
     "nhsNo": 9999999039,
     "gpDetails": "Bernard, Kieran O.",
     "pasNo": 9999039,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 140,
@@ -694,7 +694,7 @@
     "nhsNo": 9999999040,
     "gpDetails": "Slater, Dane R.",
     "pasNo": 9999040,
-    "department": "Outpatient"
+    "department": "Mental Health"
   },
   {
     "id": 141,
@@ -711,7 +711,7 @@
     "nhsNo": 9999999041,
     "gpDetails": "Cohen, Amity G.",
     "pasNo": 9999041,
-    "department": "Emergency"
+    "department": "Neighbourhood"
   },
   {
     "id": 142,
@@ -728,7 +728,7 @@
     "nhsNo": 9999999042,
     "gpDetails": "Patel, Josephine K.",
     "pasNo": 9999042,
-    "department": "Inpatient"
+    "department": "Hospital"
   },
   {
     "id": 143,
@@ -745,7 +745,7 @@
     "nhsNo": 9999999043,
     "gpDetails": "Young, Brian W.",
     "pasNo": 9999043,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 144,
@@ -762,7 +762,7 @@
     "nhsNo": 9999999044,
     "gpDetails": "Spence, Kay Z.",
     "pasNo": 9999044,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 145,
@@ -779,7 +779,7 @@
     "nhsNo": 9999999045,
     "gpDetails": "Guzman, Kimberley M.",
     "pasNo": 9999045,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 146,
@@ -796,7 +796,7 @@
     "nhsNo": 9999999046,
     "gpDetails": "May, Solomon V.",
     "pasNo": 9999046,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 147,
@@ -813,7 +813,7 @@
     "nhsNo": 9999999047,
     "gpDetails": "Finley, Carson Q.",
     "pasNo": 9999047,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 148,
@@ -830,7 +830,7 @@
     "nhsNo": 9999999048,
     "gpDetails": "Carver, Rhiannon A.",
     "pasNo": 9999048,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 149,
@@ -847,7 +847,7 @@
     "nhsNo": 9999999049,
     "gpDetails": "Horn, Ramona D.",
     "pasNo": 9999049,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 150,
@@ -864,7 +864,7 @@
     "nhsNo": 9999999050,
     "gpDetails": "Hawkins, Sonya T.",
     "pasNo": 9999050,
-    "department": "Outpatient"
+    "department": "Mental Health"
   },
   {
     "id": 151,
@@ -881,7 +881,7 @@
     "nhsNo": 9999999051,
     "gpDetails": "Greer, Belle W.",
     "pasNo": 9999051,
-    "department": "Emergency"
+    "department": "Neighbourhood"
   },
   {
     "id": 152,
@@ -898,7 +898,7 @@
     "nhsNo": 9999999052,
     "gpDetails": "Reed, Melyssa H.",
     "pasNo": 9999052,
-    "department": "Inpatient"
+    "department": "Hospital"
   },
   {
     "id": 153,
@@ -915,7 +915,7 @@
     "nhsNo": 9999999053,
     "gpDetails": "Trujillo, Dieter M.",
     "pasNo": 9999053,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 154,
@@ -932,7 +932,7 @@
     "nhsNo": 9999999054,
     "gpDetails": "George, Isadora Y.",
     "pasNo": 9999054,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 155,
@@ -949,7 +949,7 @@
     "nhsNo": 9999999055,
     "gpDetails": "Strickland, Ferdinand B.",
     "pasNo": 9999055,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 156,
@@ -966,7 +966,7 @@
     "nhsNo": 9999999056,
     "gpDetails": "Joseph, Kenyon U.",
     "pasNo": 9999056,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 157,
@@ -983,7 +983,7 @@
     "nhsNo": 9999999057,
     "gpDetails": "Mcintyre, Barbara Y.",
     "pasNo": 9999057,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 158,
@@ -1000,7 +1000,7 @@
     "nhsNo": 9999999058,
     "gpDetails": "Oconnor, Kevin Y.",
     "pasNo": 9999058,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 159,
@@ -1017,7 +1017,7 @@
     "nhsNo": 9999999059,
     "gpDetails": "Floyd, Desirae R.",
     "pasNo": 9999059,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 160,
@@ -1034,7 +1034,7 @@
     "nhsNo": 9999999060,
     "gpDetails": "Massey, Armand T.",
     "pasNo": 9999060,
-    "department": "Outpatient"
+    "department": "Mental Health"
   },
   {
     "id": 161,
@@ -1051,7 +1051,7 @@
     "nhsNo": 9999999061,
     "gpDetails": "Daniels, Yvonne C.",
     "pasNo": 9999061,
-    "department": "Emergency"
+    "department": "Neighbourhood"
   },
   {
     "id": 162,
@@ -1068,7 +1068,7 @@
     "nhsNo": 9999999062,
     "gpDetails": "Guerra, Dai C.",
     "pasNo": 9999062,
-    "department": "Inpatient"
+    "department": "Hospital"
   },
   {
     "id": 163,
@@ -1085,7 +1085,7 @@
     "nhsNo": 9999999063,
     "gpDetails": "Dotson, Merrill T.",
     "pasNo": 9999063,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 164,
@@ -1102,7 +1102,7 @@
     "nhsNo": 9999999064,
     "gpDetails": "Gordon, Quin P.",
     "pasNo": 9999064,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 165,
@@ -1119,7 +1119,7 @@
     "nhsNo": 9999999065,
     "gpDetails": "Bird, Darrel L.",
     "pasNo": 9999065,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 166,
@@ -1136,7 +1136,7 @@
     "nhsNo": 9999999066,
     "gpDetails": "Webster, Uta A.",
     "pasNo": 9999066,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 167,
@@ -1153,7 +1153,7 @@
     "nhsNo": 9999999067,
     "gpDetails": "Hooper, Tate K.",
     "pasNo": 9999067,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 168,
@@ -1170,7 +1170,7 @@
     "nhsNo": 9999999068,
     "gpDetails": "Parsons, Melissa A.",
     "pasNo": 9999068,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 169,
@@ -1187,7 +1187,7 @@
     "nhsNo": 9999999069,
     "gpDetails": "Schultz, Kane E.",
     "pasNo": 9999069,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 170,
@@ -1204,7 +1204,7 @@
     "nhsNo": 9999999070,
     "gpDetails": "Ortiz, Whitney X.",
     "pasNo": 9999070,
-    "department": "Outpatient"
+    "department": "Mental Health"
   },
   {
     "id": 171,
@@ -1221,7 +1221,7 @@
     "nhsNo": 9999999071,
     "gpDetails": "Horn, Bevis E.",
     "pasNo": 9999071,
-    "department": "Emergency"
+    "department": "Neighbourhood"
   },
   {
     "id": 172,
@@ -1238,7 +1238,7 @@
     "nhsNo": 9999999072,
     "gpDetails": "Jacobson, Amir O.",
     "pasNo": 9999072,
-    "department": "Inpatient"
+    "department": "Hospital"
   },
   {
     "id": 173,
@@ -1255,7 +1255,7 @@
     "nhsNo": 9999999073,
     "gpDetails": "Craig, Keane W.",
     "pasNo": 9999073,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 174,
@@ -1272,7 +1272,7 @@
     "nhsNo": 9999999074,
     "gpDetails": "Oneal, Jackson C.",
     "pasNo": 9999074,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 175,
@@ -1289,7 +1289,7 @@
     "nhsNo": 9999999075,
     "gpDetails": "Richardson, Brett F.",
     "pasNo": 9999075,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 176,
@@ -1306,7 +1306,7 @@
     "nhsNo": 9999999076,
     "gpDetails": "Solis, Ariana C.",
     "pasNo": 9999076,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 177,
@@ -1323,7 +1323,7 @@
     "nhsNo": 9999999077,
     "gpDetails": "Frederick, Nash E.",
     "pasNo": 9999077,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 178,
@@ -1340,7 +1340,7 @@
     "nhsNo": 9999999078,
     "gpDetails": "Ferguson, Keaton Y.",
     "pasNo": 9999078,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 179,
@@ -1357,7 +1357,7 @@
     "nhsNo": 9999999079,
     "gpDetails": "Jacobson, Lyle N.",
     "pasNo": 9999079,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 180,
@@ -1374,7 +1374,7 @@
     "nhsNo": 9999999080,
     "gpDetails": "Reed, Remedios H.",
     "pasNo": 9999080,
-    "department": "Outpatient"
+    "department": "Mental Health"
   },
   {
     "id": 181,
@@ -1391,7 +1391,7 @@
     "nhsNo": 9999999081,
     "gpDetails": "Kim, Charles Q.",
     "pasNo": 9999081,
-    "department": "Emergency"
+    "department": "Neighbourhood"
   },
   {
     "id": 182,
@@ -1408,7 +1408,7 @@
     "nhsNo": 9999999082,
     "gpDetails": "Lott, Ferdinand V.",
     "pasNo": 9999082,
-    "department": "Inpatient"
+    "department": "Hospital"
   },
   {
     "id": 183,
@@ -1425,7 +1425,7 @@
     "nhsNo": 9999999083,
     "gpDetails": "Forbes, Merritt P.",
     "pasNo": 9999083,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 184,
@@ -1442,7 +1442,7 @@
     "nhsNo": 9999999084,
     "gpDetails": "Combs, Susan J.",
     "pasNo": 9999084,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 185,
@@ -1459,7 +1459,7 @@
     "nhsNo": 9999999085,
     "gpDetails": "Slater, Yael U.",
     "pasNo": 9999085,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 186,
@@ -1476,7 +1476,7 @@
     "nhsNo": 9999999086,
     "gpDetails": "Pierce, Ulric Q.",
     "pasNo": 9999086,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 187,
@@ -1493,7 +1493,7 @@
     "nhsNo": 9999999087,
     "gpDetails": "Hickman, Mikayla F.",
     "pasNo": 9999087,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 188,
@@ -1510,7 +1510,7 @@
     "nhsNo": 9999999088,
     "gpDetails": "Guy, Victoria I.",
     "pasNo": 9999088,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 189,
@@ -1527,7 +1527,7 @@
     "nhsNo": 9999999089,
     "gpDetails": "Higgins, Quintessa N.",
     "pasNo": 9999089,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 190,
@@ -1544,7 +1544,7 @@
     "nhsNo": 9999999090,
     "gpDetails": "Bernard, Frances Z.",
     "pasNo": 9999090,
-    "department": "Outpatient"
+    "department": "Mental Health"
   },
   {
     "id": 191,
@@ -1561,7 +1561,7 @@
     "nhsNo": 9999999091,
     "gpDetails": "Ortiz, Ezra A.",
     "pasNo": 9999091,
-    "department": "Emergency"
+    "department": "Neighbourhood"
   },
   {
     "id": 192,
@@ -1578,7 +1578,7 @@
     "nhsNo": 9999999092,
     "gpDetails": "Slater, Kibo B.",
     "pasNo": 9999092,
-    "department": "Inpatient"
+    "department": "Hospital"
   },
   {
     "id": 193,
@@ -1595,7 +1595,7 @@
     "nhsNo": 9999999093,
     "gpDetails": "Best, Sylvia U.",
     "pasNo": 9999093,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 194,
@@ -1612,7 +1612,7 @@
     "nhsNo": 9999999094,
     "gpDetails": "Gilbert, Nichole P.",
     "pasNo": 9999094,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 195,
@@ -1629,7 +1629,7 @@
     "nhsNo": 9999999095,
     "gpDetails": "Cortez, Anjolie Q.",
     "pasNo": 9999095,
-    "department": "Inpatient"
+    "department": "Community Care"
   },
   {
     "id": 196,
@@ -1646,7 +1646,7 @@
     "nhsNo": 9999999096,
     "gpDetails": "Mccray, Trevor I.",
     "pasNo": 9999096,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 197,
@@ -1663,7 +1663,7 @@
     "nhsNo": 9999999097,
     "gpDetails": "Sweet, Illiana H.",
     "pasNo": 9999097,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 198,
@@ -1680,7 +1680,7 @@
     "nhsNo": 9999999098,
     "gpDetails": "Boone, Aretha M.",
     "pasNo": 9999098,
-    "department": "Inpatient"
+    "department": "Primary Care"
   },
   {
     "id": 199,
@@ -1697,6 +1697,6 @@
     "nhsNo": 9999999099,
     "gpDetails": "Aguilar, Phoebe A.",
     "pasNo": 9999099,
-    "department": "Inpatient"
+    "department": "Primary Care"
   }
 ]

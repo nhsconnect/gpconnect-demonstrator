@@ -1,0 +1,57 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ modal.title }}</h4>
+</div>
+
+<div class="modal-body">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">{{ patient.fullname() }}</h4>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-4 text-left"><label>Born:</label> <strong>{{ patient.born | date:'dd-MMM-yyyy' }}</strong></div>
+        <div class="col-sm-4 text-center"><label>Gender:</label> <strong>{{ patient.gender }}</strong></div>
+        <div class="col-sm-4 text-right"><label>NHS No:</label> <strong>{{ patient.nhsNo }}</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <form name="allergyForm" class="form-horizontal text-left">
+    <fieldset>
+      <legend>Allergy detail</legend>
+
+      <div class="form-group" ng-class="{'has-error': (formSubmitted || allergyForm.text.$dirty) && allergyForm.text.$invalid, 'has-success': allergyForm.text.$valid && allergyForm.text.$dirty}">
+        <label for="text" class="control-label col-md-4">Text</label>
+        <div class="col-md-8">
+          <div class="input-group">
+            <textarea class="form-control input-sm" id="text" name="text" ng-model="allergy.text" required></textarea>
+            <span class="input-group-addon input-sm">
+                <i class="fa fa-check fa-fw"></i>
+            </span>
+          </div>
+          <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.text.$error.required">You must enter a value.</span>
+        </div>
+      </div>
+
+      <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || allergyForm.date.$dirty) && allergyForm.date.$invalid, 'has-success': allergyForm.date.$valid && allergyForm.date.$dirty}">
+        <label for="date" class="control-label col-md-4">Date</label>
+        <div class="col-md-8">
+          <div class="input-group">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'dateOpen')"><i class="fa fa-calendar"></i></button>
+            </span>
+            <input type="text" class="form-control" id="date" name="date" ng-model="allergy.date" ng-click="openDatepicker($event, 'dateOpen')" datepicker-popup is-open="$parent.dateOpen" required />
+            <span class="input-group-addon input-sm">
+              <i class="fa fa-check fa-fw"></i>
+            </span>
+          </div>
+          <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.date.$error.required">You must enter a valid date.</span>
+        </div>
+      </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+    <a class="btn btn-info" ng-click="cancel()">Cancel</a>
+    <button class="btn btn-success" ng-click="formSubmitted = true; ok(allergyForm, allergy);"><i class="fa fa-check"></i> Complete</button>
+</div>

@@ -23,6 +23,7 @@ angular
           main: { templateUrl: 'views/patients/patients-list.html', controller: 'PatientsListCtrl' }
         }
       })
+
       .state('patients-charts', {
         url: '/',
         views: {
@@ -37,6 +38,16 @@ angular
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
           main: { templateUrl: 'views/diagnoses/diagnoses-list.html', controller: 'DiagnosesListCtrl' }
+        }
+      })
+
+      .state('diagnoses-detail', {
+        url: '/patients/{patientId:int}/diagnoses/{diagnosisId}',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/diagnoses/diagnoses-list.html', controller: 'DiagnosesListCtrl' },
+          detail: { templateUrl: 'views/diagnoses/diagnoses-detail.html', controller: 'DiagnosesDetailCtrl' }
         }
       })
 
@@ -59,16 +70,24 @@ angular
         }
       })
 
-      .state('diagnoses-detail', {
-        url: '/patients/{patientId:int}/diagnoses/{diagnosisId}',
+      .state('medications', {
+        url: '/patients/{patientId:int}/medications',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/diagnoses/diagnoses-list.html', controller: 'DiagnosesListCtrl' },
-          detail: { templateUrl: 'views/diagnoses/diagnoses-detail.html', controller: 'DiagnosesDetailCtrl' }
+          main: { templateUrl: 'views/medications/medications-list.html', controller: 'MedicationsListCtrl' }
+        }
+      })
+
+      .state('medications-detail', {
+        url: '/patients/{patientId:int}/medications/{medicationId:int}',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/medications/medications-list.html', controller: 'MedicationsListCtrl' },
+          detail: { templateUrl: 'views/medications/medications-detail.html', controller: 'MedicationsDetailCtrl' }
         }
       });
-
   })
   .config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
     datepickerConfig.startingDay          = 1;

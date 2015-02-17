@@ -20,16 +20,16 @@
     <fieldset>
       <legend>Allergy detail</legend>
 
-      <div class="form-group" ng-class="{'has-error': (formSubmitted || allergyForm.text.$dirty) && allergyForm.text.$invalid, 'has-success': allergyForm.text.$valid && allergyForm.text.$dirty}">
-        <label for="text" class="control-label col-md-4">Text</label>
+      <div class="form-group" ng-class="{'has-error': (formSubmitted || allergyForm.allergy.$dirty) && allergyForm.allergy.$invalid, 'has-success': allergyForm.allergy.$valid && allergyForm.allergy.$dirty}">
+        <label for="allergy" class="control-label col-md-4">Allergy</label>
         <div class="col-md-8">
           <div class="input-group">
-            <textarea class="form-control input-sm" id="text" name="text" ng-model="allergy.text" required></textarea>
+            <textarea class="form-control input-sm" id="allergy" name="allergy" ng-model="allergy.allergy" required></textarea>
             <span class="input-group-addon input-sm">
                 <i class="fa fa-check fa-fw"></i>
             </span>
           </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.text.$error.required">You must enter a value.</span>
+          <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.allergy.$error.required">You must enter a value.</span>
         </div>
       </div>
 
@@ -46,6 +46,32 @@
             </span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.date.$error.required">You must enter a valid date.</span>
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="{'has-error': (formSubmitted || allergyForm.description.$dirty) && allergyForm.description.$invalid, 'has-success': allergyForm.description.$valid && allergyForm.description.$dirty}">
+        <label for="description" class="control-label col-md-4">Description</label>
+        <div class="col-md-8">
+          <div class="input-group">
+            <textarea class="form-control input-sm" id="description" name="description" ng-model="allergy.description" required></textarea>
+            <span class="input-group-addon input-sm">
+                <i class="fa fa-check fa-fw"></i>
+            </span>
+          </div>
+          <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.description.$error.required">You must enter a value.</span>
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="{'has-error': (formSubmitted || allergyForm.author.$dirty) && allergyForm.author.$invalid, 'has-success': allergyForm.author.$valid && allergyForm.author.$dirty}">
+        <label for="author" class="control-label col-md-4">Author</label>
+        <div class="col-md-8">
+          <div class="input-group">
+            <input type="text" class="form-control input-sm" id="author" name="author" ng-model="allergy.author" required />
+            <span class="input-group-addon input-sm">
+                <i class="fa fa-check fa-fw"></i>
+            </span>
+          </div>
+          <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.author.$error.required">You must enter a value.</span>
         </div>
       </div>
   </form>

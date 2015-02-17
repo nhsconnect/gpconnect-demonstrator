@@ -12,7 +12,7 @@
   <tbody>
     <tr ng-repeat="allergy in allergies | orderBy:'-date'" ng-click="go('/patients/{{patient.id}}/allergies/{{allergy.id}}')" ng-class="{info: selected(allergy)}">
       <td>{{ allergy.date | date:'dd-MMM-yyyy HH:mm' }}</td>
-      <td>{{ allergy.text }}</td>
+      <td>{{ allergy.allergy }}</td>
       <td><i class="fa fa-fw" ng-class="selected(allergy) ? 'fa-folder-open' : 'fa-folder'"></i></td>
     </tr>
 

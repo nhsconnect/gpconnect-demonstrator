@@ -1,0 +1,35 @@
+<h4>Contacts detail</h4>
+
+<div class="form-horizontal text-left">
+    <div class="form-group form-group-sm">
+      <label class="control-label col-md-4">Contacts</label>
+      <div class="col-md-8">
+        <div class="form-control-static">{{ contact.name }}</div>
+      </div>
+    </div>
+
+    <div class="form-group form-group-sm">
+      <label class="control-label col-md-4">Date</label>
+      <div class="col-md-8">
+        <div class="form-control-static">{{ contact.date | date: 'dd-MMM-yyyy HH:mm' }}</div>
+      </div>
+    </div>
+
+    <div class="form-group form-group-sm">
+      <label class="control-label col-md-4">Description</label>
+      <div class="col-md-8">
+        <div class="form-control-static">{{ contact.description }}</div>
+      </div>
+    </div>
+
+    <div class="form-group form-group-sm">
+      <label class="control-label col-md-4">Author</label>
+      <div class="col-md-8">
+        <div class="form-control-static">{{ contact.author }}</div>
+      </div>
+    </div>
+</div>
+
+<div class="form-group form-group-sm text-right">
+  <button class="btn btn-info" ng-click="edit();"><i class="fa fa-pencil"></i> Edit</button>
+</div>

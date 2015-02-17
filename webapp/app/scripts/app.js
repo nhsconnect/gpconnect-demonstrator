@@ -87,6 +87,25 @@ angular
           main: { templateUrl: 'views/medications/medications-list.html', controller: 'MedicationsListCtrl' },
           detail: { templateUrl: 'views/medications/medications-detail.html', controller: 'MedicationsDetailCtrl' }
         }
+      })
+
+      .state('contacts', {
+        url: '/patients/{patientId:int}/contacts',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/contacts/contacts-list.html', controller: 'ContactsListCtrl' }
+        }
+      })
+
+      .state('contacts-detail', {
+        url: '/patients/{patientId:int}/contacts/{contactId:int}',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/contacts/contacts-list.html', controller: 'ContactsListCtrl' },
+          detail: { templateUrl: 'views/contacts/contacts-detail.html', controller: 'ContactsDetailCtrl' }
+        }
       });
   })
   .config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {

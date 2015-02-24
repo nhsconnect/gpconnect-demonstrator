@@ -1,22 +1,25 @@
 OpenEHR POC
 =========
 
+### Installation
 
-###Building OpenEHR POC
+To run the application locally you must have the following installed:
+* Java RE 8
+* Maven 3
+* NodeJS
+* MySQL
 
-####TODO:
-* npm instructions
-* ordering of command line snippets
+To build and start the developement server for the Java API:
+```sh
+mvn clean package -Pwebapp:run
+```
 
-[Once you have your environment setup](https://github.com/AnswerConsulting/open-ehr/wiki) you can package the ESB and run the webapp using:
+Install global NPM dependencies:
+```sh
+npm install -g grunt-cli bower
+```
 
-    mvn clean package -Pwebapp:run
-
-To build the front end only, you can use:
-
-    grunt build
-  
-To view the 'unminified' front end components (useful when debugging), you can use:
-
-    grunt serve
-
+To serve the web assets and watch for changes:
+```sh
+cd webapp && grunt serve
+```

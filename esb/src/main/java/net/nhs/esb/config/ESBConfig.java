@@ -1,36 +1,43 @@
 package net.nhs.esb.config;
 
-import java.io.IOException;
-
-import net.nhs.esb.aggregators.ListAddListAggregator;
-import net.nhs.esb.enrichers.DiagnosesIdHeaderEnricher;
+import net.nhs.esb.patient.config.PatientDatabaseConfig;
+import net.nhs.esb.patient.config.PatientRepositoryConfig;
 import net.nhs.repo.legacy.config.LegacyDataConfig;
 import net.nhs.repo.legacy.config.LegacyJPATransactionalConfig;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.camel.builder.xml.Namespaces;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.env.Environment;
 
 @Configuration
-@ComponentScan(basePackageClasses = { DiagnosesIdHeaderEnricher.class, ListAddListAggregator.class })
+@ComponentScan("net.nhs.esb")
 @PropertySource("classpath:application.properties")
 @Import({
-	ESBCoreConfig.class,
-	CamelConfig.class, RouteConfig.class, RestConfig.class,
-	LegacyJPATransactionalConfig.class, LegacyDataConfig.class
-	})
+        CamelConfig.class, RestConfig.class,
+        LegacyJPATransactionalConfig.class, LegacyDataConfig.class,
+        PatientDatabaseConfig.class, PatientRepositoryConfig.class
+})
 public class ESBConfig {
 
-	@Autowired
-	private Environment environment;
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
 
-	@Bean
-	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() throws IOException {
-		return new PropertySourcesPlaceholderConfigurer();
-	}
+    @Bean
+    public Namespaces namespaces() {
+        Namespaces namespaces = new Namespaces("soap", "http://schemas.xmlsoap.org/soap/envelope/");
+        namespaces.add("wsa", "http://www.w3.org/2005/08/addressing");
+        namespaces.add("wsaspine", "http://schemas.xmlsoap.org/ws/2004/08/addressing");
+        namespaces.add("itk", "urn:nhs-itk:ns:201005");
+        namespaces.add("local", "local-namespace-uri");
+        namespaces.add("hl7", "urn:hl7-org:v3");
+        namespaces.add("eb", "http://www.oasis-open.org/committees/ebxml-msg/schema/msg-header-2_0.xsd");
+        namespaces.add("npfitlc", "NPFIT:HL7:Localisation");
+
+        return namespaces;
+    }
 }

@@ -42,7 +42,6 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (diagnosis) {
         Diagnosis.createByPatient($scope.patient.id, diagnosis).then(function (result) {
           $scope.patient.diagnoses.push(result.data);
-          console.log(result);
         });
       });
     };

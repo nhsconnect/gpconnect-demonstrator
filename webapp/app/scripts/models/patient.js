@@ -12,7 +12,7 @@ angular.module('openehrPocApp')
       };
 
       self.address = (function () {
-        return [self.address1, self.address2, self.address4].join(', ');
+        return [self.address1, self.address2, self.address3, self.address4, self.address5, self.postCode].join(', ');
       })();
 
       self.age = function () {

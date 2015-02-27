@@ -4,7 +4,7 @@ angular.module('openehrPocApp')
   .factory('PatientService', function ($http, Patient) {
 
     var all = function () {
-      return $http.get('/dummy-data/patients.json', { cache: true }).then(function (result) {
+      return $http.get('/api/patients').then(function (result) {
         var patients = [];
 
         angular.forEach(result.data, function (patient) {
@@ -17,9 +17,32 @@ angular.module('openehrPocApp')
     };
 
     var get = function (id) {
-      return all().then(function (patients) {
-        return _.findWhere(patients, { id: parseInt(id) });
+      return $http.get('/api/patients/' + id).then(function (result) {
+        return new Patient(result.data);
       });
+    };
+
+    var create = function (patient) {
+      var sendPatient = {
+        address1: patient.address1,
+        address2: patient.address2,
+        address3: patient.address3,
+        address4: patient.address4,
+        address5: patient.address5,
+        born: patient.born,
+        department: patient.department,
+        firstname: patient.firstname,
+        gPPractice: patient.gPPractice,
+        gender: patient.gender,
+        id: patient.id,
+        lastname: patient.lastname,
+        nhsNo: patient.nhsNo,
+        phone: patient.phone,
+        postCode: patient.postCode,
+        title: patient.title
+      };
+
+      return $http.put('/api/patients', sendPatient);
     };
 
     var update = function (patient, updatedDiagnosis) {
@@ -52,7 +75,8 @@ angular.module('openehrPocApp')
       all: all,
       get: get,
       update: update,
-      summaries: summaries
+      summaries: summaries,
+      create: create
     };
 
   });

@@ -46,20 +46,19 @@
       <tr>
         <th>Name</th>
         <th>Address</th>
-        <th>Post Code</th>
+        <th></th>
       </tr>
     </thead>
 
     <tbody>
       <tr ng-repeat="patient in patients | orderBy:'firstname'">
-        <td>{{ patient.firstname + patient.lastname }}</td>
-        <td>{{ patient.address1 }}</td>
-        <td>{{ patient.postalCode }}</td>
-        <td width="120" class="text-center"><button class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Save</button></td>
+        <td>{{ patient.fullname() }}</td>
+        <td>{{ patient.address }}</td>
+        <td width="120" class="text-center"><button class="btn btn-success btn-xs" ng-click="create(patient)"><i class="fa fa-plus"></i> Save</button></td>
       </tr>
 
       <tr ng-if="!patients.length">
-        <td colspan="3"><span class="label label-default">No results found</span></td>
+        <td colspan="3"><span class="label label-default">No patients</span></td>
       </tr>
     </tbody>
   </table>

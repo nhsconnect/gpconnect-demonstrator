@@ -6,16 +6,22 @@ angular.module('openehrPocApp')
     $modal.open({
       templateUrl: 'views/patients/patients-lookup.html',
       size: 'lg',
-      controller: function ($scope, PatientLookup) {
+      controller: function ($scope, SmspLookup, PatientService) {
 
         $scope.search = function (firstname, lastname) {
           $scope.searching = true;
 
-          PatientLookup.bySearch(firstname, lastname).then(function (result) {
+          SmspLookup.byName(firstname, lastname).then(function (result) {
             $scope.patients = result;
             $scope.searching = false;
           }, function () {
             $scope.searching = false;
+          });
+        };
+
+        $scope.create = function (patient) {
+          PatientService.create(patient).then(function () {
+            $scope.save();
           });
         };
 
@@ -29,7 +35,7 @@ angular.module('openehrPocApp')
 
       }
     }).result.finally(function () {
-      $state.go('patients-charts');
+      $state.go('patients-list');
     });
 
   });

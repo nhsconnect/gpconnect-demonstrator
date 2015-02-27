@@ -114,6 +114,15 @@ angular
           main: { templateUrl: 'views/contacts/contacts-list.html', controller: 'ContactsListCtrl' },
           detail: { templateUrl: 'views/contacts/contacts-detail.html', controller: 'ContactsDetailCtrl' }
         }
+      })
+
+      .state('transferOfCare', {
+        url: '/patients/{patientId:int}/transfer-of-care',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { controller: 'TransferOfCareCtrl' }
+        }
       });
   })
   .config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {

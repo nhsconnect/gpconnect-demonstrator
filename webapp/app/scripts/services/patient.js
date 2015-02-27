@@ -55,7 +55,7 @@ angular.module('openehrPocApp')
         var summaries = {};
 
         summaries.age = _.chain(patients)
-          .filter(function (patient) { return !!patient.age })
+          .filter(function (patient) { return !!patient.age; })
           .countBy(function (patient) { return patient.ageRange; })
           .map(function (value, key) { return { series: key, value: value }; })
           .sortBy(function (value) { return value.ageRange; })
@@ -63,7 +63,7 @@ angular.module('openehrPocApp')
           .value();
 
         summaries.department = _.chain(patients)
-          .filter(function (patient) { return !!patient.department })
+          .filter(function (patient) { return !!patient.department; })
           .countBy(function (patient) { return patient.department; })
           .map(function (value, key) { return { series: key, value: value }; })
           .sortBy(function (value) { return value.department; })

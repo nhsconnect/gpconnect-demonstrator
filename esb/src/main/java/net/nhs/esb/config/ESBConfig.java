@@ -1,6 +1,5 @@
 package net.nhs.esb.config;
 
-import net.nhs.esb.patient.config.PatientDatabaseConfig;
 import net.nhs.esb.patient.config.PatientRepositoryConfig;
 import net.nhs.repo.legacy.config.LegacyDataConfig;
 import net.nhs.repo.legacy.config.LegacyJPATransactionalConfig;
@@ -18,7 +17,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @Import({
         CamelConfig.class, RestConfig.class,
         LegacyJPATransactionalConfig.class, LegacyDataConfig.class,
-        PatientDatabaseConfig.class, PatientRepositoryConfig.class
+        PatientRepositoryConfig.class
 })
 public class ESBConfig {
 

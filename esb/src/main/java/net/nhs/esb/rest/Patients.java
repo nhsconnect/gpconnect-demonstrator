@@ -11,8 +11,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import net.nhs.domain.openehr.model.Diagnoses;
+import net.nhs.esb.allergy.model.Allergy;
+import net.nhs.esb.allergy.model.AllergyArray;
+import net.nhs.esb.clinicalsynopsis.model.ClinicalSynopsis;
+import net.nhs.esb.clinicalsynopsis.model.ClinicalSynopsisArray;
+import net.nhs.esb.contact.model.Contact;
+import net.nhs.esb.contact.model.ContactArray;
+import net.nhs.esb.medication.model.Medication;
+import net.nhs.esb.medication.model.MedicationArray;
 import net.nhs.esb.patient.model.PatientDetails;
 import net.nhs.esb.patient.model.PatientDetailsArray;
+import net.nhs.esb.transfer.model.TransferOfCareArray;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -59,6 +68,114 @@ public class Patients {
     @GET
     @Path("/{id}")
     public PatientDetails findPatientById(@PathParam("id") Long id) {
+        return null;
+    }
+
+    @GET
+    @Path("/{patientId}/allergies")
+    public AllergyArray findAllergiesByPatientId(@PathParam("patientId") Long patientId) {
+        return null;
+    }
+
+    @POST
+    @Path("/{patientId}/allergies")
+    public AllergyArray findAllergiesByPatientIdWithPost(@PathParam("patientId") Long patientId) {
+        return null;
+    }
+
+    @GET
+    @Path("/{patientId}/allergies/{id}")
+    public Allergy findAllergyById(@PathParam("patientId") Long patientId, @PathParam("id") Long id) {
+        return null;
+    }
+
+    @PUT
+    @Path("/{patientId}/allergies/{id}")
+    public void createAllergy(@PathParam("patientId") Long patientId, @PathParam("id") Long id, Allergy allergy) {
+
+    }
+
+    @GET
+    @Path("/{patientId}/contacts")
+    public ContactArray findContactsByPatientId(@PathParam("patientId") Long patientId) {
+        return null;
+    }
+
+    @POST
+    @Path("/{patientId}/contacts")
+    public ContactArray findContactsByPatientIdWithPost(@PathParam("patientId") Long patientId) {
+        return null;
+    }
+
+    @GET
+    @Path("/{patientId}/contacts/{id}")
+    public Contact findContactById(@PathParam("patientId") Long patientId, @PathParam("id") Long id) {
+        return null;
+    }
+
+    @PUT
+    @Path("/{patientId}/contacts/{id}")
+    public void createContact(@PathParam("patientId") Long patientId, @PathParam("id") Long id, Contact contact) {
+
+    }
+
+    @GET
+    @Path("/{patientId}/medications")
+    public MedicationArray findMedicationsByPatientId(@PathParam("patientId") Long patientId) {
+        return null;
+    }
+
+    @POST
+    @Path("/{patientId}/medications")
+    public MedicationArray findMedicationsByPatientIdWithPost(@PathParam("patientId") Long patientId) {
+        return null;
+    }
+
+    @GET
+    @Path("/{patientId}/medications/{id}")
+    public Medication findMedicationById(@PathParam("patientId") Long patientId, @PathParam("id") Long id) {
+        return null;
+    }
+
+    @PUT
+    @Path("/{patientId}/medications/{id}")
+    public void createMedication(@PathParam("patientId") Long patientId, @PathParam("id") Long id, Medication medication) {
+
+    }
+
+    @GET
+    @Path("/{patientId}/clinical-synopses")
+    public ClinicalSynopsisArray findClinicalSynopsesByPatientId(@PathParam("patientId") Long patientId) {
+        return null;
+    }
+
+    @POST
+    @Path("/{patientId}/clinical-synopses")
+    public ClinicalSynopsisArray findClinicalSynopsesByPatientIdWithPost(@PathParam("patientId") Long patientId) {
+        return null;
+    }
+
+    @GET
+    @Path("/{patientId}/clinical-synopses/{id}")
+    public ClinicalSynopsis findClinicalSynopsisById(@PathParam("patientId") Long patientId, @PathParam("id") Long id) {
+        return null;
+    }
+
+    @PUT
+    @Path("/{patientId}/clinical-synopses/{id}")
+    public void createClinicalSynopsis(@PathParam("patientId") Long patientId, @PathParam("id") Long id, ClinicalSynopsis clinicalSynopsis) {
+
+    }
+
+    @GET
+    @Path("/{patientId}/transfer-of-care")
+    public TransferOfCareArray findTransfersOfCareByPatientId(@PathParam("patientId") Long patientId) {
+        return null;
+    }
+
+    @POST
+    @Path("/{patientId}/transfer-of-care")
+    public TransferOfCareArray findTransfersOfCareByPatientIdWithPost(@PathParam("patientId") Long patientId) {
         return null;
     }
 }

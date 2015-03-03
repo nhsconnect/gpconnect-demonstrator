@@ -8,12 +8,16 @@ import net.nhs.esb.patient.transform.PatientSearchTransformer;
 import org.apache.camel.Exchange;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
  */
 @Component
 public class PatientSearchRouteBuilder extends SpringRouteBuilder {
+
+    @Value("${smsp.address}")
+    private String smspAddress;
 
     @Override
     public void configure() throws Exception {
@@ -30,9 +34,9 @@ public class PatientSearchRouteBuilder extends SpringRouteBuilder {
                 .convertBodyTo(PatientSearchCriteria.class)
                 .bean(messageTransformer, "createRequest")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
-                .setHeader(Exchange.HTTP_URI, simple("https://smsp-dummy.herokuapp.com"))
+                .setHeader(Exchange.HTTP_URI, simple(smspAddress))
                 .setHeader(Exchange.HTTP_PATH, constant("/getpatientdetailsbysearch"))
-                .to("https://smsp-dummy.herokuapp.com")
+                .to(smspAddress)
                 .to("direct:smspGetPatientDetailsBySearchResponse");
 
         from("direct:smspGetPatientDetailsBySearchResponse")

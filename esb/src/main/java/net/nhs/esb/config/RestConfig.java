@@ -10,14 +10,15 @@ import org.apache.camel.component.cxf.spring.SpringJAXRSClientFactoryBean;
 import org.apache.camel.component.cxf.spring.SpringJAXRSServerFactoryBean;
 import org.apache.camel.spring.javaconfig.CamelConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RestConfig extends CamelConfiguration {
-    private static final String OPENEHR_ADDRESS = "https://rest.ehrscape.com/rest/v1";
-    //private static final String OPENEHR_ADDRESS = "http://ocean-db.cloudapp.net";
-    //private static final String OPENEHR_ADDRESS = "http://localhost:1234/rest/v1";
+
+    @Value("${openehr.address}")
+    private String openEhrAddress;
 
     @Autowired
     private Patients patients;
@@ -50,7 +51,7 @@ public class RestConfig extends CamelConfiguration {
     public SpringJAXRSClientFactoryBean rsOpenEhr() {
         SpringJAXRSClientFactoryBean springJAXRSClientFactoryBean = new SpringJAXRSClientFactoryBean();
         springJAXRSClientFactoryBean.setServiceClass(OpenEhr.class);
-        springJAXRSClientFactoryBean.setAddress(OPENEHR_ADDRESS);
+        springJAXRSClientFactoryBean.setAddress(openEhrAddress);
         springJAXRSClientFactoryBean.setLoggingFeatureEnabled(true);
         springJAXRSClientFactoryBean.setProvider(jacksonJsonProvider());
         return springJAXRSClientFactoryBean;

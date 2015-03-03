@@ -34,25 +34,25 @@ public class Patients {
 
     @GET
     @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses")
-    public List<Diagnoses> getDiagnosesByPatientId(@PathParam(PATIENT_ID_HEADER) Integer patientId) {
+    public List<Diagnoses> getDiagnosesByPatientId(@PathParam(PATIENT_ID_HEADER) Long patientId) {
         return null;
     }
 
     @POST
     @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses")
-    public Diagnoses saveDiagnosisByPatientId(@PathParam(PATIENT_ID_HEADER) Integer patientId, Diagnoses diagnosis) {
+    public Diagnoses saveDiagnosisByPatientId(@PathParam(PATIENT_ID_HEADER) Long patientId, Diagnoses diagnosis) {
         return null;
     }
 
     @GET
     @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses/{" + DIAGNOSIS_ID_HEADER + "}")
-    public Diagnoses getDiagnosisByIdAndPatientId(@PathParam(PATIENT_ID_HEADER) Integer patientId, @PathParam(DIAGNOSIS_ID_HEADER) String diagnosisId) {
+    public Diagnoses getDiagnosisByIdAndPatientId(@PathParam(PATIENT_ID_HEADER) Long patientId, @PathParam(DIAGNOSIS_ID_HEADER) String diagnosisId) {
         return null;
     }
 
     @PUT
     @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses/{" + DIAGNOSIS_ID_HEADER + "}")
-    public Diagnoses updateDiagnosisByIdAndPatientId(@PathParam(PATIENT_ID_HEADER) Integer patientId, @PathParam(DIAGNOSIS_ID_HEADER) String diagnosisId, Diagnoses diagnosis) {
+    public Diagnoses updateDiagnosisByIdAndPatientId(@PathParam(PATIENT_ID_HEADER) Long patientId, @PathParam(DIAGNOSIS_ID_HEADER) String diagnosisId, Diagnoses diagnosis) {
         return null;
     }
 

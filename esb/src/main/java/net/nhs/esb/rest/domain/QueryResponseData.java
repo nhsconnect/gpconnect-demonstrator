@@ -1,15 +1,17 @@
-package net.nhs.esb.contact.route.model;
+package net.nhs.esb.rest.domain;
 
-import net.nhs.esb.rest.domain.Meta;
+import java.util.List;
+import java.util.Map;
 
 /**
  */
-public class ContactSearchResponse {
+public class QueryResponseData {
 
     private Meta meta;
     private String aql;
     private String executedAql;
-    private ContactSearchResult[] resultSet;
+    private Map<String,Object> aqlParameters;
+    private List<Map<String,Object>> resultSet;
 
     public Meta getMeta() {
         return meta;
@@ -35,11 +37,19 @@ public class ContactSearchResponse {
         this.executedAql = executedAql;
     }
 
-    public ContactSearchResult[] getResultSet() {
+    public Map<String, Object> getAqlParameters() {
+        return aqlParameters;
+    }
+
+    public void setAqlParameters(Map<String, Object> aqlParameters) {
+        this.aqlParameters = aqlParameters;
+    }
+
+    public List<Map<String, Object>> getResultSet() {
         return resultSet;
     }
 
-    public void setResultSet(ContactSearchResult[] resultSet) {
+    public void setResultSet(List<Map<String, Object>> resultSet) {
         this.resultSet = resultSet;
     }
 }

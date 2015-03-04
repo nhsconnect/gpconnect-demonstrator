@@ -1,10 +1,8 @@
 package net.nhs.esb.contact.route;
 
 import net.nhs.esb.contact.model.ContactArray;
-import net.nhs.esb.contact.route.model.ContactSearchResponse;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
-import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.springframework.stereotype.Component;
 
@@ -22,15 +20,12 @@ public class FindPatientContactArrayRouteBuilder extends SpringRouteBuilder {
                 .to("direct:getEhrId")
                 .to("direct:openEhrFindPatientContactList");
 
-        JacksonDataFormat dataFormat = new JacksonDataFormat(ContactSearchResponse.class);
-
         from("direct:openEhrFindPatientContactList")
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
                 .setHeader(CxfConstants.OPERATION_NAME, constant("query"))
                 .setBody(simple(buildQuery()))
                 .to("cxfrs:bean:rsOpenEhr")
-                .unmarshal(dataFormat)
                 .convertBodyTo(ContactArray.class)
                 .setBody(simple("${body.contacts}"))
                 .end();

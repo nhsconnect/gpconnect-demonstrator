@@ -14,6 +14,7 @@ import net.nhs.esb.rest.domain.EhrDiagnosisRequest;
 import net.nhs.esb.rest.domain.EhrDiagnosisResponse;
 import net.nhs.esb.rest.domain.EhrResponse;
 import net.nhs.esb.rest.domain.LoginResponse;
+import net.nhs.esb.rest.domain.QueryResponseData;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -36,7 +37,7 @@ public class OpenEhr {
 
     @GET
     @Path("/query")
-    public String query(@QueryParam("aql") String aql) {
+    public QueryResponseData query(@QueryParam("aql") String aql) {
         return null;
     }
 

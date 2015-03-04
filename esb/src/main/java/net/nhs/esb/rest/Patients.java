@@ -97,7 +97,7 @@ public class Patients {
 
     @GET
     @Path("/{patientId}/contacts")
-    public ContactArray findContactsByPatientId(@PathParam("patientId") Long patientId) {
+    public ContactArray findPatientContactList(@PathParam("patientId") Long patientId) {
         return null;
     }
 

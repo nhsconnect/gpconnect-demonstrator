@@ -1,8 +1,8 @@
-package net.nhs.esb.contact.model;
+package net.nhs.esb.contact.route.model;
 
 /**
  */
-public class Contact {
+public class ContactSearchResult {
 
     private String name;
     private String contactInformation;

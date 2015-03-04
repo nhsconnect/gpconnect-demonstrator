@@ -10,47 +10,45 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import net.nhs.esb.rest.domain.AqlResponse;
 import net.nhs.esb.rest.domain.EhrDiagnosisRequest;
 import net.nhs.esb.rest.domain.EhrDiagnosisResponse;
 import net.nhs.esb.rest.domain.EhrResponse;
 import net.nhs.esb.rest.domain.LoginResponse;
-
 import org.springframework.stereotype.Controller;
 
 @Controller
 @Path("/")
-@Produces({MediaType.APPLICATION_JSON})
-@Consumes({MediaType.APPLICATION_JSON})
+@Produces({ MediaType.APPLICATION_JSON })
+@Consumes({ MediaType.APPLICATION_JSON })
 public class OpenEhr {
-	
-	@POST
-	@Path("/session")
+
+    @POST
+    @Path("/session")
     public LoginResponse login(@QueryParam("username") String username, @QueryParam("password") String password) {
-		return null;
+        return null;
     }
-	
-	@GET
-	@Path("/ehr")
+
+    @GET
+    @Path("/ehr")
     public EhrResponse ehr(@QueryParam("subjectNamespace") String subjectNamespace, @QueryParam("subjectId") String subjectId) {
-		return null;
+        return null;
     }
-	
-	@GET
-	@Path("/query")
-    public AqlResponse query(@QueryParam(value="aql") String aql) {
-		return null;
+
+    @GET
+    @Path("/query")
+    public String query(@QueryParam("aql") String aql) {
+        return null;
     }
-	
-	@POST
-	@Path("/composition")
-    public EhrDiagnosisResponse create(EhrDiagnosisRequest ehrDiagnosisRequest, @QueryParam(value="templateId") String templateId, @QueryParam(value="ehrId") String ehrId, @QueryParam(value="format") String format) {
-		return null;
+
+    @POST
+    @Path("/composition")
+    public EhrDiagnosisResponse create(EhrDiagnosisRequest ehrDiagnosisRequest, @QueryParam("templateId") String templateId, @QueryParam("ehrId") String ehrId, @QueryParam("format") String format) {
+        return null;
     }
-	
-	@PUT
-	@Path("/composition/{compositionId}")
-    public EhrDiagnosisResponse update(EhrDiagnosisRequest ehrDiagnosisRequest, @PathParam("compositionId") String compositionId, @QueryParam(value="templateId") String templateId, @QueryParam(value="ehrId") String ehrId, @QueryParam(value="format") String format) {
-		return null;
+
+    @PUT
+    @Path("/composition/{compositionId}")
+    public EhrDiagnosisResponse update(EhrDiagnosisRequest ehrDiagnosisRequest, @PathParam("compositionId") String compositionId, @QueryParam(value = "templateId") String templateId, @QueryParam(value = "ehrId") String ehrId, @QueryParam(value = "format") String format) {
+        return null;
     }
 }

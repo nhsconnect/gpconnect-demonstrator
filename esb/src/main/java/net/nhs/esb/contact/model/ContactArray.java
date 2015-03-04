@@ -1,16 +1,18 @@
 package net.nhs.esb.contact.model;
 
+import java.util.List;
+
 /**
  */
 public class ContactArray {
 
-    private Contact[] contacts;
+    private List<Contact> contacts;
 
-    public Contact[] getContacts() {
+    public List<Contact> getContacts() {
         return contacts;
     }
 
-    public void setContacts(Contact[] contacts) {
+    public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
     }
 }

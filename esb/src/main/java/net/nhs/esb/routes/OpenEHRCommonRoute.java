@@ -43,7 +43,6 @@ public class OpenEHRCommonRoute extends SpringRouteBuilder {
                 .setHeader("Ehr-Session", simple("${body.sessionId}"))
         ;
 
-        // TODO Take out the hard-coded ehrId value
         from("direct:getEhrId")
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
@@ -51,8 +50,7 @@ public class OpenEHRCommonRoute extends SpringRouteBuilder {
                 .bean(openEhrPatientParams)
                 .to("cxfrs:bean:rsOpenEhr")
                 .log("EhrId: ${body.ehrId}")
-                .setHeader("ehrId", constant("0da489ee-c0ae-4653-9074-57b7f63c9f16"))
-//                .setHeader("ehrId", simple("${body.ehrId}"))
+                .setHeader("ehrId", simple("${body.ehrId}"))
         ;
 
         from("direct:createEhrDiagnosisRequest")

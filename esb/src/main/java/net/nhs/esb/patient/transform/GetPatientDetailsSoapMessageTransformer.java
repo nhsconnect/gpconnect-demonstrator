@@ -39,10 +39,6 @@ public class GetPatientDetailsSoapMessageTransformer {
         return producerTemplate.requestBody("velocity:template/velocity/GetPatientDetailsBySearch.vm", searchCriteria, String.class);
     }
 
-    public PatientDetails[] patientDetails(PatientDetailsArray patientDetailsArray) {
-        return patientDetailsArray.getPatientDetails();
-    }
-
     @Converter
     public PatientDetailsArray convert(String soapResponse) throws XPathExpressionException {
 

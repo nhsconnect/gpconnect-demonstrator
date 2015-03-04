@@ -42,7 +42,7 @@ public class PatientSearchRouteBuilder extends SpringRouteBuilder {
         from("direct:smspGetPatientDetailsBySearchResponse")
                 .convertBodyTo(String.class)
                 .convertBodyTo(PatientDetailsArray.class)
-                .bean(messageTransformer, "patientDetails")
+                .setBody(simple("${body.patientDetails"))
                 .end();
 
         from("direct:findAllPatients")

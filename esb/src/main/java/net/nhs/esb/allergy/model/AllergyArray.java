@@ -1,16 +1,18 @@
 package net.nhs.esb.allergy.model;
 
+import java.util.List;
+
 /**
  */
 public class AllergyArray {
 
-    private Allergy[] allergies;
+    private List<Allergy> allergies;
 
-    public Allergy[] getAllergies() {
+    public List<Allergy> getAllergies() {
         return allergies;
     }
 
-    public void setAllergies(Allergy[] allergies) {
+    public void setAllergies(List<Allergy> allergies) {
         this.allergies = allergies;
     }
 }

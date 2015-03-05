@@ -1,16 +1,18 @@
 package net.nhs.esb.medication.model;
 
+import java.util.List;
+
 /**
  */
 public class MedicationArray {
 
-    private Medication[] medications;
+    private List<Medication> medications;
 
-    public Medication[] getMedications() {
+    public List<Medication> getMedications() {
         return medications;
     }
 
-    public void setMedications(Medication[] medications) {
+    public void setMedications(List<Medication> medications) {
         this.medications = medications;
     }
 }

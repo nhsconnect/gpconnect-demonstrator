@@ -4,9 +4,18 @@ import java.util.List;
 
 /**
  */
-public class ContactArray {
+public class ContactComposition {
 
+    private String compositionId;
     private List<Contact> contacts;
+
+    public String getCompositionId() {
+        return compositionId;
+    }
+
+    public void setCompositionId(String compositionId) {
+        this.compositionId = compositionId;
+    }
 
     public List<Contact> getContacts() {
         return contacts;

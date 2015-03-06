@@ -4,9 +4,18 @@ import java.util.List;
 
 /**
  */
-public class MedicationArray {
+public class MedicationComposition {
 
+    private String compositionId;
     private List<Medication> medications;
+
+    public String getCompositionId() {
+        return compositionId;
+    }
+
+    public void setCompositionId(String compositionId) {
+        this.compositionId = compositionId;
+    }
 
     public List<Medication> getMedications() {
         return medications;

@@ -1,4 +1,4 @@
-package net.nhs.esb.rest.domain;
+package net.nhs.esb.openehr.model;
 
 import java.util.List;
 import java.util.Map;

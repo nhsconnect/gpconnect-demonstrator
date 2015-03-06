@@ -10,17 +10,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import net.nhs.esb.openehr.model.CompositionResponseData;
+import net.nhs.esb.openehr.model.QueryResponseData;
 import net.nhs.esb.rest.domain.EhrDiagnosisRequest;
 import net.nhs.esb.rest.domain.EhrDiagnosisResponse;
 import net.nhs.esb.rest.domain.EhrResponse;
 import net.nhs.esb.rest.domain.LoginResponse;
-import net.nhs.esb.rest.domain.QueryResponseData;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @Path("/")
-@Produces({ MediaType.APPLICATION_JSON })
-@Consumes({ MediaType.APPLICATION_JSON })
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class OpenEhr {
 
     @POST
@@ -41,6 +42,12 @@ public class OpenEhr {
         return null;
     }
 
+    @GET
+    @Path("/composition/{compositionId}")
+    public CompositionResponseData findComposition(@PathParam("compositionId") String compositionId, @QueryParam("format") String format) {
+        return null;
+    }
+
     @POST
     @Path("/composition")
     public EhrDiagnosisResponse create(EhrDiagnosisRequest ehrDiagnosisRequest, @QueryParam("templateId") String templateId, @QueryParam("ehrId") String ehrId, @QueryParam("format") String format) {
@@ -49,7 +56,7 @@ public class OpenEhr {
 
     @PUT
     @Path("/composition/{compositionId}")
-    public EhrDiagnosisResponse update(EhrDiagnosisRequest ehrDiagnosisRequest, @PathParam("compositionId") String compositionId, @QueryParam(value = "templateId") String templateId, @QueryParam(value = "ehrId") String ehrId, @QueryParam(value = "format") String format) {
+    public EhrDiagnosisResponse update(EhrDiagnosisRequest ehrDiagnosisRequest, @PathParam("compositionId") String compositionId, @QueryParam("templateId") String templateId, @QueryParam("ehrId") String ehrId, @QueryParam("format") String format) {
         return null;
     }
 }

@@ -1,4 +1,4 @@
-package net.nhs.esb.rest.domain;
+package net.nhs.esb.openehr.model;
 
 public class Meta {
 	private String href;

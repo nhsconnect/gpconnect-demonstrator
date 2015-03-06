@@ -2,6 +2,8 @@ package net.nhs.esb.rest.domain;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import net.nhs.esb.openehr.model.Meta;
+
 @XmlRootElement(name ="ehrResponseData")
 public class EhrResponse {
 	private EhrStatus ehrStatus;

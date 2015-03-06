@@ -1,9 +1,9 @@
 package net.nhs.esb.enrichers;
 
-import static org.junit.Assert.*;
-import net.nhs.esb.rest.domain.EhrDiagnosisResponse;
-import net.nhs.esb.rest.domain.Meta;
+import static org.junit.Assert.assertEquals;
 
+import net.nhs.esb.openehr.model.Meta;
+import net.nhs.esb.rest.domain.EhrDiagnosisResponse;
 import org.junit.Test;
 
 public class FindDiagnosisIdEnricherTest {

@@ -8,6 +8,8 @@ public class Contact {
     private String contactInformation;
     private String relationship;
     private String relationshipType;
+    private String relationshipCode;
+    private String relationshipTerminology;
     private Boolean nextOfKin;
     private String note;
 
@@ -41,6 +43,22 @@ public class Contact {
 
     public void setRelationshipType(String relationshipType) {
         this.relationshipType = relationshipType;
+    }
+
+    public String getRelationshipCode() {
+        return relationshipCode;
+    }
+
+    public void setRelationshipCode(String relationshipCode) {
+        this.relationshipCode = relationshipCode;
+    }
+
+    public String getRelationshipTerminology() {
+        return relationshipTerminology;
+    }
+
+    public void setRelationshipTerminology(String relationshipTerminology) {
+        this.relationshipTerminology = relationshipTerminology;
     }
 
     public Boolean getNextOfKin() {

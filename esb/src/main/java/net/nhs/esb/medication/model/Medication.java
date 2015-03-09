@@ -5,6 +5,8 @@ package net.nhs.esb.medication.model;
 public class Medication {
 
     private String name;
+    private String code;
+    private String terminology;
     private String route;
     private String doseAmount;
     private String doseTiming;
@@ -17,6 +19,22 @@ public class Medication {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getTerminology() {
+        return terminology;
+    }
+
+    public void setTerminology(String terminology) {
+        this.terminology = terminology;
     }
 
     public String getRoute() {

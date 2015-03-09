@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 public class CompositionSearchParameters {
 
     public Object[] createParameters(@Header("compositionId") String compositionId) {
-        return new Object[] { compositionId, "STRUCTURED" };
+        return new Object[] { compositionId, "FLAT" };
     }
 }

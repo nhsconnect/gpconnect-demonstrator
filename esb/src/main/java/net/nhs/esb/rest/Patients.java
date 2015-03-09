@@ -71,9 +71,15 @@ public class Patients {
         return null;
     }
 
+    @POST
+    @Path("/{patientId}/allergies")
+    public void createPatientAllergyComposition(@PathParam("patientId") Long patientId, AllergyComposition allergyComposition) {
+
+    }
+
     @PUT
     @Path("/{patientId}/allergies")
-    public void createAllergy(@PathParam("patientId") Long patientId, AllergyComposition allergyComposition) {
+    public void updatePatientAllergyComposition(@PathParam("patientId") Long patientId, AllergyComposition allergyComposition) {
 
     }
 

@@ -1,6 +1,6 @@
-package net.nhs.esb.contact.route;
+package net.nhs.esb.medication.route;
 
-import net.nhs.esb.contact.model.ContactUpdate;
+import net.nhs.esb.medication.model.MedicationUpdate;
 import net.nhs.esb.openehr.route.CompositionCreateParameters;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 /**
  */
 @Component
-public class CreatePatientContactRouteBuilder extends SpringRouteBuilder {
+public class CreatePatientMedicationRouteBuilder extends SpringRouteBuilder {
 
-    @Value("${openehr.contactsTemplate}")
-    private String contactTemplate;
+    @Value("${openehr.medicationTemplate")
+    private String medicationTemplate;
 
     @Autowired
     private CompositionCreateParameters compositionCreateParameters;
@@ -23,19 +23,19 @@ public class CreatePatientContactRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from("direct:createPatientContactComposition").routeId("openEhrCreatePatientContactComposition")
-                .convertBodyTo(ContactUpdate.class)
+        from("direct:createPatientMedicationComposition").routeId("openEhrCreatePatientMedicationComposition")
+                .convertBodyTo(MedicationUpdate.class)
                 .setHeader("composition", simple("${body.content}"))
-                .to("direct:openEhrCreatePatientContactComposition");
+                .to("direct:openEhrCreatePatientMedicationComposition");
 
-        from("direct:openEhrCreatePatientContactComposition")
+        from("direct:openEhrCreatePatientMedicationComposition")
                 .to("direct:setHeaders")
                 .to("direct:createSession")
                 .to("direct:getEhrId")
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
                 .setHeader(CxfConstants.OPERATION_NAME, constant("createComposition"))
-                .setHeader("template", constant(contactTemplate))
+                .setHeader("template", constant(medicationTemplate))
                 .bean(compositionCreateParameters)
                 .to("cxfrs:bean:rsOpenEhr")
                 .end();

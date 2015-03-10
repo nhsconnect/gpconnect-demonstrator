@@ -50,7 +50,7 @@ public class OpenEhr {
 
     @POST
     @Path("/composition")
-    public ActionRestResponseData createComposition(@QueryParam("templateId") String templateId, @QueryParam("ehrId") String ehrId, @QueryParam("format") String format, Object body) {
+    public ActionRestResponseData createComposition(@QueryParam("templateId") String templateId, @QueryParam("ehrId") String ehrId, @QueryParam("format") String format, Map<String,Object> body) {
         return null;
     }
 

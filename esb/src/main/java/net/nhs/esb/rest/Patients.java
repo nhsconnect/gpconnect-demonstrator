@@ -1,5 +1,6 @@
 package net.nhs.esb.rest;
 
+import java.util.Collections;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -29,7 +30,7 @@ public class Patients {
     @GET
     @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses")
     public List<Diagnoses> getDiagnosesByPatientId(@PathParam(PATIENT_ID_HEADER) Long patientId) {
-        return null;
+        return Collections.emptyList();
     }
 
     @POST
@@ -91,7 +92,13 @@ public class Patients {
 
     @PUT
     @Path("/{patientId}/contacts")
-    public void createContact(@PathParam("patientId") Long patientId, ContactComposition contactComposition) {
+    public void createPatientContactComposition(@PathParam("patientId") Long patientId, ContactComposition contactComposition) {
+
+    }
+
+    @POST
+    @Path("/{patientId}/contacts")
+    public void updatePatientContactComposition(@PathParam("patientId") Long patientId, ContactComposition contactComposition) {
 
     }
 
@@ -103,7 +110,14 @@ public class Patients {
 
     @PUT
     @Path("/{patientId}/medications")
-    public void createMedication(@PathParam("patientId") Long patientId, MedicationComposition medicationComposition) {
+    public void createPatientMedicationComposition(@PathParam("patientId") Long patientId, MedicationComposition medicationComposition) {
 
     }
+
+    @POST
+    @Path("/{patientId}/medications")
+    public void updatePatientMedicationComposition(@PathParam("patientId") Long patientId, MedicationComposition medicationComposition) {
+
+    }
+
 }

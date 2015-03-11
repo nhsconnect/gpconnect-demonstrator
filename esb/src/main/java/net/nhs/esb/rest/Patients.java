@@ -130,19 +130,19 @@ public class Patients {
     }
 
     @GET
-    @Path("/{patientId}/diagnosis")
+    @Path("/{patientId}/diagnoses")
     public ProblemComposition findPatientProblemComposition(@PathParam("patientId") Long patientId) {
         return null;
     }
 
     @PUT
-    @Path("/{patientId}/diagnosis")
+    @Path("/{patientId}/diagnoses")
     public void createPatientProblemComposition(@PathParam("patientId") Long patientId, ProblemComposition problemComposition) {
 
     }
 
     @POST
-    @Path("/{patientId}/diagnosis")
+    @Path("/{patientId}/diagnoses")
     public void updatePatientProblemComposition(@PathParam("patientId") Long patientId, ProblemComposition problemComposition) {
 
     }

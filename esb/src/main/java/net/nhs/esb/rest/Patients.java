@@ -30,25 +30,25 @@ public class Patients {
     public static final String DIAGNOSIS_ID_HEADER = "diagnosisId";
 
     @GET
-    @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses")
+    @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses_old")
     public List<Diagnoses> getDiagnosesByPatientId(@PathParam(PATIENT_ID_HEADER) Long patientId) {
         return Collections.emptyList();
     }
 
     @POST
-    @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses")
+    @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses_old")
     public Diagnoses saveDiagnosisByPatientId(@PathParam(PATIENT_ID_HEADER) Long patientId, Diagnoses diagnosis) {
         return null;
     }
 
     @GET
-    @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses/{" + DIAGNOSIS_ID_HEADER + "}")
+    @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses_old/{" + DIAGNOSIS_ID_HEADER + "}")
     public Diagnoses getDiagnosisByIdAndPatientId(@PathParam(PATIENT_ID_HEADER) Long patientId, @PathParam(DIAGNOSIS_ID_HEADER) String diagnosisId) {
         return null;
     }
 
     @PUT
-    @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses/{" + DIAGNOSIS_ID_HEADER + "}")
+    @Path("/{" + PATIENT_ID_HEADER + "}/diagnoses_old/{" + DIAGNOSIS_ID_HEADER + "}")
     public Diagnoses updateDiagnosisByIdAndPatientId(@PathParam(PATIENT_ID_HEADER) Long patientId, @PathParam(DIAGNOSIS_ID_HEADER) String diagnosisId, Diagnoses diagnosis) {
         return null;
     }
@@ -130,19 +130,19 @@ public class Patients {
     }
 
     @GET
-    @Path("/{patientId}/clinical-synopses")
+    @Path("/{patientId}/diagnosis")
     public ProblemComposition findPatientProblemComposition(@PathParam("patientId") Long patientId) {
         return null;
     }
 
     @PUT
-    @Path("/{patientId}/clinical-synopses")
+    @Path("/{patientId}/diagnosis")
     public void createPatientProblemComposition(@PathParam("patientId") Long patientId, ProblemComposition problemComposition) {
 
     }
 
     @POST
-    @Path("/{patientId}/clinical-synopses")
+    @Path("/{patientId}/diagnosis")
     public void updatePatientProblemComposition(@PathParam("patientId") Long patientId, ProblemComposition problemComposition) {
 
     }

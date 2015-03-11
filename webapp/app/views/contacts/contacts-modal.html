@@ -24,7 +24,7 @@
         <label for="name" class="control-label col-md-4">Name</label>
         <div class="col-md-8">
           <div class="input-group">
-            <textarea class="form-control input-sm" id="name" name="name" ng-model="contact.name" required></textarea>
+            <input type="text" class="form-control input-sm" id="name" name="name" ng-model="contact.name" required />
             <span class="input-group-addon input-sm">
                 <i class="fa fa-check fa-fw"></i>
             </span>
@@ -33,47 +33,91 @@
         </div>
       </div>
 
-      <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || contactForm.date.$dirty) && contactForm.date.$invalid, 'has-success': contactForm.date.$valid && contactForm.date.$dirty}">
-        <label for="date" class="control-label col-md-4">Date</label>
+      <div class="form-group" ng-class="{'has-error': (formSubmitted || contactForm.relationship.$dirty) && contactForm.relationship.$invalid, 'has-success': contactForm.relationship.$valid && contactForm.relationship.$dirty}">
+        <label for="relationship" class="control-label col-md-4">Relationship</label>
         <div class="col-md-8">
           <div class="input-group">
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'dateOpen')"><i class="fa fa-calendar"></i></button>
-            </span>
-            <input type="text" class="form-control" id="date" name="date" ng-model="contact.date" ng-click="openDatepicker($event, 'dateOpen')" datepicker-popup is-open="$parent.dateOpen" required />
-            <span class="input-group-addon input-sm">
-              <i class="fa fa-check fa-fw"></i>
-            </span>
-          </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && contactForm.date.$error.required">You must enter a valid date.</span>
-        </div>
-      </div>
-
-      <div class="form-group" ng-class="{'has-error': (formSubmitted || contactForm.description.$dirty) && contactForm.description.$invalid, 'has-success': contactForm.description.$valid && contactForm.description.$dirty}">
-        <label for="description" class="control-label col-md-4">Description</label>
-        <div class="col-md-8">
-          <div class="input-group">
-            <textarea class="form-control input-sm" id="description" name="description" ng-model="contact.description" required></textarea>
+            <input type="text" class="form-control input-sm" id="relationship" name="relationship" ng-model="contact.relationship" required />
             <span class="input-group-addon input-sm">
                 <i class="fa fa-check fa-fw"></i>
             </span>
           </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && contactForm.description.$error.required">You must enter a value.</span>
+          <span class="help-block animate-fade" ng-show="formSubmitted && contactForm.relationship.$error.required">You must enter a value.</span>
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error': (formSubmitted || contactForm.author.$dirty) && contactForm.author.$invalid, 'has-success': contactForm.author.$valid && contactForm.author.$dirty}">
-        <label for="author" class="control-label col-md-4">Author</label>
+      <div class="form-group" ng-class="{'has-error': (formSubmitted || contactForm.relationshipCode.$dirty) && contactForm.relationshipCode.$invalid, 'has-success': contactForm.relationshipCode.$valid && contactForm.relationshipCode.$dirty}">
+        <label for="relationshipCode" class="control-label col-md-4">Relationship Code</label>
         <div class="col-md-8">
           <div class="input-group">
-            <input type="text" class="form-control input-sm" id="author" name="author" ng-model="contact.author" required />
+            <input type="text" class="form-control input-sm" id="relationshipCode" name="relationshipCode" ng-model="contact.relationshipCode" required />
             <span class="input-group-addon input-sm">
                 <i class="fa fa-check fa-fw"></i>
             </span>
           </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && contactForm.author.$error.required">You must enter a value.</span>
+          <span class="help-block animate-fade" ng-show="formSubmitted && contactForm.relationshipCode.$error.required">You must enter a value.</span>
         </div>
       </div>
+
+      <div class="form-group" ng-class="{'has-error': (formSubmitted || contactForm.relationshipTerminology.$dirty) && contactForm.relationshipTerminology.$invalid, 'has-success': contactForm.relationshipTerminology.$valid && contactForm.relationshipTerminology.$dirty}">
+        <label for="relationshipTerminology" class="control-label col-md-4">Relationship Terminology</label>
+        <div class="col-md-8">
+          <div class="input-group">
+            <input type="text" class="form-control input-sm" id="relationshipTerminology" name="relationshipTerminology" ng-model="contact.relationshipTerminology" required />
+            <span class="input-group-addon input-sm">
+                <i class="fa fa-check fa-fw"></i>
+            </span>
+          </div>
+          <span class="help-block animate-fade" ng-show="formSubmitted && contactForm.relationshipTerminology.$error.required">You must enter a value.</span>
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="{'has-error': (formSubmitted || contactForm.relationshipType.$dirty) && contactForm.relationshipType.$invalid, 'has-success': contactForm.relationshipType.$valid && contactForm.relationshipType.$dirty}">
+        <label for="relationshipType" class="control-label col-md-4">Relationship Type</label>
+        <div class="col-md-8">
+          <div class="input-group">
+            <input type="text" class="form-control input-sm" id="relationshipType" name="relationshipType" ng-model="contact.relationshipType" required />
+            <span class="input-group-addon input-sm">
+                <i class="fa fa-check fa-fw"></i>
+            </span>
+          </div>
+          <span class="help-block animate-fade" ng-show="formSubmitted && contactForm.relationshipType.$error.required">You must enter a value.</span>
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="{'has-error': (formSubmitted || contactForm.contactInformation.$dirty) && contactForm.contactInformation.$invalid, 'has-success': contactForm.contactInformation.$valid && contactForm.contactInformation.$dirty}">
+        <label for="contactInformation" class="control-label col-md-4">Contact Information</label>
+        <div class="col-md-8">
+          <div class="input-group">
+            <input type="text" class="form-control input-sm" id="contactInformation" name="contactInformation" ng-model="contact.contactInformation" required />
+            <span class="input-group-addon input-sm">
+                <i class="fa fa-check fa-fw"></i>
+            </span>
+          </div>
+          <span class="help-block animate-fade" ng-show="formSubmitted && contactForm.contactInformation.$error.required">You must enter a value.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="nextOfKin" class="control-label col-md-4">Next of Kin</label>
+        <div class="col-md-8">
+          <input type="checkbox" id="nextOfKin" name="nextOfKin" ng-model="contact.nextOfKin" />
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="{'has-error': (formSubmitted || contactForm.note.$dirty) && contactForm.note.$invalid, 'has-success': contactForm.note.$valid && contactForm.note.$dirty}">
+        <label for="note" class="control-label col-md-4">Note</label>
+        <div class="col-md-8">
+          <div class="input-group">
+            <textarea class="form-control input-sm" id="note" name="note" ng-model="contact.note" required></textarea>
+            <span class="input-group-addon input-sm">
+                <i class="fa fa-check fa-fw"></i>
+            </span>
+          </div>
+          <span class="help-block animate-fade" ng-show="formSubmitted && contactForm.note.$error.required">You must enter a value.</span>
+        </div>
+      </div>
+    </fieldset>
   </form>
 </div>
 

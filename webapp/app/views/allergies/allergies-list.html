@@ -3,16 +3,16 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
-      <th>Date</th>
-      <th>Record</th>
+      <th>Cause</th>
+      <th>Reaction</th>
       <th></th>
     </tr>
   </thead>
 
   <tbody>
-    <tr ng-repeat="allergy in allergies | orderBy:'-date'" ng-click="go('/patients/{{patient.id}}/allergies/{{allergy.id}}')" ng-class="{info: selected(allergy)}">
-      <td>{{ allergy.date | date:'dd-MMM-yyyy HH:mm' }}</td>
-      <td>{{ allergy.allergy }}</td>
+    <tr ng-repeat="allergy in allergies" ng-click="go('/patients/{{patient.id}}/allergies/{{$index}}')" ng-class="{info: selected($index)}">
+      <td>{{ allergy.cause }}</td>
+      <td>{{ allergy.reaction }}</td>
       <td><i class="fa fa-fw" ng-class="selected(allergy) ? 'fa-folder-open' : 'fa-folder'"></i></td>
     </tr>
 

@@ -5,18 +5,19 @@ angular.module('openehrPocApp')
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
+    });
 
-      Diagnosis.byPatient($scope.patient.id).then(function (result) {
-        $scope.patient.diagnoses = result.data;
-      });
+    Diagnosis.all($stateParams.patientId).then(function (result) {
+      $scope.result = result.data;
+      $scope.diagnoses = $scope.result.problems;
     });
 
     $scope.go = function (path) {
       $location.path(path);
     };
 
-    $scope.selected = function (diagnosis) {
-      return diagnosis.id === $stateParams.diagnosisId;
+    $scope.selected = function (diagnosisIndex) {
+      return diagnosisIndex === $stateParams.diagnosisIndex;
     };
 
     $scope.create = function () {
@@ -31,7 +32,7 @@ angular.module('openehrPocApp')
             };
           },
           diagnosis: function () {
-            return { dateOfOnset: new Date() };
+            return { };
           },
           patient: function () {
             return $scope.patient;
@@ -40,7 +41,9 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (diagnosis) {
-        Diagnosis.createByPatient($scope.patient.id, diagnosis).then(function (result) {
+        $scope.result.problems.push(diagnosis);
+
+        Diagnosis.update($scope.patient.id, $scope.result).then(function (result) {
           $scope.patient.diagnoses.push(result.data);
         });
       });

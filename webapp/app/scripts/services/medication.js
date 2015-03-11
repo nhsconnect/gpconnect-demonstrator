@@ -3,18 +3,18 @@
 angular.module('openehrPocApp')
   .factory('Medication', function ($http) {
 
-    var byPatient = function () {
-      return $http.get('/dummy-data/medications.json');
+    var patientIdOveride = 9999999000;
+
+    var all = function (patientId) {
+      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/medications');
     };
 
-    var get = function (medicationId) {
-      return byPatient().then(function (result) {
-        return _.findWhere(result.data, { id: medicationId });
-      });
+    var update = function (patientId, composition) {
+      return $http.put('/api/patients/' + (patientIdOveride || patientId) + '/medications', composition);
     };
 
     return {
-      byPatient: byPatient,
-      get: get
+      all: all,
+      update: update
     };
   });

@@ -7,16 +7,17 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    Medication.byPatient($stateParams.patientId).then(function (result) {
-      $scope.medications = result.data;
+    Medication.all($stateParams.patientId).then(function (result) {
+      $scope.result = result.data;
+      $scope.medications = $scope.result.medications;
     });
 
     $scope.go = function (path) {
       $location.path(path);
     };
 
-    $scope.selected = function (medication) {
-      return medication.id === $stateParams.medicationId;
+    $scope.selected = function (medicationIndex) {
+      return medicationIndex === $stateParams.medicationIndex;
     };
 
     $scope.create = function () {
@@ -31,7 +32,7 @@ angular.module('openehrPocApp')
             };
           },
           medication: function () {
-            return { date: new Date() };
+            return { };
           },
           patient: function () {
             return $scope.patient;
@@ -40,7 +41,9 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (medication) {
-        Medication.createByPatient($scope.patient.id, medication).then(function (result) {
+        $scope.result.medications.push(medication);
+
+        Medication.update($scope.patient.id, $scope.result).then(function (result) {
           $scope.patient.medications.push(result.data);
         });
       });

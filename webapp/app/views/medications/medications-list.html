@@ -3,17 +3,17 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
-      <th>Date</th>
-      <th>Record</th>
+      <th>Name</th>
+      <th>Dose Amount</th>
       <th></th>
     </tr>
   </thead>
 
   <tbody>
-    <tr ng-repeat="medication in medications | orderBy:'-date'" ng-click="go('/patients/{{patient.id}}/medications/{{medication.id}}')" ng-class="{info: selected(medication)}">
-      <td>{{ medication.date | date:'dd-MMM-yyyy HH:mm' }}</td>
-      <td>{{ medication.medication }}</td>
-      <td><i class="fa fa-fw" ng-class="selected(medication) ? 'fa-folder-open' : 'fa-folder'"></i></td>
+    <tr ng-repeat="medication in medications" ng-click="go('/patients/{{patient.id}}/medications/{{$index}}')" ng-class="{info: selected($index)}">
+      <td>{{ medication.name }}</td>
+      <td>{{ medication.doseAmount }}</td>
+      <td><i class="fa fa-fw" ng-class="selected($index) ? 'fa-folder-open' : 'fa-folder'"></i></td>
     </tr>
 
     <tr ng-if="!medications.length">

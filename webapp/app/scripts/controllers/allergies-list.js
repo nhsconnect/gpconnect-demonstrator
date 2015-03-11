@@ -7,16 +7,17 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    Allergy.byPatient($stateParams.patientId).then(function (result) {
-      $scope.allergies = result.data;
+    Allergy.all($stateParams.patientId).then(function (result) {
+      $scope.result = result.data;
+      $scope.allergies = $scope.result.allergies;
     });
 
     $scope.go = function (path) {
       $location.path(path);
     };
 
-    $scope.selected = function (allergy) {
-      return allergy.id === $stateParams.allergyId;
+    $scope.selected = function ($index) {
+      return $index === $stateParams.allergyIndex;
     };
 
     $scope.create = function () {
@@ -31,7 +32,7 @@ angular.module('openehrPocApp')
             };
           },
           allergy: function () {
-            return { date: new Date() };
+            return { };
           },
           patient: function () {
             return $scope.patient;
@@ -40,7 +41,9 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (allergy) {
-        Allergy.createByPatient($scope.patient.id, allergy).then(function (result) {
+        $scope.result.allergies.push(allergy);
+
+        Allergy.update($scope.patient.id, $scope.result).then(function (result) {
           $scope.patient.allergies.push(result.data);
         });
       });

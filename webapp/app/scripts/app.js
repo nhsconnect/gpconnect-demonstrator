@@ -50,7 +50,7 @@ angular
       })
 
       .state('diagnoses-detail', {
-        url: '/patients/{patientId:int}/diagnoses/{diagnosisId}',
+        url: '/patients/{patientId:int}/diagnoses/{diagnosisIndex:int}',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -69,7 +69,7 @@ angular
       })
 
       .state('allergies-detail', {
-        url: '/patients/{patientId:int}/allergies/{allergyId:int}',
+        url: '/patients/{patientId:int}/allergies/{allergyIndex:int}',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -88,7 +88,7 @@ angular
       })
 
       .state('medications-detail', {
-        url: '/patients/{patientId:int}/medications/{medicationId:int}',
+        url: '/patients/{patientId:int}/medications/{medicationIndex:int}',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -107,7 +107,7 @@ angular
       })
 
       .state('contacts-detail', {
-        url: '/patients/{patientId:int}/contacts/{contactId:int}',
+        url: '/patients/{patientId:int}/contacts/{contactIndex:int}',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },

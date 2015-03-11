@@ -9,23 +9,24 @@ angular.module('openehrPocApp')
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
+    });
 
-      Diagnosis.findByPatient($scope.patient.id, $stateParams.diagnosisId).then(function (result) {
-        $scope.diagnosis = result.data;
-      });
+    Diagnosis.all($stateParams.patientId).then(function (result) {
+      $scope.result = result.data;
+      $scope.diagnosis = $scope.result.problems[$stateParams.diagnosisIndex];
     });
 
     $scope.formDisabled = true;
 
     $scope.edit = function () {
       var modalInstance = $modal.open({
-        templateUrl: 'views/diagnoses/diagnoses-modal.html',
+        templateUrl: 'views/contacts/diagnoses-modal.html',
         size: 'lg',
         controller: 'DiagnosesModalCtrl',
         resolve: {
           modal: function () {
             return {
-              title: 'Edit Diagnosis'
+              title: 'Edit Problem'
             };
           },
           diagnosis: function () {
@@ -37,10 +38,12 @@ angular.module('openehrPocApp')
         }
       });
 
-      modalInstance.result.then(function (diagnosis) {
-        Diagnosis.updateByPatient($scope.patient.id, diagnosis).then(function (result) {
-          $scope.diagnosis = result.data;
-          $location.path('/patients/' + $scope.patient.id + '/diagnoses/' + $scope.diagnosis.id);
+      modalInstance.result.then(function (diagnoses) {
+        $scope.result.problems[$stateParams.diagnosisIndex] = diagnoses;
+
+        Diagnosis.update($scope.patient.id, $scope.result).then(function (result) {
+          $scope.diagnoses = result.data;
+          $location.path('/patients/' + $scope.patient.id + '/contacts/' + $stateParams.diagnosisIndex);
         });
       });
     };

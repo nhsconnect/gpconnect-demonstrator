@@ -7,8 +7,9 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    Contact.get($stateParams.contactId).then(function (contact) {
-      $scope.contact = contact;
+    Contact.all($stateParams.contactId).then(function (result) {
+      $scope.result = result.data;
+      $scope.contact = $scope.result.contacts[$stateParams.contactIndex];
     });
 
     $scope.edit = function () {
@@ -32,9 +33,11 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (contact) {
-        Contact.updateByPatient($scope.patient.id, contact).then(function (result) {
+        $scope.result.contacts[$stateParams.contactIndex] = contact;
+
+        Contact.update($scope.patient.id, $scope.result).then(function (result) {
           $scope.contact = result.data;
-          $location.path('/patients/' + $scope.patient.id + '/contacts/' + $scope.contact.id);
+          $location.path('/patients/' + $scope.patient.id + '/contacts/' + $stateParams.contactIndex);
         });
       });
     };

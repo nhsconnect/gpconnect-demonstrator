@@ -1,22 +1,22 @@
-<h4>Problem / Issues / Diagnoses</h4>
+<h4>Problems</h4>
 
 <table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
+      <th>Problem</th>
       <th>Date</th>
-      <th>Record</th>
       <th></th>
     </tr>
   </thead>
 
   <tbody>
-    <tr ng-repeat="diagnosis in patient.diagnoses | orderBy:'-dateOfOnset'" ng-click="go('/patients/{{patient.id}}/diagnoses/{{diagnosis.id}}')" ng-class="{info: selected(diagnosis)}">
+    <tr ng-repeat="diagnosis in diagnoses" ng-click="go('/patients/{{patient.id}}/diagnoses/{{$index}}')" ng-class="{info: selected($index)}">
+      <td>{{ diagnosis.problem }}</td>
       <td>{{ diagnosis.dateOfOnset | date:'dd-MMM-yyyy' }}</td>
-      <td>{{ diagnosis.problemDiagnosis }}</td>
-      <td><i class="fa fa-fw" ng-class="selected(diagnosis) ? 'fa-folder-open' : 'fa-folder'"></i></td>
+      <td><i class="fa fa-fw" ng-class="selected($index) ? 'fa-folder-open' : 'fa-folder'"></i></td>
     </tr>
 
-    <tr ng-if="! patient.diagnoses || ! patient.diagnoses.length">
+    <tr ng-if="! diagnoses || ! diagnoses.length">
       <td colspan="3"><span class="label label-default">No diagnoses</span></td>
     </tr>
   </tbody>

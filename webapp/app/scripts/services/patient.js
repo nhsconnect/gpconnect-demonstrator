@@ -17,7 +17,7 @@ angular.module('openehrPocApp')
     };
 
     var get = function (id) {
-      return $http.get('/api/patients/' + id).then(function (result) {
+      return $http.get('/api/patients/' + id, { cache: true }).then(function (result) {
         return new Patient(result.data);
       });
     };

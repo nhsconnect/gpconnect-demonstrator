@@ -3,21 +3,23 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
-      <th>Date</th>
-      <th>Record</th>
+      <th>Name</th>
+      <th>Relationship</th>
+      <th>Next of Kin</th>
       <th></th>
     </tr>
   </thead>
 
   <tbody>
-    <tr ng-repeat="contact in contacts | orderBy:'-date'" ng-click="go('/patients/{{patient.id}}/contacts/{{contact.id}}')" ng-class="{info: selected(contact)}">
-      <td>{{ contact.date | date:'dd-MMM-yyyy HH:mm' }}</td>
+    <tr ng-repeat="contact in contacts" ng-click="go('/patients/{{patient.id}}/contacts/{{$index}}')" ng-class="{info: selected($index)}">
       <td>{{ contact.name }}</td>
+      <td>{{ contact.relationship }}</td>
+      <td><i class="fa fa-fw fa-check" ng-if="contact.nextOfKin"></i></td>
       <td><i class="fa fa-fw" ng-class="selected(contact) ? 'fa-folder-open' : 'fa-folder'"></i></td>
     </tr>
 
     <tr ng-if="!contacts.length">
-      <td colspan="3"><span class="label label-default">No contacts</span></td>
+      <td colspan="4"><span class="label label-default">No contacts</span></td>
     </tr>
   </tbody>
 </table>

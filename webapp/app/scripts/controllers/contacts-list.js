@@ -7,16 +7,17 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    Contact.byPatient($stateParams.patientId).then(function (result) {
-      $scope.contacts = result.data;
+    Contact.all($stateParams.patientId).then(function (result) {
+      $scope.result = result.data;
+      $scope.contacts = $scope.result.contacts;
     });
 
     $scope.go = function (path) {
       $location.path(path);
     };
 
-    $scope.selected = function (contact) {
-      return contact.id === $stateParams.contactId;
+    $scope.selected = function ($index) {
+      return $index === $stateParams.allergyIndex;
     };
 
     $scope.create = function () {
@@ -31,7 +32,7 @@ angular.module('openehrPocApp')
             };
           },
           contact: function () {
-            return { date: new Date() };
+            return { };
           },
           patient: function () {
             return $scope.patient;
@@ -40,7 +41,9 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (contact) {
-        Contact.createByPatient($scope.patient.id, contact).then(function (result) {
+        $scope.result.contacts.push(contact);
+
+        Contact.update($scope.patient.id, $scope.result).then(function (result) {
           $scope.patient.contacts.push(result.data);
         });
       });

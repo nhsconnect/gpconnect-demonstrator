@@ -2,6 +2,7 @@ package net.nhs.esb.rest;
 
 import java.util.Map;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -57,6 +58,12 @@ public class OpenEhr {
     @PUT
     @Path("/composition/{compositionId}")
     public ActionRestResponseData updateComposition(@PathParam("compositionId") String compositionId, @QueryParam("templateId") String templateId, @QueryParam("ehrId") String ehrId, @QueryParam("format") String format, Map<String,Object> body) {
+        return null;
+    }
+
+    @DELETE
+    @Path("/composition/{compositionId}")
+    public ActionRestResponseData deleteComposition(@PathParam("compositionId") String compositionId) {
         return null;
     }
 }

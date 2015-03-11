@@ -3,6 +3,7 @@ package net.nhs.esb.rest;
 import java.util.Collections;
 import java.util.List;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -84,6 +85,13 @@ public class Patients {
     public void updatePatientAllergyComposition(@PathParam("patientId") Long patientId, AllergyComposition allergyComposition) {
 
     }
+
+    @DELETE
+    @Path("/{patientId}/allergies/{compositionId}")
+    public void deletePatientAllergyComposition(@PathParam("patientId") Long patientId, @PathParam("compositionId") String compositionId) {
+
+    }
+
 
     @GET
     @Path("/{patientId}/contacts")

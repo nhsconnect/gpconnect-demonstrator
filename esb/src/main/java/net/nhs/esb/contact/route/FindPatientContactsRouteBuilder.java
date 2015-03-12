@@ -23,20 +23,23 @@ public class FindPatientContactsRouteBuilder extends SpringRouteBuilder {
                 .to("direct:setHeaders")
                 .to("direct:createSession")
                 .to("direct:getEhrId")
-                .to("direct:openEhrFindPatientContactComposition");
+                .to("direct:openEhrFindPatientContactCompositionId")
+                .to("direct:openEhrFindPatientContactComposition")
+                .end();
 
         from("direct:openEhrFindPatientContactComposition")
+                .bean(compositionParameters)
+                .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
+                .to("cxfrs:bean:rsOpenEhr")
+                .convertBodyTo(ContactComposition.class);
+
+        from("direct:openEhrFindPatientContactCompositionId")
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
                 .setHeader(CxfConstants.OPERATION_NAME, constant("query"))
                 .setBody(simple(buildQuery()))
                 .to("cxfrs:bean:rsOpenEhr")
-                .setHeader("compositionId", simple("${body.resultSet[0][uid]}"))
-                .bean(compositionParameters)
-                .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
-                .to("cxfrs:bean:rsOpenEhr")
-                .convertBodyTo(ContactComposition.class)
-                .end();
+                .setHeader("compositionId", simple("${body.resultSet[0][uid]}"));
     }
 
     private String buildQuery() {

@@ -2,6 +2,7 @@ package net.nhs.esb.contact.route;
 
 import net.nhs.esb.contact.model.ContactUpdate;
 import net.nhs.esb.openehr.route.CompositionCreateParameters;
+import net.nhs.esb.openehr.route.HttpStatusProcessor;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.apache.camel.spring.SpringRouteBuilder;
@@ -26,18 +27,26 @@ public class CreatePatientContactRouteBuilder extends SpringRouteBuilder {
         from("direct:createPatientContactComposition").routeId("openEhrCreatePatientContactComposition")
                 .convertBodyTo(ContactUpdate.class)
                 .setHeader("composition", simple("${body.content}"))
-                .to("direct:openEhrCreatePatientContactComposition");
-
-        from("direct:openEhrCreatePatientContactComposition")
+                .setBody(simple("${header.patientId}"))
                 .to("direct:setHeaders")
                 .to("direct:createSession")
                 .to("direct:getEhrId")
+                .to("direct:openEhrCreatePatientContactCompositionId")
+                .choice()
+                    .when(header("compositionId").isNull())
+                        .setBody(simple("${header.composition}"))
+                        .to("direct:openEhrCreatePatientContactComposition")
+                    .otherwise()
+                        .process(new HttpStatusProcessor())
+                .endChoice()
+                .end();
+
+        from("direct:openEhrCreatePatientContactComposition")
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
                 .setHeader(CxfConstants.OPERATION_NAME, constant("createComposition"))
                 .setHeader("template", constant(contactTemplate))
                 .bean(compositionCreateParameters)
-                .to("cxfrs:bean:rsOpenEhr")
-                .end();
+                .to("cxfrs:bean:rsOpenEhr");
     }
 }

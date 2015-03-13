@@ -3,19 +3,77 @@
 </div>
 
 <div class="modal-body">
-  <form>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">{{ patient.fullname() }}</h4>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-4 text-left"><label>Born:</label> <strong>{{ patient.born | date:'dd-MMM-yyyy' }}</strong></div>
+        <div class="col-sm-4 text-center"><label>Gender:</label> <strong>{{ patient.gender }}</strong></div>
+        <div class="col-sm-4 text-right"><label>NHS No:</label> <strong>{{ patient.nhsNo }}</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <ul class="list-group">
+        <li class="list-group-item">Problems <span class="badge badge-default">{{ transferOfCare.problems.problems.length }}</span></li>
+        <li class="list-group-item">Allergies <span class="badge badge-default">{{ transferOfCare.allergies.allergies.length }}</span></li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <ul class="list-group">
+        <li class="list-group-item">Medications <span class="badge badge-default">{{ transferOfCare.medication.medications.length }}</span></li>
+        <li class="list-group-item">Contacts <span class="badge badge-default">{{ transferOfCare.contacts.contacts.length }}</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <form class="form-horizontal" name="transferOfCareForm">
     <fieldset>
-      <legend>Patient details</legend>
+      <legend>Details</legend>
+
       <div class="form-group">
-        <label class="control-label">Name: </label>
-        <div class="form-control">{{ patient.fullname() }}</div>
+        <label for="site" class="control-label col-md-4">Site</label>
+        <div class="col-md-8">
+          <div class="input-group">
+            <select class="form-control" name="site" id="site" required>
+              <option value="">Select a Site</option>
+              <option>KINGS COLLEGE HOSPITAL</option>
+              <option>WORCESTERSHIRE HEALTH AND CARE NHS TRUST</option>
+              <option>ST JAMES'S UNIVERSITY HOSPITAL</option>
+              <option>OXFORD HEALTH NHS FOUNDATION TRUST</option>
+              <option>HINCHINGBROOKE HEALTH CARE NHS TRUST</option>
+            </select>
+            <span class="input-group-addon input-sm">
+                <i class="fa fa-check fa-fw"></i>
+            </span>
+          </div>
+        </div>
+        <span class="help-block animate-fade" ng-show="formSubmitted && diagnosisForm.problem.$error.required">You must enter a value.</span>
       </div>
 
-      <div class="form-group"></div>
+      <div class="form-group">
+        <label for="code" class="control-label col-md-4">Reason for Contact</label>
+        <div class="col-md-8">
+          <textarea class="form-control" rows="3" id="reasonForContact" ng-model="transferOfCare.reasonForContact"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="code" class="control-label col-md-4">Clinical Summary</label>
+        <div class="col-md-8">
+          <textarea class="form-control" rows="3" id="clinicalSummary" ng-model="transferOfCare.clinicalSummary"></textarea>
+        </div>
+      </div>
+
     </fieldset>
   </form>
 </div>
 
 <div class="modal-footer">
-    <a class="btn btn-info" ng-click="dismiss()">Close</a>
+    <a class="btn btn-info" ng-click="cancel()">Cancel</a>
+    <button class="btn btn-success" ng-click="formSubmitted = true; ok(transferOfCareForm, transferOfCare);"><i class="fa fa-check"></i> Complete</button>
 </div>

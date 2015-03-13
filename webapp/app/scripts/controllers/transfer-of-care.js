@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('TransferOfCareCtrl', function ($modal, $state, $scope, $stateParams, PatientService) {
+  .controller('TransferOfCareCtrl', function ($modal, $state, $scope, $stateParams, PatientService, TransferOfCare) {
 
     $modal.open({
       templateUrl: 'views/transfer-of-care/transfer-of-care.html',
@@ -12,13 +12,18 @@ angular.module('openehrPocApp')
             $scope.patient = patient;
             return $scope.patient;
           });
+        },
+        transferOfCare: function () {
+          return TransferOfCare.get($stateParams.patientId).then(function (result) {
+            $scope.transferOfCare = result.data;
+            return $scope.transferOfCare;
+          });
         }
       },
-      controller: function ($scope, patient) {
+      controller: function ($scope, patient, transferOfCare) {
 
         $scope.patient = patient;
-
-        console.log(patient);
+        $scope.transferOfCare = transferOfCare;
 
         $scope.dismiss = function () {
           $scope.$dismiss();
@@ -26,6 +31,13 @@ angular.module('openehrPocApp')
 
         $scope.save = function () {
           $scope.$close(true);
+        };
+
+        $scope.ok = function (form, toc) {
+          $scope.formSubmitted = true;
+          if (form.$valid) {
+            $scope.$close(toc);
+          }
         };
 
       }

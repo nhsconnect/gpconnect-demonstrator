@@ -18,18 +18,18 @@
 
   <form name="diagnosisForm" class="form-horizontal text-left">
     <fieldset>
-      <legend>Diagnosis detail</legend>
+      <legend>Problem detail</legend>
 
-      <div class="form-group" ng-class="{'has-error': (formSubmitted || diagnosisForm.problemDiagnosis.$dirty) && diagnosisForm.problemDiagnosis.$invalid, 'has-success': diagnosisForm.problemDiagnosis.$valid && diagnosisForm.problemDiagnosis.$dirty}">
-        <label for="text" class="control-label col-md-4">Problem/Diagnosis</label>
+      <div class="form-group" ng-class="{'has-error': (formSubmitted || diagnosisForm.problem.$dirty) && diagnosisForm.problem.$invalid, 'has-success': diagnosisForm.problem.$valid && diagnosisForm.problem.$dirty}">
+        <label for="text" class="control-label col-md-4">Problem</label>
         <div class="col-md-8">
           <div class="input-group">
-            <textarea class="form-control input-sm" id="problemDiagnosis" name="problemDiagnosis" ng-model="diagnosis.problemDiagnosis" required></textarea>
+            <input type="text" class="form-control input-sm" id="problem" name="problem" ng-model="diagnosis.problem" required />
             <span class="input-group-addon input-sm">
                 <i class="fa fa-check fa-fw"></i>
             </span>
           </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && diagnosisForm.problemDiagnosis.$error.required">You must enter a value.</span>
+          <span class="help-block animate-fade" ng-show="formSubmitted && diagnosisForm.problem.$error.required">You must enter a value.</span>
         </div>
       </div>
 
@@ -49,38 +49,6 @@
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error': (formSubmitted || diagnosisForm.ageAtOnset.$dirty) && diagnosisForm.ageAtOnset.$invalid, 'has-success': diagnosisForm.ageAtOnset.$valid && diagnosisForm.ageAtOnset.$dirty}">
-        <label for="ageAtOnset" class="control-label col-md-4">Age at Onset</label>
-        <div class="col-md-8">
-          <div class="input-group">
-            <input type="number" class="form-control" id="ageAtOnset" name="ageAtOnset" ng-model="diagnosis.ageAtOnset" required />
-            <span class="input-group-addon input-sm">
-              <i class="fa fa-check fa-fw"></i>
-            </span>
-          </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && diagnosisForm.ageAtOnset.$error.required">You must enter a value.</span>
-        </div>
-      </div>
-
-      <div class="form-group form-group-sm">
-        <label for="dateOfResolution" class="control-label col-md-4">Date of Resolution</label>
-        <div class="col-md-8">
-          <div class="input-group">
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'dateOfResolutionOpen')"><i class="fa fa-calendar"></i></button>
-            </span>
-            <input type="text" class="form-control" id="dateOfResolution" name="dateOfResolution" ng-model="diagnosis.dateOfResolution" ng-click="openDatepicker($event, 'dateOfResolutionOpen')" datepicker-popup is-open="$parent.dateOfResolutionOpen" />
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="ageAtResolution" class="control-label col-md-4">Age at Resolution</label>
-        <div class="col-md-8">
-          <input type="number" class="form-control" id="ageAtResolution" ng-model="diagnosis.ageAtResolution" />
-        </div>
-      </div>
-
       <div class="form-group">
         <label for="text" class="control-label col-md-4">Description</label>
         <div class="col-md-8">
@@ -89,16 +57,16 @@
       </div>
 
       <div class="form-group form-group-sm">
-        <label for="code" class="control-label col-md-4">Body Site</label>
+        <label for="code" class="control-label col-md-4">Terminology</label>
         <div class="col-md-8">
-          <input type="text" class="form-control" id="code" ng-model="diagnosis.bodySite" />
+          <input type="text" class="form-control" id="code" ng-model="diagnosis.terminology" />
         </div>
       </div>
 
       <div class="form-group form-group-sm">
-        <label for="grade" class="control-label col-md-4">Severity</label>
+        <label for="code" class="control-label col-md-4">Code</label>
         <div class="col-md-8">
-          <input type="text" class="form-control" id="grade" ng-model="diagnosis.severity" />
+          <input type="text" class="form-control" id="code" ng-model="diagnosis.code" />
         </div>
       </div>
     </fieldset>

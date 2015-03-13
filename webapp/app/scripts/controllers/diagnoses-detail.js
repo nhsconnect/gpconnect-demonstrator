@@ -20,7 +20,7 @@ angular.module('openehrPocApp')
 
     $scope.edit = function () {
       var modalInstance = $modal.open({
-        templateUrl: 'views/contacts/diagnoses-modal.html',
+        templateUrl: 'views/diagnoses/diagnoses-modal.html',
         size: 'lg',
         controller: 'DiagnosesModalCtrl',
         resolve: {
@@ -38,8 +38,8 @@ angular.module('openehrPocApp')
         }
       });
 
-      modalInstance.result.then(function (diagnoses) {
-        $scope.result.problems[$stateParams.diagnosisIndex] = diagnoses;
+      modalInstance.result.then(function (diagnosis) {
+        $scope.result.problems[$stateParams.diagnosisIndex] = diagnosis;
 
         Diagnosis.update($scope.patient.id, $scope.result).then(function (result) {
           $scope.diagnoses = result.data;

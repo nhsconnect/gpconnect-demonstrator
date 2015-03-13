@@ -1,5 +1,6 @@
 package net.nhs.esb.rest;
 
+import java.util.Collections;
 import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -53,7 +54,7 @@ public class OpenEhr {
     @GET
     @Path("/template/{templateId}/example")
     public Map<String,String> findTemplateExample(@PathParam("templateId") String templateId) {
-        return null;
+        return Collections.emptyMap();
     }
 
     @POST

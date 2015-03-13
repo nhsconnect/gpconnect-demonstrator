@@ -49,6 +49,13 @@ public class OpenEhr {
         return null;
     }
 
+
+    @GET
+    @Path("/template/{templateId}/example")
+    public Map<String,String> findTemplateExample(@PathParam("templateId") String templateId) {
+        return null;
+    }
+
     @POST
     @Path("/composition")
     public ActionRestResponseData createComposition(@QueryParam("templateId") String templateId, @QueryParam("ehrId") String ehrId, @QueryParam("format") String format, Map<String,Object> body) {

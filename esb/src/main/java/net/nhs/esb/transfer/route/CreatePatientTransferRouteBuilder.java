@@ -53,8 +53,6 @@ public class CreatePatientTransferRouteBuilder extends SpringRouteBuilder {
         from("direct:openEhrCreatePatientTransferComposition")
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
-//                .setBody(constant("LCR Handover Summary Report.v0"))
-//                .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
                 .setHeader(CxfConstants.OPERATION_NAME, constant("createComposition"))
                 .setHeader("template", constant(transferTemplate))
                 .bean(compositionCreateParameters)

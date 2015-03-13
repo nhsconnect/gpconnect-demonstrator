@@ -19,6 +19,8 @@ import net.nhs.esb.medication.model.MedicationComposition;
 import net.nhs.esb.patient.model.PatientDetails;
 import net.nhs.esb.patient.model.PatientDetailsArray;
 import net.nhs.esb.problem.model.ProblemComposition;
+import net.nhs.esb.transfer.model.TransferOfCare;
+import net.nhs.esb.transfer.model.TransferOfCareSummary;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -144,6 +146,18 @@ public class Patients {
     @POST
     @Path("/{patientId}/diagnoses")
     public void updatePatientProblemComposition(@PathParam("patientId") Long patientId, ProblemComposition problemComposition) {
+
+    }
+
+    @GET
+    @Path("/{patientId}/transfer-of-care")
+    public TransferOfCareSummary findPatientTransferComposition(@PathParam("patientId") Long patientId) {
+        return null;
+    }
+
+    @POST
+    @Path("/{patientId}/transfer-of-care")
+    public void createPatientTransferComposition(@PathParam("patientId") Long patientId, TransferOfCare transfer) {
 
     }
 

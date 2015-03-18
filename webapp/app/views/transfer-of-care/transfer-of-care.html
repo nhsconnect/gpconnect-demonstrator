@@ -16,20 +16,86 @@
     </div>
   </div>
 
+  <style>
+    .red{
+      border-color: red;
+      color: red;
+    }
+
+    .green{
+      border-color: green;
+      color: green;
+    }
+  </style>
+
   <div class="row">
-    <div class="col-md-6">
+
+    <div class="col-md-3">
       <ul class="list-group">
-        <li class="list-group-item">Problems <span class="badge badge-default">{{ transferOfCare.problems.problems.length }}</span></li>
-        <li class="list-group-item">Allergies <span class="badge badge-default">{{ transferOfCare.allergies.allergies.length }}</span></li>
+        <li class="list-group-item" style="font-weight: bold">Problems <span class="badge badge-default">{{ transferOfCare.problems.problems.length }}</span> </li>
+        <li class="list-group-item" ng-repeat="problem in problems" ng-click="selectTransferOfCareItem($index, 'problems')" ng-class="isItemSelected($index,'problems')">
+          <div class="row">
+            <div class="col-xs-9">
+              {{problem.problem}}
+            </div>
+            <div class="col-xs-3">
+              <span ng-class="isItemSelectedIcon($index,'problems')"></span>
+            </div>
+          </div>
+        </li>
       </ul>
     </div>
-    <div class="col-md-6">
+
+    <div class="col-md-3">
       <ul class="list-group">
-        <li class="list-group-item">Medications <span class="badge badge-default">{{ transferOfCare.medication.medications.length }}</span></li>
-        <li class="list-group-item">Contacts <span class="badge badge-default">{{ transferOfCare.contacts.contacts.length }}</span></li>
+        <li class="list-group-item" style="font-weight: bold">Medications <span class="badge badge-default">{{ transferOfCare.medication.medications.length }}</span></li> </span> </li>
+        <li class="list-group-item" ng-repeat="medication in medications" ng-click="selectTransferOfCareItem($index, 'medications')" ng-class="isItemSelected($index,'medications')">
+          <div class="row">
+            <div class="col-xs-9">
+              {{medication.name}}
+            </div>
+            <div class="col-xs-3">
+              <span ng-class="isItemSelectedIcon($index,'medications')"></span>
+            </div>
+          </div>
+        </li>
       </ul>
     </div>
-  </div>
+
+    <div class="col-md-3">
+      <ul class="list-group">
+        <li class="list-group-item" style="font-weight: bold">Allergies <span class="badge badge-default">{{ transferOfCare.allergies.allergies.length }}</span> </li>
+        <li class="list-group-item" ng-repeat="allergy in allergies" ng-click="selectTransferOfCareItem($index, 'allergies')" ng-class="isItemSelected($index,'allergies')">
+          <div class="row">
+            <div class="col-xs-9">
+              {{allergy.cause}}
+            </div>
+            <div class="col-xs-3">
+              <span ng-class="isItemSelectedIcon($index,'allergies')"></span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-md-3">
+      <ul class="list-group">
+        <li class="list-group-item" style="font-weight: bold">Contacts <span class="badge badge-default">{{ transferOfCare.contacts.contacts.length }}</span> </li>
+        <li class="list-group-item" ng-repeat="contact in contacts" ng-click="selectTransferOfCareItem($index, 'contacts')" ng-class="isItemSelected($index,'contacts')">
+          <div class="row">
+            <div class="col-xs-9">
+              {{contact.name}}
+            </div>
+            <div class="col-xs-3">
+              <span ng-class="isItemSelectedIcon($index,'contacts')"></span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    </div>
+  {{selecteditemzzz}}
 
   <form class="form-horizontal" name="transferOfCareForm">
     <fieldset>

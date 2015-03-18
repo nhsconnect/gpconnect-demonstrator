@@ -24,6 +24,37 @@ angular.module('openehrPocApp')
 
         $scope.patient = patient;
         $scope.transferOfCare = transferOfCare;
+        $scope.allergies = $scope.transferOfCare.allergies.allergies;
+        $scope.contacts = $scope.transferOfCare.contacts.contacts;
+        $scope.problems = $scope.transferOfCare.problems.problems;
+        $scope.medications = $scope.transferOfCare.medication.medications;
+
+        var selectedItems = {
+          problems:[],
+          medications:[],
+          allergies:[],
+          contacts:[]
+        }
+
+        $scope.selecteditemzzz = selectedItems;
+
+        $scope.selectTransferOfCareItem = function(selectedIndex,type){
+          console.log("type passed " + type);
+          console.log("selected:" + selectedIndex);
+
+          selectedItems[type].indexOf(selectedIndex) != -1 ? selectedItems[type].splice(selectedItems[type].indexOf(selectedIndex),1) : selectedItems[type].push(selectedIndex);
+
+          console.log("UPDATED selected:");
+          console.log(selectedItems[type]);
+        };
+
+        $scope.isItemSelected = function(index,type){
+        return selectedItems[type].indexOf(index) != -1 ? "green" : "red";
+        }
+
+        $scope.isItemSelectedIcon = function(index,type){
+          return selectedItems[type].indexOf(index) != -1 ? "glyphicon glyphicon-ok" : "glyphicon glyphicon-remove";
+        }
 
         $scope.dismiss = function () {
           $scope.$dismiss();

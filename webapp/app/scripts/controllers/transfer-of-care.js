@@ -36,24 +36,79 @@ angular.module('openehrPocApp')
           contacts:[]
         }
 
-        $scope.selecteditemzzz = selectedItems;
+        $scope.selecteditemzzz = selectedItems; //REMOVE THIS
+
+        //console.log($scope.transferOfCare.problems.problems[0]);
 
         $scope.selectTransferOfCareItem = function(selectedIndex,type){
-          console.log("type passed " + type);
-          console.log("selected:" + selectedIndex);
-
+          //console.log("type passed " + type);
+          //console.log("selected:" + selectedIndex);
           selectedItems[type].indexOf(selectedIndex) != -1 ? selectedItems[type].splice(selectedItems[type].indexOf(selectedIndex),1) : selectedItems[type].push(selectedIndex);
-
-          console.log("UPDATED selected:");
-          console.log(selectedItems[type]);
+          //console.log("UPDATED selected:");
+          //console.log(selectedItems[type]);
         };
 
         $scope.isItemSelected = function(index,type){
-        return selectedItems[type].indexOf(index) != -1 ? "green" : "red";
+        return selectedItems[type].indexOf(index) != -1 ? "transfer-of-care-green" : "transfer-of-care-red";
         }
 
         $scope.isItemSelectedIcon = function(index,type){
           return selectedItems[type].indexOf(index) != -1 ? "glyphicon glyphicon-ok" : "glyphicon glyphicon-remove";
+        }
+
+        function updateTransferOfCare(){
+
+          for (var type in selectedItems) {
+
+            switch (type){
+              case 'allergies':
+              case 'problems':
+              case 'contacts':
+
+                for (var transferIndex = $scope.transferOfCare[type][type].length; transferIndex--;) {
+
+                  var contains = false;
+                  angular.forEach(selectedItems[type], function (value) {
+                    //console.log("selected type: " + value);
+                    var selectedItemIndex = value;
+
+                    if (transferIndex == selectedItemIndex) {
+                      contains = true;
+                    }
+                  });
+
+                  if (contains === false) {
+                    //console.log("Transfer does NOT contain " + transferIndex);
+                    $scope.transferOfCare[type][type].splice(transferIndex, 1);
+
+                   // console.log("splice " + transferIndex);
+                  } else {
+                   // console.log("Transfer does contain " + transferIndex);
+                  }
+
+                }
+                    break;
+              case 'medications':
+                for (var transferIndex = $scope.transferOfCare['medication'][type].length; transferIndex--;) {
+
+                  var contains = false;
+                  angular.forEach(selectedItems[type], function (value) {
+                    var selectedItemIndex = value;
+
+                    if (transferIndex == selectedItemIndex) {
+                      contains = true;
+                    }
+                  });
+
+                  if (contains === false) {
+                    $scope.transferOfCare['medication'][type].splice(transferIndex, 1);
+                  }
+
+                }
+                    break;
+            }
+          }
+        return $scope.transferOfCare;
         }
 
         $scope.dismiss = function () {
@@ -65,6 +120,12 @@ angular.module('openehrPocApp')
         };
 
         $scope.ok = function (form, toc) {
+
+          var result = updateTransferOfCare();
+          console.log(result);
+          alert("returned!")
+
+
           $scope.formSubmitted = true;
           if (form.$valid) {
             $scope.$close(toc);

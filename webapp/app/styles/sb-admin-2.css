@@ -343,3 +343,11 @@ table.dataTable thead .sorting:after {
 .panel-yellow a:hover {
     color: #df8a13;
 }
+
+.transfer-of-care-red{
+  color: #a94442;
+}
+
+.transfer-of-care-green {
+  color: #3c763d;
+}

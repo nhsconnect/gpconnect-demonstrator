@@ -38,8 +38,6 @@ angular.module('openehrPocApp')
 
         $scope.selecteditemzzz = selectedItems; //REMOVE THIS
 
-        //console.log($scope.transferOfCare.problems.problems[0]);
-
         $scope.selectTransferOfCareItem = function(selectedIndex,type){
           //console.log("type passed " + type);
           //console.log("selected:" + selectedIndex);
@@ -80,7 +78,6 @@ angular.module('openehrPocApp')
                   if (contains === false) {
                     //console.log("Transfer does NOT contain " + transferIndex);
                     $scope.transferOfCare[type][type].splice(transferIndex, 1);
-
                    // console.log("splice " + transferIndex);
                   } else {
                    // console.log("Transfer does contain " + transferIndex);
@@ -111,30 +108,56 @@ angular.module('openehrPocApp')
         return $scope.transferOfCare;
         }
 
-        $scope.dismiss = function () {
+       /* $scope.dismiss = function () {
           $scope.$dismiss();
         };
 
         $scope.save = function () {
           $scope.$close(true);
-        };
+        };*/
 
         $scope.ok = function (form, toc) {
 
-          var result = updateTransferOfCare();
-          console.log(result);
-          alert("returned!")
-
-
           $scope.formSubmitted = true;
           if (form.$valid) {
+
             $scope.$close(toc);
+
+             var result = updateTransferOfCare();
+             console.log(result);
+            //alert("returned!")
+
           }
         };
 
       }
-    }).result.finally(function () {
-      $state.go('diagnoses-list', { patientId: $scope.patient.id });
+    }).result.then(function () {
+
+        confirmTransferOfCareSelections();
+
     });
+
+    function confirmTransferOfCareSelections() {
+      alert("confirmTransferOfCareSelections called");
+
+      $modal.open({
+        templateUrl: 'views/transfer-of-care/transfer-of-care-confirmation.html',
+        size: 'md',
+        controller: function ($scope) {
+
+          $scope.ok = function () {
+            $scope.close();
+          };
+
+          $scope.cancel = function () {
+            alert("needs to go back to first modal");
+          };
+
+        }
+      }).result.finally(function () {
+          $state.go('diagnoses-list', { patientId: $scope.patient.id });
+      });
+
+    }
 
   });

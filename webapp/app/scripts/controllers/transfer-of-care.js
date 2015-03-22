@@ -135,9 +135,16 @@ angular.module('openehrPocApp')
 
          $scope.ok = function () {
             $scope.transferOfCare = updateTransferOfCare();
-            console.log("The final transferOfCare object:")
+            console.log("The final transferOfCare object:");
             console.log($scope.transferOfCare);
-            $scope.$close();
+
+           //update
+           /*
+           TransferOfCare.update($scope.patient.id ,$scope.transferOfCare ).then(function () {
+              $scope.$close();
+           });
+           */
+           $scope.$close();
         };
 
       }

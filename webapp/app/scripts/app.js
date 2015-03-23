@@ -116,6 +116,25 @@ angular
         }
       })
 
+      .state('transferOfCare-list', {
+        url: '/patients/{patientId:int}/transfer-of-care-list',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/transfer-of-care/transfer-of-care-list.html', controller: 'TransferOfCareListCtrl' }
+        }
+      })
+
+      .state('transferOfCare-detail', {
+        url: '/patients/{patientId:int}/transfer-of-care-detail/{transferOfCareIndex:int}',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/transfer-of-care/transfer-of-care-list.html', controller: 'TransferOfCareListCtrl' },
+          detail: { templateUrl: 'views/transfer-of-care/transfer-of-care-detail.html', controller: 'TransferOfCareDetailCtrl' }
+        }
+      })
+
       .state('transferOfCare', {
         url: '/patients/{patientId:int}/transfer-of-care',
         views: {
@@ -124,6 +143,9 @@ angular
           main: { controller: 'TransferOfCareCtrl' }
         }
       });
+
+
+
   })
   .config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
     datepickerConfig.startingDay          = 1;

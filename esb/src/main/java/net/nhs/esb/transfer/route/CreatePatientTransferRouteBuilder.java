@@ -1,8 +1,8 @@
 package net.nhs.esb.transfer.route;
 
 import net.nhs.esb.openehr.route.CompositionCreateParameters;
+import net.nhs.esb.openehr.route.HttpStatusProcessor;
 import net.nhs.esb.transfer.model.TransferOfCareUpdate;
-import net.nhs.esb.transfer.route.converter.TransferCompositionAggregator;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.apache.camel.spring.SpringRouteBuilder;
@@ -19,35 +19,26 @@ public class CreatePatientTransferRouteBuilder extends SpringRouteBuilder {
     private String transferTemplate;
 
     @Autowired
-    private TransferCompositionAggregator transferCompositionAggregator;
-
-    @Autowired
     private CompositionCreateParameters compositionCreateParameters;
 
     @Override
     public void configure() throws Exception {
 
         from("direct:createPatientTransferComposition").routeId("openEhrCreatePatientTransferComposition")
-                .setHeader("transfer", simple("${body}"))
+                .convertBodyTo(TransferOfCareUpdate.class)
+                .setHeader("composition", simple("${body.content}"))
+                .setBody(simple("${header.patientId}"))
                 .to("direct:setHeaders")
                 .to("direct:createSession")
                 .to("direct:getEhrId")
                 .to("direct:openEhrFindPatientAllergyCompositionId")
-                .to("direct:openEhrFindPatientAllergyComposition")
-                .setHeader("allergies", simple("${body}"))
-                .to("direct:openEhrFindPatientContactCompositionId")
-                .to("direct:openEhrFindPatientContactComposition")
-                .setHeader("contacts", simple("${body}"))
-                .to("direct:openEhrFindPatientMedicationCompositionId")
-                .to("direct:openEhrFindPatientMedicationComposition")
-                .setHeader("medication", simple("${body}"))
-                .to("direct:openEhrFindPatientProblemCompositionId")
-                .to("direct:openEhrFindPatientProblemComposition")
-                .setHeader("problems", simple("${body}"))
-                .bean(transferCompositionAggregator)
-                .convertBodyTo(TransferOfCareUpdate.class)
-                .setHeader("composition", simple("${body.content}"))
-                .to("direct:openEhrCreatePatientTransferComposition")
+                .choice()
+                    .when(header("compositionId").isNull())
+                        .setBody(simple("${header.composition}"))
+                        .to("direct:openEhrCreatePatientTransferComposition")
+                    .otherwise()
+                        .process(new HttpStatusProcessor())
+                .endChoice()
                 .end();
 
         from("direct:openEhrCreatePatientTransferComposition")

@@ -1,6 +1,9 @@
 package net.nhs.esb.transfer.route;
 
-import net.nhs.esb.transfer.route.converter.TransferSummaryAggregator;
+import net.nhs.esb.openehr.route.CompositionSearchParameters;
+import net.nhs.esb.transfer.model.TransferOfCareComposition;
+import org.apache.camel.ExchangePattern;
+import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class FindPatientTransferRouteBuilder extends SpringRouteBuilder {
 
     @Autowired
-    private TransferSummaryAggregator transferSummaryAggregator;
+    private CompositionSearchParameters compositionParameters;
 
     @Override
     public void configure() throws Exception {
@@ -20,20 +23,29 @@ public class FindPatientTransferRouteBuilder extends SpringRouteBuilder {
                 .to("direct:setHeaders")
                 .to("direct:createSession")
                 .to("direct:getEhrId")
-                .to("direct:openEhrFindPatientAllergyCompositionId")
-                .to("direct:openEhrFindPatientAllergyComposition")
-                .setHeader("allergies", simple("${body}"))
-                .to("direct:openEhrFindPatientContactCompositionId")
-                .to("direct:openEhrFindPatientContactComposition")
-                .setHeader("contacts", simple("${body}"))
-                .to("direct:openEhrFindPatientMedicationCompositionId")
-                .to("direct:openEhrFindPatientMedicationComposition")
-                .setHeader("medication", simple("${body}"))
-                .to("direct:openEhrFindPatientProblemCompositionId")
-                .to("direct:openEhrFindPatientProblemComposition")
-                .setHeader("problems", simple("${body}"))
-                .bean(transferSummaryAggregator)
+                .to("direct:openEhrFindPatientTransferCompositionId")
+                .to("direct:openEhrFindPatientTransferComposition")
                 .end();
 
+        from("direct:openEhrFindPatientTransferComposition")
+                .bean(compositionParameters)
+                .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
+                .to("cxfrs:bean:rsOpenEhr")
+                .convertBodyTo(TransferOfCareComposition.class);
+
+        from("direct:openEhrFindPatientTransferCompositionId")
+                .setExchangePattern(ExchangePattern.InOut)
+                .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
+                .setHeader(CxfConstants.OPERATION_NAME, constant("query"))
+                .setBody(simple(buildQuery()))
+                .to("cxfrs:bean:rsOpenEhr")
+                .setHeader("compositionId", simple("${body.resultSet[0][uid]}"));
+    }
+
+    private String buildQuery() {
+        return "select a/uid/value as uid " +
+                "from EHR e[ehr_id/value='${header.ehrId}'] " +
+                "contains COMPOSITION a[openEHR-EHR-COMPOSITION.report.v1] " +
+                "where a/name/value='IDCR Handover Summary Report'";
     }
 }

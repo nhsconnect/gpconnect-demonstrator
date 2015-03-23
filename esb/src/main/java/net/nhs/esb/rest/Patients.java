@@ -20,6 +20,7 @@ import net.nhs.esb.patient.model.PatientDetails;
 import net.nhs.esb.patient.model.PatientDetailsArray;
 import net.nhs.esb.problem.model.ProblemComposition;
 import net.nhs.esb.transfer.model.TransferOfCare;
+import net.nhs.esb.transfer.model.TransferOfCareComposition;
 import net.nhs.esb.transfer.model.TransferOfCareSummary;
 import org.springframework.stereotype.Controller;
 
@@ -150,15 +151,21 @@ public class Patients {
     }
 
     @GET
-    @Path("/{patientId}/transfer-of-care")
-    public TransferOfCareSummary findPatientTransferComposition(@PathParam("patientId") Long patientId) {
+    @Path("/{patientId}/transfer-of-care/summary")
+    public TransferOfCareSummary findPatientTransferSummary(@PathParam("patientId") Long patientId) {
         return null;
     }
 
     @POST
     @Path("/{patientId}/transfer-of-care")
-    public void createPatientTransferComposition(@PathParam("patientId") Long patientId, TransferOfCare transfer) {
+    public void createPatientTransferComposition(@PathParam("patientId") Long patientId, TransferOfCareComposition transferOfCareComposition) {
 
+    }
+
+    @GET
+    @Path("/{patientId}/transfer-of-care")
+    public TransferOfCare findPatientTransferComposition(@PathParam("patientId") Long patientId) {
+        return null;
     }
 
 }

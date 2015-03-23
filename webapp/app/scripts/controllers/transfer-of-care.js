@@ -139,11 +139,11 @@ angular.module('openehrPocApp')
             console.log($scope.transferOfCare);
 
            //update
-           /*
+
            TransferOfCare.update($scope.patient.id ,$scope.transferOfCare ).then(function () {
               $scope.$close();
            });
-           */
+
            $scope.$close();
         };
 

@@ -7,12 +7,12 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    $scope.transferofCareCollection = { transferOfCares :[]};
+    $scope.transferofCareCollection = { transferOfCares :[] };
 
     TransferOfCare.get($stateParams.patientId).then(function (result) {
       $scope.transferOfCare = result.data;
 
-      //Ask Ian for collection of transferOfCares
+      // Ask Ian for collection of transferOfCares
       $scope.transferofCareCollection.transferOfCares.push($scope.transferOfCare);
     });
 

@@ -9,15 +9,15 @@ angular.module('openehrPocApp')
 
     console.log($stateParams);
 
-    $scope.transferofCareCollection = { transferOfCares :[]};
+    $scope.transferofCareCollection = { transferOfCares :[] };
 
     TransferOfCare.get($stateParams.patientId).then(function (result) {
       $scope.result = result.data;
 
-      //Ask Ian for collection of transferOfCares
+      // Ask Ian for collection of transferOfCares
       $scope.transferofCareCollection.transferOfCares.push($scope.result);
 
-      $scope.transferOfCare =  $scope.transferofCareCollection.transferOfCares[$stateParams.transferOfCareIndex]; //patient id
+      $scope.transferOfCare =  $scope.transferofCareCollection.transferOfCares[$stateParams.transferOfCareIndex]; // patient id
       console.log($scope.transferOfCare);
     });
 
@@ -44,10 +44,10 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (medication) {
         $scope.result.medications[$stateParams.medicationIndex] = medication;
 
-        Medication.update($scope.patient.id, $scope.result).then(function (result) {
+        /*Medication.update($scope.patient.id, $scope.result).then(function (result) {
           $scope.medication = result.data;
           $location.path('/patients/' + $scope.patient.id + '/medications/' + $scope.medication.id);
-        });
+        });*/
       });
     };
 

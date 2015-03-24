@@ -10,7 +10,11 @@ angular.module('openehrPocApp')
     };
 
     var update = function (patientId, composition) {
-      return $http.post('/api/patients/' + (patientIdOveride || patientId) + '/transfer-of-care', composition);
+      var data = { 'patientId' : patientId, 'transferOfCareComposition' : composition };
+      //return $http.post('/api/patients/' + patientId + '/transfer-of-care', data);
+      console.log('transferOfCareComposition: ');
+      console.log(composition);
+       return $http.post('/api/patients/' + (patientIdOveride || patientId) + '/transfer-of-care', data);
     };
 
     return {
@@ -18,3 +22,5 @@ angular.module('openehrPocApp')
       update: update
     };
   });
+
+

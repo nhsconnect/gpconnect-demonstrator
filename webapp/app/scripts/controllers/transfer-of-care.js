@@ -29,25 +29,24 @@ angular.module('openehrPocApp')
           $scope.medications = $scope.transferOfCare.medication.medications;
 
           $scope.selectedItems = {
-            problems: [],
-            medications: [],
             allergies: [],
-            contacts: []
+            contacts: [],
+            medications: [],
+            problems: []
           };
 
-          $scope.selectTransferOfCareItem = function (selectedIndex, type) {
-            // console.log("type passed " + type);
-            // console.log("selected:" + selectedIndex);
+          $scope.transferOfCareComposition = {
+          compositionId : null,
+          transfers : []
+          };
 
-            if ($scope.selectedItems[type].indexOf(selectedIndex) !== -1) {
+          $scope.transferDetail = {};
+          $scope.selectTransferOfCareItem = function (selectedIndex, type) {
+              if ($scope.selectedItems[type].indexOf(selectedIndex) !== -1) {
               $scope.selectedItems[type].splice($scope.selectedItems[type].indexOf(selectedIndex), 1);
             } else {
               $scope.selectedItems[type].push(selectedIndex);
             }
-
-            // $scope.selectedItems[type].indexOf(selectedIndex) !== -1 ? $scope.selectedItems[type].splice($scope.selectedItems[type].indexOf(selectedIndex),1) : $scope.selectedItems[type].push(selectedIndex);
-            // console.log("UPDATED selected:");
-            // console.log(selectedItems[type]);
           };
 
           $scope.isItemSelected = function (index, type) {
@@ -64,10 +63,12 @@ angular.module('openehrPocApp')
 
             if (transferOfCareForm.$valid) {
               $scope.selectedItemsForSummary = updateTransferOfCare();
-              $scope.selectedAllergies = $scope.selectedItemsForSummary.allergies.allergies;
-              $scope.selectedContacts = $scope.selectedItemsForSummary.contacts.contacts;
-              $scope.selectedProblems = $scope.selectedItemsForSummary.problems.problems;
-              $scope.selectedMedications = $scope.selectedItemsForSummary.medication.medications;
+              $scope.selectedAllergies = $scope.selectedItemsForSummary.allergies;
+              $scope.selectedContacts = $scope.selectedItemsForSummary.contacts;
+              $scope.selectedProblems = $scope.selectedItemsForSummary.problems;
+              $scope.selectedMedications = $scope.selectedItemsForSummary.medications;
+              $scope.transferDetail.reasonForContact = !$scope.details.reasonForContact ? 'No reason specified' : $scope.details.reasonForContact;
+              $scope.transferDetail.clinicalSummary = !$scope.details.clinicalSummary  ? 'No clinical summary' : $scope.details.clinicalSummary;
               $scope.toggleDetailView();
             }
 
@@ -75,17 +76,24 @@ angular.module('openehrPocApp')
 
           function updateTransferOfCare () {
 
-            var updatedTransferOfCare = angular.copy($scope.transferOfCare);
+            var updatedTransferOfCare = jQuery.extend(true, {},
+              $scope.transferOfCare.allergies,
+              $scope.transferOfCare.contacts,
+              $scope.transferOfCare.medication,
+              $scope.transferOfCare.problems);
+
+            // check why this is here!
+            delete updatedTransferOfCare.compositionId;
 
             for (var type in $scope.selectedItems) {
 
               switch (type) {
                 case 'allergies':
-                case 'problems':
                 case 'contacts':
+                case 'medications':
+                case 'problems':
 
-                  for (var transferIndex = updatedTransferOfCare[type][type].length; transferIndex--;) {
-
+                  for (var transferIndex = updatedTransferOfCare[type].length; transferIndex--;) {
                     var contains = false;
                     angular.forEach($scope.selectedItems[type], function (value) {
                       var selectedItemIndex = value;
@@ -95,29 +103,14 @@ angular.module('openehrPocApp')
                       }
                     });
                     if (contains === false) {
-                      updatedTransferOfCare[type][type].splice(transferIndex, 1);
+                      updatedTransferOfCare[type].splice(transferIndex, 1);
                     }
-                  }
-                  break;
-                case 'medications':
-                  for (transferIndex = updatedTransferOfCare.medication[type].length; transferIndex--;) {
-
-                    var contains2 = false;
-                    angular.forEach($scope.selectedItems[type], function (value) {
-                      var selectedItemIndex = value;
-                      if (transferIndex === selectedItemIndex) {
-                        contains2 = true;
-                      }
-                    });
-                    if (contains2 === false) {
-                      updatedTransferOfCare.medication[type].splice(transferIndex, 1);
-                    }
-
                   }
                   break;
               }
             }
-            return updatedTransferOfCare;
+
+           return updatedTransferOfCare;
           }
 
           $scope.displayDetail = false;
@@ -131,11 +124,10 @@ angular.module('openehrPocApp')
 
           $scope.ok = function () {
             $scope.transferOfCare = updateTransferOfCare();
-            console.log('The final transferOfCare object:');
-            console.log($scope.transferOfCare);
+            $scope.transferOfCare.transferDetail = $scope.transferDetail;
+            $scope.transferOfCareComposition.transfers.push($scope.transferOfCare);
 
-            // update
-            TransferOfCare.update($scope.patient.id, $scope.transferOfCare).then(function () {
+            TransferOfCare.update($scope.patient.id, $scope.transferOfCareComposition).then(function () {
               $scope.$close();
             });
 

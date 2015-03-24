@@ -86,7 +86,6 @@
   <form class="form-horizontal" name="transferOfCareForm" ng-show="!displayDetail">
     <fieldset>
       <legend>Details</legend>
-
       <div class="form-group" ng-class="{'has-error': (formSubmitted || transferOfCareForm.site.$dirty) && transferOfCareForm.site.$invalid, 'has-success': transferOfCareForm.site.$valid && transferOfCareForm.site.$dirty}">
         <label for="site" class="control-label col-md-4">Site</label>
         <div class="col-md-8">
@@ -128,7 +127,7 @@
   <div ng-show="displayDetail" class="row transfer-of-care-detail">
     <div class="row">
       <div class="col-xs-12">
-        <form class="form-horizontal">
+       <form class="form-horizontal">
           <fieldset class="transfer-of-care-detail-fieldset">
             <legend>Selected Items</legend>
 

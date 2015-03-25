@@ -10,15 +10,18 @@
 
   <tbody>
 
-  <tr ng-repeat="transfer in transferofCareCollection.transferOfCares" ng-click="go('/patients/{{patient.id}}/transfer-of-care-detail/{{$index}}')" ng-class="{info: selected($index)}">
+  <tr ng-repeat="transfer in transferofCareComposition.transfers" ng-click="go('/patients/{{patient.id}}/transfer-of-care-detail/{{$index}}')" ng-class="{info: selected($index)}">
     <td>Transfer of care #{{($index + 1)}}</td>
     <td><i class="fa fa-fw" ng-class="selected($index) ? 'fa-folder-open' : 'fa-folder'"></i></td>
   </tr>
 
-  <tr ng-if="!transferofCareCollection.transferOfCares.length">
+  <tr ng-if="!transferofCareComposition.transfers.length">
     <td colspan="3"><span class="label label-default">No transfer of cares</span></td>
   </tr>
   </tbody>
 </table>
 
+<div class="text-right">
+  <button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button>
+</div>
 

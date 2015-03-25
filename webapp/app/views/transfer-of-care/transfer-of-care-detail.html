@@ -1,56 +1,77 @@
-<h4>Transfer of care detail</h4>
+<h4>Transfer of care <span ng-if="transferOfCareSelectionNumber"> #{{transferOfCareSelectionNumber}}</span> detail</h4>
 
 <div class="form-horizontal text-left">
+
   <div class="form-group form-group-sm">
-    <label class="control-label col-md-4">Name</label>
+    <label class="control-label col-md-4">Problems</label>
     <div class="col-md-8">
-      <div class="form-control-static">{{ medication.name }}</div>
+      <div class="form-control-static">
+        <span class="transfer-of-care-no-selected-items" ng-if="!problems.length">No problems selected</span>
+        <ul>
+          <li ng-repeat="(key,value) in problems">{{value.name}}</li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <div class="form-group form-group-sm">
-    <label class="control-label col-md-4">Dose Amount</label>
+    <label class="control-label col-md-4">Medications</label>
     <div class="col-md-8">
-      <div class="form-control-static">{{ medication.doseAmount }}</div>
+      <div class="form-control-static">
+        <span class="transfer-of-care-no-selected-items" ng-if="!medications.length">No medication selected</span>
+        <ul>
+          <li ng-repeat="(key,value) in medications">{{value.name}}</li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <div class="form-group form-group-sm">
-    <label class="control-label col-md-4">Dose Directions</label>
+    <label class="control-label col-md-4">Allergies</label>
     <div class="col-md-8">
-      <div class="form-control-static">{{ medication.doseDirections }}</div>
+      <div class="form-control-static">
+        <span class="transfer-of-care-no-selected-items" ng-if="!allergies.length">No allergies selected</span>
+        <ul>
+          <li ng-repeat="(key,value) in allergies">{{value.cause}}</li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <div class="form-group form-group-sm">
-    <label class="control-label col-md-4">Dose Timing</label>
+    <label class="control-label col-md-4">Contacts</label>
     <div class="col-md-8">
-      <div class="form-control-static">{{ medication.doseTiming }}</div>
+      <div class="form-control-static">
+        <span class="transfer-of-care-no-selected-items" ng-if="!contacts.length">No contacts selected</span>
+        <ul>
+          <li ng-repeat="(key,value) in contacts">{{value.name}}</li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <div class="form-group form-group-sm">
-    <label class="control-label col-md-4">Route</label>
+    <label class="control-label col-md-4">Reason for contact</label>
     <div class="col-md-8">
-      <div class="form-control-static">{{ medication.route }}</div>
+      <div class="form-control-static">
+        <span class="transfer-of-care-no-selected-items" ng-if="!transferDetail.reasonForContact.length">No reason specified</span>
+        <ul ng-if="transferDetail.reasonForContact">
+          <li>{{transferDetail.reasonForContact}}</li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <div class="form-group form-group-sm">
-    <label class="control-label col-md-4">Start Date Time</label>
+    <label class="control-label col-md-4">Clinical Summary</label>
     <div class="col-md-8">
-      <div class="form-control-static">{{ medication.startDateTime | date:'dd-MMM-yyyy hh:mm' }}</div>
+      <div class="form-control-static">
+        <span class="transfer-of-care-no-selected-items" ng-if="!transferDetail.clinicalSummary.length">No clinical summary</span>
+        <ul ng-if="transferDetail.clinicalSummary">
+          <li>{{transferDetail.clinicalSummary}}</li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <div class="form-group form-group-sm">
-    <label class="control-label col-md-4">Terminology</label>
-    <div class="col-md-8">
-      <div class="form-control-static">{{ medication.terminology }}</div>
-    </div>
-  </div>
-</div>
-
-<div class="form-group form-group-sm text-right">
-  <button class="btn btn-info" ng-click="edit();"><i class="fa fa-pencil"></i> Edit</button>
 </div>

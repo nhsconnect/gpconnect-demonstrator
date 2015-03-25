@@ -116,7 +116,7 @@ angular
         }
       })
 
-      .state('transferOfCare-list', {
+      .state('transferOfCare', {
         url: '/patients/{patientId:int}/transfer-of-care-list',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
@@ -135,15 +135,14 @@ angular
         }
       })
 
-      .state('transferOfCare', {
-        url: '/patients/{patientId:int}/transfer-of-care',
+      .state('transferOfCare-create', {
+        url: '/patients/{patientId:int}/transfer-of-care-create',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
           main: { controller: 'TransferOfCareCtrl' }
         }
       });
-
 
 
   })

@@ -1,19 +1,14 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('TransferOfCareListCtrl', function ($scope, $location, $stateParams, $modal, PatientService, TransferOfCare) {
+  .controller('TransferOfCareListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, TransferOfCare) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
 
-    $scope.transferofCareCollection = { transferOfCares :[] };
-
-    TransferOfCare.get($stateParams.patientId).then(function (result) {
-      $scope.transferOfCare = result.data;
-
-      // Ask Ian for collection of transferOfCares
-      $scope.transferofCareCollection.transferOfCares.push($scope.transferOfCare);
+    TransferOfCare.getComposition($stateParams.patientId).then(function (result) {
+      $scope.transferofCareComposition = result.data;
     });
 
     $scope.go = function (path) {
@@ -23,5 +18,12 @@ angular.module('openehrPocApp')
     $scope.selected = function (transferOfCareIndex) {
       return transferOfCareIndex === $stateParams.transferOfCareIndex;
     };
+
+    $scope.create = function () {
+      $state.go('transferOfCare-create', {
+        patientId: $scope.patient.id
+      });
+    };
+
 
   });

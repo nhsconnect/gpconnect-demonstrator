@@ -3,7 +3,7 @@ angular.module('openehrPocApp')
     .controller('TransferOfCareCtrl', function ($modal, $state, $scope, $stateParams, PatientService, TransferOfCare) {
 
       $modal.open({
-        templateUrl: 'views/transfer-of-care/transfer-of-care.html',
+        templateUrl: 'views/transfer-of-care/transfer-of-care-modal.html',
         size: 'lg',
         resolve: {
           patient: function () {
@@ -42,7 +42,8 @@ angular.module('openehrPocApp')
 
           $scope.transferDetail = {};
           $scope.selectTransferOfCareItem = function (selectedIndex, type) {
-              if ($scope.selectedItems[type].indexOf(selectedIndex) !== -1) {
+
+            if ($scope.selectedItems[type].indexOf(selectedIndex) !== -1) {
               $scope.selectedItems[type].splice($scope.selectedItems[type].indexOf(selectedIndex), 1);
             } else {
               $scope.selectedItems[type].push(selectedIndex);
@@ -75,7 +76,7 @@ angular.module('openehrPocApp')
           };
 
           function updateTransferOfCare () {
-
+            // works
             var updatedTransferOfCare = jQuery.extend(true, {},
               $scope.transferOfCare.allergies,
               $scope.transferOfCare.contacts,
@@ -109,8 +110,7 @@ angular.module('openehrPocApp')
                   break;
               }
             }
-
-           return updatedTransferOfCare;
+            return updatedTransferOfCare;
           }
 
           $scope.displayDetail = false;
@@ -120,10 +120,16 @@ angular.module('openehrPocApp')
 
           $scope.dismiss = function () {
             $scope.$dismiss();
+            $state.go('transferOfCare', {
+              patientId: $scope.patient.id
+            });
           };
 
           $scope.ok = function () {
             $scope.transferOfCare = updateTransferOfCare();
+
+            $scope.transferOfCare.medication = $scope.transferOfCare.medications;
+            delete $scope.transferOfCare.medications;
             $scope.transferOfCare.transferDetail = $scope.transferDetail;
             $scope.transferOfCareComposition.transfers.push($scope.transferOfCare);
 
@@ -151,7 +157,7 @@ angular.module('openehrPocApp')
 
           }
         }).result.finally(function () {
-            $state.go('diagnoses-list', {
+            $state.go('transferOfCare', {
               patientId: $scope.patient.id
             });
           });

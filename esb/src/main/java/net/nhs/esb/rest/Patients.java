@@ -161,10 +161,22 @@ public class Patients {
 
     }
 
+    @PUT
+    @Path("/{patientId}/transfer-of-care")
+    public void updatePatientTransferComposition(@PathParam("patientId") Long patientId, TransferOfCareComposition transferOfCareComposition) {
+
+    }
+
     @GET
     @Path("/{patientId}/transfer-of-care")
     public TransferOfCareComposition findPatientTransferComposition(@PathParam("patientId") Long patientId) {
         return null;
+    }
+
+    @DELETE
+    @Path("/{patientId}/transfer-of-care/{compositionId}")
+    public void deletePatientTransferComposition(@PathParam("patientId") Long patientId, @PathParam("compositionId") String compositionId) {
+
     }
 
 }

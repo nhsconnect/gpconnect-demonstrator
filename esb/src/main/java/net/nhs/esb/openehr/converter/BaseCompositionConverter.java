@@ -22,7 +22,7 @@ public abstract class BaseCompositionConverter<T> {
         List<T> list = new ArrayList<>();
 
         int count = countDataEntries(rawComposition);
-        for (int i = 0; i <= count; i++) {
+        for (int i = 0; i < count; i++) {
 
             String prefix = dataDefinitionPrefix() + i;
 
@@ -36,7 +36,7 @@ public abstract class BaseCompositionConverter<T> {
     private int countDataEntries(Map<String, Object> rawComposition) {
 
         String prefix = dataDefinitionPrefix();
-        int maxEntry = 0;
+        int maxEntry = -1;
         for (String key : rawComposition.keySet()) {
             if (StringUtils.startsWith(key, prefix)) {
                 String index = StringUtils.substringAfter(key, prefix);
@@ -46,7 +46,7 @@ public abstract class BaseCompositionConverter<T> {
             }
         }
 
-        return maxEntry;
+        return maxEntry + 1;
 
     }
 }

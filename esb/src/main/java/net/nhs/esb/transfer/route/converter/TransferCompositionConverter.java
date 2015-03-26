@@ -33,7 +33,14 @@ public class TransferCompositionConverter {
         Map<String, Object> rawComposition = response.getComposition();
 
         String compositionId = MapUtils.getString(rawComposition, TRANSFER_UID);
-        List<TransferOfCare> transferOfCareList = Collections.singletonList(createTransferOfCare(rawComposition));
+
+        List<TransferOfCare> transferOfCareList = new ArrayList<>();
+
+        int transferOfCareCount = countDataEntries(rawComposition, "idcr_handover_summary_report/reason_for_contact:");
+        for (int i = 0; i < transferOfCareCount; i++) {
+            TransferOfCare transferOfCare = createTransferOfCare(rawComposition, i);
+            transferOfCareList.add(transferOfCare);
+        }
 
         TransferOfCareComposition transferOfCareComposition = new TransferOfCareComposition();
         transferOfCareComposition.setCompositionId(compositionId);
@@ -50,7 +57,7 @@ public class TransferCompositionConverter {
         List<T> list = new ArrayList<>();
 
         int count = countDataEntries(rawComposition, dataDefinitionPrefix);
-        for (int i = 0; i <= count; i++) {
+        for (int i = 0; i < count; i++) {
             factory.setPrefix(dataDefinitionPrefix + i);
 
             T t = factory.create();
@@ -62,7 +69,7 @@ public class TransferCompositionConverter {
 
     private int countDataEntries(Map<String, Object> rawComposition, String prefix) {
 
-        int maxEntry = 0;
+        int maxEntry = -1;
         for (String key : rawComposition.keySet()) {
             if (StringUtils.startsWith(key, prefix)) {
                 String index = StringUtils.substringAfter(key, prefix);
@@ -72,21 +79,21 @@ public class TransferCompositionConverter {
             }
         }
 
-        return maxEntry;
+        return maxEntry + 1;
 
     }
 
-    private TransferOfCare createTransferOfCare(Map<String, Object> rawComposition) {
+    private TransferOfCare createTransferOfCare(Map<String, Object> rawComposition, int index) {
 
 
-        List<Allergy> allergyList = extractCompositionData(rawComposition, "idcr_handover_summary_report/allergies_and_adverse_reactions:0/adverse_reaction:", new AllergyFactory());
-        List<Contact> contactList = extractCompositionData(rawComposition, "idcr_handover_summary_report/patient_information/relevant_contacts:0/relevant_contact:", new ContactFactory());
-        List<Medication> medicationList = extractCompositionData(rawComposition, "idcr_handover_summary_report/medication_and_medical_devices:0/current_medication:0/medication_statement:", new MedicationFactory());
+        List<Allergy> allergyList = extractCompositionData(rawComposition, "idcr_handover_summary_report/allergies_and_adverse_reactions:" + index + "/adverse_reaction:", new AllergyFactory());
+        List<Contact> contactList = extractCompositionData(rawComposition, "idcr_handover_summary_report/patient_information/relevant_contacts:" + index + "/relevant_contact:", new ContactFactory());
+        List<Medication> medicationList = extractCompositionData(rawComposition, "idcr_handover_summary_report/medication_and_medical_devices:" + index + "/current_medication:0/medication_statement:", new MedicationFactory());
         List<Problem> problemList = Collections.emptyList();
 
         TransferDetail transferDetail = new TransferDetail();
-        transferDetail.setReasonForContact(MapUtils.getString(rawComposition, "idcr_handover_summary_report/reason_for_contact:0/reason_for_contact/presenting_problem:0"));
-        transferDetail.setClinicalSummary(MapUtils.getString(rawComposition, "idcr_handover_summary_report/clinical_summary:0/clinical_summary/summary"));
+        transferDetail.setReasonForContact(MapUtils.getString(rawComposition, "idcr_handover_summary_report/reason_for_contact:" + index + "/reason_for_contact/presenting_problem:0"));
+        transferDetail.setClinicalSummary(MapUtils.getString(rawComposition, "idcr_handover_summary_report/clinical_summary:" + index + "/clinical_summary/summary"));
 
         TransferOfCare transferOfCare = new TransferOfCare();
         transferOfCare.setAllergies(allergyList);

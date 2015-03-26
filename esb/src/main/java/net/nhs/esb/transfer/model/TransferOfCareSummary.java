@@ -9,10 +9,19 @@ import net.nhs.esb.problem.model.ProblemComposition;
  */
 public class TransferOfCareSummary {
 
+    private String compositionId;
     private AllergyComposition allergies;
     private ContactComposition contacts;
     private MedicationComposition medication;
     private ProblemComposition problems;
+
+    public String getCompositionId() {
+        return compositionId;
+    }
+
+    public void setCompositionId(String compositionId) {
+        this.compositionId = compositionId;
+    }
 
     public AllergyComposition getAllergies() {
         return allergies;

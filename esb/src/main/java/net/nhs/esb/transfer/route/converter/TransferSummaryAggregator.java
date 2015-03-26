@@ -13,12 +13,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class TransferSummaryAggregator {
 
-    public TransferOfCareSummary aggregate(@Header("allergies") AllergyComposition allergies,
+    public TransferOfCareSummary aggregate(@Header("compositionId") String compositionId,
+                                           @Header("allergies") AllergyComposition allergies,
                                            @Header("contacts") ContactComposition contacts,
                                            @Header("medication") MedicationComposition medication,
                                            @Header("problems") ProblemComposition problems) {
 
         TransferOfCareSummary summary = new TransferOfCareSummary();
+        summary.setCompositionId(compositionId);
         summary.setAllergies(allergies);
         summary.setContacts(contacts);
         summary.setMedication(medication);

@@ -32,6 +32,7 @@ public class FindPatientTransferSummaryRouteBuilder extends SpringRouteBuilder {
                 .to("direct:openEhrFindPatientProblemCompositionId")
                 .to("direct:openEhrFindPatientProblemComposition")
                 .setHeader("problems", simple("${body}"))
+                .to("direct:openEhrFindPatientTransferCompositionId")
                 .bean(transferSummaryAggregator)
                 .end();
 

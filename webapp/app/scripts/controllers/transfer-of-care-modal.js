@@ -17,9 +17,16 @@ angular.module('openehrPocApp')
               $scope.transferOfCare = result.data;
               return $scope.transferOfCare;
             });
+          },
+
+          transferOfCareCompositions: function () {
+            return TransferOfCare.getComposition($stateParams.patientId).then(function (result) {
+              $scope.transferOfCareCompositions = result.data;
+              return $scope.transferOfCareCompositions;
+            });
           }
         },
-        controller: function ($scope, patient, transferOfCare) {
+        controller: function ($scope, patient, transferOfCare, transferOfCareCompositions) {
 
           $scope.patient = patient;
           $scope.transferOfCare = transferOfCare;
@@ -27,6 +34,7 @@ angular.module('openehrPocApp')
           $scope.contacts = $scope.transferOfCare.contacts.contacts;
           $scope.problems = $scope.transferOfCare.problems.problems;
           $scope.medications = $scope.transferOfCare.medication.medications;
+          $scope.transferOfCareComposition = transferOfCareCompositions;
 
           $scope.selectedItems = {
             allergies: [],
@@ -35,12 +43,8 @@ angular.module('openehrPocApp')
             problems: []
           };
 
-          $scope.transferOfCareComposition = {
-          compositionId : null,
-          transfers : []
-          };
-
           $scope.transferDetail = {};
+
           $scope.selectTransferOfCareItem = function (selectedIndex, type) {
 
             if ($scope.selectedItems[type].indexOf(selectedIndex) !== -1) {
@@ -76,14 +80,13 @@ angular.module('openehrPocApp')
           };
 
           function updateTransferOfCare () {
-            // works
+
             var updatedTransferOfCare = jQuery.extend(true, {},
               $scope.transferOfCare.allergies,
               $scope.transferOfCare.contacts,
               $scope.transferOfCare.medication,
               $scope.transferOfCare.problems);
 
-            // check why this is here!
             delete updatedTransferOfCare.compositionId;
 
             for (var type in $scope.selectedItems) {

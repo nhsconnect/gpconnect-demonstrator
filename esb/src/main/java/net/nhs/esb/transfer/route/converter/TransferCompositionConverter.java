@@ -1,7 +1,6 @@
 package net.nhs.esb.transfer.route.converter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +88,7 @@ public class TransferCompositionConverter {
         List<Allergy> allergyList = extractCompositionData(rawComposition, "idcr_handover_summary_report/allergies_and_adverse_reactions:" + index + "/adverse_reaction:", new AllergyFactory());
         List<Contact> contactList = extractCompositionData(rawComposition, "idcr_handover_summary_report/patient_information/relevant_contacts:" + index + "/relevant_contact:", new ContactFactory());
         List<Medication> medicationList = extractCompositionData(rawComposition, "idcr_handover_summary_report/medication_and_medical_devices:" + index + "/current_medication:0/medication_statement:", new MedicationFactory());
-        List<Problem> problemList = Collections.emptyList();
+        List<Problem> problemList = extractCompositionData(rawComposition, "idcr_handover_summary_report/problems_and_issues:" + index + "/problem_diagnosis:", new ProblemFactory());
 
         TransferDetail transferDetail = new TransferDetail();
         transferDetail.setReasonForContact(MapUtils.getString(rawComposition, "idcr_handover_summary_report/reason_for_contact:" + index + "/reason_for_contact/presenting_problem:0"));
@@ -171,6 +170,19 @@ public class TransferCompositionConverter {
             medication.setStartDateTime(MapUtils.getString(rawComposition, prefix + "/medication_item/course_details/start_datetime"));
 
             return medication;
+        }
+    }
+
+    private class ProblemFactory extends AbstractFactory<Problem> {
+
+        @Override
+        public Problem create() {
+            Problem problem = new Problem();
+            problem.setProblem(MapUtils.getString(rawComposition, prefix + "/problem_diagnosis"));
+            problem.setDescription(MapUtils.getString(rawComposition, prefix + "/description"));
+            problem.setDateOfOnset(MapUtils.getString(rawComposition, prefix + "/date_of_onset"));
+
+            return problem;
         }
     }
 }

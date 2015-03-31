@@ -16,6 +16,7 @@ angular.module('openehrPocApp')
         $scope.problems = $scope.transferOfCare.problems;
         $scope.medications = $scope.transferOfCare.medication;
         $scope.transferDetail = $scope.transferOfCare.transferDetail;
+        $scope.site = $scope.transferOfCare.transferDetail.site;
       });
 
   });

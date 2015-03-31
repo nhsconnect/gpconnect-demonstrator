@@ -3,7 +3,10 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
-    <th>Name</th>
+    <th>Transfer</th>
+    <th>From (Site/Org)</th>
+    <th>To (Site/Org) </th>
+    <th>Date</th>
     <th></th>
   </tr>
   </thead>
@@ -11,7 +14,10 @@
   <tbody>
 
   <tr ng-repeat="transfer in transferofCareComposition.transfers" ng-click="go('/patients/{{patient.id}}/transfer-of-care-detail/{{$index}}')" ng-class="{info: selected($index)}">
-    <td>Transfer of care #{{($index + 1)}}</td>
+    <td>Transfer #{{($index + 1)}}</td>
+    <td>{{transfer.transferDetail.site.siteFrom}}</td>
+    <td>{{transfer.transferDetail.site.siteTo}}</td>
+    <td>{{transfer.transferDetail.site.timeStamp}}</td>
     <td><i class="fa fa-fw" ng-class="selected($index) ? 'fa-folder-open' : 'fa-folder'"></i></td>
   </tr>
 

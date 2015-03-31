@@ -42,7 +42,8 @@ public class TransferOfCareTransformer {
 			Site site = new Site();
 			site.setPatientId(patientId);
 			site.setSiteFrom("WORCESTERSHIRE HEALTH AND CARE NHS TRUST");
-			transferOfCareComposition.getTransfers().get(0).getTransferDetail().setSite(site);
+			site.setSiteTo("KINGS COLLEGE HOSPITAL");
+           	transferOfCareComposition.getTransfers().get(0).getTransferDetail().setSite(site);
 			transferOfCareComposition.getTransfers().get(0).getTransferDetail().setReasonForContact(null);
 			transferOfCareComposition.getTransfers().get(0).getTransferDetail().setClinicalSummary(null);
 			createTransferOfCareComposition(transferOfCareComposition);

@@ -86,14 +86,15 @@
   <form class="form-horizontal" name="transferOfCareForm" ng-show="!displayDetail">
     <fieldset>
       <legend>Details</legend>
-      <div class="form-group" ng-class="{'has-error': (formSubmitted || transferOfCareForm.site.$dirty) && transferOfCareForm.site.$invalid, 'has-success': transferOfCareForm.site.$valid && transferOfCareForm.site.$dirty}">
-        <label for="site" class="control-label col-md-4">Site</label>
+      <div class="form-group" ng-class="{'has-error': (formSubmitted || transferOfCareForm.siteTo.$dirty) && transferOfCareForm.siteTo.$invalid, 'has-success': transferOfCareForm.siteTo.$valid && transferOfCareForm.siteTo.$dirty}">
+        <label for="siteTo" class="control-label col-md-4">Site/Organisation</label>
         <div class="col-md-8">
           <div class="input-group">
-            <select class="form-control" name="site" id="site" ng-model="details.site" required>
+            <select class="form-control" name="siteTo" id="siteTo" ng-model="details.siteTo" required>
               <option value="">Select a Site</option>
               <option>KINGS COLLEGE HOSPITAL</option>
-              <option>WORCESTERSHIRE HEALTH AND CARE NHS TRUST</option>
+              <!--Removed as it is default in database-->
+              <!-- <option>WORCESTERSHIRE HEALTH AND CARE NHS TRUST</option>-->
               <option>ST JAMES'S UNIVERSITY HOSPITAL</option>
               <option>OXFORD HEALTH NHS FOUNDATION TRUST</option>
               <option>HINCHINGBROOKE HEALTH CARE NHS TRUST</option>
@@ -102,7 +103,7 @@
                 <i class="fa fa-check fa-fw"></i>
             </span>
           </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && transferOfCareForm.site.$error.required">You must select a value.</span>
+          <span class="help-block animate-fade" ng-show="formSubmitted && transferOfCareForm.siteTo.$error.required">You must select a value.</span>
         </div>
       </div>
 
@@ -174,11 +175,11 @@
 
           <div class="form-group">
             <div class="col-md-8">
-              <h5>Site</h5>
-              <ul ng-if="details.site">
-                <li>{{details.site}}</li>
+              <h5>Site/Organisation</h5>
+              <ul ng-if="details.siteTo">
+                <li>{{details.siteTo}}</li>
               </ul>
-              <span class="transfer-of-care-no-selected-items" ng-if="!details.site">No site selected</span>
+              <span class="transfer-of-care-no-selected-items" ng-if="!details.siteTo">No site selected</span>
 
               <h5>Reason for Contact</h5>
               <ul ng-if="details.reasonForContact">

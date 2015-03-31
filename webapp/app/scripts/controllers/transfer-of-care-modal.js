@@ -35,6 +35,7 @@ angular.module('openehrPocApp')
           $scope.problems = $scope.transferOfCare.problems.problems;
           $scope.medications = $scope.transferOfCare.medication.medications;
           $scope.transferOfCareComposition = transferOfCareCompositions;
+          $scope.siteFrom = $scope.transferOfCareComposition.transfers[0].transferDetail.site.siteFrom;
 
           $scope.selectedItems = {
             allergies: [],
@@ -43,7 +44,9 @@ angular.module('openehrPocApp')
             problems: []
           };
 
-          $scope.transferDetail = {};
+          $scope.transferDetail = {
+            'site' : {}
+          };
 
           $scope.selectTransferOfCareItem = function (selectedIndex, type) {
 
@@ -74,6 +77,9 @@ angular.module('openehrPocApp')
               $scope.selectedMedications = $scope.selectedItemsForSummary.medications;
               $scope.transferDetail.reasonForContact = !$scope.details.reasonForContact ? 'No reason specified' : $scope.details.reasonForContact;
               $scope.transferDetail.clinicalSummary = !$scope.details.clinicalSummary  ? 'No clinical summary' : $scope.details.clinicalSummary;
+              $scope.transferDetail.site.siteFrom = !$scope.siteFrom  ? 'No site from' : $scope.siteFrom;
+              $scope.transferDetail.site.siteTo = !$scope.details.siteTo  ? 'No site to' : $scope.details.siteTo;
+              $scope.transferDetail.site.patientId = 9999999000;
               $scope.toggleDetailView();
             }
 
@@ -136,7 +142,7 @@ angular.module('openehrPocApp')
             $scope.transferOfCare.transferDetail = $scope.transferDetail;
             $scope.transferOfCareComposition.transfers.push($scope.transferOfCare);
 
-            TransferOfCare.update($scope.patient.id, $scope.transferOfCareComposition).then(function () {
+            TransferOfCare.create($scope.patient.id, $scope.transferOfCareComposition).then(function () {
               $scope.$close();
             });
 

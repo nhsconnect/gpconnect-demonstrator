@@ -1,6 +1,6 @@
 package net.nhs.esb.transfer.model;
 
-import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 import javax.persistence.Basic;
@@ -13,10 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -42,11 +39,9 @@ public class Site {
     @JsonProperty("siteFrom")
     private String siteFrom;
     
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="time_stamp")
     @JsonProperty("timeStamp")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date timeStamp;
+    private String timeStamp;
     
     @OneToOne
     @JoinColumn(name="transfer_detail_id")
@@ -55,7 +50,8 @@ public class Site {
     
     @PrePersist
     public void setTimeStamp(){
-    	this.timeStamp = GregorianCalendar.getInstance().getTime();
+    	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    	this.timeStamp = sdf.format(GregorianCalendar.getInstance().getTime());
     }
     
 	public String getSiteTo() {
@@ -98,11 +94,11 @@ public class Site {
 		this.transferDetail = transferDetail;
 	}
 
-	public Date getTimeStamp() {
+	public String getTimeStamp() {
 		return timeStamp;
 	}
 
-	public void setTimeStamp(Date timeStamp) {
+	public void setTimeStamp(String timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 }

@@ -1,3 +1,10 @@
+drop table if exists poc_legacy.problems;
+drop table if exists poc_legacy.medications;
+drop table if exists poc_legacy.contacts;
+drop table if exists poc_legacy.allergies;
+drop table if exists poc_legacy.sites;
+drop table if exists poc_legacy.transfer_details;
+drop table if exists poc_legacy.transfer_cares;
 drop table if exists poc_legacy.transfer_care_compositions;
 
 create table poc_legacy.transfer_care_compositions (
@@ -7,17 +14,12 @@ create table poc_legacy.transfer_care_compositions (
   UNIQUE (composition_id)
 );
 
-drop table if exists poc_legacy.transfer_cares;
-
 create table poc_legacy.transfer_cares (
   id bigint not null auto_increment,
   transfer_care_composition_id bigint not null,
   primary key (id),
   FOREIGN KEY (transfer_care_composition_id) REFERENCES poc_legacy.transfer_care_compositions(id)
 );
-
-
-drop table if exists poc_legacy.transfer_details;
 
 create table poc_legacy.transfer_details (
   id bigint not null auto_increment,
@@ -28,21 +30,16 @@ create table poc_legacy.transfer_details (
   FOREIGN KEY (transfer_care_id) REFERENCES poc_legacy.transfer_cares(id)
 );
 
-
-drop table if exists poc_legacy.sites;
-
 create table poc_legacy.sites (
   id bigint not null auto_increment,
   patient_id bigint not null,
-  time_stamp timestamp,
+  time_stamp varchar(100),
   transfer_detail_id bigint not null,
   site_to varchar(256) null,
   site_from varchar(256) null,
   primary key (id),
   FOREIGN KEY (transfer_detail_id) REFERENCES poc_legacy.transfer_details(id)
 );
-
-drop table if exists poc_legacy.allergies;
 
 create table poc_legacy.allergies (
   id bigint not null auto_increment,
@@ -54,8 +51,6 @@ create table poc_legacy.allergies (
   primary key (id),
   FOREIGN KEY (transfer_care_id) REFERENCES poc_legacy.transfer_cares(id)
 );
-
-drop table if exists poc_legacy.contacts;
 
 create table poc_legacy.contacts (
   id bigint not null auto_increment,
@@ -72,9 +67,6 @@ create table poc_legacy.contacts (
   FOREIGN KEY (transfer_care_id) REFERENCES poc_legacy.transfer_cares(id)
 );
 
-drop table if exists poc_legacy.medications;
-
-
 create table poc_legacy.medications (
   id bigint not null auto_increment,
   transfer_care_id bigint not null,
@@ -89,8 +81,6 @@ create table poc_legacy.medications (
   primary key (id),
   FOREIGN KEY (transfer_care_id) REFERENCES poc_legacy.transfer_cares(id)
 );
-
-drop table if exists poc_legacy.problems;
 
 create table poc_legacy.problems (
   id bigint not null auto_increment,

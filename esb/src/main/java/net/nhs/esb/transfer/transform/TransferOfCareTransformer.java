@@ -41,6 +41,7 @@ public class TransferOfCareTransformer {
 		if (tocFromDB == null){
 			Site site = new Site();
 			site.setPatientId(patientId);
+			site.setSiteTo("WORCESTERSHIRE HEALTH AND CARE NHS TRUST -- Too");
 			site.setSiteFrom("WORCESTERSHIRE HEALTH AND CARE NHS TRUST");
 			transferOfCareComposition.getTransfers().get(0).getTransferDetail().setSite(site);
 			transferOfCareComposition.getTransfers().get(0).getTransferDetail().setReasonForContact(null);

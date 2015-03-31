@@ -4,6 +4,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import net.nhs.esb.patient.repository.PatientRepository;
+import net.nhs.esb.transfer.repository.SiteRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +19,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 /**
  */
 @Configuration
-@EnableJpaRepositories(basePackageClasses = PatientRepository.class,
+@EnableJpaRepositories(basePackageClasses = { PatientRepository.class, SiteRepository.class},
         entityManagerFactoryRef = "patientEntityManagerFactory",
         transactionManagerRef = "patientTransactionManager"
 )
@@ -31,6 +33,8 @@ public class PatientRepositoryConfig {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setShowSql(true);
         vendorAdapter.setDatabase(Database.MYSQL);
+        vendorAdapter.getJpaPropertyMap().put("format_sql", true);
+        vendorAdapter.getJpaPropertyMap().put("use_sql_comments", true);
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);

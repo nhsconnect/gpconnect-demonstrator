@@ -2,6 +2,8 @@ package net.nhs.esb.transfer.route;
 
 import net.nhs.esb.openehr.route.CompositionSearchParameters;
 import net.nhs.esb.transfer.model.TransferOfCareComposition;
+import net.nhs.esb.transfer.transform.TransferOfCareTransformer;
+
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.apache.camel.spring.SpringRouteBuilder;
@@ -15,6 +17,9 @@ public class FindPatientTransferRouteBuilder extends SpringRouteBuilder {
 
     @Autowired
     private CompositionSearchParameters compositionParameters;
+    
+    @Autowired
+    private TransferOfCareTransformer transferOfCareTransformer;
 
     @Override
     public void configure() throws Exception {
@@ -25,6 +30,7 @@ public class FindPatientTransferRouteBuilder extends SpringRouteBuilder {
                 .to("direct:getEhrId")
                 .to("direct:openEhrFindPatientTransferCompositionId")
                 .to("direct:openEhrFindPatientTransferComposition")
+                .bean(transferOfCareTransformer, "readTransferOfCareComposition")
                 .end();
 
         from("direct:openEhrFindPatientTransferComposition")
@@ -40,6 +46,9 @@ public class FindPatientTransferRouteBuilder extends SpringRouteBuilder {
                 .setBody(simple(buildQuery()))
                 .to("cxfrs:bean:rsOpenEhr")
                 .setHeader("compositionId", simple("${body.resultSet[0][uid]}"));
+        
+        from("direct:findTransferOfCare")
+        	.bean(transferOfCareTransformer, "findTransferOfCare");
     }
 
     private String buildQuery() {

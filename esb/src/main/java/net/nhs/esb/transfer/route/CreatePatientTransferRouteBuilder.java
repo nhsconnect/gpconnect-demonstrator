@@ -3,6 +3,8 @@ package net.nhs.esb.transfer.route;
 import net.nhs.esb.openehr.route.CompositionCreateParameters;
 import net.nhs.esb.openehr.route.HttpStatusProcessor;
 import net.nhs.esb.transfer.model.TransferOfCareUpdate;
+import net.nhs.esb.transfer.transform.TransferOfCareTransformer;
+
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.apache.camel.spring.SpringRouteBuilder;
@@ -20,11 +22,15 @@ public class CreatePatientTransferRouteBuilder extends SpringRouteBuilder {
 
     @Autowired
     private CompositionCreateParameters compositionCreateParameters;
+    
+    @Autowired
+    private TransferOfCareTransformer siteTransformer;
 
     @Override
     public void configure() throws Exception {
 
         from("direct:createPatientTransferComposition").routeId("openEhrCreatePatientTransferComposition")
+        		.bean(siteTransformer, "createTransferOfCareComposition")
                 .convertBodyTo(TransferOfCareUpdate.class)
                 .setHeader("composition", simple("${body.content}"))
                 .setBody(simple("${header.patientId}"))
@@ -36,6 +42,7 @@ public class CreatePatientTransferRouteBuilder extends SpringRouteBuilder {
                     .when(header("compositionId").isNull())
                         .setBody(simple("${header.composition}"))
                         .to("direct:openEhrCreatePatientTransferComposition")
+                        
                     .otherwise()
                         .process(new HttpStatusProcessor())
                 .endChoice()

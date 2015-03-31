@@ -2,6 +2,7 @@ package net.nhs.esb.rest;
 
 import java.util.Collections;
 import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,8 +20,10 @@ import net.nhs.esb.medication.model.MedicationComposition;
 import net.nhs.esb.patient.model.PatientDetails;
 import net.nhs.esb.patient.model.PatientDetailsArray;
 import net.nhs.esb.problem.model.ProblemComposition;
+import net.nhs.esb.transfer.model.TransferOfCare;
 import net.nhs.esb.transfer.model.TransferOfCareComposition;
 import net.nhs.esb.transfer.model.TransferOfCareSummary;
+
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -161,13 +164,13 @@ public class Patients {
 
     }
 
-    @PUT
+    @PUT 
     @Path("/{patientId}/transfer-of-care")
     public void updatePatientTransferComposition(@PathParam("patientId") Long patientId, TransferOfCareComposition transferOfCareComposition) {
 
     }
 
-    @GET
+    @GET 
     @Path("/{patientId}/transfer-of-care")
     public TransferOfCareComposition findPatientTransferComposition(@PathParam("patientId") Long patientId) {
         return null;
@@ -178,5 +181,10 @@ public class Patients {
     public void deletePatientTransferComposition(@PathParam("patientId") Long patientId, @PathParam("compositionId") String compositionId) {
 
     }
-
+    
+    @GET 
+    @Path("/{patientId}/transfer-of-care/{transferOfCareId}")
+    public TransferOfCare findTransferOfCare(@PathParam("patientId") Long patitentId, @PathParam("transferOfCareId") Long transferOfCareId){
+    	return null;
+    }
 }

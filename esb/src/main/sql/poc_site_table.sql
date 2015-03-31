@@ -34,6 +34,7 @@ drop table if exists poc_legacy.sites;
 create table poc_legacy.sites (
   id bigint not null auto_increment,
   patient_id bigint not null,
+  time_stamp timestamp,
   transfer_detail_id bigint not null,
   site_to varchar(256) null,
   site_from varchar(256) null,

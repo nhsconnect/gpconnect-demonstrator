@@ -37,14 +37,14 @@ public class TransferOfCareTransformer {
 		
 		TransferOfCareComposition tocFromDB = transferOfCareCompositionRepository.findByCompositionId(transferOfCareComposition.getCompositionId());
 		
-		//it works only one time to save the open-ehr result
-		//TODO Siteto and sitefrom value change !!
+		//it works only one time to save the open-ehr result, when the composition-id change.
 		if (tocFromDB == null){
 			Site site = new Site();
 			site.setPatientId(patientId);
-			site.setSiteFrom("Change me");
-			site.setSiteTo("Change me");
+			site.setSiteFrom("WORCESTERSHIRE HEALTH AND CARE NHS TRUST");
 			transferOfCareComposition.getTransfers().get(0).getTransferDetail().setSite(site);
+			transferOfCareComposition.getTransfers().get(0).getTransferDetail().setReasonForContact(null);
+			transferOfCareComposition.getTransfers().get(0).getTransferDetail().setClinicalSummary(null);
 			createTransferOfCareComposition(transferOfCareComposition);
 			return transferOfCareComposition;
 		}

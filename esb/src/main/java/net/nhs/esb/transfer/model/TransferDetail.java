@@ -33,7 +33,7 @@ public class TransferDetail {
     @JsonProperty("clinicalSummary")
     private String clinicalSummary;
     
-    @OneToOne(mappedBy="transferDetail", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToOne(mappedBy="transferDetail", fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
     private Site site;
     
     @OneToOne

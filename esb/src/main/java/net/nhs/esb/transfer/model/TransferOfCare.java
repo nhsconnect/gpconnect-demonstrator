@@ -35,23 +35,23 @@ public class TransferOfCare {
     @JsonProperty("id")
 	private Long id;
 
-	@OneToOne(mappedBy="transferOfCare", cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.MERGE})
+	@OneToOne(mappedBy="transferOfCare", cascade=CascadeType.ALL, orphanRemoval=true)
 	@LazyCollection(LazyCollectionOption.FALSE)
     private TransferDetail transferDetail;
     
-	@OneToMany(mappedBy="transferOfCare", cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.MERGE})
+	@OneToMany(mappedBy="transferOfCare", cascade=CascadeType.ALL, orphanRemoval=true)
 	@LazyCollection(LazyCollectionOption.FALSE)
     private List<Allergy> allergies;
 	
-	@OneToMany(mappedBy="transferOfCare", cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.MERGE})
+	@OneToMany(mappedBy="transferOfCare", cascade=CascadeType.ALL, orphanRemoval=true)
 	@LazyCollection(LazyCollectionOption.FALSE)
     private List<Contact> contacts;
 	
-	@OneToMany(mappedBy="transferOfCare", cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.MERGE})
+	@OneToMany(mappedBy="transferOfCare", cascade=CascadeType.ALL, orphanRemoval=true)
 	@LazyCollection(LazyCollectionOption.FALSE)
     private List<Medication> medication;
 	
-	@OneToMany(mappedBy="transferOfCare", cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.MERGE})
+	@OneToMany(mappedBy="transferOfCare", cascade=CascadeType.ALL)
 	@LazyCollection(LazyCollectionOption.FALSE)
     private List<Problem> problems;
     

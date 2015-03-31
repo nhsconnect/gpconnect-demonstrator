@@ -29,7 +29,7 @@ public class TransferOfCareComposition {
     @JsonProperty("compositionId")
     private String compositionId;
 	
-	@OneToMany(fetch=FetchType.EAGER, mappedBy="transferOfCareComposition", cascade=CascadeType.ALL)
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="transferOfCareComposition", cascade=CascadeType.ALL, orphanRemoval=true)
     private List<TransferOfCare> transfers;
 
     public String getCompositionId() {

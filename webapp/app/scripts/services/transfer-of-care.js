@@ -13,15 +13,22 @@ angular.module('openehrPocApp')
       return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/transfer-of-care/');
     };
 
-    var update = function (patientId, composition) {
+    var create = function (patientId, composition) {
       console.log('transferOfCareComposition: ');
       console.log(composition);
       return $http.post('/api/patients/' + (patientIdOveride || patientId) + '/transfer-of-care', composition);
     };
 
+    var update = function (patientId, composition) {
+      console.log('transferOfCareComposition: ');
+      console.log(composition);
+      return $http.put('/api/patients/' + (patientIdOveride || patientId) + '/transfer-of-care', composition);
+    };
+
     return {
       get: get,
       getComposition: getComposition,
+      create: create,
       update: update
     };
   });

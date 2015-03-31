@@ -4,7 +4,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import net.nhs.esb.patient.repository.PatientRepository;
-import net.nhs.esb.transfer.repository.SiteRepository;
+import net.nhs.esb.transfer.repository.TransferOfCareCompositionRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 /**
  */
 @Configuration
-@EnableJpaRepositories(basePackageClasses = { PatientRepository.class, SiteRepository.class},
+@EnableJpaRepositories(basePackageClasses = { PatientRepository.class, TransferOfCareCompositionRepository.class},
         entityManagerFactoryRef = "patientEntityManagerFactory",
         transactionManagerRef = "patientTransactionManager"
 )

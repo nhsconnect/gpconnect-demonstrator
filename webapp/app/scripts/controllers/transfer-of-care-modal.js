@@ -45,7 +45,7 @@ angular.module('openehrPocApp')
           };
 
           $scope.transferDetail = {
-            'site' : {}
+            site : {}
           };
 
           $scope.selectTransferOfCareItem = function (selectedIndex, type) {

@@ -86,8 +86,17 @@
   <form class="form-horizontal" name="transferOfCareForm" ng-show="!displayDetail">
     <fieldset>
       <legend>Details</legend>
+
+      <div class="form-group">
+        <label class="control-label col-md-4">From (Site/Organisation)</label>
+        <div class="col-md-8">
+          <span>{{siteFrom}}</span>
+          <span ng-if="!siteFrom">No From (Site/Organisation) selected</span>
+        </div>
+      </div>
+
       <div class="form-group" ng-class="{'has-error': (formSubmitted || transferOfCareForm.siteTo.$dirty) && transferOfCareForm.siteTo.$invalid, 'has-success': transferOfCareForm.siteTo.$valid && transferOfCareForm.siteTo.$dirty}">
-        <label for="siteTo" class="control-label col-md-4">Site/Organisation</label>
+        <label for="siteTo" class="control-label col-md-4">To (Site/Organisation)</label>
         <div class="col-md-8">
           <div class="input-group">
             <select class="form-control" name="siteTo" id="siteTo" ng-model="details.siteTo" required>
@@ -108,14 +117,14 @@
       </div>
 
       <div class="form-group">
-        <label for="code" class="control-label col-md-4">Reason for Contact</label>
+        <label for="reasonForContact" class="control-label col-md-4">Reason for Contact</label>
         <div class="col-md-8">
           <textarea class="form-control" rows="3" id="reasonForContact" ng-model="details.reasonForContact"></textarea>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="code" class="control-label col-md-4">Clinical Summary</label>
+        <label for="clinicalSummary" class="control-label col-md-4">Clinical Summary</label>
         <div class="col-md-8">
           <textarea class="form-control" rows="3" id="clinicalSummary" ng-model="details.clinicalSummary"></textarea>
         </div>
@@ -175,11 +184,17 @@
 
           <div class="form-group">
             <div class="col-md-8">
-              <h5>Site/Organisation</h5>
+              <h5>From (Site/Organisation)</h5>
+              <ul ng-if="siteFrom">
+                <li>{{siteFrom}}</li>
+              </ul>
+              <span class="transfer-of-care-no-selected-items" ng-if="!siteFrom">No From (Site/Organisation) selected</span>
+
+              <h5>To (Site/Organisation)</h5>
               <ul ng-if="details.siteTo">
                 <li>{{details.siteTo}}</li>
               </ul>
-              <span class="transfer-of-care-no-selected-items" ng-if="!details.siteTo">No site selected</span>
+              <span class="transfer-of-care-no-selected-items" ng-if="!details.siteTo">No To (Site/Organisation) selected</span>
 
               <h5>Reason for Contact</h5>
               <ul ng-if="details.reasonForContact">

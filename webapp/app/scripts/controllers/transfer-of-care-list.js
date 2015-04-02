@@ -9,7 +9,6 @@ angular.module('openehrPocApp')
 
     TransferOfCare.getComposition($stateParams.patientId).then(function (result) {
       $scope.transferofCareComposition = result.data;
-
       console.log($scope.transferofCareComposition);
     });
 

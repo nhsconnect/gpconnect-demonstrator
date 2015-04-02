@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-@Table(name="sites", schema="poc_legacy")
+@Table(name="sites")
 public class Site {
 	
     @Id

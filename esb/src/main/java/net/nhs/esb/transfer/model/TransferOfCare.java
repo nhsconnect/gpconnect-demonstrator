@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-@Table(name="transfer_cares", schema="poc_legacy")
+@Table(name="transfer_cares")
 public class TransferOfCare {
 
 	@Id
@@ -51,7 +51,7 @@ public class TransferOfCare {
 	@LazyCollection(LazyCollectionOption.FALSE)
     private List<Medication> medication;
 	
-	@OneToMany(mappedBy="transferOfCare", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="transferOfCare", cascade=CascadeType.ALL, orphanRemoval=true)
 	@LazyCollection(LazyCollectionOption.FALSE)
     private List<Problem> problems;
     

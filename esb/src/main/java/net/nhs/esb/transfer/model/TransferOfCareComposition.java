@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-@Table(name="transfer_care_compositions", schema="poc_legacy")
+@Table(name="transfer_care_compositions")
 public class TransferOfCareComposition {
 
 	@Id

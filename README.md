@@ -1,4 +1,4 @@
-OpenEHR POC
+IDCR POC
 =========
 
 ### Installation

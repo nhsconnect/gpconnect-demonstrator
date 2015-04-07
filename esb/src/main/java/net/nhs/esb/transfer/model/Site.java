@@ -2,6 +2,7 @@ package net.nhs.esb.transfer.model;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -47,13 +48,14 @@ public class Site {
     @JoinColumn(name="transfer_detail_id")
     @JsonIgnore
     private TransferDetail transferDetail;
-    
-    @PrePersist
-    public void setTimeStamp(){
-    	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-    	this.timeStamp = sdf.format(GregorianCalendar.getInstance().getTime());
-    }
-    
+
+     @PrePersist
+     public void setTimeStamp(){
+         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+         sdf.setTimeZone(TimeZone.getTimeZone("Europe/London"));
+         this.timeStamp = sdf.format(GregorianCalendar.getInstance().getTime());
+     }
+
 	public String getSiteTo() {
 		return siteTo;
 	}

@@ -63,5 +63,7 @@ In a second shell, serve the web assets and watch for changes:
 cd webapp && grunt serve
 ```
 
+### Deployment and server configuration 
 
+See IDCR-Setup.doc in Google Drive - Managed Solutions Drive/OS Demonstrator 
 

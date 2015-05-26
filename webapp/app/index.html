@@ -18,6 +18,16 @@
     <link rel="stylesheet" href="styles/sb-admin-2.css" />
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+
+
+    <!-- build:css(.tmp) components/heroweb/hero-stylesheet.css -->
+    <link rel="stylesheet" href="components/heroweb/hero-demo.css" />
+    <link rel="stylesheet" href="components/heroweb/hero-stylesheet.css" />
+    <style type="text/css">#title,.glyphs p{font-family:"Hero"}</style>
+
+    <!-- endbuild -->
+
+
   </head>
   <body ng-app="openehrPocApp">
     <!--[if lt IE 7]>
@@ -27,18 +37,73 @@
     <!-- Add your site or application content here -->
     <div id="wrapper">
 
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top primary-nav" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#/">IDCR POC</a>
-            </div>
-            <!-- /.navbar-header -->
+      <!-- Header -->
+      <div class="row header-background hidden-xs">
+        <div class="col-sm-4 header-left">
+            <div class="glyphs g"><p class="header-title-1"><img src="images/ripple-icon.png" alt="Ripple Icon" class="ripple-icon"> IDCR</p><p class="header-title-2"> POC</p></div>﻿
+        </div>
+
+        <div class="col-sm-4 col-xs-12 header-center">
+          <div class="search-left-inner-addon">
+            <i class="glyphicon glyphicon-search"></i>
+            <input type="search"
+                   class="form-control"
+                   placeholder="Patient search..." />
+          </div>
+        </div>
+
+        <div class="col-sm-4 col-xs-12 header-right">
+          <span class="glyphicon glyphicon-user"></span>
+          <span>Demonstration</span>
+        </div>
+      </div>
+      <!-- /.Header -->
+
+      <!-- Header mobile -->
+      <div class="row header-background-mobile visible-xs">
+        <div class="col-xs-12 header-left-mobile">
+            <div class="g glyphs"><p class="header-title-1"><img src="images/ripple-icon.png" alt="Ripple Icon" class="ripple-icon"> IDCR</p><p class="header-title-2"> POC</p></div>﻿
+        </div>
+
+        <div class="col-xs-12 header-right-mobile">
+          <span class="glyphicon glyphicon-user"></span>
+          <span>Demonstration</span>
+        </div>
+
+        <div class="col-xs-12 header-center">
+          <div class="search-left-inner-addon">
+            <i class="glyphicon glyphicon-search"></i>
+            <input type="search"
+                   class="form-control"
+                   placeholder="Patient search..." />
+          </div>
+        </div>
+
+      </div>
+      <!-- /.Header mobile -->
+
+
+      <!-- Header toolbar -->
+      <div class="row">
+        <div class="col-md-12 header-toolbar">
+            <span>Patient Dashboard</span>
+        </div>
+      </div>
+      <!-- /.Header toolbar -->
+
+
+      <div class="row">
+      <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 1px">
+         <!--  <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#/">IDCR POC</a>
+        </div>-->
+        <!-- /.navbar-header -->
 
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
@@ -62,7 +127,7 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
-
+      </div>
         <div id="page-wrapper">
             <div class="section-north" ui-view="user-context"></div>
 

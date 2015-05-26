@@ -1,3 +1,5 @@
 ﻿.glyphs .g{width:40px;float:left;text-align:center;padding:0 3px 0 3px;white-space:nowrap;margin-bottom:0px;min-height:0px}
 .glyphs p{font-size:35px;padding:0;margin:0px 0 0 0; display: inline }
 
+#title,.glyphs p
+{font-family:"Hero"}

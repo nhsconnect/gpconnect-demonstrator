@@ -21,7 +21,8 @@ angular
         views: {
           actions: { templateUrl: 'views/home-sidebar.html' },
           main: { templateUrl: 'views/patients/patients-list.html', controller: 'PatientsListCtrl' }
-        }
+        },
+      pageHeader: 'Patient Lists'
       })
 
       .state('patients-charts', {
@@ -29,7 +30,8 @@ angular
         views: {
           actions: { templateUrl: 'views/home-sidebar.html' },
           main: { templateUrl: 'views/patients/patients-charts.html', controller: 'PatientsChartsCtrl' }
-        }
+        },
+        pageHeader: 'Patient Dashboard'
       })
 
       .state('patients-lookup', {
@@ -46,7 +48,8 @@ angular
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
           main: { templateUrl: 'views/diagnoses/diagnoses-list.html', controller: 'DiagnosesListCtrl' }
-        }
+        },
+      pageHeader: 'Diagnosis List'
       })
 
       .state('diagnoses-detail', {
@@ -144,9 +147,21 @@ angular
         }
       });
 
-
   })
-  .config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
+
+  .run(function ($rootScope, $state) {
+    $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+
+      $rootScope.previousState_name = fromState.name;
+      $rootScope.previousState_params = fromParams;
+
+    });
+    $rootScope.back = function() {
+      window.history.back();
+    };
+  })
+
+.config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
     datepickerConfig.startingDay          = 1;
     datepickerPopupConfig.showButtonBar   = false;
     datepickerPopupConfig.datepickerPopup = 'dd-MMM-yyyy';

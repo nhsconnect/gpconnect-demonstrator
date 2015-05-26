@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('DiagnosesListCtrl', function ($scope, $stateParams, $location, $modal, PatientService, Diagnosis) {
+  .controller('DiagnosesListCtrl', function ($scope, $state, $stateParams, $location, $modal, $rootScope, PatientService, Diagnosis) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
+
+    $rootScope.pageHeader = $state.current.pageHeader;
 
     Diagnosis.all($stateParams.patientId).then(function (result) {
       $scope.result = result.data;

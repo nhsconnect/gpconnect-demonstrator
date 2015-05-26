@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('PatientsChartsCtrl', function ($scope, $window, $state, PatientService) {
+  .controller('PatientsChartsCtrl', function ($scope, $window, $state, PatientService, $rootScope) {
+
+    $rootScope.pageHeader = $state.current.pageHeader;
 
     PatientService.summaries().then(function (summaries) {
       ageChart(summaries);

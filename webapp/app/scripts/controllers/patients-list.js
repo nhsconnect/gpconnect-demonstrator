@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('PatientsListCtrl', function ($scope, $state, $stateParams, PatientService) {
+  .controller('PatientsListCtrl', function ($scope, $state, $stateParams, PatientService,$rootScope) {
     PatientService.all().then(function (patients) {
       $scope.patients = patients;
     });
+
+    $rootScope.pageHeader = $state.current.pageHeader;
 
     $scope.order = $stateParams.order || 'lastname';
     $scope.reverse = $stateParams.reverse === 'true';

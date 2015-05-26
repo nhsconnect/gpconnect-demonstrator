@@ -19,14 +19,10 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
 
-
     <!-- build:css(.tmp) components/heroweb/hero-stylesheet.css -->
     <link rel="stylesheet" href="components/heroweb/hero-demo.css" />
     <link rel="stylesheet" href="components/heroweb/hero-stylesheet.css" />
-    <style type="text/css">#title,.glyphs p{font-family:"Hero"}</style>
-
     <!-- endbuild -->
-
 
   </head>
   <body ng-app="openehrPocApp">
@@ -39,11 +35,11 @@
 
       <!-- Header -->
       <div class="row header-background hidden-xs">
-        <div class="col-sm-4 header-left">
+        <div class="col-md-4 col-sm-5 header-left">
             <div class="glyphs g"><p class="header-title-1"><img src="images/ripple-icon.png" alt="Ripple Icon" class="ripple-icon"> IDCR</p><p class="header-title-2"> POC</p></div>﻿
         </div>
 
-        <div class="col-sm-4 col-xs-12 header-center">
+        <div class="col-md-4 col-sm-3 header-center">
           <div class="search-left-inner-addon">
             <i class="glyphicon glyphicon-search"></i>
             <input type="search"
@@ -52,7 +48,7 @@
           </div>
         </div>
 
-        <div class="col-sm-4 col-xs-12 header-right">
+        <div class="col-md-4 col-sm-4 header-right">
           <span class="glyphicon glyphicon-user"></span>
           <span>Demonstration</span>
         </div>
@@ -78,31 +74,44 @@
                    placeholder="Patient search..." />
           </div>
         </div>
-
       </div>
       <!-- /.Header mobile -->
 
-
       <!-- Header toolbar -->
-      <div class="row">
-        <div class="col-md-12 header-toolbar">
-            <span>Patient Dashboard</span>
+      <div class="row header-toolbar hidden-xs" ng-controller="headerController">
+        <div class="col-sm-5">
+          <span class="glyphicon glyphicon-arrow-left" style="float:left; padding-left: 30px;padding-top: 4px;" ng-if="previousPage" ng-click="back()"></span>
+          <span style="padding-left: 20px;">{{previousPage}}</span>
+        </div>
+        <div class="col-sm-7">
+          <span>{{pageHeader}}</span>
         </div>
       </div>
       <!-- /.Header toolbar -->
 
+      <!-- Header toolbar mobile -->
+      <div class="row header-toolbar visible-xs" ng-controller="headerController">
+        <div class="col-xs-2" style="padding-left: 25px;">
+          <span class="glyphicon glyphicon-arrow-left"  ng-click="back()"></span>
+        </div>
+        <div class="col-xs-8" style="text-align: center">
+          <span>{{pageHeader}}</span>
+        </div>
+      </div>
+      <!-- /.Header toolbar mobile-->
 
+      <!--Sidebar-->
       <div class="row">
       <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 1px">
-         <!--  <div class="navbar-header">
+           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#/">IDCR POC</a>
-        </div>-->
+            <a class="navbar-brand" href="#/"></a>
+        </div>
         <!-- /.navbar-header -->
 
             <div class="navbar-default sidebar" role="navigation">
@@ -128,6 +137,9 @@
             <!-- /.navbar-static-side -->
         </nav>
       </div>
+      <!-- /.Sidebar-->
+      
+      <!-- /page-wrapper -->
         <div id="page-wrapper">
             <div class="section-north" ui-view="user-context"></div>
 
@@ -142,15 +154,13 @@
                 </div>
               </div>
             </div>
-
         </div>
-        <!-- /#page-wrapper -->
+      <!-- /.#page-wrapper -->
 
     </div>
     <!-- /#wrapper -->
 
     <div class="notifications" growl-notifications></div>
-
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -203,6 +213,7 @@
         <script src="scripts/services/transfer-of-care.js"></script>
         <script src="scripts/models/patient.js"></script>
         <script src="scripts/controllers/patients-list.js"></script>
+        <script src="scripts/controllers/header-controller.js"></script>
         <script src="scripts/controllers/patients-charts.js"></script>
         <script src="scripts/controllers/patients-lookup.js"></script>
         <script src="scripts/controllers/patients-detail.js"></script>

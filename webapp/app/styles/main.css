@@ -195,12 +195,12 @@ label {
 }
 
 .panel-default {
-  border-color: #56008c;
+  border-color: #0C9444;
   border-width: 2px;
 }
 
 .panel-default > .panel-heading {
-  background-color: #56008c;
+  background-color: #0C9444;
   border-radius: 0;
   border-bottom: 0;
 }
@@ -425,7 +425,9 @@ legend {
 /* Header */
 .header-background {
   background-color: #20408D;
-  padding-top: 15px;
+  padding-top: 20px;
+  padding-bottom: 15px;
+  line-height: 0;
 }
 
 .header-background-mobile {
@@ -520,7 +522,6 @@ legend {
 /* Toolbar */
 .header-toolbar{
   background-color: #426AAF;
-  text-align: center;
   font-size: 22px;
   color: #FFF;
   padding-top: 10px;

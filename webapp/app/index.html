@@ -80,7 +80,7 @@
       <!-- Header toolbar -->
       <div class="row header-toolbar hidden-xs" ng-controller="headerController">
         <div class="col-sm-5">
-          <span class="glyphicon glyphicon-arrow-left" style="float:left; padding-left: 30px;padding-top: 4px;" ng-if="previousPage" ng-click="back()"></span>
+          <span class="glyphicon glyphicon-arrow-left" style="float:left; padding-left: 30px;padding-top: 4px;" ng-if="previousPage" ng-click="goBack()"></span>
           <span style="padding-left: 20px;">{{previousPage}}</span>
         </div>
         <div class="col-sm-7">
@@ -101,20 +101,19 @@
       <!-- /.Header toolbar mobile-->
 
       <!--Sidebar-->
-      <div class="row">
-      <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 1px">
-           <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#/"></a>
-        </div>
-        <!-- /.navbar-header -->
 
-            <div class="navbar-default sidebar" role="navigation">
+      <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 1px;">
+         <div class="navbar-header">
+             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                 <span class="sr-only">Toggle navigation</span>
+                 <span class="icon-bar"></span>
+                 <span class="icon-bar"></span>
+                 <span class="icon-bar"></span>
+             </button>
+             <a class="navbar-brand" href="#/"></a>
+         </div>
+         <!-- /.Sidebar -->
+            <div class="navbar-default sidebar" style="background-color: red" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li class="sidebar-search" >
@@ -136,12 +135,22 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
-      </div>
       <!-- /.Sidebar-->
-      
-      <!-- /page-wrapper -->
+
+
+      <!---delete--> ng-show="$state.current.main != null"
+      <!---
+            <div class="row" ui-view="scoobyDoo" style="background-color: #ffff00">
+               <div class="col-md-12" ui-view="scoobyDoo" style="padding-left: 100px;padding-right: 100px;"></div>
+            </div>-->
+           <!---/-delete-->
+
+
+    <!-- / Wrapper -->
+
+<!-- /page-wrapper -->
         <div id="page-wrapper">
-            <div class="section-north" ui-view="user-context"></div>
+            <div class="section-north"  ui-view="user-context"></div>
 
             <div class="section section-content">
               <div class="row section-row">
@@ -149,7 +158,7 @@
                   <div class="section-main" ui-view="main"></div>
                 </div>
 
-                <div class="col-md-6 col-right">
+                <div class="col-md-6 col-right" style="background-color: firebrick">
                   <div class="section-detail" ui-view="detail"></div>
                 </div>
               </div>
@@ -159,6 +168,7 @@
 
     </div>
     <!-- /#wrapper -->
+
 
     <div class="notifications" growl-notifications></div>
 

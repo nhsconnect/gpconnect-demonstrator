@@ -130,6 +130,14 @@ a[ui-sref] {
   color: #bbb;
 }
 
+
+.navbar-default{
+  background-color: #006600;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+
 .btn {
   font-weight: bold;
 }

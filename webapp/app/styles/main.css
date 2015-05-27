@@ -30,8 +30,8 @@ textarea {
 
 #page-wrapper {
   padding: 0;
-  padding-top: 51px;
-  margin-top: -51px;
+  /*padding-top: 51px;*/
+  /*margin-top: -51px;*/
   min-height: 0;
 }
 
@@ -58,8 +58,8 @@ textarea {
 }
 
 .section-content {
-  padding-top: 74px;
-  margin-top: -74px;
+  /*padding-top: 74px;
+  margin-top: -74px;*/
 }
 
 .section-row {
@@ -129,14 +129,6 @@ a[ui-sref] {
   background-color: transparent;
   color: #bbb;
 }
-
-
-.navbar-default{
-  background-color: #006600;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
 
 .btn {
   font-weight: bold;
@@ -535,3 +527,14 @@ legend {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+.previous-page-arrow{
+  float:left;
+  padding-left: 30px;
+  padding-top: 4px;
+}
+
+.previous-page-title{
+  padding-left: 20px;
+}
+

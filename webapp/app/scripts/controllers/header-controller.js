@@ -5,39 +5,61 @@ angular.module('openehrPocApp')
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 
-      var previousState = "";
-      var pageHeader = "";
-      var previousPage = "";
+      var previousState = '';
+      var pageHeader = '';
+      var previousPage = '';
+
+      var mainWidth = 0;
+      var detailWidth = 0;
 
       switch(toState.name) {
         case 'patients-list':
           previousState = 'patients-charts';
           pageHeader = 'Patient Lists';
           previousPage = 'Patient Dashboard';
+          mainWidth = 11;
+          detailWidth = 1;
           break;
         case 'patients-charts':
           previousState = '';
           pageHeader = 'Patient Dashboard';
-          previousPage = ''
+          previousPage = '';
+          mainWidth = 11;
+          detailWidth = 1;
           break;
         case 'patients-lookup':
           previousState = '';
           pageHeader = '';
-          previousPage = ''
+          previousPage = '';
+          mainWidth = 6;
+          detailWidth = 6;
           break;
         default:
           previousState = 'patients-list';
           pageHeader = 'Patients Details';
           previousPage = 'Patient Lists';
+          mainWidth = 6;
+          detailWidth = 6;
           break;
         }
 
       $scope.pageHeader = pageHeader;
       $scope.previousState = previousState;
       $scope.previousPage = previousPage;
+
+      // Set bootstrap column sizes
+      $scope.mainWidth = mainWidth;
+      $scope.detailWidth = detailWidth;
+
       $scope.goBack = function() {
         $state.go(previousState);
       };
+
+      if("user-context" in $state.current.views){
+        $scope.userContextViewExists = true;
+      }else{
+        $scope.userContextViewExists = false;
+      }
 
     });
 

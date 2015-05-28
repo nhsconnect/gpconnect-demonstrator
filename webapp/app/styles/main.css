@@ -444,6 +444,9 @@ legend {
   color: #CCCCCC;
 }
 
+.header-title-3{
+  color: #FFFFFF;
+}
 .ripple-icon
 {
   width:40px;
@@ -521,7 +524,7 @@ legend {
 }
 
 .glyphicon-user:before {
-  color:#CCCCCC;
+  color:#82BE36;
 }
 
 /* Toolbar */
@@ -636,7 +639,6 @@ legend {
 .main-nav a.button.spine i { font-size: 90px; margin-top: 10px; }
 .main-nav a.button.saved i { font-size: 85px; margin-top: 10px; }
 
-
 .chart-inner {
   border: 1px solid #bdbdbd;
   border-radius: 4px;
@@ -648,23 +650,47 @@ legend {
   width: auto;
 }
 
-.chart {
-  margin-top: 30px;
+/* User Profile Menu */
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+  background-color: #eee;
+  border-color: transparent;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+  text-decoration: none;
+  background-color: transparent;
+}
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+  background-color: transparent;
+  border-color: transparent;
 }
 
-/* Not needed for production */
-.chart img {
-  width: 100%;
-  height: auto
+.navbar-login {
+  width: 305px;
+  padding: 10px;
+  padding-bottom: 0px;
+}
+
+.navbar-login-session {
+  padding: 10px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+.dropdown-profile-text{
+  color: black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  padding-top: 10px;]
+}
+
+.profile-image {
+  margin-bottom: 0;
+  color:#82BE36;
+  font-size: 70px;
+  border: 1px solid #c0c2be;
+  border-radius: 3px;
+  background-color: #eef8e7;
 }
 
 
-/* Use this instead of hide as doesn't carry the '!important'a attribute.
-	Useful when calling jQuery show() on hidden elements */
-.soft-hide {
-  display: none;
-}
 
-.clearfix {
-  clear: both;
-}

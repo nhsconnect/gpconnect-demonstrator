@@ -19,7 +19,6 @@ angular
       .state('patients-list', {
         url: '/patients?ageRange&department&order&reverse',
         views: {
-        //  actions: { templateUrl: 'views/home-sidebar.html' },
           main: { templateUrl: 'views/patients/patients-list.html', controller: 'PatientsListCtrl' }
         }
       })
@@ -27,7 +26,6 @@ angular
       .state('patients-charts', {
         url: '/',
         views: {
-         // actions: { templateUrl: 'views/home-sidebar.html' },
           main: { templateUrl: 'views/patients/patients-charts.html', controller: 'PatientsChartsCtrl' }
         }
       })

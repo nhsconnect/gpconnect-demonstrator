@@ -17,15 +17,15 @@ angular.module('openehrPocApp')
           previousState = 'patients-charts';
           pageHeader = 'Patient Lists';
           previousPage = 'Patient Dashboard';
-          mainWidth = 11;
-          detailWidth = 1;
+          mainWidth = 12;
+          detailWidth = 0;
           break;
         case 'patients-charts':
           previousState = '';
           pageHeader = 'Patient Dashboard';
           previousPage = '';
-          mainWidth = 11;
-          detailWidth = 1;
+          mainWidth = 12;
+          detailWidth = 0;
           break;
         case 'patients-lookup':
           previousState = '';
@@ -59,6 +59,12 @@ angular.module('openehrPocApp')
         $scope.userContextViewExists = true;
       }else{
         $scope.userContextViewExists = false;
+      }
+
+      if('actions' in $state.current.views){
+        $scope.actionsExists = true;
+      }else{
+        $scope.actionsExists = false;
       }
 
     });

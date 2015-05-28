@@ -35,7 +35,7 @@ angular.module('openehrPocApp')
 
       }
     }).result.finally(function () {
-      $state.go('patients-list');
+      $state.go('patients-charts');
     });
 
   });

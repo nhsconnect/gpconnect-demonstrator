@@ -1,18 +1,23 @@
+<div class="row">
+<div class="col-md-3" style="float:right">
+  <div class="search-left-inner-addon">
+
+    <i class="fi-filter icon-searchbar"></i>
+    <input type="search"
+           class="form-control"
+           placeholder=" Filter..."
+           ng-model="search"
+      />
+  </div>
+</div>
+</div>
+
 <div class="row form-group">
   <div class="col-sm-6">
     <div class="form-group">
       <span ng-if="filters.department" class="label label-default">Setting: {{filters.department}}</span>
       <span ng-if="filters.ageRange" class="label label-default">Age range: {{filters.ageRange}}</span>
     </div>
-  </div>
-
-  <div class="col-sm-6 text-right">
-    <form class="form-inline">
-      <div class="form-group">
-        <label for="search">Search: </label>
-        <input type="text" class="form-control" id="search" ng-model="search" />
-      </div>
-    </form>
   </div>
 </div>
 
@@ -32,7 +37,8 @@
           <td>{{ patient.address }}</td>
           <td>{{ patient.born | date:'dd-MMM-yyyy' }}</td>
           <td>{{ patient.gender }}</td>
-          <td>{{ patient.nhsNo }}</td>
+          <td>{{ patient.nhsNo }} <span class="glyphicon glyphicon-chevron-right" style="float: right"></span> </td>
+
         </tr>
     </tbody>
 </table>

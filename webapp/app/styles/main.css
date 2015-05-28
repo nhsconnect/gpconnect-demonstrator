@@ -458,6 +458,7 @@ legend {
   color: #82BE36;
   font-size: 20px;
 }
+
 .search-left-inner-addon {
   position: relative;
   color: #999999;
@@ -478,7 +479,7 @@ legend {
   width: 100%;
   height: 34px;
   padding-left: 30px;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.42857143;
   color: #999999;
   background-color: white;
@@ -493,6 +494,17 @@ legend {
 .search-left-inner-addon  .form-control::-moz-placeholder { color: #999999; }
 .search-left-inner-addon .form-control:-ms-input-placeholder { color: #999999; }
 
+.header-search-mobile{
+  padding-left:45px;
+  padding-right: 45px;
+  padding-bottom: 10px
+}
+
+.header-search{
+  font-size: 20px;
+  color: #FFF;
+}
+
 .header-left{
   padding-left: 40px;
   text-align: left;
@@ -502,11 +514,6 @@ legend {
   text-align: center;
   padding-right: 60px;
   max-height: 45px;
-}
-
-.header-center{
-  font-size: 20px;
-  color: #FFF;
 }
 
 .header-right{
@@ -519,8 +526,7 @@ legend {
 .header-right-mobile{
   font-size: 20px;
   color: #FFF;
-  padding-right: 40px;
-  text-align: center;
+  padding-left: 45px;
 }
 
 .glyphicon-user:before {
@@ -540,6 +546,7 @@ legend {
   float:left;
   padding-left: 30px;
   padding-top: 4px;
+  cursor: pointer;
 }
 
 .previous-page-title{
@@ -576,6 +583,13 @@ legend {
   color: #000000;
   font-size: 22px;
   margin-bottom: 5px;
+  font-family: "Hero";
+}
+
+.chart-description{
+  color: #767676;
+  font-size: 16px;
+  font-family: "Hero";
 }
 
 .chart-fa-stack{
@@ -587,11 +601,6 @@ legend {
   margin-left: 30px;
   font-size: 18px;
   padding-bottom: 40px;
-}
-
-.chart-description{
-  color: #767676;
-  font-size: 16px;
 }
 
 .chart-title-age{
@@ -690,6 +699,145 @@ legend {
   border: 1px solid #c0c2be;
   border-radius: 3px;
   background-color: #eef8e7;
+}
+
+/* Patient Detail */
+
+/* Tables (Generic) and Pagination */
+
+.table-wrapper {
+
+}
+
+table.table {
+  width: 100%;
+  border: 1px solid #bebcbd;
+  border-collapse:separate;
+  border-radius: 3px;
+  -moz-border-radius:6px;
+}
+
+.table thead {
+  background-color: #cee7ae;
+}
+
+.table thead tr th {
+  border-bottom: none;
+  font-weight: 500;
+}
+
+/* Sorting */
+.table thead i {
+  margin-left: 5px;
+}
+
+.table.clickable tbody tr {
+  cursor: pointer;
+}
+
+.table tbody tr:first-child td {
+  border-top: none;
+}
+
+.table tbody tr td {
+  vertical-align: middle;
+  height: 37px;
+}
+
+.table tbody tr td:first-child {
+  font-weight: 500;
+}
+
+.table .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+.table .dropdown-menu li {
+  width: 100%;
+}
+
+.table .dropdown-menu li i {
+  width: 18px;
+  display: inline-block;
+}
+
+/* Transparent Tables */
+
+.table-striped tbody tr {
+  background-color: rgba(238, 241, 243, 0.7);
+}
+
+.table-striped tbody tr:hover td {
+  background-color: #eef8e7;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255,255,255,0.7);
+}
+
+.table .view {
+  min-width: 93px;
+}
+
+.table .view .dropdown-toggle:hover {
+  background-color: #7dbe31;
+  border-color: #7dbe31;
+}
+
+.table .view .dropdown-menu>li>a:hover {
+  background-color: #d0e8af;
+}
+
+
+.pagination {
+  margin-top: 10px;
+}
+
+.pagination li a {
+  background: transparent;
+  border: none;
+  font-weight: 700;
+  color: #283536;
+  padding: 5px 7px;
+}
+
+.pagination li a:hover {
+  background: transparent;
+  text-decoration: underline;
+}
+
+.pagination li.selected a {
+  color: #7dbe31;
+}
+
+.pagination .increment a {
+  background-color: #0e672f;
+  color: #fff;
+  padding: 5px 10px;
+}
+
+.pagination .increment a:hover {
+  background-color: #128642;
+  text-decoration: none;
+  color: #fff;
+}
+
+.pagination .increment.disabled a {
+  background-color: #9a9a9a;
+  color: #fff;
+}
+
+.pagination .increment.disabled a {
+  text-decoration: none;
+}
+
+.pagination .increment.previous a {
+  margin-right: 10px;
+}
+
+.pagination .increment.next a {
+  margin-left: 10px;
 }
 
 

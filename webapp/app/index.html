@@ -42,7 +42,7 @@
             <div class="glyphs g"><p class="header-title-1"><img src="images/ripple-icon.png" alt="Ripple Icon" class="ripple-icon"> IDCR</p><p class="header-title-2"> POC</p></div>﻿
         </div>
 
-        <div class="col-md-4 col-sm-3 header-center">
+        <div class="col-md-4 col-sm-3 header-search">
           <div class="search-left-inner-addon">
             <i class="fi-magnifying-glass icon-searchbar"></i>
             <input type="search"
@@ -110,7 +110,7 @@
           <span>Demonstration</span>
         </div>
 
-        <div class="col-xs-12 header-center">
+        <div class="col-xs-12 header-search-mobile">
           <div class="search-left-inner-addon">
             <i class="fi-magnifying-glass icon-searchbar"></i>
             <input type="search"
@@ -135,8 +135,8 @@
 
       <!-- Header toolbar mobile -->
       <div class="row header-toolbar visible-xs">
-        <div class="col-xs-2" style="padding-left: 25px;">
-          <span class="glyphicon glyphicon-arrow-left" ng-if="previousPage" ng-click="goBack()"></span>
+        <div class="col-xs-2">
+          <span class="glyphicon glyphicon-arrow-left previous-page-arrow" ng-if="previousPage" ng-click="goBack()"></span>
         </div>
         <div class="col-xs-8" style="text-align: center">
           <span>{{pageHeader}}</span>

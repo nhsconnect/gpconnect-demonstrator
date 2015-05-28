@@ -1,5 +1,79 @@
-<h3>Patients by Age</h3>
-<div id="age-chart"></div>
+<!-- START Main Content Area -->
 
-<h3>Patients by Setting</h3>
-<div id="department-chart"></div>
+<div class ="row">
+
+  <!-- START Charts -->
+  <div class="col-md-8 charts">
+
+    <div class="chart-inner">
+      <!-- Chart toggle -->
+      <select name="type" class="form-control">
+        <option value="age">Patients By Age</option>
+        <option value="setting">Patients By Result</option>
+      </select>
+      <!-- Chart Age -->
+      <div class="chart age" id="age">
+         <span class="fa-stack fa-lg pull-left chart-fa-stack">
+                  <i class="fa fa-circle fa-stack-2x cake-icon"></i>
+                  <i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i>
+         </span>
+        <div class="pull-left chart-title-group">
+          <h2 class="chart-title">Patients by <span class="chart-title-age">Age</span></h2>
+          <span class="chart-description">This is a brief description of patients by age.</span>
+        </div>
+          <div id="age-chart"></div>
+      </div>
+
+      <!-- Chart Setting -->
+      <div class="chart setting soft-hide" id="setting">
+         <span class="fa-stack fa-lg pull-left chart-fa-stack">
+                  <i class="fa fa-circle fa-stack-2x map-marker-icon"></i>
+                  <i class="fa fa-map-marker fa-stack-1x fa-inverse"></i>
+         </span>
+        <div class="pull-left chart-title-group">
+          <h2 class="chart-title">Patients by <span class="chart-title-setting">Setting</span></h2>
+          <span class="chart-description">This is a brief description of patients by setting.</span>
+        </div>
+           <div id="department-chart"></div>
+      </div>
+
+    </div>
+
+ </div>
+
+  <!-- END Charts -->
+
+  <!-- START Main Nav -->
+  <div class="col-md-4 text-center main-nav">
+
+    <a href="list.html" class="button viewall">
+      <i class="fi-results-demographics"></i><br/>
+      View all Patients
+    </a>
+
+    <a href="" class="button spine">
+      <i class="fi-magnifying-glass"></i><br/>
+      Spine Lookup
+    </a>
+
+    <a href="" class="button saved">
+      <i class="fi-star"></i><br/>
+      Saved Searches
+    </a>
+
+  </div>
+  <!-- END Main Nav -->
+
+</div>
+<!-- END Main Content Area -->
+
+
+
+
+
+
+
+
+
+
+

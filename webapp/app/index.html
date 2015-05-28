@@ -24,6 +24,10 @@
     <link rel="stylesheet" href="components/heroweb/hero-stylesheet.css" />
     <!-- endbuild -->
 
+    <!-- build:css(.tmp) components/foundation-icons -->
+    <link rel="stylesheet" href="components/foundation-icons/foundation-icons.css" />
+    <!-- endbuild -->
+
   </head>
   <body ng-app="openehrPocApp" ng-controller="headerController">
     <!--[if lt IE 7]>
@@ -40,10 +44,10 @@
 
         <div class="col-md-4 col-sm-3 header-center">
           <div class="search-left-inner-addon">
-            <i class="glyphicon glyphicon-search"></i>
+            <i class="fi-magnifying-glass icon-searchbar"></i>
             <input type="search"
                    class="form-control"
-                   placeholder="Patient search..." />
+                   placeholder="Patient search..."/>
           </div>
         </div>
 
@@ -67,7 +71,7 @@
 
         <div class="col-xs-12 header-center">
           <div class="search-left-inner-addon">
-            <i class="glyphicon glyphicon-search"></i>
+            <i class="fi-magnifying-glass icon-searchbar"></i>
             <input type="search"
                    class="form-control"
                    placeholder="Patient search..." />
@@ -100,7 +104,7 @@
       <!-- /.Header toolbar mobile-->
 
 
-        <!--Sidebar-->
+        <!-- Sidebar-->
         <div class="wrapper navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul side-menu class="nav" ui-view="actions"></ul>
@@ -109,7 +113,7 @@
       <!-- /.Sidebar-->
 
 
-<!-- /page-wrapper -->
+      <!-- /page-wrapper -->
         <div id="page-wrapper">
             <div class="section-north" ui-view="user-context" ng-if=(userContextViewExists)></div>
 

@@ -17,6 +17,7 @@ textarea {
 .voffset8 { margin-top: 100px; }
 .voffset9 { margin-top: 150px; }
 
+/* Index */
 .section {
   padding-right: 15px;
   padding-left: 15px;
@@ -449,7 +450,11 @@ legend {
   height:40px;
 }
 
-/* Search Bar */
+/* Header - Search Bar */
+.icon-searchbar:before{
+  color: #82BE36;
+  font-size: 20px;
+}
 .search-left-inner-addon {
   position: relative;
   color: #999999;
@@ -538,3 +543,128 @@ legend {
   padding-left: 20px;
 }
 
+/* Dashboard */
+.button-icons:before {
+  color: #82BE36;
+  font-size:70px;
+}
+
+.dashboard-button{
+  text-align: center;
+  border: solid 2px #D0D0D0;
+  padding: 20px;
+  background-color: #FFF;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.dashboard-button-text{
+  margin-top: 20px;
+  color: #000000;
+  display: block;
+  font-size: 25px;
+}
+
+.button-icons-stack:before{
+  color: #000066;
+}
+
+.chart-title{
+  color: #000000;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.chart-fa-stack{
+  padding-top: 18px;
+  font-size: 30px;
+}
+
+.chart-title-group{
+  margin-left: 30px;
+  font-size: 18px;
+  padding-bottom: 40px;
+}
+
+.chart-description{
+  color: #767676;
+  font-size: 16px;
+}
+
+.chart-title-age{
+  color: #7E28CD;
+}
+
+.chart-title-setting{
+  color:#25A174;
+}
+
+.cake-icon:before{
+  color: #7E28CD;
+}
+
+.map-marker-icon:before{
+  color:#25A174;
+}
+
+.main-nav a.button {
+  display: block;
+  width: 100%;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  padding: 0 10px 20px 10px;
+  font-size: 22px;
+  background-color: #fff;
+  color: #000000;
+}
+
+.main-nav a.button:hover {
+  background-color: #f4f8ec;
+  text-decoration: none;
+}
+
+.main-nav a.button i {
+  color: #7cbe31;
+  line-height: 70px;
+  height: 70px;
+  display: block;
+}
+
+/* Button Icons - Variable Sizes to fit */
+.main-nav a.button.viewall i { font-size: 110px; }
+.main-nav a.button.spine i { font-size: 90px; margin-top: 10px; }
+.main-nav a.button.saved i { font-size: 85px; margin-top: 10px; }
+
+
+.chart-inner {
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.chart-inner select.form-control {
+  width: auto;
+}
+
+.chart {
+  margin-top: 30px;
+}
+
+/* Not needed for production */
+.chart img {
+  width: 100%;
+  height: auto
+}
+
+
+/* Use this instead of hide as doesn't carry the '!important'a attribute.
+	Useful when calling jQuery show() on hidden elements */
+.soft-hide {
+  display: none;
+}
+
+.clearfix {
+  clear: both;
+}

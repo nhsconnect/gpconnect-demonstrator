@@ -701,6 +701,11 @@ legend {
   background-color: #eef8e7;
 }
 
+/* Patient List */
+.glyphicon-list-patients:before {
+  color: #7cbe31;
+}
+
 /* Patient Detail */
 
 /* Tables (Generic) and Pagination */

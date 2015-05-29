@@ -16,6 +16,8 @@ angular.module('openehrPocApp')
       case "phr":
         $state.go('patients-summary');
         break;
+      default:
+        $state.go('patients-charts');
     }
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {

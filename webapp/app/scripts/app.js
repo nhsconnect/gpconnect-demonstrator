@@ -32,7 +32,6 @@ angular
 
       .state('patients-charts', {
          url: '/',
-       // url: '/?role&email',
         views: {
           main: { templateUrl: 'views/patients/patients-charts.html', controller: 'PatientsChartsCtrl' }
         }
@@ -49,6 +48,8 @@ angular
       .state('patients-summary', {
         url: '/patients/summary',
         views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
           main: { templateUrl: 'views/patients/patients-summary.html', controller: 'PatientsSummaryCtrl' }
         }
       })

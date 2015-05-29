@@ -23,8 +23,16 @@ angular
         }
       })
 
+      .state('header', {
+        url: '/?role&email',
+        views: {
+          main: { controller: 'headerController' }
+        }
+      })
+
       .state('patients-charts', {
-        url: '/',
+         url: '/',
+       // url: '/?role&email',
         views: {
           main: { templateUrl: 'views/patients/patients-charts.html', controller: 'PatientsChartsCtrl' }
         }
@@ -35,6 +43,13 @@ angular
         views: {
           actions: { templateUrl: 'views/home-sidebar.html' },
           main: { controller: 'PatientsLookupCtrl' }
+        }
+      })
+
+      .state('patients-summary', {
+        url: '/patients/summary',
+        views: {
+          main: { templateUrl: 'views/patients/patients-summary.html', controller: 'PatientsSummaryCtrl' }
         }
       })
 
@@ -140,7 +155,7 @@ angular
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
           main: { controller: 'TransferOfCareCtrl' }
         }
-      });
+      })
 
   })
 

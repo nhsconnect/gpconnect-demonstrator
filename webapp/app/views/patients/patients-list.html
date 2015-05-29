@@ -20,7 +20,17 @@
   </div>
 </div>
 
-<div class="col-md-2 form-group" style="float:right">
+  <div class="col-md-2" ng-if="!filters.department && !filters.ageRange">
+    <div class="search-left-inner-addon">
+      <i class="glyphicon glyphicon-list glyphicon-list-patients" style="color: black"></i>
+      <input class="form-control"
+             placeholder=" All Patients"
+             readonly
+        />
+    </div>
+  </div>
+
+  <div class="col-md-2 form-group" style="float:right">
       <div class="search-left-inner-addon">
         <i class="fi-filter icon-searchbar"></i>
         <input type="search"

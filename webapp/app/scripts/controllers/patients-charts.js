@@ -1,7 +1,26 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('PatientsChartsCtrl', function ($scope, $window, $state, PatientService) {
+  .controller('PatientsChartsCtrl', function ($scope, $window, $state, PatientService, $modal, $stateParams) {
+
+    var openModal = function (){
+    $modal.open({
+      templateUrl: 'views/confirmation.html',
+      size: 'md',
+      controller: function ($scope) {
+
+        $scope.cancel = function () {
+          $scope.$dismiss();
+          $window.location.href="https://ripple-identity-uat.answerappcloud.com/signout";
+        };
+
+        $scope.ok = function () {
+          $scope.$close(true);
+        };
+
+      }
+    });
+    };
 
     PatientService.summaries().then(function (summaries) {
       ageChart(summaries);
@@ -20,8 +39,9 @@ angular.module('openehrPocApp')
         ymin: 0,
         ymax: 40
       }).on('click', function (i, row) {
+        openModal();                     // Need a callback
         $state.go('patients-list', { ageRange: row.series });
-      });
+      })
     };
 
     var departmentChart = function (summaries) {
@@ -36,10 +56,10 @@ angular.module('openehrPocApp')
         ymin: 0,
         ymax: 40
       }).on('click', function (i, row) {
+        openModal();
         if (row.series === 'All') {
           row.series = null;
         }
-
         $state.go('patients-list', { department: row.series });
       });
     };
@@ -64,6 +84,9 @@ angular.module('openehrPocApp')
 
 
   });
+
+
+
 
 
 

@@ -1,5 +1,6 @@
 html, body, #wrapper, #page-wrapper, .section-content {
   height: 100%;
+  background: url('../images/site-bg2.png') center 100px no-repeat #ffffff;
 }
 
 textarea {
@@ -846,4 +847,18 @@ table.table {
 }
 
 
+.modal-backdrop {
+  background-color: #ffffff;
+}
 
+.modal-header {
+  background-color: #20408D;
+}
+
+.modal-body {
+  background-color: #ffffff;
+}
+
+.modal-title{
+  background-color: #20408D;
+}

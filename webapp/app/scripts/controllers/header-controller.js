@@ -1,7 +1,22 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('headerController', function ($scope, $rootScope, $state) {
+  .controller('headerController', function ($scope, $rootScope, $state, $stateParams) {
+
+    var role = $stateParams.role;
+    var email = $stateParams.email;
+
+    $scope.email = email;
+    $scope.role = role;
+
+    switch(role) {
+      case "idcr":
+        $state.go('patients-charts');
+        break;
+      case "phr":
+        $state.go('patients-summary');
+        break;
+    }
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 
@@ -23,6 +38,13 @@ angular.module('openehrPocApp')
         case 'patients-charts':
           previousState = '';
           pageHeader = 'Patient Dashboard';
+          previousPage = '';
+          mainWidth = 12;
+          detailWidth = 0;
+          break;
+        case 'patients-summary':
+          previousState = '';
+          pageHeader = 'Patients Summary';
           previousPage = '';
           mainWidth = 12;
           detailWidth = 0;

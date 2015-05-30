@@ -4,7 +4,7 @@ html, body, #wrapper, #page-wrapper, .section-content {
 }
 
 body {
-  background: url('../images/site-bg2.png') center 100px no-repeat #ffffff;
+  /*background: url('../images/site-bg2.png') center 100px no-repeat #ffffff;*/
   background-size: 100% auto;
 }
 
@@ -444,27 +444,27 @@ legend {
 
 /* Header */
 .header-background {
-  background-color: #20408D;
+  background-color: #FFFFFF;
   padding-top: 20px;
   padding-bottom: 5px;
   line-height: 0;
 }
 
 .header-background-mobile {
-  background-color: #20408D;
+  background-color: #FFFFFF;
   padding-top: 0px;
 }
 
 .header-title-1{
-  color: #FFFFFF;
+  color: #0E682F;
 }
 
 .header-title-2{
-  color: #CCCCCC;
+  color: #0E682F;
 }
 
 .header-title-3{
-  color: #FFFFFF;
+  color: #000000;
 }
 .ripple-icon
 {
@@ -540,7 +540,6 @@ legend {
 
 .header-right{
   font-size: 20px;
-  color: #FFF;
   padding-right: 40px;
   text-align: right;
   font-family: "Hero";
@@ -548,7 +547,7 @@ legend {
 
 .header-right-mobile{
   font-size: 20px;
-  color: #FFF;
+  color:#000000;
   padding-left: 45px;
   font-family: "Hero";
 }
@@ -557,13 +556,18 @@ legend {
   color:#82BE36;
 }
 
+.glyphicon-chevron-down:before{
+  color: #0E682F;
+}
 /* Toolbar */
 .header-toolbar{
-  background-color: #426AAF;
+  background-color: #0E682F;
   font-size: 22px;
-  color: #FFF;
+  color: #000000;
   padding-top: 10px;
   padding-bottom: 10px;
+  border-top: 1px solid #CCCCCC;
+  border-bottom: 1px solid #CCCCCC;
 }
 
 .previous-page-arrow{
@@ -571,16 +575,26 @@ legend {
   padding-left: 30px;
   padding-top: 4px;
   cursor: pointer;
+  color: #FFF;
 }
 
 .previous-page-title{
   padding-left: 20px;
   font-family: "Hero";
+  color: #FFF;
 }
 
 .current-page-title {
   font-family: "Hero";
+  color: #FFF;
 }
+
+.current-page-title-mobile {
+  font-family: "Hero";
+  font-size: 20px;
+  color: #FFF;
+}
+
 
 /* Dashboard */
 .button-icons:before {
@@ -731,7 +745,7 @@ legend {
 .user-profile-image {
   margin-bottom: 0;
   color:#82BE36;
-  font-size: 70px;
+  font-size: 60px;
   border: 1px solid #c0c2be;
   border-radius: 3px;
   background-color: #eef8e7;

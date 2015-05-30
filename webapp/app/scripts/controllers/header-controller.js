@@ -10,8 +10,8 @@ angular.module('openehrPocApp')
     $scope.role = role;
 
     switch(role) {
-      case "idcr":
-        $state.go('patients-charts');
+        case "idcr":
+          $state.go('patients-charts');
         break;
       case "phr":
         $state.go('patients-summary');

@@ -3,19 +3,36 @@
 angular.module('openehrPocApp')
   .controller('PatientsChartsCtrl', function ($scope, $window, $state, PatientService, $modal, $stateParams) {
 
-    var openModal = function (){
+    $scope.openModal = function (row, chartType){
     $modal.open({
       templateUrl: 'views/confirmation.html',
       size: 'md',
       controller: function ($scope) {
 
         $scope.cancel = function () {
-          $scope.$dismiss();
-          $window.location.href="https://ripple-identity-uat.answerappcloud.com/signout";
+          $scope.$close(true);
         };
 
         $scope.ok = function () {
           $scope.$close(true);
+
+          switch(chartType) {
+            case 'all':
+              $state.go('patients-list');
+              break;
+            case 'age':
+              $state.go('patients-list', { ageRange: row.series });
+              break;
+            case 'summary':
+              if (row.series === 'All') {
+                row.series = null;
+              }
+              $state.go('patients-list', { department: row.series });
+              break;
+            default:
+              $state.go('patients-list');
+              break;
+          }
         };
 
       }
@@ -35,8 +52,10 @@ angular.module('openehrPocApp')
         ymin: 0,
         ymax: 40
       }).on('click', function (i, row) {
-        openModal();                     // Need a callback
-        $state.go('patients-list', { ageRange: row.series });
+
+        var chartType = 'age';
+        $scope.openModal(row, chartType);
+
       })
     };
 
@@ -53,11 +72,10 @@ angular.module('openehrPocApp')
         ymin: 0,
         ymax: 40
       }).on('click', function (i, row) {
-        openModal();
-        if (row.series === 'All') {
-          row.series = null;
-        }
-        $state.go('patients-list', { department: row.series });
+
+        var chartType = 'summary';
+        $scope.openModal(row, chartType);
+
       });
     };
 

@@ -23,7 +23,7 @@ textarea {
 .voffset8 { margin-top: 100px; }
 .voffset9 { margin-top: 150px; }
 
-/* Global Styles */
+/* Global Styles */s
 a,
 a:hover,
 a:focus,
@@ -56,8 +56,6 @@ li {
 
 #page-wrapper {
   padding: 0;
-  /*padding-top: 51px;*/
-  /*margin-top: -51px;*/
   min-height: 0;
 }
 
@@ -81,11 +79,6 @@ li {
   padding-top: 15px;
   padding-bottom: 15px;
   height: 568px;
-}
-
-.section-content {
-  /*padding-top: 74px;
-  margin-top: -74px;*/
 }
 
 .section-row {
@@ -515,7 +508,7 @@ legend {
   align-content: center;
 }
 
-.search-left-inner-addon .form-control::-webkit-input-placeholder { color: #999999; }
+.search-left-inner-addon .form-control::-webkit-input-placeholder { color: #999999;}
 .search-left-inner-addon  .form-control:-moz-placeholder { color: #999999; }
 .search-left-inner-addon  .form-control::-moz-placeholder { color: #999999; }
 .search-left-inner-addon .form-control:-ms-input-placeholder { color: #999999; }
@@ -523,12 +516,14 @@ legend {
 .header-search-mobile{
   padding-left:45px;
   padding-right: 45px;
-  padding-bottom: 10px
+  padding-bottom: 10px;
+  font-family:hero;
 }
 
 .header-search{
   font-size: 20px;
   color: #FFF;
+  font-family:hero;
 }
 
 .header-left{
@@ -540,19 +535,22 @@ legend {
   text-align: center;
   padding-right: 60px;
   max-height: 45px;
+  font-family:hero;
 }
 
 .header-right{
-   font-size: 20px;
-   color: #FFF;
-   padding-right: 40px;
-   text-align: right;
+  font-size: 20px;
+  color: #FFF;
+  padding-right: 40px;
+  text-align: right;
+  font-family: "Hero";
  }
 
 .header-right-mobile{
   font-size: 20px;
   color: #FFF;
   padding-left: 45px;
+  font-family: "Hero";
 }
 
 .glyphicon-user:before {
@@ -577,6 +575,11 @@ legend {
 
 .previous-page-title{
   padding-left: 20px;
+  font-family: "Hero";
+}
+
+.current-page-title {
+  font-family: "Hero";
 }
 
 /* Dashboard */
@@ -617,13 +620,11 @@ legend {
   color: #000000;
   font-size: 22px;
   margin-bottom: 5px;
-  font-family: "Hero";
 }
 
 .chart-description{
   color: #767676;
   font-size: 16px;
-  font-family: "Hero";
 }
 
 .chart-fa-stack{
@@ -635,6 +636,7 @@ legend {
   margin-left: 30px;
   font-size: 18px;
   padding-bottom: 40px;
+  font-family: "Hero";
 }
 
 .chart-title-age{
@@ -1131,10 +1133,6 @@ table.table {
 
 .side-bar #filter label {
   font-weight: 300;
-}
-
-::-webkit-input-placeholder {
-  font-style: italic;
 }
 
 /* Panels (General) - Collapsed by default */

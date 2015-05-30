@@ -453,7 +453,7 @@ legend {
 .header-background {
   background-color: #20408D;
   padding-top: 20px;
-  padding-bottom: 15px;
+  padding-bottom: 5px;
   line-height: 0;
 }
 
@@ -605,6 +605,14 @@ legend {
   color: #000066;
 }
 
+#age-chart{
+  margin-top: 100px
+}
+
+#department-chart{
+  margin-top: 100px
+}
+
 .chart-title{
   color: #000000;
   font-size: 22px;
@@ -715,7 +723,7 @@ legend {
   color: black;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  padding-top: 10px;]
+  padding-top: 10px;
 }
 
 .user-profile-image {
@@ -735,10 +743,6 @@ legend {
 /* Patient Detail */
 
 /* Tables (Generic) and Pagination */
-
-.table-wrapper {
-
-}
 
 table.table {
   width: 100%;
@@ -887,9 +891,6 @@ table.table {
 .modal-title{
   background-color: #20408D;
 }
-
-
-
 
 /* Patient Dashboard */
 
@@ -1216,6 +1217,19 @@ table.table {
 .side-bar .panel a i {
   color: #268d5c;
 }
+
+
+/* Toggle Charts */
+/* Use this instead of hide as doesn't carry the '!important'a attribute.
+	Useful when calling jQuery show() on hidden elements */
+.soft-hide {
+  display: none;
+}
+
+.clearfix {
+  clear: both;
+}
+
 
 
 

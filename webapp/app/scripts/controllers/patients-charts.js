@@ -22,14 +22,10 @@ angular.module('openehrPocApp')
     });
     };
 
-    PatientService.summaries().then(function (summaries) {
-      ageChart(summaries);
-      departmentChart(summaries);
-    });
-
     var ageChart = function (summaries) {
       $window.Morris.Bar({
         element: 'age-chart',
+        resize: true,
         data: summaries.age,
         ykeys: ['value'],
         xkey: 'series',
@@ -47,6 +43,7 @@ angular.module('openehrPocApp')
     var departmentChart = function (summaries) {
       $window.Morris.Bar({
         element: 'department-chart',
+        resize: true,
         data: summaries.department,
         ykeys: ['value'],
         xkey: 'series',
@@ -82,6 +79,32 @@ angular.module('openehrPocApp')
 
     });
 
+     // Clear previous chart
+     $scope.toggleChart = function(){
+      if($scope.selectedChart == "age"){
+        $("#age-chart").empty();
+        $("#department-chart").empty();
+        $("#age-chart").off('click');
+        $("#department-chart").off('click');
+
+        PatientService.summaries().then(function (summaries) {
+          ageChart(summaries);
+        });
+      } else {
+        $("#age-chart").empty();
+        $("#department-chart").empty();
+        $("#age-chart").off('click');
+        $("#department-chart").off('click');
+
+        PatientService.summaries().then(function (summaries) {
+          departmentChart(summaries);
+        });
+      }
+    };
+
+    // Selected chart on page load
+    $scope.selectedChart = "age"
+    $scope.toggleChart();
 
   });
 

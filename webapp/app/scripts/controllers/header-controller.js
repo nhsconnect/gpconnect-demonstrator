@@ -59,7 +59,7 @@ angular.module('openehrPocApp')
           detailWidth = 6;
           break;
         default:
-          previousState = 'patients-list';
+          previousState = 'patients-list';      //change
           pageHeader = 'Patients Details';
           previousPage = 'Patient Lists';
           mainWidth = 6;

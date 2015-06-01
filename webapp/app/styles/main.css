@@ -4,8 +4,9 @@ html, body, #wrapper, #page-wrapper, .section-content {
 }
 
 body {
-  /*background: url('../images/site-bg2.png') center 100px no-repeat #ffffff;*/
+  background: url('../images/site-bg2.png') center 100px no-repeat #ffffff;
   background-size: 100% auto;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 textarea {
@@ -31,6 +32,16 @@ a:active {
   color: #283536;
   cursor: pointer;
 }
+a {
+  color: #000000;
+  text-decoration: none;
+}
+a:hover
+{
+  color: #82BE36;
+  text-decoration: none;
+}
+
 
 ul {
   margin: 0;
@@ -214,12 +225,12 @@ label {
 }
 
 .panel-default {
-  border-color: #0C9444;
+  border-color: #1CA54F;
   border-width: 2px;
 }
 
 .panel-default > .panel-heading {
-  background-color: #0C9444;
+  background-color: #1CA54F;
   border-radius: 0;
   border-bottom: 0;
 }
@@ -277,7 +288,7 @@ legend {
 }
 
 .panel-patient .list-inline label {
-  color: #bbb;
+  color: #fff;
 }
 
 .panel-patient .panel-body {
@@ -683,14 +694,15 @@ legend {
 
 .main-nav a.button:hover {
   background-color: #f4f8ec;
-  text-decoration: none;
+/* background-color: #EDF2C3;*/
+ text-decoration: none;
 }
 
 .main-nav a.button i {
-  color: #7cbe31;
-  line-height: 70px;
-  height: 70px;
-  display: block;
+ color: #7cbe31;
+ line-height: 70px;
+ height: 70px;
+ display: block;
 }
 
 /* Button Icons - Variable Sizes to fit */
@@ -737,7 +749,7 @@ legend {
 
 .dropdown-profile-text{
   color: black;
-  font-family: 'Roboto', sans-serif;
+  font-family: hero;
   font-size: 14px;
   padding-top: 10px;
 }
@@ -820,7 +832,7 @@ table.table {
 }
 
 .table-striped tbody tr:hover td {
-  background-color: #eef8e7;
+  background-color: #EDF2C3;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
@@ -840,6 +852,28 @@ table.table {
   background-color: #d0e8af;
 }
 
+.table > thead > tr > td.info,
+.table > tbody > tr > td.info,
+.table > tfoot > tr > td.info,
+.table > thead > tr > th.info,
+.table > tbody > tr > th.info,
+.table > tfoot > tr > th.info,
+.table > thead > tr.info > td,
+.table > tbody > tr.info > td,
+.table > tfoot > tr.info > td,
+.table > thead > tr.info > th,
+.table > tbody > tr.info > th,
+.table > tfoot > tr.info > th {
+  background-color: #EDF2C3;
+}
+
+.table-hover > tbody > tr > td.info:hover,
+.table-hover > tbody > tr > th.info:hover,
+.table-hover > tbody > tr.info:hover > td,
+.table-hover > tbody > tr:hover > .info,
+.table-hover > tbody > tr.info:hover > th {
+  background-color: #EDF2C3;
+}
 
 .pagination {
   margin-top: 10px;
@@ -1242,7 +1276,8 @@ table.table {
   clear: both;
 }
 
-
-
+.dashboard {
+  background-color: transparent;
+}
 
 

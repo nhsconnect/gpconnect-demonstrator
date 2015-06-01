@@ -27,7 +27,8 @@ angular.module('openehrPocApp')
     };
 
     $scope.go = function (patient) {
-      $state.go('diagnoses-list', { patientId: patient.id });
+      //$state.go('diagnoses-list', { patientId: patient.id });
+      $state.go('patients-summary', { patientId: patient.id });
     };
 
     $scope.patientFilter = function (patient) {

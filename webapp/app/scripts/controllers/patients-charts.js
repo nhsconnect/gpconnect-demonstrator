@@ -121,7 +121,7 @@ angular.module('openehrPocApp')
     };
 
     // Selected chart on page load
-    $scope.selectedChart = "age"
+    $scope.selectedChart = "age";
     $scope.toggleChart();
 
   });

@@ -17,11 +17,6 @@ angular.module('openehrPocApp')
     };
 
     $scope.selected = function ($index) {
-
-      if( $index === $stateParams.allergyIndex){
-        alert($index);
-      }
-
       return $index === $stateParams.allergyIndex;
     };
 

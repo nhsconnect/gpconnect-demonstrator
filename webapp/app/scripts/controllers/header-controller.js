@@ -1,20 +1,25 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('headerController', function ($scope, $rootScope, $state, $stateParams) {
+  .controller('headerController', function ($scope, $rootScope, $state, $stateParams,PatientService) {
 
     var role = $stateParams.role;
     var email = $stateParams.email;
 
-    $scope.email = email;
-    $scope.role = role;
+    // Set current user
+    PatientService.setCurrentUser(role,email);
 
-    switch(role) {
+    // Get current user
+    $scope.currentUser = PatientService.getCurrentUser();
+    console.log($scope.currentUser);
+
+    // Direct different roles to different pages at login
+    switch($scope.currentUser.role) {
         case "idcr":
           $state.go('patients-charts');
         break;
       case "phr":
-        $state.go('patients-summary');
+        $state.go('patients-summary', { patientId: 10 });  //id is hard coded
         break;
       default:
         $state.go('patients-charts');
@@ -45,9 +50,9 @@ angular.module('openehrPocApp')
           detailWidth = 0;
           break;
         case 'patients-summary':
-          previousState = '';
+          previousState = 'patients-list';
           pageHeader = 'Patients Summary';
-          previousPage = '';
+          previousPage = 'Patient Lists';
           mainWidth = 12;
           detailWidth = 0;
           break;
@@ -59,7 +64,7 @@ angular.module('openehrPocApp')
           detailWidth = 6;
           break;
         default:
-          previousState = 'patients-list';      //change
+          previousState = 'patients-list';
           pageHeader = 'Patients Details';
           previousPage = 'Patient Lists';
           mainWidth = 6;
@@ -89,6 +94,20 @@ angular.module('openehrPocApp')
         $scope.actionsExists = true;
       }else{
         $scope.actionsExists = false;
+      }
+
+      $scope.go = function (patient) {
+        alert(patient.id);
+        $state.go('patients-summary', { patientId: patient.id });
+      };
+
+      // Set title depending on user
+      if($scope.currentUser.role == 'idcr'){
+        $scope.title = "IDCR POC";
+      }
+
+      if($scope.currentUser.role == 'phr'){
+        $scope.title = "PHR";
       }
 
     });

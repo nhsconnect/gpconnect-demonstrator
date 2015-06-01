@@ -39,7 +39,7 @@
       <!-- Header -->
       <div class="row header-background hidden-xs">
         <div class="col-md-4 col-sm-4 header-left">
-            <div class="glyphs g"><p class="header-title-1"><img src="images/ripple-icon.png" alt="Ripple Icon" class="ripple-icon"> IDCR</p><p class="header-title-2"> POC</p></div>﻿
+            <div class="glyphs g"><p class="header-title-1" ng-if="title"><img src="images/ripple-icon.png" alt="Ripple Icon" class="ripple-icon"> {{title}}</p></div>
         </div>
 
         <div class="col-md-4 col-sm-3 header-search">
@@ -47,7 +47,7 @@
             <i class="fi-magnifying-glass icon-searchbar"></i>
             <input type="search"
                    class="form-control"
-                   placeholder="Patient search..."/>
+                   placeholder="Patient..."/>
           </div>
         </div>
 
@@ -71,8 +71,9 @@
                           <div class="user-profile-image" style="text-align: center"><i class="glyphicon glyphicon-user"></i></div>
                         </div>
                         <div class="col-md-8">
-                          <p class="dropdown-profile-text"><b>Freya Blackwell</b></p>
-                          <p class="dropdown-profile-text">FreyaBlackwell@email.com</p>
+                          <p class="dropdown-profile-text"><b>User Name</b></p>
+                          <p class="dropdown-profile-text"><b>{{currentUser.role}}</b></p>
+                          <p class="dropdown-profile-text"> {{currentUser.email}} </p>
                           <p class="dropdown-profile-text">10/05/2099</p>
                         </div>
                       </div>
@@ -115,7 +116,7 @@
             <i class="fi-magnifying-glass icon-searchbar"></i>
             <input type="search"
                    class="form-control"
-                   placeholder="Patient search..." />
+                   placeholder="Patient..." />
           </div>
         </div>
       </div>

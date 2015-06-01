@@ -5,7 +5,6 @@ angular.module('openehrPocApp')
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
-      console.log($scope.patient);
     });
 
     Diagnosis.all($stateParams.patientId).then(function (result) {
@@ -33,7 +32,6 @@ angular.module('openehrPocApp')
       $scope.contacts = $scope.result.contacts.slice(0,5);
     });
 
-
     TransferOfCare.getComposition($stateParams.patientId).then(function (result) {
       $scope.transferofCaresCount = result.data.transfers.length;
       $scope.transferofCareComposition = result.data;
@@ -49,6 +47,5 @@ angular.module('openehrPocApp')
       $scope.transferofCareComposition = $scope.transferofCareComposition.transfers.slice(0,5);
       console.log ($scope.transferofCareComposition);
     });
-
 
   });

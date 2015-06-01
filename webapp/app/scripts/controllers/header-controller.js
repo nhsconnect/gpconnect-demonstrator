@@ -22,7 +22,7 @@ angular.module('openehrPocApp')
         $state.go('patients-summary', { patientId: 10 });  //id is hard coded
         break;
       default:
-        $state.go('patients-charts');
+        $state.go('patients-summary', { patientId: 10 });  //id is hard coded
     }
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {

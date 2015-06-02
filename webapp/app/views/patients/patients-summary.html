@@ -25,7 +25,7 @@
         <table class="table table-striped clickable">
           <tbody>
           <tr ng-repeat="diagnosis in diagnoses" data-target="patient-detail.html"> <!--data target-->
-            <td>{{ diagnosis.problem }} </td>
+            <td ng-click="go('/patients/{{patient.id}}/diagnoses/{{$index}}')">{{ diagnosis.problem }} </td>
           </tr>
           </tbody>
         </table>
@@ -43,7 +43,7 @@
         <table class="table table-striped clickable">
           <tbody>
           <tr ng-repeat="allergy in allergies">
-            <td>{{allergy.cause}}</td>
+            <td ng-click="go('/patients/{{patient.id}}/allergies/{{$index}}')">{{allergy.cause}}</td>
           </tr>
           </tbody>
         </table>
@@ -60,7 +60,7 @@
         <table class="table table-striped clickable">
           <tbody>
           <tr ng-repeat="medication in medications">
-            <td>{{ medication.name }}</td>
+            <td ng-click="go('/patients/{{patient.id}}/medications/{{$index}}')" > {{ medication.name }}</td>
           </tr>
           </tbody>
         </table>
@@ -77,7 +77,7 @@
         <table class="table table-striped clickable">
           <tbody>
           <tr ng-repeat="contact in contacts">
-            <td> {{ contact.name }} </td>
+            <td ng-click="go('/patients/{{patient.id}}/contacts/{{$index}}')"> {{ contact.name }} </td>
           </tr>
           </tbody>
         </table>
@@ -94,7 +94,7 @@
         <table class="table table-striped clickable">
           <tbody>
           <tr ng-repeat="transfer in transferofCareComposition">
-            <td>
+            <td ng-click="go('/patients/{{patient.id}}/transfer-of-care-detail/{{transfer.transferDetail.id-1}}')">
               From {{transfer.transferDetail.site.siteFrom}}<br>
               to {{transfer.transferDetail.site.siteTo}}<br>
               {{transfer.transferDetail.site.timeStamp}}

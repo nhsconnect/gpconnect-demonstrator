@@ -17,7 +17,7 @@ angular.module('openehrPocApp')
     };
 
     $scope.selected = function ($index) {
-      return $index === $stateParams.allergyIndex;
+      return $index === $stateParams.contactIndex;
     };
 
     $scope.create = function () {

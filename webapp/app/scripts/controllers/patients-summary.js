@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('PatientsSummaryCtrl', function ($scope, $stateParams, PatientService,Diagnosis,Allergy,Medication,Contact,TransferOfCare) {
+  .controller('PatientsSummaryCtrl', function ($scope, $stateParams,$location,PatientService,Diagnosis,Allergy,Medication,Contact,TransferOfCare) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -47,5 +47,9 @@ angular.module('openehrPocApp')
       $scope.transferofCareComposition = $scope.transferofCareComposition.transfers.slice(0,5);
       console.log ($scope.transferofCareComposition);
     });
+
+    $scope.go = function (path) {
+      $location.path(path);
+    };
 
   });

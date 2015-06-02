@@ -332,7 +332,9 @@ module.exports = function (grunt) {
             'dummy-data/*',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
-            'fonts/*'
+            'fonts/*',
+            'styles/{,*/}/*.{woff,eot,svg,ttf}',
+            'styles/**/svgs/*'
           ]
         }, {
           expand: true,

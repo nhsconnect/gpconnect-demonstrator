@@ -53,6 +53,12 @@ li {
   display: inline-block;
 }
 
+/* Navigation Menu */
+.navigation-menu{
+  text-align: center;
+}
+
+
 /* Index */
 .section {
   padding-right: 15px;
@@ -169,15 +175,15 @@ a[ui-sref] {
   border-color: #20408d;
 }
 
-.btn-info {
-  background-color: #1191ca;
-  border-color: #1191ca;
+.btn-info, .btn-info:hover {
+  background-color: #007a41;
+  border-color: #007a41;
   color: #fff;
 }
 
 .btn-success {
-  background-color: #17aa4e;
-  border-color: #17aa4e;
+  background-color: #007a41;
+  border-color: #007a41;
   padding-left: 22px;
   padding-right: 22px;
 }
@@ -225,12 +231,13 @@ label {
 }
 
 .panel-default {
-  border-color: #1CA54F;
+  border-color: #007a41;
   border-width: 2px;
 }
 
 .panel-default > .panel-heading {
-  background-color: #1CA54F;
+  /*background-color: #1CA54F;*/
+  background-color: #007a41;
   border-radius: 0;
   border-bottom: 0;
 }
@@ -481,6 +488,7 @@ legend {
 {
   width:40px;
   height:40px;
+  cursor: pointer;
 }
 
 /* Header - Search Bar */
@@ -570,6 +578,18 @@ legend {
 .glyphicon-chevron-down:before{
   color: #0E682F;
 }
+
+.glyphicon-chevron-right:before {
+  float: right;
+  font-size: 8px;
+  color: #106333;
+  line-height: 2.4em;
+}
+
+.glyphicon-chevron-right{
+  float: right;
+}
+
 /* Toolbar */
 .header-toolbar{
   background-color: #0E682F;
@@ -931,7 +951,7 @@ table.table {
 }
 
 .modal-header {
-  background-color: #82BE36;
+  background-color: #007a41;
 }
 
 .modal-body {
@@ -939,7 +959,7 @@ table.table {
 }
 
 .modal-title{
-  background-color: #82BE36;
+  background-color: #007a41;
 }
 
 /* Patient Dashboard */
@@ -1058,59 +1078,6 @@ table.table {
   color: #7dbf31;
   margin-right: 4px;
 }
-
-
-/* Patient Details Panel */
-
-.side-bar #details .panel-body {
-  padding: 0;
-  background-color: #fff;
-}
-
-.side-bar #details nav {
-  margin: 0;
-}
-
-.side-bar #details nav li {
-  display: block;
-}
-
-.side-bar #details nav li a {
-  padding: 0 10px 8px 10px;
-  display: block;
-  width: 100%;
-  border-bottom: 1px solid #ebebeb;
-  font-size: 16px;
-}
-
-.side-bar #details nav li a:hover {
-  color: #283536;
-}
-
-.side-bar #details nav li:last-child a {
-  border-bottom: none;
-}
-
-.side-bar #details nav li a:hover {
-  text-decoration: none;
-  background-color: #eef8e7;
-}
-
-.side-bar #details nav li a i {
-  font-size: 26px;
-  display: inline-block;
-  width: 28px;
-  height: 28px;
-  overflow: hidden;
-  position: relative;
-  top: 3px;
-}
-
-/* Section - Variable Sizes to fit */
-.side-bar #details nav li a i.fa-stethoscope { top: 8px; }
-.side-bar #details nav li a i.fa-ambulance { font-size: 22px; top: 10px; }
-
-
 
 /* Main Content Area */
 

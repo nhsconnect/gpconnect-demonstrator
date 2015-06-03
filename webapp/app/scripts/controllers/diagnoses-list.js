@@ -10,6 +10,11 @@ angular.module('openehrPocApp')
     Diagnosis.all($stateParams.patientId).then(function (result) {
       $scope.result = result.data;
       $scope.diagnoses = $scope.result.problems;
+
+      console.log("original diagnosis");
+      console.log($scope.result);
+      console.log("original diagnosis array");
+      console.log($scope.result.problems);
     });
 
     $scope.go = function (path) {
@@ -44,7 +49,8 @@ angular.module('openehrPocApp')
         $scope.result.problems.push(diagnosis);
 
         Diagnosis.update($scope.patient.id, $scope.result).then(function (result) {
-          $scope.patient.diagnoses.push(result.data);
+        //  $scope.patient.diagnoses.push(result.data);
+          $state.go('diagnoses-list', { patientId: $scope.patient.id });
         });
       });
     };

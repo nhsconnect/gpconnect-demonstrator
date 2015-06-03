@@ -44,7 +44,8 @@ angular.module('openehrPocApp')
         $scope.result.medications.push(medication);
 
         Medication.update($scope.patient.id, $scope.result).then(function (result) {
-          $scope.patient.medications.push(result.data);
+         // $scope.patient.medications.push(result.data);
+          $state.go('medications', { patientId: $scope.patient.id });
         });
       });
     };

@@ -13,7 +13,7 @@
     <tr ng-repeat="allergy in allergies" ng-click="go('/patients/{{patient.id}}/allergies/{{$index}}')" ng-class="{info: selected($index)}">
       <td>{{ allergy.cause }}</td>
       <td>{{ allergy.reaction }}</td>
-      <td><i class="fa fa-fw" ng-class="selected(allergy) ? 'fa-folder-open' : 'fa-folder'"></i></td>
+      <td><i class="fa fa-fw" ng-class="selected($index) ? 'fa-folder-open' : 'fa-folder'"></i></td>
     </tr>
 
     <tr ng-if="!allergies.length">
@@ -25,3 +25,4 @@
 <div class="text-right">
   <button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button>
 </div>
+

@@ -10,6 +10,8 @@ angular.module('openehrPocApp')
     };
 
     var update = function (patientId, composition) {
+      console.log('put allergy comp:');
+      console.log(composition);
       return $http.put('/api/patients/' + (patientIdOveride || patientId) + '/allergies', composition);
     };
 

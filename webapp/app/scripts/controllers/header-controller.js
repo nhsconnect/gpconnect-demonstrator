@@ -13,6 +13,12 @@ angular.module('openehrPocApp')
     $scope.currentUser = PatientService.getCurrentUser();
     console.log($scope.currentUser);
 
+    //Temporary default user
+    if(!$scope.currentUser.role){
+      $scope.currentUser.role = 'idcr';
+      $scope.currentUser.email = 'example@email.com';
+    }
+
     // Direct different roles to different pages at login
     switch($scope.currentUser.role) {
         case "idcr":
@@ -105,10 +111,20 @@ angular.module('openehrPocApp')
       if($scope.currentUser.role == 'idcr'){
         $scope.title = "IDCR POC";
       }
-
       if($scope.currentUser.role == 'phr'){
         $scope.title = "PHR";
       }
+      //
+
+      //Set home url depending on user
+      $scope.goHome = function (){
+        if($scope.currentUser.role == 'idcr'){
+          $state.go('patients-charts');
+        }
+        if($scope.currentUser.role == 'phr'){
+          $state.go('patients-summary', { patientId: 10 }); // Hardcoded
+        }
+      };
 
     });
 

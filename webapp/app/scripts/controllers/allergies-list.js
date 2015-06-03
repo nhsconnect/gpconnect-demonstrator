@@ -41,12 +41,16 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (allergy) {
+        console.log(allergy);
         $scope.result.allergies.push(allergy);
 
         Allergy.update($scope.patient.id, $scope.result).then(function (result) {
-          $scope.patient.allergies.push(result.data);
+          //$scope.patient.allergies.push(result.data);
+          $state.go('allergies', { patientId: $scope.patient.id });
         });
       });
     };
 
   });
+
+

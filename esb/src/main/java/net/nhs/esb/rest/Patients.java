@@ -158,6 +158,7 @@ public class Patients {
         return null;
     }
 
+
     @POST
     @Path("/{patientId}/transfer-of-care")
     public void createPatientTransferComposition(@PathParam("patientId") Long patientId, TransferOfCareComposition transferOfCareComposition) {

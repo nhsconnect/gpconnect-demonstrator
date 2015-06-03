@@ -16,8 +16,8 @@ angular.module('openehrPocApp')
       $location.path(path);
     };
 
-    $scope.selected = function ($index) {
-      return $index === $stateParams.contactIndex;
+    $scope.selected = function (contactIndex) {
+      return contactIndex === $stateParams.contactIndex;
     };
 
     $scope.create = function () {
@@ -44,7 +44,8 @@ angular.module('openehrPocApp')
         $scope.result.contacts.push(contact);
 
         Contact.update($scope.patient.id, $scope.result).then(function (result) {
-          $scope.patient.contacts.push(result.data);
+        //  $scope.patient.contacts.push(result.data);
+          $state.go('contacts', { patientId: $scope.patient.id });
         });
       });
     };

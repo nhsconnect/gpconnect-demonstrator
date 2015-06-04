@@ -114,7 +114,7 @@ angular.module('openehrPocApp')
         $scope.title = 'PHR';
       }
 
-      //Set home url depending on user
+      // Set home url depending on user
       $scope.goHome = function (){
         if($scope.currentUser.role === 'idcr'){
           $state.go('patients-charts');

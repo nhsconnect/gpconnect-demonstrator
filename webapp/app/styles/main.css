@@ -1,6 +1,5 @@
 html, body, #wrapper, #page-wrapper, .section-content {
   height: 100%;
-
 }
 
 body {
@@ -58,7 +57,6 @@ li {
   text-align: center;
 }
 
-
 /* Index */
 .section {
   padding-right: 15px;
@@ -81,9 +79,10 @@ li {
   margin-bottom: 15px;
 }
 
-.col-right {
+
+.col-right { /*Disabled scroll*/
   border-right: 1px solid #e7e7e7;
-  overflow-y: scroll;
+  /*overflow-y: scroll;*/
   height: 100%;
 }
 
@@ -144,35 +143,8 @@ a[ui-sref] {
   height: 0;
 }
 
-.primary-nav {
-  background-color: #20408d;
-  border-bottom: 0;
-}
-
-.primary-nav .navbar-brand {
-  color: #fff;
-}
-
-.primary-nav .navbar-brand:hover, .primary-nav .navbar-brand:focus {
-  color: #bbb;
-}
-
-.primary-nav .navbar-top-links > li > a {
-  color: #fff;
-}
-
-.primary-nav .navbar-top-links > li > a:hover, .primary-nav .navbar-top-links > li > a:focus {
-  background-color: transparent;
-  color: #bbb;
-}
-
 .btn {
   font-weight: bold;
-}
-
-.btn-primary {
-  background-color: #20408d;
-  border-color: #20408d;
 }
 
 .btn-info, .btn-info:hover {
@@ -236,7 +208,7 @@ label {
 }
 
 .panel-default > .panel-heading {
-  /*background-color: #1CA54F;*/
+  /*background-color: #1CA54F; - Previous Green*/
   background-color: #007a41;
   border-radius: 0;
   border-bottom: 0;
@@ -256,7 +228,6 @@ label {
 .modal-title {
   padding: 4px 10px;
   font-weight: bold;
-  background-color: #20408d;
   color: #fff;
 }
 
@@ -471,10 +442,12 @@ legend {
 .header-background-mobile {
   background-color: #FFFFFF;
   padding-top: 0px;
+  z-index: -1;
 }
 
 .header-title-1{
   color: #0E682F;
+  white-space: nowrap;
 }
 
 .header-title-2{
@@ -525,6 +498,7 @@ legend {
   border: 1px solid #ccc;
   border-radius: 2px;
   align-content: center;
+  min-width: 230px;
 }
 
 .search-left-inner-addon .form-control::-webkit-input-placeholder { color: #999999;}
@@ -624,8 +598,8 @@ legend {
   font-family: "Hero";
   font-size: 20px;
   color: #FFF;
+  text-align:center;
 }
-
 
 /* Dashboard */
 .button-icons:before {
@@ -714,7 +688,6 @@ legend {
 
 .main-nav a.button:hover {
   background-color: #f4f8ec;
-/* background-color: #EDF2C3;*/
  text-decoration: none;
 }
 
@@ -781,6 +754,32 @@ legend {
   border: 1px solid #c0c2be;
   border-radius: 3px;
   background-color: #eef8e7;
+  text-align: center;
+}
+
+/* User Profile Mobile */
+@media (max-width: 767px) {
+  .navbar-nav .open .dropdown-menu {
+    top: 100%;
+    left: 0;
+    float: left;
+    width: 310px;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    z-index: 9999;
+    position: absolute;
+    display: block;
+    line-height: 0;
+  }
 }
 
 /* Patient List */
@@ -789,9 +788,7 @@ legend {
 }
 
 /* Patient Detail */
-
-/* Tables (Generic) and Pagination */
-
+/* Tables and Pagination */
 table.table {
   width: 100%;
   border: 1px solid #bebcbd;
@@ -846,7 +843,6 @@ table.table {
 }
 
 /* Transparent Tables */
-
 .table-striped tbody tr {
   background-color: rgba(238, 241, 243, 0.7);
 }
@@ -962,96 +958,8 @@ table.table {
   background-color: #007a41;
 }
 
-/* Patient Dashboard */
-
-/* Patient Summary (top) */
-
-.patient-summary {
-  padding: 0;
-  border: 1px solid #c0c2be;
-  border-radius: 3px;
-  background-color: #eef8e7;
-}
-
-.patient-summary .profile {
-  padding: 15px;
-}
-
-.patient-summary h2 {
-  font-size: 17px;
-  font-weight: 400;
-  margin-top: 0;
-}
-
-.patient-summary .profile-image {
-  height: 55px;
-  padding-left: 6px;
-  padding-right: 6px;
-  margin-bottom: 0;
-}
-
-.patient-summary .profile-image i {
-  font-size: 70px;
-  line-height: 70px;
-}
-
-.patient-summary .info {
-  padding: 15px 15px 25px 15px;
-  background-color: #fff;
-  font-size: 14px;
-  min-height: 85px;
-}
-
-.patient-summary .info dl {
-  margin: 0 0 0 0;
-  line-height: 2em;
-}
-
-.patient-summary .info dl dt,
-.patient-summary .info dl dd {
-  display: inline-block;
-  line-height: 1em;
-}
-
-.patient-summary .info dl dt {
-  margin-right: 5px;
-  font-weight: 500;
-}
-
-.patient-summary .info dl dd {
-  margin-right: 15px;
-}
-
-
-.patient-summary a.more {
-  font-size: 11px;
-  text-transform: uppercase;
-  font-weight: 500;
-  color: #106633;
-  position: absolute;
-  right: 15px;
-  bottom: 10px;
-}
-
-.patient-summary a.more:hover {
-  text-decoration: none;
-  color: #283536;
-}
-
-.patient-summary .more i {
-  font-size: 14px;
-  margin-left: 5px;
-}
-
-/* Expanded Panels */
-/* 		.patient-summary .more-info.expanded { display: block; } */
-
-/* Collapsed Panels */
-.patient-summary .more-info.collapsed { display: none; }
-
-
-/* Dashboards */
-
+/* Patient Summary */
+/* Summary Icons */
 .board:nth-child(4) {
   /* 4th board should always clear left */
   clear: left;
@@ -1079,159 +987,6 @@ table.table {
   margin-right: 4px;
 }
 
-/* Main Content Area */
-
-.main {
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-}
-
-.main h1 {
-  font-size: 24px;
-  font-weight: 300;
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
-.main h1 i {
-  color: #79bc2d;
-  font-size: 140%;
-  height: 26px;
-  display: inline-block;
-  overflow: hidden;
-  margin-right: 7px;
-}
-
-.main.opaque-bg {
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 5px;
-}
-
-/* Side Bar (Specific) */
-
-/* Profile Panel */
-.profile-image {
-  border: 1px solid #bdbdbd;
-  margin: 0 10px 10px 0;
-  padding: 0 10px;
-  background-color: #fff;
-  height: 85px;
-  overflow: hidden;
-}
-
-.profile-image i {
-  font-size: 100px;
-  line-height: 100px;
-  display: block;
-  color: #c1c1c1;
-}
-
-.side-bar #profile p.date {
-  font-size: 12px;
-}
-
-.side-bar #profile p.nav {
-  clear: left;
-  font-size: 12px;
-  text-transform: uppercase;
-}
-
-.side-bar #profile p.nav a {
-  font-weight: 500;
-}
-
-/* Filter Panel */
-
-.side-bar #filter label {
-  font-weight: 300;
-}
-
-.side-bar #filter label {
-  font-weight: 300;
-}
-
-/* Panels (General) - Collapsed by default */
-.side-bar .panel .panel-heading,
-.side-bar .panel .panel-body,
-.side-bar .panel .panel-footer {
-  padding: 1px 15px;
-  border-radius: 0;
-}
-
-.side-bar .panel {
-  border-radius: 0;
-  box-shadow: none;
-  border: none;
-  margin-bottom: 0;
-}
-
-/* First Panel is rounded at the top */
-.side-bar .panel:first-child .panel-heading {
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-}
-
-/* Last Panel is rounded at the bottom */
-.side-bar .panel.collapsed:last-child .panel-heading,
-.side-bar .panel.expanded:last-child .panel-body {
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-
-.side-bar .panel .panel-heading {
-  background-color: #7cbe31;
-  color: #fff;
-  font-size: 19px;
-  font-weight: 300;
-  padding-right: 5px;
-}
-
-/* Expanded Panels */
-.side-bar .panel.expanded .panel-heading { background-color: #0e682f; }
-
-/* Collapsed Panels */
-.side-bar .panel.collapsed .panel-body { display: none; }
-
-.side-bar .panel .panel-heading i {
-  font-size: 130%;
-  margin-right: 5px;
-}
-
-.side-bar .panel .panel-heading i.fi-torso {
-  margin-left: 2px;
-  margin-right: 6px;
-}
-
-.side-bar .panel .panel-heading .toggle {
-  line-height: 1.9em;
-}
-
-.side-bar .panel .panel-heading .toggle i {
-  font-size: 70%;
-  color: #fff;
-}
-
-.side-bar .panel .panel-body {
-  padding: 15px 18px;
-  background-color: #eff0f2;
-}
-
-.side-bar .panel h3 {
-  margin: 0 0 8px 0;
-  font-size: 19px;
-  font-weight: 400;
-}
-
-.side-bar .panel a {
-  color: #283536;
-}
-
-.side-bar .panel p.nav,
-.side-bar .panel a i {
-  color: #268d5c;
-}
-
-
 /* Toggle Charts */
 /* Use this instead of hide as doesn't carry the '!important'a attribute.
 	Useful when calling jQuery show() on hidden elements */
@@ -1242,9 +997,3 @@ table.table {
 .clearfix {
   clear: both;
 }
-
-.dashboard {
-  background-color: transparent;
-}
-
-

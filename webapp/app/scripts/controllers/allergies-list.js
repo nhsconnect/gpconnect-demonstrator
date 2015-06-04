@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, $modal, PatientService, Allergy) {
+  .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Allergy) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -45,7 +45,7 @@ angular.module('openehrPocApp')
         $scope.result.allergies.push(allergy);
 
         Allergy.update($scope.patient.id, $scope.result).then(function (result) {
-          //$scope.patient.allergies.push(result.data);
+          // $scope.patient.allergies.push(result.data);
           $state.go('allergies', { patientId: $scope.patient.id });
         });
       });

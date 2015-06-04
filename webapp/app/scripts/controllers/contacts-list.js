@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('ContactsListCtrl', function ($scope, $location, $stateParams, $modal, PatientService, Contact) {
+  .controller('ContactsListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Contact) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -44,7 +44,7 @@ angular.module('openehrPocApp')
         $scope.result.contacts.push(contact);
 
         Contact.update($scope.patient.id, $scope.result).then(function (result) {
-        //  $scope.patient.contacts.push(result.data);
+          // $scope.patient.contacts.push(result.data);
           $state.go('contacts', { patientId: $scope.patient.id });
         });
       });

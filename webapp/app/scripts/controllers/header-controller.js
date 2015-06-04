@@ -13,7 +13,7 @@ angular.module('openehrPocApp')
     $scope.currentUser = PatientService.getCurrentUser();
     console.log($scope.currentUser);
 
-    //Temporary default user
+    // Temporary default user
     if(!$scope.currentUser.role){
       $scope.currentUser.role = 'idcr';
       $scope.currentUser.email = 'example@email.com';
@@ -21,10 +21,10 @@ angular.module('openehrPocApp')
 
     // Direct different roles to different pages at login
     switch($scope.currentUser.role) {
-        case "idcr":
+        case 'idcr':
           $state.go('patients-charts');
         break;
-      case "phr":
+      case 'phr':
         $state.go('patients-summary', { patientId: 10 });  //id is hard coded
         break;
       default:
@@ -90,7 +90,7 @@ angular.module('openehrPocApp')
         $state.go(previousState);
       };
 
-      if("user-context" in $state.current.views){
+      if('user-context' in $state.current.views){
         $scope.userContextViewExists = true;
       }else{
         $scope.userContextViewExists = false;
@@ -103,26 +103,24 @@ angular.module('openehrPocApp')
       }
 
       $scope.go = function (patient) {
-        alert(patient.id);
         $state.go('patients-summary', { patientId: patient.id });
       };
 
       // Set title depending on user
-      if($scope.currentUser.role == 'idcr'){
-        $scope.title = "IDCR POC";
+      if($scope.currentUser.role === 'idcr'){
+        $scope.title = 'IDCR POC';
       }
-      if($scope.currentUser.role == 'phr'){
-        $scope.title = "PHR";
+      if($scope.currentUser.role === 'phr'){
+        $scope.title = 'PHR';
       }
-      //
 
       //Set home url depending on user
       $scope.goHome = function (){
-        if($scope.currentUser.role == 'idcr'){
+        if($scope.currentUser.role === 'idcr'){
           $state.go('patients-charts');
         }
-        if($scope.currentUser.role == 'phr'){
-          $state.go('patients-summary', { patientId: 10 }); // Hardcoded
+        if($scope.currentUser.role === 'phr'){
+          $state.go('patients-summary', { patientId: 10 }); // Id is hardcoded
         }
       };
 

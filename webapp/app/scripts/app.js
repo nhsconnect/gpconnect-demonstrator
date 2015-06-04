@@ -156,7 +156,7 @@ angular
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
           main: { controller: 'TransferOfCareCtrl' }
         }
-      })
+      });
 
   })
 

@@ -1,6 +1,7 @@
 package net.nhs.esb.cancermdt.route.converter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import net.nhs.esb.cancermdt.model.CancerMDT;
 import net.nhs.esb.cancermdt.model.CancerMDTComposition;
@@ -23,7 +24,7 @@ public class CancerMDTUpdateConverter {
         content.put("ctx/territory", "GB");
 
         int index = 0;
-        CancerMDT cancerMDT = composition.getCancerMDT();
+        List<CancerMDT> cancerMDT = composition.getCancerMDT();
 
         /*
         String prefix = "current_medication_list/medication_and_medical_devices:0/current_medication:0/medication_statement:" + index;

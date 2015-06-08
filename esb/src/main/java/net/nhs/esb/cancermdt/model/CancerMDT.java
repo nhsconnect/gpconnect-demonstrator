@@ -19,7 +19,7 @@ public class CancerMDT {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @JsonIgnore
+    @JsonProperty("id")
     private Long id;
     
     @Column(name = "service")

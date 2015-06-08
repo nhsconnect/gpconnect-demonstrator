@@ -1,11 +1,13 @@
 package net.nhs.esb.cancermdt.model;
 
+import java.util.List;
+
 /**
  */
 public class CancerMDTComposition {
 
     private String compositionId;
-    private CancerMDT cancerMDT;
+    private List<CancerMDT> cancerMDT;
 
     public String getCompositionId() {
         return compositionId;
@@ -15,11 +17,11 @@ public class CancerMDTComposition {
         this.compositionId = compositionId;
     }
 
-    public CancerMDT getCancerMDT() {
+    public List<CancerMDT> getCancerMDT() {
         return cancerMDT;
     }
 
-    public void setCancerMDT(CancerMDT cancerMDT) {
+    public void setCancerMDT(List<CancerMDT> cancerMDT) {
         this.cancerMDT = cancerMDT;
     }
 }

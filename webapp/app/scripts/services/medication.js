@@ -10,6 +10,8 @@ angular.module('openehrPocApp')
     };
 
     var update = function (patientId, composition) {
+      console.log('put medication comp:');
+      console.log(composition);
       return $http.put('/api/patients/' + (patientIdOveride || patientId) + '/medications', composition);
     };
 
@@ -18,3 +20,4 @@ angular.module('openehrPocApp')
       update: update
     };
   });
+

@@ -12,19 +12,33 @@ body {
     width: 100%;
 }
 
-#page-wrapper {
+.page-wrapper {
     padding: 0 15px;
     min-height: 568px;
-    background-color: #fff;
+    background-color: transparent;
 }
 
 @media(min-width:768px) {
-    #page-wrapper {
+    .page-wrapper {
         position: inherit;
         margin: 0 0 0 250px;
         padding: 0 30px;
         border-left: 1px solid #e7e7e7;
     }
+}
+
+.page-wrapper-off {
+  padding: 0 15px;
+  min-height: 568px;
+}
+
+@media(min-width:768px) {
+  .page-wrapper-off {
+    position: inherit;
+    margin: 0 0 0 0px;
+    padding: 0 30px;
+    border-left: 1px solid #e7e7e7;
+  }
 }
 
 .navbar-top-links li {
@@ -128,7 +142,7 @@ body {
         z-index: 1;
         position: absolute;
         width: 250px;
-        margin-top: 51px;
+        margin-top: 22px;
     }
 
     .navbar-top-links .dropdown-messages,
@@ -337,11 +351,11 @@ table.dataTable thead .sorting:after {
 }
 
 .panel-yellow a {
-    color: #f0ad4e;
+  color: #f0ad4e;
 }
 
 .panel-yellow a:hover {
-    color: #df8a13;
+  color: #df8a13;
 }
 
 .transfer-of-care-red{

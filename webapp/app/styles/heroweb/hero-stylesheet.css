@@ -1,0 +1,9 @@
+﻿/* @font-face kit by Fonts2u (http://www.fonts2u.com) */
+
+@font-face {
+  font-family: "Hero";
+  src: url("Hero.eot?") format("eot"), url("Hero.woff") format("woff"), url("Hero.ttf") format("truetype"), url("Hero.svg#Hero") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+

@@ -19,15 +19,20 @@ angular
       .state('patients-list', {
         url: '/patients?ageRange&department&order&reverse',
         views: {
-          actions: { templateUrl: 'views/home-sidebar.html' },
           main: { templateUrl: 'views/patients/patients-list.html', controller: 'PatientsListCtrl' }
         }
       })
 
-      .state('patients-charts', {
-        url: '/',
+      .state('header', {
+        url: '/?role&email',
         views: {
-          actions: { templateUrl: 'views/home-sidebar.html' },
+          main: { controller: 'headerController' }
+        }
+      })
+
+      .state('patients-charts', {
+         url: '/',
+        views: {
           main: { templateUrl: 'views/patients/patients-charts.html', controller: 'PatientsChartsCtrl' }
         }
       })
@@ -37,6 +42,15 @@ angular
         views: {
           actions: { templateUrl: 'views/home-sidebar.html' },
           main: { controller: 'PatientsLookupCtrl' }
+        }
+      })
+
+      .state('patients-summary', {
+        url: '/patients/{patientId:int}/patients-summary',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
+          main: { templateUrl: 'views/patients/patients-summary.html', controller: 'PatientsSummaryCtrl' }
         }
       })
 
@@ -144,9 +158,9 @@ angular
         }
       });
 
-
   })
-  .config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
+
+.config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
     datepickerConfig.startingDay          = 1;
     datepickerPopupConfig.showButtonBar   = false;
     datepickerPopupConfig.datepickerPopup = 'dd-MMM-yyyy';

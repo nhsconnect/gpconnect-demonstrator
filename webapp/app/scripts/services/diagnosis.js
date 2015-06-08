@@ -10,6 +10,10 @@ angular.module('openehrPocApp')
     };
 
     var update = function (patientId, composition) {
+      console.log('new compositon is:');
+      console.log(composition);
+      console.log('new diagnosis array');
+      console.log(composition.problems);
       return $http.put('/api/patients/' + (patientIdOveride || patientId) + '/diagnoses', composition);
     };
 
@@ -18,3 +22,4 @@ angular.module('openehrPocApp')
       update: update
     };
   });
+

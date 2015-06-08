@@ -18,74 +18,205 @@
     <link rel="stylesheet" href="styles/sb-admin-2.css" />
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+
+    <!-- build:css(.tmp) styles/heroweb/hero-demo.css -->
+    <link rel="stylesheet" href="styles/heroweb/hero-demo.css" />
+    <link rel="stylesheet" href="styles/heroweb/hero-stylesheet.css" />
+    <!-- endbuild -->
+
+    <!-- build:css(.tmp) styles/foundation-icons//foundation-icons.css -->
+    <link rel="stylesheet" href="styles/foundation-icons/foundation-icons.css" />
+    <!-- endbuild -->
+
   </head>
-  <body ng-app="openehrPocApp">
+  <body ng-app="openehrPocApp" ng-controller="headerController">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div id="wrapper">
 
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top primary-nav" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#/">IDCR POC</a>
-            </div>
-            <!-- /.navbar-header -->
+      <!-- Header -->
+      <div class="row header-background hidden-xs">
+        <div class="col-md-4 col-sm-4 header-left">
+            <div class="glyphs g"><p class="header-title-1" ng-if="title"><img src="images/ripple-icon.png" alt="Ripple Icon" class="ripple-icon" ng-click="goHome()"> {{title}}</p></div>
+        </div>
 
-            <div class="navbar-default sidebar" role="navigation">
+        <div class="col-md-4 col-sm-3 header-search">
+          <div class="search-left-inner-addon">
+            <i class="fi-magnifying-glass icon-searchbar"></i>
+            <input type="search"
+                   class="form-control"
+                   placeholder="Search..."/>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-5 header-right">
+          <!-- User Profile -->
+          <div class="collapse navbar-collapse">
+
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown-profile">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <span class="glyphicon glyphicon-user"></span>
+                  <span class="header-title-3">Demonstration</span>
+                  <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <div class="navbar-login">
+                      <div class="row">
+                        <div class="col-md-4 col-sm-4">
+                          <div class="user-profile-image"><i class="glyphicon glyphicon-user"></i></div>
+                        </div>
+                        <div class="col-md-8 col-sm-8">
+                          <p class="dropdown-profile-text"><b>User Name</b></p>
+                          <p class="dropdown-profile-text"><b>{{currentUser.role}}</b></p>
+                          <p class="dropdown-profile-text"> {{currentUser.email}} </p>
+                          <p class="dropdown-profile-text">10/05/2099</p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <div class="navbar-login navbar-login-session">
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <p>
+                            <a href="https://ripple-identity-uat.answerappcloud.com/signout" class="btn btn-danger btn-block">Sign Out</a>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <!-- /.User Profile -->
+        </div>
+      </div>
+      <!-- /.Header -->
+
+      <!-- Header mobile -->
+      <div class="row header-background-mobile visible-xs">
+        <div class="col-xs-12 header-left-mobile">
+          <div class="glyphs g"><p class="header-title-1" ng-if="title"><img src="images/ripple-icon.png" alt="Ripple Icon" class="ripple-icon" ng-click="goHome()"> {{title}}</p></div>﻿
+        </div>
+
+        <div class="col-xs-12 header-right-mobile">
+          <!--<span class="glyphicon glyphicon-user"></span>
+          <span>Demonstration</span> -->
+
+          <!-- User Profile -->
+          <div class="navbar-collapse">
+
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown-profile">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <span class="glyphicon glyphicon-user"></span>
+                  <span class="header-title-3">Demonstration</span>
+                  <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <div class="navbar-login">
+                      <div class="row">
+                        <div class="col-xs-4">
+                          <div class="user-profile-image"><i class="glyphicon glyphicon-user"></i></div>
+                        </div>
+                        <div class="col-xs-8">
+                          <p class="dropdown-profile-text"><b>User Name</b></p>
+                          <p class="dropdown-profile-text"><b>{{currentUser.role}}</b></p>
+                          <p class="dropdown-profile-text"> {{currentUser.email}} </p>
+                          <p class="dropdown-profile-text">10/05/2099</p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <div class="navbar-login navbar-login-session">
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <p>
+                            <a href="https://ripple-identity-uat.answerappcloud.com/signout" class="btn btn-danger btn-block">Sign Out</a>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <!-- /.User Profile -->
+        </div>
+
+        <div class="col-xs-12 header-search-mobile">
+          <div class="search-left-inner-addon">
+            <i class="fi-magnifying-glass icon-searchbar"></i>
+            <input type="search"
+                   class="form-control"
+                   placeholder="Search..." />
+          </div>
+        </div>
+      </div>
+      <!-- /.Header mobile -->
+
+      <!-- Header toolbar -->
+      <div class="row header-toolbar hidden-xs">
+        <div class="col-sm-5">
+          <span class="glyphicon glyphicon-arrow-left previous-page-arrow" ng-if="previousPage && currentUser.role=='idcr'" ng-click="goBack()"></span>
+          <span class="previous-page-title" ng-if="previousPage && currentUser.role=='idcr'">{{previousPage}}</span>
+
+        </div>
+        <div class="col-sm-7">
+          <span class="current-page-title">{{pageHeader}}</span>
+        </div>
+      </div>
+      <!-- /.Header toolbar -->
+
+      <!-- Header toolbar mobile -->
+      <div class="row header-toolbar visible-xs">
+        <div class="col-xs-2">
+          <span class="glyphicon glyphicon-arrow-left previous-page-arrow" ng-if="previousPage && currentUser.role=='idcr'" ng-click="goBack()"></span>
+        </div>
+        <div class="col-xs-8 current-page-title-mobile">
+          <span>{{pageHeader}}</span>
+        </div>
+      </div>
+      <!-- /.Header toolbar mobile-->
+
+        <!-- Sidebar-->
+        <div class="wrapper navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li class="sidebar-search" >
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                            </div>
-                            <!-- /input-group -->
-                        </li>
-
-                    </ul>
                     <ul side-menu class="nav" ui-view="actions"></ul>
                 </div>
-                <!-- /.sidebar-collapse -->
-            </div>
-            <!-- /.navbar-static-side -->
-        </nav>
+        </div>
+      <!-- /.Sidebar-->
 
-        <div id="page-wrapper">
-            <div class="section-north" ui-view="user-context"></div>
+      <!-- /page-wrapper -->
+        <div ng-class="actionsExists ? 'page-wrapper' : 'page-wrapper-off'">
+            <div class="section-north" ui-view="user-context" ng-if=(userContextViewExists)></div>
 
             <div class="section section-content">
               <div class="row section-row">
-                <div class="col-md-6 col-left">
+                <div class="col-md-{{mainWidth}} col-left">
                   <div class="section-main" ui-view="main"></div>
                 </div>
 
-                <div class="col-md-6 col-right">
+                <div class="col-md-{{detailWidth}} col-right">
                   <div class="section-detail" ui-view="detail"></div>
                 </div>
               </div>
             </div>
-
         </div>
-        <!-- /#page-wrapper -->
-
-    </div>
-    <!-- /#wrapper -->
+      <!-- /.#page-wrapper -->
+      <!-- /.#page-wrapper -->
 
     <div class="notifications" growl-notifications></div>
-
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -138,8 +269,10 @@
         <script src="scripts/services/transfer-of-care.js"></script>
         <script src="scripts/models/patient.js"></script>
         <script src="scripts/controllers/patients-list.js"></script>
+        <script src="scripts/controllers/header-controller.js"></script>
         <script src="scripts/controllers/patients-charts.js"></script>
         <script src="scripts/controllers/patients-lookup.js"></script>
+        <script src="scripts/controllers/patients-summary.js"></script>
         <script src="scripts/controllers/patients-detail.js"></script>
         <script src="scripts/controllers/diagnoses-list.js"></script>
         <script src="scripts/controllers/diagnoses-detail.js"></script>
@@ -156,6 +289,7 @@
         <script src="scripts/controllers/transfer-of-care-modal.js"></script>
         <script src="scripts/controllers/transfer-of-care-list.js"></script>
         <script src="scripts/controllers/transfer-of-care-detail.js"></script>
+
         <!-- endbuild -->
 </body>
 </html>

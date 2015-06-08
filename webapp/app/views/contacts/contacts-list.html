@@ -15,7 +15,7 @@
       <td>{{ contact.name }}</td>
       <td>{{ contact.relationship }}</td>
       <td><i class="fa fa-fw fa-check" ng-if="contact.nextOfKin"></i></td>
-      <td><i class="fa fa-fw" ng-class="selected(contact) ? 'fa-folder-open' : 'fa-folder'"></i></td>
+      <td><i class="fa fa-fw" ng-class="selected($index) ? 'fa-folder-open' : 'fa-folder'"></i></td>
     </tr>
 
     <tr ng-if="!contacts.length">

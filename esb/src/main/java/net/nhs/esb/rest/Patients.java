@@ -15,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 
 import net.nhs.domain.openehr.model.Diagnoses;
 import net.nhs.esb.allergy.model.AllergyComposition;
-import net.nhs.esb.cancermdt.model.CancerMDTComposition;
 import net.nhs.esb.contact.model.ContactComposition;
 import net.nhs.esb.medication.model.MedicationComposition;
 import net.nhs.esb.patient.model.PatientDetails;
@@ -188,23 +187,4 @@ public class Patients {
     public TransferOfCare findTransferOfCare(@PathParam("patientId") Long patitentId, @PathParam("transferOfCareId") Long transferOfCareId){
     	return null;
     }
-    
-    @GET
-    @Path("/{patientId}/cancermdt")
-    public CancerMDTComposition findPatientCancerMDTComposition(@PathParam("patientId") Long patientId) {
-        return null;
-    }
-
-    @PUT
-    @Path("/{patientId}/cancermdt")
-    public void createPatientCancerMDTComposition(@PathParam("patientId") Long patientId, CancerMDTComposition cancerMDTComposition) {
-
-    }
-
-    @POST
-    @Path("/{patientId}/cancermdt")
-    public void updatePatientCancerMDTComposition(@PathParam("patientId") Long patientId, CancerMDTComposition cancerMDTComposition) {
-
-    }
-
 }

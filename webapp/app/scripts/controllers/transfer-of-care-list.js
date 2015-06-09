@@ -16,6 +16,7 @@ angular.module('openehrPocApp')
     };
 
     $scope.selected = function (transferOfCareIndex) {
+      console.log($stateParams);
       return transferOfCareIndex === $stateParams.transferOfCareIndex;
     };
 

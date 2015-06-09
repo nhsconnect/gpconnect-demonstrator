@@ -43,8 +43,7 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (medication) {
         $scope.result.medications.push(medication);
 
-        Medication.update($scope.patient.id, $scope.result).then(function (result) {
-          // $scope.patient.medications.push(result.data);
+        Medication.update($scope.patient.id, $scope.result).then(function () {
           $state.go('medications', { patientId: $scope.patient.id });
         });
       });

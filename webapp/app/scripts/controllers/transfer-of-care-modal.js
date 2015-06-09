@@ -141,7 +141,7 @@ angular.module('openehrPocApp')
             delete $scope.transferOfCare.medications;
             $scope.transferOfCare.transferDetail = $scope.transferDetail;
             $scope.transferOfCareComposition.transfers.push($scope.transferOfCare);
-
+            console.log($scope.transferOfCareComposition);
             TransferOfCare.create($scope.patient.id, $scope.transferOfCareComposition).then(function () {
               $scope.$close();
             });

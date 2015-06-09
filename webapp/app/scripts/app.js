@@ -156,6 +156,25 @@ angular
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
           main: { controller: 'TransferOfCareCtrl' }
         }
+      })
+
+    .state('cancerMdt', {
+      url: '/patients/{patientId:int}/cancer-mdt-list',
+      views: {
+        'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+        actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+        main: { templateUrl: 'views/cancer-mdt/cancermdt-list.html', controller: 'CancerMdtListCtrl' }
+      }
+    })
+
+      .state('cancerMdt-detail', {
+        url: '/patients/{patientId:int}/cancer-mdt-detail/{cancerMdtIndex:int}',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/cancer-mdt/cancermdt-list.html', controller: 'CancerMdtListCtrl' },
+          detail: { templateUrl: 'views/cancer-mdt/cancer-mdt-detail.html', controller: 'CancerMdtDetailCtrl' }
+        }
       });
 
   })

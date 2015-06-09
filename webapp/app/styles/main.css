@@ -220,20 +220,32 @@ label {
   font-size: 18px;
 }
 
+
+/* Confirmation Modal */
 .modal-header {
   padding-bottom: 0;
   border-bottom: 0;
+  background-color: #007a41;
 }
 
 .modal-title {
-  padding: 4px 10px;
+  padding: 4px 10px 10px;
   font-weight: bold;
   color: #fff;
+  background-color: #007a41;
 }
 
 .modal-footer {
   padding-top: 0;
   border-top: 0;
+}
+
+.modal-backdrop {
+  background-color: #ffffff;
+}
+
+.modal-body {
+  background-color: #ffffff;
 }
 
 fieldset {
@@ -939,23 +951,6 @@ table.table {
 
 .pagination .increment.next a {
   margin-left: 10px;
-}
-
-/* Confirmation Modal */
-.modal-backdrop {
-  background-color: #ffffff;
-}
-
-.modal-header {
-  background-color: #007a41;
-}
-
-.modal-body {
-  background-color: #ffffff;
-}
-
-.modal-title{
-  background-color: #007a41;
 }
 
 /* Patient Summary */

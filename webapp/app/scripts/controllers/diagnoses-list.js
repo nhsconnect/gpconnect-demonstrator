@@ -47,8 +47,7 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (diagnosis) {
         $scope.result.problems.push(diagnosis);
 
-        Diagnosis.update($scope.patient.id, $scope.result).then(function (result) {
-          // $scope.patient.diagnoses.push(result.data);
+        Diagnosis.update($scope.patient.id, $scope.result).then(function () {
           $state.go('diagnoses-list', { patientId: $scope.patient.id });
         });
       });

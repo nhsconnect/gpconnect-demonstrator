@@ -23,21 +23,20 @@ public class CancerMDTUpdateConverter {
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
 
-        int index = 0;
-        List<CancerMDT> cancerMDT = composition.getCancerMDT();
+        List<CancerMDT> cancerMDTs = composition.getCancerMDT();
 
-        /*
-        String prefix = "current_medication_list/medication_and_medical_devices:0/current_medication:0/medication_statement:" + index;
-        content.put(prefix + "/medication_item/medication_name|value", medication.getName());
-        content.put(prefix + "/medication_item/medication_name|code", medication.getCode());
-        content.put(prefix + "/medication_item/medication_name|terminology", medication.getTerminology());
-        content.put(prefix + "/medication_item/route:0|code", medication.getRoute());
-        content.put(prefix + "/medication_item/dose_amount_description", medication.getDoseAmount());
-        content.put(prefix + "/medication_item/dose_timing_description", medication.getDoseTiming());
-        content.put(prefix + "/medication_item/course_details/start_datetime", medication.getStartDateTime());
-        content.put(prefix + "/medication_item/dose_directions_description", medication.getDoseDirections());
-        */
-        
+        int index = 0;
+
+        for (CancerMDT cancerMDT : cancerMDTs) {
+
+            content.put("cancer_mdt_output_report/referral_details:" + index + "/original_referral/request:0/service_requested", cancerMDT.getService());
+            content.put("cancer_mdt_output_report/plan_and_requested_actions:" + index + "/recommendation:0/recommendation", cancerMDT.getNotes());
+            
+            //content.put("cancer_mdt_output_report/referral_details:" + index + "/mdt_referral/request:0/date_or_time_service_required", cancerMDT.getDate());
+
+            index++;
+        }
+
         return new CancerMDTUpdate(content);
     }
 

@@ -31,7 +31,7 @@ public class CreatePatientCancerMDTRouteBuilder extends SpringRouteBuilder {
                 .to("direct:setHeaders")
                 .to("direct:createSession")
                 .to("direct:getEhrId")
-                .to("direct:openEhrCreatePatientCancerMDTCompositionId")
+                .to("direct:openEhrFindPatientCancerMDTCompositionId")
                 .choice()
                     .when(header("compositionId").isNull())
                         .setBody(simple("${header.composition}"))

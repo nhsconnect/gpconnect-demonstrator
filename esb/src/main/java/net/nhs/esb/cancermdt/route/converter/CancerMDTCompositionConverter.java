@@ -19,7 +19,7 @@ public class CancerMDTCompositionConverter extends BaseCompositionConverter<Canc
     private static final String CANCERMDT_DEFINITION = "cancer_mdt_output_report/referral_details:";
 
     @Converter
-    public CancerMDTComposition convertResponseToMedicationComposition(CompositionResponseData response) {
+    public CancerMDTComposition convertResponseToCancerMDTComposition(CompositionResponseData response) {
 
         Map<String, Object> rawComposition = response.getComposition();
 
@@ -38,6 +38,8 @@ public class CancerMDTCompositionConverter extends BaseCompositionConverter<Canc
     protected CancerMDT create(Map<String, Object> rawComposition, String prefix) {
 
         CancerMDT cancerMDT = new CancerMDT();
+        
+        cancerMDT.setRawComposition(rawComposition);
 
         String indexStr = prefix.substring(prefix.lastIndexOf(":") + 1);
         int index = Integer.valueOf(indexStr);

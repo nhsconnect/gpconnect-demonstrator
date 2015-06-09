@@ -7,8 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Map;
 
 /**
  */
@@ -21,6 +21,10 @@ public class CancerMDT {
     @Basic(optional = false)
     @JsonProperty("id")
     private Long id;
+    
+    @JsonProperty("rawComposition")
+    static Map<String, Object> rawComposition;
+    
     
     @Column(name = "service")
     @JsonProperty("Service")
@@ -42,6 +46,14 @@ public class CancerMDT {
         this.id = id;
     }
 
+    public Map<String, Object> getRawComposition() {
+        return rawComposition;
+    }
+
+    public void setRawComposition(Map<String, Object> rawComposition) {
+        this.rawComposition = rawComposition;
+    }
+    
     public String getService() {
         return service;
     }

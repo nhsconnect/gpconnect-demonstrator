@@ -18,23 +18,31 @@ public class CancerMDTUpdateConverter {
     @Converter
     public CancerMDTUpdate convertCompositionToCancerMDTUpdate(CancerMDTComposition composition) {
 
-        Map<String, String> content = new HashMap<>();
-
-        content.put("ctx/language", "en");
-        content.put("ctx/territory", "GB");
-
         List<CancerMDT> cancerMDTs = composition.getCancerMDT();
+        Map<String, Object> rawComposition = null;
 
         int index = 0;
 
         for (CancerMDT cancerMDT : cancerMDTs) {
 
-            content.put("cancer_mdt_output_report/referral_details:" + index + "/original_referral/request:0/service_requested", cancerMDT.getService());
-            content.put("cancer_mdt_output_report/plan_and_requested_actions:" + index + "/recommendation:0/recommendation", cancerMDT.getNotes());
-            
-            //content.put("cancer_mdt_output_report/referral_details:" + index + "/mdt_referral/request:0/date_or_time_service_required", cancerMDT.getDate());
+            if (rawComposition == null) {
+                rawComposition = cancerMDT.getRawComposition();
+            }
 
+            rawComposition.put("cancer_mdt_output_report/referral_details:" + index + "/original_referral/request:0/service_requested", cancerMDT.getService());
+            rawComposition.put("cancer_mdt_output_report/plan_and_requested_actions:" + index + "/recommendation:0/recommendation", cancerMDT.getNotes());
+
+            //content.put("cancer_mdt_output_report/referral_details:" + index + "/original_referral/request:0/service_requested", cancerMDT.getService());
             index++;
+        }
+
+        Map<String, String> content = new HashMap<>();
+
+        content.put("ctx/language", "en");
+        content.put("ctx/territory", "GB");
+
+        for (Map.Entry<String, Object> entry : rawComposition.entrySet()) {
+            content.put(entry.getKey(), String.valueOf(entry.getValue()));
         }
 
         return new CancerMDTUpdate(content);

@@ -1,5 +1,7 @@
 package net.nhs.esb.cancermdt.route.converter;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +31,36 @@ public class CancerMDTUpdateConverter {
                 rawComposition = cancerMDT.getRawComposition();
             }
 
-            rawComposition.put("cancer_mdt_output_report/referral_details:" + index + "/original_referral/request:0/service_requested", cancerMDT.getService());
+            String prefix = "cancer_mdt_output_report/referral_details:" + index;
+            
+            // Add the updated or created fields passed from web page
+            rawComposition.put(prefix + "/original_referral/request:0/service_requested", cancerMDT.getService());
             rawComposition.put("cancer_mdt_output_report/plan_and_requested_actions:" + index + "/recommendation:0/recommendation", cancerMDT.getNotes());
 
+            
+            // Set defailt values for fields requred in openEHR validation
+            if(rawComposition.get(prefix + "/mdt_referral/request:0/service_requested") == null){
+                rawComposition.put(prefix + "/mdt_referral/request:0/service_requested", "MDT referral");
+            }
+
+            SimpleDateFormat openEHRDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            String currentDateTime = openEHRDateFormat.format(Calendar.getInstance().getTime());
+            if(rawComposition.get(prefix + "/mdt_referral/request:0/date_or_time_service_required") == null){
+                rawComposition.put(prefix + "/mdt_referral/request:0/date_or_time_service_required", currentDateTime);
+            }
+            if(rawComposition.get(prefix + "/mdt_referral/request:0/timing") == null){
+                rawComposition.put(prefix + "/mdt_referral/request:0/timing", currentDateTime);
+            }
+            if(rawComposition.get(prefix + "/original_referral/request:0/timing") == null){
+                rawComposition.put(prefix + "/original_referral/request:0/timing", currentDateTime);
+            }
+            if(rawComposition.get(prefix + "/mdt_referral/narrative") == null){
+                rawComposition.put(prefix + "/mdt_referral/narrative", "Default Narrative");
+            }
+            if(rawComposition.get(prefix + "/original_referral/narrative") == null){
+                rawComposition.put(prefix + "/original_referral/narrative", "Default Narrative");
+            }
+            
             index++;
         }
 

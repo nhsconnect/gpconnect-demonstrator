@@ -11,6 +11,7 @@ angular.module('openehrPocApp')
 
     CancerMdt.getComposition($stateParams.patientId).then(function (result) {
       $scope.cancerMdtComposition = result.data;
+      console.log(  $scope.cancerMdtComposition );
       rawComposition = $scope.cancerMdtComposition.cancerMDT[0].rawComposition;
     });
 
@@ -44,6 +45,7 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (cancerMdt) {
         cancerMdt.rawComposition = rawComposition;
+        $scope.cancerMdtComposition.cancerMDT.push(cancerMdt);
         CancerMdt.create($scope.patient.id, $scope.cancerMdtComposition).then(function () {
           $state.go('cancerMdt', { patientId: $scope.patient.id });
         });

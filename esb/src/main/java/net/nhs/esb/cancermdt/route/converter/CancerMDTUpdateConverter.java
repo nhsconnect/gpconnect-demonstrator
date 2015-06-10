@@ -32,7 +32,6 @@ public class CancerMDTUpdateConverter {
             rawComposition.put("cancer_mdt_output_report/referral_details:" + index + "/original_referral/request:0/service_requested", cancerMDT.getService());
             rawComposition.put("cancer_mdt_output_report/plan_and_requested_actions:" + index + "/recommendation:0/recommendation", cancerMDT.getNotes());
 
-            //content.put("cancer_mdt_output_report/referral_details:" + index + "/original_referral/request:0/service_requested", cancerMDT.getService());
             index++;
         }
 

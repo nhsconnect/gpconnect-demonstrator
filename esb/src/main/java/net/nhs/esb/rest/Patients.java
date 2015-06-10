@@ -196,13 +196,13 @@ public class Patients {
         return null;
     }
 
-    @PUT
+    @POST
     @Path("/{patientId}/cancermdt")
     public void createPatientCancerMDTComposition(@PathParam("patientId") Long patientId, CancerMDTComposition cancerMDTComposition) {
 
     }
 
-    @POST
+    @PUT
     @Path("/{patientId}/cancermdt")
     public void updatePatientCancerMDTComposition(@PathParam("patientId") Long patientId, CancerMDTComposition cancerMDTComposition) {
 

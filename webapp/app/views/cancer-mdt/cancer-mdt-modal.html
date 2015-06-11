@@ -1,8 +1,8 @@
 <div class="modal-header">
-  <h4 class="modal-title">{{ modal.title }}</h4>
+  <h4 class="modal-title" ng-if="cancerMdtSelectionNumber">Edit MDT #{{cancerMdtSelectionNumber}}</h4>
 </div>
 
-<div class="modal-body">
+<div class="modal-body" style=" height:100%;">
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">{{ patient.fullname() }}</h4>
@@ -18,33 +18,66 @@
 
   <form name="cancerMdtForm" class="form-horizontal text-left">
     <fieldset>
-      <legend>Cancer MDT detail</legend>
+      <legend ng-if="cancerMdtSelectionNumber">Edit MDT #{{cancerMdtSelectionNumber}}</legend>
 
-      <div class="form-group" ng-class="{'has-error': (formSubmitted || cancerMdtForm.Service.$dirty) && cancerMdtForm.Service.$invalid, 'has-success': cancerMdtForm.Service.$valid && cancerMdtForm.Service.$dirty}">
-        <label for="Service" class="control-label col-md-4">Service</label>
-        <div class="col-md-8">
-          <div class="input-group">
-            <input type="text" class="form-control input-sm" id="Service" name="Service" ng-model="cancerMdt.Service" required />
+      <div class="col-md-8">
+
+        <div class="form-group" ng-class="{'has-error': (formSubmitted || cancerMdtForm.Service.$dirty) && cancerMdtForm.Service.$invalid, 'has-success': cancerMdtForm.Service.$valid && cancerMdtForm.Service.$dirty}">
+          <label for="Service" class="control-label col-md-4" style="text-align: left">Multidisciplinary Team</label>
+          <div class="col-md-8">
+            <div class="input-group">
+              <input type="text" class="form-control input-sm" id="Service" name="Service" ng-model="cancerMdt.Service" required />
             <span class="input-group-addon input-sm">
                 <i class="fa fa-check fa-fw"></i>
             </span>
+            </div>
+            <span class="help-block animate-fade" ng-show="formSubmitted && cancerMdtForm.Service.$error.required">You must enter a value.</span>
           </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && cancerMdtForm.Service.$error.required">You must enter a value.</span>
         </div>
-      </div>
 
-      <div class="form-group" ng-class="{'has-error': (formSubmitted || cancerMdtForm.Notes.$dirty) && cancerMdtForm.Notes.$invalid, 'has-success': cancerMdtForm.Notes.$valid && cancerMdtForm.Notes.$dirty}">
-        <label for="Notes" class="control-label col-md-4">Notes</label>
-        <div class="col-md-8">
-          <div class="input-group">
-            <textarea class="form-control input-sm" id="Notes" name="Notes" ng-model="cancerMdt.Notes" required></textarea>
+        <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || cancerMdtForm.Date.$dirty) && cancerMdtForm.Date.$invalid, 'has-success': cancerMdtForm.Date.$valid && cancerMdtForm.Date.$dirty}">
+          <label for="Date" class="control-label col-md-4" style="text-align: left;">Date of request</label>
+          <div class="col-md-8">
+            <div class="input-group">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'Date')"><i class="fa fa-calendar"></i></button>
+            </span>
+              <input type="text" class="form-control" id="Date" name="Date" ng-model="cancerMdt.Date" ng-click="openDatepicker($event, 'dateOpen')" startDateTimepicker-popup is-open="$parent.dateOpen" required />
+            <span class="input-group-addon input-sm">
+              <i class="fa fa-check fa-fw"></i>
+            </span>
+            </div>
+            <span class="help-block animate-fade" ng-show="formSubmitted && cancerMdtForm.Date.$error.required">You must enter a valid date.</span>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (formSubmitted || cancerMdtForm.Notes.$dirty) && cancerMdtForm.Notes.$invalid, 'has-success': cancerMdtForm.Notes.$valid && cancerMdtForm.Notes.$dirty}">
+          <label for="Notes" class="control-label col-md-4" style="text-align: left; padding-bottom: 10px;">Meeting Notes</label>
+          <div class="col-md-12">
+            <div class="input-group">
+              <textarea class="form-control input-sm" id="Notes" name="Notes" ng-model="cancerMdt.Notes" required></textarea>
             <span class="input-group-addon input-sm">
                 <i class="fa fa-check fa-fw"></i>
             </span>
+            </div>
+            <span class="help-block animate-fade" ng-show="formSubmitted && cancerMdtForm.Notes.$error.required">You must enter a value.</span>
           </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && cancerMdtForm.Notes.$error.required">You must enter a value.</span>
         </div>
       </div>
+
+      <div class="col-md-4" style="overflow:scroll; height:400px;">
+        <label>Who Attended </label>
+
+        <div class="form-control-static">
+          <span class="transfer-of-care-no-selected-items" ng-if="!cancerMdt.participants.length">No attendance</span>
+          <ul>
+            <li ng-repeat="participant in cancerMdt.participants">{{participant}}</li>
+          </ul>
+        </div>
+        <br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br>
+      </div>
+
     </fieldset>
   </form>
 </div>

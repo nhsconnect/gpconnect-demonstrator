@@ -49,12 +49,12 @@ ul {
 
 li {
   list-style: none;
-  display: inline-block;
 }
 
 /* Navigation Menu */
 .navigation-menu{
-  text-align: center;
+  text-align: left;
+  padding-left: 18px;
 }
 
 /* Index */

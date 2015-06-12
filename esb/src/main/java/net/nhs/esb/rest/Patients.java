@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import net.nhs.domain.openehr.model.Diagnoses;
 import net.nhs.esb.allergy.model.AllergyComposition;
 import net.nhs.esb.cancermdt.model.CancerMDTComposition;
+import net.nhs.esb.cancermdt.model.CancerMDTsComposition;
 import net.nhs.esb.contact.model.ContactComposition;
 import net.nhs.esb.medication.model.MedicationComposition;
 import net.nhs.esb.patient.model.PatientDetails;
@@ -204,7 +205,7 @@ public class Patients {
 
     @PUT
     @Path("/{patientId}/cancermdt")
-    public void updatePatientCancerMDTComposition(@PathParam("patientId") Long patientId, CancerMDTComposition cancerMDTComposition) {
+    public void updatePatientCancerMDTComposition(@PathParam("patientId") Long patientId, CancerMDTsComposition cancerMDTsComposition) {
 
     }
 

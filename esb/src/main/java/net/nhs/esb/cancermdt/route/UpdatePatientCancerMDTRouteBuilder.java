@@ -1,8 +1,12 @@
 package net.nhs.esb.cancermdt.route;
 
+import java.util.List;
+import net.nhs.esb.cancermdt.model.CancerMDT;
 import net.nhs.esb.cancermdt.model.CancerMDTUpdate;
 import net.nhs.esb.openehr.route.CompositionUpdateParameters;
+import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
+import org.apache.camel.Processor;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,18 @@ public class UpdatePatientCancerMDTRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
 
         from("direct:updatePatientCancerMDTComposition").routeId("openEhrUpdatePatientCancerMDTComposition")
+                
+                .setHeader("Camel.openEHR.CancerMDTsComposition", simple("${body.cancerMDT}"))
+                .setHeader("Camel.openEHR.CancerMDTsCompositionSize", simple("${body.cancerMDT.size}"))
+                
+                .loop(header("Camel.openEHR.CancerMDTsCompositionSize"))
+                .process(new Processor() {
+                    @Override
+                    public void process(Exchange exchng) throws Exception {
+                        CancerMDT cancerMDT = (CancerMDT)exchng.getIn().getHeader("Camel.openEHR.CancerMDTsComposition", List.class).get((Integer)exchng.getProperty("CamelLoopIndex"));
+                        exchng.getIn().setBody(cancerMDT);
+                    }
+                })
                 .setHeader("compositionId", simple("${body.compositionId}"))
                 .convertBodyTo(CancerMDTUpdate.class)
                 
@@ -39,18 +55,18 @@ public class UpdatePatientCancerMDTRouteBuilder extends SpringRouteBuilder {
                 .setHeader("composition", simple("${header.Camel.openEHR.composition}"))
                 .removeHeaders("Camel.openEHR.composition")
                 
-                .to("direct:openEhrUpdatePatientCancerMDTComposition");
-
+                .to("direct:openEhrUpdatePatientCancerMDTComposition")
+                .end();
+        
+        
         from("direct:openEhrUpdatePatientCancerMDTComposition")
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
                 .setHeader(CxfConstants.OPERATION_NAME, constant("updateComposition"))
                 .setHeader("template", constant(cancerMDTTemplate))
                 .bean(compositionUpdateParameters)
-                
                 // Now the composition header details are back in the body the header needs removing or the header will be two large for openEHR
                 .removeHeaders("composition")
-                .to("cxfrs:bean:rsOpenEhr")
-                .end();
+                .to("cxfrs:bean:rsOpenEhr");
     }
 }

@@ -51,7 +51,7 @@ public class CreatePatientCancerMDTRouteBuilder extends SpringRouteBuilder {
                 .otherwise()
                 .setBody(simple("${header.Camel.openEHR.getEhrIDResponse}"))
                 .removeHeaders("Camel.openEHR.getEhrIDResponse")
-                .to("direct:openEhrUpdatePatientCancerMDTComposition")
+                //.to("direct:openEhrUpdatePatientCancerMDTComposition")
                 .endChoice()
                 .end();
 
@@ -62,6 +62,7 @@ public class CreatePatientCancerMDTRouteBuilder extends SpringRouteBuilder {
                 .setHeader("template", constant(cancerMDTTemplate))
                 .bean(compositionCreateParameters)
                 .removeHeaders("composition")
-                .to("cxfrs:bean:rsOpenEhr");
+                //.to("cxfrs:bean:rsOpenEhr")
+                ;
     }
 }

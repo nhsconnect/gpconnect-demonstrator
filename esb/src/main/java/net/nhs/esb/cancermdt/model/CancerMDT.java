@@ -8,9 +8,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import java.util.Map;
 import javax.persistence.ElementCollection;
 import javax.persistence.MapKeyColumn;
+import javax.persistence.OneToMany;
 
 /**
  */
@@ -45,6 +47,12 @@ public class CancerMDT {
     @JsonProperty("Notes")
     private String notes;
 
+    @Column(name = "participation")
+    @JsonProperty("participation")
+    @OneToMany
+    private List<CancerMDTparticipation> participation;
+    
+    
     public Long getId() {
         return id;
     }
@@ -91,6 +99,14 @@ public class CancerMDT {
 
     public void setCompositionId(String compositionId) {
         this.compositionId = compositionId;
+    }
+
+    public List<CancerMDTparticipation> getParticipation() {
+        return participation;
+    }
+
+    public void setParticipation(List<CancerMDTparticipation> participation) {
+        this.participation = participation;
     }
 
 }

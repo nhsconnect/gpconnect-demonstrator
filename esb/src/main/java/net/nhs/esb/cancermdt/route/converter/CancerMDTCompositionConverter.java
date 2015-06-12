@@ -10,7 +10,9 @@ import org.apache.camel.Converter;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import org.apache.commons.lang.StringUtils;
 
 /**
  */
@@ -49,10 +51,68 @@ public class CancerMDTCompositionConverter {
         cancerMDT.setNotes(MapUtils.getString(rawComposition, "cancer_mdt_output_report/plan_and_requested_actions:0/recommendation:0/recommendation"));
         
         
+        // Get the participants for the MDT
+        
+        //int countParticipants = countNumberOfElements(rawComposition, "ctx/participation_name:");
+        int countParticipants = 0;
+        
+        if(countParticipants > 0){
+            List<CancerMDTparticipation> participationList = new ArrayList<>();
+
+            for(int participantIndex = 0; participantIndex < countParticipants; participantIndex++){
+
+                CancerMDTparticipation participant = new CancerMDTparticipation();
+                participant.setName(MapUtils.getString(rawComposition, "ctx/participation_name:" + participantIndex));
+                participant.setFunction(MapUtils.getString(rawComposition, "ctx/participation_function:" + participantIndex));
+                participant.setMode(MapUtils.getString(rawComposition, "ctx/participation_mode:" + participantIndex));
+                participant.setId(Long.valueOf(MapUtils.getString(rawComposition, "ctx/participation_id:" + participantIndex)));
+
+                participationList.add(participant);
+            }
+
+            cancerMDT.setParticipation(participationList);
+        }
+        
+        List<CancerMDTparticipation> participationList = new ArrayList<>();
+
+        CancerMDTparticipation participant = new CancerMDTparticipation();
+        participant.setName("Dr. Marcus Johnson");
+        participant.setFunction("Oncologist");
+        participant.setMode("face-to-face communication");
+        participant.setId(Long.valueOf("1345678"));
+        participationList.add(participant);
+        
+        CancerMDTparticipation participant2 = new CancerMDTparticipation();
+        participant2.setName("Heather Smith");
+        participant2.setFunction("McMillan Nurse");
+        participant2.setMode("face-to-face communication");
+        participant2.setId(Long.valueOf("365672345"));
+        participationList.add(participant2);
+        
+        cancerMDT.setParticipation(participationList);
+        
+        
         CancerMDTComposition cancerMDTComposition = new CancerMDTComposition();
         cancerMDTComposition.setCancerMDT(cancerMDT);
 
         return cancerMDTComposition;
     }
 
+    
+    public int countNumberOfElements(Map<String, Object> rawComposition, String elementString){
+        
+        int maxEntry = -1;
+        
+        for (String key : rawComposition.keySet()) {
+            if (StringUtils.startsWith(key, elementString)) {
+                String index = StringUtils.substringAfter(key, elementString);
+                index = StringUtils.substringBefore(index, "/");
+
+                maxEntry = Math.max(maxEntry, Integer.parseInt(index));
+            }
+        }
+
+        return maxEntry + 1;
+    }
+    
 }

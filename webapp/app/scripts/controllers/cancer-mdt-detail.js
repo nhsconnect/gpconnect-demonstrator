@@ -16,8 +16,20 @@ angular.module('openehrPocApp')
       $scope.cancerMdtSelectionNumber = $stateParams.cancerMdtIndex + 1;
 
       // Temporary add participants
-      var participants = ['Joe Hughes', 'Lucy Jones', 'Bob Lowe'];
-      $scope.cancerMdt.participants = participants;
+      $scope.participation = [
+        {
+          "name" : "Dr. Marcus Johnson",
+          "function" : "Oncologist",
+          "mode" : "face-to-face communication",
+          "id" : "1345678"
+        },
+        {
+          "name" : "Heather Smith",
+          "function" : "McMillan Nurse",
+          "mode" : "face-to-face communication",
+          "id" : "365672345"
+        }
+      ];
 
     });
 
@@ -42,15 +54,8 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (cancerMdt) {
-        // temporary remove all hardcoded participants
-        delete cancerMdt['participants'];
         cancerMdt.rawComposition = rawComposition;
         $scope.cancerMdtComposition.cancerMDT[$stateParams.cancerMdtIndex] = cancerMdt;
-
-        // temporary remove all hardcoded participants
-          for(var people in $scope.cancerMdtComposition.cancerMDT){
-            delete people['participants'];
-           }
         console.log('to post');
         console.log($scope.cancerMdtComposition);
         CancerMdt.update($scope.patient.id,$scope.cancerMdtComposition).then(function () {

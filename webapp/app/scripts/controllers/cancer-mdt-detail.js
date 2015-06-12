@@ -3,8 +3,6 @@
 angular.module('openehrPocApp')
   .controller('CancerMdtDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, PatientService, CancerMdt) {
 
-    var rawComposition;
-
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
@@ -12,7 +10,6 @@ angular.module('openehrPocApp')
     CancerMdt.getComposition($stateParams.patientId).then(function (result) {
       $scope.cancerMdtComposition = result.data;
       $scope.cancerMdt = $scope.cancerMdtComposition.cancerMDT[$stateParams.cancerMdtIndex];
-      rawComposition = $scope.cancerMdtComposition.cancerMDT[0].rawComposition;
       $scope.cancerMdtSelectionNumber = $stateParams.cancerMdtIndex + 1;
 
       // Temporary add participants
@@ -54,7 +51,6 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (cancerMdt) {
-        cancerMdt.rawComposition = rawComposition;
         $scope.cancerMdtComposition.cancerMDT[$stateParams.cancerMdtIndex] = cancerMdt;
         console.log('to post');
         console.log($scope.cancerMdtComposition);

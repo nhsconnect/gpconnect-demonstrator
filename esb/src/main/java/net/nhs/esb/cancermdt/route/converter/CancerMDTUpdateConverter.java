@@ -20,14 +20,17 @@ public class CancerMDTUpdateConverter {
     @Converter
     public CancerMDTUpdate convertCompositionToCancerMDTUpdate(CancerMDTComposition composition) {
 
-        List<CancerMDT> cancerMDTs = composition.getCancerMDT();
-        Map<String, Object> rawComposition = null;
+        CancerMDT cancerMDT = composition.getCancerMDT();
+        Map<String, String> rawComposition = null;
 
         int index = 0;
 
         SimpleDateFormat openEHRDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         String currentDateTime = openEHRDateFormat.format(Calendar.getInstance().getTime());
             
+        rawComposition = cancerMDT.getRawComposition();
+        
+        /*
         for (CancerMDT cancerMDT : cancerMDTs) {
 
             if (rawComposition == null) {
@@ -64,17 +67,18 @@ public class CancerMDTUpdateConverter {
             
             index++;
         }
-
+*/
         Map<String, String> content = new HashMap<>();
 
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
 
-        rawComposition.put("cancer_mdt_output_report/context/start_time", currentDateTime);
-        
-        for (Map.Entry<String, Object> entry : rawComposition.entrySet()) {
+        //rawComposition.put("cancer_mdt_output_report/context/start_time", currentDateTime);
+        /*
+        for (Map.Entry<String, String> entry : rawComposition.entrySet()) {
             content.put(entry.getKey(), String.valueOf(entry.getValue()));
         }
+        */
 
         return new CancerMDTUpdate(content);
     }

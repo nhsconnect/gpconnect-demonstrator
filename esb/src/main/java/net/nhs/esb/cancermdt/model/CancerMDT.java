@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
+import javax.persistence.ElementCollection;
+import javax.persistence.MapKeyColumn;
 
 /**
  */
@@ -21,23 +23,28 @@ public class CancerMDT {
     @Basic(optional = false)
     @JsonProperty("id")
     private Long id;
-    
+
+    @Column(name = "compositionId")
+    @JsonProperty("compositionId")
+    private String compositionId;
+
+    @ElementCollection
     @JsonProperty("rawComposition")
-    static Map<String, Object> rawComposition;
-    
-    
+    Map<String, String> rawComposition;
+
+     
     @Column(name = "service")
     @JsonProperty("Service")
     private String service;
-    
+
     @Column(name = "date")
     @JsonProperty("Date")
     private String date;
-    
+
     @Column(name = "notes")
     @JsonProperty("Notes")
     private String notes;
-    
+
     public Long getId() {
         return id;
     }
@@ -46,14 +53,14 @@ public class CancerMDT {
         this.id = id;
     }
 
-    public Map<String, Object> getRawComposition() {
+    public Map<String, String> getRawComposition() {
         return rawComposition;
     }
 
-    public void setRawComposition(Map<String, Object> rawComposition) {
+    public void setRawComposition(Map<String, String> rawComposition) {
         this.rawComposition = rawComposition;
     }
-    
+
     public String getService() {
         return service;
     }
@@ -77,5 +84,13 @@ public class CancerMDT {
     public void setNotes(String notes) {
         this.notes = notes;
     }
-    
+
+    public String getCompositionId() {
+        return compositionId;
+    }
+
+    public void setCompositionId(String compositionId) {
+        this.compositionId = compositionId;
+    }
+
 }

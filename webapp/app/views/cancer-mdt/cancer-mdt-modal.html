@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  <form name="cancerMdtForm" class="form-horizontal text-left">
+  <form name="cancerMdtForm" class="form-horizontal text-left" novalidate>
     <fieldset>
       <legend ng-if="cancerMdtSelectionNumber">Edit MDT #{{cancerMdtSelectionNumber}}</legend>
 
@@ -70,10 +70,10 @@
       <!-- START col-md-6 -->
       <div class="col-md-6 participants-column">
         <label>Who Attended</label>
-        <span class="no-attendance" ng-if="!participation.length">No attendance</span>
+        <span class="no-attendance" ng-if="!cancerMdt.participation.length">No attendance</span>
 
          <!---START ng-repeat-->
-        <div  data-ng-repeat="participant in participation" class="participant-border">
+        <div  data-ng-repeat="participant in cancerMdt.participation" class="participant-border">
 
           <button class="remove-person-button" ng-click="removeParticipant($index)">-</button>
           <br><br>
@@ -120,11 +120,11 @@
         </div>
         <!-- END ng-repeat -->
 
-        <button class="add-person-button" ng-click="addNewParticipant()">+</button>
+        <button class="add-person-button" ng-model="cancerMdt.participation" ng-click="addNewParticipant()">+</button>
 
         <br><br><br>
         <div id="participantsDisplay">
-          {{ participation }}
+          {{ cancerMdt.participation }}
         </div>
 
       </div>

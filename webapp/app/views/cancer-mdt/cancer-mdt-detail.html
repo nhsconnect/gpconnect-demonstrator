@@ -6,7 +6,7 @@
     <label class="control-label col-md-4">Date of request</label>
     <div class="col-md-8">
       <div class="form-control-static">
-        <span class="transfer-of-care-no-selected-items" ng-if="!cancerMdt.Date.length">No MDT date</span>
+        <span ng-if="!cancerMdt.Date.length">No MDT date</span>
         <ul ng-if="cancerMdt.Date">
           <li>{{cancerMdt.Date}}</li>
         </ul>
@@ -18,7 +18,7 @@
     <label class="control-label col-md-4">Meeting Notes</label>
     <div class="col-md-8">
       <div class="form-control-static">
-        <span class="transfer-of-care-no-selected-items" ng-if="!cancerMdt.Notes.length">No MDT notes</span>
+        <span ng-if="!cancerMdt.Notes.length">No MDT notes</span>
         <ul ng-if="cancerMdt.Notes">
           <li>{{cancerMdt.Notes}}</li>
         </ul>
@@ -30,7 +30,7 @@
     <label class="control-label col-md-4">Multidisciplinary Team</label>
     <div class="col-md-8">
       <div class="form-control-static">
-        <span class="transfer-of-care-no-selected-items" ng-if="!cancerMdt.Service.length">No service</span>
+        <span ng-if="!cancerMdt.Service.length">No service</span>
         <ul ng-if="cancerMdt.Service">
           <li>{{cancerMdt.Service}}</li>
         </ul>
@@ -42,14 +42,14 @@
     <label class="control-label col-md-12">Who Attended</label>
     <div class="col-md-8 participants-list">
         <div class="form-control-static">
-          <span ng-if="!participation.length" clas="transfer-of-care-no-selected-items">No attendance</span>
-          <ul data-ng-repeat="participant in participation">
+          <span ng-if="!cancerMdt.participation.length" class="transfer-of-care-no-selected-items">No attendance</span>
+          <ul data-ng-repeat="participant in cancerMdt.participation">
 
             <div class="form-group form-group-sm">
               <label class="control-label col-md-4">Name</label>
               <div class="col-md-8">
                 <div class="form-control-static">
-                  <span class="transfer-of-care-no-selected-items" ng-if="!participant.name.length">No Name</span>
+                  <span ng-if="!participant.name.length">No Name</span>
                   <ul>
                     <li>{{participant.name}}</li>
                   </ul>
@@ -61,7 +61,7 @@
               <label class="control-label col-md-4">Role</label>
               <div class="col-md-8">
                 <div class="form-control-static">
-                  <span class="transfer-of-care-no-selected-items" ng-if="!participant.name.length">No Role</span>
+                  <span ng-if="!participant.function.length">No Role</span>
                   <ul>
                     <li>{{participant.function}}</li>
                   </ul>
@@ -73,7 +73,7 @@
               <label class="control-label col-md-4">Attendance Mode</label>
               <div class="col-md-8">
                 <div class="form-control-static">
-                  <span class="transfer-of-care-no-selected-items" ng-if="!participant.mode.length">No Attendance Mode</span>
+                  <span ng-if="!participant.mode.length">No Attendance Mode</span>
                   <ul>
                     <li>{{participant.mode}}</li>
                   </ul>

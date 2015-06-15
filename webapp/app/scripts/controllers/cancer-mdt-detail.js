@@ -11,23 +11,6 @@ angular.module('openehrPocApp')
       $scope.cancerMdtComposition = result.data;
       $scope.cancerMdt = $scope.cancerMdtComposition.cancerMDT[$stateParams.cancerMdtIndex];
       $scope.cancerMdtSelectionNumber = $stateParams.cancerMdtIndex + 1;
-
-      // Temporary add participants
-      $scope.participation = [
-        {
-          "name" : "Dr. Marcus Johnson",
-          "function" : "Oncologist",
-          "mode" : "face-to-face communication",
-          "id" : "1345678"
-        },
-        {
-          "name" : "Heather Smith",
-          "function" : "McMillan Nurse",
-          "mode" : "face-to-face communication",
-          "id" : "365672345"
-        }
-      ];
-
     });
 
     $scope.edit = function () {

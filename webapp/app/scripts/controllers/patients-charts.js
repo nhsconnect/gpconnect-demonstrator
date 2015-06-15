@@ -47,10 +47,9 @@ angular.module('openehrPocApp')
         ykeys: ['value'],
         xkey: 'series',
         labels: ['Patients'],
-        hideHover: true,
         barColors: ['#7E28CD'],
         ymin: 0,
-        ymax: 40
+        ymax: 46
       }).on('click', function (i, row) {
 
         var chartType = 'age';

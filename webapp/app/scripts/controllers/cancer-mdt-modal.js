@@ -5,25 +5,14 @@ angular.module('openehrPocApp')
 
     $scope.cancerMdt = cancerMdt;
 
-      // Temporary add participants
-      $scope.participation = [
-     {
-       "name" : "Dr. Marcus Johnson",
-       "function" : "Oncologist",
-       "mode" : "face-to-face communication",
-       "id" : "1345678"
-     },
-     {
-       "name" : "Heather Smith",
-       "function" : "McMillan Nurse",
-       "mode" : "face-to-face communication",
-       "id" : "365672345"
-     }
-     ];
+    if(!Object.keys($scope.cancerMdt).length){
+      $scope.cancerMdt.participation = [];
+    }
 
     $scope.patient = patient;
     $scope.modal = modal;
     $scope.cancerMdtSelectionNumber = $stateParams.cancerMdtIndex + 1;
+
     $scope.ok = function (cancerMdtForm, cancerMdt) {
       $scope.formSubmitted = true;
       if (cancerMdtForm.$valid) {
@@ -36,15 +25,15 @@ angular.module('openehrPocApp')
     };
 
     $scope.addNewParticipant = function() {
-      $scope.participation.push({
-          "name" : "",
-          "function" : "",
-          "mode" : ""
+      $scope.cancerMdt.participation.push({
+          'name' : '',
+          'function' : '',
+          'mode' : ''
       });
     };
 
     $scope.removeParticipant = function(index) {
-      $scope.participation.splice(index, 1);
+      $scope.cancerMdt.participation.splice(index, 1);
     };
 
     $scope.validate = function(form, name, index){
@@ -53,7 +42,7 @@ angular.module('openehrPocApp')
       for(var error in form.$error.required){
         var errorName = form.$error.required[error].$name;
 
-        if (errorName == errorToCheckFor){
+        if (errorName === errorToCheckFor){
           return true;
         }
       }

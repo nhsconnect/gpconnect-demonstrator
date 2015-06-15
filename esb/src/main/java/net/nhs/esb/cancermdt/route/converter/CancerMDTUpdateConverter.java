@@ -40,6 +40,7 @@ public class CancerMDTUpdateConverter {
         // Add the updated or created fields passed from web page
         rawComposition.put(prefix + "/original_referral/request:0/service_requested", cancerMDT.getService());
         rawComposition.put("cancer_mdt_output_report/plan_and_requested_actions:" + index + "/recommendation:0/recommendation", cancerMDT.getNotes());
+        rawComposition.put("cancer_mdt_output_report/history:0/question_for_mdt/question_to_mdt", cancerMDT.getQuestionForMDT());
         
 
         // Set defailt values for fields requred in openEHR validation

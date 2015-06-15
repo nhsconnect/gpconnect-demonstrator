@@ -50,11 +50,11 @@ public class CancerMDTCompositionConverter {
 
         cancerMDT.setNotes(MapUtils.getString(rawComposition, "cancer_mdt_output_report/plan_and_requested_actions:0/recommendation:0/recommendation"));
         
+        cancerMDT.setQuestionForMDT(MapUtils.getString(rawComposition, "cancer_mdt_output_report/history:0/question_for_mdt/question_to_mdt"));
         
         // Get the participants for the MDT
         
-        //int countParticipants = countNumberOfElements(rawComposition, "ctx/participation_name:");
-        int countParticipants = 0;
+        int countParticipants = countNumberOfElements(rawComposition, "ctx/participation_name:");
         
         if(countParticipants > 0){
             List<CancerMDTparticipation> participationList = new ArrayList<>();
@@ -72,6 +72,10 @@ public class CancerMDTCompositionConverter {
 
             cancerMDT.setParticipation(participationList);
         }
+
+        
+        
+        
         
         List<CancerMDTparticipation> participationList = new ArrayList<>();
 
@@ -90,6 +94,7 @@ public class CancerMDTCompositionConverter {
         participationList.add(participant2);
         
         cancerMDT.setParticipation(participationList);
+        
         
         
         CancerMDTComposition cancerMDTComposition = new CancerMDTComposition();

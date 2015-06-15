@@ -51,7 +51,10 @@ public class CancerMDT {
     @JsonProperty("participation")
     @OneToMany
     private List<CancerMDTparticipation> participation;
-    
+
+    @Column(name = "questionForMDT")
+    @JsonProperty("questionForMDT")
+    private String questionForMDT;
     
     public Long getId() {
         return id;
@@ -109,4 +112,11 @@ public class CancerMDT {
         this.participation = participation;
     }
 
+    public String getQuestionForMDT() {
+        return questionForMDT;
+    }
+
+    public void setQuestionForMDT(String questionForMDT) {
+        this.questionForMDT = questionForMDT;
+    }
 }

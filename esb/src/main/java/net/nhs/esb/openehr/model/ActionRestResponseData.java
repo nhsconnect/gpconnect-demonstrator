@@ -6,6 +6,7 @@ public class ActionRestResponseData {
 
     private Meta meta;
     private String action;
+    private String compositionUid;
 
     public Meta getMeta() {
         return meta;
@@ -22,4 +23,13 @@ public class ActionRestResponseData {
     public void setAction(String action) {
         this.action = action;
     }
+
+    public String getCompositionUid() {
+        return compositionUid;
+    }
+
+    public void setCompositionUid(String compositionUid) {
+        this.compositionUid = compositionUid;
+    }
+    
 }

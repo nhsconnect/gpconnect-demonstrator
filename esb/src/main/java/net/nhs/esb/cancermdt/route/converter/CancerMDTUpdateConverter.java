@@ -30,7 +30,10 @@ public class CancerMDTUpdateConverter {
         String currentDateTime = openEHRDateFormat.format(Calendar.getInstance().getTime());
 
         rawComposition = cancerMDT.getRawComposition();
-
+        
+        if(rawComposition == null){
+            rawComposition = new HashMap<String, String>();
+        }
 
         String prefix = "cancer_mdt_output_report/referral_details:" + index;
 
@@ -64,20 +67,6 @@ public class CancerMDTUpdateConverter {
 
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
-
-        //rawComposition.put("cancer_mdt_output_report/context/start_time", currentDateTime);
-        for (Map.Entry<String, String> entry : rawComposition.entrySet()){
-            
-            if(entry.getKey().startsWith("ctx/participation_name:") ||
-                    entry.getKey().startsWith("ctx/participation_function:") ||
-                    entry.getKey().startsWith("ctx/participation_mode:") ||
-                    entry.getKey().startsWith("ctx/participation_id:")){
-                // This list is excluded so do nothing
-            } else {
-                // Copy all existing and updated fields
-                content.put(entry.getKey(), String.valueOf(entry.getValue()));
-            }
-        }
         
         List<CancerMDTparticipation> participationList = cancerMDT.getParticipation();
         
@@ -93,6 +82,7 @@ public class CancerMDTUpdateConverter {
         }
         */
         
+    
         /*
         content.put("ctx/participation_name:0", "Dr. Marcus Johnson");
         content.put("ctx/participation_function:0", "Oncologist");
@@ -103,8 +93,24 @@ public class CancerMDTUpdateConverter {
         content.put("ctx/participation_function:1", "McMillan Nurse");
         content.put("ctx/participation_mode:1", "face-to-face communication");
         content.put("ctx/participation_id:1", "365672345");
+          
         */
-        return new CancerMDTUpdate(content);
+        
+        //rawComposition.put("cancer_mdt_output_report/context/start_time", currentDateTime);
+        for (Map.Entry<String, String> entry : rawComposition.entrySet()){
+            
+            // We don't want to store the old participation information as we have added the new information so skip over it
+            if(entry.getKey().startsWith("ctx/participation_name:") ||
+                    entry.getKey().startsWith("ctx/participation_function:") ||
+                    entry.getKey().startsWith("ctx/participation_mode:") ||
+                    entry.getKey().startsWith("ctx/participation_id:")){
+                // This list is excluded so do nothing
+            } else {
+                // Copy all existing and updated fields
+                content.put(entry.getKey(), String.valueOf(entry.getValue()));
+            }
+        }
+       return new CancerMDTUpdate(content);
     }
 
 }

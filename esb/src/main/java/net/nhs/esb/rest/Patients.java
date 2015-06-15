@@ -199,7 +199,7 @@ public class Patients {
 
     @POST
     @Path("/{patientId}/cancermdt")
-    public void createPatientCancerMDTComposition(@PathParam("patientId") Long patientId, CancerMDTComposition cancerMDTComposition) {
+    public void createPatientCancerMDTComposition(@PathParam("patientId") Long patientId, CancerMDTsComposition cancerMDTsComposition) {
 
     }
 

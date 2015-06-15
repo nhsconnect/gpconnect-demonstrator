@@ -1,8 +1,13 @@
 package net.nhs.esb.cancermdt.route;
 
+import java.util.List;
+import net.nhs.esb.cancermdt.model.CancerMDT;
 import net.nhs.esb.cancermdt.model.CancerMDTUpdate;
 import net.nhs.esb.openehr.route.CompositionCreateParameters;
+import net.nhs.esb.openehr.route.HttpStatusProcessor;
+import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
+import org.apache.camel.Processor;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,37 +29,33 @@ public class CreatePatientCancerMDTRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
 
         from("direct:createPatientCancerMDTComposition").routeId("openEhrCreatePatientCancerMDTComposition")
-                .convertBodyTo(CancerMDTUpdate.class)
-                
-                // Store composition into a Camel* header rather than "composition" so it is not sent to openEHR as it is too big for openEHR to accept
-                //.setHeader("composition", simple("${body.content}"))
-                .setHeader("Camel.openEHR.composition", simple("${body.content}"))
-                
-                .setBody(simple("${header.patientId}"))
+
+                .setHeader("Camel.openEHR.CancerMDTsComposition", simple("${body.cancerMDT}"))
+                .setHeader("Camel.openEHR.CancerMDTsCompositionSize", simple("${body.cancerMDT.size}"))
+                                
                 .to("direct:setHeaders")
                 .to("direct:createSession")
                 .to("direct:getEhrId")
                 
-                // Save body so we can just update if a Composition exists
-                .setHeader("Camel.openEHR.getEhrIDResponse", simple("${body}"))
                 
-                .to("direct:openEhrFindPatientCancerMDTCompositionId")
-
-                // Switch composition back into "composition" header for standard processor
-                .setHeader("composition", simple("${header.Camel.openEHR.composition}"))
-                .removeHeaders("Camel.openEHR.composition")
+                .loop(header("Camel.openEHR.CancerMDTsCompositionSize"))
+                .process(new Processor() {
+                    @Override
+                    public void process(Exchange exchng) throws Exception {
+                        CancerMDT cancerMDT = (CancerMDT)exchng.getIn().getHeader("Camel.openEHR.CancerMDTsComposition", List.class).get((Integer)exchng.getProperty("CamelLoopIndex"));
+                        exchng.getIn().setBody(cancerMDT);
+                    }
+                })
+                .setHeader("compositionId", simple("${body.compositionId}"))
+                .convertBodyTo(CancerMDTUpdate.class)
+                .setHeader("composition", simple("${body.content}"))
                 
                 .choice()
                 .when(header("compositionId").isNull())
-                .setBody(simple("${header.composition}"))
                 .to("direct:openEhrCreatePatientCancerMDTComposition")
-                .otherwise()
-                .setBody(simple("${header.Camel.openEHR.getEhrIDResponse}"))
-                .removeHeaders("Camel.openEHR.getEhrIDResponse")
-                //.to("direct:openEhrUpdatePatientCancerMDTComposition")
-                .endChoice()
-                .end();
-
+                .endChoice();
+        
+        
         from("direct:openEhrCreatePatientCancerMDTComposition")
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
@@ -62,7 +63,7 @@ public class CreatePatientCancerMDTRouteBuilder extends SpringRouteBuilder {
                 .setHeader("template", constant(cancerMDTTemplate))
                 .bean(compositionCreateParameters)
                 .removeHeaders("composition")
-                //.to("cxfrs:bean:rsOpenEhr")
-                ;
+                .to("cxfrs:bean:rsOpenEhr");
+        
     }
 }

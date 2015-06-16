@@ -25,6 +25,13 @@ angular.module('openehrPocApp')
       $modalInstance.dismiss('cancel');
     };
 
+    $scope.openDatepicker = function ($event, name) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      $scope[name] = true;
+    };
+
     $scope.addNewParticipant = function() {
       $scope.cancerMdt.participation.push({
           'name' : '',

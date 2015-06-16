@@ -21,7 +21,6 @@ angular.module('openehrPocApp')
     $scope.openDatepicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();
-
       $scope[name] = true;
     };
 

@@ -37,13 +37,13 @@
         </div>
 
         <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || cancerMdtForm.Date.$dirty) && cancerMdtForm.Date.$invalid, 'has-success': cancerMdtForm.Date.$valid && cancerMdtForm.Date.$dirty}">
-          <label for="Date" class="control-label col-md-4">Date of request</label>
+          <label for="Date" class="control-label col-md-4">Date of Request</label>
           <div class="col-md-8">
             <div class="input-group">
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'Date')"><i class="fa fa-calendar"></i></button>
+              <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'dateOfOnsetOpen')"><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control" id="Date" name="Date" ng-model="cancerMdt.Date" ng-click="openDatepicker($event, 'dateOpen')" startDateTimepicker-popup is-open="$parent.dateOpen" required />
+              <input type="text" class="form-control" id="Date" name="Date" ng-model="cancerMdt.Date" ng-click="openDatepicker($event, 'dateOfOnsetOpen')" datepicker-popup is-open="dateOfOnsetOpen" required />
             <span class="input-group-addon input-sm">
               <i class="fa fa-check fa-fw"></i>
             </span>

@@ -40,7 +40,7 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'dateOfOnsetOpen')"><i class="fa fa-calendar"></i></button>
             </span>
-            <input type="text" class="form-control" id="dateOfOnset" name="dateOfOnset" ng-model="diagnosis.dateOfOnset" ng-click="openDatepicker($event, 'dateOfOnsetOpen')" datepicker-popup is-open="$parent.dateOfOnsetOpen" required />
+            <input type="text" class="form-control" id="dateOfOnset" name="dateOfOnset" ng-model="diagnosis.dateOfOnset" ng-click="openDatepicker($event, 'dateOfOnsetOpen')" datepicker-popup is-open="dateOfOnsetOpen" required />
             <span class="input-group-addon input-sm">
               <i class="fa fa-check fa-fw"></i>
             </span>
@@ -57,9 +57,9 @@
       </div>
 
       <div class="form-group form-group-sm">
-        <label for="code" class="control-label col-md-4">Terminology</label>
+        <label for="terminology" class="control-label col-md-4">Terminology</label>
         <div class="col-md-8">
-          <input type="text" class="form-control" id="code" ng-model="diagnosis.terminology" />
+          <input type="text" class="form-control" id="terminology" ng-model="diagnosis.terminology" />
         </div>
       </div>
 

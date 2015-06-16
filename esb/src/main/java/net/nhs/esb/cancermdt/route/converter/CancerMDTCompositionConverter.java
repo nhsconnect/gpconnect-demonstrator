@@ -65,7 +65,11 @@ public class CancerMDTCompositionConverter {
                 participant.setName(MapUtils.getString(rawComposition, "cancer_mdt_output_report/referral_details:0/mdt_referral/_other_participation:" + participantIndex + "|name"));
                 participant.setFunction(MapUtils.getString(rawComposition, "cancer_mdt_output_report/referral_details:0/mdt_referral/_other_participation:" + participantIndex + "|function"));
                 participant.setMode(MapUtils.getString(rawComposition, "cancer_mdt_output_report/referral_details:0/mdt_referral/_other_participation:" + participantIndex + "|mode"));
-                participant.setId(Long.valueOf(MapUtils.getString(rawComposition, "cancer_mdt_output_report/referral_details:0/mdt_referral/_other_participation:" + participantIndex + "|id")));
+                String id = MapUtils.getString(rawComposition, "cancer_mdt_output_report/referral_details:0/mdt_referral/_other_participation:" + participantIndex + "|id");
+                if(id.equalsIgnoreCase("null")){
+                    id = "1345678";
+                }
+                participant.setId(Long.valueOf(id));
 
                 participationList.add(participant);
             }

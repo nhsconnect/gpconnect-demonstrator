@@ -49,7 +49,11 @@ angular.module('openehrPocApp')
         labels: ['Patients'],
         barColors: ['#7E28CD'],
         ymin: 0,
-        ymax: 46
+        ymax: 46,
+        barGap:4,
+        barSizeRatio:0.55,
+        xLabelAngle: 50,
+        redraw: true
       }).on('click', function (i, row) {
 
         var chartType = 'age';
@@ -69,7 +73,11 @@ angular.module('openehrPocApp')
         hideHover: true,
         barColors: ['#25A174'],
         ymin: 0,
-        ymax: 40
+        ymax: 40,
+        barGap:4,
+        barSizeRatio:0.55,
+        xLabelAngle: 50,
+        redraw: true
       }).on('click', function (i, row) {
 
         var chartType = 'summary';
@@ -77,7 +85,7 @@ angular.module('openehrPocApp')
 
       });
     };
-
+    $('svg').height(700);
     jQuery(document).ready(function($) {
       // Chart Toggle
       $('.chart-inner select').change(function(){

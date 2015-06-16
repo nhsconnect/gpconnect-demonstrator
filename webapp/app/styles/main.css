@@ -640,11 +640,32 @@ legend {
 }
 
 #age-chart{
-  margin-top: 100px
+  height: 350px;
+  align-content: center;
+  padding-bottom: 0;
 }
 
 #department-chart{
-  margin-top: 100px
+  height: 350px;
+  align-content: center;
+  padding-bottom:30px;
+}
+
+ svg {
+   height:500px;
+ }
+
+.chart-inner {
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  background-color: #fff;
+  padding-top: 10px;
+  margin-bottom: 0;
+  padding-bottom: 20px;
+}
+
+.chart-inner select.form-control {
+  width: auto;
 }
 
 .chart-title{
@@ -663,10 +684,13 @@ legend {
   font-size: 30px;
 }
 
+.chart-title-group-container{
+  overflow: hidden;
+}
+
 .chart-title-group{
   margin-left: 30px;
   font-size: 18px;
-  padding-bottom: 40px;
   font-family: "Hero";
 }
 
@@ -684,6 +708,43 @@ legend {
 
 .map-marker-icon:before{
   color:#25A174;
+}
+
+.chartSelectList{
+  float: right;
+}
+
+/* Charts in mobile view*/
+@media (max-width: 768px){
+  .chart-inner {
+    display: inline-block;
+    padding-left: 0;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 0px;
+  }
+
+  #age-chart{
+    height: 300px;
+    padding-left: 20px;
+  }
+
+  #department-chart{
+    height: 300px;
+    padding-left: 20px;
+  }
+
+  .chart-title-group{
+    padding-top: 20px;
+  }
+
+  .chart-title-group-mobile{
+    padding-top: 10px;
+    padding-left: 10px;
+    font-size: 18px;
+    font-family: "Hero";
+  }
+
 }
 
 .main-nav a.button {
@@ -714,17 +775,6 @@ legend {
 .main-nav a.button.viewall i { font-size: 110px; }
 .main-nav a.button.spine i { font-size: 90px; margin-top: 10px; }
 .main-nav a.button.saved i { font-size: 85px; margin-top: 10px; }
-
-.chart-inner {
-  border: 1px solid #bdbdbd;
-  border-radius: 4px;
-  padding: 20px;
-  background-color: #fff;
-}
-
-.chart-inner select.form-control {
-  width: auto;
-}
 
 /* User Profile Menu */
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {

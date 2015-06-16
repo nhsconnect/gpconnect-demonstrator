@@ -30,14 +30,24 @@ public class UpdatePatientMedicationRouteBuilder extends SpringRouteBuilder {
                 .to("direct:openEhrUpdatePatientMedicationComposition");
 
         from("direct:openEhrUpdatePatientMedicationComposition")
+                
+                .setHeader("Camel.openEHR.composition", simple("${body.content}"))
+                .removeHeaders("composition")
+                
                 .to("direct:setHeaders")
                 .to("direct:createSession")
                 .to("direct:getEhrId")
+                
+                .setHeader("composition", simple("${header.Camel.openEHR.composition}"))
+                .removeHeaders("Camel.openEHR.composition")
+                
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
                 .setHeader(CxfConstants.OPERATION_NAME, constant("updateComposition"))
                 .setHeader("template", constant(medicationTemplate))
                 .bean(compositionUpdateParameters)
+                
+                .removeHeaders("composition")
                 .to("cxfrs:bean:rsOpenEhr")
                 .end();
     }

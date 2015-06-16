@@ -35,7 +35,7 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (medication) {
         $scope.result.medications[$stateParams.medicationIndex] = medication;
 
-        Medication.update($scope.patient.id, $scope.result).then(function (result) {
+        Medication.create($scope.patient.id, $scope.result).then(function (result) {
           $scope.medication = result.data;
           $location.path('/patients/' + $scope.patient.id + '/medications/' + $scope.medication.id);
         });

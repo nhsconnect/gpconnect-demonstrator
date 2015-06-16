@@ -5,7 +5,8 @@ angular.module('openehrPocApp')
 
     $scope.cancerMdt = cancerMdt;
 
-    if(!Object.keys($scope.cancerMdt).length){
+    console.log($scope.cancerMdt);
+    if(!Object.keys($scope.cancerMdt).length || !$scope.cancerMdt.participation){
       $scope.cancerMdt.participation = [];
     }
 

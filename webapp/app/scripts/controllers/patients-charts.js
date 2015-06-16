@@ -85,7 +85,7 @@ angular.module('openehrPocApp')
 
       });
     };
-    $('svg').height(700);
+
     jQuery(document).ready(function($) {
       // Chart Toggle
       $('.chart-inner select').change(function(){

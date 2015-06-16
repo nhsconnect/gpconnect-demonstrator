@@ -25,7 +25,6 @@ angular.module('openehrPocApp')
       $event.stopPropagation();
       $scope[name] = true;
       console.log($scope[name]);
-
     };
 
   });

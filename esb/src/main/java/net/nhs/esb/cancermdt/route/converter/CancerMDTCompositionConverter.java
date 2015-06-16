@@ -54,7 +54,7 @@ public class CancerMDTCompositionConverter {
         
         // Get the participants for the MDT
         
-        int countParticipants = countNumberOfElements(rawComposition, "ctx/participation_name:");
+        int countParticipants = countNumberOfElements(rawComposition, "cancer_mdt_output_report/referral_details:0/mdt_referral/_other_participation:");
         
         if(countParticipants > 0){
             List<CancerMDTparticipation> participationList = new ArrayList<>();
@@ -62,10 +62,10 @@ public class CancerMDTCompositionConverter {
             for(int participantIndex = 0; participantIndex < countParticipants; participantIndex++){
 
                 CancerMDTparticipation participant = new CancerMDTparticipation();
-                participant.setName(MapUtils.getString(rawComposition, "ctx/participation_name:" + participantIndex));
-                participant.setFunction(MapUtils.getString(rawComposition, "ctx/participation_function:" + participantIndex));
-                participant.setMode(MapUtils.getString(rawComposition, "ctx/participation_mode:" + participantIndex));
-                participant.setId(Long.valueOf(MapUtils.getString(rawComposition, "ctx/participation_id:" + participantIndex)));
+                participant.setName(MapUtils.getString(rawComposition, "cancer_mdt_output_report/referral_details:0/mdt_referral/_other_participation:" + participantIndex + "|name"));
+                participant.setFunction(MapUtils.getString(rawComposition, "cancer_mdt_output_report/referral_details:0/mdt_referral/_other_participation:" + participantIndex + "|function"));
+                participant.setMode(MapUtils.getString(rawComposition, "cancer_mdt_output_report/referral_details:0/mdt_referral/_other_participation:" + participantIndex + "|mode"));
+                participant.setId(Long.valueOf(MapUtils.getString(rawComposition, "cancer_mdt_output_report/referral_details:0/mdt_referral/_other_participation:" + participantIndex + "|id")));
 
                 participationList.add(participant);
             }
@@ -73,30 +73,6 @@ public class CancerMDTCompositionConverter {
             cancerMDT.setParticipation(participationList);
         }
 
-        
-        
-        
-        
-        List<CancerMDTparticipation> participationList = new ArrayList<>();
-
-        CancerMDTparticipation participant = new CancerMDTparticipation();
-        participant.setName("Dr. Marcus Johnson");
-        participant.setFunction("Oncologist");
-        participant.setMode("face-to-face communication");
-        participant.setId(Long.valueOf("1345678"));
-        participationList.add(participant);
-        
-        CancerMDTparticipation participant2 = new CancerMDTparticipation();
-        participant2.setName("Heather Smith");
-        participant2.setFunction("McMillan Nurse");
-        participant2.setMode("face-to-face communication");
-        participant2.setId(Long.valueOf("365672345"));
-        participationList.add(participant2);
-        
-        cancerMDT.setParticipation(participationList);
-        
-        
-        
         CancerMDTComposition cancerMDTComposition = new CancerMDTComposition();
         cancerMDTComposition.setCancerMDT(cancerMDT);
 
@@ -111,7 +87,7 @@ public class CancerMDTCompositionConverter {
         for (String key : rawComposition.keySet()) {
             if (StringUtils.startsWith(key, elementString)) {
                 String index = StringUtils.substringAfter(key, elementString);
-                index = StringUtils.substringBefore(index, "/");
+                index = StringUtils.substringBefore(index, "|");
 
                 maxEntry = Math.max(maxEntry, Integer.parseInt(index));
             }

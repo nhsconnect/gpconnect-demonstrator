@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.nhs.esb.cancermdt.model.CancerMDT;
-import net.nhs.esb.cancermdt.model.CancerMDTComposition;
 import net.nhs.esb.cancermdt.model.CancerMDTUpdate;
 import net.nhs.esb.cancermdt.model.CancerMDTparticipation;
 import org.apache.camel.Converter;
@@ -68,10 +67,11 @@ public class CancerMDTUpdateConverter {
 
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
+        content.put("ctx/id_scheme", "NHS");
+        content.put("ctx/id_namespace", "NHS");
         
         List<CancerMDTparticipation> participationList = cancerMDT.getParticipation();
         
-        /*
         if(participationList != null){
             for(int participantIndex = 0; participantIndex < participationList.size(); participantIndex++){
                 CancerMDTparticipation participant = participationList.get(participantIndex);
@@ -81,36 +81,15 @@ public class CancerMDTUpdateConverter {
                 content.put("ctx/participation_id:" + participantIndex, String.valueOf(participant.getId()));
             }
         }
-        */
         
-    
-        /*
-        content.put("ctx/participation_name:0", "Dr. Marcus Johnson");
-        content.put("ctx/participation_function:0", "Oncologist");
-        content.put("ctx/participation_mode:0", "face-to-face communication");
-        content.put("ctx/participation_id:0", "1345678");
-
-        content.put("ctx/participation_name:1", "Heather Smith");
-        content.put("ctx/participation_function:1", "McMillan Nurse");
-        content.put("ctx/participation_mode:1", "face-to-face communication");
-        content.put("ctx/participation_id:1", "365672345");
-          
-        */
-        
-        //rawComposition.put("cancer_mdt_output_report/context/start_time", currentDateTime);
         for (Map.Entry<String, String> entry : rawComposition.entrySet()){
-            
-            // We don't want to store the old participation information as we have added the new information so skip over it
-            if(entry.getKey().startsWith("ctx/participation_name:") ||
-                    entry.getKey().startsWith("ctx/participation_function:") ||
-                    entry.getKey().startsWith("ctx/participation_mode:") ||
-                    entry.getKey().startsWith("ctx/participation_id:")){
-                // This list is excluded so do nothing
-            } else {
-                // Copy all existing and updated fields
+            // We don't want to store the old participation information as we have added new information and we don't know who is removed
+            if(!entry.getKey().contains("_other_participation:")){
+                // Copy all existing and updated fields except the participation fields
                 content.put(entry.getKey(), String.valueOf(entry.getValue()));
             }
         }
+        
        return new CancerMDTUpdate(content);
     }
 

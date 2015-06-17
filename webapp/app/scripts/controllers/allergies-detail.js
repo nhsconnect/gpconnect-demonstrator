@@ -35,9 +35,8 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (allergy) {
         $scope.result.allergies[$stateParams.allergyIndex] = allergy;
 
-        Allergy.update($scope.patient.id, $scope.result).then(function (result) {
-          $scope.result = result.data;
-          $location.path('/patients/' + $scope.patient.id + '/allergies/' + $stateParams.allergyIndex);
+        Allergy.update($scope.patient.id, $scope.result).then(function () {
+          $location.path('/patients/' + $scope.patient.id + '/allergies');
         });
       });
     };

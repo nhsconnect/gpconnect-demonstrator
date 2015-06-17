@@ -35,9 +35,8 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (contact) {
         $scope.result.contacts[$stateParams.contactIndex] = contact;
 
-        Contact.create($scope.patient.id, $scope.result).then(function (result) {
-          $scope.contact = result.data;
-          $location.path('/patients/' + $scope.patient.id + '/contacts/' + $stateParams.contactIndex);
+        Contact.create($scope.patient.id, $scope.result).then(function () {
+          $location.path('/patients/' + $scope.patient.id + '/contacts');
         });
       });
     };

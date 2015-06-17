@@ -14,6 +14,7 @@ angular.module('openehrPocApp')
     Diagnosis.all($stateParams.patientId).then(function (result) {
       $scope.result = result.data;
       $scope.diagnosis = $scope.result.problems[$stateParams.diagnosisIndex];
+      $scope.diagnosisSelectionNumber = $stateParams.diagnosisIndex + 1;
     });
 
     $scope.formDisabled = true;

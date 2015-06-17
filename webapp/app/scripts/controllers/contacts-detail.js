@@ -10,6 +10,7 @@ angular.module('openehrPocApp')
     Contact.all($stateParams.contactId).then(function (result) {
       $scope.result = result.data;
       $scope.contact = $scope.result.contacts[$stateParams.contactIndex];
+      $scope.contactSelectionNumber = $stateParams.contactIndex + 1;
     });
 
     $scope.edit = function () {

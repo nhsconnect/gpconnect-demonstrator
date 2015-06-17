@@ -10,6 +10,7 @@ angular.module('openehrPocApp')
     Medication.all($stateParams.medicationIndex).then(function (result) {
       $scope.result = result.data;
       $scope.medication = $scope.result.medications[$stateParams.medicationIndex];
+      $scope.medicationSelectionNumber = $stateParams.medicationIndex + 1;
     });
 
     $scope.edit = function () {

@@ -10,6 +10,7 @@ angular.module('openehrPocApp')
     Allergy.all($stateParams.patientId).then(function (result) {
       $scope.result = result.data;
       $scope.allergy = $scope.result.allergies[$stateParams.allergyIndex];
+      $scope.allergySelectionNumber = $stateParams.allergyIndex + 1;
     });
 
     $scope.edit = function () {

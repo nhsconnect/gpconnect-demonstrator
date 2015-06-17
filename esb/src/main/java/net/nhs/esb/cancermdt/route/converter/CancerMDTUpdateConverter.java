@@ -26,6 +26,7 @@ public class CancerMDTUpdateConverter {
         int index = 0;
 
         SimpleDateFormat openEHRDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat jsonDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String currentDateTime = openEHRDateFormat.format(Calendar.getInstance().getTime());
 
         rawComposition = cancerMDT.getRawComposition();
@@ -42,7 +43,6 @@ public class CancerMDTUpdateConverter {
         rawComposition.put("cancer_mdt_output_report/history:0/question_for_mdt/question_to_mdt", cancerMDT.getQuestionForMDT());
 
         try{
-            SimpleDateFormat jsonDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Calendar newDateTime = Calendar.getInstance();
             newDateTime.setTime(jsonDateFormat.parse(cancerMDT.getDate()));
             rawComposition.put(prefix + "/mdt_referral/request:0/date_or_time_service_required", openEHRDateFormat.format(newDateTime.getTime()));

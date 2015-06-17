@@ -1093,13 +1093,6 @@ table.table {
   float: right;
 }
 
-#participantsDisplay {
-  padding: 10px;
-  background: rgb(227, 250, 227);
-  border: 1px solid rgb(171, 239, 171);
-  color: rgb(9, 56, 9);
-}
-
 .participant-border{
   border-bottom: 1px solid #ccc;
   padding-bottom: 5px;

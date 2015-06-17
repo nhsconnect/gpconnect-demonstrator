@@ -32,6 +32,7 @@ public class MedicationUpdateConverter {
             content.put(prefix + "/medication_item/medication_name|code", medication.getCode());
             content.put(prefix + "/medication_item/medication_name|terminology", medication.getTerminology());
             content.put(prefix + "/medication_item/route:0|code", medication.getRoute());
+            content.put(prefix + "/medication_item/route:0|value", "RouteValue");
             content.put(prefix + "/medication_item/dose_amount_description", medication.getDoseAmount());
             content.put(prefix + "/medication_item/dose_timing_description", medication.getDoseTiming());
             content.put(prefix + "/medication_item/course_details/start_datetime", medication.getStartDateTime());

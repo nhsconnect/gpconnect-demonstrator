@@ -29,6 +29,11 @@ public class MedicationUpdateConverter {
             String prefix = "current_medication_list/medication_and_medical_devices:0/current_medication:0/medication_statement:" + index;
 
             content.put(prefix + "/medication_item/medication_name|value", medication.getName());
+            
+            if(medication.getCode() == null || medication.getCode().isEmpty()){
+                medication.setCode("DefaultCode");
+            }
+                    
             content.put(prefix + "/medication_item/medication_name|code", medication.getCode());
             content.put(prefix + "/medication_item/medication_name|terminology", medication.getTerminology());
             content.put(prefix + "/medication_item/route:0|code", medication.getRoute());

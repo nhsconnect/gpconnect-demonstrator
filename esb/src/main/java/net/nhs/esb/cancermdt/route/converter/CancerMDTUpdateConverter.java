@@ -40,16 +40,22 @@ public class CancerMDTUpdateConverter {
         rawComposition.put(prefix + "/original_referral/request:0/service_requested", cancerMDT.getService());
         rawComposition.put("cancer_mdt_output_report/plan_and_requested_actions:" + index + "/recommendation:0/recommendation", cancerMDT.getNotes());
         rawComposition.put("cancer_mdt_output_report/history:0/question_for_mdt/question_to_mdt", cancerMDT.getQuestionForMDT());
-        
 
+        try{
+            SimpleDateFormat jsonDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Calendar newDateTime = Calendar.getInstance();
+            newDateTime.setTime(jsonDateFormat.parse(cancerMDT.getDate()));
+            rawComposition.put(prefix + "/mdt_referral/request:0/date_or_time_service_required", openEHRDateFormat.format(newDateTime.getTime()));
+        }catch(Exception e){
+            // IF the date fails to parse it is because it is the new date format from the date picker which is already in the correct format
+            rawComposition.put(prefix + "/mdt_referral/request:0/date_or_time_service_required", cancerMDT.getDate());
+        }
+        
         // Set defailt values for fields requred in openEHR validation
         if (rawComposition.get(prefix + "/mdt_referral/request:0/service_requested") == null) {
             rawComposition.put(prefix + "/mdt_referral/request:0/service_requested", "MDT referral");
         }
 
-        if (rawComposition.get(prefix + "/mdt_referral/request:0/date_or_time_service_required") == null) {
-            rawComposition.put(prefix + "/mdt_referral/request:0/date_or_time_service_required", currentDateTime);
-        }
         if (rawComposition.get(prefix + "/mdt_referral/request:0/timing") == null) {
             rawComposition.put(prefix + "/mdt_referral/request:0/timing", currentDateTime);
         }

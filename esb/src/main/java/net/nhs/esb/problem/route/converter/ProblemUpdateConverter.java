@@ -28,6 +28,14 @@ public class ProblemUpdateConverter {
 
             String prefix = "problem_list/problems_and_issues:0/problem_diagnosis:" + index;
 
+            // Set defaults for require fields when saving to composition
+            if(problem.getCode() == null || problem.getCode().isEmpty()){
+                problem.setCode("00001");
+            }
+            if(problem.getTerminology() == null || problem.getTerminology().isEmpty()){
+                problem.setTerminology("Std");
+            }
+            
             content.put(prefix + "/problem_diagnosis|value", problem.getProblem());
             content.put(prefix + "/description", problem.getDescription());
             content.put(prefix + "/problem_diagnosis|code", problem.getCode());

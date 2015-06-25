@@ -37,6 +37,7 @@ angular.module('openehrPocApp')
       var pageHeader = '';
       var previousPage = '';
 
+
       var mainWidth = 0;
       var detailWidth = 0;
 

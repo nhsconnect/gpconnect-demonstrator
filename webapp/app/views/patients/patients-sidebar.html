@@ -3,7 +3,11 @@
 </li>
 
 <li class="navigation-menu">
-    <a ng-href="#/patients/{{patient.id}}/diagnoses">Problems</a>
+    <a ui-sref="contacts({patientId: patient.id})">Contacts</a>
+</li>
+
+<li class="navigation-menu">
+    <a ng-href="#/patients/{{patient.id}}/diagnoses">Problems/Diagnosis</a>
 </li>
 
 <li class="navigation-menu">
@@ -15,11 +19,23 @@
 </li>
 
 <li class="navigation-menu">
-    <a ui-sref="contacts({patientId: patient.id})">Contacts</a>
+    <a ui-sref="procedures({patientId: patient.id})">Procedures</a>
+</li>
+
+<li class="navigation-menu">
+    <a ui-sref="referrals({patientId: patient.id})">Referrals</a>
+</li>
+
+<li class="navigation-menu">
+    <a ui-sref="appointments({patientId: patient.id})">Appointments</a>
 </li>
 
 <li class="navigation-menu">
     <a ui-sref="transferOfCare({patientId: patient.id})">Transfer of Care</a>
+</li>
+
+<li class="navigation-menu">
+    <a ui-sref="eolcareplans({patientId: patient.id})">Care Plans</a>
 </li>
 
 <li class="navigation-menu">

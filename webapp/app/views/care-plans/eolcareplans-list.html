@@ -1,0 +1,28 @@
+<h4>Care Plans</h4>
+
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Date</th>
+      <th>Source</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="eolcareplan in eolcareplans" ng-click="go({{$index}})" ng-class="{info: selected($index)}">
+      <td>{{ eolcareplan.careDocument.name }}</td>
+      <td>{{ eolcareplan.careDocument.type }}</td>
+      <td>{{ eolcareplan.careDocument.date }}</td>
+      <td>{{ eolcareplan.source }}</td>
+    </tr>
+
+    <tr ng-if="!eolcareplans.length">
+      <td colspan="4"><span class="label label-default">No care plans</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="text-right">
+  <button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button>
+</div>

@@ -860,7 +860,7 @@ table.table {
 }
 
 .table thead {
-  background-color: #cee7ae;
+  background-color: #C5E29F;
 }
 
 .table thead tr th {
@@ -1116,4 +1116,43 @@ table.table {
 
 .validation-error{
   color: #a94442;
+}
+
+.eolTabs{
+    width:100%;
+    text-align: left;
+}
+
+.eolForm{
+    height: 400px;
+}
+
+.eolForm input, .eolForm .input-group {
+ width:100% !important;
+ padding-top: 5px;    
+}
+
+.eolForm .form-group{
+   padding-top: 10px;
+    width: 97%;
+}
+
+
+textarea#prioritycarecomment{
+    height:100px;
+    width: 102%;
+}
+
+textarea#treatmentdecisioncomment{
+   height:100px;
+   width: 109%;
+}
+
+textarea#cprdecisioncomment{
+   height:100px;
+   width: 109%;
+}
+
+#dateofdecision{
+    width: 60%;
 }

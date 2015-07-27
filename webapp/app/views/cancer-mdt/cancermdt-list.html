@@ -1,11 +1,11 @@
-<h4>MDT</h4>
+<h4>MultiDisciplinary Teams</h4>
 
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
-    <th>MDT</th>
-    <th>Date</th>
-    <th>Service</th>
+    <th>Date of Request</th>
+    <th>Service Team</th>
+    <th>Date of Meeting</th>
     <th></th>
   </tr>
   </thead>
@@ -13,9 +13,9 @@
   <tbody>
 
   <tr ng-repeat="mdt in cancerMdtComposition.cancerMDT" ng-click="go('/patients/{{patient.id}}/cancer-mdt-detail/{{$index}}')" ng-class="{info: selected($index)}">
-    <td>MDT #{{($index + 1)}}</td>
     <td>{{mdt.Date}}</td>
     <td>{{mdt.Service}}</td>
+    <td>{{mdt.Date}}</td>
     <td><i class="fa fa-fw" ng-class="selected($index) ? 'fa-folder-open' : 'fa-folder'"></i></td>
   </tr>
   <tr ng-if="!cancerMdtComposition.cancerMDT.length">

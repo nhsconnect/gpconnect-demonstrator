@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ modal.title }}</h4>
+</div>
+
+<div class="modal-body">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">{{ patient.fullname() }}</h4>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-4 text-left"><label>Born:</label> <strong>{{ patient.born | date:'dd-MMM-yyyy' }}</strong></div>
+        <div class="col-sm-4 text-center"><label>Gender:</label> <strong>{{ patient.gender }}</strong></div>
+        <div class="col-sm-4 text-right"><label>NHS No:</label> <strong>{{ patient.nhsNo }}</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <form name="referralForm" class="form-horizontal text-left">
+    <fieldset>
+      <legend>referral detail</legend>
+  </form>
+</div>
+
+<div class="modal-footer">
+    <a class="btn btn-info" ng-click="cancel()">Cancel</a>
+    <button class="btn btn-success" ng-click="formSubmitted = true; ok(referralForm, referral);"><i class="fa fa-check"></i> Complete</button>
+</div>

@@ -1,0 +1,29 @@
+<h4>Appointments</h4>
+
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Date of App.</th>
+      <th>Time</th>
+      <th>Care Service Team</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr ng-repeat="appointment in appointments" ng-click="go('/patients/{{$patient.id}}/appointments/{{$index}}')" ng-class="{info: selected($index)}">
+      <td>{{ appointment.date }}</td>
+      <td>{{ appointment.time }}</td>
+      <td>{{ appointment.careServiceTeam}}</td>
+      <td></td>
+    </tr>
+
+    <tr ng-if="!appointments.length">
+      <td colspan="4"><span class="label label-default">No appointments</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="text-right">
+  <button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button>
+</div>

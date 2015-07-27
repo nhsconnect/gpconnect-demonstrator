@@ -5,7 +5,7 @@
     <tr>
       <th>Name</th>
       <th>Dose Amount</th>
-      <th></th>
+      <th>Source</th>
     </tr>
   </thead>
 
@@ -13,7 +13,7 @@
     <tr ng-repeat="medication in medications" ng-click="go('/patients/{{patient.id}}/medications/{{$index}}')" ng-class="{info: selected($index)}">
       <td>{{ medication.name }}</td>
       <td>{{ medication.doseAmount }}</td>
-      <td><i class="fa fa-fw" ng-class="selected($index) ? 'fa-folder-open' : 'fa-folder'"></i></td>
+      <td>{{ medication.source}}</td>
     </tr>
 
     <tr ng-if="!medications.length">

@@ -175,9 +175,77 @@ angular
           main: { templateUrl: 'views/cancer-mdt/cancermdt-list.html', controller: 'CancerMdtListCtrl' },
           detail: { templateUrl: 'views/cancer-mdt/cancer-mdt-detail.html', controller: 'CancerMdtDetailCtrl' }
         }
+      })
+    
+    .state('referrals', {
+        url: '/patients/{patientId:int}/referrals',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/referrals/referrals-list.html', controller: 'ReferralsListCtrl' }
+        }
+      })
+
+      .state('referrals-detail', {
+        url: '/patients/{patientId:int}/referrals/{referralIndex:int}',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/referrals/referrals-list.html', controller: 'ReferralsListCtrl' },
+          detail: { templateUrl: 'views/referrals/referrals-detail.html', controller: 'referralsDetailCtrl' }
+        }
+      })
+    
+    .state('eolcareplans', {
+        url: '/patients/{patientId:int}/eolcareplans',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/care-plans/eolcareplans-list.html', controller: 'EolcareplansListCtrl' }
+        }
+      })
+
+      .state('eolcareplans-detail', {
+        url: '/patients/{patientId:int}/eolcareplans/{eolcareplansIndex:int}',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/care-plans/eolcareplans-list.html', controller: 'EolcareplansListCtrl' },
+          detail: { templateUrl: 'views/care-plans/eolcareplans-detail.html', controller: 'EolcareplansDetailCtrl' }
+        }
+      })
+    
+     .state('appointments', {
+        url: '/patients/{patientId:int}/appointments',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/appointments/appointments-list.html', controller: 'AppointmentsListCtrl' }
+        }
+      })
+
+      .state('appointments-detail', {
+        url: '/patients/{patientId:int}/appointments/{appointmentIndex:int}',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/appointments/appointments-list.html', controller: 'AppointmentsListCtrl' },
+          detail: { templateUrl: 'views/appointments/appointments-detail.html', controller: 'appointmentsDetailCtrl' }
+        }
       });
 
   })
+
+.directive('datepickerPopup', function (){
+    return {
+        restrict: 'EAC',
+        require: 'ngModel',
+        link: function(scope, element, attr, controller) {
+      //remove the default formatter from the input directive to prevent conflict
+      controller.$formatters.shift();
+  }
+}
+})
 
 .config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
     datepickerConfig.startingDay          = 1;

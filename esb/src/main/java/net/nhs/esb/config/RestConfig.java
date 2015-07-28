@@ -3,9 +3,14 @@ package net.nhs.esb.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import net.nhs.esb.allergy.rest.AllergyController;
+import net.nhs.esb.cancermdt.rest.CancerMDTController;
+import net.nhs.esb.medication.rest.MedicationController;
 import net.nhs.esb.patient.rest.PatientSearchController;
+import net.nhs.esb.procedures.rest.ProceduresController;
 import net.nhs.esb.rest.OpenEhr;
 import net.nhs.esb.rest.Patients;
+import net.nhs.esb.transfer.rest.TransferOfCareController;
 import org.apache.camel.component.cxf.spring.SpringJAXRSClientFactoryBean;
 import org.apache.camel.component.cxf.spring.SpringJAXRSServerFactoryBean;
 import org.apache.camel.spring.javaconfig.CamelConfiguration;
@@ -21,7 +26,22 @@ public class RestConfig extends CamelConfiguration {
     private String openEhrAddress;
 
     @Autowired
+    private AllergyController allergyController;
+
+    @Autowired
+    private CancerMDTController cancerMDTController;
+
+    @Autowired
+    private MedicationController medicationController;
+
+    @Autowired
     private Patients patients;
+
+    @Autowired
+    private ProceduresController proceduresController;
+
+    @Autowired
+    private TransferOfCareController transferOfCareController;
 
     @Bean
     public ObjectMapper objectMapper() {
@@ -40,7 +60,12 @@ public class RestConfig extends CamelConfiguration {
     @Bean
     public SpringJAXRSServerFactoryBean rsPatients() {
         SpringJAXRSServerFactoryBean springJAXRSServerFactoryBean = new SpringJAXRSServerFactoryBean();
-        springJAXRSServerFactoryBean.setServiceBean(patients);
+        springJAXRSServerFactoryBean.setServiceBeanObjects(patients,
+                                                           allergyController,
+                                                           cancerMDTController,
+                                                           medicationController,
+                                                           proceduresController,
+                                                           transferOfCareController);
         springJAXRSServerFactoryBean.setAddress("/patients/");
         springJAXRSServerFactoryBean.setLoggingFeatureEnabled(true);
         springJAXRSServerFactoryBean.setProvider(jacksonJsonProvider());

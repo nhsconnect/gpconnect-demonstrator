@@ -26,35 +26,25 @@ public class FindPatientProceduresRouteBuilder extends SpringRouteBuilder {
             .to("direct:setHeaders")
             .to("direct:createSession")
             .to("direct:getEhrId")
-            .to("direct:openEhrFindPatientProcedureCompositionIds")
-        .end();
-        //@formatter:on
-
-        //@formatter:off
-        from("direct:openEhrFindPatientProcedureCompositionIds")
             .setExchangePattern(ExchangePattern.InOut)
             .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
             .setHeader(CxfConstants.OPERATION_NAME, constant("query"))
             .setBody(simple(buildQuery()))
             .to("cxfrs:bean:rsOpenEhr")
             .choice()
-              .when(body().isNotNull())
-                .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<ProcedureComposition>())
-                  .to("direct:openEhrFindPatientProceduresComposition")
-                .end()
+                .when(body().isNotNull())
+                    .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<ProcedureComposition>())
+                        .setHeader("compositionId", simple("${body[uid]}"))
+                        .bean(compositionParameters)
+                        .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
+                        .to("cxfrs:bean:rsOpenEhr")
+                        .convertBodyTo(ProcedureComposition.class)
+                    .end()
                 .endChoice()
-              .otherwise()
-                .removeHeader("CamelHttpResponseCode")
-                .setBody(new EmptyList());
-        //@formatter:on
-
-        //@formatter:off
-        from("direct:openEhrFindPatientProceduresComposition")
-            .setHeader("compositionId", simple("${body[uid]}"))
-            .bean(compositionParameters)
-            .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
-            .to("cxfrs:bean:rsOpenEhr")
-            .convertBodyTo(ProcedureComposition.class);
+                .otherwise()
+                    .removeHeader("CamelHttpResponseCode")
+                    .setBody(new EmptyList())
+        .end();
         //@formatter:on
     }
 

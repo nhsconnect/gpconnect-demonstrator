@@ -45,12 +45,13 @@ public class ProcedureCompositionConverter {
     private int countProcedures(Map<String,Object> rawComposition) {
 
         int index = -1;
-        boolean found = true;
+        boolean found;
 
-        while (found) {
+        do {
             index++;
             found = rawComposition.containsKey(PROCEDURE_PREFIX + index + "/procedure_name");
         }
+        while (found);
 
         return index;
     }
@@ -59,6 +60,10 @@ public class ProcedureCompositionConverter {
 
         String procedureName = MapUtils.getString(rawComposition, PROCEDURE_PREFIX + index + "/procedure_name");
         String procedureNotes = MapUtils.getString(rawComposition, PROCEDURE_PREFIX + index + "/procedure_notes");
+        String performer = findPerformer(rawComposition, index);
+
+        String code = MapUtils.getString(rawComposition, PROCEDURE_PREFIX + index + "/ism_transition/careflow_step|code");
+        String terminology = MapUtils.getString(rawComposition, PROCEDURE_PREFIX + index + "/ism_transition/careflow_step|terminology");
 
         String dateTime = MapUtils.getString(rawComposition, PROCEDURE_PREFIX + index + "/time");
         String date = StringUtils.substringBefore(dateTime, "T");
@@ -66,10 +71,34 @@ public class ProcedureCompositionConverter {
 
         Procedure procedure = new Procedure();
         procedure.setDateOfProcedure(date);
+        procedure.setTimeOfProcedure(time);
         procedure.setProcedureName(procedureName);
         procedure.setProcedureNotes(procedureNotes);
-        procedure.setTimeOfProcedure(time);
+        procedure.setPerformer(performer);
+        procedure.setCode(code);
+        procedure.setTerminology(terminology);
+        procedure.setSource("openehr");
 
         return procedure;
+    }
+
+    private String findPerformer(Map<String,Object> rawComposition, int procedureIndex) {
+
+        String prefix = PROCEDURE_PREFIX + procedureIndex + "/_other_participation:";
+        String role;
+
+        int index = 0;
+        do {
+            role = MapUtils.getString(rawComposition, prefix + index + "|function");
+
+            if (StringUtils.equals(role, "Performer")) {
+                return MapUtils.getString(rawComposition, prefix + index + "|name");
+            }
+
+            index++;
+        }
+        while (role != null);
+
+        return null;
     }
 }

@@ -14,6 +14,7 @@ public class Procedure {
     private String timeOfProcedure;
     private String dateSubmitted;
     private String source;
+    private String performer;
 
     public Integer getId() {
         return id;
@@ -93,5 +94,13 @@ public class Procedure {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getPerformer() {
+        return performer;
+    }
+
+    public void setPerformer(String performer) {
+        this.performer = performer;
     }
 }

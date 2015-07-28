@@ -1,16 +1,15 @@
-package net.nhs.esb.procedures.route;
+package net.nhs.esb.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.nhs.esb.procedures.model.ProcedureComposition;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 
 /**
  */
-public class ProcedureAggregationStrategy implements AggregationStrategy {
+public class DefaultAggregationStrategy<T> implements AggregationStrategy {
 
     @Override
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
@@ -19,8 +18,8 @@ public class ProcedureAggregationStrategy implements AggregationStrategy {
             return convertBodyToList(newExchange);
         }
 
-        List<ProcedureComposition> compositionList = oldExchange.getIn().getBody(List.class);
-        ProcedureComposition composition = newExchange.getIn().getBody(ProcedureComposition.class);
+        List<T> compositionList = oldExchange.getIn().getBody(List.class);
+        T composition = (T)newExchange.getIn().getBody();
 
         compositionList.add(composition);
 
@@ -32,12 +31,14 @@ public class ProcedureAggregationStrategy implements AggregationStrategy {
         Message in = exchange.getIn();
         Object body = in.getBody();
 
-        if (body instanceof ProcedureComposition) {
-            List<ProcedureComposition> compositionList = new ArrayList<>();
-            compositionList.add((ProcedureComposition)body);
-
-            in.setBody(compositionList);
+        if (body instanceof List) {
+            return exchange;
         }
+
+        List<T> compositionList = new ArrayList<>();
+        compositionList.add((T)body);
+
+        in.setBody(compositionList);
 
         return exchange;
     }

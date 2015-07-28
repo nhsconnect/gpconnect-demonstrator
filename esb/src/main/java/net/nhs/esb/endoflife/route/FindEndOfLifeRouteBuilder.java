@@ -1,7 +1,7 @@
-package net.nhs.esb.procedures.route;
+package net.nhs.esb.endoflife.route;
 
+import net.nhs.esb.endoflife.model.EndOfLifeComposition;
 import net.nhs.esb.openehr.route.CompositionSearchParameters;
-import net.nhs.esb.procedures.model.ProcedureComposition;
 import net.nhs.esb.util.DefaultAggregationStrategy;
 import net.nhs.esb.util.EmptyList;
 import org.apache.camel.ExchangePattern;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 /**
  */
 @Component
-public class FindPatientProceduresRouteBuilder extends SpringRouteBuilder {
+public class FindEndOfLifeRouteBuilder extends SpringRouteBuilder {
 
     @Autowired
     private CompositionSearchParameters compositionParameters;
@@ -22,16 +22,16 @@ public class FindPatientProceduresRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
 
         //@formatter:off
-        from("direct:findPatientProcedures").routeId("FindPatientProcedures")
+        from("direct:findPatientEndOfLifePlan").routeId("FindPatientEndOfLifePlan")
             .to("direct:setHeaders")
             .to("direct:createSession")
             .to("direct:getEhrId")
-            .to("direct:openEhrFindPatientProcedureCompositionIds")
+            .to("direct:openEhrFindPatientEndOfLifeCompositionIds")
         .end();
         //@formatter:on
 
         //@formatter:off
-        from("direct:openEhrFindPatientProcedureCompositionIds")
+        from("direct:openEhrFindPatientEndOfLifeCompositionIds")
             .setExchangePattern(ExchangePattern.InOut)
             .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
             .setHeader(CxfConstants.OPERATION_NAME, constant("query"))
@@ -39,8 +39,8 @@ public class FindPatientProceduresRouteBuilder extends SpringRouteBuilder {
             .to("cxfrs:bean:rsOpenEhr")
             .choice()
               .when(body().isNotNull())
-                .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<ProcedureComposition>())
-                  .to("direct:openEhrFindPatientProceduresComposition")
+                .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<EndOfLifeComposition>())
+                  .to("direct:openEhrFindPatientEndOfLifeComposition")
                 .end()
                 .endChoice()
               .otherwise()
@@ -49,19 +49,19 @@ public class FindPatientProceduresRouteBuilder extends SpringRouteBuilder {
         //@formatter:on
 
         //@formatter:off
-        from("direct:openEhrFindPatientProceduresComposition")
+        from("direct:openEhrFindPatientEndOfLifeComposition")
             .setHeader("compositionId", simple("${body[uid]}"))
             .bean(compositionParameters)
             .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
             .to("cxfrs:bean:rsOpenEhr")
-            .convertBodyTo(ProcedureComposition.class);
+            .convertBodyTo(EndOfLifeComposition.class);
         //@formatter:on
     }
 
     private String buildQuery() {
         return "select a/uid/value as uid " +
                 "from EHR e[ehr_id/value='${header.ehrId}'] " +
-                "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
-                "where a/name/value='Procedures list'";
+                "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_plan.v1] " +
+                "where a/name/value='End of Life Patient Preferences'";
     }
 }

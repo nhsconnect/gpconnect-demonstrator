@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import net.nhs.esb.allergy.rest.AllergyController;
 import net.nhs.esb.cancermdt.rest.CancerMDTController;
+import net.nhs.esb.endoflife.rest.EndOfLifeController;
 import net.nhs.esb.medication.rest.MedicationController;
 import net.nhs.esb.patient.rest.PatientSearchController;
 import net.nhs.esb.procedures.rest.ProceduresController;
@@ -30,6 +31,9 @@ public class RestConfig extends CamelConfiguration {
 
     @Autowired
     private CancerMDTController cancerMDTController;
+
+    @Autowired
+    private EndOfLifeController endOfLifeController;
 
     @Autowired
     private MedicationController medicationController;
@@ -63,6 +67,7 @@ public class RestConfig extends CamelConfiguration {
         springJAXRSServerFactoryBean.setServiceBeanObjects(patients,
                                                            allergyController,
                                                            cancerMDTController,
+                                                           endOfLifeController,
                                                            medicationController,
                                                            proceduresController,
                                                            transferOfCareController);

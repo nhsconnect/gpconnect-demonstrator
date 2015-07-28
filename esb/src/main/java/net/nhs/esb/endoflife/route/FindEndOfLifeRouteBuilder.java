@@ -22,39 +22,29 @@ public class FindEndOfLifeRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
 
         //@formatter:off
-        from("direct:findPatientEndOfLifePlan").routeId("FindPatientEndOfLifePlan")
+        from("direct:findPatientEndOfLifeCarePlan").routeId("FindPatientEndOfLifeCarePlan")
             .to("direct:setHeaders")
             .to("direct:createSession")
             .to("direct:getEhrId")
-            .to("direct:openEhrFindPatientEndOfLifeCompositionIds")
-        .end();
-        //@formatter:on
-
-        //@formatter:off
-        from("direct:openEhrFindPatientEndOfLifeCompositionIds")
             .setExchangePattern(ExchangePattern.InOut)
             .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
             .setHeader(CxfConstants.OPERATION_NAME, constant("query"))
             .setBody(simple(buildQuery()))
             .to("cxfrs:bean:rsOpenEhr")
             .choice()
-              .when(body().isNotNull())
-                .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<EndOfLifeComposition>())
-                  .to("direct:openEhrFindPatientEndOfLifeComposition")
-                .end()
+                .when(body().isNotNull())
+                    .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<EndOfLifeComposition>())
+                        .setHeader("compositionId", simple("${body[uid]}"))
+                        .bean(compositionParameters)
+                        .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
+                        .to("cxfrs:bean:rsOpenEhr")
+                        .convertBodyTo(EndOfLifeComposition.class)
+                    .end()
                 .endChoice()
-              .otherwise()
-                .removeHeader("CamelHttpResponseCode")
-                .setBody(new EmptyList());
-        //@formatter:on
-
-        //@formatter:off
-        from("direct:openEhrFindPatientEndOfLifeComposition")
-            .setHeader("compositionId", simple("${body[uid]}"))
-            .bean(compositionParameters)
-            .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
-            .to("cxfrs:bean:rsOpenEhr")
-            .convertBodyTo(EndOfLifeComposition.class);
+                .otherwise()
+                    .removeHeader("CamelHttpResponseCode")
+                    .setBody(new EmptyList())
+        .end();
         //@formatter:on
     }
 

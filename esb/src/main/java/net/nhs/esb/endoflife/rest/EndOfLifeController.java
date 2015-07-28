@@ -23,19 +23,19 @@ public class EndOfLifeController {
 
     @GET
     @Path("/{patientId}/eolcareplans")
-    public List<EndOfLifeComposition> findPatientEndOfLifePlan(@PathParam("patientId") Long patientId) {
+    public List<EndOfLifeComposition> findPatientEndOfLifeCarePlan(@PathParam("patientId") Long patientId) {
         return Collections.emptyList();
     }
 
     @POST
     @Path("/{patientId}/eolcareplans")
-    public void createPatientEndOfLifePlan(@PathParam("patientId") Long patientId, EndOfLifeComposition endOfLifeComposition) {
+    public void createPatientEndOfLifeCarePlan(@PathParam("patientId") Long patientId, EndOfLifeComposition endOfLifeComposition) {
 
     }
 
     @PUT
     @Path("/{patientId}/eolcareplans")
-    public void updatePatientEndOfLifePlan(@PathParam("patientId") Long patientId, EndOfLifeComposition endOfLifeComposition) {
+    public void updatePatientEndOfLifeCarePlan(@PathParam("patientId") Long patientId, EndOfLifeComposition endOfLifeComposition) {
 
     }
 }

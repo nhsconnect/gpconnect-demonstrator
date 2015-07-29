@@ -1,12 +1,14 @@
 package net.nhs.esb.procedures.route.converter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.nhs.esb.openehr.model.CompositionResponseData;
 import net.nhs.esb.procedures.model.Procedure;
 import net.nhs.esb.procedures.model.ProcedureComposition;
+import net.nhs.esb.procedures.model.ProcedureUpdate;
 import org.apache.camel.Converter;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +42,30 @@ public class ProcedureCompositionConverter {
         procedureComposition.setProcedures(procedureList);
 
         return procedureComposition;
+    }
+
+    @Converter
+    public ProcedureUpdate convertProcedureCompositionToUpdate(ProcedureComposition procedureComposition) {
+
+        Map<String,String> content = new HashMap<>();
+
+        int index = 0;
+        for (Procedure procedure : procedureComposition.getProcedures()) {
+
+            String dateTime = procedure.getDateOfProcedure() + "T" + procedure.getTimeOfProcedure() + ":00.000Z";
+
+            content.put(PROCEDURE_PREFIX + index + "/procedure_name", procedure.getProcedureName());
+            content.put(PROCEDURE_PREFIX + index + "/procedure_notes", procedure.getProcedureNotes());
+            content.put(PROCEDURE_PREFIX + index + "/ism_transition/careflow_step|code", procedure.getCode());
+            content.put(PROCEDURE_PREFIX + index + "/ism_transition/careflow_step|terminology", procedure.getTerminology());
+            content.put(PROCEDURE_PREFIX + index + "/_other_participation:0|function", "Performer");
+            content.put(PROCEDURE_PREFIX + index + "/_other_participation:0|name", procedure.getPerformer());
+            content.put(PROCEDURE_PREFIX + index + "/time", dateTime);
+
+            index++;
+        }
+
+        return new ProcedureUpdate(content);
     }
 
     private int countProcedures(Map<String,Object> rawComposition) {

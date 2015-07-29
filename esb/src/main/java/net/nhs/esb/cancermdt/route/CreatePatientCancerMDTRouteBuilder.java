@@ -1,10 +1,10 @@
 package net.nhs.esb.cancermdt.route;
 
 import java.util.List;
+
 import net.nhs.esb.cancermdt.model.CancerMDT;
 import net.nhs.esb.cancermdt.model.CancerMDTUpdate;
 import net.nhs.esb.openehr.route.CompositionCreateParameters;
-import net.nhs.esb.openehr.route.HttpStatusProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
@@ -46,12 +46,12 @@ public class CreatePatientCancerMDTRouteBuilder extends SpringRouteBuilder {
                         exchng.getIn().setBody(cancerMDT);
                     }
                 })
-                .setHeader("compositionId", simple("${body.compositionId}"))
+                .setHeader("Camel.compositionId", simple("${body.compositionId}"))
                 .convertBodyTo(CancerMDTUpdate.class)
-                .setHeader("composition", simple("${body.content}"))
+                .setHeader("Camel.composition", simple("${body.content}"))
                 
                 .choice()
-                .when(header("compositionId").isNull())
+                .when(header("Camel.compositionId").isNull())
                 .to("direct:openEhrCreatePatientCancerMDTComposition")
                 .endChoice();
         
@@ -60,9 +60,9 @@ public class CreatePatientCancerMDTRouteBuilder extends SpringRouteBuilder {
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
                 .setHeader(CxfConstants.OPERATION_NAME, constant("createComposition"))
-                .setHeader("template", constant(cancerMDTTemplate))
+                .setHeader("Camel.template", constant(cancerMDTTemplate))
                 .bean(compositionCreateParameters)
-                .removeHeaders("composition")
+                .removeHeaders("Camel.*")
                 .to("cxfrs:bean:rsOpenEhr");
         
     }

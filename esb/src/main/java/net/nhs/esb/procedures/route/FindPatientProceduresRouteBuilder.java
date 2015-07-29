@@ -34,7 +34,7 @@ public class FindPatientProceduresRouteBuilder extends SpringRouteBuilder {
             .choice()
                 .when(body().isNotNull())
                     .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<ProcedureComposition>())
-                        .setHeader("compositionId", simple("${body[uid]}"))
+                        .setHeader("Camel.compositionId", simple("${body[uid]}"))
                         .bean(compositionParameters)
                         .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
                         .to("cxfrs:bean:rsOpenEhr")
@@ -50,7 +50,7 @@ public class FindPatientProceduresRouteBuilder extends SpringRouteBuilder {
 
     private String buildQuery() {
         return "select a/uid/value as uid " +
-                "from EHR e[ehr_id/value='${header.ehrId}'] " +
+                "from EHR e[ehr_id/value='${header.Camel.ehrId}'] " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
                 "where a/name/value='Procedures list'";
     }

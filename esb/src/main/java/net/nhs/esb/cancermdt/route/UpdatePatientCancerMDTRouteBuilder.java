@@ -1,6 +1,7 @@
 package net.nhs.esb.cancermdt.route;
 
 import java.util.List;
+
 import net.nhs.esb.cancermdt.model.CancerMDT;
 import net.nhs.esb.cancermdt.model.CancerMDTUpdate;
 import net.nhs.esb.openehr.route.CompositionUpdateParameters;
@@ -40,7 +41,7 @@ public class UpdatePatientCancerMDTRouteBuilder extends SpringRouteBuilder {
                         exchng.getIn().setBody(cancerMDT);
                     }
                 })
-                .setHeader("compositionId", simple("${body.compositionId}"))
+                .setHeader("Camel.compositionId", simple("${body.compositionId}"))
                 .convertBodyTo(CancerMDTUpdate.class)
                 
                 // Store composition into a Camel* header rather than "composition" so it is not sent to openEHR as it is too big for openEHR to accept
@@ -52,7 +53,7 @@ public class UpdatePatientCancerMDTRouteBuilder extends SpringRouteBuilder {
                 .to("direct:getEhrId")
                 
                 // Switch composition back into "composition" header for standard processor
-                .setHeader("composition", simple("${header.Camel.openEHR.composition}"))
+                .setHeader("Camel.composition", simple("${header.Camel.openEHR.composition}"))
                 .removeHeaders("Camel.openEHR.composition")
                 
                 .to("direct:openEhrUpdatePatientCancerMDTComposition")
@@ -63,7 +64,7 @@ public class UpdatePatientCancerMDTRouteBuilder extends SpringRouteBuilder {
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
                 .setHeader(CxfConstants.OPERATION_NAME, constant("updateComposition"))
-                .setHeader("template", constant(cancerMDTTemplate))
+                .setHeader("Camel.template", constant(cancerMDTTemplate))
                 .bean(compositionUpdateParameters)
                 // Now the composition header details are back in the body the header needs removing or the header will be two large for openEHR
                 .removeHeaders("composition")

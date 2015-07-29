@@ -26,15 +26,15 @@ public class CreatePatientAllergyRouteBuilder extends SpringRouteBuilder {
 
         from("direct:createPatientAllergyComposition").routeId("openEhrCreatePatientAllergyComposition")
                 .convertBodyTo(AllergyUpdate.class)
-                .setHeader("composition", simple("${body.content}"))
+                .setHeader("Camel.composition", simple("${body.content}"))
                 .setBody(simple("${header.patientId}"))
                 .to("direct:setHeaders")
                 .to("direct:createSession")
                 .to("direct:getEhrId")
                 .to("direct:openEhrFindPatientAllergyCompositionId")
                 .choice()
-                    .when(header("compositionId").isNull())
-                        .setBody(simple("${header.composition}"))
+                    .when(header("Camel.compositionId").isNull())
+                        .setBody(simple("${header.Camel.composition}"))
                         .to("direct:openEhrCreatePatientAllergyComposition")
                     .otherwise()
                         .process(new HttpStatusProcessor())
@@ -45,8 +45,9 @@ public class CreatePatientAllergyRouteBuilder extends SpringRouteBuilder {
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
                 .setHeader(CxfConstants.OPERATION_NAME, constant("createComposition"))
-                .setHeader("template", constant(allergiesTemplate))
+                .setHeader("Camel.template", constant(allergiesTemplate))
                 .bean(compositionCreateParameters)
+                .removeHeaders("Camel.*")
                 .to("cxfrs:bean:rsOpenEhr");
     }
 }

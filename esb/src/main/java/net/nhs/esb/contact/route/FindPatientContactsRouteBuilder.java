@@ -19,32 +19,34 @@ public class FindPatientContactsRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from("direct:findPatientContactComposition").routeId("openEhrFindPatientContactComposition")
-                .to("direct:setHeaders")
-                .to("direct:createSession")
-                .to("direct:getEhrId")
-                .to("direct:openEhrFindPatientContactCompositionId")
-                .to("direct:openEhrFindPatientContactComposition")
-                .end();
+        //@formatter:off
+        from("direct:findPatientContactComposition").routeId("FindPatientContacts")
+            .to("direct:setHeaders")
+            .to("direct:createSession")
+            .to("direct:getEhrId")
+            .to("direct:openEhrFindPatientContactCompositionId")
+            .to("direct:openEhrFindPatientContactComposition")
+        .end();
 
         from("direct:openEhrFindPatientContactComposition")
-                .bean(compositionParameters)
-                .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
-                .to("cxfrs:bean:rsOpenEhr")
-                .convertBodyTo(ContactComposition.class);
+            .bean(compositionParameters)
+            .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
+            .to("cxfrs:bean:rsOpenEhr")
+            .convertBodyTo(ContactComposition.class);
 
         from("direct:openEhrFindPatientContactCompositionId")
-                .setExchangePattern(ExchangePattern.InOut)
-                .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
-                .setHeader(CxfConstants.OPERATION_NAME, constant("query"))
-                .setBody(simple(buildQuery()))
-                .to("cxfrs:bean:rsOpenEhr")
-                .setHeader("compositionId", simple("${body.resultSet[0][uid]}"));
+            .setExchangePattern(ExchangePattern.InOut)
+            .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
+            .setHeader(CxfConstants.OPERATION_NAME, constant("query"))
+            .setBody(simple(buildQuery()))
+            .to("cxfrs:bean:rsOpenEhr")
+            .setHeader("Camel.compositionId", simple("${body.resultSet[0][uid]}"));
+        //@formatter:on
     }
 
     private String buildQuery() {
         return "select a/uid/value as uid " +
-                "from EHR e[ehr_id/value='${header.ehrId}'] " +
+                "from EHR e[ehr_id/value='${header.Camel.ehrId}'] " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
                 "where a/name/value='Relevant contacts'";
     }

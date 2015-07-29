@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CompositionSearchParameters {
 
-    public Object[] createParameters(@Header("compositionId") String compositionId) {
+    public Object[] createParameters(@Header("Camel.compositionId") String compositionId) {
         return new Object[] { compositionId, "FLAT" };
     }
 }

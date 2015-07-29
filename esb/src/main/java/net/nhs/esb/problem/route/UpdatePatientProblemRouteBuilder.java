@@ -24,30 +24,24 @@ public class UpdatePatientProblemRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
 
         from("direct:updatePatientProblemComposition").routeId("openEhrUpdatePatientProblemComposition")
-                .setHeader("compositionId", simple("${body.compositionId}"))
+                .setHeader("Camel.compositionId", simple("${body.compositionId}"))
                 .convertBodyTo(ProblemUpdate.class)
-                .setHeader("composition", simple("${body.content}"))
+                .setHeader("Camel.composition", simple("${body.content}"))
                 .to("direct:openEhrUpdatePatientProblemComposition");
 
         from("direct:openEhrUpdatePatientProblemComposition")
                 
-                .setHeader("Camel.openEHR.composition", simple("${body.content}"))
-                .removeHeaders("composition")
-                
                 .to("direct:setHeaders")
                 .to("direct:createSession")
                 .to("direct:getEhrId")
-                
-                .setHeader("composition", simple("${header.Camel.openEHR.composition}"))
-                .removeHeaders("Camel.openEHR.composition")
-                
+
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
                 .setHeader(CxfConstants.OPERATION_NAME, constant("updateComposition"))
-                .setHeader("template", constant(problemTemplate))
+                .setHeader("Camel.template", constant(problemTemplate))
                 .bean(compositionUpdateParameters)
                 
-                .removeHeaders("composition")
+                .removeHeaders("Camel.*")
                 .to("cxfrs:bean:rsOpenEhr")
                 .end();
     }

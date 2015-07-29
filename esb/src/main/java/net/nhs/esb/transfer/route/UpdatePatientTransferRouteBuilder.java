@@ -3,7 +3,6 @@ package net.nhs.esb.transfer.route;
 import net.nhs.esb.openehr.route.CompositionUpdateParameters;
 import net.nhs.esb.transfer.model.TransferOfCareUpdate;
 import net.nhs.esb.transfer.transform.TransferOfCareTransformer;
-
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.apache.camel.spring.SpringRouteBuilder;
@@ -21,7 +20,7 @@ public class UpdatePatientTransferRouteBuilder extends SpringRouteBuilder {
 
     @Autowired
     private CompositionUpdateParameters compositionUpdateParameters;
-    
+
     @Autowired
     private TransferOfCareTransformer transferOfCareTransformer;
 
@@ -30,30 +29,24 @@ public class UpdatePatientTransferRouteBuilder extends SpringRouteBuilder {
 
         from("direct:updatePatientTransferComposition").routeId("openEhrUpdatePatientTransferComposition")
         		.bean(transferOfCareTransformer, "createTransferOfCareComposition")
-                .setHeader("compositionId", simple("${body.compositionId}"))
+                .setHeader("Camel.compositionId", simple("${body.compositionId}"))
                 .convertBodyTo(TransferOfCareUpdate.class)
-                .setHeader("composition", simple("${body.content}"))
+                .setHeader("Camel.composition", simple("${body.content}"))
                 .to("direct:openEhrUpdatePatientTransferComposition");
 
         from("direct:openEhrUpdatePatientTransferComposition")
                 
-                .setHeader("Camel.openEHR.composition", simple("${body.content}"))
-                .removeHeaders("composition")
-                
                 .to("direct:setHeaders")
                 .to("direct:createSession")
                 .to("direct:getEhrId")
-                
-                .setHeader("composition", simple("${header.Camel.openEHR.composition}"))
-                .removeHeaders("Camel.openEHR.composition")
-                
+
                 .setExchangePattern(ExchangePattern.InOut)
                 .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
                 .setHeader(CxfConstants.OPERATION_NAME, constant("updateComposition"))
-                .setHeader("template", constant(transferTemplate))
+                .setHeader("Camel.template", constant(transferTemplate))
                 .bean(compositionUpdateParameters)
                 
-                .removeHeaders("composition")
+                .removeHeaders("Camel.*")
                 .to("cxfrs:bean:rsOpenEhr")
                 .end();
     }

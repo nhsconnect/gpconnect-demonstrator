@@ -50,7 +50,7 @@ public class OpenEHRCommonRoute extends SpringRouteBuilder {
                 .bean(openEhrPatientParams)
                 .to("cxfrs:bean:rsOpenEhr")
                 .log("EhrId: ${body.ehrId}")
-                .setHeader("ehrId", simple("${body.ehrId}"))
+                .setHeader("Camel.ehrId", simple("${body.ehrId}"))
         ;
 
         from("direct:createEhrDiagnosisRequest")

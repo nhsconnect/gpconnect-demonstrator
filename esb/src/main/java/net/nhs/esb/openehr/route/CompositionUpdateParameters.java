@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class CompositionUpdateParameters {
 
-    public Object[] createParameters(@Header("compositionId") String compositionId, @Header("template") String template,
-                                     @Header("ehrId") String ehrId, @Header("composition") Map<String,Object> body) {
+    public Object[] createParameters(@Header("Camel.compositionId") String compositionId,
+                                     @Header("Camel.template") String template,
+                                     @Header("Camel.ehrId") String ehrId,
+                                     @Header("Camel.composition") Map<String,Object> body) {
         return new Object[] { compositionId, template, ehrId, "FLAT", body };
     }
 }

@@ -3,6 +3,7 @@ package net.nhs.esb.cancermdt.route;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import net.nhs.esb.cancermdt.model.CancerMDT;
 import net.nhs.esb.cancermdt.model.CancerMDTComposition;
 import net.nhs.esb.cancermdt.model.CancerMDTsComposition;
@@ -51,7 +52,7 @@ public class FindPatientCancerMDTRouteBuilder extends SpringRouteBuilder {
                     public void process(Exchange exchng) throws Exception {
                         // Set the compositionID in the header
                         List<Map<String,Object>> resultSet = (List<Map<String,Object>>)exchng.getIn().getHeader("Camel.openEHR.compositionIDs");
-                        exchng.getIn().setHeader("compositionId", resultSet.get((Integer)exchng.getProperty("CamelLoopIndex")).get("uid"));
+                        exchng.getIn().setHeader("Camel.compositionId", resultSet.get((Integer)exchng.getProperty("CamelLoopIndex")).get("uid"));
                     }
                 })
                 // call get composition route which will save the  composition to the header before doing the next one
@@ -90,7 +91,7 @@ public class FindPatientCancerMDTRouteBuilder extends SpringRouteBuilder {
 
     private String buildQuery() {
         return "select a/uid/value as uid "
-                + "from EHR e[ehr_id/value='${header.ehrId}'] "
+                + "from EHR e[ehr_id/value='${header.Camel.ehrId}'] "
                 + "contains COMPOSITION a[openEHR-EHR-COMPOSITION.report.v1] "
                 + "where a/name/value='Cancer MDT Output Report'"
                 + "order by a/context/start_time/value desc";

@@ -59,7 +59,7 @@ public class FindEndOfLifeRouteBuilder extends SpringRouteBuilder {
 
     private String buildQuery() {
         return "select a/uid/value as uid " +
-                "from EHR e[ehr_id/value='${header.ehrId}'] " +
+                "from EHR e[ehr_id/value='${header.Camel.ehrId}'] " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_plan.v1] " +
                 "where a/name/value='End of Life Patient Preferences'";
     }

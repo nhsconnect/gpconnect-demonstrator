@@ -49,10 +49,15 @@ public class ProcedureCompositionConverter {
 
         Map<String,String> content = new HashMap<>();
 
+        content.put("ctx/language", "en");
+        content.put("ctx/territory", "GB");
+        content.put("ctx/id_scheme", "NHS");
+        content.put("ctx/id_namespace", "NHS");
+
         int index = 0;
         for (Procedure procedure : procedureComposition.getProcedures()) {
 
-            String dateTime = procedure.getDateOfProcedure() + "T" + procedure.getTimeOfProcedure() + ":00.000Z";
+            String dateTime = procedure.getDateOfProcedure() + "T" + procedure.getTimeOfProcedure() + ":00";
 
             content.put(PROCEDURE_PREFIX + index + "/procedure_name", procedure.getProcedureName());
             content.put(PROCEDURE_PREFIX + index + "/procedure_notes", procedure.getProcedureNotes());

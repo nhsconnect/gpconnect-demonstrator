@@ -91,13 +91,13 @@ li {
 
 
 .col-right { /*Disabled scroll*/
-  border-right: 1px solid #e7e7e7;
+  /*border-right: 1px solid #e7e7e7;*/
   /*overflow-y: scroll;*/
   height: 100%;
 }
 
 .col-left {
-  overflow-y: scroll;
+  /*overflow-y: scroll; */
   height: 100%;
   margin-left: -14px;    
 }
@@ -1209,4 +1209,28 @@ margin-left: 90px;
 .tabContetInner{
     padding-left: 5%;
     padding-top: 16px;
+}
+
+.scrollcontainer1 {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+.scrollcontainer2 {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: -17px;
+    overflow: auto;
+}
+
+.scrollcontainer2EmptyList {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    overflow: auto;
 }

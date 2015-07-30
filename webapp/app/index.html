@@ -167,7 +167,7 @@
 
       <!-- Header toolbar -->
       <div class="row header-toolbar hidden-xs">
-        <div class="col-sm-5">
+        <div class="col-sm-4 col-offset-1 previousGroup">
           <span class="glyphicon glyphicon-arrow-left previous-page-arrow" ng-if="previousPage && currentUser.role=='idcr'" ng-click="goBack()"></span>
           <span class="previous-page-title" ng-if="previousPage && currentUser.role=='idcr'">{{previousPage}}</span>
 
@@ -201,12 +201,12 @@
         <div ng-class="actionsExists ? 'page-wrapper' : 'page-wrapper-off'">
             <div class="section-north" ui-view="user-context" ng-if=(userContextViewExists)></div>
 
+            
             <div class="section section-content">
               <div class="row section-row">
                 <div class="col-md-{{mainWidth}} col-left">
                   <div class="section-main" ui-view="main"></div>
-                </div>
-
+                </div>       
                 <div class="col-md-{{detailWidth}} col-right">
                   <div class="section-detail" ui-view="detail"></div>
                 </div>

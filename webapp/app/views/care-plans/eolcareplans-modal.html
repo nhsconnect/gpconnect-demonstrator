@@ -26,9 +26,9 @@
         <div class="btn eolTabs" ng-model="radioModel" btn-radio="'Tab4'">CPR Decision</div>   
         </div>
         <div class="col-md-9">
-        <div ng-if="radioModel == 'Tab1'">        
-        <div><strong>Care Document</strong></div>
-        <div class="row">
+        <div ng-if="radioModel == 'Tab1'" class="tabContent">        
+        <div class="row tabContetInner">
+                  <div class="col-md-12"><strong>Care Document</strong></div>
             <div class="col-md-6">
                 <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || eolcareplanForm.name.$dirty) && eolcareplanForm.name.$invalid, 'has-success': eolcareplanForm.name.$valid && eolcareplanForm.name.$dirty}">
           <label for="name" class="control-label col-md-12">Name:</label>
@@ -81,9 +81,9 @@
             </div>
         </div>
         </div>   
-        <div ng-if="radioModel == 'Tab2'">
-        <div><strong>Priorities of Care</strong></div>
-        <div class="row">
+        <div ng-if="radioModel == 'Tab2'"  class="tabContent">
+        <div class="row tabContetInner">
+              <div class="col-md-12"><strong>Priorities of Care</strong></div>
             <div class="col-md-6">
         <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || eolcareplanForm.placeofcare.$dirty) && eolcareplanForm.placeofcare.$invalid, 'has-success': eolcareplanForm.placeofcare.$valid && eolcareplanForm.placeofcare.$dirty}">
           <label for="name" class="control-label col-md-12">Place of Care:</label>
@@ -119,9 +119,9 @@
         </div>        
         </div>   
         </div>    
-        <div ng-if="radioModel == 'Tab3'">
-        <div><strong>Treatment Decision</strong></div>
-        <div class="row">
+        <div ng-if="radioModel == 'Tab3'"  class="tabContent">
+        <div class="row tabContetInner">
+            <div class="col-md-12"><strong>Advanced Decision to Refuse Treatment</strong></div>
             <div class="col-md-12">
           <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || eolcareplanForm.decisiontorefusetreatment.$dirty) && eolcareplanForm.decisiontorefusetreatment.$invalid, 'has-success': eolcareplanForm.decisiontorefusetreatment.$valid && eolcareplanForm.decisiontorefusetreatment.$dirty}">
         <label for="siteTo" class="control-label col-md-12">Decision to Refuse Treatment:</label>
@@ -166,9 +166,9 @@
         </div>
         </div>    
         </div>
-        <div ng-if="radioModel == 'Tab4'">
-        <div><strong>CPR Decision</strong></div>
-        <div class="row">
+        <div ng-if="radioModel == 'Tab4'"  class="tabContent">
+        <div class="row tabContetInner">
+            <div class="col-md-12"><strong>CPR Decision</strong></div>
             <div class="col-md-12">
           <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || eolcareplanForm.cprdecision.$dirty) && eolcareplanForm.cprdecision.$invalid, 'has-success': eolcareplanForm.cprdecision.$valid && eolcareplanForm.cprdecision.$dirty}">
         <label for="siteTo" class="control-label col-md-12">CPR Decision:</label>

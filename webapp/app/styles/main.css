@@ -1,5 +1,13 @@
+
+body{
+    width:72%;
+    overflow:scroll;
+}
+
 html, body, #wrapper, #page-wrapper, .section-content {
   height: 100%;
+  margin-left: auto;
+  margin-right: auto;    
 }
 
 body {
@@ -7,6 +15,7 @@ body {
   background-size: 100% auto;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
+
 
 textarea {
   resize: vertical;
@@ -67,6 +76,7 @@ li {
   min-height: 74px;
   border: 1px solid #fff;
   border-bottom: 1px solid #e7e7e7;
+  width: 99%;    
 }
 
 #page-wrapper {
@@ -89,6 +99,7 @@ li {
 .col-left {
   overflow-y: scroll;
   height: 100%;
+  margin-left: -14px;    
 }
 
 .section-main, .section-detail {
@@ -192,6 +203,14 @@ label {
 .panel-default > .panel-heading {
   color: #fff;
   padding: 2px 8px 4px 8px;
+}
+
+.panel-heading li{
+padding-right: 4%;
+}
+
+.panel-heading .nhsLabel{
+margin-right: -4%;
 }
 
 .panel-body {
@@ -581,6 +600,8 @@ legend {
   background-color: #0E682F;
   font-size: 22px;
   color: #000000;
+  width: 115%;
+  margin-left: -7.5%;    
   padding-top: 10px;
   padding-bottom: 10px;
   border-top: 1px solid #CCCCCC;
@@ -822,7 +843,7 @@ legend {
 /* User Profile Mobile */
 @media (max-width: 767px) {
   .navbar-nav .open .dropdown-menu {
-    top: 100%;
+    top: 100%;  
     left: 0;
     float: left;
     width: 310px;
@@ -1120,11 +1141,23 @@ table.table {
 
 .eolTabs{
     width:100%;
-    text-align: left;
+    border: 1px solid #DDDDDD;
+    border-radius: 0 !important;
+    margin-left: -10px;
+}
+
+.eolTabs .active{
+background-color: white;
 }
 
 .eolForm{
     height: 400px;
+    background-color: #F7F7F7;
+}
+
+.eolForm .btn:active, .btn.active{
+  box-shadow:none;
+  background-color: white;    
 }
 
 .eolForm input, .eolForm .input-group {
@@ -1155,4 +1188,25 @@ textarea#cprdecisioncomment{
 
 #dateofdecision{
     width: 60%;
+}
+
+.DetailsSubHeadingt{
+padding-top: 15px;
+}
+
+.previousGroup{
+margin-left: 90px;
+}
+
+.tabContent{
+    margin-top: -3%;
+    height: 363px;
+    background-color: white;
+    width: 107.5%;
+    margin-left: -6%
+}
+
+.tabContetInner{
+    padding-left: 5%;
+    padding-top: 16px;
 }

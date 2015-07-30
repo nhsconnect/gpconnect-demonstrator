@@ -34,7 +34,7 @@
           <label for="name" class="control-label col-md-12">Name:</label>
           <div class="col-md-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="name" name="name" ng-model="eolcareplan.careDocument.name" required />
+              <input type="text" value="End of Life Document" placeholder="End of Life Document" placeholder="{{currentUser.email}}" class="form-control input-sm" id="name" name="name" ng-model="eolcareplan.careDocument.name"  disabled/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.name.$error.required">You must enter a value.</span>
           </div>
@@ -43,7 +43,7 @@
           <label for="author" class="control-label col-md-12">Author:</label>
           <div class="col-md-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="author" name="author" ng-model="eolcareplan.careDocument.author" required />
+              <input type="text" value="{{currentUser.email}}" placeholder="{{currentUser.email}}" class="form-control input-sm" id="author" name="author" ng-model="eolcareplan.careDocument.author" disabled />
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.author.$error.required">You must enter a value.</span>
           </div>

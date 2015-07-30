@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('EolcareplansModalCtrl', function ($scope, $filter, $modalInstance, eolcareplan, patient, modal) {
+  .controller('EolcareplansModalCtrl', function ($scope, $filter, $modalInstance, eolcareplan, patient, modal, PatientService) {
         
+    $scope.currentUser = PatientService.getCurrentUser();
     $scope.eolcareplan = eolcareplan;
     $scope.patient = patient;
     $scope.modal = modal;

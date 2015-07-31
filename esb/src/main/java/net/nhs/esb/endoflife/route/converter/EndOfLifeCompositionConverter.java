@@ -1,6 +1,7 @@
 package net.nhs.esb.endoflife.route.converter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import net.nhs.esb.endoflife.model.CareDocument;
 import net.nhs.esb.endoflife.model.CprDecision;
 import net.nhs.esb.endoflife.model.EndOfLifeCarePlan;
 import net.nhs.esb.endoflife.model.EndOfLifeComposition;
+import net.nhs.esb.endoflife.model.EndOfLifeUpdate;
 import net.nhs.esb.endoflife.model.PrioritiesOfCare;
 import net.nhs.esb.endoflife.model.TreatmentDecision;
 import net.nhs.esb.openehr.model.CompositionResponseData;
@@ -44,6 +46,30 @@ public class EndOfLifeCompositionConverter {
         endOfLifeComposition.setEolCarePlans(carePlanList);
 
         return endOfLifeComposition;
+    }
+
+    @Converter
+    public EndOfLifeUpdate convertEndOfLifeCompositionToUpdate(EndOfLifeComposition endOfLifeComposition) {
+
+        Map<String,String> content = new HashMap<>();
+
+        content.put("ctx/language", "en");
+        content.put("ctx/territory", "GB");
+
+        int index = 0;
+        for (EndOfLifeCarePlan endOfLifeCarePlan : endOfLifeComposition.getEolCarePlans()) {
+
+            String prefix = CARE_PLAN_PREFIX + index;
+
+            addCareDocument(content, prefix, endOfLifeCarePlan.getCareDocument());
+            addCprDecision(content, prefix, endOfLifeCarePlan.getCprDecision());
+            addTreatmentDecision(content, prefix, endOfLifeCarePlan.getTreatmentDecision());
+            addPriorities(content, prefix, endOfLifeCarePlan.getPrioritiesOfCare());
+
+            index++;
+        }
+
+        return new EndOfLifeUpdate(content);
     }
 
     private int countEntries(Map<String, Object> rawComposition, String prefix) {
@@ -133,5 +159,46 @@ public class EndOfLifeCompositionConverter {
         prioritiesOfCare.setComment(MapUtils.getString(rawComposition, prefix + index + "/comment"));
 
         return prioritiesOfCare;
+    }
+
+
+    private void addCareDocument(Map<String, String> content, String prefix, CareDocument careDocument) {
+        // TODO
+    }
+
+    private void addTreatmentDecision(Map<String, String> content, String prefix, TreatmentDecision treatmentDecision) {
+
+        String decisionDate = treatmentDecision.getDateOfDecision() + "T00:00:00Z";
+
+        content.put(prefix + "/advance_decision_to_refuse_treatment/decision_status|value", treatmentDecision.getDecisionToRefuseTreatment());
+        content.put(prefix + "/advance_decision_to_refuse_treatment/comment", treatmentDecision.getComment());
+        content.put(prefix + "/advance_decision_to_refuse_treatment/date_of_decision", decisionDate);
+        content.put(prefix + "/advance_decision_to_refuse_treatment/decision_status|code", "at0005");
+    }
+
+    private void addPriorities(Map<String, String> content, String prefix, List<PrioritiesOfCare> prioritiesOfCare) {
+
+        int index = 0;
+        for (PrioritiesOfCare priority : prioritiesOfCare) {
+            String priorityPrefix = prefix + "/preferred_priorities_of_care:" + index;
+
+            content.put(priorityPrefix + "/preferred_place_of_care:0|value", priority.getPlaceOfCare());
+            content.put(priorityPrefix + "/preferred_place_of_care:0|code", "at0008");
+            content.put(priorityPrefix + "/preferred_place_of_death:0|value", priority.getPlaceOfDeath());
+            content.put(priorityPrefix + "/preferred_place_of_death:0|code", "at0018");
+            content.put(priorityPrefix + "/comment", priority.getComment());
+
+            index++;
+        }
+    }
+
+    private void addCprDecision(Map<String, String> content, String prefix, CprDecision cprDecision) {
+
+        String decisionDate = cprDecision.getDateOfDecision() + "T00:00:00Z";
+
+        content.put(prefix + "/cpr_decision/cpr_decision|value", cprDecision.getCprDecision());
+        content.put(prefix + "/cpr_decision/comment", cprDecision.getComment());
+        content.put(prefix + "/cpr_decision/date_of_cpr_decision", decisionDate);
+        content.put(prefix + "/cpr_decision/cpr_decision|code", "at0005");
     }
 }

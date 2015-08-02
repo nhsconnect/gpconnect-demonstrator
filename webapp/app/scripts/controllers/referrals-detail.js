@@ -24,7 +24,7 @@ angular.module('openehrPocApp')
               title: 'Edit Referral'
             };
           },
-          contact: function () {
+          referral: function () {
             return angular.copy($scope.referral);
           },
           patient: function () {
@@ -34,7 +34,7 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (referral) {
-        $scope.result.appointments[$stateParams.referralIndex] = referral;
+        $scope.result.referrals[$stateParams.referralIndex] = referral;
 
         Contact.create($scope.patient.id, $scope.result).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/referrals');

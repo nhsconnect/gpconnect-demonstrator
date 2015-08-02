@@ -9,7 +9,8 @@ angular
     'ui.bootstrap',
     'angular-loading-bar',
     'growlNotifications',
-    'angularUtils.directives.dirPagination'
+    'angularUtils.directives.dirPagination',
+    'ui.timepicker'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
 
@@ -177,6 +178,25 @@ angular
         }
       })
     
+     .state('procedures', {
+        url: '/patients/{patientId:int}/procedures',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/procedures/procedures-list.html', controller: 'ProceduresListCtrl' }
+        }
+      })
+
+      .state('procedures-detail', {
+        url: '/patients/{patientId:int}/procedures/{procedureIndex:int}',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/procedures/procedures-list.html', controller: 'ProceduresListCtrl' },
+          detail: { templateUrl: 'views/referrals/procedures-detail.html', controller: 'ProceduresDetailCtrl' }
+        }
+      })
+    
     .state('referrals', {
         url: '/patients/{patientId:int}/referrals',
         views: {
@@ -246,7 +266,6 @@ angular
   }
 }
 })
-
 .config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
     datepickerConfig.startingDay          = 1;
     datepickerPopupConfig.showButtonBar   = false;

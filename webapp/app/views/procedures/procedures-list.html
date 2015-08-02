@@ -1,0 +1,29 @@
+<h4>Procedures</h4>
+<div class="scrollcontainer1">
+    <div ng-class="!procedures.length?  'scrollcontainer2Empty' :  'scrollcontainer2' ">
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Date of Request</th>
+    <th>Service Team</th>
+    <th>Date of Meeting</th>
+    <th>source</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="procedure in procedures" ng-click="go('/patients/{{patient.id}}/procedures/{{$index}}')" ng-class="{info: selected($index)}">
+    <td>{{procedure.procedureName}}</td>
+    <td>{{procedure.dateOfProcedure}}</td>
+    <td>{{procedure.timeOfProcedure}}</td>
+    <td>{{procedure.source}}</td>
+  </tr>
+  <tr ng-if="!procedures.length">
+    <td colspan="4"><span class="label label-default">No Procedures's</span></td>
+  </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="text-right">
+  <button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button>
+</div>

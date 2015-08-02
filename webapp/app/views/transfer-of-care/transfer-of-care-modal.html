@@ -36,7 +36,7 @@
 
     <div class="col-md-3">
       <ul class="list-group">
-        <li class="list-group-item" style="font-weight: bold">Medications <span class="badge badge-default">{{ transferOfCare.medication.medications.length }}</span></li> </span> </li>
+        <li class="list-group-item" style="font-weight: bold">Medications <span class="badge badge-default">{{ transferOfCare.medication.medications.length }}</span></li> 
         <li class="list-group-item" ng-repeat="medication in medications" ng-click="selectTransferOfCareItem($index, 'medications')" ng-class="isItemSelected($index,'medications')">
           <div class="row">
             <div class="col-xs-9">

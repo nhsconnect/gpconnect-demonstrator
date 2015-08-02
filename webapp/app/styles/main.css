@@ -1,7 +1,6 @@
 
 body{
     width:72%;
-    overflow:scroll;
 }
 
 html, body, #wrapper, #page-wrapper, .section-content {
@@ -192,6 +191,10 @@ label {
   padding-top: 1px;
 }
 
+.form-horizontal label {
+  font-weight: bold;
+}
+
 .radio label, .checkbox label {
   color: #555;
 }
@@ -242,6 +245,8 @@ margin-right: -4%;
 
 /* Confirmation Modal */
 .modal-header {
+  border-top-left-radius:6px;
+  border-top-right-radius: 6px;    
   padding-bottom: 0;
   border-bottom: 0;
   background-color: #007a41;
@@ -1139,38 +1144,6 @@ table.table {
   color: #a94442;
 }
 
-.eolTabs{
-    width:100%;
-    border: 1px solid #DDDDDD;
-    border-radius: 0 !important;
-    margin-left: -10px;
-}
-
-.eolTabs .active{
-background-color: white;
-}
-
-.eolForm{
-    height: 400px;
-    background-color: #F7F7F7;
-}
-
-.eolForm .btn:active, .btn.active{
-  box-shadow:none;
-  background-color: white;    
-}
-
-.eolForm input, .eolForm .input-group {
- width:100% !important;
- padding-top: 5px;    
-}
-
-.eolForm .form-group{
-   padding-top: 10px;
-    width: 97%;
-}
-
-
 textarea#prioritycarecomment{
     height:100px;
     width: 102%;
@@ -1184,6 +1157,10 @@ textarea#treatmentdecisioncomment{
 textarea#cprdecisioncomment{
    height:100px;
    width: 109%;
+}
+
+textarea#procedureNotes{
+   height:108px;
 }
 
 #dateofdecision{
@@ -1222,7 +1199,7 @@ margin-left: 90px;
     top: 0px;
     bottom: 0px;
     left: 0px;
-    right: -17px;
+    right: 0px;
     overflow: auto;
 }
 
@@ -1233,4 +1210,83 @@ margin-left: 90px;
     left: 0px;
     right: 0px;
     overflow: auto;
+}
+
+.modal-open {
+  overflow: auto;
+}
+
+
+.eolTabs{
+    width:100%;
+    border: 1px solid #DDDDDD;
+    border-radius: 0 !important;
+    margin-left: -10px;
+}
+
+.eolTabs .active{
+background-color: white;
+}
+
+.eolForm{
+    height: 400px;
+    background-color: #F7F7F7;
+}
+
+.eolForm .btn:active, .btn.active{
+  box-shadow:none;
+  background-color: white;    
+}
+
+.eolForm input, .eolForm .input-group {
+ width:100% !important;
+ padding-top: 5px;    
+}
+
+.eolForm .form-group{
+   padding-top: 10px;
+    width: 97%;
+}
+
+.procedureForm{
+
+}
+
+.procedureForm input {
+ padding-top: 8px;      
+}
+
+.procedureForm .input-group{
+ width:100% !important;
+ padding-top: 8px;        
+}
+
+.procedureForm .form-group{
+   padding-top: 10px;
+    width: 97%;
+   padding-left:15px;    
+}
+
+.procedureRightModal{
+margin-left: -85px;
+}
+
+.procedureRightModal .rowTwo{
+margin-left: -15px;
+}
+
+.procedureForm .procedureRightModal .input-group{
+        width:140% !important;
+}
+
+.procedureForm .procedureRightModal .proceduretimeform{
+        padding-left: 80px;
+}
+
+.procedureForm .procedureRightModal .proceduretimepicker{
+    width: 350% !important;
+}
+
+.procedureRightModal .proceduredateform input{
+    width: 220px;
 }

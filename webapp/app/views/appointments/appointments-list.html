@@ -6,7 +6,7 @@
       <th>Date of App.</th>
       <th>Time</th>
       <th>Care Service Team</th>
-      <th></th>
+      <th>Source</th>
     </tr>
   </thead>
 
@@ -15,7 +15,7 @@
       <td>{{ appointment.date }}</td>
       <td>{{ appointment.time }}</td>
       <td>{{ appointment.careServiceTeam}}</td>
-      <td></td>
+      <td>{{ apointment.source }}</td>
     </tr>
 
     <tr ng-if="!appointments.length">

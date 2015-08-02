@@ -6,7 +6,7 @@
       <th>Name</th>
       <th>Relationship</th>
       <th>Next of Kin</th>
-      <th></th>
+      <th>Source</th>
     </tr>
   </thead>
 
@@ -15,7 +15,7 @@
       <td>{{ contact.name }}</td>
       <td>{{ contact.relationship }}</td>
       <td><i class="fa fa-fw fa-check" ng-if="contact.nextOfKin"></i></td>
-      <td><i class="fa fa-fw" ng-class="selected($index) ? 'fa-folder-open' : 'fa-folder'"></i></td>
+      <td>{{ contact.source }}</td>
     </tr>
 
     <tr ng-if="!contacts.length">

@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('ReferralsDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Procedure) {
+  .controller('ProceduresDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Procedure) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
 
     Procedure.all($stateParams.procedureId).then(function (result) {
-      $scope.result = result.data;
-      $scope.procedure = $scope.result.Procedure[$stateParams.procedureIndex];
+      $scope.result = result.data[0];
+      $scope.procedure = $scope.result.procedures[$stateParams.procedureIndex];
     });
 
     $scope.edit = function () {

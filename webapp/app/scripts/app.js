@@ -193,7 +193,7 @@ angular
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
           main: { templateUrl: 'views/procedures/procedures-list.html', controller: 'ProceduresListCtrl' },
-          detail: { templateUrl: 'views/referrals/procedures-detail.html', controller: 'ProceduresDetailCtrl' }
+          detail: { templateUrl: 'views/procedures/procedures-detail.html', controller: 'ProceduresDetailCtrl' }
         }
       })
     

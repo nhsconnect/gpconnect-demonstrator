@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('ProceduresModalCtrl', function ($scope, $filter, $modalInstance, PatientService, patient, modal, Procedure) {
+  .controller('ProceduresModalCtrl', function ($scope, $filter, $modalInstance, PatientService, patient, modal, procedure) {
 
     $scope.currentUser = PatientService.getCurrentUser();
-    $scope.procedure = Procedure;
+    $scope.procedure = procedure;
     $scope.patient = patient;
     $scope.modal = modal;
-    $scope.procedure.dateSubmitted = new Date();
+    
+    if(modal.title === 'Create Procedure'){$scope.procedure.dateSubmitted = new Date();}
     
     $scope.procedure.code = '1234567';
     $scope.procedure.terminology = 'ICD-10';

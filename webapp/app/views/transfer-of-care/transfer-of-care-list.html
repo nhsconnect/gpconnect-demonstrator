@@ -7,7 +7,7 @@
     <th>From (Site/Organisation)</th>
     <th>To (Site/Organisation) </th>
     <th>Date/Time</th>
-    <th></th>
+    <th>Source</th>
   </tr>
   </thead>
 
@@ -18,7 +18,7 @@
     <td>{{transfer.transferDetail.site.siteFrom}}</td>
     <td>{{transfer.transferDetail.site.siteTo}}</td>
     <td>{{transfer.transferDetail.site.timeStamp}}</td>
-    <td><i class="fa fa-fw" ng-class="selected($index) ? 'fa-folder-open' : 'fa-folder'"></i></td>
+    <td>{{transfer.source}}</td>
   </tr>
 
   <tr ng-if="!transferofCareComposition.transfers.length">

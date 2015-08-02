@@ -1189,12 +1189,13 @@ margin-left: 90px;
 }
 
 .scrollcontainer1 {
-    height: 100%;
+    height: 90%;
     width: 100%;
     overflow: hidden;
     position: relative;
 }
 .scrollcontainer2 {
+    height: 90%;
     position: absolute;
     top: 0px;
     bottom: 0px;
@@ -1289,4 +1290,24 @@ margin-left: -15px;
 
 .procedureRightModal .proceduredateform input{
     width: 220px;
+}
+
+.procedureMobileform label{
+    float: none;
+}
+
+.procedureMobileform .popupinputs{
+        height: 30px;
+}
+
+.procedureMobileform .terminologylabel{
+   padding-left:16px
+}
+
+.procedureMobileform{
+    width:98% !important;
+}
+
+.procedureMobileform label{
+   padding-top: 10px;
 }

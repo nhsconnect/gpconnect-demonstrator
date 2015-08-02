@@ -1,11 +1,11 @@
-<h4>Problems</h4>
+<h4>Problems/Diagnosis</h4>
 
 <table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
-      <th>Problem</th>
+      <th>Problems/Diagnosis</th>
       <th>Date</th>
-      <th></th>
+      <th>Source</th>
     </tr>
   </thead>
 
@@ -13,7 +13,7 @@
     <tr ng-repeat="diagnosis in diagnoses" ng-click="go('/patients/{{patient.id}}/diagnoses/{{$index}}')" ng-class="{info: selected($index)}">
       <td>{{ diagnosis.problem }}</td>
       <td>{{ diagnosis.dateOfOnset | date:'dd-MMM-yyyy' }}</td>
-      <td><i class="fa fa-fw" ng-class="selected($index) ? 'fa-folder-open' : 'fa-folder'"></i></td>
+      <td>{{diagnosis.source}}</td>
     </tr>
 
     <tr ng-if="! diagnoses || ! diagnoses.length">

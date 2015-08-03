@@ -9,7 +9,7 @@ angular.module('openehrPocApp')
 
     Eolcareplan.all($stateParams.eolcareplanId).then(function (result) {
       $scope.result = result.data;
-      $scope.eolcareplan = $scope.result.eolCarePlans[$stateParams.eolcareplansIndex];
+      $scope.eolcareplan = $scope.result[0].eolCarePlans[$stateParams.eolcareplansIndex];
     });
 
     $scope.edit = function () {
@@ -23,7 +23,7 @@ angular.module('openehrPocApp')
               title: 'Edit Care Plan'
             };
           },
-          contact: function () {
+          eolcareplan: function () {
             return angular.copy($scope.eolcareplan);
           },
           patient: function () {
@@ -33,9 +33,9 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (eolcareplan) {
-        $scope.result.eolcareplans[$stateParams.eolcareplansIndex] = eolcareplan;
+        $scope.result[0].eolCarePlans[$stateParams.eolcareplansIndex] = eolcareplan;
 
-        Eolcareplan.create($scope.patient.id, $scope.result).then(function () {
+        Eolcareplan.update($scope.patient.id, $scope.result).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/eolcareplans');
         });
       });

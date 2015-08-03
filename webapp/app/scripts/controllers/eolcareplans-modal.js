@@ -1,12 +1,18 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('EolcareplansModalCtrl', function ($scope, $filter, $modalInstance, Eolcareplan, patient, modal, PatientService) {
+  .controller('EolcareplansModalCtrl', function ($scope, $filter, $modalInstance, eolcareplan, patient, modal, PatientService) {
         
     $scope.currentUser = PatientService.getCurrentUser();
-    $scope.eolcareplan = Eolcareplan;
+    $scope.eolcareplan = eolcareplan;
     $scope.patient = patient;
     $scope.modal = modal;
+    
+      if(modal.title === 'Create Care plan'){
+          $scope.eolcareplan.careDocument = {
+          date : new Date()
+          }
+      }
 
     $scope.ok = function (eolcareplanForm, eolcareplan) {
       $scope.formSubmitted = true;
@@ -19,8 +25,7 @@ angular.module('openehrPocApp')
       $modalInstance.dismiss('cancel');
     };
     
-     $scope.radioModel = 'Tab1';
-    
+    $scope.radioModel = 'Tab1';
         
     $scope.typesAvaliable = ['Document', 'Document T1', 'Document T2', 'Document T3'];
     $scope.typesChosen = $scope.typesAvaliable[0];

@@ -9,7 +9,7 @@ angular.module('openehrPocApp')
 
     Eolcareplan.all($stateParams.patientId).then(function (result) {
       $scope.result = result.data;
-      $scope.eolcareplans = $scope.result.eolCarePlans;
+      $scope.eolcareplans = $scope.result[0].eolCarePlans;
     });
 
     $scope.go = function (index) {
@@ -41,7 +41,7 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (eolcareplan) {
-        $scope.result.eolCarePlans.push(eolcareplan);
+        $scope.result[0].eolCarePlans.push(eolcareplan);
 
         Eolcareplan.create($scope.patient.id, $scope.result).then(function () {
           $state.go('eolcareplans', { patientId: $scope.patient.id });

@@ -28,7 +28,7 @@ angular.module('openehrPocApp')
         resolve: {
           modal: function () {
             return {
-              title: 'Create Care plan'
+              title: 'Create End of Life Care Document'
             };
           },
           eolcareplan: function () {

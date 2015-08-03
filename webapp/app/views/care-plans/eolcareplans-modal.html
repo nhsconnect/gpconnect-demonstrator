@@ -17,13 +17,13 @@
   </div>
   <form name="eolcareplanForm" class="form-horizontal text-left">
     <fieldset class="eolForm">
-      <legend>Edit End of Life Care Document</legend>
+      <legend>{{modal.title}}</legend>
         <div class="row">
         <div class="col-md-3">
         <div class="btn eolTabs" ng-model="radioModel" btn-radio="'Tab1'">Care Document</div>
         <div class="btn eolTabs" ng-model="radioModel" btn-radio="'Tab2'">Priorities of Care</div>
         <div class="btn eolTabs" ng-model="radioModel" btn-radio="'Tab3'">Treatment Decision</div>
-        <div class="btn eolTabs" ng-model="radioModel" btn-radio="'Tab4'">CPR Decision</div>   
+        <div class="btn eolTabs eolTabsBottom" ng-model="radioModel" btn-radio="'Tab4'">CPR Decision</div>   
         </div>
         <div class="col-md-9">
         <div ng-if="radioModel == 'Tab1'" class="tabContent">        

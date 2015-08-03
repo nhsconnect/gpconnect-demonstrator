@@ -20,7 +20,7 @@ angular.module('openehrPocApp')
         resolve: {
           modal: function () {
             return {
-              title: 'Edit Care Plan'
+              title: 'Edit End of Life Care Document'
             };
           },
           eolcareplan: function () {

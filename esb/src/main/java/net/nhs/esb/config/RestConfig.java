@@ -10,6 +10,7 @@ import net.nhs.esb.mdtreport.rest.MDTReportController;
 import net.nhs.esb.medication.rest.MedicationController;
 import net.nhs.esb.patient.rest.PatientSearchController;
 import net.nhs.esb.procedures.rest.ProceduresController;
+import net.nhs.esb.referrals.rest.ReferralsController;
 import net.nhs.esb.rest.OpenEhr;
 import net.nhs.esb.rest.Patients;
 import net.nhs.esb.transfer.rest.TransferOfCareController;
@@ -51,6 +52,10 @@ public class RestConfig extends CamelConfiguration {
     @Autowired
     private TransferOfCareController transferOfCareController;
 
+    @Autowired
+    private ReferralsController referralsController;
+
+
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -75,7 +80,8 @@ public class RestConfig extends CamelConfiguration {
                                                            mdtReportController,
                                                            medicationController,
                                                            proceduresController,
-                                                           transferOfCareController);
+                                                           transferOfCareController,
+                                                           referralsController);
         springJAXRSServerFactoryBean.setAddress("/patients/");
         springJAXRSServerFactoryBean.setLoggingFeatureEnabled(true);
         springJAXRSServerFactoryBean.setProvider(jacksonJsonProvider());

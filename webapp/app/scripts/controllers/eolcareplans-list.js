@@ -42,8 +42,13 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (eolcareplan) {
         $scope.result[0].eolCarePlans.push(eolcareplan);
+          
+           var toAdd = {
+         compositionId : $scope.result[0].compositionId,
+         eolCarePlans : $scope.result[0].eolCarePlans     
+        }; 
 
-        Eolcareplan.create($scope.patient.id, $scope.result).then(function () {
+        Eolcareplan.create($scope.patient.id, toAdd).then(function () {
           $state.go('eolcareplans', { patientId: $scope.patient.id });
         });
       });

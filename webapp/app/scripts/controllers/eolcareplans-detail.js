@@ -34,8 +34,13 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (eolcareplan) {
         $scope.result[0].eolCarePlans[$stateParams.eolcareplansIndex] = eolcareplan;
-
-        Eolcareplan.update($scope.patient.id, $scope.result).then(function () {
+          
+        var toUpdate = {
+         compositionId : $scope.result[0].compositionId,
+         eolCarePlans : $scope.result[0].eolCarePlans     
+        }; 
+          
+        Eolcareplan.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/eolcareplans');
         });
       });

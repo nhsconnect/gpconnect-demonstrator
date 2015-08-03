@@ -5,7 +5,8 @@ angular.module('openehrPocApp')
 
     $scope.appointment = appointment;
     $scope.patient = patient;
-    $scope.modal = modal;
+    $scope.modal = modal; 
+    $scope.radioModel = 'Tab1';
 
     $scope.ok = function (appointmentForm, appointment) {
       $scope.formSubmitted = true;

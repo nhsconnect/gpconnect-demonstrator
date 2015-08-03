@@ -15,14 +15,27 @@
       </div>
     </div>
   </div>
-
   <form name="appointmentForm" class="form-horizontal text-left">
-    <fieldset>
+    <fieldset class="eolForm">
       <legend>Appointment detail</legend>
-      </fieldset>
+    
+       <div class="row">
+        <div class="col-md-3">
+        <div class="btn eolTabs" ng-model="radioModel" btn-radio="'Tab1'">Service</div>
+        <div class="btn eolTabs" ng-model="radioModel" btn-radio="'Tab2'">Schedule</div>
+        </div>
+        <div class="col-md-9">
+         <div ng-if="radioModel == 'Tab1'" class="tabContent">        
+            <div class="row tabContetInner"></div>
+         </div>
+        <div ng-if="radioModel == 'Tab2'" class="tabContent">        
+            <div class="row tabContetInner"></div>
+        </div>
+        </div>
+      </div>
+    </fieldset>
   </form>
 </div>
-
 <div class="modal-footer">
     <a class="btn btn-info" ng-click="cancel()">Cancel</a>
     <button class="btn btn-success" ng-click="formSubmitted = true; ok(appointmentForm, appointment);"><i class="fa fa-check"></i> Complete</button>

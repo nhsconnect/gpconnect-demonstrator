@@ -19,7 +19,7 @@
   <form name="procedureForm" class="form-horizontal text-left">
     <fieldset class="procedureForm">
       <legend>Procedure detail</legend>
-    <div class="row procedureMobileform">
+    <div class="row">
       <div class="col-md-6">
           
          <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || procedureForm.procedureName.$dirty) && procedureForm.procedureName.$invalid, 'has-success': procedureForm.procedureName.$valid && procedureForm.procedureName.$dirty}">
@@ -137,7 +137,7 @@
     
           </row>  
          </div>
-      <div class="col-xs-12 col-sm-12 hidden-md hidden-lg">  
+      <div class="procedureMobileform col-xs-12 col-sm-12 hidden-md hidden-lg">  
 
             
          <div ng-class="{'has-error': (formSubmitted || procedureForm.terminology.$dirty) && procedureForm.terminology.$invalid, 'has-success': procedureForm.terminology.$valid && procedureForm.terminology.$dirty}">

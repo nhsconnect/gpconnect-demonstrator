@@ -1,13 +1,11 @@
 package net.nhs.esb.endoflife.model;
 
-import java.util.List;
-
 /**
  */
 public class EndOfLifeCarePlan {
 
     private CareDocument careDocument;
-    private List<PrioritiesOfCare> prioritiesOfCare;
+    private PrioritiesOfCare prioritiesOfCare;
     private TreatmentDecision treatmentDecision;
     private CprDecision cprDecision;
     private String source;
@@ -20,11 +18,11 @@ public class EndOfLifeCarePlan {
         this.careDocument = careDocument;
     }
 
-    public List<PrioritiesOfCare> getPrioritiesOfCare() {
+    public PrioritiesOfCare getPrioritiesOfCare() {
         return prioritiesOfCare;
     }
 
-    public void setPrioritiesOfCare(List<PrioritiesOfCare> prioritiesOfCare) {
+    public void setPrioritiesOfCare(PrioritiesOfCare prioritiesOfCare) {
         this.prioritiesOfCare = prioritiesOfCare;
     }
 

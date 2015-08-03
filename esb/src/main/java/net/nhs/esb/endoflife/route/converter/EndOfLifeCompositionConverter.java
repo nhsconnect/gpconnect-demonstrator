@@ -51,7 +51,7 @@ public class EndOfLifeCompositionConverter {
     @Converter
     public EndOfLifeUpdate convertEndOfLifeCompositionToUpdate(EndOfLifeComposition endOfLifeComposition) {
 
-        Map<String,String> content = new HashMap<>();
+        Map<String, String> content = new HashMap<>();
 
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
@@ -93,8 +93,12 @@ public class EndOfLifeCompositionConverter {
         carePlan.setCprDecision(extractCprDecision(rawComposition, prefix));
         carePlan.setTreatmentDecision(extractTreatmentDecision(rawComposition, prefix));
         carePlan.setCareDocument(extractCareDocument());
-        carePlan.setPrioritiesOfCare(extractPrioritiesOfCare(rawComposition, prefix));
         carePlan.setSource("openehr");
+
+        List<PrioritiesOfCare> prioritiesOfCareList = extractPrioritiesOfCare(rawComposition, prefix);
+        if (!prioritiesOfCareList.isEmpty()) {
+            carePlan.setPrioritiesOfCare(prioritiesOfCareList.get(0));
+        }
 
         return carePlan;
     }
@@ -176,20 +180,15 @@ public class EndOfLifeCompositionConverter {
         content.put(prefix + "/advance_decision_to_refuse_treatment/decision_status|code", "at0005");
     }
 
-    private void addPriorities(Map<String, String> content, String prefix, List<PrioritiesOfCare> prioritiesOfCare) {
+    private void addPriorities(Map<String, String> content, String prefix, PrioritiesOfCare priority) {
 
-        int index = 0;
-        for (PrioritiesOfCare priority : prioritiesOfCare) {
-            String priorityPrefix = prefix + "/preferred_priorities_of_care:" + index;
+        String priorityPrefix = prefix + "/preferred_priorities_of_care:0";
 
-            content.put(priorityPrefix + "/preferred_place_of_care:0|value", priority.getPlaceOfCare());
-            content.put(priorityPrefix + "/preferred_place_of_care:0|code", "at0008");
-            content.put(priorityPrefix + "/preferred_place_of_death:0|value", priority.getPlaceOfDeath());
-            content.put(priorityPrefix + "/preferred_place_of_death:0|code", "at0018");
-            content.put(priorityPrefix + "/comment", priority.getComment());
-
-            index++;
-        }
+        content.put(priorityPrefix + "/preferred_place_of_care:0|value", priority.getPlaceOfCare());
+        content.put(priorityPrefix + "/preferred_place_of_care:0|code", "at0008");
+        content.put(priorityPrefix + "/preferred_place_of_death:0|value", priority.getPlaceOfDeath());
+        content.put(priorityPrefix + "/preferred_place_of_death:0|code", "at0018");
+        content.put(priorityPrefix + "/comment", priority.getComment());
     }
 
     private void addCprDecision(Map<String, String> content, String prefix, CprDecision cprDecision) {

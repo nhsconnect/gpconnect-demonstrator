@@ -1249,9 +1249,6 @@ background-color: white;
     width: 97%;
 }
 
-.procedureForm{
-
-}
 
 .procedureForm input {
  padding-top: 8px;      
@@ -1310,4 +1307,35 @@ margin-left: -15px;
 
 .procedureMobileform label{
    padding-top: 10px;
+}
+
+
+.referralForm .input-group{
+    width:100% !important;
+    padding-top: 8px;
+    
+}
+
+.referralForm .form-control{
+    height: 30px;
+}
+
+.performerInput{
+  width: 104%;
+}
+
+.referralDate{
+  margin-left: -12px;
+}
+
+.referralDate input{
+  width: 108% !important;
+}
+
+#reasonforreferral, #clinicalsummary{
+    height: 100px;
+}
+
+.reasonforreferralGroup{
+padding-top: 22px;
 }

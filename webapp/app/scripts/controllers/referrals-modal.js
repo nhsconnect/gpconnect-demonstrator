@@ -1,11 +1,26 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('ReferralsModalCtrl', function ($scope, $modalInstance, referral, patient, modal) {
-
+  .controller('ReferralsModalCtrl', function ($scope, $modalInstance, referral, PatientService, patient, modal) {
+   
+    $scope.currentUser = PatientService.getCurrentUser();
     $scope.referral = referral;
     $scope.patient = patient;
     $scope.modal = modal;
+    
+    if(modal.title === 'Create Referral'){$scope.referral.dateCreated = new Date();}
+    
+    $scope.referralCreatedDatepicker = function ($event, name) {
+     $event.preventDefault();
+     $event.stopPropagation();
+     $scope[name] = true;
+    };
+    
+    $scope.dateofReferralDatepicker = function ($event, name) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      $scope[name] = true;
+    };
 
     $scope.ok = function (referralForm, referral) {
       $scope.formSubmitted = true;

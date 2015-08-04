@@ -44,9 +44,9 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (referral) {
 
-            referral.source = 'OpenEHR';  
+            referral.source = 'OpenEHR'; 
           if($scope.result.length > 0){
-            $scope.result[0].push(referral);
+            $scope.result[0].referrals.push(referral);
             Referral.update($scope.patient.id, $scope.result[0]).then(function () {
             $state.go('referrals', { patientId: $scope.patient.id });
             });

@@ -21,7 +21,7 @@
        <div class="row hidden-xs hidden-sm">
         <div class="col-md-3">
         <div class="btn eolTabs" ng-model="radioModel" btn-radio="'Tab1'">Service</div>
-        <div class="btn eolTabs" ng-model="radioModel" btn-radio="'Tab2'">Schedule</div>
+        <div class="btn eolTabsBottom eolTabs" ng-model="radioModel" btn-radio="'Tab2'">Schedule</div>
         </div>
         <div class="col-md-9">
          <div ng-if="radioModel == 'Tab1'" class="appointmentTabContent">        
@@ -244,6 +244,6 @@
   </form>
 </div>
 <div class="modal-footer">
-    <a class="btn btn-info" ng-click="cancel()">Cancel</a>
+   <a class="btn btn-danger" ng-click="cancel()">Cancel</a>
     <button class="btn btn-success" ng-click="formSubmitted = true; ok(appointmentForm, appointment);"><i class="fa fa-check"></i> Complete</button>
 </div>

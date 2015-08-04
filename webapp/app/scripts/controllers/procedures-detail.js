@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('ProceduresDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Procedure) {
+  .controller('ProceduresDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Procedure, DateFormatter) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -33,12 +33,18 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (procedure) {
-        $scope.result.procedures[$stateParams.procedureIndex] = procedure;
-
-        Contact.create($scope.patient.id, $scope.result).then(function () {
+          var s = procedure.dateofProcedure.toLocaleDateString();
+          $scope.result.procedures[$stateParams.procedureIndex] = procedure;
+          
+        var toUpdate = {
+         compositionId : $scope.result.compositionId,
+         procedures : $scope.result.procedures     
+        }; 
+          
+        Procedure.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/procedures');
         });
-      });
+       });
     };
 
   });

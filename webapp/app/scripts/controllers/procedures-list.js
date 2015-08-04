@@ -8,8 +8,10 @@ angular.module('openehrPocApp')
     });
 
     Procedure.all($stateParams.patientId).then(function (result) {
-      $scope.result = result.data[0];
-      $scope.procedures = $scope.result.procedures;
+      $scope.result = result.data;
+           if(result.data.length > 0){
+      $scope.procedures = $scope.result[0].procedures;
+        }
     });
 
     $scope.go = function (path) {
@@ -40,12 +42,25 @@ angular.module('openehrPocApp')
         }
       });
 
-      modalInstance.result.then(function (procedures) {
-        $scope.result.procedures.push(procedure);
+      modalInstance.result.then(function (procedure) {
+        //    procedure.dateofProcedure = procedure.dateofProcedure.toJSON();
+        //    procedure.dateSubmitted = procedure.dateSubmitted.toJSON();
+            procedure.source = 'OpenEHR';  
+          if($scope.result.length > 0){
+            $scope.result[0].procedures.push(procedure);
+            Procedure.update($scope.patient.id, $scope.result[0]).then(function () {
+            $state.go('procedures', { patientId: $scope.patient.id });
+            });
+          }else{
+           var toAdd = {
+         compositionId : '',
+         procedures : [procedure]   
+        }; 
 
-        Contact.create($scope.patient.id, $scope.result).then(function () {
+        Procedure.create($scope.patient.id, toAdd).then(function () {
           $state.go('procedures', { patientId: $scope.patient.id });
         });
+        }
       });
     };
 

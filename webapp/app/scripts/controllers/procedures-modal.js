@@ -29,6 +29,14 @@ angular.module('openehrPocApp')
       $scope[name] = true;
     };
     
+    
+    $scope.$watch('mydateSubmitted', function (newValue) {
+    $scope.procedure.dateSubmitted = $filter('date')(newValue, 'yyyy-MM-dd'); 
+    });
+
+    $scope.$watch('procedure.dateSubmitted', function (newValue) {
+    $scope.mydateSubmitted = $filter('date')(newValue, 'yyyy-MM-dd'); 
+    });
 
 
     $scope.ok = function (procedureForm, procedure) {

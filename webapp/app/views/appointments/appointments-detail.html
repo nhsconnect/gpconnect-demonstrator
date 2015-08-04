@@ -1,4 +1,4 @@
-<h4>Appointment <span ng-if="appointmentSelectionNumber"></h4>
+<h3><strong>Appointment </strong></h3>
 
 <div class="form-horizontal text-left">
     <div class="form-group form-group-sm">
@@ -11,7 +11,7 @@
     <div class="form-group form-group-sm">
       <label class="control-label col-md-4">Date of Appointment:</label>
       <div class="col-md-8">
-        <div class="form-control-static">{{ appointment.dateOfAppointment  }}</div>
+        <div class="form-control-static">{{ appointment.dateOfAppointment  | date:'y-MM-dd' }}</div>
       </div>
     </div>
 
@@ -39,7 +39,7 @@
         <div class="form-group form-group-sm">
       <label class="control-label col-md-4">Date Created:</label>
       <div class="col-md-8">
-        <div class="form-control-static">{{ appointment.date  }}</div>
+        <div class="form-control-static">{{ appointment.date   | date:'y-MM-dd'}}</div>
       </div>
     </div>
     

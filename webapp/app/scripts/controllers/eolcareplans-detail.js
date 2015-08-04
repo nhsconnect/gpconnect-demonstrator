@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('EolcareplansDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Eolcareplan) {
+  .controller('EolcareplansDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Eolcareplan, DateFormatter) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -9,7 +9,7 @@ angular.module('openehrPocApp')
 
     Eolcareplan.all($stateParams.eolcareplanId).then(function (result) {
       $scope.result = result.data;
-      $scope.eolcareplan = $scope.result[0].eolCarePlans[$stateParams.eolcareplansIndex];
+      $scope.eolcareplan = $scope.result[0].eolCarePlans[$stateParams.eolcareplansIndex];  
     });
 
     $scope.edit = function () {

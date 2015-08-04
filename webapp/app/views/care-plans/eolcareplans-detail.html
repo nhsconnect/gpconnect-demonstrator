@@ -13,7 +13,7 @@
     <div class="form-group form-group-sm">
       <label class="control-label col-md-4">Document Date:</label>
       <div class="col-md-8">
-        <div class="form-control-static">{{ eolcareplan.careDocument.date }}</div>
+        <div class="form-control-static">{{ eolcareplan.careDocument.date | date:'y-MM-dd'}}</div>
       </div>
     </div>
  </div>
@@ -54,7 +54,7 @@
     <div class="form-group form-group-sm">
       <label class="control-label col-md-4">Date of Decision:</label>
       <div class="col-md-8">
-        <div class="form-control-static">{{ eolcareplan.treatmentDecision.dateOfDecision }}</div>
+        <div class="form-control-static">{{ eolcareplan.treatmentDecision.dateOfDecision  | date:'y-MM-dd'}}</div>
       </div>
     </div>        
       </div>   
@@ -82,7 +82,7 @@
     <div class="form-group form-group-sm">
       <label class="control-label col-md-4">Date of Decision:</label>
       <div class="col-md-8">
-        <div class="form-control-static">{{ eolcareplan.cprDecision.dateOfDecision }}</div>
+        <div class="form-control-static">{{ eolcareplan.cprDecision.dateOfDecision  | date:'y-MM-dd'}}</div>
       </div>
     </div>  
       </div>                          

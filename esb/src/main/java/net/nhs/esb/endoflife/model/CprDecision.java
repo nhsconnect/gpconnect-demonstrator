@@ -1,11 +1,13 @@
 package net.nhs.esb.endoflife.model;
 
+import java.util.Date;
+
 /**
  */
 public class CprDecision {
 
     private String cprDecision;
-    private String dateOfDecision;
+    private Date dateOfDecision;
     private String comment;
 
     public String getCprDecision() {
@@ -16,11 +18,11 @@ public class CprDecision {
         this.cprDecision = cprDecision;
     }
 
-    public String getDateOfDecision() {
+    public Date getDateOfDecision() {
         return dateOfDecision;
     }
 
-    public void setDateOfDecision(String dateOfDecision) {
+    public void setDateOfDecision(Date dateOfDecision) {
         this.dateOfDecision = dateOfDecision;
     }
 

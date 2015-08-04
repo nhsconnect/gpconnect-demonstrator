@@ -1,5 +1,7 @@
 package net.nhs.esb.procedures.model;
 
+import java.util.Date;
+
 /**
  */
 public class Procedure {
@@ -10,9 +12,9 @@ public class Procedure {
     private String author;
     private String terminology;
     private String code;
-    private String dateOfProcedure;
-    private String timeOfProcedure;
-    private String dateSubmitted;
+    private Date dateOfProcedure;
+    private Date timeOfProcedure;
+    private Date dateSubmitted;
     private String source;
     private String performer;
 
@@ -64,27 +66,27 @@ public class Procedure {
         this.code = code;
     }
 
-    public String getDateOfProcedure() {
+    public Date getDateOfProcedure() {
         return dateOfProcedure;
     }
 
-    public void setDateOfProcedure(String dateOfProcedure) {
+    public void setDateOfProcedure(Date dateOfProcedure) {
         this.dateOfProcedure = dateOfProcedure;
     }
 
-    public String getTimeOfProcedure() {
+    public Date getTimeOfProcedure() {
         return timeOfProcedure;
     }
 
-    public void setTimeOfProcedure(String timeOfProcedure) {
+    public void setTimeOfProcedure(Date timeOfProcedure) {
         this.timeOfProcedure = timeOfProcedure;
     }
 
-    public String getDateSubmitted() {
+    public Date getDateSubmitted() {
         return dateSubmitted;
     }
 
-    public void setDateSubmitted(String dateSubmitted) {
+    public void setDateSubmitted(Date dateSubmitted) {
         this.dateSubmitted = dateSubmitted;
     }
 

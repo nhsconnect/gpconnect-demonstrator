@@ -1,6 +1,7 @@
 package net.nhs.esb.procedures.route.converter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import net.nhs.esb.openehr.model.CompositionResponseData;
 import net.nhs.esb.procedures.model.Procedure;
 import net.nhs.esb.procedures.model.ProcedureComposition;
 import net.nhs.esb.procedures.model.ProcedureUpdate;
+import net.nhs.esb.util.DateFormatter;
 import org.apache.camel.Converter;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -57,7 +59,7 @@ public class ProcedureCompositionConverter {
         int index = 0;
         for (Procedure procedure : procedureComposition.getProcedures()) {
 
-            String dateTime = procedure.getDateOfProcedure() + "T" + procedure.getTimeOfProcedure() + ":00";
+            String dateTime = DateFormatter.combineDateTime(procedure.getDateOfProcedure(), procedure.getTimeOfProcedure());
 
             content.put(PROCEDURE_PREFIX + index + "/procedure_name", procedure.getProcedureName());
             content.put(PROCEDURE_PREFIX + index + "/procedure_notes", procedure.getProcedureNotes());
@@ -89,6 +91,7 @@ public class ProcedureCompositionConverter {
 
     private Procedure extractProcedure(Map<String,Object> rawComposition, int index) {
 
+        String dateSubmitted = MapUtils.getString(rawComposition, "procedures_list/context/start_time");
         String procedureName = MapUtils.getString(rawComposition, PROCEDURE_PREFIX + index + "/procedure_name");
         String procedureNotes = MapUtils.getString(rawComposition, PROCEDURE_PREFIX + index + "/procedure_notes");
         String performer = findPerformer(rawComposition, index);
@@ -97,10 +100,11 @@ public class ProcedureCompositionConverter {
         String terminology = MapUtils.getString(rawComposition, PROCEDURE_PREFIX + index + "/ism_transition/careflow_step|terminology");
 
         String dateTime = MapUtils.getString(rawComposition, PROCEDURE_PREFIX + index + "/time");
-        String date = StringUtils.substringBefore(dateTime, "T");
-        String time = StringUtils.substringBeforeLast(StringUtils.substringAfter(dateTime, "T"), ":");
+        Date date = DateFormatter.toDateOnly(dateTime);
+        Date time = DateFormatter.toTimeOnly(dateTime);
 
         Procedure procedure = new Procedure();
+        procedure.setDateSubmitted(DateFormatter.toDate(dateSubmitted));
         procedure.setDateOfProcedure(date);
         procedure.setTimeOfProcedure(time);
         procedure.setProcedureName(procedureName);

@@ -1,5 +1,7 @@
 package net.nhs.esb.endoflife.model;
 
+import java.util.Date;
+
 /**
  */
 public class CareDocument {
@@ -7,7 +9,7 @@ public class CareDocument {
     private String name;
     private String type;
     private String author;
-    private String date;
+    private Date date;
 
     public String getName() {
         return name;
@@ -33,11 +35,11 @@ public class CareDocument {
         this.author = author;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

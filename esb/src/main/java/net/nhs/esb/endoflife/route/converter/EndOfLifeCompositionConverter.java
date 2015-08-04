@@ -13,6 +13,7 @@ import net.nhs.esb.endoflife.model.EndOfLifeUpdate;
 import net.nhs.esb.endoflife.model.PrioritiesOfCare;
 import net.nhs.esb.endoflife.model.TreatmentDecision;
 import net.nhs.esb.openehr.model.CompositionResponseData;
+import net.nhs.esb.util.DateFormatter;
 import org.apache.camel.Converter;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -92,7 +93,7 @@ public class EndOfLifeCompositionConverter {
         EndOfLifeCarePlan carePlan = new EndOfLifeCarePlan();
         carePlan.setCprDecision(extractCprDecision(rawComposition, prefix));
         carePlan.setTreatmentDecision(extractTreatmentDecision(rawComposition, prefix));
-        carePlan.setCareDocument(extractCareDocument());
+        carePlan.setCareDocument(extractCareDocument(rawComposition));
         carePlan.setSource("openehr");
 
         List<PrioritiesOfCare> prioritiesOfCareList = extractPrioritiesOfCare(rawComposition, prefix);
@@ -106,12 +107,11 @@ public class EndOfLifeCompositionConverter {
     private CprDecision extractCprDecision(Map<String, Object> rawComposition, String prefix) {
 
         String dateTime = MapUtils.getString(rawComposition, prefix + "/cpr_decision/date_of_cpr_decision");
-        String decisionDate = StringUtils.substringBefore(dateTime, "T");
 
         CprDecision cprDecision = new CprDecision();
         cprDecision.setCprDecision(MapUtils.getString(rawComposition, prefix + "/cpr_decision/cpr_decision|value"));
         cprDecision.setComment(MapUtils.getString(rawComposition, prefix + "/cpr_decision/comment"));
-        cprDecision.setDateOfDecision(decisionDate);
+        cprDecision.setDateOfDecision(DateFormatter.toDate(dateTime));
 
         return cprDecision;
     }
@@ -119,23 +119,25 @@ public class EndOfLifeCompositionConverter {
     private TreatmentDecision extractTreatmentDecision(Map<String, Object> rawComposition, String prefix) {
 
         String dateTime = MapUtils.getString(rawComposition, prefix + "/advance_decision_to_refuse_treatment/date_of_decision");
-        String decisionDate = StringUtils.substringBefore(dateTime, "T");
 
         TreatmentDecision treatmentDecision = new TreatmentDecision();
         treatmentDecision.setDecisionToRefuseTreatment(MapUtils.getString(rawComposition, prefix + "/advance_decision_to_refuse_treatment/decision_status|value"));
         treatmentDecision.setComment(MapUtils.getString(rawComposition, prefix + "/advance_decision_to_refuse_treatment/comment"));
-        treatmentDecision.setDateOfDecision(decisionDate);
+        treatmentDecision.setDateOfDecision(DateFormatter.toDate(dateTime));
 
         return treatmentDecision;
     }
 
-    private CareDocument extractCareDocument() {
+    private CareDocument extractCareDocument(Map<String, Object> rawComposition) {
+
+        String dateTime = MapUtils.getString(rawComposition, "end_of_life_patient_preferences/context/start_time");
+
         // TODO: Remove hard-coded data
         CareDocument careDocument = new CareDocument();
         careDocument.setName("End of Life Care");
         careDocument.setType("Document");
         careDocument.setAuthor("Dr John Smith");
-        careDocument.setDate("2015-01-01");
+        careDocument.setDate(DateFormatter.toDate(dateTime));
 
         return careDocument;
     }
@@ -172,7 +174,7 @@ public class EndOfLifeCompositionConverter {
 
     private void addTreatmentDecision(Map<String, String> content, String prefix, TreatmentDecision treatmentDecision) {
 
-        String decisionDate = treatmentDecision.getDateOfDecision() + "T00:00:00Z";
+        String decisionDate = DateFormatter.toString(treatmentDecision.getDateOfDecision());
 
         content.put(prefix + "/advance_decision_to_refuse_treatment/decision_status|value", treatmentDecision.getDecisionToRefuseTreatment());
         content.put(prefix + "/advance_decision_to_refuse_treatment/comment", treatmentDecision.getComment());
@@ -193,7 +195,7 @@ public class EndOfLifeCompositionConverter {
 
     private void addCprDecision(Map<String, String> content, String prefix, CprDecision cprDecision) {
 
-        String decisionDate = cprDecision.getDateOfDecision() + "T00:00:00Z";
+        String decisionDate = DateFormatter.toString(cprDecision.getDateOfDecision());
 
         content.put(prefix + "/cpr_decision/cpr_decision|value", cprDecision.getCprDecision());
         content.put(prefix + "/cpr_decision/comment", cprDecision.getComment());

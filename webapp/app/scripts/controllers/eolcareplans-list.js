@@ -9,7 +9,9 @@ angular.module('openehrPocApp')
 
     Eolcareplan.all($stateParams.patientId).then(function (result) {
       $scope.result = result.data;
+        if(result.data.length > 0){
       $scope.eolcareplans = $scope.result[0].eolCarePlans;
+        }
     });
 
     $scope.go = function (index) {
@@ -41,16 +43,22 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (eolcareplan) {
-        $scope.result[0].eolCarePlans.push(eolcareplan);
-          
+          eolcareplan.source = 'OpenEHR';  
+          if($scope.result.length > 0){
+            $scope.result[0].eolCarePlans.push(eolcareplan);
+            Eolcareplan.update($scope.patient.id, $scope.result[0]).then(function () {
+            $state.go('eolcareplans', { patientId: $scope.patient.id });
+            });
+          }else{
            var toAdd = {
-         compositionId : $scope.result[0].compositionId,
-         eolCarePlans : $scope.result[0].eolCarePlans     
+         compositionId : '',
+         eolCarePlans : [eolcareplan]   
         }; 
 
         Eolcareplan.create($scope.patient.id, toAdd).then(function () {
           $state.go('eolcareplans', { patientId: $scope.patient.id });
         });
+        }
       });
     };
 

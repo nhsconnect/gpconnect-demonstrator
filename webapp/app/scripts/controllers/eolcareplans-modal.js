@@ -8,7 +8,7 @@ angular.module('openehrPocApp')
     $scope.patient = patient;
     $scope.modal = modal;
     
-      if(modal.title === 'Create Care plan'){
+      if(modal.title === 'Create End of Life Care Document'){
           $scope.eolcareplan.careDocument = {
           date : new Date()
           }

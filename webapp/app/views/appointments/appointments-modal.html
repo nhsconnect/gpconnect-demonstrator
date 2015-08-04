@@ -92,7 +92,7 @@
         </div>
          </div>
             <div class="col-md-3">
-             <button class="btn btn-primary" ng-click=""><i class="fa fa-calendar"></i> Re-Schedule</button>
+             <button class="btn btn-primary" ng-click="schedule()"><i class="fa fa-calendar"></i> Re-Schedule</button>
             </div>    
             </row>  
             <row>    
@@ -125,7 +125,11 @@
             </div>
          </div>
         <div ng-if="radioModel == 'Tab2'" class="tabContent">        
-            <div class="row tabContetInner"></div>
+            <div class="row tabContetInner">
+                <div>
+                    <img id="scheduler" src="images/Before.png" ng-click="imgClick()" alt="Scheduler" >
+                </div>
+            </div>
         </div>
         </div>
       </div>
@@ -231,8 +235,8 @@
             </row>    
             </div>
          </div>
-        <div ng-if="radioModel == 'Tab2'" class="tabContent">        
-            <div class="row tabContetInner"></div>
+         <div ng-if="radioModel == 'Tab2'" class="tabContent">        
+            
         </div>
         </div>
         </div>

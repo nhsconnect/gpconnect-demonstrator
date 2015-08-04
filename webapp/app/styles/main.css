@@ -1260,6 +1260,12 @@ background-color: white;
 .appointmentForm .form-group{
     padding-top: 15px;
 }
+.appointmentForm .tabContent{
+    height: 490px !important;
+}
+.appointmentForm .tabContent img{
+    margin-left: -15px;
+}
 
  .eolForm .btn:active, .btn.active{
   box-shadow:none;

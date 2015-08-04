@@ -203,7 +203,7 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')"><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control popupinputs" id="datesubmitted" name="datesubmitted" ng-model="procedure.dateSubmitted" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" datepicker-popup is-open="dateSubmitted" required />
+              <input type="text" class="form-control popupinputs" id="datesubmitted" name="datesubmitted" ng-model="procedure.dateSubmitted" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" datepicker-popup is-open="dateSubmitted" required  disabled/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.datesubmitted.$error.required">You must enter a valid date.</span>
           </div>

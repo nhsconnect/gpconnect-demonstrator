@@ -1244,25 +1244,37 @@ background-color: white;
 }
 
 .appointmentForm{
-    height: px;
     background-color: #F7F7F7;
 }
 
- .appointmentForm ,.eolForm .btn:active, .btn.active{
+.appointmentForm .form-Group{
+    padding-top: 33px;
+    width: 97%;
+}
+
+.appointmentForm fieldset{
+    background-color: #F7F7F7 !important;
+    padding-bottom: 0px !important;
+}
+
+.appointmentForm .form-group{
+    padding-top: 15px;
+}
+
+ .eolForm .btn:active, .btn.active{
   box-shadow:none;
   background-color: white;    
 }
 
- .appointmentForm, .eolForm input, .eolForm .input-group {
+ .eolForm input, .eolForm .input-group {
  width:100% !important;
  padding-top: 5px;    
 }
 
- .appointmentForm, .eolForm .form-group{
+.eolForm .form-group{
    padding-top: 10px;
     width: 97%;
 }
-
 
 .procedureForm input {
  padding-top: 8px;      
@@ -1334,9 +1346,43 @@ margin-left: -15px;
     height: 30px;
 }
 
-.tabContetInner .btn-primary{
-   margin-top: 31px;
+
+.appointmentLocationGroup{
+    margin-left: -10px;
+}
+
+.appointmentStatusGroup{
+    margin-left: -25px;
+}
+
+.appointmentStatusGroup .input-group .form-control{
+    width : 150px !important;
+}
+
+.appointmentTabContent{
+    background-color: white;
+    border-left: 1px solid #DDDDDD;
+    height: 240px;
+    width: 677px;
+    margin-left: -40px;
+    margin-top: -21px;
+}
+
+.appointmentdateGroup{
+    margin-left: -25px !important;
+}
+
+.appointmentTabContent .outerRow{
+    padding-left: 30px;
+}
+
+.appointmentTabContent  .btn-primary{
+   margin-top: 33px;
    margin-left: -25px;
+}
+
+.appointmentTabContentMobile .input-group{
+    width:100%
 }
 
 .referralDate{
@@ -1353,20 +1399,4 @@ margin-left: -15px;
 
 .reasonforreferralGroup{
     padding-top: 22px;
-}
-
-.appointmentLocationGroup{
-    margin-left: -25px;
-}
-
-.appointmentStatusGroup{
-    margin-left: -25px;
-}
-
-.appointmentStatusGroup .input-group .form-control{
-    width : 150px !important;
-}
-
-.appointmentdateGroup{
-    margin-left: -50px;
 }

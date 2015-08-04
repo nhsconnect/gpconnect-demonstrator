@@ -1,15 +1,18 @@
 package net.nhs.esb.referrals.model;
 
 
+import java.util.Date;
+
+
 public class Referral {
 
     private String referralFrom;
     private String referralTo;
-    private String dateOfReferral;
+    private Date dateOfReferral;
     private String reasonForReferral;
     private String clinicalSummary;
     private String author;
-    private String dateCreated;
+    private Date dateCreated;
     private String source;
 
     public String getReferralFrom() {
@@ -28,11 +31,11 @@ public class Referral {
         this.referralTo = referralTo;
     }
 
-    public String getDateOfReferral() {
+    public Date getDateOfReferral() {
         return dateOfReferral;
     }
 
-    public void setDateOfReferral(String dateOfReferral) {
+    public void setDateOfReferral(Date dateOfReferral) {
         this.dateOfReferral = dateOfReferral;
     }
 
@@ -60,11 +63,11 @@ public class Referral {
         this.author = author;
     }
 
-    public String getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(String dateCreated) {
+    public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 

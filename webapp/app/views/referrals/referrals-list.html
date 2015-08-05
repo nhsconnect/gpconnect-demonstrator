@@ -12,7 +12,7 @@
 
   <tbody>
     <tr ng-repeat="referral in referrals" ng-click="go('/patients/{{patient.id}}/referrals/{{$index}}')" ng-class="{info: selected($index)}">
-      <td>{{ referral.dateOfReferral }}</td>
+      <td>{{ referral.dateOfReferral | date:'y-MM-dd'}}</td>
       <td>{{ referral.referralFrom }}</td>
       <td>{{ referral.referralTo }}</td>
       <td>{{ referral.source }}</td>

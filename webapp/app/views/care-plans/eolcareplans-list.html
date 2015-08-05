@@ -13,7 +13,7 @@
     <tr ng-repeat="eolcareplan in eolcareplans" ng-click="go({{$index}})" ng-class="{info: selected($index)}">
       <td>{{ eolcareplan.careDocument.name }}</td>
       <td>{{ eolcareplan.careDocument.type }}</td>
-      <td>{{ eolcareplan.careDocument.date }}</td>
+      <td>{{ eolcareplan.careDocument.date | date:'y-MM-dd'}}</td>
       <td>{{ eolcareplan.source }}</td>
     </tr>
 

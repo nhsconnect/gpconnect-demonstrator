@@ -212,7 +212,7 @@ angular
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
           main: { templateUrl: 'views/referrals/referrals-list.html', controller: 'ReferralsListCtrl' },
-          detail: { templateUrl: 'views/referrals/referrals-detail.html', controller: 'referralsDetailCtrl' }
+          detail: { templateUrl: 'views/referrals/referrals-detail.html', controller: 'ReferralsDetailCtrl' }
         }
       })
     
@@ -262,7 +262,7 @@ angular
         require: 'ngModel',
         link: function(scope, element, attr, controller) {
       //remove the default formatter from the input directive to prevent conflict
-      controller.$formatters.shift();
+      controller.$formatters.unshift();
   }
 }
 })

@@ -9,7 +9,9 @@ angular.module('openehrPocApp')
 
     Referral.all($stateParams.patientId).then(function (result) {
       $scope.result = result.data;
-      $scope.referrals = $scope.result.referrals;
+            if(result.data.length > 0){
+      $scope.referrals = $scope.result[0].referrals;
+        }
     });
 
     $scope.go = function (path) {
@@ -41,11 +43,25 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (referral) {
-        $scope.result.referrals.push(referral);
 
-        Contact.create($scope.patient.id, $scope.result).then(function () {
+            referral.source = 'OpenEHR'; 
+          if($scope.result.length > 0){
+            $scope.result[0].referrals.push(referral);
+            Referral.update($scope.patient.id, $scope.result[0]).then(function () {
+            $state.go('referrals', { patientId: $scope.patient.id });
+            });
+          }else{
+           var toAdd = {
+         compositionId : '',
+         referrals : [referral]   
+        }; 
+
+        Referral.create($scope.patient.id, toAdd).then(function () {
           $state.go('referrals', { patientId: $scope.patient.id });
         });
+        }
+          
+          
       });
     };
 

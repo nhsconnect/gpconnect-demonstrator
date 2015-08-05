@@ -24,7 +24,7 @@ angular.module('openehrPocApp')
     
      $scope.dateofSubmittedDatepicker = function ($event, name) {
       $event.preventDefault();
-     $event.stopPropagation();
+      $event.stopPropagation();
         
       $scope[name] = true;
     };
@@ -32,6 +32,10 @@ angular.module('openehrPocApp')
 
 
     $scope.ok = function (procedureForm, procedure) {
+     //   procedure.dateofProcedure = DateFormatter.clean(procedure.dateofProcedure);
+      //  procedure.dateSubmitted = DateFormatter.clean(procedure.dateSubmitted);
+      var adateofProcedure = moment(procedure.dateofProcedure).format('YYYY-MM-DD')+'T00:00:00Z';
+      //procedure.dateofProcedure = moment(procedure.dateofProcedure).format('YYYY-MM-DD')+'T00:00:00Z';
       $scope.formSubmitted = true;
       if (procedureForm.$valid) {
         $modalInstance.close(procedure);

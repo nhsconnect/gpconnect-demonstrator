@@ -1,7 +1,7 @@
 package net.nhs.esb.referrals.route;
 
 import net.nhs.esb.openehr.route.CompositionSearchParameters;
-import net.nhs.esb.referrals.model.ReferralsComposition;
+import net.nhs.esb.referrals.model.Referral;
 import net.nhs.esb.util.DefaultAggregationStrategy;
 import net.nhs.esb.util.EmptyList;
 import org.apache.camel.ExchangePattern;
@@ -31,12 +31,12 @@ public class FindPatientReferralsRouteBuilder extends SpringRouteBuilder {
             .to("cxfrs:bean:rsOpenEhr")
             .choice()
                 .when(body().isNotNull())
-                    .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<ReferralsComposition>())
+                    .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<Referral>())
                         .setHeader("Camel.compositionId", simple("${body[uid]}"))
                         .bean(compositionSearchParams)
                         .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
                         .to("cxfrs:bean:rsOpenEhr")
-                        .convertBodyTo(ReferralsComposition.class)
+                        .convertBodyTo(Referral.class)
                 .end()
             .endChoice()
             .otherwise()

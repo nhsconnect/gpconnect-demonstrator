@@ -22,7 +22,6 @@ public class UpdatePatientReferralsRouteBuilder extends SpringRouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        // TODO - test
         //@formatter:off
         from("direct:updatePatientReferralsComposition").routeId("UpdatePatientReferralsComposition")
             .setHeader("Camel.compositionId", simple("${body.compositionId}"))

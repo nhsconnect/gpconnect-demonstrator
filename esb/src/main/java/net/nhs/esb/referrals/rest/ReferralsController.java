@@ -1,6 +1,6 @@
 package net.nhs.esb.referrals.rest;
 
-import net.nhs.esb.referrals.model.ReferralsComposition;
+import net.nhs.esb.referrals.model.Referral;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.Consumes;
@@ -21,17 +21,15 @@ import java.util.List;
 public class ReferralsController {
 
     @GET
-    public List<ReferralsComposition> findAllPatientReferralCompositions(@PathParam("patientId") Long patientId) {
+    public List<Referral> findAllPatientReferralCompositions(@PathParam("patientId") Long patientId) {
         return null;
     }
 
     @POST
-    public void createPatientReferralsComposition(@PathParam("patientId") Long patientId,
-                                                  ReferralsComposition referralsComposition) {
+    public void createPatientReferralsComposition(@PathParam("patientId") Long patientId, Referral referral) {
     }
 
     @PUT
-    public void updatePatientReferralsComposition(@PathParam("patientId") Long patientId,
-                                                 ReferralsComposition referralsComposition) {
+    public void updatePatientReferralsComposition(@PathParam("patientId") Long patientId, Referral referral) {
     }
 }

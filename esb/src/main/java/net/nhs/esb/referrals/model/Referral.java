@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class Referral {
 
+    private String compositionId;
     private String referralFrom;
     private String referralTo;
     private Date dateOfReferral;
@@ -14,6 +15,14 @@ public class Referral {
     private String author;
     private Date dateCreated;
     private String source;
+
+    public String getCompositionId() {
+        return compositionId;
+    }
+
+    public void setCompositionId(String compositionId) {
+        this.compositionId = compositionId;
+    }
 
     public String getReferralFrom() {
         return referralFrom;

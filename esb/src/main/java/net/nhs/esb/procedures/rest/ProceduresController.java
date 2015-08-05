@@ -11,7 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import net.nhs.esb.procedures.model.ProcedureComposition;
+import net.nhs.esb.procedures.model.Procedure;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -23,19 +23,19 @@ public class ProceduresController {
 
     @GET
     @Path("/{patientId}/procedures")
-    public List<ProcedureComposition> findPatientProcedures(@PathParam("patientId") Long patientId) {
+    public List<Procedure> findPatientProcedures(@PathParam("patientId") Long patientId) {
         return Collections.emptyList();
     }
 
     @POST
     @Path("/{patientId}/procedures")
-    public void createPatientProcedureComposition(@PathParam("patientId") Long patientId, ProcedureComposition procedureComposition) {
+    public void createPatientProcedureComposition(@PathParam("patientId") Long patientId, Procedure procedure) {
 
     }
 
     @PUT
     @Path("/{patientId}/procedures")
-    public void updatePatientProcedureComposition(@PathParam("patientId") Long patientId, ProcedureComposition procedureComposition) {
+    public void updatePatientProcedureComposition(@PathParam("patientId") Long patientId, Procedure procedure) {
 
     }
 }

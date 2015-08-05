@@ -6,7 +6,7 @@ import java.util.Date;
  */
 public class Procedure {
 
-    private Integer id;
+    private String compositionId;
     private String procedureName;
     private String procedureNotes;
     private String author;
@@ -18,12 +18,12 @@ public class Procedure {
     private String source;
     private String performer;
 
-    public Integer getId() {
-        return id;
+    public String getCompositionId() {
+        return compositionId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCompositionId(String compositionId) {
+        this.compositionId = compositionId;
     }
 
     public String getProcedureName() {

@@ -1,7 +1,7 @@
 package net.nhs.esb.procedures.route;
 
 import net.nhs.esb.openehr.route.CompositionSearchParameters;
-import net.nhs.esb.procedures.model.ProcedureComposition;
+import net.nhs.esb.procedures.model.Procedure;
 import net.nhs.esb.util.DefaultAggregationStrategy;
 import net.nhs.esb.util.EmptyList;
 import org.apache.camel.ExchangePattern;
@@ -33,12 +33,12 @@ public class FindPatientProceduresRouteBuilder extends SpringRouteBuilder {
             .to("cxfrs:bean:rsOpenEhr")
             .choice()
                 .when(body().isNotNull())
-                    .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<ProcedureComposition>())
+                    .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<Procedure>())
                         .setHeader("Camel.compositionId", simple("${body[uid]}"))
                         .bean(compositionParameters)
                         .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
                         .to("cxfrs:bean:rsOpenEhr")
-                        .convertBodyTo(ProcedureComposition.class)
+                        .convertBodyTo(Procedure.class)
                     .end()
                 .endChoice()
                 .otherwise()

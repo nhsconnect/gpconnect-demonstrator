@@ -10,7 +10,7 @@ angular.module('openehrPocApp')
     Referral.all($stateParams.patientId).then(function (result) {
       $scope.result = result.data;
             if(result.data.length > 0){
-      $scope.referrals = $scope.result[0].referrals;
+      $scope.referrals = $scope.result;
         }
     });
 

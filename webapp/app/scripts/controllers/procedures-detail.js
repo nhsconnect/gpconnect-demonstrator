@@ -33,20 +33,10 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (procedure) {
-<<<<<<< HEAD
-          var s = procedure.dateofProcedure.toLocaleDateString();
-          $scope.result.procedures[$stateParams.procedureIndex] = procedure;
-          
-        var toUpdate = {
-         compositionId : $scope.result.compositionId,
-         procedures : $scope.result.procedures     
-=======
-          $scope.result[0].procedures[$stateParams.procedureIndex] = procedure;
-          
+        $scope.result[0].procedures[$stateParams.procedureIndex] = procedure;
         var toUpdate = {
          compositionId : $scope.result[0].compositionId,
          procedures : $scope.result[0].procedures     
->>>>>>> Changes after Lisa's feedback
         }; 
           
         Procedure.update($scope.patient.id, toUpdate).then(function () {

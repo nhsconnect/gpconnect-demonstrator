@@ -18,6 +18,11 @@ public final class DateFormatter {
     }
 
     public static Date toDate(String input) {
+
+        if (input == null) {
+            return null;
+        }
+
         try {
             return DateUtils.parseDate(input, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss.SSSX", "yyyy-MM-dd'T'HH:mm:ss");
         } catch (ParseException ignore) {
@@ -56,6 +61,10 @@ public final class DateFormatter {
     }
 
     public static String toString(Date input) {
+        if (input == null) {
+            return null;
+        }
+
         return DateFormatUtils.format(input, "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     }
 
@@ -63,6 +72,10 @@ public final class DateFormatter {
 
         String dateAsString = toString(date);
         String timeAsString = toString(time);
+
+        if (dateAsString == null || timeAsString == null) {
+            return null;
+        }
 
         return StringUtils.substringBefore(dateAsString, "T") + "T" + StringUtils.substringAfter(timeAsString, "T");
     }

@@ -1,14 +1,16 @@
 package net.nhs.esb.mdtreport.model;
 
+import java.util.Date;
+
 /**
  */
 public class MDTReportComposition {
 
     private String compositionId;
     private String service;
-    private String dateOfRequest;
-    private String dateOfMeeting;
-    private String timeOfMeeting;
+    private Date dateOfRequest;
+    private Date dateOfMeeting;
+    private Date timeOfMeeting;
     private String servicePageLink;
     private String questionForMDT;
     private String meetingDiscussion;
@@ -30,27 +32,27 @@ public class MDTReportComposition {
         this.service = service;
     }
 
-    public String getDateOfRequest() {
+    public Date getDateOfRequest() {
         return dateOfRequest;
     }
 
-    public void setDateOfRequest(String dateOfRequest) {
+    public void setDateOfRequest(Date dateOfRequest) {
         this.dateOfRequest = dateOfRequest;
     }
 
-    public String getDateOfMeeting() {
+    public Date getDateOfMeeting() {
         return dateOfMeeting;
     }
 
-    public void setDateOfMeeting(String dateOfMeeting) {
+    public void setDateOfMeeting(Date dateOfMeeting) {
         this.dateOfMeeting = dateOfMeeting;
     }
 
-    public String getTimeOfMeeting() {
+    public Date getTimeOfMeeting() {
         return timeOfMeeting;
     }
 
-    public void setTimeOfMeeting(String timeOfMeeting) {
+    public void setTimeOfMeeting(Date timeOfMeeting) {
         this.timeOfMeeting = timeOfMeeting;
     }
 

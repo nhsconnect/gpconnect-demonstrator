@@ -9,7 +9,7 @@ angular.module('openehrPocApp')
 
     Referral.all($stateParams.referralId).then(function (result) {
       $scope.result = result.data;
-      $scope.referral = $scope.result[0].referrals[$stateParams.referralIndex];
+      $scope.referral = $scope.result[$stateParams.referralIndex];
     });
 
     $scope.edit = function () {
@@ -38,7 +38,7 @@ angular.module('openehrPocApp')
           
         var toUpdate = {
          compositionId : $scope.result[0].compositionId,
-         referrals : $scope.result[0].referrals     
+         referral : $scope.result[0].referrals     
         }; 
           
         Referral.update($scope.patient.id, toUpdate).then(function () {

@@ -25,11 +25,8 @@
         <div class="col-md-8">
           <div class="input-group">
             <textarea class="form-control input-sm" id="cause" name="cause" ng-model="allergy.cause" required></textarea>
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.allergy.$error.required">You must enter a value.</span>
+          <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.cause.$error.required">You must enter a value.</span>
         </div>
       </div>
 
@@ -38,9 +35,6 @@
         <div class="col-md-8">
           <div class="input-group">
             <input type="text" class="form-control input-sm" id="causeCode" name="causeCode" ng-model="allergy.causeCode" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.causeCode.$error.required">You must enter a value.</span>
         </div>
@@ -51,9 +45,6 @@
         <div class="col-md-8">
           <div class="input-group">
             <textarea class="form-control input-sm" id="reaction" name="reaction" ng-model="allergy.reaction" required></textarea>
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.reaction.$error.required">You must enter a value.</span>
         </div>
@@ -64,9 +55,6 @@
         <div class="col-md-8">
           <div class="input-group">
             <input type="text" class="form-control input-sm" id="causeTerminology" name="causeTerminology" ng-model="allergy.causeTerminology" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.causeTerminology.$error.required">You must enter a value.</span>
         </div>

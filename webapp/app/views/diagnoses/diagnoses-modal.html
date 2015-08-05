@@ -25,9 +25,6 @@
         <div class="col-md-8">
           <div class="input-group">
             <input type="text" class="form-control input-sm" id="problem" name="problem" ng-model="diagnosis.problem" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && diagnosisForm.problem.$error.required">You must enter a value.</span>
         </div>
@@ -41,9 +38,6 @@
               <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'dateOfOnsetOpen')"><i class="fa fa-calendar"></i></button>
             </span>
             <input type="text" class="form-control" id="dateOfOnset" name="dateOfOnset" ng-model="diagnosis.dateOfOnset" ng-click="openDatepicker($event, 'dateOfOnsetOpen')" datepicker-popup is-open="dateOfOnsetOpen" required />
-            <span class="input-group-addon input-sm">
-              <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && diagnosisForm.dateOfOnset.$error.required">You must enter a valid date.</span>
         </div>

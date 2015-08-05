@@ -1222,6 +1222,9 @@ height: 265px !important;
   overflow: auto;
 }
 
+.appointmentTabs{
+    width:80% !important;
+}
 
 .eolTabs{
     width:100%;
@@ -1261,10 +1264,12 @@ background-color: white;
     padding-top: 15px;
 }
 .appointmentForm .tabContent{
-    height: 490px !important;
+    height: 515px !important;
+    margin-left: -78px;
+    width: 715px !important;
 }
 .appointmentForm .tabContent img{
-    margin-left: -15px;
+    margin-left: 17px;
 }
 
  .eolForm .btn:active, .btn.active{
@@ -1341,6 +1346,9 @@ margin-left: -15px;
    padding-top: 10px;
 }
 
+#careserviceteam{
+    width:159%;
+}
 
 .referralForm .input-group{
     width:100% !important;
@@ -1369,8 +1377,8 @@ margin-left: -15px;
     background-color: white;
     border-left: 1px solid #DDDDDD;
     height: 240px;
-    width: 677px;
-    margin-left: -40px;
+    width: 715px;
+    margin-left: -78px;
     margin-top: -21px;
 }
 
@@ -1405,4 +1413,13 @@ margin-left: -15px;
 
 .reasonforreferralGroup{
     padding-top: 22px;
+}
+
+.referral-calendar-view label{
+    padding-bottom: 35px;
+}
+
+.referral-calendar-group{
+    float: right;
+    padding-right: 15px;
 }

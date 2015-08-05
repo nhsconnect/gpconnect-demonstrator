@@ -21,15 +21,12 @@
       <legend>Medication detail</legend>
 
       <div class="form-group" ng-class="{'has-error': (formSubmitted || medicationForm.name.$dirty) && medicationForm.name.$invalid, 'has-success': medicationForm.name.$valid && medicationForm.name.$dirty}">
-        <label for="medication" class="control-label col-md-4">Name</label>
+        <label for="name" class="control-label col-md-4">Name</label>
         <div class="col-md-8">
           <div class="input-group">
             <textarea class="form-control input-sm" id="medication" name="medication" ng-model="medication.name" required></textarea>
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && medicationForm.name.$error.required">You must enter a value.</span>
+          <span class="help-block animate-fade" ng-show="formSubmitted && medicationForm.medication.$error.required">You must enter a value.</span>
         </div>
       </div>
 
@@ -38,9 +35,6 @@
         <div class="col-md-8">
           <div class="input-group">
             <input type="text" class="form-control input-sm" id="doseAmount" name="doseAmount" ng-model="medication.doseAmount" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && medicationForm.doseAmount.$error.required">You must enter a value.</span>
         </div>
@@ -51,9 +45,6 @@
         <div class="col-md-8">
           <div class="input-group">
             <input type="text" class="form-control input-sm" id="doseDirections" name="doseDirections" ng-model="medication.doseDirections" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && medicationForm.doseDirections.$error.required">You must enter a value.</span>
         </div>
@@ -64,9 +55,6 @@
         <div class="col-md-8">
           <div class="input-group">
             <input type="text" class="form-control input-sm" id="doseTiming" name="doseTiming" ng-model="medication.doseTiming" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && medicationForm.doseTiming.$error.required">You must enter a value.</span>
         </div>
@@ -77,9 +65,6 @@
         <div class="col-md-8">
           <div class="input-group">
             <input type="text" class="form-control input-sm" id="route" name="route" ng-model="medication.route" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && medicationForm.route.$error.required">You must enter a value.</span>
         </div>
@@ -93,9 +78,6 @@
               <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'startDateTimeOpen')"><i class="fa fa-calendar"></i></button>
             </span>
             <input type="text" class="form-control" id="startDateTime" name="startDateTime" ng-model="medication.startDateTime" ng-click="openDatepicker($event, 'dateOpen')" startDateTimepicker-popup is-open="$parent.dateOpen" required />
-            <span class="input-group-addon input-sm">
-              <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && medicationForm.startDateTime.$error.required">You must enter a valid date.</span>
         </div>
@@ -106,13 +88,11 @@
         <div class="col-md-8">
           <div class="input-group">
             <input type="text" class="form-control input-sm" id="terminology" name="terminology" ng-model="medication.terminology" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && medicationForm.terminology.$error.required">You must enter a value.</span>
         </div>
-      </div>
+        </div>
+      </fieldset>
   </form>
 </div>
 

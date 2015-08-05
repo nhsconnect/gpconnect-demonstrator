@@ -28,9 +28,6 @@
           <div class="col-md-8">
             <div class="input-group">
               <input type="text" class="form-control input-sm" id="Service" name="Service" ng-model="cancerMdt.Service" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && cancerMdtForm.Service.$error.required">You must enter a value.</span>
           </div>
@@ -44,9 +41,6 @@
               <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'dateOfOnsetOpen')"><i class="fa fa-calendar"></i></button>
             </span>
               <input type="text" class="form-control" id="Date" name="Date" ng-model="cancerMdt.Date" ng-click="openDatepicker($event, 'dateOfOnsetOpen')" datepicker-popup is-open="dateOfOnsetOpen" required />
-            <span class="input-group-addon input-sm">
-              <i class="fa fa-check fa-fw"></i>
-            </span>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && cancerMdtForm.Date.$error.required">You must enter a valid date.</span>
           </div>
@@ -57,9 +51,6 @@
           <div class="col-md-8">
             <div class="input-group">
               <input type="text" class="form-control input-sm" id="questionForMDT" name="questionForMDT" ng-model="cancerMdt.questionForMDT" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && cancerMdtForm.questionForMDT.$error.required">You must enter a value.</span>
           </div>
@@ -70,9 +61,6 @@
           <div class="col-md-12">
             <div class="input-group">
               <textarea class="form-control input-sm" id="Notes" name="Notes" ng-model="cancerMdt.Notes" required></textarea>
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && cancerMdtForm.Notes.$error.required">You must enter a value.</span>
           </div>
@@ -96,9 +84,6 @@
             <div class="col-md-8">
               <div class="input-group">
                 <input type="text" class="form-control input-sm" id="participantName-{{$index}}" name="participantName-{{$index}}" ng-model="participant.name" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
               </div>
               <span class="help-block animate-fade has-error validation-error" ng-show="formSubmitted && validate(cancerMdtForm,'participantName-',$index)">You must enter a value.</span>
             </div>
@@ -109,9 +94,6 @@
             <div class="col-md-8">
               <div class="input-group">
                 <input type="text" class="form-control  input-sm" id="participantFunction-{{$index}}" name="participantFunction-{{$index}}" ng-model="participant.function" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
               </div>
               <span class="help-block animate-fade has-error validation-error" ng-show="formSubmitted && validate(cancerMdtForm,'participantFunction-',$index)">You must enter a value.</span>
             </div>
@@ -122,9 +104,6 @@
             <div class="col-md-8">
               <div class="input-group">
                 <input type="text" class="form-control input-sm" id="participantMode-{{$index}}" name="participantMode-{{$index}}" ng-model="participant.mode" required />
-            <span class="input-group-addon input-sm">
-                <i class="fa fa-check fa-fw"></i>
-            </span>
               </div>
               <span class="help-block animate-fade validation-error" ng-show="formSubmitted && validate(cancerMdtForm,'participantMode-',$index)">You must enter a value.</span>
             </div>

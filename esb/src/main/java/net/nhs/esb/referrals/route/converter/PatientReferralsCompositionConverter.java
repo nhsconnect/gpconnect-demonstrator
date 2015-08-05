@@ -7,10 +7,8 @@ import net.nhs.esb.util.DateFormatter;
 import org.apache.camel.Converter;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static net.nhs.esb.util.DateFormatter.stripOddDate;
@@ -42,12 +40,13 @@ public class PatientReferralsCompositionConverter {
 
         String reasonForReferral = getString(rawComposition, REFERRALS_REQUEST + "request/reason_for_referral");
         String clinicalSummary = getString(rawComposition, REFERRALS_REQUEST + "request/clinical_summary");
-        String author = getString(rawComposition, "ctx/composer_name");
-        String source = "openehr";
 
         String rawDateCreated = getString(rawComposition, REFERRALS_REQUEST + "request/timing");
         rawDateCreated = stripOddDate(rawDateCreated);
         Date dateCreated = toDate(rawDateCreated);
+
+        String author = getString(rawComposition, "ctx/composer_name");
+        String source = "openehr";
 
         // populate composition
         Referral referral = new Referral();

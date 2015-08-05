@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import net.nhs.esb.allergy.rest.AllergyController;
+import net.nhs.esb.appointments.rest.AppointmentsController;
 import net.nhs.esb.cancermdt.rest.CancerMDTController;
 import net.nhs.esb.endoflife.rest.EndOfLifeController;
 import net.nhs.esb.mdtreport.rest.MDTReportController;
@@ -55,6 +56,9 @@ public class RestConfig extends CamelConfiguration {
     @Autowired
     private ReferralsController referralsController;
 
+    @Autowired
+    private AppointmentsController appointmentsController;
+
 
     @Bean
     public ObjectMapper objectMapper() {
@@ -81,7 +85,8 @@ public class RestConfig extends CamelConfiguration {
                                                            medicationController,
                                                            proceduresController,
                                                            transferOfCareController,
-                                                           referralsController);
+                                                           referralsController,
+                                                           appointmentsController);
         springJAXRSServerFactoryBean.setAddress("/patients/");
         springJAXRSServerFactoryBean.setLoggingFeatureEnabled(true);
         springJAXRSServerFactoryBean.setProvider(jacksonJsonProvider());

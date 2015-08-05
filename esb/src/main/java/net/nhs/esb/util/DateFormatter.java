@@ -25,7 +25,7 @@ public final class DateFormatter {
 
         try {
             return DateUtils.parseDate(input, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss.SSSX", "yyyy-MM-dd'T'HH:mm:ss",
-                                       "yyyy-MM-dd'T'HH:mm:ss.SSS");
+                                       "yyyy-MM-dd'T'HH:mm:ss.SSS", "HH:mm:ss");
         } catch (ParseException ignore) {
             return null;
         }

@@ -87,7 +87,7 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="dateofProcedureDatepicker($event, 'dateOfProcedure')"><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control" id="dateofprocedure" name="dateofprocedure" ng-model="procedure.dateOfProcedure" ng-click="dateofProcedureDatepicker($event, 'dateOfProcedure')" datepicker-popup is-open="dateOfProcedure" required />
+              <input type="text" class="form-control" id="dateofprocedure" name="dateofprocedure" ng-model="procedure.dateOfProcedure" ng-click="dateofProcedureDatepicker($event, 'dateOfProcedure')" datepicker-popup="yyyy-MM-dd" is-open="dateOfProcedure" required />
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.dateofprocedure.$error.required">You must enter a valid date.</span>
           </div>
@@ -126,7 +126,7 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')"><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control" id="datesubmitted" name="datesubmitted" ng-model="mydateSubmitted" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" datepicker-popup="YYYY-MM-DD" is-open="dateSubmitted" required disabled />
+              <input type="text" class="form-control" id="datesubmitted" name="datesubmitted" ng-model="procedure.dateSubmitted" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" datepicker-popup="yyyy-MM-dd" is-open="dateSubmitted" required disabled />
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.datesubmitted.$error.required">You must enter a valid date.</span>
           </div>

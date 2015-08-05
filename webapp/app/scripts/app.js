@@ -269,7 +269,7 @@ angular
 .config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
     datepickerConfig.startingDay          = 1;
     datepickerPopupConfig.showButtonBar   = false;
-    datepickerPopupConfig.datepickerPopup = 'yyyy-MM-dd';
+    datepickerPopupConfig.datepickerPopup = 'dd-MMM-yyyy';
     cfpLoadingBarProvider.includeSpinner  = false;
   })
   .config(function (paginationTemplateProvider) {

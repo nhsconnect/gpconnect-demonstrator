@@ -44,7 +44,7 @@
           <label for="name" class="control-label col-md-12">Location</label>
           <div class="col-md-12">
             <div class="input-group">
-              <input type="text" value="Leeds General" placeholder="Leeds General" class="form-control input-sm" id="location" name="location" ng-model="appointment.location"  disabled/>
+              <input type="text" class="form-control input-sm" id="location" name="location" ng-model="appointment.location"  disabled/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && appointmentForm.location.$error.required">You must enter a value.</span>
           </div>
@@ -56,9 +56,8 @@
         <div class="col-md-12">
           <div class="input-group">
             <select class="form-control" name="status" id="status" ng-model="appointmentForm.status" required>
-              <option value="">Select Status</option>
-              <option>Scheduled</option>
-              <option>Not Scheduled</option>
+              <option value="Not Scheduled">Not Scheduled</option>
+              <option value="Scheduled">Scheduled</option>
             </select>
           </div>
         <span class="help-block animate-fade" ng-show="formSubmitted && appointmentForm.status.$error.required">You must enter a value.</span>
@@ -75,7 +74,7 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm"><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control" id="dateofappointment" name="dateofappointment" ng-model="appointment.dateOfAppointment" ng-click="openAppointmentDatepicker($event, 'dateOfAppointment')"  datepicker-popup is-open="$parent.dateOfAppointment" disabled required/>
+              <input type="text" class="form-control" id="dateofappointment" name="dateofappointment" ng-model="appointment.dateOfAppointment" ng-click="openAppointmentDatepicker($event, 'dateOfAppointment')"  datepicker-popup="yyyy-MM-dd" is-open="$parent.dateOfAppointment" disabled required/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && appointmentForm.dateofappointment.$error.required">You must enter a valid date.</span>
           </div>
@@ -110,13 +109,13 @@
         </div>
                 <div class="col-md-4">
                       <div class="appointmentdateGroup form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.date.$dirty) && appointmentForm.date.$invalid, 'has-success': eolcareplanForm.date.$valid && eolcareplanForm.date.$dirty}">
-          <label for="Date" class="control-label col-md-12">Date of Appointment</label>
+          <label for="Date" class="control-label col-md-12">Date</label>
           <div class="col-md-12">
             <div class="input-group">
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm"><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control" id="date" name="date" ng-click="openDatepicker($event, 'date')" ng-model="appointment.date" ng-click="openDatepicker($event, 'date')"  datepicker-popup is-open="$parent.date" disabled required/>
+              <input type="text" class="form-control" id="date" name="date" ng-click="openDatepicker($event, 'date')" ng-model="appointment.date" ng-click="openDatepicker($event, 'date')"  datepicker-popup="yyyy-MM-dd" is-open="$parent.date" disabled required/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && appointmentForm.date.$error.required">You must enter a valid date.</span>
           </div>

@@ -9,8 +9,10 @@ angular.module('openehrPocApp')
     $scope.patient = patient;
     $scope.modal = modal; 
     $scope.radioModel = 'Tab1';
+    $scope.appointment.location = appointment.location || 'Leeds General';
+    $scope.appointment.status = appointment.status || 'Scheduled';
     
-    if(modal.title === 'Create Appointment'){$scope.appointment.date = new Date();}
+    if(modal.title === 'Create Appointment'){$scope.appointment.date = new Date().toISOString().slice(0, 10);}
     
     $scope.openAppointmentDatepicker = function ($event, name) {
     $event.preventDefault();
@@ -33,7 +35,7 @@ angular.module('openehrPocApp')
             $("#scheduler").attr("src","images/After.png");
         }else{
            $scope.appointment.timeSlot = '12:00pm';
-           $scope.appointment.dateOfAppointment = new Date();
+           $scope.appointment.dateOfAppointment = new Date().toISOString().slice(0, 10);;
            $scope.radioModel = 'Tab1';
         }
     }

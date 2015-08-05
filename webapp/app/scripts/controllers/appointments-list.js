@@ -41,12 +41,21 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (appointment) {
-        $scope.result.appointments.push(appointment);
 
-        Contact.create($scope.patient.id, $scope.result).then(function () {
+          var toAdd =  {
+                  compositionId: '',
+                  careServiceTeam: appointment.careServiceTeam,
+                  dateOfAppointment:  appointment.dateOfAppointment,
+                  timeSlot:  appointment.timeSlot,
+                  location:  appointment.location,
+                  status:  appointment.status,
+                  author:  appointment.author,
+                  dateCreated:  appointment.date,
+                  source: "openehr"
+            }
+        Appointment.create($scope.patient.id, toAdd).then(function () {
           $state.go('appointments', { patientId: $scope.patient.id });
         });
       });
     };
-
   });

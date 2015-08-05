@@ -9,7 +9,7 @@ angular.module('openehrPocApp')
     $scope.modal = modal;
     
     if(modal.title === 'Create Referral'){
-        $scope.referral.dateCreated = new Date();
+        $scope.referral.dateCreated = new Date().toISOString().slice(0, 10);
         $scope.author = $scope.currentUser;
     }
     

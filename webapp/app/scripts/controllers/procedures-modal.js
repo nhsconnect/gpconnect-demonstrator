@@ -8,7 +8,9 @@ angular.module('openehrPocApp')
     $scope.patient = patient;
     $scope.modal = modal;
     
-    if(modal.title === 'Create Procedure'){$scope.procedure.dateSubmitted = new Date();}
+    if(modal.title === 'Create Procedure'){
+        $scope.procedure.dateSubmitted = new Date().toISOString().slice(0, 10);
+    }
     
     $scope.procedure.code = '1234567';
     $scope.procedure.terminology = 'ICD-10';
@@ -30,20 +32,7 @@ angular.module('openehrPocApp')
     };
     
     
-    $scope.$watch('mydateSubmitted', function (newValue) {
-    $scope.procedure.dateSubmitted = $filter('date')(newValue, 'yyyy-MM-dd'); 
-    });
-
-    $scope.$watch('procedure.dateSubmitted', function (newValue) {
-    $scope.mydateSubmitted = $filter('date')(newValue, 'yyyy-MM-dd'); 
-    });
-
-
     $scope.ok = function (procedureForm, procedure) {
-     //   procedure.dateofProcedure = DateFormatter.clean(procedure.dateofProcedure);
-      //  procedure.dateSubmitted = DateFormatter.clean(procedure.dateSubmitted);
-      var adateofProcedure = moment(procedure.dateofProcedure).format('YYYY-MM-DD')+'T00:00:00Z';
-      //procedure.dateofProcedure = moment(procedure.dateofProcedure).format('YYYY-MM-DD')+'T00:00:00Z';
       $scope.formSubmitted = true;
       if (procedureForm.$valid) {
         $modalInstance.close(procedure);
@@ -53,9 +42,6 @@ angular.module('openehrPocApp')
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
-
-    
-    
     
      $scope.validate = function(form, name, index){
       var errorToCheckFor = name + index;

@@ -11,7 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import net.nhs.esb.endoflife.model.EndOfLifeComposition;
+import net.nhs.esb.endoflife.model.EndOfLifeCarePlan;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -23,19 +23,19 @@ public class EndOfLifeController {
 
     @GET
     @Path("/{patientId}/eolcareplans")
-    public List<EndOfLifeComposition> findPatientEndOfLifeCarePlan(@PathParam("patientId") Long patientId) {
+    public List<EndOfLifeCarePlan> findPatientEndOfLifeCarePlan(@PathParam("patientId") Long patientId) {
         return Collections.emptyList();
     }
 
     @POST
     @Path("/{patientId}/eolcareplans")
-    public void createPatientEndOfLifeCarePlan(@PathParam("patientId") Long patientId, EndOfLifeComposition endOfLifeComposition) {
+    public void createPatientEndOfLifeCarePlan(@PathParam("patientId") Long patientId, EndOfLifeCarePlan endOfLifeCarePlan) {
 
     }
 
     @PUT
     @Path("/{patientId}/eolcareplans")
-    public void updatePatientEndOfLifeCarePlan(@PathParam("patientId") Long patientId, EndOfLifeComposition endOfLifeComposition) {
+    public void updatePatientEndOfLifeCarePlan(@PathParam("patientId") Long patientId, EndOfLifeCarePlan endOfLifeCarePlan) {
 
     }
 }

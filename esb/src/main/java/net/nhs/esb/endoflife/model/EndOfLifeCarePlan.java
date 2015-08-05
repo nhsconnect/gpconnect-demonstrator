@@ -4,11 +4,20 @@ package net.nhs.esb.endoflife.model;
  */
 public class EndOfLifeCarePlan {
 
+    private String compositionId;
     private CareDocument careDocument;
     private PrioritiesOfCare prioritiesOfCare;
     private TreatmentDecision treatmentDecision;
     private CprDecision cprDecision;
     private String source;
+
+    public String getCompositionId() {
+        return compositionId;
+    }
+
+    public void setCompositionId(String compositionId) {
+        this.compositionId = compositionId;
+    }
 
     public CareDocument getCareDocument() {
         return careDocument;

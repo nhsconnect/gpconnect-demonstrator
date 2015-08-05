@@ -8,7 +8,6 @@ import java.util.Map;
 import net.nhs.esb.endoflife.model.CareDocument;
 import net.nhs.esb.endoflife.model.CprDecision;
 import net.nhs.esb.endoflife.model.EndOfLifeCarePlan;
-import net.nhs.esb.endoflife.model.EndOfLifeComposition;
 import net.nhs.esb.endoflife.model.EndOfLifeUpdate;
 import net.nhs.esb.endoflife.model.PrioritiesOfCare;
 import net.nhs.esb.endoflife.model.TreatmentDecision;
@@ -25,50 +24,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class EndOfLifeCompositionConverter {
 
-    private static final String CARE_PLAN_PREFIX = "end_of_life_patient_preferences/legal_information:";
+    private static final String CARE_PLAN_PREFIX = "end_of_life_patient_preferences/legal_information:0";
 
     @Converter
-    public EndOfLifeComposition convertResponseToEndOfLifeComposition(CompositionResponseData responseData) {
+    public EndOfLifeCarePlan convertResponseToEndOfLifeComposition(CompositionResponseData responseData) {
 
         Map<String, Object> rawComposition = responseData.getComposition();
 
-        String compositionId = MapUtils.getString(rawComposition, "end_of_life_patient_preferences/_uid");
-
-        List<EndOfLifeCarePlan> carePlanList = new ArrayList<>();
-
-        int count = countEntries(rawComposition, CARE_PLAN_PREFIX);
-        for (int i = 0; i < count; i++) {
-            EndOfLifeCarePlan carePlan = extractCarePlan(rawComposition, i);
-            carePlanList.add(carePlan);
-        }
-
-        EndOfLifeComposition endOfLifeComposition = new EndOfLifeComposition();
-        endOfLifeComposition.setCompositionId(compositionId);
-        endOfLifeComposition.setEolCarePlans(carePlanList);
-
-        return endOfLifeComposition;
+        return extractCarePlan(rawComposition);
     }
 
     @Converter
-    public EndOfLifeUpdate convertEndOfLifeCompositionToUpdate(EndOfLifeComposition endOfLifeComposition) {
+    public EndOfLifeUpdate convertEndOfLifeCompositionToUpdate(EndOfLifeCarePlan endOfLifeCarePlan) {
 
         Map<String, String> content = new HashMap<>();
 
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
 
-        int index = 0;
-        for (EndOfLifeCarePlan endOfLifeCarePlan : endOfLifeComposition.getEolCarePlans()) {
-
-            String prefix = CARE_PLAN_PREFIX + index;
-
-            addCareDocument(content, prefix, endOfLifeCarePlan.getCareDocument());
-            addCprDecision(content, prefix, endOfLifeCarePlan.getCprDecision());
-            addTreatmentDecision(content, prefix, endOfLifeCarePlan.getTreatmentDecision());
-            addPriorities(content, prefix, endOfLifeCarePlan.getPrioritiesOfCare());
-
-            index++;
-        }
+        addCareDocument(content, CARE_PLAN_PREFIX, endOfLifeCarePlan.getCareDocument());
+        addCprDecision(content, CARE_PLAN_PREFIX, endOfLifeCarePlan.getCprDecision());
+        addTreatmentDecision(content, CARE_PLAN_PREFIX, endOfLifeCarePlan.getTreatmentDecision());
+        addPriorities(content, CARE_PLAN_PREFIX, endOfLifeCarePlan.getPrioritiesOfCare());
 
         return new EndOfLifeUpdate(content);
     }
@@ -86,17 +63,18 @@ public class EndOfLifeCompositionConverter {
         return count;
     }
 
-    private EndOfLifeCarePlan extractCarePlan(Map<String, Object> rawComposition, int index) {
+    private EndOfLifeCarePlan extractCarePlan(Map<String, Object> rawComposition) {
 
-        String prefix = CARE_PLAN_PREFIX + index;
+        String compositionId = MapUtils.getString(rawComposition, "end_of_life_patient_preferences/_uid");
 
         EndOfLifeCarePlan carePlan = new EndOfLifeCarePlan();
-        carePlan.setCprDecision(extractCprDecision(rawComposition, prefix));
-        carePlan.setTreatmentDecision(extractTreatmentDecision(rawComposition, prefix));
+        carePlan.setCompositionId(compositionId);
+        carePlan.setCprDecision(extractCprDecision(rawComposition, CARE_PLAN_PREFIX));
+        carePlan.setTreatmentDecision(extractTreatmentDecision(rawComposition, CARE_PLAN_PREFIX));
         carePlan.setCareDocument(extractCareDocument(rawComposition));
         carePlan.setSource("openehr");
 
-        List<PrioritiesOfCare> prioritiesOfCareList = extractPrioritiesOfCare(rawComposition, prefix);
+        List<PrioritiesOfCare> prioritiesOfCareList = extractPrioritiesOfCare(rawComposition, CARE_PLAN_PREFIX);
         if (!prioritiesOfCareList.isEmpty()) {
             carePlan.setPrioritiesOfCare(prioritiesOfCareList.get(0));
         }

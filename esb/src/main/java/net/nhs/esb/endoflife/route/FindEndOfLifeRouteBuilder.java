@@ -1,6 +1,6 @@
 package net.nhs.esb.endoflife.route;
 
-import net.nhs.esb.endoflife.model.EndOfLifeComposition;
+import net.nhs.esb.endoflife.model.EndOfLifeCarePlan;
 import net.nhs.esb.openehr.route.CompositionSearchParameters;
 import net.nhs.esb.util.DefaultAggregationStrategy;
 import net.nhs.esb.util.EmptyList;
@@ -33,12 +33,12 @@ public class FindEndOfLifeRouteBuilder extends SpringRouteBuilder {
             .to("cxfrs:bean:rsOpenEhr")
             .choice()
                 .when(body().isNotNull())
-                    .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<EndOfLifeComposition>())
+                    .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<EndOfLifeCarePlan>())
                         .setHeader("Camel.compositionId", simple("${body[uid]}"))
                         .bean(compositionParameters)
                         .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
                         .to("cxfrs:bean:rsOpenEhr")
-                        .convertBodyTo(EndOfLifeComposition.class)
+                        .convertBodyTo(EndOfLifeCarePlan.class)
                     .end()
                 .endChoice()
                 .otherwise()

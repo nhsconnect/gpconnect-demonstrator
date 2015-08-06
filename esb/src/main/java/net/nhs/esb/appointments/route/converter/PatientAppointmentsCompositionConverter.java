@@ -75,7 +75,7 @@ public class PatientAppointmentsCompositionConverter {
         Date appointmentEnd = DateUtils.addHours(appointmentStart, 1);
 
         content.put(APPOINTMENTS_PREFIX + "referral_to", appointment.getCareServiceTeam());
-        content.put(APPOINTMENTS_PREFIX + "appointment_schedule/lower", DateFormatter.toString(appointmentStart));
+        content.put(APPOINTMENTS_PREFIX + "appointment_schedule/lower", DateFormatter.toString(appointment.getTimeSlot()));
         content.put(APPOINTMENTS_PREFIX + "appointment_schedule/upper", DateFormatter.toString(appointmentEnd));
         content.put(APPOINTMENTS_PREFIX + "receiver/address:0/location", appointment.getLocation());
         content.put(APPOINTMENTS_PREFIX + "ism_transition/current_state|value", appointment.getStatus());

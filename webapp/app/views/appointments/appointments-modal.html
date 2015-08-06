@@ -68,7 +68,7 @@
             <row>
                 <div class="col-md-5">
                  <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.dateofappointment.$dirty) && appointmentForm.dateofappointment.$invalid, 'has-success': eolcareplanForm.dateofappointment.$valid && eolcareplanForm.dateofappointment.$dirty}">
-          <label for="Date" class="control-label col-md-12">Date of Appointment</label>
+          <label for="dateofappointment" class="control-label col-md-12">Date of Appointment</label>
           <div class="col-md-12">
             <div class="input-group">
             <span class="input-group-btn">
@@ -108,16 +108,16 @@
         </div>  
         </div>
                 <div class="col-md-4">
-                      <div class="appointmentdateGroup form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.date.$dirty) && appointmentForm.date.$invalid, 'has-success': eolcareplanForm.date.$valid && eolcareplanForm.date.$dirty}">
-          <label for="Date" class="control-label col-md-12">Date</label>
+                      <div class="appointmentdateGroup form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.datecreated.$dirty) && appointmentForm.datecreated.$invalid, 'has-success': appointmentForm.datecreated.$valid && appointmentForm.datecreated.$dirty}">
+          <label for="datecreated" class="control-label col-md-12">Date</label>
           <div class="col-md-12">
             <div class="input-group">
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm"><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control" id="date" name="date" ng-click="openDatepicker($event, 'date')" ng-model="appointment.date" ng-click="openDatepicker($event, 'date')"  datepicker-popup="yyyy-MM-dd" is-open="$parent.date" disabled required/>
+              <input type="text" class="form-control" id="datecreated" name="datecreated" ng-model="appointment.dateCreated" datepicker-popup="yyyy-MM-dd" is-open="$parent.dateCreated" disabled required/>
             </div>
-            <span class="help-block animate-fade" ng-show="formSubmitted && appointmentForm.date.$error.required">You must enter a valid date.</span>
+            <span class="help-block animate-fade" ng-show="formSubmitted && appointmentForm.datecreated.$error.required">You must enter a valid date.</span>
           </div>
         </div>
         </div>
@@ -201,8 +201,8 @@
             </row>
             <row>
                 <div class="col-xs-12 col-sm-12">
-                 <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.dateofappointment.$dirty) && appointmentForm.dateofappointment.$invalid, 'has-success': eolcareplanForm.dateofappointment.$valid && eolcareplanForm.dateofappointment.$dirty}">
-          <label for="Date" class="control-label col-md-12">Date of Appointment</label>
+                 <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.dateofappointment.$dirty) && appointmentForm.dateofappointment.$invalid, 'has-success': appointmentForm.dateofappointment.$valid && appointmentForm.dateofappointment.$dirty}">
+          <label for="dateofappointment" class="control-label col-md-12">Date of Appointment</label>
           <div class="col-md-12">
             <div class="input-group">
             <span class="input-group-btn">
@@ -242,16 +242,16 @@
         </div>  
         </div>
                 <div class="col-xs-12 col-sm-12">
-                      <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.date.$dirty) && appointmentForm.date.$invalid, 'has-success': eolcareplanForm.date.$valid && eolcareplanForm.date.$dirty}">
-          <label for="Date" class="control-label col-md-12">Date of Appointment</label>
+                      <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.datecreated.$dirty) && appointmentForm.datecreated.$invalid, 'has-success': appointmentForm.datecreated.$valid && appointmentForm.datecreated.$dirty}">
+          <label for="datecreated" class="control-label col-md-12">Date</label>
           <div class="col-md-12">
             <div class="input-group">
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm"><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control" id="date" name="date" ng-click="openDatepicker($event, 'date')" ng-model="appointment.date" ng-click="openDatepicker($event, 'date')"  datepicker-popup is-open="$parent.date" disabled required/>
+              <input type="text" class="form-control" id="datecreated" name="datecreated" ng-click="openDatepicker($event, 'dateCreated')" ng-model="appointment.dateCreated"  disabled required/>
             </div>
-            <span class="help-block animate-fade" ng-show="formSubmitted && appointmentForm.date.$error.required">You must enter a valid date.</span>
+            <span class="help-block animate-fade" ng-show="formSubmitted && appointmentForm.datecreated.$error.required">You must enter a valid date.</span>
           </div>
         </div>
         </div>

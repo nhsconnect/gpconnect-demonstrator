@@ -12,7 +12,7 @@ angular.module('openehrPocApp')
     $scope.appointment.location = appointment.location || 'Leeds General';
     $scope.appointment.status = appointment.status || 'Scheduled';
     
-    if(modal.title === 'Create Appointment'){$scope.appointment.date = new Date().toISOString().slice(0, 10);}else{
+    if(modal.title === 'Create Appointment'){$scope.appointment.dateCreated = new Date().toISOString().slice(0, 10);}else{
     $scope.appointment.timeSlot = $scope.appointment.timeSlot.slice(12, 16);
     }
     
@@ -37,10 +37,10 @@ angular.module('openehrPocApp')
             $("#scheduler").attr("src","images/After.png");
         }else{
             var time =  new Date();
-            time.setHours(12);
+            time.setHours(11);
             time.setMinutes(0);
-           $scope.appointment.timeSlot = time.toISOString().slice(12, 16);
-           $scope.appointment.dateOfAppointment = new Date().toISOString().slice(0, 10);;
+           $scope.appointment.timeSlot = time.getHours()+':'+('0'+time.getMinutes()).slice(-2);
+           $scope.appointment.dateOfAppointment = new Date().toISOString().slice(0, 10);
            $scope.radioModel = 'Tab1';
         }
     }

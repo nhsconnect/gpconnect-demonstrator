@@ -32,19 +32,23 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (appointment) {
-   var toUpdate =  {
+          appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
+          appointment.date = new Date(appointment.date);
+          var time = new Date();
+          time.setHours(appointment.timeSlot.slice(0,2));
+          time.setMinutes(appointment.timeSlot.slice(3,4));
+          var toUpdate =  {
                   compositionId: $scope.appointment.compositionId,
                   careServiceTeam: appointment.careServiceTeam,
                   dateOfAppointment:  appointment.dateOfAppointment,
-                  timeSlot:  appointment.timeSlot,
                   location:  appointment.location,
                   status:  appointment.status,
                   author:  appointment.author,
-                  dateCreated:  appointment.date,
-                  source: "openehr"
+                  dateCreated:  appointment.dateCreated,
+                  source: "openehr",
+                  timeSlot : time    
             }
-
-        Contact.update($scope.patient.id, toUpdate).then(function () {
+        Appointment.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/appointments');
         });
       });

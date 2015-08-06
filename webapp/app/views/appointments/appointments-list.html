@@ -12,10 +12,10 @@
 
   <tbody>
     <tr ng-repeat="appointment in appointments" ng-click="go({{$index}})" ng-class="{info: selected($index)}">
-      <td>{{ appointment.date }}</td>
-      <td>{{ appointment.time }}</td>
+      <td>{{ appointment.dateCreated | date:'y-MM-dd' }}</td>
+      <td>{{ appointment.timeSlot | date:'HH:mm' }}</td>
       <td>{{ appointment.careServiceTeam}}</td>
-      <td>{{ apointment.source }}</td>
+      <td>{{ appointment.source }}</td>
     </tr>
 
     <tr ng-if="!appointments.length">

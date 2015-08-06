@@ -64,7 +64,13 @@ public class MDTReportConverter {
         content.put("mdt_output_report/history/question_to_mdt/question_to_mdt", mdtReportComposition.getQuestionForMDT());
         content.put("mdt_output_report/plan_and_requested_actions/recommendation/meeting_notes", mdtReportComposition.getMeetingDiscussion());
         content.put("mdt_output_report/context/start_time", DateFormatter.toString(mdtReportComposition.getDateOfRequest()));
+
         content.put("mdt_output_report/referral_details/referral_tracking/time", meetingTime);
+        content.put("mdt_output_report/referral_details/mdt_referral/narrative", "MDT Referral");
+        content.put("mdt_output_report/referral_details/referral_tracking/ism_transition/current_state|code", "526");
+        content.put("mdt_output_report/referral_details/referral_tracking/ism_transition/current_state|value", "planned");
+        content.put("mdt_output_report/referral_details/referral_tracking/ism_transition/careflow_step|code", "at0002");
+        content.put("mdt_output_report/referral_details/referral_tracking/ism_transition/careflow_step|value", "Referral planned");
 
         return new MDTReportUpdate(content);
     }

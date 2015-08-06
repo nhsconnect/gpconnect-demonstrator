@@ -52,20 +52,6 @@ public class ProcedureCompositionConverter {
         return new ProcedureUpdate(content);
     }
 
-    private int countProcedures(Map<String, Object> rawComposition) {
-
-        int index = -1;
-        boolean found;
-
-        do {
-            index++;
-            found = rawComposition.containsKey(PROCEDURE_PREFIX + index + "/procedure_name");
-        }
-        while (found);
-
-        return index;
-    }
-
     private Procedure extractProcedure(Map<String, Object> rawComposition) {
 
         String compositionId = MapUtils.getString(rawComposition, "procedures_list/_uid");

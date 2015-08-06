@@ -85,7 +85,7 @@
           <label for="name" class="control-label col-md-12">Time slot</label>
           <div class="col-md-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="timeslot" name="timeslot"  ng-model="appointment.timeSlot" disabled/>
+              <input type="text" class="form-control input-sm" ui-timepicker id="timeslot" name="timeslot"  ng-model="appointment.timeSlot" disabled/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && appointmentForm.timeslot.$error.required">You must enter a value.</span>
           </div>
@@ -219,7 +219,7 @@
           <label for="name" class="control-label col-md-12">Time slot</label>
           <div class="col-md-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="timeslot" name="timeslot" ng-model="appointment.timeSlot" disabled/>
+              <input type="text" class="form-control input-sm" id="timeslot" ui-timepicker name="timeslot" ng-model="appointment.timeSlot" disabled/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && appointmentForm.timeslot.$error.required">You must enter a value.</span>
           </div>

@@ -15,7 +15,7 @@ angular.module('openehrPocApp')
     $scope.procedure.code = '1234567';
     $scope.procedure.terminology = 'ICD-10';
     
-   
+    $scope.procedure.timeOfProcedure = new Date($scope.procedure.timeOfProcedure);   
     
      $scope.dateofProcedureDatepicker = function ($event, name) {
       $event.preventDefault();

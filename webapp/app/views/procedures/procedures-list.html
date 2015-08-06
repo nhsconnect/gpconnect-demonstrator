@@ -14,7 +14,7 @@
   <tr ng-repeat="procedure in procedures" ng-click="go('/patients/{{patient.id}}/procedures/{{$index}}')" ng-class="{info: selected($index)}">
     <td>{{procedure.procedureName}}</td>
     <td>{{procedure.dateOfProcedure | date:'y-MM-dd'}}</td>
-    <td>{{procedure.timeOfProcedure}}</td>
+    <td>{{procedure.timeOfProcedure | date:'HH:mm'}}</td>
     <td>{{procedure.source}}</td>
   </tr>
   <tr ng-if="!procedures.length">
@@ -22,8 +22,8 @@
   </tr>
   </tbody>
 </table>
-</div>
-</div>
 <div class="createButton text-right">
   <button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button>
+</div>
+</div>
 </div>

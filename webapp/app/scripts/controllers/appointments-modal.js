@@ -13,7 +13,7 @@ angular.module('openehrPocApp')
     $scope.appointment.status = appointment.status || 'Scheduled';
     
     if(modal.title === 'Create Appointment'){$scope.appointment.dateCreated = new Date().toISOString().slice(0, 10);}else{
-    $scope.appointment.timeSlot = $scope.appointment.timeSlot.slice(12, 16);
+    $scope.appointment.timeSlot = new Date($scope.appointment.timeSlot);    
     }
     
     $scope.openAppointmentDatepicker = function ($event, name) {

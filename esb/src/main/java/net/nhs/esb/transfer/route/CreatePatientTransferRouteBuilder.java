@@ -29,30 +29,29 @@ public class CreatePatientTransferRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
 
         from("direct:createPatientTransferComposition").routeId("openEhrCreatePatientTransferComposition")
-        		.bean(siteTransformer, "createTransferOfCareComposition")
-                .convertBodyTo(TransferOfCareUpdate.class)
-                .setHeader("Camel.composition", simple("${body.content}"))
-                .setBody(simple("${header.patientId}"))
-                .to("direct:setHeaders")
-                .to("direct:createSession")
-                .to("direct:getEhrId")
-                .to("direct:openEhrFindPatientAllergyCompositionId")
-                .choice()
-                    .when(header("Camel.compositionId").isNull())
-                        .setBody(simple("${header.Camel.composition}"))
-                        .to("direct:openEhrCreatePatientTransferComposition")
-                    .otherwise()
-                        .process(new HttpStatusProcessor())
-                .endChoice()
-                .end();
+         .bean(siteTransformer, "createTransferOfCareComposition")
+         .convertBodyTo(TransferOfCareUpdate.class)
+         .setHeader("Camel.composition", simple("${body.content}"))
+         .setBody(simple("${header.patientId}"))
+         .to("direct:setHeaders")
+         .to("direct:createSession")
+         .to("direct:getEhrId")
+         .to("direct:openEhrFindPatientAllergyCompositionId")
+         .choice()
+         .when(header("Camel.compositionId").isNull())
+         .setBody(simple("${header.Camel.composition}"))
+         .to("direct:openEhrCreatePatientTransferComposition")
+         .otherwise()
+         .process(new HttpStatusProcessor())
+         .endChoice()
+         .end();
 
         from("direct:openEhrCreatePatientTransferComposition")
-                .setExchangePattern(ExchangePattern.InOut)
-                .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
-                .setHeader(CxfConstants.OPERATION_NAME, constant("createComposition"))
-                .setHeader("Camel.template", constant(transferTemplate))
-                .bean(compositionCreateParameters)
-                .removeHeaders("Camel.*")
-                .to("cxfrs:bean:rsOpenEhr");
+         .setExchangePattern(ExchangePattern.InOut)
+         .setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, constant(Boolean.FALSE))
+         .setHeader(CxfConstants.OPERATION_NAME, constant("createComposition"))
+         .setHeader("Camel.template", constant(transferTemplate))
+         .bean(compositionCreateParameters)
+         .to("cxfrs:bean:rsOpenEhr");
     }
 }

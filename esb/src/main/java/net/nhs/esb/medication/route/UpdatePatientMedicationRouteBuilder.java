@@ -41,7 +41,6 @@ public class UpdatePatientMedicationRouteBuilder extends SpringRouteBuilder {
                 .setHeader("Camel.template", constant(medicationTemplate))
                 .bean(compositionUpdateParameters)
                 
-                .removeHeaders("Camel.*")
                 .to("cxfrs:bean:rsOpenEhr")
                 .end();
     }

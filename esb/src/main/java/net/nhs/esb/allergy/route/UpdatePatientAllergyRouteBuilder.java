@@ -41,7 +41,6 @@ public class UpdatePatientAllergyRouteBuilder extends SpringRouteBuilder {
                 .setHeader("Camel.template", constant(allergiesTemplate))
                 .bean(compositionUpdateParameters)
                 
-                .removeHeaders("Camel.*")
                 .to("cxfrs:bean:rsOpenEhr")
                 .end();
     }

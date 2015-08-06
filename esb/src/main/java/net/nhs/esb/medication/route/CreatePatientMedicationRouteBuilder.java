@@ -47,7 +47,6 @@ public class CreatePatientMedicationRouteBuilder extends SpringRouteBuilder {
                 .setHeader(CxfConstants.OPERATION_NAME, constant("createComposition"))
                 .setHeader("Camel.template", constant(medicationTemplate))
                 .bean(compositionCreateParameters)
-                .removeHeaders("Camel.*")
                 .to("cxfrs:bean:rsOpenEhr");
     }
 }

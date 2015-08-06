@@ -13,7 +13,7 @@
   <tbody>
   <tr ng-repeat="procedure in procedures" ng-click="go('/patients/{{patient.id}}/procedures/{{$index}}')" ng-class="{info: selected($index)}">
     <td>{{procedure.procedureName}}</td>
-    <td>{{procedure.dateOfProcedure}}</td>
+    <td>{{procedure.dateOfProcedure | date:'y-MM-dd'}}</td>
     <td>{{procedure.timeOfProcedure}}</td>
     <td>{{procedure.source}}</td>
   </tr>

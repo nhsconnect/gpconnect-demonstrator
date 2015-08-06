@@ -34,7 +34,6 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (referral) {            
           
-      
         var toUpdate = {
          compositionId : $scope.referral.compositionId,
          author : referral.author,

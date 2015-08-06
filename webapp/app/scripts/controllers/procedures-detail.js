@@ -9,7 +9,7 @@ angular.module('openehrPocApp')
 
     Procedure.all($stateParams.procedureId).then(function (result) {
       $scope.result = result.data;
-      $scope.procedure = $scope.result[0].procedures[$stateParams.procedureIndex];
+      $scope.procedure = $scope.result[$stateParams.procedureIndex];
     });
 
     $scope.edit = function () {
@@ -33,11 +33,21 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (procedure) {
-        $scope.result[0].procedures[$stateParams.procedureIndex] = procedure;
-        var toUpdate = {
-         compositionId : $scope.result[0].compositionId,
-         procedures : $scope.result[0].procedures     
-        }; 
+              procedure.dateSubmitted = new Date(procedure.dateSubmitted);
+         procedure.dateOfProcedure = new Date(procedure.dateOfProcedure);  
+         var toUpdate = {
+                    compositionId : $scope.procedure.compositionId,
+                    procedureName : procedure.procedureName,
+                    procedureNotes : procedure.procedureNotes,
+                    author : procedure.author,
+                    terminology : 'local',
+                    code : 'at0047',
+                    dateOfProcedure : procedure.dateOfProcedure,
+                    timeOfProcedure : procedure.timeOfProcedure,
+                    performer : procedure.performer,
+                    dateSubmitted : procedure.dateSubmitted,
+                    source : 'openehr'
+                    }
           
         Procedure.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/procedures');

@@ -8,10 +8,7 @@ angular.module('openehrPocApp')
     });
 
     Procedure.all($stateParams.patientId).then(function (result) {
-      $scope.result = result.data;
-           if(result.data.length > 0){
-      $scope.procedures = $scope.result[0].procedures;
-        }
+      $scope.procedures = result.data;
     });
 
     $scope.go = function (path) {
@@ -50,8 +47,8 @@ angular.module('openehrPocApp')
                     procedureName : procedure.procedureName,
                     procedureNotes : procedure.procedureNotes,
                     author : procedure.author,
-                    terminology : procedure.terminology,
-                    code : procedure.code,
+                    terminology : 'local',
+                    code : 'at0047',
                     dateOfProcedure : procedure.dateOfProcedure,
                     timeOfProcedure : procedure.timeOfProcedure,
                     performer : procedure.performer,

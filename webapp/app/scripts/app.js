@@ -245,12 +245,12 @@ angular
       })
 
       .state('appointments-detail', {
-        url: '/patients/{patientId:int}/appointments/{appointmentIndex:int}',
+        url: '/patients/{patientId:int}/appointments/{appointmentsIndex:int}',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
           main: { templateUrl: 'views/appointments/appointments-list.html', controller: 'AppointmentsListCtrl' },
-          detail: { templateUrl: 'views/appointments/appointments-detail.html', controller: 'appointmentsDetailCtrl' }
+          detail: { templateUrl: 'views/appointments/appointments-detail.html', controller: 'AppointmentsDetailCtrl' }
         }
       });
 

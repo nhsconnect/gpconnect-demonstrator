@@ -43,7 +43,8 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (eolcareplan) {
-           var toAdd = {
+          eolcareplan.careDocument.date = new Date(eolcareplan.careDocument.date);
+          var toAdd = {
          compositionId : '',
          careDocument : eolcareplan.careDocument,
          cprDecision : eolcareplan.cprDecision,

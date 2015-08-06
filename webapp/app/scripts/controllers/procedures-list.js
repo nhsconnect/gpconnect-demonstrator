@@ -43,6 +43,8 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (procedure) {
+         procedure.dateSubmitted = new Date(procedure.dateSubmitted);
+         procedure.dateOfProcedure = new Date(procedure.dateOfProcedure);  
          var toAdd = {
                     compositionId : '',
                     procedureName : procedure.procedureName,
@@ -52,7 +54,7 @@ angular.module('openehrPocApp')
                     code : procedure.code,
                     dateOfProcedure : procedure.dateOfProcedure,
                     timeOfProcedure : procedure.timeOfProcedure,
-                    procedurePerformedBy : procedure.procedurePerformedBy,
+                    performer : procedure.performer,
                     dateSubmitted : procedure.dateSubmitted,
                     source : 'openehr'
                     }

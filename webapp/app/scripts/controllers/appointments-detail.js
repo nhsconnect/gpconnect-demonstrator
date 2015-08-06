@@ -8,9 +8,7 @@ angular.module('openehrPocApp')
     });
 
     Appointment.all($stateParams.referralId).then(function (result) {
-      $scope.result = result.data;
-      $scope.appointment = $scope.result.Appointment[$stateParams.appointmentIndex];
-      $scope.appoinmentSelectionNumber = $stateParams.appointmentIndex + 1;
+      $scope.appointment = result.data[$stateParams.appointmentsIndex];
     });
 
     $scope.edit = function () {
@@ -24,7 +22,7 @@ angular.module('openehrPocApp')
               title: 'Edit Appointment'
             };
           },
-          contact: function () {
+          appointment: function () {
             return angular.copy($scope.appointment);
           },
           patient: function () {

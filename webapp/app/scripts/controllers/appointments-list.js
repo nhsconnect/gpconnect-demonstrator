@@ -8,12 +8,11 @@ angular.module('openehrPocApp')
     });
 
     Appointment.all($stateParams.patientId).then(function (result) {
-      $scope.result = result.data;
-      $scope.appontments = $scope.result.appointments;
+      $scope.appointments = result.data;
     });
 
-    $scope.go = function (path) {
-      $location.path(path);
+        $scope.go = function (index) {
+      $location.path('/patients/'+$scope.patient.id+'/appointments/'+index);
     };
 
     $scope.selected = function (appointmentIndex) {
@@ -41,12 +40,12 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (appointment) {
-
+          appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
+          appointment.date = new Date(appointment.date);
           var toAdd =  {
                   compositionId: '',
                   careServiceTeam: appointment.careServiceTeam,
                   dateOfAppointment:  appointment.dateOfAppointment,
-                  timeSlot:  appointment.timeSlot,
                   location:  appointment.location,
                   status:  appointment.status,
                   author:  appointment.author,

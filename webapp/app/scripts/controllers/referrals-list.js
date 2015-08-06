@@ -48,7 +48,7 @@ angular.module('openehrPocApp')
          compositionId : '',
          author : referral.author,
          clinicalSummary : referral.clinicalSummary,
-         dateCreated: referral.dateCreated,
+         dateCreated: new Date(referral.dateCreated),
          dateOfReferral: referral.dateOfReferral,
          reasonForReferral: referral.reasonForReferral,
          referralFrom: referral.referralFrom,

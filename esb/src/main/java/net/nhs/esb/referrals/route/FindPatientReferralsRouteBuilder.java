@@ -7,6 +7,7 @@ import net.nhs.esb.util.EmptyList;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.commons.collections4.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +32,7 @@ public class FindPatientReferralsRouteBuilder extends SpringRouteBuilder {
             .to("cxfrs:bean:rsOpenEhr")
             .choice()
                 .when(body().isNotNull())
-                    .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<Referral>())
+                    .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<>(new NullReferralPredicate()))
                         .setHeader("Camel.compositionId", simple("${body[uid]}"))
                         .bean(compositionSearchParams)
                         .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
@@ -51,5 +52,15 @@ public class FindPatientReferralsRouteBuilder extends SpringRouteBuilder {
             "from EHR e[ehr_id/value='${header.Camel.ehrId}'] " +
             "contains COMPOSITION a[openEHR-EHR-COMPOSITION.encounter.v1] " +
             "where a/name/value='Referral'";
+    }
+
+
+    private static class NullReferralPredicate implements Predicate<Referral> {
+
+        @Override
+        public boolean evaluate(Referral composition) {
+            return composition.getReferralFrom() != null &&
+                composition.getReferralTo() != null;
+        }
     }
 }

@@ -7,6 +7,7 @@ import net.nhs.esb.util.EmptyList;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.commons.collections4.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,7 @@ public class FindPatientAppointmentsRouteBuilder extends SpringRouteBuilder {
             .to("cxfrs:bean:rsOpenEhr")
             .choice()
                 .when(body().isNotNull())
-                    .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<Appointment>())
+                    .split(simple("${body.resultSet}"), new DefaultAggregationStrategy<>(new NullAppointmentPredicate()))
                         .setHeader("Camel.compositionId", simple("${body[uid]}"))
                         .bean(compositionSearchParams)
                         .setHeader(CxfConstants.OPERATION_NAME, constant("findComposition"))
@@ -56,5 +57,14 @@ public class FindPatientAppointmentsRouteBuilder extends SpringRouteBuilder {
             "from EHR e[ehr_id/value='${header.Camel.ehrId}'] " +
             "contains COMPOSITION a[openEHR-EHR-COMPOSITION.encounter.v1] " +
             "where a/name/value='Referral'";
+    }
+
+    private static class NullAppointmentPredicate implements Predicate<Appointment> {
+
+        @Override
+        public boolean evaluate(Appointment composition) {
+            return composition.getCareServiceTeam() != null &&
+                composition.getDateOfAppointment() != null;
+        }
     }
 }

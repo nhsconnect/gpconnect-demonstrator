@@ -31,7 +31,7 @@ public class LegacyDataConfig {
 			dataSource.setUsername(dbUri.getUserInfo().split(":")[0]);
 			dataSource.setPassword(dbUri.getUserInfo().split(":")[1]);
 		} else {
-			dataSource.setUrl("jdbc:mysql://localhost/poc_legacy");
+			dataSource.setUrl("jdbc:mysql://localhost:3306/poc_legacy");
 			dataSource.setUsername("root");
 			dataSource.setPassword(null);
 		}

@@ -31,19 +31,19 @@ public class PatientReferralsCompositionConverter {
 
         // retrieve data
         String compositionId = getString(rawComposition, "referral/_uid");
+
         String referralFrom = getString(rawComposition, REFERRALS_REQUEST + "referral_from/unstructured_name");
         String referralTo = getString(rawComposition, REFERRALS_REQUEST + "request/referral_to");
-
-        String rawDateOfReferral = getString(rawComposition, REFERRALS_REQUEST + "request/timing");
-        rawDateOfReferral = stripOddDate(rawDateOfReferral);
-        Date dateOfReferral = toDate(rawDateOfReferral);
-
         String reasonForReferral = getString(rawComposition, REFERRALS_REQUEST + "request/reason_for_referral");
         String clinicalSummary = getString(rawComposition, REFERRALS_REQUEST + "request/clinical_summary");
 
         String rawDateCreated = getString(rawComposition, REFERRALS_REQUEST + "request/timing");
         rawDateCreated = stripOddDate(rawDateCreated);
         Date dateCreated = toDate(rawDateCreated);
+
+        String rawDateOfReferral = getString(rawComposition, ORDER_REFERRAL + "time");
+        rawDateOfReferral = stripOddDate(rawDateOfReferral);
+        Date dateOfReferral = toDate(rawDateOfReferral);
 
         String author = getString(rawComposition, "ctx/composer_name");
         String source = "openehr";
@@ -73,9 +73,6 @@ public class PatientReferralsCompositionConverter {
         content.put("ctx/id_namespace", "NHS");
         content.put("ctx/composer_name", referral.getAuthor());
 
-        String dateOfReferral = DateFormatter.toString(referral.getDateOfReferral());
-
-        content.put(REFERRALS_REQUEST + "request/timing", dateOfReferral);
         content.put(REFERRALS_REQUEST + "request/referral_to", referral.getReferralTo());
         content.put(REFERRALS_REQUEST + "request/reason_for_referral", referral.getReasonForReferral());
         content.put(REFERRALS_REQUEST + "request/clinical_summary", referral.getClinicalSummary());
@@ -90,7 +87,7 @@ public class PatientReferralsCompositionConverter {
         content.put(ORDER_REFERRAL + "referral_to", referral.getReasonForReferral());
         content.put(ORDER_REFERRAL + "receiver/address:0/address_type|code", "at0013");
         content.put(ORDER_REFERRAL + "receiver/address:0/location", "Leeds Royal Infirmary");
-        content.put(ORDER_REFERRAL + "time", dateOfReferral);
+        content.put(ORDER_REFERRAL + "time", DateFormatter.toString(referral.getDateOfReferral()));
 
         return new ReferralUpdate(content);
     }

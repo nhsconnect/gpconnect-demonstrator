@@ -1,14 +1,6 @@
 package net.nhs.esb.problem.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import net.nhs.esb.transfer.model.TransferOfCare;
 
@@ -51,6 +43,9 @@ public class Problem {
 	@Column(name="date_of_onset")
     @JsonProperty("dateOfOnset")
     private String dateOfOnset;
+
+    @Transient
+    private String source;
 
     public Long getId() {
 		return id;
@@ -106,5 +101,13 @@ public class Problem {
 
     public void setDateOfOnset(String dateOfOnset) {
         this.dateOfOnset = dateOfOnset;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

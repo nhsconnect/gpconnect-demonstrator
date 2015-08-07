@@ -1,14 +1,6 @@
 package net.nhs.esb.medication.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import net.nhs.esb.transfer.model.TransferOfCare;
 
@@ -63,6 +55,9 @@ public class Medication {
 	@Column(name="dose_directions")
     @JsonProperty("doseDirections")
     private String doseDirections;
+
+    @Transient
+    private String source;
 
 
     public String getName() {
@@ -144,4 +139,12 @@ public class Medication {
 	public void setTransferOfCare(TransferOfCare transferOfCare) {
 		this.transferOfCare = transferOfCare;
 	}
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 }

@@ -47,6 +47,7 @@ public class MedicationCompositionConverter extends BaseCompositionConverter<Med
         medication.setDoseTiming(MapUtils.getString(rawComposition, prefix + "/medication_item/dose_timing_description"));
         medication.setStartDateTime(MapUtils.getString(rawComposition, prefix + "/medication_item/course_details/start_datetime"));
         medication.setDoseDirections(MapUtils.getString(rawComposition, prefix + "/medication_item/dose_directions_description"));
+        medication.setSource("openehr");
 
         return medication;
     }

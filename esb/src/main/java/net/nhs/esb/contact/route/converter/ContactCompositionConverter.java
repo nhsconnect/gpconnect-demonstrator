@@ -47,6 +47,7 @@ public class ContactCompositionConverter extends BaseCompositionConverter<Contac
         contact.setRelationshipTerminology(MapUtils.getString(rawComposition, prefix + "/relationship_category|terminology"));
         contact.setNextOfKin(MapUtils.getBoolean(rawComposition, prefix + "/is_next_of_kin"));
         contact.setNote(MapUtils.getString(rawComposition, prefix + "/note"));
+        contact.setSource("openehr");
 
         return contact;
     }

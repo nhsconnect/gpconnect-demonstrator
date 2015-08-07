@@ -2,17 +2,7 @@ package net.nhs.esb.transfer.model;
 
 import java.util.List;
 
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import net.nhs.esb.allergy.model.Allergy;
 import net.nhs.esb.contact.model.Contact;
@@ -59,6 +49,9 @@ public class TransferOfCare {
     @JoinColumn(name="transfer_care_composition_id")
     @JsonIgnore
     private TransferOfCareComposition transferOfCareComposition;
+
+    @Transient
+    private String source;
 
     public TransferDetail getTransferDetail() {
         return transferDetail;
@@ -116,4 +109,12 @@ public class TransferOfCare {
 			TransferOfCareComposition transferOfCareComposition) {
 		this.transferOfCareComposition = transferOfCareComposition;
 	}
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 }

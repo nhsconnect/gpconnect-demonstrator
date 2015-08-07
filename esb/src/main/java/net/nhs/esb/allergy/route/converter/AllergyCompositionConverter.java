@@ -43,6 +43,7 @@ public class AllergyCompositionConverter extends BaseCompositionConverter<Allerg
         allergy.setReaction(MapUtils.getString(rawComposition, prefix + "/adverse_reaction:0/reaction_details/comment"));
         allergy.setCauseCode(MapUtils.getString(rawComposition, prefix + "/adverse_reaction:0/causative_agent|code"));
         allergy.setCauseTerminology(MapUtils.getString(rawComposition, prefix + "/adverse_reaction:0/causative_agent|terminology"));
+        allergy.setSource("openehr");
 
         return allergy;
     }

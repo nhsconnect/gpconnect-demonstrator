@@ -51,6 +51,7 @@ public class ProblemCompositionConverter extends BaseCompositionConverter<Proble
         problem.setCode(code);
         problem.setTerminology(terminology);
         problem.setDateOfOnset(dateOfOnset);
+        problem.setSource("openehr");
 
         return problem;
     }

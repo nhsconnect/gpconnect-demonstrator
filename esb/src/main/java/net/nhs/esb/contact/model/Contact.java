@@ -1,19 +1,11 @@
 package net.nhs.esb.contact.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import net.nhs.esb.transfer.model.TransferOfCare;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import net.nhs.esb.transfer.model.TransferOfCare;
+
+import javax.persistence.*;
+
 
 /**
  */
@@ -63,6 +55,9 @@ public class Contact {
     @JoinColumn(name="transfer_care_id")
     @JsonIgnore
     private TransferOfCare transferOfCare;
+
+    @Transient
+    private String source;
 
     public String getName() {
         return name;
@@ -143,4 +138,12 @@ public class Contact {
 	public void setTransferOfCare(TransferOfCare transferOfCare) {
 		this.transferOfCare = transferOfCare;
 	}
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 }

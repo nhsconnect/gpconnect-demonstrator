@@ -100,6 +100,7 @@ public class TransferCompositionConverter {
         transferOfCare.setMedication(medicationList);
         transferOfCare.setProblems(problemList);
         transferOfCare.setTransferDetail(transferDetail);
+        transferOfCare.setSource("local");
 
         return transferOfCare;
     }

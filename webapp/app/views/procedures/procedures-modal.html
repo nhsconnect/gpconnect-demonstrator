@@ -22,13 +22,13 @@
     <div class="row">
       <div class="col-md-6">
           
-         <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || procedureForm.procedureName.$dirty) && procedureForm.procedureName.$invalid, 'has-success': procedureForm.procedureName.$valid && procedureForm.procedureName.$dirty}">
+         <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || procedureForm.name.$dirty) && procedureForm.name.$invalid, 'has-success': procedureForm.name.$valid && procedureForm.name.$dirty}">
           <label for="name" class="control-label col-md-12">Procedure Name</label>
           <div class="col-md-12">
             <div class="input-group">
               <input type="text" class="form-control input-sm" id="name" name="name" ng-model="procedure.procedureName"  required/>
             </div>
-            <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.procedureName.$error.required">You must enter a value.</span>
+            <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.name.$error.required">You must enter a value.</span>
           </div>
         </div>
           
@@ -58,7 +58,7 @@
             <div class="col-md-12 procedureRightModal">
                 <div class="col-md-6">      
          <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || procedureForm.terminology.$dirty) && procedureForm.terminology.$invalid, 'has-success': procedureForm.terminology.$valid && procedureForm.terminology.$dirty}">
-          <label for="name" class="control-label col-md-6">Terminilogy</label>
+          <label for="terminology" class="control-label col-md-6">Terminilogy</label>
           <div class="col-md-12">
             <div class="input-group">
               <input type="text" class="form-control input-sm" id="terminology" name="terminology" ng-model="procedure.terminology"  required/>
@@ -69,7 +69,7 @@
         </div>
         <div class="col-md-6">
          <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || procedureForm.terminology.$dirty) && procedureForm.code.$invalid, 'has-success': procedureForm.code.$valid && procedureForm.code.$dirty}">
-          <label for="name" class="control-label col-md-6">Code</label>
+          <label for="code" class="control-label col-md-6">Code</label>
           <div class="col-md-12">
             <div class="input-group">
               <input type="text" class="form-control input-sm" id="code" name="code" ng-model="procedure.code"  required/>

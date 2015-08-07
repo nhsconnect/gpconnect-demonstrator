@@ -13,7 +13,7 @@ angular.module('openehrPocApp')
     $scope.appointment.status = appointment.status || 'Scheduled';
     
     if(modal.title === 'Create Appointment'){$scope.appointment.dateCreated = new Date().toISOString().slice(0, 10);}else{
-    $scope.appointment.timeSlot = new Date($scope.appointment.timeSlot);    
+           $scope.appointment.timeSlot = new Date($scope.appointment.timeSlot);
     }
     
     $scope.openAppointmentDatepicker = function ($event, name) {
@@ -39,7 +39,7 @@ angular.module('openehrPocApp')
             var time =  new Date();
             time.setHours(11);
             time.setMinutes(0);
-           $scope.appointment.timeSlot = time.getHours()+':'+('0'+time.getMinutes()).slice(-2);
+           $scope.appointment.timeSlot = time;
            $scope.appointment.dateOfAppointment = new Date().toISOString().slice(0, 10);
            $scope.radioModel = 'Tab1';
         }

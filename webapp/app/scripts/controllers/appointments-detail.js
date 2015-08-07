@@ -7,8 +7,8 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    Appointment.all($stateParams.referralId).then(function (result) {
-      $scope.appointment = result.data[$stateParams.appointmentsIndex];
+    Appointment.all($stateParams.appointmentIndex).then(function (result) {
+      $scope.appointment = result.data[$stateParams.appointmentIndex];
     });
 
     $scope.edit = function () {
@@ -34,9 +34,6 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (appointment) {
           appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
           appointment.date = new Date(appointment.date);
-          var time = new Date();
-          time.setHours(appointment.timeSlot.slice(0,2));
-          time.setMinutes(appointment.timeSlot.slice(3,4));
           var toUpdate =  {
                   compositionId: $scope.appointment.compositionId,
                   careServiceTeam: appointment.careServiceTeam,
@@ -46,7 +43,7 @@ angular.module('openehrPocApp')
                   author:  appointment.author,
                   dateCreated:  appointment.dateCreated,
                   source: "openehr",
-                  timeSlot : time    
+                  timeSlot : appointment.timeSlot    
             }
         Appointment.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/appointments');

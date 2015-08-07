@@ -28,7 +28,7 @@
          <div ng-if="radioModel == 'Tab1'" class="appointmentTabContent">        
             <div class="row outerRow">
              <row>
-                 <div class="col-md-5">
+                 <div class="col-md-5 fixedHeight">
                   <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.careserviceteam.$dirty) && appointmentForm.careserviceteam.$invalid, 'has-success': appointmentForm.careserviceteam.$valid && appointmentForm.careserviceteam.$dirty}">
           <label for="name" class="control-label col-md-12">Care Service Team</label>
           <div class="col-md-12">
@@ -39,7 +39,7 @@
           </div>
         </div>
                  </div>   
-                 <div class="col-md-4 appointmentLocationGroup">
+                 <div class="col-md-4 fixedHeight appointmentLocationGroup">
                   <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.location.$dirty) && appointmentForm.location.$invalid, 'has-success': appointmentForm.location.$valid && appointmentForm.location.$dirty}">
           <label for="name" class="control-label col-md-12">Location</label>
           <div class="col-md-12">
@@ -50,7 +50,7 @@
           </div>
         </div>
         </div>   
-                 <div class="col-md-3 appointmentStatusGroup">
+                 <div class="col-md-3 fixedHeight appointmentStatusGroup">
                  <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.status.$dirty) && appointmentForm.status.$invalid, 'has-success': appointmentForm.status.$valid && appointmentForm.status.$dirty}">
         <label for="status" class="control-label col-md-12">Status</label>
         <div class="col-md-12">

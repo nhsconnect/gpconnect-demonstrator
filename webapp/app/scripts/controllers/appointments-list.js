@@ -42,9 +42,9 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (appointment) {
           appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
           appointment.date = new Date(appointment.date);
-          var time = new Date();
-          time.setHours(appointment.timeSlot.slice(0,2));
-          time.setMinutes(appointment.timeSlot.slice(3,4));
+         // var time = new Date();
+        //  time.setHours(appointment.timeSlot.slice(0,2));
+        //  time.setMinutes(appointment.timeSlot.slice(3,4));
           var toAdd =  {
                   compositionId: '',
                   careServiceTeam: appointment.careServiceTeam,
@@ -54,7 +54,7 @@ angular.module('openehrPocApp')
                   author:  appointment.author,
                   dateCreated:  appointment.date,
                   source: "openehr",
-                  timeSlot : time    
+                  timeSlot : appointment.timeSlot   
             }
         Appointment.create($scope.patient.id, toAdd).then(function () {
           $state.go('appointments', { patientId: $scope.patient.id });

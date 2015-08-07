@@ -25,6 +25,7 @@ public class TransferSummaryAggregator {
         summary.setContacts(contacts);
         summary.setMedication(medication);
         summary.setProblems(problems);
+        summary.setSource("local");
 
         return summary;
     }

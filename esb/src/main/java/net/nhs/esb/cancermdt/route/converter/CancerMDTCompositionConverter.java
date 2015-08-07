@@ -79,6 +79,7 @@ public class CancerMDTCompositionConverter {
 
         CancerMDTComposition cancerMDTComposition = new CancerMDTComposition();
         cancerMDTComposition.setCancerMDT(cancerMDT);
+        cancerMDT.setSource("openehr");
 
         return cancerMDTComposition;
     }

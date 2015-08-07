@@ -14,6 +14,7 @@ public class TransferOfCareSummary {
     private ContactComposition contacts;
     private MedicationComposition medication;
     private ProblemComposition problems;
+    private String source;
 
     public String getCompositionId() {
         return compositionId;
@@ -53,5 +54,13 @@ public class TransferOfCareSummary {
 
     public void setProblems(ProblemComposition problems) {
         this.problems = problems;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

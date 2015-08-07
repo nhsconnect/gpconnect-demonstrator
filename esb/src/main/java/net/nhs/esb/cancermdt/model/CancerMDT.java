@@ -1,18 +1,11 @@
 package net.nhs.esb.cancermdt.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.ElementCollection;
-import javax.persistence.MapKeyColumn;
-import javax.persistence.OneToMany;
+
 
 /**
  */
@@ -55,6 +48,9 @@ public class CancerMDT {
     @Column(name = "questionForMDT")
     @JsonProperty("questionForMDT")
     private String questionForMDT;
+
+    @Transient
+    private String source;
     
     public Long getId() {
         return id;
@@ -118,5 +114,13 @@ public class CancerMDT {
 
     public void setQuestionForMDT(String questionForMDT) {
         this.questionForMDT = questionForMDT;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

@@ -27,8 +27,8 @@
         <div class="col-md-9">
          <div ng-if="radioModel == 'Tab1'" class="appointmentTabContent">        
             <div class="row outerRow">
-             <row>
-                 <div class="col-md-5 fixedHeight">
+             <row class="applyFloatRight">
+                 <div class="col-md-5">
                   <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.careserviceteam.$dirty) && appointmentForm.careserviceteam.$invalid, 'has-success': appointmentForm.careserviceteam.$valid && appointmentForm.careserviceteam.$dirty}">
           <label for="name" class="control-label col-md-12">Care Service Team</label>
           <div class="col-md-12">
@@ -39,7 +39,7 @@
           </div>
         </div>
                  </div>   
-                 <div class="col-md-4 fixedHeight appointmentLocationGroup">
+                 <div class="col-md-4 appointmentLocationGroup">
                   <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.location.$dirty) && appointmentForm.location.$invalid, 'has-success': appointmentForm.location.$valid && appointmentForm.location.$dirty}">
           <label for="name" class="control-label col-md-12">Location</label>
           <div class="col-md-12">
@@ -50,7 +50,7 @@
           </div>
         </div>
         </div>   
-                 <div class="col-md-3 fixedHeight appointmentStatusGroup">
+                 <div class="col-md-3 appointmentStatusGroup">
                  <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.status.$dirty) && appointmentForm.status.$invalid, 'has-success': appointmentForm.status.$valid && appointmentForm.status.$dirty}">
         <label for="status" class="control-label col-md-12">Status</label>
         <div class="col-md-12">
@@ -65,7 +65,7 @@
         </div>
             </div>   
             </row>
-            <row>
+            <row class="applyFloatRight">
                 <div class="col-md-5">
                  <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.dateofappointment.$dirty) && appointmentForm.dateofappointment.$invalid, 'has-success': eolcareplanForm.dateofappointment.$valid && eolcareplanForm.dateofappointment.$dirty}">
           <label for="dateofappointment" class="control-label col-md-12">Date of Appointment</label>
@@ -95,7 +95,7 @@
              <button class="btn btn-primary" ng-click="schedule()"><i class="fa fa-calendar"></i> Re-Schedule</button>
             </div>    
             </row>  
-            <row>    
+            <row class="applyFloatRight">    
             <div class="col-md-5">
              <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.author.$dirty) && appointmentForm.author.$invalid, 'has-success': appointmentForm.author.$valid && appointmentForm.author.$dirty}">
           <label for="author" class="control-label col-md-12">Author</label>

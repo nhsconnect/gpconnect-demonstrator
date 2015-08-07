@@ -1,3 +1,6 @@
+*, *:before, *:after {
+  box-sizing: border-box;
+}
 
 body{
     width:72%;
@@ -1195,6 +1198,10 @@ height: 265px !important;
 .tabContetInner{
     padding-left: 5%;
     padding-top: 16px;
+}
+
+.applyFloatRight{
+    float: left;
 }
 
 .scrollcontainer1 {

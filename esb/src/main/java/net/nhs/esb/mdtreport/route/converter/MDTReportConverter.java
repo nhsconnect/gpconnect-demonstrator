@@ -29,7 +29,8 @@ public class MDTReportConverter {
         String meetingDiscussion = MapUtils.getString(rawComposition, "mdt_output_report/plan_and_requested_actions/recommendation/meeting_notes");
 
         String requestDateTime = MapUtils.getString(rawComposition, "mdt_output_report/context/start_time");
-        String meetingDateTime = MapUtils.getString(rawComposition, "mdt_output_report/referral_details/referral_tracking/time");
+        String meetingDateTime = MapUtils.getString(rawComposition, "mdt_output_report/referral_details/mdt_referral/request:0/timing");
+        meetingDateTime = DateFormatter.stripOddDate(meetingDateTime);
 
         Date dateOfRequest = DateFormatter.toDate(requestDateTime);
         Date dateOfMeeting = DateFormatter.toDateOnly(meetingDateTime);
@@ -60,13 +61,16 @@ public class MDTReportConverter {
 
         String meetingTime = DateFormatter.combineDateTime(mdtReportComposition.getDateOfMeeting(), mdtReportComposition.getTimeOfMeeting());
 
-        content.put("mdt_output_report/referral_details/mdt_referral/mdt_team", mdtReportComposition.getService());
         content.put("mdt_output_report/history/question_to_mdt/question_to_mdt", mdtReportComposition.getQuestionForMDT());
         content.put("mdt_output_report/plan_and_requested_actions/recommendation/meeting_notes", mdtReportComposition.getMeetingDiscussion());
         content.put("mdt_output_report/context/start_time", DateFormatter.toString(mdtReportComposition.getDateOfRequest()));
 
-        content.put("mdt_output_report/referral_details/referral_tracking/time", meetingTime);
         content.put("mdt_output_report/referral_details/mdt_referral/narrative", "MDT Referral");
+        content.put("mdt_output_report/referral_details/mdt_referral/mdt_team", mdtReportComposition.getService());
+        content.put("mdt_output_report/referral_details/mdt_referral/request:0/service_requested", "MDT referral");
+        content.put("mdt_output_report/referral_details/mdt_referral/request:0/timing", meetingTime);
+        content.put("mdt_output_report/referral_details/mdt_referral/request:0/timing|formalism", "timing");
+        content.put("mdt_output_report/referral_details/referral_tracking/referred_service", "MDT referral");
         content.put("mdt_output_report/referral_details/referral_tracking/ism_transition/current_state|code", "526");
         content.put("mdt_output_report/referral_details/referral_tracking/ism_transition/current_state|value", "planned");
         content.put("mdt_output_report/referral_details/referral_tracking/ism_transition/careflow_step|code", "at0002");

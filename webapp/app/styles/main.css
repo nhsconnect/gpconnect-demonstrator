@@ -956,6 +956,10 @@ table.table {
   background-color: #d0e8af;
 }
 
+.table > thead > tr > th {
+    font-weight: bold;
+}
+
 .table > thead > tr > td.info,
 .table > tbody > tr > td.info,
 .table > tfoot > tr > td.info,

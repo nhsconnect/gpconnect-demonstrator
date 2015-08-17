@@ -3,43 +3,43 @@
 <div class="form-horizontal text-left">
     
       <div class="form-group form-group-sm">
-    <label class="control-label col-md-4">Service / Team</label>
+    <label class="control-label col-md-4">Service / Team:</label>
     <div class="col-md-8">
       <div class="form-control-static">
-        <span ng-if="!cancerMdt.Service.length">No Multidisciplinary Team</span>
-        <ul ng-if="cancerMdt.Service">
-          <li>{{cancerMdt.Service}}</li>
+        <span ng-if="!cancerMdt.service.length">No Multidisciplinary Team</span>
+        <ul ng-if="cancerMdt.service">
+          <li>{{cancerMdt.service}}</li>
         </ul>
       </div>
     </div>
   </div>
 
   <div class="form-group form-group-sm">
-    <label class="control-label col-md-4">Date of request</label>
+    <label class="control-label col-md-4">Date of request:</label>
     <div class="col-md-8">
       <div class="form-control-static">
-        <span ng-if="!cancerMdt.Date.length">No MDT date</span>
-        <ul ng-if="cancerMdt.Date">
-          <li>{{cancerMdt.Date}}</li>
+        <span ng-if="!cancerMdt.dateOfRequest.length">No MDT date</span>
+        <ul ng-if="cancerMdt.dateOfRequest">
+          <li>{{cancerMdt.dateOfRequest | date:'dd-MMM-y' }}</li>
         </ul>
       </div>
     </div>
   </div>
     
       <div class="form-group form-group-sm">
-    <label class="control-label col-md-4">Date of Meeting</label>
+    <label class="control-label col-md-4">Date of Meeting:</label>
     <div class="col-md-8">
       <div class="form-control-static">
-        <span ng-if="!cancerMdt.Date.length">Not Available</span>
-        <ul ng-if="cancerMdt.Date">
-          <li>{{cancerMdt.Date}}</li>
+        <span ng-if="!cancerMdt.dateOfMeeting.length">Not Available</span>
+        <ul ng-if="cancerMdt.dateOfMeeting">
+          <li>{{cancerMdt.dateOfMeeting | date:'y-MMM-y' }}</li>
         </ul>
       </div>
     </div>
   </div>
     
      <div class="form-group form-group-sm">
-    <label class="control-label col-md-12">Link to Web Service Page</label>
+    <label class="control-label col-md-12">Link to Web Service Page:</label>
     <div class="col-md-12">
       <div class="form-control-static">
             <a href="https://www.mdtwebservicedirectory.com?123080s9ijass">https://www.mdtwebservicedirectory.com?123080s9ijass</a>
@@ -48,7 +48,7 @@
   </div>
 
   <div class="form-group form-group-sm">
-    <label class="control-label col-md-12">Question For MDT</label>
+    <label class="control-label col-md-12">Question For MDT:</label>
     <div class="col-md-12">
       <div class="form-control-static">
         <span ng-if="!cancerMdt.questionForMDT.length">No Question For MDT</span>
@@ -61,12 +61,12 @@
     
     
   <div class="form-group form-group-sm">
-    <label class="control-label col-md-12">Meeting Discussion</label>
+    <label class="control-label col-md-12">Meeting Discussion:</label>
     <div class="col-md-12">
       <div class="form-control-static">
-        <span ng-if="!cancerMdt.Notes.length">No Meeting notes</span>
-        <ul ng-if="cancerMdt.Notes">
-          <li>{{cancerMdt.Notes}}</li>
+        <span ng-if="!cancerMdt.meetingDiscussion.length">No Meeting Discussion</span>
+        <ul ng-if="cancerMdt.meetingDiscussion">
+          <li>{{cancerMdt.meetingDiscussion}}</li>
         </ul>
       </div>
     </div>

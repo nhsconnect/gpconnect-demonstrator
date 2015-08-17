@@ -17,13 +17,13 @@
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="mdt in cancerMdtComposition.cancerMDT | filter:query" ng-click="go('/patients/{{patient.id}}/cancer-mdt-detail/{{$index}}')" ng-class="{info: selected($index)}">
-    <td>{{mdt.Date}}</td>
-    <td>{{mdt.Service}}</td>
-    <td>{{mdt.Date}}</td>
+  <tr ng-repeat="mdt in cancerMdtComposition | filter:query" ng-click="go('/patients/{{patient.id}}/cancer-mdt-detail/{{$index}}')" ng-class="{info: selected($index)}">
+    <td>{{mdt.dateOfRequest | date:'dd-MMM-y' }}</td>
+    <td>{{mdt.service}}</td>
+    <td>{{mdt.dateOfMeeting | date:'dd-MMM-y' }}</td>
     <td>{{mdt.source}}</td>
   </tr>
-  <tr ng-if="!cancerMdtComposition.cancerMDT.length">
+  <tr ng-if="!cancerMdtComposition.length">
     <td colspan="4"><span class="label label-default">No MDT's</span></td>
   </tr>
   </tbody>

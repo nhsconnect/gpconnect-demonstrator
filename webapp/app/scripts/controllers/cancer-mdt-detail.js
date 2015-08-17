@@ -9,8 +9,7 @@ angular.module('openehrPocApp')
 
     CancerMdt.getComposition($stateParams.patientId).then(function (result) {
       $scope.cancerMdtComposition = result.data;
-      $scope.cancerMdt = $scope.cancerMdtComposition.cancerMDT[$stateParams.cancerMdtIndex];
-      $scope.cancerMdtSelectionNumber = $stateParams.cancerMdtIndex + 1;
+      $scope.cancerMdt = $scope.cancerMdtComposition[$stateParams.cancerMdtIndex];
     });
 
     $scope.edit = function () {

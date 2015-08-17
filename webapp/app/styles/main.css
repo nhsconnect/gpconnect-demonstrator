@@ -1458,3 +1458,21 @@ margin-bottom: 15px;
 /* add padding  */
 .left-addon input  { padding-left:  30px; }
 .right-addon input { padding-right: 30px; }
+
+.cancerMdtForm textarea{
+    height: 80px !important;
+}
+
+.cancerMdtForm .input-group{
+    padding-top: 5px;
+    width: 100%;
+}
+
+.cancerMdtForm .linkButton{
+line-height: 16px;
+}
+
+.mdtLinkGroup{
+    width: 100%;
+    margin-left: 0px !important;
+}

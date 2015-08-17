@@ -4,15 +4,29 @@ angular.module('openehrPocApp')
   .controller('CancerMdtModalCtrl', function ($scope, $modalInstance, $stateParams, $state, cancerMdt, patient, modal) {
 
     $scope.cancerMdt = cancerMdt;
-
-    console.log($scope.cancerMdt);
-    if(!Object.keys($scope.cancerMdt).length || !$scope.cancerMdt.participation){
-      $scope.cancerMdt.participation = [];
+    
+    $scope.protocol = 'http://'
+    
+       if(modal.title === 'Edit MDT'){
+           $scope.cancerMdt.timeOfMeeting = new Date($scope.cancerMdt.timeOfMeeting);
+       }
+    
+    
+    $scope.changeProtocol = function(protocol){
+    switch(protocol) {
+    case 'http':
+        $scope.protocol = 'http://';
+        break;
+    case 'https':
+            $scope.protocol = 'https://';
+        break;
+    default:
+            $scope.protocol = 'http://'
+    }
     }
 
     $scope.patient = patient;
     $scope.modal = modal;
-    $scope.cancerMdtSelectionNumber = $stateParams.cancerMdtIndex + 1;
 
     $scope.ok = function (cancerMdtForm, cancerMdt) {
       $scope.formSubmitted = true;
@@ -28,21 +42,16 @@ angular.module('openehrPocApp')
     $scope.openDatepicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();
-
+      $scope[name] = true;
+    };
+    
+    $scope.dateofMeetingDatepicker = function ($event, name) {
+    $event.preventDefault();
+    $event.stopPropagation();
+        
       $scope[name] = true;
     };
 
-    $scope.addNewParticipant = function() {
-      $scope.cancerMdt.participation.push({
-          'name' : '',
-          'function' : '',
-          'mode' : ''
-      });
-    };
-
-    $scope.removeParticipant = function(index) {
-      $scope.cancerMdt.participation.splice(index, 1);
-    };
 
     $scope.validate = function(form, name, index){
       var errorToCheckFor = name + index;

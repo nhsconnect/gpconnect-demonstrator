@@ -20,7 +20,7 @@ angular.module('openehrPocApp')
         resolve: {
           modal: function () {
             return {
-              title: 'Edit Cancer MDT'
+              title: 'Edit MDT'
             };
           },
           cancerMdt: function () {
@@ -33,11 +33,13 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (cancerMdt) {
-        $scope.cancerMdtComposition.cancerMDT[$stateParams.cancerMdtIndex] = cancerMdt;
-        console.log('to post');
-        console.log($scope.cancerMdtComposition);
-        CancerMdt.update($scope.patient.id,$scope.cancerMdtComposition).then(function () {
-          $state.go('cancerMdt', { patientId: $scope.patient.id });
+          
+        cancerMdt.dateOfMeeting = new Date(cancerMdt.dateOfMeeting); 
+        cancerMdt.dateOfRequest = new Date(cancerMdt.dateOfRequest);  
+        if(cancerMdt.timeOfMeeting !== null){cancerMdt.timeOfMeeting = new Date(cancerMdt.timeOfMeeting);}  
+
+        CancerMdt.update($scope.patient.id, cancerMdt).then(function () {
+        $state.go('cancerMdt', { patientId: $scope.patient.id });
         });
       });
     };

@@ -1,5 +1,10 @@
 <h3><strong>Problems/Diagnosis</strong></h3>
 
+<div class="inner-addon left-addon filterInput">
+    <i class="fa fa-filter"></i>
+    <input type="text" class="form-control" placeholder="Filter..." ng-model="query[queryBy]" />
+</div>
+
 <table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
@@ -10,7 +15,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="diagnosis in diagnoses" ng-click="go('/patients/{{patient.id}}/diagnoses/{{$index}}')" ng-class="{info: selected($index)}">
+    <tr ng-repeat="diagnosis in diagnoses | filter:query" ng-click="go('/patients/{{patient.id}}/diagnoses/{{$index}}')" ng-class="{info: selected($index)}">
       <td>{{ diagnosis.problem }}</td>
       <td>{{ diagnosis.dateOfOnset | date:'dd-MMM-yyyy' }}</td>
       <td>{{diagnosis.source}}</td>

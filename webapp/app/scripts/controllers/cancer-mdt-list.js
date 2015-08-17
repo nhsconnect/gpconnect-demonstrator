@@ -3,6 +3,9 @@
 angular.module('openehrPocApp')
   .controller('CancerMdtListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, CancerMdt) {
 
+    $scope.query = {};
+    $scope.queryBy = '$';
+    
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });

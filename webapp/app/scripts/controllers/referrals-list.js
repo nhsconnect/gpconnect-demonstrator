@@ -3,6 +3,9 @@
 angular.module('openehrPocApp')
   .controller('ReferralsListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Referral) {
 
+    $scope.query = {};
+    $scope.queryBy = '$';
+    
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });

@@ -3,6 +3,9 @@
 angular.module('openehrPocApp')
   .controller('AppointmentsListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Appointment) {
 
+    $scope.query = {};
+    $scope.queryBy = '$';
+    
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });

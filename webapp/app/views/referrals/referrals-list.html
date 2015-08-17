@@ -1,5 +1,10 @@
 <h3><strong>Referrals</strong></h3>
 
+<div class="inner-addon left-addon filterInput">
+    <i class="fa fa-filter"></i>
+    <input type="text" class="form-control" placeholder="Filter..." ng-model="query[queryBy]" />
+</div>
+
 <table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
@@ -11,7 +16,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="referral in referrals" ng-click="go('/patients/{{patient.id}}/referrals/{{$index}}')" ng-class="{info: selected($index)}">
+    <tr ng-repeat="referral in referrals | filter:query" ng-click="go('/patients/{{patient.id}}/referrals/{{$index}}')" ng-class="{info: selected($index)}">
       <td>{{ referral.dateOfReferral | date:'y-MM-dd'}}</td>
       <td>{{ referral.referralFrom }}</td>
       <td>{{ referral.referralTo }}</td>

@@ -37,7 +37,7 @@ angular.module('openehrPocApp')
             $("#scheduler").attr("src","images/After.png");
         }else{
             var time =  new Date();
-            time.setHours(11);
+            time.setHours(12);
             time.setMinutes(0);
            $scope.appointment.timeSlot = time;
            $scope.appointment.dateOfAppointment = new Date().toISOString().slice(0, 10);

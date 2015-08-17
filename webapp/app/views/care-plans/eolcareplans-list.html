@@ -1,5 +1,11 @@
 <h3><strong>Care Plans</strong></h3>
 
+<div class="inner-addon left-addon filterInput">
+    <i class="fa fa-filter"></i>
+    <input type="text" class="form-control" placeholder="Filter..." ng-model="query[queryBy]" />
+</div>
+
+
 <table class="listTable table table-bordered table-striped table-hover">
   <thead>
     <tr>
@@ -10,7 +16,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="eolcareplan in eolcareplans" ng-click="go({{$index}})" ng-class="{info: selected($index)}">
+    <tr ng-repeat="eolcareplan in eolcareplans | filter:query" ng-click="go({{$index}})" ng-class="{info: selected($index)}">
       <td>{{ eolcareplan.careDocument.name }}</td>
       <td>{{ eolcareplan.careDocument.type }}</td>
       <td>{{ eolcareplan.careDocument.date | date:'y-MM-dd'}}</td>

@@ -1,4 +1,9 @@
-<h4>Contacts</h4>
+<h3><strong>Contacts</strong></h3>
+
+<div class="inner-addon left-addon filterInput">
+    <i class="fa fa-filter"></i>
+    <input type="text" class="form-control" placeholder="Filter..." ng-model="query[queryBy]" />
+</div>
 
 <table class="table table-bordered table-striped table-hover">
   <thead>
@@ -11,7 +16,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="contact in contacts" ng-click="go('/patients/{{patient.id}}/contacts/{{$index}}')" ng-class="{info: selected($index)}">
+    <tr ng-repeat="contact in contacts | filter:query" ng-click="go('/patients/{{patient.id}}/contacts/{{$index}}')" ng-class="{info: selected($index)}">
       <td>{{ contact.name }}</td>
       <td>{{ contact.relationship }}</td>
       <td><i class="fa fa-fw fa-check" ng-if="contact.nextOfKin"></i></td>

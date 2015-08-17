@@ -1,5 +1,10 @@
 <h3><strong>Appointments</strong></h3>
 
+<div class="inner-addon left-addon filterInput">
+    <i class="fa fa-filter"></i>
+    <input type="text" class="form-control" placeholder="Filter..." ng-model="query[queryBy]" />
+</div>
+
 <table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
@@ -11,7 +16,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="appointment in appointments" ng-click="go({{$index}})" ng-class="{info: selected($index)}">
+    <tr ng-repeat="appointment in appointments | filter:query" ng-click="go({{$index}})" ng-class="{info: selected($index)}">
       <td>{{ appointment.dateCreated | date:'y-MM-dd' }}</td>
       <td>{{ appointment.timeSlot | date:'HH:mm' }}</td>
       <td>{{ appointment.careServiceTeam}}</td>

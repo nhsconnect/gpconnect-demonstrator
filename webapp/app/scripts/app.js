@@ -10,7 +10,8 @@ angular
     'angular-loading-bar',
     'growlNotifications',
     'angularUtils.directives.dirPagination',
-    'ui.timepicker'
+    'ui.timepicker',
+    'ui.calendar'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
 

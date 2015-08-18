@@ -1275,7 +1275,7 @@ background-color: white;
     padding-top: 15px;
 }
 .appointmentForm .tabContent{
-    height: 515px !important;
+    height: 554px !important;
     margin-left: -78px;
     width: 715px !important;
 }
@@ -1425,6 +1425,11 @@ margin-left: -15px;
     padding-top: 22px;
 }
 
+.referral-calendar-view{
+    margin-right: 0px;
+    padding-right: 15px;
+}
+
 .referral-calendar-view label{
     padding-bottom: 35px;
 }
@@ -1476,3 +1481,6 @@ line-height: 16px;
     width: 100%;
     margin-left: 0px !important;
 }
+
+
+		

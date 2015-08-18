@@ -126,31 +126,15 @@
          </div>
         <div ng-if="radioModel == 'Tab2'" class="tabContent">        
             <div class="row tabContetInner referral-calendar-view">
-                <div>
-                    <row>
+                    <div class="row">
                         <div class="col-md-12">
                         <label for="timeSlot" class="control-label">Select Time Slot</label>
                         </div>
-                    </row>    
-                      <row>
-                        <div class="col-md-4">
-                       <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                          <button type="button" class="btn btn-default">&#60;</button>
-                          <button type="button" class="btn btn-default">&#62;</button>
-                        </div>
-                        </div>
-                          <div class="col-md-4">
-                              <h4><strong>9 - 15 Feb 2015</strong></h4>
-                        </div>
-                          <div class="col-md-4">
-                       <div class="btn-group btn-group-sm referral-calendar-group" role="group" aria-label="...">
-                          <button type="button" class="btn btn-default">Month</button>
-                          <button type="button" class="btn btn-default">Week</button>
-                          <button type="button" class="btn btn-default">Day</button>
-                        </div>
-                        </div>
-                    </row> 
-                    <img id="scheduler" src="images/Before.png" ng-click="imgClick()" alt="Scheduler" >
+                    </div>    
+                  <div class="row">
+                        <div class="col-md-12">
+                    <div ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
+                  </div>
                 </div>
             </div>
         </div>

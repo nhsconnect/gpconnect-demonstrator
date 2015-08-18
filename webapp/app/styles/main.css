@@ -1464,6 +1464,10 @@ margin-bottom: 15px;
 .left-addon input  { padding-left:  30px; }
 .right-addon input { padding-right: 30px; }
 
+.fa-filter {
+    color: green;
+}
+
 .cancerMdtForm textarea{
     height: 80px !important;
 }

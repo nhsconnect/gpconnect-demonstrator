@@ -7,6 +7,8 @@ import net.nhs.esb.allergy.rest.AllergyController;
 import net.nhs.esb.appointments.rest.AppointmentsController;
 import net.nhs.esb.cancermdt.rest.CancerMDTController;
 import net.nhs.esb.endoflife.rest.EndOfLifeController;
+import net.nhs.esb.lab.orders.rest.LabOrderController;
+import net.nhs.esb.lab.results.rest.LabResultController;
 import net.nhs.esb.mdtreport.rest.MDTReportController;
 import net.nhs.esb.medication.rest.MedicationController;
 import net.nhs.esb.patient.rest.PatientSearchController;
@@ -37,6 +39,12 @@ public class RestConfig extends CamelConfiguration {
 
     @Autowired
     private EndOfLifeController endOfLifeController;
+
+    @Autowired
+    private LabOrderController labOrderController;
+
+    @Autowired
+    private LabResultController labResultController;
 
     @Autowired
     private MDTReportController mdtReportController;
@@ -81,6 +89,8 @@ public class RestConfig extends CamelConfiguration {
                                                            allergyController,
                                                            cancerMDTController,
                                                            endOfLifeController,
+                                                           labOrderController,
+                                                           labResultController,
                                                            mdtReportController,
                                                            medicationController,
                                                            proceduresController,

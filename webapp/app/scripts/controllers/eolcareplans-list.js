@@ -48,6 +48,7 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (eolcareplan) {
           eolcareplan.careDocument.date = new Date(eolcareplan.careDocument.date);
+          eolcareplan.careDocument.type = eolcareplan.careDocument.type.type;
           var toAdd = {
          compositionId : '',
          careDocument : eolcareplan.careDocument,

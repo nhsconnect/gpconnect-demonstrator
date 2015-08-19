@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title">Edit MDT</h4>
+  <h4 class="modal-title">{{ modal.title }}</h4>
 </div>
 
 <div class="modal-body">
@@ -18,7 +18,7 @@
 
   <form name="cancerMdtForm" class="cancerMdtForm form-horizontal text-left" novalidate>
     <fieldset>
-      <legend>Edit {{cancerMdt.service}}</legend>
+      <legend>{{ modal.title }}</legend>
 
       <!-- START col-md-6 -->
         <div class="row">
@@ -62,7 +62,7 @@
     <div class="row">
     <div class="col-md-12">
 <div class="form-group  form-group-sm mdtLinkGroup">
-<label class="control-label">Link to Web Service Directory</label>
+<label class="control-label">Link to MDT Web Service Directory</label>
    <div class="input-group">
       <div class="input-group-btn">
         <button type="button" class="btn linkButton btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{protocol}} <span class="caret"></span></button>

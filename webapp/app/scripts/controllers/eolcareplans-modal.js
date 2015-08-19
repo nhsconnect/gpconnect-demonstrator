@@ -8,6 +8,11 @@ angular.module('openehrPocApp')
     $scope.patient = patient;
     $scope.modal = modal;
     
+    $scope.docTypes =  [
+        {type:'Document Type'}, 
+        {type:'Document Type 2'}
+    ];
+    
       if(modal.title === 'Create End of Life Care Document'){
           var today = new Date().toISOString().slice(0, 10);
           $scope.eolcareplan.careDocument = {

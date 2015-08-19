@@ -33,7 +33,7 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (eolcareplan) {
-          
+          eolcareplan.careDocument.type = eolcareplan.careDocument.type.type;
            var toUpdate = {
          compositionId : eolcareplan.compositionId,
          careDocument : eolcareplan.careDocument,

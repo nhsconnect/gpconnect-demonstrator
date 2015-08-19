@@ -55,10 +55,7 @@
         <label for="siteTo" class="control-label col-md-12">Type</label>
         <div class="col-md-12">
           <div class="input-group">
-            <select class="form-control" name="doctype" id="doctype" ng-model="eolcareplan.careDocument.type" required>
-              <option value="">Select document Type</option>
-              <option>Document 1</option>
-              <option>Document 2</option>
+            <select class="form-control" name="doctype" id="doctype" ng-model="eolcareplan.careDocument.type" ng-options="doctype.type for doctype in docTypes" required>
             </select>
           </div>
         <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.type.$error.required">You must enter a value.</span>

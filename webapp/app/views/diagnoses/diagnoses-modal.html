@@ -18,7 +18,7 @@
 
   <form name="diagnosisForm" class="form-horizontal text-left">
     <fieldset>
-      <legend>Problem/Diagnosis Detail</legend>
+      <legend>{{ modal.title }}</legend>
 
       <div class="form-group" ng-class="{'has-error': (formSubmitted || diagnosisForm.problem.$dirty) && diagnosisForm.problem.$invalid, 'has-success': diagnosisForm.problem.$valid && diagnosisForm.problem.$dirty}">
         <label for="text" class="control-label col-md-4">Problem/Diagnosis</label>

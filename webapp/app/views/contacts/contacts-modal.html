@@ -18,7 +18,7 @@
 
   <form name="contactForm" class="form-horizontal text-left">
     <fieldset>
-      <legend>Contact detail</legend>
+      <legend>{{ modal.title }}</legend>
 
       <div class="form-group" ng-class="{'has-error': (formSubmitted || contactForm.name.$dirty) && contactForm.name.$invalid, 'has-success': contactForm.name.$valid && contactForm.name.$dirty}">
         <label for="name" class="control-label col-md-4">Name</label>
@@ -101,6 +101,6 @@
 </div>
 
 <div class="modal-footer">
-    <a class="btn btn-info" ng-click="cancel()">Cancel</a>
+    <a class="btn btn-danger" ng-click="cancel()">Cancel</a>
     <button class="btn btn-success" ng-click="formSubmitted = true; ok(contactForm, contact);"><i class="fa fa-check"></i> Complete</button>
 </div>

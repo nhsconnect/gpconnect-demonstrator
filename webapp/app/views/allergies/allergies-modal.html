@@ -18,7 +18,7 @@
 
   <form name="allergyForm" class="form-horizontal text-left">
     <fieldset>
-      <legend>Allergy detail</legend>
+      <legend>{{ modal.title }}</legend>
 
       <div class="form-group" ng-class="{'has-error': (formSubmitted || allergyForm.cause.$dirty) && allergyForm.cause.$invalid, 'has-success': allergyForm.cause.$valid && allergyForm.cause.$dirty}">
         <label for="cause" class="control-label col-md-4">Cause</label>
@@ -64,6 +64,6 @@
 </div>
 
 <div class="modal-footer">
-    <a class="btn btn-info" ng-click="cancel()">Cancel</a>
+    <a class="btn btn-danger" ng-click="cancel()">Cancel</a>
     <button class="btn btn-success" ng-click="formSubmitted = true; ok(allergyForm, allergy);"><i class="fa fa-check"></i> Complete</button>
 </div>

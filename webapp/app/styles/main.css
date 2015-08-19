@@ -2,10 +2,6 @@
   box-sizing: border-box;
 }
 
-body{
-    width:72%;
-}
-
 html, body, #wrapper, #page-wrapper, .section-content {
   height: 100%;
   margin-left: auto;
@@ -609,7 +605,7 @@ legend {
   font-size: 22px;
   color: #000000;
   width: 115%;
-  margin-left: -7.5%;    
+  margin-left: -5.5%;    
   padding-top: 10px;
   padding-bottom: 10px;
   border-top: 1px solid #CCCCCC;
@@ -1253,8 +1249,12 @@ background-color: white;
 }
 
 .eolForm {
-    height: 400px;
+    height: 430px;
     background-color: #F7F7F7;
+}
+
+.eolForm .tabContent{
+    height: 393px;
 }
 
 .appointmentForm{
@@ -1326,7 +1326,7 @@ margin-left: -15px;
 }
 
 .procedureForm .procedureRightModal .proceduretimeform{
-        padding-left: 80px;
+        padding-left: 55px;
 }
 
 .procedureForm .procedureRightModal .proceduretimepicker{

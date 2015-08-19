@@ -79,7 +79,7 @@
         </div>
      </div>        
     <div class="col-md-12 rowTwo">
-        <div class="col-md-8"> 
+        <div class="col-md-9"> 
         <div class="proceduredateform form-group form-group-sm" ng-class="{'has-error': (formSubmitted || procedureForm.dateofprocedure.$dirty) && procedureForm.dateofprocedure.$invalid, 'has-success': procedureForm.dateofprocedure.$valid && procedureForm.dateofprocedure.$dirty}">
           <label for="Date" class="control-label col-md-12">Date of Procedure</label>
           <div class="col-md-12">
@@ -93,7 +93,7 @@
           </div>
         </div>
         </div>  
-        <div class="col-md-4">        
+        <div class="col-md-3">        
  <div class="proceduretimeform form-group form-group-sm" ng-class="{'has-error': (formSubmitted || procedureForm.dateofprocedure.$dirty) && procedureForm.dateofprocedure.$invalid, 'has-success': procedureForm.dateofprocedure.$valid && procedureForm.dateofprocedure.$dirty}">
           <label for="Date" class="control-label col-md-12">Time</label>
           <div class="col-md-12">
@@ -126,7 +126,7 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')"><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control" id="datesubmitted" name="datesubmitted" ng-model="procedure.dateSubmitted" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" datepicker-popup="yyyy-MM-dd" is-open="dateSubmitted" required disabled />
+              <input type="text" class="form-control" id="datesubmitted" name="datesubmitted" ng-model="procedure.dateSubmitted" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" datepicker-popup="dd-MMM-y" is-open="dateSubmitted" required disabled />
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.datesubmitted.$error.required">You must enter a valid date.</span>
           </div>

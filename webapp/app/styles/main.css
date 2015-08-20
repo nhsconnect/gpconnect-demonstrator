@@ -97,7 +97,7 @@ li {
 .col-left {
   /*overflow-y: scroll; */
   height: 100%;
-  margin-left: -14px;    
+  margin-left: 0px;    
 }
 
 .section-main, .section-detail {
@@ -109,7 +109,7 @@ li {
 .section-row {
   height: 100%;
   margin-right: -45px;
-  margin-left: -45px;    
+  margin-left: -30px;    
 }
 
 tr[ng-click] {

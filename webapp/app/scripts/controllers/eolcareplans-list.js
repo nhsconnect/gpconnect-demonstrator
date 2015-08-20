@@ -4,8 +4,14 @@ angular.module('openehrPocApp')
   .controller('EolcareplansListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Eolcareplan) {
 
     
-    $scope.query = {};
-    $scope.queryBy = '$';
+    $scope.search = function (row) {
+        return (
+          angular.lowercase(row.careDocument.name).indexOf(angular.lowercase($scope.query) || '') !== -1 
+       || angular.lowercase(row.careDocument.type).indexOf(angular.lowercase($scope.query) || '') !== -1
+       || angular.lowercase(row.careDocument.date).indexOf(angular.lowercase($scope.query) || '') !== -1
+       || angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
+        );
+    };
     
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -15,6 +21,9 @@ angular.module('openehrPocApp')
       $scope.result = result.data;
         if(result.data.length > 0){
       $scope.eolcareplans = $scope.result;
+              for(var i = 0; i < $scope.eolcareplans.length; i++){
+        $scope.eolcareplans[i].careDocument.date = moment($scope.eolcareplans[i].careDocument.date).format('DD-MMM-YYYY'); 
+        }
         }
     });
 

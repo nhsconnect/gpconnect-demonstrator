@@ -3,8 +3,14 @@
 angular.module('openehrPocApp')
   .controller('ProceduresListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Procedure) {
 
-    $scope.query = {};
-    $scope.queryBy = '$';
+    $scope.search = function (row) {
+        return (
+          angular.lowercase(row.procedureName).indexOf(angular.lowercase($scope.query) || '') !== -1 
+       || angular.lowercase(row.dateOfProcedure).indexOf(angular.lowercase($scope.query) || '') !== -1
+       || angular.lowercase(row.timeOfProcedure).indexOf(angular.lowercase($scope.query) || '') !== -1
+       || angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
+        );
+    };
     
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -12,6 +18,10 @@ angular.module('openehrPocApp')
 
     Procedure.all($stateParams.patientId).then(function (result) {
       $scope.procedures = result.data;
+        for(var i = 0; i < $scope.procedures.length; i++){
+        $scope.procedures[i].dateOfProcedure = moment($scope.procedures[i].dateOfProcedure).format('DD-MMM-YYYY');
+        $scope.procedures[i].timeOfProcedure = moment($scope.procedures[i].timeOfProcedure).format('HH:mm');    
+        }
     });
 
     $scope.go = function (path) {

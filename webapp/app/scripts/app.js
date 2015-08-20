@@ -276,3 +276,4 @@ angular
   .config(function (paginationTemplateProvider) {
     paginationTemplateProvider.setPath('views/dirPagination.tpl.html');
   });
+

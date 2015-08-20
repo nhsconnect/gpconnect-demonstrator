@@ -2,7 +2,7 @@
 
 <div class="inner-addon left-addon filterInput">
     <i class="fa fa-filter"></i>
-    <input type="text" class="form-control" placeholder="Filter..." ng-model="query[queryBy]" />
+    <input type="text" class="form-control" placeholder="Filter..." ng-model="query" />
 </div>
 
 <div class="scrollcontainer1">
@@ -17,10 +17,10 @@
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="procedure in procedures | filter:query" ng-click="go('/patients/{{patient.id}}/procedures/{{$index}}')" ng-class="{info: selected($index)}">
+  <tr ng-repeat="procedure in procedures | filter:search" ng-click="go('/patients/{{patient.id}}/procedures/{{$index}}')" ng-class="{info: selected($index)}">
     <td>{{procedure.procedureName}}</td>
-    <td>{{procedure.dateOfProcedure | date:'y-MM-dd'}}</td>
-    <td>{{procedure.timeOfProcedure | date:'HH:mm'}}</td>
+    <td>{{procedure.dateOfProcedure}}</td>
+    <td>{{procedure.timeOfProcedure}}</td>
     <td>{{procedure.source}}</td>
   </tr>
   <tr ng-if="!procedures.length">

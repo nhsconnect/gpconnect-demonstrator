@@ -2,7 +2,7 @@
 
 <div class="inner-addon left-addon filterInput">
     <i class="fa fa-filter"></i>
-    <input type="text" class="form-control" placeholder="Filter..." ng-model="query[queryBy]" />
+    <input type="text" class="form-control" placeholder="Filter..." ng-model="query" />
 </div>
 
 <table class="table table-bordered table-striped table-hover">
@@ -16,8 +16,8 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="referral in referrals | filter:query" ng-click="go('/patients/{{patient.id}}/referrals/{{$index}}')" ng-class="{info: selected($index)}">
-      <td>{{ referral.dateOfReferral | date:'y-MM-dd'}}</td>
+    <tr ng-repeat="referral in referrals | filter:search" ng-click="go('/patients/{{patient.id}}/referrals/{{$index}}')" ng-class="{info: selected($index)}">
+      <td>{{ referral.dateOfReferral}}</td>
       <td>{{ referral.referralFrom }}</td>
       <td>{{ referral.referralTo }}</td>
       <td>{{ referral.source }}</td>

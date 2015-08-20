@@ -3,8 +3,14 @@
 angular.module('openehrPocApp')
   .controller('AppointmentsListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Appointment) {
 
-    $scope.query = {};
-    $scope.queryBy = '$';
+      $scope.search = function (row) {
+        return (
+          angular.lowercase(row.dateOfAppointment).indexOf(angular.lowercase($scope.query) || '') !== -1 
+       || angular.lowercase(row.timeSlot).indexOf(angular.lowercase($scope.query) || '') !== -1
+       || angular.lowercase(row.careServiceTeam).indexOf(angular.lowercase($scope.query) || '') !== -1
+       || angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
+        );
+    };
     
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -12,6 +18,11 @@ angular.module('openehrPocApp')
 
     Appointment.all($stateParams.patientId).then(function (result) {
       $scope.appointments = result.data;
+      for(var i = 0; i < $scope.appointments.length; i++){
+          var  tempdate= new Date($scope.appointments[i].dateOfAppointment);
+          $scope.appointments[i].dateOfAppointment = moment($scope.appointments[i].dateOfAppointment).format('DD-MMM-YYYY');
+          $scope.appointments[i].timeSlot = moment($scope.appointments[i].timeSlot).format('HH:mm');
+      } 
     });
 
         $scope.go = function (index) {
@@ -45,9 +56,6 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (appointment) {
           appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
           appointment.date = new Date(appointment.date);
-         // var time = new Date();
-        //  time.setHours(appointment.timeSlot.slice(0,2));
-        //  time.setMinutes(appointment.timeSlot.slice(3,4));
           var toAdd =  {
                   compositionId: '',
                   careServiceTeam: appointment.careServiceTeam,

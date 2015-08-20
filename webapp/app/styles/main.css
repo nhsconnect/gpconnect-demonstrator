@@ -472,6 +472,7 @@ legend {
   padding-top: 20px;
   padding-bottom: 5px;
   line-height: 0;
+  margin-right: 0px;
 }
 
 .header-background-mobile {
@@ -604,8 +605,8 @@ legend {
   background-color: #0E682F;
   font-size: 22px;
   color: #000000;
-  width: 115%;
-  margin-left: -5.5%;    
+  margin-left: -5.5%;  
+  margin-right:0px;    
   padding-top: 10px;
   padding-bottom: 10px;
   border-top: 1px solid #CCCCCC;

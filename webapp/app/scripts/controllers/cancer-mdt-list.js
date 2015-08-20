@@ -55,7 +55,10 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (cancerMdt) {          
         cancerMdt.dateOfMeeting = new Date(cancerMdt.dateOfMeeting); 
         cancerMdt.dateOfRequest = new Date(cancerMdt.dateOfRequest);  
-        if(cancerMdt.timeOfMeeting !== null){cancerMdt.timeOfMeeting = new Date(cancerMdt.timeOfMeeting);}  
+        if(cancerMdt.timeOfMeeting !== null){
+            cancerMdt.timeOfMeeting = new Date(cancerMdt.timeOfMeeting);
+            cancerMdt.timeOfMeeting.setMinutes(cancerMdt.timeOfMeeting.getMinutes() - cancerMdt.timeOfMeeting.getTimezoneOffset());
+        }  
         
         cancerMdt.compositionId = '';
         cancerMdt.source = "openehr";  

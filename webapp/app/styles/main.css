@@ -108,6 +108,7 @@ li {
 
 .section-row {
   height: 100%;
+  margin-right: -65px;    
 }
 
 tr[ng-click] {

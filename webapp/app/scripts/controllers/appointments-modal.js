@@ -80,6 +80,11 @@ angular.module('openehrPocApp')
         eventClick: function(calEvent, jsEvent, view) {
             $scope.setTimeSlot(calEvent.start)
         },
+        eventMouseover: function( event, jsEvent, view ) { 
+            if(event.color === '#dd2b08'){
+                $(this).css('cursor','not-allowed');
+            }
+        },
         eventDrop: $scope.alertOnDrop,
         eventResize: $scope.alertOnResize,
         defaultView: 'agendaWeek',
@@ -128,8 +133,7 @@ angular.module('openehrPocApp')
               if(event.start === time._i){
                 if(event.color === '#dd2b08')   
                 {
-                    event.color = '#dd2b08';
-                    window.alert("Slot unavailable, please choose another slot");
+                
                 }else{
                    $scope.appointment.timeSlot = time;
                    $scope.appointment.dateOfAppointment = time.toISOString().slice(0, 10);

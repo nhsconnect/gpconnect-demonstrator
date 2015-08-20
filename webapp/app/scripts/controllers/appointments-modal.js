@@ -73,6 +73,9 @@ angular.module('openehrPocApp')
           center: 'title',
           left: 'prev,next'
         },
+          columnFormat:{
+            week: 'ddd D/M'
+          },
         dayClick: $scope.alertEventOnClick,
         eventClick: function(calEvent, jsEvent, view) {
             $(this).css('backgroundColor', '#6599C8');

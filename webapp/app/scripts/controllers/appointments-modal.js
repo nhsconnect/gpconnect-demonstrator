@@ -99,6 +99,9 @@ angular.module('openehrPocApp')
         var booking = $scope.appointment.dateOfAppointment.slice(0, 10)+' '+$scope.appointment.timeSlot.toISOString().slice(11, 13)+':00';
         for(var i = 0; i < $scope.uiConfig.calendar.events.length; i++){
             var event = $scope.uiConfig.calendar.events[i];
+            if(event.color === '#6599C8'){
+                event.color = '#378006';
+            }
             if(event.start === booking){
                 event.color = '#6599C8';
             }
@@ -120,6 +123,7 @@ angular.module('openehrPocApp')
     $scope.setTimeSlot = function (time) {
            $scope.appointment.timeSlot = time;
            $scope.appointment.dateOfAppointment = time.toISOString().slice(0, 10);
+           setBookedSlot();  
            $scope.radioModel = 'Tab1';
     }
     

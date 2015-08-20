@@ -51,7 +51,7 @@
           <label for="questionForMDT" class="control-label col-md-12">Question For MDT</label>
           <div class="col-md-12">
             <div class="input-group">
-              <TextArea type="text" class="form-control" id="questionForMDT" name="questionForMDT" ng-model="cancerMdt.questionForMDT" required />
+              <textarea type="text" class="form-control" id="questionForMDT" name="questionForMDT" ng-model="cancerMdt.questionForMDT" required ></textarea>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && cancerMdtForm.questionForMDT.$error.required">You must enter a value.</span>
           </div>
@@ -105,7 +105,7 @@
         </div>
          </div>
     </div>
-          <div class="row">
+    <div class="row">
               <div class="col-md-12">
                <div class="form-group" ng-class="{'has-error': (formSubmitted || cancerMdtForm.meetingdiscussion.$dirty) && cancerMdtForm.meetingdiscussion.$invalid, 'has-success': cancerMdtForm.meetingdiscussion.$valid && cancerMdtForm.meetingdiscussion.$dirty}">
           <label for="Notes" class="control-label col-md-12">Meeting Discussion</label>

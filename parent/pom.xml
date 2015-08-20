@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>openEHR-parent</artifactId>
     <parent>
@@ -12,7 +12,7 @@
     </parent>
     <packaging>pom</packaging>
 
-	<properties>
+    <properties>
         <!-- stack -->
         <spring.version>4.0.7.RELEASE</spring.version>
         <camel.version>2.14.0</camel.version>
@@ -31,17 +31,17 @@
         <maven-surefire-plugin.version>2.16</maven-surefire-plugin.version>
         <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
 
-		<!-- logging -->
-		<slf4j.version>1.7.7</slf4j.version>
-		<log4j.version>1.2.17</log4j.version>
+        <!-- logging -->
+        <slf4j.version>1.7.7</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
 
-		<!-- commons -->
-		<commons-lang3.version>3.3.2</commons-lang3.version>
+        <!-- commons -->
+        <commons-lang3.version>3.3.2</commons-lang3.version>
 
         <!-- testing -->
         <mockito.version>1.10.8</mockito.version>
         <junit.version>4.11</junit.version>
-	</properties>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -72,6 +72,13 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-servlet_3.0_spec</artifactId>
+                <version>1.0</version>
+                <scope>provided</scope>
+            </dependency>
+
             <!--Spring -->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -97,11 +104,11 @@
                 <version>${javax.servlet-api.version}</version>
                 <scope>provided</scope>
             </dependency>
-	            <dependency>
-	            <groupId>com.fasterxml.jackson.jaxrs</groupId>
-	            <artifactId>jackson-jaxrs-json-provider</artifactId>
-	            <version>${jackson-jaxrs-json-provider.version}</version>
-	        </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>${jackson-jaxrs-json-provider.version}</version>
+            </dependency>
 
             <!-- Camel -->
             <dependency>
@@ -200,10 +207,10 @@
 
             <!-- Database -->
             <dependency>
-			    <groupId>mysql</groupId>
-			    <artifactId>mysql-connector-java</artifactId>
-			    <version>${mysql-connector-java.version}</version>
-			</dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector-java.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.tomcat</groupId>
                 <artifactId>tomcat-dbcp</artifactId>

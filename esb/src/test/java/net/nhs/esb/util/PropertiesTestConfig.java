@@ -2,12 +2,9 @@ package net.nhs.esb.util;
 
 import java.util.Properties;
 
-import net.nhs.esb.config.CamelConfig;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
-@Import(CamelConfig.class)
 public abstract class PropertiesTestConfig {
 
     @Bean

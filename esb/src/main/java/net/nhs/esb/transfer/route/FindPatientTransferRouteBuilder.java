@@ -48,7 +48,7 @@ public class FindPatientTransferRouteBuilder extends SpringRouteBuilder {
             .setHeader("Camel.compositionId", simple("${body.resultSet[0][uid]}"));
         
         from("direct:findTransferOfCare")
-        	.bean(transferOfCareTransformer, "findTransferOfCare");
+            .bean(transferOfCareTransformer, "findTransferOfCare");
         //@formatter:on
     }
 

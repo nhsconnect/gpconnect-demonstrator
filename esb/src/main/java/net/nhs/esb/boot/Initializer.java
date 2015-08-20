@@ -5,7 +5,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 
 import net.nhs.esb.config.ESBConfig;
-
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 
 public class Initializer implements WebApplicationInitializer {
 
-	private static Logger log = LoggerFactory.getLogger(Initializer.class);
+	private static final Logger log = LoggerFactory.getLogger(Initializer.class);
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {

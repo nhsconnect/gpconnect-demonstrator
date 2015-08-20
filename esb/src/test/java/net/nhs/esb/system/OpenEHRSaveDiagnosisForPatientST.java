@@ -1,6 +1,12 @@
 package net.nhs.esb.system;
 
-import static net.nhs.domain.openehr.constants.RouteConstants.*;
+import static net.nhs.domain.openehr.constants.RouteConstants.DIRECT;
+import static net.nhs.domain.openehr.constants.RouteConstants.END;
+import static net.nhs.domain.openehr.constants.RouteConstants.MOCK;
+import static net.nhs.domain.openehr.constants.RouteConstants.OPENEHR_GET_DIAGNOSIS_FOR_PATIENT_ROUTE;
+import static net.nhs.domain.openehr.constants.RouteConstants.OPENEHR_SAVE_DIAGNOSIS_FOR_PATIENT_ROUTE;
+import static net.nhs.domain.openehr.constants.RouteConstants.START;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 import java.util.Properties;
@@ -17,7 +23,6 @@ import net.nhs.esb.routes.OpenEHRCommonRoute;
 import net.nhs.esb.routes.OpenEHRGetDiagnosisForPatientRoute;
 import net.nhs.esb.routes.OpenEHRSaveDiagnosisForPatientRoute;
 import net.nhs.esb.util.PropertiesTestConfig;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
@@ -26,9 +31,6 @@ import org.apache.camel.spring.SpringRouteBuilder;
 import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
 import org.apache.camel.test.spring.CamelSpringJUnit4ClassRunner;
 import org.apache.camel.test.spring.MockEndpoints;
-
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
@@ -39,42 +41,42 @@ import org.springframework.test.context.ContextConfiguration;
 
 @RunWith(CamelSpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {
-		OpenEHRSaveDiagnosisForPatientST.TestConfig.class,
-		OpenEHRSaveDiagnosisForPatientRoute.class,
-		OpenEhrPatientParams.class,
-		RestConfig.class,
-		OpenEHRCommonRoute.class,
-		OpenEhrCreateDiagnosisParams.class,
-		FindDiagnosisIdEnricher.class,
-		OpenEHRGetDiagnosisForPatientRoute.class,
-		ListAddElementAggregator.class, DiagnosesEnricher.class
-		}, loader = CamelSpringDelegatingTestContextLoader.class)
+                                 OpenEHRSaveDiagnosisForPatientST.TestConfig.class,
+                                 OpenEHRSaveDiagnosisForPatientRoute.class,
+                                 OpenEhrPatientParams.class,
+                                 RestConfig.class,
+                                 OpenEHRCommonRoute.class,
+                                 OpenEhrCreateDiagnosisParams.class,
+                                 FindDiagnosisIdEnricher.class,
+                                 OpenEHRGetDiagnosisForPatientRoute.class,
+                                 ListAddElementAggregator.class, DiagnosesEnricher.class
+}, loader = CamelSpringDelegatingTestContextLoader.class)
 @MockEndpoints
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class OpenEHRSaveDiagnosisForPatientST {
 
-	@Produce(uri = DIRECT+START)
-	private ProducerTemplate start;
+    @Produce(uri = DIRECT + START)
+    private ProducerTemplate start;
 
-	@EndpointInject(uri = MOCK+END)
-	private MockEndpoint endMock;
+    @EndpointInject(uri = MOCK + END)
+    private MockEndpoint endMock;
 
     @Test
     public void testRoute() throws Exception {
-    	//given
-    	Integer patientId = 746;
-    	Date nowDate = new Date();
-    	
-    	Diagnoses diagnoses = new Diagnoses();
-		diagnoses.setProblemDiagnosis("ProblemDiagnosis");
-		diagnoses.setDescription("Description");
-		diagnoses.setSeverity("Severity");
-		diagnoses.setDateOfOnset(nowDate);
-		diagnoses.setAgeAtOnset(18);
-		diagnoses.setBodySite("BodySite");
-		diagnoses.setDateOfResolution(nowDate);
-		diagnoses.setAgeAtResolution(18);
-    	
+        //given
+        Integer patientId = 746;
+        Date nowDate = new Date();
+
+        Diagnoses diagnoses = new Diagnoses();
+        diagnoses.setProblemDiagnosis("ProblemDiagnosis");
+        diagnoses.setDescription("Description");
+        diagnoses.setSeverity("Severity");
+        diagnoses.setDateOfOnset(nowDate);
+        diagnoses.setAgeAtOnset(18);
+        diagnoses.setBodySite("BodySite");
+        diagnoses.setDateOfResolution(nowDate);
+        diagnoses.setAgeAtResolution(18);
+
         // when
         start.sendBodyAndHeader(diagnoses, Patients.PATIENT_ID_HEADER, patientId);
 
@@ -87,23 +89,23 @@ public class OpenEHRSaveDiagnosisForPatientST {
 
         @Override
         protected void loadProperties(Properties properties) {
-        	properties.put("openEHRSaveDiagnosisForPatientRoute", DIRECT+OPENEHR_SAVE_DIAGNOSIS_FOR_PATIENT_ROUTE);
-        	properties.put("openEHRGetDiagnosisForPatientRoute", DIRECT+OPENEHR_GET_DIAGNOSIS_FOR_PATIENT_ROUTE);
+            properties.put("openEHRSaveDiagnosisForPatientRoute", DIRECT + OPENEHR_SAVE_DIAGNOSIS_FOR_PATIENT_ROUTE);
+            properties.put("openEHRGetDiagnosisForPatientRoute", DIRECT + OPENEHR_GET_DIAGNOSIS_FOR_PATIENT_ROUTE);
         }
-        
-        @Bean
-		public SpringRouteBuilder testRoute() {
-			return new SpringRouteBuilder() {
 
-				@Override
-				public void configure() throws Exception {
-                    from(DIRECT+START)
-                    	.to(DIRECT+OPENEHR_SAVE_DIAGNOSIS_FOR_PATIENT_ROUTE)
-                    	.to("log:end?showAll=true")
-                        .to(MOCK+END)
-                        ;
-				}
-			};
-		}
+        @Bean
+        public SpringRouteBuilder testRoute() {
+            return new SpringRouteBuilder() {
+
+                @Override
+                public void configure() throws Exception {
+                    from(DIRECT + START)
+                     .to(DIRECT + OPENEHR_SAVE_DIAGNOSIS_FOR_PATIENT_ROUTE)
+                     .to("log:end?showAll=true")
+                     .to(MOCK + END)
+                    ;
+                }
+            };
+        }
     }
 }

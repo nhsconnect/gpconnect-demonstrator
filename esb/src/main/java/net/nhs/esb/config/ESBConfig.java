@@ -5,6 +5,7 @@ import net.nhs.esb.patient.config.PatientRepositoryConfig;
 import net.nhs.repo.legacy.config.LegacyDataConfig;
 import net.nhs.repo.legacy.config.LegacyJPATransactionalConfig;
 import org.apache.camel.builder.xml.Namespaces;
+import org.apache.camel.spring.javaconfig.CamelConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +17,12 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @ComponentScan("net.nhs.esb")
 @PropertySource("classpath:application.properties")
 @Import({
-        CamelConfig.class, RestConfig.class,
+        RestConfig.class,
         TerminologyConfig.class,
         LegacyJPATransactionalConfig.class, LegacyDataConfig.class,
         PatientRepositoryConfig.class
 })
-public class ESBConfig {
+public class ESBConfig extends CamelConfiguration {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {

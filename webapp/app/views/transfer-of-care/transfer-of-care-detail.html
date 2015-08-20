@@ -6,7 +6,7 @@
     <label class="control-label col-md-3">Problems</label>
     <div class="col-md-9">
       <div class="form-control-static">
-        <span class="transfer-of-care-no-selected-items" ng-if="!problems.length">No problems selected</span>
+        <span ng-if="!problems.length">No problems selected</span>
         <ul>
           <li ng-repeat="(key,value) in problems">{{value.problem}}</li>
         </ul>
@@ -18,7 +18,7 @@
     <label class="control-label col-md-3">Medications</label>
     <div class="col-md-9">
       <div class="form-control-static">
-        <span class="transfer-of-care-no-selected-items" ng-if="!medications.length">No medication selected</span>
+        <span ng-if="!medications.length">No medication selected</span>
         <ul>
           <li ng-repeat="(key,value) in medications">{{value.name}}</li>
         </ul>
@@ -30,7 +30,7 @@
     <label class="control-label col-md-3">Allergies</label>
     <div class="col-md-9">
       <div class="form-control-static">
-        <span class="transfer-of-care-no-selected-items" ng-if="!allergies.length">No allergies selected</span>
+        <span ng-if="!allergies.length">No allergies selected</span>
         <ul>
           <li ng-repeat="(key,value) in allergies">{{value.cause}}</li>
         </ul>
@@ -42,7 +42,7 @@
     <label class="control-label col-md-3">Contacts</label>
     <div class="col-md-9">
       <div class="form-control-static">
-        <span class="transfer-of-care-no-selected-items" ng-if="!contacts.length">No contacts selected</span>
+        <span ng-if="!contacts.length">No contacts selected</span>
         <ul>
           <li ng-repeat="(key,value) in contacts">{{value.name}}</li>
         </ul>
@@ -54,7 +54,7 @@
     <label class="control-label col-md-3">Reason for contact</label>
     <div class="col-md-9">
       <div class="form-control-static">
-        <span class="transfer-of-care-no-selected-items" ng-if="!transferDetail.reasonForContact.length">No reason specified</span>
+        <span ng-if="!transferDetail.reasonForContact.length">No reason specified</span>
         <ul ng-if="transferDetail.reasonForContact">
           <li>{{transferDetail.reasonForContact}}</li>
         </ul>
@@ -66,7 +66,7 @@
     <label class="control-label col-md-3">Clinical Summary</label>
     <div class="col-md-9">
       <div class="form-control-static">
-        <span class="transfer-of-care-no-selected-items" ng-if="!transferDetail.clinicalSummary.length">No clinical summary</span>
+        <span ng-if="!transferDetail.clinicalSummary.length">No clinical summary</span>
         <ul ng-if="transferDetail.clinicalSummary">
           <li>{{transferDetail.clinicalSummary}}</li>
         </ul>
@@ -78,7 +78,7 @@
     <label class="control-label col-md-3">From (Site/Org)</label>
     <div class="col-md-9">
       <div class="form-control-static">
-        <span class="transfer-of-care-no-selected-items" ng-if="!site.siteFrom.length">No transfer from (Site/Org)</span>
+        <span ng-if="!site.siteFrom.length">No transfer from (Site/Org)</span>
         <ul ng-if="site.siteFrom">
           <li>{{site.siteFrom}}</li>
         </ul>
@@ -90,7 +90,7 @@
     <label class="control-label col-md-3">To (Site/Org)</label>
     <div class="col-md-9">
       <div class="form-control-static">
-        <span class="transfer-of-care-no-selected-items" ng-if="!site.siteTo.length">No transfer to (Site/Org)</span>
+        <span ng-if="!site.siteTo.length">No transfer to (Site/Org)</span>
         <ul ng-if="site.siteTo">
           <li>{{site.siteTo}}</li>
         </ul>
@@ -102,7 +102,7 @@
     <label class="control-label col-md-3">Date of Transfer</label>
     <div class="col-md-9">
       <div class="form-control-static">
-        <span class="transfer-of-care-no-selected-items" ng-if="!site.timeStamp.length">No transfer date</span>
+        <span ng-if="!site.timeStamp.length">No transfer date</span>
         <ul ng-if="site.timeStamp">
           <li>{{site.timeStamp}}</li>
         </ul>

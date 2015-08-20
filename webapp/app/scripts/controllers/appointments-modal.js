@@ -78,7 +78,6 @@ angular.module('openehrPocApp')
           },
         dayClick: $scope.alertEventOnClick,
         eventClick: function(calEvent, jsEvent, view) {
-            $(this).css('backgroundColor', '#6599C8');
             $scope.setTimeSlot(calEvent.start)
         },
         eventDrop: $scope.alertOnDrop,
@@ -124,11 +123,22 @@ angular.module('openehrPocApp')
     };
     
     $scope.setTimeSlot = function (time) {
-           $scope.appointment.timeSlot = time;
-           $scope.appointment.dateOfAppointment = time.toISOString().slice(0, 10);
-           setBookedSlot();  
-           $scope.radioModel = 'Tab1';
-    }
+           for(var i = 0; i < $scope.uiConfig.calendar.events.length; i++){
+              var event = $scope.uiConfig.calendar.events[i];
+              if(event.start === time._i){
+                if(event.color === '#dd2b08')   
+                {
+                    event.color = '#dd2b08';
+                    window.alert("Slot unavailable, please choose another slot");
+                }else{
+                   $scope.appointment.timeSlot = time;
+                   $scope.appointment.dateOfAppointment = time.toISOString().slice(0, 10);
+                   setBookedSlot();  
+                   $scope.radioModel = 'Tab1';
+                }  
+              }
+           }
+        }
     
     $scope.schedule = function () {
         $scope.radioModel = 'Tab2';

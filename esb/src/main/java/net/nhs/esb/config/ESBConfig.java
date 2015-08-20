@@ -17,6 +17,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @PropertySource("classpath:application.properties")
 @Import({
         CamelConfig.class, RestConfig.class,
+        TerminologyConfig.class,
         LegacyJPATransactionalConfig.class, LegacyDataConfig.class,
         PatientRepositoryConfig.class
 })

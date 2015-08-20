@@ -19,14 +19,13 @@ import net.nhs.esb.rest.Patients;
 import net.nhs.esb.transfer.rest.TransferOfCareController;
 import org.apache.camel.component.cxf.spring.SpringJAXRSClientFactoryBean;
 import org.apache.camel.component.cxf.spring.SpringJAXRSServerFactoryBean;
-import org.apache.camel.spring.javaconfig.CamelConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RestConfig extends CamelConfiguration {
+public class RestConfig {
 
     @Value("${openehr.address}")
     private String openEhrAddress;

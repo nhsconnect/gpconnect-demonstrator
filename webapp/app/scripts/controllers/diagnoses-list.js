@@ -3,8 +3,13 @@
 angular.module('openehrPocApp')
   .controller('DiagnosesListCtrl', function ($scope, $state, $stateParams, $location, $modal, PatientService, Diagnosis) {
 
-    $scope.query = {};
-    $scope.queryBy = '$';
+   $scope.search = function (row) {
+        return (
+          angular.lowercase(row.problem).indexOf(angular.lowercase($scope.query) || '') !== -1 
+       || angular.lowercase(row.dateOfOnset).indexOf(angular.lowercase($scope.query) || '') !== -1
+       || angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
+        );
+    };
     
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -13,10 +18,9 @@ angular.module('openehrPocApp')
     Diagnosis.all($stateParams.patientId).then(function (result) {
       $scope.result = result.data;
       $scope.diagnoses = $scope.result.problems;
-      console.log('original diagnosis');
-      console.log($scope.result);
-      console.log('original diagnosis array');
-      console.log($scope.result.problems);
+        for(var i = 0; i < $scope.diagnoses.length; i++){
+          $scope.diagnoses[i].dateOfOnset = moment($scope.diagnoses[i].dateOfOnset).format('DD-MMM-YYYY');
+      } 
     });
 
     $scope.go = function (path) {

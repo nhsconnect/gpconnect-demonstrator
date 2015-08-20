@@ -19,7 +19,6 @@ angular.module('openehrPocApp')
     Appointment.all($stateParams.patientId).then(function (result) {
       $scope.appointments = result.data;
       for(var i = 0; i < $scope.appointments.length; i++){
-          var  tempdate= new Date($scope.appointments[i].dateOfAppointment);
           $scope.appointments[i].dateOfAppointment = moment($scope.appointments[i].dateOfAppointment).format('DD-MMM-YYYY');
           $scope.appointments[i].timeSlot = moment($scope.appointments[i].timeSlot).format('HH:mm');
       } 

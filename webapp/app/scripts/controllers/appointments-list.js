@@ -55,6 +55,7 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (appointment) {
           appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
           appointment.date = new Date(appointment.date);
+          
           var toAdd =  {
                   compositionId: '',
                   careServiceTeam: appointment.careServiceTeam,

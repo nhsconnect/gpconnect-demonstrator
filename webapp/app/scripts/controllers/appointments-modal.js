@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('AppointmentsModalCtrl', function ($scope, $modalInstance, appointment, patient, modal, PatientService) {
+  .controller('AppointmentsModalCtrl', function ($scope, $modalInstance, $modal, appointment, patient, modal, PatientService) {
     
  
     
@@ -76,7 +76,6 @@ angular.module('openehrPocApp')
           columnFormat:{
             week: 'ddd D/M'
           },
-        dayClick: $scope.alertEventOnClick,
         eventClick: function(calEvent, jsEvent, view) {
             $scope.setTimeSlot(calEvent.start)
         },
@@ -93,6 +92,31 @@ angular.module('openehrPocApp')
 		maxTime: '17:00',
 		weekends: false
       }
+    };
+    
+     function innerModal(time) {
+      var modalInstance = $modal.open({
+        templateUrl: 'views/appointments/appointments-confirm-modal.html',
+        size: 'sm   ',
+        windowClass: 'confirm-modal',
+        controller: 'AppointmentsConfirmModalCtrl',
+        resolve: {
+          modal: function () {
+            return {
+              title: 'Confirm Date'
+            };
+          },
+            time:function () {
+             return angular.copy(time);
+          }
+        }
+      });
+      modalInstance.result.then(function (appointment) {
+      $scope.appointment.timeSlot = time;
+      $scope.appointment.dateOfAppointment = time.toISOString().slice(0, 10);
+      setBookedSlot();  
+      $scope.radioModel = 'Tab1';
+      });
     };
     
     $scope.eventSources = [];
@@ -135,10 +159,7 @@ angular.module('openehrPocApp')
                 {
                 
                 }else{
-                   $scope.appointment.timeSlot = time;
-                   $scope.appointment.dateOfAppointment = time.toISOString().slice(0, 10);
-                   setBookedSlot();  
-                   $scope.radioModel = 'Tab1';
+                    innerModal(time);   
                 }  
               }
            }

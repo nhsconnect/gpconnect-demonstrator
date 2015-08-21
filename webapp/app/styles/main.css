@@ -1489,5 +1489,20 @@ line-height: 16px;
     margin-left: 0px !important;
 }
 
+.confirm-modal{
+    margin-top :15%;
+}
+
+.confirm-modal .modal-footer{
+    margin-left: -15px;
+}
+
+.confirm-modal-row{
+    margin-top: 35px;
+}
+
+.modal-sm{
+    width : 280px;
+}
 
 		

@@ -34,6 +34,7 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (appointment) {
           appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
           appointment.date = new Date(appointment.date);
+  
           var toUpdate =  {
                   compositionId: $scope.appointment.compositionId,
                   careServiceTeam: appointment.careServiceTeam,
@@ -41,7 +42,7 @@ angular.module('openehrPocApp')
                   location:  appointment.location,
                   status:  appointment.status,
                   author:  appointment.author,
-                  dateCreated:  appointment.dateCreated,
+                  dateCreated:  appointment.date,
                   source: "openehr",
                   timeSlot : appointment.timeSlot    
             }

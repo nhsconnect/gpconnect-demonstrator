@@ -33,6 +33,7 @@ public class LabOrderCompositionConverter {
         labOrder.setDate(DateFormatter.toDate(date));
         labOrder.setCode(MapUtils.getString(rawComposition, LAB_ORDER_PREFIX + "/service_requested|code"));
         labOrder.setName(MapUtils.getString(rawComposition, LAB_ORDER_PREFIX + "/service_requested|value"));
+        labOrder.setSource("openehr");
 
         return labOrder;
     }

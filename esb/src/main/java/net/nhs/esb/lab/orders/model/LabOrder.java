@@ -11,6 +11,7 @@ public class LabOrder {
     private String name;
     private Date date;
     private String author;
+    private String source;
 
     public String getCompositionId() {
         return compositionId;
@@ -50,5 +51,13 @@ public class LabOrder {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

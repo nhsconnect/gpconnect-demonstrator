@@ -40,6 +40,7 @@ public class LabResultCompositionConverter {
         labResult.setDateReported(DateFormatter.toDate(dateReported));
         labResult.setSampleTaken(DateFormatter.toDate(sampleTaken));
         labResult.setResultDetails(resultDetailList);
+        labResult.setSource("openehr");
 
         return labResult;
     }

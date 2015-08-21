@@ -17,6 +17,7 @@ public class LabResult {
     private String status;
     private String conclusion;
     private String author;
+    private String source;
     private List<LabResultDetail> resultDetails;
 
     public String getCompositionId() {
@@ -89,6 +90,14 @@ public class LabResult {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public List<LabResultDetail> getResultDetails() {

@@ -1505,4 +1505,21 @@ line-height: 16px;
     width : 280px;
 }
 
+.resultTable{
+    width: 100%;
+    border: 1px solid #bebcbd;
+}
+
+.resultTable .fa-info-circle{
+    color:#00753E;
+}
+
+.resultTableOuterDiv{
+    width: 95%;
+    padding-bottom: 25px;
+}
+
+.resultTableMainrow{
+    border-top: 1px solid #bebcbd;
+}
 		

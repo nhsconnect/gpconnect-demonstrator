@@ -253,8 +253,26 @@ angular
           main: { templateUrl: 'views/appointments/appointments-list.html', controller: 'AppointmentsListCtrl' },
           detail: { templateUrl: 'views/appointments/appointments-detail.html', controller: 'AppointmentsDetailCtrl' }
         }
-      });
+      })
+    
+       .state('results', {
+        url: '/patients/{patientId:int}/results',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/results/results-list.html', controller: 'ResultsListCtrl' }
+        }
+      })
 
+      .state('results-detail', {
+        url: '/patients/{patientId:int}/results/{resultIndex:int}',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/results/results-list.html', controller: 'ResultsListCtrl' },
+          detail: { templateUrl: 'views/results/results-detail.html', controller: 'ResultsDetailCtrl' }
+        }
+      });
   })
 
 .directive('datepickerPopup', function (){

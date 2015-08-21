@@ -40,10 +40,10 @@
   </thead>
   <tbody ng-repeat="detail in result.resultDetails">
       <tr class="resultTableMainrow">
-          <td>{{detail.result}}</td>
-          <td>{{detail.value}}</td>
-          <td>{{detail.unit}}</td>
-          <td>{{detail.normalRange}}</td>
+          <td>&nbsp;&nbsp;{{detail.result}}</td>
+          <td>&nbsp;&nbsp;{{detail.value}}</td>
+          <td>&nbsp;&nbsp;{{detail.unit}}</td>
+          <td>&nbsp;&nbsp;{{detail.normalRange}}</td>
           <td>
               <i data-toggle="collapse" data-target="#demo{{$index}}" class="fa fa-info-circle"></i>
           </td>
@@ -52,10 +52,13 @@
         <td colspan="5">
             <ul>
                <li> 
-                Comment: {{detail.comment}}
+                &nbsp;&nbsp;Comment: 
                 </li>
                 <li>
-                Possible Artifact:
+                &nbsp;&nbsp;{{detail.comment}}
+                </li>    
+                <li>
+                &nbsp;&nbsp;Possible Artifact:
                 </li>
             </ul>
          </td>

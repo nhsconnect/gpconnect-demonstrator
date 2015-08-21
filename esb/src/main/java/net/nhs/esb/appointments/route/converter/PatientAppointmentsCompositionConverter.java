@@ -1,5 +1,12 @@
 package net.nhs.esb.appointments.route.converter;
 
+import static net.nhs.esb.util.DateFormatter.toDate;
+import static org.apache.commons.collections4.MapUtils.getString;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.nhs.esb.appointments.model.Appointment;
 import net.nhs.esb.appointments.model.AppointmentsUpdate;
 import net.nhs.esb.openehr.model.CompositionResponseData;
@@ -7,14 +14,6 @@ import net.nhs.esb.util.DateFormatter;
 import org.apache.camel.Converter;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import static net.nhs.esb.util.DateFormatter.toDate;
-import static net.nhs.esb.util.DateFormatter.toTimeOnly;
-import static org.apache.commons.collections4.MapUtils.getString;
 
 
 @Converter
@@ -34,7 +33,6 @@ public class PatientAppointmentsCompositionConverter {
         String dateTimeOfAppointment = getString(rawComposition, APPOINTMENTS_PREFIX + "appointment_schedule/lower");
 
         Date dateOfAppointment = toDate(dateTimeOfAppointment);
-        Date timeSlot = toTimeOnly(dateTimeOfAppointment);
 
         String rawDateCreated = getString(rawComposition, APPOINTMENTS_PREFIX + "time");
         Date dateCreated = toDate(rawDateCreated);
@@ -51,7 +49,7 @@ public class PatientAppointmentsCompositionConverter {
         appointment.setCompositionId(compositionId);
         appointment.setCareServiceTeam(careServiceTeam);
         appointment.setDateOfAppointment(dateOfAppointment);
-        appointment.setTimeSlot(timeSlot);
+        appointment.setTimeSlot(dateOfAppointment);
         appointment.setLocation(location);
         appointment.setStatus(status);
         appointment.setDateCreated(dateCreated);

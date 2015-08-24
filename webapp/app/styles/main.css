@@ -1523,4 +1523,8 @@ line-height: 16px;
 .resultTableMainrow{
     border-top: 1px solid #bebcbd;
 }
+
+.section-detail .btn-info{
+    margin-right: 45px;
+}
 		

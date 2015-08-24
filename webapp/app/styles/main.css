@@ -1527,4 +1527,7 @@ line-height: 16px;
 .section-detail .btn-info{
     margin-right: 45px;
 }
-		
+
+.resultTable .firstHeading{
+    padding-left: 10px;
+}

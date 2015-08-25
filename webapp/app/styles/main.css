@@ -1471,6 +1471,10 @@ margin-bottom: 15px;
     color: #82BF36;
 }
 
+.fa-ellipsis-h{
+    color: black;
+}
+
 .cancerMdtForm textarea{
     height: 80px !important;
 }
@@ -1542,4 +1546,13 @@ line-height: 16px;
 
 .orderForm .input-group{
     width:100%;
+}
+
+.elipsis-span {
+    float: right;
+    margin-right: 10px;
+    margin-top: -20px;
+    position: relative;
+    z-index: 2;
+    color: black;
 }

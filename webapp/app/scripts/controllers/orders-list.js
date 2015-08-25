@@ -6,7 +6,7 @@ angular.module('openehrPocApp')
       $scope.search = function (row) {
         return (
           angular.lowercase(row.name).indexOf(angular.lowercase($scope.query) || '') !== -1 
-       || angular.lowercase(row.dateCreated).indexOf(angular.lowercase($scope.query) || '') !== -1
+       || angular.lowercase(row.date).indexOf(angular.lowercase($scope.query) || '') !== -1
        || angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
         );
     };

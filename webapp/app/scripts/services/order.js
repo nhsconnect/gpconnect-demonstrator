@@ -19,9 +19,14 @@ angular.module('openehrPocApp')
       return $http.put('/api/patients/' + (patientIdOveride || patientId) + '/laborders', composition);
     };
 
+     var suggestion = function (patientId) {
+        return $http.get('/api/terminology/local/list/document');
+    };
+    
     return {
       all: all,
       update: update,
-      create:create
+      create:create,
+      suggestion:suggestion
     };
   });

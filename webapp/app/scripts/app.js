@@ -254,6 +254,24 @@ angular
           detail: { templateUrl: 'views/appointments/appointments-detail.html', controller: 'AppointmentsDetailCtrl' }
         }
       })
+      .state('orders', {
+        url: '/patients/{patientId:int}/orders',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/orders/orders-list.html', controller: 'OrdersListCtrl' }
+        }
+      })
+
+      .state('orders-detail', {
+        url: '/patients/{patientId:int}/orders/{orderIndex:int}',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/orders/orders-list.html', controller: 'OrdersListCtrl' },
+          detail: { templateUrl: 'views/orders/orders-detail.html', controller: 'OrdersDetailCtrl' }
+        }
+      })
     
        .state('results', {
         url: '/patients/{patientId:int}/results',

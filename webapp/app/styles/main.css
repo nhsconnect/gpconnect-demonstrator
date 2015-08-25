@@ -1480,6 +1480,14 @@ margin-bottom: 15px;
     width: 100%;
 }
 
+.orderForm .input-group{
+    width:95%;
+}
+
+.orderForm .date-form{
+    margin-top: 5px;
+} 
+
 .cancerMdtForm .linkButton{
 line-height: 16px;
 }
@@ -1530,4 +1538,8 @@ line-height: 16px;
 
 .resultTable .firstHeading{
     padding-left: 10px;
+}
+
+.orderForm .input-group{
+    width:100%;
 }

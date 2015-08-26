@@ -53,6 +53,8 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (order) {
         order.compositionId = '';
+        order.date = new Date(order.date);
+          
           
         Order.create($scope.patient.id, order).then(function () {
           $state.go('orders', { patientId: $scope.patient.id });

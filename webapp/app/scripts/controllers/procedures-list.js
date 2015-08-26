@@ -55,6 +55,7 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (procedure) {
          procedure.dateSubmitted = new Date(procedure.dateSubmitted);
          procedure.dateOfProcedure = new Date(procedure.dateOfProcedure);  
+         procedure.timeOfProcedure = new Date(procedure.timeOfProcedure.valueOf() - procedure.timeOfProcedure.getTimezoneOffset() * 60000);   
          var toAdd = {
                     compositionId : '',
                     procedureName : procedure.procedureName,

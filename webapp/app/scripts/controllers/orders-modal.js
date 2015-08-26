@@ -1,11 +1,17 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('OrdersModalCtrl', function ($scope, $modalInstance, order, patient, modal, Order) {
+  .controller('OrdersModalCtrl', function ($scope, $modalInstance, order, patient, modal, Order, PatientService) {
 
+    $scope.currentUser = PatientService.getCurrentUser();
     $scope.order = order;
     $scope.patient = patient;
     $scope.modal = modal;
+    $scope.order.author =  $scope.currentUser.email;
+    
+    if(modal.title === 'Create Order'){
+        $scope.order.date = new Date().toISOString().slice(0, 10);
+    }
     
     Order.suggestion().then(function (suggestions) {
       $scope.suggestions = suggestions.data;

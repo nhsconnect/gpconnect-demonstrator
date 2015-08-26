@@ -12,6 +12,7 @@ angular.module('openehrPocApp')
         );
     };
     
+    
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
@@ -20,7 +21,7 @@ angular.module('openehrPocApp')
       $scope.appointments = result.data;
       for(var i = 0; i < $scope.appointments.length; i++){
           $scope.appointments[i].dateOfAppointment = moment($scope.appointments[i].dateOfAppointment).format('DD-MMM-YYYY');
-          $scope.appointments[i].timeSlot = moment($scope.appointments[i].timeSlot).format('HH:mm');
+          $scope.appointments[i].timeSlotFull = moment($scope.appointments[i].timeSlot).format('h:mma') + '-' + moment($scope.appointments[i].timeSlot).add(59, 'm').format('h:mma');
       } 
     });
 

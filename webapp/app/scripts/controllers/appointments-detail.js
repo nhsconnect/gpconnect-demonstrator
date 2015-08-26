@@ -3,14 +3,18 @@
 angular.module('openehrPocApp')
   .controller('AppointmentsDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Appointment) {
 
+    
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
 
     Appointment.all($stateParams.appointmentIndex).then(function (result) {
       $scope.appointment = result.data[$stateParams.appointmentIndex];
+      $scope.timeSlotFull = moment($scope.appointment.timeSlot).format('h:mma') + '-' + moment($scope.appointment.timeSlot).add(59, 'm').format('h:mma')
     });
 
+    
+    
     $scope.edit = function () {
       var modalInstance = $modal.open({
         templateUrl: 'views/appointments/appointments-modal.html',

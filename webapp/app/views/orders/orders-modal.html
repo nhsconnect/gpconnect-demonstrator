@@ -24,7 +24,7 @@
         <label for="text" class="control-label col-md-12">Order Name</label>
         <div class="col-md-12">
           <div class="input-group">
-                <input type="text" class="form-control input-sm" id="name" name="name" ng-model="order.name" typeahead="suggestion as suggestion.text for suggestion in suggestions | filter:{text:$viewValue}" required />
+                <input type="text" class="form-control input-sm" id="name" name="name" ng-model="order.name" typeahead="suggestion.text as suggestion.text for suggestion in suggestions | filter:{text:$viewValue}" required />
                 <span class="fa fa-ellipsis-h elipsis-span"></span>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && orderForm.name.$error.required">You must enter a value.</span>
@@ -37,7 +37,7 @@
         <label for="text" class="control-label col-md-12">Author</label>
         <div class="col-md-12">
           <div class="input-group">
-            <input type="text" class="form-control input-sm" id="author" name="author" ng-model="order.author" required />
+            <input type="text" class="form-control input-sm" id="author" name="author" ng-model="order.author" required  disabled/>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && orderForm.author.$error.required">You must enter a value.</span>
         </div>
@@ -51,7 +51,7 @@
             <span class="input-group-btn">
               <button type="button" ng-click="openDatepicker($event, 'dateOfOrder')"  class="btn btn-default btn-sm"><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control" id="date" name="date" ng-model="order.date" ng-click="openDatepicker($event, 'dateOfOrder')"  datepicker-popup="dd-MMM-y" is-open="dateOfOrder" required/>
+              <input type="text" class="form-control" id="date" name="date" ng-model="order.date" ng-click="openDatepicker($event, 'dateOfOrder')"  datepicker-popup="dd-MMM-y" is-open="dateOfOrder" disabled required/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && orderForm.date.$error.required">You must enter a valid date.</span>
           </div>

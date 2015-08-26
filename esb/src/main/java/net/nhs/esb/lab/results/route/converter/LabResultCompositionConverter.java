@@ -42,6 +42,11 @@ public class LabResultCompositionConverter {
         labResult.setResultDetails(resultDetailList);
         labResult.setSource("openehr");
 
+        // TODO Remove hard-coding
+        if (labResult.getAuthor() == null) {
+            labResult.setAuthor("Dr John Smith");
+        }
+
         return labResult;
     }
 

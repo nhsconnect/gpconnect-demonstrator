@@ -35,6 +35,11 @@ public class LabOrderCompositionConverter {
         labOrder.setName(MapUtils.getString(rawComposition, LAB_ORDER_PREFIX + "/service_requested|value"));
         labOrder.setSource("openehr");
 
+        // TODO Remove hard-coding
+        if (labOrder.getAuthor() == null) {
+            labOrder.setAuthor("Dr John Smith");
+        }
+
         return labOrder;
     }
 

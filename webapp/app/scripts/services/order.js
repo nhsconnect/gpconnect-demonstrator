@@ -20,7 +20,7 @@ angular.module('openehrPocApp')
     };
 
      var suggestion = function (patientId) {
-        return $http.get('/api/terminology/local/list/document');
+        return $http.get('/api/terminology/local/list/order');
     };
     
     return {

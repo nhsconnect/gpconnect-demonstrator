@@ -42,5 +42,38 @@ angular.module('openehrPocApp')
 
       $scope[name] = true;
     };
+    
+    
+    $scope.validate = function(form, name, index){
+      var errorToCheckFor = name + index;
+
+      for(var error in form.$error.required){
+        var errorName = form.$error.required[error].$name;
+
+        if (errorName === errorToCheckFor){
+          return true;
+        }
+      }
+    };
+
+    $scope.validateDirty = function(form, name, index){
+      var errorToCheckFor = name + index;
+
+      if(form[errorToCheckFor].$dirty && form[errorToCheckFor].$invalid){
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    $scope.validateClean = function(form, name, index){
+      var errorToCheckFor = name + index;
+
+      if(form[errorToCheckFor].$dirty && form[errorToCheckFor].$valid){
+        return true;
+      } else {
+        return false;
+      }
+    };
 
   });

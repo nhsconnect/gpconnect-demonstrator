@@ -17,6 +17,7 @@ angular.module('openehrPocApp')
         $scope.medications = $scope.transferOfCare.medication;
         $scope.transferDetail = $scope.transferOfCare.transferDetail;
         $scope.site = $scope.transferOfCare.transferDetail.site;
+        $scope.transferDetail.site.timeStamp = moment($scope.transferDetail.site.timeStamp).format('DD-MMM-YYYY');
       });
 
   });

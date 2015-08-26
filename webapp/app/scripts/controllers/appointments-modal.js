@@ -116,20 +116,12 @@ angular.module('openehrPocApp')
         }
       });
       modalInstance.result.then(function (appointment) {
-<<<<<<< HEAD
-        $scope.appointment.timeSlot = time;
-        $scope.appointment.status = 'Scheduled';
-        $scope.appointment.dateOfAppointment = time.toISOString().slice(0, 10);
-        setBookedSlot();
-        $scope.radioModel = 'Tab1';
-=======
       $scope.appointment.timeSlot = time;
       $scope.appointment.status = 'Scheduled';        
       $scope.appointment.dateOfAppointment = time.toISOString().slice(0, 10);
       $scope.timeSlotFull = moment($scope.appointment.timeSlot).format('h:mma') + '-' + moment($scope.appointment.timeSlot).add(59, 'm').format('h:mma')
       setBookedSlot();  
       $scope.radioModel = 'Tab1';
->>>>>>> Appointment Modal Time slot now shows start and end time
       });
     }
 

@@ -11,7 +11,7 @@ angular.module('openehrPocApp')
     $scope.modal = modal; 
     $scope.radioModel = 'Tab1';
     $scope.appointment.location = appointment.location || 'Leeds General';
-    $scope.appointment.status = appointment.status || 'Scheduled';
+    $scope.appointment.status = appointment.status || 'Not Scheduled';
     $scope.uiConfig = {
       calendar:{
         height: 450,
@@ -113,6 +113,7 @@ angular.module('openehrPocApp')
       });
       modalInstance.result.then(function (appointment) {
       $scope.appointment.timeSlot = time;
+      $scope.appointment.status = 'Scheduled';        
       $scope.appointment.dateOfAppointment = time.toISOString().slice(0, 10);
       setBookedSlot();  
       $scope.radioModel = 'Tab1';

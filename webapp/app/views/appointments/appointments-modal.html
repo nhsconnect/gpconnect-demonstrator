@@ -51,16 +51,12 @@
         </div>
         </div>   
                  <div class="col-md-3 appointmentStatusGroup">
-                 <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || appointmentForm.status.$dirty) && appointmentForm.status.$invalid, 'has-success': appointmentForm.status.$valid && appointmentForm.status.$dirty}">
+                 <div class="form-group form-group-sm">
         <label for="status" class="control-label col-md-12">Status</label>
         <div class="col-md-12">
           <div class="input-group">
-            <select class="form-control" name="status" id="status" ng-model="appointmentForm.status" required>
-              <option value="Not Scheduled">Not Scheduled</option>
-              <option value="Scheduled">Scheduled</option>
-            </select>
+              <label>{{appointment.status}}</label>
           </div>
-        <span class="help-block animate-fade" ng-show="formSubmitted && appointmentForm.status.$error.required">You must enter a value.</span>
           </div>
         </div>
             </div>   

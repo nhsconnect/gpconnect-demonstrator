@@ -10,6 +10,12 @@ angular.module('openehrPocApp')
     $scope.radioModel = 'Tab1';
     $scope.appointment.location = appointment.location || 'Leeds General';
     $scope.appointment.status = appointment.status || 'Not Scheduled';
+    if($scope.appointment.status === 'Scheduled'){
+        $scope.timeSlotFull = moment(appointment.timeSlot).format('h:mma') 
+        + '-' + moment(appointment.timeSlot).add(59, 'm').format('h:mma');
+    } 
+    
+    
     $scope.uiConfig = {
       calendar: {
         height: 450,
@@ -110,11 +116,20 @@ angular.module('openehrPocApp')
         }
       });
       modalInstance.result.then(function (appointment) {
+<<<<<<< HEAD
         $scope.appointment.timeSlot = time;
         $scope.appointment.status = 'Scheduled';
         $scope.appointment.dateOfAppointment = time.toISOString().slice(0, 10);
         setBookedSlot();
         $scope.radioModel = 'Tab1';
+=======
+      $scope.appointment.timeSlot = time;
+      $scope.appointment.status = 'Scheduled';        
+      $scope.appointment.dateOfAppointment = time.toISOString().slice(0, 10);
+      $scope.timeSlotFull = moment($scope.appointment.timeSlot).format('h:mma') + '-' + moment($scope.appointment.timeSlot).add(59, 'm').format('h:mma')
+      setBookedSlot();  
+      $scope.radioModel = 'Tab1';
+>>>>>>> Appointment Modal Time slot now shows start and end time
       });
     }
 

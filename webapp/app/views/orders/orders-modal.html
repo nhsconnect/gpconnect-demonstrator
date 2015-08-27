@@ -49,7 +49,7 @@
           <div class="col-md-12">
             <div class="input-group">
             <span class="input-group-btn">
-              <button type="button" ng-click="openDatepicker($event, 'dateOfOrder')"  class="btn btn-default btn-sm"><i class="fa fa-calendar"></i></button>
+              <button type="button" ng-click="openDatepicker($event, 'dateOfOrder')"  class="btn btn-default btn-sm" disabled><i class="fa fa-calendar"></i></button>
             </span>
               <input type="text" class="form-control" id="date" name="date" ng-model="order.date" ng-click="openDatepicker($event, 'dateOfOrder')"  datepicker-popup="dd-MMM-y" is-open="dateOfOrder" disabled required/>
             </div>

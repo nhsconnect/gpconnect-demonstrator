@@ -293,6 +293,10 @@ legend {
   border-bottom: 1px solid #ddd;
 }
 
+.patient-dashboard{
+    width:98%;
+}
+
 .panel-patient {
   margin-bottom: 0;
   margin-top: 20px;
@@ -1179,7 +1183,7 @@ padding-top: 15px;
 }
 
 .previousGroup{
-margin-left: 90px;
+margin-left: 5%;
 }
 
 .tabContent{

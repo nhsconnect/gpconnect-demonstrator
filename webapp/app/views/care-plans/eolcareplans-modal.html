@@ -67,9 +67,9 @@
           <div class="col-md-12">
             <div class="input-group">
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'dateOfOnsetOpen')"><i class="fa fa-calendar"></i></button>
+              <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'dateOfOnsetOpen')" disabled><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control" id="date" name="date" ng-model="eolcareplan.careDocument.date" ng-click="openDatepicker($event, 'dateOfOnsetOpen')"  datepicker-popup="yyyy-MM-dd" is-open="$parent.dateOfOnsetOpen" disabled/>
+              <input type="text" class="form-control" id="date" name="date" ng-model="eolcareplan.careDocument.date"  datepicker-popup="yyyy-MM-dd" is-open="$parent.dateOfOnsetOpen" disabled/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.date.$error.required">You must enter a valid date.</span>
           </div>

@@ -29,6 +29,8 @@
     <!-- build:css(.tmp) styles/foundation-icons//foundation-icons.css -->
     <link rel="stylesheet" href="styles/foundation-icons/foundation-icons.css" />
     <!-- endbuild -->
+      
+    <link rel="icon" type="img/ico" href="images/favicon.ico">
 
   </head>
   <body ng-app="openehrPocApp" ng-controller="headerController">
@@ -169,12 +171,12 @@
 
       <!-- Header toolbar -->
       <div class="row header-toolbar hidden-xs">
-        <div class="col-sm-4 col-offset-1 previousGroup">
+        <div class="col-sm-5 previousGroup">
           <span class="glyphicon glyphicon-arrow-left previous-page-arrow" ng-if="previousPage && currentUser.role=='idcr'" ng-click="goBack()"></span>
           <span class="previous-page-title" ng-if="previousPage && currentUser.role=='idcr'">{{previousPage}}</span>
 
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-6">
           <span class="current-page-title">{{pageHeader}}</span>
         </div>
       </div>

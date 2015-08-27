@@ -68,7 +68,7 @@
           <div class="col-md-12">
             <div class="input-group">
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default btn-sm"><i class="fa fa-calendar"></i></button>
+              <button type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-calendar"></i></button>
             </span>
               <input type="text" class="form-control" id="dateofappointment" name="dateofappointment" ng-model="appointment.dateOfAppointment" ng-click="openAppointmentDatepicker($event, 'dateOfAppointment')"  datepicker-popup="dd-MMM-y" is-open="$parent.dateOfAppointment" disabled required/>
             </div>
@@ -109,7 +109,7 @@
           <div class="col-md-12">
             <div class="input-group">
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default btn-sm"><i class="fa fa-calendar"></i></button>
+              <button type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-calendar"></i></button>
             </span>
               <input type="text" class="form-control" id="datecreated" name="datecreated" ng-model="appointment.dateCreated" datepicker-popup="yyyy-MM-dd" is-open="$parent.dateCreated" disabled required/>
             </div>

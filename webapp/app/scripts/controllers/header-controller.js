@@ -58,7 +58,7 @@ angular.module('openehrPocApp')
           break;
         case 'patients-summary':
           previousState = 'patients-list';
-          pageHeader = 'Patients Summary';
+          pageHeader = 'Patient Summary';
           previousPage = 'Patient Lists';
           mainWidth = 12;
           detailWidth = 0;

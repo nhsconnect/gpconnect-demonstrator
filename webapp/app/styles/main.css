@@ -106,6 +106,7 @@ li {
   height: 568px;
 }
 
+
 .section-row {
   height: 100%;
   margin-right: -45px;
@@ -1556,3 +1557,16 @@ line-height: 16px;
     z-index: 2;
     color: black;
 }
+
+div.transbox {
+    background-color: #fafafa;
+    opacity: 0.7;
+    filter: alpha(opacity=70); 
+    color: #000000;
+    margin-right: 5%;
+}
+
+div.transbox .innerTransbox{
+    margin-left: 20px;
+}
+

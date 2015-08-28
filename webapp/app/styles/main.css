@@ -102,6 +102,7 @@ li {
 .section-main, .section-detail {
   padding-top: 15px;
   padding-bottom: 15px;
+  padding-left: 15px;    
   height: 568px;
 }
 
@@ -292,9 +293,12 @@ legend {
   border-bottom: 1px solid #ddd;
 }
 
+.dashboard.row{
+    margin-right: -20px;
+}
+
 .patient-dashboard{
-    width:95%;
-    margin-left: 2%;
+    width:97%;
 }
 
 .panel-patient {
@@ -1578,4 +1582,8 @@ div.transbox .innerTransbox{
 
 td.dateTime{
         width:130px;
+}
+
+.patients-list-context{
+    margin-left: -15px;
 }

@@ -39,7 +39,7 @@ angular.module('openehrPocApp')
         resolve: {
           modal: function () {
             return {
-              title: 'Create Problems / Diagnosis'
+              title: 'Create Problem and Diagnosis'
             };
           },
           diagnosis: function () {

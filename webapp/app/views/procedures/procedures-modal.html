@@ -124,7 +124,7 @@
           <div class="col-md-12">
             <div class="input-group">
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default btn-sm" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')"><i class="fa fa-calendar"></i></button>
+              <button type="button" class="btn btn-default btn-sm" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" disabled><i class="fa fa-calendar"></i></button>
             </span>
               <input type="text" class="form-control" id="datesubmitted" name="datesubmitted" ng-model="procedure.dateSubmitted" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" datepicker-popup="dd-MMM-y" is-open="dateSubmitted" required disabled />
             </div>
@@ -201,7 +201,7 @@
           <div class="col-xs-12">
             <div class="input-group">
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default btn-sm" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')"><i class="fa fa-calendar"></i></button>
+              <button type="button" class="btn btn-default btn-sm" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" disabled><i class="fa fa-calendar"></i></button>
             </span>
               <input type="text" class="form-control popupinputs" id="datesubmitted" name="datesubmitted" ng-model="procedure.dateSubmitted" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" datepicker-popup="yyyy-MM-dd" is-open="dateSubmitted" required  disabled/>
             </div>

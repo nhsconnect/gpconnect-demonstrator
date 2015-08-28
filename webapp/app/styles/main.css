@@ -67,7 +67,6 @@ li {
 /* Index */
 .section {
   padding-right: 15px;
-  padding-left: 15px;
 }
 
 .section-north {
@@ -294,7 +293,8 @@ legend {
 }
 
 .patient-dashboard{
-    width:98%;
+    width:95%;
+    margin-left: 2%;
 }
 
 .panel-patient {

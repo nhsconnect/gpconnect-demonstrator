@@ -21,7 +21,7 @@
       <legend>{{ modal.title }}</legend>
 
       <div class="form-group" ng-class="{'has-error': (formSubmitted || diagnosisForm.problem.$dirty) && diagnosisForm.problem.$invalid, 'has-success': diagnosisForm.problem.$valid && diagnosisForm.problem.$dirty}">
-        <label for="text" class="control-label col-md-4">Problem/Diagnosis</label>
+        <label for="text" class="control-label col-md-4">Problem and Diagnosis</label>
         <div class="col-md-8">
           <div class="input-group">
             <input type="text" class="form-control input-sm" id="problem" name="problem" ng-model="diagnosis.problem" required />

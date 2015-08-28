@@ -18,8 +18,8 @@
   <tbody>
     <tr ng-repeat="result in results | filter:search" ng-click="go('/patients/{{patient.id}}/results/{{$index}}')" ng-class="{info: selected($index)}">
       <td>{{ result.name }}</td>
-      <td>{{ result.sampleTaken}}</td>
-      <td>{{ result.dateReported}}</td>
+      <td class="dateTime">{{ result.sampleTaken}}</td>
+      <td class="dateTime">{{ result.dateReported}}</td>
       <td>openehr</td>
     </tr>
 

@@ -18,9 +18,9 @@
   </thead>
   <tbody>
   <tr ng-repeat="mdt in cancerMdtComposition | filter:search" ng-click="go('/patients/{{patient.id}}/cancer-mdt-detail/{{$index}}')" ng-class="{info: selected($index)}">
-    <td>{{mdt.dateOfRequest}}</td>
+    <td class="dateTime">{{mdt.dateOfRequest}}</td>
     <td>{{mdt.service}}</td>
-    <td>{{mdt.dateOfMeeting}}</td>
+    <td class="dateTime">{{mdt.dateOfMeeting}}</td>
     <td>{{mdt.source}}</td>
   </tr>
   <tr ng-if="!cancerMdtComposition.length">

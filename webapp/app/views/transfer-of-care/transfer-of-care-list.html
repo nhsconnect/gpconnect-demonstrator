@@ -21,8 +21,8 @@
   <tr ng-repeat="transfer in transferofCareComposition.transfers | filter:query" ng-click="go('/patients/{{patient.id}}/transfer-of-care-detail/{{$index}}')" ng-class="{info: selected($index)}">
     <td>Transfer #{{($index + 1)}}</td>
     <td>{{transfer.transferDetail.site.siteFrom}}</td>
-    <td  width="30%">{{transfer.transferDetail.site.siteTo}}</td>
-    <td width="15%">{{transfer.transferDetail.site.timeStamp}}</td>
+    <td>{{transfer.transferDetail.site.siteTo}}</td>
+    <td class="dateTime">{{transfer.transferDetail.site.timeStamp}}</td>
     <td>local</td>
   </tr>
 

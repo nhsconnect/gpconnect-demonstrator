@@ -19,7 +19,7 @@
     <tr ng-repeat="eolcareplan in eolcareplans | filter:search" ng-click="go({{$index}})" ng-class="{info: selected($index)}">
       <td>{{ eolcareplan.careDocument.name }}</td>
       <td>{{ eolcareplan.careDocument.type }}</td>
-      <td>{{ eolcareplan.careDocument.date | date:'y-MM-dd'}}</td>
+      <td class="dateTime">{{ eolcareplan.careDocument.date | date:'y-MM-dd'}}</td>
       <td>{{ eolcareplan.source }}</td>
     </tr>
 

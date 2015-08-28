@@ -1576,3 +1576,6 @@ div.transbox .innerTransbox{
     padding-bottom: 15px;
 }
 
+td.dateTime{
+        width:130px;
+}

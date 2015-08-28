@@ -17,7 +17,7 @@
   <tbody>
     <tr ng-repeat="diagnosis in diagnoses | filter:search" ng-click="go('/patients/{{patient.id}}/diagnoses/{{$index}}')" ng-class="{info: selected($index)}">
       <td>{{ diagnosis.problem }}</td>
-      <td>{{ diagnosis.dateOfOnset}}</td>
+      <td class="dateTime">{{ diagnosis.dateOfOnset}}</td>
       <td>{{diagnosis.source}}</td>
     </tr>
 

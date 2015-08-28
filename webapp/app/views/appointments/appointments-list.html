@@ -17,7 +17,7 @@
 
   <tbody>
     <tr ng-repeat="appointment in appointments | filter:search" ng-click="go({{$index}})" ng-class="{info: selected($index)}">
-      <td>{{ appointment.dateOfAppointment}}</td>
+      <td class="dateTime">{{ appointment.dateOfAppointment}}</td>
       <td>{{ appointment.timeSlotFull }}</td>
       <td>{{ appointment.careServiceTeam}}</td>
       <td>{{ appointment.source }}</td>

@@ -61,7 +61,7 @@ public class LabResultCompositionConverter {
             String prefix = LAB_RESULT_PREFIX + "/laboratory_test_panel/laboratory_result:" + index;
 
             LabResult.LabResultDetail labResultDetail = new LabResult.LabResultDetail();
-            labResultDetail.setResult(MapUtils.getString(rawComposition, prefix + "/result_value/_name|code"));
+            labResultDetail.setResult(MapUtils.getString(rawComposition, prefix + "/result_value/_name|value"));
             labResultDetail.setValue(MapUtils.getString(rawComposition, prefix + "/result_value|magnitude"));
             labResultDetail.setUnit(MapUtils.getString(rawComposition, prefix + "/result_value|unit"));
             labResultDetail.setNormalRange(MapUtils.getString(rawComposition, prefix + "/result_value|normal_range"));

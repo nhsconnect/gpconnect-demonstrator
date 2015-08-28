@@ -1,32 +1,35 @@
 
 package net.nhs.esb.config;
 
-import net.nhs.esb.patient.config.PatientRepositoryConfig;
-import net.nhs.repo.legacy.config.LegacyDataConfig;
-import net.nhs.repo.legacy.config.LegacyJPATransactionalConfig;
+import net.nhs.esb.util.CamelConverterInjector;
 import org.apache.camel.builder.xml.Namespaces;
 import org.apache.camel.spring.javaconfig.CamelConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
-@ComponentScan("net.nhs.esb")
+@ComponentScan("net.nhs")
 @PropertySource("classpath:application.properties")
-@Import({
-        RestConfig.class,
-        TerminologyConfig.class,
-        LegacyJPATransactionalConfig.class, LegacyDataConfig.class,
-        PatientRepositoryConfig.class
-})
 public class ESBConfig extends CamelConfiguration {
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public CamelConverterInjector camelConverterInjector() throws Exception {
+        CamelConverterInjector camelConverterInjector = new CamelConverterInjector(camelContext(), applicationContext);
+        camelConverterInjector.afterPropertiesSet();
+        return camelConverterInjector;
     }
 
     @Bean

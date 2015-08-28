@@ -1,8 +1,9 @@
 package net.nhs.repo.legacy.config;
 
+import javax.sql.DataSource;
+
 import java.net.URI;
 import java.net.URISyntaxException;
-import javax.sql.DataSource;
 
 import com.mysql.jdbc.Driver;
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
@@ -28,10 +29,9 @@ public class LegacyDataConfig {
         } else {
             dataSource.setUrl("jdbc:mysql://localhost:3306/poc_legacy");
             dataSource.setUsername("root");
-            dataSource.setPassword(null);
+            dataSource.setPassword("password");
         }
 
         return dataSource;
     }
-
 }

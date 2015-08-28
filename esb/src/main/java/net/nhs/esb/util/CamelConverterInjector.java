@@ -9,19 +9,18 @@ import org.apache.camel.Exchange;
 import org.apache.camel.TypeConversionException;
 import org.apache.camel.support.TypeConverterSupport;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
 @SuppressWarnings("unchecked")
-@Component
 public class CamelConverterInjector implements InitializingBean {
 
-    @Autowired
-    private CamelContext camelContext;
+    private final CamelContext camelContext;
+    private final ApplicationContext springContext;
 
-    @Autowired
-    private ApplicationContext springContext;
+	public CamelConverterInjector(CamelContext camelContext, ApplicationContext springContext) {
+        this.camelContext = camelContext;
+        this.springContext = springContext;
+    }
 
     private abstract static class TypeConverterWrapper extends TypeConverterSupport {
         protected final Method method;

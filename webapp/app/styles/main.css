@@ -73,7 +73,7 @@ li {
   min-height: 74px;
   border: 1px solid #fff;
   border-bottom: 1px solid #e7e7e7;
-  width: 99%;    
+  width: 101%;    
 }
 
 #page-wrapper {
@@ -298,7 +298,7 @@ legend {
 }
 
 .patient-dashboard{
-    width:97%;
+    width:98%;
 }
 
 .panel-patient {

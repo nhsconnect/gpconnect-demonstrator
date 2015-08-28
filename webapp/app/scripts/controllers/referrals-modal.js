@@ -3,6 +3,8 @@
 angular.module('openehrPocApp')
   .controller('ReferralsModalCtrl', function ($scope, $modalInstance, referral, PatientService, patient, modal) {
    
+    $('#dateofreferral').datepicker({dateFormat: 'dd-MMM-y'});
+    
     $scope.currentUser = PatientService.getCurrentUser();
     $scope.referral = referral;
     $scope.patient = patient;
@@ -44,7 +46,8 @@ angular.module('openehrPocApp')
     };
     
     
-    $scope.validate = function(form, name, index){
+    $scope.validate = function(form, name, index){ 
+        
       var errorToCheckFor = name + index;
 
       for(var error in form.$error.required){

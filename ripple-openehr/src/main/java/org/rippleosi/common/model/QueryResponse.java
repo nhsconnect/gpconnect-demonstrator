@@ -1,11 +1,11 @@
-package net.nhs.esb.openehr.model;
+package org.rippleosi.common.model;
 
 import java.util.List;
 import java.util.Map;
 
 /**
  */
-public class QueryResponseData {
+public class QueryResponse {
 
     private Meta meta;
     private String aql;

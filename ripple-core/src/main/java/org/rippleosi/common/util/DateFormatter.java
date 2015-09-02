@@ -1,4 +1,4 @@
-package net.nhs.esb.util;
+package org.rippleosi.common.util;
 
 import java.text.ParseException;
 import java.util.Calendar;
@@ -24,8 +24,14 @@ public final class DateFormatter {
         }
 
         try {
-            return DateUtils.parseDate(input, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss.SSSX", "yyyy-MM-dd'T'HH:mm:ss",
-                                       "yyyy-MM-dd'T'HH:mm:ss.SSS", "HH:mm:ss");
+            // TODO Optimisation - Re-order this list of dates to put the most common formats first
+            return DateUtils.parseDate(input, "yyyy-MM-dd",
+                                       "yyyy-MM-dd'T'HH:mm:ss",
+                                       "yyyy-MM-dd'T'HH:mm:ss.SSS",
+                                       "yyyy-MM-dd'T'HH:mm:ss.SSSX",
+                                       "yyyy-MM-dd'T'HH:mm:ss.SSSXX",
+                                       "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+                                       "HH:mm:ss");
         } catch (ParseException ignore) {
             return null;
         }

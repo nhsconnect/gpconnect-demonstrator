@@ -1,4 +1,4 @@
-package net.nhs.esb.openehr.model;
+package org.rippleosi.common.model;
 
 public class Meta {
 	private String href;

@@ -1,8 +1,8 @@
-package net.nhs.esb.openehr.model;
+package org.rippleosi.common.model;
 
 /**
  */
-public class ActionRestResponseData {
+public class ActionRestResponse {
 
     private Meta meta;
     private String action;
@@ -31,5 +31,4 @@ public class ActionRestResponseData {
     public void setCompositionUid(String compositionUid) {
         this.compositionUid = compositionUid;
     }
-    
 }

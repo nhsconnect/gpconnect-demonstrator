@@ -51,7 +51,7 @@ angular
         url: '/patients/{patientId:int}/patients-summary',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
-          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
           main: { templateUrl: 'views/patients/patients-summary.html', controller: 'PatientsSummaryCtrl' }
         }
       })
@@ -178,7 +178,7 @@ angular
           detail: { templateUrl: 'views/cancer-mdt/cancer-mdt-detail.html', controller: 'CancerMdtDetailCtrl' }
         }
       })
-    
+
      .state('procedures', {
         url: '/patients/{patientId:int}/procedures',
         views: {
@@ -197,7 +197,7 @@ angular
           detail: { templateUrl: 'views/procedures/procedures-detail.html', controller: 'ProceduresDetailCtrl' }
         }
       })
-    
+
     .state('referrals', {
         url: '/patients/{patientId:int}/referrals',
         views: {
@@ -216,7 +216,7 @@ angular
           detail: { templateUrl: 'views/referrals/referrals-detail.html', controller: 'ReferralsDetailCtrl' }
         }
       })
-    
+
     .state('eolcareplans', {
         url: '/patients/{patientId:int}/eolcareplans',
         views: {
@@ -235,7 +235,7 @@ angular
           detail: { templateUrl: 'views/care-plans/eolcareplans-detail.html', controller: 'EolcareplansDetailCtrl' }
         }
       })
-    
+
      .state('appointments', {
         url: '/patients/{patientId:int}/appointments',
         views: {
@@ -254,6 +254,7 @@ angular
           detail: { templateUrl: 'views/appointments/appointments-detail.html', controller: 'AppointmentsDetailCtrl' }
         }
       })
+
       .state('orders', {
         url: '/patients/{patientId:int}/orders',
         views: {
@@ -272,7 +273,7 @@ angular
           detail: { templateUrl: 'views/orders/orders-detail.html', controller: 'OrdersDetailCtrl' }
         }
       })
-    
+
        .state('results', {
         url: '/patients/{patientId:int}/results',
         views: {
@@ -293,15 +294,14 @@ angular
       });
   })
 
-.directive('datepickerPopup', function (){
-    return {
+.directive('datepickerPopup', function () {
+  return {
         restrict: 'EAC',
         require: 'ngModel',
-        link: function(scope, element, attr, controller) {
-      //remove the default formatter from the input directive to prevent conflict
-      controller.$formatters.unshift();
-  }
-}
+        link: function (scope, element, attr, controller) {
+          controller.$formatters.unshift();
+        }
+    };
 })
 .config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
     datepickerConfig.startingDay          = 1;

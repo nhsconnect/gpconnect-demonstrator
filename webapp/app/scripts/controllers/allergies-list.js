@@ -3,9 +3,9 @@
 angular.module('openehrPocApp')
   .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Allergy) {
 
-        $scope.query = {};
-        $scope.queryBy = '$';
-    
+    $scope.query = {};
+    $scope.queryBy = '$';
+
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });

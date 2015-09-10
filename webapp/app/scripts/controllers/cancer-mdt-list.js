@@ -3,25 +3,25 @@
 angular.module('openehrPocApp')
   .controller('CancerMdtListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, CancerMdt) {
 
-     $scope.search = function (row) {
-        return (
-          angular.lowercase(row.dateOfRequest).indexOf(angular.lowercase($scope.query) || '') !== -1 
-       || angular.lowercase(row.service).indexOf(angular.lowercase($scope.query) || '') !== -1
-       || angular.lowercase(row.dateOfMeeting).indexOf(angular.lowercase($scope.query) || '') !== -1
-       || angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
+    $scope.search = function (row) {
+      return (
+          angular.lowercase(row.dateOfRequest).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.service).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.dateOfMeeting).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
         );
     };
-    
+
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
 
     CancerMdt.getComposition($stateParams.patientId).then(function (result) {
       $scope.cancerMdtComposition = result.data;
-         for(var i = 0; i < $scope.cancerMdtComposition.length; i++){
-        $scope.cancerMdtComposition[i].dateOfRequest = moment($scope.cancerMdtComposition[i].dateOfRequest).format('DD-MMM-YYYY'); 
-        $scope.cancerMdtComposition[i].dateOfMeeting = moment($scope.cancerMdtComposition[i].dateOfMeeting).format('DD-MMM-YYYY'); 
-        }
+      for (var i = 0; i < $scope.cancerMdtComposition.length; i++){
+        $scope.cancerMdtComposition[i].dateOfRequest = moment($scope.cancerMdtComposition[i].dateOfRequest).format('DD-MMM-YYYY');
+        $scope.cancerMdtComposition[i].dateOfMeeting = moment($scope.cancerMdtComposition[i].dateOfMeeting).format('DD-MMM-YYYY');
+      }
     });
 
     $scope.go = function (path) {
@@ -52,17 +52,17 @@ angular.module('openehrPocApp')
         }
       });
 
-      modalInstance.result.then(function (cancerMdt) {          
-        cancerMdt.dateOfMeeting = new Date(cancerMdt.dateOfMeeting); 
-        cancerMdt.dateOfRequest = new Date(cancerMdt.dateOfRequest);  
-        if(cancerMdt.timeOfMeeting !== null){
-            cancerMdt.timeOfMeeting = new Date(cancerMdt.timeOfMeeting);
-            cancerMdt.timeOfMeeting.setMinutes(cancerMdt.timeOfMeeting.getMinutes() - cancerMdt.timeOfMeeting.getTimezoneOffset());
-        }  
-        
+      modalInstance.result.then(function (cancerMdt) {
+        cancerMdt.dateOfMeeting = new Date(cancerMdt.dateOfMeeting);
+        cancerMdt.dateOfRequest = new Date(cancerMdt.dateOfRequest);
+        if (cancerMdt.timeOfMeeting !== null){
+          cancerMdt.timeOfMeeting = new Date(cancerMdt.timeOfMeeting);
+          cancerMdt.timeOfMeeting.setMinutes(cancerMdt.timeOfMeeting.getMinutes() - cancerMdt.timeOfMeeting.getTimezoneOffset());
+        }
+
         cancerMdt.compositionId = '';
-        cancerMdt.source = "openehr";  
-          
+        cancerMdt.source = 'openehr';
+
         CancerMdt.create($scope.patient.id, cancerMdt).then(function () {
           $state.go('cancerMdt', { patientId: $scope.patient.id });
         });

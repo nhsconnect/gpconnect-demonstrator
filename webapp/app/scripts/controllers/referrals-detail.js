@@ -32,8 +32,8 @@ angular.module('openehrPocApp')
         }
       });
 
-      modalInstance.result.then(function (referral) {            
-          
+      modalInstance.result.then(function (referral) {
+
         var toUpdate = {
          compositionId : $scope.referral.compositionId,
          author : referral.author,
@@ -43,12 +43,12 @@ angular.module('openehrPocApp')
          reasonForReferral: referral.reasonForReferral,
          referralFrom: referral.referralFrom,
          referralTo: referral.referralTo,
-         source: 'openehr'  
-        }; 
-          
+         source: 'openehr'
+        };
+
         Referral.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/referrals');
         });
-    });
-    }
+      });
+    };
   });

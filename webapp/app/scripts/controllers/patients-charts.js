@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('PatientsChartsCtrl', function ($scope, $window, $state, PatientService, $modal, $stateParams) {
+  .controller('PatientsChartsCtrl', function ($scope, $window, $state, PatientService, $modal) {
 
-    $scope.openModal = function (row, chartType){
-    $modal.open({
+    $scope.openModal = function (row, chartType) {
+      $modal.open({
       templateUrl: 'views/confirmation.html',
       size: 'md',
       controller: function ($scope) {
@@ -16,7 +16,7 @@ angular.module('openehrPocApp')
         $scope.ok = function () {
           $scope.$close(true);
 
-          switch(chartType) {
+          switch (chartType) {
             case 'all':
               $state.go('patients-list');
               break;
@@ -34,7 +34,6 @@ angular.module('openehrPocApp')
               break;
           }
         };
-
       }
     });
     };
@@ -86,16 +85,16 @@ angular.module('openehrPocApp')
       });
     };
 
-    jQuery(document).ready(function($) {
+    jQuery(document).ready(function ($) {
       // Chart Toggle
-      $('.chart-inner select').change(function(){
+      $('.chart-inner select').change(function () {
 
         // Get the target
         var target = $(this).val();
 
         // Show / Hide loop through all charts witihn this section
-        $(this).closest('.chart-inner').find('.chart').each(function(){
-          if( $(this).attr('id') === target ){
+        $(this).closest('.chart-inner').find('.chart').each(function () {
+          if ($(this).attr('id') === target) {
             $(this).show();
           } else {
             $(this).hide();
@@ -104,8 +103,8 @@ angular.module('openehrPocApp')
 
       });
        // Clear previous chart
-       $scope.toggleChart = function(){
-        if($scope.selectedChart === 'age'){
+      $scope.toggleChart = function () {
+        if ($scope.selectedChart === 'age') {
           $('#age-chart').empty();
           $('#department-chart').empty();
           $('#age-chart').off('click');
@@ -132,14 +131,3 @@ angular.module('openehrPocApp')
     $scope.toggleChart();
 
   });
-
-
-
-
-
-
-
-
-
-
-

@@ -4,27 +4,26 @@ angular.module('openehrPocApp')
   .controller('ReferralsListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Referral) {
 
     $scope.search = function (row) {
-        return (
-          angular.lowercase(row.dateOfReferral).indexOf(angular.lowercase($scope.query) || '') !== -1 
-       || angular.lowercase(row.referralFrom).indexOf(angular.lowercase($scope.query) || '') !== -1
-       || angular.lowercase(row.referralTo).indexOf(angular.lowercase($scope.query) || '') !== -1
-       || angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
-        );
+      return (
+          angular.lowercase(row.dateOfReferral).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.referralFrom).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.referralTo).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
+      );
     };
-    
-    
+
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
 
     Referral.all($stateParams.patientId).then(function (result) {
       $scope.result = result.data;
-            if(result.data.length > 0){
-      $scope.referrals = $scope.result;
-                for(var i = 0; i < $scope.referrals.length; i++){
-        $scope.referrals[i].dateOfReferral = moment($scope.referrals[i].dateOfReferral).format('DD-MMM-YYYY');
+      if (result.data.length > 0){
+        $scope.referrals = $scope.result;
+        for (var i = 0; i < $scope.referrals.length; i++){
+          $scope.referrals[i].dateOfReferral = moment($scope.referrals[i].dateOfReferral).format('DD-MMM-YYYY');
         }
-        }
+      }
     });
 
     $scope.go = function (path) {
@@ -57,7 +56,7 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (referral) {
 
-          var toAdd = {
+        var toAdd = {
          compositionId : '',
          author : referral.author,
          clinicalSummary : referral.clinicalSummary,
@@ -66,12 +65,12 @@ angular.module('openehrPocApp')
          reasonForReferral: referral.reasonForReferral,
          referralFrom: referral.referralFrom,
          referralTo: referral.referralTo,
-         source: 'openehr'  
-        }; 
-          
+         source: 'openehr'
+        };
+
         Referral.create($scope.patient.id, toAdd).then(function () {
           $state.go('referrals', { patientId: $scope.patient.id });
         });
-    });
-    }
+      });
+    };
   });

@@ -5,7 +5,7 @@ angular.module('openehrPocApp')
 
     $scope.query = {};
     $scope.queryBy = '$';
-    
+
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });

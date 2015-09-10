@@ -3,18 +3,15 @@
 angular.module('openehrPocApp')
   .controller('AppointmentsDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Appointment) {
 
-    
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
 
     Appointment.all($stateParams.appointmentIndex).then(function (result) {
       $scope.appointment = result.data[$stateParams.appointmentIndex];
-      $scope.timeSlotFull = moment($scope.appointment.timeSlot).format('h:mma') + '-' + moment($scope.appointment.timeSlot).add(59, 'm').format('h:mma')
+      $scope.timeSlotFull = moment($scope.appointment.timeSlot).format('h:mma') + '-' + moment($scope.appointment.timeSlot).add(59, 'm').format('h:mma');
     });
 
-    
-    
     $scope.edit = function () {
       var modalInstance = $modal.open({
         templateUrl: 'views/appointments/appointments-modal.html',
@@ -36,10 +33,10 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (appointment) {
-          appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
-          appointment.date = new Date(appointment.date);
-  
-          var toUpdate =  {
+        appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
+        appointment.date = new Date(appointment.date);
+
+        var toUpdate =  {
                   compositionId: $scope.appointment.compositionId,
                   careServiceTeam: appointment.careServiceTeam,
                   dateOfAppointment:  appointment.dateOfAppointment,
@@ -47,9 +44,9 @@ angular.module('openehrPocApp')
                   status:  appointment.status,
                   author:  appointment.author,
                   dateCreated:  appointment.date,
-                  source: "openehr",
-                  timeSlot : appointment.timeSlot    
-            }
+                  source: 'openehr',
+                  timeSlot : appointment.timeSlot
+            };
         Appointment.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/appointments');
         });

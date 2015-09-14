@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class ProcedureDetails implements Serializable {
 
-    private String id;
+    private String sourceId;
     private String author;
     private Date dateSubmitted;
     private String name;
@@ -20,12 +20,12 @@ public class ProcedureDetails implements Serializable {
     private String currentStatusTerminology;
     private String source;
 
-    public String getId() {
-        return id;
+    public String getSourceId() {
+        return sourceId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
     public String getAuthor() {

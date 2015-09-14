@@ -4,18 +4,19 @@ package org.rippleosi.patient.allergies.model;
  */
 public class AllergyDetails {
 
-    private String id;
+    private String sourceId;
     private String cause;
     private String causeCode;
     private String reaction;
     private String terminology;
+    private String source;
 
-    public String getId() {
-        return id;
+    public String getSourceId() {
+        return sourceId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
     public String getCause() {
@@ -48,5 +49,13 @@ public class AllergyDetails {
 
     public void setTerminology(String terminology) {
         this.terminology = terminology;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

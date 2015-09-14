@@ -6,18 +6,18 @@ import java.util.Date;
  */
 public class ProcedureSummary {
 
-    private String id;
+    private String sourceId;
     private String name;
     private Date date;
     private Date time;
     private String source;
 
-    public String getId() {
-        return id;
+    public String getSourceId() {
+        return sourceId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
     public String getName() {

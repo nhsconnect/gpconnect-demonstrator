@@ -44,7 +44,7 @@ public class ProcedureSummaryQueryStrategy extends AbstractQueryStrategy<List<Pr
             Date date = DateFormatter.toDateOnly(dateAsString);
             Date time = DateFormatter.toTimeOnly(dateAsString);
 
-            procedure.setId(uid);
+            procedure.setSourceId(uid);
             procedure.setName(name);
             procedure.setDate(date);
             procedure.setTime(time);

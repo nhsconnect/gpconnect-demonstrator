@@ -62,7 +62,7 @@ public class ProcedureDetailsQueryStrategy extends AbstractQueryStrategy<Procedu
         Date procedureTime = DateFormatter.toTimeOnly(procedureDateAsString);
 
         ProcedureDetails procedure = new ProcedureDetails();
-        procedure.setId(MapUtils.getString(data, "uid"));
+        procedure.setSourceId(MapUtils.getString(data, "uid"));
         procedure.setAuthor(MapUtils.getString(data, "author"));
         procedure.setDateSubmitted(dateSubmitted);
         procedure.setName(MapUtils.getString(data, "procedure_name"));

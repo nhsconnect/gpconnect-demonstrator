@@ -40,11 +40,14 @@ public class ProcedureSummaryQueryStrategy extends AbstractQueryStrategy<List<Pr
             String uid = MapUtils.getString(data, "uid");
             String name = MapUtils.getString(data, "procedure_name");
             String dateAsString = MapUtils.getString(data, "procedure_date");
-            Date date = DateFormatter.toDate(dateAsString);
+
+            Date date = DateFormatter.toDateOnly(dateAsString);
+            Date time = DateFormatter.toTimeOnly(dateAsString);
 
             procedure.setId(uid);
             procedure.setName(name);
             procedure.setDate(date);
+            procedure.setTime(time);
             procedure.setSource("openehr");
 
             summaries.add(procedure);

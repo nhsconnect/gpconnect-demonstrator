@@ -58,7 +58,8 @@ public class ProcedureDetailsQueryStrategy extends AbstractQueryStrategy<Procedu
         String procedureDateAsString = MapUtils.getString(data, "procedure_date");
 
         Date dateSubmitted = DateFormatter.toDate(dateSubmittedAsString);
-        Date procedureDate = DateFormatter.toDate(procedureDateAsString);
+        Date procedureDate = DateFormatter.toDateOnly(procedureDateAsString);
+        Date procedureTime = DateFormatter.toTimeOnly(procedureDateAsString);
 
         ProcedureDetails procedure = new ProcedureDetails();
         procedure.setId(MapUtils.getString(data, "uid"));
@@ -68,6 +69,7 @@ public class ProcedureDetailsQueryStrategy extends AbstractQueryStrategy<Procedu
         procedure.setNotes(MapUtils.getString(data, "procedure_notes"));
         procedure.setPerformer(MapUtils.getString(data, "performer"));
         procedure.setDate(procedureDate);
+        procedure.setTime(procedureTime);
         procedure.setCurrentStatus(MapUtils.getString(data, "status"));
         procedure.setCurrentStatusCode(MapUtils.getString(data, "status_code"));
         procedure.setCurrentStatusTerminology(MapUtils.getString(data, "terminology"));

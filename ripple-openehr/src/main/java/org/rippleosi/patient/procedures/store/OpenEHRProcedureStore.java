@@ -49,7 +49,7 @@ public class OpenEHRProcedureStore extends AbstractOpenEhrService implements Pro
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
 
-        String dateTime = DateFormatter.toString(procedure.getDate());
+        String dateTime = DateFormatter.combineDateTime(procedure.getDate(), procedure.getTime());
 
         content.put(PROCEDURE_PREFIX + "/procedure_name", procedure.getName());
         content.put(PROCEDURE_PREFIX + "/procedure_notes", procedure.getNotes());

@@ -9,6 +9,7 @@ public class ProcedureSummary {
     private String id;
     private String name;
     private Date date;
+    private Date time;
     private String source;
 
     public String getId() {
@@ -33,6 +34,14 @@ public class ProcedureSummary {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 
     public String getSource() {

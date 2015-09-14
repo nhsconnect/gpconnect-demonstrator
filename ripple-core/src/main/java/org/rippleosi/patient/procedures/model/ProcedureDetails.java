@@ -14,6 +14,7 @@ public class ProcedureDetails implements Serializable {
     private String notes;
     private String performer;
     private Date date;
+    private Date time;
     private String currentStatus;
     private String currentStatusCode;
     private String currentStatusTerminology;
@@ -73,6 +74,14 @@ public class ProcedureDetails implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 
     public String getCurrentStatus() {

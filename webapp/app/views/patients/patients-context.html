@@ -2,13 +2,13 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col-md-4">
-        <h4 class="panel-title">{{ patient.fullname() }}</h4>
+        <h4 class="panel-title">{{ patient.name }}</h4>
       </div>
       <div class="col-md-8 text-right">
         <ul class="list-inline">
           <li><label>Gender:</label> <strong>{{ patient.gender }}</strong></li>
-          <li><label>Born:</label>  <strong>{{ patient.born | date:'dd-MMM-yyyy' }}</strong></li>
-          <li class="nhsLabel"><label>NHS No.:</label> <strong>{{ patient.nhsNo }}</strong></li>
+          <li><label>Born:</label>  <strong>{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</strong></li>
+          <li class="nhsLabel"><label>NHS No.:</label> <strong>{{ patient.nhsNumber }}</strong></li>
         </ul>
       </div>
     </div>
@@ -18,7 +18,7 @@
       <tbody>
         <tr>
           <td width="40%"><label>Address:</label>  <strong>{{ patient.address }}</strong></td>
-          <td width="20%"><label>Phone:</label> <strong>{{ patient.phone }}</strong></td>
+          <td width="20%"><label>Phone:</label> <strong>{{ patient.telephone }}</strong></td>
           <td width="20%"><label>GP Details:</label> <strong>{{ patient.gpDetails }}</strong></td>
           <td width="20%"><label>PAS No.:</label> <strong>{{ patient.pasNo }}</strong></td>
         </tr>

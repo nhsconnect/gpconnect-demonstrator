@@ -7,9 +7,8 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    Procedure.all($stateParams.procedureId).then(function (result) {
-      $scope.result = result.data;
-      $scope.procedure = $scope.result[$stateParams.procedureIndex];
+    Procedure.get($stateParams.patientId, $stateParams.procedureId).then(function (result) {
+      $scope.procedure = result.data;
     });
 
     $scope.edit = function () {
@@ -32,18 +31,18 @@ angular.module('openehrPocApp')
         }
       });
 
-      modalInstance.result.then(function (procedure) {
-        procedure.dateSubmitted = new Date(procedure.dateSubmitted);
-        procedure.dateOfProcedure = new Date(procedure.dateOfProcedure);
+      modalInstance.result.then(function (procedure) {         
+         procedure.dateSubmitted = new Date(procedure.dateSubmitted);
+         procedure.date = new Date(procedure.date);  
         var toUpdate = {
-                    compositionId : $scope.procedure.compositionId,
-                    procedureName : procedure.procedureName,
-                    procedureNotes : procedure.procedureNotes,
+                    sourceId : procedure.sourceId,
+                    name : procedure.name,
+                    procedureNotes : procedure.notes,
                     author : procedure.author,
-                    terminology : 'local',
-                    code : 'at0047',
-                    dateOfProcedure : procedure.dateOfProcedure,
-                    timeOfProcedure : procedure.timeOfProcedure,
+                    currentStatusTerminology : 'local',
+                    currentStatusCode : 'at0047',
+                    date : procedure.date,
+                    time : procedure.time,
                     performer : procedure.performer,
                     dateSubmitted : procedure.dateSubmitted,
                     source : 'openehr'

@@ -26,7 +26,7 @@
           <label for="name" class="control-label col-md-12">Procedure Name</label>
           <div class="col-md-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="name" name="name" ng-model="procedure.procedureName"  required/>
+              <input type="text" class="form-control input-sm" id="name" name="name" ng-model="procedure.name"  required/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.name.$error.required">You must enter a value.</span>
           </div>
@@ -36,7 +36,7 @@
         <label for="siteTo" class="control-label col-md-12">Procedure Notes</label>
         <div class="col-md-12">
          <div class="input-group">
-                <textarea class="form-control input-sm" id="procedureNotes" name="procedureNotes" ng-model="procedure.procedureNotes" required ></textarea>
+                <textarea class="form-control input-sm" id="procedureNotes" name="procedureNotes" ng-model="procedure.notes" required ></textarea>
             </div>
         <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.procedureNotes.$error.required">You must enter a value.</span>
           </div>
@@ -61,7 +61,7 @@
           <label for="terminology" class="control-label col-md-6">Terminology</label>
           <div class="col-md-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="terminology" name="terminology" ng-model="procedure.terminology"  required/>
+              <input type="text" class="form-control input-sm" id="terminology" name="terminology" ng-model="procedure.currentStatusTerminology"  required/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.terminology.$error.required">You must enter a value.</span>
           </div>
@@ -72,7 +72,7 @@
           <label for="code" class="control-label col-md-6">Code</label>
           <div class="col-md-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="code" name="code" ng-model="procedure.code"  required/>
+              <input type="text" class="form-control input-sm" id="code" name="code" ng-model="procedure.currentStatusCode"  required/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.code.$error.required">You must enter a value.</span>
           </div>
@@ -87,7 +87,7 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="dateofProcedureDatepicker($event, 'dateOfProcedure')"><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control" id="dateofprocedure" name="dateofprocedure" ng-model="procedure.dateOfProcedure" ng-click="dateofProcedureDatepicker($event, 'dateOfProcedure')" datepicker-popup="yyyy-MM-dd" is-open="dateOfProcedure" required />
+              <input type="text" class="form-control" id="dateofprocedure" name="dateofprocedure" ng-model="procedure.date" ng-click="dateofProcedureDatepicker($event, 'dateOfProcedure')" datepicker-popup="yyyy-MM-dd" is-open="dateOfProcedure" required />
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.dateofprocedure.$error.required">You must enter a valid date.</span>
           </div>
@@ -101,7 +101,7 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm"><i class="fa fa-clock-o"></i></button>
             </span>
-                <input class="proceduretimepicker form-control" id="timeofprocedure" ui-timepicker ng-model="procedure.timeOfProcedure">
+                <input class="proceduretimepicker form-control" id="timeofprocedure" ui-timepicker ng-model="procedure.time">
             </div>
           </div>
         </div>  
@@ -144,7 +144,7 @@
           <label class="terminologylabel" for="terminology" >Terminology</label>
           <div class="col-xs-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="terminology" name="terminology" ng-model="procedure.terminology"  required/>
+              <input type="text" class="form-control input-sm" id="terminology" name="terminology" ng-model="procedure.currentStatusTerminology"  required/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.terminology.$error.required">You must enter a value.</span>
           </div>
@@ -153,7 +153,7 @@
           <label for="name" class="codelabel col-xs-12">Code</label>
           <div class="col-xs-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="code" name="code" ng-model="procedure.code"  required/>
+              <input type="text" class="form-control input-sm" id="code" name="code" ng-model="procedure.currentStatusCode"  required/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.code.$error.required">You must enter a value.</span>
           </div>
@@ -167,7 +167,7 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="dateofProcedureDatepicker($event, 'dateOfProcedure')"><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control popupinputs" id="dateofprocedure" name="dateofprocedure" ng-model="procedure.dateOfProcedure" ng-click="dateofProcedureDatepicker($event, 'dateOfProcedure')" datepicker-popup="yyyy-MM-dd" is-open="dateOfProcedure" required />
+              <input type="text" class="form-control popupinputs" id="dateofprocedure" name="dateofprocedure" ng-model="procedure.date" ng-click="dateofProcedureDatepicker($event, 'dateOfProcedure')" datepicker-popup="yyyy-MM-dd" is-open="dateOfProcedure" required />
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.dateofprocedure.$error.required">You must enter a valid date.</span>
           </div>
@@ -180,7 +180,7 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm"><i class="fa fa-clock-o"></i></button>
             </span>
-                <input class="proceduretimepicker popupinputs form-control" ui-timepicker ng-model="procedure.timeOfProcedure">
+                <input class="proceduretimepicker popupinputs form-control" ui-timepicker ng-model="procedure.time">
             </div>
           </div>
         </div>  

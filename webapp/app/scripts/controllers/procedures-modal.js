@@ -10,12 +10,14 @@ angular.module('openehrPocApp')
 
     if (modal.title === 'Create Procedure'){
       $scope.procedure.dateSubmitted = new Date().toISOString().slice(0, 10);
+    }else{
+      $scope.procedure.time = new Date($scope.procedure.time);
+      $scope.procedure.dateSubmitted = new Date($scope.procedure.dateSubmitted).toISOString().slice(0, 10);
+      $scope.procedure.date = new Date($scope.procedure.date).toISOString().slice(0, 10);
     }
 
-    $scope.procedure.code = '1234567';
-    $scope.procedure.terminology = 'ICD-10';
-
-    $scope.procedure.timeOfProcedure = moment($scope.procedure.timeOfProcedure);
+    $scope.procedure.currentStatusCode = '1234567';
+    $scope.procedure.currentStatusTerminology = 'ICD-10';
 
     $scope.dateofProcedureDatepicker = function ($event, name) {
       $event.preventDefault();

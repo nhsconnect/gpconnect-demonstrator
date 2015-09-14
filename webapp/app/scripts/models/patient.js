@@ -7,16 +7,8 @@ angular.module('openehrPocApp')
       var self = this;
       _.extend(this, attributes);
 
-      self.fullname = function () {
-        return self.lastname.toUpperCase() + ', ' + self.firstname + (self.title ? (' (' + self.title + ')') : '');
-      };
-
-      self.address = (function () {
-        return [self.address1, self.address2, self.address3, self.address4, self.address5, self.postCode].join(', ');
-      })();
-
       self.age = function () {
-        return $window.moment().diff(self.born, 'years');
+        return $window.moment().diff(self.dateOfBirth, 'years');
       };
 
       self.ageRange = (function () {

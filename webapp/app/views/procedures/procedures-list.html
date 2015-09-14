@@ -17,10 +17,10 @@
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="procedure in procedures | filter:search" ng-click="go('/patients/{{patient.id}}/procedures/{{$index}}')" ng-class="{info: selected($index)}">
-    <td>{{procedure.procedureName}}</td>
-    <td class="dateTime">{{procedure.dateOfProcedure}}</td>
-    <td>{{procedure.timeOfProcedure}}</td>
+  <tr ng-repeat="procedure in procedures | filter:search" ng-click="go('/patients/{{patient.id}}/procedures/{{procedure.sourceId}}')" ng-class="{info: selected(procedure.sourceId)}">
+    <td>{{procedure.name}}</td>
+    <td class="dateTime">{{procedure.date}}</td>
+    <td>{{procedure.time}}</td>
     <td>{{procedure.source}}</td>
   </tr>
   <tr ng-if="!procedures.length">

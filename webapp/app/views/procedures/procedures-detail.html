@@ -6,7 +6,7 @@
     <div class="form-group form-group-sm">
       <label class="control-label col-md-3">Procedure Name:</label>
       <div class="col-md-9">
-        <div class="form-control-static">{{ procedure.procedureName }}</div>
+        <div class="form-control-static">{{ procedure.name }}</div>
       </div>
     </div>
     </div>
@@ -15,7 +15,7 @@
     <div class="form-group form-group-sm">
       <label class="control-label col-md-12">Description:</label>
       <div class="col-md-12">
-        <div class="form-control-static">{{ procedure.procedureNotes  }}</div>
+        <div class="form-control-static">{{ procedure.notes  }}</div>
       </div>
     </div>
  </div>
@@ -24,7 +24,7 @@
     <div class="form-group form-group-sm">
       <label class="control-label col-md-3">Date of Procedure:</label>
       <div class="col-md-9">
-        <div class="form-control-static">{{ procedure.dateOfProcedure  | date:'y-MM-dd' }}</div>
+        <div class="form-control-static">{{ procedure.date  | date:'y-MM-dd' }}</div>
       </div>
     </div>        
     </div>   
@@ -33,7 +33,7 @@
     <div class="form-group form-group-sm">
       <label class="control-label col-md-3">Terminology:</label>
       <div class="col-md-9">
-        <div class="form-control-static">{{ procedure.terminology }}</div>
+        <div class="form-control-static">{{ procedure.currentStatusTerminology }}</div>
       </div>
     </div>        
     </div>   
@@ -42,7 +42,7 @@
     <div class="form-group form-group-sm">
       <label class="control-label col-md-3">Code:</label>
       <div class="col-md-9">
-        <div class="form-control-static">{{ procedure.code }}</div>
+        <div class="form-control-static">{{ procedure.currentStatusCode }}</div>
       </div>
     </div>        
     </div>  

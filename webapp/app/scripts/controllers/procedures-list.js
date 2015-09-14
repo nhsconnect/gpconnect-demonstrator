@@ -5,9 +5,9 @@ angular.module('openehrPocApp')
 
     $scope.search = function (row) {
       return (
-          angular.lowercase(row.procedureName).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-          angular.lowercase(row.dateOfProcedure).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-          angular.lowercase(row.timeOfProcedure).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.name).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.date).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.time).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
           angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
         );
     };
@@ -19,8 +19,8 @@ angular.module('openehrPocApp')
     Procedure.all($stateParams.patientId).then(function (result) {
       $scope.procedures = result.data;
       for (var i = 0; i < $scope.procedures.length; i++){
-        $scope.procedures[i].dateOfProcedure = moment($scope.procedures[i].dateOfProcedure).format('DD-MMM-YYYY');
-        $scope.procedures[i].timeOfProcedure = moment($scope.procedures[i].timeOfProcedure).format('HH:mm');
+        $scope.procedures[i].date = moment($scope.procedures[i].date).format('DD-MMM-YYYY');
+        $scope.procedures[i].time = moment($scope.procedures[i].time).format('HH:mm');    
       }
     });
 
@@ -28,8 +28,8 @@ angular.module('openehrPocApp')
       $location.path(path);
     };
 
-    $scope.selected = function (procedureIndex) {
-      return procedureIndex === $stateParams.procedureIndex;
+    $scope.selected = function (procedureId) {
+      return procedureId === $stateParams.procedureId;
     };
 
     $scope.create = function () {
@@ -54,17 +54,17 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (procedure) {
         procedure.dateSubmitted = new Date(procedure.dateSubmitted);
-        procedure.dateOfProcedure = new Date(procedure.dateOfProcedure);
-        procedure.timeOfProcedure = new Date(procedure.timeOfProcedure.valueOf() - procedure.timeOfProcedure.getTimezoneOffset() * 60000);
-        var toAdd = {
-                    compositionId : '',
-                    procedureName : procedure.procedureName,
-                    procedureNotes : procedure.procedureNotes,
+         procedure.date = new Date(procedure.date);  
+         procedure.time = new Date(procedure.time.valueOf() - procedure.time.getTimezoneOffset() * 60000);   
+         var toAdd = {
+                    sourceId : '',
+                    name : procedure.name,
+                    notes : procedure.notes,
                     author : procedure.author,
-                    terminology : 'local',
-                    code : 'at0047',
-                    dateOfProcedure : procedure.dateOfProcedure,
-                    timeOfProcedure : procedure.timeOfProcedure,
+                    currentStatusTerminology : 'local',
+                    currentStatusCode : 'at0047',
+                    date : procedure.date,
+                    time : procedure.time,
                     performer : procedure.performer,
                     dateSubmitted : procedure.dateSubmitted,
                     source : 'openehr'

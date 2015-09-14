@@ -11,7 +11,7 @@ angular.module('openehrPocApp')
       $scope.result = result.data;
       $scope.order = $scope.result[$stateParams.orderIndex];
     });
-    
+
     $scope.edit = function () {
       var modalInstance = $modal.open({
         templateUrl: 'views/orders/orders-modal.html',

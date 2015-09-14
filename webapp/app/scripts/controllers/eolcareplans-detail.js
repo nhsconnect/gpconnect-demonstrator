@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('EolcareplansDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Eolcareplan, DateFormatter) {
+  .controller('EolcareplansDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Eolcareplan) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -9,7 +9,7 @@ angular.module('openehrPocApp')
 
     Eolcareplan.all($stateParams.eolcareplanId).then(function (result) {
       $scope.result = result.data;
-      $scope.eolcareplan = $scope.result[$stateParams.eolcareplansIndex];  
+      $scope.eolcareplan = $scope.result[$stateParams.eolcareplansIndex];
     });
 
     $scope.edit = function () {
@@ -33,16 +33,16 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (eolcareplan) {
-          eolcareplan.careDocument.type = eolcareplan.careDocument.type.type;
-           var toUpdate = {
+        eolcareplan.careDocument.type = eolcareplan.careDocument.type.type;
+        var toUpdate = {
          compositionId : eolcareplan.compositionId,
          careDocument : eolcareplan.careDocument,
          cprDecision : eolcareplan.cprDecision,
          prioritiesOfCare : eolcareplan.prioritiesOfCare,
          source : 'openehr',
-         treatmentDecision : eolcareplan.treatmentDecision       
-        }; 
-          
+         treatmentDecision : eolcareplan.treatmentDecision
+        };
+
         Eolcareplan.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/eolcareplans');
         });

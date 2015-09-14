@@ -33,13 +33,13 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (cancerMdt) {
-          
-        cancerMdt.dateOfMeeting = new Date(cancerMdt.dateOfMeeting); 
-        cancerMdt.dateOfRequest = new Date(cancerMdt.dateOfRequest);  
-        if(cancerMdt.timeOfMeeting !== null){cancerMdt.timeOfMeeting = new Date(cancerMdt.timeOfMeeting);}  
+
+        cancerMdt.dateOfMeeting = new Date(cancerMdt.dateOfMeeting);
+        cancerMdt.dateOfRequest = new Date(cancerMdt.dateOfRequest);
+        if (cancerMdt.timeOfMeeting !== null){cancerMdt.timeOfMeeting = new Date(cancerMdt.timeOfMeeting);}
 
         CancerMdt.update($scope.patient.id, cancerMdt).then(function () {
-        $state.go('cancerMdt', { patientId: $scope.patient.id });
+          $state.go('cancerMdt', { patientId: $scope.patient.id });
         });
       });
     };

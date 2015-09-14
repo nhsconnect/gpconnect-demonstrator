@@ -7,31 +7,31 @@ angular.module('openehrPocApp')
     var email = $stateParams.email;
 
     // Set current user
-    PatientService.setCurrentUser(role,email);
+    PatientService.setCurrentUser(role, email);
 
     // Get current user
     $scope.currentUser = PatientService.getCurrentUser();
     console.log($scope.currentUser);
 
     // Temporary default user
-    if(!$scope.currentUser.role){
+    if (!$scope.currentUser.role){
       $scope.currentUser.role = 'idcr';
       $scope.currentUser.email = 'example@email.com';
     }
 
     // Direct different roles to different pages at login
-    switch($scope.currentUser.role) {
-        case 'idcr':
-          $state.go('patients-charts');
+    switch ($scope.currentUser.role) {
+      case 'idcr':
+        $state.go('patients-charts');
         break;
       case 'phr':
-        $state.go('patients-summary', { patientId: 10 });  //id is hard coded
+        $state.go('patients-summary', { patientId: 10 });  // id is hard coded
         break;
       default:
-        $state.go('patients-summary', { patientId: 10 });  //id is hard coded
+        $state.go('patients-summary', { patientId: 10 });  // id is hard coded
     }
 
-    $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+    $rootScope.$on('$stateChangeSuccess', function (event, toState) {
 
       var previousState = '';
       var pageHeader = '';
@@ -41,7 +41,7 @@ angular.module('openehrPocApp')
       var mainWidth = 0;
       var detailWidth = 0;
 
-      switch(toState.name) {
+      switch (toState.name) {
         case 'patients-list':
           previousState = 'patients-charts';
           pageHeader = 'Patient Lists';
@@ -77,7 +77,7 @@ angular.module('openehrPocApp')
           mainWidth = 6;
           detailWidth = 6;
           break;
-        }
+      }
 
       $scope.pageHeader = pageHeader;
       $scope.previousState = previousState;
@@ -87,19 +87,19 @@ angular.module('openehrPocApp')
       $scope.mainWidth = mainWidth;
       $scope.detailWidth = detailWidth;
 
-      $scope.goBack = function() {
+      $scope.goBack = function () {
         $state.go(previousState);
       };
 
-      if('user-context' in $state.current.views){
+      if ('user-context' in $state.current.views){
         $scope.userContextViewExists = true;
-      }else{
+      }else {
         $scope.userContextViewExists = false;
       }
 
-      if('actions' in $state.current.views){
+      if ('actions' in $state.current.views){
         $scope.actionsExists = true;
-      }else{
+      }else {
         $scope.actionsExists = false;
       }
 
@@ -108,19 +108,19 @@ angular.module('openehrPocApp')
       };
 
       // Set title depending on user
-      if($scope.currentUser.role === 'idcr'){
+      if ($scope.currentUser.role === 'idcr'){
         $scope.title = 'IDCR POC';
       }
-      if($scope.currentUser.role === 'phr'){
+      if ($scope.currentUser.role === 'phr'){
         $scope.title = 'PHR';
       }
 
       // Set home url depending on user
-      $scope.goHome = function (){
-        if($scope.currentUser.role === 'idcr'){
+      $scope.goHome = function () {
+        if ($scope.currentUser.role === 'idcr'){
           $state.go('patients-charts');
         }
-        if($scope.currentUser.role === 'phr'){
+        if ($scope.currentUser.role === 'phr'){
           $state.go('patients-summary', { patientId: 10 }); // Id is hardcoded
         }
       };

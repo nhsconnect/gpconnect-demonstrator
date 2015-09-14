@@ -8,15 +8,14 @@ angular.module('openehrPocApp')
     $scope.patient = patient;
     $scope.modal = modal;
     $scope.order.author =  'Dr John Smith';
-    
-    if(modal.title === 'Create Order'){
-        $scope.order.date = new Date().toISOString().slice(0, 10);
+
+    if (modal.title === 'Create Order'){
+      $scope.order.date = new Date().toISOString().slice(0, 10);
     }
-    
+
     Order.suggestion().then(function (suggestions) {
       $scope.suggestions = suggestions.data;
     });
-        
 
     $scope.ok = function (orderForm, order) {
       $scope.formSubmitted = true;

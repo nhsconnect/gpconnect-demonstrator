@@ -75,13 +75,13 @@ angular.module('openehrPocApp')
 
     var currentUser = {};
     currentUser.role = '';
-    currentUser.email='';
+    currentUser.email = '';
     currentUser.isAuthenticated = false;
 
     var setCurrentUser = function (role,email) {
       currentUser.role = role;
       currentUser.email = email;
-      if(role){
+      if (role){
         currentUser.isAuthenticated = true;
       }
     };

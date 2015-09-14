@@ -21,6 +21,8 @@
   "globals": {
     "angular": false,
     "_": false,
-    "jQuery": false
+    "$": false,
+    "jQuery": false,
+    "moment": false  
   }
 }

@@ -7,31 +7,30 @@ angular.module('openehrPocApp')
     $scope.procedure = procedure;
     $scope.patient = patient;
     $scope.modal = modal;
-    
-    if(modal.title === 'Create Procedure'){
-        $scope.procedure.dateSubmitted = new Date().toISOString().slice(0, 10);
+
+    if (modal.title === 'Create Procedure'){
+      $scope.procedure.dateSubmitted = new Date().toISOString().slice(0, 10);
     }
-    
-     $scope.procedure.code = '1234567';
-     $scope.procedure.terminology = 'ICD-10';
-    
-     $scope.procedure.timeOfProcedure = moment($scope.procedure.timeOfProcedure);   
-    
-     $scope.dateofProcedureDatepicker = function ($event, name) {
-      $event.preventDefault();
-     $event.stopPropagation();
-        
-      $scope[name] = true;
-    };   
-    
-     $scope.dateofSubmittedDatepicker = function ($event, name) {
+
+    $scope.procedure.code = '1234567';
+    $scope.procedure.terminology = 'ICD-10';
+
+    $scope.procedure.timeOfProcedure = moment($scope.procedure.timeOfProcedure);
+
+    $scope.dateofProcedureDatepicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();
-        
+
       $scope[name] = true;
     };
-    
-    
+
+    $scope.dateofSubmittedDatepicker = function ($event, name) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      $scope[name] = true;
+    };
+
     $scope.ok = function (procedureForm, procedure) {
       $scope.formSubmitted = true;
       if (procedureForm.$valid) {
@@ -42,11 +41,11 @@ angular.module('openehrPocApp')
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
-    
-     $scope.validate = function(form, name, index){
+
+    $scope.validate = function (form, name, index) {
       var errorToCheckFor = name + index;
 
-      for(var error in form.$error.required){
+      for (var error in form.$error.required){
         var errorName = form.$error.required[error].$name;
 
         if (errorName === errorToCheckFor){
@@ -54,25 +53,25 @@ angular.module('openehrPocApp')
         }
       }
     };
-    
-      $scope.validateDirty = function(form, name, index){
+
+    $scope.validateDirty = function (form, name, index) {
       var errorToCheckFor = name + index;
 
-      if(form[errorToCheckFor].$dirty && form[errorToCheckFor].$invalid){
+      if (form[errorToCheckFor].$dirty && form[errorToCheckFor].$invalid){
         return true;
       } else {
         return false;
       }
     };
 
-    $scope.validateClean = function(form, name, index){
+    $scope.validateClean = function (form, name, index) {
       var errorToCheckFor = name + index;
 
-      if(form[errorToCheckFor].$dirty && form[errorToCheckFor].$valid){
+      if (form[errorToCheckFor].$dirty && form[errorToCheckFor].$valid){
         return true;
       } else {
         return false;
       }
     };
-    
+
   });

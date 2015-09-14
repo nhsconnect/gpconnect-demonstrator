@@ -19,10 +19,10 @@ angular.module('openehrPocApp')
       return $http.put('/api/patients/' + (patientIdOveride || patientId) + '/laborders', composition);
     };
 
-     var suggestion = function (patientId) {
-        return $http.get('/api/terminology/local/list/order');
+    var suggestion = function () {
+      return $http.get('/api/terminology/local/list/order');
     };
-    
+
     return {
       all: all,
       update: update,

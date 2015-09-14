@@ -2,8 +2,8 @@ package net.nhs.esb.transfer.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -44,7 +44,7 @@ public class Site {
 
     @Column(name = "time_stamp")
     @JsonIgnore
-    private String timeStamp;
+    private String timestamp;
 
     @OneToOne
     @JoinColumn(name = "transfer_detail_id")
@@ -53,23 +53,37 @@ public class Site {
 
     @PrePersist
     public void setTimeStamp() {
+        formatTimestamp(Calendar.getInstance().getTime());
+    }
+
+    private void formatTimestamp(Date timestamp) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("Europe/London"));
-        timeStamp = sdf.format(GregorianCalendar.getInstance().getTime());
+        this.timestamp = sdf.format(timestamp);
     }
 
     @Transient
     @JsonProperty("timeStamp")
     public Date getJsonTimestamp() {
+
+        if (timestamp == null) {
+            return null;
+        }
+
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             sdf.setTimeZone(TimeZone.getTimeZone("Europe/London"));
-            return sdf.parse(timeStamp);
+            return sdf.parse(timestamp);
         } catch (ParseException ignore) {
             return null;
         }
     }
 
+    @Transient
+    @JsonProperty("timeStamp")
+    public void setJsonTimestamp(Date timestamp) {
+        formatTimestamp(timestamp);
+    }
 
     public String getSiteTo() {
         return siteTo;
@@ -112,10 +126,10 @@ public class Site {
     }
 
     public String getTimeStamp() {
-        return timeStamp;
+        return timestamp;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTimeStamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }

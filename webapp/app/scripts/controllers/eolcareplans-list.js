@@ -3,32 +3,31 @@
 angular.module('openehrPocApp')
   .controller('EolcareplansListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Eolcareplan) {
 
-    
     $scope.search = function (row) {
-        return (
-          angular.lowercase(row.careDocument.name).indexOf(angular.lowercase($scope.query) || '') !== -1 
-       || angular.lowercase(row.careDocument.type).indexOf(angular.lowercase($scope.query) || '') !== -1
-       || angular.lowercase(row.careDocument.date).indexOf(angular.lowercase($scope.query) || '') !== -1
-       || angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
+      return (
+          angular.lowercase(row.careDocument.name).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.careDocument.type).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.careDocument.date).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
         );
     };
-    
+
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
 
     Eolcareplan.all($stateParams.patientId).then(function (result) {
       $scope.result = result.data;
-        if(result.data.length > 0){
-      $scope.eolcareplans = $scope.result;
-              for(var i = 0; i < $scope.eolcareplans.length; i++){
-        $scope.eolcareplans[i].careDocument.date = moment($scope.eolcareplans[i].careDocument.date).format('DD-MMM-YYYY'); 
+      if (result.data.length > 0){
+        $scope.eolcareplans = $scope.result;
+        for (var i = 0; i < $scope.eolcareplans.length; i++){
+          $scope.eolcareplans[i].careDocument.date = moment($scope.eolcareplans[i].careDocument.date).format('DD-MMM-YYYY');
         }
-        }
+      }
     });
 
     $scope.go = function (index) {
-      $location.path('/patients/'+$scope.patient.id+'/eolcareplans/'+index);
+      $location.path('/patients/' + $scope.patient.id + '/eolcareplans/' + index);
     };
 
     $scope.selected = function (eolcareplansIndex) {
@@ -56,20 +55,20 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (eolcareplan) {
-          eolcareplan.careDocument.date = new Date(eolcareplan.careDocument.date);
-          eolcareplan.careDocument.type = eolcareplan.careDocument.type.type;
-          var toAdd = {
-         compositionId : '',
-         careDocument : eolcareplan.careDocument,
-         cprDecision : eolcareplan.cprDecision,
-         prioritiesOfCare : eolcareplan.prioritiesOfCare,
-         source : 'openehr',
-         treatmentDecision : eolcareplan.treatmentDecision       
-        }; 
+        eolcareplan.careDocument.date = new Date(eolcareplan.careDocument.date);
+        eolcareplan.careDocument.type = eolcareplan.careDocument.type.type;
+        var toAdd = {
+          compositionId : '',
+          careDocument : eolcareplan.careDocument,
+          cprDecision : eolcareplan.cprDecision,
+          prioritiesOfCare : eolcareplan.prioritiesOfCare,
+          source : 'openehr',
+          treatmentDecision : eolcareplan.treatmentDecision
+        };
 
         Eolcareplan.create($scope.patient.id, toAdd).then(function () {
           $state.go('eolcareplans', { patientId: $scope.patient.id });
         });
-    });
-    }
+      });
+    };
   });

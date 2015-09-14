@@ -8,11 +8,11 @@ import java.util.Map;
 import org.apache.commons.collections4.MapUtils;
 import org.rippleosi.common.service.AbstractQueryStrategy;
 import org.rippleosi.common.util.DateFormatter;
-import org.rippleosi.patient.procedures.model.ProcedureSummaries;
+import org.rippleosi.patient.procedures.model.ProcedureSummary;
 
 /**
  */
-public class ProcedureSummaryQueryStrategy extends AbstractQueryStrategy<ProcedureSummaries> {
+public class ProcedureSummaryQueryStrategy extends AbstractQueryStrategy<List<ProcedureSummary>> {
 
     ProcedureSummaryQueryStrategy(String patientId) {
         super(patientId);
@@ -30,12 +30,12 @@ public class ProcedureSummaryQueryStrategy extends AbstractQueryStrategy<Procedu
     }
 
     @Override
-    public ProcedureSummaries transform(List<Map<String, Object>> resultSet) {
+    public List<ProcedureSummary> transform(List<Map<String, Object>> resultSet) {
 
-        List<ProcedureSummaries.Procedure> procedureList = new ArrayList<>();
+        List<ProcedureSummary> summaries = new ArrayList<>();
 
         for (Map<String, Object> data : resultSet) {
-            ProcedureSummaries.Procedure procedure = new ProcedureSummaries.Procedure();
+            ProcedureSummary procedure = new ProcedureSummary();
 
             String uid = MapUtils.getString(data, "uid");
             String name = MapUtils.getString(data, "procedure_name");
@@ -47,11 +47,8 @@ public class ProcedureSummaryQueryStrategy extends AbstractQueryStrategy<Procedu
             procedure.setDate(date);
             procedure.setSource("openehr");
 
-            procedureList.add(procedure);
+            summaries.add(procedure);
         }
-
-        ProcedureSummaries summaries = new ProcedureSummaries();
-        summaries.setProcedures(procedureList);
 
         return summaries;
     }

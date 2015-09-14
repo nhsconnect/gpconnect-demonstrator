@@ -1,7 +1,9 @@
 package org.rippleosi.patient.procedures.rest;
 
+import java.util.List;
+
 import org.rippleosi.patient.procedures.model.ProcedureDetails;
-import org.rippleosi.patient.procedures.model.ProcedureSummaries;
+import org.rippleosi.patient.procedures.model.ProcedureSummary;
 import org.rippleosi.patient.procedures.search.ProcedureSearch;
 import org.rippleosi.patient.procedures.search.ProcedureSearchFactory;
 import org.rippleosi.patient.procedures.store.ProcedureStore;
@@ -27,8 +29,8 @@ public class ProceduresController {
     private ProcedureStoreFactory procedureStoreFactory;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ProcedureSummaries findAllProcedures(@PathVariable("patientId") String patientId,
-                                                @RequestParam(required = false) String source) {
+    public List<ProcedureSummary> findAllProcedures(@PathVariable("patientId") String patientId,
+                                                    @RequestParam(required = false) String source) {
 
         ProcedureSearch procedureSearch = procedureSearchFactory.select(source);
 

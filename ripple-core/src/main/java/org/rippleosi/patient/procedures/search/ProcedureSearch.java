@@ -1,14 +1,16 @@
 package org.rippleosi.patient.procedures.search;
 
+import java.util.List;
+
 import org.rippleosi.common.search.Repository;
 import org.rippleosi.patient.procedures.model.ProcedureDetails;
-import org.rippleosi.patient.procedures.model.ProcedureSummaries;
+import org.rippleosi.patient.procedures.model.ProcedureSummary;
 
 /**
  */
 public interface ProcedureSearch extends Repository {
 
-    ProcedureSummaries findAllProcedures(String patientId);
+    List<ProcedureSummary> findAllProcedures(String patientId);
 
     ProcedureDetails findProcedure(String patientId, String procedureId);
 

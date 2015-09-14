@@ -1,8 +1,10 @@
 package org.rippleosi.patient.procedures.search;
 
+import java.util.List;
+
 import org.rippleosi.common.service.AbstractOpenEhrService;
 import org.rippleosi.patient.procedures.model.ProcedureDetails;
-import org.rippleosi.patient.procedures.model.ProcedureSummaries;
+import org.rippleosi.patient.procedures.model.ProcedureSummary;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class OpenEHRProcedureSearch extends AbstractOpenEhrService implements ProcedureSearch {
 
     @Override
-    public ProcedureSummaries findAllProcedures(String patientId) {
+    public List<ProcedureSummary> findAllProcedures(String patientId) {
         ProcedureSummaryQueryStrategy query = new ProcedureSummaryQueryStrategy(patientId);
 
         return findData(query);

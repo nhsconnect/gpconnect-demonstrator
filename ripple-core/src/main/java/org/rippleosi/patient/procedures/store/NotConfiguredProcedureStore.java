@@ -2,11 +2,9 @@ package org.rippleosi.patient.procedures.store;
 
 import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.patient.procedures.model.ProcedureDetails;
-import org.springframework.stereotype.Service;
 
 /**
  */
-@Service
 public class NotConfiguredProcedureStore implements ProcedureStore {
 
     @Override

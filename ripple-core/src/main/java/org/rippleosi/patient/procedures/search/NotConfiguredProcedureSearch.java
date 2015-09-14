@@ -1,13 +1,13 @@
 package org.rippleosi.patient.procedures.search;
 
+import java.util.List;
+
 import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.patient.procedures.model.ProcedureDetails;
-import org.rippleosi.patient.procedures.model.ProcedureSummaries;
-import org.springframework.stereotype.Service;
+import org.rippleosi.patient.procedures.model.ProcedureSummary;
 
 /**
  */
-@Service
 public class NotConfiguredProcedureSearch implements ProcedureSearch {
 
     @Override
@@ -21,7 +21,7 @@ public class NotConfiguredProcedureSearch implements ProcedureSearch {
     }
 
     @Override
-    public ProcedureSummaries findAllProcedures(String patientId) {
+    public List<ProcedureSummary> findAllProcedures(String patientId) {
         throw notImplemented();
     }
 

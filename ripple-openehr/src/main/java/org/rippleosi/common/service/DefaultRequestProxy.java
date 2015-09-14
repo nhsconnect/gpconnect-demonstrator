@@ -9,6 +9,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.rippleosi.common.exception.InvalidDataException;
 import org.rippleosi.common.model.LoginResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.HttpEntity;
@@ -25,7 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 /**
  */
 @Service
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class DefaultRequestProxy implements RequestProxy {
 
     @Value("${openehr.address}")

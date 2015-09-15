@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  */
 @RestController
-@RequestMapping("/allergies/{patientId}/allergies")
+@RequestMapping("/patients/{patientId}/allergies")
 public class AllergiesController {
 
     @Autowired

@@ -35,7 +35,7 @@ public abstract class AbstractOpenEhrService implements Repository {
     @Autowired
     private RequestProxy requestProxy;
 
-    private final Map<String, String> idCache = Collections.synchronizedMap(LazyMap.lazyMap(new LRUMap<String, String>(), new EhrIdLookup()));
+    private final Map<String, String> idCache = Collections.synchronizedMap(LazyMap.lazyMap(new LRUMap<>(), new EhrIdLookup()));
 
     @Override
     public String getSource() {

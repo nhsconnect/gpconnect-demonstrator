@@ -37,7 +37,7 @@ public class OpenEHRProcedureStore extends AbstractOpenEhrService implements Pro
 
         Map<String,String> content = createFlatJsonContent(procedure);
 
-        ProcedureStoreStrategy updateStrategy = new ProcedureStoreStrategy(procedure.getSourceId(), proceduresTemplate, patientId, content);
+        ProcedureStoreStrategy updateStrategy = new ProcedureStoreStrategy(procedure.getSourceId(), patientId, proceduresTemplate, content);
 
         updateData(updateStrategy);
     }

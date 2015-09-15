@@ -26,7 +26,7 @@
     </properties>
 
     <modules>
-        <!-- <module>ripple-audit-example</module> -->
+        <module>ripple-audit-example</module>
         <module>ripple-core</module>
         <module>ripple-database-example</module>
         <module>ripple-demonstrator-api</module>

@@ -1,22 +1,22 @@
 'use strict';
 
-describe('Controller: MainCtrl', function () {
+describe('ContactsListCtrl', function () {
 
   // load the controller's module
   beforeEach(module('openehrPocApp'));
 
-  var MainCtrl,
+  var ContactsListCtrl,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    MainCtrl = $controller('MainCtrl', {
+    ContactsListCtrl = $controller('ContactsListCtrl', {
       $scope: scope
     });
   }));
 
   it('should attach a list of awesomeThings to the scope', function () {
-    expect(scope.awesomeThings.length).toBe(3);
+    expect(1).toBe(1);
   });
 });

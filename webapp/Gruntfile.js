@@ -26,6 +26,12 @@ module.exports = function (grunt) {
 
     // Project settings
     yeoman: appConfig,
+    
+    karma: {
+            unit: {
+                configFile: 'test/karma.conf.js'
+            }
+        },
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
@@ -377,6 +383,7 @@ module.exports = function (grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
@@ -403,7 +410,8 @@ module.exports = function (grunt) {
     'clean:server',
     'concurrent:test',
     'autoprefixer',
-    'connect:test'
+    'connect:test',
+    'karma'   
   ]);
 
   grunt.registerTask('build', [
@@ -421,7 +429,7 @@ module.exports = function (grunt) {
     'usemin',
     'htmlmin'
   ]);
-
+    
   grunt.registerTask('default', [
     'newer:jshint',
     'newer:jscs',

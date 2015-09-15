@@ -31,9 +31,9 @@ angular.module('openehrPocApp')
         }
       });
 
-      modalInstance.result.then(function (procedure) {         
-         procedure.dateSubmitted = new Date(procedure.dateSubmitted);
-         procedure.date = new Date(procedure.date);  
+      modalInstance.result.then(function (procedure) {
+        procedure.dateSubmitted = new Date(procedure.dateSubmitted);
+        procedure.date = new Date(procedure.date);
         var toUpdate = {
                     sourceId : procedure.sourceId,
                     name : procedure.name,
@@ -49,7 +49,7 @@ angular.module('openehrPocApp')
                     };
 
         Procedure.update($scope.patient.id, toUpdate).then(function () {
-        $state.go('procedures', { patientId: $scope.patient.id });
+          $state.go('procedures', { patientId: $scope.patient.id });
         });
       });
     };

@@ -8,8 +8,8 @@ angular.module('openehrPocApp')
     var all = function (patientId) {
       return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/medications');
     };
-    
-     var get = function (patientId, compositionId) {
+
+    var get = function (patientId, compositionId) {
       return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/medications/' + compositionId);
     };
 

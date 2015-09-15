@@ -10,12 +10,12 @@ import org.rippleosi.common.search.AbstractRepositoryFactoryTest;
 public class DefaultAllergySearchFactoryTest extends AbstractRepositoryFactoryTest<AllergySearchFactory,AllergySearch> {
 
     @Override
-    protected AllergySearchFactory createSearchFactory() {
+    protected AllergySearchFactory createRepositoryFactory() {
         return new DefaultAllergySearchFactory();
     }
 
     @Override
-    protected Class<AllergySearch> getSearchClass() {
+    protected Class<AllergySearch> getRepositoryClass() {
         return AllergySearch.class;
     }
 }

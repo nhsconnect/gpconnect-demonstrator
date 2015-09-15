@@ -54,6 +54,7 @@ public class NotConfiguredContactSearch implements ContactSearch {
         contactDetails.setSource("openehr");
         contactDetails.setName("Sheila Nisbett");
         contactDetails.setRelationship("Daughter");
+        contactDetails.setRelationshipType("Informal carer");
         contactDetails.setRelationshipCode("at0039");
         contactDetails.setRelationshipTerminology("local");
         contactDetails.setNextOfKin(true);

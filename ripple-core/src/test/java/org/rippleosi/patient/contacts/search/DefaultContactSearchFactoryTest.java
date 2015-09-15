@@ -10,12 +10,12 @@ import org.rippleosi.common.search.AbstractRepositoryFactoryTest;
 public class DefaultContactSearchFactoryTest extends AbstractRepositoryFactoryTest<ContactSearchFactory,ContactSearch> {
 
     @Override
-    protected ContactSearchFactory createSearchFactory() {
+    protected ContactSearchFactory createRepositoryFactory() {
         return new DefaultContactSearchFactory();
     }
 
     @Override
-    protected Class<ContactSearch> getSearchClass() {
+    protected Class<ContactSearch> getRepositoryClass() {
         return ContactSearch.class;
     }
 }

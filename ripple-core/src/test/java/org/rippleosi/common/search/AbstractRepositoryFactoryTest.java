@@ -15,23 +15,23 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 /**
  */
-public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<S>,S extends Repository> {
+public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<R>, R extends Repository> {
 
     private static final String SOURCE = "source ";
 
-    private F searchFactory;
+    private F factory;
 
     @Mock
     private ApplicationContext mockApplicationContext;
 
-    protected abstract F createSearchFactory();
-    protected abstract Class<S> getSearchClass();
+    protected abstract F createRepositoryFactory();
+    protected abstract Class<R> getRepositoryClass();
 
     @Before
     public void setUp() throws Exception {
-        searchFactory = createSearchFactory();
+        factory = createRepositoryFactory();
 
-        ReflectionTestUtils.setField(searchFactory, "applicationContext", mockApplicationContext);
+        ReflectionTestUtils.setField(factory, "applicationContext", mockApplicationContext);
     }
 
     @Test
@@ -39,8 +39,8 @@ public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<
 
         initContext(0);
 
-        S search = searchFactory.select(null);
-        assertEquals("not configured", search.getSource());
+        R repository = factory.select(null);
+        assertEquals("not configured", repository.getSource());
     }
 
     @Test
@@ -48,9 +48,9 @@ public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<
 
         initContext(1);
 
-        S nullSource = searchFactory.select(null);
-        S source1 = searchFactory.select(SOURCE + 1);
-        S source2 = searchFactory.select(SOURCE + 2);
+        R nullSource = factory.select(null);
+        R source1 = factory.select(SOURCE + 1);
+        R source2 = factory.select(SOURCE + 2);
 
         String expected = SOURCE + 1;
         assertEquals(expected, nullSource.getSource());
@@ -63,7 +63,7 @@ public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<
 
         initContext(4);
 
-        S source = searchFactory.select(SOURCE + 2);
+        R source = factory.select(SOURCE + 2);
 
         assertEquals(SOURCE + 2, source.getSource());
     }
@@ -73,32 +73,32 @@ public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<
 
         initContext(2);
 
-        S source = searchFactory.select("invalid");
+        R source = factory.select("invalid");
 
         assertEquals(SOURCE + 1, source.getSource());
     }
 
     private void initContext(int count) {
 
-        Class<S> cls = getSearchClass();
+        Class<R> cls = getRepositoryClass();
 
-        Map<String, S> patientSearchMap = configureSearch(cls, count);
-        when(mockApplicationContext.getBeansOfType(cls)).thenReturn(patientSearchMap);
+        Map<String, R> repositoryMap = configureRepository(cls, count);
+        when(mockApplicationContext.getBeansOfType(cls)).thenReturn(repositoryMap);
 
-        ReflectionTestUtils.invokeMethod(searchFactory, "postConstruct");
+        ReflectionTestUtils.invokeMethod(factory, "postConstruct");
     }
 
-    private Map<String,S> configureSearch(Class<S> cls, int count) {
+    private Map<String, R> configureRepository(Class<R> cls, int count) {
 
-        Map<String,S> patientSearchMap = new HashMap<>();
+        Map<String, R> repositoryMap = new HashMap<>();
         for (int i = 1; i <= count; i++) {
-            S patientSearch = Mockito.mock(cls);
-            when(patientSearch.getSource()).thenReturn(SOURCE + i);
-            when(patientSearch.getPriority()).thenReturn(i);
+            R repository = Mockito.mock(cls);
+            when(repository.getSource()).thenReturn(SOURCE + i);
+            when(repository.getPriority()).thenReturn(i);
 
-            patientSearchMap.put(SOURCE + i, patientSearch);
+            repositoryMap.put(SOURCE + i, repository);
         }
 
-        return patientSearchMap;
+        return repositoryMap;
     }
 }

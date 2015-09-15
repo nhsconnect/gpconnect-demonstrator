@@ -8,6 +8,7 @@ public class ContactDetails {
     private String source;
     private String name;
     private String relationship;
+    private String relationshipType;
     private String relationshipCode;
     private String relationshipTerminology;
     private String contactInformation;
@@ -44,6 +45,14 @@ public class ContactDetails {
 
     public void setRelationship(String relationship) {
         this.relationship = relationship;
+    }
+
+    public String getRelationshipType() {
+        return relationshipType;
+    }
+
+    public void setRelationshipType(String relationshipType) {
+        this.relationshipType = relationshipType;
     }
 
     public String getRelationshipCode() {

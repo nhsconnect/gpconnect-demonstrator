@@ -10,12 +10,12 @@ import org.rippleosi.common.search.AbstractRepositoryFactoryTest;
 public class DefaultProcedureSearchFactoryTest extends AbstractRepositoryFactoryTest<ProcedureSearchFactory,ProcedureSearch> {
 
     @Override
-    protected ProcedureSearchFactory createSearchFactory() {
+    protected ProcedureSearchFactory createRepositoryFactory() {
         return new DefaultProcedureSearchFactory();
     }
 
     @Override
-    protected Class<ProcedureSearch> getSearchClass() {
+    protected Class<ProcedureSearch> getRepositoryClass() {
         return ProcedureSearch.class;
     }
 }

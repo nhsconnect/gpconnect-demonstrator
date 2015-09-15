@@ -10,12 +10,12 @@ import org.rippleosi.common.search.AbstractRepositoryFactoryTest;
 public class DefaultPatientSearchFactoryTest extends AbstractRepositoryFactoryTest<PatientSearchFactory,PatientSearch> {
 
     @Override
-    protected PatientSearchFactory createSearchFactory() {
+    protected PatientSearchFactory createRepositoryFactory() {
         return new DefaultPatientSearchFactory();
     }
 
     @Override
-    protected Class<PatientSearch> getSearchClass() {
+    protected Class<PatientSearch> getRepositoryClass() {
         return PatientSearch.class;
     }
 }

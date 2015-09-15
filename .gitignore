@@ -8,3 +8,4 @@ target/
 .tern-project
 webapp/.idea/
 node_modules/
+activemq-data/

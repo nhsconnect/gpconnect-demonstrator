@@ -123,7 +123,7 @@ angular
       })
 
       .state('contacts-detail', {
-        url: '/patients/{patientId:int}/contacts/{contactIndex:int}',
+        url: '/patients/{patientId:int}/contacts/{contactIndex}',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },

@@ -11,8 +11,7 @@ angular.module('openehrPocApp')
     });
 
     Contact.all($stateParams.patientId).then(function (result) {
-      $scope.result = result.data;
-      $scope.contacts = $scope.result.contacts;
+      $scope.contacts = result.data;
     });
 
     $scope.go = function (path) {

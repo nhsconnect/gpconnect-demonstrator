@@ -26,7 +26,7 @@ module.exports = function (grunt) {
 
     // Project settings
     yeoman: appConfig,
-    
+
     karma: {
             unit: {
                 configFile: 'test/karma.conf.js'
@@ -411,7 +411,7 @@ module.exports = function (grunt) {
     'concurrent:test',
     'autoprefixer',
     'connect:test',
-    'karma'   
+    'karma'
   ]);
 
   grunt.registerTask('build', [
@@ -429,7 +429,7 @@ module.exports = function (grunt) {
     'usemin',
     'htmlmin'
   ]);
-    
+
   grunt.registerTask('default', [
     'newer:jshint',
     'newer:jscs',

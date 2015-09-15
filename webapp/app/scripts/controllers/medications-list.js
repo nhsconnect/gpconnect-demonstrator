@@ -11,8 +11,7 @@ angular.module('openehrPocApp')
     });
 
     Medication.all($stateParams.patientId).then(function (result) {
-      $scope.result = result.data;
-      $scope.medications = $scope.result.medications;
+      $scope.medications = result.data;
     });
 
     $scope.go = function (path) {

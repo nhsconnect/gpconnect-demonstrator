@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('openehrPocApp')
-  .controller('ContactsDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Contact) {
+  .controller('ContactsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, PatientService, Contact) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;

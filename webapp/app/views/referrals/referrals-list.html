@@ -16,7 +16,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="referral in referrals | filter:search" ng-click="go('/patients/{{patient.id}}/referrals/{{$index}}')" ng-class="{info: selected($index)}">
+    <tr ng-repeat="referral in referrals | filter:search" ng-click="go('/patients/{{patient.id}}/referrals/{{referral.sourceId}}')" ng-class="{info: selected(referral.sourceId)}">
       <td class="dateTime">{{ referral.dateOfReferral}}</td>
       <td>{{ referral.referralFrom }}</td>
       <td>{{ referral.referralTo }}</td>

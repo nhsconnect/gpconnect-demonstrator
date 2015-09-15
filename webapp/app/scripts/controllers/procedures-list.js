@@ -20,7 +20,7 @@ angular.module('openehrPocApp')
       $scope.procedures = result.data;
       for (var i = 0; i < $scope.procedures.length; i++){
         $scope.procedures[i].date = moment($scope.procedures[i].date).format('DD-MMM-YYYY');
-        $scope.procedures[i].time = moment($scope.procedures[i].time).format('HH:mm');    
+        $scope.procedures[i].time = moment($scope.procedures[i].time).format('HH:mm');
       }
     });
 
@@ -54,9 +54,9 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (procedure) {
         procedure.dateSubmitted = new Date(procedure.dateSubmitted);
-         procedure.date = new Date(procedure.date);  
-         procedure.time = new Date(procedure.time.valueOf() - procedure.time.getTimezoneOffset() * 60000);   
-         var toAdd = {
+        procedure.date = new Date(procedure.date);
+        procedure.time = new Date(procedure.time.valueOf() - procedure.time.getTimezoneOffset() * 60000);
+        var toAdd = {
                     sourceId : '',
                     name : procedure.name,
                     notes : procedure.notes,

@@ -15,7 +15,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="medication in medications | filter:query" ng-click="go('/patients/{{patient.id}}/medications/{{$index}}')" ng-class="{info: selected($index)}">
+    <tr ng-repeat="medication in medications | filter:query" ng-click="go('/patients/{{patient.id}}/medications/{{medication.sourceId}}')" ng-class="{info: selected(medication.sourceId)}">
       <td>{{ medication.name }}</td>
       <td>{{ medication.doseAmount }}</td>
       <td>{{ medication.source}}</td>

@@ -42,7 +42,7 @@ angular.module('openehrPocApp')
         }
       });
 
-      modalInstance.result.then(function (contact) {  
+      modalInstance.result.then(function (contact) {
         contact.sourceId = '';
 
         Contact.create($scope.patient.id, contact).then(function () {

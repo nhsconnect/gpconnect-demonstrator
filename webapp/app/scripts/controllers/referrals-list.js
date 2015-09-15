@@ -30,8 +30,8 @@ angular.module('openehrPocApp')
       $location.path(path);
     };
 
-    $scope.selected = function (referralIndex) {
-      return referralIndex === $stateParams.referralIndex;
+    $scope.selected = function (referralId) {
+      return referralId === $stateParams.referralId;
     };
 
     $scope.create = function () {

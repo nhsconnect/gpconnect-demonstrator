@@ -132,8 +132,12 @@ public abstract class AbstractOpenEhrService implements Repository {
 
         @Override
         public String transform(String nhsNumber) {
-            ResponseEntity<EhrResponse> idResponse = requestProxy.getWithSession(getEhrIdUri(nhsNumber), EhrResponse.class);
-            return idResponse.getBody().getEhrId();
+            ResponseEntity<EhrResponse> response = requestProxy.getWithSession(getEhrIdUri(nhsNumber), EhrResponse.class);
+            if (response.getStatusCode() != HttpStatus.OK) {
+                throw new DataNotFoundException("OpenEHR query returned with status code " + response.getStatusCode());
+            }
+
+            return response.getBody().getEhrId();
         }
 
         private String getEhrIdUri(String nhsNumber) {

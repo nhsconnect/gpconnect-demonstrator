@@ -32,10 +32,8 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (contact) {
-        $scope.result.contacts[$stateParams.contactIndex] = contact;
-
-        Contact.create($scope.patient.id, $scope.result).then(function () {
-          $location.path('/patients/' + $scope.patient.id + '/contacts');
+        Contact.update($scope.patient.id, contact).then(function () {
+          $state.go('contacts', { patientId: $scope.patient.id });
         });
       });
     };

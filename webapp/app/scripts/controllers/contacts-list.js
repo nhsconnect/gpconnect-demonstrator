@@ -42,10 +42,10 @@ angular.module('openehrPocApp')
         }
       });
 
-      modalInstance.result.then(function (contact) {
-        $scope.result.contacts.push(contact);
+      modalInstance.result.then(function (contact) {  
+        contact.sourceId = '';
 
-        Contact.create($scope.patient.id, $scope.result).then(function () {
+        Contact.create($scope.patient.id, contact).then(function () {
           $state.go('contacts', { patientId: $scope.patient.id });
         });
       });

@@ -8,6 +8,10 @@ angular.module('openehrPocApp')
     var all = function (patientId) {
       return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/referrals');
     };
+    
+    var get = function (patientId, compositionId) {
+      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/referrals/' + compositionId);
+    };
 
     var create = function (patientId, composition) {
       console.log('post referral comp:');
@@ -23,6 +27,7 @@ angular.module('openehrPocApp')
 
     return {
       all: all,
+      get: get,
       update: update,
       create: create
     };

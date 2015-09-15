@@ -7,9 +7,8 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    Referral.all($stateParams.referralId).then(function (result) {
-      $scope.result = result.data;
-      $scope.referral = $scope.result[$stateParams.referralIndex];
+    Referral.get($stateParams.patientId, $stateParams.referralId).then(function (result) {
+      $scope.referral = result.data;
     });
 
     $scope.edit = function () {
@@ -47,7 +46,7 @@ angular.module('openehrPocApp')
         };
 
         Referral.update($scope.patient.id, toUpdate).then(function () {
-          $location.path('/patients/' + $scope.patient.id + '/referrals');
+          $state.go('referrals', { patientId: $scope.patient.id });
         });
       });
     };

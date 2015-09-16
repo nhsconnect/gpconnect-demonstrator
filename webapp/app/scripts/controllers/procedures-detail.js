@@ -37,7 +37,7 @@ angular.module('openehrPocApp')
         var toUpdate = {
                     sourceId : procedure.sourceId,
                     name : procedure.name,
-                    procedureNotes : procedure.notes,
+                    notes : procedure.notes,
                     author : procedure.author,
                     currentStatusTerminology : 'local',
                     currentStatusCode : 'at0047',
@@ -49,7 +49,8 @@ angular.module('openehrPocApp')
                     };
 
         Procedure.update($scope.patient.id, toUpdate).then(function () {
-          $state.go('procedures', { patientId: $scope.patient.id });
+          //$location.path('/patients/' + $scope.patient.id + '/procedures/' + procedure.sourceId);
+          $state.go('procedures', { patientId: $scope.patient.id});
         });
       });
     };

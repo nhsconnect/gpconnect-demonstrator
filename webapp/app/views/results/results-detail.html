@@ -6,7 +6,7 @@
     <div class="form-group form-group-sm">
       <label class="control-label col-md-3">Test Name:</label>
       <div class="col-md-9">
-        <div class="form-control-static">{{ result.name }}</div>
+        <div class="form-control-static">{{ result.testName }}</div>
       </div>
     </div>
 
@@ -40,7 +40,7 @@
       <th><label></label></th>        
     </tr>
   </thead>
-  <tbody ng-repeat="detail in result.resultDetails">
+  <tbody ng-repeat="detail in result.testResults">
       <tr class="resultTableMainrow">
           <td>{{detail.result}}</td>
           <td>{{detail.value}}</td>
@@ -83,7 +83,7 @@
     <div class="form-group form-group-sm">
       <label class="control-label col-md-3">Date Reported:</label>
       <div class="col-md-9">
-        <div class="form-control-static">{{ result.dateReported | date: 'dd-MMM-y' }}</div>
+        <div class="form-control-static">{{ result.dateCreated | date: 'dd-MMM-y' }}</div>
       </div>
     </div>
     

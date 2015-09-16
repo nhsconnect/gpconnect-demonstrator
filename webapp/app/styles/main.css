@@ -1544,6 +1544,10 @@ line-height: 16px;
     border-top: 1px solid #bebcbd;
 }
 
+.resultTableMainrow td:first-child{
+    padding-left: 9px;
+}
+
 .section-detail .btn-info{
     margin-right: 20px;
     margin-top: 20px;

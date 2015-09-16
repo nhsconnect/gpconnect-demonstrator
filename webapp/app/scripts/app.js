@@ -284,7 +284,7 @@ angular
       })
 
       .state('results-detail', {
-        url: '/patients/{patientId:int}/results/{resultIndex:int}',
+        url: '/patients/{patientId:int}/results/{resultIndex}',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },

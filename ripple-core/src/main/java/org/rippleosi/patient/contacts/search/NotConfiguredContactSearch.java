@@ -1,6 +1,5 @@
 package org.rippleosi.patient.contacts.search;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.rippleosi.common.exception.ConfigurationException;
@@ -24,44 +23,17 @@ public class NotConfiguredContactSearch implements ContactSearch {
 
     @Override
     public List<ContactHeadline> findContactHeadlines(String patientId) {
-        // TODO: Replace with notImplemented()
-        ContactHeadline headline = new ContactHeadline();
-        headline.setSourceId("1");
-        headline.setSource("openehr");
-        headline.setName("Sheila Nisbett");
-
-        return Collections.singletonList(headline);
+        throw notImplemented();
     }
 
     @Override
     public List<ContactSummary> findAllContacts(String patientId) {
-
-        ContactSummary contactSummary = new ContactSummary();
-        contactSummary.setSourceId("1");
-        contactSummary.setSource("openehr");
-        contactSummary.setName("Sheila Nisbett");
-        contactSummary.setNextOfKin(true);
-        contactSummary.setRelationship("Daughter");
-
-        return Collections.singletonList(contactSummary);
+        throw notImplemented();
     }
 
     @Override
     public ContactDetails findContact(String patientId, String contactId) {
-
-        ContactDetails contactDetails = new ContactDetails();
-        contactDetails.setSourceId("1");
-        contactDetails.setSource("openehr");
-        contactDetails.setName("Sheila Nisbett");
-        contactDetails.setRelationship("Daughter");
-        contactDetails.setRelationshipType("Informal carer");
-        contactDetails.setRelationshipCode("at0039");
-        contactDetails.setRelationshipTerminology("local");
-        contactDetails.setNextOfKin(true);
-        contactDetails.setContactInformation("mobile 055345 224567");
-        contactDetails.setNotes("Has largely lost contact with her father");
-
-        return contactDetails;
+        throw notImplemented();
     }
 
     private ConfigurationException notImplemented() {

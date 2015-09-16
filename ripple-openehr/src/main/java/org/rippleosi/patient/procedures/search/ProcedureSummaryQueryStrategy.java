@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
-import org.rippleosi.common.service.AbstractQueryStrategy;
+import org.rippleosi.common.service.AbstractListQueryStrategy;
 import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.procedures.model.ProcedureSummary;
 
 /**
  */
-public class ProcedureSummaryQueryStrategy extends AbstractQueryStrategy<List<ProcedureSummary>> {
+public class ProcedureSummaryQueryStrategy extends AbstractListQueryStrategy<ProcedureSummary> {
 
     ProcedureSummaryQueryStrategy(String patientId) {
         super(patientId);

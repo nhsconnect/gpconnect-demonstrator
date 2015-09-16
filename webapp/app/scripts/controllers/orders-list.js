@@ -6,7 +6,7 @@ angular.module('openehrPocApp')
     $scope.search = function (row) {
       return (
           angular.lowercase(row.name).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-          angular.lowercase(row.date).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.orderDate).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
           angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
         );
     };
@@ -18,7 +18,7 @@ angular.module('openehrPocApp')
     Order.all($stateParams.patientId).then(function (result) {
       $scope.orders = result.data;
       for (var i = 0; i < $scope.orders.length; i++){
-        $scope.orders[i].date = moment($scope.orders[i].date).format('DD-MMM-YYYY');
+        $scope.orders[i].orderDate = moment($scope.orders[i].orderDate).format('DD-MMM-YYYY');
       }
     });
 
@@ -26,8 +26,8 @@ angular.module('openehrPocApp')
       $location.path(path);
     };
 
-    $scope.selected = function (orderIndex) {
-      return orderIndex === $stateParams.orderIndex;
+    $scope.selected = function (orderId) {
+      return orderId === $stateParams.orderId;
     };
 
     $scope.create = function () {

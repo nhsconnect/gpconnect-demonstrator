@@ -10,7 +10,7 @@ angular.module('openehrPocApp')
     $scope.order.author =  'Dr John Smith';
 
     if (modal.title === 'Create Order'){
-      $scope.order.date = new Date().toISOString().slice(0, 10);
+      $scope.order.orderDate = new Date().toISOString().slice(0, 10);
     }
 
     Order.suggestion().then(function (suggestions) {

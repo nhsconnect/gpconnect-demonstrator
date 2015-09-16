@@ -42,9 +42,9 @@
         </thead>
         <tbody>
             <tr dir-paginate="patient in patients | filter: search | filter: patientFilter | itemsPerPage: 10 | orderBy:[order] : reverse" ng-click="go(patient)">
-                <td>{{ patient.firstname }} {{ patient.lastname }}</td>
+                <td>{{ patient.name }}</td>
                 <td>{{ patient.address }}</td>
-                <td class="dateTime">{{ patient.born | date:'dd-MMM-yyyy' }}</td>
+                <td class="dateTime">{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</td>
                 <td>{{ patient.gender }}</td>
                 <td>{{ patient.nhsNo }} <span class="glyphicon glyphicon-chevron-right" style="float: right"></span> </td>
 

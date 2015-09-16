@@ -7,9 +7,8 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    Order.all($stateParams.resultIndex).then(function (result) {
-      $scope.result = result.data;
-      $scope.order = $scope.result[$stateParams.orderIndex];
+    Order.get($stateParams.patientId, $stateParams.orderId).then(function (result) {
+      $scope.order = result.data;
     });
 
     $scope.edit = function () {

@@ -8,7 +8,6 @@ import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.patient.medication.model.MedicationDetails;
 import org.rippleosi.patient.medication.model.MedicationHeadline;
 import org.rippleosi.patient.medication.model.MedicationSummary;
-import org.rippleosi.patient.medication.store.MedicationStore;
 
 /**
  */
@@ -66,6 +65,6 @@ public class NotConfiguredMedicationSearch implements MedicationSearch {
     }
 
     private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + MedicationStore.class.getSimpleName() + " instance");
+        return new ConfigurationException("Unable to find a configured " + MedicationSearch.class.getSimpleName() + " instance");
     }
 }

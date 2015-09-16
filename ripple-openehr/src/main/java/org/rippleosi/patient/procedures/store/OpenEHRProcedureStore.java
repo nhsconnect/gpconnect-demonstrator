@@ -5,6 +5,9 @@ import java.util.Map;
 
 import org.apache.camel.Consume;
 import org.rippleosi.common.service.AbstractOpenEhrService;
+import org.rippleosi.common.service.CreateStrategy;
+import org.rippleosi.common.service.DefaultStoreStrategy;
+import org.rippleosi.common.service.UpdateStrategy;
 import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.procedures.model.ProcedureDetails;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,9 +27,9 @@ public class OpenEHRProcedureStore extends AbstractOpenEhrService implements Pro
     @Consume(uri = "activemq:Consumer.OpenEHR.VirtualTopic.Ripple.Procedures.Create")
     public void create(String patientId, ProcedureDetails procedure) {
 
-        Map<String,String> content = createFlatJsonContent(procedure);
+        Map<String,Object> content = createFlatJsonContent(procedure);
 
-        ProcedureStoreStrategy createStrategy = new ProcedureStoreStrategy(patientId, proceduresTemplate, content);
+        CreateStrategy createStrategy = new DefaultStoreStrategy(patientId, proceduresTemplate, content);
 
         createData(createStrategy);
     }
@@ -35,16 +38,16 @@ public class OpenEHRProcedureStore extends AbstractOpenEhrService implements Pro
     @Consume(uri = "activemq:Consumer.OpenEHR.VirtualTopic.Ripple.Procedures.Update")
     public void update(String patientId, ProcedureDetails procedure) {
 
-        Map<String,String> content = createFlatJsonContent(procedure);
+        Map<String,Object> content = createFlatJsonContent(procedure);
 
-        ProcedureStoreStrategy updateStrategy = new ProcedureStoreStrategy(procedure.getSourceId(), patientId, proceduresTemplate, content);
+        UpdateStrategy updateStrategy = new DefaultStoreStrategy(procedure.getSourceId(), patientId, proceduresTemplate, content);
 
         updateData(updateStrategy);
     }
 
-    private Map<String,String> createFlatJsonContent(ProcedureDetails procedure) {
+    private Map<String,Object> createFlatJsonContent(ProcedureDetails procedure) {
 
-        Map<String, String> content = new HashMap<>();
+        Map<String, Object> content = new HashMap<>();
 
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");

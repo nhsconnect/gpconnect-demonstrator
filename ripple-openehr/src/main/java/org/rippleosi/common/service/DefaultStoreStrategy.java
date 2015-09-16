@@ -1,25 +1,22 @@
-package org.rippleosi.patient.procedures.store;
+package org.rippleosi.common.service;
 
 import java.util.Collections;
 import java.util.Map;
 
-import org.rippleosi.common.service.UpdateStrategy;
-import org.rippleosi.patient.procedures.model.ProcedureDetails;
-
 /**
  */
-public class ProcedureStoreStrategy implements UpdateStrategy<ProcedureDetails> {
+public class DefaultStoreStrategy implements UpdateStrategy {
 
     private final String patientId;
     private final String compositionId;
     private final String template;
-    private final Map<String,String> content;
+    private final Map<String,Object> content;
 
-    public ProcedureStoreStrategy(String patientId, String template, Map<String, String> content) {
+    public DefaultStoreStrategy(String patientId, String template, Map<String, Object> content) {
         this(null, patientId, template, content);
     }
 
-    public ProcedureStoreStrategy(String compositionId, String patientId, String template, Map<String, String> content) {
+    public DefaultStoreStrategy(String compositionId, String patientId, String template, Map<String, Object> content) {
         this.compositionId = compositionId;
         this.patientId = patientId;
         this.template = template;
@@ -42,7 +39,7 @@ public class ProcedureStoreStrategy implements UpdateStrategy<ProcedureDetails> 
     }
 
     @Override
-    public Map<String, String> getContent() {
+    public Map<String, Object> getContent() {
         return content;
     }
 }

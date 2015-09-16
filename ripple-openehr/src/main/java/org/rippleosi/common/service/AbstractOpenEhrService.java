@@ -61,12 +61,12 @@ public abstract class AbstractOpenEhrService implements Repository {
         return queryStrategy.transform(response.getBody().getResultSet());
     }
 
-    protected void createData(CreateStrategy<?> createStrategy) {
+    protected void createData(CreateStrategy createStrategy) {
 
         String patientId = createStrategy.getPatientId();
         String ehrId = findEhrIdByNHSNumber(patientId);
         String template = createStrategy.getTemplate();
-        Map<String,String> content = createStrategy.getContent();
+        Map<String, Object> content = createStrategy.getContent();
 
         String uri = getCreateURI(template, ehrId);
 
@@ -77,13 +77,13 @@ public abstract class AbstractOpenEhrService implements Repository {
         }
     }
 
-    protected void updateData(UpdateStrategy<?> updateStrategy) {
+    protected void updateData(UpdateStrategy updateStrategy) {
 
         String patientId = updateStrategy.getPatientId();
         String ehrId = findEhrIdByNHSNumber(patientId);
         String compositionId = updateStrategy.getCompositionId();
         String template = updateStrategy.getTemplate();
-        Map<String,String> content = updateStrategy.getContent();
+        Map<String, Object> content = updateStrategy.getContent();
 
         String uri = getUpdateURI(compositionId, template, ehrId);
 
@@ -108,22 +108,22 @@ public abstract class AbstractOpenEhrService implements Repository {
 
     private String getCreateURI(String template, String ehrId) {
         UriComponents components = UriComponentsBuilder
-            .fromHttpUrl(openEhrAddress + "/composition")
-            .queryParam("templateId", template)
-            .queryParam("ehrId", ehrId)
-            .queryParam("format", "FLAT")
-            .build();
+                                    .fromHttpUrl(openEhrAddress + "/composition")
+                                    .queryParam("templateId", template)
+                                    .queryParam("ehrId", ehrId)
+                                    .queryParam("format", "FLAT")
+                                    .build();
 
         return components.toUriString();
     }
 
     private String getUpdateURI(String compositionId, String template, String ehrId) {
         UriComponents components = UriComponentsBuilder
-            .fromHttpUrl(openEhrAddress + "/composition/" + compositionId)
-            .queryParam("templateId", template)
-            .queryParam("ehrId", ehrId)
-            .queryParam("format", "FLAT")
-            .build();
+                                    .fromHttpUrl(openEhrAddress + "/composition/" + compositionId)
+                                    .queryParam("templateId", template)
+                                    .queryParam("ehrId", ehrId)
+                                    .queryParam("format", "FLAT")
+                                    .build();
 
         return components.toUriString();
     }

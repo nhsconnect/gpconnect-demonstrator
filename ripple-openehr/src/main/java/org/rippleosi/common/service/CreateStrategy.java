@@ -4,11 +4,11 @@ import java.util.Map;
 
 /**
  */
-public interface CreateStrategy<T> {
+public interface CreateStrategy {
 
     String getPatientId();
 
     String getTemplate();
 
-    Map<String,String> getContent();
+    Map<String,Object> getContent();
 }

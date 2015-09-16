@@ -2,7 +2,7 @@ package org.rippleosi.common.service;
 
 /**
  */
-public interface UpdateStrategy<T> extends CreateStrategy<T> {
+public interface UpdateStrategy extends CreateStrategy {
 
     String getCompositionId();
 }

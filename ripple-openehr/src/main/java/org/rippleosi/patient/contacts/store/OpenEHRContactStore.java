@@ -51,6 +51,8 @@ public class OpenEHRContactStore extends AbstractOpenEhrService implements Conta
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
 
+        Boolean nextOfKin = contact.isNextOfKin() ? Boolean.TRUE : null;
+
         content.put(CONTACT_PREFIX + "/personal_details/person_name/unstructured_name", contact.getName());
         content.put(CONTACT_PREFIX + "/personal_details/telecom_details/unstuctured_telcoms", contact.getContactInformation());
         content.put(CONTACT_PREFIX + "/relationship", contact.getRelationship());
@@ -58,7 +60,7 @@ public class OpenEHRContactStore extends AbstractOpenEhrService implements Conta
         content.put(CONTACT_PREFIX + "/relationship_category|value", contact.getRelationshipType());
         content.put(CONTACT_PREFIX + "/relationship_category|code", contact.getRelationshipCode());
         content.put(CONTACT_PREFIX + "/relationship_category|terminology", contact.getRelationshipTerminology());
-        content.put(CONTACT_PREFIX + "/is_next_of_kin", contact.isNextOfKin());
+        content.put(CONTACT_PREFIX + "/is_next_of_kin", nextOfKin);
         content.put(CONTACT_PREFIX + "/note", contact.getNotes());
 
         return content;

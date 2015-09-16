@@ -17,7 +17,6 @@ angular.module('openehrPocApp')
       $scope.result = result.data;
       $scope.allergiesCount =  $scope.result.allergies.length;
       $scope.allergies = $scope.result.allergies.slice(0, 5);
-
     });
 
     Medication.all($stateParams.patientId).then(function (result) {

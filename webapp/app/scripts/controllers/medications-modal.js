@@ -6,6 +6,11 @@ angular.module('openehrPocApp')
     $scope.medication = medication;
     $scope.patient = patient;
     $scope.modal = modal;
+    
+     if (modal.title === 'Edit Medication'){
+      //$scope.procedure.time = new Date($scope.procedure.time);
+      $scope.medication.startDateTime = new Date($scope.medication.startDateTime).toISOString().slice(0, 10);
+    }
 
     $scope.ok = function (medicationForm, medication) {
       $scope.formSubmitted = true;
@@ -19,12 +24,9 @@ angular.module('openehrPocApp')
     };
 
     $scope.openDatepicker = function ($event, name) {
-      console.log($event);
-      console.log(name);
       $event.preventDefault();
       $event.stopPropagation();
       $scope[name] = true;
-      console.log($scope[name]);
     };
 
   });

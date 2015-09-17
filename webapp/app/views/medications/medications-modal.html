@@ -5,11 +5,11 @@
 <div class="modal-body">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h4 class="panel-title">{{ patient.fullname() }}</h4>
+      <h4 class="panel-title">{{ patient.name }}</h4>
     </div>
     <div class="panel-body">
       <div class="row">
-        <div class="col-sm-4 text-left"><label>Born:</label> <strong>{{ patient.born | date:'dd-MMM-yyyy' }}</strong></div>
+        <div class="col-sm-4 text-left"><label>Born:</label> <strong>{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</strong></div>
         <div class="col-sm-4 text-center"><label>Gender:</label> <strong>{{ patient.gender }}</strong></div>
         <div class="col-sm-4 text-right"><label>NHS No:</label> <strong>{{ patient.nhsNo }}</strong></div>
       </div>
@@ -77,7 +77,8 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'startDateTimeOpen')"><i class="fa fa-calendar"></i></button>
             </span>
-            <input type="text" class="form-control" id="startDateTime" name="startDateTime" ng-model="medication.startDateTime" ng-click="openDatepicker($event, 'dateOpen')" startDateTimepicker-popup is-open="$parent.dateOpen" required />
+              
+            <input type="text" class="form-control" id="startDateTime" name="startDateTime" ng-model="medication.startDateTime" ng-click="openDatepicker($event, 'startDateTime')" datepicker-popup="yyyy-MM-dd" is-open="startDateTime" required />
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && medicationForm.startDateTime.$error.required">You must enter a valid date.</span>
         </div>
@@ -87,7 +88,7 @@
         <label for="terminology" class="control-label col-md-4">Terminology</label>
         <div class="col-md-8">
           <div class="input-group">
-            <input type="text" class="form-control input-sm" id="terminology" name="terminology" ng-model="medication.terminology" required />
+            <input type="text" class="form-control input-sm" id="terminology" name="terminology" ng-model="medication.medicationTerminology" required />
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && medicationForm.terminology.$error.required">You must enter a value.</span>
         </div>

@@ -38,9 +38,16 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (diagnosis) {
-        $scope.result.problems[$stateParams.diagnosisIndex] = diagnosis;
-
-        Diagnosis.create($scope.patient.id, $scope.result).then(function () {
+        var toUpdate = {
+                    code: diagnosis.code,
+                    dateOfOnset: diagnosis.dateOfOnset,
+                    description: diagnosis.description,
+                    problem: diagnosis.problem,
+                    source: 'openehr',
+                    sourceId: diagnosis.sourceId,
+                    terminology: diagnosis.terminology
+                    };
+        Diagnosis.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/diagnoses');
         });
       });

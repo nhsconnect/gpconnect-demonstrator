@@ -47,7 +47,7 @@ public class MedicationDetailsQueryStrategy extends AbstractQueryStrategy<Medica
             throw new DataNotFoundException("No results found");
         }
 
-        Map<String, Object> data = resultSet.get(2);
+        Map<String, Object> data = resultSet.get(0);
 
         String startDateTimeAsString = MapUtils.getString(data, "start_date");
 

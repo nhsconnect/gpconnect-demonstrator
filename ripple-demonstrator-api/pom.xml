@@ -116,6 +116,10 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>ripple-demonstrator-api</finalName>
+    </build>
+
     <profiles>
         <profile>
             <id>webapp:run</id>

@@ -14,14 +14,10 @@ angular.module('openehrPocApp')
     };
 
     var create = function (patientId, composition) {
-      console.log('post medication comp:');
-      console.log(composition);
       return $http.post('/api/patients/' + (patientIdOveride || patientId) + '/medications', composition);
     };
 
     var update = function (patientId, composition) {
-      console.log('put medication comp:');
-      console.log(composition);
       return $http.put('/api/patients/' + (patientIdOveride || patientId) + '/medications', composition);
     };
 

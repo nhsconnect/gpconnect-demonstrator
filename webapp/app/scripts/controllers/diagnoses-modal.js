@@ -6,6 +6,10 @@ angular.module('openehrPocApp')
     $scope.diagnosis = diagnosis;
     $scope.patient = patient;
     $scope.modal = modal;
+    
+    if (modal.title === 'Edit Problem / Diagnosis'){
+      $scope.diagnosis.dateOfOnset = new Date($scope.diagnosis.dateOfOnset).toISOString().slice(0, 10);
+    }
 
     $scope.ok = function (diagnosisForm, diagnosis) {
       $scope.formSubmitted = true;

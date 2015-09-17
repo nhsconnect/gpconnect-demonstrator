@@ -32,9 +32,22 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (medication) {
-        $scope.result.medications[$stateParams.medicationIndex] = medication;
+        medication.startDate = new Date(medication.startDate);
+        var toUpdate = {
+                    sourceId : medication.sourceId,
+                    doseAmount : medication.doseAmount,
+                    doseDirections : medication.doseDirections,
+                    doseTiming : medication.doseTiming,
+                    medicationCode : medication.medicationCode,
+                    medicationTerminology : medication.medicationTerminology,
+                    name : medication.name,
+                    route : medication.route,
+                    startDate : medication.startDate,
+                    startTime : medication.startTime,
+                    source : 'openehr'
+                    };
 
-        Medication.create($scope.patient.id, $scope.result).then(function () {
+        Medication.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/medications');
         });
       });

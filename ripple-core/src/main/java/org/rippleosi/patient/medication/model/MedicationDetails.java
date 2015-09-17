@@ -13,7 +13,8 @@ public class MedicationDetails {
     private String doseDirections;
     private String doseTiming;
     private String route;
-    private Date startDateTime;
+    private Date startDate;
+    private Date startTime;
     private String medicationCode;
     private String medicationTerminology;
 
@@ -73,12 +74,20 @@ public class MedicationDetails {
         this.route = route;
     }
 
-    public Date getStartDateTime() {
-        return startDateTime;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStartDateTime(Date startDateTime) {
-        this.startDateTime = startDateTime;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
     public String getMedicationCode() {

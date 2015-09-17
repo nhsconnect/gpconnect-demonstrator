@@ -55,7 +55,7 @@ public class OpenEHRMedicationStore extends AbstractOpenEhrService implements Me
 
         String medicationCode = StringUtils.isEmpty(medication.getMedicationCode()) ? "DefaultCode" : medication.getMedicationCode();
 
-        String startDateTime = DateFormatter.toString(medication.getStartDateTime());
+        String startDateTime = DateFormatter.combineDateTime(medication.getStartDate(), medication.getStartTime());
 
         content.put(MEDICATION_PREFIX + "/medication_item/medication_name|value", medication.getName());
         content.put(MEDICATION_PREFIX + "/medication_item/medication_name|code", medicationCode);

@@ -51,7 +51,8 @@ public class MedicationDetailsQueryStrategy extends AbstractQueryStrategy<Medica
 
         String startDateTimeAsString = MapUtils.getString(data, "start_date");
 
-        Date startDateTime = DateFormatter.toDate(startDateTimeAsString);
+        Date startDate = DateFormatter.toDateOnly(startDateTimeAsString);
+        Date startTime = DateFormatter.toTimeOnly(startDateTimeAsString);
 
         MedicationDetails medication = new MedicationDetails();
         medication.setSource("openehr");
@@ -63,7 +64,8 @@ public class MedicationDetailsQueryStrategy extends AbstractQueryStrategy<Medica
         medication.setRoute(MapUtils.getString(data, "route"));
         medication.setMedicationCode(MapUtils.getString(data, "medication_code"));
         medication.setMedicationTerminology(MapUtils.getString(data, "medication_terminology"));
-        medication.setStartDateTime(startDateTime);
+        medication.setStartDate(startDate);
+        medication.setStartTime(startTime);
 
         return medication;
     }

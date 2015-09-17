@@ -1,7 +1,5 @@
 package org.rippleosi.patient.medication.search;
 
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import org.rippleosi.common.exception.ConfigurationException;
@@ -25,43 +23,17 @@ public class NotConfiguredMedicationSearch implements MedicationSearch {
 
     @Override
     public List<MedicationHeadline> findMedicationHeadlines(String patientId) {
-        // TODO Replace this code with notImplemented()
-
-        MedicationHeadline headline = new MedicationHeadline();
-        headline.setSourceId("1");
-        headline.setSource("openehr");
-        headline.setName("Atorvastatin");
-
-        return Collections.singletonList(headline);
+        throw notImplemented();
     }
 
     @Override
     public List<MedicationSummary> findAllMedication(String patientId) {
-
-        MedicationSummary summary = new MedicationSummary();
-        summary.setSourceId("1");
-        summary.setSource("openehr");
-        summary.setName("Atorvastatin");
-        summary.setDoseAmount("400mg");
-
-        return Collections.singletonList(summary);
+        throw notImplemented();
     }
 
     @Override
     public MedicationDetails findMedication(String patientId, String medicationId) {
-
-        MedicationDetails medicationDetails = new MedicationDetails();
-        medicationDetails.setSourceId("1");
-        medicationDetails.setSource("openehr");
-        medicationDetails.setName("Atorvastatin");
-        medicationDetails.setDoseAmount("400mg");
-        medicationDetails.setDoseDirections("2 puffs as required for wheeze");
-        medicationDetails.setDoseTiming("Morning before breakfast");
-        medicationDetails.setRoute("inhalation");
-        medicationDetails.setStartDateTime(new Date());
-        medicationDetails.setTerminology("SNOMED-CT");
-
-        return medicationDetails;
+        throw notImplemented();
     }
 
     private ConfigurationException notImplemented() {

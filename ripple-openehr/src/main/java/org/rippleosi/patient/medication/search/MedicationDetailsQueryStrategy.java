@@ -26,8 +26,9 @@ public class MedicationDetailsQueryStrategy extends AbstractQueryStrategy<Medica
         return "select a/uid/value as uid, " +
                "a/composer/name as author, " +
                "a_a/items/items/data[at0001]/items/items[at0001]/value/value as name, " +
+               "a_a/items/items/data[at0001]/items/items[at0001]/value/defining_code/code_string as medication_code, " +
+               "a_a/items/items/data[at0001]/items/items[at0001]/value/defining_code/terminology_id/value as medication_terminology, " +
                "a_a/items/items/data[at0001]/items/items[at0002]/value/defining_code/code_string as route, " +
-               "a_a/items/items/data[at0001]/items/items[at0002]/value/defining_code/terminology_id/value as route_terminology, " +
                "a_a/items/items/data[at0001]/items/items[at0003]/value/value as dose_directions, " +
                "a_a/items/items/data[at0001]/items/items[at0020]/value/value as dose_amount, " +
                "a_a/items/items/data[at0001]/items/items[at0021]/value/value as dose_timing, " +
@@ -46,7 +47,7 @@ public class MedicationDetailsQueryStrategy extends AbstractQueryStrategy<Medica
             throw new DataNotFoundException("No results found");
         }
 
-        Map<String, Object> data = resultSet.get(0);
+        Map<String, Object> data = resultSet.get(2);
 
         String startDateTimeAsString = MapUtils.getString(data, "start_date");
 
@@ -60,7 +61,8 @@ public class MedicationDetailsQueryStrategy extends AbstractQueryStrategy<Medica
         medication.setDoseTiming(MapUtils.getString(data, "dose_timing"));
         medication.setDoseDirections(MapUtils.getString(data, "dose_directions"));
         medication.setRoute(MapUtils.getString(data, "route"));
-        medication.setTerminology(MapUtils.getString(data, "route_terminology"));
+        medication.setMedicationCode(MapUtils.getString(data, "medication_code"));
+        medication.setMedicationTerminology(MapUtils.getString(data, "medication_terminology"));
         medication.setStartDateTime(startDateTime);
 
         return medication;

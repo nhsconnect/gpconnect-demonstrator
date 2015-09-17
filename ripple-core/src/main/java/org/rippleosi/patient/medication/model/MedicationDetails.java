@@ -14,7 +14,8 @@ public class MedicationDetails {
     private String doseTiming;
     private String route;
     private Date startDateTime;
-    private String terminology;
+    private String medicationCode;
+    private String medicationTerminology;
 
     public String getSourceId() {
         return sourceId;
@@ -80,11 +81,19 @@ public class MedicationDetails {
         this.startDateTime = startDateTime;
     }
 
-    public String getTerminology() {
-        return terminology;
+    public String getMedicationCode() {
+        return medicationCode;
     }
 
-    public void setTerminology(String terminology) {
-        this.terminology = terminology;
+    public void setMedicationCode(String medicationCode) {
+        this.medicationCode = medicationCode;
+    }
+
+    public String getMedicationTerminology() {
+        return medicationTerminology;
+    }
+
+    public void setMedicationTerminology(String medicationTerminology) {
+        this.medicationTerminology = medicationTerminology;
     }
 }

@@ -18,15 +18,37 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'bower_components/**/*.js',
-      'bower_components/**/**/*.js',
+      'bower_components/angular/angular.js',
+      'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/angular-resource/angular-resource.js',
+      'bower_components/angular-touch/angular-touch.js',
+      'bower_components/angular-animate/angular-animate.js',
+      'bower_components/angular-animate/angular-animate.js',
+      'bower_components/angular-ui-router/src/*.js',
+      'bower_components/angular-ui-bootstrap-bower/*.js',
+      'bower_components/angular-loading-bar/src/*',
+      'bower_components/angular-growl-notifications/dist/angular-growl-notifications.js',
+      'bower_components/angular-utils-pagination/dirPagination.js',
+      'bower_components/angular-utils-pagination/dirPagination.js',
+      'bower_components/jquery/dist/jquery.js',
+      'bower_components/jquery-timepicker-jt/jquery.timepicker.js',
+      'bower_components/angular-jquery-timepicker/src/timepickerdirective.js',
+      'bower_components/angular-ui-calendar/src/calendar.js',
+      //'bower_components/jquery/src/jquery.js',
+      //'bower_components/**/*.js',
+      //'bower_components/**/**/*.js',
       'app/scripts/**/*.js',
       'app/scripts/app.js',
       'test/spec/**/*.js'
     ],
 
     // list of files / patterns to exclude
-    exclude: [],
+    exclude: [
+       'bower_components/**/gruntFile.js',
+       'bower_components/**/Gruntfile.js',
+       'bower_components/jquery/src/**/*',
+       'bower_components/angular-touch/index.js'
+    ],
 
     // web server port
     port: 8080,
@@ -46,6 +68,7 @@ module.exports = function(config) {
     // Which plugins to enable
     plugins: [
       'karma-phantomjs-launcher',
+      'karma-chrome-launcher',
       'karma-jasmine'
     ],
 

@@ -4,18 +4,18 @@ import java.util.Date;
 
 public class TransferOfCareSummary {
 
-	private Long sourceId;
+	private String sourceId;
     private String siteTo;
     private String siteFrom;
     private Date dateOfTransfer;
     private String source;
 
-    public Long getsourceId() {
+    public String getSourceId() {
         return sourceId;
     }
 
-    public void setsourceId(Long id) {
-        this.sourceId = id;
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
     public String getSiteTo() {

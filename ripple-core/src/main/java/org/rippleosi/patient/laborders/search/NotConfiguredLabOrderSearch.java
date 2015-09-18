@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.patient.laborders.model.LabOrderDetails;
 import org.rippleosi.patient.laborders.model.LabOrderSummary;
 
@@ -33,6 +32,8 @@ public class NotConfiguredLabOrderSearch implements LabOrderSearch {
         labOrder.setOrderDate(new Date());
 
         return Collections.singletonList(labOrder);
+
+//        throw ConfigurationException.unimplementedTransaction(LabOrderSearch.class);
     }
 
     @Override
@@ -45,9 +46,7 @@ public class NotConfiguredLabOrderSearch implements LabOrderSearch {
         labOrder.setAuthor("Dr John Smith");
 
         return labOrder;
-    }
 
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + LabOrderSearch.class.getSimpleName() + " instance");
+//        throw ConfigurationException.unimplementedTransaction(LabOrderSearch.class);
     }
 }

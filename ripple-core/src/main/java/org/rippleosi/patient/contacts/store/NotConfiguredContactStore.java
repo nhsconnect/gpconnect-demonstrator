@@ -21,15 +21,11 @@ public class NotConfiguredContactStore implements ContactStore {
 
     @Override
     public void create(@Header("patientId") String patientId, @Body ContactDetails contact) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(ContactStore.class);
     }
 
     @Override
     public void update(@Header("patientId") String patientId, @Body ContactDetails contact) {
-        throw notImplemented();
-    }
-
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + ContactStore.class.getSimpleName() + " instance");
+        throw ConfigurationException.unimplementedTransaction(ContactStore.class);
     }
 }

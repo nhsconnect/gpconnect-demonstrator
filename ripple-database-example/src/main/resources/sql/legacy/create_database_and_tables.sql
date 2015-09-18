@@ -3,7 +3,6 @@ CREATE DATABASE IF NOT EXISTS poc_legacy DEFAULT CHARACTER SET utf8;
 USE poc_legacy;
 
 /* Create a new user */
-CREATE USER 'answer'                    IDENTIFIED BY 'answer99q';
 GRANT ALL ON poc_legacy.* TO 'answer'   IDENTIFIED BY 'answer99q';
 
 /* Destroy all existing data */

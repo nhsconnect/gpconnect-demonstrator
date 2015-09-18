@@ -19,15 +19,11 @@ public class NotConfiguredProcedureStore implements ProcedureStore {
 
     @Override
     public void create(String patientId, ProcedureDetails procedure) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(ProcedureStore.class);
     }
 
     @Override
     public void update(String patientId, ProcedureDetails procedure) {
-        throw notImplemented();
-    }
-
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + ProcedureStore.class.getSimpleName() + " instance");
+        throw ConfigurationException.unimplementedTransaction(ProcedureStore.class);
     }
 }

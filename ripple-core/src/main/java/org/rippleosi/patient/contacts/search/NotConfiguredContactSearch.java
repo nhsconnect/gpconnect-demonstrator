@@ -23,20 +23,16 @@ public class NotConfiguredContactSearch implements ContactSearch {
 
     @Override
     public List<ContactHeadline> findContactHeadlines(String patientId) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(ContactSearch.class);
     }
 
     @Override
     public List<ContactSummary> findAllContacts(String patientId) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(ContactSearch.class);
     }
 
     @Override
     public ContactDetails findContact(String patientId, String contactId) {
-        throw notImplemented();
-    }
-
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + ContactSearch.class.getSimpleName() + " instance");
+        throw ConfigurationException.unimplementedTransaction(ContactSearch.class);
     }
 }

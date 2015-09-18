@@ -6,7 +6,6 @@ import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.patient.problems.model.ProblemDetails;
 import org.rippleosi.patient.problems.model.ProblemHeadline;
 import org.rippleosi.patient.problems.model.ProblemSummary;
-import org.rippleosi.patient.problems.store.ProblemStore;
 
 /**
  */
@@ -24,20 +23,17 @@ public class NotConfiguredProblemSearch implements ProblemSearch {
 
     @Override
     public List<ProblemHeadline> findProblemHeadlines(String patientId) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(ProblemSearch.class);
     }
 
     @Override
     public List<ProblemSummary> findAllProblems(String patientId) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(ProblemSearch.class);
     }
 
     @Override
     public ProblemDetails findProblem(String patientId, String problemId) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(ProblemSearch.class);
     }
 
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + ProblemStore.class.getSimpleName() + " instance");
-    }
 }

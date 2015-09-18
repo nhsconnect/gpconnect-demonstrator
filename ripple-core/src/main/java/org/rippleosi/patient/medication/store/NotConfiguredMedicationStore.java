@@ -21,15 +21,11 @@ public class NotConfiguredMedicationStore implements MedicationStore {
 
     @Override
     public void create(@Header("patientId") String patientId, @Body MedicationDetails medication) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(MedicationStore.class);
     }
 
     @Override
     public void update(@Header("patientId") String patientId, @Body MedicationDetails medication) {
-        throw notImplemented();
-    }
-
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + MedicationStore.class.getSimpleName() + " instance");
+        throw ConfigurationException.unimplementedTransaction(MedicationStore.class);
     }
 }

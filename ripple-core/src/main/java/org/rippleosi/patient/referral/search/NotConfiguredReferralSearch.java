@@ -33,6 +33,8 @@ public class NotConfiguredReferralSearch implements ReferralSearch {
         referral.setReferralTo("Dr Joseph Lay");
 
         return Collections.singletonList(referral);
+
+//        throw ConfigurationException.unimplementedTransaction(ReferralSearch.class);
     }
 
     @Override
@@ -50,9 +52,7 @@ public class NotConfiguredReferralSearch implements ReferralSearch {
         referral.setDateCreated(new Date());
 
         return referral;
-    }
 
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + ReferralSearch.class.getSimpleName() + " instance");
+//        throw ConfigurationException.unimplementedTransaction(ReferralSearch.class);
     }
 }

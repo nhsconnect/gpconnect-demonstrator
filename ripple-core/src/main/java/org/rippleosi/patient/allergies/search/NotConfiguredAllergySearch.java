@@ -23,20 +23,16 @@ public class NotConfiguredAllergySearch implements AllergySearch {
 
     @Override
     public List<AllergyHeadline> findAllergyHeadlines(String patientId) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(AllergySearch.class);
     }
 
     @Override
     public List<AllergySummary> findAllAllergies(String patientId) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(AllergySearch.class);
     }
 
     @Override
     public AllergyDetails findAllergy(String patientId, String allergyId) {
-        throw notImplemented();
-    }
-
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + AllergySearch.class.getSimpleName() + " instance");
+        throw ConfigurationException.unimplementedTransaction(AllergySearch.class);
     }
 }

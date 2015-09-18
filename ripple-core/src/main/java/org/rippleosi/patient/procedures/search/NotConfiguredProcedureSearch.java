@@ -22,15 +22,12 @@ public class NotConfiguredProcedureSearch implements ProcedureSearch {
 
     @Override
     public List<ProcedureSummary> findAllProcedures(String patientId) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(ProcedureSearch.class);
     }
 
     @Override
     public ProcedureDetails findProcedure(String patientId, String procedureId) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(ProcedureSearch.class);
     }
 
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + ProcedureSearch.class.getSimpleName() + " instance");
-    }
 }

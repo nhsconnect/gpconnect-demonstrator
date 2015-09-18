@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.patient.labresults.model.LabResultDetails;
 import org.rippleosi.patient.labresults.model.LabResultSummary;
 
@@ -34,6 +33,8 @@ public class NotConfiguredLabResultSearch implements LabResultSearch {
         labResult.setTestName("Urea, electrolytes and creatinine measurement");
 
         return Collections.singletonList(labResult);
+
+//        throw ConfigurationException.unimplementedTransaction(LabResultSearch.class);
     }
 
     @Override
@@ -57,9 +58,7 @@ public class NotConfiguredLabResultSearch implements LabResultSearch {
         labResult.setTestResults(Collections.singletonList(testResult));
 
         return labResult;
-    }
 
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + LabResultSearch.class.getSimpleName() + " instance");
+//        throw ConfigurationException.unimplementedTransaction(LabResultSearch.class);
     }
 }

@@ -21,15 +21,11 @@ public class NotConfiguredAllergyStore implements AllergyStore {
 
     @Override
     public void create(@Header("patientId") String patientId, @Body AllergyDetails allergy) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(AllergyStore.class);
     }
 
     @Override
     public void update(@Header("patientId") String patientId, @Body AllergyDetails allergy) {
-        throw notImplemented();
-    }
-
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + AllergyStore.class.getSimpleName() + " instance");
+        throw ConfigurationException.unimplementedTransaction(AllergyStore.class);
     }
 }

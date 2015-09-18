@@ -21,15 +21,11 @@ public class NotConfiguredProblemStore implements ProblemStore {
 
     @Override
     public void create(@Header("patientId") String patientId, @Body ProblemDetails problem) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(ProblemStore.class);
     }
 
     @Override
     public void update(@Header("patientId") String patientId, @Body ProblemDetails problem) {
-        throw notImplemented();
-    }
-
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + ProblemStore.class.getSimpleName() + " instance");
+        throw ConfigurationException.unimplementedTransaction(ProblemStore.class);
     }
 }

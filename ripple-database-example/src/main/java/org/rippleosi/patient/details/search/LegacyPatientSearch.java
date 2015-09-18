@@ -10,10 +10,14 @@ import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.patient.summary.search.PatientSearch;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LegacyPatientSearch implements PatientSearch {
+
+    @Value("${legacy.datasource.priority:900}")
+    private int priority;
 
     @Autowired
     private PatientRepository patientRepository;
@@ -43,6 +47,6 @@ public class LegacyPatientSearch implements PatientSearch {
 
     @Override
     public int getPriority() {
-        return 900;
+        return priority;
     }
 }

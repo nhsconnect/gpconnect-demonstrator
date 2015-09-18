@@ -19,15 +19,12 @@ public class NotConfiguredReferralStore implements ReferralStore {
 
     @Override
     public void create(String patientId, ReferralDetails referral) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(ReferralStore.class);
     }
 
     @Override
     public void update(String patientId, ReferralDetails referral) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(ReferralStore.class);
     }
 
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + ReferralStore.class.getSimpleName() + " instance");
-    }
 }

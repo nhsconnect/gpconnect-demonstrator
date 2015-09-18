@@ -23,20 +23,16 @@ public class NotConfiguredMedicationSearch implements MedicationSearch {
 
     @Override
     public List<MedicationHeadline> findMedicationHeadlines(String patientId) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(MedicationSearch.class);
     }
 
     @Override
     public List<MedicationSummary> findAllMedication(String patientId) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(MedicationSearch.class);
     }
 
     @Override
     public MedicationDetails findMedication(String patientId, String medicationId) {
-        throw notImplemented();
-    }
-
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + MedicationSearch.class.getSimpleName() + " instance");
+        throw ConfigurationException.unimplementedTransaction(MedicationSearch.class);
     }
 }

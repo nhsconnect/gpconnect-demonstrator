@@ -51,14 +51,17 @@ public class PatientEntity {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "born")
-    private Date born;
+    @Column(name = "date_of_birth")
+    private Date dateOfBirth;
 
     @Column(name = "gender")
     private String gender;
 
     @Column(name = "nhs_number")
     private String nhsNumber;
+
+    @Column(name = "pas_number")
+    private String pasNumber;
 
     @ManyToOne
     private DepartmentEntity department;
@@ -154,12 +157,12 @@ public class PatientEntity {
         this.phone = phone;
     }
 
-    public Date getBorn() {
-        return born;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setBorn(Date born) {
-        this.born = born;
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getGender() {
@@ -176,6 +179,14 @@ public class PatientEntity {
 
     public void setNhsNumber(String nhsNumber) {
         this.nhsNumber = nhsNumber;
+    }
+
+    public String getPasNumber() {
+        return pasNumber;
+    }
+
+    public void setPasNumber(String pasNumber) {
+        this.pasNumber = pasNumber;
     }
 
     public DepartmentEntity getDepartment() {

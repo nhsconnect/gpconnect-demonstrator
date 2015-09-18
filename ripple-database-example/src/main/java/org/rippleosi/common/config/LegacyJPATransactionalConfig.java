@@ -29,6 +29,9 @@ public class LegacyJPATransactionalConfig {
     @Value("${legacy.datasource.vendor}")
     private String vendor;
 
+    @Value("${legacy.datasource.showSql:false}")
+    private boolean showSql;
+
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
@@ -36,9 +39,11 @@ public class LegacyJPATransactionalConfig {
 
     @Bean
     public EntityManagerFactory legacyEntityManagerFactory() {
+        Database database = Database.valueOf(vendor.toUpperCase());
+
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setShowSql(true);
-        vendorAdapter.setDatabase(Database.valueOf(vendor));
+        vendorAdapter.setShowSql(showSql);
+        vendorAdapter.setDatabase(database);
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);

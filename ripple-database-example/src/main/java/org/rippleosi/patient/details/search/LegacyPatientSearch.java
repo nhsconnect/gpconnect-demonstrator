@@ -33,6 +33,16 @@ public class LegacyPatientSearch implements PatientSearch {
     private PatientEntityToSummaryTransformer patientEntityToSummaryTransformer;
 
     @Override
+    public String getSource() {
+        return "legacy";
+    }
+
+    @Override
+    public int getPriority() {
+        return priority;
+    }
+
+    @Override
     public List<PatientSummary> findAllPatients() {
         List<PatientEntity> patients = patientRepository.findAll();
         return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
@@ -42,15 +52,5 @@ public class LegacyPatientSearch implements PatientSearch {
     public PatientDetails findPatient(String patientId) {
         PatientEntity patient = patientRepository.findByPatientId(patientId);
         return patientEntityToDetailsTransformer.transform(patient);
-    }
-
-    @Override
-    public String getSource() {
-        return "legacy";
-    }
-
-    @Override
-    public int getPriority() {
-        return priority;
     }
 }

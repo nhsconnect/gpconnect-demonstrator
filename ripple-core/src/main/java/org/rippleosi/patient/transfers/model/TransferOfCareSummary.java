@@ -5,8 +5,8 @@ import java.util.Date;
 public class TransferOfCareSummary {
 
 	private String sourceId;
-    private String siteTo;
     private String siteFrom;
+    private String siteTo;
     private Date dateOfTransfer;
     private String source;
 
@@ -18,20 +18,20 @@ public class TransferOfCareSummary {
         this.sourceId = sourceId;
     }
 
-    public String getSiteTo() {
-        return siteTo;
-    }
-
-    public void setSiteTo(String siteTo) {
-        this.siteTo = siteTo;
-    }
-
     public String getSiteFrom() {
         return siteFrom;
     }
 
     public void setSiteFrom(String siteFrom) {
         this.siteFrom = siteFrom;
+    }
+
+    public String getSiteTo() {
+        return siteTo;
+    }
+
+    public void setSiteTo(String siteTo) {
+        this.siteTo = siteTo;
     }
 
     public Date getDateOfTransfer() {

@@ -1,14 +1,11 @@
 package org.rippleosi.patient.procedures.search;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
 import org.rippleosi.common.exception.DataNotFoundException;
 import org.rippleosi.common.exception.InvalidDataException;
 import org.rippleosi.common.service.AbstractQueryStrategy;
-import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.procedures.model.ProcedureDetails;
 
 /**
@@ -52,29 +49,8 @@ public class ProcedureDetailsQueryStrategy extends AbstractQueryStrategy<Procedu
             throw new InvalidDataException("Too many results found");
         }
 
-        Map<String,Object> data = resultSet.get(0);
+        Map<String, Object> data = resultSet.get(0);
 
-        String dateSubmittedAsString = MapUtils.getString(data, "date_submitted");
-        String procedureDateAsString = MapUtils.getString(data, "procedure_date");
-
-        Date dateSubmitted = DateFormatter.toDate(dateSubmittedAsString);
-        Date procedureDate = DateFormatter.toDateOnly(procedureDateAsString);
-        Date procedureTime = DateFormatter.toTimeOnly(procedureDateAsString);
-
-        ProcedureDetails procedure = new ProcedureDetails();
-        procedure.setSourceId(MapUtils.getString(data, "uid"));
-        procedure.setAuthor(MapUtils.getString(data, "author"));
-        procedure.setDateSubmitted(dateSubmitted);
-        procedure.setName(MapUtils.getString(data, "procedure_name"));
-        procedure.setNotes(MapUtils.getString(data, "procedure_notes"));
-        procedure.setPerformer(MapUtils.getString(data, "performer"));
-        procedure.setDate(procedureDate);
-        procedure.setTime(procedureTime);
-        procedure.setCurrentStatus(MapUtils.getString(data, "status"));
-        procedure.setCurrentStatusCode(MapUtils.getString(data, "status_code"));
-        procedure.setCurrentStatusTerminology(MapUtils.getString(data, "terminology"));
-        procedure.setSource("openehr");
-
-        return procedure;
+        return new ProcedureDetailsTransformer().transform(data);
     }
 }

@@ -1,10 +1,11 @@
 package org.rippleosi.patient.referral.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  */
-public class ReferralDetails {
+public class ReferralDetails implements Serializable {
 
     private String sourceId;
     private String source;

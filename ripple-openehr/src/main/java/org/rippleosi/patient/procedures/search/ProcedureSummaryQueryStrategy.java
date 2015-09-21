@@ -1,13 +1,11 @@
 package org.rippleosi.patient.procedures.search;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.AbstractListQueryStrategy;
-import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.procedures.model.ProcedureSummary;
 
 /**
@@ -31,28 +29,6 @@ public class ProcedureSummaryQueryStrategy extends AbstractListQueryStrategy<Pro
 
     @Override
     public List<ProcedureSummary> transform(List<Map<String, Object>> resultSet) {
-
-        List<ProcedureSummary> summaries = new ArrayList<>();
-
-        for (Map<String, Object> data : resultSet) {
-            ProcedureSummary procedure = new ProcedureSummary();
-
-            String uid = MapUtils.getString(data, "uid");
-            String name = MapUtils.getString(data, "procedure_name");
-            String dateAsString = MapUtils.getString(data, "procedure_date");
-
-            Date date = DateFormatter.toDateOnly(dateAsString);
-            Date time = DateFormatter.toTimeOnly(dateAsString);
-
-            procedure.setSourceId(uid);
-            procedure.setName(name);
-            procedure.setDate(date);
-            procedure.setTime(time);
-            procedure.setSource("openehr");
-
-            summaries.add(procedure);
-        }
-
-        return summaries;
+        return CollectionUtils.collect(resultSet, new ProcedureSummaryTransformer(), new ArrayList<>());
     }
 }

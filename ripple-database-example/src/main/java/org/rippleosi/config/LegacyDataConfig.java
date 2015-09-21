@@ -1,4 +1,4 @@
-package org.rippleosi.common.config;
+package org.rippleosi.config;
 
 import javax.sql.DataSource;
 

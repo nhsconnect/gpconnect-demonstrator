@@ -1,4 +1,4 @@
-package org.rippleosi.common.config;
+package org.rippleosi.config;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -26,7 +26,7 @@ public class LegacyJPATransactionalConfig {
     @Autowired
     private DataSource legacyDataSource;
 
-    @Value("${legacy.datasource.vendor}")
+    @Value("${legacy.datasource.vendor:mysql}")
     private String vendor;
 
     @Value("${legacy.datasource.showSql:false}")

@@ -11,7 +11,7 @@ import org.rippleosi.common.exception.UpdateFailedException;
 import org.rippleosi.common.model.ActionRestResponse;
 import org.rippleosi.common.model.EhrResponse;
 import org.rippleosi.common.model.QueryResponse;
-import org.rippleosi.common.search.Repository;
+import org.rippleosi.common.repo.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

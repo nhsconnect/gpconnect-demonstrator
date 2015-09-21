@@ -2,7 +2,7 @@ package org.rippleosi.patient.labresults.search;
 
 import java.util.List;
 
-import org.rippleosi.common.search.Repository;
+import org.rippleosi.common.repo.Repository;
 import org.rippleosi.patient.labresults.model.LabResultDetails;
 import org.rippleosi.patient.labresults.model.LabResultSummary;
 

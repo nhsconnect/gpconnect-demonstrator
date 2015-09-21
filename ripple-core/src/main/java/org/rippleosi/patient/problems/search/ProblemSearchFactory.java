@@ -1,6 +1,6 @@
 package org.rippleosi.patient.problems.search;
 
-import org.rippleosi.common.search.RepositoryFactory;
+import org.rippleosi.common.repo.RepositoryFactory;
 
 /**
  */

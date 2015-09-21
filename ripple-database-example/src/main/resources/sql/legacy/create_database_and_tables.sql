@@ -2,18 +2,15 @@
 CREATE DATABASE IF NOT EXISTS poc_legacy DEFAULT CHARACTER SET utf8;
 USE poc_legacy;
 
-/* Create a new user */
-GRANT ALL ON poc_legacy.* TO 'answer'   IDENTIFIED BY 'answer99q';
-
 /* Destroy all existing data */
 DROP TABLE IF EXISTS poc_legacy.general_practitioners;
 DROP TABLE IF EXISTS poc_legacy.medical_departments;
 DROP TABLE IF EXISTS poc_legacy.patients;
+DROP TABLE IF EXISTS poc_legacy.transfers_of_care;
 DROP TABLE IF EXISTS poc_legacy.allergy_headlines;
 DROP TABLE IF EXISTS poc_legacy.contact_headlines;
 DROP TABLE IF EXISTS poc_legacy.medication_headlines;
 DROP TABLE IF EXISTS poc_legacy.problem_headlines;
-DROP TABLE IF EXISTS poc_legacy.transfers_of_care;
 
 /* Create new table schemas */
 CREATE TABLE poc_legacy.general_practitioners (
@@ -59,16 +56,14 @@ CREATE TABLE poc_legacy.patients (
 
 CREATE TABLE poc_legacy.transfers_of_care (
   id                  BIGINT        NOT NULL    AUTO_INCREMENT,
-  source_id           VARCHAR(100)  NOT NULL,
   patient_id          BIGINT        NOT NULL,
   reason_for_contact  VARCHAR(256)  NULL,
   clinical_summary    VARCHAR(256)  NULL,
-  site_from           VARCHAR(150)  NULL,
-  site_to             VARCHAR(150)  NULL,
+  site_from           VARCHAR(256)  NULL,
+  site_to             VARCHAR(256)  NULL,
   date_of_transfer    DATE          NULL,
   source              VARCHAR(30)   NOT NULL,
   PRIMARY KEY         (id),
-  UNIQUE              (source_id),
   FOREIGN KEY         (patient_id)  REFERENCES  poc_legacy.patients(id)
 );
 
@@ -115,3 +110,12 @@ CREATE TABLE poc_legacy.problem_headlines (
   UNIQUE        (source_id),
   FOREIGN KEY   (transfer_id)  REFERENCES  poc_legacy.transfers_of_care(id)
 );
+
+/* Delete the answer user if exists */
+DROP USER 'answer';
+FLUSH PRIVILEGES;
+
+/* Create a new answer user with full privileges */
+CREATE USER 'answer'                  IDENTIFIED BY 'answer99q';
+GRANT ALL ON poc_legacy.* TO 'answer' IDENTIFIED BY 'answer99q';
+FLUSH PRIVILEGES;

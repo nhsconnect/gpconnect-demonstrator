@@ -1,6 +1,6 @@
 package org.rippleosi.patient.referral.store;
 
-import org.rippleosi.common.search.RepositoryFactory;
+import org.rippleosi.common.repo.RepositoryFactory;
 
 /**
  */

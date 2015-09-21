@@ -2,7 +2,7 @@ package org.rippleosi.patient.allergies.search;
 
 import java.util.List;
 
-import org.rippleosi.common.search.Repository;
+import org.rippleosi.common.repo.Repository;
 import org.rippleosi.patient.allergies.model.AllergyDetails;
 import org.rippleosi.patient.allergies.model.AllergyHeadline;
 import org.rippleosi.patient.allergies.model.AllergySummary;

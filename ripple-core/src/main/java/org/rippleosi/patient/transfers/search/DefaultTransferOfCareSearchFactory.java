@@ -1,6 +1,6 @@
 package org.rippleosi.patient.transfers.search;
 
-import org.rippleosi.common.search.AbstractRepositoryFactory;
+import org.rippleosi.common.repo.AbstractRepositoryFactory;
 import org.springframework.stereotype.Service;
 
 @Service

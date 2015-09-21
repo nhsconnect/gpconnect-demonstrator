@@ -1,4 +1,4 @@
-package org.rippleosi.common.search;
+package org.rippleosi.common.repo;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;

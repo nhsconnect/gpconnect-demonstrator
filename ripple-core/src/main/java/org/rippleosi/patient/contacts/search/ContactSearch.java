@@ -2,7 +2,7 @@ package org.rippleosi.patient.contacts.search;
 
 import java.util.List;
 
-import org.rippleosi.common.search.Repository;
+import org.rippleosi.common.repo.Repository;
 import org.rippleosi.patient.contacts.model.ContactDetails;
 import org.rippleosi.patient.contacts.model.ContactHeadline;
 import org.rippleosi.patient.contacts.model.ContactSummary;

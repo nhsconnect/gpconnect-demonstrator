@@ -2,7 +2,7 @@ package org.rippleosi.patient.medication.search;
 
 import java.util.List;
 
-import org.rippleosi.common.search.Repository;
+import org.rippleosi.common.repo.Repository;
 import org.rippleosi.patient.medication.model.MedicationDetails;
 import org.rippleosi.patient.medication.model.MedicationHeadline;
 import org.rippleosi.patient.medication.model.MedicationSummary;

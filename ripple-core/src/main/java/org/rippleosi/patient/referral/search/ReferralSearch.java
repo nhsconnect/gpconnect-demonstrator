@@ -2,7 +2,7 @@ package org.rippleosi.patient.referral.search;
 
 import java.util.List;
 
-import org.rippleosi.common.search.Repository;
+import org.rippleosi.common.repo.Repository;
 import org.rippleosi.patient.referral.model.ReferralDetails;
 import org.rippleosi.patient.referral.model.ReferralSummary;
 

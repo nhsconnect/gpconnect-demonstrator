@@ -1,4 +1,4 @@
-package org.rippleosi.common.search;
+package org.rippleosi.common.repo;
 
 import java.util.HashMap;
 import java.util.Map;

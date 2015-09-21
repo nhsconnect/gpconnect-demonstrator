@@ -3,7 +3,7 @@ package org.rippleosi.patient.transfers.store;
 import org.apache.camel.Body;
 import org.apache.camel.Header;
 import org.apache.camel.InOnly;
-import org.rippleosi.common.search.Repository;
+import org.rippleosi.common.repo.Repository;
 import org.rippleosi.patient.transfers.model.TransferOfCareDetails;
 
 @InOnly

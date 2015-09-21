@@ -1,6 +1,6 @@
 package org.rippleosi.patient.allergies.store;
 
-import org.rippleosi.common.search.AbstractRepositoryFactory;
+import org.rippleosi.common.repo.AbstractRepositoryFactory;
 import org.springframework.stereotype.Service;
 
 /**

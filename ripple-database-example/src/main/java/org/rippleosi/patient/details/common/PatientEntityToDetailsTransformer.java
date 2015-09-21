@@ -6,7 +6,7 @@ import org.rippleosi.patient.summary.model.PatientDetails;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PatientEntityTransformer implements Transformer<PatientEntity, PatientDetails> {
+public class PatientEntityToDetailsTransformer implements Transformer<PatientEntity, PatientDetails> {
 
     @Override
     public PatientDetails transform(PatientEntity patientEntity) {

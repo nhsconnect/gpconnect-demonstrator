@@ -1,6 +1,6 @@
 package org.rippleosi.patient.contacts.search;
 
-import org.rippleosi.common.search.RepositoryFactory;
+import org.rippleosi.common.repo.RepositoryFactory;
 
 /**
  */

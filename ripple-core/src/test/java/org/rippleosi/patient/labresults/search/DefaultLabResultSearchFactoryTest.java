@@ -2,7 +2,7 @@ package org.rippleosi.patient.labresults.search;
 
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.rippleosi.common.search.AbstractRepositoryFactoryTest;
+import org.rippleosi.common.repo.AbstractRepositoryFactoryTest;
 
 /**
  */

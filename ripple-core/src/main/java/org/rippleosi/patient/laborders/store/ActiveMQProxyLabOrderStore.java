@@ -45,7 +45,7 @@ public class ActiveMQProxyLabOrderStore implements LabOrderStore {
     @Override
     public void update(String patientId, LabOrderDetails labOrder) {
         try {
-            createTopic.create(patientId, labOrder);
+            createTopic.update(patientId, labOrder);
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }

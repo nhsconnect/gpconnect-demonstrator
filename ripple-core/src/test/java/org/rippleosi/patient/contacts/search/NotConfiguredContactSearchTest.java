@@ -18,7 +18,7 @@ public class NotConfiguredContactSearchTest {
     }
 
     @Test
-    public void shouldReportAsUnknownImplementation() {
+    public void shouldReportAsNotConfiguredImplementation() {
         assertEquals("not configured", contactSearch.getSource());
     }
 
@@ -28,12 +28,12 @@ public class NotConfiguredContactSearchTest {
     }
 
     @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindAllAllergies() {
+    public void shouldThrowExceptionWhenTryingToFindAllContacts() {
         contactSearch.findAllContacts(null);
     }
 
     @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindPatientDetails() {
+    public void shouldThrowExceptionWhenTryingToFindContactDetails() {
         contactSearch.findContact(null, null);
     }
 }

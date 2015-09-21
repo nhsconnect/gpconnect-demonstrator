@@ -18,7 +18,7 @@ public class NotConfiguredAllergySearchTest {
     }
 
     @Test
-    public void shouldReportAsUnknownImplementation() {
+    public void shouldReportAsNotConfiguredImplementation() {
         assertEquals("not configured", allergySearch.getSource());
     }
 
@@ -33,7 +33,7 @@ public class NotConfiguredAllergySearchTest {
     }
 
     @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindPatientDetails() {
+    public void shouldThrowExceptionWhenTryingToFindAllergyDetails() {
         allergySearch.findAllergy(null, null);
     }
 }

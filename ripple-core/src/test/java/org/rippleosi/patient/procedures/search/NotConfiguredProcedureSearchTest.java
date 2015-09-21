@@ -18,7 +18,7 @@ public class NotConfiguredProcedureSearchTest {
     }
 
     @Test
-    public void shouldReportAsUnknownImplementation() {
+    public void shouldReportAsNotConfiguredImplementation() {
         assertEquals("not configured", procedureSearch.getSource());
     }
 
@@ -28,7 +28,7 @@ public class NotConfiguredProcedureSearchTest {
     }
 
     @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindPatientDetails() {
+    public void shouldThrowExceptionWhenTryingToFindProcedureDetails() {
         procedureSearch.findProcedure(null, null);
     }
 }

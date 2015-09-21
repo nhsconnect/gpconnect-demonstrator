@@ -18,7 +18,7 @@ public class NotConfiguredProblemSearchTest {
     }
 
     @Test
-    public void shouldReportAsUnknownImplementation() {
+    public void shouldReportAsNotConfiguredImplementation() {
         assertEquals("not configured", problemSearch.getSource());
     }
 
@@ -28,12 +28,12 @@ public class NotConfiguredProblemSearchTest {
     }
 
     @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindAllAllergies() {
+    public void shouldThrowExceptionWhenTryingToFindAllProblems() {
         problemSearch.findAllProblems(null);
     }
 
     @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindPatientDetails() {
+    public void shouldThrowExceptionWhenTryingToFindProblemDetails() {
         problemSearch.findProblem(null, null);
     }
 }

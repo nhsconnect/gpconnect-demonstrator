@@ -1,16 +1,20 @@
 package org.rippleosi.patient.laborders.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  */
-public class LabOrderDetails {
+public class LabOrderDetails implements Serializable {
 
     private String sourceId;
     private String source;
     private String name;
+    private String code;
+    private String terminology;
     private Date orderDate;
     private String author;
+    private Date dateCreated;
 
     public String getSourceId() {
         return sourceId;
@@ -36,6 +40,22 @@ public class LabOrderDetails {
         this.name = name;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getTerminology() {
+        return terminology;
+    }
+
+    public void setTerminology(String terminology) {
+        this.terminology = terminology;
+    }
+
     public Date getOrderDate() {
         return orderDate;
     }
@@ -50,5 +70,13 @@ public class LabOrderDetails {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

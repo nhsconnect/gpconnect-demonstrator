@@ -11,6 +11,8 @@ angular.module('openehrPocApp')
 
     if (modal.title === 'Create Order'){
       $scope.order.orderDate = new Date().toISOString().slice(0, 10);
+    }else{
+      $scope.order.orderDate = new Date($scope.order.orderDate).toISOString().slice(0, 10);
     }
 
     Order.suggestion().then(function (suggestions) {

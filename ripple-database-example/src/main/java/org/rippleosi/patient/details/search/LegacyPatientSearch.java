@@ -1,7 +1,9 @@
 package org.rippleosi.patient.details.search;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.patient.details.common.PatientEntityListTransformer;
 import org.rippleosi.patient.details.common.PatientEntityTransformer;
 import org.rippleosi.patient.details.model.PatientEntity;
@@ -31,7 +33,7 @@ public class LegacyPatientSearch implements PatientSearch {
     @Override
     public List<PatientSummary> findAllPatients() {
         List<PatientEntity> patients = patientRepository.findAll();
-        return patientEntityListTransformer.transform(patients);
+        return CollectionUtils.collect(patients, patientEntityListTransformer, new ArrayList<>());
     }
 
     @Override

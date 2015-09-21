@@ -20,7 +20,7 @@ public class ProblemHeadlineEntity {
     private String sourceId;
 
     @ManyToOne
-    TransferOfCareEntity transferOfCare;
+    private TransferOfCareEntity transferOfCare;
 
     @Column(name = "problem")
     private String problem;

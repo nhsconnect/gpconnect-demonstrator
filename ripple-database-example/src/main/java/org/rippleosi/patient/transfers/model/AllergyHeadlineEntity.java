@@ -20,7 +20,7 @@ public class AllergyHeadlineEntity {
     private String sourceId;
 
     @ManyToOne
-    TransferOfCareEntity transferOfCare;
+    private TransferOfCareEntity transferOfCare;
 
     @Column(name = "allergy")
     private String allergy;

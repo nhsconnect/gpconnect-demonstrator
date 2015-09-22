@@ -1,13 +1,10 @@
 package org.rippleosi.patient.laborders.search;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
 import org.rippleosi.common.exception.DataNotFoundException;
 import org.rippleosi.common.service.AbstractQueryStrategy;
-import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.laborders.model.LabOrderDetails;
 
 /**
@@ -46,19 +43,6 @@ public class LabOrderDetailsQueryStrategy extends AbstractQueryStrategy<LabOrder
 
         Map<String, Object> data = resultSet.get(0);
 
-        Date orderDate = DateFormatter.toDate(MapUtils.getString(data, "order_date"));
-        Date dateCreated = DateFormatter.toDate(MapUtils.getString(data, "date_created"));
-
-        LabOrderDetails labOrder = new LabOrderDetails();
-        labOrder.setSource("openehr");
-        labOrder.setSourceId(MapUtils.getString(data, "uid"));
-        labOrder.setName(MapUtils.getString(data, "name"));
-        labOrder.setOrderDate(orderDate);
-        labOrder.setAuthor(MapUtils.getString(data, "author"));
-        labOrder.setDateCreated(dateCreated);
-        labOrder.setCode(MapUtils.getString(data, "code"));
-        labOrder.setTerminology(MapUtils.getString(data, "terminology"));
-
-        return labOrder;
+        return new LabOrderDetailsTransformer().transform(data);
     }
 }

@@ -1,26 +1,15 @@
 package org.rippleosi.patient.labresults.search;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.rippleosi.common.exception.DataNotFoundException;
 import org.rippleosi.common.service.AbstractQueryStrategy;
-import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.labresults.model.LabResultDetails;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  */
 public class LabResultDetailsQueryStrategy extends AbstractQueryStrategy<LabResultDetails> {
-
-    private static final Logger logger = LoggerFactory.getLogger(LabResultDetailsQueryStrategy.class);
 
     private final String labResultId;
 
@@ -55,39 +44,6 @@ public class LabResultDetailsQueryStrategy extends AbstractQueryStrategy<LabResu
 
         Map<String, Object> data = resultSet.get(0);
 
-        Date sampleTaken = DateFormatter.toDate(MapUtils.getString(data, "sample_taken"));
-        Date dateCreated = DateFormatter.toDate(MapUtils.getString(data, "date_created"));
-
-        LabResultDetails labResult = new LabResultDetails();
-        labResult.setSource("openehr");
-        labResult.setSourceId(MapUtils.getString(data, "uid"));
-        labResult.setTestName(MapUtils.getString(data, "test_name"));
-        labResult.setSampleTaken(sampleTaken);
-        labResult.setDateCreated(dateCreated);
-        labResult.setAuthor(MapUtils.getString(data, "author"));
-        labResult.setConclusion(MapUtils.getString(data, "conclusion"));
-        labResult.setStatus(MapUtils.getString(data, "status"));
-
-        List<LabResultDetails.TestResult> testResults = createTestResults(data);
-
-        labResult.setTestResults(testResults);
-
-        return labResult;
-    }
-
-    private List<LabResultDetails.TestResult> createTestResults(Map<String, Object> data) {
-
-        List<Map<String, Object>> labResults = extractLabResults(data);
-
-        return CollectionUtils.collect(labResults, new TestResultTransformer(), new ArrayList<>());
-    }
-
-    private List<Map<String, Object>> extractLabResults(Map<String, Object> source) {
-        try {
-            return (List<Map<String, Object>>)PropertyUtils.getNestedProperty(source, "test_panel.items");
-        } catch (Exception ex) {
-            logger.debug("{}: {}", ex.getClass().getName(), ex.getMessage());
-            return Collections.emptyList();
-        }
+        return new LabResultDetailsTransformer().transform(data);
     }
 }

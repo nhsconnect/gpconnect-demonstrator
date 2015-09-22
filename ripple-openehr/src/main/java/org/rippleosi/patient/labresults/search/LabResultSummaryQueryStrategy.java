@@ -1,13 +1,11 @@
 package org.rippleosi.patient.labresults.search;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.AbstractListQueryStrategy;
-import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.labresults.model.LabResultSummary;
 
 /**
@@ -32,24 +30,6 @@ public class LabResultSummaryQueryStrategy extends AbstractListQueryStrategy<Lab
 
     @Override
     public List<LabResultSummary> transform(List<Map<String, Object>> resultSet) {
-
-        List<LabResultSummary> labResultList = new ArrayList<>();
-
-        for (Map<String, Object> data : resultSet) {
-
-            Date sampleTaken = DateFormatter.toDate(MapUtils.getString(data, "sample_taken"));
-            Date dateCreated = DateFormatter.toDate(MapUtils.getString(data, "date_created"));
-
-            LabResultSummary labResult = new LabResultSummary();
-            labResult.setSource("openehr");
-            labResult.setSourceId(MapUtils.getString(data, "uid"));
-            labResult.setTestName(MapUtils.getString(data, "test_name"));
-            labResult.setSampleTaken(sampleTaken);
-            labResult.setDateCreated(dateCreated);
-
-            labResultList.add(labResult);
-        }
-
-        return labResultList;
+        return CollectionUtils.collect(resultSet, new LabResultSummaryTransformer(), new ArrayList<>());
     }
 }

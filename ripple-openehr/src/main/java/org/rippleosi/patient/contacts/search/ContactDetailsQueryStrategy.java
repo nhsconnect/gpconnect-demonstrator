@@ -3,7 +3,6 @@ package org.rippleosi.patient.contacts.search;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
 import org.rippleosi.common.exception.DataNotFoundException;
 import org.rippleosi.common.service.AbstractQueryStrategy;
 import org.rippleosi.patient.contacts.model.ContactDetails;
@@ -47,20 +46,6 @@ public class ContactDetailsQueryStrategy extends AbstractQueryStrategy<ContactDe
 
         Map<String,Object> data = resultSet.get(0);
 
-        Boolean nextOfKin = MapUtils.getBoolean(data, "next_of_kin");
-
-        ContactDetails contact = new ContactDetails();
-        contact.setSource("openehr");
-        contact.setSourceId(MapUtils.getString(data, "uid"));
-        contact.setName(MapUtils.getString(data, "name"));
-        contact.setNextOfKin(nextOfKin != null && nextOfKin.booleanValue());
-        contact.setRelationship(MapUtils.getString(data, "relationship"));
-        contact.setRelationshipType(MapUtils.getString(data, "relationship_type"));
-        contact.setRelationshipCode(MapUtils.getString(data, "relationship_code"));
-        contact.setRelationshipTerminology(MapUtils.getString(data, "relationship_terminology"));
-        contact.setContactInformation(MapUtils.getString(data, "contact_information"));
-        contact.setNotes(MapUtils.getString(data, "notes"));
-
-        return contact;
+        return new ContactDetailsTransformer().transform(data);
     }
 }

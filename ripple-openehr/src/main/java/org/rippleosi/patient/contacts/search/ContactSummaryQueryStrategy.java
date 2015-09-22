@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.AbstractListQueryStrategy;
 import org.rippleosi.patient.contacts.model.ContactSummary;
 
@@ -30,23 +30,6 @@ public class ContactSummaryQueryStrategy extends AbstractListQueryStrategy<Conta
 
     @Override
     public List<ContactSummary> transform(List<Map<String, Object>> resultSet) {
-
-        List<ContactSummary> contactList = new ArrayList<>();
-
-        for (Map<String, Object> data : resultSet) {
-
-            Boolean nextOfKin = MapUtils.getBoolean(data, "next_of_kin");
-
-            ContactSummary contact = new ContactSummary();
-            contact.setSource("openehr");
-            contact.setSourceId(MapUtils.getString(data, "uid"));
-            contact.setName(MapUtils.getString(data, "name"));
-            contact.setNextOfKin(nextOfKin != null && nextOfKin.booleanValue());
-            contact.setRelationship(MapUtils.getString(data, "relationship"));
-
-            contactList.add(contact);
-        }
-
-        return contactList;
+        return CollectionUtils.collect(resultSet, new ContactSummaryTransformer(), new ArrayList<>());
     }
 }

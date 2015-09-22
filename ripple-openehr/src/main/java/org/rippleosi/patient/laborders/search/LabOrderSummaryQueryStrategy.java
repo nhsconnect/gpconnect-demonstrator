@@ -1,13 +1,11 @@
 package org.rippleosi.patient.laborders.search;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.AbstractListQueryStrategy;
-import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.laborders.model.LabOrderSummary;
 
 /**
@@ -31,22 +29,6 @@ public class LabOrderSummaryQueryStrategy extends AbstractListQueryStrategy<LabO
 
     @Override
     public List<LabOrderSummary> transform(List<Map<String, Object>> resultSet) {
-
-        List<LabOrderSummary> labOrderList = new ArrayList<>();
-
-        for (Map<String, Object> data : resultSet) {
-
-            Date orderDate = DateFormatter.toDate(MapUtils.getString(data, "order_date"));
-
-            LabOrderSummary labOrder = new LabOrderSummary();
-            labOrder.setSource("openehr");
-            labOrder.setSourceId(MapUtils.getString(data, "uid"));
-            labOrder.setName(MapUtils.getString(data, "name"));
-            labOrder.setOrderDate(orderDate);
-
-            labOrderList.add(labOrder);
-        }
-
-        return labOrderList;
+        return CollectionUtils.collect(resultSet, new LabOrderSummaryTransformer(), new ArrayList<>());
     }
 }

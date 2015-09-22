@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.AbstractListQueryStrategy;
 import org.rippleosi.patient.contacts.model.ContactHeadline;
 
@@ -28,19 +28,6 @@ public class ContactHeadlineQueryStrategy extends AbstractListQueryStrategy<Cont
 
     @Override
     public List<ContactHeadline> transform(List<Map<String, Object>> resultSet) {
-
-        List<ContactHeadline> contactList = new ArrayList<>();
-
-        for (Map<String, Object> data : resultSet) {
-
-            ContactHeadline contact = new ContactHeadline();
-            contact.setSource("openehr");
-            contact.setSourceId(MapUtils.getString(data, "uid"));
-            contact.setName(MapUtils.getString(data, "name"));
-
-            contactList.add(contact);
-        }
-
-        return contactList;
+        return CollectionUtils.collect(resultSet, new ContactHeadlineTransformer(), new ArrayList<>());
     }
 }

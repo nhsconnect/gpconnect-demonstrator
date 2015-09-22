@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.AbstractListQueryStrategy;
 import org.rippleosi.patient.medication.model.MedicationSummary;
 
@@ -29,20 +29,6 @@ public class MedicationSummaryQueryStrategy extends AbstractListQueryStrategy<Me
 
     @Override
     public List<MedicationSummary> transform(List<Map<String, Object>> resultSet) {
-
-        List<MedicationSummary> medicationList = new ArrayList<>();
-
-        for (Map<String, Object> data : resultSet) {
-
-            MedicationSummary medication = new MedicationSummary();
-            medication.setSource("openehr");
-            medication.setSourceId(MapUtils.getString(data, "uid"));
-            medication.setName(MapUtils.getString(data, "name"));
-            medication.setDoseAmount(MapUtils.getString(data, "dose_amount"));
-
-            medicationList.add(medication);
-        }
-
-        return medicationList;
+        return CollectionUtils.collect(resultSet, new MedicationSummaryTransformer(), new ArrayList<>());
     }
 }

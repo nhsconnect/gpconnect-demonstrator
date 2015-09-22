@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.AbstractListQueryStrategy;
 import org.rippleosi.patient.problems.model.ProblemHeadline;
 
@@ -28,19 +28,6 @@ public class ProblemHeadlineQueryStrategy extends AbstractListQueryStrategy<Prob
 
     @Override
     public List<ProblemHeadline> transform(List<Map<String, Object>> resultSet) {
-
-        List<ProblemHeadline> problemList = new ArrayList<>();
-
-        for (Map<String, Object> data : resultSet) {
-
-            ProblemHeadline problem = new ProblemHeadline();
-            problem.setSource("openehr");
-            problem.setSourceId(MapUtils.getString(data, "uid"));
-            problem.setProblem(MapUtils.getString(data, "problem"));
-
-            problemList.add(problem);
-        }
-
-        return problemList;
+        return CollectionUtils.collect(resultSet, new ProblemHeadlineTransformer(), new ArrayList<>());
     }
 }

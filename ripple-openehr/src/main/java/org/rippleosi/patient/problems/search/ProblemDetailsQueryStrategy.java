@@ -1,13 +1,10 @@
 package org.rippleosi.patient.problems.search;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
 import org.rippleosi.common.exception.DataNotFoundException;
 import org.rippleosi.common.service.AbstractQueryStrategy;
-import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.problems.model.ProblemDetails;
 
 /**
@@ -45,17 +42,6 @@ public class ProblemDetailsQueryStrategy extends AbstractQueryStrategy<ProblemDe
 
         Map<String, Object> data = resultSet.get(0);
 
-        Date dateOfOnset = DateFormatter.toDate(MapUtils.getString(data, "onset_date"));
-
-        ProblemDetails problem = new ProblemDetails();
-        problem.setSource("openehr");
-        problem.setSourceId(MapUtils.getString(data, "uid"));
-        problem.setProblem(MapUtils.getString(data, "problem"));
-        problem.setDateOfOnset(dateOfOnset);
-        problem.setCode(MapUtils.getString(data, "problem_code"));
-        problem.setTerminology(MapUtils.getString(data, "problem_terminology"));
-        problem.setDescription(MapUtils.getString(data, "description"));
-
-        return problem;
+        return new ProblemDetailsTransformer().transform(data);
     }
 }

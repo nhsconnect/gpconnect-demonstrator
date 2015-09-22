@@ -1,13 +1,11 @@
 package org.rippleosi.patient.problems.search;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.AbstractListQueryStrategy;
-import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.problems.model.ProblemSummary;
 
 /**
@@ -31,22 +29,6 @@ public class ProblemSummaryQueryStrategy extends AbstractListQueryStrategy<Probl
 
     @Override
     public List<ProblemSummary> transform(List<Map<String, Object>> resultSet) {
-
-        List<ProblemSummary> problemList = new ArrayList<>();
-
-        for (Map<String, Object> data : resultSet) {
-
-            Date dateOfOnset = DateFormatter.toDate(MapUtils.getString(data, "onset_date"));
-
-            ProblemSummary problem = new ProblemSummary();
-            problem.setSource("openehr");
-            problem.setSourceId(MapUtils.getString(data, "uid"));
-            problem.setProblem(MapUtils.getString(data, "problem"));
-            problem.setDateOfOnset(dateOfOnset);
-
-            problemList.add(problem);
-        }
-
-        return problemList;
+        return CollectionUtils.collect(resultSet, new ProblemSummaryTransformer(), new ArrayList<>());
     }
 }

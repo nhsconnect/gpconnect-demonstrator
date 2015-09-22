@@ -1,4 +1,4 @@
-package org.rippleosi.patient.transfers.common;
+package org.rippleosi.patient.transfers.search;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class TransferEntityToDetailsTransformer implements Transformer<TransferO
                                                                  new ArrayList<>());
 
         TransferOfCareDetails transferDetails = new TransferOfCareDetails();
-        transferDetails.setSourceId(transferEntity.getSourceId());
+        transferDetails.setSourceId(transferEntity.getId().toString());
         transferDetails.setProblems(problems);
         transferDetails.setMedications(medications);
         transferDetails.setAllergies(allergies);

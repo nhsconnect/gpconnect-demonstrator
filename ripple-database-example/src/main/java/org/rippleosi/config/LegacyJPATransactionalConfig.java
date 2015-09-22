@@ -43,6 +43,7 @@ public class LegacyJPATransactionalConfig {
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setShowSql(showSql);
+        vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setDatabase(database);
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();

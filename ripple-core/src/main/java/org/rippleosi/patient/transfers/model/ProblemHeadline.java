@@ -1,6 +1,8 @@
 package org.rippleosi.patient.transfers.model;
 
-public class ProblemHeadline {
+import java.io.Serializable;
+
+public class ProblemHeadline implements Serializable {
 
     private String sourceId;
     private String problem;

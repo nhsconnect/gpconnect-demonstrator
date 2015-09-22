@@ -1,6 +1,8 @@
 package org.rippleosi.patient.transfers.model;
 
-public class AllergyHeadline {
+import java.io.Serializable;
+
+public class AllergyHeadline implements Serializable {
 
     private String sourceId;
     private String allergy;

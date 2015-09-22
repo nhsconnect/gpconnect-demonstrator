@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.rippleosi.patient.details.common.PatientEntityToSummaryTransformer;
-import org.rippleosi.patient.details.common.PatientEntityToDetailsTransformer;
 import org.rippleosi.patient.details.model.PatientEntity;
 import org.rippleosi.patient.details.repo.PatientRepository;
 import org.rippleosi.patient.summary.model.PatientDetails;

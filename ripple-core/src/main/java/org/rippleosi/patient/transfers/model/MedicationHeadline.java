@@ -1,6 +1,8 @@
 package org.rippleosi.patient.transfers.model;
 
-public class MedicationHeadline {
+import java.io.Serializable;
+
+public class MedicationHeadline implements Serializable {
 
     private String sourceId;
     private String medication;

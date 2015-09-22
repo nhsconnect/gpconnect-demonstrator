@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -25,10 +26,8 @@ public class TransferOfCareEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "source_id")
-    private String sourceId;
-
     @ManyToOne
+    @JoinColumn(name = "patient_id")
     private PatientEntity patient;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -71,14 +70,6 @@ public class TransferOfCareEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getSourceId() {
-        return sourceId;
-    }
-
-    public void setSourceId(String sourceId) {
-        this.sourceId = sourceId;
     }
 
     public PatientEntity getPatient() {

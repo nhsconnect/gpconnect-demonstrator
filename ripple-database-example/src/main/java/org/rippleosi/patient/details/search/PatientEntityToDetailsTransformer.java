@@ -1,4 +1,4 @@
-package org.rippleosi.patient.details.common;
+package org.rippleosi.patient.details.search;
 
 import org.apache.commons.collections4.Transformer;
 import org.rippleosi.patient.details.model.PatientEntity;

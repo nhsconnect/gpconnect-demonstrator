@@ -9,9 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface TransferOfCareSummaryRepository extends JpaRepository<TransferOfCareSummaryEntity, Long> {
 
-    @Query("select tocs from TransferOfCareSummaryEntity tocs where tocs.sourceId=:sourceId")
-    TransferOfCareSummaryEntity findBySourceId(@Param("sourceId") String sourceId);
-
-    @Query("SELECT toc FROM TransferOfCareSummaryEntity toc WHERE toc.patient.id=:patientId")
+    @Query("SELECT toc FROM TransferOfCareSummaryEntity toc WHERE toc.patient.nhsNumber=:patientId")
     List<TransferOfCareSummaryEntity> findAllByPatientId(@Param("patientId") String patientId);
 }

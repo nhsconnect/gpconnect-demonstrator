@@ -1,4 +1,4 @@
-package org.rippleosi.patient.transfers.common;
+package org.rippleosi.patient.transfers.search;
 
 import org.apache.commons.collections4.Transformer;
 import org.rippleosi.patient.transfers.model.TransferOfCareSummary;
@@ -12,7 +12,7 @@ public class TransferEntityToSummaryTransformer implements Transformer<TransferO
     public TransferOfCareSummary transform(TransferOfCareSummaryEntity transferEntity) {
         TransferOfCareSummary transferSummary = new TransferOfCareSummary();
 
-        transferSummary.setSourceId(transferEntity.getSourceId());
+        transferSummary.setSourceId(transferEntity.getId().toString());
         transferSummary.setSiteFrom(transferEntity.getSiteFrom());
         transferSummary.setSiteTo(transferEntity.getSiteTo());
         transferSummary.setDateOfTransfer(transferEntity.getDateOfTransfer());

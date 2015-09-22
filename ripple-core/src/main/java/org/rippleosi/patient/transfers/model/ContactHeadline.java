@@ -1,6 +1,8 @@
 package org.rippleosi.patient.transfers.model;
 
-public class ContactHeadline {
+import java.io.Serializable;
+
+public class ContactHeadline implements Serializable {
 
     private String sourceId;
     private String contactName;

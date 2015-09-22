@@ -1,9 +1,10 @@
 package org.rippleosi.patient.transfers.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class TransferOfCareDetails {
+public class TransferOfCareDetails implements Serializable {
 
     private String sourceId;
     private List<ProblemHeadline> problems;

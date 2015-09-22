@@ -116,6 +116,7 @@ DROP USER 'answer';
 FLUSH PRIVILEGES;
 
 /* Create a new answer user with full privileges */
-CREATE USER 'answer'                  IDENTIFIED BY 'answer99q';
-GRANT ALL ON poc_legacy.* TO 'answer' IDENTIFIED BY 'answer99q';
+CREATE USER 'answer'                              IDENTIFIED BY 'answer99q';
+GRANT ALL ON poc_legacy.* TO 'answer'@'%'         IDENTIFIED BY 'answer99q';
+GRANT ALL ON poc_legacy.* TO 'answer'@'localhost' IDENTIFIED BY 'answer99q';
 FLUSH PRIVILEGES;

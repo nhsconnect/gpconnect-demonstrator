@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -64,9 +65,11 @@ public class PatientEntity {
     private String pasNumber;
 
     @ManyToOne
+    @JoinColumn(name = "department_id")
     private DepartmentEntity department;
 
     @ManyToOne
+    @JoinColumn(name = "gp_id")
     private GPEntity gp;
 
     public Long getId() {

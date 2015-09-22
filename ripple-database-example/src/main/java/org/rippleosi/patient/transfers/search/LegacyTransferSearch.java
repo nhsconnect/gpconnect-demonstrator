@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.rippleosi.patient.transfers.common.TransferEntityToDetailsTransformer;
-import org.rippleosi.patient.transfers.common.TransferEntityToSummaryTransformer;
 import org.rippleosi.patient.transfers.model.TransferOfCareDetails;
 import org.rippleosi.patient.transfers.model.TransferOfCareEntity;
 import org.rippleosi.patient.transfers.model.TransferOfCareSummary;
@@ -54,7 +52,8 @@ public class LegacyTransferSearch implements TransferOfCareSearch {
 
     @Override
     public TransferOfCareDetails findTransferOfCare(String patientId, String transferId) {
-        TransferOfCareEntity transfer = transferOfCareRepository.findBySourceId(transferId);
+        Long id = Long.valueOf(transferId);
+        TransferOfCareEntity transfer = transferOfCareRepository.findOne(id);
         return transferEntityToDetailsTransformer.transform(transfer);
     }
 }

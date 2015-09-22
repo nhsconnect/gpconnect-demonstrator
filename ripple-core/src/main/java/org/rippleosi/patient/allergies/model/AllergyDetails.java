@@ -7,8 +7,8 @@ public class AllergyDetails {
     private String sourceId;
     private String cause;
     private String causeCode;
+    private String causeTerminology;
     private String reaction;
-    private String terminology;
     private String source;
 
     public String getSourceId() {
@@ -35,20 +35,20 @@ public class AllergyDetails {
         this.causeCode = causeCode;
     }
 
+    public String getCauseTerminology() {
+        return causeTerminology;
+    }
+
+    public void setCauseTerminology(String causeTerminology) {
+        this.causeTerminology = causeTerminology;
+    }
+
     public String getReaction() {
         return reaction;
     }
 
     public void setReaction(String reaction) {
         this.reaction = reaction;
-    }
-
-    public String getTerminology() {
-        return terminology;
-    }
-
-    public void setTerminology(String terminology) {
-        this.terminology = terminology;
     }
 
     public String getSource() {

@@ -13,6 +13,9 @@ angular.module('openehrPocApp')
     if (modal.title === 'Create Referral'){
       $scope.referral.dateCreated = new Date().toISOString().slice(0, 10);
       $scope.author = $scope.currentUser;
+    }else {
+      $scope.referral.dateCreated = new Date($scope.referral.dateCreated).toISOString().slice(0, 10);
+      $scope.referral.dateOfReferral = new Date($scope.referral.dateOfReferral).toISOString().slice(0, 10);
     }
 
     $scope.referralCreatedDatepicker = function ($event, name) {

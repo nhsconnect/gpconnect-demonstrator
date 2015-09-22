@@ -49,8 +49,8 @@ angular.module('openehrPocApp')
                     };
 
         Procedure.update($scope.patient.id, toUpdate).then(function () {
-          //$location.path('/patients/' + $scope.patient.id + '/procedures/' + procedure.sourceId);
-          $state.go('procedures', { patientId: $scope.patient.id});
+          // $location.path('/patients/' + $scope.patient.id + '/procedures/' + procedure.sourceId);
+          $state.go('procedures', { patientId: $scope.patient.id });
         });
       });
     };

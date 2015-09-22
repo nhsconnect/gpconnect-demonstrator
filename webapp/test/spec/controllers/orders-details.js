@@ -5,7 +5,7 @@ describe('OrdersDetailCtrl', function () {
   // load the controller's module
   beforeEach(module('openehrPocApp'));
 
-  var OrdersDetailCtrl, scope, $location, $stateParams, $state, PatientService, Contact, $modal;
+  var OrdersDetailCtrl, scope, $modal;
   var fakeModal = {
         result: {
         then: function(confirmCallback, cancelCallback) {
@@ -21,13 +21,8 @@ describe('OrdersDetailCtrl', function () {
     }
     };
 
-  beforeEach(inject(function ($rootScope, $controller, _$location_, _$stateParams_, _$modal_, _$state_, _PatientService_, _Contact_) {
+  beforeEach(inject(function ($rootScope, $controller, _$modal_) {
     scope = $rootScope.$new();
-    $location = _$location_;
-    $stateParams = _$stateParams_;
-    $state = _$state_;
-    PatientService = _PatientService_;
-    Contact = _Contact_;
     $modal = _$modal_;
 
     OrdersDetailCtrl = $controller('OrdersDetailCtrl', {

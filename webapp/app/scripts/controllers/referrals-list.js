@@ -57,12 +57,12 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (referral) {
 
         var toAdd = {
-         compositionId : '',
+         sourceId : '',
          author : referral.author,
          clinicalSummary : referral.clinicalSummary,
          dateCreated: new Date(referral.dateCreated),
          dateOfReferral: referral.dateOfReferral,
-         reasonForReferral: referral.reasonForReferral,
+         reason: referral.reason,
          referralFrom: referral.referralFrom,
          referralTo: referral.referralTo,
          source: 'openehr'

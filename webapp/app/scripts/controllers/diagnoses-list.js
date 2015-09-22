@@ -16,7 +16,7 @@ angular.module('openehrPocApp')
     });
 
     Diagnosis.all($stateParams.patientId).then(function (result) {
-      $scope.diagnoses =result.data;
+      $scope.diagnoses = result.data;
       for (var i = 0; i < $scope.diagnoses.length; i++){
         $scope.diagnoses[i].dateOfOnset = moment($scope.diagnoses[i].dateOfOnset).format('DD-MMM-YYYY');
       }

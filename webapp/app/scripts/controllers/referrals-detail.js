@@ -34,12 +34,12 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (referral) {
 
         var toUpdate = {
-         compositionId : $scope.referral.compositionId,
+         sourceId : referral.sourceId,
          author : referral.author,
          clinicalSummary : referral.clinicalSummary,
-         dateCreated: referral.dateCreated,
+         dateCreated: new Date(referral.dateCreated),
          dateOfReferral: referral.dateOfReferral,
-         reasonForReferral: referral.reasonForReferral,
+         reason: referral.reason,
          referralFrom: referral.referralFrom,
          referralTo: referral.referralTo,
          source: 'openehr'

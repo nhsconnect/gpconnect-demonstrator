@@ -6,8 +6,8 @@ angular.module('openehrPocApp')
     $scope.medication = medication;
     $scope.patient = patient;
     $scope.modal = modal;
-    
-     if (modal.title === 'Edit Medication'){
+
+    if (modal.title === 'Edit Medication'){
       $scope.medication.startTime = new Date($scope.medication.startTime);
       $scope.medication.startDate = new Date($scope.medication.startDate).toISOString().slice(0, 10);
     }

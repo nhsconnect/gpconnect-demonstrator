@@ -1,11 +1,12 @@
 package org.rippleosi.patient.labresults.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  */
-public class LabResultDetails {
+public class LabResultDetails implements Serializable {
 
     private String sourceId;
     private String source;

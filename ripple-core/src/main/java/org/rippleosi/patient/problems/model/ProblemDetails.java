@@ -1,10 +1,11 @@
 package org.rippleosi.patient.problems.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  */
-public class ProblemDetails {
+public class ProblemDetails implements Serializable {
 
     private String sourceId;
     private String source;

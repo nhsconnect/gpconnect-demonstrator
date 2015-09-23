@@ -1,8 +1,10 @@
 package org.rippleosi.patient.contacts.model;
 
+import java.io.Serializable;
+
 /**
  */
-public class ContactDetails {
+public class ContactDetails implements Serializable {
 
     private String sourceId;
     private String source;

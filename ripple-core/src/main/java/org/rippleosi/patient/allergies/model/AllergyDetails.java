@@ -1,8 +1,10 @@
 package org.rippleosi.patient.allergies.model;
 
+import java.io.Serializable;
+
 /**
  */
-public class AllergyDetails {
+public class AllergyDetails implements Serializable {
 
     private String sourceId;
     private String cause;

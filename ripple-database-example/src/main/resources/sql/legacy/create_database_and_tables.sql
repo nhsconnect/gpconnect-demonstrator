@@ -1,5 +1,6 @@
 /* Create a new poc_legacy database and begin configuration */
-CREATE DATABASE IF NOT EXISTS poc_legacy DEFAULT CHARACTER SET utf8;
+DROP DATABASE IF EXISTS poc_legacy;
+CREATE DATABASE         poc_legacy DEFAULT CHARACTER SET utf8;
 USE poc_legacy;
 
 /* Destroy all existing data */
@@ -111,7 +112,8 @@ CREATE TABLE poc_legacy.problem_headlines (
   FOREIGN KEY   (transfer_id)  REFERENCES  poc_legacy.transfers_of_care(id)
 );
 
-/* Delete the answer user if exists */
+/* Delete the answer user (grant all to workaround MySQL not supporting 'IF EXISTS') */
+GRANT ALL ON poc_legacy.* TO 'answer' IDENTIFIED BY 'answer99q';
 DROP USER 'answer';
 FLUSH PRIVILEGES;
 

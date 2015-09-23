@@ -2,7 +2,7 @@
 
 <div class="inner-addon left-addon filterInput">
     <i class="fa fa-filter"></i>
-    <input type="text" class="form-control" placeholder="Filter..." ng-model="query[queryBy]" />
+    <input type="text" class="form-control" placeholder="Filter..." ng-model="query" />
 </div>
 
 <table class="table table-bordered table-striped table-hover">
@@ -15,7 +15,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="allergy in allergies | filter:query" ng-click="go('/patients/{{patient.id}}/allergies/{{$index}}')" ng-class="{info: selected($index)}">
+    <tr ng-repeat="allergy in allergies | filter:search" ng-click="go('/patients/{{patient.id}}/allergies/{{allergy.sourceId}}')" ng-class="{info: selected(allergy.sourceId)}">
       <td>{{ allergy.cause }}</td>
       <td>{{ allergy.reaction }}</td>
       <td>{{ allergy.source }}</td>

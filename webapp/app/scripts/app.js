@@ -85,7 +85,7 @@ angular
       })
 
       .state('allergies-detail', {
-        url: '/patients/{patientId:int}/allergies/{allergyIndex:int}',
+        url: '/patients/{patientId:int}/allergies/{allergyIndex}',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },

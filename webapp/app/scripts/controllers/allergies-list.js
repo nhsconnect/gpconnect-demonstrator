@@ -3,16 +3,20 @@
 angular.module('openehrPocApp')
   .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Allergy) {
 
-    $scope.query = {};
-    $scope.queryBy = '$';
+    $scope.search = function (row) {
+      return (
+        angular.lowercase(row.cause).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+        angular.lowercase(row.reaction).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+        angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
+      );
+    };
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
 
     Allergy.all($stateParams.patientId).then(function (result) {
-      $scope.result = result.data;
-      $scope.allergies = $scope.result.allergies;
+      $scope.allergies = result.data;
     });
 
     $scope.go = function (path) {
@@ -35,7 +39,7 @@ angular.module('openehrPocApp')
             };
           },
           allergy: function () {
-            return { };
+            return {};
           },
           patient: function () {
             return $scope.patient;
@@ -44,14 +48,21 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (allergy) {
-        $scope.result.allergies.push(allergy);
+          var toAdd = {
+              sourceId: '',
+              cause: allergy.cause,
+              causeCode: allergy.causeCode,
+              causeTerminology: allergy.causeTerminology,
+              reaction: allergy.reaction,
+              source: 'openehr'
+          };
 
-        Allergy.update($scope.patient.id, $scope.result).then(function () {
-          $state.go('allergies', { patientId: $scope.patient.id });
+        Allergy.create($scope.patient.id, toAdd).then(function () {
+          $state.go('allergies', {
+            patientId: $scope.patient.id
+          });
         });
       });
     };
 
   });
-
-

@@ -9,6 +9,16 @@ angular.module('openehrPocApp')
       return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/allergies');
     };
 
+    var get = function (patientId, compositionId) {
+      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/allergies/' + compositionId);
+    };
+
+    var create = function (patientId, composition) {
+      console.log('put allergy comp:');
+      console.log(composition);
+      return $http.post('/api/patients/' + (patientIdOveride || patientId) + '/allergies', composition);
+    };
+
     var update = function (patientId, composition) {
       console.log('put allergy comp:');
       console.log(composition);
@@ -17,6 +27,8 @@ angular.module('openehrPocApp')
 
     return {
       all: all,
-      update: update
+      get: get,
+      update: update,
+      create: create
     };
   });

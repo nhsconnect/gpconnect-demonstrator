@@ -8,7 +8,7 @@ public class MDTReportSummary {
 
     private String source;
     private String sourceId;
-    private String team;
+    private String serviceTeam;
     private Date dateOfRequest;
     private Date dateOfMeeting;
 
@@ -28,12 +28,12 @@ public class MDTReportSummary {
         this.sourceId = sourceId;
     }
 
-    public String getTeam() {
-        return team;
+    public String getServiceTeam() {
+        return serviceTeam;
     }
 
-    public void setTeam(String team) {
-        this.team = team;
+    public void setServiceTeam(String serviceTeam) {
+        this.serviceTeam = serviceTeam;
     }
 
     public Date getDateOfRequest() {

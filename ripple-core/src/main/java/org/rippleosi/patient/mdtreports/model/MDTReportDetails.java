@@ -9,12 +9,13 @@ public class MDTReportDetails implements Serializable {
 
     private String source;
     private String sourceId;
-    private String team;
+    private String serviceTeam;
     private Date dateOfRequest;
     private Date dateOfMeeting;
+    private Date timeOfMeeting;
     private String servicePageLink;
     private String question;
-    private String meetingDiscussion;
+    private String notes;
 
     public String getSource() {
         return source;
@@ -32,12 +33,12 @@ public class MDTReportDetails implements Serializable {
         this.sourceId = sourceId;
     }
 
-    public String getTeam() {
-        return team;
+    public String getServiceTeam() {
+        return serviceTeam;
     }
 
-    public void setTeam(String team) {
-        this.team = team;
+    public void setServiceTeam(String serviceTeam) {
+        this.serviceTeam = serviceTeam;
     }
 
     public Date getDateOfRequest() {
@@ -56,6 +57,14 @@ public class MDTReportDetails implements Serializable {
         this.dateOfMeeting = dateOfMeeting;
     }
 
+    public Date getTimeOfMeeting() {
+        return timeOfMeeting;
+    }
+
+    public void setTimeOfMeeting(Date timeOfMeeting) {
+        this.timeOfMeeting = timeOfMeeting;
+    }
+
     public String getServicePageLink() {
         return servicePageLink;
     }
@@ -72,11 +81,11 @@ public class MDTReportDetails implements Serializable {
         this.question = question;
     }
 
-    public String getMeetingDiscussion() {
-        return meetingDiscussion;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setMeetingDiscussion(String meetingDiscussion) {
-        this.meetingDiscussion = meetingDiscussion;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

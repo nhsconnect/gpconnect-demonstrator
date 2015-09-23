@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/patients/{patientId}/mdtreports")
-public class MDTReportContoller {
+public class MDTReportController {
 
     @Autowired
     private MDTReportSearchFactory mdtReportSearchFactory;
@@ -30,7 +30,7 @@ public class MDTReportContoller {
 
     @RequestMapping(method = RequestMethod.GET)
     public List<MDTReportSummary> findAllMDTReports(@PathVariable("patientId") String patientId,
-                                                  @RequestParam(required = false) String source) {
+                                                    @RequestParam(required = false) String source) {
         MDTReportSearch mdtReportSearch = mdtReportSearchFactory.select(source);
 
         return mdtReportSearch.findAllMDTReports(patientId);
@@ -38,8 +38,8 @@ public class MDTReportContoller {
 
     @RequestMapping(value = "/{reportId}", method = RequestMethod.GET)
     public MDTReportDetails findMDTReport(@PathVariable("patientId") String patientId,
-                                        @PathVariable("reportId") String reportId,
-                                        @RequestParam(required = false) String source) {
+                                          @PathVariable("reportId") String reportId,
+                                          @RequestParam(required = false) String source) {
         MDTReportSearch mdtReportSearch = mdtReportSearchFactory.select(source);
 
         return mdtReportSearch.findMDTReport(patientId, reportId);
@@ -47,8 +47,8 @@ public class MDTReportContoller {
 
     @RequestMapping(method = RequestMethod.POST)
     public void createMDTReport(@PathVariable("patientId") String patientId,
-                               @RequestParam(required = false) String source,
-                               @RequestBody MDTReportDetails mdtReport) {
+                                @RequestParam(required = false) String source,
+                                @RequestBody MDTReportDetails mdtReport) {
         MDTReportStore mdtReportStore = mdtReportStoreFactory.select(source);
 
         mdtReportStore.create(patientId, mdtReport);
@@ -56,8 +56,8 @@ public class MDTReportContoller {
 
     @RequestMapping(method = RequestMethod.PUT)
     public void updateMDTReport(@PathVariable("patientId") String patientId,
-                               @RequestParam(required = false) String source,
-                               @RequestBody MDTReportDetails mdtReport) {
+                                @RequestParam(required = false) String source,
+                                @RequestBody MDTReportDetails mdtReport) {
         MDTReportStore mdtReportStore = mdtReportStoreFactory.select(source);
 
         mdtReportStore.update(patientId, mdtReport);

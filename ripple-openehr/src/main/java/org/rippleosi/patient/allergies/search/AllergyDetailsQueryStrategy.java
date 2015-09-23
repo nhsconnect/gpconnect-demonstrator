@@ -28,7 +28,8 @@ public class AllergyDetailsQueryStrategy extends AbstractQueryStrategy<AllergyDe
                 "from EHR e[ehr_id/value='" + ehrId + "'] " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
                 "contains SECTION a_a[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1] " +
-                "where a/name/value='Allergies list' ";
+                "where a/name/value='Allergies list' " +
+                "and a/uid/value='" + allergyId + "'";
     }
 
     @Override

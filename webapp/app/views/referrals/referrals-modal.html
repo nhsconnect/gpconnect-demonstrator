@@ -11,7 +11,7 @@
       <div class="row">
         <div class="col-sm-4 text-left"><label>Born:</label> <strong>{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</strong></div>
         <div class="col-sm-4 text-center"><label>Gender:</label> <strong>{{ patient.gender }}</strong></div>
-        <div class="col-sm-4 text-right"><label>NHS No:</label> <strong>{{ patient.nhsNo }}</strong></div>
+        <div class="col-sm-4 text-right"><label>NHS No:</label> <strong>{{ patient.nhsNumber }}</strong></div>
       </div>
     </div>
   </div>
@@ -29,7 +29,7 @@
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && referralForm.referralfrom.$error.required">You must enter a value.</span>
         </div>
-      </div>  
+      </div>
         </div>
         <div class="col-md-6">
             <div class="form-group" ng-class="{'has-error': (formSubmitted || referralForm.referralto.$dirty) && referralForm.referralto.$invalid, 'has-success': referralForm.referralto.$valid && referralForm.referralto.$dirty}">
@@ -40,7 +40,7 @@
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && referralForm.referralto.$error.required">You must enter a value.</span>
         </div>
-      </div>  
+      </div>
         </div>
         </div>
         <div class="row">
@@ -56,11 +56,11 @@
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && referralForm.dateofreferral.$error.required">You must enter a valid date.</span>
           </div>
-        
+
              </div>
               </div>
-              
-              
+
+
         </div>
         <div class="row" >
         <div class="col-md-6 reasonforreferralGroup">
@@ -83,10 +83,10 @@
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && referralForm.clinicalsummary.$error.required">You must enter a value.</span>
           </div>
-        </div>    
         </div>
         </div>
-        <div class="row"> 
+        </div>
+        <div class="row">
                  <div class="col-md-6">
             <div class="form-group" ng-class="{'has-error': (formSubmitted || referralForm.author.$dirty) && referralForm.author.$invalid, 'has-success': referralForm.author.$valid && referralForm.author.$dirty}">
         <label for="referralfrom" class="control-label col-md-12">Author</label>
@@ -96,7 +96,7 @@
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && referralForm.author.$error.required">Author cannot be empty.</span>
         </div>
-      </div>  
+      </div>
         </div>
         <div class="col-md-6">
             <div class="form-group" ng-class="{'has-error': (formSubmitted || referralForm.datecreated.$dirty) && referralForm.datecreated.$invalid, 'has-success': referralForm.datecreated.$valid && referralForm.datecreated.$dirty}">
@@ -110,7 +110,7 @@
             </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && referralForm.datecreated.$error.required">You must enter a value.</span>
         </div>
-      </div>  
+      </div>
         </div>
         </div>
     </fieldset>

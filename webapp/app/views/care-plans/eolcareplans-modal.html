@@ -11,7 +11,7 @@
       <div class="row">
         <div class="col-sm-4 text-left"><label>Born:</label> <strong>{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</strong></div>
         <div class="col-sm-4 text-center"><label>Gender:</label> <strong>{{ patient.gender }}</strong></div>
-        <div class="col-sm-4 text-right"><label>NHS No:</label> <strong>{{ patient.nhsNo }}</strong></div>
+        <div class="col-sm-4 text-right"><label>NHS No:</label> <strong>{{ patient.nhsNumber }}</strong></div>
       </div>
     </div>
   </div>
@@ -23,10 +23,10 @@
         <div class="btn eolTabs" ng-model="radioModel" btn-radio="'Tab1'">Care Document</div>
         <div class="btn eolTabs" ng-model="radioModel" btn-radio="'Tab2'">Priorities of Care</div>
         <div class="btn eolTabs" ng-model="radioModel" btn-radio="'Tab3'">Treatment Decision</div>
-        <div class="btn eolTabs eolTabsBottom" ng-model="radioModel" btn-radio="'Tab4'">CPR Decision</div>   
+        <div class="btn eolTabs eolTabsBottom" ng-model="radioModel" btn-radio="'Tab4'">CPR Decision</div>
         </div>
         <div class="col-md-9">
-        <div ng-if="radioModel == 'Tab1'" class="tabContent">        
+        <div ng-if="radioModel == 'Tab1'" class="tabContent">
         <div class="row tabContetInner">
                   <div class="col-md-12"><strong>Care Document</strong></div>
             <div class="col-md-6">
@@ -47,10 +47,10 @@
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.author.$error.required">You must enter a value.</span>
           </div>
-        </div>        
+        </div>
             </div>
-            <div class="col-md-6">           
-                
+            <div class="col-md-6">
+
             <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || eolcareplanForm.doctype.$dirty) && eolcareplanForm.doctype.$invalid, 'has-success': eolcareplanForm.doctype.$valid && eolcareplanForm.doctype.$dirty}">
         <label for="siteTo" class="control-label col-md-12">Type</label>
         <div class="col-md-12">
@@ -61,7 +61,7 @@
         <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.type.$error.required">You must enter a value.</span>
           </div>
         </div>
-                
+
                  <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || eolcareplanForm.date.$dirty) && eolcareplanForm.date.$invalid, 'has-success': eolcareplanForm.date.$valid && eolcareplanForm.date.$dirty}">
           <label for="Date" class="control-label col-md-12">Date</label>
           <div class="col-md-12">
@@ -74,10 +74,10 @@
             <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.date.$error.required">You must enter a valid date.</span>
           </div>
         </div>
-                
+
             </div>
         </div>
-        </div>   
+        </div>
         <div ng-if="radioModel == 'Tab2'"  class="tabContent">
         <div class="row tabContetInner">
               <div class="col-md-12"><strong>Priorities of Care</strong></div>
@@ -113,9 +113,9 @@
             <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.prioritycarecomment.$error.required">You must enter a value.</span>
           </div>
         </div>
-        </div>        
-        </div>   
-        </div>    
+        </div>
+        </div>
+        </div>
         <div ng-if="radioModel == 'Tab3'"  class="tabContent">
         <div class="row tabContetInner">
             <div class="col-md-12"><strong>Advanced Decision to Refuse Treatment</strong></div>
@@ -145,7 +145,7 @@
             <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.dateofdecision.$error.required">You must enter a valid date.</span>
           </div>
         </div>
-        </div>  
+        </div>
         <div class="col-md-5"></div>
          <div class="col-md-12">
                     <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || eolcareplanForm.treatmentdecisioncomment.$dirty) && eolcareplanForm.treatmentdecisioncomment.$invalid, 'has-success': eolcareplanForm.treatmentdecisioncomment.$valid && eolcareplanForm.treatmentdecisioncomment.$dirty}">
@@ -156,12 +156,12 @@
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.treatmentdecisioncomment.$error.required">You must enter a value.</span>
           </div>
-              
+
         </div>
         </div>
         </div>
         </div>
-        </div>    
+        </div>
         </div>
         <div ng-if="radioModel == 'Tab4'"  class="tabContent">
         <div class="row tabContetInner">
@@ -192,7 +192,7 @@
             <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.dateofcprdecision.$error.required">You must enter a valid date.</span>
           </div>
         </div>
-        </div>  
+        </div>
         <div class="col-md-5"></div>
          <div class="col-md-12">
                     <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || eolcareplanForm.cprdecisioncomment.$dirty) && eolcareplanForm.cprdecisioncomment.$invalid, 'has-success': eolcareplanForm.cprdecisioncomment.$valid && eolcareplanForm.cprdecisioncomment.$dirty}">
@@ -207,7 +207,7 @@
         </div>
         </div>
         </div>
-        </div>    
+        </div>
         </div>
         </div>
         </div>

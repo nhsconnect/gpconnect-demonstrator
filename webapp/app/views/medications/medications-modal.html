@@ -11,7 +11,7 @@
       <div class="row">
         <div class="col-sm-4 text-left"><label>Born:</label> <strong>{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</strong></div>
         <div class="col-sm-4 text-center"><label>Gender:</label> <strong>{{ patient.gender }}</strong></div>
-        <div class="col-sm-4 text-right"><label>NHS No:</label> <strong>{{ patient.nhsNo }}</strong></div>
+        <div class="col-sm-4 text-right"><label>NHS No:</label> <strong>{{ patient.nhsNumber }}</strong></div>
       </div>
     </div>
   </div>
@@ -79,13 +79,13 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'startDateTimeOpen')"><i class="fa fa-calendar"></i></button>
             </span>
-              
+
             <input type="text" class="form-control" id="startDateTime" name="startDateTime" ng-model="medication.startDate" ng-click="openDatepicker($event, 'startDateTime')" datepicker-popup="yyyy-MM-dd" is-open="startDateTime" required />
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && medicationForm.startDateTime.$error.required">You must enter a valid date.</span>
         </div>
       </div>
-          
+
            <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || medicationForm.time.$dirty) && medicationForm.time.$invalid, 'has-success': medicationForm.time.$valid && medicationForm.time.$dirty}">
           <label for="Date" class="control-label col-md-4">Time</label>
           <div class="col-md-8">
@@ -96,7 +96,7 @@
                 <input class="form-control" id="time" ui-timepicker ng-model="medication.startTime">
             </div>
           </div>
-        </div>  
+        </div>
 
       <div class="form-group" ng-class="{'has-error': (formSubmitted || medicationForm.terminology.$dirty) && medicationForm.terminology.$invalid, 'has-success': medicationForm.terminology.$valid && medicationForm.terminology.$dirty}">
         <label for="terminology" class="control-label col-md-4">Terminology</label>

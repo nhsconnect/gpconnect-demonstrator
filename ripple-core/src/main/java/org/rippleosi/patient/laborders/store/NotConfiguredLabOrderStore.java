@@ -21,15 +21,11 @@ public class NotConfiguredLabOrderStore implements LabOrderStore {
 
     @Override
     public void create(@Header("patientId") String patientId, @Body LabOrderDetails labOrder) {
-        throw notImplemented();
+        throw ConfigurationException.unimplementedTransaction(LabOrderStore.class);
     }
 
     @Override
     public void update(@Header("patientId") String patientId, @Body LabOrderDetails labOrder) {
-        throw notImplemented();
-    }
-
-    private ConfigurationException notImplemented() {
-        return new ConfigurationException("Unable to find a configured " + LabOrderStore.class.getSimpleName() + " instance");
+        throw ConfigurationException.unimplementedTransaction(LabOrderStore.class);
     }
 }

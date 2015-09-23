@@ -45,7 +45,7 @@ public class ActiveMQProxyContactStore implements ContactStore {
     @Override
     public void update(String patientId, ContactDetails contact) {
         try {
-            createTopic.create(patientId, contact);
+            updateTopic.update(patientId, contact);
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }

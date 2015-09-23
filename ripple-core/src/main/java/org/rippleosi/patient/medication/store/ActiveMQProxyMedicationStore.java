@@ -45,7 +45,7 @@ public class ActiveMQProxyMedicationStore implements MedicationStore {
     @Override
     public void update(String patientId, MedicationDetails medication) {
         try {
-            createTopic.create(patientId, medication);
+            updateTopic.update(patientId, medication);
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }

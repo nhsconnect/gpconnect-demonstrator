@@ -1,4 +1,4 @@
-package org.rippleosi.patient.terminology;
+package org.rippleosi.patient.terminology.rest;
 
 import java.util.List;
 

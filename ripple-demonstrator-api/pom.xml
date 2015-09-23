@@ -38,6 +38,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.rippleosi</groupId>
+            <artifactId>ripple-terminology-example</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
         </dependency>

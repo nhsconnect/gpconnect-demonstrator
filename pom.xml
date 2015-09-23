@@ -32,6 +32,7 @@
         <module>ripple-database-example</module>
         <module>ripple-demonstrator-api</module>
         <module>ripple-openehr</module>
+        <module>ripple-terminology-example</module>
     </modules>
 
     <dependencyManagement>
@@ -57,6 +58,12 @@
             <dependency>
                 <groupId>org.rippleosi</groupId>
                 <artifactId>ripple-openehr</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.rippleosi</groupId>
+                <artifactId>ripple-terminology-example</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

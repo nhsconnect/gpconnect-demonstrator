@@ -1,6 +1,7 @@
 package org.rippleosi.patient.referral.search;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,8 @@ public class ReferralSummaryQueryStrategy extends AbstractListQueryStrategy<Refe
 
     @Override
     public List<ReferralSummary> transform(List<Map<String, Object>> resultSet) {
-        return CollectionUtils.collect(resultSet, new ReferralSummaryTransformer(), new ArrayList<>());
+        Collection<Map<String, Object>> filtered = CollectionUtils.select(resultSet, new ReferralOnlyPredicate());
+
+        return CollectionUtils.collect(filtered, new ReferralSummaryTransformer(), new ArrayList<>());
     }
 }

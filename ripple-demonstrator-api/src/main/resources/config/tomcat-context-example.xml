@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="" reloadable="true">
+
+    <Environment name="openehr.address"          type="java.lang.String" override="false" value="https://rest.ehrscape.com/rest/v1"/>
+    <Environment name="openehr.user"             type="java.lang.String" override="false" value="<your openehr username>"/>
+    <Environment name="openehr.password"         type="java.lang.String" override="false" value="<your openehr password>"/>
+    <Environment name="openehr.subjectNamespace" type="java.lang.String" override="false" value="uk.nhs.nhsnumber"/>
+
+    <Environment name="openehr.allergiesTemplate"    type="java.lang.String" override="false" value="LCR Allergies List.v0"/>
+    <Environment name="openehr.contactsTemplate"     type="java.lang.String" override="false" value="LCR Relevant Contacts List.v0"/>
+    <Environment name="openehr.endOfLifeTemplate"    type="java.lang.String" override="false" value="IDCR - End of Life Patient Preferences.v0"/>
+    <Environment name="openehr.labOrderTemplate"     type="java.lang.String" override="false" value="IDCR - Laboratory Order.v0"/>
+    <Environment name="openehr.mdtReportTemplate"    type="java.lang.String" override="false" value="IDCR - Generic MDT Output Report.v0"/>
+    <Environment name="openehr.medicationTemplate"   type="java.lang.String" override="false" value="LCR Medication List.v0"/>
+    <Environment name="openehr.problemTemplate"      type="java.lang.String" override="false" value="LCR Problem List.v0"/>
+    <Environment name="openehr.proceduresTemplate"   type="java.lang.String" override="false" value="IDCR Procedures List.v0"/>
+    <Environment name="openehr.transferTemplate"     type="java.lang.String" override="false" value="LCR Handover Summary Report.v0"/>
+    <Environment name="openehr.cancermdtTemplate"    type="java.lang.String" override="false" value="IDCR - Cancer MDT Output Report.v0"/>
+    <Environment name="openehr.referralsTemplate"    type="java.lang.String" override="false" value="RIPPLE - Minimal referral.v0"/>
+    <Environment name="openehr.appointmentsTemplate" type="java.lang.String" override="false" value="RIPPLE - Minimal referral.v0"/>
+
+    <Environment name="legacy.datasource.vendor"    type="java.lang.String"  override="false" value="mysql"/>
+    <Environment name="legacy.datasource.host"      type="java.lang.String"  override="false" value="<database address>"/>
+    <Environment name="legacy.datasource.port"      type="java.lang.String"  override="false" value="<database port>"/>
+    <Environment name="legacy.datasource.schema"    type="java.lang.String"  override="false" value="poc_legacy"/>
+    <Environment name="legacy.datasource.username"  type="java.lang.String"  override="false" value="<your database username>"/>
+    <Environment name="legacy.datasource.password"  type="java.lang.String"  override="false" value="<your database password>"/>
+    <Environment name="legacy.datasource.showSql"   type="java.lang.Boolean" override="false" value="false"/>
+
+</Context>

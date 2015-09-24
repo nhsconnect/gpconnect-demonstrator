@@ -19,5 +19,6 @@ import org.rippleosi.common.repo.RepositoryFactory;
 
 /**
  */
+@FunctionalInterface
 public interface AllergyStoreFactory extends RepositoryFactory<AllergyStore> {
 }

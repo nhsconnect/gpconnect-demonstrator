@@ -7,9 +7,9 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    Appointment.all($stateParams.appointmentIndex).then(function (result) {
-      $scope.appointment = result.data[$stateParams.appointmentIndex];
-      $scope.timeSlotFull = moment($scope.appointment.timeSlot).format('h:mma') + '-' + moment($scope.appointment.timeSlot).add(59, 'm').format('h:mma');
+    Appointment.get($stateParams.patientId, $stateParams.appointmentIndex).then(function (result) {
+      $scope.appointment = result.data
+      $scope.timeOfAppointment = moment($scope.appointment.timeOfAppointment).format('h:mma') + '-' + moment($scope.appointment.timeOfAppointment).add(59, 'm').format('h:mma');
     });
 
     $scope.edit = function () {
@@ -33,20 +33,20 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (appointment) {
-        appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
-        appointment.date = new Date(appointment.date);
+          appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
+          appointment.dateCreated = new Date(appointment.dateCreated);
 
-        var toUpdate =  {
-                  compositionId: $scope.appointment.compositionId,
-                  careServiceTeam: appointment.careServiceTeam,
-                  dateOfAppointment:  appointment.dateOfAppointment,
-                  location:  appointment.location,
-                  status:  appointment.status,
-                  author:  appointment.author,
-                  dateCreated:  appointment.date,
-                  source: 'openehr',
-                  timeSlot : appointment.timeSlot
-            };
+          var toUpdate = {
+                    sourceId: appointment.sourceId,
+                    serviceTeam: appointment.serviceTeam,
+                    dateOfAppointment: appointment.dateOfAppointment,
+                    location: appointment.location,
+                    status: appointment.status,
+                    author: 'example@email.com',
+                    dateCreated: appointment.dateCreated,
+                    source: 'openehr',
+                    timeOfAppointment: appointment.timeOfAppointment
+        };
         Appointment.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/appointments');
         });

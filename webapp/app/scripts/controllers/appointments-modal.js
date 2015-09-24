@@ -10,8 +10,18 @@ angular.module('openehrPocApp')
     $scope.radioModel = 'Tab1';
     $scope.appointment.location = appointment.location || 'Leeds General';
     $scope.appointment.status = appointment.status || 'Not Scheduled';
+
+    if(modal.title === 'Edit Appointment'){
+      $scope.appointment.dateCreated = new Date($scope.appointment.dateCreated).toISOString();
+      $scope.appointment.dateOfAppointment = new Date($scope.appointment.dateOfAppointment).toISOString();
+      $scope.appointment.timeOfAppointment = new Date($scope.appointment.timeOfAppointment);
+    }else{
+      $scope.appointment.dateCreated = new Date().toISOString().slice(0, 10);
+    }
+
+
     if ($scope.appointment.status === 'Scheduled'){
-      $scope.timeSlotFull = moment(appointment.timeSlot).format('h:mma') + '-' + moment(appointment.timeSlot).add(59, 'm').format('h:mma');
+      $scope.timeSlotFull = moment(appointment.timeOfAppointment).format('h:mma') + '-' + moment(appointment.timeOfAppointment).add(59, 'm').format('h:mma');
     }
 
     $scope.uiConfig = {
@@ -115,10 +125,10 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function () {
-        $scope.appointment.timeSlot = time;
+        $scope.appointment.timeOfAppointment = time;
         $scope.appointment.status = 'Scheduled';
         $scope.appointment.dateOfAppointment = time.toISOString().slice(0, 10);
-        $scope.timeSlotFull = moment($scope.appointment.timeSlot).format('h:mma') + '-' + moment($scope.appointment.timeSlot).add(59, 'm').format('h:mma');
+        $scope.timeSlotFull = moment($scope.appointment.timeOfAppointment).format('h:mma') + '-' + moment($scope.appointment.timeOfAppointment).add(59, 'm').format('h:mma');
         setBookedSlot();
         $scope.radioModel = 'Tab1';
       });
@@ -127,7 +137,7 @@ angular.module('openehrPocApp')
     $scope.eventSources = [];
 
     function setBookedSlot() {
-      var booking = $scope.appointment.dateOfAppointment.slice(0, 10) + ' ' + $scope.appointment.timeSlot.toISOString().slice(11, 13) + ':00';
+      var booking = $scope.appointment.dateOfAppointment.slice(0, 10) + ' ' + $scope.appointment.timeOfAppointment.toISOString().slice(11, 13) + ':00';
       for (var i = 0; i < $scope.uiConfig.calendar.events.length; i++) {
         var event = $scope.uiConfig.calendar.events[i];
         if (event.color === '#6599C8') {
@@ -142,12 +152,12 @@ angular.module('openehrPocApp')
     if (modal.title === 'Create Appointment') {
       $scope.appointment.dateCreated = new Date().toISOString().slice(0, 10);
     } else {
-      $scope.appointment.timeSlot = new Date($scope.appointment.timeSlot);
+      $scope.appointment.timeOfAppointment = new Date($scope.appointment.timeOfAppointment);
       setBookedSlot();
     }
 
     var isBooked = function () {
-      return $scope.appointment.dateOfAppointment && $scope.appointment.timeSlot;
+      return $scope.appointment.dateOfAppointment && $scope.appointment.timeOfAppointment;
     };
 
     $scope.getScheduleLabel = function () {

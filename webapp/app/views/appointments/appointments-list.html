@@ -16,10 +16,10 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="appointment in appointments | filter:search" ng-click="go({{$index}})" ng-class="{info: selected($index)}">
+    <tr ng-repeat="appointment in appointments | filter:search" ng-click="go('/patients/{{patient.id}}/appointments/{{appointment.sourceId}}')" ng-class="{info: selected(appointment.sourceId)}">
       <td class="dateTime">{{ appointment.dateOfAppointment}}</td>
-      <td>{{ appointment.timeSlotFull }}</td>
-      <td>{{ appointment.careServiceTeam}}</td>
+      <td>{{ appointment.timeOfAppointment }}</td>
+      <td>{{ appointment.serviceTeam}}</td>
       <td>{{ appointment.source }}</td>
     </tr>
 

@@ -39,7 +39,6 @@ public final class DateFormatter {
         }
 
         try {
-            // TODO Optimisation - Re-order this list of dates to put the most common formats first
             return DateUtils.parseDate(input, "yyyy-MM-dd",
                                        "yyyy-MM-dd'T'HH:mm:ss",
                                        "yyyy-MM-dd'T'HH:mm:ss.SSS",
@@ -103,18 +102,22 @@ public final class DateFormatter {
     }
 
     public static String stripOddDate(String input) {
-        if (input != null) {
-            if (input.contains("/")) {
-                input = StringUtils.substringAfter(input, "/");
-            }
-            if (input.contains("/")) {
-                input = StringUtils.substringBefore(input, "/");
-            }
-            if (input.contains("+")) {
-                input = StringUtils.substringBefore(input, "+");
-            }
+        if (input == null) {
+            return null;
         }
 
-        return input;
+        String date = input;
+
+        if (date.contains("/")) {
+            date = StringUtils.substringAfter(date, "/");
+        }
+        if (date.contains("/")) {
+            date = StringUtils.substringBefore(date, "/");
+        }
+        if (date.contains("+")) {
+            date = StringUtils.substringBefore(date, "+");
+        }
+
+        return date;
     }
 }

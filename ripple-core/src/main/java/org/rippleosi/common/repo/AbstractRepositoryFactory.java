@@ -28,11 +28,11 @@ public abstract class AbstractRepositoryFactory<R extends Repository> implements
 
     private final Map<String, R> repositories = new HashMap<>();
 
-    protected abstract R defaultRepository();
-    protected abstract Class<R> repositoryClass();
-
     @Autowired
     private ApplicationContext applicationContext;
+
+    protected abstract R defaultRepository();
+    protected abstract Class<R> repositoryClass();
 
     @Override
     public R select(String source) {

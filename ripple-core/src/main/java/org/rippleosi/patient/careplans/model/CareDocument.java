@@ -10,7 +10,7 @@ public class CareDocument implements Serializable {
     private String name;
     private String type;
     private String author;
-    private Date date;
+    private Date dateCreated;
 
     public String getName() {
         return name;
@@ -36,11 +36,11 @@ public class CareDocument implements Serializable {
         this.author = author;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

@@ -16,6 +16,7 @@
 package org.rippleosi.patient.summary.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  */
@@ -30,6 +31,12 @@ public class PatientDetails {
     private String telephone;
     private String gpDetails;
     private String pasNumber;
+
+    private List<PatientHeadline> problems;
+    private List<PatientHeadline> allergies;
+    private List<PatientHeadline> medications;
+    private List<PatientHeadline> contacts;
+    private List<PatientHeadline> transfers;
 
     public String getId() {
         return id;
@@ -101,5 +108,45 @@ public class PatientDetails {
 
     public void setPasNumber(String pasNumber) {
         this.pasNumber = pasNumber;
+    }
+
+    public List<PatientHeadline> getProblems() {
+        return problems;
+    }
+
+    public void setProblems(List<PatientHeadline> problems) {
+        this.problems = problems;
+    }
+
+    public List<PatientHeadline> getAllergies() {
+        return allergies;
+    }
+
+    public void setAllergies(List<PatientHeadline> allergies) {
+        this.allergies = allergies;
+    }
+
+    public List<PatientHeadline> getMedications() {
+        return medications;
+    }
+
+    public void setMedications(List<PatientHeadline> medications) {
+        this.medications = medications;
+    }
+
+    public List<PatientHeadline> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<PatientHeadline> contacts) {
+        this.contacts = contacts;
+    }
+
+    public List<PatientHeadline> getTransfers() {
+        return transfers;
+    }
+
+    public void setTransfers(List<PatientHeadline> transfers) {
+        this.transfers = transfers;
     }
 }

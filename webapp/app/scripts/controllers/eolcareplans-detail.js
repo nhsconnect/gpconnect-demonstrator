@@ -7,9 +7,8 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    Eolcareplan.all($stateParams.eolcareplanId).then(function (result) {
-      $scope.result = result.data;
-      $scope.eolcareplan = $scope.result[$stateParams.eolcareplansIndex];
+    Eolcareplan.get($stateParams.patientId, $stateParams.eolcareplansIndex).then(function (result) {
+      $scope.eolcareplan = result.data;
     });
 
     $scope.edit = function () {
@@ -34,8 +33,12 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (eolcareplan) {
         eolcareplan.careDocument.type = eolcareplan.careDocument.type.type;
+        eolcareplan.careDocument.dateCreated = new Date(eolcareplan.careDocument.dateCreated);
+        eolcareplan.cprDecision.dateOfDecision = new Date(eolcareplan.cprDecision.dateOfDecision);
+        eolcareplan.treatmentDecision.dateOfDecision = new Date(eolcareplan.treatmentDecision.dateOfDecision);
+
         var toUpdate = {
-         compositionId : eolcareplan.compositionId,
+         sourceId : eolcareplan.sourceId,
          careDocument : eolcareplan.careDocument,
          cprDecision : eolcareplan.cprDecision,
          prioritiesOfCare : eolcareplan.prioritiesOfCare,

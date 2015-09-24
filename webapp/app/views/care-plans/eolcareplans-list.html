@@ -16,10 +16,10 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="eolcareplan in eolcareplans | filter:search" ng-click="go({{$index}})" ng-class="{info: selected($index)}">
-      <td>{{ eolcareplan.careDocument.name }}</td>
-      <td>{{ eolcareplan.careDocument.type }}</td>
-      <td class="dateTime">{{ eolcareplan.careDocument.date | date:'y-MM-dd'}}</td>
+    <tr ng-repeat="eolcareplan in eolcareplans | filter:search" ng-click="go('/patients/{{patient.id}}/eolcareplans/{{eolcareplan.sourceId}}')" ng-class="{info: selected(eolcareplan.sourceId)}">
+      <td>{{ eolcareplan.name }}</td>
+      <td>{{ eolcareplan.type }}</td>
+      <td class="dateTime">{{ eolcareplan.date | date:'y-MM-dd'}}</td>
       <td>{{ eolcareplan.source }}</td>
     </tr>
 

@@ -69,7 +69,7 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="openDatepicker($event, 'dateOfOnsetOpen')" disabled><i class="fa fa-calendar"></i></button>
             </span>
-              <input type="text" class="form-control" id="date" name="date" ng-model="eolcareplan.careDocument.date"  datepicker-popup="yyyy-MM-dd" is-open="$parent.dateOfOnsetOpen" disabled/>
+              <input type="text" class="form-control" id="date" name="date" ng-model="eolcareplan.careDocument.dateCreated"  datepicker-popup="yyyy-MM-dd" is-open="$parent.dateOfOnsetOpen" disabled/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.date.$error.required">You must enter a valid date.</span>
           </div>
@@ -126,8 +126,8 @@
           <div class="input-group">
             <select class="form-control" name="decisiontorefusetreatment" id="decisiontorefusetreatment" ng-model="eolcareplan.treatmentDecision.decisionToRefuseTreatment" required>
               <option value="">Select Decision</option>
-              <option>Advanced decision to refuse treatment signed</option>
-              <option>Some other decision</option>
+              <option>Advanced decision to refuse treatment signed </option>
+              <option>Some other decision </option>
             </select>
           </div>
         <span class="help-block animate-fade" ng-show="formSubmitted && eolcareplanForm.decisiontorefusetreatment.$error.required">You must enter a value.</span>
@@ -173,7 +173,7 @@
           <div class="input-group">
             <select class="form-control" name="cprdecision" id="cprdecision" ng-model="eolcareplan.cprDecision.cprDecision" required>
               <option value="">Select Decision</option>
-              <option>For attempted cardio-pulmonary resuscitation</option>
+              <option>For attempted cardio-pulmonary resuscitation </option>
               <option>Decision 2</option>
             </select>
           </div>

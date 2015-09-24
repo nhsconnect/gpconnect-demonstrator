@@ -16,8 +16,12 @@ angular.module('openehrPocApp')
     if (modal.title === 'Create End of Life Care Document'){
       var today = new Date().toISOString().slice(0, 10);
       $scope.eolcareplan.careDocument = {
-        date : today
+        dateCreated : today
       };
+    }else{
+      $scope.eolcareplan.careDocument.dateCreated = new Date($scope.eolcareplan.careDocument.dateCreated).toISOString().slice(0, 10);
+      $scope.eolcareplan.cprDecision.dateOfDecision = new Date($scope.eolcareplan.cprDecision.dateOfDecision).toISOString().slice(0, 10);
+      $scope.eolcareplan.treatmentDecision.dateOfDecision = new Date($scope.eolcareplan.treatmentDecision.dateOfDecision).toISOString().slice(0, 10);
     }
 
     $scope.ok = function (eolcareplanForm, eolcareplan) {

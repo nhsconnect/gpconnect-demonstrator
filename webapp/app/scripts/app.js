@@ -227,7 +227,7 @@ angular
       })
 
       .state('eolcareplans-detail', {
-        url: '/patients/{patientId:int}/eolcareplans/{eolcareplansIndex:int}',
+        url: '/patients/{patientId:int}/eolcareplans/{eolcareplansIndex}',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },

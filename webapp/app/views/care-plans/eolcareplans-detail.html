@@ -15,15 +15,15 @@
     <div class="form-group form-group-sm">
       <label class="control-label col-md-3">Document Date:</label>
       <div class="col-md-9">
-        <div class="form-control-static">{{ eolcareplan.careDocument.date | date:'y-MM-dd'}}</div>
+        <div class="form-control-static">{{ eolcareplan.careDocument.dateCreated | date:'dd-MMM-y'}}</div>
       </div>
     </div>
  </div>
 
     <div class="form-horizontal text-left DetailsSubHeadingt">
         <h5><strong>Priorities of Care</strong></h5>
-    </div>   
-        
+    </div>
+
    <div class="form-horizontal text-left">
     <div class="form-group form-group-sm">
       <label class="control-label col-md-3">Place of Care:</label>
@@ -31,7 +31,7 @@
         <div class="form-control-static">{{ eolcareplan.prioritiesOfCare.placeOfCare }}</div>
       </div>
     </div>
-     </div>        
+     </div>
    <div class="form-horizontal text-left">
     <div class="form-group form-group-sm">
       <label class="control-label col-md-3">Place of Death:</label>
@@ -39,63 +39,63 @@
         <div class="form-control-static">{{ eolcareplan.prioritiesOfCare.placeOfDeath }}</div>
       </div>
     </div>
-     </div>   
+     </div>
     <div class="form-horizontal text-left">
     <div class="form-group form-group-sm">
       <label class="control-label col-md-12">Comment:</label>
       <div class="col-md-12">
         <div class="form-control-static">{{ eolcareplan.prioritiesOfCare.comment }}</div>
       </div>
-    </div>   
-    </div>    
+    </div>
+    </div>
     <div class="form-horizontal text-left DetailsSubHeadingt">
         <h5><strong>Advanced Decision to Refuse Treatment</strong></h5>
-    </div>   
-               
+    </div>
+
     <div class="form-horizontal text-left">
     <div class="form-group form-group-sm">
       <label class="control-label col-md-3">Date of Decision:</label>
       <div class="col-md-9">
-        <div class="form-control-static">{{ eolcareplan.treatmentDecision.dateOfDecision  | date:'y-MM-dd'}}</div>
+        <div class="form-control-static">{{ eolcareplan.treatmentDecision.dateOfDecision  | date:'dd-MMM-y'}}</div>
       </div>
-    </div>        
-      </div>   
+    </div>
+      </div>
     <div class="form-horizontal text-left">
     <div class="form-group form-group-sm">
       <label class="control-label col-md-12">Decision to Refuse Treatment:</label>
       <div class="col-md-12">
         <div class="form-control-static">{{ eolcareplan.treatmentDecision.decisionToRefuseTreatment }}</div>
       </div>
-    </div>   
-       </div>          
+    </div>
+       </div>
     <div class="form-horizontal text-left">
     <div class="form-group form-group-sm">
       <label class="control-label col-md-12">Comment:</label>
       <div class="col-md-12">
         <div class="form-control-static">{{ eolcareplan.treatmentDecision.comment }}</div>
       </div>
-    </div>  
-       </div>         
+    </div>
+       </div>
     <div class="form-horizontal text-left DetailsSubHeadingt">
         <h5><strong>CPR Decision</strong></h5>
-    </div> 
-                       
+    </div>
+
     <div class="form-horizontal text-left">
     <div class="form-group form-group-sm">
       <label class="control-label col-md-3">Date of Decision:</label>
       <div class="col-md-9">
-        <div class="form-control-static">{{ eolcareplan.cprDecision.dateOfDecision  | date:'y-MM-dd'}}</div>
+        <div class="form-control-static">{{ eolcareplan.cprDecision.dateOfDecision  | date:'dd-MMM-y'}}</div>
       </div>
-    </div>  
-      </div>                          
+    </div>
+      </div>
     <div class="form-horizontal text-left">
     <div class="form-group form-group-sm">
       <label class="control-label col-md-12">CPR Decision:</label>
       <div class="col-md-12">
         <div class="form-control-static">{{ eolcareplan.cprDecision.cprDecision }}</div>
       </div>
-    </div>  
-      </div>                                  
+    </div>
+      </div>
     <div class="form-horizontal text-left">
     <div class="form-group form-group-sm">
       <label class="control-label col-md-12">Comment:</label>

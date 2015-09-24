@@ -1,6 +1,6 @@
 'use strict';/*jshint loopfunc: true*/
 angular.module('openehrPocApp')
-    .controller('TransferOfCareCtrl', function ($modal, $state, $scope, $stateParams, PatientService, TransferOfCare) {
+    .controller('TransferOfCareCtrl', function ($modal, $state, $scope, $q, $stateParams, PatientService, TransferOfCare, Allergy, Diagnosis, Medication, Contact) {
 
       $modal.open({
         templateUrl: 'views/transfer-of-care/transfer-of-care-modal.html',
@@ -12,30 +12,35 @@ angular.module('openehrPocApp')
               return $scope.patient;
             });
           },
-          transferOfCare: function () {
-            return TransferOfCare.get($stateParams.patientId).then(function (result) {
-              $scope.transferOfCare = result.data;
-              return $scope.transferOfCare;
-            });
-          },
 
           transferOfCareCompositions: function () {
-            return TransferOfCare.getComposition($stateParams.patientId).then(function (result) {
+            return TransferOfCare.all($stateParams.patientId).then(function (result) {
               $scope.transferOfCareCompositions = result.data;
               return $scope.transferOfCareCompositions;
             });
           }
         },
-        controller: function ($scope, patient, transferOfCare, transferOfCareCompositions) {
-
+        controller: function ($scope, patient, transferOfCareCompositions) {
+          $scope.transferOfCare = {};
+              $q.all([
+              Allergy.all($stateParams.patientId), Diagnosis.all($stateParams.patientId), Medication.all($stateParams.patientId), Contact.all($stateParams.patientId)
+                  ]).then(function (allResult) {
+                    $scope.transferOfCare.allergies = {};
+                    $scope.transferOfCare.problems = {};
+                    $scope.transferOfCare.medication = {};
+                    $scope.transferOfCare.contacts = {};
+                    $scope.transferOfCare.allergies.allergies = allResult[0].data;
+                    $scope.transferOfCare.problems.problems = allResult[1].data;
+                    $scope.transferOfCare.medication.medications = allResult[2].data;
+                    $scope.transferOfCare.contacts.contacts = allResult[3].data;
+                    $scope.allergies = $scope.transferOfCare.allergies.allergies;
+                    $scope.problems = $scope.transferOfCare.problems.problems;
+                    $scope.medications = $scope.transferOfCare.medication.medications;
+                    $scope.contacts = $scope.transferOfCare.contacts.contacts;
+               })
           $scope.patient = patient;
-          $scope.transferOfCare = transferOfCare;
-          $scope.allergies = $scope.transferOfCare.allergies.allergies;
-          $scope.contacts = $scope.transferOfCare.contacts.contacts;
-          $scope.problems = $scope.transferOfCare.problems.problems;
-          $scope.medications = $scope.transferOfCare.medication.medications;
           $scope.transferOfCareComposition = transferOfCareCompositions;
-          $scope.siteFrom = $scope.transferOfCareComposition.transfers[0].transferDetail.site.siteFrom;
+          $scope.siteFrom = 'WORCESTERSHIRE HEALTH AND CARE NHS TRUST';
 
           $scope.selectedItems = {
             allergies: [],
@@ -78,7 +83,7 @@ angular.module('openehrPocApp')
               $scope.transferDetail.reasonForContact = !$scope.details.reasonForContact ? 'No reason specified' : $scope.details.reasonForContact;
               $scope.transferDetail.clinicalSummary = !$scope.details.clinicalSummary  ? 'No clinical summary' : $scope.details.clinicalSummary;
               $scope.transferDetail.site.siteFrom = !$scope.siteFrom  ? 'No site from' : $scope.siteFrom;
-              $scope.transferDetail.site.siteTo = !$scope.details.siteTo  ? 'No site to' : $scope.details.siteTo;
+              $scope.transferDetail.site.siteTo = !$scope.details.siteTo  ? 'No site to' : $scope.details.  siteTo;
               $scope.transferDetail.site.patientId = 9999999000;
               $scope.toggleDetailView();
             }
@@ -87,7 +92,7 @@ angular.module('openehrPocApp')
 
           function updateTransferOfCare () {
 
-            var updatedTransferOfCare = jQuery.extend(true, {},
+               var updatedTransferOfCare = jQuery.extend(true, {},
               $scope.transferOfCare.allergies,
               $scope.transferOfCare.contacts,
               $scope.transferOfCare.medication,
@@ -140,9 +145,22 @@ angular.module('openehrPocApp')
             $scope.transferOfCare.medication = $scope.transferOfCare.medications;
             delete $scope.transferOfCare.medications;
             $scope.transferOfCare.transferDetail = $scope.transferDetail;
-            $scope.transferOfCareComposition.transfers.push($scope.transferOfCare);
-            console.log($scope.transferOfCareComposition);
-            TransferOfCare.create($scope.patient.id, $scope.transferOfCareComposition).then(function () {
+            var todayDate = new Date();
+            var toAdd = {
+                allergies: $scope.transferOfCare.allergies,
+                contacts: $scope.transferOfCare.contacts,
+                medications: $scope.transferOfCare.medication,
+                problems: $scope.transferOfCare.problems,
+                clinicalSummary: $scope.transferDetail.clinicalSummary,
+                dateOfTransfer: todayDate,
+                reasonForContact: $scope.transferDetail.reasonForContact,
+                siteFrom: 'WORCESTERSHIRE HEALTH AND CARE NHS TRUST',
+                siteTo: $scope.details.siteTo,
+                source: 'openehr',
+                sourceId: ''
+            };
+
+            TransferOfCare.create($scope.patient.id, toAdd).then(function () {
               $scope.$close();
             });
 

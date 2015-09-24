@@ -18,15 +18,15 @@
 
   <tbody>
 
-  <tr ng-repeat="transfer in transferofCareComposition.transfers | filter:query" ng-click="go('/patients/{{patient.id}}/transfer-of-care-detail/{{$index}}')" ng-class="{info: selected($index)}">
+  <tr ng-repeat="transfer in transferofCareComposition | filter:query" ng-click="go('/patients/{{patient.id}}/transfer-of-care-detail/{{transfer.sourceId}}')" ng-class="{info: selected(transfer.sourceId)}">
     <td>Transfer #{{($index + 1)}}</td>
-    <td>{{transfer.transferDetail.site.siteFrom}}</td>
-    <td>{{transfer.transferDetail.site.siteTo}}</td>
-    <td class="dateTime">{{transfer.transferDetail.site.timeStamp}}</td>
+    <td>{{transfer.siteFrom}}</td>
+    <td>{{transfer.siteTo}}</td>
+    <td class="dateTime">{{transfer.dateOfTransfer}}</td>
     <td>local</td>
   </tr>
 
-  <tr ng-if="!transferofCareComposition.transfers.length">
+  <tr ng-if="!transferofCareComposition.length">
     <td colspan="5"><span class="label label-default">No transfers</span></td>
   </tr>
   </tbody>

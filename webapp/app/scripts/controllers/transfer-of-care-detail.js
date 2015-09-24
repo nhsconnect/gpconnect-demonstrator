@@ -7,17 +7,13 @@ angular.module('openehrPocApp')
         $scope.patient = patient;
       });
 
-    TransferOfCare.getComposition($stateParams.patientId).then(function (result) {
-        $scope.transferofCareComposition = result.data;
-        $scope.transferOfCare = $scope.transferofCareComposition.transfers[$stateParams.transferOfCareIndex];
-        $scope.transferOfCareSelectionNumber = $stateParams.transferOfCareIndex + 1;
+    TransferOfCare.get($stateParams.patientId, $stateParams.transferOfCareIndex).then(function (result) {
+        $scope.transferOfCare = result.data;
         $scope.allergies = $scope.transferOfCare.allergies;
         $scope.contacts = $scope.transferOfCare.contacts;
         $scope.problems = $scope.transferOfCare.problems;
-        $scope.medications = $scope.transferOfCare.medication;
-        $scope.transferDetail = $scope.transferOfCare.transferDetail;
-        $scope.site = $scope.transferOfCare.transferDetail.site;
-        $scope.transferDetail.site.timeStamp = moment($scope.transferDetail.site.timeStamp).format('DD-MMM-YYYY');
+        $scope.medications = $scope.transferOfCare.medications;
+        $scope.dateOfTransfer = $scope.transferOfCare.dateOfTransfer;
       });
 
   });

@@ -17,9 +17,9 @@
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="mdt in cancerMdtComposition | filter:search" ng-click="go('/patients/{{patient.id}}/cancer-mdt-detail/{{$index}}')" ng-class="{info: selected($index)}">
+  <tr ng-repeat="mdt in cancerMdtComposition | filter:search" ng-click="go('/patients/{{patient.id}}/cancer-mdt-detail/{{mdt.sourceId}}')" ng-class="{info: selected(mdt.sourceId)}">
     <td class="dateTime">{{mdt.dateOfRequest}}</td>
-    <td>{{mdt.service}}</td>
+    <td>{{mdt.serviceTeam}}</td>
     <td class="dateTime">{{mdt.dateOfMeeting}}</td>
     <td>{{mdt.source}}</td>
   </tr>

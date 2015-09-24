@@ -7,9 +7,8 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    CancerMdt.getComposition($stateParams.patientId).then(function (result) {
-      $scope.cancerMdtComposition = result.data;
-      $scope.cancerMdt = $scope.cancerMdtComposition[$stateParams.cancerMdtIndex];
+    CancerMdt.get($stateParams.patientId, $stateParams.cancerMdtIndex).then(function (result) {
+      $scope.cancerMdt = result.data;
     });
 
     $scope.edit = function () {

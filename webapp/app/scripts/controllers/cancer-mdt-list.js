@@ -6,7 +6,7 @@ angular.module('openehrPocApp')
     $scope.search = function (row) {
       return (
           angular.lowercase(row.dateOfRequest).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-          angular.lowercase(row.service).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+          angular.lowercase(row.serviceTeam).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
           angular.lowercase(row.dateOfMeeting).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
           angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
         );
@@ -16,7 +16,7 @@ angular.module('openehrPocApp')
       $scope.patient = patient;
     });
 
-    CancerMdt.getComposition($stateParams.patientId).then(function (result) {
+    CancerMdt.all($stateParams.patientId).then(function (result) {
       $scope.cancerMdtComposition = result.data;
       for (var i = 0; i < $scope.cancerMdtComposition.length; i++){
         $scope.cancerMdtComposition[i].dateOfRequest = moment($scope.cancerMdtComposition[i].dateOfRequest).format('DD-MMM-YYYY');

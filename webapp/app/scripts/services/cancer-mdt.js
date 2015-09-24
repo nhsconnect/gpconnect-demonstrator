@@ -5,8 +5,12 @@ angular.module('openehrPocApp')
 
     var patientIdOveride = 9999999000;
 
-    var getComposition = function (patientId) {
+    var all = function (patientId) {
       return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/mdtreports/');
+    };
+
+    var get = function (patientId, compositionId) {
+      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/mdtreports/' + compositionId);
     };
 
     var create = function (patientId, composition) {
@@ -22,7 +26,8 @@ angular.module('openehrPocApp')
     };
 
     return {
-      getComposition: getComposition,
+      all: all,
+      get: get,
       create: create,
       update: update
     };

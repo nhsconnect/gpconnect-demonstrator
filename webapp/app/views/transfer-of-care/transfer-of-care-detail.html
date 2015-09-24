@@ -22,7 +22,7 @@
       <div class="form-control-static">
         <span ng-if="!medications.length">No medication selected</span>
         <ul>
-          <li ng-repeat="(key,value) in medications">{{value.name}}</li>
+          <li ng-repeat="(key,value) in medications">{{value.medication}}</li>
         </ul>
       </div>
     </div>
@@ -34,7 +34,7 @@
       <div class="form-control-static">
         <span ng-if="!allergies.length">No allergies selected</span>
         <ul>
-          <li ng-repeat="(key,value) in allergies">{{value.cause}}</li>
+          <li ng-repeat="(key,value) in allergies">{{value.allergy}}</li>
         </ul>
       </div>
     </div>
@@ -46,7 +46,7 @@
       <div class="form-control-static">
         <span ng-if="!contacts.length">No contacts selected</span>
         <ul>
-          <li ng-repeat="(key,value) in contacts">{{value.name}}</li>
+          <li ng-repeat="(key,value) in contacts">{{value.contactName}}</li>
         </ul>
       </div>
     </div>

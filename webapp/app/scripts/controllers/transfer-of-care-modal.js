@@ -110,7 +110,10 @@ angular.module('openehrPocApp')
 
                   for (var transferIndex = updatedTransferOfCare[type].length; transferIndex--;) {
                     var contains = false;
+
                     angular.forEach($scope.selectedItems[type], function (value) {
+
+
                       var selectedItemIndex = value;
 
                       if (transferIndex === selectedItemIndex) {
@@ -145,6 +148,34 @@ angular.module('openehrPocApp')
             $scope.transferOfCare.medication = $scope.transferOfCare.medications;
             delete $scope.transferOfCare.medications;
             $scope.transferOfCare.transferDetail = $scope.transferDetail;
+
+            angular.forEach($scope.transferOfCare.allergies, function (value, key) {
+              $scope.transferOfCare.allergies[key] =
+                {
+                  allergy: value.cause,
+                  source: value.source,
+                  sourceId: value.sourceId
+                };
+            });
+
+            angular.forEach($scope.transferOfCare.contacts, function (value, key) {
+              $scope.transferOfCare.contacts[key] =
+                {
+                  contactName: value.name,
+                  source: value.source,
+                  sourceId: value.sourceId
+                };
+            });
+
+            angular.forEach($scope.transferOfCare.medication, function (value, key) {
+              $scope.transferOfCare.medication[key] =
+                {
+                  medication: value.name,
+                  source:value. source,
+                  sourceId: value.sourceId
+                };
+            });
+
             var todayDate = new Date();
             var toAdd = {
                 allergies: $scope.transferOfCare.allergies,

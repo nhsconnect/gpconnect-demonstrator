@@ -71,31 +71,31 @@ public class OpenEHRCarePlanStore extends AbstractOpenEhrService implements Care
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
 
-        addCareDocument(content, CARE_PLAN_PREFIX, carePlan.getCareDocument());
-        addCprDecision(content, CARE_PLAN_PREFIX, carePlan.getCprDecision());
-        addTreatmentDecision(content, CARE_PLAN_PREFIX, carePlan.getTreatmentDecision());
-        addPriorities(content, CARE_PLAN_PREFIX, carePlan.getPrioritiesOfCare());
+        addCareDocument(content, carePlan.getCareDocument());
+        addCprDecision(content, carePlan.getCprDecision());
+        addTreatmentDecision(content, carePlan.getTreatmentDecision());
+        addPriorities(content, carePlan.getPrioritiesOfCare());
 
         return content;
     }
 
-    private void addCareDocument(Map<String, Object> content, String prefix, CareDocument careDocument) {
+    private void addCareDocument(Map<String, Object> content, CareDocument careDocument) {
         // TODO
     }
 
-    private void addTreatmentDecision(Map<String, Object> content, String prefix, TreatmentDecision treatmentDecision) {
+    private void addTreatmentDecision(Map<String, Object> content, TreatmentDecision treatmentDecision) {
 
         String decisionDate = DateFormatter.toString(treatmentDecision.getDateOfDecision());
 
-        content.put(prefix + "/advance_decision_to_refuse_treatment/decision_status|value", treatmentDecision.getDecisionToRefuseTreatment());
-        content.put(prefix + "/advance_decision_to_refuse_treatment/comment", treatmentDecision.getComment());
-        content.put(prefix + "/advance_decision_to_refuse_treatment/date_of_decision", decisionDate);
-        content.put(prefix + "/advance_decision_to_refuse_treatment/decision_status|code", "at0005");
+        content.put(CARE_PLAN_PREFIX + "/advance_decision_to_refuse_treatment/decision_status|value", treatmentDecision.getDecisionToRefuseTreatment());
+        content.put(CARE_PLAN_PREFIX + "/advance_decision_to_refuse_treatment/comment", treatmentDecision.getComment());
+        content.put(CARE_PLAN_PREFIX + "/advance_decision_to_refuse_treatment/date_of_decision", decisionDate);
+        content.put(CARE_PLAN_PREFIX + "/advance_decision_to_refuse_treatment/decision_status|code", "at0005");
     }
 
-    private void addPriorities(Map<String, Object> content, String prefix, PrioritiesOfCare priority) {
+    private void addPriorities(Map<String, Object> content, PrioritiesOfCare priority) {
 
-        String priorityPrefix = prefix + "/preferred_priorities_of_care:0";
+        String priorityPrefix = CARE_PLAN_PREFIX + "/preferred_priorities_of_care:0";
 
         content.put(priorityPrefix + "/preferred_place_of_care:0|value", priority.getPlaceOfCare());
         content.put(priorityPrefix + "/preferred_place_of_care:0|code", "at0008");
@@ -104,13 +104,13 @@ public class OpenEHRCarePlanStore extends AbstractOpenEhrService implements Care
         content.put(priorityPrefix + "/comment", priority.getComment());
     }
 
-    private void addCprDecision(Map<String, Object> content, String prefix, CPRDecision cprDecision) {
+    private void addCprDecision(Map<String, Object> content, CPRDecision cprDecision) {
 
         String decisionDate = DateFormatter.toString(cprDecision.getDateOfDecision());
 
-        content.put(prefix + "/cpr_decision/cpr_decision|value", cprDecision.getCprDecision());
-        content.put(prefix + "/cpr_decision/comment", cprDecision.getComment());
-        content.put(prefix + "/cpr_decision/date_of_cpr_decision", decisionDate);
-        content.put(prefix + "/cpr_decision/cpr_decision|code", "at0005");
+        content.put(CARE_PLAN_PREFIX + "/cpr_decision/cpr_decision|value", cprDecision.getCprDecision());
+        content.put(CARE_PLAN_PREFIX + "/cpr_decision/comment", cprDecision.getComment());
+        content.put(CARE_PLAN_PREFIX + "/cpr_decision/date_of_cpr_decision", decisionDate);
+        content.put(CARE_PLAN_PREFIX + "/cpr_decision/cpr_decision|code", "at0005");
     }
 }

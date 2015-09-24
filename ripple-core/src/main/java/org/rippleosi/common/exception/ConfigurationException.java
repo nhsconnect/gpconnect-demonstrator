@@ -23,7 +23,7 @@ public class ConfigurationException extends RuntimeException {
         super(message);
     }
 
-    public static ConfigurationException unimplementedTransaction(Class clazz) {
+    public static ConfigurationException unimplementedTransaction(Class<?> clazz) {
         return new ConfigurationException("Unable to find a configured " + clazz.getSimpleName() + " instance");
     }
 }

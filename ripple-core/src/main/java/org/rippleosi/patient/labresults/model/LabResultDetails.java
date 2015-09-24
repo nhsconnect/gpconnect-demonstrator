@@ -105,7 +105,7 @@ public class LabResultDetails implements Serializable {
         this.testResults = testResults;
     }
 
-    public static class TestResult {
+    public static class TestResult implements Serializable {
 
         private String result;
         private String value;

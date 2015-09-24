@@ -14,8 +14,6 @@ angular.module('openehrPocApp')
     };
 
     var create = function (patientId, composition) {
-      console.log('transferOfCareComposition: ');
-      console.log(composition);
       return $http.post('/api/patients/' + (patientIdOveride || patientId) + '/transfers-of-care', composition);
     };
 

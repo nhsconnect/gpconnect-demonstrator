@@ -9,6 +9,8 @@ angular.module('openehrPocApp')
 
     if (modal.title === 'Edit MDT') {
       $scope.cancerMdt.timeOfMeeting = new Date($scope.cancerMdt.timeOfMeeting);
+      $scope.cancerMdt.dateOfMeeting = new Date($scope.cancerMdt.dateOfMeeting).toISOString().slice(0, 10);
+      $scope.cancerMdt.dateOfRequest = new Date($scope.cancerMdt.dateOfRequest).toISOString().slice(0, 10);
     }
 
     $scope.changeProtocol = function (protocol) {

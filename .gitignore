@@ -1,13 +1,23 @@
+# IntelliJ IDEA #
 .idea
 *.iml
+webapp/.idea/
+
+# Eclipse #
 .project
 .classpath
 .settings/
+
+# Misc #
 target/
 .springBeans
 .tern-project
-webapp/.idea/
 node_modules/
+*.log
+
+# ActiveMQ #
 activemq-data/
 */activemq-data/
+
+# Config #
 context-ripple.xml

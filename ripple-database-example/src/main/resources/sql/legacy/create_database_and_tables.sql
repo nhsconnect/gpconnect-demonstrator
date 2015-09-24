@@ -75,7 +75,6 @@ CREATE TABLE poc_legacy.allergy_headlines (
   allergy       VARCHAR(256)  NULL,
   source        VARCHAR(30)   NOT NULL,
   PRIMARY KEY   (id),
-  UNIQUE        (source_id),
   FOREIGN KEY   (transfer_id)  REFERENCES  poc_legacy.transfers_of_care(id)
 );
 
@@ -86,7 +85,6 @@ CREATE TABLE poc_legacy.contact_headlines (
   contact_name  VARCHAR(256)  NULL,
   source        VARCHAR(30)   NOT NULL,
   PRIMARY KEY   (id),
-  UNIQUE        (source_id),
   FOREIGN KEY   (transfer_id)  REFERENCES  poc_legacy.transfers_of_care(id)
 );
 
@@ -97,7 +95,6 @@ CREATE TABLE poc_legacy.medication_headlines (
   medication    VARCHAR(256)  NULL,
   source        VARCHAR(30)   NOT NULL,
   PRIMARY KEY   (id),
-  UNIQUE        (source_id),
   FOREIGN KEY   (transfer_id)  REFERENCES  poc_legacy.transfers_of_care(id)
 );
 
@@ -108,7 +105,6 @@ CREATE TABLE poc_legacy.problem_headlines (
   problem       VARCHAR(256)  NULL,
   source        VARCHAR(30)   NOT NULL,
   PRIMARY KEY   (id),
-  UNIQUE        (source_id),
   FOREIGN KEY   (transfer_id)  REFERENCES  poc_legacy.transfers_of_care(id)
 );
 

@@ -37,6 +37,9 @@ public class LegacyDataConfig {
         dataSource.setUsername(username);
         dataSource.setPassword(password);
 
+        dataSource.setValidationQuery("select 1 as dbcp_connection_test");
+        dataSource.setTestOnBorrow(true);
+
         return dataSource;
     }
 }

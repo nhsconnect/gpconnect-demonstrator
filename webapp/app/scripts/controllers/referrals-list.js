@@ -55,7 +55,8 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (referral) {
-
+        referral.dateOfReferral = new Date(referral.dateOfReferral);
+        referral.dateOfReferral.setMinutes(referral.dateOfReferral.getMinutes() - referral.dateOfReferral.getTimezoneOffset());
         var toAdd = {
          sourceId : '',
          author : referral.author,

@@ -15,7 +15,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="allergy in allergies | filter:search" ng-click="go('/patients/{{patient.id}}/allergies/{{allergy.sourceId}}')" ng-class="{info: selected(allergy.sourceId)}">
+    <tr ng-repeat="allergy in allergies | filter:search" ng-click="go('{{allergy.sourceId}}')" ng-class="{info: selected(allergy.sourceId)}">
       <td>{{ allergy.cause }}</td>
       <td>{{ allergy.reaction }}</td>
       <td>{{ allergy.source }}</td>

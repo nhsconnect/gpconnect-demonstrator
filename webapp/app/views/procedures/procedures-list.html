@@ -17,7 +17,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr ng-repeat="procedure in procedures | filter:search" ng-click="go('/patients/{{patient.id}}/procedures/{{procedure.sourceId}}')" ng-class="{info: selected(procedure.sourceId)}">
+  <tr ng-repeat="procedure in procedures | filter:search" ng-click="go('{{procedure.sourceId}}')" ng-class="{info: selected(procedure.sourceId)}">
     <td>{{procedure.name}}</td>
     <td class="dateTime">{{procedure.date}}</td>
     <td>{{procedure.time}}</td>

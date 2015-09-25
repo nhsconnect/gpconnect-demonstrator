@@ -24,8 +24,8 @@ angular.module('openehrPocApp')
       }
     });
 
-    $scope.go = function (path) {
-      $location.path(path);
+    $scope.go = function (id) {
+      $location.path('/patients/'+ $scope.patient.id+ '/cancer-mdt-detail/' + id);
     };
 
     $scope.selected = function (cancerMdtIndex) {

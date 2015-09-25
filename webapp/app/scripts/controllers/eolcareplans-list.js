@@ -25,8 +25,8 @@ angular.module('openehrPocApp')
       }
     });
 
-    $scope.go = function (path) {
-       $location.path(path);
+    $scope.go = function (id) {
+       $location.path('/patients/'+ $scope.patient.id+ '/eolcareplans/' + id);
     };
 
     $scope.selected = function (eolcareplansIndex) {

@@ -16,7 +16,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="contact in contacts | filter:query" ng-click="go('/patients/{{patient.id}}/contacts/{{contact.sourceId}}')" ng-class="{info: selected(contact.sourceId)}">
+    <tr ng-repeat="contact in contacts | filter:query" ng-click="go('{{contact.sourceId}}')" ng-class="{info: selected(contact.sourceId)}">
       <td>{{ contact.name }}</td>
       <td>{{ contact.relationship }}</td>
       <td><i class="fa fa-fw fa-check" ng-if="contact.nextOfKin"></i></td>

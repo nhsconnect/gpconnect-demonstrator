@@ -15,7 +15,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="order in orders | filter:search" ng-click="go('/patients/{{patient.id}}/orders/{{order.sourceId}}')" ng-class="{info: selected(order.sourceId)}">
+    <tr ng-repeat="order in orders | filter:search" ng-click="go('{{order.sourceId}}')" ng-class="{info: selected(order.sourceId)}">
       <td>{{order.name }}</td>
       <td class="dateTime">{{order.orderDate}}</td>
       <td>openehr</td>

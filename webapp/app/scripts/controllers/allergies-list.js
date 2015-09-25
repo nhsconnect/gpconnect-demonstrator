@@ -19,8 +19,8 @@ angular.module('openehrPocApp')
       $scope.allergies = result.data;
     });
 
-    $scope.go = function (path) {
-      $location.path(path);
+    $scope.go = function (id) {
+      $location.path('/patients/'+ $scope.patient.id+ '/allergies/' + id);
     };
 
     $scope.selected = function ($index) {

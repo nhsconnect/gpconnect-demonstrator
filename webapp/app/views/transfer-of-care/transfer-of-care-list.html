@@ -18,7 +18,7 @@
 
   <tbody>
 
-  <tr ng-repeat="transfer in transferofCareComposition | filter:query" ng-click="go('/patients/{{patient.id}}/transfer-of-care-detail/{{transfer.sourceId}}')" ng-class="{info: selected(transfer.sourceId)}">
+  <tr ng-repeat="transfer in transferofCareComposition | filter:query" ng-click="go('{{transfer.sourceId}}')" ng-class="{info: selected(transfer.sourceId)}">
     <td>Transfer #{{($index + 1)}}</td>
     <td>{{transfer.siteFrom}}</td>
     <td>{{transfer.siteTo}}</td>

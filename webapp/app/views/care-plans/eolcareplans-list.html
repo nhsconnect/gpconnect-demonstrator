@@ -16,7 +16,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="eolcareplan in eolcareplans | filter:search" ng-click="go('/patients/{{patient.id}}/eolcareplans/{{eolcareplan.sourceId}}')" ng-class="{info: selected(eolcareplan.sourceId)}">
+    <tr ng-repeat="eolcareplan in eolcareplans | filter:search" ng-click="go('{{eolcareplan.sourceId}}')" ng-class="{info: selected(eolcareplan.sourceId)}">
       <td>{{ eolcareplan.name }}</td>
       <td>{{ eolcareplan.type }}</td>
       <td class="dateTime">{{ eolcareplan.date | date:'y-MM-dd'}}</td>

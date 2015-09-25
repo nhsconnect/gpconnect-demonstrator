@@ -60,7 +60,7 @@
         <table class="table table-striped clickable">
           <tbody>
           <tr ng-repeat="medication in medications">
-            <td ng-click="go('/patients/{{patient.id}}/medications/{{$index}}')" > {{ medication.text }}<span class="glyphicon glyphicon-chevron-right"></span></td>
+            <td ng-click="go('/patients/{{patient.id}}/medications/{medication.sourceId}}')" > {{ medication.text }}<span class="glyphicon glyphicon-chevron-right"></span></td>
           </tr>
           </tbody>
         </table>

@@ -6,7 +6,7 @@ angular.module('openehrPocApp')
       $scope.patients = patients;
     });
 
-    $scope.order = $stateParams.order || 'lastname';
+    $scope.order = $stateParams.order || 'name';
     $scope.reverse = $stateParams.reverse === 'true';
     $scope.filters = { department: $stateParams.department, ageRange: $stateParams.ageRange };
 

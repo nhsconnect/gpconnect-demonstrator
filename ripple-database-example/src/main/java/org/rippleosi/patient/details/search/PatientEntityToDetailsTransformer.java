@@ -35,6 +35,7 @@ import org.rippleosi.patient.problems.search.ProblemSearch;
 import org.rippleosi.patient.problems.search.ProblemSearchFactory;
 import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientHeadline;
+import org.rippleosi.patient.summary.model.TransferHeadline;
 import org.rippleosi.patient.transfers.model.TransferOfCareSummary;
 import org.rippleosi.patient.transfers.search.TransferOfCareSearch;
 import org.rippleosi.patient.transfers.search.TransferOfCareSearchFactory;
@@ -128,7 +129,7 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         return CollectionUtils.collect(problems, new ProblemTransformer(), new ArrayList<>());
     }
 
-    private List<PatientHeadline> findTransfers(String patientId) {
+    private List<TransferHeadline> findTransfers(String patientId) {
 
         TransferOfCareSearch transferOfCareSearch = transferOfCareSearchFactory.select(null);
 

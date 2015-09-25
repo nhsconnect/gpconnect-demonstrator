@@ -16,23 +16,22 @@
 package org.rippleosi.patient.details.search;
 
 import org.apache.commons.collections4.Transformer;
-import org.rippleosi.common.util.DateFormatter;
-import org.rippleosi.patient.summary.model.PatientHeadline;
+import org.rippleosi.patient.summary.model.TransferHeadline;
 import org.rippleosi.patient.transfers.model.TransferOfCareSummary;
 
 /**
  */
-public class TransferOfCareTransformer implements Transformer<TransferOfCareSummary, PatientHeadline> {
+public class TransferOfCareTransformer implements Transformer<TransferOfCareSummary, TransferHeadline> {
 
     @Override
-    public PatientHeadline transform(TransferOfCareSummary input) {
+    public TransferHeadline transform(TransferOfCareSummary input) {
 
-        String text = input.getSiteFrom() + " to " + input.getSiteTo() + " " + DateFormatter.toString(input.getDateOfTransfer());
-
-        PatientHeadline headline = new PatientHeadline();
+        TransferHeadline headline = new TransferHeadline();
         headline.setSource(input.getSource());
         headline.setSourceId(input.getSourceId());
-        headline.setText(text);
+        headline.setFrom(input.getSiteFrom());
+        headline.setTo(input.getSiteTo());
+        headline.setDateOfTransfer(input.getDateOfTransfer());
 
         return headline;
     }

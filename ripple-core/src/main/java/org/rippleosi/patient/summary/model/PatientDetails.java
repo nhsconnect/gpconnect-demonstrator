@@ -36,7 +36,7 @@ public class PatientDetails {
     private List<PatientHeadline> allergies;
     private List<PatientHeadline> medications;
     private List<PatientHeadline> contacts;
-    private List<PatientHeadline> transfers;
+    private List<TransferHeadline> transfers;
 
     public String getId() {
         return id;
@@ -142,11 +142,11 @@ public class PatientDetails {
         this.contacts = contacts;
     }
 
-    public List<PatientHeadline> getTransfers() {
+    public List<TransferHeadline> getTransfers() {
         return transfers;
     }
 
-    public void setTransfers(List<PatientHeadline> transfers) {
+    public void setTransfers(List<TransferHeadline> transfers) {
         this.transfers = transfers;
     }
 }

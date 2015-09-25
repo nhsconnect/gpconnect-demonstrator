@@ -22,7 +22,7 @@ angular.module('openehrPocApp')
     };
 
     var suggestion = function () {
-      return $http.get('/api/terminology/local/list/order');
+      return $http.get('/api/terminology/list/order');
     };
 
     return {

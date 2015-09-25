@@ -16,11 +16,14 @@
 package org.rippleosi.patient.details.search;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
+import org.apache.commons.lang3.StringUtils;
 import org.rippleosi.common.exception.DataNotFoundException;
 import org.rippleosi.patient.allergies.model.AllergyHeadline;
 import org.rippleosi.patient.allergies.search.AllergySearch;
@@ -41,15 +44,11 @@ import org.rippleosi.patient.summary.model.TransferHeadline;
 import org.rippleosi.patient.transfers.model.TransferOfCareSummary;
 import org.rippleosi.patient.transfers.search.TransferOfCareSearch;
 import org.rippleosi.patient.transfers.search.TransferOfCareSearchFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PatientEntityToDetailsTransformer implements Transformer<PatientEntity, PatientDetails> {
-
-    private static final Logger logger = LoggerFactory.getLogger(PatientEntityToDetailsTransformer.class);
 
     @Autowired
     private AllergySearchFactory allergySearchFactory;
@@ -72,10 +71,15 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         PatientDetails patient = new PatientDetails();
 
         String name = patientEntity.getFirstName() + " " + patientEntity.getLastName();
-        String address = patientEntity.getAddress1() + ", " +
-                         patientEntity.getAddress2() + ", " +
-                         patientEntity.getAddress3() + ", " +
-                         patientEntity.getPostcode();
+
+        Collection<String> addressList = Arrays.asList(StringUtils.trimToNull(patientEntity.getAddress1()),
+                                                       StringUtils.trimToNull(patientEntity.getAddress2()),
+                                                       StringUtils.trimToNull(patientEntity.getAddress3()),
+                                                       StringUtils.trimToNull(patientEntity.getPostcode()));
+
+        addressList = CollectionUtils.removeAll(addressList, Collections.singletonList(null));
+
+        String address = StringUtils.join(addressList, ", ");
 
         String patientId = patientEntity.getNhsNumber();
 
@@ -100,77 +104,62 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
     }
 
     private List<PatientHeadline> findAllergies(String patientId) {
-        AllergySearch allergySearch = allergySearchFactory.select(null);
-        List<AllergyHeadline> allergies;
-
         try {
-            allergies = allergySearch.findAllergyHeadlines(patientId);
-        }
-        catch (DataNotFoundException e) {
-            logger.error(e.getMessage(), e);
-            allergies = new ArrayList<>();
-        }
+            AllergySearch allergySearch = allergySearchFactory.select(null);
 
-        return CollectionUtils.collect(allergies, new AllergyTransformer(), new ArrayList<>());
+            List<AllergyHeadline> allergies = allergySearch.findAllergyHeadlines(patientId);
+
+            return CollectionUtils.collect(allergies, new AllergyTransformer(), new ArrayList<>());
+        } catch (DataNotFoundException ignore) {
+            return Collections.emptyList();
+        }
     }
 
     private List<PatientHeadline> findContacts(String patientId) {
-        ContactSearch contactSearch = contactSearchFactory.select(null);
-        List<ContactHeadline> contacts;
-
         try {
-            contacts = contactSearch.findContactHeadlines(patientId);
-        }
-        catch (DataNotFoundException e) {
-            logger.error(e.getMessage(), e);
-            contacts = new ArrayList<>();
-        }
+            ContactSearch contactSearch = contactSearchFactory.select(null);
 
-        return CollectionUtils.collect(contacts, new ContactTransformer(), new ArrayList<>());
+            List<ContactHeadline> contacts = contactSearch.findContactHeadlines(patientId);
+
+            return CollectionUtils.collect(contacts, new ContactTransformer(), new ArrayList<>());
+        } catch (DataNotFoundException ignore) {
+            return Collections.emptyList();
+        }
     }
 
     private List<PatientHeadline> findMedications(String patientId) {
-        MedicationSearch medicationSearch = medicationSearchFactory.select(null);
-        List<MedicationHeadline> medications;
-
         try {
-            medications = medicationSearch.findMedicationHeadlines(patientId);
-        }
-        catch (DataNotFoundException e) {
-            logger.error(e.getMessage(), e);
-            medications = new ArrayList<>();
-        }
+            MedicationSearch medicationSearch = medicationSearchFactory.select(null);
 
-        return CollectionUtils.collect(medications, new MedicationTransformer(), new ArrayList<>());
+            List<MedicationHeadline> medications = medicationSearch.findMedicationHeadlines(patientId);
+
+            return CollectionUtils.collect(medications, new MedicationTransformer(), new ArrayList<>());
+        } catch (DataNotFoundException ignore) {
+            return Collections.emptyList();
+        }
     }
 
     private List<PatientHeadline> findProblems(String patientId) {
-        ProblemSearch problemSearch = problemSearchFactory.select(null);
-        List<ProblemHeadline> problems;
-
         try {
-            problems = problemSearch.findProblemHeadlines(patientId);
-        }
-        catch (DataNotFoundException e) {
-            logger.error(e.getMessage(), e);
-            problems = new ArrayList<>();
-        }
+            ProblemSearch problemSearch = problemSearchFactory.select(null);
 
-        return CollectionUtils.collect(problems, new ProblemTransformer(), new ArrayList<>());
+            List<ProblemHeadline> problems = problemSearch.findProblemHeadlines(patientId);
+
+            return CollectionUtils.collect(problems, new ProblemTransformer(), new ArrayList<>());
+        } catch (DataNotFoundException ignore) {
+            return Collections.emptyList();
+        }
     }
 
     private List<TransferHeadline> findTransfers(String patientId) {
-        TransferOfCareSearch transferOfCareSearch = transferOfCareSearchFactory.select(null);
-        List<TransferOfCareSummary> transfers;
-
         try {
-            transfers = transferOfCareSearch.findAllTransfers(patientId);
-        }
-        catch (DataNotFoundException e) {
-            logger.error(e.getMessage(), e);
-            transfers = new ArrayList<>();
-        }
+            TransferOfCareSearch transferOfCareSearch = transferOfCareSearchFactory.select(null);
 
-        return CollectionUtils.collect(transfers, new TransferOfCareTransformer(), new ArrayList<>());
+            List<TransferOfCareSummary> transfers = transferOfCareSearch.findAllTransfers(patientId);
+
+            return CollectionUtils.collect(transfers, new TransferOfCareTransformer(), new ArrayList<>());
+        } catch (DataNotFoundException ignore) {
+            return Collections.emptyList();
+        }
     }
 }

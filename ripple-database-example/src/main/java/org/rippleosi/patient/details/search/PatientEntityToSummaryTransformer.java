@@ -39,6 +39,7 @@ public class PatientEntityToSummaryTransformer implements Transformer<PatientEnt
         patientSummary.setDateOfBirth(patientEntity.getDateOfBirth());
         patientSummary.setGender(patientEntity.getGender());
         patientSummary.setNhsNumber(patientEntity.getNhsNumber());
+        patientSummary.setDepartment(patientEntity.getDepartment().getDepartment());
 
         return patientSummary;
     }

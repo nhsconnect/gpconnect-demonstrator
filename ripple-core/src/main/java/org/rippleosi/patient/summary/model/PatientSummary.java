@@ -27,6 +27,7 @@ public class PatientSummary {
     private Date dateOfBirth;
     private String gender;
     private String nhsNumber;
+    private String department;
 
     public String getId() {
         return id;
@@ -74,5 +75,13 @@ public class PatientSummary {
 
     public void setNhsNumber(String nhsNumber) {
         this.nhsNumber = nhsNumber;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 }

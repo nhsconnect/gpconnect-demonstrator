@@ -6,8 +6,8 @@ angular.module('openehrPocApp')
       $scope.search = function (row) {
         return (
                 angular.lowercase(row.dateOfAppointment).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-                angular.lowercase(row.timeSlot).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-                angular.lowercase(row.careServiceTeam).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+                angular.lowercase(row.timeOfAppointment).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+                angular.lowercase(row.serviceTeam).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
                 angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
         );
       };
@@ -20,12 +20,12 @@ angular.module('openehrPocApp')
         $scope.appointments = result.data;
         for (var i = 0; i < $scope.appointments.length; i++) {
           $scope.appointments[i].dateOfAppointment = moment($scope.appointments[i].dateOfAppointment).format('DD-MMM-YYYY');
-          $scope.appointments[i].timeSlotFull = moment($scope.appointments[i].timeSlot).format('h:mma') + '-' + moment($scope.appointments[i].timeSlot).add(59, 'm').format('h:mma');
+          $scope.appointments[i].timeOfAppointment = moment($scope.appointments[i].timeOfAppointment).format('h:mma') + '-' + moment($scope.appointments[i].timeOfAppointment).add(59, 'm').format('h:mma');
         }
       });
 
-      $scope.go = function (index) {
-        $location.path('/patients/' + $scope.patient.id + '/appointments/' + index);
+      $scope.go = function (path) {
+         $location.path(path);
       };
 
       $scope.selected = function (appointmentIndex) {
@@ -54,18 +54,18 @@ angular.module('openehrPocApp')
 
         modalInstance.result.then(function (appointment) {
           appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
-          appointment.date = new Date(appointment.date);
+          appointment.dateCreated = new Date(appointment.dateCreated);
 
           var toAdd = {
                     compositionId: '',
-                    careServiceTeam: appointment.careServiceTeam,
+                    serviceTeam: appointment.serviceTeam,
                     dateOfAppointment: appointment.dateOfAppointment,
                     location: appointment.location,
                     status: appointment.status,
-                    author: appointment.author,
-                    dateCreated: appointment.date,
+                    author: 'example@email.com',
+                    dateCreated: appointment.dateCreated,
                     source: 'openehr',
-                    timeSlot: appointment.timeSlot
+                    timeOfAppointment: appointment.timeOfAppointment
         };
           Appointment.create($scope.patient.id, toAdd).then(function () {
             $state.go('appointments', {

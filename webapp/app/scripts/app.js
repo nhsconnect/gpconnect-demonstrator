@@ -246,7 +246,7 @@ angular
       })
 
       .state('appointments-detail', {
-        url: '/patients/{patientId:int}/appointments/{appointmentIndex:int}',
+        url: '/patients/{patientId:int}/appointments/{appointmentIndex}',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },

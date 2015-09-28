@@ -11,11 +11,11 @@ angular.module('openehrPocApp')
     $scope.appointment.location = appointment.location || 'Leeds General';
     $scope.appointment.status = appointment.status || 'Not Scheduled';
 
-    if(modal.title === 'Edit Appointment'){
+    if (modal.title === 'Edit Appointment'){
       $scope.appointment.dateCreated = new Date($scope.appointment.dateCreated).toISOString();
       $scope.appointment.dateOfAppointment = new Date($scope.appointment.dateOfAppointment).toISOString();
       $scope.appointment.timeOfAppointment = new Date($scope.appointment.timeOfAppointment);
-    }else{
+    }else {
       $scope.appointment.dateCreated = new Date().toISOString().slice(0, 10);
     }
 

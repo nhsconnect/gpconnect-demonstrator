@@ -22,7 +22,7 @@ angular.module('openehrPocApp')
         },
         controller: function ($scope, patient, transferOfCareCompositions) {
           $scope.transferOfCare = {};
-              $q.all([
+          $q.all([
               Allergy.all($stateParams.patientId), Diagnosis.all($stateParams.patientId), Medication.all($stateParams.patientId), Contact.all($stateParams.patientId)
                   ]).then(function (allResult) {
                     $scope.transferOfCare.allergies = {};
@@ -37,7 +37,7 @@ angular.module('openehrPocApp')
                     $scope.problems = $scope.transferOfCare.problems.problems;
                     $scope.medications = $scope.transferOfCare.medication.medications;
                     $scope.contacts = $scope.transferOfCare.contacts.contacts;
-               })
+                  });
           $scope.patient = patient;
           $scope.transferOfCareComposition = transferOfCareCompositions;
           $scope.siteFrom = 'WORCESTERSHIRE HEALTH AND CARE NHS TRUST';
@@ -92,7 +92,7 @@ angular.module('openehrPocApp')
 
           function updateTransferOfCare () {
 
-               var updatedTransferOfCare = jQuery.extend(true, {},
+            var updatedTransferOfCare = jQuery.extend(true, {},
               $scope.transferOfCare.allergies,
               $scope.transferOfCare.contacts,
               $scope.transferOfCare.medication,

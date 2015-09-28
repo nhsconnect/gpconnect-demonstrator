@@ -20,7 +20,7 @@ angular.module('openehrPocApp')
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/'+ $scope.patient.id+ '/allergies/' + id);
+      $location.path('/patients/' + $scope.patient.id + '/allergies/' + id);
     };
 
     $scope.selected = function ($index) {
@@ -48,7 +48,7 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (allergy) {
-          var toAdd = {
+        var toAdd = {
               sourceId: '',
               cause: allergy.cause,
               causeCode: allergy.causeCode,

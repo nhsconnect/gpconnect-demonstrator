@@ -32,7 +32,7 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (allergy) {
-         var toUpdate = {
+        var toUpdate = {
               sourceId: allergy.sourceId,
               cause: allergy.cause,
               causeCode: allergy.causeCode,

@@ -18,7 +18,7 @@ angular.module('openehrPocApp')
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/'+ $scope.patient.id+ '/transfer-of-care-detail/' + id);
+      $location.path('/patients/' + $scope.patient.id + '/transfer-of-care-detail/' + id);
     };
 
     $scope.selected = function (transferOfCareIndex) {

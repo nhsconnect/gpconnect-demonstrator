@@ -18,7 +18,7 @@ angular.module('openehrPocApp')
       $scope.eolcareplan.careDocument = {
         dateCreated : today
       };
-    }else{
+    }else {
       $scope.eolcareplan.careDocument.dateCreated = new Date($scope.eolcareplan.careDocument.dateCreated).toISOString().slice(0, 10);
       $scope.eolcareplan.cprDecision.dateOfDecision = new Date($scope.eolcareplan.cprDecision.dateOfDecision).toISOString().slice(0, 10);
       $scope.eolcareplan.treatmentDecision.dateOfDecision = new Date($scope.eolcareplan.treatmentDecision.dateOfDecision).toISOString().slice(0, 10);

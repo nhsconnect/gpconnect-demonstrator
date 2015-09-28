@@ -27,7 +27,7 @@ angular.module('openehrPocApp')
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/'+ $scope.patient.id+ '/referrals/' + id);
+      $location.path('/patients/' + $scope.patient.id + '/referrals/' + id);
     };
 
     $scope.selected = function (referralId) {

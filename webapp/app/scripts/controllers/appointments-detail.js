@@ -8,7 +8,7 @@ angular.module('openehrPocApp')
     });
 
     Appointment.get($stateParams.patientId, $stateParams.appointmentIndex).then(function (result) {
-      $scope.appointment = result.data
+      $scope.appointment = result.data;
       $scope.timeOfAppointment = moment($scope.appointment.timeOfAppointment).format('h:mma') + '-' + moment($scope.appointment.timeOfAppointment).add(59, 'm').format('h:mma');
     });
 
@@ -33,10 +33,10 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (appointment) {
-          appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
-          appointment.dateCreated = new Date(appointment.dateCreated);
+        appointment.dateOfAppointment = new Date(appointment.dateOfAppointment);
+        appointment.dateCreated = new Date(appointment.dateCreated);
 
-          var toUpdate = {
+        var toUpdate = {
                     sourceId: appointment.sourceId,
                     serviceTeam: appointment.serviceTeam,
                     dateOfAppointment: appointment.dateOfAppointment,

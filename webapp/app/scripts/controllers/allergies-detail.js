@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('AllergiesDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Allergy) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
@@ -33,13 +33,13 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (allergy) {
         var toUpdate = {
-              sourceId: allergy.sourceId,
-              cause: allergy.cause,
-              causeCode: allergy.causeCode,
-              causeTerminology: allergy.causeTerminology,
-              reaction: allergy.reaction,
-              source: 'openehr'
-          };
+          sourceId: allergy.sourceId,
+          cause: allergy.cause,
+          causeCode: allergy.causeCode,
+          causeTerminology: allergy.causeTerminology,
+          reaction: allergy.reaction,
+          source: 'openehr'
+        };
 
         Allergy.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/allergies');

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('CancerMdtDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, PatientService, CancerMdt) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
@@ -32,10 +32,12 @@ angular.module('openehrPocApp')
       });
 
       modalInstance.result.then(function (cancerMdt) {
-
         cancerMdt.dateOfMeeting = new Date(cancerMdt.dateOfMeeting);
         cancerMdt.dateOfRequest = new Date(cancerMdt.dateOfRequest);
-        if (cancerMdt.timeOfMeeting !== null){cancerMdt.timeOfMeeting = new Date(cancerMdt.timeOfMeeting);}
+
+        if (cancerMdt.timeOfMeeting !== null) {
+          cancerMdt.timeOfMeeting = new Date(cancerMdt.timeOfMeeting);
+        }
 
         CancerMdt.update($scope.patient.id, cancerMdt).then(function () {
           $state.go('cancerMdt', { patientId: $scope.patient.id });

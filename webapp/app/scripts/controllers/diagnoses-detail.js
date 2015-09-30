@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('DiagnosesDetailCtrl', function ($scope, $stateParams, $location, $modal, PatientService, Diagnosis) {
 
     $scope.UnlockedSources = [
@@ -39,14 +39,15 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (diagnosis) {
         var toUpdate = {
-                    code: diagnosis.code,
-                    dateOfOnset: diagnosis.dateOfOnset,
-                    description: diagnosis.description,
-                    problem: diagnosis.problem,
-                    source: 'openehr',
-                    sourceId: diagnosis.sourceId,
-                    terminology: diagnosis.terminology
-                    };
+          code: diagnosis.code,
+          dateOfOnset: diagnosis.dateOfOnset,
+          description: diagnosis.description,
+          problem: diagnosis.problem,
+          source: 'openehr',
+          sourceId: diagnosis.sourceId,
+          terminology: diagnosis.terminology
+        };
+
         Diagnosis.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/diagnoses');
         });
@@ -57,10 +58,12 @@ angular.module('openehrPocApp')
       if (!(diagnosis && diagnosis.id)) {
         return true;
       }
+
       var diagnosisIdSegments = diagnosis.id.toString().split('::');
       if (diagnosisIdSegments.length > 1) {
         return ($scope.UnlockedSources.indexOf(diagnosisIdSegments[1]) < 0);
       }
+
       return true;
     };
 
@@ -68,4 +71,5 @@ angular.module('openehrPocApp')
       var result = text.replace(/([A-Z])/g, ' $1');
       return result.charAt(0).toUpperCase() + result.slice(1);
     };
+
   });

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('openehrPocApp')
-  .controller('headerController', function ($scope, $rootScope, $state, $stateParams,PatientService) {
+angular.module('rippleDemonstrator')
+  .controller('headerController', function ($scope, $rootScope, $state, $stateParams, PatientService) {
 
     var role = $stateParams.role;
     var email = $stateParams.email;
@@ -14,7 +14,7 @@ angular.module('openehrPocApp')
     console.log($scope.currentUser);
 
     // Temporary default user
-    if (!$scope.currentUser.role){
+    if (!$scope.currentUser.role) {
       $scope.currentUser.role = 'idcr';
       $scope.currentUser.email = 'example@email.com';
     }
@@ -36,7 +36,6 @@ angular.module('openehrPocApp')
       var previousState = '';
       var pageHeader = '';
       var previousPage = '';
-
 
       var mainWidth = 0;
       var detailWidth = 0;
@@ -91,42 +90,30 @@ angular.module('openehrPocApp')
         $state.go(previousState);
       };
 
-      if ('user-context' in $state.current.views){
-        $scope.userContextViewExists = true;
-      }else {
-        $scope.userContextViewExists = false;
-      }
-
-      if ('actions' in $state.current.views){
-        $scope.actionsExists = true;
-      }else {
-        $scope.actionsExists = false;
-      }
+      $scope.userContextViewExists = ('user-context' in $state.current.views);
+      $scope.actionsExists = ('actions' in $state.current.views);
 
       $scope.go = function (patient) {
-        $state.go('patients-summary', { patientId: patient.id });
+        $state.go('patients-summary', {patientId: patient.id});
       };
 
       // Set title depending on user
-      if ($scope.currentUser.role === 'idcr'){
+      if ($scope.currentUser.role === 'idcr') {
         $scope.title = 'IDCR POC';
       }
-      if ($scope.currentUser.role === 'phr'){
+      if ($scope.currentUser.role === 'phr') {
         $scope.title = 'PHR';
       }
 
       // Set home url depending on user
       $scope.goHome = function () {
-        if ($scope.currentUser.role === 'idcr'){
+        if ($scope.currentUser.role === 'idcr') {
           $state.go('patients-charts');
         }
-        if ($scope.currentUser.role === 'phr'){
-          $state.go('patients-summary', { patientId: 10 }); // Id is hardcoded
+        if ($scope.currentUser.role === 'phr') {
+          $state.go('patients-summary', {patientId: 10}); // Id is hardcoded
         }
       };
-
     });
 
   });
-
-

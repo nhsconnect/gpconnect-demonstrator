@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('TransferOfCareListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, TransferOfCare) {
 
     $scope.query = {};
@@ -12,7 +12,8 @@ angular.module('openehrPocApp')
 
     TransferOfCare.all($stateParams.patientId).then(function (result) {
       $scope.transferofCareComposition = result.data;
-      for (var i = 0; i < $scope.transferofCareComposition.length; i++){
+
+      for (var i = 0; i < $scope.transferofCareComposition.length; i++) {
         $scope.transferofCareComposition[i].dateOfTransfer = moment($scope.transferofCareComposition[i].dateOfTransfer).format('DD-MMM-YYYY');
       }
     });

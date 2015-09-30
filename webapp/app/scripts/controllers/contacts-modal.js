@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('ContactsModalCtrl', function ($scope, $modalInstance, contact, patient, modal) {
 
     $scope.contact = contact;
@@ -9,6 +9,7 @@ angular.module('openehrPocApp')
 
     $scope.ok = function (contactForm, contact) {
       $scope.formSubmitted = true;
+
       if (contactForm.$valid) {
         $modalInstance.close(contact);
       }

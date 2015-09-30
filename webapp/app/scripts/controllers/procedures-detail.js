@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('ProceduresDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, PatientService, Procedure) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
@@ -34,23 +34,24 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (procedure) {
         procedure.dateSubmitted = new Date(procedure.dateSubmitted);
         procedure.date = new Date(procedure.date);
+
         var toUpdate = {
-                    sourceId : procedure.sourceId,
-                    name : procedure.name,
-                    notes : procedure.notes,
-                    author : procedure.author,
-                    currentStatusTerminology : 'local',
-                    currentStatusCode : 'at0047',
-                    date : procedure.date,
-                    time : procedure.time,
-                    performer : procedure.performer,
-                    dateSubmitted : procedure.dateSubmitted,
-                    source : 'openehr'
-                    };
+          sourceId: procedure.sourceId,
+          name: procedure.name,
+          notes: procedure.notes,
+          author: procedure.author,
+          currentStatusTerminology: 'local',
+          currentStatusCode: 'at0047',
+          date: procedure.date,
+          time: procedure.time,
+          performer: procedure.performer,
+          dateSubmitted: procedure.dateSubmitted,
+          source: 'openehr'
+        };
 
         Procedure.update($scope.patient.id, toUpdate).then(function () {
           // $location.path('/patients/' + $scope.patient.id + '/procedures/' + procedure.sourceId);
-          $state.go('procedures', { patientId: $scope.patient.id });
+          $state.go('procedures', {patientId: $scope.patient.id});
         });
       });
     };

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('ProceduresModalCtrl', function ($scope, $filter, $modalInstance, PatientService, patient, modal, procedure) {
 
     $scope.currentUser = PatientService.getCurrentUser();
@@ -8,9 +8,10 @@ angular.module('openehrPocApp')
     $scope.patient = patient;
     $scope.modal = modal;
 
-    if (modal.title === 'Create Procedure'){
+    if (modal.title === 'Create Procedure') {
       $scope.procedure.dateSubmitted = new Date().toISOString().slice(0, 10);
-    }else {
+    }
+    else {
       $scope.procedure.time = new Date($scope.procedure.time);
       $scope.procedure.dateSubmitted = new Date($scope.procedure.dateSubmitted).toISOString().slice(0, 10);
       $scope.procedure.date = new Date($scope.procedure.date).toISOString().slice(0, 10);
@@ -35,6 +36,7 @@ angular.module('openehrPocApp')
 
     $scope.ok = function (procedureForm, procedure) {
       $scope.formSubmitted = true;
+
       if (procedureForm.$valid) {
         $modalInstance.close(procedure);
       }
@@ -47,10 +49,10 @@ angular.module('openehrPocApp')
     $scope.validate = function (form, name, index) {
       var errorToCheckFor = name + index;
 
-      for (var error in form.$error.required){
+      for (var error in form.$error.required) {
         var errorName = form.$error.required[error].$name;
 
-        if (errorName === errorToCheckFor){
+        if (errorName === errorToCheckFor) {
           return true;
         }
       }
@@ -58,22 +60,12 @@ angular.module('openehrPocApp')
 
     $scope.validateDirty = function (form, name, index) {
       var errorToCheckFor = name + index;
-
-      if (form[errorToCheckFor].$dirty && form[errorToCheckFor].$invalid){
-        return true;
-      } else {
-        return false;
-      }
+      return form[errorToCheckFor].$dirty && form[errorToCheckFor].$invalid;
     };
 
     $scope.validateClean = function (form, name, index) {
       var errorToCheckFor = name + index;
-
-      if (form[errorToCheckFor].$dirty && form[errorToCheckFor].$valid){
-        return true;
-      } else {
-        return false;
-      }
+      return form[errorToCheckFor].$dirty && form[errorToCheckFor].$valid;
     };
 
   });

@@ -1,14 +1,14 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('DiagnosesListCtrl', function ($scope, $state, $stateParams, $location, $modal, PatientService, Diagnosis) {
 
     $scope.search = function (row) {
       return (
-          angular.lowercase(row.problem).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-          angular.lowercase(row.dateOfOnset).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-          angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
-        );
+        angular.lowercase(row.problem).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+        angular.lowercase(row.dateOfOnset).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+        angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
+      );
     };
 
     PatientService.get($stateParams.patientId).then(function (patient) {
@@ -17,7 +17,8 @@ angular.module('openehrPocApp')
 
     Diagnosis.all($stateParams.patientId).then(function (result) {
       $scope.diagnoses = result.data;
-      for (var i = 0; i < $scope.diagnoses.length; i++){
+
+      for (var i = 0; i < $scope.diagnoses.length; i++) {
         $scope.diagnoses[i].dateOfOnset = moment($scope.diagnoses[i].dateOfOnset).format('DD-MMM-YYYY');
       }
     });
@@ -42,7 +43,7 @@ angular.module('openehrPocApp')
             };
           },
           diagnosis: function () {
-            return { };
+            return {};
           },
           patient: function () {
             return $scope.patient;
@@ -52,19 +53,21 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (diagnosis) {
         diagnosis.dateOfOnset = new Date(diagnosis.dateOfOnset);
+
         var toAdd = {
-                    code: diagnosis.code,
-                    dateOfOnset: diagnosis.dateOfOnset,
-                    description: diagnosis.description,
-                    problem: diagnosis.problem,
-                    source: 'openehr',
-                    sourceId: '',
-                    terminology: diagnosis.terminology
-                    };
+          code: diagnosis.code,
+          dateOfOnset: diagnosis.dateOfOnset,
+          description: diagnosis.description,
+          problem: diagnosis.problem,
+          source: 'openehr',
+          sourceId: '',
+          terminology: diagnosis.terminology
+        };
 
         Diagnosis.create($scope.patient.id, toAdd).then(function () {
-          $state.go('diagnoses-list', { patientId: $scope.patient.id });
+          $state.go('diagnoses-list', {patientId: $scope.patient.id});
         });
       });
     };
+
   });

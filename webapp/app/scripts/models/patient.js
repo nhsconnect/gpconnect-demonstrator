@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .factory('Patient', function ($window) {
 
     var patient = function (attributes) {
@@ -34,4 +34,5 @@ angular.module('openehrPocApp')
     };
 
     return patient;
+
   });

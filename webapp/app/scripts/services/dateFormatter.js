@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .factory('DateFormatter', function () {
 
     var clean = function (date) {
@@ -10,4 +10,5 @@ angular.module('openehrPocApp')
     return {
         clean:clean
     };
+
   });

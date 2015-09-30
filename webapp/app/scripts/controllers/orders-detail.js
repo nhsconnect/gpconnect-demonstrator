@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('OrdersDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Order) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {

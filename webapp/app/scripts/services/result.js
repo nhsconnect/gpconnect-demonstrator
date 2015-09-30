@@ -1,20 +1,19 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .factory('Result', function ($http) {
 
-    var patientIdOveride = 9999999000;
-
     var get = function (patientId, compositionId) {
-      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/labresults/' + compositionId);
+      return $http.get('/api/patients/' + patientId + '/labresults/' + compositionId);
     };
 
     var all = function (patientId) {
-      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/labresults');
+      return $http.get('/api/patients/' + patientId + '/labresults');
     };
 
     return {
       all: all,
       get: get
     };
+
   });

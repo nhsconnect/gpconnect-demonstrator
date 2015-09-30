@@ -1,24 +1,24 @@
 'use strict';
 
-angular.module('openehrPocApp')
-  .controller('EolcareplansModalCtrl', function ($scope, $filter, $modalInstance, eolcareplan, patient, modal, PatientService) {
+angular.module('rippleDemonstrator')
+  .controller('EolcareplansModalCtrl', function ($scope, $filter, $modalInstance, PatientService, eolcareplan, patient, modal) {
 
     $scope.currentUser = PatientService.getCurrentUser();
     $scope.eolcareplan = eolcareplan;
     $scope.patient = patient;
     $scope.modal = modal;
 
-    $scope.docTypes =  [
-        { type:'Document Type' },
-        { type:'Document Type 2' }
+    $scope.docTypes = [
+      { type: 'Document Type' },
+      { type: 'Document Type 2' }
     ];
 
-    if (modal.title === 'Create End of Life Care Document'){
-      var today = new Date().toISOString().slice(0, 10);
+    if (modal.title === 'Create End of Life Care Document') {
       $scope.eolcareplan.careDocument = {
-        dateCreated : today
+        dateCreated: new Date().toISOString().slice(0, 10)
       };
-    }else {
+    }
+    else {
       $scope.eolcareplan.careDocument.dateCreated = new Date($scope.eolcareplan.careDocument.dateCreated).toISOString().slice(0, 10);
       $scope.eolcareplan.cprDecision.dateOfDecision = new Date($scope.eolcareplan.cprDecision.dateOfDecision).toISOString().slice(0, 10);
       $scope.eolcareplan.treatmentDecision.dateOfDecision = new Date($scope.eolcareplan.treatmentDecision.dateOfDecision).toISOString().slice(0, 10);
@@ -26,6 +26,7 @@ angular.module('openehrPocApp')
 
     $scope.ok = function (eolcareplanForm, eolcareplan) {
       $scope.formSubmitted = true;
+
       if (eolcareplanForm.$valid) {
         $modalInstance.close(eolcareplan);
       }
@@ -64,10 +65,10 @@ angular.module('openehrPocApp')
     $scope.validate = function (form, name, index) {
       var errorToCheckFor = name + index;
 
-      for (var error in form.$error.required){
+      for (var error in form.$error.required) {
         var errorName = form.$error.required[error].$name;
 
-        if (errorName === errorToCheckFor){
+        if (errorName === errorToCheckFor) {
           return true;
         }
       }
@@ -75,22 +76,12 @@ angular.module('openehrPocApp')
 
     $scope.validateDirty = function (form, name, index) {
       var errorToCheckFor = name + index;
-
-      if (form[errorToCheckFor].$dirty && form[errorToCheckFor].$invalid){
-        return true;
-      } else {
-        return false;
-      }
+      return form[errorToCheckFor].$dirty && form[errorToCheckFor].$invalid;
     };
 
     $scope.validateClean = function (form, name, index) {
       var errorToCheckFor = name + index;
-
-      if (form[errorToCheckFor].$dirty && form[errorToCheckFor].$valid){
-        return true;
-      } else {
-        return false;
-      }
+      return form[errorToCheckFor].$dirty && form[errorToCheckFor].$valid;
     };
 
   });

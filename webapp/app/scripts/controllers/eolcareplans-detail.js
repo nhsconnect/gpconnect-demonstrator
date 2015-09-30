@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('EolcareplansDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Eolcareplan) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
@@ -38,12 +38,12 @@ angular.module('openehrPocApp')
         eolcareplan.treatmentDecision.dateOfDecision = new Date(eolcareplan.treatmentDecision.dateOfDecision);
 
         var toUpdate = {
-         sourceId : eolcareplan.sourceId,
-         careDocument : eolcareplan.careDocument,
-         cprDecision : eolcareplan.cprDecision,
-         prioritiesOfCare : eolcareplan.prioritiesOfCare,
-         source : 'openehr',
-         treatmentDecision : eolcareplan.treatmentDecision
+          sourceId: eolcareplan.sourceId,
+          careDocument: eolcareplan.careDocument,
+          cprDecision: eolcareplan.cprDecision,
+          prioritiesOfCare: eolcareplan.prioritiesOfCare,
+          source: 'openehr',
+          treatmentDecision: eolcareplan.treatmentDecision
         };
 
         Eolcareplan.update($scope.patient.id, toUpdate).then(function () {

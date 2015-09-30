@@ -3,7 +3,7 @@
 describe('ReferralsDetailCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('openehrPocApp'));
+  beforeEach(module('rippleDemonstrator'));
 
   var ReferralsDetailCtrl, scope, $location, $stateParams, $state, PatientService, Contact, $modal;
   var fakeModal = {

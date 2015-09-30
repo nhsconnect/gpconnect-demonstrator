@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('PatientsLookupCtrl', function ($modal, $state) {
 
     $modal.open({
@@ -35,7 +35,7 @@ angular.module('openehrPocApp')
 
       }
     }).result.finally(function () {
-      $state.go('patients-charts');
-    });
+        $state.go('patients-charts');
+      });
 
   });

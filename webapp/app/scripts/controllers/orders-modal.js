@@ -1,17 +1,18 @@
 'use strict';
 
-angular.module('openehrPocApp')
-  .controller('OrdersModalCtrl', function ($scope, $modalInstance, order, patient, modal, Order, PatientService) {
+angular.module('rippleDemonstrator')
+  .controller('OrdersModalCtrl', function ($scope, $modalInstance, Order, PatientService, order, patient, modal) {
 
     $scope.currentUser = PatientService.getCurrentUser();
     $scope.order = order;
     $scope.patient = patient;
     $scope.modal = modal;
-    $scope.order.author =  'Dr John Smith';
+    $scope.order.author = 'Dr John Smith';
 
-    if (modal.title === 'Create Order'){
+    if (modal.title === 'Create Order') {
       $scope.order.orderDate = new Date().toISOString().slice(0, 10);
-    }else {
+    }
+    else {
       $scope.order.orderDate = new Date($scope.order.orderDate).toISOString().slice(0, 10);
     }
 
@@ -21,6 +22,7 @@ angular.module('openehrPocApp')
 
     $scope.ok = function (orderForm, order) {
       $scope.formSubmitted = true;
+
       if (orderForm.$valid) {
         $modalInstance.close(order);
       }
@@ -33,6 +35,7 @@ angular.module('openehrPocApp')
     $scope.openDatepicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();
+
       $scope[name] = true;
     };
 

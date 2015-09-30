@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('AppointmentsDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Appointment) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
@@ -37,19 +37,21 @@ angular.module('openehrPocApp')
         appointment.dateCreated = new Date(appointment.dateCreated);
 
         var toUpdate = {
-                    sourceId: appointment.sourceId,
-                    serviceTeam: appointment.serviceTeam,
-                    dateOfAppointment: appointment.dateOfAppointment,
-                    location: appointment.location,
-                    status: appointment.status,
-                    author: 'example@email.com',
-                    dateCreated: appointment.dateCreated,
-                    source: 'openehr',
-                    timeOfAppointment: appointment.timeOfAppointment
+          sourceId: appointment.sourceId,
+          serviceTeam: appointment.serviceTeam,
+          dateOfAppointment: appointment.dateOfAppointment,
+          location: appointment.location,
+          status: appointment.status,
+          author: 'example@email.com',
+          dateCreated: appointment.dateCreated,
+          source: 'openehr',
+          timeOfAppointment: appointment.timeOfAppointment
         };
+
         Appointment.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/appointments');
         });
       });
     };
+
   });

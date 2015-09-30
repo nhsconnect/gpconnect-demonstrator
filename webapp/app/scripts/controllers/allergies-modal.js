@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('AllergiesModalCtrl', function ($scope, $modalInstance, allergy, patient, modal) {
 
     $scope.allergy = allergy;
@@ -9,6 +9,7 @@ angular.module('openehrPocApp')
 
     $scope.ok = function (allergyForm, allergy) {
       $scope.formSubmitted = true;
+
       if (allergyForm.$valid) {
         $modalInstance.close(allergy);
       }

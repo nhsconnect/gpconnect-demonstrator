@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('AppointmentsConfirmModalCtrl', function ($scope, $modalInstance, time) {
 
     $scope.modal = $modalInstance;
@@ -13,4 +13,5 @@ angular.module('openehrPocApp')
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
+
   });

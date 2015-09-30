@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .factory('PatientService', function ($http, Patient) {
 
     var all = function () {
@@ -17,7 +17,7 @@ angular.module('openehrPocApp')
     };
 
     var get = function (id) {
-      return $http.get('/api/patients/' + id, { cache: true }).then(function (result) {
+      return $http.get('/api/patients/' + id, {cache: true}).then(function (result) {
         return new Patient(result.data);
       });
     };
@@ -46,7 +46,7 @@ angular.module('openehrPocApp')
     };
 
     var update = function (patient, updatedDiagnosis) {
-      var diagnosis = _.findWhere(patient.diagnoses, { id: updatedDiagnosis.id });
+      var diagnosis = _.findWhere(patient.diagnoses, {id: updatedDiagnosis.id});
       angular.extend(diagnosis, updatedDiagnosis);
     };
 
@@ -55,18 +55,34 @@ angular.module('openehrPocApp')
         var summaries = {};
 
         summaries.age = _.chain(patients)
-          .filter(function (patient) { return !!patient.age; })
-          .countBy(function (patient) { return patient.ageRange; })
-          .map(function (value, key) { return { series: key, value: value }; })
-          .sortBy(function (value) { return value.ageRange; })
+          .filter(function (patient) {
+            return !!patient.age;
+          })
+          .countBy(function (patient) {
+            return patient.ageRange;
+          })
+          .map(function (value, key) {
+            return {series: key, value: value};
+          })
+          .sortBy(function (value) {
+            return value.ageRange;
+          })
           .reverse()
           .value();
 
         summaries.department = _.chain(patients)
-          .filter(function (patient) { return !!patient.department; })
-          .countBy(function (patient) { return patient.department; })
-          .map(function (value, key) { return { series: key, value: value }; })
-          .sortBy(function (value) { return value.department; })
+          .filter(function (patient) {
+            return !!patient.department;
+          })
+          .countBy(function (patient) {
+            return patient.department;
+          })
+          .map(function (value, key) {
+            return {series: key, value: value};
+          })
+          .sortBy(function (value) {
+            return value.department;
+          })
           .value();
 
         return summaries;
@@ -78,10 +94,11 @@ angular.module('openehrPocApp')
     currentUser.email = '';
     currentUser.isAuthenticated = false;
 
-    var setCurrentUser = function (role,email) {
+    var setCurrentUser = function (role, email) {
       currentUser.role = role;
       currentUser.email = email;
-      if (role){
+
+      if (role) {
         currentUser.isAuthenticated = true;
       }
     };
@@ -96,8 +113,8 @@ angular.module('openehrPocApp')
       update: update,
       summaries: summaries,
       create: create,
-      setCurrentUser:setCurrentUser,
-      getCurrentUser:getCurrentUser
+      setCurrentUser: setCurrentUser,
+      getCurrentUser: getCurrentUser
     };
 
   });

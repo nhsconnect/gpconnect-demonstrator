@@ -1,28 +1,26 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .factory('Allergy', function ($http) {
 
-    var patientIdOveride = 9999999000;
-
     var all = function (patientId) {
-      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/allergies');
+      return $http.get('/api/patients/' + patientId + '/allergies');
     };
 
     var get = function (patientId, compositionId) {
-      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/allergies/' + compositionId);
+      return $http.get('/api/patients/' + patientId + '/allergies/' + compositionId);
     };
 
     var create = function (patientId, composition) {
       console.log('put allergy comp:');
       console.log(composition);
-      return $http.post('/api/patients/' + (patientIdOveride || patientId) + '/allergies', composition);
+      return $http.post('/api/patients/' + patientId + '/allergies', composition);
     };
 
     var update = function (patientId, composition) {
       console.log('put allergy comp:');
       console.log(composition);
-      return $http.put('/api/patients/' + (patientIdOveride || patientId) + '/allergies', composition);
+      return $http.put('/api/patients/' + patientId + '/allergies', composition);
     };
 
     return {
@@ -31,4 +29,5 @@ angular.module('openehrPocApp')
       update: update,
       create: create
     };
+
   });

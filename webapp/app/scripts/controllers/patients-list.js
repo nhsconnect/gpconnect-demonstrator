@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('PatientsListCtrl', function ($scope, $state, $stateParams, PatientService) {
+
     PatientService.all().then(function (patients) {
       $scope.patients = patients;
     });
@@ -17,7 +18,7 @@ angular.module('openehrPocApp')
         reverse = !reverse;
       }
 
-      $state.transitionTo($state.current, _.extend($stateParams, { order: field, reverse: reverse }));
+      $state.transitionTo($state.current, _.extend($stateParams, {order: field, reverse: reverse}));
     };
 
     $scope.sortClass = function (field) {
@@ -27,7 +28,7 @@ angular.module('openehrPocApp')
     };
 
     $scope.go = function (patient) {
-      $state.go('patients-summary', { patientId: patient.id });
+      $state.go('patients-summary', {patientId: patient.id});
     };
 
     $scope.patientFilter = function (patient) {
@@ -41,4 +42,5 @@ angular.module('openehrPocApp')
 
       return true;
     };
+
   });

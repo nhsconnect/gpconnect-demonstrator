@@ -1,30 +1,29 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .factory('Eolcareplan', function ($http) {
 
-    var patientIdOveride = 9999999000;
-
     var all = function (patientId) {
-      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/eolcareplans');
+      return $http.get('/api/patients/' + patientId + '/eolcareplans');
     };
 
     var get = function (patientId, compositionId) {
-      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/eolcareplans/' + compositionId);
+      return $http.get('/api/patients/' + patientId + '/eolcareplans/' + compositionId);
     };
 
     var create = function (patientId, composition) {
-      return $http.post('/api/patients/' + (patientIdOveride || patientId) + '/eolcareplans', composition);
+      return $http.post('/api/patients/' + patientId + '/eolcareplans', composition);
     };
 
     var update = function (patientId, composition) {
-      return $http.put('/api/patients/' + (patientIdOveride || patientId) + '/eolcareplans', composition);
+      return $http.put('/api/patients/' + patientId + '/eolcareplans', composition);
     };
 
     return {
       all: all,
       get: get,
       update: update,
-      create:create
+      create: create
     };
+
   });

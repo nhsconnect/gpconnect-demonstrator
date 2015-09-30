@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-  .module('openehrPocApp', [
+  .module('rippleDemonstrator', [
     'ngResource',
     'ngTouch',
     'ngAnimate',
@@ -294,22 +294,23 @@ angular
       });
   })
 
-.directive('datepickerPopup', function () {
-  return {
-        restrict: 'EAC',
-        require: 'ngModel',
-        link: function (scope, element, attr, controller) {
-          controller.$formatters.unshift();
-        }
+  .directive('datepickerPopup', function () {
+    return {
+      restrict: 'EAC',
+      require: 'ngModel',
+      link: function (scope, element, attr, controller) {
+        controller.$formatters.unshift();
+      }
     };
-})
-.config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
-    datepickerConfig.startingDay          = 1;
-    datepickerPopupConfig.showButtonBar   = false;
-    datepickerPopupConfig.datepickerPopup = 'dd-MMM-yyyy';
-    cfpLoadingBarProvider.includeSpinner  = false;
   })
+
+  .config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
+    datepickerConfig.startingDay = 1;
+    datepickerPopupConfig.showButtonBar = false;
+    datepickerPopupConfig.datepickerPopup = 'dd-MMM-yyyy';
+    cfpLoadingBarProvider.includeSpinner = false;
+  })
+
   .config(function (paginationTemplateProvider) {
     paginationTemplateProvider.setPath('views/dirPagination.tpl.html');
   });
-

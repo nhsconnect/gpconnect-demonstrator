@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('openehrPocApp')
-  .controller('AppointmentsModalCtrl', function ($scope, $modalInstance, $modal, appointment, patient, modal, PatientService) {
+angular.module('rippleDemonstrator')
+  .controller('AppointmentsModalCtrl', function ($scope, $modalInstance, $modal, PatientService, appointment, patient, modal) {
 
     $scope.currentUser = PatientService.getCurrentUser();
     $scope.appointment = appointment;
@@ -11,21 +11,21 @@ angular.module('openehrPocApp')
     $scope.appointment.location = appointment.location || 'Leeds General';
     $scope.appointment.status = appointment.status || 'Not Scheduled';
 
-    if (modal.title === 'Edit Appointment'){
+    if (modal.title === 'Edit Appointment') {
       $scope.appointment.dateCreated = new Date($scope.appointment.dateCreated).toISOString();
       $scope.appointment.dateOfAppointment = new Date($scope.appointment.dateOfAppointment).toISOString();
       $scope.appointment.timeOfAppointment = new Date($scope.appointment.timeOfAppointment);
-    }else {
+    }
+    else {
       $scope.appointment.dateCreated = new Date().toISOString().slice(0, 10);
     }
 
-
-    if ($scope.appointment.status === 'Scheduled'){
+    if ($scope.appointment.status === 'Scheduled') {
       $scope.timeSlotFull = moment(appointment.timeOfAppointment).format('h:mma') + '-' + moment(appointment.timeOfAppointment).add(59, 'm').format('h:mma');
     }
 
     $scope.uiConfig = {
-        calendar: {
+      calendar: {
         height: 450,
         width: 400,
         editable: true,
@@ -151,7 +151,8 @@ angular.module('openehrPocApp')
 
     if (modal.title === 'Create Appointment') {
       $scope.appointment.dateCreated = new Date().toISOString().slice(0, 10);
-    } else {
+    }
+    else {
       $scope.appointment.timeOfAppointment = new Date($scope.appointment.timeOfAppointment);
       setBookedSlot();
     }
@@ -167,18 +168,21 @@ angular.module('openehrPocApp')
     $scope.openAppointmentDatepicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();
+
       $scope[name] = true;
     };
 
     $scope.openDatepicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();
+
       $scope[name] = true;
     };
 
     $scope.setTimeSlot = function (time) {
       for (var i = 0; i < $scope.uiConfig.calendar.events.length; i++) {
         var event = $scope.uiConfig.calendar.events[i];
+
         if (event.start === time._i) {
           if (event.color !== '#dd2b08') {
             innerModal(time);
@@ -193,6 +197,7 @@ angular.module('openehrPocApp')
 
     $scope.ok = function (appointmentForm, appointment) {
       $scope.formSubmitted = true;
+
       if (appointmentForm.$valid) {
         $modalInstance.close(appointment);
       }

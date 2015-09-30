@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .factory('SmspLookup', function ($http, Patient) {
 
     var byName = function (firstname, lastname) {

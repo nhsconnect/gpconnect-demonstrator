@@ -1,10 +1,9 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('CancerMdtModalCtrl', function ($scope, $modalInstance, $stateParams, $state, cancerMdt, patient, modal) {
 
     $scope.cancerMdt = cancerMdt;
-
     $scope.protocol = 'http://';
 
     if (modal.title === 'Edit MDT') {
@@ -15,14 +14,14 @@ angular.module('openehrPocApp')
 
     $scope.changeProtocol = function (protocol) {
       switch (protocol) {
-      case 'http':
-        $scope.protocol = 'http://';
-        break;
-      case 'https':
-        $scope.protocol = 'https://';
-        break;
-      default:
-        $scope.protocol = 'http://';
+        case 'http':
+          $scope.protocol = 'http://';
+          break;
+        case 'https':
+          $scope.protocol = 'https://';
+          break;
+        default:
+          $scope.protocol = 'http://';
       }
     };
 
@@ -31,6 +30,7 @@ angular.module('openehrPocApp')
 
     $scope.ok = function (cancerMdtForm, cancerMdt) {
       $scope.formSubmitted = true;
+
       if (cancerMdtForm.$valid) {
         $modalInstance.close(cancerMdt);
       }
@@ -43,6 +43,7 @@ angular.module('openehrPocApp')
     $scope.openDatepicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();
+
       $scope[name] = true;
     };
 
@@ -56,10 +57,10 @@ angular.module('openehrPocApp')
     $scope.validate = function (form, name, index) {
       var errorToCheckFor = name + index;
 
-      for (var error in form.$error.required){
+      for (var error in form.$error.required) {
         var errorName = form.$error.required[error].$name;
 
-        if (errorName === errorToCheckFor){
+        if (errorName === errorToCheckFor) {
           return true;
         }
       }
@@ -67,22 +68,12 @@ angular.module('openehrPocApp')
 
     $scope.validateDirty = function (form, name, index) {
       var errorToCheckFor = name + index;
-
-      if (form[errorToCheckFor].$dirty && form[errorToCheckFor].$invalid){
-        return true;
-      } else {
-        return false;
-      }
+      return form[errorToCheckFor].$dirty && form[errorToCheckFor].$invalid;
     };
 
     $scope.validateClean = function (form, name, index) {
       var errorToCheckFor = name + index;
-
-      if (form[errorToCheckFor].$dirty && form[errorToCheckFor].$valid) {
-        return true;
-      } else {
-        return false;
-      }
+      return form[errorToCheckFor].$dirty && form[errorToCheckFor].$valid;
     };
 
   });

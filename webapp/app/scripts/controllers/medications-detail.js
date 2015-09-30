@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('MedicationsDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Medication) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
@@ -33,19 +33,20 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (medication) {
         medication.startDate = new Date(medication.startDate);
+
         var toUpdate = {
-                    sourceId : medication.sourceId,
-                    doseAmount : medication.doseAmount,
-                    doseDirections : medication.doseDirections,
-                    doseTiming : medication.doseTiming,
-                    medicationCode : medication.medicationCode,
-                    medicationTerminology : medication.medicationTerminology,
-                    name : medication.name,
-                    route : medication.route,
-                    startDate : medication.startDate,
-                    startTime : medication.startTime,
-                    source : 'openehr'
-                    };
+          sourceId: medication.sourceId,
+          doseAmount: medication.doseAmount,
+          doseDirections: medication.doseDirections,
+          doseTiming: medication.doseTiming,
+          medicationCode: medication.medicationCode,
+          medicationTerminology: medication.medicationTerminology,
+          name: medication.name,
+          route: medication.route,
+          startDate: medication.startDate,
+          startTime: medication.startTime,
+          source: 'openehr'
+        };
 
         Medication.update($scope.patient.id, toUpdate).then(function () {
           $location.path('/patients/' + $scope.patient.id + '/medications');

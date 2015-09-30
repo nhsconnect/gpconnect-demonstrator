@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('EolcareplansListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Eolcareplan) {
 
     $scope.search = function (row) {
       return (
-          angular.lowercase(row.name).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-          angular.lowercase(row.type).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-          angular.lowercase(row.date).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-          angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
-        );
+        angular.lowercase(row.name).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+        angular.lowercase(row.type).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+        angular.lowercase(row.date).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+        angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
+      );
     };
 
     PatientService.get($stateParams.patientId).then(function (patient) {
@@ -18,8 +18,9 @@ angular.module('openehrPocApp')
 
     Eolcareplan.all($stateParams.patientId).then(function (result) {
       $scope.eolcareplans = result.data;
-      if (result.data.length > 0){
-        for (var i = 0; i < $scope.eolcareplans.length; i++){
+
+      if (result.data.length > 0) {
+        for (var i = 0; i < $scope.eolcareplans.length; i++) {
           $scope.eolcareplans[i].date = moment($scope.eolcareplans[i].date).format('DD-MMM-YYYY');
         }
       }
@@ -45,7 +46,7 @@ angular.module('openehrPocApp')
             };
           },
           eolcareplan: function () {
-            return { };
+            return {};
           },
           patient: function () {
             return $scope.patient;
@@ -60,17 +61,18 @@ angular.module('openehrPocApp')
         eolcareplan.treatmentDecision.dateOfDecision = new Date(eolcareplan.treatmentDecision.dateOfDecision);
 
         var toAdd = {
-         sourceId : '',
-         careDocument : eolcareplan.careDocument,
-         cprDecision : eolcareplan.cprDecision,
-         prioritiesOfCare : eolcareplan.prioritiesOfCare,
-         source : 'openehr',
-         treatmentDecision : eolcareplan.treatmentDecision
+          sourceId: '',
+          careDocument: eolcareplan.careDocument,
+          cprDecision: eolcareplan.cprDecision,
+          prioritiesOfCare: eolcareplan.prioritiesOfCare,
+          source: 'openehr',
+          treatmentDecision: eolcareplan.treatmentDecision
         };
 
         Eolcareplan.create($scope.patient.id, toAdd).then(function () {
-          $state.go('eolcareplans', { patientId: $scope.patient.id });
+          $state.go('eolcareplans', {patientId: $scope.patient.id});
         });
       });
     };
+
   });

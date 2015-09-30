@@ -3,7 +3,7 @@
 //describe('OrdersModalCtrl', function () {
 //
 //  // load the controller's module
-//  beforeEach(module('openehrPocApp'));
+//  beforeEach(module('rippleDemonstrator'));
 //
 //  var OrdersModalCtrl, scope, modalInstance, $order;
 //

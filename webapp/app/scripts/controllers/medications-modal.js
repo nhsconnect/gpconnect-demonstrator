@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('MedicationsModalCtrl', function ($scope, $modalInstance, medication, patient, modal) {
 
     $scope.medication = medication;
@@ -14,6 +14,7 @@ angular.module('openehrPocApp')
 
     $scope.ok = function (medicationForm, medication) {
       $scope.formSubmitted = true;
+
       if (medicationForm.$valid) {
         $modalInstance.close(medication);
       }
@@ -26,6 +27,7 @@ angular.module('openehrPocApp')
     $scope.openDatepicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();
+
       $scope[name] = true;
     };
 

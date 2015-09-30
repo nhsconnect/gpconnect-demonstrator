@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('ContactsListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Contact) {
 
     $scope.query = {};
@@ -34,7 +34,7 @@ angular.module('openehrPocApp')
             };
           },
           contact: function () {
-            return { };
+            return {};
           },
           patient: function () {
             return $scope.patient;

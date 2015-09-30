@@ -1,24 +1,22 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .factory('Medication', function ($http) {
 
-    var patientIdOveride = 9999999000;
-
     var all = function (patientId) {
-      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/medications');
+      return $http.get('/api/patients/' + patientId + '/medications');
     };
 
     var get = function (patientId, compositionId) {
-      return $http.get('/api/patients/' + (patientIdOveride || patientId) + '/medications/' + compositionId);
+      return $http.get('/api/patients/' + patientId + '/medications/' + compositionId);
     };
 
     var create = function (patientId, composition) {
-      return $http.post('/api/patients/' + (patientIdOveride || patientId) + '/medications', composition);
+      return $http.post('/api/patients/' + patientId + '/medications', composition);
     };
 
     var update = function (patientId, composition) {
-      return $http.put('/api/patients/' + (patientIdOveride || patientId) + '/medications', composition);
+      return $http.put('/api/patients/' + patientId + '/medications', composition);
     };
 
     return {
@@ -27,5 +25,5 @@ angular.module('openehrPocApp')
       update: update,
       create: create
     };
-  });
 
+  });

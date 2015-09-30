@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('openehrPocApp')
-  .controller('MedicationsListCtrl', function ($scope, $location, $stateParams, $modal, $state,PatientService, Medication) {
+angular.module('rippleDemonstrator')
+  .controller('MedicationsListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Medication) {
 
     $scope.query = {};
     $scope.queryBy = '$';
@@ -34,7 +34,7 @@ angular.module('openehrPocApp')
             };
           },
           medication: function () {
-            return { };
+            return {};
           },
           patient: function () {
             return $scope.patient;
@@ -45,21 +45,23 @@ angular.module('openehrPocApp')
       modalInstance.result.then(function (medication) {
         medication.startDate = new Date(medication.startDate);
         medication.startTime = new Date(medication.startTime.valueOf() - medication.startTime.getTimezoneOffset() * 60000);
+
         var toAdd = {
-                    sourceId : '',
-                    doseAmount : medication.doseAmount,
-                    doseDirections : medication.doseDirections,
-                    doseTiming : medication.doseTiming,
-                    medicationCode : medication.medicationCode,
-                    medicationTerminology : medication.medicationTerminology,
-                    name : medication.name,
-                    route : medication.route,
-                    startDate : medication.startDate,
-                    startTime : medication.startTime,
-                    source : 'openehr'
-                    };
+          sourceId: '',
+          doseAmount: medication.doseAmount,
+          doseDirections: medication.doseDirections,
+          doseTiming: medication.doseTiming,
+          medicationCode: medication.medicationCode,
+          medicationTerminology: medication.medicationTerminology,
+          name: medication.name,
+          route: medication.route,
+          startDate: medication.startDate,
+          startTime: medication.startTime,
+          source: 'openehr'
+        };
+
         Medication.create($scope.patient.id, toAdd).then(function () {
-          $state.go('medications', { patientId: $scope.patient.id });
+          $state.go('medications', {patientId: $scope.patient.id});
         });
       });
     };

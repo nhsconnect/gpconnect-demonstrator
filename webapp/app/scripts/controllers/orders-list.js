@@ -1,14 +1,14 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('OrdersListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Order) {
 
     $scope.search = function (row) {
       return (
-          angular.lowercase(row.name).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-          angular.lowercase(row.orderDate).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-          angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
-        );
+        angular.lowercase(row.name).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+        angular.lowercase(row.orderDate).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+        angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
+      );
     };
 
     PatientService.get($stateParams.patientId).then(function (patient) {
@@ -17,7 +17,8 @@ angular.module('openehrPocApp')
 
     Order.all($stateParams.patientId).then(function (result) {
       $scope.orders = result.data;
-      for (var i = 0; i < $scope.orders.length; i++){
+
+      for (var i = 0; i < $scope.orders.length; i++) {
         $scope.orders[i].orderDate = moment($scope.orders[i].orderDate).format('DD-MMM-YYYY');
       }
     });
@@ -42,7 +43,7 @@ angular.module('openehrPocApp')
             };
           },
           order: function () {
-            return { };
+            return {};
           },
           patient: function () {
             return $scope.patient;
@@ -55,7 +56,7 @@ angular.module('openehrPocApp')
         order.date = new Date(order.date);
 
         Order.create($scope.patient.id, order).then(function () {
-          $state.go('orders', { patientId: $scope.patient.id });
+          $state.go('orders', {patientId: $scope.patient.id});
         });
       });
     };

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openehrPocApp')
+angular.module('rippleDemonstrator')
   .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Allergy) {
 
     $scope.search = function (row) {
@@ -49,13 +49,13 @@ angular.module('openehrPocApp')
 
       modalInstance.result.then(function (allergy) {
         var toAdd = {
-              sourceId: '',
-              cause: allergy.cause,
-              causeCode: allergy.causeCode,
-              causeTerminology: allergy.causeTerminology,
-              reaction: allergy.reaction,
-              source: 'openehr'
-          };
+          sourceId: '',
+          cause: allergy.cause,
+          causeCode: allergy.causeCode,
+          causeTerminology: allergy.causeTerminology,
+          reaction: allergy.reaction,
+          source: 'openehr'
+        };
 
         Allergy.create($scope.patient.id, toAdd).then(function () {
           $state.go('allergies', {

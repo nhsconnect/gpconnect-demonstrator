@@ -64,8 +64,7 @@ public abstract class AbstractOpenEhrService implements Repository {
 
     protected <T> T findData(QueryStrategy<T> queryStrategy) {
 
-        String ehrId = findEhrIdByNHSNumber(queryStrategy.getPatientId());
-        String query = queryStrategy.getQuery(ehrId);
+        String query = queryStrategy.getQuery(openEhrSubjectNamespace, queryStrategy.getPatientId());
 
         ResponseEntity<QueryResponse> response = requestProxy.getWithSession(getQueryURI(query), QueryResponse.class);
 

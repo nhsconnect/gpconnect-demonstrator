@@ -33,14 +33,16 @@ public class AppointmentSummaryQueryStrategy extends AbstractListQueryStrategy<A
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                 "b_a/description/items[at0011]/value/value as service_team, " +
                 "b_a/description/items[at0026]/value/lower/value as appointment_date " +
-                "from EHR e[ehr_id/value='" + ehrId + "'] " +
+                "from EHR e " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.encounter.v1] " +
                 "contains ACTION b_a[openEHR-EHR-ACTION.referral_uk.v1] " +
-                "where a/name/value='Referral' ";
+                "where a/name/value='Referral' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

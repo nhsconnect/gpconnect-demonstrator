@@ -32,15 +32,17 @@ public class ContactSummaryQueryStrategy extends AbstractListQueryStrategy<Conta
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
-               "a_a/items/data[at0001]/items/items[openEHR-EHR-CLUSTER.person_name.v1]/items/value/value as name, " +
-               "a_a/items/data[at0001]/items[at0030]/value/value as relationship, " +
-               "a_a/items/data[at0001]/items[at0025]/value/value as next_of_kin " +
-               "from EHR e[ehr_id/value='" + ehrId + "'] " +
-               "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
-               "contains SECTION a_a[openEHR-EHR-SECTION.relevant_contacts_rcp.v1] " +
-               "where a/name/value='Relevant contacts'";
+                "a_a/items/data[at0001]/items/items[openEHR-EHR-CLUSTER.person_name.v1]/items/value/value as name, " +
+                "a_a/items/data[at0001]/items[at0030]/value/value as relationship, " +
+                "a_a/items/data[at0001]/items[at0025]/value/value as next_of_kin " +
+                "from EHR e " +
+                "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
+                "contains SECTION a_a[openEHR-EHR-SECTION.relevant_contacts_rcp.v1] " +
+                "where a/name/value='Relevant contacts' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

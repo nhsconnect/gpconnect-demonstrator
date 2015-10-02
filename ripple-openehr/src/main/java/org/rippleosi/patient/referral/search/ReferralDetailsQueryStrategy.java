@@ -35,7 +35,7 @@ public class ReferralDetailsQueryStrategy extends AbstractQueryStrategy<Referral
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                 "a/composer/name as author, " +
                 "a/context/start_time/value as date_submitted, " +
@@ -44,11 +44,13 @@ public class ReferralDetailsQueryStrategy extends AbstractQueryStrategy<Referral
                 "a_a/items/activities/description/items[at0121]/value/value as referral_to, " +
                 "a_a/items/activities/description/items[at0062]/value/value as referral_reason, " +
                 "a_a/items/activities/description/items[at0064]/value/value as clinical_summary " +
-                "from EHR e[ehr_id/value='" + ehrId + "'] " +
+                "from EHR e " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.encounter.v1] " +
                 "contains SECTION a_a[openEHR-EHR-SECTION.referral_details_rcp.v1] " +
                 "where a/name/value='Referral' " +
-                "and a/uid/value='" + referralId + "' ";
+                "and a/uid/value='" + referralId + "' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

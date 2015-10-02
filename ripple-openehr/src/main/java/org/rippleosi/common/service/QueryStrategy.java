@@ -24,7 +24,7 @@ public interface QueryStrategy<T> {
 
     String getPatientId();
 
-    String getQuery(String ehrId);
+    String getQuery(String namespace, String patientId);
 
     T transform(List<Map<String, Object>> resultSet);
 }

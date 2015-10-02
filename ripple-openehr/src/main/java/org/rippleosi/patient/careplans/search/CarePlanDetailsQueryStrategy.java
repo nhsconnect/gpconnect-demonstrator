@@ -34,7 +34,7 @@ public class CarePlanDetailsQueryStrategy extends AbstractQueryStrategy<CarePlan
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                 "a/composer/name as author, " +
                 "a/context/start_time/value as date_created, " +
@@ -47,11 +47,13 @@ public class CarePlanDetailsQueryStrategy extends AbstractQueryStrategy<CarePlan
                 "b_a/items[openEHR-EHR-EVALUATION.cpr_decision_uk.v1]/data/items[at0003]/value/value as cpr_decision, " +
                 "b_a/items[openEHR-EHR-EVALUATION.cpr_decision_uk.v1]/data/items[at0002]/value/value as cpr_date_of_decision, " +
                 "b_a/items[openEHR-EHR-EVALUATION.cpr_decision_uk.v1]/data/items[at0021]/value/value as cpr_comment " +
-                "from EHR e[ehr_id/value='" + ehrId + "'] " +
+                "from EHR e " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_plan.v1] " +
                 "contains SECTION b_a[openEHR-EHR-SECTION.legal_information_rcp.v1] " +
                 "where a/name/value='End of Life Patient Preferences' " +
-                "and a/uid/value='" + carePlanId + "' ";
+                "and a/uid/value='" + carePlanId + "' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

@@ -34,7 +34,7 @@ public class AppointmentDetailsQueryStrategy extends AbstractQueryStrategy<Appoi
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                 "a/composer/name as author, " +
                 "a/context/start_time/value as date_created, " +
@@ -42,11 +42,13 @@ public class AppointmentDetailsQueryStrategy extends AbstractQueryStrategy<Appoi
                 "b_a/description/items[at0026]/value/lower/value as appointment_date, " +
                 "b_a/protocol/items/items/items[at0002]/value/value as location, " +
                 "b_a/ism_transition/current_state/value as status " +
-                "from EHR e[ehr_id/value='" + ehrId + "'] " +
+                "from EHR e " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.encounter.v1] " +
                 "contains ACTION b_a[openEHR-EHR-ACTION.referral_uk.v1] " +
                 "where a/name/value='Referral' " +
-                "and a/uid/value = '" + appointmentId + "'";
+                "and a/uid/value = '" + appointmentId + "' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

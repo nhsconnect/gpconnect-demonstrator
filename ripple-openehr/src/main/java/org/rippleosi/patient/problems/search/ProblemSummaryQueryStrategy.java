@@ -32,14 +32,16 @@ public class ProblemSummaryQueryStrategy extends AbstractListQueryStrategy<Probl
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                 "a_a/items/data[at0001]/items[at0002]/value/value as problem, " +
                 "a_a/items/data[at0001]/items[at0003]/value/value as onset_date " +
-                "from EHR e[ehr_id/value='" + ehrId + "'] " +
+                "from EHR e " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
                 "contains SECTION a_a[openEHR-EHR-SECTION.problems_issues_rcp.v1] " +
-                "where a/name/value='Problem list'";
+                "where a/name/value='Problem list' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

@@ -32,15 +32,17 @@ public class LabResultSummaryQueryStrategy extends AbstractListQueryStrategy<Lab
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                 "a/context/start_time/value as date_created, " +
                 "a_a/data[at0001]/events[at0002]/data[at0003]/items[at0005]/value/value as test_name, " +
                 "a_a/data[at0001]/events[at0002]/data[at0003]/items[at0075]/value/value as sample_taken " +
-                "from EHR e[ehr_id/value='" + ehrId + "'] " +
+                "from EHR e " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.report-result.v1] " +
                 "contains OBSERVATION a_a[openEHR-EHR-OBSERVATION.laboratory_test.v0] " +
-                "where a/name/value='Laboratory test report' ";
+                "where a/name/value='Laboratory test report' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

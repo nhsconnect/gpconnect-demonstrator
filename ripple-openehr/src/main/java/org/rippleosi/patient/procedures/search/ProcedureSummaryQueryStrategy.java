@@ -32,14 +32,16 @@ public class ProcedureSummaryQueryStrategy extends AbstractListQueryStrategy<Pro
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                 "a_a/description[at0001]/items[at0002]/value/value as procedure_name, " +
                 "a_a/time/value as procedure_date " +
-                "from EHR e[ehr_id/value='" + ehrId + "'] " +
+                "from EHR e " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
                 "contains ACTION a_a[openEHR-EHR-ACTION.procedure.v1] " +
-                "where a/name/value='Procedures list'";
+                "where a/name/value='Procedures list' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

@@ -34,7 +34,7 @@ public class ContactDetailsQueryStrategy extends AbstractQueryStrategy<ContactDe
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                "a/composer/name as author, " +
                "a_a/items/data[at0001]/items/items[openEHR-EHR-CLUSTER.person_name.v1]/items/value/value as name, " +
@@ -45,11 +45,13 @@ public class ContactDetailsQueryStrategy extends AbstractQueryStrategy<ContactDe
                "a_a/items/data[at0001]/items[at0030]/value/value as relationship, " +
                "a_a/items/data[at0001]/items[at0017]/value/value as notes, " +
                "a_a/items/data[at0001]/items[at0025]/value/value as next_of_kin " +
-               "from EHR e[ehr_id/value='" + ehrId + "'] " +
+               "from EHR e " +
                "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
                "contains SECTION a_a[openEHR-EHR-SECTION.relevant_contacts_rcp.v1] " +
                "where a/name/value='Relevant contacts' " +
-               "and a/uid/value='" + contactId + "' ";
+               "and a/uid/value='" + contactId + "' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

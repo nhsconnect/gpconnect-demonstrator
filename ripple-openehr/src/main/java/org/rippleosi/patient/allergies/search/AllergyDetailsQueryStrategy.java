@@ -34,17 +34,19 @@ public class AllergyDetailsQueryStrategy extends AbstractQueryStrategy<AllergyDe
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                 "a_a/items/data[at0001]/items[at0002]/value/value as cause, " +
                 "a_a/items/data[at0001]/items[at0002]/value/defining_code/terminology_id/value as cause_terminology, " +
                 "a_a/items/data[at0001]/items[at0002]/value/defining_code/code_string as cause_code, " +
                 "a_a/items/data[at0001]/items[at0025]/items[at0022]/value/value as reaction " +
-                "from EHR e[ehr_id/value='" + ehrId + "'] " +
+                "from EHR e " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
                 "contains SECTION a_a[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1] " +
                 "where a/name/value='Allergies list' " +
-                "and a/uid/value='" + allergyId + "'";
+                "and a/uid/value='" + allergyId + "' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

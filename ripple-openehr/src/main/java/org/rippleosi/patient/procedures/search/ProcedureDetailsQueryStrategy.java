@@ -35,7 +35,7 @@ public class ProcedureDetailsQueryStrategy extends AbstractQueryStrategy<Procedu
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                 "a/composer/name as author, " +
                 "a/context/start_time/value as date_submitted, " +
@@ -46,11 +46,13 @@ public class ProcedureDetailsQueryStrategy extends AbstractQueryStrategy<Procedu
                 "b_a/ism_transition/careflow_step/value as status, " +
                 "b_a/ism_transition/careflow_step/defining_code/code_string as status_code, " +
                 "b_a/ism_transition/careflow_step/defining_code/terminology_id/value as terminology " +
-                "from EHR e[ehr_id/value='" + ehrId + "'] " +
+                "from EHR e " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
                 "contains ACTION b_a[openEHR-EHR-ACTION.procedure.v1] " +
                 "where a/name/value='Procedures list' " +
-                "and a/uid/value='" + procedureId + "' ";
+                "and a/uid/value='" + procedureId + "' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

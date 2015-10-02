@@ -32,13 +32,15 @@ public class CarePlanSummaryQueryStrategy extends AbstractListQueryStrategy<Care
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                 "a/context/start_time/value as date_created " +
-                "from EHR e[ehr_id/value='" + ehrId + "'] " +
+                "from EHR e " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_plan.v1] " +
                 "contains SECTION b_a[openEHR-EHR-SECTION.legal_information_rcp.v1] " +
-                "where a/name/value='End of Life Patient Preferences'";
+                "where a/name/value='End of Life Patient Preferences' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

@@ -34,7 +34,7 @@ public class LabOrderDetailsQueryStrategy extends AbstractQueryStrategy<LabOrder
     }
 
     @Override
-    public String getQuery(String ehrId) {
+    public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                 "a/composer/name as author, " +
                 "a/context/start_time/value as date_created, " +
@@ -42,11 +42,13 @@ public class LabOrderDetailsQueryStrategy extends AbstractQueryStrategy<LabOrder
                 "a_a/activities[at0001]/description/items[at0121]/value/defining_code/code_string as code, " +
                 "a_a/activities[at0001]/description/items[at0121]/value/defining_code/terminology_id/value as terminology, " +
                 "a_a/activities[at0001]/timing/value as order_date " +
-                "from EHR e[ehr_id/value='" + ehrId + "'] " +
+                "from EHR e " +
                 "contains COMPOSITION a[openEHR-EHR-COMPOSITION.referral.v0] " +
                 "contains INSTRUCTION a_a[openEHR-EHR-INSTRUCTION.request-lab_test.v1] " +
                 "where a/name/value='Laboratory order' " +
-                "and a/uid/value='" + labOrderId + "' ";
+                "and a/uid/value='" + labOrderId + "' " +
+                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

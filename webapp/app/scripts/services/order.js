@@ -15,10 +15,6 @@ angular.module('rippleDemonstrator')
       return $http.post('/api/patients/' + patientId + '/laborders', composition);
     };
 
-    var update = function (patientId, composition) {
-      return $http.put('/api/patients/' + patientId + '/laborders', composition);
-    };
-
     var suggestion = function () {
       return $http.get('/api/terminology/list/order');
     };
@@ -26,7 +22,6 @@ angular.module('rippleDemonstrator')
     return {
       all: all,
       get: get,
-      update: update,
       create: create,
       suggestion: suggestion
     };

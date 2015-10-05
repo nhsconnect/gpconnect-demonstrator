@@ -1,53 +1,89 @@
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
-html, body, #wrapper, #page-wrapper, .section-content {
+html,
+body,
+#wrapper,
+#page-wrapper,
+.section-content {
   height: 100%;
   margin-left: auto;
-  margin-right: auto;    
+  margin-right: auto;
 }
 
 body {
   background: url('../images/site-bg2.png') center 100px no-repeat #ffffff;
   background-size: 100% auto;
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
 
 textarea {
   resize: vertical;
 }
 
-.voffset  { margin-top: 2px; }
-.voffset1 { margin-top: 5px; }
-.voffset2 { margin-top: 10px; }
-.voffset3 { margin-top: 15px; }
-.voffset4 { margin-top: 30px; }
-.voffset5 { margin-top: 40px; }
-.voffset6 { margin-top: 60px; }
-.voffset7 { margin-top: 80px; }
-.voffset8 { margin-top: 100px; }
-.voffset9 { margin-top: 150px; }
+.voffset {
+  margin-top: 2px;
+}
 
-/* Global Styles */s
-a,
+.voffset1 {
+  margin-top: 5px;
+}
+
+.voffset2 {
+  margin-top: 10px;
+}
+
+.voffset3 {
+  margin-top: 15px;
+}
+
+.voffset4 {
+  margin-top: 30px;
+}
+
+.voffset5 {
+  margin-top: 40px;
+}
+
+.voffset6 {
+  margin-top: 60px;
+}
+
+.voffset7 {
+  margin-top: 80px;
+}
+
+.voffset8 {
+  margin-top: 100px;
+}
+
+.voffset9 {
+  margin-top: 150px;
+}
+
+
+/* Global Styles */
+
+s a,
 a:hover,
 a:focus,
 a:active {
   color: #283536;
   cursor: pointer;
 }
+
 a {
   color: #000000;
   text-decoration: none;
 }
-a:hover
-{
+
+a:hover {
   color: #82BE36;
   text-decoration: none;
 }
-
 
 ul {
   margin: 0;
@@ -58,21 +94,26 @@ li {
   list-style: none;
 }
 
+
 /* Navigation Menu */
-.navigation-menu{
+
+.navigation-menu {
   text-align: left;
   padding-left: 18px;
 }
 
+
 /* Index */
+
 .section {
-  padding-right: 15px;}
+  padding-right: 15px;
+}
 
 .section-north {
   min-height: 74px;
   border: 1px solid #fff;
   border-bottom: 1px solid #e7e7e7;
-  width: 99%;    
+  width: 99%;
 }
 
 #page-wrapper {
@@ -85,8 +126,8 @@ li {
   margin-bottom: 15px;
 }
 
-
-.col-right { /*Disabled scroll*/
+.col-right {
+  /*Disabled scroll*/
   /*border-right: 1px solid #e7e7e7;*/
   /*overflow-y: scroll;*/
   height: 100%;
@@ -95,21 +136,21 @@ li {
 .col-left {
   /*overflow-y: scroll; */
   height: 100%;
-  margin-left: 0px;    
+  margin-left: 0px;
 }
 
-.section-main, .section-detail {
+.section-main,
+.section-detail {
   padding-top: 15px;
   padding-bottom: 15px;
-  padding-left: 15px;    
+  padding-left: 15px;
   height: 568px;
 }
-
 
 .section-row {
   height: 100%;
   margin-right: -45px;
-  margin-left: -30px;    
+  margin-left: -30px;
 }
 
 tr[ng-click] {
@@ -158,7 +199,8 @@ a[ui-sref] {
   font-weight: bold;
 }
 
-.btn-info, .btn-info:hover {
+.btn-info,
+.btn-info:hover {
   background-color: #007a41;
   border-color: #007a41;
   color: #fff;
@@ -188,7 +230,10 @@ label {
   }
 }
 
-.form-horizontal .radio, .form-horizontal .checkbox, .form-horizontal .radio-inline, .form-horizontal .checkbox-inline {
+.form-horizontal .radio,
+.form-horizontal .checkbox,
+.form-horizontal .radio-inline,
+.form-horizontal .checkbox-inline {
   padding-top: 1px;
 }
 
@@ -196,11 +241,13 @@ label {
   font-weight: bold;
 }
 
-.radio label, .checkbox label {
+.radio label,
+.checkbox label {
   color: #555;
 }
 
-.radio input[type="radio"], .checkbox input[type="checkbox"] {
+.radio input[type="radio"],
+.checkbox input[type="checkbox"] {
   margin-top: 2px
 }
 
@@ -209,12 +256,12 @@ label {
   padding: 2px 8px 4px 8px;
 }
 
-.panel-heading li{
-padding-right: 4%;
+.panel-heading li {
+  padding-right: 4%;
 }
 
-.panel-heading .nhsLabel{
-margin-right: -4%;
+.panel-heading .nhsLabel {
+  margin-right: -4%;
 }
 
 .panel-body {
@@ -245,9 +292,10 @@ margin-right: -4%;
 
 
 /* Confirmation Modal */
+
 .modal-header {
-  border-top-left-radius:6px;
-  border-top-right-radius: 6px;    
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
   padding-bottom: 0;
   border-bottom: 0;
   background-color: #007a41;
@@ -292,12 +340,12 @@ legend {
   border-bottom: 1px solid #ddd;
 }
 
-.dashboard.row{
-    margin-right: -20px;
+.dashboard.row {
+  margin-right: -20px;
 }
 
-.patient-dashboard{
-    width:98%;
+.patient-dashboard {
+  width: 98%;
 }
 
 .panel-patient {
@@ -354,12 +402,12 @@ legend {
 
 .sort-asc:after {
   padding-left: 5px;
-  content:'\25BC'
+  content: '\25BC'
 }
 
 .sort-desc:after {
   padding-left: 5px;
-  content:'\25B2'
+  content: '\25B2'
 }
 
 .spinner {
@@ -371,11 +419,12 @@ legend {
   display: inline-block;
 }
 
-.container1 > div, .container2 > div, .container3 > div {
+.container1 > div,
+.container2 > div,
+.container3 > div {
   width: 6px;
   height: 6px;
   background-color: #777;
-
   border-radius: 100%;
   position: absolute;
   -webkit-animation: bouncedelay 1.2s infinite ease-in-out;
@@ -401,10 +450,25 @@ legend {
   transform: rotateZ(90deg);
 }
 
-.circle1 { top: 0; left: 0; }
-.circle2 { top: 0; right: 0; }
-.circle3 { right: 0; bottom: 0; }
-.circle4 { left: 0; bottom: 0; }
+.circle1 {
+  top: 0;
+  left: 0;
+}
+
+.circle2 {
+  top: 0;
+  right: 0;
+}
+
+.circle3 {
+  right: 0;
+  bottom: 0;
+}
+
+.circle4 {
+  left: 0;
+  bottom: 0;
+}
 
 .container2 .circle1 {
   -webkit-animation-delay: -1.1s;
@@ -462,21 +526,32 @@ legend {
 }
 
 @-webkit-keyframes bouncedelay {
-  0%, 80%, 100% { -webkit-transform: scale(0.0) }
-  40% { -webkit-transform: scale(1.0) }
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0.0)
+  }
+  40% {
+    -webkit-transform: scale(1.0)
+  }
 }
 
 @keyframes bouncedelay {
-  0%, 80%, 100% {
+  0%,
+  80%,
+  100% {
     transform: scale(0.0);
     -webkit-transform: scale(0.0);
-  } 40% {
+  }
+  40% {
     transform: scale(1.0);
     -webkit-transform: scale(1.0);
   }
 }
 
+
 /* Header */
+
 .header-background {
   background-color: #FFFFFF;
   padding-top: 20px;
@@ -491,27 +566,29 @@ legend {
   z-index: -1;
 }
 
-.header-title-1{
+.header-title-1 {
   color: #0E682F;
   white-space: nowrap;
 }
 
-.header-title-2{
+.header-title-2 {
   color: #0E682F;
 }
 
-.header-title-3{
+.header-title-3 {
   color: #000000;
 }
-.ripple-icon
-{
-  width:40px;
-  height:40px;
+
+.ripple-icon {
+  width: 40px;
+  height: 40px;
   cursor: pointer;
 }
 
+
 /* Header - Search Bar */
-.icon-searchbar:before{
+
+.icon-searchbar:before {
   color: #82BE36;
   font-size: 20px;
 }
@@ -519,11 +596,13 @@ legend {
 .search-left-inner-addon {
   position: relative;
   color: #999999;
-  font-size:16px;
+  font-size: 16px;
 }
+
 .search-left-inner-addon input {
   padding-left: 30px;
 }
+
 .search-left-inner-addon i {
   position: absolute;
   padding: 10px 12px;
@@ -531,7 +610,7 @@ legend {
   color: #999999;
 }
 
-.search-left-inner-addon .form-control{
+.search-left-inner-addon .form-control {
   display: block;
   width: 100%;
   height: 34px;
@@ -547,55 +626,66 @@ legend {
   min-width: 230px;
 }
 
-.search-left-inner-addon .form-control::-webkit-input-placeholder { color: #999999;}
-.search-left-inner-addon  .form-control:-moz-placeholder { color: #999999; }
-.search-left-inner-addon  .form-control::-moz-placeholder { color: #999999; }
-.search-left-inner-addon .form-control:-ms-input-placeholder { color: #999999; }
+.search-left-inner-addon .form-control::-webkit-input-placeholder {
+  color: #999999;
+}
 
-.header-search-mobile{
-  padding-left:45px;
+.search-left-inner-addon .form-control:-moz-placeholder {
+  color: #999999;
+}
+
+.search-left-inner-addon .form-control::-moz-placeholder {
+  color: #999999;
+}
+
+.search-left-inner-addon .form-control:-ms-input-placeholder {
+  color: #999999;
+}
+
+.header-search-mobile {
+  padding-left: 45px;
   padding-right: 45px;
   padding-bottom: 10px;
-  font-family:hero;
+  font-family: hero;
 }
 
-.header-search{
+.header-search {
   font-size: 20px;
   color: #FFF;
-  font-family:hero;
+  font-family: hero;
 }
 
-.header-left{
+.header-left {
   padding-left: 40px;
   text-align: left;
 }
 
-.header-left-mobile{
+.header-left-mobile {
   text-align: center;
   padding-right: 60px;
   max-height: 45px;
-  font-family:hero;
+  font-family: hero;
 }
 
-.header-right{
+.header-right {
   font-size: 20px;
   padding-right: 40px;
   text-align: right;
   font-family: "Hero";
- }
+}
 
-.header-right-mobile{
+.header-right-mobile {
   font-size: 20px;
-  color:#000000;
+  color: #000000;
   padding-left: 45px;
   font-family: "Hero";
 }
 
 .glyphicon-user:before {
-  color:#82BE36;
+  color: #82BE36;
 }
 
-.glyphicon-chevron-down:before{
+.glyphicon-chevron-down:before {
   color: #0E682F;
 }
 
@@ -606,32 +696,34 @@ legend {
   line-height: 2.4em;
 }
 
-.glyphicon-chevron-right{
+.glyphicon-chevron-right {
   float: right;
 }
 
+
 /* Toolbar */
-.header-toolbar{
+
+.header-toolbar {
   background-color: #0E682F;
   font-size: 22px;
   color: #000000;
-  margin-left: -5.5%;  
-  margin-right:0px;    
+  margin-left: -5.5%;
+  margin-right: 0px;
   padding-top: 10px;
   padding-bottom: 10px;
   border-top: 1px solid #CCCCCC;
   border-bottom: 1px solid #CCCCCC;
 }
 
-.previous-page-arrow{
-  float:left;
+.previous-page-arrow {
+  float: left;
   padding-left: 30px;
   padding-top: 4px;
   cursor: pointer;
   color: #FFF;
 }
 
-.previous-page-title{
+.previous-page-title {
   padding-left: 20px;
   font-family: "Hero";
   color: #FFF;
@@ -646,16 +738,18 @@ legend {
   font-family: "Hero";
   font-size: 20px;
   color: #FFF;
-  text-align:center;
+  text-align: center;
 }
+
 
 /* Dashboard */
+
 .button-icons:before {
   color: #82BE36;
-  font-size:70px;
+  font-size: 70px;
 }
 
-.dashboard-button{
+.dashboard-button {
   text-align: center;
   border: solid 2px #D0D0D0;
   padding: 20px;
@@ -664,32 +758,32 @@ legend {
   margin-bottom: 20px;
 }
 
-.dashboard-button-text{
+.dashboard-button-text {
   margin-top: 20px;
   color: #000000;
   display: block;
   font-size: 25px;
 }
 
-.button-icons-stack:before{
+.button-icons-stack:before {
   color: #000066;
 }
 
-#age-chart{
+#age-chart {
   height: 350px;
   align-content: center;
   padding-bottom: 0;
 }
 
-#department-chart{
+#department-chart {
   height: 350px;
   align-content: center;
-  padding-bottom:30px;
+  padding-bottom: 30px;
 }
 
- svg {
-   height:500px;
- }
+svg {
+  height: 500px;
+}
 
 .chart-inner {
   border: 1px solid #bdbdbd;
@@ -704,54 +798,56 @@ legend {
   width: auto;
 }
 
-.chart-title{
+.chart-title {
   color: #000000;
   font-size: 22px;
   margin-bottom: 5px;
 }
 
-.chart-description{
+.chart-description {
   color: #767676;
   font-size: 16px;
 }
 
-.chart-fa-stack{
+.chart-fa-stack {
   padding-top: 18px;
   font-size: 30px;
 }
 
-.chart-title-group-container{
+.chart-title-group-container {
   overflow: hidden;
 }
 
-.chart-title-group{
+.chart-title-group {
   margin-left: 30px;
   font-size: 18px;
   font-family: "Hero";
 }
 
-.chart-title-age{
+.chart-title-age {
   color: #7E28CD;
 }
 
-.chart-title-setting{
-  color:#25A174;
+.chart-title-setting {
+  color: #25A174;
 }
 
-.cake-icon:before{
+.cake-icon:before {
   color: #7E28CD;
 }
 
-.map-marker-icon:before{
-  color:#25A174;
+.map-marker-icon:before {
+  color: #25A174;
 }
 
-.chartSelectList{
+.chartSelectList {
   float: right;
 }
 
+
 /* Charts in mobile view*/
-@media (max-width: 768px){
+
+@media (max-width: 768px) {
   .chart-inner {
     display: inline-block;
     padding-left: 0;
@@ -759,28 +855,23 @@ legend {
     padding-right: 10px;
     padding-bottom: 0px;
   }
-
-  #age-chart{
+  #age-chart {
     height: 300px;
     padding-left: 20px;
   }
-
-  #department-chart{
+  #department-chart {
     height: 300px;
     padding-left: 20px;
   }
-
-  .chart-title-group{
+  .chart-title-group {
     padding-top: 20px;
   }
-
-  .chart-title-group-mobile{
+  .chart-title-group-mobile {
     padding-top: 10px;
     padding-left: 10px;
     font-size: 18px;
     font-family: "Hero";
   }
-
 }
 
 .main-nav a.button {
@@ -797,31 +888,52 @@ legend {
 
 .main-nav a.button:hover {
   background-color: #f4f8ec;
- text-decoration: none;
+  text-decoration: none;
 }
 
 .main-nav a.button i {
- color: #7cbe31;
- line-height: 70px;
- height: 70px;
- display: block;
+  color: #7cbe31;
+  line-height: 70px;
+  height: 70px;
+  display: block;
 }
 
+
 /* Button Icons - Variable Sizes to fit */
-.main-nav a.button.viewall i { font-size: 110px; }
-.main-nav a.button.spine i { font-size: 90px; margin-top: 10px; }
-.main-nav a.button.saved i { font-size: 85px; margin-top: 10px; }
+
+.main-nav a.button.viewall i {
+  font-size: 110px;
+}
+
+.main-nav a.button.spine i {
+  font-size: 90px;
+  margin-top: 10px;
+}
+
+.main-nav a.button.saved i {
+  font-size: 85px;
+  margin-top: 10px;
+}
+
 
 /* User Profile Menu */
-.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+
+.nav .open > a,
+.nav .open > a:hover,
+.nav .open > a:focus {
   background-color: #eee;
   border-color: transparent;
 }
-.nav > li > a:hover, .nav > li > a:focus {
+
+.nav > li > a:hover,
+.nav > li > a:focus {
   text-decoration: none;
   background-color: transparent;
 }
-.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+
+.nav .open > a,
+.nav .open > a:hover,
+.nav .open > a:focus {
   background-color: transparent;
   border-color: transparent;
 }
@@ -838,7 +950,7 @@ legend {
   padding-top: 0px;
 }
 
-.dropdown-profile-text{
+.dropdown-profile-text {
   color: black;
   font-family: hero;
   font-size: 14px;
@@ -847,7 +959,7 @@ legend {
 
 .user-profile-image {
   margin-bottom: 0;
-  color:#82BE36;
+  color: #82BE36;
   font-size: 60px;
   border: 1px solid #c0c2be;
   border-radius: 3px;
@@ -855,10 +967,12 @@ legend {
   text-align: center;
 }
 
+
 /* User Profile Mobile */
+
 @media (max-width: 767px) {
   .navbar-nav .open .dropdown-menu {
-    top: 100%;  
+    top: 100%;
     left: 0;
     float: left;
     width: 310px;
@@ -880,19 +994,25 @@ legend {
   }
 }
 
+
 /* Patient List */
+
 .glyphicon-list-patients:before {
   color: #7cbe31;
 }
 
+
 /* Patient Detail */
+
+
 /* Tables and Pagination */
+
 table.table {
   width: 100%;
   border: 1px solid #bebcbd;
-  border-collapse:separate;
+  border-collapse: separate;
   border-radius: 3px;
-  -moz-border-radius:6px;
+  -moz-border-radius: 6px;
 }
 
 .table thead {
@@ -904,7 +1024,9 @@ table.table {
   font-weight: 500;
 }
 
+
 /* Sorting */
+
 .table thead i {
   margin-left: 5px;
 }
@@ -940,7 +1062,9 @@ table.table {
   display: inline-block;
 }
 
+
 /* Transparent Tables */
+
 .table-striped tbody tr {
   background-color: rgba(238, 241, 243, 0.7);
 }
@@ -950,7 +1074,7 @@ table.table {
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(255,255,255,0.7);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .table .view {
@@ -967,7 +1091,7 @@ table.table {
 }
 
 .table > thead > tr > th {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .table > thead > tr > td.info,
@@ -1043,8 +1167,12 @@ table.table {
   margin-left: 10px;
 }
 
+
 /* Patient Summary */
+
+
 /* Summary Icons */
+
 .board:nth-child(4) {
   /* 4th board should always clear left */
   clear: left;
@@ -1072,9 +1200,13 @@ table.table {
   margin-right: 4px;
 }
 
+
 /* Toggle Charts */
+
+
 /* Use this instead of hide as doesn't carry the '!important'a attribute.
 	Useful when calling jQuery show() on hidden elements */
+
 .soft-hide {
   display: none;
 }
@@ -1083,22 +1215,27 @@ table.table {
   clear: both;
 }
 
+
 /* MDT Detail*/
-.participants-list{
+
+.participants-list {
   margin-left: 80px;
   padding-top: 10px;
 }
+
+
 /* MDT */
 
-.participants-column{
-  overflow:scroll;
-  height:400px;
+.participants-column {
+  overflow: scroll;
+  height: 400px;
 }
 
-.no-attendance{
+.no-attendance {
   padding-left: 35px;
 }
-.remove-person-button{
+
+.remove-person-button {
   background: #d9534f;
   color: #FFF;
   font-weight: bold;
@@ -1112,10 +1249,11 @@ table.table {
   float: right;
   padding-bottom: 5px;
   padding-top: 5px;
-  padding-right:10px;
+  padding-right: 10px;
   padding-left: 10px;
 }
-.add-person-button{
+
+.add-person-button {
   background: #5cb85c;
   color: #FFF;
   font-weight: bold;
@@ -1128,466 +1266,564 @@ table.table {
   margin: 10px 0;
   padding-bottom: 5px;
   padding-top: 5px;
-  padding-right:10px;
+  padding-right: 10px;
   padding-left: 10px;
   float: right;
 }
 
-.participant-border{
+.participant-border {
   border-bottom: 1px solid #ccc;
   padding-bottom: 5px;
   padding-top: 5px;
 }
 
-.participant-label{
+.participant-label {
   padding-top: 5px;
 }
 
-.notes-label{
+.notes-label {
   text-align: left;
   padding-bottom: 10px;
 }
 
-@media (min-width: 768px){
+@media (min-width: 768px) {
   .form-horizontal .control-label {
     text-align: left;
   }
 }
 
-.validation-error{
+.validation-error {
   color: #a94442;
 }
 
-textarea#prioritycarecomment{
-    height:100px;
-    width: 102%;
+textarea#prioritycarecomment {
+  height: 100px;
+  width: 102%;
 }
 
-textarea#treatmentdecisioncomment{
-   height:100px;
-   width: 109%;
+textarea#treatmentdecisioncomment {
+  height: 100px;
+  width: 109%;
 }
 
-textarea#cprdecisioncomment{
-   height:100px;
-   width: 109%;
+textarea#cprdecisioncomment {
+  height: 100px;
+  width: 109%;
 }
 
-textarea#procedureNotes{
-   height:108px;
+textarea#procedureNotes {
+  height: 108px;
 }
 
-#dateofdecision{
-    width: 60%;
+#dateofdecision {
+  width: 60%;
 }
 
-.DetailsSubHeadingt{
-padding-top: 15px;
+.DetailsSubHeadingt {
+  padding-top: 15px;
 }
 
-.previousGroup{
-margin-left: 5%;
+.previousGroup {
+  margin-left: 5%;
 }
 
-.tabContent{
-    border-left: 1px solid #DDDDDD;
-    margin-top: -3%;
-    height: 363px;
-    background-color: white;
-    width: 108.5%;
-    margin-left: -7%
+.tabContent {
+  border-left: 1px solid #DDDDDD;
+  margin-top: -3%;
+  height: 363px;
+  background-color: white;
+  width: 108.5%;
+  margin-left: -7%
 }
 
-.appointmentTabContent .tabContent{
-height: 265px !important;
+.appointmentTabContent .tabContent {
+  height: 265px !important;
 }
 
-.tabContetInner{
-    padding-left: 5%;
-    padding-top: 16px;
+.tabContetInner {
+  padding-left: 5%;
+  padding-top: 16px;
 }
 
-.applyFloatRight{
-    float: left;
+.applyFloatRight {
+  float: left;
 }
 
 .scrollcontainer1 {
-    height: 90%;
-    width: 100%;
-    overflow: hidden;
-    position: relative;
+  height: 90%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
 }
+
 .scrollcontainer2 {
-    height: 90%;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    overflow: auto;
+  height: 90%;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  overflow: auto;
 }
 
 .scrollcontainer2EmptyList {
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    overflow: auto;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  overflow: auto;
 }
 
 .modal-open {
   overflow: auto;
 }
 
-.appointmentTabs{
-    width:80% !important;
+.appointmentTabs {
+  width: 80% !important;
 }
 
-.eolTabs{
-    width:100%;
-    border-top: 1px solid #DDDDDD;
-    border-radius: 0 !important;
-    margin-left: -10px;
+.eolTabs {
+  width: 100%;
+  border-top: 1px solid #DDDDDD;
+  border-radius: 0 !important;
+  margin-left: -10px;
 }
 
-.eolTabsBottom{
-    border-bottom: 1px solid #DDDDDD;
+.eolTabsBottom {
+  border-bottom: 1px solid #DDDDDD;
 }
 
-.eolTabs .active{
-background-color: white;
+.eolTabs .active {
+  background-color: white;
 }
 
 .eolForm {
-    height: 430px;
-    background-color: #F7F7F7;
+  height: 430px;
+  background-color: #F7F7F7;
 }
 
-.eolForm .tabContent{
-    height: 393px;
+.eolForm .tabContent {
+  height: 393px;
 }
 
-.appointmentForm{
-    background-color: #F7F7F7;
+.appointmentForm {
+  background-color: #F7F7F7;
 }
 
-.appointmentForm .form-Group{
-    padding-top: 33px;
-    width: 97%;
+.appointmentForm .form-Group {
+  padding-top: 33px;
+  width: 97%;
 }
 
-.appointmentForm fieldset{
-    background-color: #F7F7F7 !important;
-    padding-bottom: 0px !important;
+.appointmentForm fieldset {
+  background-color: #F7F7F7 !important;
+  padding-bottom: 0px !important;
 }
 
-.appointmentForm .form-group{
-    padding-top: 15px;
-}
-.appointmentForm .tabContent{
-    height: 554px !important;
-    margin-left: -78px;
-    width: 715px !important;
-}
-.appointmentForm .tabContent img{
-    margin-left: 17px;
+.appointmentForm .form-group {
+  padding-top: 15px;
 }
 
- .eolForm .btn:active, .btn.active{
-  box-shadow:none;
-  background-color: white;    
+.appointmentForm .tabContent {
+  height: 554px !important;
+  margin-left: -78px;
+  width: 715px !important;
 }
 
- .eolForm input, .eolForm .input-group {
- width:100% !important;
- padding-top: 5px;    
+.appointmentForm .tabContent img {
+  margin-left: 17px;
 }
 
-.eolForm .form-group{
-   padding-top: 10px;
-    width: 97%;
+.eolForm .btn:active,
+.btn.active {
+  box-shadow: none;
+  background-color: white;
+}
+
+.eolForm input,
+.eolForm .input-group {
+  width: 100% !important;
+  padding-top: 5px;
+}
+
+.eolForm .form-group {
+  padding-top: 10px;
+  width: 97%;
 }
 
 .procedureForm input {
- padding-top: 8px;      
+  padding-top: 8px;
 }
 
-.procedureForm .input-group{
- width:100% !important;
- padding-top: 8px;        
+.procedureForm .input-group {
+  width: 100% !important;
+  padding-top: 8px;
 }
 
-.procedureForm .form-group{
-   padding-top: 10px;
-    width: 97%;
-   padding-left:15px;    
+.procedureForm .form-group {
+  padding-top: 10px;
+  width: 97%;
+  padding-left: 15px;
 }
 
-.procedureRightModal{
-margin-left: -85px;
+.procedureRightModal {
+  margin-left: -85px;
 }
 
-.procedureRightModal .rowTwo{
-margin-left: -15px;
+.procedureRightModal .rowTwo {
+  margin-left: -15px;
 }
 
-.procedureForm .procedureRightModal .input-group{
-        width:140% !important;
+.procedureForm .procedureRightModal .input-group {
+  width: 140% !important;
 }
 
-.procedureForm .procedureRightModal .proceduretimeform{
-        padding-left: 55px;
+.procedureForm .procedureRightModal .proceduretimeform {
+  padding-left: 55px;
 }
 
-.procedureForm .procedureRightModal .proceduretimepicker{
-    width: 350% !important;
+.procedureForm .procedureRightModal .proceduretimepicker {
+  width: 350% !important;
 }
 
-.procedureRightModal .proceduredateform input{
-    width: 220px;
+.procedureRightModal .proceduredateform input {
+  width: 220px;
 }
 
-.procedureMobileform label{
-    float: none;
+.procedureMobileform label {
+  float: none;
 }
 
-.procedureMobileform .popupinputs{
-        height: 30px;
+.procedureMobileform .popupinputs {
+  height: 30px;
 }
 
-.procedureMobileform .terminologylabel{
-   padding-left:16px
+.procedureMobileform .terminologylabel {
+  padding-left: 16px
 }
 
-.procedureMobileform{
-    width:98% !important;
+.procedureMobileform {
+  width: 98% !important;
 }
 
-.procedureMobileform label{
-   padding-top: 10px;
+.procedureMobileform label {
+  padding-top: 10px;
 }
 
-#careserviceteam{
-    width:159%;
+#careserviceteam {
+  width: 159%;
 }
 
-.referralForm .input-group{
-    width:100% !important;
-    padding-top: 8px;
-    
+.referralForm .input-group {
+  width: 100% !important;
+  padding-top: 8px;
 }
 
-.referralForm .form-control{
-    height: 30px;
+.referralForm .form-control {
+  height: 30px;
 }
 
-
-.appointmentLocationGroup{
-    margin-left: -10px;
+.appointmentLocationGroup {
+  margin-left: -10px;
 }
 
-.appointmentStatusGroup{
-    margin-left: -25px;
+.appointmentStatusGroup {
+  margin-left: -25px;
 }
 
-.appointmentStatusGroup .input-group .form-control{
-    width : 150px !important;
+.appointmentStatusGroup .input-group .form-control {
+  width: 150px !important;
 }
 
-.appointmentTabContent{
-    background-color: white;
-    border-left: 1px solid #DDDDDD;
-    width: 715px;
-    margin-left: -78px;
-    margin-top: -21px;
+.appointmentTabContent {
+  background-color: white;
+  border-left: 1px solid #DDDDDD;
+  width: 715px;
+  margin-left: -78px;
+  margin-top: -21px;
 }
 
-.appointmentdateGroup{
-    margin-left: -25px !important;
+.appointmentdateGroup {
+  margin-left: -25px !important;
 }
 
-.appointmentTabContent .outerRow{
-    padding-left: 30px;
+.appointmentTabContent .outerRow {
+  padding-left: 30px;
 }
 
-.appointmentTabContent  .btn-primary{
-   margin-top: 33px;
-   margin-left: -25px;
+.appointmentTabContent .btn-primary {
+  margin-top: 33px;
+  margin-left: -25px;
 }
 
-.appointmentTabContentMobile .input-group{
-    width:100%
+.appointmentTabContentMobile .input-group {
+  width: 100%
 }
 
-.referralDate{
+.referralDate {
   margin-left: -12px;
 }
 
-.referralDate input{
+.referralDate input {
   width: 108% !important;
 }
 
-#reasonforreferral, #clinicalsummary{
-    height: 100px;
+#reasonforreferral,
+#clinicalsummary {
+  height: 100px;
 }
 
-.reasonforreferralGroup{
-    padding-top: 22px;
+.reasonforreferralGroup {
+  padding-top: 22px;
 }
 
-.referral-calendar-view{
-    margin-right: 0px;
-    padding-right: 15px;
+.referral-calendar-view {
+  margin-right: 0px;
+  padding-right: 15px;
 }
 
-.referral-calendar-view label{
-    padding-bottom: 35px;
+.referral-calendar-view label {
+  padding-bottom: 35px;
 }
 
-.referral-calendar-group{
-    float: right;
-    padding-right: 15px;
+.referral-calendar-group {
+  float: right;
+  padding-right: 15px;
 }
 
-.filterInput input{
-width: 100%;
-margin-bottom: 15px;    
+.filterInput input {
+  width: 100%;
+  margin-bottom: 15px;
 }
+
 
 /* enable absolute positioning */
-.inner-addon { 
-    position: relative; 
+
+.inner-addon {
+  position: relative;
 }
 
+
 /* style icon */
+
 .inner-addon .fa {
   position: absolute;
   padding: 10px;
   pointer-events: none;
 }
 
+
 /* align icon */
-.left-addon .fa  { left:  0px;}
-.right-addon .fa { right: 0px;}
+
+.left-addon .fa {
+  left: 0px;
+}
+
+.right-addon .fa {
+  right: 0px;
+}
+
 
 /* add padding  */
-.left-addon input  { padding-left:  30px; }
-.right-addon input { padding-right: 30px; }
+
+.left-addon input {
+  padding-left: 30px;
+}
+
+.right-addon input {
+  padding-right: 30px;
+}
 
 .fa-filter {
-    color: #82BF36;
+  color: #82BF36;
 }
 
-.fa-ellipsis-h{
-    color: black;
+.fa-ellipsis-h {
+  color: black;
 }
 
-.cancerMdtForm textarea{
-    height: 80px !important;
+.cancerMdtForm textarea {
+  height: 80px !important;
 }
 
-.cancerMdtForm .input-group{
-    padding-top: 5px;
-    width: 100%;
+.cancerMdtForm .input-group {
+  padding-top: 5px;
+  width: 100%;
 }
 
-.orderForm .input-group{
-    width:95%;
+.orderForm .input-group {
+  width: 95%;
 }
 
-.orderForm .date-form{
-    margin-top: 5px;
-} 
-
-.cancerMdtForm .linkButton{
-line-height: 16px;
+.orderForm .date-form {
+  margin-top: 5px;
 }
 
-.mdtLinkGroup{
-    width: 100%;
-    margin-left: 0px !important;
+.cancerMdtForm .linkButton {
+  line-height: 16px;
 }
 
-.confirm-modal{
-    margin-top :15%;
+.mdtLinkGroup {
+  width: 100%;
+  margin-left: 0px !important;
 }
 
-.confirm-modal .modal-footer{
-    margin-left: -15px;
+.confirm-modal {
+  margin-top: 15%;
 }
 
-.confirm-modal-row{
-    margin-top: 35px;
+.confirm-modal .modal-footer {
+  margin-left: -15px;
 }
 
-.modal-sm{
-    width : 280px;
+.confirm-modal-row {
+  margin-top: 35px;
 }
 
-.resultTable{
-    width: 100%;
-    border: 1px solid #bebcbd;
+.modal-sm {
+  width: 280px;
 }
 
-.resultTable .fa-info-circle{
-    color:#00753E;
-    cursor:pointer;
+.resultTable {
+  width: 100%;
+  border: 1px solid #bebcbd;
 }
 
-.resultTableOuterDiv{
-    width: 95%;
-    padding-bottom: 25px;
+.resultTable .fa-info-circle {
+  color: #00753E;
+  cursor: pointer;
 }
 
-.resultTableMainrow{
-    border-top: 1px solid #bebcbd;
+.resultTableOuterDiv {
+  width: 95%;
+  padding-bottom: 25px;
 }
 
-.resultTableMainrow td:first-child{
-    padding-left: 9px;
+.resultTableMainrow {
+  border-top: 1px solid #bebcbd;
 }
 
-.section-detail .btn-info{
-    margin-right: 20px;
-    margin-top: 20px;
+.resultTableMainrow td:first-child {
+  padding-left: 9px;
 }
 
-.resultTable .firstHeading{
-    padding-left: 10px;
+.section-detail .btn-info {
+  margin-right: 20px;
+  margin-top: 20px;
 }
 
-.orderForm .input-group{
-    width:100%;
+.resultTable .firstHeading {
+  padding-left: 10px;
+}
+
+.orderForm {
+  padding-right: 20px;
+}
+
+.orderForm .input-group {
+  width: 100%;
 }
 
 .elipsis-span {
-    float: right;
-    margin-right: 10px;
-    margin-top: -20px;
-    position: relative;
-    z-index: 2;
-    color: black;
+  float: right;
+  margin-right: 10px;
+  margin-top: -20px;
+  position: relative;
+  z-index: 2;
+  color: black;
 }
 
 div.transbox {
-    background-color: #fafafa;
-    opacity: 0.7;
-    filter: alpha(opacity=70); 
-    color: #000000;
-    margin-right: 5%;
+  background-color: #fafafa;
+  opacity: 0.7;
+  filter: alpha(opacity=70);
+  color: #000000;
+  margin-right: 5%;
 }
 
-div.transbox .innerTransbox{
-    padding-right: 20px;
-    padding-left: 20px;
-    padding-bottom: 15px;
+div.transbox .innerTransbox {
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-bottom: 15px;
 }
 
-td.dateTime{
-        width:130px;
+td.dateTime {
+  width: 130px;
 }
 
-.patients-list-context{
-    margin-left: -15px;
+.patients-list-context {
+  margin-left: -15px;
+}
+
+.orderForm table {
+  display: block;
+  position: relative;
+  font-size: 16px;
+  font-weight: 500;
+  height: 200px;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid #D8D8D8;
+}
+
+.orderForm tbody {
+  display: block;
+}
+
+.orderForm tr {
+  display: block;
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #D8D8D8;
+  padding-left: 10px;
+}
+
+tr.ng-scope.selectedItemLeft {
+  background-color: #EDF2C3;
+}
+
+#switchImg {
+  float: left;
+  margin-left: -28px;
+  margin-top: 108px;
+}
+
+#switchImg:hover {
+  cursor: pointer;
+}
+
+.orderCreateButton {
+  padding-top: 10px;
+}
+
+.btn-info.disabled {
+  background-color: #C3C3C3 !important;
+  border-color: #C3C3C3 !important;
+}
+
+.ordersPageTwo {
+  margin-top: -40px;
+}
+
+.ordersPageTwo li {
+  padding-top: 10px;
+}
+
+.ordersPageTwo .fa-times-circle {
+  color: red;
+  float: right;
+  margin-right: 180px;
+}
+
+.fa-times-circle:hover {
+  cursor: pointer;
+}
+
+.orderBackButton .btn {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  height: 27px;
+  line-height: 10px;
 }

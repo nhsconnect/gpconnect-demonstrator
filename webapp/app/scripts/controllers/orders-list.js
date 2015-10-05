@@ -51,11 +51,20 @@ angular.module('rippleDemonstrator')
         }
       });
 
-      modalInstance.result.then(function (order) {
-        order.compositionId = '';
-        order.date = new Date(order.date);
+      modalInstance.result.then(function (orders, author) {
+        var toAdd = [];
+        for(var i = 0; i < orders.length; i++){
+          var newItem = {};
+          newItem.sourceId = '';
+          newItem.dateCreated = new Date().toISOString().slice(0, 10);
+          newItem.author = 'Dr John Smith';
+          newItem.code = orders[i].code;
+          newItem.name = orders[i].text;
+          newItem.source = 'openehr';
+          toAdd.push(newItem);
+        }
 
-        Order.create($scope.patient.id, order).then(function () {
+        Order.create($scope.patient.id, toAdd).then(function () {
           $state.go('orders', {patientId: $scope.patient.id});
         });
       });

@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/search/reports")
 public class ReportsController {
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/chart", method = RequestMethod.GET)
     public List<ReportGraphPatientSummary> getGraphReportByType(@RequestBody ReportGraphQuery query) {
         return null;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/table", method = RequestMethod.GET)
     public List<ReportTablePatientSummary> getTableReportByType(@RequestBody ReportTableQuery query) {
         return null;
     }

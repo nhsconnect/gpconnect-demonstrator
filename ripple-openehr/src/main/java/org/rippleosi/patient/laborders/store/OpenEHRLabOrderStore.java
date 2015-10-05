@@ -16,6 +16,7 @@
 package org.rippleosi.patient.laborders.store;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.camel.Consume;
@@ -40,13 +41,15 @@ public class OpenEHRLabOrderStore extends AbstractOpenEhrService implements LabO
 
     @Override
     @Consume(uri = "activemq:Consumer.OpenEHR.VirtualTopic.Ripple.LabOrder.Create")
-    public void create(String patientId, LabOrderDetails labOrder) {
+    public void create(String patientId, List<LabOrderDetails> labOrders) {
 
-        Map<String, Object> content = createFlatJsonContent(labOrder);
+        for (LabOrderDetails labOrder : labOrders) {
+            Map<String, Object> content = createFlatJsonContent(labOrder);
 
-        CreateStrategy createStrategy = new DefaultStoreStrategy(patientId, labOrderTemplate, content);
+            CreateStrategy createStrategy = new DefaultStoreStrategy(patientId, labOrderTemplate, content);
 
-        createData(createStrategy);
+            createData(createStrategy);
+        }
     }
 
     @Override

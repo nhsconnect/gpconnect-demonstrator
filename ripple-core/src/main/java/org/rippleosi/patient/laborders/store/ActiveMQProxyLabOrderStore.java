@@ -15,6 +15,8 @@
  */
 package org.rippleosi.patient.laborders.store;
 
+import java.util.List;
+
 import org.apache.camel.Produce;
 import org.rippleosi.patient.laborders.model.LabOrderDetails;
 import org.slf4j.Logger;
@@ -49,9 +51,9 @@ public class ActiveMQProxyLabOrderStore implements LabOrderStore {
     }
 
     @Override
-    public void create(String patientId, LabOrderDetails labOrder) {
+    public void create(String patientId, List<LabOrderDetails> labOrders) {
         try {
-            createTopic.create(patientId, labOrder);
+            createTopic.create(patientId, labOrders);
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }

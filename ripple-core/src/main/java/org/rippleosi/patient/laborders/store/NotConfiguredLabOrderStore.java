@@ -15,6 +15,8 @@
  */
 package org.rippleosi.patient.laborders.store;
 
+import java.util.List;
+
 import org.apache.camel.Body;
 import org.apache.camel.Header;
 import org.rippleosi.common.exception.ConfigurationException;
@@ -35,7 +37,7 @@ public class NotConfiguredLabOrderStore implements LabOrderStore {
     }
 
     @Override
-    public void create(@Header("patientId") String patientId, @Body LabOrderDetails labOrder) {
+    public void create(@Header("patientId") String patientId, @Body List<LabOrderDetails> labOrders) {
         throw ConfigurationException.unimplementedTransaction(LabOrderStore.class);
     }
 

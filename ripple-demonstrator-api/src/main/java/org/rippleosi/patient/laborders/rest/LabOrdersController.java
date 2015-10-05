@@ -61,12 +61,12 @@ public class LabOrdersController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void createLabOrder(@PathVariable("patientId") String patientId,
-                               @RequestParam(required = false) String source,
-                               @RequestBody LabOrderDetails labOrder) {
+    public void createLabOrders(@PathVariable("patientId") String patientId,
+                                @RequestParam(required = false) String source,
+                                @RequestBody List<LabOrderDetails> labOrders) {
         LabOrderStore labOrderStore = labOrderStoreFactory.select(source);
 
-        labOrderStore.create(patientId, labOrder);
+        labOrderStore.create(patientId, labOrders);
     }
 
     @RequestMapping(method = RequestMethod.PUT)

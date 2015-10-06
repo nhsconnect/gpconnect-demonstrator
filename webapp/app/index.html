@@ -32,7 +32,104 @@
 
     <link rel="icon" type="img/ico" href="images/favicon.ico">
 
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/raphael/raphael.js"></script>
+    <script src="bower_components/mocha/mocha.js"></script>
+    <script src="bower_components/morrisjs/morris.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="bower_components/angular-growl-notifications/dist/angular-growl-notifications.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-utils-pagination/dirPagination.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/jquery-timepicker-jt/jquery.timepicker.js"></script>
+    <script src="bower_components/angular-jquery-timepicker/src/timepickerdirective.js"></script>
+    <script src="bower_components/jquery-ui/jquery-ui.js"></script>
+    <script src="bower_components/fullcalendar/dist/fullcalendar.js"></script>
+    <script src="bower_components/angular-ui-calendar/src/calendar.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js(.) scripts/oldieshim.js -->
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+    <!-- endbuild -->
+
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/services/patient.js"></script>
+        <script src="scripts/services/diagnosis.js"></script>
+        <script src="scripts/services/allergy.js"></script>
+        <script src="scripts/services/medication.js"></script>
+        <script src="scripts/services/contact.js"></script>
+        <script src="scripts/services/smsp-lookup.js"></script>
+        <script src="scripts/services/transfer-of-care.js"></script>
+        <script src="scripts/services/cancer-mdt.js"></script>
+        <script src="scripts/services/appointment.js"></script>
+        <script src="scripts/services/referral.js"></script>
+        <script src="scripts/services/eolcareplans.js"></script>
+        <script src="scripts/services/procedure.js"></script>
+        <script src="scripts/services/dateFormatter.js"></script>
+        <script src="scripts/services/result.js"></script>
+        <script src="scripts/services/order.js"></script>
+        <script src="scripts/models/patient.js"></script>
+        <script src="scripts/controllers/patients-list.js"></script>
+        <script src="scripts/controllers/header-controller.js"></script>
+        <script src="scripts/controllers/patients-charts.js"></script>
+        <script src="scripts/controllers/patients-lookup.js"></script>
+        <script src="scripts/controllers/patients-summary.js"></script>
+        <script src="scripts/controllers/patients-detail.js"></script>
+        <script src="scripts/controllers/diagnoses-list.js"></script>
+        <script src="scripts/controllers/diagnoses-detail.js"></script>
+        <script src="scripts/controllers/diagnoses-modal.js"></script>
+        <script src="scripts/controllers/allergies-list.js"></script>
+        <script src="scripts/controllers/allergies-detail.js"></script>
+        <script src="scripts/controllers/allergies-modal.js"></script>
+        <script src="scripts/controllers/medications-list.js"></script>
+        <script src="scripts/controllers/medications-detail.js"></script>
+        <script src="scripts/controllers/medications-modal.js"></script>
+        <script src="scripts/controllers/contacts-list.js"></script>
+        <script src="scripts/controllers/contacts-detail.js"></script>
+        <script src="scripts/controllers/contacts-modal.js"></script>
+        <script src="scripts/controllers/transfer-of-care-modal.js"></script>
+        <script src="scripts/controllers/transfer-of-care-list.js"></script>
+        <script src="scripts/controllers/transfer-of-care-detail.js"></script>
+        <script src="scripts/controllers/cancer-mdt-modal.js"></script>
+        <script src="scripts/controllers/cancer-mdt-list.js"></script>
+        <script src="scripts/controllers/cancer-mdt-detail.js"></script>
+        <script src="scripts/controllers/appointments-modal.js"></script>
+        <script src="scripts/controllers/appointments-confirm-modal.js"></script>
+        <script src="scripts/controllers/appointments-list.js"></script>
+        <script src="scripts/controllers/appointments-detail.js"></script>
+        <script src="scripts/controllers/referrals-modal.js"></script>
+        <script src="scripts/controllers/referrals-list.js"></script>
+        <script src="scripts/controllers/referrals-detail.js"></script>
+        <script src="scripts/controllers/eolcareplans-modal.js"></script>
+        <script src="scripts/controllers/eolcareplans-list.js"></script>
+        <script src="scripts/controllers/eolcareplans-detail.js"></script>
+        <script src="scripts/controllers/procedures-modal.js"></script>
+        <script src="scripts/controllers/procedures-list.js"></script>
+        <script src="scripts/controllers/procedures-detail.js"></script>
+        <script src="scripts/controllers/results-list.js"></script>
+        <script src="scripts/controllers/results-detail.js"></script>
+        <script src="scripts/controllers/orders-list.js"></script>
+        <script src="scripts/controllers/orders-detail.js"></script>
+        <script src="scripts/controllers/orders-modal.js"></script>
+
+    <!-- endbuild -->
+
   </head>
   <body ng-app="rippleDemonstrator" ng-cloak ng-controller="headerController">
     <!--[if lt IE 7]>
@@ -239,103 +336,6 @@
        ga('send', 'pageview');
     </script>
 
-    <!-- build:js(.) scripts/oldieshim.js -->
-    <!--[if lt IE 9]>
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-    <script src="bower_components/json3/lib/json3.min.js"></script>
-    <![endif]-->
-    <!-- endbuild -->
 
-    <!-- build:js(.) scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/json3/lib/json3.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="bower_components/moment/moment.js"></script>
-    <script src="bower_components/raphael/raphael.js"></script>
-    <script src="bower_components/mocha/mocha.js"></script>
-    <script src="bower_components/morrisjs/morris.js"></script>
-    <script src="bower_components/underscore/underscore.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-touch/angular-touch.js"></script>
-    <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
-    <script src="bower_components/angular-growl-notifications/dist/angular-growl-notifications.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-utils-pagination/dirPagination.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
-    <script src="bower_components/jquery-timepicker-jt/jquery.timepicker.js"></script>
-    <script src="bower_components/angular-jquery-timepicker/src/timepickerdirective.js"></script>
-    <script src="bower_components/jquery-ui/jquery-ui.js"></script>
-    <script src="bower_components/fullcalendar/dist/fullcalendar.js"></script>
-    <script src="bower_components/angular-ui-calendar/src/calendar.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
-
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/services/patient.js"></script>
-        <script src="scripts/services/diagnosis.js"></script>
-        <script src="scripts/services/allergy.js"></script>
-        <script src="scripts/services/medication.js"></script>
-        <script src="scripts/services/contact.js"></script>
-        <script src="scripts/services/smsp-lookup.js"></script>
-        <script src="scripts/services/transfer-of-care.js"></script>
-        <script src="scripts/services/cancer-mdt.js"></script>
-        <script src="scripts/services/appointment.js"></script>
-        <script src="scripts/services/referral.js"></script>
-        <script src="scripts/services/eolcareplans.js"></script>
-        <script src="scripts/services/procedure.js"></script>
-        <script src="scripts/services/dateFormatter.js"></script>
-        <script src="scripts/services/result.js"></script>
-        <script src="scripts/services/order.js"></script>
-        <script src="scripts/models/patient.js"></script>
-        <script src="scripts/controllers/patients-list.js"></script>
-        <script src="scripts/controllers/header-controller.js"></script>
-        <script src="scripts/controllers/patients-charts.js"></script>
-        <script src="scripts/controllers/patients-lookup.js"></script>
-        <script src="scripts/controllers/patients-summary.js"></script>
-        <script src="scripts/controllers/patients-detail.js"></script>
-        <script src="scripts/controllers/diagnoses-list.js"></script>
-        <script src="scripts/controllers/diagnoses-detail.js"></script>
-        <script src="scripts/controllers/diagnoses-modal.js"></script>
-        <script src="scripts/controllers/allergies-list.js"></script>
-        <script src="scripts/controllers/allergies-detail.js"></script>
-        <script src="scripts/controllers/allergies-modal.js"></script>
-        <script src="scripts/controllers/medications-list.js"></script>
-        <script src="scripts/controllers/medications-detail.js"></script>
-        <script src="scripts/controllers/medications-modal.js"></script>
-        <script src="scripts/controllers/contacts-list.js"></script>
-        <script src="scripts/controllers/contacts-detail.js"></script>
-        <script src="scripts/controllers/contacts-modal.js"></script>
-        <script src="scripts/controllers/transfer-of-care-modal.js"></script>
-        <script src="scripts/controllers/transfer-of-care-list.js"></script>
-        <script src="scripts/controllers/transfer-of-care-detail.js"></script>
-        <script src="scripts/controllers/cancer-mdt-modal.js"></script>
-        <script src="scripts/controllers/cancer-mdt-list.js"></script>
-        <script src="scripts/controllers/cancer-mdt-detail.js"></script>
-        <script src="scripts/controllers/appointments-modal.js"></script>
-        <script src="scripts/controllers/appointments-confirm-modal.js"></script>
-        <script src="scripts/controllers/appointments-list.js"></script>
-        <script src="scripts/controllers/appointments-detail.js"></script>
-        <script src="scripts/controllers/referrals-modal.js"></script>
-        <script src="scripts/controllers/referrals-list.js"></script>
-        <script src="scripts/controllers/referrals-detail.js"></script>
-        <script src="scripts/controllers/eolcareplans-modal.js"></script>
-        <script src="scripts/controllers/eolcareplans-list.js"></script>
-        <script src="scripts/controllers/eolcareplans-detail.js"></script>
-        <script src="scripts/controllers/procedures-modal.js"></script>
-        <script src="scripts/controllers/procedures-list.js"></script>
-        <script src="scripts/controllers/procedures-detail.js"></script>
-        <script src="scripts/controllers/results-list.js"></script>
-        <script src="scripts/controllers/results-detail.js"></script>
-        <script src="scripts/controllers/orders-list.js"></script>
-        <script src="scripts/controllers/orders-detail.js"></script>
-        <script src="scripts/controllers/orders-modal.js"></script>
-
-
-
-    <!-- endbuild -->
 </body>
 </html>

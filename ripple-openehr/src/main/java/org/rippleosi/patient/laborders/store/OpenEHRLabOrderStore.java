@@ -15,6 +15,7 @@
  */
 package org.rippleosi.patient.laborders.store;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,10 @@ public class OpenEHRLabOrderStore extends AbstractOpenEhrService implements LabO
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
 
-        String orderDate = DateFormatter.toString(labOrder.getOrderDate());
+        Date dateToFormat = labOrder.getOrderDate() != null ? labOrder.getOrderDate()
+                                                            : labOrder.getDateCreated();
+        String orderDate = DateFormatter.toString(dateToFormat);
+
         String code = labOrder.getCode() == null ? "" : labOrder.getCode();
         String terminology = labOrder.getTerminology() == null ? "SNOMED-CT" : labOrder.getTerminology();
 

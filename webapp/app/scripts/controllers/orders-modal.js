@@ -11,7 +11,7 @@ angular.module('rippleDemonstrator')
     $scope.firstPage = true;
     $scope.chosenOrders = [];
 
-    if (modal.title === 'Create Order') {
+    if (modal.title === 'Create Orders') {
       $scope.order.orderDate = new Date().toISOString().slice(0, 10);
     }
 

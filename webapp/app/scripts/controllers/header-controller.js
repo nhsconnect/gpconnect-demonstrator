@@ -79,17 +79,18 @@ angular.module('rippleDemonstrator')
       }
 
       $scope.containsReportString = function (){
-          return $scope.searchExpression.indexOf('rp ') == 0 ? true : false;
+          return $scope.searchExpression.indexOf('rp') == 0 ? true : false;
       }
 
       $scope.searchExpression = '';
       $scope.reportMode = false;
       $scope.checkExpression = function () {
        if($scope.reportMode) {
-          $scope.processReportMode();
+
         }
         else{
           $scope.reportMode = $scope.containsReportString();
+          $scope.processReportMode();
         }
       }
 
@@ -98,7 +99,7 @@ angular.module('rippleDemonstrator')
       }
 
       $scope.processReportMode = function (){
-        if($scope.searchExpression == 'rp ') {$scope.searchExpression = '';}
+       $scope.searchExpression = '';
       }
 
       $scope.pageHeader = pageHeader;

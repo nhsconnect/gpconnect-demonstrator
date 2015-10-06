@@ -65,8 +65,8 @@ angular.module('rippleDemonstrator')
         }
 
         Order.create($scope.patient.id, toAdd).then(function () {
-          $state.go('orders', {patientId: $scope.patient.id});
-          window.location.reload();
+          //$state.go('orders', {patientId: $scope.patient.id});
+          setTimeout(window.location.reload(),2000);
         });
       });
     };

@@ -303,10 +303,10 @@ angular
       }
     };
   })
-  .directive('myEnter', function () {
+  .directive('mySpace', function () {
     return function (scope, element, attrs) {
         element.bind("keydown keypress", function (event) {
-            if(event.which === 13) {
+            if(event.which === 32) {
                 scope.$apply(function (){
                     scope.$eval(attrs.myEnter);
                 });

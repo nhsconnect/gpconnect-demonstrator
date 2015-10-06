@@ -151,7 +151,7 @@
                    class="form-control"
                    placeholder="Search..."
                    ng-model="searchExpression"
-                   my-enter="checkExpression()"
+                   ng-keyup="checkExpression()"
                    ng-trim="false"
                    ng-class="{moveRight: reportMode}"
                    />

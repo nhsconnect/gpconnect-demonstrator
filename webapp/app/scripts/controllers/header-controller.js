@@ -99,7 +99,9 @@ angular.module('rippleDemonstrator')
       }
 
       $scope.processReportMode = function (){
-       $scope.searchExpression = '';
+       if($scope.searchExpression == 'rp '){
+         $scope.searchExpression = '';
+       }
       }
 
       $scope.pageHeader = pageHeader;

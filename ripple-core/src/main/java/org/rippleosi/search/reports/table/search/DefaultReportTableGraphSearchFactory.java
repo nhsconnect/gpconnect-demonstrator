@@ -1,7 +1,9 @@
 package org.rippleosi.search.reports.table.search;
 
 import org.rippleosi.common.repo.AbstractRepositoryFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DefaultReportTableGraphSearchFactory extends AbstractRepositoryFactory<ReportTableSearch>
     implements ReportTableSearchFactory {
 

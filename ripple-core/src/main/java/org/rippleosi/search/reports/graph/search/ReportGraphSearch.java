@@ -8,5 +8,5 @@ import org.rippleosi.search.reports.graph.model.ReportGraphQuery;
 
 public interface ReportGraphSearch extends Repository {
 
-    List<ReportGraphPatientSummary> findAllPatientsByQuery(ReportGraphQuery query);
+    List<ReportGraphPatientSummary> findAllPatientsByQuery(ReportGraphQuery graphQuery);
 }

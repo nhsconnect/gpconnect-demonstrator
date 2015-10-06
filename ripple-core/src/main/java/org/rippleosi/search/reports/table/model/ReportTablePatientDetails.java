@@ -2,9 +2,10 @@ package org.rippleosi.search.reports.table.model;
 
 import java.util.Date;
 
-public class ReportTablePatientSummary {
+public class ReportTablePatientDetails {
 
-    private String id;
+    private String source;
+    private String sourceId;
     private String name;
     private String address;
     private Date dateOfBirth;
@@ -17,12 +18,20 @@ public class ReportTablePatientSummary {
     private RecordHeadline resultsHeadline;
     private RecordHeadline treatmentsHeadline;
 
-    public String getId() {
-        return id;
+    public String getSource() {
+        return source;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
     public String getName() {

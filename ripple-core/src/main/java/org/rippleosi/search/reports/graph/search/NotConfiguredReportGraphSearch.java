@@ -19,7 +19,7 @@ public class NotConfiguredReportGraphSearch implements ReportGraphSearch {
     }
 
     @Override
-    public List<ReportGraphPatientSummary> findAllPatientsByQuery(ReportGraphQuery query) {
+    public List<ReportGraphPatientSummary> findAllPatientsByQuery(ReportGraphQuery graphQuery) {
         throw ConfigurationException.unimplementedTransaction(ReportGraphSearch.class);
     }
 }

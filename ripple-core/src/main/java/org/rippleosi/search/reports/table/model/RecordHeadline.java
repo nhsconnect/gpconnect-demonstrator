@@ -4,16 +4,25 @@ import java.util.Date;
 
 public class RecordHeadline {
 
-    private String id;
+    private String source;
+    private String sourceId;
     private Date latestEntry;
     private int totalEntries;
 
-    public String getId() {
-        return id;
+    public String getSource() {
+        return source;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
     public Date getLatestEntry() {

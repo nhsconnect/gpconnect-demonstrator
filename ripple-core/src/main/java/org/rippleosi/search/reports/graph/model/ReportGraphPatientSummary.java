@@ -4,25 +4,25 @@ import java.util.Date;
 
 public class ReportGraphPatientSummary {
 
-    private String id;
-    private String name;
+    private String source;
+    private String sourceId;
     private Date dateOfBirth;
     private String nhsNumber;
 
-    public String getId() {
-        return id;
+    public String getSource() {
+        return source;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSource(String source) {
+        this.source = source;
     }
 
-    public String getName() {
-        return name;
+    public String getSourceId() {
+        return sourceId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
     public Date getDateOfBirth() {

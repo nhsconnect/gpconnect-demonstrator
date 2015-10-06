@@ -40,9 +40,4 @@ public class NotConfiguredLabOrderStore implements LabOrderStore {
     public void create(@Header("patientId") String patientId, @Body List<LabOrderDetails> labOrders) {
         throw ConfigurationException.unimplementedTransaction(LabOrderStore.class);
     }
-
-    @Override
-    public void update(@Header("patientId") String patientId, @Body LabOrderDetails labOrder) {
-        throw ConfigurationException.unimplementedTransaction(LabOrderStore.class);
-    }
 }

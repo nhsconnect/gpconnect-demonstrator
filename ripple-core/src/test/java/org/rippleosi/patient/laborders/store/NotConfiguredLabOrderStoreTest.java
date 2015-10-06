@@ -41,9 +41,4 @@ public class NotConfiguredLabOrderStoreTest {
     public void shouldThrowExceptionWhenTryingCreateLabOrder() {
         labOrderStore.create(null, null);
     }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToUpdateLabOrder() {
-        labOrderStore.update(null, null);
-    }
 }

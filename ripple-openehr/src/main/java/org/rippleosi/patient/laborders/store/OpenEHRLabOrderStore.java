@@ -53,17 +53,6 @@ public class OpenEHRLabOrderStore extends AbstractOpenEhrService implements LabO
         }
     }
 
-    @Override
-    @Consume(uri = "activemq:Consumer.OpenEHR.VirtualTopic.Ripple.LabOrder.Update")
-    public void update(String patientId, LabOrderDetails labOrder) {
-
-        Map<String, Object> content = createFlatJsonContent(labOrder);
-
-        UpdateStrategy updateStrategy = new DefaultStoreStrategy(labOrder.getSourceId(), patientId, labOrderTemplate, content);
-
-        updateData(updateStrategy);
-    }
-
     private Map<String, Object> createFlatJsonContent(LabOrderDetails labOrder) {
 
         Map<String, Object> content = new HashMap<>();

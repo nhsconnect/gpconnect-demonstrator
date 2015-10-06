@@ -29,6 +29,4 @@ import org.rippleosi.patient.laborders.model.LabOrderDetails;
 public interface LabOrderStore extends Repository {
 
     void create(@Header("patientId") String patientId, @Body List<LabOrderDetails> labOrders);
-
-    void update(@Header("patientId") String patientId, @Body LabOrderDetails labOrder);
 }

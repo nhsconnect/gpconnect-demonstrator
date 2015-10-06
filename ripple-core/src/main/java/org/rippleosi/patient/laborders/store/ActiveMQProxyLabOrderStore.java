@@ -37,9 +37,6 @@ public class ActiveMQProxyLabOrderStore implements LabOrderStore {
     @Produce(uri = "activemq:topic:VirtualTopic.Ripple.LabOrder.Create")
     private LabOrderStore createTopic;
 
-    @Produce(uri = "activemq:topic:VirtualTopic.Ripple.LabOrder.Update")
-    private LabOrderStore updateTopic;
-
     @Override
     public int getPriority() {
         return priority;
@@ -54,15 +51,6 @@ public class ActiveMQProxyLabOrderStore implements LabOrderStore {
     public void create(String patientId, List<LabOrderDetails> labOrders) {
         try {
             createTopic.create(patientId, labOrders);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-    }
-
-    @Override
-    public void update(String patientId, LabOrderDetails labOrder) {
-        try {
-            updateTopic.update(patientId, labOrder);
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }

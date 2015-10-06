@@ -68,13 +68,4 @@ public class LabOrdersController {
 
         labOrderStore.create(patientId, labOrders);
     }
-
-    @RequestMapping(method = RequestMethod.PUT)
-    public void updateLabOrder(@PathVariable("patientId") String patientId,
-                               @RequestParam(required = false) String source,
-                               @RequestBody LabOrderDetails labOrder) {
-        LabOrderStore labOrderStore = labOrderStoreFactory.select(source);
-
-        labOrderStore.update(patientId, labOrder);
-    }
 }

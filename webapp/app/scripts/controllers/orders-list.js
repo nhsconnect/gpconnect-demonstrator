@@ -56,7 +56,7 @@ angular.module('rippleDemonstrator')
         for(var i = 0; i < orders.length; i++){
           var newItem = {};
           newItem.sourceId = '';
-          newItem.dateCreated = new Date().toISOString().slice(0, 10);
+          newItem.dateCreated = new Date();
           newItem.author = 'Dr John Smith';
           newItem.code = orders[i].code;
           newItem.name = orders[i].text;

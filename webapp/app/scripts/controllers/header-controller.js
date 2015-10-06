@@ -78,6 +78,17 @@ angular.module('rippleDemonstrator')
           break;
       }
 
+      $scope.containsReportString = function (){
+          return $scope.searchExpression.indexOf("rp ") == 0 ? true : false;
+      }
+
+      $scope.searchExpression = '';
+      $scope.reportMode = false;
+      $scope.checkExpression = function () {
+       $scope.reportMode = $scope.containsReportString();
+
+      }
+
       $scope.pageHeader = pageHeader;
       $scope.previousState = previousState;
       $scope.previousPage = previousPage;

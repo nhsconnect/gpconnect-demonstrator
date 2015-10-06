@@ -51,7 +51,10 @@
             <i class="fi-magnifying-glass icon-searchbar"></i>
             <input type="search"
                    class="form-control"
-                   placeholder="Search..."/>
+                   placeholder="Search..."
+                   ng-model="searchExpression"
+                   ng-keyup="checkExpression()"
+                   />
           </div>
         </div>
 

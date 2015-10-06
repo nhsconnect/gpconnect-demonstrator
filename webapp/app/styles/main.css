@@ -595,7 +595,6 @@ legend {
 
 .search-left-inner-addon {
   position: relative;
-  color: #999999;
   font-size: 16px;
 }
 
@@ -603,11 +602,16 @@ legend {
   padding-left: 30px;
 }
 
-.search-left-inner-addon i {
+.moveRight{
+  padding-left: 100px !important;
+}
+
+.search-left-inner-addon span {
   position: absolute;
-  padding: 10px 12px;
-  pointer-events: none;
-  color: #999999;
+  padding: 7px 15px;
+  margin-top: 5px;
+  margin-left: 10px;
+  height: 25px;
 }
 
 .search-left-inner-addon .form-control {
@@ -1826,4 +1830,17 @@ tr.ng-scope.selectedItemLeft {
   margin-bottom: 30px;
   height: 27px;
   line-height: 10px;
+}
+
+.fa.fa-times:hover {
+  cursor: pointer;
+}
+
+[ng:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+  display: none !important;
 }

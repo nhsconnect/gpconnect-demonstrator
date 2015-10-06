@@ -79,14 +79,26 @@ angular.module('rippleDemonstrator')
       }
 
       $scope.containsReportString = function (){
-          return $scope.searchExpression.indexOf("rp ") == 0 ? true : false;
+          return $scope.searchExpression.indexOf('rp ') == 0 ? true : false;
       }
 
       $scope.searchExpression = '';
       $scope.reportMode = false;
       $scope.checkExpression = function () {
-       $scope.reportMode = $scope.containsReportString();
+       if($scope.reportMode) {
+          $scope.processReportMode();
+        }
+        else{
+          $scope.reportMode = $scope.containsReportString();
+        }
+      }
 
+      $scope.cancelReportMode = function () {
+          $scope.reportMode = false;
+      }
+
+      $scope.processReportMode = function (){
+        if($scope.searchExpression == 'rp ') {$scope.searchExpression = '';}
       }
 
       $scope.pageHeader = pageHeader;

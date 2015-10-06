@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
     <link rel="stylesheet" href="bower_components/jquery-timepicker-jt/jquery.timepicker.css" />
     <link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.css" />
+    <script src="bower_components/angular/angular.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -33,7 +34,7 @@
     <link rel="icon" type="img/ico" href="images/favicon.ico">
 
   </head>
-  <body ng-app="rippleDemonstrator" ng-controller="headerController">
+  <body ng-app="rippleDemonstrator" ng-cloak ng-controller="headerController">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -46,14 +47,16 @@
             <div class="glyphs g"><p class="header-title-1" ng-if="title"><img src="images/ripple-icon.png" alt="Ripple Icon" class="ripple-icon" ng-click="goHome()"> {{title}}</p></div>
         </div>
 
-        <div class="col-md-4 col-sm-3 header-search">
+        <div class="col-md-4 col-sm-3 header-search ng-cloak" ng-cloak>
           <div class="search-left-inner-addon">
-            <i class="fi-magnifying-glass icon-searchbar"></i>
+            <div ng-show="reportMode" class="ng-cloak" ng-cloak><span ng-cloak ng-show="reportMode" class="label ng-cloak label-success">Report<i ng-show="reportMode" ng-click="cancelReportMode()" class="fa fa-times"></i></span></div>
             <input type="search"
                    class="form-control"
                    placeholder="Search..."
                    ng-model="searchExpression"
                    ng-keyup="checkExpression()"
+                   ng-trim="false"
+                   ng-class="{moveRight: reportMode}"
                    />
           </div>
         </div>
@@ -253,7 +256,6 @@
     <script src="bower_components/mocha/mocha.js"></script>
     <script src="bower_components/morrisjs/morris.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>

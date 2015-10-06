@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <form name="orderForm" class="form-horizontal text-left">
+  <form name="orderForm" class="noselect form-horizontal text-left">
     <fieldset class="orderForm">
       <div ng-if="firstPage">
         <legend>{{ modal.title }}</legend>
@@ -51,6 +51,7 @@
         </div>
       </div>
       <div ng-if="!firstPage">
+        <legend>{{ modal.title }}</legend>
         <div class="row ordersPageTwo">
           <div class="col-md-6">
             <label>Create Selected Orders?</label>

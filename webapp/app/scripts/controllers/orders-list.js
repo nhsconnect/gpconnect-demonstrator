@@ -39,7 +39,7 @@ angular.module('rippleDemonstrator')
         resolve: {
           modal: function () {
             return {
-              title: 'Create Order'
+              title: 'Create Orders'
             };
           },
           order: function () {
@@ -66,6 +66,7 @@ angular.module('rippleDemonstrator')
 
         Order.create($scope.patient.id, toAdd).then(function () {
           $state.go('orders', {patientId: $scope.patient.id});
+          window.location.reload();
         });
       });
     };

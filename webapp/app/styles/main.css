@@ -1763,7 +1763,7 @@ td.dateTime {
 .orderForm table {
   display: block;
   position: relative;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 500;
   height: 200px;
   width: 100%;
@@ -1807,10 +1807,6 @@ tr.ng-scope.selectedItemLeft {
   border-color: #C3C3C3 !important;
 }
 
-.ordersPageTwo {
-  margin-top: -40px;
-}
-
 .ordersPageTwo li {
   padding-top: 10px;
 }
@@ -1843,4 +1839,13 @@ tr.ng-scope.selectedItemLeft {
 .ng-cloak,
 .x-ng-cloak {
   display: none !important;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

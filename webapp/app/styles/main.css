@@ -1866,3 +1866,13 @@ tr.ng-scope.selectedItemLeft {
 .searchButton{
     margin-right: 250px;
 }
+
+.report-chart-inner{
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.reportChartRow{
+
+}

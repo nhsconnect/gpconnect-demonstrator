@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ReportChartsCtrl', function ($scope, $window, $state, $stateParams, PatientService) {
+  .controller('ReportChartsCtrl', function ($scope, $window, $state, $stateParams, Report) {
 
-    var a = $stateParams.searchString;
-    var ageChart = function (summaries) {
+    var ageChart = function (graphData) {
+      $('svg').height(700);
       $window.Morris.Bar({
-        element: 'age-chart',
+      element: 'age-chart',
         resize: true,
-        data: summaries.age,
+        data: graphData,
         ykeys: ['value'],
         xkey: 'series',
         labels: ['Patients'],
@@ -26,8 +26,33 @@ angular.module('rippleDemonstrator')
       });
     };
 
-  PatientService.summaries().then(function (summaries) {
-            ageChart(summaries);
-  });
+//  PatientService.summaries().then(function (summaries) {
+//            ageChart(summaries);
+//  });
+
+  if($stateParams.searchString !== undefined){
+  var searchQuery = $stateParams.searchString.split(':');
+
+  if(searchQuery.length === 1){
+    $state.go('patients-charts');
+  }
+  var requestBody = {
+      reportType: searchQuery[0],
+      searchString: searchQuery[1]
+  }
+  Report.getChart(requestBody).then(function(chartData){
+    var graphData = [
+      { series: '11-18', value: chartData.data.agedElevenToEighteen },
+      { series: '19-30', value: chartData.data.agedNineteenToThirty },
+      { series: '31-60', value: chartData.data.agedThirtyOneToSixty },
+      { series: '61-80', value: chartData.data.agedSixtyToEighty },
+      { series: '>80', value: chartData.data.agedEightyPlus }
+      ];
+
+    ageChart(graphData);
+  })
+  }else {
+    $state.go('patients-charts');
+  }
 
   });

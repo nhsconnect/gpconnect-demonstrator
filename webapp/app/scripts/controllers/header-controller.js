@@ -74,6 +74,13 @@ angular.module('rippleDemonstrator')
         mainWidth = 6;
         detailWidth = 6;
         break;
+      case 'search-report':
+        previousState = '';
+        pageHeader = '';
+        previousPage = '';
+        mainWidth = 12;
+        detailWidth = 0;
+        break;
       default:
         previousState = 'patients-list';
         pageHeader = 'Patients Details';
@@ -107,7 +114,11 @@ angular.module('rippleDemonstrator')
 
       $scope.searchReport = function () {
         if ($scope.reportMode && $scope.searchExpression != '') {
-          $state.go('search-report', {searchString: $scope.searchExpression});
+          var tempExpression = $scope.searchExpression;
+          $scope.searchExpression = '';
+          $scope.reportMode = false;
+          $scope.chartPage = true;
+          $state.go('search-report', {searchString: tempExpression});
         }
       }
 

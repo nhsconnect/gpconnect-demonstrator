@@ -1,9 +1,7 @@
 package org.rippleosi.search.reports.graph.search;
 
-import java.util.List;
-
 import org.rippleosi.common.service.AbstractOpenEhrService;
-import org.rippleosi.search.reports.graph.model.ReportGraphPatientSummary;
+import org.rippleosi.search.reports.graph.model.ReportGraphDemographicSummary;
 import org.rippleosi.search.reports.graph.model.ReportGraphQuery;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class OpenEHRReportGraphSearch extends AbstractOpenEhrService implements ReportGraphSearch {
 
     @Override
-    public List<ReportGraphPatientSummary> findAllPatientsByQuery(ReportGraphQuery graphQuery) {
+    public ReportGraphDemographicSummary findPatientDemographicsByQuery(ReportGraphQuery graphQuery) {
         ReportGraphQueryStrategy queryStrategy = new ReportGraphQueryStrategy(graphQuery);
         return queryStrategy.transform(null);
 

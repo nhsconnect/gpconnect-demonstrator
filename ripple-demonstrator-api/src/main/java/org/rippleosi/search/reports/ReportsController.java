@@ -2,7 +2,7 @@ package org.rippleosi.search.reports;
 
 import java.util.List;
 
-import org.rippleosi.search.reports.graph.model.ReportGraphPatientSummary;
+import org.rippleosi.search.reports.graph.model.ReportGraphDemographicSummary;
 import org.rippleosi.search.reports.graph.model.ReportGraphQuery;
 import org.rippleosi.search.reports.graph.search.ReportGraphSearch;
 import org.rippleosi.search.reports.graph.search.ReportGraphSearchFactory;
@@ -28,10 +28,10 @@ public class ReportsController {
     private ReportTableSearchFactory reportTableSearchFactory;
 
     @RequestMapping(value = "/chart", method = RequestMethod.POST)
-    public List<ReportGraphPatientSummary> getGraphReportByType(@RequestParam(required = false) String source,
-                                                                @RequestBody ReportGraphQuery graphQuery) {
+    public ReportGraphDemographicSummary getGraphReportByType(@RequestParam(required = false) String source,
+                                                              @RequestBody ReportGraphQuery graphQuery) {
         ReportGraphSearch search = reportGraphSearchFactory.select(source);
-        return search.findAllPatientsByQuery(graphQuery);
+        return search.findPatientDemographicsByQuery(graphQuery);
     }
 
     @RequestMapping(value = "/table", method = RequestMethod.POST)

@@ -1,9 +1,7 @@
 package org.rippleosi.search.reports.graph.search;
 
-import java.util.List;
-
 import org.rippleosi.common.exception.ConfigurationException;
-import org.rippleosi.search.reports.graph.model.ReportGraphPatientSummary;
+import org.rippleosi.search.reports.graph.model.ReportGraphDemographicSummary;
 import org.rippleosi.search.reports.graph.model.ReportGraphQuery;
 
 public class NotConfiguredReportGraphSearch implements ReportGraphSearch {
@@ -19,7 +17,7 @@ public class NotConfiguredReportGraphSearch implements ReportGraphSearch {
     }
 
     @Override
-    public List<ReportGraphPatientSummary> findAllPatientsByQuery(ReportGraphQuery graphQuery) {
+    public ReportGraphDemographicSummary findPatientDemographicsByQuery(ReportGraphQuery graphQuery) {
         throw ConfigurationException.unimplementedTransaction(ReportGraphSearch.class);
     }
 }

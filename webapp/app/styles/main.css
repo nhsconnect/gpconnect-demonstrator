@@ -614,6 +614,19 @@ legend {
   height: 25px;
 }
 
+.search-left-inner-addon i {
+  position: absolute;
+  padding: 2px 0px;
+  margin-top: 5px;
+  margin-left: 10px;
+  height: 25px;
+}
+
+.search-left-inner-addon i.fa.fa-times{
+    margin-top: -2px;
+    margin-left: 3px;
+}
+
 .search-left-inner-addon .form-control {
   display: block;
   width: 100%;
@@ -1848,4 +1861,8 @@ tr.ng-scope.selectedItemLeft {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.searchButton{
+    margin-right: 250px;
 }

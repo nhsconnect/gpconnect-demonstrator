@@ -39,6 +39,13 @@ angular
         }
       })
 
+      .state('search-report', {
+         url: '/search-report?searchString',
+        views: {
+          main: { templateUrl: 'views/search/report-chart.html', controller: 'ReportChartsCtrl' }
+        }
+      })
+
       .state('patients-lookup', {
         url: '/lookup',
         views: {

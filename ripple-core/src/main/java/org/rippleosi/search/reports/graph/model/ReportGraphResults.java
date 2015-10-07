@@ -1,6 +1,6 @@
 package org.rippleosi.search.reports.graph.model;
 
-public class ReportGraphDemographicSummary {
+public class ReportGraphResults {
 
     private String source;
     private String agedElevenToEighteen;

@@ -1,10 +1,8 @@
 package org.rippleosi.search.reports.table.search;
 
-import java.util.List;
-
 import org.rippleosi.common.exception.ConfigurationException;
-import org.rippleosi.search.reports.table.model.ReportTablePatientDetails;
 import org.rippleosi.search.reports.table.model.ReportTableQuery;
+import org.rippleosi.search.reports.table.model.ReportTableResults;
 
 public class NotConfiguredReportTableSearch implements ReportTableSearch {
 
@@ -19,7 +17,7 @@ public class NotConfiguredReportTableSearch implements ReportTableSearch {
     }
 
     @Override
-    public List<ReportTablePatientDetails> findAllPatientsByQuery(ReportTableQuery tableQuery) {
+    public ReportTableResults findAllPatientsByQuery(ReportTableQuery tableQuery) {
         throw ConfigurationException.unimplementedTransaction(ReportTableSearch.class);
     }
 }

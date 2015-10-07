@@ -3,14 +3,11 @@ package org.rippleosi.search.reports.graph.search;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
-import org.rippleosi.common.exception.DataNotFoundException;
-import org.rippleosi.common.exception.InvalidDataException;
 import org.rippleosi.common.service.AbstractQueryStrategy;
-import org.rippleosi.search.reports.graph.model.ReportGraphDemographicSummary;
+import org.rippleosi.search.reports.graph.model.ReportGraphResults;
 import org.rippleosi.search.reports.graph.model.ReportGraphQuery;
 
-public class ReportGraphQueryStrategy extends AbstractQueryStrategy<ReportGraphDemographicSummary> {
+public class ReportGraphQueryStrategy extends AbstractQueryStrategy<ReportGraphResults> {
 
     private ReportGraphQuery graphQuery;
 
@@ -26,9 +23,9 @@ public class ReportGraphQueryStrategy extends AbstractQueryStrategy<ReportGraphD
     }
 
     @Override
-    public ReportGraphDemographicSummary transform(List<Map<String, Object>> resultSet) {
+    public ReportGraphResults transform(List<Map<String, Object>> resultSet) {
 
-        ReportGraphDemographicSummary summary = new ReportGraphDemographicSummary();
+        ReportGraphResults summary = new ReportGraphResults();
         summary.setSource("openehr");
         summary.setAgedElevenToEighteen(String.valueOf(16));
         summary.setAgedNineteenToThirty(String.valueOf(8));

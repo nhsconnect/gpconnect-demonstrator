@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.AbstractQueryStrategy;
 import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.search.reports.table.model.RecordHeadline;
 import org.rippleosi.search.reports.table.model.ReportTablePatientDetails;
 import org.rippleosi.search.reports.table.model.ReportTableQuery;
+import org.rippleosi.search.reports.table.model.ReportTableResults;
 
-public class ReportTableQueryStrategy extends AbstractQueryStrategy<List<ReportTablePatientDetails>> {
+public class ReportTableQueryStrategy extends AbstractQueryStrategy<ReportTableResults> {
 
     private ReportTableQuery tableQuery;
 
@@ -27,7 +27,7 @@ public class ReportTableQueryStrategy extends AbstractQueryStrategy<List<ReportT
     }
 
     @Override
-    public List<ReportTablePatientDetails> transform(List<Map<String, Object>> resultSet) {
+    public ReportTableResults transform(List<Map<String, Object>> resultSet) {
 
         ReportTablePatientDetails ivor = new ReportTablePatientDetails();
         ivor.setSource("local");
@@ -75,7 +75,11 @@ public class ReportTableQueryStrategy extends AbstractQueryStrategy<List<ReportT
         List<ReportTablePatientDetails> details = new ArrayList<>();
         details.add(ivor);
 
-        return details;
+        ReportTableResults results = new ReportTableResults();
+        results.setPatientDetails(details);
+        results.setTotalPatients(String.valueOf(details.size()));
+
+        return results;
 
         // TODO - delete dummy data above and uncomment the line below
 //        return CollectionUtils.collect(resultSet, new ReportTablePatientDetailsTransformer(), new ArrayList<>());

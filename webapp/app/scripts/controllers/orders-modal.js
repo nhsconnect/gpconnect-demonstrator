@@ -58,6 +58,9 @@ angular.module('rippleDemonstrator')
           $scope.chosenOrders.splice(i, 1)
         }
       }
+      if($scope.chosenOrders.length === 0){
+        $scope.firstPage = true;
+      }
     };
 
     $scope.moveItem = function () {

@@ -56,20 +56,23 @@
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Address</th>
-                <th>Born</th>
-                <th>Gender</th>
-                <th>NHS No.</th>
+                <th>Notes</th>
+                <th>Vitals</th>
+                <th>Orders</th>
+                <th>Results</th>
+                <th>Treatments</th>
+                <th>Medications</th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="patient in patients" ng-click="go(patient)">
-                <td>{{ patient.name }}</td>
-                <td>{{ patient.address }}</td>
-                <td class="dateTime">{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</td>
-                <td>{{ patient.gender }}</td>
-                <td>{{ patient.nhsNumber }} <span class="glyphicon glyphicon-chevron-right" style="float: right"></span> </td>
-
+              <td>{{ patient.name }}</td>
+              <td>{{ patient.notesHeadline.totalEntries }}</td>
+              <td>{{ patient.vitalsHeadline.totalEntries }}</td>
+              <td>{{ patient.ordersHeadline.totalEntries }}</td>
+              <td>{{ patient.resultsHeadline.totalEntries }}</td>
+              <td>{{ patient.treatmentsHeadline.totalEntries }}</td>
+              <td>{{ patient.medsHeadline.totalEntries }}</td>
               </tr>
             </tbody>
 

@@ -25,6 +25,13 @@ angular
         }
       })
 
+      .state('patients-list-full', {
+        url: '/patients-full-details?ageFrom&ageTo&orderColumn&orderType&pageNumber&reportType&searchString&queryType',
+        views: {
+          main: { templateUrl: 'views/search/patients-list-full.html', controller: 'PatientsListFullCtrl' }
+        }
+      })
+
       .state('header', {
         url: '/?role&email',
         views: {

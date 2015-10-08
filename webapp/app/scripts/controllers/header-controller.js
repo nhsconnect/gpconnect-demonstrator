@@ -81,6 +81,13 @@ angular.module('rippleDemonstrator')
         mainWidth = 12;
         detailWidth = 0;
         break;
+      case 'patients-list-full':
+        previousState = '';
+        pageHeader = '';
+        previousPage = '';
+        mainWidth = 12;
+        detailWidth = 0;
+        break;
       default:
         previousState = 'patients-list';
         pageHeader = 'Patients Details';

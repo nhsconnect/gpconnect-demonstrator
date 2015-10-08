@@ -200,7 +200,9 @@ a[ui-sref] {
 }
 
 .btn-info,
-.btn-info:hover {
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active {
   background-color: #007a41;
   border-color: #007a41;
   color: #fff;
@@ -1873,6 +1875,7 @@ tr.ng-scope.selectedItemLeft {
   background-color: #fff;
 }
 
-.reportChartRow{
-
+.patient-list-full-subheader{
+  padding-bottom: 15px;
+  font-weight: bold;
 }

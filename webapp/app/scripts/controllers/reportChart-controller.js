@@ -4,7 +4,6 @@ angular.module('rippleDemonstrator')
   .controller('ReportChartsCtrl', function ($scope, $window, $state, $stateParams, Report) {
 
     var ageChart = function (graphData) {
-      $('svg').height(700);
       $window.Morris.Bar({
       element: 'age-chart',
         resize: true,
@@ -20,15 +19,30 @@ angular.module('rippleDemonstrator')
         xLabelAngle: 50,
         redraw: true
       }).on('click', function (i, row) {
+        var ageArr = row.series.split('-');
+        var ageFr = 0;
+        var ageT = 0;
 
-        var chartType = 'age';
-        //$scope.openModal(row, chartType);
+        if(ageArr.length === 2){
+          ageFr = ageArr[0];
+          ageT = ageArr[1];
+        }else {
+          ageFr = 80;
+          ageT = 130;
+        }
+
+        $state.go('patients-list-full', {
+          queryType: 'Reports: ',
+          ageFrom: ageFr,
+          ageTo: ageT,
+          orderColumn: 'name',
+          orderType: 'ASC',
+          pageNumber: 1,
+          reportType: $scope.requestBody.reportType,
+          searchString: $scope.requestBody.searchString
+        });
       });
     };
-
-//  PatientService.summaries().then(function (summaries) {
-//            ageChart(summaries);
-//  });
 
   if($stateParams.searchString !== undefined){
   var searchQuery = $stateParams.searchString.split(':');
@@ -36,11 +50,13 @@ angular.module('rippleDemonstrator')
   if(searchQuery.length === 1){
     $state.go('patients-charts');
   }
-  var requestBody = {
+
+  $scope.requestBody = {
       reportType: searchQuery[0],
       searchString: searchQuery[1]
   }
-  Report.getChart(requestBody).then(function(chartData){
+
+  Report.getChart($scope.requestBody).then(function(chartData){
     var graphData = [
       { series: '11-18', value: chartData.data.agedElevenToEighteen },
       { series: '19-30', value: chartData.data.agedNineteenToThirty },

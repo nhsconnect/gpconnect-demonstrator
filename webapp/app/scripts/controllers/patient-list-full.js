@@ -20,7 +20,27 @@ angular.module('rippleDemonstrator')
 
     Report.getTable(patientListQuery).then(function (result) {
       $scope.patients = result.data.patientDetails;
+       for (var i = 0; i < $scope.patients.length; i++) {
+        $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].ordersHeadline.latestEntry));
+        $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].medsHeadline.latestEntry));
+        $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].resultsHeadline.latestEntry));
+        $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].treatmentsHeadline.latestEntry));
+      }
     });
+
+
+    $scope.processDateFormat = function (dateString) {
+      if(moment().diff(dateString, 'days') < 1){
+          return dateString.format('h:mm a');
+      }
+      if(moment().startOf('year') <= dateString){
+          return dateString.format('DD-MMM');
+      }
+      if(moment().startOf('year').subtract(1, 'year') < dateString){
+          return dateString.format('MMM-YY');
+      }
+      return dateString.format('YYYY');
+    }
 
     $scope.order = $stateParams.order || 'name';
     $scope.reverse = $stateParams.reverse === 'true';

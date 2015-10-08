@@ -4,10 +4,9 @@ public class ReportTableQuery {
 
     private String reportType;
     private String searchString;
-    private int ageFrom;
-    private int ageTo;
-    private int pageNumber;
-    private String orderColumn;
+    private String ageFrom;
+    private String ageTo;
+    private String pageNumber;
     private String orderType;
 
     public String getReportType() {
@@ -26,36 +25,28 @@ public class ReportTableQuery {
         this.searchString = searchString;
     }
 
-    public int getAgeFrom() {
+    public String getAgeFrom() {
         return ageFrom;
     }
 
-    public void setAgeFrom(int ageFrom) {
+    public void setAgeFrom(String ageFrom) {
         this.ageFrom = ageFrom;
     }
 
-    public int getAgeTo() {
+    public String getAgeTo() {
         return ageTo;
     }
 
-    public void setAgeTo(int ageTo) {
+    public void setAgeTo(String ageTo) {
         this.ageTo = ageTo;
     }
 
-    public int getPageNumber() {
+    public String getPageNumber() {
         return pageNumber;
     }
 
-    public void setPageNumber(int pageNumber) {
+    public void setPageNumber(String pageNumber) {
         this.pageNumber = pageNumber;
-    }
-
-    public String getOrderColumn() {
-        return orderColumn;
-    }
-
-    public void setOrderColumn(String orderColumn) {
-        this.orderColumn = orderColumn;
     }
 
     public String getOrderType() {

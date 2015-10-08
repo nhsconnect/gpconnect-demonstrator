@@ -5,24 +5,39 @@ import java.util.Map;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.Transformer;
 import org.rippleosi.common.util.DateFormatter;
+import org.rippleosi.patient.summary.model.PatientSummary;
+import org.rippleosi.patient.summary.search.PatientSearch;
+import org.rippleosi.patient.summary.search.PatientSearchFactory;
 import org.rippleosi.search.reports.table.model.RecordHeadline;
 import org.rippleosi.search.reports.table.model.ReportTablePatientDetails;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ReportTablePatientDetailsTransformer implements Transformer<Map<String, Object>, ReportTablePatientDetails> {
+
+    @Autowired
+    private PatientSearchFactory patientSearchFactory;
 
     @Override
     public ReportTablePatientDetails transform(Map<String, Object> input) {
+        // find out who the patient is
+        String nhsNumber = MapUtils.getString(input, "nhsNumber");
+
+        // retrieve the sensitive patient data from local
+        PatientSearch patientSearch = patientSearchFactory.select(null);
+        PatientSummary summary = patientSearch.findPatientSummary(nhsNumber);
+
+        // populate the table details object
         ReportTablePatientDetails details = new ReportTablePatientDetails();
 
-        details.setSource("openehr");
-        details.setSourceId(MapUtils.getString(input, "uid"));
-        details.setName(MapUtils.getString(input, "name"));
-        details.setAddress(MapUtils.getString(input, "address"));
-        details.setGender(MapUtils.getString(input, "gender"));
-        details.setNhsNumber(MapUtils.getString(input, "nhsNumber"));
-
-        String dob = MapUtils.getString(input, "dob");
-        details.setDateOfBirth(DateFormatter.toDate(dob));
+        details.setSource("local");
+        details.setSourceId(summary.getId());
+        details.setName(summary.getName());
+        details.setAddress(summary.getAddress());
+        details.setGender(summary.getGender());
+        details.setNhsNumber(summary.getNhsNumber());
+        details.setDateOfBirth(summary.getDateOfBirth());
 
         details.setVitalsHeadline(populateVitalsHeadline(input));
         details.setOrdersHeadline(populateOrdersHeadline(input));

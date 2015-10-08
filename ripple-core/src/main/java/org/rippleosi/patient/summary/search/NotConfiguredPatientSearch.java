@@ -44,4 +44,9 @@ public class NotConfiguredPatientSearch implements PatientSearch {
     public PatientDetails findPatient(String patientId) {
         throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
     }
+
+    @Override
+    public PatientSummary findPatientSummary(String patientId) {
+        throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
+    }
 }

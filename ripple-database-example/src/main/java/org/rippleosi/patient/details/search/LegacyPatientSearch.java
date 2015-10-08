@@ -66,4 +66,10 @@ public class LegacyPatientSearch implements PatientSearch {
         PatientEntity patient = patientRepository.findByPatientId(patientId);
         return patientEntityToDetailsTransformer.transform(patient);
     }
+
+    @Override
+    public PatientSummary findPatientSummary(String patientId) {
+        PatientEntity patient = patientRepository.findByPatientId(patientId);
+        return patientEntityToSummaryTransformer.transform(patient);
+    }
 }

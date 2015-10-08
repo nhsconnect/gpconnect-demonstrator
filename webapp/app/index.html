@@ -150,18 +150,27 @@
       </div>
     </div>
 
-    <div class="col-md-4 col-sm-3 header-search ng-cloak" ng-cloak>
+    <div class="col-md-4 hidden-sm hidden-xs header-search ng-cloak" ng-cloak>
       <div class="search-left-inner-addon">
-        <div ng-show="reportMode" class="ng-cloak" ng-cloak><span ng-cloak ng-show="reportMode" class="label ng-cloak label-success">Report<i ng-show="reportMode" ng-click="cancelReportMode()" class="fa fa-times"></i></span></div>
+        <div ng-show="reportMode" class="ng-cloak" ng-cloak><span ng-cloak ng-show="reportMode" class="label ng-cloak report-label">Reports&nbsp;<i ng-show="reportMode" ng-click="cancelReportMode()" class="fa fa-times"></i></span></div>
+        <div><i ng-show="searchExpression !== '' || reportMode" ng-click="cancelReportMode()" class="clearAll fa fa-times-circle"></i></div>
         <input class="form-control" placeholder="Search..." type="text" typeahead="report for report in reportTypes | filter:$viewValue" ng-model="searchExpression" ng-keyup="checkExpression()" ng-trim="false" ng-class="{moveRight: reportMode}" />
       </div>
+      <button class="btn btn-info searchButton" ng-click="searchReport();"><i class="fa fa-search"></i> Search</button>
     </div>
 
-    <div class="col-md-4 col-sm-5 header-right">
+    <div class="hidden-xs hidden-md col-sm-12 hidden-lg ng-cloak" ng-cloak>
+      <div class="search-left-inner-addon">
+        <div ng-show="reportMode" class="ng-cloak" ng-cloak><span ng-cloak ng-show="reportMode" class="label ng-cloak report-label">Reports&nbsp;<i ng-show="reportMode" ng-click="cancelReportMode()" class="fa fa-times"></i></span></div>
+        <div><i ng-show="searchExpression !== '' || reportMode" ng-click="cancelReportMode()" class="clearAll fa fa-times-circle"></i></div>
+        <input class="form-control" placeholder="Search..." type="text" typeahead="report for report in reportTypes | filter:$viewValue" ng-model="searchExpression" ng-keyup="checkExpression()" ng-trim="false" ng-class="{moveRight: reportMode}" />
+      </div>
+      <button class="btn btn-info" ng-click="searchReport();"><i class="fa fa-search"></i> Search</button>
+    </div>
 
+    <div class="col-md-offset-1 col-sm-offset-1 col-md-3 col-sm-4 header-right">
       <!-- User Profile -->
       <div class="collapse navbar-collapse">
-        <button class="btn btn-info searchButton" ng-click="searchReport();"><i class="fa fa-search"></i> Search</button>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown-profile">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -265,9 +274,13 @@
 
     <div class="col-xs-12 header-search-mobile">
       <div class="search-left-inner-addon">
-        <i class="fi-magnifying-glass icon-searchbar"></i>
-        <input type="search" class="form-control" placeholder="Search..." />
+        <div ng-show="reportMode" class="ng-cloak" ng-cloak><span ng-cloak ng-show="reportMode" class="label ng-cloak report-label">Reports&nbsp;<i ng-show="reportMode" ng-click="cancelReportMode()" class="fa fa-times"></i></span></div>
+        <div><i ng-show="searchExpression !== '' || reportMode" ng-click="cancelReportMode()" class="clearAll fa fa-times-circle"></i></div>
+        <input class="form-control" placeholder="Search..." type="text" typeahead="report for report in reportTypes | filter:$viewValue" ng-model="searchExpression" ng-keyup="checkExpression()" ng-trim="false" ng-class="{moveRight: reportMode}" />
       </div>
+    </div>
+    <div class="col-xs-12 header-search-mobile">
+      <button class="btn btn-info" ng-click="searchReport();"><i class="fa fa-search"></i> Search</button>
     </div>
   </div>
   <!-- /.Header mobile -->

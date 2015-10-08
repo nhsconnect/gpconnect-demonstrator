@@ -101,30 +101,30 @@ angular.module('rippleDemonstrator')
         return $scope.searchExpression.indexOf('rp ') == 0 ? true : false;
       }
 
-      $scope.reportMode = false;
+      $rootScope.reportMode = false;
       $scope.checkExpression = function () {
-        if ($scope.reportMode) {
+        if ($rootScope.reportMode) {
           $scope.reportTypes = [
       'Diagnosis: ',
       'Orders: '
     ];
         } else {
-          $scope.reportMode = $scope.containsReportString();
+          $scope.reportTypes = '';
+          $rootScope.reportMode = $scope.containsReportString();
           $scope.processReportMode();
         }
       }
 
       $scope.cancelReportMode = function () {
-        $scope.reportMode = false;
+        $rootScope.reportMode = false;
         $scope.searchExpression = '';
+        $scope.reportTypes = '';
       }
 
       $scope.searchReport = function () {
         if ($scope.reportMode && $scope.searchExpression != '') {
           var tempExpression = $scope.searchExpression;
-          $scope.searchExpression = '';
-          $scope.reportMode = false;
-          $scope.chartPage = true;
+          $rootScope.reportMode = true;
           $state.go('search-report', {searchString: tempExpression});
         }
       }

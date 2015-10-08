@@ -604,16 +604,20 @@ legend {
   padding-left: 30px;
 }
 
-.moveRight{
+.moveRight {
   padding-left: 100px !important;
 }
 
 .search-left-inner-addon span {
   position: absolute;
-  padding: 7px 15px;
+  padding: 6px 15px;
   margin-top: 5px;
   margin-left: 10px;
   height: 25px;
+  font-size: 14px;
+  font-weight: normal;
+  padding-left: 8px;
+  padding-right: 24px;
 }
 
 .search-left-inner-addon i {
@@ -624,9 +628,19 @@ legend {
   height: 25px;
 }
 
-.search-left-inner-addon i.fa.fa-times{
-    margin-top: -2px;
-    margin-left: 3px;
+
+i.clearAll {
+    position: absolute;
+    padding: 2px 0px;
+    margin-top: 7px;
+    margin-left: 95%;
+    height: 25px;
+    color: red
+}
+
+.search-left-inner-addon i.fa.fa-times {
+  margin-top: -2px;
+  margin-left: 3px;
 }
 
 .search-left-inner-addon .form-control {
@@ -1857,25 +1871,56 @@ tr.ng-scope.selectedItemLeft {
 }
 
 .noselect {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
-.searchButton{
-    margin-right: 250px;
+.searchButton {
+    margin-top: -35px;
+    margin-left: 101%;
 }
 
-.report-chart-inner{
+.report-chart-inner {
   border: 1px solid #bdbdbd;
   border-radius: 4px;
   background-color: #fff;
 }
 
-.patient-list-full-subheader{
+.patient-list-full-subheader {
   padding-bottom: 15px;
   font-weight: bold;
+  font-size: 16px;
+}
+
+.patient-details-tabs {
+  text-align: right;
+}
+
+.patient-details-tabs span {
+  font-weight: bold;
+  background-color: #EEEEEE;
+  padding-top: 10px;
+  padding-bottom: 17px;
+  padding-right: 19px;
+  padding-left: 20px;
+  line-height: 1;
+}
+
+.patient-details-tabs span:hover {
+  cursor: pointer;
+  background-color: #0E682F;
+  color: white;
+}
+
+span.selectedTab {
+  background-color: #0E682F;
+  color: white;
+}
+
+.report-label{
+  background-color:#6AB123;
 }

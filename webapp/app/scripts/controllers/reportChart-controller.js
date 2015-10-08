@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ReportChartsCtrl', function ($scope, $window, $state, $stateParams, Report) {
+  .controller('ReportChartsCtrl', function ($scope, $rootScope, $window, $state, $stateParams, Report) {
+
+    $rootScope.reportMode = true;
 
     var ageChart = function (graphData) {
       $window.Morris.Bar({
@@ -46,6 +48,8 @@ angular.module('rippleDemonstrator')
 
   if($stateParams.searchString !== undefined){
   var searchQuery = $stateParams.searchString.split(':');
+  $scope.reportType = searchQuery[0];
+  $scope.searchString = searchQuery[1];
 
   if(searchQuery.length === 1){
     $state.go('patients-charts');

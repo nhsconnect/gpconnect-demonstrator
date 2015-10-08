@@ -2,44 +2,18 @@
 <div class="patients-list-context">
 <div class ="row reportChartRow">
 
-  <!-- START Main Nav -->
-  <div class="col-md-3 col-sm-3  col-xs-12 text-center main-nav">
-
-    <a class="button viewall" ng-click="openModal()">
-      <i class="fi-results-demographics"></i><br/>
-      View all Patients
-    </a>
-
-    <a href="#/lookup" class="button spine">
-      <i class="fi-magnifying-glass"></i><br/>
-      Spine Lookup
-    </a>
-
-  </div>
-  <!-- END Main Nav -->
-
   <!-- START Charts -->
-  <div class="col-md-7 col-sm-7 chart-inner">
+  <div class="col-md-offset-3 col-sm-offset-3 col-md-6 col-sm-6 chart-inner">
 
         <!-- Age Chart -->
         <div class="chart age" id="age">
-
-        <span class="fa-stack fa-lg pull-left chart-fa-stack hidden-xs" >
-            <i class="fa fa-circle fa-stack-2x cake-icon"></i>
-            <i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i>
-        </span>
           <div class ="chart-title-group-container hidden-xs">
             <div class="pull-left chart-title-group">
-              <h2 class="chart-title">Patients by <span class="chart-title-age">Age</span></h2>
-              <p class="chart-description">This is a brief description of patients by age.</p>
+              <h2 class="chart-title">Reports: {{searchString}}</h2>
+              <p class="chart-description">Showing patients by age with {{searchString}}</p>
             </div>
           </div>
-
           <br><br>
-          <span class="fa-stack fa-lg pull-left chart-fa-stack visible-xs" style="margin-left:10px; ">
-              <i class="fa fa-circle fa-stack-2x cake-icon"></i>
-              <i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i>
-          </span>
           <div class="chart-title-group-container">
             <div class="pull-left chart-title-group-mobile visible-xs">
               <h2 class="chart-title" >Patients by <span class="chart-title-age">Age</span></h2>

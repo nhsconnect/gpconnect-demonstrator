@@ -16,6 +16,7 @@ angular.module('rippleDemonstrator')
     }
 
     $scope.subHeader = $stateParams.queryType + $stateParams.reportType + ': ' + $stateParams.searchString + ' & Aged ' + $stateParams.ageFrom + ' to ' + $stateParams.ageTo;
+    $scope.tab = 'patientInfo';
 
     Report.getTable(patientListQuery).then(function (result) {
       $scope.patients = result.data.patientDetails;
@@ -35,6 +36,18 @@ angular.module('rippleDemonstrator')
         order: field,
         reverse: reverse
       }));
+    };
+
+    $scope.viewPatients = function (){
+      $scope.tab = 'patientInfo';
+    };
+
+    $scope.viewDateTime = function () {
+      $scope.tab = 'dateTime';
+    };
+
+    $scope.viewCounts = function (){
+      $scope.tab = 'counts';
     };
 
     $scope.sortClass = function (field) {

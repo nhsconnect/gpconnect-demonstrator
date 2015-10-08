@@ -1,8 +1,8 @@
-package org.rippleosi.search.reports.table.model;
+package org.rippleosi.search.common.model;
 
 import java.util.Date;
 
-public class ReportTablePatientDetails {
+public class SearchTablePatientDetails {
 
     private String source;
     private String sourceId;

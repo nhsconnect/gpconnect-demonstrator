@@ -1,4 +1,4 @@
-package org.rippleosi.search.reports.table.model;
+package org.rippleosi.search.common.model;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ public class RecordHeadline {
     private String source;
     private String sourceId;
     private Date latestEntry;
-    private int totalEntries;
+    private String totalEntries;
 
     public String getSource() {
         return source;
@@ -33,11 +33,11 @@ public class RecordHeadline {
         this.latestEntry = latestEntry;
     }
 
-    public int getTotalEntries() {
+    public String getTotalEntries() {
         return totalEntries;
     }
 
-    public void setTotalEntries(int totalEntries) {
+    public void setTotalEntries(String totalEntries) {
         this.totalEntries = totalEntries;
     }
 }

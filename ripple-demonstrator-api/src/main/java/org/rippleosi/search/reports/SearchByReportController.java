@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/search/reports")
-public class ReportsController {
+public class SearchByReportController {
 
     @Autowired
     private ReportGraphSearchFactory reportGraphSearchFactory;
@@ -26,15 +26,15 @@ public class ReportsController {
     private ReportTableSearchFactory reportTableSearchFactory;
 
     @RequestMapping(value = "/chart", method = RequestMethod.POST)
-    public ReportGraphResults getGraphReportByType(@RequestParam(required = false) String source,
-                                                   @RequestBody ReportGraphQuery graphQuery) {
+    public ReportGraphResults getReportGraph(@RequestParam(required = false) String source,
+                                             @RequestBody ReportGraphQuery graphQuery) {
         ReportGraphSearch search = reportGraphSearchFactory.select(source);
         return search.findPatientDemographicsByQuery(graphQuery);
     }
 
     @RequestMapping(value = "/table", method = RequestMethod.POST)
-    public ReportTableResults getTableReportByType(@RequestParam(required = false) String source,
-                                                   @RequestBody ReportTableQuery tableQuery) {
+    public ReportTableResults getReportTable(@RequestParam(required = false) String source,
+                                             @RequestBody ReportTableQuery tableQuery) {
         ReportTableSearch search = reportTableSearchFactory.select(source);
         return search.findAllPatientsByQuery(tableQuery);
     }

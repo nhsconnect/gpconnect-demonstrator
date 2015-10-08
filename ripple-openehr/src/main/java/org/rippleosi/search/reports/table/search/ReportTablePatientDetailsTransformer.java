@@ -8,19 +8,19 @@ import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.patient.summary.search.PatientSearch;
 import org.rippleosi.patient.summary.search.PatientSearchFactory;
-import org.rippleosi.search.reports.table.model.RecordHeadline;
-import org.rippleosi.search.reports.table.model.ReportTablePatientDetails;
+import org.rippleosi.search.common.model.RecordHeadline;
+import org.rippleosi.search.common.model.SearchTablePatientDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ReportTablePatientDetailsTransformer implements Transformer<Map<String, Object>, ReportTablePatientDetails> {
+public class ReportTablePatientDetailsTransformer implements Transformer<Map<String, Object>, SearchTablePatientDetails> {
 
     @Autowired
     private PatientSearchFactory patientSearchFactory;
 
     @Override
-    public ReportTablePatientDetails transform(Map<String, Object> input) {
+    public SearchTablePatientDetails transform(Map<String, Object> input) {
         // find out who the patient is
         String nhsNumber = MapUtils.getString(input, "nhsNumber");
 
@@ -29,7 +29,7 @@ public class ReportTablePatientDetailsTransformer implements Transformer<Map<Str
         PatientSummary summary = patientSearch.findPatientSummary(nhsNumber);
 
         // populate the table details object
-        ReportTablePatientDetails details = new ReportTablePatientDetails();
+        SearchTablePatientDetails details = new SearchTablePatientDetails();
 
         details.setSource("local");
         details.setSourceId(summary.getId());
@@ -53,7 +53,7 @@ public class ReportTablePatientDetailsTransformer implements Transformer<Map<Str
 
         headline.setSource(MapUtils.getString(input, "vitalsSource"));
         headline.setSourceId(MapUtils.getString(input, "vitalsSourceId"));
-        headline.setTotalEntries(MapUtils.getInteger(input, "vitalsCount"));
+        headline.setTotalEntries(MapUtils.getString(input, "vitalsCount"));
 
         String latestVital = MapUtils.getString(input, "vitalsLatest");
         headline.setLatestEntry(DateFormatter.toDate(latestVital));
@@ -66,7 +66,7 @@ public class ReportTablePatientDetailsTransformer implements Transformer<Map<Str
 
         headline.setSource(MapUtils.getString(input, "ordersSource"));
         headline.setSourceId(MapUtils.getString(input, "ordersSourceId"));
-        headline.setTotalEntries(MapUtils.getInteger(input, "ordersCount"));
+        headline.setTotalEntries(MapUtils.getString(input, "ordersCount"));
 
         String latestOrder = MapUtils.getString(input, "ordersLatest");
         headline.setLatestEntry(DateFormatter.toDate(latestOrder));
@@ -79,7 +79,7 @@ public class ReportTablePatientDetailsTransformer implements Transformer<Map<Str
 
         headline.setSource(MapUtils.getString(input, "medsSource"));
         headline.setSourceId(MapUtils.getString(input, "medsSourceId"));
-        headline.setTotalEntries(MapUtils.getInteger(input, "medsCount"));
+        headline.setTotalEntries(MapUtils.getString(input, "medsCount"));
 
         String latestMed = MapUtils.getString(input, "medsLatest");
         headline.setLatestEntry(DateFormatter.toDate(latestMed));
@@ -92,7 +92,7 @@ public class ReportTablePatientDetailsTransformer implements Transformer<Map<Str
 
         headline.setSource(MapUtils.getString(input, "resultsSource"));
         headline.setSourceId(MapUtils.getString(input, "resultsSourceId"));
-        headline.setTotalEntries(MapUtils.getInteger(input, "resultsCount"));
+        headline.setTotalEntries(MapUtils.getString(input, "resultsCount"));
 
         String latestResult = MapUtils.getString(input, "resultsLatest");
         headline.setLatestEntry(DateFormatter.toDate(latestResult));
@@ -105,7 +105,7 @@ public class ReportTablePatientDetailsTransformer implements Transformer<Map<Str
 
         headline.setSource(MapUtils.getString(input, "treatmentsSource"));
         headline.setSourceId(MapUtils.getString(input, "treatmentsSourceId"));
-        headline.setTotalEntries(MapUtils.getInteger(input, "treatmentsCount"));
+        headline.setTotalEntries(MapUtils.getString(input, "treatmentsCount"));
 
         String latestTreatment = MapUtils.getString(input, "treatmentsLatest");
         headline.setLatestEntry(DateFormatter.toDate(latestTreatment));

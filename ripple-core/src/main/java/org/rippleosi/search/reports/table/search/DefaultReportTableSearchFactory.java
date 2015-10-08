@@ -4,7 +4,7 @@ import org.rippleosi.common.repo.AbstractRepositoryFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DefaultReportTableGraphSearchFactory extends AbstractRepositoryFactory<ReportTableSearch>
+public class DefaultReportTableSearchFactory extends AbstractRepositoryFactory<ReportTableSearch>
     implements ReportTableSearchFactory {
 
     @Override

@@ -69,21 +69,21 @@ angular.module('rippleDemonstrator')
         break;
       case 'patients-lookup':
         previousState = '';
-        pageHeader = '';
+        pageHeader = 'Patients lookup';
         previousPage = '';
         mainWidth = 6;
         detailWidth = 6;
         break;
       case 'search-report':
         previousState = '';
-        pageHeader = '';
+        pageHeader = 'Report Search';
         previousPage = '';
         mainWidth = 12;
         detailWidth = 0;
         break;
       case 'patients-list-full':
         previousState = '';
-        pageHeader = '';
+        pageHeader = 'Patients Details';
         previousPage = '';
         mainWidth = 12;
         detailWidth = 0;

@@ -3,7 +3,6 @@
 angular.module('rippleDemonstrator')
   .controller('ReportChartsCtrl', function ($scope, $rootScope, $window, $state, $stateParams, Report) {
 
-    $scope.pageHeader = 'Patient Dashboard';
     $rootScope.reportMode = true;
 
     var ageChart = function (graphData) {

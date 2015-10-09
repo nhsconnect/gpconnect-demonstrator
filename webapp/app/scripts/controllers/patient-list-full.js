@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('PatientsListFullCtrl', function ($scope, $state, $stateParams, Report) {
+  .controller('PatientsListFullCtrl', function ($scope, $rootScope, $state, $stateParams, Report) {
 
     $scope.patients = [];
+    $rootScope.reportMode = true;
 
     var patientListQuery = {
       ageFrom: $stateParams.ageFrom,
@@ -27,7 +28,6 @@ angular.module('rippleDemonstrator')
         $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].treatmentsHeadline.latestEntry));
       }
     });
-
 
     $scope.processDateFormat = function (dateString) {
       if(moment().diff(dateString, 'days') < 1){

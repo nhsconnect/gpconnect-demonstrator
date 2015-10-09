@@ -73,7 +73,7 @@ angular.module('rippleDemonstrator')
         };
 
         Referral.create($scope.patient.id, toAdd).then(function () {
-          $state.go('referrals', {patientId: $scope.patient.id});
+          $state.go('referrals', { patientId: $scope.patient.id });
         });
       });
     };

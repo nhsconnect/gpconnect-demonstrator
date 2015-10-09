@@ -50,8 +50,7 @@ angular.module('rippleDemonstrator')
         };
 
         Procedure.update($scope.patient.id, toUpdate).then(function () {
-          // $location.path('/patients/' + $scope.patient.id + '/procedures/' + procedure.sourceId);
-          $state.go('procedures', {patientId: $scope.patient.id});
+          $state.go('procedures', { patientId: $scope.patient.id });
         });
       });
     };

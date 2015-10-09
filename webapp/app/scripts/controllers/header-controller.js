@@ -98,8 +98,8 @@ angular.module('rippleDemonstrator')
       }
 
       $scope.containsReportString = function () {
-        return $scope.searchExpression.indexOf('rp ') == 0 ? true : false;
-      }
+        return $scope.searchExpression.indexOf('rp ') === 0 ? true : false;
+      };
 
       $rootScope.reportMode = false;
       $scope.checkExpression = function () {
@@ -113,27 +113,27 @@ angular.module('rippleDemonstrator')
           $rootScope.reportMode = $scope.containsReportString();
           $scope.processReportMode();
         }
-      }
+      };
 
       $scope.cancelReportMode = function () {
         $rootScope.reportMode = false;
         $scope.searchExpression = '';
         $scope.reportTypes = '';
-      }
+      };
 
       $scope.searchReport = function () {
-        if ($scope.reportMode && $scope.searchExpression != '') {
+        if ($scope.reportMode && $scope.searchExpression !== '') {
           var tempExpression = $scope.searchExpression;
           $rootScope.reportMode = true;
-          $state.go('search-report', {searchString: tempExpression});
+          $state.go('search-report', { searchString: tempExpression });
         }
-      }
+      };
 
       $scope.processReportMode = function () {
         if ($scope.searchExpression === 'rp ') {
           $scope.searchExpression = '';
         }
-      }
+      };
 
       $scope.pageHeader = pageHeader;
       $scope.previousState = previousState;

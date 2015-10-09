@@ -51,9 +51,9 @@ angular.module('rippleDemonstrator')
         }
       });
 
-      modalInstance.result.then(function (orders, author) {
+      modalInstance.result.then(function (orders) {
         var toAdd = [];
-        for(var i = 0; i < orders.length; i++){
+        for (var i = 0; i < orders.length; i++){
           var newItem = {};
           newItem.sourceId = '';
           newItem.dateCreated = new Date();
@@ -65,8 +65,7 @@ angular.module('rippleDemonstrator')
         }
 
         Order.create($scope.patient.id, toAdd).then(function () {
-          //$state.go('orders', {patientId: $scope.patient.id});
-          setTimeout(window.location.reload(),2000);
+          setTimeout(window.location.reload(), 2000);
         });
       });
     };

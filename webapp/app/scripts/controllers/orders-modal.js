@@ -45,7 +45,7 @@ angular.module('rippleDemonstrator')
       for (var i = 0; i < $scope.suggestions.length; i++) {
         if ($scope.suggestions[i].code === $scope.idSelectedLeft) {
           $scope.chosenOrders.push($scope.suggestions[i]);
-          $scope.suggestions.splice(i, 1)
+          $scope.suggestions.splice(i, 1);
         }
       }
     };
@@ -55,10 +55,10 @@ angular.module('rippleDemonstrator')
       for (var i = 0; i < $scope.chosenOrders.length; i++) {
         if ($scope.chosenOrders[i].code === $scope.idSelectedRight) {
           $scope.suggestions.push($scope.chosenOrders[i]);
-          $scope.chosenOrders.splice(i, 1)
+          $scope.chosenOrders.splice(i, 1);
         }
       }
-      if($scope.chosenOrders.length === 0){
+      if ($scope.chosenOrders.length === 0){
         $scope.firstPage = true;
       }
     };
@@ -85,7 +85,7 @@ angular.module('rippleDemonstrator')
       $scope.firstPage = false;
     };
 
-   $scope.pageOne = function () {
+    $scope.pageOne = function () {
       $scope.firstPage = true;
     };
 

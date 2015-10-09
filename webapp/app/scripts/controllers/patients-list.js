@@ -18,7 +18,7 @@ angular.module('rippleDemonstrator')
         reverse = !reverse;
       }
 
-      $state.transitionTo($state.current, _.extend($stateParams, {order: field, reverse: reverse}));
+      $state.transitionTo($state.current, _.extend($stateParams, { order: field, reverse: reverse }));
     };
 
     $scope.sortClass = function (field) {
@@ -28,7 +28,7 @@ angular.module('rippleDemonstrator')
     };
 
     $scope.go = function (patient) {
-      $state.go('patients-summary', {patientId: patient.id});
+      $state.go('patients-summary', { patientId: patient.id });
     };
 
     $scope.patientFilter = function (patient) {

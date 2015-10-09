@@ -3,7 +3,7 @@
 angular.module('rippleDemonstrator')
   .controller('ReferralsModalCtrl', function ($scope, $modalInstance, PatientService, referral, patient, modal) {
 
-    $('#dateofreferral').datepicker({dateFormat: 'dd-MMM-y'});
+    $('#dateofreferral').datepicker({ dateFormat: 'dd-MMM-y' });
 
     $scope.currentUser = PatientService.getCurrentUser();
     $scope.referral = referral;

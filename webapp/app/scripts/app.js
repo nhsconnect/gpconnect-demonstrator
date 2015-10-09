@@ -319,17 +319,17 @@ angular
   })
   .directive('mySpace', function () {
     return function (scope, element, attrs) {
-        element.bind("keydown keypress", function (event) {
-            if(event.which === 32) {
-                scope.$apply(function (){
-                    scope.$eval(attrs.myEnter);
-                });
+      element.bind('keydown keypress', function (event) {
+        if (event.which === 32) {
+          scope.$apply(function () {
+            scope.$eval(attrs.myEnter);
+          });
 
-                event.preventDefault();
-            }
-        });
+          event.preventDefault();
+        }
+      });
     };
-})
+  })
   .config(function (datepickerConfig, datepickerPopupConfig, cfpLoadingBarProvider) {
     datepickerConfig.startingDay = 1;
     datepickerPopupConfig.showButtonBar = false;

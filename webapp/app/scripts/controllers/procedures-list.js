@@ -73,7 +73,7 @@ angular.module('rippleDemonstrator')
         };
 
         Procedure.create($scope.patient.id, toAdd).then(function () {
-          $state.go('procedures', {patientId: $scope.patient.id});
+          $state.go('procedures', { patientId: $scope.patient.id });
         });
       });
     };

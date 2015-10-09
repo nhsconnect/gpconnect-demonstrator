@@ -65,7 +65,7 @@ angular.module('rippleDemonstrator')
         };
 
         Diagnosis.create($scope.patient.id, toAdd).then(function () {
-          $state.go('diagnoses-list', {patientId: $scope.patient.id});
+          $state.go('diagnoses-list', { patientId: $scope.patient.id });
         });
       });
     };

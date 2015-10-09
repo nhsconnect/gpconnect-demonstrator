@@ -17,7 +17,7 @@ angular.module('rippleDemonstrator')
     };
 
     var get = function (id) {
-      return $http.get('/api/patients/' + id, {cache: true}).then(function (result) {
+      return $http.get('/api/patients/' + id, { cache: true }).then(function (result) {
         return new Patient(result.data);
       });
     };
@@ -46,7 +46,7 @@ angular.module('rippleDemonstrator')
     };
 
     var update = function (patient, updatedDiagnosis) {
-      var diagnosis = _.findWhere(patient.diagnoses, {id: updatedDiagnosis.id});
+      var diagnosis = _.findWhere(patient.diagnoses, { id: updatedDiagnosis.id });
       angular.extend(diagnosis, updatedDiagnosis);
     };
 
@@ -62,7 +62,7 @@ angular.module('rippleDemonstrator')
             return patient.ageRange;
           })
           .map(function (value, key) {
-            return {series: key, value: value};
+            return { series: key, value: value };
           })
           .sortBy(function (value) {
             return value.ageRange;
@@ -78,7 +78,7 @@ angular.module('rippleDemonstrator')
             return patient.department;
           })
           .map(function (value, key) {
-            return {series: key, value: value};
+            return { series: key, value: value };
           })
           .sortBy(function (value) {
             return value.department;

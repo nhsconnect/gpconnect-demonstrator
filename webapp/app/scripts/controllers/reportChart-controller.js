@@ -25,7 +25,7 @@ angular.module('rippleDemonstrator')
         var ageFr = 0;
         var ageT = 0;
 
-        if(ageArr.length === 2){
+        if (ageArr.length === 2){
           ageFr = ageArr[0];
           ageT = ageArr[1];
         }else {
@@ -46,22 +46,22 @@ angular.module('rippleDemonstrator')
       });
     };
 
-  if($stateParams.searchString !== undefined){
-  var searchQuery = $stateParams.searchString.split(':');
-  $scope.reportType = searchQuery[0];
-  $scope.searchString = searchQuery[1];
+    if ($stateParams.searchString !== undefined){
+      var searchQuery = $stateParams.searchString.split(':');
+      $scope.reportType = searchQuery[0];
+      $scope.searchString = searchQuery[1];
 
-  if(searchQuery.length === 1){
-    $state.go('patients-charts');
-  }
+      if (searchQuery.length === 1){
+        $state.go('patients-charts');
+      }
 
-  $scope.requestBody = {
+      $scope.requestBody = {
       reportType: searchQuery[0],
       searchString: searchQuery[1]
-  }
+    }
 
-  Report.getChart($scope.requestBody).then(function(chartData){
-    var graphData = [
+      Report.getChart($scope.requestBody).then(function (chartData) {
+        var graphData = [
       { series: '11-18', value: chartData.data.agedElevenToEighteen },
       { series: '19-30', value: chartData.data.agedNineteenToThirty },
       { series: '31-60', value: chartData.data.agedThirtyOneToSixty },
@@ -69,10 +69,10 @@ angular.module('rippleDemonstrator')
       { series: '>80', value: chartData.data.agedEightyPlus }
       ];
 
-    ageChart(graphData);
-  })
-  }else {
-    $state.go('patients-charts');
-  }
+        ageChart(graphData);
+      })
+    }else {
+      $state.go('patients-charts');
+    }
 
   });

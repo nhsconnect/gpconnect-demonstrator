@@ -13,7 +13,7 @@ angular.module('rippleDemonstrator')
 
     return {
       getChart: getChart,
-      getTable: getTable,
+      getTable: getTable
     };
 
   });

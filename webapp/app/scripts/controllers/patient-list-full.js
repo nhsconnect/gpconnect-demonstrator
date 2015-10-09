@@ -21,7 +21,7 @@ angular.module('rippleDemonstrator')
 
     Report.getTable(patientListQuery).then(function (result) {
       $scope.patients = result.data.patientDetails;
-       for (var i = 0; i < $scope.patients.length; i++) {
+      for (var i = 0; i < $scope.patients.length; i++) {
         $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].ordersHeadline.latestEntry));
         $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].medsHeadline.latestEntry));
         $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].resultsHeadline.latestEntry));
@@ -30,14 +30,14 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.processDateFormat = function (dateString) {
-      if(moment().diff(dateString, 'days') < 1){
-          return dateString.format('h:mm a');
+      if (moment().diff(dateString, 'days') < 1){
+        return dateString.format('h:mm a');
       }
-      if(moment().startOf('year') <= dateString){
-          return dateString.format('DD-MMM');
+      if (moment().startOf('year') <= dateString){
+        return dateString.format('DD-MMM');
       }
-      if(moment().startOf('year').subtract(1, 'year') < dateString){
-          return dateString.format('MMM-YY');
+      if (moment().startOf('year').subtract(1, 'year') < dateString){
+        return dateString.format('MMM-YY');
       }
       return dateString.format('YYYY');
     }
@@ -58,7 +58,7 @@ angular.module('rippleDemonstrator')
       }));
     };
 
-    $scope.viewPatients = function (){
+    $scope.viewPatients = function () {
       $scope.tab = 'patientInfo';
     };
 
@@ -66,7 +66,7 @@ angular.module('rippleDemonstrator')
       $scope.tab = 'dateTime';
     };
 
-    $scope.viewCounts = function (){
+    $scope.viewCounts = function () {
       $scope.tab = 'counts';
     };
 

@@ -111,11 +111,11 @@ angular.module('rippleDemonstrator')
           for (var type in $scope.selectedItems) {
             switch (type) {
               case 'allergies':
-                    break;
+                break;
               case 'contacts':
-                    break;
+                break;
               case 'medications':
-                    break;
+                break;
               case 'problems':
                 for (var transferIndex = updatedTransferOfCare[type].length; transferIndex--;) {
                   var contains = false;

@@ -628,14 +628,13 @@ legend {
   height: 25px;
 }
 
-
 i.clearAll {
-    position: absolute;
-    padding: 2px 0px;
-    margin-top: 7px;
-    margin-left: 95%;
-    height: 25px;
-    color: red
+  position: absolute;
+  padding: 2px 0px;
+  margin-top: 7px;
+  margin-left: 95%;
+  height: 25px;
+  color: red
 }
 
 .search-left-inner-addon i.fa.fa-times {
@@ -1880,8 +1879,8 @@ tr.ng-scope.selectedItemLeft {
 }
 
 .searchButton {
-    margin-top: -35px;
-    margin-left: 101%;
+  margin-top: -35px;
+  margin-left: 101%;
 }
 
 .report-chart-inner {
@@ -1903,11 +1902,11 @@ tr.ng-scope.selectedItemLeft {
 .patient-details-tabs span {
   font-weight: bold;
   background-color: #EEEEEE;
-  padding-top: 10px;
-  padding-bottom: 17px;
+  padding-top: 12px;
+  padding-bottom: 12px;
   padding-right: 19px;
   padding-left: 20px;
-  line-height: 1;
+  line-height: 3;
 }
 
 .patient-details-tabs span:hover {
@@ -1921,6 +1920,11 @@ span.selectedTab {
   color: white;
 }
 
-.report-label{
-  background-color:#6AB123;
+.report-label {
+  background-color: #6AB123;
+}
+
+.patient-details-tabs span.countsTab {
+  padding-right: 28px;
+  padding-left: 26px;
 }

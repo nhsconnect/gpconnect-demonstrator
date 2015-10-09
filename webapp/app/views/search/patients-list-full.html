@@ -31,49 +31,50 @@
 
           </tr>
         </tbody>
-        <table ng-if="tab == 'dateTime'" class="table table-striped table-bordered table-hover">
-          <thead>
-            <tr>
-              <th >Name</th>
-              <th >Vitals</th>
-              <th >Orders</th>
-              <th >meds</th>
-              <th >Results</th>
-              <th >Treatments</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="patient in patients" ng-click="go(patient)">
-              <td>{{ patient.name }}</td>
-              <td>{{ patient.vitalsHeadline.latestEntry }}</td>
-              <td>{{ patient.ordersHeadline.latestEntry }}</td>
-              <td>{{ patient.medsHeadline.latestEntry }}</td>
-              <td>{{ patient.resultsHeadline.latestEntry }}</td>
-              <td>{{ patient.treatmentsHeadline.latestEntry }}</td>
-            </tr>
-          </tbody>
-          <table ng-if="tab == 'counts'" class="table table-striped table-bordered table-hover">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Notes</th>
-                <th>Vitals</th>
-                <th>Orders</th>
-                <th>Results</th>
-                <th>Treatments</th>
-                <th>Medications</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="patient in patients" ng-click="go(patient)">
-              <td>{{ patient.name }}</td>
-              <td>{{ patient.notesHeadline.totalEntries }}</td>
-              <td>{{ patient.vitalsHeadline.totalEntries }}</td>
-              <td>{{ patient.ordersHeadline.totalEntries }}</td>
-              <td>{{ patient.resultsHeadline.totalEntries }}</td>
-              <td>{{ patient.treatmentsHeadline.totalEntries }}</td>
-              <td>{{ patient.medsHeadline.totalEntries }}</td>
-              </tr>
-            </tbody>
-
-          </table>
+      </table>
+      <table ng-if="tab == 'dateTime'" class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Vitals</th>
+            <th>Orders</th>
+            <th>meds</th>
+            <th>Results</th>
+            <th>Treatments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="patient in patients" ng-click="go(patient)">
+            <td>{{ patient.name }}</td>
+            <td>{{ patient.vitalsHeadline.latestEntry }}</td>
+            <td>{{ patient.ordersHeadline.latestEntry }}</td>
+            <td>{{ patient.medsHeadline.latestEntry }}</td>
+            <td>{{ patient.resultsHeadline.latestEntry }}</td>
+            <td>{{ patient.treatmentsHeadline.latestEntry }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <table ng-if="tab == 'counts'" class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Notes</th>
+            <th>Vitals</th>
+            <th>Orders</th>
+            <th>Results</th>
+            <th>Treatments</th>
+            <th>Medications</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="patient in patients" ng-click="go(patient)">
+            <td>{{ patient.name }}</td>
+            <td>{{ patient.notesHeadline.totalEntries }}</td>
+            <td>{{ patient.vitalsHeadline.totalEntries }}</td>
+            <td>{{ patient.ordersHeadline.totalEntries }}</td>
+            <td>{{ patient.resultsHeadline.totalEntries }}</td>
+            <td>{{ patient.treatmentsHeadline.totalEntries }}</td>
+            <td>{{ patient.medsHeadline.totalEntries }}</td>
+          </tr>
+        </tbody>
+      </table>

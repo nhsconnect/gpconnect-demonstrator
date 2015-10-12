@@ -15,13 +15,15 @@
  */
 package org.rippleosi.patient.details.repo;
 
+import java.util.List;
+
 import org.rippleosi.patient.details.model.PatientEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface PatientRepository extends JpaRepository<PatientEntity, Long> {
+public interface PatientRepository extends PagingAndSortingRepository<PatientEntity, Long> {
 
-    @Query("SELECT patient FROM PatientEntity patient WHERE patient.nhsNumber=:patientId")
-    PatientEntity findByPatientId(@Param("patientId") String patientId);
+    PatientEntity findByNhsNumber(String nhsNumber);
+
+    List<PatientEntity> findPatientsByDepartmentDepartmentIgnoreCase(String department, Pageable pageable);
 }

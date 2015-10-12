@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.AbstractQueryStrategy;
 import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.search.common.model.RecordHeadline;
@@ -126,6 +127,12 @@ public class ReportTableQueryStrategy extends AbstractQueryStrategy<ReportTableR
         return results;
 
         // TODO - delete dummy data above and uncomment the line below
-//        return CollectionUtils.collect(resultSet, new ReportTablePatientDetailsTransformer(), new ArrayList<>());
+//        ReportTableResults results = new ReportTableResults();
+//        List<SearchTablePatientDetails> details = CollectionUtils.collect(resultSet,
+//                                                                          new ReportTablePatientDetailsTransformer(),
+//                                                                          new ArrayList<>());
+//        results.setPatientDetails(details);
+//        results.setTotalPatients(String.valueOf(details.size()));
+//        return results;
     }
 }

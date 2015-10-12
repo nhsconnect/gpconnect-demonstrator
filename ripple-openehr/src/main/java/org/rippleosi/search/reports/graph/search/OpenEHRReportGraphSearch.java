@@ -1,19 +1,20 @@
 package org.rippleosi.search.reports.graph.search;
 
-import org.rippleosi.common.service.AbstractOpenEhrService;
-import org.rippleosi.search.reports.graph.model.ReportGraphResults;
+import org.rippleosi.common.service.AbstractC4HReportingService;
 import org.rippleosi.search.reports.graph.model.ReportGraphQuery;
+import org.rippleosi.search.reports.graph.model.ReportGraphResults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OpenEHRReportGraphSearch extends AbstractOpenEhrService implements ReportGraphSearch {
+public class OpenEHRReportGraphSearch extends AbstractC4HReportingService implements ReportGraphSearch {
+
+    @Autowired
+    private ReportGraphQueryStrategy queryStrategy;
 
     @Override
     public ReportGraphResults findPatientDemographicsByQuery(ReportGraphQuery graphQuery) {
-        ReportGraphQueryStrategy queryStrategy = new ReportGraphQueryStrategy(graphQuery);
-        return queryStrategy.transform(null);
-
-        // TODO - delete the invocation of transform() and uncomment the line below
-//        return findData(queryStrategy);
+        queryStrategy.setGraphQuery(graphQuery);
+        return findChartData(queryStrategy);
     }
 }

@@ -24,8 +24,11 @@ import org.rippleosi.patient.details.repo.PatientRepository;
 import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.patient.summary.search.PatientSearch;
+import org.rippleosi.search.setting.table.model.SettingTableQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,19 +60,36 @@ public class LegacyPatientSearch implements PatientSearch {
 
     @Override
     public List<PatientSummary> findAllPatients() {
-        List<PatientEntity> patients = patientRepository.findAll();
+        Sort sort = new Sort("nhsNumber");
+        Iterable<PatientEntity> patients = patientRepository.findAll(sort);
         return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
     }
 
     @Override
     public PatientDetails findPatient(String patientId) {
-        PatientEntity patient = patientRepository.findByPatientId(patientId);
+        PatientEntity patient = patientRepository.findByNhsNumber(patientId);
         return patientEntityToDetailsTransformer.transform(patient);
     }
 
     @Override
     public PatientSummary findPatientSummary(String patientId) {
-        PatientEntity patient = patientRepository.findByPatientId(patientId);
+        PatientEntity patient = patientRepository.findByNhsNumber(patientId);
         return patientEntityToSummaryTransformer.transform(patient);
+    }
+
+    @Override
+    public List<PatientSummary> findAllPatientsByDepartment(SettingTableQuery tableQuery) {
+        // determine page number (zero indexed) and sort direction
+        Integer pageNumber = Integer.valueOf(tableQuery.getPageNumber()) - 1;
+        Sort.Direction sortDirection = Sort.Direction.fromString(tableQuery.getOrderType());
+
+        // create the request for a page (sorted by NHS number)
+        PageRequest pageRequest = new PageRequest(pageNumber, 15, sortDirection, "nhsNumber");
+
+        // find and return the data
+        List<PatientEntity> patients =
+            patientRepository.findPatientsByDepartmentDepartmentIgnoreCase(tableQuery.getSearchString(), pageRequest);
+
+        return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
     }
 }

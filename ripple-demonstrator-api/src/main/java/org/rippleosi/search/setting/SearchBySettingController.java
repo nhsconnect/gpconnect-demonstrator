@@ -1,5 +1,10 @@
 package org.rippleosi.search.setting;
 
+import java.util.List;
+
+import org.rippleosi.patient.summary.model.PatientSummary;
+import org.rippleosi.patient.summary.search.PatientSearch;
+import org.rippleosi.patient.summary.search.PatientSearchFactory;
 import org.rippleosi.search.setting.table.model.SettingTableQuery;
 import org.rippleosi.search.setting.table.model.SettingTableResults;
 import org.rippleosi.search.setting.table.search.SettingTableSearch;
@@ -16,12 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class SearchBySettingController {
 
     @Autowired
+    private PatientSearchFactory patientSearchFactory;
+
+    @Autowired
     private SettingTableSearchFactory settingTableSearchFactory;
 
     @RequestMapping(value = "/table", method = RequestMethod.POST)
-    public SettingTableResults getSettingTable(@RequestParam(required = false) String source,
+    public SettingTableResults getSettingTable(@RequestParam(required = false) String patientSource,
+                                               @RequestParam(required = false) String patientDataSource,
                                                @RequestBody SettingTableQuery tableQuery) {
-        SettingTableSearch search = settingTableSearchFactory.select(source);
-        return search.findAllPatientsByQuery(tableQuery);
+        PatientSearch patientSearch = patientSearchFactory.select(patientSource);
+        List<PatientSummary> patientSummaries = patientSearch.findAllPatientsByDepartment(tableQuery);
+
+        SettingTableSearch settingSearch = settingTableSearchFactory.select(patientDataSource);
+        return settingSearch.findAssociatedPatientData(patientSummaries);
     }
 }

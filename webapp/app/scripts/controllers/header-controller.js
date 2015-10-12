@@ -101,36 +101,74 @@ angular.module('rippleDemonstrator')
         return $scope.searchExpression.indexOf('rp ') === 0 ? true : false;
       };
 
+      $scope.containsSettingString = function () {
+        return $scope.searchExpression.lastIndexOf('st ') === 0 ? true : false;
+      };
+
+      $rootScope.searchMode = false;
       $rootScope.reportMode = false;
+      $rootScope.settingsMode = false;
+
       $scope.checkExpression = function () {
-        if ($rootScope.reportMode) {
-          $scope.reportTypes = [
+        if ($rootScope.searchMode) {
+          if ($rootScope.reportMode) {
+            $scope.reportTypes = [
       'Diagnosis: ',
       'Orders: '
     ];
+          }
         } else {
           $scope.reportTypes = '';
+          $rootScope.searchMode = ($scope.containsReportString() || $scope.containsSettingString());
           $rootScope.reportMode = $scope.containsReportString();
-          $scope.processReportMode();
+          $rootScope.settingsMode = $scope.containsSettingString();
+          if ($rootScope.reportMode) {
+            $scope.processReportMode();
+          }
+          if ($rootScope.settingsMode) {
+            $scope.processSettingMode();
+          }
         }
       };
 
-      $scope.cancelReportMode = function () {
+      $scope.cancelSearchMode = function () {
         $rootScope.reportMode = false;
+        $rootScope.searchMode = false;
+        $rootScope.settingsMode = false;
         $scope.searchExpression = '';
         $scope.reportTypes = '';
       };
 
-      $scope.searchReport = function () {
+      $scope.searchFunction = function () {
         if ($scope.reportMode && $scope.searchExpression !== '') {
           var tempExpression = $scope.searchExpression;
-          $rootScope.reportMode = true;
-          $state.go('search-report', { searchString: tempExpression });
+          $state.go('search-report', {
+            searchString: tempExpression
+          });
+        }
+         if ($scope.settingsMode && $scope.searchExpression !== '') {
+          var tempExpression = $scope.searchExpression;
+         $state.go('patients-list-full', {
+          queryType: 'Settings: ',
+          ageFrom: ageFr,
+          ageTo: ageT,
+          orderColumn: 'name',
+          orderType: 'ASC',
+          pageNumber: 1,
+          reportType: $scope.requestBody.reportType,
+          searchString: $scope.requestBody.searchString
+        });
         }
       };
 
       $scope.processReportMode = function () {
         if ($scope.searchExpression === 'rp ') {
+          $scope.searchExpression = '';
+        }
+      };
+
+      $scope.processSettingMode = function () {
+        if ($scope.searchExpression === 'st ') {
           $scope.searchExpression = '';
         }
       };

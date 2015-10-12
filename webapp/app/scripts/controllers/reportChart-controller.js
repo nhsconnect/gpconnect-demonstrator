@@ -3,6 +3,7 @@
 angular.module('rippleDemonstrator')
   .controller('ReportChartsCtrl', function ($scope, $rootScope, $window, $state, $stateParams, Report) {
 
+    $rootScope.searchMode = true;
     $rootScope.reportMode = true;
 
     var ageChart = function (graphData) {

@@ -605,7 +605,7 @@ legend {
 }
 
 .moveRight {
-  padding-left: 100px !important;
+  padding-left: 105px !important;
 }
 
 .search-left-inner-addon span {
@@ -638,8 +638,8 @@ i.clearAll {
 }
 
 .search-left-inner-addon i.fa.fa-times {
-  margin-top: -2px;
-  margin-left: 3px;
+  margin-top: -16px;
+  margin-left: 33px;
 }
 
 .search-left-inner-addon .form-control {

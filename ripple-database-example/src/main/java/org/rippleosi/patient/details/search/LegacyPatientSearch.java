@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.hibernate.annotations.NamedQuery;
-import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.patient.details.model.PatientEntity;
 import org.rippleosi.patient.details.repo.PatientRepository;
 import org.rippleosi.patient.summary.model.PatientDetails;
@@ -29,8 +27,6 @@ import org.rippleosi.patient.summary.search.PatientSearch;
 import org.rippleosi.search.setting.table.model.SettingTableQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -92,8 +88,7 @@ public class LegacyPatientSearch implements PatientSearch {
 
         // find and return the data
         List<PatientEntity> patients =
-            patientRepository.findPatientsByDepartmentDepartmentIgnoreCase(tableQuery.getSearchString(),
-                                                                           pageRequest);
+            patientRepository.findPatientsByDepartmentDepartmentIgnoreCase(tableQuery.getSearchString(), pageRequest);
 
         return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
     }

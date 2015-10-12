@@ -6,8 +6,9 @@ public class ReportGraphResults {
     private String agedElevenToEighteen;
     private String agedNineteenToThirty;
     private String agedThirtyOneToSixty;
-    private String agedSixtyToEighty;
+    private String agedSixtyOneToEighty;
     private String agedEightyPlus;
+    private String all;
 
     public String getSource() {
         return source;
@@ -41,12 +42,12 @@ public class ReportGraphResults {
         this.agedThirtyOneToSixty = agedThirtyOneToSixty;
     }
 
-    public String getAgedSixtyToEighty() {
-        return agedSixtyToEighty;
+    public String getAgedSixtyOneToEighty() {
+        return agedSixtyOneToEighty;
     }
 
-    public void setAgedSixtyToEighty(String agedSixtyToEighty) {
-        this.agedSixtyToEighty = agedSixtyToEighty;
+    public void setAgedSixtyOneToEighty(String agedSixtyOneToEighty) {
+        this.agedSixtyOneToEighty = agedSixtyOneToEighty;
     }
 
     public String getAgedEightyPlus() {
@@ -55,5 +56,13 @@ public class ReportGraphResults {
 
     public void setAgedEightyPlus(String agedEightyPlus) {
         this.agedEightyPlus = agedEightyPlus;
+    }
+
+    public String getAll() {
+        return all;
+    }
+
+    public void setAll(String all) {
+        this.all = all;
     }
 }

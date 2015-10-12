@@ -3,19 +3,24 @@
 angular.module('rippleDemonstrator')
   .controller('PatientsListFullCtrl', function ($scope, $rootScope, $state, $stateParams, Report) {
 
-      $scope.tab = 'patientInfo';
-      $scope.patients = [];
-      $rootScope.searchMode = true;
-      if ($stateParams.queryType === 'Setting: ') {
-        $rootScope.settingsMode = true;
-        $rootScope.reportMode = false;
-        $rootScope.subHeader = $stateParams.queryType + $stateParams.searchString;
-        var patientListQuery = {
-          searchString: $stateParams.searchString,
-          orderType: $stateParams.orderType,
-          pageNumber: $stateParams.pageNumber
-        }
-        Report.getSettingsTable(patientListQuery).then(function (result) {
+    $scope.pagingInfo = {
+      page: 1,
+      totalItems: 0,
+    };
+
+    $scope.tab = 'patientInfo';
+    $scope.patients = [];
+    $rootScope.searchMode = true;
+    if ($stateParams.queryType === 'Setting: ') {
+      $rootScope.settingsMode = true;
+      $rootScope.reportMode = false;
+      $rootScope.subHeader = $stateParams.queryType + $stateParams.searchString;
+      var patientListQuery = {
+        searchString: $stateParams.searchString,
+        orderType: $stateParams.orderType,
+        pageNumber: $stateParams.pageNumber
+      }
+      Report.getSettingsTable(patientListQuery).then(function (result) {
         $scope.patients = result.data.patientDetails;
         for (var i = 0; i < $scope.patients.length; i++) {
           $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].ordersHeadline.latestEntry));
@@ -23,7 +28,7 @@ angular.module('rippleDemonstrator')
           $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].resultsHeadline.latestEntry));
           $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].treatmentsHeadline.latestEntry));
         }
-        });
+      });
 
     } else {
       $rootScope.reportMode = true;
@@ -63,7 +68,8 @@ angular.module('rippleDemonstrator')
       return dateString.format('YYYY');
     }
 
-    $scope.order = $stateParams.order || 'name'; $scope.reverse = $stateParams.reverse === 'true';
+    $scope.order = $stateParams.order || 'name';
+    $scope.reverse = $stateParams.reverse === 'true';
 
     $scope.sort = function (field) {
       var reverse = $scope.reverse;
@@ -95,6 +101,10 @@ angular.module('rippleDemonstrator')
         return $scope.reverse ? 'sort-desc' : 'sort-asc';
       }
     };
+
+    $scope.$watch('pagingInfo.page', function (page) {
+        $scope.pagingInfo.page = page;
+    });
 
     $scope.go = function (patient) {
       $state.go('patients-summary', {

@@ -1925,6 +1925,11 @@ span.selectedTab {
 }
 
 .patient-details-tabs span.countsTab {
-  padding-right: 28px;
-  padding-left: 26px;
+  padding-right: 33px;
+  padding-left: 32px;
+}
+
+.patient-details-tabs span.patientInfoTab{
+  padding-right: 18px;
+  padding-left: 18px;
 }

@@ -5,7 +5,7 @@
       <i class="glyphicon glyphicon-list glyphicon-list-patients"></i> {{subHeader}}
     </div>
     <div class="col-md-5 col-sm-5 col-xs-12 patient-details-tabs">
-      <span ng-class="{'selectedTab': tab == 'patientInfo'}" ng-click="viewPatients()">Patient Info</span>
+      <span ng-class="{'selectedTab': tab == 'patientInfo'}" ng-click="viewPatients()" class="patientInfoTab">Patient Info</span>
       <span ng-class="{'selectedTab': tab == 'dateTime'}" ng-click="viewDateTime()">Date / Time</span>
       <span ng-class="{'selectedTab': tab == 'counts'}" ng-click="viewCounts()" class="countsTab">Counts</span>
     </div>
@@ -38,7 +38,7 @@
             <th>Name</th>
             <th>Vitals</th>
             <th>Orders</th>
-            <th>meds</th>
+            <th>Medications</th>
             <th>Results</th>
             <th>Treatments</th>
           </tr>
@@ -78,3 +78,14 @@
           </tr>
         </tbody>
       </table>
+
+      <uib-pagination boundary-links="true" total-items="pagingInfo.totalItems" ng-model="pagingInfo.page" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+
+      <pagination page="pagingInfo.page"
+                            total-items="pagingInfo.totalItems"
+                            previous-text="&lsaquo;" next-text="&rsaquo;"
+                            first-text="&laquo;" last-text="&raquo;"
+                            items-per-page="15"
+                            max-size="0"
+                            rotate="false"
+                            boundary-links="true" ng-model="pagingInfo.page"></pagination>

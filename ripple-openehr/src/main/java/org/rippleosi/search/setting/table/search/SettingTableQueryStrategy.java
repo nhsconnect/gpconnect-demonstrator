@@ -32,7 +32,6 @@ public class SettingTableQueryStrategy extends AbstractQueryStrategy<SettingTabl
                                                                           new SettingTablePatientDetailsTransformer(),
                                                                           new ArrayList<>());
         results.setPatientDetails(details);
-        results.setTotalPatients(String.valueOf(details.size()));
         return results;
     }
 }

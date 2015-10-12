@@ -78,6 +78,11 @@ public class LegacyPatientSearch implements PatientSearch {
     }
 
     @Override
+    public Integer findPatientCountByDepartment(String department) {
+        return patientRepository.countByDepartmentDepartmentIgnoreCase(department);
+    }
+
+    @Override
     public List<PatientSummary> findAllPatientsByDepartment(SettingTableQuery tableQuery) {
         // determine page number (zero indexed) and sort direction
         Integer pageNumber = Integer.valueOf(tableQuery.getPageNumber()) - 1;

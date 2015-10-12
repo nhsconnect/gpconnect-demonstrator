@@ -52,6 +52,11 @@ public class NotConfiguredPatientSearch implements PatientSearch {
     }
 
     @Override
+    public Integer findPatientCountByDepartment(String department) {
+        throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
+    }
+
+    @Override
     public List<PatientSummary> findAllPatientsByDepartment(SettingTableQuery tableQuery) {
         throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
     }

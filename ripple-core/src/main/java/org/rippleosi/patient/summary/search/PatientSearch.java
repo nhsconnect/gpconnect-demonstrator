@@ -32,5 +32,7 @@ public interface PatientSearch extends Repository {
 
     PatientSummary findPatientSummary(String patientId);
 
+    Integer findPatientCountByDepartment(String department);
+
     List<PatientSummary> findAllPatientsByDepartment(SettingTableQuery tableQuery);
 }

@@ -25,5 +25,7 @@ public interface PatientRepository extends PagingAndSortingRepository<PatientEnt
 
     PatientEntity findByNhsNumber(String nhsNumber);
 
+    Integer countByDepartmentDepartmentIgnoreCase(String department);
+
     List<PatientEntity> findPatientsByDepartmentDepartmentIgnoreCase(String department, Pageable pageable);
 }

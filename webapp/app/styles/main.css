@@ -1933,3 +1933,31 @@ span.selectedTab {
   padding-right: 18px;
   padding-left: 18px;
 }
+
+.pagination{
+
+}
+
+.pagination > li > a:hover{
+  color:  #6AB123;
+}
+
+.pagination >
+.active > a, .pagination >
+.active > span, .pagination >
+.active > a:hover, .pagination >
+.active > span:hover, .pagination >
+.active > a:focus, .pagination >
+.active > span:focus{
+  background:  #6AB123;
+}
+
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a, .pagination >
+.disabled > a:hover, .pagination >
+.disabled > a:focus{
+  background: transparent;
+
+}

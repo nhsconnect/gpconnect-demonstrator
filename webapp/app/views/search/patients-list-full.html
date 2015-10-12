@@ -79,13 +79,14 @@
         </tbody>
       </table>
 
-      <uib-pagination boundary-links="true" total-items="pagingInfo.totalItems" ng-model="pagingInfo.page" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
-
+      <div class="text-center">
       <pagination page="pagingInfo.page"
-                            total-items="pagingInfo.totalItems"
-                            previous-text="&lsaquo;" next-text="&rsaquo;"
-                            first-text="&laquo;" last-text="&raquo;"
-                            items-per-page="15"
-                            max-size="0"
-                            rotate="false"
-                            boundary-links="true" ng-model="pagingInfo.page"></pagination>
+                  total-items="pagingInfo.totalItems"
+                  previous-text="&lsaquo;" next-text="&rsaquo;"
+                  first-text="&laquo;" last-text="&raquo;"
+                  items-per-page="15"
+                  max-size="10"
+                  rotate="false"
+                  boundary-links="true"
+                  ng-model="pagingInfo.page"></pagination>
+      </div>

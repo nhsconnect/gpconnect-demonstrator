@@ -11,6 +11,9 @@ angular.module('rippleDemonstrator')
     $scope.tab = 'patientInfo';
     $scope.patients = [];
     $rootScope.searchMode = true;
+    getData();
+
+    function getData(){
     if ($stateParams.queryType === 'Setting: ') {
       $rootScope.settingsMode = true;
       $rootScope.reportMode = false;
@@ -24,10 +27,12 @@ angular.module('rippleDemonstrator')
         $scope.patients = result.data.patientDetails;
         for (var i = 0; i < $scope.patients.length; i++) {
           $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].ordersHeadline.latestEntry));
+          $scope.patients[i].vitalsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].vitalsHeadline.latestEntry));
           $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].medsHeadline.latestEntry));
           $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].resultsHeadline.latestEntry));
           $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].treatmentsHeadline.latestEntry));
         }
+        $scope.pagingInfo.totalItems = result.data.totalPatients;
       });
 
     } else {
@@ -48,11 +53,14 @@ angular.module('rippleDemonstrator')
         $scope.patients = result.data.patientDetails;
         for (var i = 0; i < $scope.patients.length; i++) {
           $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].ordersHeadline.latestEntry));
+          $scope.patients[i].vitalsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].vitalsHeadline.latestEntry));
           $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].medsHeadline.latestEntry));
           $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].resultsHeadline.latestEntry));
           $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].treatmentsHeadline.latestEntry));
         }
+        $scope.pagingInfo.totalItems = result.data.totalPatients;
       });
+    }
     }
 
     $scope.processDateFormat = function (dateString) {
@@ -104,6 +112,8 @@ angular.module('rippleDemonstrator')
 
     $scope.$watch('pagingInfo.page', function (page) {
         $scope.pagingInfo.page = page;
+        $stateParams.pageNumber = page;
+        getData();
     });
 
     $scope.go = function (patient) {

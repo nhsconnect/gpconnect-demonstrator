@@ -20,6 +20,7 @@ import java.util.List;
 import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientSummary;
+import org.rippleosi.search.setting.table.model.SettingTableQuery;
 
 /**
  */
@@ -47,6 +48,11 @@ public class NotConfiguredPatientSearch implements PatientSearch {
 
     @Override
     public PatientSummary findPatientSummary(String patientId) {
+        throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
+    }
+
+    @Override
+    public List<PatientSummary> findAllPatientsByDepartment(SettingTableQuery tableQuery) {
         throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
     }
 }

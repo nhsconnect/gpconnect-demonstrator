@@ -54,7 +54,7 @@ public class LegacyTransferStore implements TransferOfCareStore {
     @Override
     @Consume(uri = "activemq:topic:VirtualTopic.Ripple.Transfers.Create")
     public void create(@Header("patientId") String patientId, @Body TransferOfCareDetails transferOfCare) {
-        PatientEntity patientEntity = patientRepository.findByPatientId(patientId);
+        PatientEntity patientEntity = patientRepository.findByNhsNumber(patientId);
 
         TransferOfCareEntity transferEntity = new TransferDetailsToEntityTransformer().transform(transferOfCare);
         transferEntity.setPatient(patientEntity);

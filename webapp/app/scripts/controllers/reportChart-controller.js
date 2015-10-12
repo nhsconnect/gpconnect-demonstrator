@@ -5,10 +5,11 @@ angular.module('rippleDemonstrator')
 
     $rootScope.searchMode = true;
     $rootScope.reportMode = true;
+    $scope.resultSize = 0;
 
     var ageChart = function (graphData) {
       $window.Morris.Bar({
-      element: 'age-chart',
+        element: 'age-chart',
         resize: true,
         data: graphData,
         ykeys: ['value'],
@@ -26,10 +27,10 @@ angular.module('rippleDemonstrator')
         var ageFr = 0;
         var ageT = 0;
 
-        if (ageArr.length === 2){
+        if (ageArr.length === 2) {
           ageFr = ageArr[0];
           ageT = ageArr[1];
-        }else {
+        } else {
           ageFr = 80;
           ageT = 130;
         }
@@ -47,32 +48,49 @@ angular.module('rippleDemonstrator')
       });
     };
 
-    if ($stateParams.searchString !== undefined){
+    if ($stateParams.searchString !== undefined) {
       var searchQuery = $stateParams.searchString.split(':');
       $scope.reportType = searchQuery[0];
       $scope.searchString = searchQuery[1];
 
-      if (searchQuery.length === 1){
+      if (searchQuery.length === 1) {
         $state.go('patients-charts');
       }
 
       $scope.requestBody = {
-      reportType: searchQuery[0],
-      searchString: searchQuery[1]
-    }
+        reportType: searchQuery[0],
+        searchString: searchQuery[1]
+      }
 
       Report.getChart($scope.requestBody).then(function (chartData) {
         var graphData = [
-      { series: '11-18', value: chartData.data.agedElevenToEighteen },
-      { series: '19-30', value: chartData.data.agedNineteenToThirty },
-      { series: '31-60', value: chartData.data.agedThirtyOneToSixty },
-      { series: '61-80', value: chartData.data.agedSixtyOneToEighty },
-      { series: '>80', value: chartData.data.agedEightyPlus }
+          {
+            series: '11-18',
+            value: chartData.data.agedElevenToEighteen
+          },
+          {
+            series: '19-30',
+            value: chartData.data.agedNineteenToThirty
+          },
+          {
+            series: '31-60',
+            value: chartData.data.agedThirtyOneToSixty
+          },
+          {
+            series: '61-80',
+            value: chartData.data.agedSixtyOneToEighty
+          },
+          {
+            series: '>80',
+            value: chartData.data.agedEightyPlus
+          }
       ];
-
-        ageChart(graphData);
+        $scope.resultSize = chartData.data.all;
+        if ($scope.resultSize !== 0) {
+          ageChart(graphData);
+        }
       })
-    }else {
+    } else {
       $state.go('patients-charts');
     }
 

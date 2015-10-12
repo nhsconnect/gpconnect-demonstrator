@@ -87,7 +87,7 @@
       </div>
     </div>
 
-      <div ng-if="pagingInfo.totalItems == 0">
+      <div ng-show="pagingInfo.totalItems == 0" ng-cloak class="ng-cloak" >
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div class="no-results">There are no results that match your search criteria</div>
         </div>

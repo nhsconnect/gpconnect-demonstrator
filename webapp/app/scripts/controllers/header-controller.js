@@ -149,14 +149,10 @@ angular.module('rippleDemonstrator')
          if ($scope.settingsMode && $scope.searchExpression !== '') {
           var tempExpression = $scope.searchExpression;
          $state.go('patients-list-full', {
-          queryType: 'Settings: ',
-          ageFrom: ageFr,
-          ageTo: ageT,
-          orderColumn: 'name',
+          queryType: 'Setting: ',
+          searchString: $scope.searchExpression,
           orderType: 'ASC',
-          pageNumber: 1,
-          reportType: $scope.requestBody.reportType,
-          searchString: $scope.requestBody.searchString
+          pageNumber: '1'
         });
         }
       };

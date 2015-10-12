@@ -3,47 +3,67 @@
 angular.module('rippleDemonstrator')
   .controller('PatientsListFullCtrl', function ($scope, $rootScope, $state, $stateParams, Report) {
 
-    $scope.patients = [];
-    $rootScope.reportMode = true;
+      $scope.tab = 'patientInfo';
+      $scope.patients = [];
+      $rootScope.searchMode = true;
+      if ($stateParams.queryType === 'Setting: ') {
+        $rootScope.settingsMode = true;
+        $rootScope.reportMode = false;
+        $rootScope.subHeader = $stateParams.queryType + $stateParams.searchString;
+        var patientListQuery = {
+          searchString: $stateParams.searchString,
+          orderType: $stateParams.orderType,
+          pageNumber: $stateParams.pageNumber
+        }
+        Report.getSettingsTable(patientListQuery).then(function (result) {
+        $scope.patients = result.data.patientDetails;
+        for (var i = 0; i < $scope.patients.length; i++) {
+          $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].ordersHeadline.latestEntry));
+          $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].medsHeadline.latestEntry));
+          $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].resultsHeadline.latestEntry));
+          $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].treatmentsHeadline.latestEntry));
+        }
+        });
 
-    var patientListQuery = {
-      ageFrom: $stateParams.ageFrom,
-      ageTo: $stateParams.ageTo,
-      orderColumn: $stateParams.orderColumn,
-      orderType: $stateParams.orderType,
-      pageNumber: $stateParams.pageNumber,
-      reportType: $stateParams.reportType,
-      searchString: $stateParams.searchString
+    } else {
+      $rootScope.reportMode = true;
+      $rootScope.settingsMode = false;
+      $scope.subHeader = $stateParams.queryType + $stateParams.reportType + ': ' + $stateParams.searchString + ' & Aged ' + $stateParams.ageFrom + ' to ' + $stateParams.ageTo;
+
+      var patientListQuery = {
+        ageFrom: $stateParams.ageFrom,
+        ageTo: $stateParams.ageTo,
+        orderType: $stateParams.orderType,
+        pageNumber: $stateParams.pageNumber,
+        reportType: $stateParams.reportType,
+        searchString: $stateParams.searchString
+      }
+
+      Report.getTable(patientListQuery).then(function (result) {
+        $scope.patients = result.data.patientDetails;
+        for (var i = 0; i < $scope.patients.length; i++) {
+          $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].ordersHeadline.latestEntry));
+          $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].medsHeadline.latestEntry));
+          $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].resultsHeadline.latestEntry));
+          $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].treatmentsHeadline.latestEntry));
+        }
+      });
     }
 
-    $scope.subHeader = $stateParams.queryType + $stateParams.reportType + ': ' + $stateParams.searchString + ' & Aged ' + $stateParams.ageFrom + ' to ' + $stateParams.ageTo;
-    $scope.tab = 'patientInfo';
-
-    Report.getTable(patientListQuery).then(function (result) {
-      $scope.patients = result.data.patientDetails;
-      for (var i = 0; i < $scope.patients.length; i++) {
-        $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].ordersHeadline.latestEntry));
-        $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].medsHeadline.latestEntry));
-        $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].resultsHeadline.latestEntry));
-        $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].treatmentsHeadline.latestEntry));
-      }
-    });
-
     $scope.processDateFormat = function (dateString) {
-      if (moment().diff(dateString, 'days') < 1){
+      if (moment().diff(dateString, 'days') < 1) {
         return dateString.format('h:mm a');
       }
-      if (moment().startOf('year') <= dateString){
+      if (moment().startOf('year') <= dateString) {
         return dateString.format('DD-MMM');
       }
-      if (moment().startOf('year').subtract(1, 'year') < dateString){
+      if (moment().startOf('year').subtract(1, 'year') < dateString) {
         return dateString.format('MMM-YY');
       }
       return dateString.format('YYYY');
     }
 
-    $scope.order = $stateParams.order || 'name';
-    $scope.reverse = $stateParams.reverse === 'true';
+    $scope.order = $stateParams.order || 'name'; $scope.reverse = $stateParams.reverse === 'true';
 
     $scope.sort = function (field) {
       var reverse = $scope.reverse;

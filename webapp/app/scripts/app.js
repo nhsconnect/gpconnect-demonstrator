@@ -26,7 +26,7 @@ angular
       })
 
       .state('patients-list-full', {
-        url: '/patients-full-details?ageFrom&ageTo&orderColumn&orderType&pageNumber&reportType&searchString&queryType',
+        url: '/patients-full-details?ageFrom&ageTo&orderType&pageNumber&reportType&searchString&queryType',
         views: {
           main: { templateUrl: 'views/search/patients-list-full.html', controller: 'PatientsListFullCtrl' }
         }

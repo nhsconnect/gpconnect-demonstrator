@@ -7,13 +7,18 @@ angular.module('rippleDemonstrator')
       return $http.post('/api/search/reports/table', searchBody);
     };
 
+    var getSettingsTable = function (searchBody) {
+      return $http.post('/api/search/setting/table', searchBody);
+    };
+
     var getChart = function (searchString) {
       return $http.post('/api/search/reports/chart', searchString);
     };
 
     return {
       getChart: getChart,
-      getTable: getTable
+      getTable: getTable,
+      getSettingsTable: getSettingsTable
     };
 
   });

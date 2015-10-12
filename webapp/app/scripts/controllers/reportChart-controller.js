@@ -66,7 +66,7 @@ angular.module('rippleDemonstrator')
       { series: '11-18', value: chartData.data.agedElevenToEighteen },
       { series: '19-30', value: chartData.data.agedNineteenToThirty },
       { series: '31-60', value: chartData.data.agedThirtyOneToSixty },
-      { series: '61-80', value: chartData.data.agedSixtyToEighty },
+      { series: '61-80', value: chartData.data.agedSixtyOneToEighty },
       { series: '>80', value: chartData.data.agedEightyPlus }
       ];
 

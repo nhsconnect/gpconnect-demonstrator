@@ -35,6 +35,7 @@ angular.module('rippleDemonstrator')
           }
           $scope.pagingInfo.totalItems = result.data.totalPatients;
           $scope.pagingInfo.orderType = $stateParams.orderType;
+          $scope.pagingInfo.page =  $stateParams.pageNumber;
         });
 
       } else {
@@ -62,6 +63,7 @@ angular.module('rippleDemonstrator')
           }
           $scope.pagingInfo.totalItems = result.data.totalPatients;
           $scope.pagingInfo.orderType = $stateParams.orderType;
+          $scope.pagingInfo.page =  $stateParams.pageNumber;
         });
       }
     }
@@ -76,6 +78,7 @@ angular.module('rippleDemonstrator')
       } else {
         $stateParams.orderType = 'ASC';
       }
+      $stateParams.pageNumber = 1;
       getData();
     }
 

@@ -105,9 +105,14 @@ angular.module('rippleDemonstrator')
         return $scope.searchExpression.lastIndexOf('st ') === 0 ? true : false;
       };
 
+      $scope.containsPatientString = function () {
+        return $scope.searchExpression.lastIndexOf('pt ') === 0 ? true : false;
+      };
+
       $rootScope.searchMode = false;
       $rootScope.reportMode = false;
       $rootScope.settingsMode = false;
+      $rootScope.patientMode = false;
 
       $scope.checkExpression = function () {
         if ($rootScope.searchMode) {
@@ -119,14 +124,18 @@ angular.module('rippleDemonstrator')
           }
         } else {
           $scope.reportTypes = '';
-          $rootScope.searchMode = ($scope.containsReportString() || $scope.containsSettingString());
+          $rootScope.searchMode = ($scope.containsReportString() || $scope.containsSettingString() || $scope.containsPatientString());
           $rootScope.reportMode = $scope.containsReportString();
           $rootScope.settingsMode = $scope.containsSettingString();
+          $rootScope.patientMode = $scope.containsPatientString();
           if ($rootScope.reportMode) {
             $scope.processReportMode();
           }
           if ($rootScope.settingsMode) {
             $scope.processSettingMode();
+          }
+          if ($rootScope.patientMode) {
+            $scope.processPatientMode();
           }
         }
       };
@@ -134,6 +143,7 @@ angular.module('rippleDemonstrator')
       $scope.cancelSearchMode = function () {
         $rootScope.reportMode = false;
         $rootScope.searchMode = false;
+        $rootScope.patientMode = false;
         $rootScope.settingsMode = false;
         $scope.searchExpression = '';
         $scope.reportTypes = '';
@@ -146,14 +156,23 @@ angular.module('rippleDemonstrator')
             searchString: tempExpression
           });
         }
-         if ($scope.settingsMode && $scope.searchExpression !== '') {
+        if ($scope.settingsMode && $scope.searchExpression !== '') {
           var tempExpression = $scope.searchExpression;
-         $state.go('patients-list-full', {
-          queryType: 'Setting: ',
-          searchString: $scope.searchExpression,
-          orderType: 'ASC',
-          pageNumber: '1'
-        });
+          $state.go('patients-list-full', {
+            queryType: 'Setting: ',
+            searchString: $scope.searchExpression,
+            orderType: 'ASC',
+            pageNumber: '1'
+          });
+        }
+        if ($scope.patientMode && $scope.searchExpression !== '') {
+          var tempExpression = $scope.searchExpression;
+          $state.go('patients-list-full', {
+            queryType: 'Patient: ',
+            searchString: $scope.searchExpression,
+            orderType: 'ASC',
+            pageNumber: '1'
+          });
         }
       };
 
@@ -168,6 +187,13 @@ angular.module('rippleDemonstrator')
           $scope.searchExpression = '';
         }
       };
+
+      $scope.processPatientMode = function () {
+        if ($scope.searchExpression === 'pt ') {
+          $scope.searchExpression = '';
+        }
+      };
+
 
       $scope.pageHeader = pageHeader;
       $scope.previousState = previousState;

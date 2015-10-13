@@ -155,6 +155,7 @@
         <div ng-show="searchMode" class="ng-cloak" ng-cloak><span ng-cloak ng-show="searchMode" class="label ng-cloak report-label">
           <div ng-if="reportMode">Reports&nbsp;</div>
           <div ng-if="settingsMode">Setting&nbsp;</div>
+          <div ng-if="patientMode">Patients&nbsp;</div>
           <i ng-show="searchMode" ng-click="cancelSearchMode()" class="fa fa-times"></i></span></div>
         <div><i ng-show="searchExpression !== '' || searchMode" ng-click="cancelSearchMode()" class="clearAll fa fa-times-circle"></i></div>
         <input class="form-control" placeholder="Search..." type="text" typeahead="report for report in reportTypes | filter:$viewValue" ng-model="searchExpression" ng-keyup="checkExpression()" ng-trim="false" ng-class="{moveRight: searchMode}" />

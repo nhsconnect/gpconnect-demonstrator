@@ -1938,17 +1938,13 @@ span.selectedTab {
   border: 1px solid #CCCCCC;
 }
 
-.pagination > li > a {
+.pagination > li > a,
+.pagination > li > a:hover{
   background-color: #EDF6E3;
   color: #030303;
   text-decoration: underline;
   border: 1px solid #CCCCCC;
-}
-
-.pagination > li > a:hover {
-  background-color: #EDF6E3;
-  color: #030303;
-  text-decoration: underline;
+  font-weight: normal;
 }
 
 .pagination > .active > a,
@@ -1959,8 +1955,8 @@ span.selectedTab {
 .pagination > .active > span:focus {
   background-color: #EDF6E3;
   color: #030303;
-  font-weight: bold;
-  text-decoration: underline;
+  font-weight: bolder;
+  text-decoration: none;
   border: 1px solid #CCCCCC;
 }
 

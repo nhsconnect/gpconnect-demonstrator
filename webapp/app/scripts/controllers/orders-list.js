@@ -16,10 +16,10 @@ angular.module('rippleDemonstrator')
     });
 
     Order.all($stateParams.patientId).then(function (result) {
-      $scope.orders = result.data;
+      $scope.orders = result.data.reverse();
 
       for (var i = 0; i < $scope.orders.length; i++) {
-        $scope.orders[i].orderDate = moment($scope.orders[i].orderDate).format('DD-MMM-YYYY');
+        $scope.orders[i].orderDate = moment($scope.orders[i].orderDate).format('DD-MMM-YYYY h:mm a');
       }
     });
 

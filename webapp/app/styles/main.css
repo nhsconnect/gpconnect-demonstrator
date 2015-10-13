@@ -1934,10 +1934,20 @@ span.selectedTab {
   padding-left: 18px;
 }
 
-.pagination {}
+.pagination {
+  border: 1px solid #CCCCCC;
+}
+
+.pagination > li > a {
+  background-color: #EDF6E3;
+  color: #030303;
+  text-decoration: underline;
+}
 
 .pagination > li > a:hover {
-  color: #6AB123;
+  background-color: #EDF6E3;
+  color: #030303;
+  text-decoration: underline;
 }
 
 .pagination > .active > a,
@@ -1946,7 +1956,10 @@ span.selectedTab {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-  background: #6AB123;
+  background-color: #EDF6E3;
+  color: #030303;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 .pagination > .disabled > span,
@@ -1955,11 +1968,24 @@ span.selectedTab {
 .pagination > .disabled > a,
 .pagination > .disabled > a:hover,
 .pagination > .disabled > a:focus {
-  background: transparent;
+  background-color: #EDF6E3;
+  text-decoration: underline;
 }
 
 .no-results {
   text-align: center;
   font-size: 20px;
   font-weight: bold;
+}
+
+.pagination > li:first-child > a,
+.pagination > li:first-child > span,
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  background-color: white;
+  text-decoration: none;
+}
+
+.orderDateTime {
+  width:20%;
 }

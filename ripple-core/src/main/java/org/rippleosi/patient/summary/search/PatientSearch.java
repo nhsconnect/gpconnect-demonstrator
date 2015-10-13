@@ -20,6 +20,7 @@ import java.util.List;
 import org.rippleosi.common.repo.Repository;
 import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientSummary;
+import org.rippleosi.search.patient.table.model.PatientTableQuery;
 import org.rippleosi.search.setting.table.model.SettingTableQuery;
 
 /**
@@ -29,6 +30,10 @@ public interface PatientSearch extends Repository {
     List<PatientSummary> findAllPatients();
 
     PatientDetails findPatient(String patientId);
+
+    List<PatientSummary> findPatientsByQuery(PatientTableQuery tableQuery);
+
+    Integer countPatientsByQuery(PatientTableQuery tableQuery);
 
     PatientSummary findPatientSummary(String patientId);
 

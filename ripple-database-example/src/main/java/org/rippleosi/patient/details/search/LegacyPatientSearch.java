@@ -16,19 +16,24 @@
 package org.rippleosi.patient.details.search;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.rippleosi.patient.details.model.PatientEntity;
 import org.rippleosi.patient.details.repo.PatientRepository;
 import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.patient.summary.search.PatientSearch;
+import org.rippleosi.search.patient.table.model.AbstractPageableTableQuery;
+import org.rippleosi.search.patient.table.model.PatientTableQuery;
 import org.rippleosi.search.setting.table.model.SettingTableQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,6 +77,58 @@ public class LegacyPatientSearch implements PatientSearch {
     }
 
     @Override
+    public List<PatientSummary> findPatientsByQuery(PatientTableQuery tableQuery) {
+        List<PatientEntity> patients =
+            patientRepository.findDistinctByFirstNameOrLastNameOrDateOfBirthAllIgnoreCase(tableQuery.getFirstName(),
+                                                                                          tableQuery.getLastName(),
+                                                                                          tableQuery.getDateOfBirth(),
+                                                                                          generatePageRequest(tableQuery));
+
+        List<PatientEntity> filtered = filterPatients(patients, tableQuery);
+        return CollectionUtils.collect(filtered, patientEntityToSummaryTransformer, new ArrayList<>());
+    }
+
+    @Override
+    public Integer countPatientsByQuery(PatientTableQuery tableQuery) {
+        List<PatientEntity> patients =
+            patientRepository.findDistinctByFirstNameOrLastNameOrDateOfBirthAllIgnoreCase(tableQuery.getFirstName(),
+                                                                                          tableQuery.getLastName(),
+                                                                                          tableQuery.getDateOfBirth());
+        List<PatientEntity> filtered = filterPatients(patients, tableQuery);
+        return filtered.size();
+    }
+
+    private List<PatientEntity> filterPatients(List<PatientEntity> patients, PatientTableQuery tableQuery) {
+        String firstName = tableQuery.getFirstName();
+        String lastName = tableQuery.getLastName();
+        Date dateOfBirth = tableQuery.getDateOfBirth();
+
+        List<PatientEntity> filtered = new ArrayList<>();
+
+        for (PatientEntity patient : patients) {
+            boolean firstNameEqual = true;
+            boolean lastNameEqual = true;
+            boolean dateOfBirthEqual = true;
+
+            if (firstName != null && !firstName.equals("")) {
+                firstNameEqual = patient.getFirstName().equals(firstName);
+            }
+            if (lastName != null && !lastName.equals("")) {
+                lastNameEqual = patient.getLastName().equals(lastName);
+            }
+            if (dateOfBirth != null) {
+                dateOfBirthEqual = DateUtils.isSameDay(patient.getDateOfBirth(), dateOfBirth);
+            }
+
+            if (firstNameEqual && lastNameEqual && dateOfBirthEqual) {
+                filtered.add(patient);
+            }
+        }
+
+        return filtered;
+    }
+
+    @Override
     public PatientSummary findPatientSummary(String patientId) {
         PatientEntity patient = patientRepository.findByNhsNumber(patientId);
         return patientEntityToSummaryTransformer.transform(patient);
@@ -84,17 +141,19 @@ public class LegacyPatientSearch implements PatientSearch {
 
     @Override
     public List<PatientSummary> findAllPatientsByDepartment(SettingTableQuery tableQuery) {
-        // determine page number (zero indexed) and sort direction
-        Integer pageNumber = Integer.valueOf(tableQuery.getPageNumber()) - 1;
-        Sort.Direction sortDirection = Sort.Direction.fromString(tableQuery.getOrderType());
-
-        // create the request for a page (sorted by NHS number)
-        PageRequest pageRequest = new PageRequest(pageNumber, 15, sortDirection, "nhsNumber");
-
-        // find and return the data
         List<PatientEntity> patients =
-            patientRepository.findPatientsByDepartmentDepartmentIgnoreCase(tableQuery.getSearchString(), pageRequest);
+            patientRepository.findPatientsByDepartmentDepartmentIgnoreCase(tableQuery.getSearchString(),
+                                                                           generatePageRequest(tableQuery));
 
         return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
+    }
+
+    private PageRequest generatePageRequest(AbstractPageableTableQuery tableQuery) {
+        // determine page number (zero indexed) and sort direction
+        Integer pageNumber = Integer.valueOf(tableQuery.getPageNumber()) - 1;
+        Direction sortDirection = Direction.fromString(tableQuery.getOrderType());
+
+        // create the request for a page (sorted by NHS number)
+        return new PageRequest(pageNumber, 15, sortDirection, "nhsNumber");
     }
 }

@@ -52,11 +52,11 @@ angular.module('rippleDemonstrator')
       Report.getTable(patientListQuery).then(function (result) {
         $scope.patients = result.data.patientDetails;
         for (var i = 0; i < $scope.patients.length; i++) {
-          $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].ordersHeadline.latestEntry));
-          $scope.patients[i].vitalsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].vitalsHeadline.latestEntry));
-          $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].medsHeadline.latestEntry));
-          $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].resultsHeadline.latestEntry));
-          $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].treatmentsHeadline.latestEntry));
+          $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].ordersHeadline.latestEntry);
+          $scope.patients[i].vitalsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].vitalsHeadline.latestEntry);
+          $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].medsHeadline.latestEntry);
+          $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].resultsHeadline.latestEntry);
+          $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].treatmentsHeadline.latestEntry);
         }
         $scope.pagingInfo.totalItems = result.data.totalPatients;
       });
@@ -64,6 +64,10 @@ angular.module('rippleDemonstrator')
     }
 
     $scope.processDateFormat = function (dateString) {
+      if(dateString === null) {
+        return 'N/A';
+      }
+      dateString = moment(dateString);
       if (moment().diff(dateString, 'days') < 1) {
         return dateString.format('h:mm a');
       }

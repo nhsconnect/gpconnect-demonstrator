@@ -1942,6 +1942,7 @@ span.selectedTab {
   background-color: #EDF6E3;
   color: #030303;
   text-decoration: underline;
+  border: 1px solid #CCCCCC;
 }
 
 .pagination > li > a:hover {
@@ -1960,16 +1961,18 @@ span.selectedTab {
   color: #030303;
   font-weight: bold;
   text-decoration: underline;
+  border: 1px solid #CCCCCC;
 }
 
 .pagination > .disabled > span,
 .pagination > .disabled > span:hover,
 .pagination > .disabled > span:focus,
-.pagination > .disabled > a,
 .pagination > .disabled > a:hover,
-.pagination > .disabled > a:focus {
+.pagination > .disabled > a:focus,
+.pagination > .disabled > a {
   background-color: #EDF6E3;
   text-decoration: underline;
+  color: #030303;
 }
 
 .no-results {
@@ -1979,11 +1982,17 @@ span.selectedTab {
 }
 
 .pagination > li:first-child > a,
+.pagination > li:first-child > a .active,
+.pagination > li:first-child > a .disabled,
 .pagination > li:first-child > span,
 .pagination > li:last-child > a,
-.pagination > li:last-child > span {
+.pagination > li:last-child > a .active,
+.pagination > li:last-child > a .disabled,
+.pagination > li:last-child > span
+{
   background-color: white;
   text-decoration: none;
+  color: #030303;
 }
 
 .orderDateTime {

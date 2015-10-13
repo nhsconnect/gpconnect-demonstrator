@@ -18,6 +18,7 @@ angular.module('rippleDemonstrator')
       if ($stateParams.queryType === 'Setting: ') {
         $rootScope.settingsMode = true;
         $rootScope.reportMode = false;
+        $rootScope.patientMode = false;
         $rootScope.subHeader = $stateParams.queryType + $stateParams.searchString;
         var patientListQuery = {
           searchString: $stateParams.searchString,
@@ -38,9 +39,10 @@ angular.module('rippleDemonstrator')
           $scope.pagingInfo.page =  $stateParams.pageNumber;
         });
 
-      } else {
+      } else if($stateParams.queryType === 'Reports: '){
         $rootScope.reportMode = true;
         $rootScope.settingsMode = false;
+        $rootScope.patientMode = false;
         $scope.subHeader = $stateParams.queryType + $stateParams.reportType + ': ' + $stateParams.searchString + ' & Aged ' + $stateParams.ageFrom + ' to ' + $stateParams.ageTo;
 
         var patientListQuery = {
@@ -65,6 +67,12 @@ angular.module('rippleDemonstrator')
           $scope.pagingInfo.orderType = $stateParams.orderType;
           $scope.pagingInfo.page =  $stateParams.pageNumber;
         });
+      }
+      else {
+        $rootScope.reportMode = false;
+        $rootScope.settingsMode = false;
+        $rootScope.patientMode = true;
+
       }
     }
 

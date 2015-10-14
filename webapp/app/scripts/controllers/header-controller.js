@@ -127,7 +127,7 @@ angular.module('rippleDemonstrator')
 
       $scope.checkExpression = function () {
         if ($rootScope.searchMode) {
-          if ($rootScope.reportMode) {
+          if ($rootScope.reportMode && !$rootScope.reportTypeSet) {
             $scope.reportTypes = [
       'Diagnosis: ',
       'Orders: '
@@ -138,7 +138,7 @@ angular.module('rippleDemonstrator')
             $scope.processReportTypeMode();
             }
         } else {
-          $scope.reportTypes = '';
+          $scope.reportTypes = [];
           $rootScope.searchMode = ($scope.containsReportString() || $scope.containsSettingString() || $scope.containsPatientString());
           $rootScope.reportMode = $scope.containsReportString();
           $rootScope.settingsMode = $scope.containsSettingString();
@@ -176,7 +176,7 @@ angular.module('rippleDemonstrator')
 
       $scope.searchFunction = function () {
         if ($scope.reportMode && $scope.searchExpression !== '') {
-          var tempExpression = $scope.searchExpression;
+          var tempExpression = $rootScope.reportTypeString + ': ' + $scope.searchExpression;
           $state.go('search-report', {
             searchString: tempExpression
           });

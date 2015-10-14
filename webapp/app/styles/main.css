@@ -608,7 +608,7 @@ legend {
   padding-left: 105px !important;
 }
 
-.moveFurtherRight{
+.moveFurtherRight {
   padding-left: 210px !important;
 }
 
@@ -2012,6 +2012,10 @@ span.selectedTab {
 }
 
 i.fa.cancel-reportType.fa-times {
-    margin-left: 4px;
-    margin-top: -2px;
+  margin-left: 4px;
+  margin-top: -2px;
+}
+
+.dateCountTable th {
+  width: 15%;
 }

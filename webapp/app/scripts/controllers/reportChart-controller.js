@@ -5,6 +5,7 @@ angular.module('rippleDemonstrator')
 
     $rootScope.searchMode = true;
     $rootScope.reportMode = true;
+    $rootScope.reportTypeSet = true;
     $scope.resultSize = 0;
 
     var ageChart = function (graphData) {
@@ -52,6 +53,7 @@ angular.module('rippleDemonstrator')
       var searchQuery = $stateParams.searchString.split(':');
       $scope.reportType = searchQuery[0];
       $scope.searchString = searchQuery[1];
+      $rootScope.reportTypeString = $scope.reportType;
 
       if (searchQuery.length === 1) {
         $state.go('patients-charts');

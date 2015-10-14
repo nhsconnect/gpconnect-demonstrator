@@ -152,17 +152,26 @@
 
     <div class="col-md-4 col-sm-4 hidden-xs header-search ng-cloak" ng-cloak>
       <div class="search-left-inner-addon">
-        <div ng-show="searchMode" class="ng-cloak" ng-cloak><span ng-cloak ng-show="searchMode" class="label ng-cloak report-label">
+        <div ng-show="searchMode" class="ng-cloak" ng-cloak>
+          <span ng-cloak ng-show="searchMode" class="label ng-cloak report-label">
           <div ng-if="reportMode">Reports&nbsp;</div>
           <div ng-if="settingsMode">Setting&nbsp;</div>
           <div ng-if="patientMode">Patients&nbsp;</div>
-          <i ng-show="searchMode" ng-click="cancelSearchMode()" class="fa fa-times"></i></span></div>
+          <i ng-show="searchMode" ng-click="cancelSearchMode()" class="fa fa-times"></i></span>
+        </div>
+        <div ng-show="reportTypeSet" class="ng-cloak" ng-cloak>
+          <span ng-cloak ng-show="reportTypeSet" class="label ng-cloak reportType-label">
+          <div ng-if="reportTypeSet" class="reportTypeSet">
+            {{reportTypeString}}&nbsp;
+            <i ng-show="reportTypeSet" ng-click="cancelReportType()" class="fa cancel-reportType fa-times"></i>
+          </div>
+          </span>
+        </div>
         <div><i ng-show="searchExpression !== '' || searchMode" ng-click="cancelSearchMode()" class="clearAll fa fa-times-circle"></i></div>
-        <input class="form-control" placeholder="Search..." type="text" typeahead="report for report in reportTypes | filter:$viewValue" ng-model="searchExpression" ng-keyup="checkExpression()" ng-trim="false" ng-class="{moveRight: searchMode}" />
+        <input class="form-control" placeholder="Search..." type="text" typeahead="report for report in reportTypes | filter:$viewValue" ng-model="searchExpression" ng-keyup="checkExpression()" ng-trim="false" ng-class="{'moveRight': searchMode && !reportTypeSet, 'moveFurtherRight': searchMode && reportTypeSet}" />
       </div>
       <button class="btn btn-info searchButton" ng-click="searchFunction();"><i class="fa fa-search"></i> Search</button>
     </div>
-
     <div class="col-md-offset-1 col-sm-offset-1 col-md-3 col-sm-4 header-right">
       <!-- User Profile -->
       <div class="collapse navbar-collapse">

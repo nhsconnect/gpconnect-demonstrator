@@ -608,6 +608,10 @@ legend {
   padding-left: 105px !important;
 }
 
+.moveFurtherRight{
+  padding-left: 210px !important;
+}
+
 .search-left-inner-addon span {
   position: absolute;
   padding: 6px 15px;
@@ -638,8 +642,9 @@ i.clearAll {
 }
 
 .search-left-inner-addon i.fa.fa-times {
-  margin-top: -16px;
+  margin-top: -17px;
   margin-left: 33px;
+  z-index: 1;
 }
 
 .search-left-inner-addon .form-control {
@@ -1939,7 +1944,7 @@ span.selectedTab {
 }
 
 .pagination > li > a,
-.pagination > li > a:hover{
+.pagination > li > a:hover {
   background-color: #EDF6E3;
   color: #030303;
   text-decoration: underline;
@@ -1984,13 +1989,29 @@ span.selectedTab {
 .pagination > li:last-child > a,
 .pagination > li:last-child > a .active,
 .pagination > li:last-child > a .disabled,
-.pagination > li:last-child > span
-{
+.pagination > li:last-child > span {
   background-color: white;
   text-decoration: none;
   color: #030303;
 }
 
 .orderDateTime {
-  width:23%;
+  width: 23%;
+}
+
+.reportTypeSet {
+  background-color: #6AB123;
+  margin-left: 84px;
+  padding-left: 10px;
+  padding-right: 25px;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  margin-top: -6px;
+  cursor: context-menu;
+  border-radius: 2px;
+}
+
+i.fa.cancel-reportType.fa-times {
+    margin-left: 4px;
+    margin-top: -2px;
 }

@@ -109,10 +109,21 @@ angular.module('rippleDemonstrator')
         return $scope.searchExpression.lastIndexOf('pt ') === 0 ? true : false;
       };
 
+      $scope.containsReportTypeString = function () {
+        for (var i = 0; i < $scope.reportTypes.length; i++) {
+          if ($scope.searchExpression.lastIndexOf($scope.reportTypes[i]) != -1) {
+            return true;
+          }
+        }
+        return false;
+      }
+
       $rootScope.searchMode = false;
       $rootScope.reportMode = false;
       $rootScope.settingsMode = false;
       $rootScope.patientMode = false;
+      $rootScope.reportTypeSet = false;
+      $rootScope.reportTypeString = '';
 
       $scope.checkExpression = function () {
         if ($rootScope.searchMode) {
@@ -122,6 +133,10 @@ angular.module('rippleDemonstrator')
       'Orders: '
     ];
           }
+           if($scope.containsReportTypeString()) {
+            $rootScope.reportTypeSet = true;
+            $scope.processReportTypeMode();
+            }
         } else {
           $scope.reportTypes = '';
           $rootScope.searchMode = ($scope.containsReportString() || $scope.containsSettingString() || $scope.containsPatientString());
@@ -129,6 +144,9 @@ angular.module('rippleDemonstrator')
           $rootScope.settingsMode = $scope.containsSettingString();
           $rootScope.patientMode = $scope.containsPatientString();
           if ($rootScope.reportMode) {
+            if($scope.containsReportTypeString) {
+            $scope.processReportTypeMode();
+            }
             $scope.processReportMode();
           }
           if ($rootScope.settingsMode) {
@@ -147,6 +165,13 @@ angular.module('rippleDemonstrator')
         $rootScope.settingsMode = false;
         $scope.searchExpression = '';
         $scope.reportTypes = '';
+        $rootScope.reportTypeSet = false;
+        $rootScope.reportTypeString = '';
+      };
+
+      $scope.cancelReportType = function () {
+        $rootScope.reportTypeString = '';
+        $rootScope.reportTypeSet = false;
       };
 
       $scope.searchFunction = function () {
@@ -180,6 +205,18 @@ angular.module('rippleDemonstrator')
         if ($scope.searchExpression === 'rp ') {
           $scope.searchExpression = '';
         }
+      };
+
+      $scope.processReportTypeMode = function () {
+       for (var i = 0; i < $scope.reportTypes.length; i++) {
+          if ($scope.searchExpression.lastIndexOf($scope.reportTypes[i]) !== -1) {
+              var arr = $scope.searchExpression.split(':');
+              $rootScope.reportTypeString = arr[0];
+              $rootScope.reportTypeSet = true;
+              $scope.searchExpression = '';
+          }
+        }
+        $scope.reportTypes = [];
       };
 
       $scope.processSettingMode = function () {

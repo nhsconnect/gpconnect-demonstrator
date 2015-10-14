@@ -62,6 +62,8 @@ angular.module('rippleDemonstrator')
         $rootScope.reportMode = true;
         $rootScope.settingsMode = false;
         $rootScope.patientMode = false;
+        $rootScope.reportTypeSet = true;
+        $rootScope.reportTypeString = $stateParams.reportType;
         $scope.subHeader = $stateParams.queryType + $stateParams.reportType + ': ' + $stateParams.searchString + ' & Aged ' + $stateParams.ageFrom + ' to ' + $stateParams.ageTo;
 
         var patientListQuery = {
@@ -85,6 +87,7 @@ angular.module('rippleDemonstrator')
           $scope.pagingInfo.totalItems = result.data.totalPatients;
           $scope.pagingInfo.orderType = $stateParams.orderType;
           $scope.pagingInfo.page =  $stateParams.pageNumber;
+          $scope.pageInfoText = getPageInfo();
         });
       }
       else {

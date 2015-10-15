@@ -37,7 +37,7 @@ angular.module('rippleDemonstrator')
     }
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState) {
-
+      var params = $stateParams;
       var previousState = '';
       var pageHeader = '';
       var previousPage = '';
@@ -75,16 +75,16 @@ angular.module('rippleDemonstrator')
         detailWidth = 6;
         break;
       case 'search-report':
-        previousState = '';
+        previousState = 'patients-charts';
         pageHeader = 'Report Search';
-        previousPage = '';
+        previousPage = 'Patient Dashboard';
         mainWidth = 12;
         detailWidth = 0;
         break;
       case 'patients-list-full':
-        previousState = '';
+        previousState = 'patients-charts';
         pageHeader = 'Patients Details';
-        previousPage = '';
+        previousPage = 'Patient Dashboard';
         mainWidth = 12;
         detailWidth = 0;
         break;
@@ -95,6 +95,11 @@ angular.module('rippleDemonstrator')
         mainWidth = 6;
         detailWidth = 6;
         break;
+      }
+
+      if (params.queryType === 'Reports: ') {
+        previousState = 'search-report';
+        previousPage = 'Report Chart';
       }
 
       $scope.containsReportString = function () {
@@ -241,7 +246,14 @@ angular.module('rippleDemonstrator')
       $scope.detailWidth = detailWidth;
 
       $scope.goBack = function () {
-        $state.go(previousState);
+        if (previousState === 'search-report') {
+          $rootScope.searchExpression = params.searchString.trim();
+          $state.go(previousState, {
+            searchString: params.reportType + ': ' + params.searchString.trim(),
+          });
+        } else {
+          $state.go(previousState);
+        }
       };
 
       $scope.userContextViewExists = ('user-context' in $state.current.views);

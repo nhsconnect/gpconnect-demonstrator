@@ -123,6 +123,8 @@ angular.module('rippleDemonstrator')
         return false;
       }
 
+
+
       $rootScope.searchMode = false;
       $rootScope.reportMode = false;
       $rootScope.settingsMode = false;
@@ -138,7 +140,7 @@ angular.module('rippleDemonstrator')
               'Orders: '
               ];
           }
-          if ($scope.containsReportTypeString()) {
+          if ($scope.containsReportTypeString() && !$scope.patientMode) {
             $rootScope.reportTypeSet = true;
             $scope.processReportTypeMode();
           }
@@ -236,12 +238,10 @@ angular.module('rippleDemonstrator')
         }
       };
 
-
       $scope.pageHeader = pageHeader;
       $scope.previousState = previousState;
       $scope.previousPage = previousPage;
 
-      // Set bootstrap column sizes
       $scope.mainWidth = mainWidth;
       $scope.detailWidth = detailWidth;
 
@@ -252,6 +252,7 @@ angular.module('rippleDemonstrator')
             searchString: params.reportType + ': ' + params.searchString.trim(),
           });
         } else {
+          $scope.cancelSearchMode();
           $state.go(previousState);
         }
       };
@@ -265,7 +266,6 @@ angular.module('rippleDemonstrator')
         });
       };
 
-      // Set title depending on user
       if ($scope.currentUser.role === 'idcr') {
         $scope.title = 'IDCR POC';
       }
@@ -273,7 +273,6 @@ angular.module('rippleDemonstrator')
         $scope.title = 'PHR';
       }
 
-      // Set home url depending on user
       $scope.goHome = function () {
         $scope.cancelSearchMode();
         if ($scope.currentUser.role === 'idcr') {

@@ -7,6 +7,7 @@ angular.module('rippleDemonstrator')
     $rootScope.reportMode = true;
     $rootScope.reportTypeSet = true;
     $scope.resultSize = 0;
+    $scope.noResults = '';
 
     $scope.openModal = function (row, requestBody) {
       $modal.open({
@@ -109,6 +110,8 @@ angular.module('rippleDemonstrator')
         $scope.resultSize = chartData.data.all;
         if ($scope.resultSize !== 0) {
           ageChart(graphData);
+        } else {
+          $scope.noResults = 'There are no results that match your search criteria';
         }
       })
     } else {

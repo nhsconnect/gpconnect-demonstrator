@@ -175,7 +175,7 @@ angular.module('rippleDemonstrator')
       };
 
       $scope.searchFunction = function () {
-        if ($scope.reportMode && $scope.searchExpression !== '') {
+        if ($scope.reportTypeSet && $scope.searchExpression !== '') {
           var tempExpression = $rootScope.reportTypeString + ': ' + $scope.searchExpression;
           $state.go('search-report', {
             searchString: tempExpression
@@ -263,6 +263,7 @@ angular.module('rippleDemonstrator')
 
       // Set home url depending on user
       $scope.goHome = function () {
+        $scope.cancelSearchMode();
         if ($scope.currentUser.role === 'idcr') {
           $state.go('patients-charts');
         }

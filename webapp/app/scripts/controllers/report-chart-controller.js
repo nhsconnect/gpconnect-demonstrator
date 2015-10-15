@@ -1,12 +1,52 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ReportChartsCtrl', function ($scope, $rootScope, $window, $state, $stateParams, Report) {
+  .controller('ReportChartsCtrl', function ($scope, $rootScope, $window, $modal, $state, $stateParams, Report) {
 
     $rootScope.searchMode = true;
     $rootScope.reportMode = true;
     $rootScope.reportTypeSet = true;
     $scope.resultSize = 0;
+
+    $scope.openModal = function (row, requestBody) {
+      $modal.open({
+        templateUrl: 'views/confirmation.html',
+        size: 'md',
+        controller: function ($scope) {
+
+          $scope.cancel = function () {
+            $scope.$close(true);
+          };
+
+          $scope.ok = function () {
+            $scope.$close(true);
+            var ageArr = row.series.split('-');
+            var ageFr = 0;
+            var ageT = 0;
+
+            if (ageArr.length === 2) {
+              ageFr = ageArr[0];
+              ageT = ageArr[1];
+            } else {
+              ageFr = 80;
+              ageT = 130;
+            }
+
+            $state.go('patients-list-full', {
+              queryType: 'Reports: ',
+              ageFrom: ageFr,
+              ageTo: ageT,
+              orderColumn: 'name',
+              orderType: 'ASC',
+              pageNumber: 1,
+              reportType: requestBody.reportType,
+              searchString: requestBody.searchString
+            });
+
+          };
+        }
+      });
+    };
 
     var ageChart = function (graphData) {
       $window.Morris.Bar({
@@ -24,28 +64,7 @@ angular.module('rippleDemonstrator')
         xLabelAngle: 50,
         redraw: true
       }).on('click', function (i, row) {
-        var ageArr = row.series.split('-');
-        var ageFr = 0;
-        var ageT = 0;
-
-        if (ageArr.length === 2) {
-          ageFr = ageArr[0];
-          ageT = ageArr[1];
-        } else {
-          ageFr = 80;
-          ageT = 130;
-        }
-
-        $state.go('patients-list-full', {
-          queryType: 'Reports: ',
-          ageFrom: ageFr,
-          ageTo: ageT,
-          orderColumn: 'name',
-          orderType: 'ASC',
-          pageNumber: 1,
-          reportType: $scope.requestBody.reportType,
-          searchString: $scope.requestBody.searchString
-        });
+        $scope.openModal(row, $scope.requestBody);
       });
     };
 

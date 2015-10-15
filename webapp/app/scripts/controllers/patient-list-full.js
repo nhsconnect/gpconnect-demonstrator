@@ -9,6 +9,7 @@ angular.module('rippleDemonstrator')
       orderType: 'ASC'
     };
 
+    $scope.noResults = '';
     $scope.tab = 'patientInfo';
     $scope.patients = [];
     $rootScope.searchMode = true;
@@ -56,6 +57,9 @@ angular.module('rippleDemonstrator')
           $scope.pagingInfo.orderType = $stateParams.orderType;
           $scope.pagingInfo.page =  $stateParams.pageNumber;
           $scope.pageInfoText = getPageInfo();
+          if($scope.pagingInfo.totalItems == 0){
+            $scope.noResults = 'There are no results that match your search criteria';
+          }
         });
 
       } else if ($stateParams.queryType === 'Reports: '){
@@ -88,6 +92,9 @@ angular.module('rippleDemonstrator')
           $scope.pagingInfo.orderType = $stateParams.orderType;
           $scope.pagingInfo.page =  $stateParams.pageNumber;
           $scope.pageInfoText = getPageInfo();
+          if($scope.pagingInfo.totalItems == 0){
+            $scope.noResults = 'There are no results that match your search criteria';
+          }
         });
       }
       else {
@@ -95,6 +102,9 @@ angular.module('rippleDemonstrator')
         $rootScope.settingsMode = false;
         $rootScope.patientMode = true;
         $scope.pageInfoText = getPageInfo();
+
+
+
       }
     }
 

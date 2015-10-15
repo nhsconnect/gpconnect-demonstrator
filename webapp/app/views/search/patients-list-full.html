@@ -1,4 +1,4 @@
-<div class="patients-list-context">
+<div  ng-cloak ng-controller="PatientsListFullCtrl" class="patients-list-context">
   <div class="row">
 
     <div class="col-md-7 col-sm-7 col-xs-12 patient-list-full-subheader">
@@ -78,8 +78,8 @@
     </div>
 
     <div ng-show="pagingInfo.totalItems == 0" ng-cloak class="ng-cloak">
-      <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="no-results">There are no results that match your search criteria</div>
+      <div ng-cloak class="col-md-12 col-sm-12 col-xs-12 ng-cloak">
+        <div ng-cloak class="no-results ng-cloak" ng-bind="noResults"></div>
       </div>
     </div>
   </div>

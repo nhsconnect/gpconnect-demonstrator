@@ -40,28 +40,37 @@ angular.module('rippleDemonstrator')
       $scope.idSelectedRight = idSelectedRight;
     };
 
-    $scope.moveToRight = function (idSelectedLeft) {
-      $scope.setSelectedLeft(idSelectedLeft);
-      for (var i = 0; i < $scope.suggestions.length; i++) {
-        if ($scope.suggestions[i].code === $scope.idSelectedLeft) {
-          $scope.chosenOrders.push($scope.suggestions[i]);
-          $scope.suggestions.splice(i, 1);
+    $scope.toggleSelectedItem = function (idSelected) {
+      if ($scope.isInSuggestionsList(idSelected)) {
+        $scope.setSelectedLeft(idSelected);
+        for (var i = 0; i < $scope.suggestions.length; i++) {
+          if ($scope.suggestions[i].code === $scope.idSelectedLeft) {
+            $scope.chosenOrders.push($scope.suggestions[i]);
+            $scope.suggestions.splice(i, 1);
+          }
+        }
+      } else {
+        $scope.setSelectedRight(idSelected);
+        for (var i = 0; i < $scope.chosenOrders.length; i++) {
+          if ($scope.chosenOrders[i].code === $scope.idSelectedRight) {
+            $scope.suggestions.push($scope.chosenOrders[i]);
+            $scope.chosenOrders.splice(i, 1);
+          }
         }
       }
-    };
-
-    $scope.moveToLeft = function (idSelectedRight) {
-      $scope.setSelectedRight(idSelectedRight);
-      for (var i = 0; i < $scope.chosenOrders.length; i++) {
-        if ($scope.chosenOrders[i].code === $scope.idSelectedRight) {
-          $scope.suggestions.push($scope.chosenOrders[i]);
-          $scope.chosenOrders.splice(i, 1);
-        }
-      }
-      if ($scope.chosenOrders.length === 0){
+      if ($scope.chosenOrders.length === 0) {
         $scope.firstPage = true;
       }
     };
+
+    $scope.isInSuggestionsList = function (idSelected) {
+      for (var i = 0; i < $scope.suggestions.length; i++) {
+        if ($scope.suggestions[i].code === idSelected) {
+          return true;
+        }
+      }
+      return false;
+    }
 
     $scope.moveItem = function () {
       if ($scope.idSelectedLeft == null) {

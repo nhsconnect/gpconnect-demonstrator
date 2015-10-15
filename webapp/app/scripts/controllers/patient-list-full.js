@@ -18,12 +18,12 @@ angular.module('rippleDemonstrator')
       var from = (15 *  $scope.pagingInfo.page - 14);
       var to = 0;
       var totalPages = 0;
-      if($scope.pagingInfo.totalItems % 15 === 0){
-       totalPages = $scope.pagingInfo.totalItems / 15;
+      if ($scope.pagingInfo.totalItems % 15 === 0){
+        totalPages = $scope.pagingInfo.totalItems / 15;
       }else {
-       totalPages = Math.floor($scope.pagingInfo.totalItems / 15) + 1;
+        totalPages = Math.floor($scope.pagingInfo.totalItems / 15) + 1;
       }
-      if($scope.pagingInfo.page === totalPages){
+      if ($scope.pagingInfo.page === totalPages){
         to = from + $scope.pagingInfo.totalItems % 15 - 1;
       }else {
         to =  $scope.pagingInfo.page * 15;
@@ -58,7 +58,7 @@ angular.module('rippleDemonstrator')
           $scope.pageInfoText = getPageInfo();
         });
 
-      } else if($stateParams.queryType === 'Reports: '){
+      } else if ($stateParams.queryType === 'Reports: '){
         $rootScope.reportMode = true;
         $rootScope.settingsMode = false;
         $rootScope.patientMode = false;

@@ -129,14 +129,14 @@ angular.module('rippleDemonstrator')
         if ($rootScope.searchMode) {
           if ($rootScope.reportMode && !$rootScope.reportTypeSet) {
             $scope.reportTypes = [
-      'Diagnosis: ',
-      'Orders: '
-    ];
+              'Diagnosis: ',
+              'Orders: '
+              ];
           }
-           if($scope.containsReportTypeString()) {
+          if ($scope.containsReportTypeString()) {
             $rootScope.reportTypeSet = true;
             $scope.processReportTypeMode();
-            }
+          }
         } else {
           $scope.reportTypes = [];
           $rootScope.searchMode = ($scope.containsReportString() || $scope.containsSettingString() || $scope.containsPatientString());
@@ -144,8 +144,8 @@ angular.module('rippleDemonstrator')
           $rootScope.settingsMode = $scope.containsSettingString();
           $rootScope.patientMode = $scope.containsPatientString();
           if ($rootScope.reportMode) {
-            if($scope.containsReportTypeString) {
-            $scope.processReportTypeMode();
+            if ($scope.containsReportTypeString) {
+              $scope.processReportTypeMode();
             }
             $scope.processReportMode();
           }
@@ -208,12 +208,12 @@ angular.module('rippleDemonstrator')
       };
 
       $scope.processReportTypeMode = function () {
-       for (var i = 0; i < $scope.reportTypes.length; i++) {
+        for (var i = 0; i < $scope.reportTypes.length; i++) {
           if ($scope.searchExpression.lastIndexOf($scope.reportTypes[i]) !== -1) {
-              var arr = $scope.searchExpression.split(':');
-              $rootScope.reportTypeString = arr[0];
-              $rootScope.reportTypeSet = true;
-              $scope.searchExpression = '';
+            var arr = $scope.searchExpression.split(':');
+            $rootScope.reportTypeString = arr[0];
+            $rootScope.reportTypeSet = true;
+            $scope.searchExpression = '';
           }
         }
         $scope.reportTypes = [];

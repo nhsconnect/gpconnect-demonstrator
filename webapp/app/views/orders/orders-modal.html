@@ -28,7 +28,7 @@
             <label>Available Orders</label>
             <table>
               <tbody>
-                <tr ng-repeat="suggestion in suggestions" ng-dblclick="moveToRight(suggestion.code)" ng-click="setSelectedLeft(suggestion.code)" ng-class="{selectedItemLeft: suggestion.code === idSelectedLeft}">
+                <tr ng-repeat="suggestion in suggestions" ng-dblclick="toggleSelectedItem(suggestion.code)" ng-click="setSelectedLeft(suggestion.code)" ng-class="{selectedItemLeft: suggestion.code === idSelectedLeft}">
                   <td>{{suggestion.text }}</td>
                 </tr>
               </tbody>
@@ -39,7 +39,7 @@
             <img src="images/move.jpg" id="switchImg" ng-click="moveItem()" />
             <table>
               <tbody>
-                <tr ng-repeat="chosenOrder in chosenOrders" ng-dblclick="moveToLeft(chosenOrder.code)" ng-click="setSelectedRight(chosenOrder.code)" ng-class="{selectedItemLeft: chosenOrder.code === idSelectedRight}">
+                <tr ng-repeat="chosenOrder in chosenOrders" ng-dblclick="toggleSelectedItem(chosenOrder.code)" ng-click="setSelectedRight(chosenOrder.code)" ng-class="{selectedItemLeft: chosenOrder.code === idSelectedRight}">
                   <td>{{chosenOrder.text }}</td>
                 </tr>
               </tbody>

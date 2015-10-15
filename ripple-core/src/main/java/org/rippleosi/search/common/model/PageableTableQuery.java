@@ -1,6 +1,6 @@
-package org.rippleosi.search.patient.table.model;
+package org.rippleosi.search.common.model;
 
-public abstract class AbstractPageableTableQuery {
+public class PageableTableQuery {
 
     private String pageNumber;
     private String orderType;

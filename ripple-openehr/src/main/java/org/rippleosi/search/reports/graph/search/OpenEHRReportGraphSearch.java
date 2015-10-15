@@ -15,6 +15,6 @@ public class OpenEHRReportGraphSearch extends AbstractC4HReportingService implem
     @Override
     public ReportGraphResults findPatientDemographicsByQuery(ReportGraphQuery graphQuery) {
         queryStrategy.setGraphQuery(graphQuery);
-        return findChartData(queryStrategy);
+        return findGraphData(queryStrategy);
     }
 }

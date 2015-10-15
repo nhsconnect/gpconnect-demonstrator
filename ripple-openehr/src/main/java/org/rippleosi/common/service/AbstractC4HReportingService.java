@@ -4,6 +4,7 @@ import org.rippleosi.common.exception.DataNotFoundException;
 import org.rippleosi.common.model.C4HRestQueryResponse;
 import org.rippleosi.common.repo.Repository;
 import org.rippleosi.search.reports.graph.model.ReportGraphResults;
+import org.rippleosi.search.setting.table.model.OpenEHRSettingResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public abstract class AbstractC4HReportingService implements Repository {
 
     @Override
     public String getSource() {
-        return "C4HOpenEHR";
+        return "c4hOpenEHR";
     }
 
     @Override
@@ -28,16 +29,32 @@ public abstract class AbstractC4HReportingService implements Repository {
         return priority;
     }
 
-    protected <T> T findChartData(C4HReportQueryStrategy<T> queryStrategy) {
+    protected <I, O> O findGraphData(C4HUriQueryStrategy<I, O> queryStrategy) {
         UriComponents uriComponents = queryStrategy.getQueryUriComponents();
+        Object requestBody = queryStrategy.getRequestBody();
 
         ResponseEntity<ReportGraphResults> response = requestProxy.getWithSession(uriComponents.toUriString(),
-                                                                                  ReportGraphResults.class);
+                                                                                  ReportGraphResults.class,
+                                                                                  requestBody);
 
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new DataNotFoundException("C4H OpenEHR query returned with status code " + response.getStatusCode());
         }
 
-        return queryStrategy.transform(response.getBody());
+        return queryStrategy.transform((I) response.getBody());
+    }
+
+    protected <I, O> O findTableData(C4HUriQueryStrategy<I, O> queryStrategy) {
+        UriComponents uriComponents = queryStrategy.getQueryUriComponents();
+
+        ResponseEntity<OpenEHRSettingResponse[]> response = requestProxy.postWithSession(uriComponents.toUriString(),
+                                                                                         OpenEHRSettingResponse[].class,
+                                                                                         queryStrategy.getRequestBody());
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new DataNotFoundException("C4H OpenEHR query returned with status code " + response.getStatusCode());
+        }
+
+        return queryStrategy.transform((I) response.getBody());
     }
 }

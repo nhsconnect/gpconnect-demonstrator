@@ -1,6 +1,6 @@
 package org.rippleosi.search.reports.graph.search;
 
-import org.rippleosi.common.service.C4HReportQueryStrategy;
+import org.rippleosi.common.service.C4HUriQueryStrategy;
 import org.rippleosi.search.reports.graph.model.ReportGraphQuery;
 import org.rippleosi.search.reports.graph.model.ReportGraphResults;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,15 +9,16 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
-public class ReportGraphQueryStrategy implements C4HReportQueryStrategy<ReportGraphResults> {
+public class ReportGraphQueryStrategy implements C4HUriQueryStrategy<ReportGraphResults, ReportGraphResults> {
 
     @Value("${c4hOpenEHR.address}")
     private String c4hOpenEHRAddress;
 
-    @Value("${c4hOpenEHR.subjectNamespace}")
-    private String c4hOpenEHRSubjectNamespace;
-
     private ReportGraphQuery graphQuery;
+
+    public void setGraphQuery(ReportGraphQuery graphQuery) {
+        this.graphQuery = graphQuery;
+    }
 
     @Override
     public UriComponents getQueryUriComponents() {
@@ -33,12 +34,13 @@ public class ReportGraphQueryStrategy implements C4HReportQueryStrategy<ReportGr
     }
 
     @Override
+    public String getRequestBody() {
+        return null;
+    }
+
+    @Override
     public ReportGraphResults transform(ReportGraphResults resultSet) {
         resultSet.setSource("c4hOpenEHR");
         return resultSet;
-    }
-
-    public void setGraphQuery(ReportGraphQuery graphQuery) {
-        this.graphQuery = graphQuery;
     }
 }

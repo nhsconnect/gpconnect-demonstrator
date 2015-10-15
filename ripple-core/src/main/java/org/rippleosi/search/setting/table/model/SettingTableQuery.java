@@ -1,8 +1,8 @@
 package org.rippleosi.search.setting.table.model;
 
-import org.rippleosi.search.patient.table.model.AbstractPageableTableQuery;
+import org.rippleosi.search.common.model.PageableTableQuery;
 
-public class SettingTableQuery extends AbstractPageableTableQuery {
+public class SettingTableQuery extends PageableTableQuery {
 
     private String searchString;
 

@@ -1,84 +1,105 @@
 package org.rippleosi.search.setting.table.search;
 
 import org.apache.commons.collections4.Transformer;
-import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.search.common.model.RecordHeadline;
 import org.rippleosi.search.common.model.SearchTablePatientDetails;
+import org.rippleosi.search.setting.table.model.OpenEHRSettingResponse;
 
 public class SettingTablePatientDetailsTransformer implements Transformer<PatientSummary, SearchTablePatientDetails> {
 
+    private OpenEHRSettingResponse[] openEhrResults;
+
+    public SettingTablePatientDetailsTransformer(OpenEHRSettingResponse[] responseData) {
+        this.openEhrResults = responseData;
+    }
+
     @Override
-    public SearchTablePatientDetails transform(PatientSummary input) {
+    public SearchTablePatientDetails transform(PatientSummary patientSummary) {
         SearchTablePatientDetails details = new SearchTablePatientDetails();
         details.setSource("local");
-        details.setSourceId(input.getId());
-        details.setName(input.getName());
-        details.setAddress(input.getAddress());
-        details.setDateOfBirth(input.getDateOfBirth());
-        details.setGender(input.getGender());
-        details.setNhsNumber(input.getNhsNumber());
+        details.setSourceId(patientSummary.getId());
+        details.setName(patientSummary.getName());
+        details.setAddress(patientSummary.getAddress());
+        details.setDateOfBirth(patientSummary.getDateOfBirth());
+        details.setGender(patientSummary.getGender());
+        details.setNhsNumber(patientSummary.getNhsNumber());
 
-        details.setVitalsHeadline(populateVitalsHeadline());
-        details.setOrdersHeadline(populateOrdersHeadline());
-        details.setMedsHeadline(populateMedsHeadline());
-        details.setResultsHeadline(populateResultsHeadline());
-        details.setTreatmentsHeadline(populateTreatmentsHeadline());
+        OpenEHRSettingResponse associatedData = new OpenEHRSettingResponse();
+
+        for (OpenEHRSettingResponse result : openEhrResults) {
+
+            if (result.getEhrId().contains(patientSummary.getNhsNumber())) {
+                associatedData = result;
+            }
+        }
+
+        RecordHeadline vitalsHeadline = populateVitalsHeadline(associatedData);
+        RecordHeadline ordersHeadline = populateOrdersHeadline(associatedData);
+        RecordHeadline medsHeadline = populateMedsHeadline(associatedData);
+        RecordHeadline resultsHeadline = populateResultsHeadline(associatedData);
+        RecordHeadline treatmentsHeadline = populateTreatmentsHeadline(associatedData);
+
+        details.setVitalsHeadline(vitalsHeadline);
+        details.setOrdersHeadline(ordersHeadline);
+        details.setMedsHeadline(medsHeadline);
+        details.setResultsHeadline(resultsHeadline);
+        details.setTreatmentsHeadline(treatmentsHeadline);
 
         return details;
     }
 
-    private RecordHeadline populateVitalsHeadline() {
+    private RecordHeadline populateVitalsHeadline(OpenEHRSettingResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
         headline.setSource("openehr");
-        headline.setSourceId("86413513");
-        headline.setTotalEntries("4");
-        headline.setLatestEntry(DateFormatter.toDate("2015-06-08"));
+        headline.setSourceId(null);
+        headline.setTotalEntries(data.getVitalsCount());
+        headline.setLatestEntry(data.getVitalsDate());
 
         return headline;
     }
 
-    private RecordHeadline populateOrdersHeadline() {
+    private RecordHeadline populateOrdersHeadline(OpenEHRSettingResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
         headline.setSource("openehr");
-        headline.setSourceId("864441468");
-        headline.setTotalEntries("1");
-        headline.setLatestEntry(DateFormatter.toDate("2015-06-09"));
+        headline.setSourceId(null);
+        headline.setTotalEntries(data.getOrdersCount());
+        headline.setLatestEntry(data.getOrdersDate());
 
         return headline;
     }
 
-    private RecordHeadline populateMedsHeadline() {
+    private RecordHeadline populateMedsHeadline(OpenEHRSettingResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
         headline.setSource("openehr");
-        headline.setSourceId("97979741");
-        headline.setTotalEntries("27");
-        headline.setLatestEntry(DateFormatter.toDate("2015-06-10"));
+        headline.setSourceId(null);
+        headline.setTotalEntries(data.getMedsCount());
+        headline.setLatestEntry(data.getMedsDate());
 
         return headline;
     }
 
-    private RecordHeadline populateResultsHeadline() {
+    private RecordHeadline populateResultsHeadline(OpenEHRSettingResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
         headline.setSource("openehr");
-        headline.setSourceId("84131");
-        headline.setTotalEntries("16");
-        headline.setLatestEntry(DateFormatter.toDate("2015-06-11"));
+        headline.setSourceId(null);
+        headline.setTotalEntries(data.getLabsCount());
+        headline.setLatestEntry(data.getLabsDate());
 
         return headline;
     }
 
-    private RecordHeadline populateTreatmentsHeadline() {
+    private RecordHeadline populateTreatmentsHeadline(OpenEHRSettingResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
         headline.setSource("openehr");
-        headline.setSourceId("354135");
-        headline.setTotalEntries("8");
-        headline.setLatestEntry(DateFormatter.toDate("2015-06-12"));
+        headline.setSourceId(null);
+        headline.setTotalEntries(data.getProceduresCount());
+        headline.setLatestEntry(data.getProceduresDate());
 
         return headline;
     }

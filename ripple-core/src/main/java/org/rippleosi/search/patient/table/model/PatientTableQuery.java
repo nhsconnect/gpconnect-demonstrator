@@ -2,7 +2,9 @@ package org.rippleosi.search.patient.table.model;
 
 import java.util.Date;
 
-public class PatientTableQuery extends AbstractPageableTableQuery {
+import org.rippleosi.search.common.model.PageableTableQuery;
+
+public class PatientTableQuery extends PageableTableQuery {
 
     private String firstName;
     private String lastName;

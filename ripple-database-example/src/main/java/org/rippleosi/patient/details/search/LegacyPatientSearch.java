@@ -26,7 +26,7 @@ import org.rippleosi.patient.details.repo.PatientRepository;
 import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.patient.summary.search.PatientSearch;
-import org.rippleosi.search.patient.table.model.AbstractPageableTableQuery;
+import org.rippleosi.search.common.model.PageableTableQuery;
 import org.rippleosi.search.patient.table.model.PatientTableQuery;
 import org.rippleosi.search.setting.table.model.SettingTableQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,7 +148,7 @@ public class LegacyPatientSearch implements PatientSearch {
         return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
     }
 
-    private PageRequest generatePageRequest(AbstractPageableTableQuery tableQuery) {
+    private PageRequest generatePageRequest(PageableTableQuery tableQuery) {
         // determine page number (zero indexed) and sort direction
         Integer pageNumber = Integer.valueOf(tableQuery.getPageNumber()) - 1;
         Direction sortDirection = Direction.fromString(tableQuery.getOrderType());

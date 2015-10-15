@@ -34,7 +34,7 @@ public class SearchBySettingController {
         List<PatientSummary> patientSummaries = patientSearch.findAllPatientsByDepartment(tableQuery);
 
         SettingTableSearch settingSearch = settingTableSearchFactory.select(patientDataSource);
-        SettingTableResults results = settingSearch.findAssociatedPatientData(patientSummaries);
+        SettingTableResults results = settingSearch.findAssociatedPatientData(tableQuery, patientSummaries);
 
         Integer countByDepartment = patientSearch.findPatientCountByDepartment(tableQuery.getSearchString());
         results.setTotalPatients(String.valueOf(countByDepartment));

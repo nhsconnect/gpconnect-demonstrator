@@ -1,8 +1,8 @@
 package org.rippleosi.search.reports.table.model;
 
-import org.rippleosi.search.patient.table.model.AbstractPageableTableQuery;
+import org.rippleosi.search.common.model.PageableTableQuery;
 
-public class ReportTableQuery extends AbstractPageableTableQuery {
+public class ReportTableQuery extends PageableTableQuery {
 
     private String reportType;
     private String searchString;

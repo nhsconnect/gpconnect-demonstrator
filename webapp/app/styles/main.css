@@ -2016,6 +2016,6 @@ i.fa.cancel-reportType.fa-times {
   margin-top: -2px;
 }
 
-.dateCountTable th {
-  width: 15%;
+.dateCountTable thead tr th {
+  width: 14.28%;
 }

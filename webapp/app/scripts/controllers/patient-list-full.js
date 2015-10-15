@@ -23,7 +23,7 @@ angular.module('rippleDemonstrator')
       }else {
         totalPages = Math.floor($scope.pagingInfo.totalItems / 15) + 1;
       }
-      if ($scope.pagingInfo.page === totalPages){
+      if ($scope.pagingInfo.page == totalPages){
         to = from + $scope.pagingInfo.totalItems % 15 - 1;
       }else {
         to =  $scope.pagingInfo.page * 15;

@@ -2,15 +2,15 @@ package org.rippleosi.search.setting.table.search;
 
 import org.apache.commons.collections4.Transformer;
 import org.rippleosi.patient.summary.model.PatientSummary;
+import org.rippleosi.search.common.model.OpenEHRDatesAndCountsResponse;
 import org.rippleosi.search.common.model.RecordHeadline;
 import org.rippleosi.search.common.model.SearchTablePatientDetails;
-import org.rippleosi.search.setting.table.model.OpenEHRSettingResponse;
 
 public class SettingTablePatientDetailsTransformer implements Transformer<PatientSummary, SearchTablePatientDetails> {
 
-    private final OpenEHRSettingResponse[] openEhrResults;
+    private final OpenEHRDatesAndCountsResponse[] openEhrResults;
 
-    public SettingTablePatientDetailsTransformer(OpenEHRSettingResponse[] responseData) {
+    public SettingTablePatientDetailsTransformer(OpenEHRDatesAndCountsResponse[] responseData) {
         this.openEhrResults = responseData;
     }
 
@@ -25,8 +25,8 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
         details.setGender(patientSummary.getGender());
         details.setNhsNumber(patientSummary.getNhsNumber());
 
-        for (OpenEHRSettingResponse result : openEhrResults) {
-            OpenEHRSettingResponse associatedData;
+        for (OpenEHRDatesAndCountsResponse result : openEhrResults) {
+            OpenEHRDatesAndCountsResponse associatedData;
             String nhsNumber = result.getNHSNumber();
 
             if (nhsNumber != null && nhsNumber.equals(patientSummary.getNhsNumber())) {
@@ -49,7 +49,7 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
         return details;
     }
 
-    private RecordHeadline populateVitalsHeadline(OpenEHRSettingResponse data) {
+    private RecordHeadline populateVitalsHeadline(OpenEHRDatesAndCountsResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
         headline.setSource("c4hOpenEHR");
@@ -60,7 +60,7 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
         return headline;
     }
 
-    private RecordHeadline populateOrdersHeadline(OpenEHRSettingResponse data) {
+    private RecordHeadline populateOrdersHeadline(OpenEHRDatesAndCountsResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
         headline.setSource("c4hOpenEHR");
@@ -71,7 +71,7 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
         return headline;
     }
 
-    private RecordHeadline populateMedsHeadline(OpenEHRSettingResponse data) {
+    private RecordHeadline populateMedsHeadline(OpenEHRDatesAndCountsResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
         headline.setSource("c4hOpenEHR");
@@ -82,7 +82,7 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
         return headline;
     }
 
-    private RecordHeadline populateResultsHeadline(OpenEHRSettingResponse data) {
+    private RecordHeadline populateResultsHeadline(OpenEHRDatesAndCountsResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
         headline.setSource("c4hOpenEHR");
@@ -93,7 +93,7 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
         return headline;
     }
 
-    private RecordHeadline populateTreatmentsHeadline(OpenEHRSettingResponse data) {
+    private RecordHeadline populateTreatmentsHeadline(OpenEHRDatesAndCountsResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
         headline.setSource("c4hOpenEHR");

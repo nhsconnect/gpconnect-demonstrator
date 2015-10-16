@@ -27,13 +27,13 @@ public class SearchByPatientController {
     private PatientTableSearchFactory patientTableSearchFactory;
 
     @RequestMapping(value = "/table", method = RequestMethod.POST)
-    public ReportTableResults findPatient(@RequestParam(required = false) String source,
-                                          @RequestBody PatientTableQuery tableQuery) {
+    public ReportTableResults getPatientTable(@RequestParam(required = false) String source,
+                                              @RequestBody PatientTableQuery tableQuery) {
         PatientSearch patientSearch = patientSearchFactory.select(source);
         List<PatientSummary> patientSummaries = patientSearch.findPatientsByQuery(tableQuery);
 
         PatientTableSearch tableSearch = patientTableSearchFactory.select(source);
-        ReportTableResults results = tableSearch.findAssociatedPatientData(patientSummaries);
+        ReportTableResults results = tableSearch.findAssociatedPatientData(tableQuery, patientSummaries);
 
         Integer total = patientSearch.countPatientsByQuery(tableQuery);
         results.setTotalPatients(String.valueOf(total));

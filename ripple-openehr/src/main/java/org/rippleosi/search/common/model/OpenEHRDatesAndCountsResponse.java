@@ -1,8 +1,8 @@
-package org.rippleosi.search.setting.table.model;
+package org.rippleosi.search.common.model;
 
 import java.util.Date;
 
-public class OpenEHRSettingResponse {
+public class OpenEHRDatesAndCountsResponse {
 
     private String ehrId;
     private String NHSNumber;

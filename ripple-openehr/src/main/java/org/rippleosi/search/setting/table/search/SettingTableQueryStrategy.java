@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.ListUtils;
 import org.rippleosi.common.service.C4HUriQueryStrategy;
 import org.rippleosi.patient.summary.model.PatientSummary;
+import org.rippleosi.search.common.model.OpenEHRDatesAndCountsResponse;
 import org.rippleosi.search.common.model.SearchTablePatientDetails;
 import org.rippleosi.search.setting.table.model.OpenEHRSettingRequestBody;
-import org.rippleosi.search.setting.table.model.OpenEHRSettingResponse;
 import org.rippleosi.search.setting.table.model.SettingTableQuery;
 import org.rippleosi.search.setting.table.model.SettingTableResults;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,8 +18,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
-public class SettingTableQueryStrategy
-    implements C4HUriQueryStrategy<OpenEHRSettingResponse[], SettingTableResults> {
+public class SettingTableQueryStrategy implements C4HUriQueryStrategy<OpenEHRDatesAndCountsResponse[], SettingTableResults> {
 
     @Value("${c4hOpenEHR.address}")
     private String c4hOpenEHRAddress;
@@ -72,7 +68,7 @@ public class SettingTableQueryStrategy
     }
 
     @Override
-    public SettingTableResults transform(OpenEHRSettingResponse[] resultSet) {
+    public SettingTableResults transform(OpenEHRDatesAndCountsResponse[] resultSet) {
         SettingTableResults results = new SettingTableResults();
         List<SearchTablePatientDetails> details = CollectionUtils.collect(patientSummaries,
                                                                           new SettingTablePatientDetailsTransformer(resultSet),

@@ -1,10 +1,9 @@
 package org.rippleosi.common.service;
 
 import org.rippleosi.common.exception.DataNotFoundException;
-import org.rippleosi.common.model.C4HRestQueryResponse;
 import org.rippleosi.common.repo.Repository;
+import org.rippleosi.search.common.model.OpenEHRDatesAndCountsResponse;
 import org.rippleosi.search.reports.graph.model.ReportGraphResults;
-import org.rippleosi.search.setting.table.model.OpenEHRSettingResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -47,8 +46,8 @@ public abstract class AbstractC4HReportingService implements Repository {
     protected <I, O> O findTableData(C4HUriQueryStrategy<I, O> queryStrategy) {
         UriComponents uriComponents = queryStrategy.getQueryUriComponents();
 
-        ResponseEntity<OpenEHRSettingResponse[]> response = requestProxy.postWithSession(uriComponents.toUriString(),
-                                                                                         OpenEHRSettingResponse[].class,
+        ResponseEntity<OpenEHRDatesAndCountsResponse[]> response = requestProxy.postWithSession(uriComponents.toUriString(),
+                                                                                         OpenEHRDatesAndCountsResponse[].class,
                                                                                          queryStrategy.getRequestBody());
 
         if (response.getStatusCode() != HttpStatus.OK) {

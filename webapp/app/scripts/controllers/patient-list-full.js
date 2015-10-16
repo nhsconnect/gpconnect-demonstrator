@@ -47,11 +47,11 @@ angular.module('rippleDemonstrator')
         Report.getSettingsTable(patientListQuery).then(function (result) {
           $scope.patients = result.data.patientDetails;
           for (var i = 0; i < $scope.patients.length; i++) {
-            $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].ordersHeadline.latestEntry));
-            $scope.patients[i].vitalsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].vitalsHeadline.latestEntry));
-            $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].medsHeadline.latestEntry));
-            $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].resultsHeadline.latestEntry));
-            $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat(moment($scope.patients[i].treatmentsHeadline.latestEntry));
+            $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].ordersHeadline.latestEntry);
+            $scope.patients[i].vitalsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].vitalsHeadline.latestEntry);
+            $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].medsHeadline.latestEntry);
+            $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].resultsHeadline.latestEntry);
+            $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].treatmentsHeadline.latestEntry);
           }
           $scope.pagingInfo.totalItems = result.data.totalPatients;
           $scope.pagingInfo.orderType = $stateParams.orderType;

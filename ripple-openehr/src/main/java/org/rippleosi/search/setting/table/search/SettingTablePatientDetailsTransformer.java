@@ -25,26 +25,26 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
         details.setGender(patientSummary.getGender());
         details.setNhsNumber(patientSummary.getNhsNumber());
 
-        OpenEHRSettingResponse associatedData = new OpenEHRSettingResponse();
-
         for (OpenEHRSettingResponse result : openEhrResults) {
+            OpenEHRSettingResponse associatedData;
+            String nhsNumber = result.getNHSNumber();
 
-            if (result.getEhrId().equals(patientSummary.getNhsNumber())) {
+            if (nhsNumber != null && nhsNumber.equals(patientSummary.getNhsNumber())) {
                 associatedData = result;
+
+                RecordHeadline vitalsHeadline = populateVitalsHeadline(associatedData);
+                RecordHeadline ordersHeadline = populateOrdersHeadline(associatedData);
+                RecordHeadline medsHeadline = populateMedsHeadline(associatedData);
+                RecordHeadline resultsHeadline = populateResultsHeadline(associatedData);
+                RecordHeadline treatmentsHeadline = populateTreatmentsHeadline(associatedData);
+
+                details.setVitalsHeadline(vitalsHeadline);
+                details.setOrdersHeadline(ordersHeadline);
+                details.setMedsHeadline(medsHeadline);
+                details.setResultsHeadline(resultsHeadline);
+                details.setTreatmentsHeadline(treatmentsHeadline);
             }
         }
-
-        RecordHeadline vitalsHeadline = populateVitalsHeadline(associatedData);
-        RecordHeadline ordersHeadline = populateOrdersHeadline(associatedData);
-        RecordHeadline medsHeadline = populateMedsHeadline(associatedData);
-        RecordHeadline resultsHeadline = populateResultsHeadline(associatedData);
-        RecordHeadline treatmentsHeadline = populateTreatmentsHeadline(associatedData);
-
-        details.setVitalsHeadline(vitalsHeadline);
-        details.setOrdersHeadline(ordersHeadline);
-        details.setMedsHeadline(medsHeadline);
-        details.setResultsHeadline(resultsHeadline);
-        details.setTreatmentsHeadline(treatmentsHeadline);
 
         return details;
     }

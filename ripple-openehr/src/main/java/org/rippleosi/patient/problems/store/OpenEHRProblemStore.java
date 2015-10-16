@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.camel.Consume;
+import org.apache.commons.lang3.StringUtils;
 import org.rippleosi.common.service.AbstractOpenEhrService;
 import org.rippleosi.common.service.CreateStrategy;
 import org.rippleosi.common.service.DefaultStoreStrategy;
@@ -67,12 +68,12 @@ public class OpenEHRProblemStore extends AbstractOpenEhrService implements Probl
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
 
-        if (problem.getCode() == null || problem.getCode().isEmpty()) {
+        if (StringUtils.isBlank(problem.getCode())) {
             problem.setCode("00001");
         }
 
-        if (problem.getTerminology() == null || problem.getTerminology().isEmpty()) {
-            problem.setTerminology("Std");
+        if (StringUtils.isBlank(problem.getTerminology())) {
+            problem.setTerminology("SNOMED-CT");
         }
 
         String dateOfOnset = DateFormatter.toString(problem.getDateOfOnset());

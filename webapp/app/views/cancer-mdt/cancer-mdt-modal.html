@@ -93,14 +93,15 @@
     </div>
                     <div class="col-md-4">
                   <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || cancerMdtForm.timeofmeeting.$dirty) && cancerMdtForm.timeofmeeting.$invalid, 'has-success': cancerMdtForm.timeofmeeting.$valid && cancerMdtForm.timeofmeeting.$dirty}">
-          <label for="name" class="control-label col-md-12">Time (Optional)</label>
+          <label for="timeofmeeting" class="control-label col-md-12">Time</label>
           <div class="col-md-12">
             <div class="input-group">
                  <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm"><i class="fa fa-clock-o"></i></button>
             </span>
-              <input type="text" class="form-control input-sm" ui-timepicker id="timeofmeeting" name="timeofmeeting"  ng-model="cancerMdt.timeOfMeeting" />
+              <input type="text" class="form-control input-sm" ui-timepicker id="timeofmeeting" name="timeofmeeting"  ng-model="cancerMdt.timeOfMeeting"  required />
             </div>
+            <span class="help-block animate-fade" ng-show="formSubmitted && cancerMdtForm.timeofmeeting.$error.required">You must enter a valid time.</span>
           </div>
         </div>
          </div>

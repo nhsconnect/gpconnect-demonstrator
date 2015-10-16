@@ -100,6 +100,7 @@ angular.module('rippleDemonstrator')
       else {
         $rootScope.reportMode = false;
         $rootScope.settingsMode = false;
+        $rootScope.reportTypeSet = false;
         $rootScope.patientMode = true;
         $scope.pageInfoText = getPageInfo();
 

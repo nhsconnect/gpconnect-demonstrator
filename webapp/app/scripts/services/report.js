@@ -15,6 +15,10 @@ angular.module('rippleDemonstrator')
       return $http.post('/api/search/reports/chart', searchString);
     };
 
+    var searchByPatien = function (searchBody) {
+
+    };
+
     return {
       getChart: getChart,
       getTable: getTable,

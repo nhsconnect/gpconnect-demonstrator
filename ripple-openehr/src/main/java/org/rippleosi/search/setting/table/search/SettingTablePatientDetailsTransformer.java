@@ -8,7 +8,7 @@ import org.rippleosi.search.setting.table.model.OpenEHRSettingResponse;
 
 public class SettingTablePatientDetailsTransformer implements Transformer<PatientSummary, SearchTablePatientDetails> {
 
-    private OpenEHRSettingResponse[] openEhrResults;
+    private final OpenEHRSettingResponse[] openEhrResults;
 
     public SettingTablePatientDetailsTransformer(OpenEHRSettingResponse[] responseData) {
         this.openEhrResults = responseData;
@@ -29,7 +29,7 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
 
         for (OpenEHRSettingResponse result : openEhrResults) {
 
-            if (result.getEhrId().contains(patientSummary.getNhsNumber())) {
+            if (result.getEhrId().equals(patientSummary.getNhsNumber())) {
                 associatedData = result;
             }
         }
@@ -52,8 +52,8 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
     private RecordHeadline populateVitalsHeadline(OpenEHRSettingResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
-        headline.setSource("openehr");
-        headline.setSourceId(null);
+        headline.setSource("c4hOpenEHR");
+        headline.setSourceId(data.getVitalsId());
         headline.setTotalEntries(data.getVitalsCount());
         headline.setLatestEntry(data.getVitalsDate());
 
@@ -63,8 +63,8 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
     private RecordHeadline populateOrdersHeadline(OpenEHRSettingResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
-        headline.setSource("openehr");
-        headline.setSourceId(null);
+        headline.setSource("c4hOpenEHR");
+        headline.setSourceId(data.getOrdersId());
         headline.setTotalEntries(data.getOrdersCount());
         headline.setLatestEntry(data.getOrdersDate());
 
@@ -74,8 +74,8 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
     private RecordHeadline populateMedsHeadline(OpenEHRSettingResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
-        headline.setSource("openehr");
-        headline.setSourceId(null);
+        headline.setSource("c4hOpenEHR");
+        headline.setSourceId(data.getMedsId());
         headline.setTotalEntries(data.getMedsCount());
         headline.setLatestEntry(data.getMedsDate());
 
@@ -85,8 +85,8 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
     private RecordHeadline populateResultsHeadline(OpenEHRSettingResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
-        headline.setSource("openehr");
-        headline.setSourceId(null);
+        headline.setSource("c4hOpenEHR");
+        headline.setSourceId(data.getLabsId());
         headline.setTotalEntries(data.getLabsCount());
         headline.setLatestEntry(data.getLabsDate());
 
@@ -96,8 +96,8 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
     private RecordHeadline populateTreatmentsHeadline(OpenEHRSettingResponse data) {
         RecordHeadline headline = new RecordHeadline();
 
-        headline.setSource("openehr");
-        headline.setSourceId(null);
+        headline.setSource("c4hOpenEHR");
+        headline.setSourceId(data.getProceduresId());
         headline.setTotalEntries(data.getProceduresCount());
         headline.setLatestEntry(data.getProceduresDate());
 

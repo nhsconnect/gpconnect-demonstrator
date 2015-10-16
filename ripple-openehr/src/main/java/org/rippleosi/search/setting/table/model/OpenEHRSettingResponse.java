@@ -4,18 +4,26 @@ import java.util.Date;
 
 public class OpenEHRSettingResponse {
 
-   private String ehrId;
-   private String NHSNumber;
-   private String vitalsCount;
-   private String ordersCount;
-   private String labsCount;
-   private String medsCount;
-   private String proceduresCount;
-   private Date vitalsDate;
-   private Date ordersDate;
-   private Date labsDate;
-   private Date medsDate;
-   private Date proceduresDate;
+    private String ehrId;
+    private String NHSNumber;
+
+    private String vitalsId;
+    private String ordersId;
+    private String labsId;
+    private String medsId;
+    private String proceduresId;
+
+    private String vitalsCount;
+    private String ordersCount;
+    private String labsCount;
+    private String medsCount;
+    private String proceduresCount;
+
+    private Date vitalsDate;
+    private Date ordersDate;
+    private Date labsDate;
+    private Date medsDate;
+    private Date proceduresDate;
 
     public String getEhrId() {
         return ehrId;
@@ -31,6 +39,46 @@ public class OpenEHRSettingResponse {
 
     public void setNHSNumber(String NHSNumber) {
         this.NHSNumber = NHSNumber;
+    }
+
+    public String getVitalsId() {
+        return vitalsId;
+    }
+
+    public void setVitalsId(String vitalsId) {
+        this.vitalsId = vitalsId;
+    }
+
+    public String getOrdersId() {
+        return ordersId;
+    }
+
+    public void setOrdersId(String ordersId) {
+        this.ordersId = ordersId;
+    }
+
+    public String getLabsId() {
+        return labsId;
+    }
+
+    public void setLabsId(String labsId) {
+        this.labsId = labsId;
+    }
+
+    public String getMedsId() {
+        return medsId;
+    }
+
+    public void setMedsId(String medsId) {
+        this.medsId = medsId;
+    }
+
+    public String getProceduresId() {
+        return proceduresId;
+    }
+
+    public void setProceduresId(String proceduresId) {
+        this.proceduresId = proceduresId;
     }
 
     public String getVitalsCount() {

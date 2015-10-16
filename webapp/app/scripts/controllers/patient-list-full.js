@@ -52,6 +52,12 @@ angular.module('rippleDemonstrator')
             $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].medsHeadline.latestEntry);
             $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].resultsHeadline.latestEntry);
             $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].treatmentsHeadline.latestEntry);
+
+            $scope.patients[i].ordersHeadline.totalEntries = $scope.processCounts($scope.patients[i].ordersHeadline.totalEntries);
+            $scope.patients[i].vitalsHeadline.totalEntries = $scope.processCounts($scope.patients[i].vitalsHeadline.totalEntries);
+            $scope.patients[i].medsHeadline.totalEntries = $scope.processCounts($scope.patients[i].medsHeadline.totalEntries);
+            $scope.patients[i].resultsHeadline.totalEntries = $scope.processCounts($scope.patients[i].resultsHeadline.totalEntries);
+            $scope.patients[i].treatmentsHeadline.totalEntries = $scope.processCounts($scope.patients[i].treatmentsHeadline.totalEntries);
           }
           $scope.pagingInfo.totalItems = result.data.totalPatients;
           $scope.pagingInfo.orderType = $stateParams.orderType;
@@ -87,6 +93,13 @@ angular.module('rippleDemonstrator')
             $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].medsHeadline.latestEntry);
             $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].resultsHeadline.latestEntry);
             $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].treatmentsHeadline.latestEntry);
+
+            $scope.patients[i].ordersHeadline.totalEntries = $scope.processCounts($scope.patients[i].ordersHeadline.totalEntries);
+            $scope.patients[i].vitalsHeadline.totalEntries = $scope.processCounts($scope.patients[i].vitalsHeadline.totalEntries);
+            $scope.patients[i].medsHeadline.totalEntries = $scope.processCounts($scope.patients[i].medsHeadline.totalEntries);
+            $scope.patients[i].resultsHeadline.totalEntries = $scope.processCounts($scope.patients[i].resultsHeadline.totalEntries);
+            $scope.patients[i].treatmentsHeadline.totalEntries = $scope.processCounts($scope.patients[i].treatmentsHeadline.totalEntries);
+
           }
           $scope.pagingInfo.totalItems = result.data.totalPatients;
           $scope.pagingInfo.orderType = $stateParams.orderType;
@@ -121,6 +134,10 @@ angular.module('rippleDemonstrator')
       }
       $stateParams.pageNumber = 1;
       getData();
+    }
+
+    $scope.processCounts = function (countString) {
+        return countString === null ? 0 : countString;
     }
 
     $scope.processDateFormat = function (dateString) {

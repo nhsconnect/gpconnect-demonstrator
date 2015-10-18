@@ -6,6 +6,7 @@ public class OpenEHRDatesAndCountsResponse {
 
     private String ehrId;
     private String NHSNumber;
+    private String NHSNumber2;
 
     private String vitalsId;
     private String ordersId;
@@ -39,6 +40,14 @@ public class OpenEHRDatesAndCountsResponse {
 
     public void setNHSNumber(String NHSNumber) {
         this.NHSNumber = NHSNumber;
+    }
+
+    public String getNHSNumber2() {
+        return NHSNumber2;
+    }
+
+    public void setNHSNumber2(String NHSNumber2) {
+        this.NHSNumber2 = NHSNumber2;
     }
 
     public String getVitalsId() {

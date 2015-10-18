@@ -33,7 +33,7 @@ public interface PatientSearch extends Repository {
 
     List<PatientSummary> findPatientsByQuery(PatientTableQuery tableQuery);
 
-    Integer countPatientsByQuery(PatientTableQuery tableQuery);
+    Long countPatientsByQuery(PatientTableQuery tableQuery);
 
     PatientSummary findPatientSummary(String patientId);
 

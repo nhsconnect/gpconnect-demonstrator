@@ -47,8 +47,8 @@ public abstract class AbstractC4HReportingService implements Repository {
         UriComponents uriComponents = queryStrategy.getQueryUriComponents();
 
         ResponseEntity<OpenEHRDatesAndCountsResponse[]> response = requestProxy.postWithSession(uriComponents.toUriString(),
-                                                                                         OpenEHRDatesAndCountsResponse[].class,
-                                                                                         queryStrategy.getRequestBody());
+                                                                                                OpenEHRDatesAndCountsResponse[].class,
+                                                                                                queryStrategy.getRequestBody());
 
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new DataNotFoundException("C4H OpenEHR query returned with status code " + response.getStatusCode());

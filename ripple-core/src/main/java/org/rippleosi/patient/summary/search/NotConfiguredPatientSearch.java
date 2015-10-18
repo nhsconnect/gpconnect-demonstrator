@@ -53,7 +53,7 @@ public class NotConfiguredPatientSearch implements PatientSearch {
     }
 
     @Override
-    public Integer countPatientsByQuery(PatientTableQuery tableQuery) {
+    public Long countPatientsByQuery(PatientTableQuery tableQuery) {
         throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
     }
 

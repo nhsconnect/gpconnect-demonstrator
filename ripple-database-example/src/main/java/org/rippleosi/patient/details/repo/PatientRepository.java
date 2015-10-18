@@ -15,22 +15,17 @@
  */
 package org.rippleosi.patient.details.repo;
 
-import java.util.Date;
 import java.util.List;
 
 import org.rippleosi.patient.details.model.PatientEntity;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface PatientRepository extends PagingAndSortingRepository<PatientEntity, Long> {
+public interface PatientRepository extends PagingAndSortingRepository<PatientEntity, Long>,
+    QueryDslPredicateExecutor<PatientEntity> {
 
     PatientEntity findByNhsNumber(String nhsNumber);
-
-    List<PatientEntity> findDistinctByFirstNameOrLastNameOrDateOfBirthAllIgnoreCase(String firstName, String lastName,
-                                                                                    Date dateOfBirth, Pageable pageable);
-
-    List<PatientEntity> findDistinctByFirstNameOrLastNameOrDateOfBirthAllIgnoreCase(String firstName, String lastName,
-                                                                                    Date dateOfBirth);
 
     Integer countByDepartmentDepartmentIgnoreCase(String department);
 

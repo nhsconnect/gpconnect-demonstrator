@@ -35,7 +35,7 @@ public class SearchByPatientController {
         PatientTableSearch tableSearch = patientTableSearchFactory.select(source);
         ReportTableResults results = tableSearch.findAssociatedPatientData(tableQuery, patientSummaries);
 
-        Integer total = patientSearch.countPatientsByQuery(tableQuery);
+        Long total = patientSearch.countPatientsByQuery(tableQuery);
         results.setTotalPatients(String.valueOf(total));
 
         return results;

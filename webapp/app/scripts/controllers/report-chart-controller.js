@@ -82,7 +82,7 @@ angular.module('rippleDemonstrator')
       $scope.requestBody = {
         reportType: searchQuery[0],
         searchString: searchQuery[1]
-      }
+      };
 
       Report.getChart($scope.requestBody).then(function (chartData) {
         var graphData = [
@@ -113,7 +113,7 @@ angular.module('rippleDemonstrator')
         } else {
           $scope.noResults = 'There are no results that match your search criteria';
         }
-      })
+      });
     } else {
       $state.go('patients-charts');
     }

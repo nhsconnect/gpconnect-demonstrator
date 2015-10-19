@@ -116,12 +116,12 @@ angular.module('rippleDemonstrator')
 
       $scope.containsReportTypeString = function () {
         for (var i = 0; i < $scope.reportTypes.length; i++) {
-          if ($scope.searchExpression.lastIndexOf($scope.reportTypes[i]) != -1) {
+          if ($scope.searchExpression.lastIndexOf($scope.reportTypes[i]) !== -1) {
             return true;
           }
         }
         return false;
-      }
+      };
 
 
 
@@ -189,7 +189,6 @@ angular.module('rippleDemonstrator')
           });
         }
         if ($scope.settingsMode && $scope.searchExpression !== '') {
-          var tempExpression = $scope.searchExpression;
           $state.go('patients-list-full', {
             queryType: 'Setting: ',
             searchString: $scope.searchExpression,
@@ -198,7 +197,6 @@ angular.module('rippleDemonstrator')
           });
         }
         if ($scope.patientMode && $scope.searchExpression !== '') {
-          var tempExpression = $scope.searchExpression;
           $state.go('patients-list-full', {
             queryType: 'Patient: ',
             searchString: $scope.searchExpression,
@@ -249,7 +247,7 @@ angular.module('rippleDemonstrator')
         if (previousState === 'search-report') {
           $rootScope.searchExpression = params.searchString.trim();
           $state.go(previousState, {
-            searchString: params.reportType + ': ' + params.searchString.trim(),
+            searchString: params.reportType + ': ' + params.searchString.trim()
           });
         } else {
           $scope.cancelSearchMode();

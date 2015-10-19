@@ -19,7 +19,7 @@ angular.module('rippleDemonstrator')
       $scope.suggestions = suggestions.data;
     });
 
-    $scope.ok = function (orderForm, order) {
+    $scope.ok = function (orderForm) {
       $scope.formSubmitted = true;
 
       if (orderForm.$valid) {
@@ -51,10 +51,10 @@ angular.module('rippleDemonstrator')
         }
       } else {
         $scope.setSelectedRight(idSelected);
-        for (var i = 0; i < $scope.chosenOrders.length; i++) {
-          if ($scope.chosenOrders[i].code === $scope.idSelectedRight) {
-            $scope.suggestions.push($scope.chosenOrders[i]);
-            $scope.chosenOrders.splice(i, 1);
+        for (var a = 0; a < $scope.chosenOrders.length; a++) {
+          if ($scope.chosenOrders[a].code === $scope.idSelectedRight) {
+            $scope.suggestions.push($scope.chosenOrders[a]);
+            $scope.chosenOrders.splice(a, 1);
           }
         }
       }
@@ -64,27 +64,27 @@ angular.module('rippleDemonstrator')
     };
 
     $scope.isInSuggestionsList = function (idSelected) {
-      for (var i = 0; i < $scope.suggestions.length; i++) {
-        if ($scope.suggestions[i].code === idSelected) {
+      for (var b = 0; b < $scope.suggestions.length; b++) {
+        if ($scope.suggestions[b].code === idSelected) {
           return true;
         }
       }
       return false;
-    }
+    };
 
     $scope.moveItem = function () {
-      if ($scope.idSelectedLeft == null) {
-        for (var i = 0; i < $scope.chosenOrders.length; i++) {
-          if ($scope.chosenOrders[i].code === $scope.idSelectedRight) {
-            $scope.suggestions.push($scope.chosenOrders[i]);
-            $scope.chosenOrders.splice(i, 1)
+      if ($scope.idSelectedLeft === null) {
+        for (var c = 0; c < $scope.chosenOrders.length; c++) {
+          if ($scope.chosenOrders[c].code === $scope.idSelectedRight) {
+            $scope.suggestions.push($scope.chosenOrders[c]);
+            $scope.chosenOrders.splice(c, 1);
           }
         }
       } else {
-        for (var i = 0; i < $scope.suggestions.length; i++) {
-          if ($scope.suggestions[i].code === $scope.idSelectedLeft) {
-            $scope.chosenOrders.push($scope.suggestions[i]);
-            $scope.suggestions.splice(i, 1)
+        for (var d = 0; d < $scope.suggestions.length; d++) {
+          if ($scope.suggestions[d].code === $scope.idSelectedLeft) {
+            $scope.chosenOrders.push($scope.suggestions[d]);
+            $scope.suggestions.splice(d, 1);
           }
         }
       }

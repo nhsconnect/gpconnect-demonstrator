@@ -13,7 +13,6 @@ angular.module('rippleDemonstrator')
     $scope.tab = 'patientInfo';
     $scope.patients = [];
     $rootScope.searchMode = true;
-    getData();
 
     function getPageInfo() {
       var from = (15 *  $scope.pagingInfo.page - 14);
@@ -31,7 +30,7 @@ angular.module('rippleDemonstrator')
       }
       var total = from + ' to ' + to + ' of ' + $scope.pagingInfo.totalItems;
       return total;
-    };
+    }
 
     function getData() {
       if ($stateParams.queryType === 'Setting: ') {
@@ -43,12 +42,12 @@ angular.module('rippleDemonstrator')
           searchString: $stateParams.searchString,
           orderType: $stateParams.orderType,
           pageNumber: $stateParams.pageNumber
-        }
+        };
         Report.getSettingsTable(patientListQuery).then(function (result) {
           $scope.patients = result.data.patientDetails;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
 
-          if($scope.pagingInfo.totalItems == 0){
+          if ($scope.pagingInfo.totalItems === 0){
             $scope.noResults = 'There are no results that match your search criteria';
           }else {
             $scope.processData();
@@ -63,20 +62,20 @@ angular.module('rippleDemonstrator')
         $rootScope.reportTypeString = $stateParams.reportType;
         $scope.subHeader = $stateParams.queryType + $stateParams.reportType + ': ' + $stateParams.searchString + ' & Aged ' + $stateParams.ageFrom + ' to ' + $stateParams.ageTo;
 
-        var patientListQuery = {
+        var patientReportListQuery = {
           ageFrom: $stateParams.ageFrom,
           ageTo: $stateParams.ageTo,
           orderType: $stateParams.orderType,
           pageNumber: $stateParams.pageNumber,
           reportType: $stateParams.reportType,
           searchString: $stateParams.searchString
-        }
+        };
 
-        Report.getTable(patientListQuery).then(function (result) {
+        Report.getTable(patientReportListQuery).then(function (result) {
           $scope.patients = result.data.patientDetails;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
 
-          if($scope.pagingInfo.totalItems == 0){
+          if ($scope.pagingInfo.totalItems === 0){
             $scope.noResults = 'There are no results that match your search criteria';
           }else {
             $scope.processData();
@@ -93,12 +92,12 @@ angular.module('rippleDemonstrator')
           orderType: $stateParams.orderType,
           pageNumber: $stateParams.pageNumber,
           searchString: $stateParams.searchString
-        }
+        };
 
         Report.searchByPatient(searchPatientQuery).then(function (result) {
           $scope.patients = result.data.patientDetails;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
-          if($scope.pagingInfo.totalItems == 0){
+          if ($scope.pagingInfo.totalItems === 0){
             $scope.noResults = 'There are no results that match your search criteria';
           }else {
             $scope.processData();
@@ -108,27 +107,26 @@ angular.module('rippleDemonstrator')
     }
 
     $scope.processData = function () {
-          for (var i = 0; i < $scope.patients.length; i++) {
-            $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].ordersHeadline.latestEntry);
-            $scope.patients[i].vitalsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].vitalsHeadline.latestEntry);
-            $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].medsHeadline.latestEntry);
-            $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].resultsHeadline.latestEntry);
-            $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].treatmentsHeadline.latestEntry);
-
-            $scope.patients[i].ordersHeadline.totalEntries = $scope.processCounts($scope.patients[i].ordersHeadline.totalEntries);
-            $scope.patients[i].vitalsHeadline.totalEntries = $scope.processCounts($scope.patients[i].vitalsHeadline.totalEntries);
-            $scope.patients[i].medsHeadline.totalEntries = $scope.processCounts($scope.patients[i].medsHeadline.totalEntries);
-            $scope.patients[i].resultsHeadline.totalEntries = $scope.processCounts($scope.patients[i].resultsHeadline.totalEntries);
-            $scope.patients[i].treatmentsHeadline.totalEntries = $scope.processCounts($scope.patients[i].treatmentsHeadline.totalEntries);
-          }
-          $scope.pagingInfo.orderType = $stateParams.orderType;
-          $scope.pagingInfo.page =  $stateParams.pageNumber;
-          $scope.pageInfoText = getPageInfo();
-    }
+      for (var i = 0; i < $scope.patients.length; i++) {
+        $scope.patients[i].ordersHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].ordersHeadline.latestEntry);
+        $scope.patients[i].vitalsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].vitalsHeadline.latestEntry);
+        $scope.patients[i].medsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].medsHeadline.latestEntry);
+        $scope.patients[i].resultsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].resultsHeadline.latestEntry);
+        $scope.patients[i].treatmentsHeadline.latestEntry = $scope.processDateFormat($scope.patients[i].treatmentsHeadline.latestEntry);
+        $scope.patients[i].ordersHeadline.totalEntries = $scope.processCounts($scope.patients[i].ordersHeadline.totalEntries);
+        $scope.patients[i].vitalsHeadline.totalEntries = $scope.processCounts($scope.patients[i].vitalsHeadline.totalEntries);
+        $scope.patients[i].medsHeadline.totalEntries = $scope.processCounts($scope.patients[i].medsHeadline.totalEntries);
+        $scope.patients[i].resultsHeadline.totalEntries = $scope.processCounts($scope.patients[i].resultsHeadline.totalEntries);
+        $scope.patients[i].treatmentsHeadline.totalEntries = $scope.processCounts($scope.patients[i].treatmentsHeadline.totalEntries);
+      }
+      $scope.pagingInfo.orderType = $stateParams.orderType;
+      $scope.pagingInfo.page =  $stateParams.pageNumber;
+      $scope.pageInfoText = getPageInfo();
+    };
 
     $scope.orderBy = function () {
       return $scope.pagingInfo.orderType === 'ASC' ? 'sort-asc' : 'sort-desc';
-    }
+    };
 
     $scope.sort = function () {
       if ($stateParams.orderType === 'ASC') {
@@ -138,11 +136,11 @@ angular.module('rippleDemonstrator')
       }
       $stateParams.pageNumber = 1;
       getData();
-    }
+    };
 
     $scope.processCounts = function (countString) {
-        return countString === null ? 0 : countString;
-    }
+      return countString === null ? 0 : countString;
+    };
 
     $scope.processDateFormat = function (dateString) {
       if (dateString === null) {
@@ -159,7 +157,7 @@ angular.module('rippleDemonstrator')
         return dateString.format('MMM-YY');
       }
       return dateString.format('YYYY');
-    }
+    };
 
     $scope.viewPatients = function () {
       $scope.tab = 'patientInfo';
@@ -185,5 +183,7 @@ angular.module('rippleDemonstrator')
         patientId: patient.id
       });
     };
+
+    getData();
 
   });

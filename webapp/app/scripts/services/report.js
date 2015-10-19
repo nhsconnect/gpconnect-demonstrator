@@ -11,18 +11,19 @@ angular.module('rippleDemonstrator')
       return $http.post('/api/search/setting/table', searchBody);
     };
 
-    var getChart = function (searchString) {
-      return $http.post('/api/search/reports/chart', searchString);
+    var getChart = function (searchBody) {
+      return $http.post('/api/search/reports/chart', searchBody);
     };
 
-    var searchByPatien = function (searchBody) {
-
+    var searchByPatient = function (searchBody) {
+      return $http.post('/api/search/patient/table', searchBody);
     };
 
     return {
       getChart: getChart,
       getTable: getTable,
-      getSettingsTable: getSettingsTable
+      getSettingsTable: getSettingsTable,
+      searchByPatient: searchByPatient
     };
 
   });

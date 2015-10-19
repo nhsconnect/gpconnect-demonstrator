@@ -47,7 +47,7 @@ angular.module('rippleDemonstrator')
           $scope.patients = result.data.patientDetails;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
 
-          if ($scope.pagingInfo.totalItems === 0){
+          if ($scope.pagingInfo.totalItems == 0){
             $scope.noResults = 'There are no results that match your search criteria';
           }else {
             $scope.processData();
@@ -75,7 +75,7 @@ angular.module('rippleDemonstrator')
           $scope.patients = result.data.patientDetails;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
 
-          if ($scope.pagingInfo.totalItems === 0){
+          if ($scope.pagingInfo.totalItems == 0){
             $scope.noResults = 'There are no results that match your search criteria';
           }else {
             $scope.processData();
@@ -97,7 +97,7 @@ angular.module('rippleDemonstrator')
         Report.searchByPatient(searchPatientQuery).then(function (result) {
           $scope.patients = result.data.patientDetails;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
-          if ($scope.pagingInfo.totalItems === 0){
+          if ($scope.pagingInfo.totalItems == 0){
             $scope.noResults = 'There are no results that match your search criteria';
           }else {
             $scope.processData();

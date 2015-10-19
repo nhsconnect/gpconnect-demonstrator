@@ -56,7 +56,7 @@
           <div class="col-md-6">
             <label>Create Selected Orders?</label>
             <ul ng-repeat="chosenOrder in chosenOrders">
-              <li>{{chosenOrder.text}} <i ng-click="moveToLeft(chosenOrder.code)" class="fa fa-times-circle"></i></li>
+              <li>{{chosenOrder.text}} <i ng-click="toggleSelectedItem(chosenOrder.code)" class="fa fa-times-circle"></i></li>
             </ul>
             <div class="orderBackButton">
               <button class="btn btn-info" ng-click="pageOne()"><i class="fa fa-angle-left"></i> Back</button>

@@ -65,7 +65,7 @@ angular.module('rippleDemonstrator')
         }
 
         Order.create($scope.patient.id, toAdd).then(function () {
-          setTimeout(window.location.reload, 2000);
+          window.location.reload();
         });
       });
     };

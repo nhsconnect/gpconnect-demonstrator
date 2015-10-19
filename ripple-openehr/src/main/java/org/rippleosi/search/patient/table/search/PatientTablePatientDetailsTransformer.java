@@ -25,26 +25,27 @@ public class PatientTablePatientDetailsTransformer implements Transformer<Patien
         details.setGender(patientSummary.getGender());
         details.setNhsNumber(patientSummary.getNhsNumber());
 
+        OpenEHRDatesAndCountsResponse associatedData = new OpenEHRDatesAndCountsResponse();
+
         for (OpenEHRDatesAndCountsResponse result : openEhrResults) {
-            OpenEHRDatesAndCountsResponse associatedData;
             String nhsNumber = result.getNHSNumber();
 
             if (nhsNumber != null && nhsNumber.equals(patientSummary.getNhsNumber())) {
                 associatedData = result;
-
-                RecordHeadline vitalsHeadline = populateVitalsHeadline(associatedData);
-                RecordHeadline ordersHeadline = populateOrdersHeadline(associatedData);
-                RecordHeadline medsHeadline = populateMedsHeadline(associatedData);
-                RecordHeadline resultsHeadline = populateResultsHeadline(associatedData);
-                RecordHeadline treatmentsHeadline = populateTreatmentsHeadline(associatedData);
-
-                details.setVitalsHeadline(vitalsHeadline);
-                details.setOrdersHeadline(ordersHeadline);
-                details.setMedsHeadline(medsHeadline);
-                details.setResultsHeadline(resultsHeadline);
-                details.setTreatmentsHeadline(treatmentsHeadline);
             }
         }
+
+        RecordHeadline vitalsHeadline = populateVitalsHeadline(associatedData);
+        RecordHeadline ordersHeadline = populateOrdersHeadline(associatedData);
+        RecordHeadline medsHeadline = populateMedsHeadline(associatedData);
+        RecordHeadline resultsHeadline = populateResultsHeadline(associatedData);
+        RecordHeadline treatmentsHeadline = populateTreatmentsHeadline(associatedData);
+
+        details.setVitalsHeadline(vitalsHeadline);
+        details.setOrdersHeadline(ordersHeadline);
+        details.setMedsHeadline(medsHeadline);
+        details.setResultsHeadline(resultsHeadline);
+        details.setTreatmentsHeadline(treatmentsHeadline);
 
         return details;
     }

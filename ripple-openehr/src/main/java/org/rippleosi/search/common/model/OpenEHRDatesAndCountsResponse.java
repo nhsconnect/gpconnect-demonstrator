@@ -2,11 +2,15 @@ package org.rippleosi.search.common.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 public class OpenEHRDatesAndCountsResponse {
 
     private String ehrId;
-    private String NHSNumber;
-    private String NHSNumber2;
+
+    @JsonProperty("nhsNumber")
+    private String nhsNumber;
 
     private String vitalsId;
     private String ordersId;
@@ -34,20 +38,13 @@ public class OpenEHRDatesAndCountsResponse {
         this.ehrId = ehrId;
     }
 
-    public String getNHSNumber() {
-        return NHSNumber;
+    public String getNhsNumber() {
+        return nhsNumber;
     }
 
-    public void setNHSNumber(String NHSNumber) {
-        this.NHSNumber = NHSNumber;
-    }
-
-    public String getNHSNumber2() {
-        return NHSNumber2;
-    }
-
-    public void setNHSNumber2(String NHSNumber2) {
-        this.NHSNumber2 = NHSNumber2;
+    @JsonSetter("nhsNumber")
+    public void setNhsNumber(String nhsNumber) {
+        this.nhsNumber = nhsNumber;
     }
 
     public String getVitalsId() {

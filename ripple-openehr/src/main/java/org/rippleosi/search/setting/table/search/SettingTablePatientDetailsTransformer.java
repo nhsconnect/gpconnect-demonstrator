@@ -28,7 +28,7 @@ public class SettingTablePatientDetailsTransformer implements Transformer<Patien
         OpenEHRDatesAndCountsResponse associatedData = new OpenEHRDatesAndCountsResponse();
 
         for (OpenEHRDatesAndCountsResponse result : openEhrResults) {
-            String nhsNumber = result.getNHSNumber();
+            String nhsNumber = result.getNhsNumber();
 
             if (nhsNumber != null && nhsNumber.equals(patientSummary.getNhsNumber())) {
                 associatedData = result;

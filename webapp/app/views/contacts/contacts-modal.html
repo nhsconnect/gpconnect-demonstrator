@@ -24,7 +24,8 @@
       <legend>{{ modal.title }}</legend>
       <div class="contactFormRow">
         <div class="row">
-          <div class="form-group col-md-12" ng-class="{'has-error': (formSubmitted || contactForm.name.$dirty) && contactForm.name.$invalid, 'has-success': contactForm.name.$valid && contactForm.name.$dirty}">
+          <div class=" col-md-12">
+          <div class="form-group" ng-class="{'has-error': (formSubmitted || contactForm.name.$dirty) && contactForm.name.$invalid, 'has-success': contactForm.name.$valid && contactForm.name.$dirty}">
             <label for="name" class="control-label col-md-12">Name</label>
             <div class="col-md-12">
               <div class="input-group">
@@ -32,6 +33,7 @@
               </div>
               <span class="help-block animate-fade" ng-show="formSubmitted && contactForm.name.$error.required">You must enter a value.</span>
             </div>
+          </div>
           </div>
         </div>
         <div class="row">
@@ -88,7 +90,7 @@
                 <div class="form-group" ng-class="{'has-error': (formSubmitted || contactForm.relationshipTerminology.$dirty) && contactForm.relationshipTerminology.$invalid, 'has-success': contactForm.relationshipTerminology.$valid && contactForm.relationshipTerminology.$dirty}">
                   <label for="relationshipTerminology" class="control-label col-md-12">Relationship Terminology</label>
                   <div class="col-md-12">
-                    <div class="contactNonEditValue">
+                    <div class="nonEditValue">
                       {{contact.relationshipTerminology}}
                     </div>
                     <span class="help-block animate-fade" ng-show="formSubmitted && contactForm.relationshipTerminology.$error.required">You must enter a value.</span>
@@ -99,7 +101,7 @@
                 <div class="form-group" ng-class="{'has-error': (formSubmitted || contactForm.relationshipCode.$dirty) && contactForm.relationshipCode.$invalid, 'has-success': contactForm.relationshipCode.$valid && contactForm.relationshipCode.$dirty}">
                   <label for="relationshipCode" class="control-label col-md-12">Relationship Code</label>
                   <div class="col-md-12">
-                    <div class="contactNonEditValue">
+                    <div class="nonEditValue">
                       {{contact.relationshipCode}}
                     </div>
                     <span class="help-block animate-fade" ng-show="formSubmitted && contactForm.relationshipCode.$error.required">You must enter a value.</span>

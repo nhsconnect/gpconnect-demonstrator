@@ -2033,6 +2033,10 @@ i.fa.cancel-reportType.fa-times {
   height: 100px;
 }
 
+.contactForm .row {
+  margin-right: 0px;
+}
+
 .contactFormThirdRow {
   margin-left: -30px;
 }
@@ -2041,6 +2045,11 @@ i.fa.cancel-reportType.fa-times {
   height: 30px;
 }
 
-.contactNonEditValue {
+.nonEditValue {
   height: 30px;
+}
+
+.allergyForm .input-group {
+  width: 100%;
+  padding-top: 8px;
 }

@@ -2025,11 +2025,13 @@ i.fa.cancel-reportType.fa-times {
 }
 
 .contactForm .input-group {
-  width:100%;
+  width: 100%;
   padding-top: 5px;
 }
 
-.contactForm textarea{
+.contactForm textarea,
+.allergyForm textarea
+{
   height: 100px;
 }
 
@@ -2041,15 +2043,25 @@ i.fa.cancel-reportType.fa-times {
   margin-left: -30px;
 }
 
-#nextOfKin{
+#nextOfKin {
   height: 30px;
 }
 
 .nonEditValue {
   height: 30px;
+  line-height: 30px;
 }
 
 .allergyForm .input-group {
   width: 100%;
   padding-top: 8px;
+}
+
+.allergyForm .nonEditValue {
+  padding-top: 8px;
+}
+
+.allergyForm .row {
+  margin-right: 0px;
+  margin-left: 0px;
 }

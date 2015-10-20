@@ -83,7 +83,7 @@ angular.module('rippleDemonstrator')
       });
     };
 
-    jQuery(document).ready(function ($) {
+
       // Chart Toggle
       $('.chart-inner select').change(function () {
         // Get the target
@@ -117,7 +117,7 @@ angular.module('rippleDemonstrator')
           });
         }
       };
-    });
+
 
     // Selected chart on page load
     $scope.selectedChart = 'age';

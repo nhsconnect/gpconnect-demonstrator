@@ -32,13 +32,6 @@ angular
         }
       })
 
-      .state('header', {
-        url: '/?role&email',
-        views: {
-          main: { controller: 'headerController' }
-        }
-      })
-
       .state('patients-charts', {
          url: '/',
         views: {

@@ -1,11 +1,19 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ContactsModalCtrl', function ($scope, $modalInstance, contact, patient, modal) {
+  .controller('ContactsModalCtrl', function ($scope, $modalInstance, contact, PatientService, patient, modal) {
 
+    $scope.currentUser = PatientService.getCurrentUser();
     $scope.contact = contact;
     $scope.patient = patient;
     $scope.modal = modal;
+
+    if (modal.title === 'Create Contact') {
+      $scope.contact.dateSubmitted = new Date().toISOString().slice(0, 10);
+    }
+    else {
+      $scope.contact.dateSubmitted = new Date($scope.procedure.dateSubmitted).toISOString().slice(0, 10);
+    }
 
     $scope.ok = function (contactForm, contact) {
       $scope.formSubmitted = true;

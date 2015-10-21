@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ReferralsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, PatientService, Referral) {
+  .controller('ReferralsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, Helper, PatientService, Referral) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -48,7 +48,7 @@ angular.module('rippleDemonstrator')
         };
 
         Referral.update($scope.patient.id, toUpdate).then(function () {
-          $state.go('referrals', { patientId: $scope.patient.id });
+         $state.go('referrals-detail', { patientId: $scope.patient.id, referralId: Helper.updateId(referral.sourceId)});
         });
       });
     };

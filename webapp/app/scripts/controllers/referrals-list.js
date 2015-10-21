@@ -16,6 +16,10 @@ angular.module('rippleDemonstrator')
       $scope.patient = patient;
     });
 
+    if ($stateParams.filter) {
+      $scope.query = $stateParams.filter;
+    }
+
     Referral.all($stateParams.patientId).then(function (result) {
       $scope.result = result.data;
 
@@ -29,7 +33,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/' + $scope.patient.id + '/referrals/' + id);
+       $state.go('referrals-detail', { patientId: $scope.patient.id, referralId: id, filter: $scope.query });
     };
 
     $scope.selected = function (referralId) {

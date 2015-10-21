@@ -10,12 +10,20 @@ angular.module('rippleDemonstrator')
       $scope.patient = patient;
     });
 
+    if ($stateParams.filter) {
+      $scope.query.$ = $stateParams.filter;
+    }
+
     Medication.all($stateParams.patientId).then(function (result) {
       $scope.medications = result.data;
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/' + $scope.patient.id + '/medications/' + id);
+      $state.go('medications-detail', {
+        patientId: $scope.patient.id,
+        medicationIndex: id,
+        filter: $scope.query.$
+      });
     };
 
     $scope.selected = function (medicationIndex) {
@@ -61,7 +69,9 @@ angular.module('rippleDemonstrator')
         };
 
         Medication.create($scope.patient.id, toAdd).then(function () {
-          $state.go('medications', { patientId: $scope.patient.id });
+          $state.go('medications', {
+            patientId: $scope.patient.id
+          });
         });
       });
     };

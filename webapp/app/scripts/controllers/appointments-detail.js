@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('AppointmentsDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Appointment) {
+  .controller('AppointmentsDetailCtrl', function ($scope, $stateParams, $modal, Helper, $state, $location, PatientService, Appointment) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -49,7 +49,7 @@ angular.module('rippleDemonstrator')
         };
 
         Appointment.update($scope.patient.id, toUpdate).then(function () {
-          $location.path('/patients/' + $scope.patient.id + '/appointments');
+          $state.go('appointments-detail', { patientId: $scope.patient.id, appointmentIndex: Helper.updateId(appointment.sourceId) });
         });
       });
     };

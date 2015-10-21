@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('DiagnosesDetailCtrl', function ($scope, $stateParams, $location, $modal, PatientService, Diagnosis) {
+  .controller('DiagnosesDetailCtrl', function ($scope, $stateParams, $location, $modal, Helper, $state, PatientService, Diagnosis) {
 
     $scope.UnlockedSources = [
       'handi.ehrscape.com'
@@ -49,7 +49,7 @@ angular.module('rippleDemonstrator')
         };
 
         Diagnosis.update($scope.patient.id, toUpdate).then(function () {
-          $location.path('/patients/' + $scope.patient.id + '/diagnoses');
+         $state.go('diagnoses-detail', { patientId: $scope.patient.id, diagnosisIndex: Helper.updateId(contact.sourceId) });
         });
       });
     };

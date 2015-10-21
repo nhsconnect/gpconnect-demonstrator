@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ProceduresDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, PatientService, Procedure) {
+  .controller('ProceduresDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, Helper, PatientService, Procedure) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -34,6 +34,7 @@ angular.module('rippleDemonstrator')
       modalInstance.result.then(function (procedure) {
         procedure.dateSubmitted = new Date(procedure.dateSubmitted);
         procedure.date = new Date(procedure.date);
+        procedure.date.setMinutes(procedure.date.getMinutes() - procedure.date.getTimezoneOffset());
 
         var toUpdate = {
           sourceId: procedure.sourceId,
@@ -50,7 +51,7 @@ angular.module('rippleDemonstrator')
         };
 
         Procedure.update($scope.patient.id, toUpdate).then(function () {
-          $state.go('procedures', { patientId: $scope.patient.id });
+          $state.go('procedures-detail', { patientId: $scope.patient.id, procedureId: Helper.updateId(procedure.sourceId)});
         });
       });
     };

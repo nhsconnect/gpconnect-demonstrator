@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('EolcareplansDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Eolcareplan) {
+  .controller('EolcareplansDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, Helper, PatientService, Eolcareplan) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -47,7 +47,7 @@ angular.module('rippleDemonstrator')
         };
 
         Eolcareplan.update($scope.patient.id, toUpdate).then(function () {
-          $location.path('/patients/' + $scope.patient.id + '/eolcareplans');
+          $state.go('eolcareplans-detail', { patientId: $scope.patient.id, eolcareplansIndex: Helper.updateId(eolcareplan.sourceId) });
         });
       });
     };

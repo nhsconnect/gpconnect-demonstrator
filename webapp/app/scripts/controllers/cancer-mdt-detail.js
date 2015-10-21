@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('CancerMdtDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, PatientService, CancerMdt) {
+  .controller('CancerMdtDetailCtrl', function ($scope, $stateParams, $modal, $location, Helper, $state, PatientService, CancerMdt) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -40,7 +40,7 @@ angular.module('rippleDemonstrator')
         }
 
         CancerMdt.update($scope.patient.id, cancerMdt).then(function () {
-          $state.go('cancerMdt', { patientId: $scope.patient.id });
+          $state.go('cancerMdt-detail', { patientId: $scope.patient.id, cancerMdtIndex: Helper.updateId(cancerMdt.sourceId) });
         });
       });
     };

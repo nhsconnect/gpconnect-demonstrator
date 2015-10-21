@@ -12,6 +12,10 @@ angular.module('rippleDemonstrator')
       );
     };
 
+    if ($stateParams.filter) {
+      $scope.query = $stateParams.filter;
+    }
+
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
@@ -26,7 +30,11 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/' + $scope.patient.id + '/cancer-mdt-detail/' + id);
+      $state.go('cancerMdt-detail', {
+        patientId: $scope.patient.id,
+        cancerMdtIndex: id,
+        filter: $scope.query
+      });
     };
 
     $scope.selected = function (cancerMdtIndex) {
@@ -60,7 +68,7 @@ angular.module('rippleDemonstrator')
         cancerMdt.dateOfRequest = new Date(cancerMdt.dateOfRequest);
         cancerMdt.dateOfRequest.setMinutes(cancerMdt.dateOfRequest.getMinutes() - cancerMdt.dateOfRequest.getTimezoneOffset());
 
-        if (cancerMdt.timeOfMeeting !== null){
+        if (cancerMdt.timeOfMeeting !== null) {
           cancerMdt.timeOfMeeting = new Date(cancerMdt.timeOfMeeting);
           cancerMdt.timeOfMeeting.setMinutes(cancerMdt.timeOfMeeting.getMinutes() - cancerMdt.timeOfMeeting.getTimezoneOffset());
         }
@@ -69,7 +77,9 @@ angular.module('rippleDemonstrator')
         cancerMdt.source = 'openehr';
 
         CancerMdt.create($scope.patient.id, cancerMdt).then(function () {
-          $state.go('cancerMdt', { patientId: $scope.patient.id });
+          $state.go('cancerMdt', {
+            patientId: $scope.patient.id
+          });
         });
       });
     };

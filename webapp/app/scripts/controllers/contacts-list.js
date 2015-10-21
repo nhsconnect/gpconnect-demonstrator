@@ -1,10 +1,14 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ContactsListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Contact) {
+  .controller('ContactsListCtrl', function ($scope, $rootScope, $location, $stateParams, $modal, $state, PatientService, Contact) {
 
     $scope.query = {};
     $scope.queryBy = '$';
+
+    if ($stateParams.filter) {
+      $scope.query.$ = $stateParams.filter;
+    }
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -15,7 +19,11 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/' + $scope.patient.id + '/contacts/' + id);
+      $state.go('contacts-detail', {
+        patientId: $scope.patient.id,
+        contactIndex: id,
+        filter: $scope.query.$
+      });
     };
 
     $scope.selected = function (contactIndex) {
@@ -46,7 +54,9 @@ angular.module('rippleDemonstrator')
         contact.sourceId = '';
 
         Contact.create($scope.patient.id, contact).then(function () {
-          $state.go('contacts', { patientId: $scope.patient.id });
+          $state.go('contacts', {
+            patientId: $scope.patient.id
+          });
         });
       });
     };

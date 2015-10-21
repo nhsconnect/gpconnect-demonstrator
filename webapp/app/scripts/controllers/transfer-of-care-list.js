@@ -6,6 +6,10 @@ angular.module('rippleDemonstrator')
     $scope.query = {};
     $scope.queryBy = '$';
 
+    if ($stateParams.filter) {
+      $scope.query.$ = $stateParams.filter;
+    }
+
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
@@ -19,7 +23,11 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/' + $scope.patient.id + '/transfer-of-care-detail/' + id);
+        $state.go('transferOfCare-detail', {
+        patientId: $scope.patient.id,
+        transferOfCareIndex: id,
+        filter: $scope.query.$
+      });
     };
 
     $scope.selected = function (transferOfCareIndex) {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ContactsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, PatientService, Contact) {
+  .controller('ContactsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, Helper, PatientService, Contact) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -33,7 +33,7 @@ angular.module('rippleDemonstrator')
 
       modalInstance.result.then(function (contact) {
         Contact.update($scope.patient.id, contact).then(function () {
-          $state.go('contacts', { patientId: $scope.patient.id });
+          $state.go('contacts-detail', { patientId: $scope.patient.id, contactIndex: Helper.updateId(contact.sourceId) });
         });
       });
     };

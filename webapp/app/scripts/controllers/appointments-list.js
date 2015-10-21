@@ -16,6 +16,10 @@ angular.module('rippleDemonstrator')
       $scope.patient = patient;
     });
 
+    if ($stateParams.filter) {
+      $scope.query = $stateParams.filter;
+    }
+
     Appointment.all($stateParams.patientId).then(function (result) {
       $scope.appointments = result.data;
 
@@ -26,7 +30,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/' + $scope.patient.id + '/appointments/' + id);
+      $state.go('appointments-detail', { patientId: $scope.patient.id, appointmentIndex: id, filter: $scope.query });
     };
 
     $scope.selected = function (appointmentIndex) {

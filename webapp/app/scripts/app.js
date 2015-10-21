@@ -73,7 +73,7 @@ angular
       })
 
       .state('diagnoses-detail', {
-        url: '/patients/{patientId:int}/diagnoses/{diagnosisIndex}',
+        url: '/patients/{patientId:int}/diagnoses/{diagnosisIndex}?filter',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -92,7 +92,7 @@ angular
       })
 
       .state('allergies-detail', {
-        url: '/patients/{patientId:int}/allergies/{allergyIndex}',
+        url: '/patients/{patientId:int}/allergies/{allergyIndex}?filter',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -111,7 +111,7 @@ angular
       })
 
       .state('medications-detail', {
-        url: '/patients/{patientId:int}/medications/{medicationIndex}',
+        url: '/patients/{patientId:int}/medications/{medicationIndex}?filter',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -130,7 +130,7 @@ angular
       })
 
       .state('contacts-detail', {
-        url: '/patients/{patientId:int}/contacts/{contactIndex}',
+        url: '/patients/{patientId:int}/contacts/{contactIndex}?filter',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -149,7 +149,7 @@ angular
       })
 
       .state('transferOfCare-detail', {
-        url: '/patients/{patientId:int}/transfer-of-care-detail/{transferOfCareIndex}',
+        url: '/patients/{patientId:int}/transfer-of-care-detail/{transferOfCareIndex}?filter',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -177,7 +177,7 @@ angular
     })
 
       .state('cancerMdt-detail', {
-        url: '/patients/{patientId:int}/cancer-mdt-detail/{cancerMdtIndex}',
+        url: '/patients/{patientId:int}/cancer-mdt-detail/{cancerMdtIndex}?filter',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -196,7 +196,7 @@ angular
       })
 
       .state('procedures-detail', {
-        url: '/patients/{patientId:int}/procedures/{procedureId}',
+        url: '/patients/{patientId:int}/procedures/{procedureId}?filter',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -215,7 +215,7 @@ angular
       })
 
       .state('referrals-detail', {
-        url: '/patients/{patientId:int}/referrals/{referralId}',
+        url: '/patients/{patientId:int}/referrals/{referralId}?filter',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -234,7 +234,7 @@ angular
       })
 
       .state('eolcareplans-detail', {
-        url: '/patients/{patientId:int}/eolcareplans/{eolcareplansIndex}',
+        url: '/patients/{patientId:int}/eolcareplans/{eolcareplansIndex}?filter',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -253,7 +253,7 @@ angular
       })
 
       .state('appointments-detail', {
-        url: '/patients/{patientId:int}/appointments/{appointmentIndex}',
+        url: '/patients/{patientId:int}/appointments/{appointmentIndex}?filter',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -272,7 +272,7 @@ angular
       })
 
       .state('orders-detail', {
-        url: '/patients/{patientId:int}/orders/{orderId}',
+        url: '/patients/{patientId:int}/orders/{orderId}?filter',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -291,7 +291,7 @@ angular
       })
 
       .state('results-detail', {
-        url: '/patients/{patientId:int}/results/{resultIndex}',
+        url: '/patients/{patientId:int}/results/{resultIndex}?filter',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },

@@ -11,6 +11,10 @@ angular.module('rippleDemonstrator')
       );
     };
 
+    if ($stateParams.filter) {
+      $scope.query = $stateParams.filter;
+    }
+
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
@@ -24,7 +28,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/' + $scope.patient.id + '/orders/' + id);
+       $state.go('orders-detail', { patientId: $scope.patient.id, orderId: id, filter: $scope.query });
     };
 
     $scope.selected = function (orderId) {

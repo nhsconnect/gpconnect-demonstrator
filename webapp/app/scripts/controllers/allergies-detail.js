@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('AllergiesDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, Allergy) {
+  .controller('AllergiesDetailCtrl', function ($scope, $stateParams, $modal, $location, Helper, PatientService, Allergy) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -42,7 +42,7 @@ angular.module('rippleDemonstrator')
         };
 
         Allergy.update($scope.patient.id, toUpdate).then(function () {
-          $location.path('/patients/' + $scope.patient.id + '/allergies');
+          $state.go('allergies-detail', { patientId: $scope.patient.id, allergyIndex: Helper.updateId(appointment.sourceId) });
         });
       });
     };

@@ -16,6 +16,10 @@ angular.module('rippleDemonstrator')
       $scope.patient = patient;
     });
 
+    if ($stateParams.filter) {
+      $scope.query = $stateParams.filter;
+    }
+
     Procedure.all($stateParams.patientId).then(function (result) {
       $scope.procedures = result.data;
 
@@ -26,7 +30,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/' + $scope.patient.id + '/procedures/' + id);
+      $state.go('procedures-detail', { patientId: $scope.patient.id, procedureId: id, filter: $scope.query });
     };
 
     $scope.selected = function (procedureId) {
@@ -56,6 +60,7 @@ angular.module('rippleDemonstrator')
       modalInstance.result.then(function (procedure) {
         procedure.dateSubmitted = new Date(procedure.dateSubmitted);
         procedure.date = new Date(procedure.date);
+        procedure.date.setMinutes(procedure.date.getMinutes() - procedure.date.getTimezoneOffset());
         procedure.time = new Date(procedure.time.valueOf() - procedure.time.getTimezoneOffset() * 60000);
 
         var toAdd = {
@@ -73,7 +78,9 @@ angular.module('rippleDemonstrator')
         };
 
         Procedure.create($scope.patient.id, toAdd).then(function () {
-          $state.go('procedures', { patientId: $scope.patient.id });
+          $state.go('procedures', {
+            patientId: $scope.patient.id
+          });
         });
       });
     };

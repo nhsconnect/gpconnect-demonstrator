@@ -11,6 +11,10 @@ angular.module('rippleDemonstrator')
       );
     };
 
+    if ($stateParams.filter) {
+      $scope.query = $stateParams.filter;
+    }
+
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
@@ -20,7 +24,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/' + $scope.patient.id + '/allergies/' + id);
+       $state.go('allergies-detail', { patientId: $scope.patient.id, allergyIndex: id, filter: $scope.query });
     };
 
     $scope.selected = function ($index) {

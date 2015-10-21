@@ -1,4 +1,4 @@
-package org.rippleosi.search.patient.table.model;
+package org.rippleosi.search.patient.stats.model;
 
 import org.rippleosi.search.common.model.PageableTableQuery;
 

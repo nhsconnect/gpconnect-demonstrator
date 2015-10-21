@@ -1,10 +1,8 @@
-package org.rippleosi.search.setting.table.model;
+package org.rippleosi.search.patient.stats.model;
 
 import java.util.List;
 
-import org.rippleosi.search.common.model.SearchTablePatientDetails;
-
-public class SettingTableResults {
+public class SearchTableResults {
 
     private String totalPatients;
     private List<SearchTablePatientDetails> patientDetails;

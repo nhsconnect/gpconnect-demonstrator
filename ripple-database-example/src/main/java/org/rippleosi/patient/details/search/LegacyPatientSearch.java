@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManagerFactory;
-
 import com.mysema.query.BooleanBuilder;
 import com.mysema.util.ArrayUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -33,7 +31,8 @@ import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.patient.summary.search.PatientSearch;
 import org.rippleosi.search.common.model.PageableTableQuery;
-import org.rippleosi.search.patient.table.model.PatientTableQuery;
+import org.rippleosi.search.patient.stats.model.PatientTableQuery;
+import org.rippleosi.search.reports.table.model.ReportTableQuery;
 import org.rippleosi.search.setting.table.model.SettingTableQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,9 +49,6 @@ public class LegacyPatientSearch implements PatientSearch {
 
     @Value("${legacy.datasource.priority:900}")
     private int priority;
-
-    @Autowired
-    private EntityManagerFactory emFactory;
 
     @Autowired
     private PatientRepository patientRepository;
@@ -77,6 +73,24 @@ public class LegacyPatientSearch implements PatientSearch {
     public List<PatientSummary> findAllPatients() {
         Sort sort = new Sort("nhsNumber");
         Iterable<PatientEntity> patients = patientRepository.findAll(sort);
+        return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
+    }
+
+    @Override
+    public List<PatientSummary> findAllMatchingPatients(List<String> nhsNumbers, ReportTableQuery tableQuery) {
+        if (nhsNumbers.isEmpty()) {
+            return null;
+        }
+
+        // build the query predicate
+        QPatientEntity blueprint = QPatientEntity.patientEntity;
+        BooleanBuilder predicate = new BooleanBuilder();
+
+        for (String nhsNumber : nhsNumbers) {
+            predicate.or(blueprint.nhsNumber.eq(nhsNumber));
+        }
+
+        Iterable<PatientEntity> patients = patientRepository.findAll(predicate, generatePageRequest(tableQuery));
         return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
     }
 

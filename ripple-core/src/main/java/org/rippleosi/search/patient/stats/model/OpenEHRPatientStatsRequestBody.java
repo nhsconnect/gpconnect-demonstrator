@@ -1,6 +1,6 @@
-package org.rippleosi.search.setting.table.model;
+package org.rippleosi.search.patient.stats.model;
 
-public class OpenEHRSettingRequestBody {
+public class OpenEHRPatientStatsRequestBody {
 
     private String externalIds;
     private String externalNamespace;

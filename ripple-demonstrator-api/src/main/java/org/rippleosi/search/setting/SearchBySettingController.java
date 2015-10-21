@@ -5,10 +5,10 @@ import java.util.List;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.patient.summary.search.PatientSearch;
 import org.rippleosi.patient.summary.search.PatientSearchFactory;
+import org.rippleosi.search.patient.stats.model.SearchTableResults;
+import org.rippleosi.search.patient.stats.search.PatientStatsSearch;
+import org.rippleosi.search.patient.stats.search.PatientStatsSearchFactory;
 import org.rippleosi.search.setting.table.model.SettingTableQuery;
-import org.rippleosi.search.setting.table.model.SettingTableResults;
-import org.rippleosi.search.setting.table.search.SettingTableSearch;
-import org.rippleosi.search.setting.table.search.SettingTableSearchFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,17 +24,17 @@ public class SearchBySettingController {
     private PatientSearchFactory patientSearchFactory;
 
     @Autowired
-    private SettingTableSearchFactory settingTableSearchFactory;
+    private PatientStatsSearchFactory patientStatsSearchFactory;
 
     @RequestMapping(value = "/table", method = RequestMethod.POST)
-    public SettingTableResults getSettingTable(@RequestParam(required = false) String patientSource,
+    public SearchTableResults getSettingTable(@RequestParam(required = false) String patientSource,
                                                @RequestParam(required = false) String patientDataSource,
                                                @RequestBody SettingTableQuery tableQuery) {
         PatientSearch patientSearch = patientSearchFactory.select(patientSource);
         List<PatientSummary> patientSummaries = patientSearch.findAllPatientsByDepartment(tableQuery);
 
-        SettingTableSearch settingSearch = settingTableSearchFactory.select(patientDataSource);
-        SettingTableResults results = settingSearch.findAssociatedPatientData(tableQuery, patientSummaries);
+        PatientStatsSearch settingSearch = patientStatsSearchFactory.select(patientDataSource);
+        SearchTableResults results = settingSearch.findAssociatedPatientData(tableQuery, patientSummaries);
 
         Integer countByDepartment = patientSearch.findPatientCountByDepartment(tableQuery.getSearchString());
         results.setTotalPatients(String.valueOf(countByDepartment));

@@ -1,4 +1,4 @@
-package org.rippleosi.search.common.model;
+package org.rippleosi.search.patient.stats.model;
 
 import java.util.Date;
 

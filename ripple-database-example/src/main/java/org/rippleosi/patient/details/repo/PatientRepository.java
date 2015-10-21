@@ -19,11 +19,11 @@ import java.util.List;
 
 import org.rippleosi.patient.details.model.PatientEntity;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface PatientRepository extends PagingAndSortingRepository<PatientEntity, Long>,
-    QueryDslPredicateExecutor<PatientEntity> {
+public interface PatientRepository extends JpaRepository<PatientEntity, Long>, QueryDslPredicateExecutor<PatientEntity> {
 
     PatientEntity findByNhsNumber(String nhsNumber);
 

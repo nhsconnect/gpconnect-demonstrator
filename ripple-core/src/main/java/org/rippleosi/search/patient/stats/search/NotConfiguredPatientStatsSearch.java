@@ -1,13 +1,13 @@
-package org.rippleosi.search.patient.table.search;
+package org.rippleosi.search.patient.stats.search;
 
 import java.util.List;
 
 import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.patient.summary.model.PatientSummary;
-import org.rippleosi.search.patient.table.model.PatientTableQuery;
-import org.rippleosi.search.reports.table.model.ReportTableResults;
+import org.rippleosi.search.common.model.PageableTableQuery;
+import org.rippleosi.search.patient.stats.model.SearchTableResults;
 
-public class NotConfiguredPatientTableSearch implements PatientTableSearch {
+public class NotConfiguredPatientStatsSearch implements PatientStatsSearch {
 
     @Override
     public String getSource() {
@@ -20,8 +20,8 @@ public class NotConfiguredPatientTableSearch implements PatientTableSearch {
     }
 
     @Override
-    public ReportTableResults findAssociatedPatientData(PatientTableQuery tableQuery,
+    public SearchTableResults findAssociatedPatientData(PageableTableQuery tableQuery,
                                                         List<PatientSummary> patientSummaries) {
-        throw ConfigurationException.unimplementedTransaction(PatientTableSearch.class);
+        throw ConfigurationException.unimplementedTransaction(PatientStatsSearch.class);
     }
 }

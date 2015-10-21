@@ -1,4 +1,4 @@
-package org.rippleosi.search.patient.table.search;
+package org.rippleosi.search.patient.stats.search;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,17 +8,17 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.C4HUriQueryStrategy;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.search.common.model.OpenEHRDatesAndCountsResponse;
-import org.rippleosi.search.common.model.SearchTablePatientDetails;
-import org.rippleosi.search.patient.table.model.PatientTableQuery;
-import org.rippleosi.search.reports.table.model.ReportTableResults;
-import org.rippleosi.search.setting.table.model.OpenEHRSettingRequestBody;
+import org.rippleosi.search.common.model.PageableTableQuery;
+import org.rippleosi.search.patient.stats.model.OpenEHRPatientStatsRequestBody;
+import org.rippleosi.search.patient.stats.model.SearchTablePatientDetails;
+import org.rippleosi.search.patient.stats.model.SearchTableResults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
-public class PatientTableQueryStrategy implements C4HUriQueryStrategy<OpenEHRDatesAndCountsResponse[], ReportTableResults> {
+public class PatientStatsQueryStrategy implements C4HUriQueryStrategy<OpenEHRDatesAndCountsResponse[], SearchTableResults> {
 
     @Value("${c4hOpenEHR.address}")
     private String c4hOpenEHRAddress;
@@ -27,13 +27,13 @@ public class PatientTableQueryStrategy implements C4HUriQueryStrategy<OpenEHRDat
     private String externalNamespace;
 
     private List<PatientSummary> patientSummaries;
-    private PatientTableQuery tableQuery;
+    private PageableTableQuery tableQuery;
 
     public void setPatientSummaries(List<PatientSummary> patientSummaries) {
         this.patientSummaries = patientSummaries;
     }
 
-    public void setTableQuery(PatientTableQuery tableQuery) {
+    public void setTableQuery(PageableTableQuery tableQuery) {
         this.tableQuery = tableQuery;
     }
 
@@ -53,7 +53,7 @@ public class PatientTableQueryStrategy implements C4HUriQueryStrategy<OpenEHRDat
 
     @Override
     public Object getRequestBody() {
-        OpenEHRSettingRequestBody body = new OpenEHRSettingRequestBody();
+        OpenEHRPatientStatsRequestBody body = new OpenEHRPatientStatsRequestBody();
 
         // create a CSV list of NHS Numbers for OpenEHR to query associated data
         StringJoiner csvBuilder = new StringJoiner(",");
@@ -68,10 +68,10 @@ public class PatientTableQueryStrategy implements C4HUriQueryStrategy<OpenEHRDat
     }
 
     @Override
-    public ReportTableResults transform(OpenEHRDatesAndCountsResponse[] resultSet) {
-        ReportTableResults results = new ReportTableResults();
+    public SearchTableResults transform(OpenEHRDatesAndCountsResponse[] resultSet) {
+        SearchTableResults results = new SearchTableResults();
         List<SearchTablePatientDetails> details = CollectionUtils.collect(patientSummaries,
-                                                                          new PatientTablePatientDetailsTransformer(resultSet),
+                                                                          new PatientStatsPatientDetailsTransformer(resultSet),
                                                                           new ArrayList<>());
         results.setPatientDetails(details);
         return results;

@@ -1,16 +1,16 @@
-package org.rippleosi.search.patient.table.search;
+package org.rippleosi.search.patient.stats.search;
 
 import org.apache.commons.collections4.Transformer;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.search.common.model.OpenEHRDatesAndCountsResponse;
-import org.rippleosi.search.common.model.RecordHeadline;
-import org.rippleosi.search.common.model.SearchTablePatientDetails;
+import org.rippleosi.search.patient.stats.model.RecordHeadline;
+import org.rippleosi.search.patient.stats.model.SearchTablePatientDetails;
 
-public class PatientTablePatientDetailsTransformer implements Transformer<PatientSummary, SearchTablePatientDetails> {
+public class PatientStatsPatientDetailsTransformer implements Transformer<PatientSummary, SearchTablePatientDetails> {
 
     private final OpenEHRDatesAndCountsResponse[] openEhrResults;
 
-    public PatientTablePatientDetailsTransformer(OpenEHRDatesAndCountsResponse[] responseData) {
+    public PatientStatsPatientDetailsTransformer(OpenEHRDatesAndCountsResponse[] responseData) {
         this.openEhrResults = responseData;
     }
 

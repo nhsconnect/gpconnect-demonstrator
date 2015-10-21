@@ -1,5 +1,7 @@
 package org.rippleosi.common.service;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Base64;
@@ -21,28 +23,46 @@ import org.springframework.web.client.RestTemplate;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class DefaultC4HRequestProxy {
 
+    @Value("${c4hOpenEHR.address}")
+    private String openEhrAddress;
+
     @Value("${c4hOpenEHR.user}")
     private String openEhrUsername;
 
     @Value("${c4hOpenEHR.password}")
     private String openEhrPassword;
 
-    public <T> ResponseEntity<T> getWithSession(String uri, Class<T> cls, Object rawBody) {
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+    public <T> ResponseEntity<T> getWithSession(String uri, Class<T> cls, Map<String, String> uriVars) {
+        HttpEntity request = buildRequest(null);
 
+        return restTemplate().exchange(uri, HttpMethod.GET, request, cls, uriVars);
+    }
+
+     public <T> ResponseEntity<T> getWithSession(String uri, Class<T> cls, Object rawBody) {
         String jsonBody = convertToJson(rawBody);
         HttpEntity request = buildRequest(jsonBody);
 
-        return new RestTemplate(requestFactory).exchange(uri, HttpMethod.GET, request, cls);
+        return restTemplate().exchange(uri, HttpMethod.GET, request, cls);
     }
 
     public <T> ResponseEntity<T> postWithSession(String uri, Class<T> cls, Object rawBody) {
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-
         String jsonBody = convertToJson(rawBody);
         HttpEntity request = buildRequest(jsonBody);
 
-        return new RestTemplate(requestFactory).exchange(uri, HttpMethod.POST, request, cls);
+        return restTemplate().exchange(uri, HttpMethod.POST, request, cls);
+    }
+
+    private HttpEntity<String> buildRequest(String body) {
+        String credentials = openEhrUsername + ":" + openEhrPassword;
+        byte[] base64 = Base64.encodeBase64(credentials.getBytes());
+        String encoded = new String(base64);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Basic " + encoded);
+        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+
+        return new HttpEntity<>(body, headers);
     }
 
     private String convertToJson(Object body) {
@@ -55,16 +75,7 @@ public class DefaultC4HRequestProxy {
         }
     }
 
-    private HttpEntity buildRequest(Object body) {
-        String credentials = openEhrUsername + ":" + openEhrPassword;
-        byte[] base64 = Base64.encodeBase64(credentials.getBytes());
-        String encoded = new String(base64);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, "Basic " + encoded);
-        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-
-        return new HttpEntity<>(body, headers);
+    private RestTemplate restTemplate() {
+        return new RestTemplate(new SimpleClientHttpRequestFactory());
     }
 }

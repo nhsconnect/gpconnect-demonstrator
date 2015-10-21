@@ -2030,7 +2030,8 @@ i.fa.cancel-reportType.fa-times {
 }
 
 .contactForm textarea,
-.allergyForm textarea
+.allergyForm textarea,
+.diagnosisForm textarea
 {
   height: 100px;
 }
@@ -2061,7 +2062,25 @@ i.fa.cancel-reportType.fa-times {
   padding-top: 8px;
 }
 
-.allergyForm .row {
+.allergyForm .row,
+.diagnosisForm > .row {
   margin-right: 0px;
   margin-left: 0px;
+}
+
+.diagnosisForm .input-group {
+  width: 100%;
+  padding-top: 8px;
+}
+
+.diagnosisForm .linkButton {
+  height: 30px;
+}
+
+.diagnosisForm label.control-label.codeLabel {
+  padding-top: 8px;
+}
+
+.diagnosisForm label.control-label.rightColumnLabel {
+  padding-top: 7px;
 }

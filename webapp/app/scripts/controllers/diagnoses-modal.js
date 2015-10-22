@@ -11,7 +11,7 @@ angular.module('rippleDemonstrator')
 
     if (modal.title === 'Edit Problem / Diagnosis') {
       $scope.diagnosis.dateSubmitted = new Date().toISOString().slice(0, 10);
-      //$scope.diagnosis.dateOfOnset = new Date($scope.diagnosis.dateOfOnset).toISOString().slice(0, 10);
+      $scope.diagnosis.dateOfOnset = new Date($scope.diagnosis.dateOfOnset).toISOString().slice(0, 10);
     }else {
       $scope.diagnosis.dateSubmitted = new Date().toISOString().slice(0, 10);
     }

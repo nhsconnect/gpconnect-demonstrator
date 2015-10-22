@@ -36,6 +36,8 @@ public class ProblemDetailsQueryStrategy extends AbstractQueryStrategy<ProblemDe
     @Override
     public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
+                "a/composer/name as author, " +
+                "a/context/start_time/value as date_created," +
                 "a_a/items/data[at0001]/items[at0002]/value/value as problem, " +
                 "a_a/items/data[at0001]/items[at0002]/value/defining_code/code_string as problem_code, " +
                 "a_a/items/data[at0001]/items[at0002]/value/defining_code/terminology_id/value as problem_terminology, " +

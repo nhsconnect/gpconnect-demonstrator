@@ -15,6 +15,7 @@
  */
 package org.rippleosi.patient.problems.store;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +68,7 @@ public class OpenEHRProblemStore extends AbstractOpenEhrService implements Probl
 
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
+        content.put("ctx/composer_name", problem.getAuthor());
 
         if (StringUtils.isBlank(problem.getCode())) {
             problem.setCode("00001");

@@ -29,6 +29,8 @@ public class ProblemDetails implements Serializable {
     private String description;
     private String terminology;
     private String code;
+    private String author;
+    private Date dateCreated;
 
     public String getSourceId() {
         return sourceId;
@@ -84,5 +86,21 @@ public class ProblemDetails implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

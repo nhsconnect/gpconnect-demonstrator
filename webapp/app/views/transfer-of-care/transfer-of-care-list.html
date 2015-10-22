@@ -18,7 +18,7 @@
 
   <tbody>
 
-  <tr ng-repeat="transfer in transferofCareComposition | filter:query" ng-click="go('{{transfer.sourceId}}')" ng-class="{info: selected(transfer.sourceId)}">
+  <tr dir-paginate="transfer in transferofCareComposition | itemsPerPage: 6 | filter:query" ng-click="go('{{transfer.sourceId}}')" ng-class="{info: selected(transfer.sourceId)}">
     <td>Transfer #{{($index + 1)}}</td>
     <td>{{transfer.siteFrom}}</td>
     <td>{{transfer.siteTo}}</td>
@@ -38,7 +38,11 @@
   </div>
 </div>
 
-<div class="text-right">
-  <button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button>
+<div class="row">
+  <div class="col-md-6 hidden-xs"><div class="text-right"><dir-pagination-controls boundary-links="false"></dir-pagination-controls></div></div>
+  <div class="col-md-6 hidden-xs"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
 </div>
-
+<div class="row">
+  <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right"><dir-pagination-controls boundary-links="false"></dir-pagination-controls></div></div>
+  <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
+</div>

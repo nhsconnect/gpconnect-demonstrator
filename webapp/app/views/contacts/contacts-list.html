@@ -16,7 +16,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="contact in contacts | filter:query" ng-click="go('{{contact.sourceId}}')" ng-class="{info: selected(contact.sourceId)}">
+    <tr dir-paginate="contact in contacts | itemsPerPage: 9 | filter:query" ng-click="go('{{contact.sourceId}}')" ng-class="{info: selected(contact.sourceId)}">
       <td>{{ contact.name }}</td>
       <td>{{ contact.relationship }}</td>
       <td><i class="fa fa-fw fa-check" ng-if="contact.nextOfKin"></i></td>
@@ -35,6 +35,11 @@
   </div>
 </div>
 
-<div class="text-right">
-  <button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button>
+<div class="row">
+  <div class="col-md-6 hidden-xs"><div class="text-right"><dir-pagination-controls boundary-links="false"></dir-pagination-controls></div></div>
+  <div class="col-md-6 hidden-xs"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
+</div>
+<div class="row">
+  <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right"><dir-pagination-controls boundary-links="false"></dir-pagination-controls></div></div>
+  <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
 </div>

@@ -15,7 +15,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="medication in medications | filter:query" ng-click="go('{{medication.sourceId}}')" ng-class="{info: selected(medication.sourceId)}">
+    <tr dir-paginate="medication in medications | itemsPerPage: 9 | filter:query" ng-click="go('{{medication.sourceId}}')" ng-class="{info: selected(medication.sourceId)}">
       <td>{{ medication.name }}</td>
       <td>{{ medication.doseAmount }}</td>
       <td>{{ medication.source}}</td>
@@ -33,6 +33,11 @@
   </div>
 </div>
 
-<div class="text-right">
-  <button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button>
+<div class="row">
+  <div class="col-md-6 hidden-xs"><div class="text-right"><dir-pagination-controls boundary-links="false"></dir-pagination-controls></div></div>
+  <div class="col-md-6 hidden-xs"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
+</div>
+<div class="row">
+  <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right"><dir-pagination-controls boundary-links="false"></dir-pagination-controls></div></div>
+  <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
 </div>

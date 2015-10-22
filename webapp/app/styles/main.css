@@ -2089,3 +2089,7 @@ i.fa.cancel-reportType.fa-times {
     margin-left: 30%;
     margin-top: 30%;
 }
+
+.create-button {
+    margin-top: 10px;
+}

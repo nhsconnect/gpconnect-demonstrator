@@ -23,6 +23,7 @@ import org.rippleosi.common.service.AbstractOpenEhrService;
 import org.rippleosi.common.service.CreateStrategy;
 import org.rippleosi.common.service.DefaultStoreStrategy;
 import org.rippleosi.common.service.UpdateStrategy;
+import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.contacts.model.ContactDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -65,9 +66,7 @@ public class OpenEHRContactStore extends AbstractOpenEhrService implements Conta
 
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
-
-        content.put("composer/name", contact.getAuthor());
-        content.put("context/start_time", contact.getDateCreated());
+        content.put("ctx/composer_name", contact.getAuthor());
 
         Boolean nextOfKin = contact.isNextOfKin() ? Boolean.TRUE : null;
 

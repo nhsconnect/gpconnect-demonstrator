@@ -10,6 +10,8 @@ angular.module('rippleDemonstrator')
 
     if (modal.title === 'Create Contact') {
       $scope.contact.dateSubmitted = new Date().toISOString().slice(0, 10);
+      $scope.contact.relationshipCode = 'at0039';
+      $scope.contact.relationshipTerminology = 'local';
     }
     else {
       $scope.contact.dateSubmitted = new Date().toISOString().slice(0, 10);

@@ -16,7 +16,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr dir-paginate="procedure in procedures | itemsPerPage: 9 | filter:search" ng-click="go('{{procedure.sourceId}}')" ng-class="{info: selected(procedure.sourceId)}">
+    <tr dir-paginate="procedure in procedures | itemsPerPage: 9 | filter:search" current-page="currentPage"  ng-click="go('{{procedure.sourceId}}')" ng-class="{info: selected(procedure.sourceId)}">
       <td>{{procedure.name}}</td>
       <td class="dateTime">{{procedure.date}}</td>
       <td>{{procedure.time}}</td>
@@ -35,10 +35,10 @@
 </div>
 
 <div class="row">
-  <div class="col-md-6 hidden-xs"><div class="text-right"><dir-pagination-controls boundary-links="false"></dir-pagination-controls></div></div>
+  <div class="col-md-6 hidden-xs"><div class="text-right"><dir-pagination-controls on-page-change="pageChangeHandler(newPageNumber)" boundary-links="false"></dir-pagination-controls></div></div>
   <div class="col-md-6 hidden-xs"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
 </div>
 <div class="row">
-  <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right"><dir-pagination-controls boundary-links="false"></dir-pagination-controls></div></div>
+  <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right"><dir-pagination-controls on-page-change="pageChangeHandler(newPageNumber)" boundary-links="false"></dir-pagination-controls></div></div>
   <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
 </div>

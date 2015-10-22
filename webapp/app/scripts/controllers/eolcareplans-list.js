@@ -3,6 +3,16 @@
 angular.module('rippleDemonstrator')
   .controller('EolcareplansListCtrl', function ($scope, $location, $stateParams, $modal, usSpinnerService, $state, PatientService, Eolcareplan) {
 
+    $scope.currentPage = 1;
+
+    $scope.pageChangeHandler = function(newPage) {
+      $scope.currentPage = newPage;
+    }
+
+    if($stateParams.page) {
+      $scope.currentPage = $stateParams.page;
+    }
+
     $scope.search = function (row) {
       return (
         angular.lowercase(row.name).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
@@ -28,7 +38,12 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $location.path('/patients/' + $scope.patient.id + '/eolcareplans/' + id);
+       $state.go('eolcareplans-detail', {
+        patientId: $scope.patient.id,
+        eolcareplansIndex: id,
+        filter: $scope.query,
+        page : $scope.currentPage
+      });
     };
 
     $scope.selected = function (eolcareplansIndex) {

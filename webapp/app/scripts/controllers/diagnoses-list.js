@@ -3,6 +3,16 @@
 angular.module('rippleDemonstrator')
   .controller('DiagnosesListCtrl', function ($scope, $state, $stateParams, $location, $modal, usSpinnerService, PatientService, Diagnosis) {
 
+    $scope.currentPage = 1;
+
+    $scope.pageChangeHandler = function(newPage) {
+      $scope.currentPage = newPage;
+    }
+
+    if($stateParams.page) {
+      $scope.currentPage = $stateParams.page;
+    }
+
     $scope.search = function (row) {
       return (
         angular.lowercase(row.problem).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
@@ -29,7 +39,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-     $state.go('diagnoses-detail', { patientId: $scope.patient.id, diagnosisIndex: id, filter: $scope.query });
+     $state.go('diagnoses-detail', { patientId: $scope.patient.id, diagnosisIndex: id, filter: $scope.query, page: $scope.currentPage });
     };
 
     $scope.selected = function (diagnosisIndex) {

@@ -6,6 +6,16 @@ angular.module('rippleDemonstrator')
     $scope.query = {};
     $scope.queryBy = '$';
 
+    $scope.currentPage = 1;
+
+    $scope.pageChangeHandler = function(newPage) {
+      $scope.currentPage = newPage;
+    }
+
+    if($stateParams.page) {
+      $scope.currentPage = $stateParams.page;
+    }
+
     if ($stateParams.filter) {
       $scope.query.$ = $stateParams.filter;
     }
@@ -27,7 +37,8 @@ angular.module('rippleDemonstrator')
         $state.go('transferOfCare-detail', {
         patientId: $scope.patient.id,
         transferOfCareIndex: id,
-        filter: $scope.query.$
+        filter: $scope.query.$,
+        page: $scope.currentPage
       });
     };
 

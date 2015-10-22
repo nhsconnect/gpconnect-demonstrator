@@ -6,6 +6,16 @@ angular.module('rippleDemonstrator')
     $scope.query = {};
     $scope.queryBy = '$';
 
+    $scope.currentPage = 1;
+
+    $scope.pageChangeHandler = function(newPage) {
+      $scope.currentPage = newPage;
+    }
+
+    if($stateParams.page) {
+      $scope.currentPage = $stateParams.page;
+    }
+
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
@@ -23,7 +33,8 @@ angular.module('rippleDemonstrator')
       $state.go('medications-detail', {
         patientId: $scope.patient.id,
         medicationIndex: id,
-        filter: $scope.query.$
+        filter: $scope.query.$,
+        page: $scope.currentPage
       });
     };
 

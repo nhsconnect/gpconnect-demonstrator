@@ -3,6 +3,16 @@
 angular.module('rippleDemonstrator')
   .controller('AppointmentsListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, usSpinnerService, Appointment) {
 
+    $scope.currentPage = 1;
+
+    $scope.pageChangeHandler = function(newPage) {
+      $scope.currentPage = newPage;
+    }
+
+    if($stateParams.page) {
+      $scope.currentPage = $stateParams.page;
+    }
+
     $scope.search = function (row) {
       return (
         angular.lowercase(row.dateOfAppointment).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
@@ -31,7 +41,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $state.go('appointments-detail', { patientId: $scope.patient.id, appointmentIndex: id, filter: $scope.query });
+      $state.go('appointments-detail', { patientId: $scope.patient.id, appointmentIndex: id, filter: $scope.query, page : $scope.currentPage });
     };
 
     $scope.selected = function (appointmentIndex) {

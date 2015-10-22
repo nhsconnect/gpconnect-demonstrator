@@ -3,6 +3,16 @@
 angular.module('rippleDemonstrator')
   .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Allergy) {
 
+    $scope.currentPage = 1;
+
+    $scope.pageChangeHandler = function(newPage) {
+      $scope.currentPage = newPage;
+    }
+
+    if($stateParams.page) {
+      $scope.currentPage = $stateParams.page;
+    }
+
     $scope.search = function (row) {
       return (
         angular.lowercase(row.cause).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
@@ -25,7 +35,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-       $state.go('allergies-detail', { patientId: $scope.patient.id, allergyIndex: id, filter: $scope.query });
+       $state.go('allergies-detail', { patientId: $scope.patient.id, allergyIndex: id, filter: $scope.query, page: $scope.currentPage });
     };
 
     $scope.selected = function ($index) {

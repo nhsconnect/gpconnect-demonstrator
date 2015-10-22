@@ -3,6 +3,16 @@
 angular.module('rippleDemonstrator')
   .controller('ProceduresListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Procedure) {
 
+    $scope.currentPage = 1;
+
+    $scope.pageChangeHandler = function(newPage) {
+      $scope.currentPage = newPage;
+    }
+
+    if($stateParams.page) {
+      $scope.currentPage = $stateParams.page;
+    }
+
     $scope.search = function (row) {
       return (
         angular.lowercase(row.name).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
@@ -31,7 +41,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $state.go('procedures-detail', { patientId: $scope.patient.id, procedureId: id, filter: $scope.query });
+      $state.go('procedures-detail', { patientId: $scope.patient.id, procedureId: id, filter: $scope.query, page: $scope.currentPage });
     };
 
     $scope.selected = function (procedureId) {

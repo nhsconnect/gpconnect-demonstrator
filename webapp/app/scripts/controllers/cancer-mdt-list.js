@@ -3,6 +3,16 @@
 angular.module('rippleDemonstrator')
   .controller('CancerMdtListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, CancerMdt) {
 
+    $scope.currentPage = 1;
+
+    $scope.pageChangeHandler = function(newPage) {
+      $scope.currentPage = newPage;
+    }
+
+    if($stateParams.page) {
+      $scope.currentPage = $stateParams.page;
+    }
+
     $scope.search = function (row) {
       return (
         angular.lowercase(row.dateOfRequest).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
@@ -34,7 +44,8 @@ angular.module('rippleDemonstrator')
       $state.go('cancerMdt-detail', {
         patientId: $scope.patient.id,
         cancerMdtIndex: id,
-        filter: $scope.query
+        filter: $scope.query,
+        page: $scope.currentPage
       });
     };
 

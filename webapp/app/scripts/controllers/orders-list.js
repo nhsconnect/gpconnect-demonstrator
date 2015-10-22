@@ -3,6 +3,16 @@
 angular.module('rippleDemonstrator')
   .controller('OrdersListCtrl', function ($scope, $location, $stateParams, usSpinnerService, $modal, $state, PatientService, Order) {
 
+    $scope.currentPage = 1;
+
+    $scope.pageChangeHandler = function(newPage) {
+      $scope.currentPage = newPage;
+    }
+
+    if($stateParams.page) {
+      $scope.currentPage = $stateParams.page;
+    }
+
     $scope.search = function (row) {
       return (
         angular.lowercase(row.name).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
@@ -29,7 +39,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-       $state.go('orders-detail', { patientId: $scope.patient.id, orderId: id, filter: $scope.query });
+       $state.go('orders-detail', { patientId: $scope.patient.id, orderId: id, filter: $scope.query, page: $scope.currentPage });
     };
 
     $scope.selected = function (orderId) {

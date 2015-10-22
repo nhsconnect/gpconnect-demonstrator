@@ -3,6 +3,16 @@
 angular.module('rippleDemonstrator')
   .controller('ReferralsListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Referral) {
 
+    $scope.currentPage = 1;
+
+    $scope.pageChangeHandler = function(newPage) {
+      $scope.currentPage = newPage;
+    }
+
+    if($stateParams.page) {
+      $scope.currentPage = $stateParams.page;
+    }
+
     $scope.search = function (row) {
       return (
         angular.lowercase(row.dateOfReferral).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
@@ -34,7 +44,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-       $state.go('referrals-detail', { patientId: $scope.patient.id, referralId: id, filter: $scope.query });
+       $state.go('referrals-detail', { patientId: $scope.patient.id, referralId: id, filter: $scope.query, page: $scope.currentPage });
     };
 
     $scope.selected = function (referralId) {

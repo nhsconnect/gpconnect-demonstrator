@@ -106,7 +106,7 @@
                 <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" disabled><i class="fa fa-calendar"></i></button>
             </span>
-                <input type="text" class="form-control" id="datesubmitted" name="datesubmitted" ng-model="allergy.dateSubmitted" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" datepicker-popup="dd-MMM-y" is-open="dateSubmitted" required disabled />
+                <input type="text" class="form-control" id="datesubmitted" name="datesubmitted" ng-model="allergy.dateCreated" ng-click="dateofSubmittedDatepicker($event, 'dateSubmitted')" datepicker-popup="dd-MMM-y" is-open="dateSubmitted" required disabled />
               </div>
               <span class="help-block animate-fade" ng-show="formSubmitted && allergyForm.datesubmitted.$error.required">You must enter a valid date.</span>
             </div>

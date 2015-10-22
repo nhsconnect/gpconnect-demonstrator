@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.Transformer;
+import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.allergies.model.AllergyDetails;
 
 /**
@@ -35,6 +36,11 @@ public class AllergyDetailsTransformer implements Transformer<Map<String, Object
         allergy.setReaction(MapUtils.getString(input, "reaction"));
         allergy.setCauseCode(MapUtils.getString(input, "cause_code"));
         allergy.setCauseTerminology(MapUtils.getString(input, "cause_terminology"));
+        allergy.setTerminologyCode(MapUtils.getString(input, "cause_code"));
+        allergy.setAuthor(MapUtils.getString(input, "author"));
+
+        String dateCreated = MapUtils.getString(input, "date_created");
+        allergy.setDateCreated(DateFormatter.toDate(dateCreated));
 
         return allergy;
     }

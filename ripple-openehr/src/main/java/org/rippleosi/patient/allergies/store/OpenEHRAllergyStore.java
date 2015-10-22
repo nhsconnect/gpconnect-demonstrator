@@ -65,6 +65,7 @@ public class OpenEHRAllergyStore extends AbstractOpenEhrService implements Aller
 
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
+        content.put("ctx/composer_name", allergy.getAuthor());
 
         content.put(ALLERGY_PREFIX + "/causative_agent|value", allergy.getCause());
         content.put(ALLERGY_PREFIX + "/causative_agent|code", allergy.getCauseCode());

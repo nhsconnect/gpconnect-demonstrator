@@ -36,6 +36,8 @@ public class AllergyDetailsQueryStrategy extends AbstractQueryStrategy<AllergyDe
     @Override
     public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
+                "a/composer/name as author, " +
+                "a/context/start_time/value as date_created, " +
                 "a_a/items/data[at0001]/items[at0002]/value/value as cause, " +
                 "a_a/items/data[at0001]/items[at0002]/value/defining_code/terminology_id/value as cause_terminology, " +
                 "a_a/items/data[at0001]/items[at0002]/value/defining_code/code_string as cause_code, " +

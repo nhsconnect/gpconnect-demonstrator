@@ -16,6 +16,7 @@
 package org.rippleosi.patient.allergies.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  */
@@ -25,8 +26,11 @@ public class AllergyDetails implements Serializable {
     private String cause;
     private String causeCode;
     private String causeTerminology;
+    private String terminologyCode;
     private String reaction;
     private String source;
+    private String author;
+    private Date dateCreated;
 
     public String getSourceId() {
         return sourceId;
@@ -60,6 +64,14 @@ public class AllergyDetails implements Serializable {
         this.causeTerminology = causeTerminology;
     }
 
+    public String getTerminologyCode() {
+        return terminologyCode;
+    }
+
+    public void setTerminologyCode(String terminologyCode) {
+        this.terminologyCode = terminologyCode;
+    }
+
     public String getReaction() {
         return reaction;
     }
@@ -74,5 +86,21 @@ public class AllergyDetails implements Serializable {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.Transformer;
+import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.contacts.model.ContactDetails;
 
 /**
@@ -41,6 +42,10 @@ public class ContactDetailsTransformer implements Transformer<Map<String, Object
         contact.setRelationshipTerminology(MapUtils.getString(input, "relationship_terminology"));
         contact.setContactInformation(MapUtils.getString(input, "contact_information"));
         contact.setNotes(MapUtils.getString(input, "notes"));
+        contact.setAuthor(MapUtils.getString(input, "author"));
+
+        String dateCreated = MapUtils.getString(input, "date_created");
+        contact.setDateCreated(DateFormatter.toDate(dateCreated));
 
         return contact;
     }

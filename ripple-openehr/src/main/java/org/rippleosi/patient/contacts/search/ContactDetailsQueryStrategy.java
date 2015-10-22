@@ -37,6 +37,7 @@ public class ContactDetailsQueryStrategy extends AbstractQueryStrategy<ContactDe
     public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                "a/composer/name as author, " +
+               "a/context/start_time/value as date_created, " +
                "a_a/items/data[at0001]/items/items[openEHR-EHR-CLUSTER.person_name.v1]/items/value/value as name, " +
                "a_a/items/data[at0001]/items/items[openEHR-EHR-CLUSTER.telecom_uk.v1]/items/value/value as contact_information, " +
                "a_a/items/data[at0001]/items[at0035]/value/value as relationship_type, " +

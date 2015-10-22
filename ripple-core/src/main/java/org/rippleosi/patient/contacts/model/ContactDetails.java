@@ -16,6 +16,7 @@
 package org.rippleosi.patient.contacts.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  */
@@ -31,6 +32,8 @@ public class ContactDetails implements Serializable {
     private String contactInformation;
     private boolean nextOfKin;
     private String notes;
+    private String author;
+    private Date dateCreated;
 
     public String getSourceId() {
         return sourceId;
@@ -110,5 +113,21 @@ public class ContactDetails implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

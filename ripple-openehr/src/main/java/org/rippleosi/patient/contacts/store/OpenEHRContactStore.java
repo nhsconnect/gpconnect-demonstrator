@@ -66,6 +66,9 @@ public class OpenEHRContactStore extends AbstractOpenEhrService implements Conta
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
 
+        content.put("composer/name", contact.getAuthor());
+        content.put("context/start_time", contact.getDateCreated());
+
         Boolean nextOfKin = contact.isNextOfKin() ? Boolean.TRUE : null;
 
         content.put(CONTACT_PREFIX + "/personal_details/person_name/unstructured_name", contact.getName());

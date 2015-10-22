@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('DiagnosesDetailCtrl', function ($scope, $stateParams, $location, $modal, Helper, $state, PatientService, Diagnosis) {
+  .controller('DiagnosesDetailCtrl', function ($scope, $stateParams, $location, $modal, Helper, $state, usSpinnerService, PatientService, Diagnosis) {
 
     $scope.UnlockedSources = [
       'handi.ehrscape.com'
@@ -13,6 +13,7 @@ angular.module('rippleDemonstrator')
 
     Diagnosis.get($stateParams.patientId, $stateParams.diagnosisIndex).then(function (result) {
       $scope.diagnosis = result.data;
+      usSpinnerService.stop('diagnosisDetail-spinner');
     });
 
     $scope.formDisabled = true;

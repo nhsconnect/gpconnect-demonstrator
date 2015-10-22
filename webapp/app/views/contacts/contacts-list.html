@@ -1,8 +1,8 @@
 <h3><strong>Contacts</strong></h3>
 
 <div class="inner-addon left-addon filterInput">
-    <i class="fa fa-filter"></i>
-    <input type="text" class="form-control" placeholder="Filter..." ng-model="query[queryBy]" />
+  <i class="fa fa-filter"></i>
+  <input type="text" class="form-control" placeholder="Filter..." ng-model="query[queryBy]" />
 </div>
 
 <table class="table table-bordered table-striped table-hover">
@@ -28,6 +28,12 @@
     </tr>
   </tbody>
 </table>
+
+<div class="row">
+  <div class="col-md-12">
+    <span class="patientSummary-spinner" us-spinner="{radius:20, width:8, length: 16}" spinner-key="patientSummary-spinner" spinner-start-active="true"></span>
+  </div>
+</div>
 
 <div class="text-right">
   <button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button>

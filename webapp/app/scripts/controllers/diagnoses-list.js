@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('DiagnosesListCtrl', function ($scope, $state, $stateParams, $location, $modal, PatientService, Diagnosis) {
+  .controller('DiagnosesListCtrl', function ($scope, $state, $stateParams, $location, $modal, usSpinnerService, PatientService, Diagnosis) {
 
     $scope.search = function (row) {
       return (
@@ -25,6 +25,7 @@ angular.module('rippleDemonstrator')
       for (var i = 0; i < $scope.diagnoses.length; i++) {
         $scope.diagnoses[i].dateOfOnset = moment($scope.diagnoses[i].dateOfOnset).format('DD-MMM-YYYY');
       }
+      usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ProceduresListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Procedure) {
+  .controller('ProceduresListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Procedure) {
 
     $scope.search = function (row) {
       return (
@@ -27,6 +27,7 @@ angular.module('rippleDemonstrator')
         $scope.procedures[i].date = moment($scope.procedures[i].date).format('DD-MMM-YYYY');
         $scope.procedures[i].time = moment($scope.procedures[i].time).format('HH:mm');
       }
+      usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {

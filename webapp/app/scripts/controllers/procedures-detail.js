@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ProceduresDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, Helper, PatientService, Procedure) {
+  .controller('ProceduresDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, Helper, usSpinnerService, PatientService, Procedure) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -9,6 +9,7 @@ angular.module('rippleDemonstrator')
 
     Procedure.get($stateParams.patientId, $stateParams.procedureId).then(function (result) {
       $scope.procedure = result.data;
+      usSpinnerService.stop('proceduresDetail-spinner');
     });
 
     $scope.edit = function () {

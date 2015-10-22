@@ -2084,3 +2084,8 @@ i.fa.cancel-reportType.fa-times {
 .diagnosisForm label.control-label.rightColumnLabel {
   padding-top: 7px;
 }
+
+.patientSummary-spinner {
+    margin-left: 30%;
+    margin-top: 30%;
+}

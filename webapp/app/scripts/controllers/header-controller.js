@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('headerController', function ($scope, $rootScope, $state, $stateParams, PatientService) {
+  .controller('headerController', function ($scope, $rootScope, $state, usSpinnerService, $stateParams, PatientService) {
+
 
     var role = $stateParams.role;
     var email = $stateParams.email;

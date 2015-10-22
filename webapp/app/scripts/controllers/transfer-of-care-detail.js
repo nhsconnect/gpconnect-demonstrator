@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('TransferOfCareDetailCtrl', function ($scope, $stateParams, $modal, $location, PatientService, TransferOfCare) {
+  .controller('TransferOfCareDetailCtrl', function ($scope, $stateParams, $modal, $location, usSpinnerService, PatientService, TransferOfCare) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -14,6 +14,7 @@ angular.module('rippleDemonstrator')
       $scope.problems = $scope.transferOfCare.problems;
       $scope.medications = $scope.transferOfCare.medications;
       $scope.dateOfTransfer = $scope.transferOfCare.dateOfTransfer;
+      usSpinnerService.stop('transferDetail-spinner');
     });
 
   });

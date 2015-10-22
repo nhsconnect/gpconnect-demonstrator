@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Allergy) {
+  .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Allergy) {
 
     $scope.search = function (row) {
       return (
@@ -21,6 +21,7 @@ angular.module('rippleDemonstrator')
 
     Allergy.all($stateParams.patientId).then(function (result) {
       $scope.allergies = result.data;
+      usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {

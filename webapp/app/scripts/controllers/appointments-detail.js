@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('AppointmentsDetailCtrl', function ($scope, $stateParams, $modal, Helper, $state, $location, PatientService, Appointment) {
+  .controller('AppointmentsDetailCtrl', function ($scope, $stateParams, $modal, Helper, $state, $location, usSpinnerService, PatientService, Appointment) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -10,6 +10,7 @@ angular.module('rippleDemonstrator')
     Appointment.get($stateParams.patientId, $stateParams.appointmentIndex).then(function (result) {
       $scope.appointment = result.data;
       $scope.timeOfAppointment = moment($scope.appointment.timeOfAppointment).format('h:mma') + '-' + moment($scope.appointment.timeOfAppointment).add(59, 'm').format('h:mma');
+      usSpinnerService.stop('appointmentsDetail-spinner');
     });
 
     $scope.edit = function () {

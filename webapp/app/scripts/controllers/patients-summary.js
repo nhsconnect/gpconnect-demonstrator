@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('PatientsSummaryCtrl', function ($scope, $stateParams, $location, PatientService) {
+  .controller('PatientsSummaryCtrl', function ($scope, $stateParams, $rootScope, $location, usSpinnerService, PatientService) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
+
 
       $scope.allergiesCount = patient.allergies.length;
       $scope.allergies = patient.allergies.slice(0, 5);
@@ -28,6 +29,8 @@ angular.module('rippleDemonstrator')
 
       $scope.transferofCareComposition.transfers = descendingTransferofCareComposition;
       $scope.transferofCareComposition = $scope.transferofCareComposition.transfers.slice(0, 5);
+
+      usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (path) {

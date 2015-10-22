@@ -2,11 +2,13 @@
 
   <!-- START Main Content Area -->
   <div class="main col-sm-12 col-md-12 patient-dashboard opaque-bg">
-
+      <div class="row">
+       <div class="col-md-12">
+        <span class="patientSummary-spinner" us-spinner="{radius:20, width:8, length: 16}" spinner-key="patientSummary-spinner" spinner-start-active="true"></span>
+      </div>
+      </div>
     <!-- START Patient Dashboard -->
     <div class="dashboard row">
-
-
       <!-- START Board
                         Note: Make sure the 4th board always does a clear left
                         Note: In our design, all boards have 5 rows, so the board below
@@ -24,9 +26,10 @@
 
         <table class="table table-striped clickable">
           <tbody>
-          <tr ng-repeat="diagnosis in diagnoses" data-target="patient-detail.html"> <!--data target-->
-            <td ng-click="go('/patients/{{patient.id}}/diagnoses/{{diagnosis.sourceId}}')">{{ diagnosis.text }} <span class="glyphicon glyphicon-chevron-right"></span></td>
-          </tr>
+            <tr ng-repeat="diagnosis in diagnoses" data-target="patient-detail.html">
+              <!--data target-->
+              <td ng-click="go('/patients/{{patient.id}}/diagnoses/{{diagnosis.sourceId}}')">{{ diagnosis.text }} <span class="glyphicon glyphicon-chevron-right"></span></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -42,9 +45,9 @@
 
         <table class="table table-striped clickable">
           <tbody>
-          <tr ng-repeat="allergy in allergies">
-            <td ng-click="go('/patients/{{patient.id}}/allergies/{{allergy.sourceId}}')">{{allergy.text}}<span class="glyphicon glyphicon-chevron-right"></span> </td>
-          </tr>
+            <tr ng-repeat="allergy in allergies">
+              <td ng-click="go('/patients/{{patient.id}}/allergies/{{allergy.sourceId}}')">{{allergy.text}}<span class="glyphicon glyphicon-chevron-right"></span> </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -59,9 +62,9 @@
 
         <table class="table table-striped clickable">
           <tbody>
-          <tr ng-repeat="medication in medications">
-            <td ng-click="go('/patients/{{patient.id}}/medications/{{medication.sourceId}}')" > {{ medication.text }}<span class="glyphicon glyphicon-chevron-right"></span></td>
-          </tr>
+            <tr ng-repeat="medication in medications">
+              <td ng-click="go('/patients/{{patient.id}}/medications/{{medication.sourceId}}')"> {{ medication.text }}<span class="glyphicon glyphicon-chevron-right"></span></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -76,9 +79,9 @@
 
         <table class="table table-striped clickable">
           <tbody>
-          <tr ng-repeat="contact in contacts">
-            <td ng-click="go('/patients/{{patient.id}}/contacts/{{contact.sourceId}}')"> {{ contact.text }} <span class="glyphicon glyphicon-chevron-right"></span></td>
-          </tr>
+            <tr ng-repeat="contact in contacts">
+              <td ng-click="go('/patients/{{patient.id}}/contacts/{{contact.sourceId}}')"> {{ contact.text }} <span class="glyphicon glyphicon-chevron-right"></span></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -93,25 +96,19 @@
 
         <table class="table table-striped clickable">
           <tbody>
-          <tr ng-repeat="transfer in transferofCareComposition">
-            <td ng-click="go('/patients/{{patient.id}}/transfer-of-care-detail/{{transfer.sourceId}}')">
-              <span class="glyphicon glyphicon-chevron-right"></span>
-              From {{transfer.from}}
-              <br>
-              to {{transfer.to}}<br>
-              {{transfer.dateOfTransfer | date:'dd-MMM-y' }}
-            </td>
-          </tr>
+            <tr ng-repeat="transfer in transferofCareComposition">
+              <td ng-click="go('/patients/{{patient.id}}/transfer-of-care-detail/{{transfer.sourceId}}')">
+                <span class="glyphicon glyphicon-chevron-right"></span> From {{transfer.from}}
+                <br> to {{transfer.to}}
+                <br> {{transfer.dateOfTransfer | date:'dd-MMM-y' }}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
-
     </div>
     <!-- END Patient Dashboard -->
-
   </div>
   <!-- END Main Content Area -->
 
 </div>
-
-

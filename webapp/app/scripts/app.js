@@ -11,7 +11,8 @@ angular
     'growlNotifications',
     'angularUtils.directives.dirPagination',
     'ui.timepicker',
-    'ui.calendar'
+    'ui.calendar',
+    'angularSpinner'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
 

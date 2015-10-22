@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('EolcareplansListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Eolcareplan) {
+  .controller('EolcareplansListCtrl', function ($scope, $location, $stateParams, $modal, usSpinnerService, $state, PatientService, Eolcareplan) {
 
     $scope.search = function (row) {
       return (
@@ -24,6 +24,7 @@ angular.module('rippleDemonstrator')
           $scope.eolcareplans[i].date = moment($scope.eolcareplans[i].date).format('DD-MMM-YYYY');
         }
       }
+      usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {

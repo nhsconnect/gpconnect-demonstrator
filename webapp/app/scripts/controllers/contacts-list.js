@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ContactsListCtrl', function ($scope, $rootScope, $location, $stateParams, $modal, $state, PatientService, Contact) {
+  .controller('ContactsListCtrl', function ($scope, $rootScope, $location, $stateParams, usSpinnerService, $modal, $state, PatientService, Contact) {
 
     $scope.query = {};
     $scope.queryBy = '$';
@@ -16,6 +16,7 @@ angular.module('rippleDemonstrator')
 
     Contact.all($stateParams.patientId).then(function (result) {
       $scope.contacts = result.data;
+      usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {

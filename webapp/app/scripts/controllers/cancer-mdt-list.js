@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('CancerMdtListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, CancerMdt) {
+  .controller('CancerMdtListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, CancerMdt) {
 
     $scope.search = function (row) {
       return (
@@ -27,6 +27,7 @@ angular.module('rippleDemonstrator')
         $scope.cancerMdtComposition[i].dateOfRequest = moment($scope.cancerMdtComposition[i].dateOfRequest).format('DD-MMM-YYYY');
         $scope.cancerMdtComposition[i].dateOfMeeting = moment($scope.cancerMdtComposition[i].dateOfMeeting).format('DD-MMM-YYYY');
       }
+      usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('TransferOfCareListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, TransferOfCare) {
+  .controller('TransferOfCareListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, TransferOfCare) {
 
     $scope.query = {};
     $scope.queryBy = '$';
@@ -20,6 +20,7 @@ angular.module('rippleDemonstrator')
       for (var i = 0; i < $scope.transferofCareComposition.length; i++) {
         $scope.transferofCareComposition[i].dateOfTransfer = moment($scope.transferofCareComposition[i].dateOfTransfer).format('DD-MMM-YYYY');
       }
+      usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {

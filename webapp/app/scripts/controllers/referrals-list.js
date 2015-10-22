@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ReferralsListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, Referral) {
+  .controller('ReferralsListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Referral) {
 
     $scope.search = function (row) {
       return (
@@ -30,6 +30,7 @@ angular.module('rippleDemonstrator')
           $scope.referrals[i].dateOfReferral = moment($scope.referrals[i].dateOfReferral).format('DD-MMM-YYYY');
         }
       }
+      usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {

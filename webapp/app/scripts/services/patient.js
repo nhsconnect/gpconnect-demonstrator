@@ -17,7 +17,9 @@ angular.module('rippleDemonstrator')
     };
 
     var get = function (id) {
-      return $http.get('/api/patients/' + id, { cache: true }).then(function (result) {
+      return $http.get('/api/patients/' + id, {
+        cache: true
+      }).then(function (result) {
         return new Patient(result.data);
       });
     };
@@ -46,8 +48,16 @@ angular.module('rippleDemonstrator')
     };
 
     var update = function (patient, updatedDiagnosis) {
-      var diagnosis = _.findWhere(patient.diagnoses, { id: updatedDiagnosis.id });
+      var diagnosis = _.findWhere(patient.diagnoses, {
+        id: updatedDiagnosis.id
+      });
       angular.extend(diagnosis, updatedDiagnosis);
+    };
+
+    var swapArrayElements = function (arr, indexA, indexB) {
+      var temp = arr[indexA];
+      arr[indexA] = arr[indexB];
+      arr[indexB] = temp;
     };
 
     var summaries = function () {
@@ -62,13 +72,16 @@ angular.module('rippleDemonstrator')
             return patient.ageRange;
           })
           .map(function (value, key) {
-            return { series: key, value: value };
+            return {
+              series: key,
+              value: value
+            };
           })
-          .sortBy(function (value) {
-            return value.ageRange;
-          })
-          .reverse()
+
+        .reverse()
           .value();
+
+        swapArrayElements(summaries.age, 3, 4);
 
         summaries.department = _.chain(patients)
           .filter(function (patient) {
@@ -78,7 +91,10 @@ angular.module('rippleDemonstrator')
             return patient.department;
           })
           .map(function (value, key) {
-            return { series: key, value: value };
+            return {
+              series: key,
+              value: value
+            };
           })
           .sortBy(function (value) {
             return value.department;

@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/patients/{patientId}/mdtreports")
-public class MDTReportController {
+public class MDTReportsController {
 
     @Autowired
     private MDTReportSearchFactory mdtReportSearchFactory;

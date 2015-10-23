@@ -46,7 +46,6 @@ public class ReferralsController {
     @RequestMapping(method = RequestMethod.GET)
     public List<ReferralSummary> findAllReferrals(@PathVariable("patientId") String patientId,
                                                   @RequestParam(required = false) String source) {
-
         ReferralSearch referralSearch = referralSearchFactory.select(source);
 
         return referralSearch.findAllReferrals(patientId);
@@ -56,27 +55,24 @@ public class ReferralsController {
     public ReferralDetails findReferral(@PathVariable("patientId") String patientId,
                                         @PathVariable("referralId") String referralId,
                                         @RequestParam(required = false) String source) {
-
         ReferralSearch referralSearch = referralSearchFactory.select(source);
 
         return referralSearch.findReferral(patientId, referralId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void createPatientReferral(@PathVariable("patientId") String patientId,
-                                      @RequestParam(required = false) String source,
-                                      @RequestBody ReferralDetails referral) {
-
+    public void createReferral(@PathVariable("patientId") String patientId,
+                               @RequestParam(required = false) String source,
+                               @RequestBody ReferralDetails referral) {
         ReferralStore referralStore = referralStoreFactory.select(source);
 
         referralStore.create(patientId, referral);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public void updatePatientReferral(@PathVariable("patientId") String patientId,
-                                      @RequestParam(required = false) String source,
-                                      @RequestBody ReferralDetails referral) {
-
+    public void updateReferral(@PathVariable("patientId") String patientId,
+                               @RequestParam(required = false) String source,
+                               @RequestBody ReferralDetails referral) {
         ReferralStore referralStore = referralStoreFactory.select(source);
 
         referralStore.update(patientId, referral);

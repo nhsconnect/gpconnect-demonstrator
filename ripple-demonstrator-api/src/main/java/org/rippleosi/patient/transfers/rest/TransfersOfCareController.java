@@ -48,9 +48,10 @@ public class TransfersOfCareController {
      * @return A list of Transfer of Care excerpts
      */
     @RequestMapping(method = RequestMethod.GET)
-    public List<TransferOfCareSummary> findAllTransferOfCareSummaries(@PathVariable("patientId") String patientId,
-                                                                      @RequestParam(required = false) String source) {
+    public List<TransferOfCareSummary> findAllTransfersOfCare(@PathVariable("patientId") String patientId,
+                                                              @RequestParam(required = false) String source) {
         TransferOfCareSearch search = transferOfCareSearchFactory.select(source);
+
         return search.findAllTransfers(patientId);
     }
 
@@ -66,6 +67,7 @@ public class TransfersOfCareController {
                                                     @PathVariable("transferId") String transferId,
                                                     @RequestParam(required = false) String source) {
         TransferOfCareSearch search = transferOfCareSearchFactory.select(source);
+
         return search.findTransferOfCare(patientId, transferId);
     }
 
@@ -80,6 +82,7 @@ public class TransfersOfCareController {
                                      @RequestParam(required = false) String source,
                                      @RequestBody TransferOfCareDetails transferOfCare) {
         TransferOfCareStore store = transferOfCareStoreFactory.select(source);
+
         store.create(patientId, transferOfCare);
     }
 }

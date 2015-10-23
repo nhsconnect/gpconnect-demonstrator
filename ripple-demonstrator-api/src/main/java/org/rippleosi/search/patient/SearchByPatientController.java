@@ -43,9 +43,9 @@ public class SearchByPatientController {
     private PatientStatsSearchFactory patientStatsSearchFactory;
 
     @RequestMapping(value = "/table", method = RequestMethod.POST)
-    public SearchTableResults getPatientTable(@RequestParam(required = false) String patientSource,
-                                              @RequestParam(required = false) String patientDataSource,
-                                              @RequestBody PatientTableQuery tableQuery) {
+    public SearchTableResults findPatientTableData(@RequestParam(required = false) String patientSource,
+                                                   @RequestParam(required = false) String patientDataSource,
+                                                   @RequestBody PatientTableQuery tableQuery) {
         PatientSearch patientSearch = patientSearchFactory.select(patientSource);
         List<PatientSummary> patientSummaries = patientSearch.findPatientsByQuery(tableQuery);
 

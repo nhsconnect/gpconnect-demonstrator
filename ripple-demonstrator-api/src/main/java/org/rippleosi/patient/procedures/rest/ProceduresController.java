@@ -46,7 +46,6 @@ public class ProceduresController {
     @RequestMapping(method = RequestMethod.GET)
     public List<ProcedureSummary> findAllProcedures(@PathVariable("patientId") String patientId,
                                                     @RequestParam(required = false) String source) {
-
         ProcedureSearch procedureSearch = procedureSearchFactory.select(source);
 
         return procedureSearch.findAllProcedures(patientId);
@@ -56,27 +55,24 @@ public class ProceduresController {
     public ProcedureDetails findProcedure(@PathVariable("patientId") String patientId,
                                           @PathVariable("procedureId") String procedureId,
                                           @RequestParam(required = false) String source) {
-
         ProcedureSearch procedureSearch = procedureSearchFactory.select(source);
 
         return procedureSearch.findProcedure(patientId, procedureId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void createPatientProcedure(@PathVariable("patientId") String patientId,
-                                       @RequestParam(required = false) String source,
-                                       @RequestBody ProcedureDetails procedure) {
-
+    public void createProcedure(@PathVariable("patientId") String patientId,
+                                @RequestParam(required = false) String source,
+                                @RequestBody ProcedureDetails procedure) {
         ProcedureStore procedureStore = procedureStoreFactory.select(source);
 
         procedureStore.create(patientId, procedure);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public void updatePatientProcedure(@PathVariable("patientId") String patientId,
-                                       @RequestParam(required = false) String source,
-                                       @RequestBody ProcedureDetails procedure) {
-
+    public void updateProcedure(@PathVariable("patientId") String patientId,
+                                @RequestParam(required = false) String source,
+                                @RequestBody ProcedureDetails procedure) {
         ProcedureStore procedureStore = procedureStoreFactory.select(source);
 
         procedureStore.update(patientId, procedure);

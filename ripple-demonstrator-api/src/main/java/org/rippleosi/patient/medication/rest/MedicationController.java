@@ -45,8 +45,8 @@ public class MedicationController {
     private MedicationStoreFactory medicationStoreFactory;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<MedicationSummary> findAllMedication(@PathVariable("patientId") String patientId,
-                                                     @RequestParam(required = false) String source) {
+    public List<MedicationSummary> findAllMedications(@PathVariable("patientId") String patientId,
+                                                      @RequestParam(required = false) String source) {
         MedicationSearch medicationSearch = medicationSearchFactory.select(source);
 
         return medicationSearch.findAllMedication(patientId);
@@ -70,18 +70,18 @@ public class MedicationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void createPatientMedication(@PathVariable("patientId") String patientId,
-                                        @RequestParam(required = false) String source,
-                                        @RequestBody MedicationDetails medication) {
+    public void createMedication(@PathVariable("patientId") String patientId,
+                                 @RequestParam(required = false) String source,
+                                 @RequestBody MedicationDetails medication) {
         MedicationStore medicationStore = medicationStoreFactory.select(source);
 
         medicationStore.create(patientId, medication);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public void updatePatientMedication(@PathVariable("patientId") String patientId,
-                                        @RequestParam(required = false) String source,
-                                        @RequestBody MedicationDetails medication) {
+    public void updateMedication(@PathVariable("patientId") String patientId,
+                                 @RequestParam(required = false) String source,
+                                 @RequestBody MedicationDetails medication) {
         MedicationStore medicationStore = medicationStoreFactory.select(source);
 
         medicationStore.update(patientId, medication);

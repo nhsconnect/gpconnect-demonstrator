@@ -55,16 +55,17 @@ public class SearchByReportController {
     private PatientStatsSearchFactory patientStatsSearchFactory;
 
     @RequestMapping(value = "/chart", method = RequestMethod.POST)
-    public ReportGraphResults getReportGraph(@RequestParam(required = false) String source,
-                                             @RequestBody ReportGraphQuery graphQuery) {
+    public ReportGraphResults findReportGraphData(@RequestParam(required = false) String source,
+                                                  @RequestBody ReportGraphQuery graphQuery) {
         ReportGraphSearch search = reportGraphSearchFactory.select(source);
+
         return search.findPatientDemographicsByQuery(graphQuery);
     }
 
     @RequestMapping(value = "/table", method = RequestMethod.POST)
-    public SearchTableResults getReportTable(@RequestParam(required = false) String patientSource,
-                                             @RequestParam(required = false) String patientDataSource,
-                                             @RequestBody ReportTableQuery tableQuery) {
+    public SearchTableResults findReportTableData(@RequestParam(required = false) String patientSource,
+                                                  @RequestParam(required = false) String patientDataSource,
+                                                  @RequestBody ReportTableQuery tableQuery) {
         // retrieve all nhsNumbers associated with the query
         ReportTableSearch reportTableSearch = reportTableSearchFactory.select(patientDataSource);
         List<String> nhsNumbers = reportTableSearch.findAllPatientsByQuery(tableQuery);

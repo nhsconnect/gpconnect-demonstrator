@@ -35,10 +35,10 @@ public class TerminologyController {
     private TerminologySearchFactory terminologySearchFactory;
 
     @RequestMapping(value = "/list/{type}", method = RequestMethod.GET)
-    public List<Terminology> getTerms(@PathVariable("type") String type,
-                                      @RequestParam(required = false) String source) {
-
+    public List<Terminology> findTerms(@PathVariable("type") String type,
+                                       @RequestParam(required = false) String source) {
         TerminologySearch search = terminologySearchFactory.select(source);
+
         return search.findTerms(type);
     }
 }

@@ -47,7 +47,6 @@ public class ProblemsController {
     @RequestMapping(method = RequestMethod.GET)
     public List<ProblemSummary> findAllProblems(@PathVariable("patientId") String patientId,
                                                 @RequestParam(required = false) String source) {
-
         ProblemSearch problemSearch = problemSearchFactory.select(source);
 
         return problemSearch.findAllProblems(patientId);
@@ -65,27 +64,24 @@ public class ProblemsController {
     public ProblemDetails findProblem(@PathVariable("patientId") String patientId,
                                       @PathVariable("problemId") String problemId,
                                       @RequestParam(required = false) String source) {
-
         ProblemSearch problemSearch = problemSearchFactory.select(source);
 
         return problemSearch.findProblem(patientId, problemId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void createPatientProblem(@PathVariable("patientId") String patientId,
-                                     @RequestParam(required = false) String source,
-                                     @RequestBody ProblemDetails problem) {
-
+    public void createProblem(@PathVariable("patientId") String patientId,
+                              @RequestParam(required = false) String source,
+                              @RequestBody ProblemDetails problem) {
         ProblemStore problemStore = problemStoreFactory.select(source);
 
         problemStore.create(patientId, problem);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public void updatePatientProblem(@PathVariable("patientId") String patientId,
-                                     @RequestParam(required = false) String source,
-                                     @RequestBody ProblemDetails problem) {
-
+    public void updateProblem(@PathVariable("patientId") String patientId,
+                              @RequestParam(required = false) String source,
+                              @RequestBody ProblemDetails problem) {
         ProblemStore problemStore = problemStoreFactory.select(source);
 
         problemStore.update(patientId, problem);

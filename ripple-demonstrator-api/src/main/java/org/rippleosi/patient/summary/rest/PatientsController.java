@@ -32,22 +32,21 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/patients")
-public class PatientController {
+public class PatientsController {
 
     @Autowired
     private PatientSearchFactory patientSearchFactory;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<PatientSummary> findAllPatients(@RequestParam(required = false) String source) {
-
         PatientSearch patientSearch = patientSearchFactory.select(source);
 
         return patientSearch.findAllPatients();
     }
 
     @RequestMapping(value = "/{patientId}", method = RequestMethod.GET)
-    public PatientDetails findPatientSummary(@PathVariable("patientId") String patientId,
-                                             @RequestParam(required = false) String source) {
+    public PatientDetails findPatient(@PathVariable("patientId") String patientId,
+                                      @RequestParam(required = false) String source) {
         PatientSearch patientSearch = patientSearchFactory.select(source);
 
         return patientSearch.findPatient(patientId);

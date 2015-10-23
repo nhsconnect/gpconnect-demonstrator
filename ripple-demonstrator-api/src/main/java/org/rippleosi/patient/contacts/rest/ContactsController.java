@@ -70,18 +70,18 @@ public class ContactsController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void createPatientContact(@PathVariable("patientId") String patientId,
-                                     @RequestParam(required = false) String source,
-                                     @RequestBody ContactDetails contact) {
+    public void createContact(@PathVariable("patientId") String patientId,
+                              @RequestParam(required = false) String source,
+                              @RequestBody ContactDetails contact) {
         ContactStore contactStore = contactStoreFactory.select(source);
 
         contactStore.create(patientId, contact);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public void updatePatientContact(@PathVariable("patientId") String patientId,
-                                     @RequestParam(required = false) String source,
-                                     @RequestBody ContactDetails contact) {
+    public void updateContact(@PathVariable("patientId") String patientId,
+                              @RequestParam(required = false) String source,
+                              @RequestBody ContactDetails contact) {
         ContactStore contactStore = contactStoreFactory.select(source);
 
         contactStore.update(patientId, contact);

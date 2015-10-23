@@ -70,20 +70,18 @@ public class AllergiesController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void createPatientAllergy(@PathVariable("patientId") String patientId,
-                                     @RequestParam(required = false) String source,
-                                     @RequestBody AllergyDetails allergy) {
-
+    public void createAllergy(@PathVariable("patientId") String patientId,
+                              @RequestParam(required = false) String source,
+                              @RequestBody AllergyDetails allergy) {
         AllergyStore allergyStore = allergyStoreFactory.select(source);
 
         allergyStore.create(patientId, allergy);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public void updatePatientAllergy(@PathVariable("patientId") String patientId,
-                                     @RequestParam(required = false) String source,
-                                     @RequestBody AllergyDetails allergy) {
-
+    public void updateAllergy(@PathVariable("patientId") String patientId,
+                              @RequestParam(required = false) String source,
+                              @RequestBody AllergyDetails allergy) {
         AllergyStore allergyStore = allergyStoreFactory.select(source);
 
         allergyStore.update(patientId, allergy);

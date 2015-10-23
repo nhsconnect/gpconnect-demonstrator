@@ -21,6 +21,7 @@ import java.util.List;
 import org.rippleosi.common.service.AbstractC4HReportingService;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.search.common.model.PageableTableQuery;
+import org.rippleosi.search.patient.stats.PatientStatsSearch;
 import org.rippleosi.search.patient.stats.model.SearchTableResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

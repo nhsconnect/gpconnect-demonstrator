@@ -14,22 +14,22 @@
  *      limitations under the License.
  */
 
-package org.rippleosi.search.reports.table.search;
+package org.rippleosi.search.patient.stats;
 
 import org.rippleosi.common.repo.AbstractRepositoryFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DefaultReportTableSearchFactory extends AbstractRepositoryFactory<ReportTableSearch>
-    implements ReportTableSearchFactory {
+public class DefaultPatientStatsSearchFactory extends AbstractRepositoryFactory<PatientStatsSearch>
+    implements PatientStatsSearchFactory {
 
     @Override
-    protected ReportTableSearch defaultRepository() {
-        return new NotConfiguredReportTableSearch();
+    protected PatientStatsSearch defaultRepository() {
+        return new NotConfiguredPatientStatsSearch();
     }
 
     @Override
-    protected Class<ReportTableSearch> repositoryClass() {
-        return ReportTableSearch.class;
+    protected Class<PatientStatsSearch> repositoryClass() {
+        return PatientStatsSearch.class;
     }
 }

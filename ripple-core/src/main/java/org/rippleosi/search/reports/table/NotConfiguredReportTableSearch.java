@@ -14,11 +14,27 @@
  *      limitations under the License.
  */
 
-package org.rippleosi.search.patient.stats.search;
+package org.rippleosi.search.reports.table;
 
-import org.rippleosi.common.repo.RepositoryFactory;
+import java.util.List;
 
-@FunctionalInterface
-public interface PatientStatsSearchFactory extends RepositoryFactory<PatientStatsSearch> {
+import org.rippleosi.common.exception.ConfigurationException;
+import org.rippleosi.search.reports.table.model.ReportTableQuery;
 
+public class NotConfiguredReportTableSearch implements ReportTableSearch {
+
+    @Override
+    public String getSource() {
+        return "not configured";
+    }
+
+    @Override
+    public int getPriority() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public List<String> findAllPatientsByQuery(ReportTableQuery tableQuery) {
+        throw ConfigurationException.unimplementedTransaction(ReportTableSearch.class);
+    }
 }

@@ -14,22 +14,16 @@
  *      limitations under the License.
  */
 
-package org.rippleosi.search.patient.stats.search;
+package org.rippleosi.search.patient.stats;
 
-import org.rippleosi.common.repo.AbstractRepositoryFactory;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-@Service
-public class DefaultPatientStatsSearchFactory extends AbstractRepositoryFactory<PatientStatsSearch>
-    implements PatientStatsSearchFactory {
+import org.rippleosi.common.repo.Repository;
+import org.rippleosi.patient.summary.model.PatientSummary;
+import org.rippleosi.search.common.model.PageableTableQuery;
+import org.rippleosi.search.patient.stats.model.SearchTableResults;
 
-    @Override
-    protected PatientStatsSearch defaultRepository() {
-        return new NotConfiguredPatientStatsSearch();
-    }
+public interface PatientStatsSearch extends Repository {
 
-    @Override
-    protected Class<PatientStatsSearch> repositoryClass() {
-        return PatientStatsSearch.class;
-    }
+    SearchTableResults findAssociatedPatientData(PageableTableQuery tableQuery, List<PatientSummary> patientSummaries);
 }

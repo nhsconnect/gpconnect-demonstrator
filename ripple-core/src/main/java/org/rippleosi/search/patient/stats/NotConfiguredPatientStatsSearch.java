@@ -14,14 +14,16 @@
  *      limitations under the License.
  */
 
-package org.rippleosi.search.reports.table.search;
+package org.rippleosi.search.patient.stats;
 
 import java.util.List;
 
 import org.rippleosi.common.exception.ConfigurationException;
-import org.rippleosi.search.reports.table.model.ReportTableQuery;
+import org.rippleosi.patient.summary.model.PatientSummary;
+import org.rippleosi.search.common.model.PageableTableQuery;
+import org.rippleosi.search.patient.stats.model.SearchTableResults;
 
-public class NotConfiguredReportTableSearch implements ReportTableSearch {
+public class NotConfiguredPatientStatsSearch implements PatientStatsSearch {
 
     @Override
     public String getSource() {
@@ -34,7 +36,8 @@ public class NotConfiguredReportTableSearch implements ReportTableSearch {
     }
 
     @Override
-    public List<String> findAllPatientsByQuery(ReportTableQuery tableQuery) {
-        throw ConfigurationException.unimplementedTransaction(ReportTableSearch.class);
+    public SearchTableResults findAssociatedPatientData(PageableTableQuery tableQuery,
+                                                        List<PatientSummary> patientSummaries) {
+        throw ConfigurationException.unimplementedTransaction(PatientStatsSearch.class);
     }
 }

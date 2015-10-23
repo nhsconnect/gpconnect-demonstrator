@@ -14,14 +14,11 @@
  *      limitations under the License.
  */
 
-package org.rippleosi.search.reports.table.search;
+package org.rippleosi.search.patient.stats;
 
-import java.util.List;
+import org.rippleosi.common.repo.RepositoryFactory;
 
-import org.rippleosi.common.repo.Repository;
-import org.rippleosi.search.reports.table.model.ReportTableQuery;
+@FunctionalInterface
+public interface PatientStatsSearchFactory extends RepositoryFactory<PatientStatsSearch> {
 
-public interface ReportTableSearch extends Repository {
-
-    List<String> findAllPatientsByQuery(ReportTableQuery tableQuery);
 }

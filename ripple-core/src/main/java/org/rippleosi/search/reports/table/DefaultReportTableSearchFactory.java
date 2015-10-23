@@ -14,21 +14,22 @@
  *      limitations under the License.
  */
 
-package org.rippleosi.search.reports.table.search;
+package org.rippleosi.search.reports.table;
 
-import java.util.List;
-
-import org.rippleosi.common.service.AbstractC4HReportingService;
-import org.rippleosi.search.reports.table.ReportTableSearch;
-import org.rippleosi.search.reports.table.model.ReportTableQuery;
+import org.rippleosi.common.repo.AbstractRepositoryFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OpenEHRReportTableSearch extends AbstractC4HReportingService implements ReportTableSearch {
+public class DefaultReportTableSearchFactory extends AbstractRepositoryFactory<ReportTableSearch>
+    implements ReportTableSearchFactory {
 
     @Override
-    public List<String> findAllPatientsByQuery(ReportTableQuery tableQuery) {
-        ReportTableQueryStrategy queryStrategy = new ReportTableQueryStrategy(tableQuery);
-        return findTableData(queryStrategy, queryStrategy.getUriVariables());
+    protected ReportTableSearch defaultRepository() {
+        return new NotConfiguredReportTableSearch();
+    }
+
+    @Override
+    protected Class<ReportTableSearch> repositoryClass() {
+        return ReportTableSearch.class;
     }
 }

@@ -1,4 +1,4 @@
-IDCR POC
+Ripple IDCR Demonstrator
 =========
 
 ### Requirements

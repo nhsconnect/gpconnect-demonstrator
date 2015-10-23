@@ -15,7 +15,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr dir-paginate="mdt in cancerMdtComposition | itemsPerPage: 9 | filter:search" current-page="currentPage" ng-click="go('{{mdt.sourceId}}')" ng-class="{info: selected(mdt.sourceId)}">
+  <tr dir-paginate="mdt in cancerMdtComposition | filter:search | itemsPerPage: 9" current-page="currentPage" ng-click="go('{{mdt.sourceId}}')" ng-class="{info: selected(mdt.sourceId)}">
     <td class="dateTime">{{mdt.dateOfRequest}}</td>
     <td>{{mdt.serviceTeam}}</td>
     <td class="dateTime">{{mdt.dateOfMeeting}}</td>

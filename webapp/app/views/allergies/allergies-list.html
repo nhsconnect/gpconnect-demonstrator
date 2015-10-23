@@ -15,7 +15,7 @@
   </thead>
 
   <tbody>
-    <tr dir-paginate="allergy in allergies | itemsPerPage : 9 | filter:search" current-page="currentPage"  ng-click="go('{{allergy.sourceId}}')" ng-class="{info: selected(allergy.sourceId)}">
+    <tr dir-paginate="allergy in allergies | filter:search | itemsPerPage : 9" current-page="currentPage"  ng-click="go('{{allergy.sourceId}}')" ng-class="{info: selected(allergy.sourceId)}">
       <td>{{ allergy.cause }}</td>
       <td>{{ allergy.reaction }}</td>
       <td>{{ allergy.source }}</td>

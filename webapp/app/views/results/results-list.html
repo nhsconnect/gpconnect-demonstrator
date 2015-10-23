@@ -16,7 +16,7 @@
   </thead>
 
   <tbody>
-    <tr dir-paginate="result in results | itemsPerPage: 9 | filter:search" current-page="currentPage"  ng-click="go('{{result.sourceId}}')" ng-class="{info: selected(result.sourceId)}">
+    <tr dir-paginate="result in results | filter:search | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{result.sourceId}}')" ng-class="{info: selected(result.sourceId)}">
       <td>{{ result.testName }}</td>
       <td class="dateTime">{{ result.sampleTaken}}</td>
       <td class="dateTime">{{ result.dateCreated}}</td>

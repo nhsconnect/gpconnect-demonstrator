@@ -13,23 +13,23 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
+package org.rippleosi.search.patient.stats;
 
-package org.rippleosi.search.reports.graph.search;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.rippleosi.common.repo.AbstractRepositoryFactoryTest;
 
-import org.rippleosi.common.repo.AbstractRepositoryFactory;
-import org.springframework.stereotype.Service;
-
-@Service
-public class DefaultReportGraphSearchFactory extends AbstractRepositoryFactory<ReportGraphSearch>
-    implements ReportGraphSearchFactory {
+@RunWith(MockitoJUnitRunner.class)
+public class DefaultPatientStatsSearchFactoryTest
+    extends AbstractRepositoryFactoryTest<PatientStatsSearchFactory, PatientStatsSearch> {
 
     @Override
-    protected ReportGraphSearch defaultRepository() {
-        return new NotConfiguredReportGraphSearch();
+    protected PatientStatsSearchFactory createRepositoryFactory() {
+        return new DefaultPatientStatsSearchFactory();
     }
 
     @Override
-    protected Class<ReportGraphSearch> repositoryClass() {
-        return ReportGraphSearch.class;
+    protected Class<PatientStatsSearch> getRepositoryClass() {
+        return PatientStatsSearch.class;
     }
 }

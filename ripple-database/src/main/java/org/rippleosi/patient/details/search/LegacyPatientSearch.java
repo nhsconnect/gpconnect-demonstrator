@@ -225,17 +225,17 @@ public class LegacyPatientSearch implements PatientSearch {
     }
 
     @Override
-    public Integer findPatientCountByDepartment(String department) {
-        return patientRepository.countByDepartmentDepartmentIgnoreCase(department);
-    }
-
-    @Override
     public List<PatientSummary> findAllPatientsByDepartment(SettingTableQuery tableQuery) {
         List<PatientEntity> patients =
             patientRepository.findPatientsByDepartmentDepartmentIgnoreCase(tableQuery.getSearchString(),
                                                                            generatePageRequest(tableQuery));
 
         return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
+    }
+
+    @Override
+    public Integer findPatientCountByDepartment(String department) {
+        return patientRepository.countByDepartmentDepartmentIgnoreCase(department);
     }
 
     private PageRequest generatePageRequest(PageableTableQuery tableQuery) {

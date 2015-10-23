@@ -14,13 +14,26 @@
  *      limitations under the License.
  */
 
-package org.rippleosi.search.reports.graph.search;
+package org.rippleosi.search.reports.graph;
 
-import org.rippleosi.common.repo.Repository;
+import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.search.reports.graph.model.ReportGraphResults;
 import org.rippleosi.search.reports.graph.model.ReportGraphQuery;
 
-public interface ReportGraphSearch extends Repository {
+public class NotConfiguredReportGraphSearch implements ReportGraphSearch {
 
-    ReportGraphResults findPatientDemographicsByQuery(ReportGraphQuery graphQuery);
+    @Override
+    public String getSource() {
+        return "not configured";
+    }
+
+    @Override
+    public int getPriority() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public ReportGraphResults findPatientDemographicsByQuery(ReportGraphQuery graphQuery) {
+        throw ConfigurationException.unimplementedTransaction(ReportGraphSearch.class);
+    }
 }

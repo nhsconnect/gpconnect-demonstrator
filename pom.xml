@@ -45,7 +45,7 @@
     <modules>
         <module>ripple-audit-example</module>
         <module>ripple-core</module>
-        <module>ripple-database-example</module>
+        <module>ripple-database</module>
         <module>ripple-demonstrator-api</module>
         <module>ripple-openehr</module>
         <module>ripple-terminology-example</module>
@@ -67,7 +67,7 @@
 
             <dependency>
                 <groupId>org.rippleosi</groupId>
-                <artifactId>ripple-database-example</artifactId>
+                <artifactId>ripple-database</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

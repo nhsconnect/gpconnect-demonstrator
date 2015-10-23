@@ -67,6 +67,7 @@ public class OpenEHRMedicationStore extends AbstractOpenEhrService implements Me
 
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
+        content.put("ctx/composer_name", medication.getAuthor());
 
         String medicationCode = StringUtils.isEmpty(medication.getMedicationCode()) ? "DefaultCode" : medication.getMedicationCode();
 

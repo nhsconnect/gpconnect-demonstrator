@@ -33,6 +33,8 @@ public class MedicationDetails implements Serializable {
     private Date startTime;
     private String medicationCode;
     private String medicationTerminology;
+    private String author;
+    private Date dateCreated;
 
     public String getSourceId() {
         return sourceId;
@@ -120,5 +122,21 @@ public class MedicationDetails implements Serializable {
 
     public void setMedicationTerminology(String medicationTerminology) {
         this.medicationTerminology = medicationTerminology;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

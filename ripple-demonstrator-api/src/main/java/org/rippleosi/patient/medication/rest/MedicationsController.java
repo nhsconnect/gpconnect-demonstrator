@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/patients/{patientId}/medications")
-public class MedicationController {
+public class MedicationsController {
 
     @Autowired
     private MedicationSearchFactory medicationSearchFactory;

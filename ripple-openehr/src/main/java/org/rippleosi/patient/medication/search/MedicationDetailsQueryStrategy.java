@@ -37,6 +37,7 @@ public class MedicationDetailsQueryStrategy extends AbstractQueryStrategy<Medica
     public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
                 "a/composer/name as author, " +
+                "a/context/start_time/value as date_created, " +
                 "a_a/items/items/data[at0001]/items/items[at0001]/value/value as name, " +
                 "a_a/items/items/data[at0001]/items/items[at0001]/value/defining_code/code_string as medication_code, " +
                 "a_a/items/items/data[at0001]/items/items[at0001]/value/defining_code/terminology_id/value as medication_terminology, " +

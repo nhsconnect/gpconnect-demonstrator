@@ -31,9 +31,11 @@ public class MedicationDetailsTransformer implements Transformer<Map<String, Obj
     public MedicationDetails transform(Map<String, Object> input) {
 
         String startDateTimeAsString = MapUtils.getString(input, "start_date");
+        String dateCreatedAsString = MapUtils.getString(input, "date_created");
 
         Date startDate = DateFormatter.toDateOnly(startDateTimeAsString);
         Date startTime = DateFormatter.toTimeOnly(startDateTimeAsString);
+        Date dateCreated = DateFormatter.toDate(dateCreatedAsString);
 
         MedicationDetails medication = new MedicationDetails();
         medication.setSource("openehr");
@@ -47,6 +49,8 @@ public class MedicationDetailsTransformer implements Transformer<Map<String, Obj
         medication.setMedicationTerminology(MapUtils.getString(input, "medication_terminology"));
         medication.setStartDate(startDate);
         medication.setStartTime(startTime);
+        medication.setAuthor(MapUtils.getString(input, "author"));
+        medication.setDateCreated(dateCreated);
 
         return medication;
     }

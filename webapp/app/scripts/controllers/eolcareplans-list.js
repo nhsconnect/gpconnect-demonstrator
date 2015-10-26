@@ -13,6 +13,10 @@ angular.module('rippleDemonstrator')
       $scope.currentPage = $stateParams.page;
     }
 
+    if ($stateParams.filter) {
+      $scope.query = $stateParams.filter;
+    }
+
     $scope.search = function (row) {
       return (
         angular.lowercase(row.name).indexOf(angular.lowercase($scope.query) || '') !== -1 ||

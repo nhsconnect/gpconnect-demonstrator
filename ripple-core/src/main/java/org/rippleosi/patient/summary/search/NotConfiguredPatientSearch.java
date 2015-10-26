@@ -74,7 +74,7 @@ public class NotConfiguredPatientSearch implements PatientSearch {
     }
 
     @Override
-    public Integer findPatientCountByDepartment(String department) {
+    public Long findPatientCountByDepartment(String department) {
         throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
     }
 }

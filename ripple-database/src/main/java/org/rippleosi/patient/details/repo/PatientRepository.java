@@ -27,7 +27,7 @@ public interface PatientRepository extends JpaRepository<PatientEntity, Long>, Q
 
     PatientEntity findByNhsNumber(String nhsNumber);
 
-    Integer countByDepartmentDepartmentIgnoreCase(String department);
+    Long countByDepartmentDepartmentIgnoreCase(String department);
 
     List<PatientEntity> findPatientsByDepartmentDepartmentIgnoreCase(String department, Pageable pageable);
 }

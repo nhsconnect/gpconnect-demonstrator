@@ -79,7 +79,7 @@ public class SearchByReportController {
         SearchTableResults associatedData = patientStatsSearch.findAssociatedPatientData(tableQuery, patientSummaries);
 
         // finally, set the total
-        int totalPatients = nhsNumbers.size();
+        Integer totalPatients = nhsNumbers.size();
         associatedData.setTotalPatients(String.valueOf(totalPatients));
 
         return associatedData;

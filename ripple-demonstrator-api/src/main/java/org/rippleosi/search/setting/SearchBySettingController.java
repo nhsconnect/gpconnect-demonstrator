@@ -49,12 +49,12 @@ public class SearchBySettingController {
         PatientSearch patientSearch = patientSearchFactory.select(patientSource);
         List<PatientSummary> patientSummaries = patientSearch.findAllPatientsByDepartment(tableQuery);
 
-        PatientStatsSearch settingSearch = patientStatsSearchFactory.select(patientDataSource);
-        SearchTableResults results = settingSearch.findAssociatedPatientData(tableQuery, patientSummaries);
+        PatientStatsSearch patientStatsSearch = patientStatsSearchFactory.select(patientDataSource);
+        SearchTableResults associatedData = patientStatsSearch.findAssociatedPatientData(tableQuery, patientSummaries);
 
-        Integer countByDepartment = patientSearch.findPatientCountByDepartment(tableQuery.getSearchString());
-        results.setTotalPatients(String.valueOf(countByDepartment));
+        Long countByDepartment = patientSearch.findPatientCountByDepartment(tableQuery.getSearchString());
+        associatedData.setTotalPatients(String.valueOf(countByDepartment));
 
-        return results;
+        return associatedData;
     }
 }

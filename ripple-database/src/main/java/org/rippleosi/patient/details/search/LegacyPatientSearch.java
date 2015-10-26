@@ -234,7 +234,7 @@ public class LegacyPatientSearch implements PatientSearch {
     }
 
     @Override
-    public Integer findPatientCountByDepartment(String department) {
+    public Long findPatientCountByDepartment(String department) {
         return patientRepository.countByDepartmentDepartmentIgnoreCase(department);
     }
 

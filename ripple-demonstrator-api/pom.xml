@@ -42,19 +42,25 @@
 
         <dependency>
             <groupId>org.rippleosi</groupId>
-            <artifactId>ripple-openehr</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.rippleosi</groupId>
             <artifactId>ripple-database</artifactId>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.rippleosi</groupId>
+            <artifactId>ripple-openehr</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.rippleosi</groupId>
             <artifactId>ripple-terminology-example</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.rippleosi</groupId>
+            <artifactId>ripple-vista</artifactId>
             <scope>runtime</scope>
         </dependency>
 

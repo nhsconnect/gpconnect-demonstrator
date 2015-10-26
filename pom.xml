@@ -49,6 +49,7 @@
         <module>ripple-demonstrator-api</module>
         <module>ripple-openehr</module>
         <module>ripple-terminology-example</module>
+        <module>ripple-vista</module>
     </modules>
 
     <dependencyManagement>
@@ -80,6 +81,12 @@
             <dependency>
                 <groupId>org.rippleosi</groupId>
                 <artifactId>ripple-terminology-example</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.rippleosi</groupId>
+                <artifactId>ripple-vista</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

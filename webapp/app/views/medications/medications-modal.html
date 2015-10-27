@@ -61,14 +61,14 @@
             <div class="col-md-12">
               <div class="input-group">
                 <select class="form-control" class="form-control input-sm" id="route" name="route" ng-model="medication.route" required>
-                  <option value="">-- route --</option>
+                  <option value="">-- Route --</option>
                   <option>Po Per Oral</option>
                   <option>IV Intra Venous</option>
+                  <option>IM Intra Muscular</option>
                   <option>PN Per Nasal</option>
                   <option>PR Per Rectum</option>
                   <option>SL Sub Lingual</option>
                   <option>SC Sub Cutaneous</option>
-                  <option>IM Intra Muscular</option>
                 </select>
               </div>
               <span class="help-block animate-fade" ng-show="formSubmitted && medicationForm.route.$error.required">You must enter a value.</span>

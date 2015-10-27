@@ -2113,3 +2113,11 @@ i.fa.cancel-reportType.fa-times {
 .create-button {
     margin-top: 10px;
 }
+
+div#age-chart div.morris-hover.morris-default-style {
+  display: none !important;
+}
+
+.hoverChart div#age-chart div.morris-hover.morris-default-style {
+  display: block !important;
+}

@@ -118,6 +118,9 @@ angular.module('rippleDemonstrator')
         }
       };
 
+   //  $('#age-chart').hover(function(){
+   //      $(this:first-child ).firstChild().nextElementSibling().css('display','block !important');
+   // });
 
     // Selected chart on page load
     $scope.selectedChart = 'age';

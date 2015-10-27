@@ -10,7 +10,7 @@
     <div class="col-md-offset-3 col-sm-offset-3 col-md-6 col-sm-6 chart-inner">
 
       <!-- Age Chart -->
-      <div class="chart age" id="age">
+      <div class="chart age" id="age" ng-class="{hoverChart: hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false">
         <div class="chart-title-group-container hidden-xs">
           <div class="pull-left chart-title-group">
             <h2 class="chart-title">Reports: {{reportType}}: {{searchString}}</h2>

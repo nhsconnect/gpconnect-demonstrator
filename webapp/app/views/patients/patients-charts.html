@@ -27,7 +27,7 @@
         <br>
 
         <!-- Age Chart -->
-        <div class="chart age" id="age">
+        <div class="chart age" ng-class="{hoverChart: hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false" id="age">
 
         <span class="fa-stack fa-lg pull-left chart-fa-stack hidden-xs" >
             <i class="fa fa-circle fa-stack-2x cake-icon"></i>
@@ -58,7 +58,7 @@
         <!-- END Age Chart -->
 
     <!--  Chart Setting -->
-    <div class="chart setting soft-hide" id="setting">
+    <div class="chart setting soft-hide" ng-class="{hoverChart: hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false"  id="setting">
 
         <span class="fa-stack fa-lg pull-left chart-fa-stack hidden-xs" >
             <i class="fa fa-circle fa-stack-2x map-marker-icon"></i>

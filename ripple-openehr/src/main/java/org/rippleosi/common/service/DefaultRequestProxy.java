@@ -15,14 +15,10 @@
  */
 package org.rippleosi.common.service;
 
-import java.util.Collections;
-import java.util.Map;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Base64;
 import org.rippleosi.common.exception.InvalidDataException;
-import org.rippleosi.common.model.LoginResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -44,58 +40,44 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class DefaultRequestProxy implements RequestProxy {
 
-    @Value("${openehr.address}")
+    @Value("${c4hOpenEHR.address}")
     private String openEhrAddress;
 
-    @Value("${openehr.user}")
+    @Value("${c4hOpenEHR.user}")
     private String openEhrUsername;
 
-    @Value("${openehr.password}")
+    @Value("${c4hOpenEHR.password}")
     private String openEhrPassword;
 
-    private String sessionId;
-
     @Override
-    public <T> ResponseEntity<T> getWithSession(String uri, Class<T> cls) {
+    public <T> ResponseEntity<T> getWithoutSession(String uri, Class<T> cls) {
 
-        HttpEntity<String> request = buildRequestWithSession();
+        HttpEntity<String> request = buildRequestWithoutSession(null);
 
         return restTemplate().exchange(uri, HttpMethod.GET, request, cls);
     }
 
     @Override
-    public <T> ResponseEntity<T> postWithSession(String uri, Class<T> cls, Object body) {
+    public <T> ResponseEntity<T> postWithoutSession(String uri, Class<T> cls, Object body) {
 
         String json = convertToJson(body);
 
-        HttpEntity<String> request = buildRequestWithSession(json);
+        HttpEntity<String> request = buildRequestWithoutSession(json);
 
         return restTemplate().exchange(uri, HttpMethod.POST, request, cls);
     }
 
     @Override
-    public <T> ResponseEntity<T> putWithSession(String uri, Class<T> cls, Object body) {
+    public <T> ResponseEntity<T> putWithoutSession(String uri, Class<T> cls, Object body) {
 
         String json = convertToJson(body);
 
-        HttpEntity<String> request = buildRequestWithSession(json);
+        HttpEntity<String> request = buildRequestWithoutSession(json);
 
         return restTemplate().exchange(uri, HttpMethod.PUT, request, cls);
     }
 
-    private HttpEntity<String> buildRequestWithSession() {
-        return buildRequestWithSession(null);
-    }
-
-    private HttpEntity<String> buildRequestWithSession(String body) {
-        return buildRequest(body, Collections.singletonMap("Ehr-Session", session()));
-    }
-
-    private HttpEntity<String> buildRequestWithoutSession() {
-        return buildRequest(null, Collections.<String, String>emptyMap());
-    }
-
-    private HttpEntity<String> buildRequest(String body, Map<String, String> additionalHeaders) {
+    private HttpEntity<String> buildRequestWithoutSession(String body) {
 
         String credentials = openEhrUsername + ":" + openEhrPassword;
         byte[] base64 = Base64.encodeBase64(credentials.getBytes());
@@ -106,37 +88,11 @@ public class DefaultRequestProxy implements RequestProxy {
         headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
-        for (Map.Entry<String, String> entry : additionalHeaders.entrySet()) {
-            headers.add(entry.getKey(), entry.getValue());
-        }
-
         return new HttpEntity<>(body, headers);
-    }
-
-    private String session() {
-
-        if (sessionId == null) {
-            HttpEntity<String> request = buildRequestWithoutSession();
-
-            ResponseEntity<LoginResponse> response = restTemplate().exchange(sessionUri(), HttpMethod.POST, request, LoginResponse.class);
-
-            sessionId = response.getBody().getSessionId();
-        }
-
-        return sessionId;
     }
 
     private RestTemplate restTemplate() {
         return new RestTemplate(new SimpleClientHttpRequestFactory());
-    }
-
-    private String sessionUri() {
-        UriComponents components = UriComponentsBuilder
-                                    .fromHttpUrl(openEhrAddress + "/session")
-                                    .queryParam("username", openEhrUsername)
-                                    .queryParam("password", openEhrPassword)
-                                    .build();
-        return components.toUriString();
     }
 
     private String convertToJson(Object body) {

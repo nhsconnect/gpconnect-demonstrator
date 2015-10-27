@@ -38,13 +38,13 @@ import org.springframework.web.util.UriComponentsBuilder;
  */
 public abstract class AbstractOpenEhrService implements Repository {
 
-    @Value("${repository.config.openehr:1000}")
+    @Value("${repository.config.c4hOpenEHR:1000}")
     private int priority;
 
-    @Value("${openehr.address}")
+    @Value("${c4hOpenEHR.address}")
     private String openEhrAddress;
 
-    @Value("${openehr.subjectNamespace}")
+    @Value("${c4hOpenEHR.subjectNamespace}")
     private String openEhrSubjectNamespace;
 
     @Autowired
@@ -66,7 +66,7 @@ public abstract class AbstractOpenEhrService implements Repository {
 
         String query = queryStrategy.getQuery(openEhrSubjectNamespace, queryStrategy.getPatientId());
 
-        ResponseEntity<QueryResponse> response = requestProxy.getWithSession(getQueryURI(query), QueryResponse.class);
+        ResponseEntity<QueryResponse> response = requestProxy.getWithoutSession(getQueryURI(query), QueryResponse.class);
 
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new DataNotFoundException("OpenEHR query returned with status code " + response.getStatusCode());
@@ -84,7 +84,7 @@ public abstract class AbstractOpenEhrService implements Repository {
 
         String uri = getCreateURI(template, ehrId);
 
-        ResponseEntity<ActionRestResponse> response = requestProxy.postWithSession(uri, ActionRestResponse.class, content);
+        ResponseEntity<ActionRestResponse> response = requestProxy.postWithoutSession(uri, ActionRestResponse.class, content);
 
         if (response.getStatusCode() != HttpStatus.CREATED) {
             throw new UpdateFailedException("Could not create " + template + " for patient " + patientId);
@@ -101,7 +101,7 @@ public abstract class AbstractOpenEhrService implements Repository {
 
         String uri = getUpdateURI(compositionId, template, ehrId);
 
-        ResponseEntity<ActionRestResponse> response = requestProxy.putWithSession(uri, ActionRestResponse.class, content);
+        ResponseEntity<ActionRestResponse> response = requestProxy.putWithoutSession(uri, ActionRestResponse.class, content);
 
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new UpdateFailedException("Could not update " + template + " (" + compositionId + ") for patient " + patientId);
@@ -146,7 +146,7 @@ public abstract class AbstractOpenEhrService implements Repository {
 
         @Override
         public String transform(String nhsNumber) {
-            ResponseEntity<EhrResponse> response = requestProxy.getWithSession(getEhrIdUri(nhsNumber), EhrResponse.class);
+            ResponseEntity<EhrResponse> response = requestProxy.getWithoutSession(getEhrIdUri(nhsNumber), EhrResponse.class);
             if (response.getStatusCode() != HttpStatus.OK) {
                 throw new DataNotFoundException("OpenEHR query returned with status code " + response.getStatusCode());
             }
@@ -157,8 +157,8 @@ public abstract class AbstractOpenEhrService implements Repository {
         private String getEhrIdUri(String nhsNumber) {
             UriComponents components = UriComponentsBuilder
                                         .fromHttpUrl(openEhrAddress + "/ehr")
-                                        .queryParam("subjectNamespace", openEhrSubjectNamespace)
                                         .queryParam("subjectId", nhsNumber)
+                                        .queryParam("subjectNamespace", openEhrSubjectNamespace)
                                         .build();
             return components.toUriString();
         }

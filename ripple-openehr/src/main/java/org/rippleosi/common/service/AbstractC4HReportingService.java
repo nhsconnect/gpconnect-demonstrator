@@ -13,7 +13,6 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-
 package org.rippleosi.common.service;
 
 import java.util.Map;
@@ -42,11 +41,11 @@ public abstract class AbstractC4HReportingService implements Repository {
     private String externalNamespace;
 
     @Autowired
-    private DefaultC4HRequestProxy requestProxy;
+    private C4HReportingRequestProxy requestProxy;
 
     @Override
     public String getSource() {
-        return "c4hOpenEHR";
+        return "openehr";
     }
 
     @Override
@@ -58,28 +57,30 @@ public abstract class AbstractC4HReportingService implements Repository {
         UriComponents uriComponents = queryStrategy.getQueryUriComponents();
         Object requestBody = queryStrategy.getRequestBody();
 
-        ResponseEntity<ReportGraphResults> response = requestProxy.getWithSession(uriComponents.toUriString(),
-                                                                                  ReportGraphResults.class,
-                                                                                  requestBody);
+        ResponseEntity<ReportGraphResults> response = requestProxy.getWithoutSession(uriComponents.toUriString(),
+                                                                                     ReportGraphResults.class,
+                                                                                     requestBody);
 
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new DataNotFoundException("C4H OpenEHR query returned with status code " + response.getStatusCode());
         }
 
+        // noinspection unchecked
         return queryStrategy.transform((I) response.getBody());
     }
 
     protected <I, O> O findTableData(C4HUriQueryStrategy<I, O> queryStrategy) {
         UriComponents uriComponents = queryStrategy.getQueryUriComponents();
 
-        ResponseEntity<OpenEHRDatesAndCountsResponse[]> response = requestProxy.postWithSession(uriComponents.toUriString(),
-                                                                                                OpenEHRDatesAndCountsResponse[].class,
-                                                                                                queryStrategy.getRequestBody());
+        ResponseEntity<OpenEHRDatesAndCountsResponse[]> response = requestProxy.postWithoutSession(uriComponents.toUriString(),
+                                                                                                   OpenEHRDatesAndCountsResponse[].class,
+                                                                                                   queryStrategy.getRequestBody());
 
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new DataNotFoundException("C4H OpenEHR query returned with status code " + response.getStatusCode());
         }
 
+        // noinspection unchecked
         return queryStrategy.transform((I) response.getBody());
     }
 
@@ -87,7 +88,9 @@ public abstract class AbstractC4HReportingService implements Repository {
 
         String query = queryStrategy.getQuery(externalNamespace, queryStrategy.getPatientId());
 
-        ResponseEntity<QueryResponse> response = requestProxy.getWithSession(getQueryURI(query), QueryResponse.class, uriVars);
+        ResponseEntity<QueryResponse> response = requestProxy.getWithoutSession(getQueryURI(query),
+                                                                                QueryResponse.class,
+                                                                                uriVars);
 
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new DataNotFoundException("OpenEHR query returned with status code " + response.getStatusCode());

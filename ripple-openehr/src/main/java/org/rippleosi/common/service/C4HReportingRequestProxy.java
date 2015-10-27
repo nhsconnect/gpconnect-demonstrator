@@ -13,7 +13,6 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-
 package org.rippleosi.common.service;
 
 import java.util.Map;
@@ -37,7 +36,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class DefaultC4HRequestProxy {
+public class C4HReportingRequestProxy {
 
     @Value("${c4hOpenEHR.address}")
     private String openEhrAddress;
@@ -48,20 +47,20 @@ public class DefaultC4HRequestProxy {
     @Value("${c4hOpenEHR.password}")
     private String openEhrPassword;
 
-    public <T> ResponseEntity<T> getWithSession(String uri, Class<T> cls, Map<String, String> uriVars) {
+    public <T> ResponseEntity<T> getWithoutSession(String uri, Class<T> cls, Map<String, String> uriVars) {
         HttpEntity request = buildRequest(null);
 
         return restTemplate().exchange(uri, HttpMethod.GET, request, cls, uriVars);
     }
 
-     public <T> ResponseEntity<T> getWithSession(String uri, Class<T> cls, Object rawBody) {
+     public <T> ResponseEntity<T> getWithoutSession(String uri, Class<T> cls, Object rawBody) {
         String jsonBody = convertToJson(rawBody);
         HttpEntity request = buildRequest(jsonBody);
 
         return restTemplate().exchange(uri, HttpMethod.GET, request, cls);
     }
 
-    public <T> ResponseEntity<T> postWithSession(String uri, Class<T> cls, Object rawBody) {
+    public <T> ResponseEntity<T> postWithoutSession(String uri, Class<T> cls, Object rawBody) {
         String jsonBody = convertToJson(rawBody);
         HttpEntity request = buildRequest(jsonBody);
 

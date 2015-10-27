@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpenEHRReferralStore extends AbstractOpenEhrService implements ReferralStore {
 
-    @Value("${openehr.referralsTemplate}")
+    @Value("${c4hOpenEHR.referralsTemplate}")
     private String referralsTemplate;
 
     private static final String REFERRALS_PREFIX = "referral/referral_details:0/";
@@ -41,7 +41,7 @@ public class OpenEHRReferralStore extends AbstractOpenEhrService implements Refe
     private static final String ORDER_REFERRAL = REFERRALS_PREFIX + "order_referral/";
 
     @Override
-    @Consume(uri = "activemq:Consumer.OpenEHR.VirtualTopic.Ripple.Referrals.Create")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Referrals.Create")
     public void create(String patientId, ReferralDetails referral) {
 
         Map<String,Object> content = createFlatJsonContent(referral);
@@ -52,7 +52,7 @@ public class OpenEHRReferralStore extends AbstractOpenEhrService implements Refe
     }
 
     @Override
-    @Consume(uri = "activemq:Consumer.OpenEHR.VirtualTopic.Ripple.Referrals.Update")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Referrals.Update")
     public void update(String patientId, ReferralDetails referral) {
 
         Map<String,Object> content = createFlatJsonContent(referral);

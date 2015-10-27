@@ -33,13 +33,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpenEHRProcedureStore extends AbstractOpenEhrService implements ProcedureStore {
 
-    @Value("${openehr.proceduresTemplate}")
+    @Value("${c4hOpenEHR.proceduresTemplate}")
     private String proceduresTemplate;
 
     private static final String PROCEDURE_PREFIX = "procedures_list/procedures:0/procedure:0";
 
     @Override
-    @Consume(uri = "activemq:Consumer.OpenEHR.VirtualTopic.Ripple.Procedures.Create")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Procedures.Create")
     public void create(String patientId, ProcedureDetails procedure) {
 
         Map<String,Object> content = createFlatJsonContent(procedure);
@@ -50,7 +50,7 @@ public class OpenEHRProcedureStore extends AbstractOpenEhrService implements Pro
     }
 
     @Override
-    @Consume(uri = "activemq:Consumer.OpenEHR.VirtualTopic.Ripple.Procedures.Update")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Procedures.Update")
     public void update(String patientId, ProcedureDetails procedure) {
 
         Map<String,Object> content = createFlatJsonContent(procedure);

@@ -35,13 +35,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpenEHRLabOrderStore extends AbstractOpenEhrService implements LabOrderStore {
 
-    @Value("${openehr.labOrderTemplate}")
+    @Value("${c4hOpenEHR.labOrderTemplate}")
     private String labOrderTemplate;
 
     private static final String LAB_ORDER_PREFIX = "laboratory_order/laboratory_test_request/lab_request";
 
     @Override
-    @Consume(uri = "activemq:Consumer.OpenEHR.VirtualTopic.Ripple.LabOrder.Create")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.LabOrder.Create")
     public void create(String patientId, List<LabOrderDetails> labOrders) {
 
         for (LabOrderDetails labOrder : labOrders) {

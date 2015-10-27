@@ -38,12 +38,12 @@ angular.module('rippleDemonstrator')
         var toUpdate = {
           sourceId: medication.sourceId,
           doseAmount: medication.doseAmount,
+          route: medication.route,
           doseDirections: medication.doseDirections,
           doseTiming: medication.doseTiming,
           medicationCode: medication.medicationCode,
           medicationTerminology: medication.medicationTerminology,
           name: medication.name,
-          route: medication.route,
           startDate: medication.startDate,
           startTime: medication.startTime,
           source: 'openehr'

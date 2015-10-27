@@ -77,6 +77,8 @@ angular.module('rippleDemonstrator')
           route: medication.route,
           startDate: medication.startDate,
           startTime: medication.startTime,
+          author: medication.author,
+          dateCreated: medication.dateCreated,
           source: 'openehr'
         };
 

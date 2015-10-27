@@ -175,8 +175,6 @@ Apache License
 
    END OF TERMS AND CONDITIONS
 
-   APPENDIX: How to apply the Apache License to your work.
-
    Copyright 2015 RippleOSI
 
    Licensed under the Apache License, Version 2.0 (the "License");

@@ -180,7 +180,7 @@ angular.module('rippleDemonstrator')
 
     $scope.go = function (patient) {
       $state.go('patients-summary', {
-        patientId: patient.id
+        patientId: patient.nhsNumber
       });
     };
 

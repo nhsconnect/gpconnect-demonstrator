@@ -51,10 +51,10 @@
               <td>{{ patient.name }}</td>
               <td>{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</td>
               <td>{{ patient.vitalsHeadline.latestEntry }}</td>
-              <td>{{ patient.ordersHeadline.latestEntry }}</td>
-              <td>{{ patient.resultsHeadline.latestEntry }}</td>
-              <td>{{ patient.treatmentsHeadline.latestEntry }}</td>
-              <td>{{ patient.medsHeadline.latestEntry }}</td>
+              <td><a href="#/patients/{{patient.nhsNumber}}/orders/{{patient.ordersHeadline.sourceId}}">{{ patient.ordersHeadline.latestEntry }}</a></td>
+              <td><a href="#/patients/{{patient.nhsNumber}}/results/{{patient.resultsHeadline.sourceId}}">{{ patient.resultsHeadline.latestEntry }}</a></td>
+              <td><a href="#/patients/{{patient.nhsNumber}}/procedures/{{patient.treatmentsHeadline.sourceId}}">{{ patient.treatmentsHeadline.latestEntry }}</a></td>
+              <td><a href="#/patients/{{patient.nhsNumber}}/medications/{{patient.medicationsHeadline.sourceId}}">{{ patient.medsHeadline.latestEntry }}</a></td>
             </tr>
           </tbody>
           <tbody ng-if="tab == 'counts'">
@@ -62,10 +62,10 @@
               <td>{{ patient.name }}</td>
               <td>{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</td>
               <td>{{ patient.vitalsHeadline.totalEntries }}</td>
-              <td>{{ patient.ordersHeadline.totalEntries }}</td>
-              <td>{{ patient.resultsHeadline.totalEntries }}</td>
-              <td>{{ patient.treatmentsHeadline.totalEntries }}</td>
-              <td>{{ patient.medsHeadline.totalEntries }}</td>
+              <td><a href="#/patients/{{patient.nhsNumber}}/orders/">{{ patient.ordersHeadline.totalEntries }}</a></td>
+              <td><a href="#/patients/{{patient.nhsNumber}}/results/">{{ patient.resultsHeadline.totalEntries }}</a></td>
+              <td><a href="#/patients/{{patient.nhsNumber}}/procedures/">{{ patient.treatmentsHeadline.totalEntries }}</a></td>
+              <td><a href="#/patients/{{patient.nhsNumber}}/medications/">{{ patient.medsHeadline.totalEntries }}</a></td>
             </tr>
           </tbody>
         </table>

@@ -17,7 +17,7 @@ angular.module('rippleDemonstrator')
       return (
         angular.lowercase(row.testName).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
         angular.lowercase(row.sampleTaken).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
-        angular.lowercase(row.dateReported).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+        angular.lowercase(row.dateCreated).indexOf(angular.lowercase($scope.query) || '') !== -1 ||
         angular.lowercase(row.source).indexOf(angular.lowercase($scope.query) || '') !== -1
       );
     };

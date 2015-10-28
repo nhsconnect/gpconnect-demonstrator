@@ -51,10 +51,10 @@
               <td>{{ patient.name }}</td>
               <td>{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</td>
               <td>{{ patient.vitalsHeadline.latestEntry }}</td>
-              <td><a href="#/patients/{{patient.nhsNumber}}/orders/{{patient.ordersHeadline.sourceId}}">{{ patient.ordersHeadline.latestEntry }}</a></td>
-              <td><a href="#/patients/{{patient.nhsNumber}}/results/{{patient.resultsHeadline.sourceId}}">{{ patient.resultsHeadline.latestEntry }}</a></td>
-              <td><a href="#/patients/{{patient.nhsNumber}}/procedures/{{patient.treatmentsHeadline.sourceId}}">{{ patient.treatmentsHeadline.latestEntry }}</a></td>
-              <td><a href="#/patients/{{patient.nhsNumber}}/medications/{{patient.medicationsHeadline.sourceId}}">{{ patient.medsHeadline.latestEntry }}</a></td>
+              <td ng-click="getItem('orders', patient.nhsNumber, patient.ordersHeadline.sourceId)"><a>{{ patient.ordersHeadline.latestEntry }}</a></td>
+              <td ng-click="getItem('results', patient.nhsNumber, patient.resultsHeadline.sourceId)"><a>{{ patient.resultsHeadline.latestEntry }}</a></td>
+              <td ng-click="getItem('procedures', patient.nhsNumber, patient.treatmentsHeadline.sourceId)"><a>{{ patient.treatmentsHeadline.latestEntry }}</a></td>
+              <td ng-click="getItem('medications', patient.nhsNumber, patient.medsHeadline.sourceId)"><a>{{ patient.medsHeadline.latestEntry }}</a></td>
             </tr>
           </tbody>
           <tbody ng-if="tab == 'counts'">
@@ -62,10 +62,10 @@
               <td>{{ patient.name }}</td>
               <td>{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</td>
               <td>{{ patient.vitalsHeadline.totalEntries }}</td>
-              <td><a href="#/patients/{{patient.nhsNumber}}/orders/">{{ patient.ordersHeadline.totalEntries }}</a></td>
-              <td><a href="#/patients/{{patient.nhsNumber}}/results/">{{ patient.resultsHeadline.totalEntries }}</a></td>
-              <td><a href="#/patients/{{patient.nhsNumber}}/procedures/">{{ patient.treatmentsHeadline.totalEntries }}</a></td>
-              <td><a href="#/patients/{{patient.nhsNumber}}/medications/">{{ patient.medsHeadline.totalEntries }}</a></td>
+              <td ng-click="goToSection('orders', patient.nhsNumber)"><a>{{ patient.ordersHeadline.totalEntries }}</a></td>
+              <td ng-click="goToSection('results', patient.nhsNumber)"><a>{{ patient.resultsHeadline.totalEntries }}</a></td>
+              <td ng-click="goToSection('procedures', patient.nhsNumber)"><a>{{ patient.treatmentsHeadline.totalEntries }}</a></td>
+              <td ng-click="goToSection('medications', patient.nhsNumber)"><a>{{ patient.medsHeadline.totalEntries }}</a></td>
             </tr>
           </tbody>
         </table>

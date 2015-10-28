@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('OrdersListCtrl', function ($scope, $location, $stateParams, usSpinnerService, $modal, $state, PatientService, Order) {
+  .controller('OrdersListCtrl', function ($scope, $location, $stateParams, SearchInput, usSpinnerService, $modal, $state, PatientService, Order) {
+
+    SearchInput.update();
 
     $scope.currentPage = 1;
 

@@ -2121,3 +2121,8 @@ div#age-chart div.morris-hover.morris-default-style {
 .hoverChart div#age-chart div.morris-hover.morris-default-style {
   display: block !important;
 }
+
+.patients-list-context a:hover{
+  color: black;
+  text-decoration: underline;
+}

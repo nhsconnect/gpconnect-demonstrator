@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('MedicationsListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Medication) {
+  .controller('MedicationsListCtrl', function ($scope, $location, $stateParams, SearchInput, $modal, $state, usSpinnerService, PatientService, Medication) {
 
     $scope.query = {};
     $scope.queryBy = '$';
+    SearchInput.update();
 
     $scope.currentPage = 1;
 

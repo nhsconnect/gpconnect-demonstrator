@@ -5,11 +5,11 @@ angular.module('rippleDemonstrator')
 
     $scope.currentPage = 1;
 
-    $scope.pageChangeHandler = function(newPage) {
+    $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
     }
 
-    if($stateParams.page) {
+    if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
 
@@ -30,16 +30,22 @@ angular.module('rippleDemonstrator')
     });
 
     Order.all($stateParams.patientId).then(function (result) {
-      $scope.orders = result.data.reverse();
-
-      for (var i = 0; i < $scope.orders.length; i++) {
-        $scope.orders[i].orderDate = moment($scope.orders[i].orderDate).format('DD-MMM-YYYY h:mm a');
+      if (result.status != 204) {
+        $scope.orders = result.data.reverse();
+        for (var i = 0; i < $scope.orders.length; i++) {
+          $scope.orders[i].orderDate = moment($scope.orders[i].orderDate).format('DD-MMM-YYYY h:mm a');
+        }
       }
       usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {
-       $state.go('orders-detail', { patientId: $scope.patient.id, orderId: id, filter: $scope.query, page: $scope.currentPage });
+      $state.go('orders-detail', {
+        patientId: $scope.patient.id,
+        orderId: id,
+        filter: $scope.query,
+        page: $scope.currentPage
+      });
     };
 
     $scope.selected = function (orderId) {
@@ -68,7 +74,7 @@ angular.module('rippleDemonstrator')
 
       modalInstance.result.then(function (orders) {
         var toAdd = [];
-        for (var i = 0; i < orders.length; i++){
+        for (var i = 0; i < orders.length; i++) {
           var newItem = {};
           newItem.sourceId = '';
           newItem.dateCreated = new Date();

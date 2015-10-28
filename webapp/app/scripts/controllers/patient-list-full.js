@@ -15,18 +15,18 @@ angular.module('rippleDemonstrator')
     $rootScope.searchMode = true;
 
     function getPageInfo() {
-      var from = (15 *  $scope.pagingInfo.page - 14);
+      var from = (15 * $scope.pagingInfo.page - 14);
       var to = 0;
       var totalPages = 0;
-      if ($scope.pagingInfo.totalItems % 15 === 0){
+      if ($scope.pagingInfo.totalItems % 15 === 0) {
         totalPages = $scope.pagingInfo.totalItems / 15;
-      }else {
+      } else {
         totalPages = Math.floor($scope.pagingInfo.totalItems / 15) + 1;
       }
-      if ($scope.pagingInfo.page == totalPages){
+      if ($scope.pagingInfo.page == totalPages) {
         to = from + $scope.pagingInfo.totalItems % 15 - 1;
-      }else {
-        to =  $scope.pagingInfo.page * 15;
+      } else {
+        to = $scope.pagingInfo.page * 15;
       }
       var total = from + ' to ' + to + ' of ' + $scope.pagingInfo.totalItems;
       return total;
@@ -47,14 +47,14 @@ angular.module('rippleDemonstrator')
           $scope.patients = result.data.patientDetails;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
 
-          if ($scope.pagingInfo.totalItems == 0){
+          if ($scope.pagingInfo.totalItems == 0) {
             $scope.noResults = 'There are no results that match your search criteria';
-          }else {
+          } else {
             $scope.processData();
           }
         });
 
-      } else if ($stateParams.queryType === 'Reports: '){
+      } else if ($stateParams.queryType === 'Reports: ') {
         $rootScope.reportMode = true;
         $rootScope.settingsMode = false;
         $rootScope.patientMode = false;
@@ -75,14 +75,13 @@ angular.module('rippleDemonstrator')
           $scope.patients = result.data.patientDetails;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
 
-          if ($scope.pagingInfo.totalItems == 0){
+          if ($scope.pagingInfo.totalItems == 0) {
             $scope.noResults = 'There are no results that match your search criteria';
-          }else {
+          } else {
             $scope.processData();
           }
         });
-      }
-      else {
+      } else {
         $rootScope.reportMode = false;
         $rootScope.settingsMode = false;
         $rootScope.reportTypeSet = false;
@@ -97,9 +96,9 @@ angular.module('rippleDemonstrator')
         Report.searchByPatient(searchPatientQuery).then(function (result) {
           $scope.patients = result.data.patientDetails;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
-          if ($scope.pagingInfo.totalItems == 0){
+          if ($scope.pagingInfo.totalItems == 0) {
             $scope.noResults = 'There are no results that match your search criteria';
-          }else {
+          } else {
             $scope.processData();
           }
         });
@@ -120,7 +119,7 @@ angular.module('rippleDemonstrator')
         $scope.patients[i].treatmentsHeadline.totalEntries = $scope.processCounts($scope.patients[i].treatmentsHeadline.totalEntries);
       }
       $scope.pagingInfo.orderType = $stateParams.orderType;
-      $scope.pagingInfo.page =  $stateParams.pageNumber;
+      $scope.pagingInfo.page = $stateParams.pageNumber;
       $scope.pageInfoText = getPageInfo();
     };
 
@@ -180,7 +179,14 @@ angular.module('rippleDemonstrator')
 
     $scope.go = function (patient) {
       $state.go('patients-summary', {
-        patientId: patient.nhsNumber
+        patientId: patient.nhsNumber,
+        ageFrom: $stateParams.ageFrom,
+        ageTo: $stateParams.ageTo,
+        orderType: $stateParams.orderType,
+        pageNumber: $stateParams.pageNumber,
+        reportType: $stateParams.reportType,
+        searchString: $stateParams.searchString,
+        queryType: $stateParams.queryType
       });
     };
 

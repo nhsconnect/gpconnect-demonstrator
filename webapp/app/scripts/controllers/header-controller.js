@@ -6,7 +6,8 @@ angular.module('rippleDemonstrator')
 
     var role = $stateParams.role;
     var email = $stateParams.email;
-    $scope.searchExpression = '';
+    $rootScope.searchExpression = '';
+    $scope.searchExpression = $rootScope.searchExpression;
     $scope.reportTypes = [];
 
     // Set current user
@@ -183,13 +184,13 @@ angular.module('rippleDemonstrator')
       };
 
       $scope.searchFunction = function () {
-        if ($scope.reportTypeSet && $scope.searchExpression !== '') {
+        if ($rootScope.reportTypeSet && $scope.searchExpression !== '') {
           var tempExpression = $rootScope.reportTypeString + ': ' + $scope.searchExpression;
           $state.go('search-report', {
             searchString: tempExpression
           });
         }
-        if ($scope.settingsMode && $scope.searchExpression !== '') {
+        if ($rootScope.settingsMode && $scope.searchExpression !== '') {
           $state.go('patients-list-full', {
             queryType: 'Setting: ',
             searchString: $scope.searchExpression,
@@ -197,7 +198,7 @@ angular.module('rippleDemonstrator')
             pageNumber: '1'
           });
         }
-        if ($scope.patientMode && $scope.searchExpression !== '') {
+        if ($rootScope.patientMode && $scope.searchExpression !== '') {
           $state.go('patients-list-full', {
             queryType: 'Patient: ',
             searchString: $scope.searchExpression,

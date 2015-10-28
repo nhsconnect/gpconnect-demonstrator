@@ -38,7 +38,7 @@ angular.module('rippleDemonstrator')
       }); // id is hard coded
     }
 
-    $rootScope.$on('$stateChangeSuccess', function (event, toState) {
+    $rootScope.$on('$stateChangeSuccess', function (event, toState, fromState) {
       var params = $stateParams;
       var previousState = '';
       var pageHeader = '';
@@ -237,6 +237,11 @@ angular.module('rippleDemonstrator')
           $scope.searchExpression = '';
         }
       };
+
+      if (typeof $stateParams.ageFrom === 'undefined') {
+        previousState = 'patients-list';
+        previousPage = 'Patient Lists';
+      }
 
       $scope.pageHeader = pageHeader;
       $scope.previousState = previousState;

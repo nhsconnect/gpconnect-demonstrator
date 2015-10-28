@@ -246,15 +246,7 @@ angular.module('rippleDemonstrator')
       $scope.detailWidth = detailWidth;
 
       $scope.goBack = function () {
-        if (previousState === 'search-report') {
-          $rootScope.searchExpression = params.searchString.trim();
-          $state.go(previousState, {
-            searchString: params.reportType + ': ' + params.searchString.trim()
-          });
-        } else {
-          $scope.cancelSearchMode();
-          $state.go(previousState);
-        }
+        history.back();
       };
 
       $scope.userContextViewExists = ('user-context' in $state.current.views);

@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Allergy) {
+  .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, SearchInput, $modal, $state, usSpinnerService, PatientService, Allergy) {
 
     $scope.currentPage = 1;
+    SearchInput.update();
 
     $scope.pageChangeHandler = function(newPage) {
       $scope.currentPage = newPage;

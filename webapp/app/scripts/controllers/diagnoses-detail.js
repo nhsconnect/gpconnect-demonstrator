@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('DiagnosesDetailCtrl', function ($scope, $stateParams, $location, $modal, Helper, $state, usSpinnerService, PatientService, Diagnosis) {
+  .controller('DiagnosesDetailCtrl', function ($scope, $stateParams, SearchInput, $location, $modal, Helper, $state, usSpinnerService, PatientService, Diagnosis) {
 
+    SearchInput.update();
     $scope.UnlockedSources = [
       'handi.ehrscape.com'
     ];

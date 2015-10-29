@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('EolcareplansListCtrl', function ($scope, $location, $stateParams, $modal, usSpinnerService, $state, PatientService, Eolcareplan) {
+  .controller('EolcareplansListCtrl', function ($scope, $location, $stateParams, SearchInput, $modal, usSpinnerService, $state, PatientService, Eolcareplan) {
 
     $scope.currentPage = 1;
+    SearchInput.update();
 
     $scope.pageChangeHandler = function(newPage) {
       $scope.currentPage = newPage;

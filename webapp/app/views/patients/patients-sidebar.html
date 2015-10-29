@@ -1,57 +1,55 @@
 <li class="navigation-menu">
-  <a ng-href="/#/patients/{{patient.id}}/patients-summary">Patient Summary</a>
+  <a ng-click="goTo('summary')">Patient Summary</a>
 </li>
 
 <li class="navigation-menu">
-    <a ui-sref="contacts({patientId: patient.id})">Contacts</a>
+  <a ng-click="goTo('contacts')">Contacts</a>
 </li>
 
 <li class="navigation-menu">
-    <a ng-href="#/patients/{{patient.id}}/diagnoses">Problems / Diagnosis</a>
+  <a ng-click="goTo('diagnosis')">Problems / Diagnosis</a>
 </li>
 
 <li class="navigation-menu">
-    <a ui-sref="allergies({patientId: patient.id})"> Allergies</a>
+  <a ng-click="goTo('allergies')">Allergies</a>
 </li>
 
 <li class="navigation-menu">
-    <a ui-sref="medications({patientId: patient.id})">Medications</a>
+  <a ng-click="goTo('medications')">Medications</a>
 </li>
 
 <li class="navigation-menu">
-    <a ui-sref="orders({patientId: patient.id})">Orders</a>
+  <a ng-click="goTo('orders')">Orders</a>
 </li>
 
 <li class="navigation-menu">
-    <a ui-sref="results({patientId: patient.id})">Results</a>
+  <a ng-click="goTo('results')">Results</a>
 </li>
 
 <li class="navigation-menu">
-    <a ui-sref="procedures({patientId: patient.id})">Procedures</a>
+  <a ng-click="goTo('procedures')">Procedures</a>
 </li>
 
 <li class="navigation-menu">
-    <a ui-sref="referrals({patientId: patient.id})">Referrals</a>
+  <a ng-click="goTo('referrals')">Referrals</a>
 </li>
 
 <li class="navigation-menu">
-    <a ui-sref="appointments({patientId: patient.id})">Appointments</a>
+  <a ng-click="goTo('appointments')">Appointments</a>
 </li>
 
 <li class="navigation-menu">
-    <a ui-sref="transferOfCare({patientId: patient.id})">Transfer of Care</a>
+  <a ng-click="goTo('transfers')">Transfer of Care</a>
 </li>
 
 <li class="navigation-menu">
-    <a ui-sref="eolcareplans({patientId: patient.id})">Care Plans</a>
+  <a ng-click="goTo('careplans')">Care Plans</a>
 </li>
 
 <li class="navigation-menu">
-  <a ui-sref="cancerMdt({patientId: patient.id})">MDT</a>
+  <a ng-click="goTo('mdt')">MDT</a>
 </li>
 
 <li class="navigation-menu">
   <a>Tags</a>
 </li>
-
-

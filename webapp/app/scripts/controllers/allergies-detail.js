@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('AllergiesDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, Helper, usSpinnerService, PatientService, Allergy) {
+  .controller('AllergiesDetailCtrl', function ($scope, $stateParams, SearchInput, $modal, $state, $location, Helper, usSpinnerService, PatientService, Allergy) {
 
+    SearchInput.update();
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });

@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('CancerMdtListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, CancerMdt) {
+  .controller('CancerMdtListCtrl', function ($scope, $location, $stateParams, SearchInput, $modal, $state, usSpinnerService, PatientService, CancerMdt) {
 
     $scope.currentPage = 1;
+    SearchInput.update();
 
     $scope.pageChangeHandler = function(newPage) {
       $scope.currentPage = newPage;

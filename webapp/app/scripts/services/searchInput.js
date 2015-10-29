@@ -18,7 +18,7 @@ angular.module('rippleDemonstrator')
         $rootScope.reportTypeSet = true;
         $rootScope.reportTypeString = $stateParams.reportType;
         $rootScope.subHeader = $stateParams.queryType + $stateParams.reportType + ': ' + $stateParams.searchString + ' & Aged ' + $stateParams.ageFrom + ' to ' + $stateParams.ageTo;
-      } else {
+      } else if ($stateParams.queryType === 'Patient: '){
         $rootScope.searchMode = true;
         $rootScope.reportMode = false;
         $rootScope.settingsMode = false;

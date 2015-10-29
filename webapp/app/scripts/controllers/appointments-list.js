@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('AppointmentsListCtrl', function ($scope, $location, $stateParams, $modal, $state, PatientService, usSpinnerService, Appointment) {
+  .controller('AppointmentsListCtrl', function ($scope, $location, $stateParams, SearchInput, $modal, $state, PatientService, usSpinnerService, Appointment) {
 
     $scope.currentPage = 1;
+    SearchInput.update();
 
     $scope.pageChangeHandler = function(newPage) {
       $scope.currentPage = newPage;

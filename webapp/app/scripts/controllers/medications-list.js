@@ -7,6 +7,10 @@ angular.module('rippleDemonstrator')
     $scope.queryBy = '$';
     SearchInput.update();
 
+    /*At the request of the product owner we have removed the filtering function, however we will leave the controller code intact
+      to allow the function to be added back in should the client chose to revert back to having a filtering function for medications
+    */
+
     $scope.currentPage = 1;
 
     $scope.pageChangeHandler = function(newPage) {

@@ -6,11 +6,11 @@ angular.module('rippleDemonstrator')
     $scope.currentPage = 1;
     SearchInput.update();
 
-    $scope.pageChangeHandler = function(newPage) {
+    $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
     }
 
-    if($stateParams.page) {
+    if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
 
@@ -45,7 +45,12 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-       $state.go('referrals-detail', { patientId: $scope.patient.id, referralId: id, filter: $scope.query, page: $scope.currentPage });
+      $state.go('referrals-detail', {
+        patientId: $scope.patient.id,
+        referralId: id,
+        filter: $scope.query,
+        page: $scope.currentPage
+      });
     };
 
     $scope.selected = function (referralId) {
@@ -89,7 +94,11 @@ angular.module('rippleDemonstrator')
         };
 
         Referral.create($scope.patient.id, toAdd).then(function () {
-          $state.go('referrals', { patientId: $scope.patient.id });
+          setTimeout(function () {
+            $state.go('referrals', {
+              patientId: $scope.patient.id
+            }, {reload: true});
+          }, 2000);
         });
       });
     };

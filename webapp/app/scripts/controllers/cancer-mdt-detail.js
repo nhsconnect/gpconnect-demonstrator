@@ -42,7 +42,12 @@ angular.module('rippleDemonstrator')
         }
 
         CancerMdt.update($scope.patient.id, cancerMdt).then(function () {
-          $state.go('cancerMdt-detail', { patientId: $scope.patient.id, cancerMdtIndex: Helper.updateId(cancerMdt.sourceId) });
+          setTimeout(function () {
+            $state.go('cancerMdt-detail', {
+              patientId: $scope.patient.id,
+              cancerMdtIndex: Helper.updateId(cancerMdt.sourceId)
+            });
+          }, 2000);
         });
       });
     };

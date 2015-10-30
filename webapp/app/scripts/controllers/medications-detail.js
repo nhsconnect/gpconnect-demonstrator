@@ -52,7 +52,12 @@ angular.module('rippleDemonstrator')
         };
 
         Medication.update($scope.patient.id, toUpdate).then(function () {
-          $state.go('medications-detail', { patientId: $scope.patient.id, medicationIndex: Helper.updateId(medication.sourceId) });
+          setTimeout(function () {
+            $state.go('medications-detail', {
+              patientId: $scope.patient.id,
+              medicationIndex: Helper.updateId(medication.sourceId)
+            });
+          }, 2000);
         });
       });
     };

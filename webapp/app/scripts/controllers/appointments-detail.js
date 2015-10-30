@@ -52,7 +52,12 @@ angular.module('rippleDemonstrator')
         };
 
         Appointment.update($scope.patient.id, toUpdate).then(function () {
-          $state.go('appointments-detail', { patientId: $scope.patient.id, appointmentIndex: Helper.updateId(appointment.sourceId) });
+          setTimeout(function () {
+            $state.go('appointments-detail', {
+              patientId: $scope.patient.id,
+              appointmentIndex: Helper.updateId(appointment.sourceId)
+            });
+          }, 2000);
         });
       });
     };

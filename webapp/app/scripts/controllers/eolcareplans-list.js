@@ -47,7 +47,7 @@ angular.module('rippleDemonstrator')
         patientId: $scope.patient.id,
         eolcareplansIndex: id,
         filter: $scope.query,
-        page : $scope.currentPage
+        page: $scope.currentPage
       });
     };
 
@@ -91,7 +91,11 @@ angular.module('rippleDemonstrator')
         };
 
         Eolcareplan.create($scope.patient.id, toAdd).then(function () {
-          $state.go('eolcareplans', { patientId: $scope.patient.id });
+          setTimeout(function () {
+            $state.go('eolcareplans', {
+              patientId: $scope.patient.id
+            }, {reload: true});
+          }, 2000);
         });
       });
     };

@@ -88,9 +88,11 @@ angular.module('rippleDemonstrator')
         };
 
         Medication.create($scope.patient.id, toAdd).then(function () {
-          $state.go('medications', {
-            patientId: $scope.patient.id
-          });
+          setTimeout(function () {
+            $state.go('medications', {
+              patientId: $scope.patient.id
+            }, {reload: true});
+          }, 2000);
         });
       });
     };

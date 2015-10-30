@@ -64,8 +64,7 @@ angular.module('rippleDemonstrator')
         $scope.selectTransferOfCareItem = function (selectedIndex, type) {
           if ($scope.selectedItems[type].indexOf(selectedIndex) !== -1) {
             $scope.selectedItems[type].splice($scope.selectedItems[type].indexOf(selectedIndex), 1);
-          }
-          else {
+          } else {
             $scope.selectedItems[type].push(selectedIndex);
           }
         };
@@ -110,27 +109,27 @@ angular.module('rippleDemonstrator')
 
           for (var type in $scope.selectedItems) {
             switch (type) {
-              case 'allergies':
-                break;
-              case 'contacts':
-                break;
-              case 'medications':
-                break;
-              case 'problems':
-                for (var transferIndex = updatedTransferOfCare[type].length; transferIndex--;) {
-                  var contains = false;
+            case 'allergies':
+              break;
+            case 'contacts':
+              break;
+            case 'medications':
+              break;
+            case 'problems':
+              for (var transferIndex = updatedTransferOfCare[type].length; transferIndex--;) {
+                var contains = false;
 
-                  angular.forEach($scope.selectedItems[type], function (value) {
-                    if (transferIndex === value) {
-                      contains = true;
-                    }
-                  });
-
-                  if (contains === false) {
-                    updatedTransferOfCare[type].splice(transferIndex, 1);
+                angular.forEach($scope.selectedItems[type], function (value) {
+                  if (transferIndex === value) {
+                    contains = true;
                   }
+                });
+
+                if (contains === false) {
+                  updatedTransferOfCare[type].splice(transferIndex, 1);
                 }
-                break;
+              }
+              break;
             }
           }
           return updatedTransferOfCare;
@@ -157,8 +156,7 @@ angular.module('rippleDemonstrator')
           $scope.transferOfCare.transferDetail = $scope.transferDetail;
 
           angular.forEach($scope.transferOfCare.allergies, function (value, key) {
-            $scope.transferOfCare.allergies[key] =
-            {
+            $scope.transferOfCare.allergies[key] = {
               allergy: value.cause,
               source: value.source,
               sourceId: value.sourceId
@@ -166,8 +164,7 @@ angular.module('rippleDemonstrator')
           });
 
           angular.forEach($scope.transferOfCare.contacts, function (value, key) {
-            $scope.transferOfCare.contacts[key] =
-            {
+            $scope.transferOfCare.contacts[key] = {
               contactName: value.name,
               source: value.source,
               sourceId: value.sourceId
@@ -175,8 +172,7 @@ angular.module('rippleDemonstrator')
           });
 
           angular.forEach($scope.transferOfCare.medication, function (value, key) {
-            $scope.transferOfCare.medication[key] =
-            {
+            $scope.transferOfCare.medication[key] = {
               medication: value.name,
               source: value.source,
               sourceId: value.sourceId
@@ -207,8 +203,8 @@ angular.module('rippleDemonstrator')
 
       }
     }).result.then(function () {
-        confirmTransferOfCareSelections();
-      });
+      confirmTransferOfCareSelections();
+    });
 
     function confirmTransferOfCareSelections() {
       $modal.open({
@@ -220,10 +216,12 @@ angular.module('rippleDemonstrator')
           };
         }
       }).result.finally(function () {
+        setTimeout(function () {
           $state.go('transferOfCare', {
             patientId: $scope.patient.id
           });
-        });
+        }, 2000);
+      });
     }
 
   });

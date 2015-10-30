@@ -50,7 +50,12 @@ angular.module('rippleDemonstrator')
         };
 
         Referral.update($scope.patient.id, toUpdate).then(function () {
-         $state.go('referrals-detail', { patientId: $scope.patient.id, referralId: Helper.updateId(referral.sourceId)});
+          setTimeout(function () {
+            $state.go('referrals-detail', {
+              patientId: $scope.patient.id,
+              referralId: Helper.updateId(referral.sourceId)
+            });
+          }, 2000);
         });
       });
     };

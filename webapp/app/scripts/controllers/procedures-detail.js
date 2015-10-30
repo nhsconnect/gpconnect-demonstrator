@@ -54,7 +54,12 @@ angular.module('rippleDemonstrator')
         };
 
         Procedure.update($scope.patient.id, toUpdate).then(function () {
-          $state.go('procedures-detail', { patientId: $scope.patient.id, procedureId: Helper.updateId(procedure.sourceId)});
+          setTimeout(function () {
+            $state.go('procedures-detail', {
+              patientId: $scope.patient.id,
+              procedureId: Helper.updateId(procedure.sourceId)
+            });
+          }, 2000);
         });
       });
     };

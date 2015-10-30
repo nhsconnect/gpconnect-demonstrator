@@ -88,7 +88,11 @@ angular.module('rippleDemonstrator')
         }
 
         Order.create($scope.patient.id, toAdd).then(function () {
-          window.location.reload();
+          setTimeout(function () {
+            $state.go('orders', {
+              patientId: $scope.patient.id
+            }, {reload: true});
+          }, 2000);
         });
       });
     };

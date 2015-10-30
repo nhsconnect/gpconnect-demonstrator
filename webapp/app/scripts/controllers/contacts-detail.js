@@ -36,7 +36,12 @@ angular.module('rippleDemonstrator')
 
       modalInstance.result.then(function (contact) {
         Contact.update($scope.patient.id, contact).then(function () {
-          $state.go('contacts-detail', { patientId: $scope.patient.id, contactIndex: Helper.updateId(contact.sourceId) });
+          setTimeout(function () {
+            $state.go('contacts-detail', {
+              patientId: $scope.patient.id,
+              contactIndex: Helper.updateId(contact.sourceId)
+            });
+          }, 2000);
         });
       });
     };

@@ -85,7 +85,7 @@ angular.module('rippleDemonstrator')
 
 
       // Chart Toggle
-      $('.chart-inner select').change(function () {
+    $('.chart-inner select').change(function () {
         // Get the target
         var target = $(this).val();
 

@@ -44,7 +44,12 @@ angular.module('rippleDemonstrator')
         };
 
         Allergy.update($scope.patient.id, toUpdate).then(function () {
-          $state.go('allergies-detail', { patientId: $scope.patient.id, allergyIndex: Helper.updateId(allergy.sourceId) });
+          setTimeout(function () {
+            $state.go('allergies-detail', {
+              patientId: $scope.patient.id,
+              allergyIndex: Helper.updateId(allergy.sourceId)
+            });
+          }, 2000);
         });
       });
     };

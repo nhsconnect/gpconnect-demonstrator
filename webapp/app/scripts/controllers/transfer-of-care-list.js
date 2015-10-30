@@ -44,7 +44,6 @@ angular.module('rippleDemonstrator')
     };
 
     $scope.selected = function (transferOfCareIndex) {
-      console.log($stateParams);
       return transferOfCareIndex === $stateParams.transferOfCareIndex;
     };
 

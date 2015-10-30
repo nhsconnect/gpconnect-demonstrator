@@ -90,9 +90,11 @@ angular.module('rippleDemonstrator')
         cancerMdt.source = 'openehr';
 
         CancerMdt.create($scope.patient.id, cancerMdt).then(function () {
-          $state.go('cancerMdt', {
-            patientId: $scope.patient.id
-          });
+          setTimeout(function () {
+            $state.go('cancerMdt', {
+              patientId: $scope.patient.id
+            }, {reload: true});
+          }, 2000);
         });
       });
     };

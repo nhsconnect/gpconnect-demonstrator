@@ -7,11 +7,11 @@ angular.module('rippleDemonstrator')
 
     SearchInput.update();
 
-    $scope.pageChangeHandler = function(newPage) {
+    $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
     }
 
-    if($stateParams.page) {
+    if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
 
@@ -43,7 +43,12 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $state.go('procedures-detail', { patientId: $scope.patient.id, procedureId: id, filter: $scope.query, page: $scope.currentPage });
+      $state.go('procedures-detail', {
+        patientId: $scope.patient.id,
+        procedureId: id,
+        filter: $scope.query,
+        page: $scope.currentPage
+      });
     };
 
     $scope.selected = function (procedureId) {
@@ -91,9 +96,11 @@ angular.module('rippleDemonstrator')
         };
 
         Procedure.create($scope.patient.id, toAdd).then(function () {
-          $state.go('procedures', {
-            patientId: $scope.patient.id
-          });
+          setTimeout(function () {
+            $state.go('procedures', {
+              patientId: $scope.patient.id
+            }, {reload: true});
+          }, 2000);
         });
       });
     };

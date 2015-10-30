@@ -40,7 +40,12 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $state.go('diagnoses-detail', { patientId: $scope.patient.id, diagnosisIndex: id, filter: $scope.query, page: $scope.currentPage });
+      $state.go('diagnoses-detail', {
+        patientId: $scope.patient.id,
+        diagnosisIndex: id,
+        filter: $scope.query,
+        page: $scope.currentPage
+      });
     };
 
     $scope.selected = function (diagnosisIndex) {
@@ -81,7 +86,12 @@ angular.module('rippleDemonstrator')
         };
 
         Diagnosis.create($scope.patient.id, toAdd).then(function () {
-          $state.go('diagnoses-list', { patientId: $scope.patient.id });
+          setTimeout(function () {
+            $state.go('diagnoses-list', {
+              patientId: $scope.patient.id
+            });
+          }, 2000);
+
         });
       });
     };

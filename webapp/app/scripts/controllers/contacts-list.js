@@ -66,9 +66,9 @@ angular.module('rippleDemonstrator')
         contact.sourceId = '';
 
         Contact.create($scope.patient.id, contact).then(function () {
-          $state.go('contacts', {
+          setTimeout(function(){ $state.go('contacts', {
             patientId: $scope.patient.id
-          });
+          }, {reload: true});},2000);
         });
       });
     };

@@ -42,7 +42,12 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $state.go('appointments-detail', { patientId: $scope.patient.id, appointmentIndex: id, filter: $scope.query, page : $scope.currentPage });
+      $state.go('appointments-detail', {
+        patientId: $scope.patient.id,
+        appointmentIndex: id,
+        filter: $scope.query,
+        page: $scope.currentPage
+      });
     };
 
     $scope.selected = function (appointmentIndex) {
@@ -86,9 +91,11 @@ angular.module('rippleDemonstrator')
         };
 
         Appointment.create($scope.patient.id, toAdd).then(function () {
-          $state.go('appointments', {
-            patientId: $scope.patient.id
-          });
+          setTimeout(function () {
+            $state.go('appointments', {
+              patientId: $scope.patient.id
+            }, {reload: true});
+          }, 2000);
         });
       });
     };

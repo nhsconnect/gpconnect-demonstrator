@@ -36,7 +36,12 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-      $state.go('allergies-detail', { patientId: $scope.patient.id, allergyIndex: id, filter: $scope.query, page: $scope.currentPage });
+      $state.go('allergies-detail', {
+        patientId: $scope.patient.id,
+        allergyIndex: id,
+        filter: $scope.query,
+        page: $scope.currentPage
+      });
     };
 
     $scope.selected = function ($index) {
@@ -74,9 +79,11 @@ angular.module('rippleDemonstrator')
         };
 
         Allergy.create($scope.patient.id, toAdd).then(function () {
-          $state.go('allergies', {
-            patientId: $scope.patient.id
-          });
+          setTimeout(function () {
+            $state.go('allergies', {
+              patientId: $scope.patient.id
+            }, {reload: true});
+          }, 2000);
         });
       });
     };

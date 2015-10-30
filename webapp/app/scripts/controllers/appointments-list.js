@@ -6,11 +6,11 @@ angular.module('rippleDemonstrator')
     $scope.currentPage = 1;
     SearchInput.update();
 
-    $scope.pageChangeHandler = function(newPage) {
+    $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
     }
 
-    if($stateParams.page) {
+    if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
 
@@ -38,7 +38,7 @@ angular.module('rippleDemonstrator')
         $scope.appointments[i].dateOfAppointment = moment($scope.appointments[i].dateOfAppointment).format('DD-MMM-YYYY');
         $scope.appointments[i].timeOfAppointment = moment($scope.appointments[i].timeOfAppointment).format('h:mma') + '-' + moment($scope.appointments[i].timeOfAppointment).add(59, 'm').format('h:mma');
       }
-       usSpinnerService.stop('patientSummary-spinner');
+      usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {

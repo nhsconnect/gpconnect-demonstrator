@@ -196,7 +196,7 @@ angular.module('rippleDemonstrator')
 
     $scope.goToSection = function (itemType, nhsNumber) {
       $scope.clickGetItem = true;
-       var requestHeader = {
+      var requestHeader = {
         patientId: nhsNumber,
         ageFrom: $stateParams.ageFrom,
         ageTo: $stateParams.ageTo,
@@ -209,19 +209,19 @@ angular.module('rippleDemonstrator')
 
       var toState = '';
 
-            switch (itemType) {
-      case 'orders':
-        toState = 'orders'
-        break;
-      case 'results':
-        toState = 'results';
-        break;
-      case 'procedures':
-        toState = 'procedures';
-        break;
-      case 'medications':
-        toState = 'medications';
-        break;
+      switch (itemType) {
+        case 'orders':
+          toState = 'orders'
+          break;
+        case 'results':
+          toState = 'results';
+          break;
+        case 'procedures':
+          toState = 'procedures';
+          break;
+        case 'medications':
+          toState = 'medications';
+          break;
       }
       $state.go(toState, requestHeader);
     }

@@ -6,11 +6,11 @@ angular.module('rippleDemonstrator')
     SearchInput.update();
     $scope.currentPage = 1;
 
-    $scope.pageChangeHandler = function(newPage) {
+    $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
     }
 
-    if($stateParams.page) {
+    if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
 
@@ -40,7 +40,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-     $state.go('diagnoses-detail', { patientId: $scope.patient.id, diagnosisIndex: id, filter: $scope.query, page: $scope.currentPage });
+      $state.go('diagnoses-detail', { patientId: $scope.patient.id, diagnosisIndex: id, filter: $scope.query, page: $scope.currentPage });
     };
 
     $scope.selected = function (diagnosisIndex) {

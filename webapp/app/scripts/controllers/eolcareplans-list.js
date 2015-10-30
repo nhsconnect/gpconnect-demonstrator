@@ -6,11 +6,11 @@ angular.module('rippleDemonstrator')
     $scope.currentPage = 1;
     SearchInput.update();
 
-    $scope.pageChangeHandler = function(newPage) {
+    $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
     }
 
-    if($stateParams.page) {
+    if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
 
@@ -43,7 +43,7 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-       $state.go('eolcareplans-detail', {
+      $state.go('eolcareplans-detail', {
         patientId: $scope.patient.id,
         eolcareplansIndex: id,
         filter: $scope.query,

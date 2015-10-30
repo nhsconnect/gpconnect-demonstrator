@@ -6,11 +6,11 @@ angular.module('rippleDemonstrator')
     $scope.currentPage = 1;
     SearchInput.update();
 
-    $scope.pageChangeHandler = function(newPage) {
+    $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
     }
 
-    if($stateParams.page) {
+    if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
 

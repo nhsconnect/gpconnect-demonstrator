@@ -8,11 +8,11 @@ angular.module('rippleDemonstrator')
     $scope.queryBy = '$';
     $scope.currentPage = 1;
 
-    $scope.pageChangeHandler = function(newPage) {
+    $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
     }
 
-    if($stateParams.page) {
+    if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
 

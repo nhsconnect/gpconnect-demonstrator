@@ -13,7 +13,7 @@ angular.module('rippleDemonstrator')
       $scope.allergy.causeCode = '1239085';
       $scope.allergy.terminologyCode = '12393890';
     } else {
-      //$scope.allergy.dateSubmitted = new Date().toISOString().slice(0, 10);
+      // $scope.allergy.dateSubmitted = new Date().toISOString().slice(0, 10);
       $scope.allergy.dateCreated = new Date($scope.allergy.dateCreated).toISOString().slice(0, 10);
     }
 

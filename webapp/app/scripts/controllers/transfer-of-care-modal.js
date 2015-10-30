@@ -218,7 +218,10 @@ angular.module('rippleDemonstrator')
       }).result.finally(function () {
         setTimeout(function () {
           $state.go('transferOfCare', {
-            patientId: $scope.patient.id
+            patientId: $scope.patient.id,
+            reportType: $stateParams.reportType,
+            searchString: $stateParams.searchString,
+            queryType: $stateParams.queryType
           });
         }, 2000);
       });

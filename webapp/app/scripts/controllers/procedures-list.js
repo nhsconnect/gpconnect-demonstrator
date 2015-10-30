@@ -101,7 +101,12 @@ angular.module('rippleDemonstrator')
         Procedure.create($scope.patient.id, toAdd).then(function () {
           setTimeout(function () {
             $state.go('procedures', {
-              patientId: $scope.patient.id
+              patientId: $scope.patient.id,
+              filter: $scope.query,
+              page: $scope.currentPage,
+              reportType: $stateParams.reportType,
+              searchString: $stateParams.searchString,
+              queryType: $stateParams.queryType
             }, {
               reload: true
             });

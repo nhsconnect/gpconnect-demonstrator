@@ -53,7 +53,11 @@ angular.module('rippleDemonstrator')
           setTimeout(function () {
             $state.go('referrals-detail', {
               patientId: $scope.patient.id,
-              referralId: Helper.updateId(referral.sourceId)
+              referralId: Helper.updateId(referral.sourceId),
+              page: $scope.currentPage,
+              reportType: $stateParams.reportType,
+              searchString: $stateParams.searchString,
+              queryType: $stateParams.queryType
             });
           }, 2000);
         });

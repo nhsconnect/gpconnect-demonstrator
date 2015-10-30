@@ -47,7 +47,11 @@ angular.module('rippleDemonstrator')
           setTimeout(function () {
             $state.go('allergies-detail', {
               patientId: $scope.patient.id,
-              allergyIndex: Helper.updateId(allergy.sourceId)
+              allergyIndex: Helper.updateId(allergy.sourceId),
+              page: $scope.currentPage,
+              reportType: $stateParams.reportType,
+              searchString: $stateParams.searchString,
+              queryType: $stateParams.queryType
             });
           }, 2000);
         });

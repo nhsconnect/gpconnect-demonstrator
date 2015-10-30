@@ -55,7 +55,11 @@ angular.module('rippleDemonstrator')
           setTimeout(function () {
             $state.go('medications-detail', {
               patientId: $scope.patient.id,
-              medicationIndex: Helper.updateId(medication.sourceId)
+              medicationIndex: Helper.updateId(medication.sourceId),
+              page: $scope.currentPage,
+              reportType: $stateParams.reportType,
+              searchString: $stateParams.searchString,
+              queryType: $stateParams.queryType
             });
           }, 2000);
         });

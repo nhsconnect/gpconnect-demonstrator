@@ -45,7 +45,11 @@ angular.module('rippleDemonstrator')
           setTimeout(function () {
             $state.go('cancerMdt-detail', {
               patientId: $scope.patient.id,
-              cancerMdtIndex: Helper.updateId(cancerMdt.sourceId)
+              cancerMdtIndex: Helper.updateId(cancerMdt.sourceId),
+              page: $scope.currentPage,
+              reportType: $stateParams.reportType,
+              searchString: $stateParams.searchString,
+              queryType: $stateParams.queryType
             });
           }, 2000);
         });

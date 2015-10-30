@@ -52,7 +52,11 @@ angular.module('rippleDemonstrator')
           setTimeout(function () {
             $state.go('eolcareplans-detail', {
               patientId: $scope.patient.id,
-              eolcareplansIndex: Helper.updateId(eolcareplan.sourceId)
+              eolcareplansIndex: Helper.updateId(eolcareplan.sourceId),
+              page: $scope.currentPage,
+              reportType: $stateParams.reportType,
+              searchString: $stateParams.searchString,
+              queryType: $stateParams.queryType
             });
           }, 2000);
         });

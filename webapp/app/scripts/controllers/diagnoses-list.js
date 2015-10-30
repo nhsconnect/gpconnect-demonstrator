@@ -44,7 +44,10 @@ angular.module('rippleDemonstrator')
         patientId: $scope.patient.id,
         diagnosisIndex: id,
         filter: $scope.query,
-        page: $scope.currentPage
+        page: $scope.currentPage,
+        reportType: $stateParams.reportType,
+        searchString: $stateParams.searchString,
+        queryType: $stateParams.queryType
       });
     };
 

@@ -7,11 +7,11 @@ angular.module('rippleDemonstrator')
 
     SearchInput.update();
 
-    $scope.pageChangeHandler = function(newPage) {
+    $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
     }
 
-    if($stateParams.page) {
+    if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
 
@@ -43,7 +43,15 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-       $state.go('results-detail', { patientId: $scope.patient.id, resultIndex: id, filter: $scope.query, page : $scope.currentPage });
+      $state.go('results-detail', {
+        patientId: $scope.patient.id,
+        resultIndex: id,
+        filter: $scope.query,
+        page: $scope.currentPage,
+        reportType: $stateParams.reportType,
+        searchString: $stateParams.searchString,
+        queryType: $stateParams.queryType
+      });
     };
 
     $scope.selected = function (resultIndex) {

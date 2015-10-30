@@ -49,7 +49,10 @@ angular.module('rippleDemonstrator')
         patientId: $scope.patient.id,
         referralId: id,
         filter: $scope.query,
-        page: $scope.currentPage
+        page: $scope.currentPage,
+        reportType: $stateParams.reportType,
+        searchString: $stateParams.searchString,
+        queryType: $stateParams.queryType
       });
     };
 
@@ -97,7 +100,9 @@ angular.module('rippleDemonstrator')
           setTimeout(function () {
             $state.go('referrals', {
               patientId: $scope.patient.id
-            }, {reload: true});
+            }, {
+              reload: true
+            });
           }, 2000);
         });
       });

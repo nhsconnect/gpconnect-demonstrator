@@ -34,7 +34,10 @@ angular.module('rippleDemonstrator')
         patientId: $scope.patient.id,
         contactIndex: id,
         filter: $scope.query.$,
-        page: $scope.currentPage
+        page: $scope.currentPage,
+        reportType: $stateParams.reportType,
+        searchString: $stateParams.searchString,
+        queryType: $stateParams.queryType
       });
     };
 
@@ -66,9 +69,13 @@ angular.module('rippleDemonstrator')
         contact.sourceId = '';
 
         Contact.create($scope.patient.id, contact).then(function () {
-          setTimeout(function(){ $state.go('contacts', {
-            patientId: $scope.patient.id
-          }, {reload: true});},2000);
+          setTimeout(function () {
+            $state.go('contacts', {
+              patientId: $scope.patient.id
+            }, {
+              reload: true
+            });
+          }, 2000);
         });
       });
     };

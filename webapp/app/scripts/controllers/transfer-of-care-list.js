@@ -9,11 +9,11 @@ angular.module('rippleDemonstrator')
 
     $scope.currentPage = 1;
 
-    $scope.pageChangeHandler = function(newPage) {
+    $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
     }
 
-    if($stateParams.page) {
+    if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
 
@@ -35,11 +35,14 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id) {
-        $state.go('transferOfCare-detail', {
+      $state.go('transferOfCare-detail', {
         patientId: $scope.patient.id,
         transferOfCareIndex: id,
         filter: $scope.query.$,
-        page: $scope.currentPage
+        page: $scope.currentPage,
+        reportType: $stateParams.reportType,
+        searchString: $stateParams.searchString,
+        queryType: $stateParams.queryType
       });
     };
 

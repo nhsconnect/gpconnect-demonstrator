@@ -46,7 +46,10 @@ angular.module('rippleDemonstrator')
         patientId: $scope.patient.id,
         orderId: id,
         filter: $scope.query,
-        page: $scope.currentPage
+        page: $scope.currentPage,
+        reportType: $stateParams.reportType,
+        searchString: $stateParams.searchString,
+        queryType: $stateParams.queryType
       });
     };
 
@@ -91,7 +94,9 @@ angular.module('rippleDemonstrator')
           setTimeout(function () {
             $state.go('orders', {
               patientId: $scope.patient.id
-            }, {reload: true});
+            }, {
+              reload: true
+            });
           }, 2000);
         });
       });

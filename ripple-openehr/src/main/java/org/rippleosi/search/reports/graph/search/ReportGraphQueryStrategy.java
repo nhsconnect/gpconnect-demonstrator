@@ -16,6 +16,7 @@
 
 package org.rippleosi.search.reports.graph.search;
 
+import org.apache.commons.lang3.StringUtils;
 import org.rippleosi.common.service.C4HUriQueryStrategy;
 import org.rippleosi.search.reports.graph.model.ReportGraphQuery;
 import org.rippleosi.search.reports.graph.model.ReportGraphResults;
@@ -38,14 +39,12 @@ public class ReportGraphQueryStrategy implements C4HUriQueryStrategy<ReportGraph
 
     @Override
     public UriComponents getQueryUriComponents() {
-        // TODO - use graphQuery and remove hard coded ehrID, template, and SNOMED CT code once implemented on C4H
+        // TODO - use graphQuery and remove hard coded ehrID, and introduce template lookup
         return UriComponentsBuilder
             .fromHttpUrl(c4hOpenEHRAddress + "/view")
-            .path("/e98be9e4-4e09-4f0b-9fce-6b1b83fc638b" + "/ProblemAgeBands")
+            .path("/4ee4bad9-2f9e-4e33-b1d6-6572709cabee" + "/ProblemAgeBands")
             .queryParam("targetCompositions", "Problem list")
-            .queryParam("targetCodes", "22298006")
-            .queryParam("minAge", "0")
-            .queryParam("maxAge", "200")
+            .queryParam("targetTextValues", StringUtils.strip(graphQuery.getSearchString()))
             .build();
     }
 

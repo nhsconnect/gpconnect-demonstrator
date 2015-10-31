@@ -4,7 +4,7 @@
     <Environment name="c4hOpenEHR.address"          type="java.lang.String" override="false" value="https://ehrscape.code-4-health.org/rest/v1/"/>
     <Environment name="c4hOpenEHR.user"             type="java.lang.String" override="false" value="c4h_ripple_osi"/>
     <Environment name="c4hOpenEHR.password"         type="java.lang.String" override="false" value="InDeCoMP"/>
-    <Environment name="c4hOpenEHR.subjectNamespace" type="java.lang.String" override="false" value="uk.nhs.nhsnumber"/>
+    <Environment name="c4hOpenEHR.subjectNamespace" type="java.lang.String" override="false" value="uk.nhs.nhs_number"/>
 
     <Environment name="c4hOpenEHR.allergiesTemplate"    type="java.lang.String" override="false" value="LCR Allergies List.v0"/>
     <Environment name="c4hOpenEHR.contactsTemplate"     type="java.lang.String" override="false" value="LCR Relevant Contacts List.v0"/>

@@ -15,7 +15,6 @@
  */
 package org.rippleosi.patient.problems.store;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,7 +67,9 @@ public class OpenEHRProblemStore extends AbstractOpenEhrService implements Probl
 
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
-        content.put("ctx/composer_name", problem.getAuthor());
+
+        String author = problem.getAuthor();
+        content.put("ctx/composer_name", author != null ? author : "Dr Tony Shannon");
 
         if (StringUtils.isBlank(problem.getCode())) {
             problem.setCode("00001");
@@ -81,10 +82,10 @@ public class OpenEHRProblemStore extends AbstractOpenEhrService implements Probl
         String dateOfOnset = DateFormatter.toString(problem.getDateOfOnset());
 
         content.put(PROBLEM_PREFIX + "/problem_diagnosis|value", problem.getProblem());
-        content.put(PROBLEM_PREFIX + "/description", problem.getDescription());
+        content.put(PROBLEM_PREFIX + "/clinical_description", problem.getDescription());
         content.put(PROBLEM_PREFIX + "/problem_diagnosis|code", problem.getCode());
         content.put(PROBLEM_PREFIX + "/problem_diagnosis|terminology", problem.getTerminology());
-        content.put(PROBLEM_PREFIX + "/date_of_onset", dateOfOnset);
+        content.put(PROBLEM_PREFIX + "/date_time_of_onset", dateOfOnset);
 
         return content;
     }

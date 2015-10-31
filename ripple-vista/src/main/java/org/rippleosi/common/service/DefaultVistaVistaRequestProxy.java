@@ -29,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class DefaultRequestProxy implements RequestProxy {
+public class DefaultVistaVistaRequestProxy implements VistaRequestProxy {
 
     @Value("${vista.address}")
     private String vistaAddress;

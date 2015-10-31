@@ -29,14 +29,14 @@ public class ProblemSummaryTransformer implements Transformer<Map<String, Object
 
     @Override
     public ProblemSummary transform(Map<String, Object> input) {
-
         Date dateOfOnset = DateFormatter.toDate(MapUtils.getString(input, "onset_date"));
+        Date dateTimeOfOnset = DateFormatter.toDate(MapUtils.getString(input, "onset_date_time"));
 
         ProblemSummary problem = new ProblemSummary();
         problem.setSource("openehr");
         problem.setSourceId(MapUtils.getString(input, "uid"));
         problem.setProblem(MapUtils.getString(input, "problem"));
-        problem.setDateOfOnset(dateOfOnset);
+        problem.setDateOfOnset(dateOfOnset != null ? dateOfOnset : dateTimeOfOnset);
 
         return problem;
     }

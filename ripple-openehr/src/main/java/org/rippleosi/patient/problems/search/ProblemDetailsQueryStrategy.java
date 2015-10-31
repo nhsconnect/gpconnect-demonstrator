@@ -36,20 +36,21 @@ public class ProblemDetailsQueryStrategy extends AbstractQueryStrategy<ProblemDe
     @Override
     public String getQuery(String namespace, String patientId) {
         return "select a/uid/value as uid, " +
-                "a/composer/name as author, " +
-                "a/context/start_time/value as date_created," +
-                "a_a/items/data[at0001]/items[at0002]/value/value as problem, " +
-                "a_a/items/data[at0001]/items[at0002]/value/defining_code/code_string as problem_code, " +
-                "a_a/items/data[at0001]/items[at0002]/value/defining_code/terminology_id/value as problem_terminology, " +
-                "a_a/items/data[at0001]/items[at0009]/value/value as description, " +
-                "a_a/items/data[at0001]/items[at0003]/value/value as onset_date " +
-                "from EHR e " +
-                "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
-                "contains SECTION a_a[openEHR-EHR-SECTION.problems_issues_rcp.v1] " +
-                "where a/name/value='Problem list' " +
-                "and a/uid/value='" + problemId + "' " +
-                "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
-                "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
+            "a/composer/name as author, " +
+            "a/context/start_time/value as date_created," +
+            "a_a/items/data[at0001]/items[at0002]/value/value as problem, " +
+            "a_a/items/data[at0001]/items[at0002]/value/defining_code/code_string as problem_code, " +
+            "a_a/items/data[at0001]/items[at0002]/value/defining_code/terminology_id/value as problem_terminology, " +
+            "a_a/items/data[at0001]/items[at0009]/value/value as description, " +
+            "a_a/items/data[at0001]/items[at0003]/value/value as onset_date, " +
+            "a_a/items/data[at0001]/items[at0077]/value/value as onset_date_time " +
+            "from EHR e " +
+            "contains COMPOSITION a[openEHR-EHR-COMPOSITION.care_summary.v0] " +
+            "contains SECTION a_a[openEHR-EHR-SECTION.problems_issues_rcp.v1] " +
+            "where a/name/value='Problem list' " +
+            "and a/uid/value='" + problemId + "' " +
+            "and e/ehr_status/subject/external_ref/namespace = '" + namespace + "' " +
+            "and e/ehr_status/subject/external_ref/id/value = '" + patientId + "'";
     }
 
     @Override

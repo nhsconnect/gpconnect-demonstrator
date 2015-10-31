@@ -17,7 +17,7 @@ package org.rippleosi.common.service;
 
 import org.springframework.http.ResponseEntity;
 
-public interface RequestProxy {
+public interface VistaRequestProxy {
 
     <T> ResponseEntity<T> getWithSession(String uri, Class<T> cls);
 }

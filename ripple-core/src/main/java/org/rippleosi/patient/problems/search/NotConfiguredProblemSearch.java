@@ -17,6 +17,7 @@ package org.rippleosi.patient.problems.search;
 
 import java.util.List;
 
+import org.hl7.fhir.instance.model.Condition;
 import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.patient.problems.model.ProblemDetails;
 import org.rippleosi.patient.problems.model.ProblemHeadline;
@@ -51,4 +52,13 @@ public class NotConfiguredProblemSearch implements ProblemSearch {
         throw ConfigurationException.unimplementedTransaction(ProblemSearch.class);
     }
 
+    @Override
+    public List<Condition> findAllFhirConditions(String patientId) {
+        throw ConfigurationException.unimplementedTransaction(ProblemSearch.class);
+    }
+
+    @Override
+    public Condition findFhirCondition(String patientId, String conditionId) {
+        throw ConfigurationException.unimplementedTransaction(ProblemSearch.class);
+    }
 }

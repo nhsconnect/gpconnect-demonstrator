@@ -17,6 +17,7 @@ package org.rippleosi.patient.problems.search;
 
 import java.util.List;
 
+import org.hl7.fhir.instance.model.Condition;
 import org.rippleosi.common.repo.Repository;
 import org.rippleosi.patient.problems.model.ProblemDetails;
 import org.rippleosi.patient.problems.model.ProblemHeadline;
@@ -31,4 +32,8 @@ public interface ProblemSearch extends Repository {
     List<ProblemSummary> findAllProblems(String patientId);
 
     ProblemDetails findProblem(String patientId, String problemId);
+
+    List<Condition> findAllFhirConditions(String patientId);
+
+    Condition findFhirCondition(String patientId, String conditionId);
 }

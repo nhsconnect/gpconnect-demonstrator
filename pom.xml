@@ -34,9 +34,10 @@
         <activemq.version>5.12.0</activemq.version>
         <camel.version>2.15.3</camel.version>
         <cxf.version>3.0.2</cxf.version>
-        <slf4j.version>1.7.10</slf4j.version>
+        <fhir.version>1.2</fhir.version>
         <jackson.version>2.4.4</jackson.version>
         <log4j.version>1.2.17</log4j.version>
+        <slf4j.version>1.7.10</slf4j.version>
         <spring.version>4.2.1.RELEASE</spring.version>
         <swagger.version>2.2.2</swagger.version>
         <querydsl.version>3.6.8</querydsl.version>
@@ -166,6 +167,12 @@
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>me.fhir</groupId>
+                <artifactId>fhir-dstu2</artifactId>
+                <version>1.0.1.7108</version>
             </dependency>
 
             <dependency>

@@ -17,16 +17,21 @@ package org.rippleosi.patient.problems.search;
 
 import java.util.List;
 
+import org.hl7.fhir.instance.model.Condition;
 import org.rippleosi.common.service.AbstractOpenEhrService;
 import org.rippleosi.patient.problems.model.ProblemDetails;
 import org.rippleosi.patient.problems.model.ProblemHeadline;
 import org.rippleosi.patient.problems.model.ProblemSummary;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
  */
 @Service
 public class OpenEHRProblemSearch extends AbstractOpenEhrService implements ProblemSearch {
+
+    @Value("${c4hOpenEHR.address}")
+    private String openEhrAddress;
 
     @Override
     public List<ProblemHeadline> findProblemHeadlines(String patientId) {
@@ -45,6 +50,24 @@ public class OpenEHRProblemSearch extends AbstractOpenEhrService implements Prob
     @Override
     public ProblemDetails findProblem(String patientId, String problemId) {
         ProblemDetailsQueryStrategy query = new ProblemDetailsQueryStrategy(patientId, problemId);
+
+        return findData(query);
+    }
+
+    @Override
+    public List<Condition> findAllFhirConditions(String patientId) {
+        String ehrId = new EhrIdLookup().transform(patientId);
+
+        FhirConditionsQueryStrategy query = new FhirConditionsQueryStrategy(patientId, ehrId, openEhrAddress);
+
+        return findData(query);
+    }
+
+    @Override
+    public Condition findFhirCondition(String patientId, String conditionId) {
+        String ehrId = new EhrIdLookup().transform(patientId);
+
+        FhirConditionQueryStrategy query = new FhirConditionQueryStrategy(patientId, ehrId, openEhrAddress, conditionId);
 
         return findData(query);
     }

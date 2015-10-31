@@ -108,7 +108,7 @@ public abstract class AbstractOpenEhrService implements Repository {
         }
     }
 
-    private String findEhrIdByNHSNumber(String nhsNumber) {
+    public String findEhrIdByNHSNumber(String nhsNumber) {
         return idCache.get(nhsNumber);
     }
 
@@ -142,7 +142,7 @@ public abstract class AbstractOpenEhrService implements Repository {
         return components.toUriString();
     }
 
-    private class EhrIdLookup implements Transformer<String, String> {
+    public class EhrIdLookup implements Transformer<String, String> {
 
         @Override
         public String transform(String nhsNumber) {

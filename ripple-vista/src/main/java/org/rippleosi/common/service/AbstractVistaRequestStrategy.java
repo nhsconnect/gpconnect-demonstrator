@@ -15,9 +15,16 @@
  */
 package org.rippleosi.common.service;
 
-import org.springframework.http.ResponseEntity;
+public abstract class AbstractVistaRequestStrategy<I, O> implements RequestStrategy<I, O> {
 
-public interface VistaRequestProxy {
+    private final String patientId;
 
-    <T> ResponseEntity<T> getWithoutSession(String uri, Class<T> cls);
+    protected AbstractVistaRequestStrategy(String patientId) {
+        this.patientId = patientId;
+    }
+
+    @Override
+    public String getPatientId() {
+        return patientId;
+    }
 }

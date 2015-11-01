@@ -48,16 +48,24 @@ public class ProblemsController {
     public List<ProblemSummary> findAllProblems(@PathVariable("patientId") String patientId,
                                                 @RequestParam(required = false) String source) {
         ProblemSearch problemSearch = problemSearchFactory.select(source);
+        List<ProblemSummary> problems = problemSearch.findAllProblems(patientId);
 
-        return problemSearch.findAllProblems(patientId);
+        ProblemSearch vistaSearch = problemSearchFactory.select("vista");
+        problems.addAll(vistaSearch.findAllProblems("17"));
+
+        return problems;
     }
 
     @RequestMapping(value = "/headlines", method = RequestMethod.GET)
     public List<ProblemHeadline> findProblemHeadlines(@PathVariable("patientId") String patientId,
                                                       @RequestParam(required = false) String source) {
         ProblemSearch problemSearch = problemSearchFactory.select(source);
+        List<ProblemHeadline> problemHeadlines = problemSearch.findProblemHeadlines(patientId);
 
-        return problemSearch.findProblemHeadlines(patientId);
+        ProblemSearch vistaSearch = problemSearchFactory.select("vista");
+        problemHeadlines.addAll(vistaSearch.findProblemHeadlines("17"));
+
+        return problemHeadlines;
     }
 
     @RequestMapping(value = "/{problemId}", method = RequestMethod.GET)
@@ -65,6 +73,10 @@ public class ProblemsController {
                                       @PathVariable("problemId") String problemId,
                                       @RequestParam(required = false) String source) {
         ProblemSearch problemSearch = problemSearchFactory.select(source);
+
+        if (source != null && source.equalsIgnoreCase("vista")) {
+            patientId = "17";
+        }
 
         return problemSearch.findProblem(patientId, problemId);
     }

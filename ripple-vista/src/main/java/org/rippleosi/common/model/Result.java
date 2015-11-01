@@ -13,11 +13,35 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-package org.rippleosi.common.service;
+package org.rippleosi.common.model;
 
-import org.springframework.http.ResponseEntity;
+public class Result {
 
-public interface VistaRequestProxy {
+    private String apiVersion;
+    private Params params;
+    private Data data;
 
-    <T> ResponseEntity<T> getWithoutSession(String uri, Class<T> cls);
+    public String getApiVersion() {
+        return apiVersion;
+    }
+
+    public void setApiVersion(String apiVersion) {
+        this.apiVersion = apiVersion;
+    }
+
+    public Params getParams() {
+        return params;
+    }
+
+    public void setParams(Params params) {
+        this.params = params;
+    }
+
+    public Data getData() {
+        return data;
+    }
+
+    public void setData(Data data) {
+        this.data = data;
+    }
 }

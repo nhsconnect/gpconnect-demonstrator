@@ -13,18 +13,23 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-package org.rippleosi.common.service;
+package org.rippleosi.patient.problems.search.search;
 
-public abstract class AbstractRequestStrategy<I, O> implements RequestStrategy<I, O> {
+import org.apache.commons.collections4.Transformer;
+import org.rippleosi.patient.problems.model.ProblemSummary;
+import org.rippleosi.patient.problems.search.model.VistaProblem;
 
-    private final String patientId;
-
-    public AbstractRequestStrategy(String patientId) {
-        this.patientId = patientId;
-    }
+public class VistaProblemToSummaryTransformer implements Transformer<VistaProblem, ProblemSummary> {
 
     @Override
-    public String getPatientId() {
-        return patientId;
+    public ProblemSummary transform(VistaProblem input) {
+        ProblemSummary summary = new ProblemSummary();
+
+        summary.setSource("vista");
+        summary.setSourceId(input.getUid());
+        summary.setProblem(input.getIcdName());
+        summary.setDateOfOnset(input.getOnset());
+
+        return summary;
     }
 }

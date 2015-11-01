@@ -15,6 +15,8 @@
  */
 package org.rippleosi.common.service;
 
+import java.util.List;
+
 import org.springframework.web.util.UriComponents;
 
 public interface RequestStrategy<I, O> {
@@ -23,5 +25,5 @@ public interface RequestStrategy<I, O> {
 
     UriComponents getQueryUriComponents();
 
-    O transform(I resultSet);
+    O transform(List<I> resultSet);
 }

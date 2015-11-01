@@ -15,15 +15,17 @@
  */
 package org.rippleosi.common.model;
 
+import java.util.List;
+
 public class VistaRestResponse {
 
-    private Results results;
+    private List<Result> results;
 
-    public Results getResults() {
+    public List<Result> getResults() {
         return results;
     }
 
-    public void setResults(Results results) {
+    public void setResults(List<Result> results) {
         this.results = results;
     }
 }

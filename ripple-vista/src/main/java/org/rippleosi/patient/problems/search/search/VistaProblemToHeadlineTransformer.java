@@ -13,35 +13,22 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-package org.rippleosi.common.model;
+package org.rippleosi.patient.problems.search.search;
 
-public class Results {
+import org.apache.commons.collections4.Transformer;
+import org.rippleosi.patient.problems.search.model.VistaProblem;
+import org.rippleosi.patient.problems.model.ProblemHeadline;
 
-    private String apiVersion;
-    private Params params;
-    private Data data;
+public class VistaProblemToHeadlineTransformer implements Transformer<VistaProblem, ProblemHeadline> {
 
-    public String getApiVersion() {
-        return apiVersion;
-    }
+    @Override
+    public ProblemHeadline transform(VistaProblem input) {
+        ProblemHeadline headline = new ProblemHeadline();
 
-    public void setApiVersion(String apiVersion) {
-        this.apiVersion = apiVersion;
-    }
+        headline.setSource("vista");
+        headline.setSourceId(input.getUid());
+        headline.setProblem(input.getIcdName());
 
-    public Params getParams() {
-        return params;
-    }
-
-    public void setParams(Params params) {
-        this.params = params;
-    }
-
-    public Data getData() {
-        return data;
-    }
-
-    public void setData(Data data) {
-        this.data = data;
+        return headline;
     }
 }

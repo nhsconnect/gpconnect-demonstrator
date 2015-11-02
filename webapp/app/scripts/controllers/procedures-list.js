@@ -42,7 +42,7 @@ angular.module('rippleDemonstrator')
       usSpinnerService.stop('patientSummary-spinner');
     });
 
-    $scope.go = function (id) {
+    $scope.go = function (id, procedureSource) {
       $state.go('procedures-detail', {
         patientId: $scope.patient.id,
         procedureId: id,
@@ -50,7 +50,8 @@ angular.module('rippleDemonstrator')
         page: $scope.currentPage,
         reportType: $stateParams.reportType,
         searchString: $stateParams.searchString,
-        queryType: $stateParams.queryType
+        queryType: $stateParams.queryType,
+        source: procedureSource
       });
     };
 

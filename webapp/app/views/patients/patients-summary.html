@@ -17,7 +17,7 @@
                             which will stretch if there's more content
                     -->
       <div class="board problems col-md-4">
-        <h2><a ng-href="#/patients/{{patient.id}}/diagnoses"><i class="fa fa-stethoscope"></i> Problems</a>
+        <h2><a ng-click="goToSection('Problems')"><i class="fa fa-stethoscope"></i> Problems</a>
           <span class="resultcount" ng-if="diagnosesCount == 0">0 of 0</span>
           <span class="resultcount" ng-if="diagnosesCount > 0 && diagnosesCount < 5">{{diagnosesCount}} of {{diagnosesCount}}</span>
           <span class="resultcount" ng-if="diagnosesCount > 0 && diagnosesCount >= 5">5 of {{diagnosesCount}}</span>
@@ -36,7 +36,7 @@
       <!-- END Board -->
 
       <div class="board problems col-md-4">
-        <h2><a ui-sref="allergies({patientId: patient.id})"><i class="fi-flag"></i> Allergies</a>
+        <h2><a ng-click="goToSection('Allergies')"><i class="fi-flag"></i> Allergies</a>
           <span class="resultcount" ng-if="allergiesCount == 0">0 of 0</span>
           <span class="resultcount" ng-if="allergiesCount > 0 && allergiesCount < 5">{{allergiesCount}} of {{allergiesCount}}</span>
           <span class="resultcount" ng-if="allergiesCount > 0 && allergiesCount >= 5">5 of {{allergiesCount}}</span>
@@ -53,7 +53,7 @@
       </div>
 
       <div class="board problems col-md-4">
-        <h2><a ui-sref="medications({patientId: patient.id})"><i class="fi-clipboard-pencil"></i> Medications</a>
+        <h2><a ng-click="goToSection('Medications')"><i class="fi-clipboard-pencil"></i> Medications</a>
           <span class="resultcount" ng-if="medicationsCount == 0">0 of 0</span>
           <span class="resultcount" ng-if="medicationsCount > 0 && medicationsCount < 5">{{medicationsCount}} of {{medicationsCount}}</span>
           <span class="resultcount" ng-if="medicationsCount > 0 && medicationsCount >= 5">5 of {{medicationsCount}}</span>
@@ -70,7 +70,7 @@
       </div>
 
       <div class="board problems col-md-4">
-        <h2><a ui-sref="contacts({patientId: patient.id})"><i class="fi-torsos-all"></i> Contacts</a>
+        <h2><a ng-click="goToSection('Contacts')"><i class="fi-torsos-all"></i> Contacts</a>
           <span class="resultcount" ng-if="contactsCount == 0">0 of 0</span>
           <span class="resultcount" ng-if="contactsCount > 0 && contactsCount < 5">{{contactsCount}} of {{contactsCount}}</span>
           <span class="resultcount" ng-if="contactsCount > 0 && contactsCount >= 5">5 of {{contactsCount}}</span>
@@ -87,7 +87,7 @@
       </div>
 
       <div class="board problems col-md-4">
-        <h2><a ui-sref="transferOfCare({patientId: patient.id})"><i class="fa fa-ambulance"></i> Transfer of Care</a>
+        <h2><a ng-click="goToSection('Transfer')"><i class="fa fa-ambulance"></i> Transfer of Care</a>
           <span class="resultcount" ng-if="transferofCaresCount == 0">0 of 0</span>
           <span class="resultcount" ng-if="transferofCaresCount > 0 && transferofCaresCount < 5">{{transferofCaresCount}} of {{transferofCaresCount}}</span>
           <span class="resultcount" ng-if="transferofCaresCount > 0 && transferofCaresCount >= 5">5 of {{transferofCaresCount}}</span>

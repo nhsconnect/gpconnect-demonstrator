@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('PatientsSummaryCtrl', function ($scope, $stateParams, SearchInput, $rootScope, $location, usSpinnerService, PatientService) {
+  .controller('PatientsSummaryCtrl', function ($scope, $stateParams, $state, SearchInput, $rootScope, $location, usSpinnerService, PatientService) {
 
     SearchInput.update();
 
@@ -38,5 +38,34 @@ angular.module('rippleDemonstrator')
     $scope.go = function (path) {
       $location.path(path);
     };
+
+    $scope.goToSection = function (section) {
+      var requestHeader = {
+        patientId: $stateParams.patientId,
+        reportType: $stateParams.reportType,
+        searchString: $stateParams.searchString,
+        queryType: $stateParams.queryType
+      };
+
+      var toState = '';
+      switch (section) {
+      case 'Problems':
+        toState = 'diagnoses-list'
+        break;
+      case 'Allergies':
+        toState = 'allergies'
+        break;
+      case 'Medications':
+        toState = 'medications'
+        break;
+      case 'Contacts':
+        toState = 'contacts'
+        break;
+      case 'Transfer':
+        toState = 'transferOfCare'
+        break;
+      }
+      $state.go(toState, requestHeader);
+    }
 
   });

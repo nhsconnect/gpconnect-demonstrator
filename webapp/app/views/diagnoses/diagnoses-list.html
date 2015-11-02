@@ -15,7 +15,7 @@
   </thead>
 
   <tbody>
-    <tr dir-paginate="diagnosis in diagnoses | filter:search | itemsPerPage: 9 " current-page="currentPage" ng-click="go('{{diagnosis.sourceId}}')" ng-class="{info: selected(diagnosis.sourceId)}">
+    <tr dir-paginate="diagnosis in diagnoses | filter:search | itemsPerPage: 9 " current-page="currentPage" ng-click="go('{{diagnosis.sourceId}}', '{{diagnosis.source}}')" ng-class="{info: selected(diagnosis.sourceId)}">
       <td>{{ diagnosis.problem }}</td>
       <td class="dateTime">{{ diagnosis.dateOfOnset}}</td>
       <td>{{diagnosis.source}}</td>

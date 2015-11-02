@@ -12,7 +12,7 @@ angular.module('rippleDemonstrator')
       $scope.patient = patient;
     });
 
-    Diagnosis.get($stateParams.patientId, $stateParams.diagnosisIndex).then(function (result) {
+    Diagnosis.get($stateParams.patientId, $stateParams.diagnosisIndex, $stateParams.source).then(function (result) {
       $scope.diagnosis = result.data;
       usSpinnerService.stop('diagnosisDetail-spinner');
     });

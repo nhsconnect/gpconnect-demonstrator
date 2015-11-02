@@ -98,6 +98,8 @@ angular.module('rippleDemonstrator')
               reportType: $stateParams.reportType,
               searchString: $stateParams.searchString,
               queryType: $stateParams.queryType
+               }, {
+              reload: true
             });
           }, 2000);
 

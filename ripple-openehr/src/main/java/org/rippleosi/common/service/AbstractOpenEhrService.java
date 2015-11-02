@@ -17,6 +17,7 @@ package org.rippleosi.common.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.Transformer;
@@ -69,12 +70,13 @@ public abstract class AbstractOpenEhrService implements Repository {
 
         ResponseEntity<QueryResponse> response = requestProxy.getWithoutSession(getQueryURI(query), QueryResponse.class);
 
-        if (response.getStatusCode() != HttpStatus.OK) {
-            // noinspection unchecked
-            return (T) new ArrayList();
+        List<Map<String, Object>> results = new ArrayList<>();
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            results = response.getBody().getResultSet();
         }
 
-        return queryStrategy.transform(response.getBody().getResultSet());
+        return queryStrategy.transform(results);
     }
 
     protected void createData(CreateStrategy createStrategy) {

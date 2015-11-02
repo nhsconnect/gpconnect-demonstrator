@@ -15,6 +15,7 @@
  */
 package org.rippleosi.common.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
@@ -69,7 +70,8 @@ public abstract class AbstractOpenEhrService implements Repository {
         ResponseEntity<QueryResponse> response = requestProxy.getWithoutSession(getQueryURI(query), QueryResponse.class);
 
         if (response.getStatusCode() != HttpStatus.OK) {
-            throw new DataNotFoundException("OpenEHR query returned with status code " + response.getStatusCode());
+            // noinspection unchecked
+            return (T) new ArrayList();
         }
 
         return queryStrategy.transform(response.getBody().getResultSet());

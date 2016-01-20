@@ -46,7 +46,9 @@ public final class DateFormatter {
                                        "yyyy-MM-dd'T'HH:mm:ss.SSSX",
                                        "yyyy-MM-dd'T'HH:mm:ss.SSSXX",
                                        "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
-                                       "HH:mm:ss");
+                                       "HH:mm:ss",
+                                       "yyyy.MM.dd",
+                                       "yyyyMMdd");
         } catch (ParseException ignore) {
             return null;
         }

@@ -13,11 +13,19 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-package org.rippleosi.patient.dicom.model;
+package org.rippleosi.common.model;
 
-public class DicomImage {
+import java.util.List;
 
-    private String source;
-    private String sourceId;
+public class StudiesListResponse {
 
+    private List<String> results;
+
+    public List<String> getResults() {
+        return results;
+    }
+
+    public void setResults(List<String> results) {
+        this.results = results;
+    }
 }

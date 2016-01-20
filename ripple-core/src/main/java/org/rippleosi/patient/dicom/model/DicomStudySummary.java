@@ -17,7 +17,7 @@ package org.rippleosi.patient.dicom.model;
 
 import java.util.Date;
 
-public class DicomSeriesSummary {
+public class DicomStudySummary {
 
     private String sourceId;
     private String source;

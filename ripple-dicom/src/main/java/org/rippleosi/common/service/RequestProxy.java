@@ -13,11 +13,11 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-package org.rippleosi.patient.dicom.model;
+package org.rippleosi.common.service;
 
-public class DicomImage {
+import org.springframework.http.ResponseEntity;
 
-    private String source;
-    private String sourceId;
+public interface RequestProxy {
 
+    <T> ResponseEntity<T> getWithoutSession(String uri, Class<T> cls);
 }

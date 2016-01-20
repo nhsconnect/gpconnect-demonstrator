@@ -18,7 +18,7 @@ package org.rippleosi.patient.dicom.rest;
 import java.util.List;
 
 import org.rippleosi.patient.dicom.model.DicomImage;
-import org.rippleosi.patient.dicom.model.DicomSeriesSummary;
+import org.rippleosi.patient.dicom.model.DicomStudySummary;
 import org.rippleosi.patient.dicom.model.DicomSeriesThumbnail;
 import org.rippleosi.patient.dicom.search.DicomSearch;
 import org.rippleosi.patient.dicom.search.DicomSearchFactory;
@@ -37,20 +37,20 @@ public class DicomController {
     private DicomSearchFactory dicomSearchFactory;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<DicomSeriesSummary> findAllDicomSeries(@PathVariable("patientId") String patientId,
+    public List<DicomStudySummary> findAllDicomStudies(@PathVariable("patientId") String patientId,
                                                        @RequestParam(required = false) String source) {
         DicomSearch dicomSearch = dicomSearchFactory.select(source);
 
-        return dicomSearch.findAllDicomSeries(patientId, source);
+        return dicomSearch.findAllDicomStudies(patientId, source);
     }
 
-    @RequestMapping(value = "/{seriesId}/thumbnails", method = RequestMethod.GET)
+    @RequestMapping(value = "/{studyId}/thumbnails", method = RequestMethod.GET)
     public List<DicomSeriesThumbnail> findAllDicomSeriesThumbnails(@PathVariable("patientId") String patientId,
-                                                                   @PathVariable("seriesId") String seriesId,
+                                                                   @PathVariable("studyId") String studyId,
                                                                    @RequestParam(required = false) String source) {
         DicomSearch dicomSearch = dicomSearchFactory.select(source);
 
-        return dicomSearch.findAllDicomSeriesThumbnails(patientId, seriesId, source);
+        return dicomSearch.findAllDicomSeriesThumbnails(patientId, studyId, source);
     }
 
     @RequestMapping(value = "/{imageId}", method = RequestMethod.GET)

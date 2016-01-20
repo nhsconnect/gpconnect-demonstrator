@@ -15,37 +15,41 @@
  */
 package org.rippleosi.patient.dicom.search;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.rippleosi.common.exception.ConfigurationException;
+import org.apache.commons.collections4.CollectionUtils;
+import org.rippleosi.common.model.StudyDetailsResponse;
+import org.rippleosi.common.service.AbstractOrthancService;
 import org.rippleosi.patient.dicom.model.DicomImage;
-import org.rippleosi.patient.dicom.model.DicomStudySummary;
 import org.rippleosi.patient.dicom.model.DicomSeriesThumbnail;
+import org.rippleosi.patient.dicom.model.DicomStudySummary;
+import org.springframework.stereotype.Service;
 
-public class NotConfiguredDicomSearch implements DicomSearch {
-
-    @Override
-    public String getSource() {
-        return "not configured";
-    }
-
-    @Override
-    public int getPriority() {
-        return Integer.MAX_VALUE;
-    }
+@Service
+public class OrthancSearch extends AbstractOrthancService implements DicomSearch {
 
     @Override
     public List<DicomStudySummary> findAllDicomStudies(String patientId, String source) {
-        throw ConfigurationException.unimplementedTransaction(DicomSearch.class);
+        List<String> studiesIds = findAllStudiesIds();
+
+        List<StudyDetailsResponse> studiesDetails = new ArrayList<>();
+
+        for (String studyId : studiesIds) {
+            StudyDetailsResponse studyDetails = findStudyDetails(studyId);
+            studiesDetails.add(studyDetails);
+        }
+
+        return CollectionUtils.collect(studiesDetails, new DicomStudyToStudySummaryTransformer(), new ArrayList<>());
     }
 
     @Override
     public List<DicomSeriesThumbnail> findAllDicomSeriesThumbnails(String patientId, String seriesId, String source) {
-        throw ConfigurationException.unimplementedTransaction(DicomSearch.class);
+        return null;
     }
 
     @Override
     public DicomImage findDicomImage(String patientId, String imageId, String source) {
-        throw ConfigurationException.unimplementedTransaction(DicomSearch.class);
+        return null;
     }
 }

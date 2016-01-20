@@ -51,6 +51,7 @@
         <module>ripple-openehr</module>
         <module>ripple-terminology-example</module>
         <module>ripple-vista</module>
+        <module>ripple-dicom</module>
     </modules>
 
     <dependencyManagement>
@@ -70,6 +71,12 @@
             <dependency>
                 <groupId>org.rippleosi</groupId>
                 <artifactId>ripple-database</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.rippleosi</groupId>
+                <artifactId>ripple-dicom</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

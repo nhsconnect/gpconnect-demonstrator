@@ -299,6 +299,16 @@ angular
           main: { templateUrl: 'views/results/results-list.html', controller: 'ResultsListCtrl' },
           detail: { templateUrl: 'views/results/results-detail.html', controller: 'ResultsDetailCtrl' }
         }
+      })
+
+      .state('images', {
+        url: '/patients/{patientId:int}/images/{resultIndex}?filter&page&reportType&searchString&queryType',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/dicom/image-list.html', controller: 'ImageListCtrl' }
+          //detail: { templateUrl: 'views/dicom/image-detail.html', controller: 'ImageDetailCtrl' }
+        }
       });
   })
 

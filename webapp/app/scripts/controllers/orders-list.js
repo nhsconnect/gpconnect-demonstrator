@@ -9,7 +9,7 @@ angular.module('rippleDemonstrator')
 
     $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
-    }
+    };
 
     if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
@@ -32,7 +32,7 @@ angular.module('rippleDemonstrator')
     });
 
     Order.all($stateParams.patientId).then(function (result) {
-      if (result.status != 204) {
+      if (result.status !== 204) {
         $scope.orders = result.data.reverse();
         for (var i = 0; i < $scope.orders.length; i++) {
           $scope.orders[i].orderDate = moment($scope.orders[i].orderDate).format('DD-MMM-YYYY h:mm a');

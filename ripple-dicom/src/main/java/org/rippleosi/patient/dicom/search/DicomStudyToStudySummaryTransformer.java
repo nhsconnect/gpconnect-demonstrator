@@ -34,7 +34,7 @@ public class DicomStudyToStudySummaryTransformer implements Transformer<StudyDet
         summary.setSourceId(studyDetails.getId());
         summary.setSource("orthanc");
         summary.setDateRecorded(dateRecorded);
-        summary.setSeriesDescription(studyDetails.getMainDicomTags().getStudyDescription());
+        summary.setStudyDescription(studyDetails.getMainDicomTags().getStudyDescription());
 
         return summary;
     }

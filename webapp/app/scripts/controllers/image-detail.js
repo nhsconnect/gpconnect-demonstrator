@@ -13,11 +13,10 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-package org.rippleosi.common.service;
 
-import org.springframework.http.ResponseEntity;
+'use strict';
 
-public interface RequestProxy {
+angular.module('rippleDemonstrator')
+  .controller('ImageDetailCtrl', function ($scope, $stateParams, SearchInput, $location, $modal, Helper, $state, usSpinnerService, PatientService) {
 
-    <T> ResponseEntity<T> getWithoutSession(String uri, Class<T> cls);
-}
+  });

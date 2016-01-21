@@ -15,7 +15,7 @@ angular.module('rippleDemonstrator')
 
     $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
-    }
+    };
 
     if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;

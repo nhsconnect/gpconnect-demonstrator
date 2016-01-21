@@ -18,7 +18,6 @@ package org.rippleosi.common.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.rippleosi.common.model.StudiesListResponse;
 import org.rippleosi.common.model.StudyDetailsResponse;
 import org.rippleosi.common.repo.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ public class AbstractOrthancService implements Repository {
     private String orthancServerAddress;
 
     @Autowired
-    private RequestProxy requestProxy;
+    private DicomRequestProxy dicomRequestProxy;
 
     @Override
     public String getSource() {
@@ -50,7 +49,7 @@ public class AbstractOrthancService implements Repository {
 
     @SuppressWarnings("unchecked")
     protected List<String> findAllStudiesIds() {
-        ResponseEntity response = requestProxy.getWithoutSession(studiesListUri(), List.class);
+        ResponseEntity response = dicomRequestProxy.getWithoutSession(studiesListUri(), List.class);
 
         List<String> results = new ArrayList<>();
 
@@ -62,8 +61,8 @@ public class AbstractOrthancService implements Repository {
     }
 
     protected StudyDetailsResponse findStudyDetails(String studyId) {
-        ResponseEntity<StudyDetailsResponse> response = requestProxy.getWithoutSession(studyDetailsUri(studyId),
-                                                                                       StudyDetailsResponse.class);
+        ResponseEntity<StudyDetailsResponse> response = dicomRequestProxy.getWithoutSession(studyDetailsUri(studyId),
+                                                                                            StudyDetailsResponse.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
             return response.getBody();

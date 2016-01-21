@@ -23,7 +23,7 @@ angular.module('rippleDemonstrator')
       } else {
         totalPages = Math.floor($scope.pagingInfo.totalItems / 15) + 1;
       }
-      if ($scope.pagingInfo.page == totalPages) {
+      if ($scope.pagingInfo.page === totalPages) {
         to = from + $scope.pagingInfo.totalItems % 15 - 1;
       } else {
         to = $scope.pagingInfo.page * 15;
@@ -47,7 +47,7 @@ angular.module('rippleDemonstrator')
           $scope.patients = result.data.patientDetails;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
 
-          if ($scope.pagingInfo.totalItems == 0) {
+          if ($scope.pagingInfo.totalItems === 0) {
             $scope.noResults = 'There are no results that match your search criteria';
           } else {
             $scope.processData();
@@ -75,7 +75,7 @@ angular.module('rippleDemonstrator')
           $scope.patients = result.data.patientDetails;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
 
-          if ($scope.pagingInfo.totalItems == 0) {
+          if ($scope.pagingInfo.totalItems === 0) {
             $scope.noResults = 'There are no results that match your search criteria';
           } else {
             $scope.processData();
@@ -96,7 +96,7 @@ angular.module('rippleDemonstrator')
         Report.searchByPatient(searchPatientQuery).then(function (result) {
           $scope.patients = result.data.patientDetails;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
-          if ($scope.pagingInfo.totalItems == 0) {
+          if ($scope.pagingInfo.totalItems === 0) {
             $scope.noResults = 'There are no results that match your search criteria';
           } else {
             $scope.processData();
@@ -211,7 +211,7 @@ angular.module('rippleDemonstrator')
 
       switch (itemType) {
         case 'orders':
-          toState = 'orders'
+          toState = 'orders';
           break;
         case 'results':
           toState = 'results';
@@ -224,7 +224,7 @@ angular.module('rippleDemonstrator')
           break;
       }
       $state.go(toState, requestHeader);
-    }
+    };
 
     $scope.getItem = function (itemType, nhsNumber, itemId) {
       $scope.clickGetItem = true;
@@ -244,7 +244,7 @@ angular.module('rippleDemonstrator')
       switch (itemType) {
       case 'orders':
         requestHeader.orderId = itemId;
-        toState = 'orders-detail'
+        toState = 'orders-detail';
         break;
       case 'results':
         requestHeader.resultIndex = itemId;
@@ -260,7 +260,7 @@ angular.module('rippleDemonstrator')
         break;
       }
       $state.go(toState, requestHeader);
-    }
+    };
 
     getData();
 

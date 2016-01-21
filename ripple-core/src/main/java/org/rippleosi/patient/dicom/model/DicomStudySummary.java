@@ -21,7 +21,7 @@ public class DicomStudySummary {
 
     private String sourceId;
     private String source;
-    private String seriesDescription;
+    private String studyDescription;
     private Date dateRecorded;
 
     public String getSourceId() {
@@ -40,12 +40,12 @@ public class DicomStudySummary {
         this.source = source;
     }
 
-    public String getSeriesDescription() {
-        return seriesDescription;
+    public String getStudyDescription() {
+        return studyDescription;
     }
 
-    public void setSeriesDescription(String seriesDescription) {
-        this.seriesDescription = seriesDescription;
+    public void setStudyDescription(String studyDescription) {
+        this.studyDescription = studyDescription;
     }
 
     public Date getDateRecorded() {

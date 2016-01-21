@@ -9,7 +9,7 @@ angular.module('rippleDemonstrator')
       var newVersionNumber = parseInt(sourceArr[2]) + 1;
       var newId = sourceArr[0] + '::' + sourceArr[1] + '::' + newVersionNumber;
       return newId;
-    }
+    };
 
     return {
       updateId: updateId

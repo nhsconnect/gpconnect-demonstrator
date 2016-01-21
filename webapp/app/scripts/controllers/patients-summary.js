@@ -50,22 +50,22 @@ angular.module('rippleDemonstrator')
       var toState = '';
       switch (section) {
       case 'Problems':
-        toState = 'diagnoses-list'
+        toState = 'diagnoses-list';
         break;
       case 'Allergies':
-        toState = 'allergies'
+        toState = 'allergies';
         break;
       case 'Medications':
-        toState = 'medications'
+        toState = 'medications';
         break;
       case 'Contacts':
-        toState = 'contacts'
+        toState = 'contacts';
         break;
       case 'Transfer':
-        toState = 'transferOfCare'
+        toState = 'transferOfCare';
         break;
       }
       $state.go(toState, requestHeader);
-    }
+    };
 
   });

@@ -20,22 +20,22 @@ angular.module('rippleDemonstrator')
 
       switch (section) {
       case 'summary':
-        toState = 'patients-summary'
+        toState = 'patients-summary';
         break;
       case 'contacts':
-        toState = 'contacts'
+        toState = 'contacts';
         break;
       case 'diagnosis':
-        toState = 'diagnoses-list'
+        toState = 'diagnoses-list';
         break;
       case 'allergies':
-        toState = 'allergies'
+        toState = 'allergies';
         break;
       case 'medications':
         toState = 'medications';
         break;
       case 'orders':
-        toState = 'orders'
+        toState = 'orders';
         break;
       case 'results':
         toState = 'results';
@@ -58,8 +58,11 @@ angular.module('rippleDemonstrator')
       case 'mdt':
         toState = 'cancerMdt';
         break;
+      case 'images':
+        toState = 'images';
+        break;
       }
       $state.go(toState, requestHeader);
-    }
+    };
 
   });

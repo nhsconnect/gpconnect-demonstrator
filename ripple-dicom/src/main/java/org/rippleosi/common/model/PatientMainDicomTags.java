@@ -13,11 +13,20 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-package org.rippleosi.patient.dicom.model;
+package org.rippleosi.common.model;
 
-public class DicomImage {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    private String source;
-    private String sourceId;
+public class PatientMainDicomTags {
 
+    @JsonProperty("PatientName")
+    private String patientName;
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    }
 }

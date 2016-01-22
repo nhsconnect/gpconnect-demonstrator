@@ -18,10 +18,9 @@ package org.rippleosi.patient.dicom.search;
 import java.util.List;
 
 import org.rippleosi.common.exception.ConfigurationException;
-import org.rippleosi.patient.dicom.model.DicomImage;
+import org.rippleosi.patient.dicom.model.DicomInstanceId;
 import org.rippleosi.patient.dicom.model.DicomSeriesSummary;
 import org.rippleosi.patient.dicom.model.DicomStudySummary;
-import org.rippleosi.patient.dicom.model.DicomSeriesThumbnail;
 
 public class NotConfiguredDicomSearch implements DicomSearch {
 
@@ -41,17 +40,12 @@ public class NotConfiguredDicomSearch implements DicomSearch {
     }
 
     @Override
-    public DicomSeriesSummary findAllDicomSeriesIdsInStudy(String patientId, String studyId, String source) {
+    public DicomSeriesSummary findAllDicomSeriesInStudy(String patientId, String studyId, String source) {
         throw ConfigurationException.unimplementedTransaction(DicomSearch.class);
     }
 
     @Override
-    public List<DicomSeriesThumbnail> findAllDicomSeriesThumbnails(String patientId, String seriesId, String source) {
-        throw ConfigurationException.unimplementedTransaction(DicomSearch.class);
-    }
-
-    @Override
-    public DicomImage findDicomImage(String patientId, String imageId, String source) {
+    public DicomInstanceId findFirstInstanceIdInSeries(String patientId, String seriesId, String source) {
         throw ConfigurationException.unimplementedTransaction(DicomSearch.class);
     }
 }

@@ -19,10 +19,16 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class StudyDetailsResponse {
+public class SeriesDetailsResponse {
+
+    @JsonProperty("ExpectedNumberOfInstances")
+    private String expectedNumberOfInstances;
 
     @JsonProperty("ID")
     private String id;
+
+    @JsonProperty("Instances")
+    private List<String> instances;
 
     @JsonProperty("IsStable")
     private boolean isStable;
@@ -33,17 +39,22 @@ public class StudyDetailsResponse {
     @JsonProperty("MainDicomTags")
     private MainDicomTags mainDicomTags;
 
-    @JsonProperty("ParentPatient")
-    private String parentPatient;
+    @JsonProperty("ParentStudy")
+    private String parentStudy;
 
-    @JsonProperty("PatientMainDicomTags")
-    private PatientMainDicomTags patientMainDicomTags;
-
-    @JsonProperty("Series")
-    private List<String> series;
+    @JsonProperty("Status")
+    private String status;
 
     @JsonProperty("Type")
     private String type;
+
+    public String getExpectedNumberOfInstances() {
+        return expectedNumberOfInstances;
+    }
+
+    public void setExpectedNumberOfInstances(String expectedNumberOfInstances) {
+        this.expectedNumberOfInstances = expectedNumberOfInstances;
+    }
 
     public String getId() {
         return id;
@@ -51,6 +62,14 @@ public class StudyDetailsResponse {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<String> getInstances() {
+        return instances;
+    }
+
+    public void setInstances(List<String> instances) {
+        this.instances = instances;
     }
 
     public boolean isStable() {
@@ -77,28 +96,20 @@ public class StudyDetailsResponse {
         this.mainDicomTags = mainDicomTags;
     }
 
-    public String getParentPatient() {
-        return parentPatient;
+    public String getParentStudy() {
+        return parentStudy;
     }
 
-    public void setParentPatient(String parentPatient) {
-        this.parentPatient = parentPatient;
+    public void setParentStudy(String parentStudy) {
+        this.parentStudy = parentStudy;
     }
 
-    public PatientMainDicomTags getPatientMainDicomTags() {
-        return patientMainDicomTags;
+    public String getStatus() {
+        return status;
     }
 
-    public void setPatientMainDicomTags(PatientMainDicomTags patientMainDicomTags) {
-        this.patientMainDicomTags = patientMainDicomTags;
-    }
-
-    public List<String> getSeries() {
-        return series;
-    }
-
-    public void setSeries(List<String> series) {
-        this.series = series;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getType() {

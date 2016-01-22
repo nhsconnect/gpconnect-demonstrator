@@ -47,7 +47,7 @@ angular.module('rippleDemonstrator')
       $scope.patient = patient;
     });
 
-    Image.all($stateParams.patientId).then(function (result) {
+    Image.allStudies($stateParams.patientId).then(function (result) {
       $scope.images = result.data;
 
       for (var i = 0; i < $scope.images.length; i++) {
@@ -63,9 +63,10 @@ angular.module('rippleDemonstrator')
     });
 
     $scope.go = function (id, source) {
-      $state.go('image-detail', {
+      $state.go('images-detail', {
         patientId: $scope.patient.id,
-        imageIndex: id,
+        studyId: id,
+        source: source,
         filter: $scope.query,
         page: $scope.currentPage,
         reportType: $stateParams.reportType,
@@ -75,7 +76,7 @@ angular.module('rippleDemonstrator')
     };
 
     $scope.selected = function (imageIndex) {
-      return imageIndex === $stateParams.imageIndex;
+      return imageIndex === $stateParams.studyId;
     };
 
   });

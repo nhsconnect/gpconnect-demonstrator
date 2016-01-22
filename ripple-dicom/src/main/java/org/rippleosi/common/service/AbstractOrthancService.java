@@ -18,6 +18,7 @@ package org.rippleosi.common.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.rippleosi.common.model.SeriesDetailsResponse;
 import org.rippleosi.common.model.StudyDetailsResponse;
 import org.rippleosi.common.repo.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,17 @@ public class AbstractOrthancService implements Repository {
         return null;
     }
 
+    protected SeriesDetailsResponse findInstanceId(String seriesId) {
+        ResponseEntity<SeriesDetailsResponse> response = dicomRequestProxy.getWithoutSession(seriesDetailsUri(seriesId),
+                                                                                            SeriesDetailsResponse.class);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return response.getBody();
+        }
+
+        return null;
+    }
+
     private String studiesListUri() {
         return UriComponentsBuilder.fromHttpUrl(orthancServerAddress + "/studies")
                                    .build()
@@ -80,6 +92,12 @@ public class AbstractOrthancService implements Repository {
     private String studyDetailsUri(String studyId) {
         return UriComponentsBuilder.fromHttpUrl(orthancServerAddress + "/studies")
                                    .path("/" + studyId)
+                                   .build()
+                                   .toUriString();
+    }
+    private String seriesDetailsUri(String seriesId) {
+        return UriComponentsBuilder.fromHttpUrl(orthancServerAddress + "/series")
+                                   .path("/" + seriesId)
                                    .build()
                                    .toUriString();
     }

@@ -38,7 +38,7 @@ angular.module('rippleDemonstrator')
       }); // id is hard coded
     }
 
-    $rootScope.$on('$stateChangeSuccess', function (event, toState, fromState) {
+    $rootScope.$on('$stateChangeSuccess', function (event, toState) {
       var params = $stateParams;
       var previousState = '';
       var pageHeader = '';
@@ -105,15 +105,15 @@ angular.module('rippleDemonstrator')
       }
 
       $scope.containsReportString = function () {
-        return $scope.searchExpression.indexOf('rp ') === 0 ? true : false;
+        return $scope.searchExpression.indexOf('rp ') === 0;
       };
 
       $scope.containsSettingString = function () {
-        return $scope.searchExpression.lastIndexOf('st ') === 0 ? true : false;
+        return $scope.searchExpression.lastIndexOf('st ') === 0;
       };
 
       $scope.containsPatientString = function () {
-        return $scope.searchExpression.lastIndexOf('pt ') === 0 ? true : false;
+        return $scope.searchExpression.lastIndexOf('pt ') === 0;
       };
 
       $scope.containsReportTypeString = function () {
@@ -124,8 +124,6 @@ angular.module('rippleDemonstrator')
         }
         return false;
       };
-
-
 
       $rootScope.searchMode = false;
       $rootScope.reportMode = false;

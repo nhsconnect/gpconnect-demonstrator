@@ -17,10 +17,9 @@ package org.rippleosi.patient.dicom.rest;
 
 import java.util.List;
 
-import org.rippleosi.patient.dicom.model.DicomImage;
+import org.rippleosi.patient.dicom.model.DicomInstanceId;
 import org.rippleosi.patient.dicom.model.DicomSeriesSummary;
 import org.rippleosi.patient.dicom.model.DicomStudySummary;
-import org.rippleosi.patient.dicom.model.DicomSeriesThumbnail;
 import org.rippleosi.patient.dicom.search.DicomSearch;
 import org.rippleosi.patient.dicom.search.DicomSearchFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,30 +44,21 @@ public class DicomController {
         return dicomSearch.findAllDicomStudies(patientId, source);
     }
 
-    @RequestMapping(value = "/{studyId}/thumbnails", method = RequestMethod.GET)
-    public List<DicomSeriesThumbnail> findAllDicomSeriesThumbnails(@PathVariable("patientId") String patientId,
-                                                                   @PathVariable("studyId") String studyId,
-                                                                   @RequestParam(required = false) String source) {
-        DicomSearch dicomSearch = dicomSearchFactory.select(source);
-
-        return dicomSearch.findAllDicomSeriesThumbnails(patientId, studyId, source);
-    }
-
     @RequestMapping(value = "/{studyId}/series", method = RequestMethod.GET)
-    public DicomSeriesSummary findAllDicomSeriesIdsInStudy(@PathVariable("patientId") String patientId,
-                                                           @PathVariable("studyId") String studyId,
-                                                           @RequestParam(required = false) String source) {
+    public DicomSeriesSummary findAllDicomSeriesInStudy(@PathVariable("patientId") String patientId,
+                                                        @PathVariable("studyId") String studyId,
+                                                        @RequestParam(required = false) String source) {
         DicomSearch dicomSearch = dicomSearchFactory.select(source);
 
-        return dicomSearch.findAllDicomSeriesIdsInStudy(patientId, studyId, source);
+        return dicomSearch.findAllDicomSeriesInStudy(patientId, studyId, source);
     }
 
-    @RequestMapping(value = "/{imageId}", method = RequestMethod.GET)
-    public DicomImage findDicomImage(@PathVariable("patientId") String patientId,
-                                     @PathVariable("imageId") String imageId,
-                                     @RequestParam(required = false) String source) {
+    @RequestMapping(value = "/{seriesId}/instance", method = RequestMethod.GET)
+    public DicomInstanceId findFirstInstanceIdInSeries(@PathVariable("patientId") String patientId,
+                                                       @PathVariable("seriesId") String seriesId,
+                                                       @RequestParam(required = false) String source) {
         DicomSearch dicomSearch = dicomSearchFactory.select(source);
 
-        return dicomSearch.findDicomImage(patientId, imageId, source);
+        return dicomSearch.findFirstInstanceIdInSeries(patientId, seriesId, source);
     }
 }

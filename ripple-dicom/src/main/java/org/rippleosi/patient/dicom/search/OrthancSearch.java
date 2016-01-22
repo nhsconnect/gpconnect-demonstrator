@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.rippleosi.common.model.SeriesDetailsResponse;
 import org.rippleosi.common.model.StudyDetailsResponse;
 import org.rippleosi.common.service.AbstractOrthancService;
-import org.rippleosi.patient.dicom.model.DicomImage;
+import org.rippleosi.patient.dicom.model.DicomInstanceId;
 import org.rippleosi.patient.dicom.model.DicomSeriesSummary;
-import org.rippleosi.patient.dicom.model.DicomSeriesThumbnail;
 import org.rippleosi.patient.dicom.model.DicomStudySummary;
 import org.springframework.stereotype.Service;
 
@@ -45,12 +45,12 @@ public class OrthancSearch extends AbstractOrthancService implements DicomSearch
     }
 
     @Override
-    public DicomSeriesSummary findAllDicomSeriesIdsInStudy(String patientId, String studyId, String source) {
+    public DicomSeriesSummary findAllDicomSeriesInStudy(String patientId, String studyId, String source) {
         StudyDetailsResponse studyDetails = findStudyDetails(studyId);
 
         DicomSeriesSummary summary = new DicomSeriesSummary();
 
-        summary.setSourceId(studyId);
+        summary.setStudyId(studyId);
         summary.setSource("orthanc");
         summary.setSeriesIds(studyDetails.getSeries());
 
@@ -58,12 +58,12 @@ public class OrthancSearch extends AbstractOrthancService implements DicomSearch
     }
 
     @Override
-    public List<DicomSeriesThumbnail> findAllDicomSeriesThumbnails(String patientId, String seriesId, String source) {
-        return null;
-    }
+    public DicomInstanceId findFirstInstanceIdInSeries(String patientId, String seriesId, String source) {
+        SeriesDetailsResponse studyDetails = findInstanceId(seriesId);
 
-    @Override
-    public DicomImage findDicomImage(String patientId, String imageId, String source) {
-        return null;
+        DicomInstanceId dicomInstanceId = new DicomInstanceId();
+        dicomInstanceId.setInstanceId(studyDetails.getInstances().get(0));
+
+        return dicomInstanceId;
     }
 }

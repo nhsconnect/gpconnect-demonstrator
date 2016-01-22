@@ -17,6 +17,6 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ImageModalCtrl', function ($scope, $filter, $modalInstance, PatientService, patient, modal) {
+  .controller('ImageModalCtrl', function () {
 
   });

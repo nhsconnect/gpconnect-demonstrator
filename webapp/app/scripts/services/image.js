@@ -19,17 +19,22 @@
 angular.module('rippleDemonstrator')
   .factory('Image', function ($http) {
 
-    var all = function (patientId) {
+    var allStudies = function (patientId) {
       return $http.get('/api/patients/' + patientId + '/dicom');
     };
 
-    var get = function (patientId, compositionId, source) {
-      return $http.get('/api/patients/' + patientId + '/dicom/' + imageId + '?source=' + source);
+    var getSeries = function (patientId, studyId, source) {
+      return $http.get('/api/patients/' + patientId + '/dicom/' + studyId + '/series' + '?source=' + source);
+    };
+
+    var getInstanceId = function (patientId, seriesId, source) {
+      return $http.get('/api/patients/' + patientId + '/dicom/' + seriesId + '/instance' + '?source=' + source);
     };
 
     return {
-      all: all,
-      get: get
+      allStudies: allStudies,
+      getSeries: getSeries,
+      getInstanceId: getInstanceId
     };
 
   });

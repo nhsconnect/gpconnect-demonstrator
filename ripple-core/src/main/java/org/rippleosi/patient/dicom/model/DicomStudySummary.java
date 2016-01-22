@@ -19,17 +19,17 @@ import java.util.Date;
 
 public class DicomStudySummary {
 
-    private String sourceId;
+    private String studyId;
     private String source;
     private String studyDescription;
     private Date dateRecorded;
 
-    public String getSourceId() {
-        return sourceId;
+    public String getStudyId() {
+        return studyId;
     }
 
-    public void setSourceId(String sourceId) {
-        this.sourceId = sourceId;
+    public void setStudyId(String studyId) {
+        this.studyId = studyId;
     }
 
     public String getSource() {

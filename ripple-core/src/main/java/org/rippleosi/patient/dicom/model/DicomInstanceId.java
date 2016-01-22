@@ -15,6 +15,15 @@
  */
 package org.rippleosi.patient.dicom.model;
 
-public class DicomSeriesThumbnail {
+public class DicomInstanceId {
 
+    private String instanceId;
+
+    public String getInstanceId() {
+        return instanceId;
+    }
+
+    public void setInstanceId(String instanceId) {
+        this.instanceId = instanceId;
+    }
 }

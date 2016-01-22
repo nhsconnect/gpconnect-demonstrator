@@ -22,6 +22,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.model.StudyDetailsResponse;
 import org.rippleosi.common.service.AbstractOrthancService;
 import org.rippleosi.patient.dicom.model.DicomImage;
+import org.rippleosi.patient.dicom.model.DicomSeriesSummary;
 import org.rippleosi.patient.dicom.model.DicomSeriesThumbnail;
 import org.rippleosi.patient.dicom.model.DicomStudySummary;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,19 @@ public class OrthancSearch extends AbstractOrthancService implements DicomSearch
         }
 
         return CollectionUtils.collect(studiesDetails, new DicomStudyToStudySummaryTransformer(), new ArrayList<>());
+    }
+
+    @Override
+    public DicomSeriesSummary findAllDicomSeriesIdsInStudy(String patientId, String studyId, String source) {
+        StudyDetailsResponse studyDetails = findStudyDetails(studyId);
+
+        DicomSeriesSummary summary = new DicomSeriesSummary();
+
+        summary.setSourceId(studyId);
+        summary.setSource("orthanc");
+        summary.setSeriesIds(studyDetails.getSeries());
+
+        return summary;
     }
 
     @Override

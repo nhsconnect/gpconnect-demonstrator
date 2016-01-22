@@ -18,6 +18,7 @@ package org.rippleosi.patient.dicom.rest;
 import java.util.List;
 
 import org.rippleosi.patient.dicom.model.DicomImage;
+import org.rippleosi.patient.dicom.model.DicomSeriesSummary;
 import org.rippleosi.patient.dicom.model.DicomStudySummary;
 import org.rippleosi.patient.dicom.model.DicomSeriesThumbnail;
 import org.rippleosi.patient.dicom.search.DicomSearch;
@@ -51,6 +52,15 @@ public class DicomController {
         DicomSearch dicomSearch = dicomSearchFactory.select(source);
 
         return dicomSearch.findAllDicomSeriesThumbnails(patientId, studyId, source);
+    }
+
+    @RequestMapping(value = "/{studyId}/series", method = RequestMethod.GET)
+    public DicomSeriesSummary findAllDicomSeriesIdsInStudy(@PathVariable("patientId") String patientId,
+                                                           @PathVariable("studyId") String studyId,
+                                                           @RequestParam(required = false) String source) {
+        DicomSearch dicomSearch = dicomSearchFactory.select(source);
+
+        return dicomSearch.findAllDicomSeriesIdsInStudy(patientId, studyId, source);
     }
 
     @RequestMapping(value = "/{imageId}", method = RequestMethod.GET)

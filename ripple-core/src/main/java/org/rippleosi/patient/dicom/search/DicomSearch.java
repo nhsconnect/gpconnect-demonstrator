@@ -19,12 +19,15 @@ import java.util.List;
 
 import org.rippleosi.common.repo.Repository;
 import org.rippleosi.patient.dicom.model.DicomImage;
+import org.rippleosi.patient.dicom.model.DicomSeriesSummary;
 import org.rippleosi.patient.dicom.model.DicomStudySummary;
 import org.rippleosi.patient.dicom.model.DicomSeriesThumbnail;
 
 public interface DicomSearch extends Repository {
 
     List<DicomStudySummary> findAllDicomStudies(String patientId, String source);
+
+    DicomSeriesSummary findAllDicomSeriesIdsInStudy(String patientId, String studyId, String source);
 
     List<DicomSeriesThumbnail> findAllDicomSeriesThumbnails(String patientId, String seriesId, String source);
 

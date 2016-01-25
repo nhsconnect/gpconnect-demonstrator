@@ -15,8 +15,8 @@
  */
 package org.rippleosi.config;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
-import org.apache.activemq.camel.component.ActiveMQComponent;
 import org.apache.camel.CamelContext;
 import org.apache.camel.spring.javaconfig.CamelConfiguration;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,19 +38,23 @@ public class BrokerConfig extends CamelConfiguration {
     public BrokerService brokerService() throws Exception {
         BrokerService brokerService = new BrokerService();
         brokerService.setBrokerName("embedded");
-        brokerService.addConnector("tcp://localhost:" + queuePort);
+        brokerService.addConnector("vm://embedded");
         brokerService.setDataDirectory(dataDirectory);
-
-        brokerService.start();
-
         return brokerService;
     }
 
-    @Override
-    protected void setupCamelContext(CamelContext camelContext) throws Exception {
-        ActiveMQComponent component = new ActiveMQComponent();
-        component.setBrokerURL("vm://embedded?create=false");
-
-        camelContext.addComponent("activemq", component);
+    @Bean
+    public CamelContext camelContext() throws Exception {
+        brokerService().start();
+        return super.camelContext();
     }
+
+    @Bean(name = "activemq")
+	public ActiveMQConnectionFactory activeMQConnectionFactory() throws Exception {
+		ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
+		activeMQConnectionFactory.setBrokerURL("vm://embedded?create=false");
+        activeMQConnectionFactory.setTrustAllPackages(true);
+
+        return activeMQConnectionFactory;
+	}
 }

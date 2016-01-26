@@ -28,9 +28,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BrokerConfig extends CamelConfiguration {
 
-    @Value("${queue.broker.port:61616}")
-    private String queuePort;
-
     @Value("${queue.broker.directory:activemq-data}")
     private String dataDirectory;
 

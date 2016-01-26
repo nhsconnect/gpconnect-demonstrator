@@ -29,4 +29,6 @@
 
     <Environment name="vista.address"               type="java.lang.String" override="false" value="https://46.101.0.93:8000/ec2/vista/"/>
 
+    <Environment name="orthancServer.address"       type="java.lang.String"  override="false" value="http://ripple-orthanc.answerappcloud.com"/>
+
 </Context>

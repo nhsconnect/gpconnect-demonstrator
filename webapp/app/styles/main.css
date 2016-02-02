@@ -2131,7 +2131,8 @@ div#age-chart div.morris-hover.morris-default-style {
   margin: auto;
   display: block;
   max-height: 680px;
-  max-width: 750px;
+  min-height: 650px;
+  max-width: 768px;
   height: auto;
   width: auto;
 }

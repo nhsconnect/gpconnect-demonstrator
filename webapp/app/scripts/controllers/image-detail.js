@@ -44,4 +44,25 @@ angular.module('rippleDemonstrator')
       });
     };
 
+    $scope.openImage = function (imageId) {
+      var modalInstance = $modal.open({
+        templateUrl: 'views/dicom/image-modal.html',
+        size: 'lg',
+        controller: 'ImageModalCtrl',
+        resolve: {
+          modal: function () {
+            return {
+              title: 'View Dicom Image'
+            };
+          },
+          dicomImageId: function () {
+            return imageId;
+          },
+          patient: function () {
+            return $scope.patient;
+          }
+        }
+      })
+    };
+
   });

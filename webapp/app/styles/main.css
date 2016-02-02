@@ -2126,3 +2126,12 @@ div#age-chart div.morris-hover.morris-default-style {
   color: black;
   text-decoration: underline;
 }
+
+.dicom-image {
+  margin: auto;
+  display: block;
+  max-height: 680px;
+  max-width: 750px;
+  height: auto;
+  width: auto;
+}

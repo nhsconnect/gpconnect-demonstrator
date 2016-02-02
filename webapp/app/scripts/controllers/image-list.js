@@ -59,7 +59,7 @@ angular.module('rippleDemonstrator')
         }
       }
 
-      usSpinnerService.stop('patientSummary-spinner');
+      usSpinnerService.stop('imagesList-spinner');
     });
 
     $scope.go = function (id, source) {

@@ -2136,3 +2136,8 @@ div#age-chart div.morris-hover.morris-default-style {
   height: auto;
   width: auto;
 }
+
+.dicomImageMini:hover,
+.dicomImageMini:focus {
+  /*border: 1px solid transparent;*/
+}

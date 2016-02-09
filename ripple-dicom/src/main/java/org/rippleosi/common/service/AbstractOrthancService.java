@@ -18,6 +18,7 @@ package org.rippleosi.common.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.rippleosi.common.model.InstanceDetailsResponse;
 import org.rippleosi.common.model.SeriesDetailsResponse;
 import org.rippleosi.common.model.StudyDetailsResponse;
 import org.rippleosi.common.repo.Repository;
@@ -69,18 +70,29 @@ public class AbstractOrthancService implements Repository {
             return response.getBody();
         }
 
-        return null;
+        return new StudyDetailsResponse();
     }
 
-    protected SeriesDetailsResponse findInstanceId(String seriesId) {
+    protected SeriesDetailsResponse findSeriesDetails(String seriesId) {
         ResponseEntity<SeriesDetailsResponse> response = dicomRequestProxy.getWithoutSession(seriesDetailsUri(seriesId),
-                                                                                            SeriesDetailsResponse.class);
+                                                                                             SeriesDetailsResponse.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
             return response.getBody();
         }
 
-        return null;
+        return new SeriesDetailsResponse();
+    }
+
+    protected InstanceDetailsResponse findInstanceDetails(String instanceId) {
+        ResponseEntity<InstanceDetailsResponse> response = dicomRequestProxy.getWithoutSession(instanceDetailsUri(instanceId),
+                                                                                               InstanceDetailsResponse.class);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return response.getBody();
+        }
+
+        return new InstanceDetailsResponse();
     }
 
     private String studiesListUri() {
@@ -95,9 +107,17 @@ public class AbstractOrthancService implements Repository {
                                    .build()
                                    .toUriString();
     }
+
     private String seriesDetailsUri(String seriesId) {
         return UriComponentsBuilder.fromHttpUrl(orthancServerAddress + "/series")
                                    .path("/" + seriesId)
+                                   .build()
+                                   .toUriString();
+    }
+
+    private String instanceDetailsUri(String instanceId) {
+        return UriComponentsBuilder.fromHttpUrl(orthancServerAddress + "/instances")
+                                   .path("/" + instanceId)
                                    .build()
                                    .toUriString();
     }

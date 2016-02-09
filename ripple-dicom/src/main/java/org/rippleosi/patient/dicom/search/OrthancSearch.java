@@ -19,10 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.rippleosi.common.model.InstanceDetailsResponse;
 import org.rippleosi.common.model.SeriesDetailsResponse;
 import org.rippleosi.common.model.StudyDetailsResponse;
 import org.rippleosi.common.service.AbstractOrthancService;
 import org.rippleosi.patient.dicom.model.DicomInstanceId;
+import org.rippleosi.patient.dicom.model.DicomInstanceSummary;
 import org.rippleosi.patient.dicom.model.DicomSeriesSummary;
 import org.rippleosi.patient.dicom.model.DicomStudySummary;
 import org.springframework.stereotype.Service;
@@ -48,22 +50,20 @@ public class OrthancSearch extends AbstractOrthancService implements DicomSearch
     public DicomSeriesSummary findAllDicomSeriesInStudy(String patientId, String studyId, String source) {
         StudyDetailsResponse studyDetails = findStudyDetails(studyId);
 
-        DicomSeriesSummary summary = new DicomSeriesSummary();
-
-        summary.setStudyId(studyId);
-        summary.setSource("orthanc");
-        summary.setSeriesIds(studyDetails.getSeries());
-
-        return summary;
+        return new DicomStudyToSeriesSummaryTransformer().transform(studyDetails);
     }
 
     @Override
     public DicomInstanceId findFirstInstanceIdInSeries(String patientId, String seriesId, String source) {
-        SeriesDetailsResponse studyDetails = findInstanceId(seriesId);
+        SeriesDetailsResponse seriesDetails = findSeriesDetails(seriesId);
 
-        DicomInstanceId dicomInstanceId = new DicomInstanceId();
-        dicomInstanceId.setInstanceId(studyDetails.getInstances().get(0));
+        return new DicomSeriesToInstanceIdTransformer().transform(seriesDetails);
+    }
 
-        return dicomInstanceId;
+    @Override
+    public DicomInstanceSummary findInstanceSummary(String patientId, String instanceId, String source) {
+        InstanceDetailsResponse instanceDetails = findInstanceDetails(instanceId);
+
+        return new DicomInstanceDetailsToSummaryTransformer().transform(instanceDetails);
     }
 }

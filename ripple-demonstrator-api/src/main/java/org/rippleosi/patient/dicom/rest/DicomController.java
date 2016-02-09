@@ -18,6 +18,7 @@ package org.rippleosi.patient.dicom.rest;
 import java.util.List;
 
 import org.rippleosi.patient.dicom.model.DicomInstanceId;
+import org.rippleosi.patient.dicom.model.DicomInstanceSummary;
 import org.rippleosi.patient.dicom.model.DicomSeriesSummary;
 import org.rippleosi.patient.dicom.model.DicomStudySummary;
 import org.rippleosi.patient.dicom.search.DicomSearch;
@@ -60,5 +61,14 @@ public class DicomController {
         DicomSearch dicomSearch = dicomSearchFactory.select(source);
 
         return dicomSearch.findFirstInstanceIdInSeries(patientId, seriesId, source);
+    }
+
+    @RequestMapping(value = "/instance/{instanceId}", method = RequestMethod.GET)
+    public DicomInstanceSummary findInstanceSummary(@PathVariable("patientId") String patientId,
+                                                    @PathVariable("instanceId") String instanceId,
+                                                    @RequestParam(required = false) String source) {
+        DicomSearch dicomSearch = dicomSearchFactory.select(source);
+
+        return dicomSearch.findInstanceSummary(patientId, instanceId, source);
     }
 }

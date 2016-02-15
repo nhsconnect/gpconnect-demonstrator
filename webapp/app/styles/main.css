@@ -2141,6 +2141,10 @@ div#age-chart div.morris-hover.morris-default-style {
   width: 150px;
 }
 
+.thumb {
+  padding-left: 0;
+}
+
 .thumbnail {
   margin-bottom: 0;
 }

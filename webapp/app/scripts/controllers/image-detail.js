@@ -34,14 +34,16 @@ angular.module('rippleDemonstrator')
       for (var i = 0; i < seriesIds.length; i++) {
         findFirstInstanceId(seriesIds[i], i);
       }
-
-      usSpinnerService.stop('imagesDetail-spinner');
     });
 
     var findFirstInstanceId = function (seriesId, index) {
       Image.getInstanceId($stateParams.patientId, seriesId, $stateParams.source).then(function (result) {
         $scope.instanceIds[index] = result.data.instanceId;
       });
+    };
+
+    $scope.stopSpinner = function (spinnerId) {
+      usSpinnerService.stop(spinnerId);
     };
 
     $scope.openImage = function (imageId) {

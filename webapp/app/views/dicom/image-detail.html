@@ -7,17 +7,11 @@
       <div class="col-lg-3 col-md-4 col-xs-6 thumb">
         <a class="thumbnail" href="#">
           <img class="dicomImageMini" ng-src="http://ripple-orthanc.answerappcloud.com/instances/{{instanceId}}/preview"
-               ng-click="openImage(instanceId)"/>
+               ng-click="openImage(instanceId)" rp-on-load="stopSpinner('imagesDetail-spinner-' + instanceId)"/>
         </a>
+        <span class="dicomImage-spinner" us-spinner="{radius: 20, width: 8, length: 16}"
+              spinner-key="{{'imagesDetail-spinner-' + instanceId}}" spinner-start-active="true"></span>
       </div>
     </div>
-
-    <div class="row">
-      <div class="col-md-12">
-        <span class="patientSummary-spinner" us-spinner="{radius:20, width:8, length: 16}"
-              spinner-key="imagesDetail-spinner" spinner-start-active="true"></span>
-      </div>
-    </div>
-
   </div>
 </div>

@@ -416,7 +416,6 @@ legend {
   width: 20px;
   height: 20px;
   padding-top: 5px;
-  padding-left: 20px;
   position: relative;
   display: inline-block;
 }
@@ -2137,7 +2136,11 @@ div#age-chart div.morris-hover.morris-default-style {
   width: auto;
 }
 
-.dicomImageMini:hover,
-.dicomImageMini:focus {
-  /*border: 1px solid transparent;*/
+.dicomImageMini {
+  height: 150px;
+  width: 150px;
+}
+
+.thumbnail {
+  margin-bottom: 0;
 }

@@ -2137,12 +2137,13 @@ div#age-chart div.morris-hover.morris-default-style {
 }
 
 .dicomImageMini {
-  height: 150px;
-  width: 150px;
+  height: 50ch;
+  width: 30ch;
 }
 
 .thumb {
   padding-left: 0;
+  padding-right: 0;
 }
 
 .thumbnail {

@@ -2149,3 +2149,7 @@ div#age-chart div.morris-hover.morris-default-style {
 .thumbnail {
   margin-bottom: 0;
 }
+
+.dicomImageMetadata {
+  margin-top: 5px;
+}

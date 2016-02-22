@@ -25,13 +25,16 @@ angular.module('rippleDemonstrator')
       $scope.patient = patient;
     });
 
-    Image.getSeries($stateParams.patientId, $stateParams.studyId, $stateParams.source).then(function (result) {
-      $scope.series = result.data;
+    $scope.series = [];
 
-      var seriesIds = $scope.series.seriesIds;
+    Image.getAllSeriesInStudy($stateParams.patientId, $stateParams.studyId, $stateParams.source).then(function (result) {
+      $scope.study = result.data;
+
+      var seriesIds = $scope.study.seriesIds;
       $scope.instanceIds = [];
 
       for (var i = 0; i < seriesIds.length; i++) {
+        findSeriesMetadata(seriesIds[i], i);
         findFirstInstanceId(seriesIds[i], i);
       }
     });
@@ -39,6 +42,14 @@ angular.module('rippleDemonstrator')
     var findFirstInstanceId = function (seriesId, index) {
       Image.getInstanceId($stateParams.patientId, seriesId, $stateParams.source).then(function (result) {
         $scope.instanceIds[index] = result.data.instanceId;
+      });
+    };
+
+    var findSeriesMetadata = function(seriesId, index) {
+      Image.getSeriesDetails($stateParams.patientId, seriesId).then(function (result) {
+        $scope.series[index] = result.data;
+        $scope.series[index].seriesDate = moment($scope.series[index].seriesDate).format('DD-MMM-YYYY');
+        $scope.series[index].seriesTime = moment($scope.series[index].seriesTime).format('h:mma');
       });
     };
 
@@ -60,6 +71,17 @@ angular.module('rippleDemonstrator')
           dicomImageId: function () {
             return imageId;
           },
+
+          seriesId: function () {
+            return Image.getInstance($stateParams.patientId, imageId).then(function (result) {
+              return result.data.parentSeries;
+            });
+          },
+
+          series: function () {
+            return $scope.series;
+          },
+
           patient: function () {
             return $scope.patient;
           }

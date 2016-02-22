@@ -20,21 +20,31 @@ angular.module('rippleDemonstrator')
   .factory('Image', function ($http) {
 
     var allStudies = function (patientId) {
-      return $http.get('/api/patients/' + patientId + '/dicom');
+      return $http.get('/api/patients/' + patientId + '/dicom/' + 'studies');
     };
 
-    var getSeries = function (patientId, studyId, source) {
-      return $http.get('/api/patients/' + patientId + '/dicom/' + studyId + '/series' + '?source=' + source);
+    var getAllSeriesInStudy = function (patientId, studyId, source) {
+      return $http.get('/api/patients/' + patientId + '/dicom/' + 'studies/' + studyId + '/series' + '?source=' + source);
+    };
+
+    var getSeriesDetails = function (patientId, seriesId, source) {
+      return $http.get('/api/patients/' + patientId + '/dicom/' + 'series/' + seriesId + '?source=' + source);
     };
 
     var getInstanceId = function (patientId, seriesId, source) {
-      return $http.get('/api/patients/' + patientId + '/dicom/' + seriesId + '/instance' + '?source=' + source);
+      return $http.get('/api/patients/' + patientId + '/dicom/' + 'series/' + seriesId + '/instance' + '?source=' + source);
+    };
+
+    var getInstance = function (patientId, instanceId, source) {
+      return $http.get('/api/patients/' + patientId + '/dicom/' + 'instances/' + instanceId + '?source=' + source)
     };
 
     return {
       allStudies: allStudies,
-      getSeries: getSeries,
-      getInstanceId: getInstanceId
+      getAllSeriesInStudy: getAllSeriesInStudy,
+      getSeriesDetails: getSeriesDetails,
+      getInstanceId: getInstanceId,
+      getInstance: getInstance
     };
 
   });

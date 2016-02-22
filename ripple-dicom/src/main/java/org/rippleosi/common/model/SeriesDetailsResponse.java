@@ -37,7 +37,7 @@ public class SeriesDetailsResponse {
     private String lastUpdate;
 
     @JsonProperty("MainDicomTags")
-    private MainDicomTags mainDicomTags;
+    private SeriesMainDicomTags seriesMainDicomTags;
 
     @JsonProperty("ParentStudy")
     private String parentStudy;
@@ -88,12 +88,12 @@ public class SeriesDetailsResponse {
         this.lastUpdate = lastUpdate;
     }
 
-    public MainDicomTags getMainDicomTags() {
-        return mainDicomTags;
+    public SeriesMainDicomTags getSeriesMainDicomTags() {
+        return seriesMainDicomTags;
     }
 
-    public void setMainDicomTags(MainDicomTags mainDicomTags) {
-        this.mainDicomTags = mainDicomTags;
+    public void setSeriesMainDicomTags(SeriesMainDicomTags seriesMainDicomTags) {
+        this.seriesMainDicomTags = seriesMainDicomTags;
     }
 
     public String getParentStudy() {

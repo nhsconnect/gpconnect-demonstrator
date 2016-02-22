@@ -25,6 +25,7 @@ import org.rippleosi.common.model.StudyDetailsResponse;
 import org.rippleosi.common.service.AbstractOrthancService;
 import org.rippleosi.patient.dicom.model.DicomInstanceId;
 import org.rippleosi.patient.dicom.model.DicomInstanceSummary;
+import org.rippleosi.patient.dicom.model.DicomSeriesDetails;
 import org.rippleosi.patient.dicom.model.DicomSeriesSummary;
 import org.rippleosi.patient.dicom.model.DicomStudySummary;
 import org.springframework.stereotype.Service;
@@ -54,10 +55,10 @@ public class OrthancSearch extends AbstractOrthancService implements DicomSearch
     }
 
     @Override
-    public DicomInstanceId findFirstInstanceIdInSeries(String patientId, String seriesId, String source) {
+    public DicomSeriesDetails findSeriesDetails(String patientId, String seriesId, String source) {
         SeriesDetailsResponse seriesDetails = findSeriesDetails(seriesId);
 
-        return new DicomSeriesToInstanceIdTransformer().transform(seriesDetails);
+        return new DicomSeriesToSeriesDetailsTransformer().transform(seriesDetails);
     }
 
     @Override
@@ -65,5 +66,12 @@ public class OrthancSearch extends AbstractOrthancService implements DicomSearch
         InstanceDetailsResponse instanceDetails = findInstanceDetails(instanceId);
 
         return new DicomInstanceDetailsToSummaryTransformer().transform(instanceDetails);
+    }
+
+    @Override
+    public DicomInstanceId findFirstInstanceIdInSeries(String patientId, String seriesId, String source) {
+        SeriesDetailsResponse seriesDetails = findSeriesDetails(seriesId);
+
+        return new DicomSeriesToInstanceIdTransformer().transform(seriesDetails);
     }
 }

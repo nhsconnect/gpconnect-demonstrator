@@ -31,7 +31,7 @@ public class StudyDetailsResponse {
     private String lastUpdate;
 
     @JsonProperty("MainDicomTags")
-    private MainDicomTags mainDicomTags;
+    private StudyMainDicomTags studyMainDicomTags;
 
     @JsonProperty("ParentPatient")
     private String parentPatient;
@@ -69,12 +69,12 @@ public class StudyDetailsResponse {
         this.lastUpdate = lastUpdate;
     }
 
-    public MainDicomTags getMainDicomTags() {
-        return mainDicomTags;
+    public StudyMainDicomTags getStudyMainDicomTags() {
+        return studyMainDicomTags;
     }
 
-    public void setMainDicomTags(MainDicomTags mainDicomTags) {
-        this.mainDicomTags = mainDicomTags;
+    public void setStudyMainDicomTags(StudyMainDicomTags studyMainDicomTags) {
+        this.studyMainDicomTags = studyMainDicomTags;
     }
 
     public String getParentPatient() {

@@ -28,13 +28,13 @@ public class DicomStudyToStudySummaryTransformer implements Transformer<StudyDet
     public DicomStudySummary transform(StudyDetailsResponse studyDetails) {
         DicomStudySummary summary = new DicomStudySummary();
 
-        String dateOfStudy = studyDetails.getMainDicomTags().getStudyDate();
+        String dateOfStudy = studyDetails.getStudyMainDicomTags().getStudyDate();
         Date dateRecorded = DateFormatter.toDate(dateOfStudy);
 
         summary.setStudyId(studyDetails.getId());
         summary.setSource("orthanc");
         summary.setDateRecorded(dateRecorded);
-        summary.setStudyDescription(studyDetails.getMainDicomTags().getStudyDescription());
+        summary.setStudyDescription(studyDetails.getStudyMainDicomTags().getStudyDescription());
 
         return summary;
     }

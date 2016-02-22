@@ -17,7 +17,7 @@ package org.rippleosi.common.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MainDicomTags {
+public class StudyMainDicomTags {
 
     @JsonProperty("InstitutionName")
     private String institutionName;

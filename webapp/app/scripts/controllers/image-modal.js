@@ -17,9 +17,9 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ImageModalCtrl', function ($scope, $modalInstance, PatientService, dicomImageId, patient, modal) {
+  .controller('ImageModalCtrl', function ($scope, $modalInstance, UserService, dicomImageId, patient, modal) {
 
-    $scope.currentUser = PatientService.getCurrentUser();
+    $scope.currentUser = UserService.getCurrentUser();
     $scope.patient = patient;
     $scope.modal = modal;
     $scope.dicomId = dicomImageId;

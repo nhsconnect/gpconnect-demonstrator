@@ -364,6 +364,18 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.app %>/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
+      },
+      tenant_ripple: {
+        cwd: '<%= yeoman.app %>/scripts/tenant/ripple/',
+        src: 'claims.js',
+        dest: '<%= yeoman.app %>/scripts/tenant/',
+        expand: true
+      },
+      tenant_stft: {
+        cwd: '<%= yeoman.app %>/scripts/tenant/stft/',
+        src: 'claims.js',
+        dest: '<%= yeoman.app %>/scripts/tenant/',
+        expand: true
       }
     },
 
@@ -385,6 +397,8 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-karma');
 
+  var tenant = grunt.option('tenant') || 'ripple';
+
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'connect:dist:keepalive']);
@@ -392,6 +406,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'copy:tenant_' + tenant,
       'wiredep',
       'concurrent:server',
       'autoprefixer',
@@ -408,6 +423,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'clean:server',
+    'copy:tenant_' + tenant,
     'concurrent:test',
     'autoprefixer',
     'connect:test',
@@ -416,6 +432,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'copy:tenant_' + tenant,
     'wiredep',
     'useminPrepare',
     'concurrent:dist',

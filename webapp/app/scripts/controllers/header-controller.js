@@ -1,26 +1,14 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('headerController', function ($scope, $rootScope, $state, usSpinnerService, $stateParams, PatientService) {
+  .controller('headerController', function ($scope, $rootScope, $state, usSpinnerService, $stateParams, UserService) {
 
-
-    var role = $stateParams.role;
-    var email = $stateParams.email;
     $rootScope.searchExpression = '';
     $scope.searchExpression = $rootScope.searchExpression;
     $scope.reportTypes = [];
 
-    // Set current user
-    PatientService.setCurrentUser(role, email);
-
     // Get current user
-    $scope.currentUser = PatientService.getCurrentUser();
-
-    // Temporary default user
-    if (!$scope.currentUser.role) {
-      $scope.currentUser.role = 'idcr';
-      $scope.currentUser.email = 'example@email.com';
-    }
+    $scope.currentUser = UserService.getCurrentUser();
 
     // Direct different roles to different pages at login
     switch ($scope.currentUser.role) {

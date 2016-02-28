@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ContactsModalCtrl', function ($scope, $modalInstance, contact, PatientService, patient, modal) {
+  .controller('ContactsModalCtrl', function ($scope, $modalInstance, contact, UserService, patient, modal) {
 
-    $scope.currentUser = PatientService.getCurrentUser();
+    $scope.currentUser = UserService.getCurrentUser();
     $scope.contact = contact;
     $scope.patient = patient;
     $scope.modal = modal;

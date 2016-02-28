@@ -105,32 +105,12 @@ angular.module('rippleDemonstrator')
       });
     };
 
-    var currentUser = {};
-    currentUser.role = '';
-    currentUser.email = '';
-    currentUser.isAuthenticated = false;
-
-    var setCurrentUser = function (role, email) {
-      currentUser.role = role;
-      currentUser.email = email;
-
-      if (role) {
-        currentUser.isAuthenticated = true;
-      }
-    };
-
-    var getCurrentUser = function () {
-      return currentUser;
-    };
-
     return {
       all: all,
       get: get,
       update: update,
       summaries: summaries,
-      create: create,
-      setCurrentUser: setCurrentUser,
-      getCurrentUser: getCurrentUser
+      create: create
     };
 
   });

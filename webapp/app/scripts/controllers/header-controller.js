@@ -251,10 +251,10 @@ angular.module('rippleDemonstrator')
       };
 
       if ($scope.currentUser.role === 'idcr') {
-        $scope.title = 'IDCR POC';
+        $scope.title = UserService.getContent('idcr_title');
       }
       if ($scope.currentUser.role === 'phr') {
-        $scope.title = 'PHR';
+        $scope.title = UserService.getContent('phr_title');
       }
 
       $scope.goHome = function () {

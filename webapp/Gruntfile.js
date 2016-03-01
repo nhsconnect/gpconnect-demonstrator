@@ -367,13 +367,13 @@ module.exports = function (grunt) {
       },
       tenant_ripple: {
         cwd: '<%= yeoman.app %>/scripts/tenant/ripple/',
-        src: 'claims.js',
+        src: '*.js',
         dest: '<%= yeoman.app %>/scripts/tenant/',
         expand: true
       },
       tenant_stft: {
         cwd: '<%= yeoman.app %>/scripts/tenant/stft/',
-        src: 'claims.js',
+        src: '*.js',
         dest: '<%= yeoman.app %>/scripts/tenant/',
         expand: true
       },

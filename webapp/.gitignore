@@ -3,6 +3,6 @@ dist
 .tmp
 .sass-cache
 bower_components
-**/tenant/claims.js
+**/tenant/*.js
 **/themes/theme.scss
 **/styles/main.*

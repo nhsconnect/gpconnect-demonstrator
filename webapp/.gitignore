@@ -4,3 +4,5 @@ dist
 .sass-cache
 bower_components
 **/tenant/claims.js
+**/themes/theme.scss
+**/styles/main.*

@@ -376,6 +376,18 @@ module.exports = function (grunt) {
         src: 'claims.js',
         dest: '<%= yeoman.app %>/scripts/tenant/',
         expand: true
+      },
+      theme_ripple: {
+        cwd: '<%= yeoman.app %>/styles/themes/ripple/',
+        src: '*.scss',
+        dest: '<%= yeoman.app %>/styles/themes/',
+        expand: true
+      },
+      theme_stft: {
+        cwd: '<%= yeoman.app %>/styles/themes/stft/',
+        src: '*.scss',
+        dest: '<%= yeoman.app %>/styles/themes/',
+        expand: true
       }
     },
 
@@ -392,10 +404,21 @@ module.exports = function (grunt) {
         'imagemin',
         'svgmin'
       ]
+    },
+
+    // Theming
+    sass: {
+      dist: {
+        files: {
+          '<%= yeoman.app %>/styles/main.css': '<%= yeoman.app %>/styles/themes/main.scss'
+        }
+      }
     }
+
   });
 
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-contrib-sass');
 
   var tenant = grunt.option('tenant') || 'ripple';
 
@@ -407,6 +430,8 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'copy:tenant_' + tenant,
+      'copy:theme_' + tenant,
+      'sass',
       'wiredep',
       'concurrent:server',
       'autoprefixer',
@@ -424,6 +449,8 @@ module.exports = function (grunt) {
   grunt.registerTask('test', [
     'clean:server',
     'copy:tenant_' + tenant,
+    'copy:theme_' + tenant,
+    'sass',
     'concurrent:test',
     'autoprefixer',
     'connect:test',
@@ -433,6 +460,8 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'copy:tenant_' + tenant,
+    'copy:theme_' + tenant,
+    'sass',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',

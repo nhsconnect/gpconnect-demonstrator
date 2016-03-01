@@ -1,3 +1,5 @@
+@import 'theme';
+
 *,
 *:before,
 *:after {
@@ -15,7 +17,7 @@ body,
 }
 
 body {
-  background: url('../images/site-bg2.png') center 100px no-repeat #ffffff;
+  background: url($background-image-url) center 100px no-repeat #ffffff;
   background-size: 100% auto;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -81,7 +83,7 @@ a {
 }
 
 a:hover {
-  color: #82BE36;
+  color: $link-color-hover;
   text-decoration: none;
 }
 
@@ -202,15 +204,20 @@ a[ui-sref] {
 .btn-info,
 .btn-info:hover,
 .btn-info:focus,
-.btn-info:active {
-  background-color: #007a41;
-  border-color: #007a41;
+.btn-info:active,
+.btn-info.active {
+  background-color: $button-info-background;
+  border-color: $button-info-background;
   color: #fff;
 }
 
-.btn-success {
-  background-color: #007a41;
-  border-color: #007a41;
+.btn-success,
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active,
+.btn-success.active {
+  background-color: $button-success-background;
+  border-color: $button-success-background;
   padding-left: 22px;
   padding-right: 22px;
 }
@@ -275,13 +282,13 @@ label {
 }
 
 .panel-default {
-  border-color: #007a41;
+  border-color: $panel-background;
   border-width: 2px;
 }
 
 .panel-default > .panel-heading {
   /*background-color: #1CA54F; - Previous Green*/
-  background-color: #007a41;
+  background-color: $panel-background;
   border-radius: 0;
   border-bottom: 0;
 }
@@ -568,12 +575,12 @@ legend {
 }
 
 .header-title-1 {
-  color: #0E682F;
+  color: $header-color;
   white-space: nowrap;
 }
 
 .header-title-2 {
-  color: #0E682F;
+  color: $header-color;
 }
 
 .header-title-3 {
@@ -718,29 +725,30 @@ i.clearAll {
 }
 
 .glyphicon-user:before {
-  color: #82BE36;
+  color: $icon-user-color;
 }
 
 .glyphicon-chevron-down:before {
-  color: #0E682F;
+  color: $icon-chevron-color;
 }
 
 .glyphicon-chevron-right:before {
   float: right;
   font-size: 8px;
-  color: #106333;
+  color: $icon-chevron-color;
   line-height: 2.4em;
 }
 
 .glyphicon-chevron-right {
   float: right;
+  color: $icon-chevron-color;
 }
 
 
 /* Toolbar */
 
 .header-toolbar {
-  background-color: #0E682F;
+  background-color: $toolbar-background;
   font-size: 22px;
   color: #000000;
   margin-left: -5.5%;
@@ -923,12 +931,12 @@ svg {
 }
 
 .main-nav a.button:hover {
-  background-color: #f4f8ec;
+  background-color: $button-main-nav-background-hover;
   text-decoration: none;
 }
 
 .main-nav a.button i {
-  color: #7cbe31;
+  color: $icon-main-nav-color;
   line-height: 70px;
   height: 70px;
   display: block;
@@ -1037,6 +1045,27 @@ svg {
   color: #7cbe31;
 }
 
+/* Patient Landing */
+.patient-landing-icon {
+    color: $icon-patient-landing-color;
+}
+
+.border {
+    border:1px solid #bebcbd;
+}
+
+.rounded-border-nolink {
+    border-radius: 20px;
+    border:1px solid #bebcbd;
+    background-color: #bebcbd;
+}
+
+.rounded-border-connected {
+    border-radius: 20px;
+    border:1px solid $rounded-connected-background;
+    background-color: $rounded-connected-background;
+}
+
 
 /* Patient Detail */
 
@@ -1052,7 +1081,7 @@ table.table {
 }
 
 .table thead {
-  background-color: #C5E29F;
+  background-color: $table-header-background;
 }
 
 .table thead tr th {
@@ -1106,7 +1135,7 @@ table.table {
 }
 
 .table-striped tbody tr:hover td {
-  background-color: #EDF2C3;
+  background-color: $table-row-background-hover;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
@@ -1834,9 +1863,16 @@ tr.ng-scope.selectedItemLeft {
   padding-top: 10px;
 }
 
-.btn-info.disabled {
-  background-color: #C3C3C3 !important;
-  border-color: #C3C3C3 !important;
+.btn-info.disabled,
+.btn-info[disabled] {
+  background-color: #C3C3C3;
+  border-color: #C3C3C3;
+}
+
+.btn-success.disabled,
+.btn-success[disabled] {
+  background-color: #C3C3C3;
+  border-color: #C3C3C3;
 }
 
 .ordersPageTwo li {
@@ -1864,7 +1900,6 @@ tr.ng-scope.selectedItemLeft {
   cursor: pointer;
 }
 
-[ng:cloak],
 [ng-cloak],
 [data-ng-cloak],
 [x-ng-cloak],
@@ -1915,12 +1950,12 @@ tr.ng-scope.selectedItemLeft {
 
 .patient-details-tabs span:hover {
   cursor: pointer;
-  background-color: #0E682F;
+  background-color: $tab-background;
   color: white;
 }
 
 span.selectedTab {
-  background-color: #0E682F;
+  background-color: $tab-background;
   color: white;
 }
 

@@ -33,9 +33,18 @@ public class AllergyHeadlineQueryStrategy extends AbstractListQueryStrategy<Alle
     }
 
     @Override
-    public String getQuery(String namespace, String patientId) {
-        //TODO awaiting SQL statement
-        return null;
+    public String getQuery(String namespace, String ehrId) {
+        return "SELECT ehr.entry.composition_id as uid, " +
+            "ehr.entry.entry #>> " +
+                "'{" +
+                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], /content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, /items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0002 and name/value=''Causative agent''],/value,value" +
+                "}' as cause, " +
+            "ehr.event_context.start_time " +
+            "FROM ehr.entry " +
+            "INNER JOIN ehr.composition ON ehr.composition.id=ehr.entry.composition_id " +
+            "INNER JOIN ehr.event_context ON ehr.event_context.composition_id=ehr.entry.composition_id " +
+            "WHERE (ehr.composition.ehr_id='" + ehrId + "') " +
+            "ORDER BY ehr.event_context.start_time DESC;";
     }
 
     @Override

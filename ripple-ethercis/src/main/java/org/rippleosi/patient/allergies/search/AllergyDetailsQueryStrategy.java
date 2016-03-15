@@ -36,9 +36,55 @@ public class AllergyDetailsQueryStrategy extends AbstractQueryStrategy<AllergyDe
     }
 
     @Override
-    public String getQuery(String namespace, String patientId) {
-        //TODO awaiting SQL statement
-        return null;
+    public String getQuery(String namespace, String ehrId) {
+        return "SELECT ehr.entry.composition_id as uid, " +
+            "ehr.entry.entry #>> " +
+                "'{" +
+                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], /content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, /items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0002 and name/value=''Causative agent''],/value,value" +
+                "}' as cause, " +
+            "ehr.entry.entry #>> " +
+                "'{" +
+                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], /content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, /items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0002 and name/value=''Causative agent''],/value,definingCode,codeString" +
+                "}' as cause_code, " +
+            "ehr.entry.entry #>>" +
+                "'{" +
+                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], /content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, /items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0002 and name/value=''Causative agent''],/value,definingCode,terminologyId,value" +
+                "}' as cause_terminology, " +
+            "ehr.entry.entry #>> " +
+                "'{" +
+                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], /content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, /items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0009 and name/value=''Reaction details''],/items[at0011],0,/value,/value,value" +
+                "}' as reaction, " +
+            "ehr.entry.entry #>> " +
+                "'{" +
+                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], /content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, /items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0009 and name/value=''Reaction details''],/items[at0011],0,/value,/value,definingCode,terminologyId,value" +
+                "}' as reaction_terminology, " +
+            "ehr.entry.entry #>> " +
+                "'{" +
+                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], /content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, /items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0009 and name/value=''Reaction details''],/items[at0011],0,/value,/value,definingCode,codeString" +
+                "}' as reaction_code, " +
+            "ehr.entry.entry #>> " +
+                "'{" +
+                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], /content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, /items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0009 and name/value=''Reaction details''],/items[at0021],0,/value,/value,value" +
+                "}' as certainty, " +
+            "ehr.entry.entry #>> " +
+                "'{" +
+                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], /content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, /items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0009 and name/value=''Reaction details''],/items[at0021],0,/value,/value,definingCode,codeString" +
+                "}' as certainty_code, " +
+            "ehr.entry.entry #>> " +
+                "'{" +
+                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], /content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, /items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0009 and name/value=''Reaction details''],/items[at0021],0,/value,/value,definingCode,terminologyId,value" +
+                "}' as certainty_terminology, " +
+            "ehr.entry.entry #>> " +
+                "'{" +
+                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], /content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, /items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0009 and name/value=''Reaction details''],/items[at0032],0,/value,/value,value" +
+                "}' as comment, " +
+            "ehr.event_context.start_time as date_created " +
+            "FROM ehr.entry " +
+            "INNER JOIN ehr.composition ON ehr.composition.id=ehr.entry.composition_id " +
+            "INNER JOIN ehr.event_context ON ehr.event_context.composition_id=ehr.entry.composition_id " +
+            "WHERE (ehr.composition.ehr_id='" + ehrId + "') " +
+            "AND (ehr.entry.archetype_Id = 'openEHR-EHR-COMPOSITION.adverse_reaction_list.v1') " +
+            "AND ehr.entry.composition_id = " + allergyId + ";";
     }
 
     @Override

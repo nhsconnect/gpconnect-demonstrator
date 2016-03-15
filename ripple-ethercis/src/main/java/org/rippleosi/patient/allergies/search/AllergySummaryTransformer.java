@@ -30,7 +30,7 @@ public class AllergySummaryTransformer implements Transformer<Map<String, Object
     public AllergySummary transform(Map<String, Object> input) {
 
         AllergySummary allergy = new AllergySummary();
-        allergy.setSource("ethercis");
+        allergy.setSource("EtherCIS");
         allergy.setSourceId(MapUtils.getString(input, "uid"));
         allergy.setCause(MapUtils.getString(input, "cause"));
         allergy.setReaction(MapUtils.getString(input, "reaction"));

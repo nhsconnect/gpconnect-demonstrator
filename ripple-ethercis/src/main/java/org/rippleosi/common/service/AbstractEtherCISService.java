@@ -38,7 +38,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@SuppressWarnings("Duplicates")
 public class AbstractEtherCISService implements Repository {
 
     @Value("${repository.config.etherCIS:900}")
@@ -73,7 +72,9 @@ public class AbstractEtherCISService implements Repository {
 
     protected <T> T findData(EtherCISQueryStrategy<T> queryStrategy) {
 
-        String query = queryStrategy.getQuery(etherCISSubjectNamespace, queryStrategy.getPatientId());
+        String patientId = queryStrategy.getPatientId();
+
+        String query = queryStrategy.getQuery(etherCISSubjectNamespace, findEhrIdByNHSNumber(patientId));
 
         ResponseEntity<EtherCISQueryResponse> response = requestProxy.getWithSession(getQueryURI(query),
                                                                                      EtherCISQueryResponse.class,

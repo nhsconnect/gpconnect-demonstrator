@@ -26,7 +26,7 @@ public interface EtherCISQueryStrategy<T> {
 
     String getPatientId();
 
-    String getQuery(String namespace, String patientId);
+    String getQuery(String namespace, String ehrId);
 
     T transform(List<Map<String, Object>> resultSet);
 }

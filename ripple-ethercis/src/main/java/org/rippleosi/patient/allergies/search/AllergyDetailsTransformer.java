@@ -31,13 +31,13 @@ public class AllergyDetailsTransformer implements Transformer<Map<String, Object
     public AllergyDetails transform(Map<String, Object> input) {
 
         AllergyDetails allergy = new AllergyDetails();
-        allergy.setSource("ethercis");
+        allergy.setSource("EtherCIS");
         allergy.setSourceId(MapUtils.getString(input, "uid"));
         allergy.setCause(MapUtils.getString(input, "cause"));
-        allergy.setReaction(MapUtils.getString(input, "reaction"));
         allergy.setCauseCode(MapUtils.getString(input, "cause_code"));
-        allergy.setCauseTerminology(MapUtils.getString(input, "cause_terminology"));
-        allergy.setTerminologyCode(MapUtils.getString(input, "cause_code"));
+        allergy.setReaction(MapUtils.getString(input, "reaction"));
+        allergy.setCauseTerminology(MapUtils.getString(input, "reaction_terminology"));
+        allergy.setTerminologyCode(MapUtils.getString(input, "reaction_code"));
         allergy.setAuthor(MapUtils.getString(input, "author"));
 
         String dateCreated = MapUtils.getString(input, "date_created");

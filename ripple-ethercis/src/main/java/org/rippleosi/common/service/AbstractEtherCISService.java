@@ -133,7 +133,7 @@ public class AbstractEtherCISService implements Repository {
                                                                                    EtherCISSessionResponse.class);
 
         if (response.getStatusCode() != HttpStatus.OK) {
-            throw new DataNotFoundException("Could not create session: " + response.getStatusCode());
+            throw new DataNotFoundException("Could not create session. Query returned status code: " + response.getStatusCode());
         }
 
         return response.getBody().getSessionId();
@@ -148,6 +148,7 @@ public class AbstractEtherCISService implements Repository {
             .fromHttpUrl(etherCISAddress + "/query")
             .queryParam("sql", query)
             .build();
+
         return components.toUriString();
     }
 
@@ -164,7 +165,8 @@ public class AbstractEtherCISService implements Repository {
 
     private String getUpdateURI(String compositionId, String template, String ehrId) {
         UriComponents components = UriComponentsBuilder
-            .fromHttpUrl(etherCISAddress + "/composition/" + compositionId)
+            .fromHttpUrl(etherCISAddress + "/composition")
+            .queryParam("uid", compositionId)
             .queryParam("templateId", template)
             .queryParam("ehrId", ehrId)
             .queryParam("format", "FLAT")

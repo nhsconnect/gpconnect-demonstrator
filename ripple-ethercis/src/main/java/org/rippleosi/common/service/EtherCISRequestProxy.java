@@ -23,10 +23,11 @@ import org.springframework.http.ResponseEntity;
  */
 public interface EtherCISRequestProxy {
 
-    <T> ResponseEntity<T> getWithoutSession(String uri, Class<T> cls);
+    <T> ResponseEntity<T> getWithSession(String uri, Class<T> cls, String sessionId);
 
-    <T> ResponseEntity<T> postWithoutSession(String uri, Class<T> cls, Object body);
+    <T> ResponseEntity<T> postWithSession(String uri, Class<T> cls, String sessionId, Object body);
 
-    <T> ResponseEntity<T> putWithoutSession(String uri, Class<T> cls, Object body);
+    <T> ResponseEntity<T> putWithSession(String uri, Class<T> cls, String sessionId, Object body);
 
+    <T> ResponseEntity<T> getSession(String uri, Class<T> cls);
 }

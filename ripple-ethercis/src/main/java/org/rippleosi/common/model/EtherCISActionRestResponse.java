@@ -19,7 +19,7 @@ package org.rippleosi.common.model;
 
 /**
  */
-public class ActionRestResponse {
+public class EtherCISActionRestResponse {
 
     private Meta meta;
     private String action;

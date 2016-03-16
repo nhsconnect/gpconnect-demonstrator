@@ -17,7 +17,6 @@ package org.rippleosi.common.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.codec.binary.Base64;
 import org.rippleosi.common.exception.InvalidDataException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -33,18 +32,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-@SuppressWarnings("Duplicates")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class EtherCISDefaultRequestProxy implements EtherCISRequestProxy {
+public class DefaultEtherCISRequestProxy implements EtherCISRequestProxy {
 
-    @Value("${c4hOpenEHR.address}")
-    private String openEhrAddress;
+    @Value("${etherCIS.address}")
+    private String etherCISAddress;
 
-    @Value("${c4hOpenEHR.user}")
-    private String openEhrUsername;
+    @Value("${etherCIS.user}")
+    private String etherCISUsername;
 
-    @Value("${c4hOpenEHR.password}")
-    private String openEhrPassword;
+    @Value("${etherCIS.password}")
+    private String etherCISPassword;
 
     @Override
     public <T> ResponseEntity<T> getWithSession(String uri, Class<T> cls, String ehrSessionId) {

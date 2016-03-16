@@ -26,7 +26,7 @@ public class EtherCISQueryResponse {
 
     private Meta meta;
     private String sql;
-    private String executedSql;
+    private String executedSQL;
     private Map<String, Object> sqlParameters;
     private List<Map<String, Object>> resultSet;
 
@@ -46,12 +46,12 @@ public class EtherCISQueryResponse {
         this.sql = sql;
     }
 
-    public String getExecutedSql() {
-        return executedSql;
+    public String getExecutedSQL() {
+        return executedSQL;
     }
 
-    public void setExecutedSql(String executedSql) {
-        this.executedSql = executedSql;
+    public void setExecutedSQL(String executedSQL) {
+        this.executedSQL = executedSQL;
     }
 
     public Map<String, Object> getSqlParameters() {

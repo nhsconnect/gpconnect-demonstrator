@@ -38,7 +38,7 @@ public class OpenEHRAllergyStore extends AbstractOpenEhrService implements Aller
     private static final String ALLERGY_PREFIX = "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0";
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Allergies.Create")
+//    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Allergies.Create")
     public void create(String patientId, AllergyDetails allergy) {
 
         Map<String,Object> content = createFlatJsonContent(allergy);
@@ -49,7 +49,7 @@ public class OpenEHRAllergyStore extends AbstractOpenEhrService implements Aller
     }
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Allergies.Update")
+//    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Allergies.Update")
     public void update(String patientId, AllergyDetails allergy) {
 
         Map<String,Object> content = createFlatJsonContent(allergy);

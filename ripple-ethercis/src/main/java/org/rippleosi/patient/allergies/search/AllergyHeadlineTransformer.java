@@ -30,7 +30,7 @@ public class AllergyHeadlineTransformer implements Transformer<Map<String, Objec
     public AllergyHeadline transform(Map<String, Object> input) {
 
         AllergyHeadline allergy = new AllergyHeadline();
-        allergy.setSource("ethercis");
+        allergy.setSource("EtherCIS");
         allergy.setSourceId(MapUtils.getString(input, "uid"));
         allergy.setCause(MapUtils.getString(input, "cause"));
 

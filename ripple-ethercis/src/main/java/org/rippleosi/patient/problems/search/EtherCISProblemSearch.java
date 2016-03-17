@@ -20,37 +20,46 @@ package org.rippleosi.patient.problems.search;
 import java.util.List;
 
 import org.hl7.fhir.instance.model.Condition;
+import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.common.service.AbstractEtherCISService;
 import org.rippleosi.patient.problems.model.ProblemDetails;
 import org.rippleosi.patient.problems.model.ProblemHeadline;
 import org.rippleosi.patient.problems.model.ProblemSummary;
+import org.springframework.stereotype.Service;
 
 /**
  */
+@Service
 public class EtherCISProblemSearch extends AbstractEtherCISService implements ProblemSearch {
 
     @Override
     public List<ProblemHeadline> findProblemHeadlines(String patientId) {
-        return null;
+        ProblemHeadlineQueryStrategy query = new ProblemHeadlineQueryStrategy(patientId);
+
+        return findData(query);
     }
 
     @Override
     public List<ProblemSummary> findAllProblems(String patientId) {
-        return null;
+        ProblemSummaryQueryStrategy query = new ProblemSummaryQueryStrategy(patientId);
+
+        return findData(query);
     }
 
     @Override
     public ProblemDetails findProblem(String patientId, String problemId) {
-        return null;
+        ProblemDetailsQueryStrategy query = new ProblemDetailsQueryStrategy(patientId, problemId);
+
+        return  findData(query);
     }
 
     @Override
     public List<Condition> findAllFhirConditions(String patientId) {
-        return null;
+        throw ConfigurationException.unimplementedTransaction(ProblemSearch.class);
     }
 
     @Override
     public Condition findFhirCondition(String patientId, String conditionId) {
-        return null;
+        throw ConfigurationException.unimplementedTransaction(ProblemSearch.class);
     }
 }

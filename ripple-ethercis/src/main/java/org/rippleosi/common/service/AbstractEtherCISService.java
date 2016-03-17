@@ -16,6 +16,8 @@
  */
 package org.rippleosi.common.service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,7 +37,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class AbstractEtherCISService implements Repository {
@@ -60,6 +61,8 @@ public class AbstractEtherCISService implements Repository {
 
     private final Map<String, String> idCache = Collections.synchronizedMap(LazyMap.lazyMap(new LRUMap<>(), new EtherCISEhrIdLookup()));
 
+    private String secretSessionId;
+
     @Override
     public String getSource() {
         return "etherCIS";
@@ -76,9 +79,11 @@ public class AbstractEtherCISService implements Repository {
 
         String query = queryStrategy.getQuery(etherCISSubjectNamespace, findEhrIdByNHSNumber(patientId));
 
-        ResponseEntity<EtherCISQueryResponse> response = requestProxy.getWithSession(getQueryURI(query),
+        String queryURI = getQueryURI(query);
+
+        ResponseEntity<EtherCISQueryResponse> response = requestProxy.getWithSession(queryURI,
                                                                                      EtherCISQueryResponse.class,
-                                                                                     createSession());
+                                                                                     sessionId());
 
         List<Map<String, Object>> results = new ArrayList<>();
 
@@ -100,10 +105,10 @@ public class AbstractEtherCISService implements Repository {
 
         ResponseEntity<EtherCISActionRestResponse> response = requestProxy.postWithSession(uri,
                                                                                            EtherCISActionRestResponse.class,
-                                                                                           createSession(),
+                                                                                           sessionId(),
                                                                                            content);
 
-        if (response.getStatusCode() != HttpStatus.CREATED) {
+        if (response.getStatusCode() != HttpStatus.OK) {
             throw new UpdateFailedException("Could not create " + template + " for patient " + patientId);
         }
     }
@@ -120,7 +125,7 @@ public class AbstractEtherCISService implements Repository {
 
         ResponseEntity<EtherCISActionRestResponse> response = requestProxy.putWithSession(uri,
                                                                                           EtherCISActionRestResponse.class,
-                                                                                          createSession(),
+                                                                                          sessionId(),
                                                                                           content);
 
         if (response.getStatusCode() != HttpStatus.OK) {
@@ -128,8 +133,15 @@ public class AbstractEtherCISService implements Repository {
         }
     }
 
-    protected String createSession() {
+    protected String sessionId() {
+        if (secretSessionId == null) {
+            requestSessionId();
+        }
 
+        return secretSessionId;
+    }
+
+    private void requestSessionId() {
         ResponseEntity<EtherCISSessionResponse> response = requestProxy.getSession(getEhrSessionIdUri(),
                                                                                    EtherCISSessionResponse.class);
 
@@ -137,7 +149,7 @@ public class AbstractEtherCISService implements Repository {
             throw new DataNotFoundException("Could not create session. Query returned status code: " + response.getStatusCode());
         }
 
-        return response.getBody().getSessionId();
+        secretSessionId = response.getBody().getSessionId();
     }
 
     public String findEhrIdByNHSNumber(String nhsNumber) {
@@ -145,45 +157,53 @@ public class AbstractEtherCISService implements Repository {
     }
 
     private String getQueryURI(String query) {
-        UriComponents components = UriComponentsBuilder
+        query = encodeQueryParameter(query);
+
+        return UriComponentsBuilder
             .fromHttpUrl(etherCISAddress + "/query")
             .queryParam("sql", query)
-            .build();
+            .build()
+            .toUriString();
+    }
 
-        return components.toUriString();
+    private String encodeQueryParameter(String query) {
+        try {
+            return URLEncoder.encode(query, "UTF-8")
+                             .replace("+", "%20");
+        }
+        catch (UnsupportedEncodingException e) {
+            return null;
+        }
     }
 
     private String getCreateURI(String template, String ehrId) {
-        UriComponents components = UriComponentsBuilder
+        return UriComponentsBuilder
             .fromHttpUrl(etherCISAddress + "/composition")
             .queryParam("templateId", template)
             .queryParam("ehrId", ehrId)
             .queryParam("format", "FLAT")
-            .build();
-
-        return components.toUriString();
+            .build()
+            .toUriString();
     }
 
     private String getUpdateURI(String compositionId, String template, String ehrId) {
-        UriComponents components = UriComponentsBuilder
+        return UriComponentsBuilder
             .fromHttpUrl(etherCISAddress + "/composition")
             .queryParam("uid", compositionId)
             .queryParam("templateId", template)
             .queryParam("ehrId", ehrId)
             .queryParam("format", "FLAT")
-            .build();
-
-        return components.toUriString();
+            .build()
+            .toUriString();
     }
 
     private String getEhrSessionIdUri() {
-        UriComponents components = UriComponentsBuilder
+        return UriComponentsBuilder
             .fromHttpUrl(etherCISAddress + "/session")
             .queryParam("username", etherCISUser)
             .queryParam("password", etherCISPassword)
-            .build();
-
-        return components.toUriString();
+            .build()
+            .toUriString();
     }
 
     private class EtherCISEhrIdLookup implements Transformer<String, String> {
@@ -192,7 +212,7 @@ public class AbstractEtherCISService implements Repository {
         public String transform(String nhsNumber) {
             ResponseEntity<EtherCISEHRResponse> response = requestProxy.getWithSession(getEhrIdUri(nhsNumber),
                                                                                        EtherCISEHRResponse.class,
-                                                                                       createSession());
+                                                                                       sessionId());
 
             if (response.getStatusCode() != HttpStatus.OK) {
                 throw new DataNotFoundException("EtherCIS query returned with status code " + response.getStatusCode());
@@ -202,13 +222,12 @@ public class AbstractEtherCISService implements Repository {
         }
 
         private String getEhrIdUri(String nhsNumber) {
-            UriComponents components = UriComponentsBuilder
+            return UriComponentsBuilder
                 .fromHttpUrl(etherCISAddress + "/ehr")
                 .queryParam("subjectId", nhsNumber)
                 .queryParam("subjectNamespace", etherCISSubjectNamespace)
-                .build();
-
-            return components.toUriString();
+                .build()
+                .toUriString();
         }
     }
 }

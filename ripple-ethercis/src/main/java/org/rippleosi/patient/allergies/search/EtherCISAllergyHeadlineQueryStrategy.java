@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.rippleosi.common.service.AbstractListQueryStrategy;
+import org.rippleosi.common.service.AbstractEtherCISListQueryStrategy;
 import org.rippleosi.patient.allergies.model.AllergyHeadline;
 
 /**
  */
-public class AllergyHeadlineQueryStrategy extends AbstractListQueryStrategy<AllergyHeadline> {
+public class EtherCISAllergyHeadlineQueryStrategy extends AbstractEtherCISListQueryStrategy<AllergyHeadline> {
 
-    AllergyHeadlineQueryStrategy(String patientId) {
+    EtherCISAllergyHeadlineQueryStrategy(String patientId) {
         super(patientId);
     }
 
@@ -37,18 +37,21 @@ public class AllergyHeadlineQueryStrategy extends AbstractListQueryStrategy<Alle
         return "SELECT ehr.entry.composition_id as uid, " +
             "ehr.entry.entry #>> " +
                 "'{" +
-                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], /content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, /items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0002 and name/value=''Causative agent''],/value,value" +
+                    "/composition[openEHR-EHR-COMPOSITION.adverse_reaction_list.v1 and name/value=''Adverse reaction list''], " +
+                    "/content[openEHR-EHR-SECTION.allergies_adverse_reactions_rcp.v1],0, " +
+                    "/items[openEHR-EHR-EVALUATION.adverse_reaction_risk.v1],0,/data[at0001],/items[at0002 and name/value=''Causative agent''],/value,value" +
                 "}' as cause, " +
             "ehr.event_context.start_time " +
             "FROM ehr.entry " +
-            "INNER JOIN ehr.composition ON ehr.composition.id=ehr.entry.composition_id " +
-            "INNER JOIN ehr.event_context ON ehr.event_context.composition_id=ehr.entry.composition_id " +
-            "WHERE (ehr.composition.ehr_id='" + ehrId + "') " +
+            "INNER JOIN ehr.composition ON ehr.composition.id = ehr.entry.composition_id " +
+            "INNER JOIN ehr.event_context ON ehr.event_context.composition_id = ehr.entry.composition_id " +
+            "WHERE (ehr.composition.ehr_id = '" + ehrId + "') " +
+            "AND (ehr.entry.archetype_Id = 'openEHR-EHR-COMPOSITION.adverse_reaction_list.v1') " +
             "ORDER BY ehr.event_context.start_time DESC;";
     }
 
     @Override
     public List<AllergyHeadline> transform(List<Map<String, Object>> resultSet) {
-        return CollectionUtils.collect(resultSet, new AllergyHeadlineTransformer(), new ArrayList<>());
+        return CollectionUtils.collect(resultSet, new EtherCISAllergyHeadlineTransformer(), new ArrayList<>());
     }
 }

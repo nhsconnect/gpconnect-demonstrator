@@ -20,28 +20,20 @@ import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.Transformer;
-import org.rippleosi.common.util.DateFormatter;
-import org.rippleosi.patient.allergies.model.AllergyDetails;
+import org.rippleosi.patient.allergies.model.AllergySummary;
 
 /**
  */
-public class AllergyDetailsTransformer implements Transformer<Map<String, Object>, AllergyDetails> {
+public class EtherCISAllergySummaryTransformer implements Transformer<Map<String, Object>, AllergySummary> {
 
     @Override
-    public AllergyDetails transform(Map<String, Object> input) {
+    public AllergySummary transform(Map<String, Object> input) {
 
-        AllergyDetails allergy = new AllergyDetails();
+        AllergySummary allergy = new AllergySummary();
         allergy.setSource("EtherCIS");
         allergy.setSourceId(MapUtils.getString(input, "uid"));
         allergy.setCause(MapUtils.getString(input, "cause"));
-        allergy.setCauseCode(MapUtils.getString(input, "cause_code"));
         allergy.setReaction(MapUtils.getString(input, "reaction"));
-        allergy.setCauseTerminology(MapUtils.getString(input, "reaction_terminology"));
-        allergy.setTerminologyCode(MapUtils.getString(input, "reaction_code"));
-        allergy.setAuthor(MapUtils.getString(input, "author"));
-
-        String dateCreated = MapUtils.getString(input, "date_created");
-        allergy.setDateCreated(DateFormatter.toDate(dateCreated));
 
         return allergy;
     }

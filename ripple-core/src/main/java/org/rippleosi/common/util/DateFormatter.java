@@ -42,6 +42,7 @@ public final class DateFormatter {
             return DateUtils.parseDate(input, "yyyy-MM-dd",
                                        "dd-MM-yyyy",
                                        "yyyy-MM-dd'T'HH:mm:ss",
+                                       "yyyy-MM-dd'T'HH:mm:ss'Z'",
                                        "yyyy-MM-dd'T'HH:mm:ss.SSS",
                                        "yyyy-MM-dd'T'HH:mm:ss.SSSX",
                                        "yyyy-MM-dd'T'HH:mm:ss.SSSXX",
@@ -102,25 +103,5 @@ public final class DateFormatter {
         }
 
         return StringUtils.substringBefore(dateAsString, "T") + "T" + StringUtils.substringAfter(timeAsString, "T");
-    }
-
-    public static String stripOddDate(String input) {
-        if (input == null) {
-            return null;
-        }
-
-        String date = input;
-
-        if (date.contains("/")) {
-            date = StringUtils.substringAfter(date, "/");
-        }
-        if (date.contains("/")) {
-            date = StringUtils.substringBefore(date, "/");
-        }
-        if (date.contains("+")) {
-            date = StringUtils.substringBefore(date, "+");
-        }
-
-        return date;
     }
 }

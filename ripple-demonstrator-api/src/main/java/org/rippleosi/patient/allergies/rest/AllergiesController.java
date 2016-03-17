@@ -47,17 +47,25 @@ public class AllergiesController {
     @RequestMapping(method = RequestMethod.GET)
     public List<AllergySummary> findAllAllergies(@PathVariable("patientId") String patientId,
                                                  @RequestParam(required = false) String source) {
-        AllergySearch allergySearch = allergySearchFactory.select(source);
+        AllergySearch ethercisSearch = allergySearchFactory.select(source);
+        List<AllergySummary> allergies = ethercisSearch.findAllAllergies(patientId);
 
-        return allergySearch.findAllAllergies(patientId);
+        AllergySearch openehrSearch = allergySearchFactory.select("openehr");
+        allergies.addAll(openehrSearch.findAllAllergies(patientId));
+
+        return allergies;
     }
 
     @RequestMapping(value = "/headlines", method = RequestMethod.GET)
     public List<AllergyHeadline> findAllergyHeadlines(@PathVariable("patientId") String patientId,
                                                       @RequestParam(required = false) String source) {
-        AllergySearch allergySearch = allergySearchFactory.select(source);
+        AllergySearch ethercisSearch = allergySearchFactory.select(source);
+        List<AllergyHeadline> allergies = ethercisSearch.findAllergyHeadlines(patientId);
 
-        return allergySearch.findAllergyHeadlines(patientId);
+        AllergySearch openehrSearch = allergySearchFactory.select("openehr");
+        allergies.addAll(openehrSearch.findAllergyHeadlines(patientId));
+
+        return allergies;
     }
 
     @RequestMapping(value = "/{allergyId}", method = RequestMethod.GET)

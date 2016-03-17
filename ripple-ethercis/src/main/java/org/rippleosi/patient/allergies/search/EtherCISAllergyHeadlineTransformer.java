@@ -24,7 +24,7 @@ import org.rippleosi.patient.allergies.model.AllergyHeadline;
 
 /**
  */
-public class AllergyHeadlineTransformer implements Transformer<Map<String, Object>, AllergyHeadline> {
+public class EtherCISAllergyHeadlineTransformer implements Transformer<Map<String, Object>, AllergyHeadline> {
 
     @Override
     public AllergyHeadline transform(Map<String, Object> input) {

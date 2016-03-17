@@ -44,6 +44,8 @@ public class DefaultEtherCISRequestProxy implements EtherCISRequestProxy {
     @Value("${etherCIS.password}")
     private String etherCISPassword;
 
+    private RestTemplate restTemplate;
+
     @Override
     public <T> ResponseEntity<T> getWithSession(String uri, Class<T> cls, String ehrSessionId) {
 
@@ -99,7 +101,12 @@ public class DefaultEtherCISRequestProxy implements EtherCISRequestProxy {
     }
 
     private RestTemplate restTemplate() {
-        return new RestTemplate(new SimpleClientHttpRequestFactory());
+        if (restTemplate == null) {
+            restTemplate = new RestTemplate(new SimpleClientHttpRequestFactory());
+            restTemplate.setUriTemplateHandler(new DefaultEtherCISUriTemplateHandler());
+        }
+
+        return restTemplate;
     }
 
     private String convertToJson(Object body) {

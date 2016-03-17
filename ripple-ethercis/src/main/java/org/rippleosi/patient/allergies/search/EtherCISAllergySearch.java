@@ -32,21 +32,21 @@ public class EtherCISAllergySearch extends AbstractEtherCISService implements Al
 
     @Override
     public List<AllergyHeadline> findAllergyHeadlines(String patientId) {
-        AllergyHeadlineQueryStrategy query = new AllergyHeadlineQueryStrategy(patientId);
+        EtherCISAllergyHeadlineQueryStrategy query = new EtherCISAllergyHeadlineQueryStrategy(patientId);
 
         return findData(query);
     }
 
     @Override
     public List<AllergySummary> findAllAllergies(String patientId) {
-        AllergySummaryQueryStrategy query = new AllergySummaryQueryStrategy(patientId);
+        EtherCISAllergySummaryQueryStrategy query = new EtherCISAllergySummaryQueryStrategy(patientId);
 
         return findData(query);
     }
 
     @Override
     public AllergyDetails findAllergy(String patientId, String allergyId) {
-        AllergyDetailsQueryStrategy query = new AllergyDetailsQueryStrategy(patientId, allergyId);
+        EtherCISAllergyDetailsQueryStrategy query = new EtherCISAllergyDetailsQueryStrategy(patientId, allergyId);
 
         return findData(query);
     }

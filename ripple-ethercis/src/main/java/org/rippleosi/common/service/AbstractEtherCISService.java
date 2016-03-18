@@ -37,7 +37,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class AbstractEtherCISService implements Repository {
@@ -136,15 +135,15 @@ public class AbstractEtherCISService implements Repository {
 
     protected String sessionId() {
         if (secretSessionId == null) {
-            requestSessionId();
+            createSession();
         }
 
         return secretSessionId;
     }
 
-    private void requestSessionId() {
-        ResponseEntity<EtherCISSessionResponse> response = requestProxy.getSession(getEhrSessionIdUri(),
-                                                                                   EtherCISSessionResponse.class);
+    private void createSession() {
+        ResponseEntity<EtherCISSessionResponse> response = requestProxy.createSession(getEhrSessionIdUri(),
+                                                                                      EtherCISSessionResponse.class);
 
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new DataNotFoundException("Could not create session. Query returned status code: " + response.getStatusCode());

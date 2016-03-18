@@ -75,9 +75,12 @@ public class DefaultEtherCISRequestProxy implements EtherCISRequestProxy {
     }
 
     @Override
-    public <T> ResponseEntity<T> getSession(String uri, Class<T> cls) {
+    public <T> ResponseEntity<T> createSession(String uri, Class<T> cls) {
 
-        HttpEntity<Object> request = new HttpEntity<>(null, basicHeaders());
+        HttpHeaders headers = basicHeaders();
+        headers.add("x-session-timeout", "0");
+
+        HttpEntity<Object> request = new HttpEntity<>(null, headers);
 
         return restTemplate().exchange(uri, HttpMethod.POST, request, cls);
     }
@@ -86,6 +89,7 @@ public class DefaultEtherCISRequestProxy implements EtherCISRequestProxy {
 
         HttpHeaders headers = basicHeaders();
         headers.add("Ehr-Session", ehrSessionId);
+        headers.add("x-reconnect", "true");
 
         return new HttpEntity<>(body, headers);
     }
@@ -93,7 +97,6 @@ public class DefaultEtherCISRequestProxy implements EtherCISRequestProxy {
     private HttpHeaders basicHeaders() {
 
         HttpHeaders headers = new HttpHeaders();
-
         headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
@@ -113,7 +116,8 @@ public class DefaultEtherCISRequestProxy implements EtherCISRequestProxy {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.writeValueAsString(body);
-        } catch (JsonProcessingException ex) {
+        }
+        catch (JsonProcessingException ex) {
             throw new InvalidDataException(ex.getMessage(), ex);
         }
     }

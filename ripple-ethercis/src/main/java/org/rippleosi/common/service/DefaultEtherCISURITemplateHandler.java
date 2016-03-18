@@ -21,7 +21,7 @@ import java.util.Map;
 
 import org.springframework.web.util.DefaultUriTemplateHandler;
 
-public class DefaultEtherCISUriTemplateHandler extends DefaultUriTemplateHandler {
+public class DefaultEtherCISURITemplateHandler extends DefaultUriTemplateHandler {
 
     @Override
     public URI expand(String uriTemplate, Map<String, ?> uriVariables) {

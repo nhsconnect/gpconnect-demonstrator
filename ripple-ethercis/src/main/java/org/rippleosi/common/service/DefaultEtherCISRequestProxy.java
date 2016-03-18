@@ -103,7 +103,7 @@ public class DefaultEtherCISRequestProxy implements EtherCISRequestProxy {
     private RestTemplate restTemplate() {
         if (restTemplate == null) {
             restTemplate = new RestTemplate(new SimpleClientHttpRequestFactory());
-            restTemplate.setUriTemplateHandler(new DefaultEtherCISUriTemplateHandler());
+            restTemplate.setUriTemplateHandler(new DefaultEtherCISURITemplateHandler());
         }
 
         return restTemplate;

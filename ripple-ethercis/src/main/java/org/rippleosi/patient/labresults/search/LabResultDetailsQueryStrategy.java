@@ -20,12 +20,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.rippleosi.common.exception.DataNotFoundException;
-import org.rippleosi.common.service.AbstractQueryStrategy;
+import org.rippleosi.common.service.AbstractEtherCISQueryStrategy;
 import org.rippleosi.patient.labresults.model.LabResultDetails;
 
 /**
  */
-public class LabResultDetailsQueryStrategy extends AbstractQueryStrategy<LabResultDetails> {
+public class LabResultDetailsQueryStrategy extends AbstractEtherCISQueryStrategy<LabResultDetails> {
 
     private final String labResultId;
 

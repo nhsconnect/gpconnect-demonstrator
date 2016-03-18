@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.rippleosi.common.service.AbstractListQueryStrategy;
+import org.rippleosi.common.service.AbstractEtherCISListQueryStrategy;
 import org.rippleosi.patient.labresults.model.LabResultSummary;
 
 /**
  */
-public class LabResultSummaryQueryStrategy extends AbstractListQueryStrategy<LabResultSummary> {
+public class LabResultSummaryQueryStrategy extends AbstractEtherCISListQueryStrategy<LabResultSummary> {
 
     LabResultSummaryQueryStrategy(String patientId) {
         super(patientId);

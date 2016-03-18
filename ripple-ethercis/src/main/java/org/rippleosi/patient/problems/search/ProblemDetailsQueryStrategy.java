@@ -16,20 +16,16 @@
  */
 package org.rippleosi.patient.problems.search;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.protocol.HTTP;
 import org.rippleosi.common.exception.DataNotFoundException;
-import org.rippleosi.common.service.AbstractQueryStrategy;
+import org.rippleosi.common.service.AbstractEtherCISQueryStrategy;
 import org.rippleosi.patient.problems.model.ProblemDetails;
 
 /**
  */
-public class ProblemDetailsQueryStrategy extends AbstractQueryStrategy<ProblemDetails> {
+public class ProblemDetailsQueryStrategy extends AbstractEtherCISQueryStrategy<ProblemDetails> {
 
     private final String problemId;
 

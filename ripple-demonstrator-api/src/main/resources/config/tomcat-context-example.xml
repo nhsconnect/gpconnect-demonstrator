@@ -24,6 +24,8 @@
     <Environment name="etherCIS.password"                 type="java.lang.String" override="false" value="guest"/>
     <Environment name="etherCIS.subjectNamespace"         type="java.lang.String" override="false" value="uk.nhs.nhs_number"/>
 
+    <Environment name="etherCIS.allergiesTemplate"        type="java.lang.String" override="false" value="IDCR - Adverse Reaction List.v1"/>
+
     <Environment name="legacy.datasource.vendor"    type="java.lang.String"  override="false" value="mysql"/>
     <Environment name="legacy.datasource.host"      type="java.lang.String"  override="false" value="127.0.0.1"/>
     <Environment name="legacy.datasource.port"      type="java.lang.String"  override="false" value="3306"/>

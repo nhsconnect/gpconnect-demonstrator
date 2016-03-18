@@ -35,7 +35,7 @@ angular.module('rippleDemonstrator')
       usSpinnerService.stop('patientSummary-spinner');
     });
 
-    $scope.go = function (id) {
+    $scope.go = function (id, source) {
       $state.go('allergies-detail', {
         patientId: $scope.patient.id,
         allergyIndex: id,
@@ -43,7 +43,8 @@ angular.module('rippleDemonstrator')
         page: $scope.currentPage,
         reportType: $stateParams.reportType,
         searchString: $stateParams.searchString,
-        queryType: $stateParams.queryType
+        queryType: $stateParams.queryType,
+        source: source
       });
     };
 
@@ -78,7 +79,7 @@ angular.module('rippleDemonstrator')
           causeCode: allergy.causeCode,
           causeTerminology: allergy.causeTerminology,
           reaction: allergy.reaction,
-          source: 'openehr'
+          source: allergy.source
         };
 
         Allergy.create($scope.patient.id, toAdd).then(function () {

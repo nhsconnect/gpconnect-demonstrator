@@ -8,7 +8,7 @@ angular.module('rippleDemonstrator')
       $scope.patient = patient;
     });
 
-    Allergy.get($stateParams.patientId, $stateParams.allergyIndex).then(function (result) {
+    Allergy.get($stateParams.patientId, $stateParams.allergyIndex, $stateParams.source).then(function (result) {
       $scope.allergy = result.data;
       usSpinnerService.stop('allergiesDetail-spinner');
     });
@@ -40,7 +40,7 @@ angular.module('rippleDemonstrator')
           causeCode: allergy.causeCode,
           causeTerminology: allergy.causeTerminology,
           reaction: allergy.reaction,
-          source: 'openehr'
+          source: allergy.source
         };
 
         Allergy.update($scope.patient.id, toUpdate).then(function () {

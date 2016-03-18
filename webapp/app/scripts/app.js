@@ -34,7 +34,7 @@ angular
       })
 
       .state('patients-charts', {
-         url: '/',
+         url: '/charts',
         views: {
           main: { templateUrl: 'views/patients/patients-charts.html', controller: 'PatientsChartsCtrl' }
         }

@@ -8,6 +8,7 @@ angular.module('rippleDemonstrator')
     $scope.reportTypes = [];
 
     // Get current user
+    UserService.setCurrentUserFromQueryString();
     $scope.currentUser = UserService.getCurrentUser();
 
     // Direct different roles to different pages at login
@@ -17,12 +18,12 @@ angular.module('rippleDemonstrator')
       break;
     case 'phr':
       $state.go('patients-summary', {
-        patientId: 10
+        patientId: 9999999001
       }); // id is hard coded
       break;
     default:
       $state.go('patients-summary', {
-        patientId: 10
+        patientId: 9999999001
       }); // id is hard coded
     }
 

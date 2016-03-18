@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .factory('UserService', function ($http, claims) {
+  .factory('UserService', function ($location, claims) {
 
     var currentUser = {
       role: claims.role,
@@ -16,13 +16,21 @@ angular.module('rippleDemonstrator')
       feature: claims.scope
     };
 
+    var setCurrentUserFromQueryString = function () {
+      var claims = $location.search();
+      console.log(claims);
+      currentUser.email = claims.email || currentUser.email;
+      currentUser.role = claims.role || currentUser.role;
+    };
+
     var getCurrentUser = function () {
       console.log(currentUser);
       return currentUser;
     };
 
     return {
-      getCurrentUser: getCurrentUser
+      getCurrentUser: getCurrentUser,
+      setCurrentUserFromQueryString: setCurrentUserFromQueryString
     };
 
   });

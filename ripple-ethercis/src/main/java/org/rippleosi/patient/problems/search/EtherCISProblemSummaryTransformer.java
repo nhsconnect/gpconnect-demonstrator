@@ -20,19 +20,23 @@ import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.Transformer;
-import org.rippleosi.patient.problems.model.ProblemHeadline;
+import org.rippleosi.common.util.DateFormatter;
+import org.rippleosi.patient.problems.model.ProblemSummary;
 
 /**
  */
-public class ProblemHeadlineTransformer implements Transformer<Map<String, Object>, ProblemHeadline> {
+public class EtherCISProblemSummaryTransformer implements Transformer<Map<String, Object>, ProblemSummary> {
 
     @Override
-    public ProblemHeadline transform(Map<String, Object> input) {
+    public ProblemSummary transform(Map<String, Object> input) {
 
-        ProblemHeadline problem = new ProblemHeadline();
+        ProblemSummary problem = new ProblemSummary();
         problem.setSource("EtherCIS");
         problem.setSourceId(MapUtils.getString(input, "uid"));
         problem.setProblem(MapUtils.getString(input, "problem"));
+
+        String onsetDate = MapUtils.getString(input, "onset_date");
+        problem.setDateOfOnset(DateFormatter.toDate(onsetDate));
 
         return problem;
     }

@@ -64,9 +64,13 @@ public class EtherCISAllergyStore extends AbstractEtherCISService implements All
 
         content.put("ctx/language", "en");
         content.put("ctx/territory", "GB");
-        content.put("ctx/composer_name", "Dr Tony Shannon");
+
+        String author = allergy.getAuthor();
+        content.put("ctx/composer_name", author != null ? author : "Dr Tony Shannon");
 
         content.put(ALLERGY_PREFIX + "/causative_agent", allergy.getCause());
+//        content.put(ALLERGY_PREFIX + "/causative_agent|code", allergy.getCauseCode());
+//        content.put(ALLERGY_PREFIX + "/causative_agent|terminology", allergy.getCauseTerminology());
         content.put(ALLERGY_PREFIX + "/reaction_details/reaction|value", allergy.getReaction());
         content.put(ALLERGY_PREFIX + "/reaction_details/reaction|terminology", allergy.getCauseTerminology());
         content.put(ALLERGY_PREFIX + "/reaction_details/reaction|code", allergy.getCauseCode());

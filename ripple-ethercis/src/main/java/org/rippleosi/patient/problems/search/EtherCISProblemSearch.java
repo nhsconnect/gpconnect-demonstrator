@@ -34,23 +34,23 @@ public class EtherCISProblemSearch extends AbstractEtherCISService implements Pr
 
     @Override
     public List<ProblemHeadline> findProblemHeadlines(String patientId) {
-        ProblemHeadlineQueryStrategy query = new ProblemHeadlineQueryStrategy(patientId);
+        EtherCISProblemHeadlineQueryStrategy query = new EtherCISProblemHeadlineQueryStrategy(patientId);
 
         return findData(query);
     }
 
     @Override
     public List<ProblemSummary> findAllProblems(String patientId) {
-        ProblemSummaryQueryStrategy query = new ProblemSummaryQueryStrategy(patientId);
+        EtherCISProblemSummaryQueryStrategy query = new EtherCISProblemSummaryQueryStrategy(patientId);
 
         return findData(query);
     }
 
     @Override
     public ProblemDetails findProblem(String patientId, String problemId) {
-        ProblemDetailsQueryStrategy query = new ProblemDetailsQueryStrategy(patientId, problemId);
+        EtherCISProblemDetailsQueryStrategy query = new EtherCISProblemDetailsQueryStrategy(patientId, problemId);
 
-        return  findData(query);
+        return findData(query);
     }
 
     @Override

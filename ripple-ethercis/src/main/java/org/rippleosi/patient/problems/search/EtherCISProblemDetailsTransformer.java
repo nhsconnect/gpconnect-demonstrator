@@ -16,7 +16,6 @@
  */
 package org.rippleosi.patient.problems.search;
 
-import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
@@ -26,21 +25,22 @@ import org.rippleosi.patient.problems.model.ProblemDetails;
 
 /**
  */
-public class ProblemDetailsTransformer implements Transformer<Map<String, Object>, ProblemDetails> {
+public class EtherCISProblemDetailsTransformer implements Transformer<Map<String, Object>, ProblemDetails> {
 
     @Override
     public ProblemDetails transform(Map<String, Object> input) {
-        Date dateOfOnset = DateFormatter.toDate(MapUtils.getString(input, "onset_date"));
 
         ProblemDetails problem = new ProblemDetails();
         problem.setSource("EtherCIS");
         problem.setSourceId(MapUtils.getString(input, "uid"));
         problem.setProblem(MapUtils.getString(input, "problem"));
-        problem.setDateOfOnset(dateOfOnset);
         problem.setCode(MapUtils.getString(input, "problem_code"));
         problem.setTerminology(MapUtils.getString(input, "problem_terminology"));
         problem.setDescription(MapUtils.getString(input, "description"));
         problem.setAuthor(MapUtils.getString(input, "author"));
+
+        String onsetDate = MapUtils.getString(input, "onset_date");
+        problem.setDateOfOnset(DateFormatter.toDate(onsetDate));
 
         String dateCreated = MapUtils.getString(input, "date_created");
         problem.setDateCreated(DateFormatter.toDate(dateCreated));

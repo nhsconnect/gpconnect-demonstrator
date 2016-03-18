@@ -50,6 +50,9 @@ public class ProblemsController {
         ProblemSearch problemSearch = problemSearchFactory.select(source);
         List<ProblemSummary> problems = problemSearch.findAllProblems(patientId);
 
+        ProblemSearch openehrSearch = problemSearchFactory.select("openehr");
+        problems.addAll(openehrSearch.findAllProblems(patientId));
+
         ProblemSearch vistaSearch = problemSearchFactory.select("vista");
         problems.addAll(vistaSearch.findAllProblems("17"));
 

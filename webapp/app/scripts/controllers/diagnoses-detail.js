@@ -54,7 +54,7 @@ angular.module('rippleDemonstrator')
           setTimeout(function () {
             $state.go('diagnoses-detail', {
               patientId: $scope.patient.id,
-              diagnosisIndex: Helper.updateId(diagnosis.sourceId),
+              diagnosisIndex: diagnosis.source === 'openehr' ? Helper.updateId(diagnosis.sourceId) : diagnosis.sourceId,
               page: $scope.currentPage,
               reportType: $stateParams.reportType,
               searchString: $stateParams.searchString,

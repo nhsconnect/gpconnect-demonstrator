@@ -47,7 +47,7 @@ angular.module('rippleDemonstrator')
           setTimeout(function () {
             $state.go('allergies-detail', {
               patientId: $scope.patient.id,
-              allergyIndex: Helper.updateId(allergy.sourceId),
+              allergyIndex: allergy.source === 'openehr' ? Helper.updateId(allergy.sourceId) : allergy.sourceId,
               page: $scope.currentPage,
               reportType: $stateParams.reportType,
               searchString: $stateParams.searchString,

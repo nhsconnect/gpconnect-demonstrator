@@ -157,7 +157,7 @@ public class AbstractEtherCISService implements Repository {
     }
 
     private String getQueryURI(String query) {
-        query = encodeQueryParameter(query);
+        query = encodeParameter(query);
 
         return UriComponentsBuilder
             .fromHttpUrl(etherCISAddress + "/query")
@@ -166,17 +166,9 @@ public class AbstractEtherCISService implements Repository {
             .toUriString();
     }
 
-    private String encodeQueryParameter(String query) {
-        try {
-            return URLEncoder.encode(query, "UTF-8")
-                             .replace("+", "%20");
-        }
-        catch (UnsupportedEncodingException e) {
-            return query;
-        }
-    }
-
     private String getCreateURI(String template, String ehrId) {
+        template = encodeParameter(template);
+
         return UriComponentsBuilder
             .fromHttpUrl(etherCISAddress + "/composition")
             .queryParam("templateId", template)
@@ -187,6 +179,8 @@ public class AbstractEtherCISService implements Repository {
     }
 
     private String getUpdateURI(String compositionId, String template, String ehrId) {
+        template = encodeParameter(template);
+
         return UriComponentsBuilder
             .fromHttpUrl(etherCISAddress + "/composition")
             .queryParam("uid", compositionId)
@@ -204,6 +198,16 @@ public class AbstractEtherCISService implements Repository {
             .queryParam("password", etherCISPassword)
             .build()
             .toUriString();
+    }
+
+    private String encodeParameter(String param) {
+        try {
+            return URLEncoder.encode(param, "UTF-8")
+                             .replace("+", "%20");
+        }
+        catch (UnsupportedEncodingException e) {
+            return param;
+        }
     }
 
     private class EtherCISEhrIdLookup implements Transformer<String, String> {

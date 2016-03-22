@@ -78,18 +78,27 @@ public class DefaultEtherCISRequestProxy implements EtherCISRequestProxy {
     public <T> ResponseEntity<T> createSession(String uri, Class<T> cls) {
 
         HttpHeaders headers = basicHeaders();
-        headers.add("x-session-timeout", "0");
 
         HttpEntity<Object> request = new HttpEntity<>(null, headers);
 
         return restTemplate().exchange(uri, HttpMethod.POST, request, cls);
     }
 
+    @Override
+    public <T> ResponseEntity<T> killSession(String uri, Class<T> cls, String sessionId) {
+
+        HttpHeaders headers = basicHeaders();
+        headers.add("Ehr-Session", sessionId);
+
+        HttpEntity<Object> request = new HttpEntity<>(null, headers);
+
+        return restTemplate().exchange(uri, HttpMethod.DELETE, request, cls);
+    }
+
     private HttpEntity<String> buildRequestWithSession(String body, String ehrSessionId) {
 
         HttpHeaders headers = basicHeaders();
         headers.add("Ehr-Session", ehrSessionId);
-        headers.add("x-reconnect", "true");
 
         return new HttpEntity<>(body, headers);
     }

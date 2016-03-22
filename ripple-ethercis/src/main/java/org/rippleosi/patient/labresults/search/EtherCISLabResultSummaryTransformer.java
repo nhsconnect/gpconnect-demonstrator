@@ -26,7 +26,7 @@ import org.rippleosi.patient.labresults.model.LabResultSummary;
 
 /**
  */
-public class LabResultSummaryTransformer implements Transformer<Map<String, Object>, LabResultSummary> {
+public class EtherCISLabResultSummaryTransformer implements Transformer<Map<String, Object>, LabResultSummary> {
 
     @Override
     public LabResultSummary transform(Map<String, Object> input) {

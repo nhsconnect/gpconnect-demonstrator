@@ -30,8 +30,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class EtherCISAllergyStore extends AbstractEtherCISService implements AllergyStore {
 
-    @Value("${etherCIS.allergiesTemplate}")
-    private String allergiesTemplate;
+    @Value("${etherCIS.allergyTemplate}")
+    private String allergyTemplate;
 
     private static final String ALLERGY_PREFIX = "adverse_reaction_list/allergies_and_adverse_reactions:0/adverse_reaction_risk:0";
 
@@ -41,7 +41,7 @@ public class EtherCISAllergyStore extends AbstractEtherCISService implements All
 
         Map<String,Object> content = createFlatJsonContent(allergy);
 
-        EtherCISCreateStrategy createStrategy = new DefaultEtherCISStoreStrategy(patientId, allergiesTemplate, content);
+        EtherCISCreateStrategy createStrategy = new DefaultEtherCISStoreStrategy(patientId, allergyTemplate, content);
 
         createData(createStrategy);
     }
@@ -53,7 +53,7 @@ public class EtherCISAllergyStore extends AbstractEtherCISService implements All
         Map<String,Object> content = createFlatJsonContent(allergy);
 
         EtherCISUpdateStrategy updateStrategy = new DefaultEtherCISStoreStrategy(allergy.getSourceId(), patientId,
-                                                                                 allergiesTemplate, content);
+                                                                                 allergyTemplate, content);
 
         updateData(updateStrategy);
     }

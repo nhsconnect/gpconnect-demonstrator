@@ -30,4 +30,6 @@ public interface EtherCISRequestProxy {
     <T> ResponseEntity<T> putWithSession(String uri, Class<T> cls, String sessionId, Object body);
 
     <T> ResponseEntity<T> createSession(String uri, Class<T> cls);
+
+    <T> ResponseEntity<T> killSession(String uri, Class<T> cls, String sessionId);
 }

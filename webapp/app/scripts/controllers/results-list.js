@@ -42,10 +42,11 @@ angular.module('rippleDemonstrator')
       usSpinnerService.stop('patientSummary-spinner');
     });
 
-    $scope.go = function (id) {
+    $scope.go = function (sourceId, source) {
       $state.go('results-detail', {
         patientId: $scope.patient.id,
-        resultIndex: id,
+        resultIndex: sourceId,
+        source: source,
         filter: $scope.query,
         page: $scope.currentPage,
         reportType: $stateParams.reportType,

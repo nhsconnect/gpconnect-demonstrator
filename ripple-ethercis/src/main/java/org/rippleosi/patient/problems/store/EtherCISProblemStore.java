@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EtherCISProblemStore extends AbstractEtherCISService implements ProblemStore {
 
-    @Value("${etherCIS.problemsTemplate}")
+    @Value("${etherCIS.problemTemplate}")
     private String problemTemplate;
 
     private static final String PROBLEM_PREFIX = "problem_list/problems_and_issues:0/problem_diagnosis:0";

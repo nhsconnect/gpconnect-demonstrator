@@ -26,9 +26,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  */
-public class TestResultTransformer implements Transformer<Map<String, Object>, LabResultDetails.TestResult> {
+public class EtherCISTestResultTransformer implements Transformer<Map<String, Object>, LabResultDetails.TestResult> {
 
-    private static final Logger logger = LoggerFactory.getLogger(TestResultTransformer.class);
+    private static final Logger logger = LoggerFactory.getLogger(EtherCISTestResultTransformer.class);
 
     private String getValueAsString(Map<String, Object> input, String path) {
         try {

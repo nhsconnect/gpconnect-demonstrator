@@ -33,9 +33,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  */
-public class LabResultDetailsTransformer implements Transformer<Map<String, Object>, LabResultDetails> {
+public class EtherCISLabResultDetailsTransformer implements Transformer<Map<String, Object>, LabResultDetails> {
 
-    private static final Logger logger = LoggerFactory.getLogger(LabResultDetailsTransformer.class);
+    private static final Logger logger = LoggerFactory.getLogger(EtherCISLabResultDetailsTransformer.class);
 
     @Override
     public LabResultDetails transform(Map<String, Object> input) {
@@ -64,7 +64,7 @@ public class LabResultDetailsTransformer implements Transformer<Map<String, Obje
 
         List<Map<String, Object>> labResults = extractLabResults(input);
 
-        return CollectionUtils.collect(labResults, new TestResultTransformer(), new ArrayList<>());
+        return CollectionUtils.collect(labResults, new EtherCISTestResultTransformer(), new ArrayList<>());
     }
 
     private List<Map<String, Object>> extractLabResults(Map<String, Object> input) {

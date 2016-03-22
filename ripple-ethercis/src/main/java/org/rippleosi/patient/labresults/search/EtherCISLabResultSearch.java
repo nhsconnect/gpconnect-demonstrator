@@ -30,14 +30,14 @@ public class EtherCISLabResultSearch extends AbstractEtherCISService implements 
 
     @Override
     public List<LabResultSummary> findAllLabResults(String patientId) {
-        LabResultSummaryQueryStrategy query = new LabResultSummaryQueryStrategy(patientId);
+        EtherCISLabResultSummaryQueryStrategy query = new EtherCISLabResultSummaryQueryStrategy(patientId);
 
         return findData(query);
     }
 
     @Override
     public LabResultDetails findLabResult(String patientId, String labResultId) {
-        LabResultDetailsQueryStrategy query = new LabResultDetailsQueryStrategy(patientId, labResultId);
+        EtherCISLabResultDetailsQueryStrategy query = new EtherCISLabResultDetailsQueryStrategy(patientId, labResultId);
 
         return findData(query);
     }

@@ -15,7 +15,7 @@
   </thead>
 
   <tbody>
-    <tr dir-paginate="order in orders| filter:search  | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{order.sourceId}}')" ng-class="{info: selected(order.sourceId)}">
+    <tr dir-paginate="order in orders| filter:search  | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{order.sourceId}}', '{{order.source}}')" ng-class="{info: selected(order.sourceId)}">
       <td>{{order.name }}</td>
       <td class="orderDateTime">{{order.orderDate}}</td>
       <td>{{ order.source }}</td>

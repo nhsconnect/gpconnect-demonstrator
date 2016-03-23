@@ -47,6 +47,10 @@ public class LabOrdersController {
     public List<LabOrderSummary> findAllLabOrders(@PathVariable("patientId") String patientId,
                                                   @RequestParam(required = false) String source) {
         LabOrderSearch labOrderSearch = labOrderSearchFactory.select(source);
+        List<LabOrderSummary> allergies = labOrderSearch.findAllLabOrders(patientId);
+
+        LabOrderSearch openehrSearch = labOrderSearchFactory.select("openehr");
+        allergies.addAll(openehrSearch.findAllLabOrders(patientId));
 
         return labOrderSearch.findAllLabOrders(patientId);
     }

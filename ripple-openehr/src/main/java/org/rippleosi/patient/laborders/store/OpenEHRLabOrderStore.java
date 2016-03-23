@@ -41,7 +41,7 @@ public class OpenEHRLabOrderStore extends AbstractOpenEhrService implements LabO
     private static final String LAB_ORDER_PREFIX = "laboratory_order/laboratory_test_request/lab_request";
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.LabOrder.Create")
+//    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.LabOrder.Create")
     public void create(String patientId, List<LabOrderDetails> labOrders) {
 
         for (LabOrderDetails labOrder : labOrders) {

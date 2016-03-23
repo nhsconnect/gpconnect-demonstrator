@@ -93,6 +93,14 @@ public final class DateFormatter {
         return DateFormatUtils.format(input, "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     }
 
+    public static String toJSONDateString(Date input) {
+        if (input == null) {
+            return null;
+        }
+
+        return DateFormatUtils.format(input, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    }
+
     public static String combineDateTime(Date date, Date time) {
 
         String dateAsString = toString(date);

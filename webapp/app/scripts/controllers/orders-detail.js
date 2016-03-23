@@ -9,7 +9,7 @@ angular.module('rippleDemonstrator')
       $scope.patient = patient;
     });
 
-    Order.get($stateParams.patientId, $stateParams.orderId).then(function (result) {
+    Order.get($stateParams.patientId, $stateParams.orderId, $stateParams.source).then(function (result) {
       $scope.order = result.data;
       usSpinnerService.stop('ordersDetail-spinner');
     });

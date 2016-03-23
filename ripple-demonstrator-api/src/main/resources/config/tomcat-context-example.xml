@@ -26,7 +26,7 @@
 
     <Environment name="etherCIS.allergyTemplate"        type="java.lang.String" override="false" value="IDCR - Adverse Reaction List.v1"/>
     <Environment name="etherCIS.labOrderTemplate"       type="java.lang.String" override="false" value="IDCR - Laboratory Order.v0"/>
-    <Environment name="etherCIS.problemsTemplate"       type="java.lang.String" override="false" value="IDCR Problem List.v1"/>
+    <Environment name="etherCIS.problemTemplate"       type="java.lang.String" override="false" value="IDCR Problem List.v1"/>
 
     <Environment name="legacy.datasource.vendor"    type="java.lang.String"  override="false" value="mysql"/>
     <Environment name="legacy.datasource.host"      type="java.lang.String"  override="false" value="127.0.0.1"/>

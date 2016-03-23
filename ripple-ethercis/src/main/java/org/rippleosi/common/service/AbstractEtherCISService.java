@@ -63,7 +63,7 @@ public class AbstractEtherCISService implements Repository {
 
     @Override
     public String getSource() {
-        return "etherCIS";
+        return "EtherCIS";
     }
 
     @Override

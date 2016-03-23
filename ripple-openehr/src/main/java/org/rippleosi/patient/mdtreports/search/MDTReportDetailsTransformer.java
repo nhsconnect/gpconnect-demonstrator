@@ -35,7 +35,7 @@ public class MDTReportDetailsTransformer implements Transformer<Map<String, Obje
         Date timeOfMeeting = DateFormatter.toTimeOnly(MapUtils.getString(input, "meeting_date"));
 
         MDTReportDetails mdtReport = new MDTReportDetails();
-        mdtReport.setSource("openehr");
+        mdtReport.setSource("Marand");
         mdtReport.setSourceId(MapUtils.getString(input, "uid"));
         mdtReport.setServiceTeam(MapUtils.getString(input, "service_team"));
         mdtReport.setDateOfRequest(dateOfRequest);

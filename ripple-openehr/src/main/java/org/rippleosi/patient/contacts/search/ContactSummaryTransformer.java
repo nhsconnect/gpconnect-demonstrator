@@ -31,7 +31,7 @@ public class ContactSummaryTransformer implements Transformer<Map<String, Object
         Boolean nextOfKin = MapUtils.getBoolean(input, "next_of_kin");
 
         ContactSummary contact = new ContactSummary();
-        contact.setSource("openehr");
+        contact.setSource("Marand");
         contact.setSourceId(MapUtils.getString(input, "uid"));
         contact.setName(MapUtils.getString(input, "name"));
         contact.setNextOfKin(nextOfKin != null && nextOfKin.booleanValue());

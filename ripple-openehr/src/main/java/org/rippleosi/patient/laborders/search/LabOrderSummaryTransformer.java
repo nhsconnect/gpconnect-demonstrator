@@ -33,7 +33,7 @@ public class LabOrderSummaryTransformer implements Transformer<Map<String, Objec
         Date orderDate = DateFormatter.toDate(MapUtils.getString(input, "order_date"));
 
         LabOrderSummary labOrder = new LabOrderSummary();
-        labOrder.setSource("openehr");
+        labOrder.setSource("Marand");
         labOrder.setSourceId(MapUtils.getString(input, "uid"));
         labOrder.setName(MapUtils.getString(input, "name"));
         labOrder.setOrderDate(orderDate);

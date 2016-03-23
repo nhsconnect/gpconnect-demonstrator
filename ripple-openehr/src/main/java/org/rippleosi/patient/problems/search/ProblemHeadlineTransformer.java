@@ -29,7 +29,7 @@ public class ProblemHeadlineTransformer implements Transformer<Map<String, Objec
     public ProblemHeadline transform(Map<String, Object> input) {
 
         ProblemHeadline problem = new ProblemHeadline();
-        problem.setSource("openehr");
+        problem.setSource("Marand");
         problem.setSourceId(MapUtils.getString(input, "uid"));
         problem.setProblem(MapUtils.getString(input, "problem"));
 

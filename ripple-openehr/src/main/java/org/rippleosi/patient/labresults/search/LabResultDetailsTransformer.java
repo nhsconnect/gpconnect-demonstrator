@@ -43,7 +43,7 @@ public class LabResultDetailsTransformer implements Transformer<Map<String, Obje
         Date dateCreated = DateFormatter.toDate(MapUtils.getString(input, "date_created"));
 
         LabResultDetails labResult = new LabResultDetails();
-        labResult.setSource("openehr");
+        labResult.setSource("Marand");
         labResult.setSourceId(MapUtils.getString(input, "uid"));
         labResult.setTestName(MapUtils.getString(input, "test_name"));
         labResult.setSampleTaken(sampleTaken);

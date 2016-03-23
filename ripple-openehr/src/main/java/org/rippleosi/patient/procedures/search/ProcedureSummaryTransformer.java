@@ -36,7 +36,7 @@ public class ProcedureSummaryTransformer implements Transformer<Map<String, Obje
         Date time = DateFormatter.toTimeOnly(dateAsString);
 
         ProcedureSummary procedure = new ProcedureSummary();
-        procedure.setSource("openehr");
+        procedure.setSource("Marand");
         procedure.setSourceId(MapUtils.getString(input, "uid"));
         procedure.setName(MapUtils.getString(input, "procedure_name"));
         procedure.setDate(date);

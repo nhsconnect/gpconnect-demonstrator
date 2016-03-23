@@ -50,7 +50,7 @@ public class AllergiesController {
         AllergySearch ethercisSearch = allergySearchFactory.select(source);
         List<AllergySummary> allergies = ethercisSearch.findAllAllergies(patientId);
 
-        AllergySearch openehrSearch = allergySearchFactory.select("openehr");
+        AllergySearch openehrSearch = allergySearchFactory.select("Marand");
         allergies.addAll(openehrSearch.findAllAllergies(patientId));
 
         return allergies;
@@ -62,7 +62,7 @@ public class AllergiesController {
         AllergySearch ethercisSearch = allergySearchFactory.select(source);
         List<AllergyHeadline> allergies = ethercisSearch.findAllergyHeadlines(patientId);
 
-        AllergySearch openehrSearch = allergySearchFactory.select("openehr");
+        AllergySearch openehrSearch = allergySearchFactory.select("Marand");
         allergies.addAll(openehrSearch.findAllergyHeadlines(patientId));
 
         return allergies;

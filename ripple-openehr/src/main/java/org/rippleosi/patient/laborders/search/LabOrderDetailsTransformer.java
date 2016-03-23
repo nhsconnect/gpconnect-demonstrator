@@ -34,7 +34,7 @@ public class LabOrderDetailsTransformer implements Transformer<Map<String, Objec
         Date dateCreated = DateFormatter.toDate(MapUtils.getString(input, "date_created"));
 
         LabOrderDetails labOrder = new LabOrderDetails();
-        labOrder.setSource("openehr");
+        labOrder.setSource("Marand");
         labOrder.setSourceId(MapUtils.getString(input, "uid"));
         labOrder.setName(MapUtils.getString(input, "name"));
         labOrder.setOrderDate(orderDate);

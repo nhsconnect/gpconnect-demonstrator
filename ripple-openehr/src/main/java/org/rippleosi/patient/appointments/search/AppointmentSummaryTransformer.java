@@ -34,7 +34,7 @@ public class AppointmentSummaryTransformer implements Transformer<Map<String, Ob
         Date appointmentTime = DateFormatter.toTimeOnly(MapUtils.getString(input, "appointment_date"));
 
         AppointmentSummary appointment = new AppointmentSummary();
-        appointment.setSource("openehr");
+        appointment.setSource("Marand");
         appointment.setSourceId(MapUtils.getString(input, "uid"));
         appointment.setServiceTeam(MapUtils.getString(input, "service_team"));
         appointment.setDateOfAppointment(appointmentDate);

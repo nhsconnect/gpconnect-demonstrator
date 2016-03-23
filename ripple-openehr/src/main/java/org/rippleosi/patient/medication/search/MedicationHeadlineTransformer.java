@@ -29,7 +29,7 @@ public class MedicationHeadlineTransformer implements Transformer<Map<String, Ob
     public MedicationHeadline transform(Map<String, Object> input) {
 
         MedicationHeadline medication = new MedicationHeadline();
-        medication.setSource("openehr");
+        medication.setSource("Marand");
         medication.setSourceId(MapUtils.getString(input, "uid"));
         medication.setName(MapUtils.getString(input, "name"));
 

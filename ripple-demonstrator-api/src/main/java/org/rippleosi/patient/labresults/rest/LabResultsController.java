@@ -43,7 +43,7 @@ public class LabResultsController {
         LabResultSearch labResultSearch = labResultSearchFactory.select(source);
         List<LabResultSummary> results = labResultSearch.findAllLabResults(patientId);
 
-        LabResultSearch openEhrSearch = labResultSearchFactory.select("openehr");
+        LabResultSearch openEhrSearch = labResultSearchFactory.select("Marand");
         results.addAll(openEhrSearch.findAllLabResults(patientId));
 
         return results;

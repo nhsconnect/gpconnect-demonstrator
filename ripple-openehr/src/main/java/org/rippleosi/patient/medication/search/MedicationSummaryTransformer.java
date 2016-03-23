@@ -29,7 +29,7 @@ public class MedicationSummaryTransformer implements Transformer<Map<String, Obj
     public MedicationSummary transform(Map<String, Object> input) {
 
         MedicationSummary medication = new MedicationSummary();
-        medication.setSource("openehr");
+        medication.setSource("Marand");
         medication.setSourceId(MapUtils.getString(input, "uid"));
         medication.setName(MapUtils.getString(input, "name"));
         medication.setDoseAmount(MapUtils.getString(input, "dose_amount"));

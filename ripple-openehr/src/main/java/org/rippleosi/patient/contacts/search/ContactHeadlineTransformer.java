@@ -29,7 +29,7 @@ public class ContactHeadlineTransformer implements Transformer<Map<String, Objec
     public ContactHeadline transform(Map<String, Object> input) {
 
         ContactHeadline contact = new ContactHeadline();
-        contact.setSource("openehr");
+        contact.setSource("Marand");
         contact.setSourceId(MapUtils.getString(input, "uid"));
         contact.setName(MapUtils.getString(input, "name"));
 

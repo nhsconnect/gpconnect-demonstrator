@@ -35,7 +35,7 @@ public class CarePlanDetailsTransformer implements Transformer<Map<String, Objec
     public CarePlanDetails transform(Map<String, Object> input) {
 
         CarePlanDetails carePlan = new CarePlanDetails();
-        carePlan.setSource("openehr");
+        carePlan.setSource("Marand");
         carePlan.setSourceId(MapUtils.getString(input, "uid"));
         carePlan.setCareDocument(extractCareDocument(input));
         carePlan.setCprDecision(extractCPRDecision(input));

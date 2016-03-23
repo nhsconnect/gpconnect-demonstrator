@@ -56,7 +56,7 @@ public abstract class AbstractOpenEhrService implements Repository {
 
     @Override
     public String getSource() {
-        return "openehr";
+        return "Marand";
     }
 
     @Override

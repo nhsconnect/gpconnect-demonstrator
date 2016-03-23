@@ -33,7 +33,7 @@ public class ProblemDetailsTransformer implements Transformer<Map<String, Object
         Date dateTimeOfOnset = DateFormatter.toDate(MapUtils.getString(input, "onset_date_time"));
 
         ProblemDetails problem = new ProblemDetails();
-        problem.setSource("openehr");
+        problem.setSource("Marand");
         problem.setSourceId(MapUtils.getString(input, "uid"));
         problem.setProblem(MapUtils.getString(input, "problem"));
         problem.setDateOfOnset(dateOfOnset != null ? dateOfOnset : dateTimeOfOnset);

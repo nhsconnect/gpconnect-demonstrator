@@ -49,7 +49,7 @@ public class ProcedureDetailsTransformer implements Transformer<Map<String, Obje
         procedure.setCurrentStatus(MapUtils.getString(input, "status"));
         procedure.setCurrentStatusCode(MapUtils.getString(input, "status_code"));
         procedure.setCurrentStatusTerminology(MapUtils.getString(input, "terminology"));
-        procedure.setSource("openehr");
+        procedure.setSource("Marand");
 
         return procedure;
     }

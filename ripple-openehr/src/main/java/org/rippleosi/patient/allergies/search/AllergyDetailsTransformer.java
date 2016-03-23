@@ -30,7 +30,7 @@ public class AllergyDetailsTransformer implements Transformer<Map<String, Object
     public AllergyDetails transform(Map<String, Object> input) {
 
         AllergyDetails allergy = new AllergyDetails();
-        allergy.setSource("openehr");
+        allergy.setSource("Marand");
         allergy.setSourceId(MapUtils.getString(input, "uid"));
         allergy.setCause(MapUtils.getString(input, "cause"));
         allergy.setReaction(MapUtils.getString(input, "reaction"));

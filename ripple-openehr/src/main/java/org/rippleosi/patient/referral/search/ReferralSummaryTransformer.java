@@ -33,7 +33,7 @@ public class ReferralSummaryTransformer implements Transformer<Map<String, Objec
         Date dateOfReferral = DateFormatter.toDate(MapUtils.getString(input, "referral_date"));
 
         ReferralSummary referral = new ReferralSummary();
-        referral.setSource("openehr");
+        referral.setSource("Marand");
         referral.setSourceId(MapUtils.getString(input, "uid"));
         referral.setReferralFrom(MapUtils.getString(input, "referral_from"));
         referral.setReferralTo(MapUtils.getString(input, "referral_to"));

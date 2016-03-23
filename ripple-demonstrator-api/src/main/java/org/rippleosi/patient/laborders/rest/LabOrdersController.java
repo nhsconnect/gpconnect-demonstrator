@@ -49,10 +49,10 @@ public class LabOrdersController {
         LabOrderSearch labOrderSearch = labOrderSearchFactory.select(source);
         List<LabOrderSummary> allergies = labOrderSearch.findAllLabOrders(patientId);
 
-        LabOrderSearch openehrSearch = labOrderSearchFactory.select("openehr");
+        LabOrderSearch openehrSearch = labOrderSearchFactory.select("Marand");
         allergies.addAll(openehrSearch.findAllLabOrders(patientId));
 
-        return labOrderSearch.findAllLabOrders(patientId);
+        return allergies;
     }
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.GET)

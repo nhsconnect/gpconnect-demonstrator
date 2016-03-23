@@ -24,18 +24,9 @@
     <Environment name="etherCIS.password"                 type="java.lang.String" override="false" value="guest"/>
     <Environment name="etherCIS.subjectNamespace"         type="java.lang.String" override="false" value="uk.nhs.nhs_number"/>
 
-    <Environment name="etherCIS.allergiesTemplate"        type="java.lang.String" override="false" value="IDCR - Adverse Reaction List.v1"/>
-    <Environment name="etherCIS.contactsTemplate"         type="java.lang.String" override="false" value=""/>
-    <Environment name="etherCIS.endOfLifeTemplate"        type="java.lang.String" override="false" value=""/>
-    <Environment name="etherCIS.labOrdersTemplate"        type="java.lang.String" override="false" value="IDCR - Laboratory Order.v0"/>
-    <Environment name="etherCIS.mdtReportsTemplate"       type="java.lang.String" override="false" value=""/>
-    <Environment name="etherCIS.medicationsTemplate"      type="java.lang.String" override="false" value=""/>
-    <Environment name="etherCIS.problemsTemplate"         type="java.lang.String" override="false" value="IDCR Problem List.v1"/>
-    <Environment name="etherCIS.proceduresTemplate"       type="java.lang.String" override="false" value=""/>
-    <Environment name="etherCIS.transfersTemplate"        type="java.lang.String" override="false" value=""/>
-    <Environment name="etherCIS.cancermdtsTemplate"       type="java.lang.String" override="false" value=""/>
-    <Environment name="etherCIS.referralsTemplate"        type="java.lang.String" override="false" value=""/>
-    <Environment name="etherCIS.appointmentsTemplate"     type="java.lang.String" override="false" value=""/>
+    <Environment name="etherCIS.allergyTemplate"        type="java.lang.String" override="false" value="IDCR - Adverse Reaction List.v1"/>
+    <Environment name="etherCIS.labOrderTemplate"       type="java.lang.String" override="false" value="IDCR - Laboratory Order.v0"/>
+    <Environment name="etherCIS.problemsTemplate"       type="java.lang.String" override="false" value="IDCR Problem List.v1"/>
 
     <Environment name="legacy.datasource.vendor"    type="java.lang.String"  override="false" value="mysql"/>
     <Environment name="legacy.datasource.host"      type="java.lang.String"  override="false" value="127.0.0.1"/>

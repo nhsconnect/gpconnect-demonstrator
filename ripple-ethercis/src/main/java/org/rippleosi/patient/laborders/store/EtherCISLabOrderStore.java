@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EtherCISLabOrderStore extends AbstractEtherCISService implements LabOrderStore {
 
-    @Value("${etherCIS.labOrdersTemplate}")
+    @Value("${etherCIS.labOrderTemplate}")
     private String labOrderTemplate;
 
     private static final String LAB_ORDER_PREFIX = "laboratory_order/laboratory_test_request/lab_request";

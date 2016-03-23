@@ -17,25 +17,19 @@
 package org.rippleosi.patient.labresults.search;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.Transformer;
 import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.labresults.model.LabResultDetails;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.rippleosi.patient.labresults.model.LabResultDetails.TestResult;
 
 /**
  */
 public class EtherCISLabResultDetailsTransformer implements Transformer<Map<String, Object>, LabResultDetails> {
-
-    private static final Logger logger = LoggerFactory.getLogger(EtherCISLabResultDetailsTransformer.class);
 
     @Override
     public LabResultDetails transform(Map<String, Object> input) {
@@ -53,26 +47,27 @@ public class EtherCISLabResultDetailsTransformer implements Transformer<Map<Stri
         labResult.setConclusion(MapUtils.getString(input, "conclusion"));
         labResult.setStatus(MapUtils.getString(input, "status"));
 
-        List<LabResultDetails.TestResult> testResults = createTestResults(input);
-
+        List<TestResult> testResults = extractTestResults(input);
         labResult.setTestResults(testResults);
 
         return labResult;
     }
 
-    private List<LabResultDetails.TestResult> createTestResults(Map<String, Object> input) {
+    private List<TestResult> extractTestResults(Map<String, Object> input) {
 
-        List<Map<String, Object>> labResults = extractLabResults(input);
+        TestResult testResult = new TestResult();
+        testResult.setResult(MapUtils.getString(input, "result_name"));
+        testResult.setValue(MapUtils.getString(input, "result_value"));
+        testResult.setUnit(MapUtils.getString(input, "result_unit"));
+        testResult.setComment(MapUtils.getString(input, "result_comment"));
 
-        return CollectionUtils.collect(labResults, new EtherCISTestResultTransformer(), new ArrayList<>());
-    }
+        String lower = MapUtils.getString(input, "normal_range_lower");
+        String upper = MapUtils.getString(input, "normal_range_upper");
+        testResult.setNormalRange(lower + " > " + upper);
 
-    private List<Map<String, Object>> extractLabResults(Map<String, Object> input) {
-        try {
-            return (List<Map<String, Object>>)PropertyUtils.getNestedProperty(input, "test_panel.items");
-        } catch (Exception ex) {
-            logger.debug("{}: {}", ex.getClass().getName(), ex.getMessage());
-            return Collections.emptyList();
-        }
+        List<TestResult> testResults = new ArrayList<>();
+        testResults.add(testResult);
+
+        return testResults;
     }
 }

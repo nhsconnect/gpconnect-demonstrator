@@ -38,7 +38,7 @@ public class EtherCISLabOrderStore extends AbstractEtherCISService implements La
     private static final String LAB_ORDER_PREFIX = "laboratory_order/laboratory_test_request/lab_request";
 
     @Override
-    @Consume(uri = "activemq:Consumer.EtherCIS.VirtualTopic.Ripple.LabOrder.Create")
+    @Consume(uri = "activemq:Consumer.EtherCIS.VirtualTopic.EtherCIS.LabOrder.Create")
     public void create(String patientId, List<LabOrderDetails> labOrders) {
 
         for (LabOrderDetails labOrder : labOrders) {

@@ -41,7 +41,7 @@ public class OpenEHRReferralStore extends AbstractOpenEhrService implements Refe
     private static final String ORDER_REFERRAL = REFERRALS_PREFIX + "order_referral/";
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Referrals.Create")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.Referrals.Create")
     public void create(String patientId, ReferralDetails referral) {
 
         Map<String,Object> content = createFlatJsonContent(referral);
@@ -52,7 +52,7 @@ public class OpenEHRReferralStore extends AbstractOpenEhrService implements Refe
     }
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Referrals.Update")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.Referrals.Update")
     public void update(String patientId, ReferralDetails referral) {
 
         Map<String,Object> content = createFlatJsonContent(referral);

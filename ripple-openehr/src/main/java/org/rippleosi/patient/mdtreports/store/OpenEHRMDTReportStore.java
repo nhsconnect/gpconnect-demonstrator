@@ -37,7 +37,7 @@ public class OpenEHRMDTReportStore extends AbstractOpenEhrService implements MDT
     private String mdtReportTemplate;
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.MDTReport.Create")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.MDTReport.Create")
     public void create(String patientId, MDTReportDetails mdtReport) {
 
         Map<String, Object> content = createFlatJsonContent(mdtReport);
@@ -48,7 +48,7 @@ public class OpenEHRMDTReportStore extends AbstractOpenEhrService implements MDT
     }
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.MDTReport.Update")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.MDTReport.Update")
     public void update(String patientId, MDTReportDetails mdtReport) {
 
         Map<String, Object> content = createFlatJsonContent(mdtReport);

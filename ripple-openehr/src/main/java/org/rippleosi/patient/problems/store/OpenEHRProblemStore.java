@@ -40,7 +40,7 @@ public class OpenEHRProblemStore extends AbstractOpenEhrService implements Probl
     private static final String PROBLEM_PREFIX = "problem_list/problems_and_issues:0/problem_diagnosis:0";
 
     @Override
-//    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Problems.Create")
+//    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.Problems.Create")
     public void create(String patientId, ProblemDetails problem) {
 
         Map<String, Object> content = createFlatJsonContent(problem);
@@ -51,7 +51,7 @@ public class OpenEHRProblemStore extends AbstractOpenEhrService implements Probl
     }
 
     @Override
-//    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Problems.Update")
+//    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.Problems.Update")
     public void update(String patientId, ProblemDetails problem) {
 
         Map<String, Object> content = createFlatJsonContent(problem);

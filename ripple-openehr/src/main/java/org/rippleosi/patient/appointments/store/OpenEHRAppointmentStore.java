@@ -40,7 +40,7 @@ public class OpenEHRAppointmentStore extends AbstractOpenEhrService implements A
     private static final String APPOINTMENTS_PREFIX = "referral/referral_details:0/schedule_appointment/";
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Appointment.Create")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.Appointment.Create")
     public void create(String patientId, AppointmentDetails appointment) {
 
         Map<String, Object> content = createFlatJsonContent(appointment);
@@ -51,7 +51,7 @@ public class OpenEHRAppointmentStore extends AbstractOpenEhrService implements A
     }
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Appointment.Update")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.Appointment.Update")
     public void update(String patientId, AppointmentDetails appointment) {
 
         Map<String, Object> content = createFlatJsonContent(appointment);

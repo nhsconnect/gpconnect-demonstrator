@@ -40,7 +40,7 @@ public class OpenEHRMedicationStore extends AbstractOpenEhrService implements Me
     private static final String MEDICATION_PREFIX = "current_medication_list/medication_and_medical_devices:0/current_medication:0/medication_statement:0";
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Medication.Create")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.Medication.Create")
     public void create(String patientId, MedicationDetails medication) {
 
         Map<String, Object> content = createFlatJsonContent(medication);
@@ -51,7 +51,7 @@ public class OpenEHRMedicationStore extends AbstractOpenEhrService implements Me
     }
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Medication.Update")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.Medication.Update")
     public void update(String patientId, MedicationDetails medication) {
 
         Map<String, Object> content = createFlatJsonContent(medication);

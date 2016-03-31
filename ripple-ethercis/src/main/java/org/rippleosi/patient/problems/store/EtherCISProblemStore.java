@@ -37,7 +37,7 @@ public class EtherCISProblemStore extends AbstractEtherCISService implements Pro
     private static final String PROBLEM_PREFIX = "problem_list/problems_and_issues:0/problem_diagnosis:0";
 
     @Override
-    @Consume(uri = "activemq:Consumer.EtherCIS.VirtualTopic.Ripple.Problems.Create")
+    @Consume(uri = "activemq:Consumer.EtherCIS.VirtualTopic.EtherCIS.Problems.Create")
     public void create(String patientId, ProblemDetails problem) {
 
         Map<String, Object> content = createFlatJsonContent(problem);
@@ -48,7 +48,7 @@ public class EtherCISProblemStore extends AbstractEtherCISService implements Pro
     }
 
     @Override
-    @Consume(uri = "activemq:Consumer.EtherCIS.VirtualTopic.Ripple.Problems.Update")
+    @Consume(uri = "activemq:Consumer.EtherCIS.VirtualTopic.EtherCIS.Problems.Update")
     public void update(String patientId, ProblemDetails problem) {
 
         Map<String, Object> content = createFlatJsonContent(problem);

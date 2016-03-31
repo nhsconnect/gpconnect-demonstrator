@@ -36,7 +36,7 @@ public class EtherCISAllergyStore extends AbstractEtherCISService implements All
     private static final String ALLERGY_PREFIX = "adverse_reaction_list/allergies_and_adverse_reactions:0/adverse_reaction_risk:0";
 
     @Override
-    @Consume(uri = "activemq:Consumer.EtherCIS.VirtualTopic.Ripple.Allergies.Create")
+    @Consume(uri = "activemq:Consumer.EtherCIS.VirtualTopic.EtherCIS.Allergies.Create")
     public void create(String patientId, AllergyDetails allergy) {
 
         Map<String,Object> content = createFlatJsonContent(allergy);
@@ -47,7 +47,7 @@ public class EtherCISAllergyStore extends AbstractEtherCISService implements All
     }
 
     @Override
-    @Consume(uri = "activemq:Consumer.EtherCIS.VirtualTopic.Ripple.Allergies.Update")
+    @Consume(uri = "activemq:Consumer.EtherCIS.VirtualTopic.EtherCIS.Allergies.Update")
     public void update(String patientId, AllergyDetails allergy) {
 
         Map<String,Object> content = createFlatJsonContent(allergy);

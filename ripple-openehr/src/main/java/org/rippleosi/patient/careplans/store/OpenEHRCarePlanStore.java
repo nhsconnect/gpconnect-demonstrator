@@ -43,7 +43,7 @@ public class OpenEHRCarePlanStore extends AbstractOpenEhrService implements Care
     private static final String CARE_PLAN_PREFIX = "end_of_life_patient_preferences/legal_information:0";
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.CarePlan.Create")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.CarePlan.Create")
     public void create(String patientId, CarePlanDetails carePlan) {
 
         Map<String, Object> content = createFlatJsonContent(carePlan);
@@ -54,7 +54,7 @@ public class OpenEHRCarePlanStore extends AbstractOpenEhrService implements Care
     }
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.CarePlan.Update")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.CarePlan.Update")
     public void update(String patientId, CarePlanDetails carePlan) {
 
         Map<String, Object> content = createFlatJsonContent(carePlan);

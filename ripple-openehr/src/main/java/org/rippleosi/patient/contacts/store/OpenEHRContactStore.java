@@ -39,7 +39,7 @@ public class OpenEHRContactStore extends AbstractOpenEhrService implements Conta
     private static final String CONTACT_PREFIX = "relevant_contacts/relevant_contacts:0/relevant_contact:0";
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Contacts.Create")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.Contacts.Create")
     public void create(String patientId, ContactDetails contact) {
 
         Map<String,Object> content = createFlatJsonContent(contact);
@@ -50,7 +50,7 @@ public class OpenEHRContactStore extends AbstractOpenEhrService implements Conta
     }
 
     @Override
-    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Ripple.Contacts.Update")
+    @Consume(uri = "activemq:Consumer.C4HOpenEHR.VirtualTopic.Marand.Contacts.Update")
     public void update(String patientId, ContactDetails contact) {
 
         Map<String,Object> content = createFlatJsonContent(contact);

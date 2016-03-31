@@ -40,6 +40,13 @@ angular
         }
       })
 
+      .state('main-search', {
+        url: '/search',
+        views: {
+          main: { templateUrl: 'views/main-search/main-search.html', controller: 'MainSearchController' }
+        }
+      })
+
       .state('search-report', {
          url: '/search-report?searchString',
         views: {
@@ -373,6 +380,20 @@ angular
       });
     };
   }])
+
+  .directive('focusElement', function($timeout) {
+    return {
+      link: function(scope, element, attrs) {
+        scope.$watch(attrs.focusElement, function(value) {
+          $timeout(function() {
+            if(value === true) {
+              element.focus();
+            }
+          });
+        });
+      }
+    }
+  })
 
   .directive('rpOnLoad', ['$parse', function ($parse) {
     return function (scope, elem, attrs) {

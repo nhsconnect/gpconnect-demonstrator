@@ -8,6 +8,7 @@ angular.module('rippleDemonstrator')
     "email": "bob.smith@gmail.com",
     "scope": {
       "homeView": "search",
+      "autoAdvancedSearch": true,
       "setting2": true,
       "setting3": true
     },

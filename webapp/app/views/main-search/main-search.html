@@ -1,0 +1,9 @@
+<div class="main-search header-search" ng-class="{'searchBarHidden' : !mainSearchEnabled }">
+  <div class="search-left-inner-addon">
+    <input class="form-control" placeholder="Search..." type="text" ng-keyup="hideSearch()" ng-model="searchExpression"/>
+    <div class="pull-right">
+      <a ng-click="openAdvancedSearch()">Advanced search</a>
+    </div>
+  </div>
+  <button class="btn btn-info mainSearchButton" ng-click="searchFunction()"><i class="fa fa-search"></i> Search</button>
+</div>

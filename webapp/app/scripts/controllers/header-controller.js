@@ -1,20 +1,23 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('headerController', function ($scope, $rootScope, $state, usSpinnerService, $stateParams, UserService) {
+  .controller('headerController', function ($scope, $rootScope, $state, usSpinnerService, $stateParams, UserService, AdvancedSearch) {
 
     $rootScope.searchExpression = '';
     $scope.searchExpression = $rootScope.searchExpression;
     $scope.reportTypes = [];
 
+    $scope.searchFocused = false;
+
     // Get current user
     UserService.setCurrentUserFromQueryString();
     $scope.currentUser = UserService.getCurrentUser();
+    $scope.autoAdvancedSearch = $scope.currentUser.feature.autoAdvancedSearch;
 
     // Direct different roles to different pages at login
     switch ($scope.currentUser.role) {
     case 'idcr':
-      $state.go('patients-charts');
+      $state.go('main-search');
       break;
     case 'phr':
       $state.go('patients-summary', {
@@ -37,6 +40,13 @@ angular.module('rippleDemonstrator')
       var detailWidth = 0;
 
       switch (toState.name) {
+        case 'main-search':
+          previousState = '';
+          pageHeader = 'Welcome';
+          previousPage = '';
+          mainWidth = 12;
+          detailWidth = 0;
+          break;
       case 'patients-list':
         previousState = 'patients-charts';
         pageHeader = 'Patient Lists';
@@ -122,7 +132,12 @@ angular.module('rippleDemonstrator')
       $rootScope.reportTypeString = '';
 
       $scope.checkExpression = function () {
-        if ($rootScope.searchMode) {
+        if($scope.autoAdvancedSearch) {
+          if($scope.searchExpression.length >= 3) {
+            AdvancedSearch.openAdvancedSearch();
+          }
+        }
+        else if ($rootScope.searchMode) {
           if ($rootScope.reportMode && !$rootScope.reportTypeSet) {
             $scope.reportTypes = [
               'Diagnosis: ',
@@ -171,6 +186,10 @@ angular.module('rippleDemonstrator')
       };
 
       $scope.searchFunction = function () {
+        if($scope.autoAdvancedSearch)
+        {
+          AdvancedSearch.openAdvancedSearch();
+        }
         if ($rootScope.reportTypeSet && $scope.searchExpression !== '') {
           var tempExpression = $rootScope.reportTypeString + ': ' + $scope.searchExpression;
           $state.go('search-report', {
@@ -237,6 +256,8 @@ angular.module('rippleDemonstrator')
       $scope.mainWidth = mainWidth;
       $scope.detailWidth = detailWidth;
 
+      $scope.searchBarEnabled = !$state.is('main-search');
+
       $scope.goBack = function () {
         history.back();
       };
@@ -270,4 +291,14 @@ angular.module('rippleDemonstrator')
       };
     });
 
+    $scope.openAdvancedSearch = AdvancedSearch.openAdvancedSearch;
+
+    $scope.$on("toggleHeaderSearchEnabled", function(event, enabled) {
+      $scope.searchBarEnabled = enabled;
+    });
+
+    $scope.$on("populateHeaderSearch", function(event, expression) {
+      $scope.searchExpression = expression;
+      $scope.searchFocused = true;
+    });
   });

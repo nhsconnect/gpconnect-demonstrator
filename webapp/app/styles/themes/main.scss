@@ -593,8 +593,26 @@ legend {
   cursor: pointer;
 }
 
+/* Main search bar for home page */
+.main-search {
+  position: absolute;
+  top: 50%;
+  left: 27%;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 40%;
+}
 
 /* Header - Search Bar */
+.searchBarHidden {
+  visibility: hidden;
+}
+
+.advanced-search-text {
+  font-size: 12px;
+  margin-top: 11px;
+}
 
 .icon-searchbar:before {
   color: #82BE36;
@@ -1662,6 +1680,10 @@ textarea#procedureNotes {
   margin-bottom: 15px;
 }
 
+.advancedSearchForm .input-group {
+  padding-top: 5px;
+  width: 100%; }
+
 
 /* enable absolute positioning */
 
@@ -1918,7 +1940,12 @@ tr.ng-scope.selectedItemLeft {
 }
 
 .searchButton {
-  margin-top: -35px;
+  margin-top: -58px;
+  margin-left: 101%;
+}
+
+.mainSearchButton {
+  margin-top: -110px;
   margin-left: 101%;
 }
 
@@ -1926,6 +1953,15 @@ tr.ng-scope.selectedItemLeft {
   border: 1px solid #bdbdbd;
   border-radius: 4px;
   background-color: #fff;
+}
+
+.col-inline-label {
+  width: auto;
+  height: 30px;
+  padding-top: 8px;
+  font-size: 14px;
+  font-weight: normal;
+  color: #a9a9a9;
 }
 
 .patient-list-full-subheader {

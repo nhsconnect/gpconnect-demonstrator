@@ -94,6 +94,7 @@
   <script src="scripts/services/order.js"></script>
   <script src="scripts/services/report.js"></script>
   <script src="scripts/services/image.js"></script>
+  <script src="scripts/services/advancedSearch.js"></script>
   <script src="scripts/models/patient.js"></script>
   <script src="scripts/controllers/patients-list.js"></script>
   <script src="scripts/controllers/header-controller.js"></script>
@@ -142,6 +143,8 @@
   <script src="scripts/controllers/image-list.js"></script>
   <script src="scripts/controllers/image-detail.js"></script>
   <script src="scripts/controllers/image-modal.js"></script>
+  <script src="scripts/controllers/main-search.js"></script>
+  <script src="scripts/controllers/advanced-search.js"></script>
   <!-- endbuild -->
 
 </head>
@@ -161,7 +164,7 @@
       </div>
     </div>
 
-    <div class="col-md-4 col-sm-4 hidden-xs header-search ng-cloak" ng-cloak>
+    <div class="col-md-4 col-sm-4 hidden-xs header-search ng-cloak" ng-cloak ng-class="{'searchBarHidden' : !searchBarEnabled }">
       <div class="search-left-inner-addon">
         <div ng-show="searchMode" class="ng-cloak" ng-cloak>
           <span ng-cloak ng-show="searchMode" class="label ng-cloak report-label">
@@ -179,7 +182,10 @@
           </span>
         </div>
         <div><i ng-show="searchExpression !== '' || searchMode" ng-click="cancelSearchMode()" class="clearAll fa fa-times-circle"></i></div>
-        <input key-bind="{ enter: 'searchFunction()', esc: 'cancelSearchMode()' }" class="form-control" placeholder="Search..." type="text" typeahead="report for report in reportTypes | filter:$viewValue" ng-model="searchExpression" ng-keyup="checkExpression()" ng-trim="false" ng-class="{'moveRight': searchMode && !reportTypeSet, 'moveFurtherRight': searchMode && reportTypeSet}" />
+        <input key-bind="{ enter: 'searchFunction()', esc: 'cancelSearchMode()' }" class="form-control" placeholder="Search..." type="text" typeahead="report for report in reportTypes | filter:$viewValue" ng-model="searchExpression" ng-keyup="checkExpression()" ng-trim="false" ng-class="{'moveRight': searchMode && !reportTypeSet, 'moveFurtherRight': searchMode && reportTypeSet}"  focus-element="searchFocused"/>
+        <div class="advanced-search-text pull-right">
+          <a ng-click="openAdvancedSearch()">Advanced search</a>
+        </div>
       </div>
       <button class="btn btn-info searchButton" ng-click="searchFunction();"><i class="fa fa-search"></i> Search</button>
     </div>

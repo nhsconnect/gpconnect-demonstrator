@@ -1,0 +1,92 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ modal.title }}</h4>
+</div>
+
+<div class="modal-body">
+  <form name="advancedSearchForm" class="advancedSearchForm form-horizontal text-left" novalidate>
+    <fieldset>
+      <legend>Patient Details</legend>
+
+      <div class="row col-md-12">
+        <div class="form-group">
+          <label for="nhsNumber" class="control-label col-md-12">NHS Number</label>
+          <div class="col-md-6">
+            <div class="input-group">
+              <input type="text" tabindex="1" class="form-control input-sm" id="nhsNumber" name="nhsNumber">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="col-inline-label">
+              e.g. 123 456 7890
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lastName" class="control-label col-md-12">Last Name</label>
+          <div class="col-md-6">
+            <div class="input-group">
+              <input type="text" tabindex="2" class="form-control input-sm" id="lastName" name="lastName"/>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="col-inline-label">
+              e.g. Smith
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="firstName" class="control-label col-md-12">First Name</label>
+          <div class="col-md-6">
+            <div class="input-group">
+              <input type="text" tabindex="3" class="form-control input-sm" id="firstName" name="firstName"/>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="col-inline-label">
+              e.g. John
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+          <label for="dateOfBirth" class="control-label col-md-12">Date of Birth</label>
+          <div class="col-md-4">
+            <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-calendar"></i></button>
+              </span>
+              <input type="text" tabindex="4" class="form-control" id="dateOfBirth" name="dateOfBirth"/>
+            </div>
+          </div>
+          <div class="col-md-offset-2 col-md-6">
+            <div class="col-inline-label">
+              e.g. 01-Jan-1945
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+          <label for="gender" class="control-label col-md-10">Gender</label>
+          <div class="col-md-4">
+            <div class="input-group">
+              <select class="form-control" tabindex="5" class="form-control input-sm" id="gender" name="gender">
+                <option value="">-- Gender --</option>
+                <option>Male</option>
+                <option>Female</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <a class="btn btn-danger" ng-click="cancel()">Cancel</a>
+  <button class="btn btn-success"><i class="fa fa-search"></i> Search</button>
+</div>
+
+

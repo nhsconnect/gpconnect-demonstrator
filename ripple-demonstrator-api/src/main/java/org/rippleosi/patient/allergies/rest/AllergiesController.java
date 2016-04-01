@@ -81,7 +81,7 @@ public class AllergiesController {
     public void createAllergy(@PathVariable("patientId") String patientId,
                               @RequestParam(required = false) String source,
                               @RequestBody AllergyDetails allergy) {
-        AllergyStore allergyStore = allergyStoreFactory.select(source);
+        AllergyStore allergyStore = allergyStoreFactory.select("EtherCIS");
 
         allergyStore.create(patientId, allergy);
     }

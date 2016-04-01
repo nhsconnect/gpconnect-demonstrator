@@ -84,7 +84,7 @@ angular.module('rippleDemonstrator')
           dateOfOnset: diagnosis.dateOfOnset,
           description: diagnosis.description,
           problem: diagnosis.problem,
-          source: 'openehr',
+          source: diagnosis.source,
           sourceId: '',
           terminology: diagnosis.terminology
         };

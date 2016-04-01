@@ -278,6 +278,8 @@ angular.module('rippleDemonstrator')
         $scope.title = UserService.getContent('phr_title');
       }
 
+      $scope.footer = UserService.getContent('idcr_footer');
+
       $scope.goHome = function () {
         $scope.cancelSearchMode();
         if ($scope.currentUser.role === 'idcr') {

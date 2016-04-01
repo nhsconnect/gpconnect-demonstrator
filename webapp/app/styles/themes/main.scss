@@ -587,10 +587,11 @@ legend {
   color: #000000;
 }
 
-.ripple-icon {
-  width: 40px;
-  height: 40px;
+.header-icon {
+  width: auto;
+  height: 70px;
   cursor: pointer;
+  content: url($header-logo-url);
 }
 
 /* Main search bar for home page */
@@ -803,6 +804,45 @@ i.clearAll {
   text-align: center;
 }
 
+
+/* Footer */
+.footer-background {
+  background-color: #EEEEEE;
+  height: 40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 0;
+  margin-right: 0px;
+}
+
+.footer-title-1 {
+  font-size: 10px;
+  color: #7E7D83;
+  font-family: "Hero";
+  display: inline;
+}
+
+.footer-title-2 {
+  font-size: 10px;
+  color: $header-color;
+  font-family: "Hero";
+  display: inline;
+}
+
+.footer-left {
+  padding-left: 40px;
+  text-align: left;
+}
+
+.footer-right {
+  padding-right: 40px;
+  text-align: right;
+}
+
+.footer-icon {
+  width: auto;
+  height: 20px;
+}
 
 /* Dashboard */
 

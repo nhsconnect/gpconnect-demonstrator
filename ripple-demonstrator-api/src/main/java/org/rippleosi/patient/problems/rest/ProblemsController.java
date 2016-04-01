@@ -88,7 +88,7 @@ public class ProblemsController {
     public void createProblem(@PathVariable("patientId") String patientId,
                               @RequestParam(required = false) String source,
                               @RequestBody ProblemDetails problem) {
-        ProblemStore problemStore = problemStoreFactory.select(source);
+        ProblemStore problemStore = problemStoreFactory.select("EtherCIS");
 
         problemStore.create(patientId, problem);
     }

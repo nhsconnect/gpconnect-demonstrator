@@ -595,10 +595,20 @@ legend {
 }
 
 /* Main search bar for home page */
+.search-logo {
+  width: 30%;
+  display: block;
+  margin: 0 auto;
+  content: url($search-logo-url);
+}
+
 .main-search {
   position: absolute;
-  top: 50%;
-  left: 27%;
+  font-size: 20px;
+  color: #FFF;
+  font-family: hero;
+  top: 10%;
+  left: 28%;
   right: 0;
   bottom: 0;
   height: 100%;

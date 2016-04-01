@@ -816,6 +816,14 @@ i.clearAll {
 
 
 /* Footer */
+footer {
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
 .footer-background {
   background-color: #EEEEEE;
   height: 40px;

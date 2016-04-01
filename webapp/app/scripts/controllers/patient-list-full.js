@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('PatientsListFullCtrl', function ($scope, $rootScope, $state, $stateParams, Report) {
+  .controller('PatientsListFullCtrl', function ($scope, $rootScope, $state, $stateParams, Report, Patient) {
 
     $scope.pagingInfo = {
       page: 1,
@@ -94,7 +94,15 @@ angular.module('rippleDemonstrator')
         };
 
         Report.searchByPatient(searchPatientQuery).then(function (result) {
-          $scope.patients = result.data.patientDetails;
+//          $scope.patients = result.data.patientDetails;
+          var patients = [];
+
+                  angular.forEach(result.data.patientDetails, function (patient) {
+                    patient = new Patient(patient);
+                    patients.push(patient);
+                  });
+
+          $scope.patients = patients;
           $scope.pagingInfo.totalItems = result.data.totalPatients;
           if ($scope.pagingInfo.totalItems === 0) {
             $scope.noResults = 'There are no results that match your search criteria';

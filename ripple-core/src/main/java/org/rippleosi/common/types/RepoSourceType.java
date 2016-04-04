@@ -19,12 +19,12 @@ package org.rippleosi.common.types;
 /**
  * 
  */
-public enum RepoSource {
+public enum RepoSourceType {
 	NONE("Not Configured"), ACTIVEMQ("ActiveMQ"), MARAND("Marand"), ETHERCIS("EtherCIS");
 
 	private final String name;
 
-	private RepoSource(String name) {
+	private RepoSourceType(String name) {
 		this.name = name;
 	}
 }

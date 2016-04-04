@@ -352,6 +352,24 @@ angular
     };
   })
 
+  .directive('isValidNhsNumber', function() {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function(scope, elem, attrs, ctrl) {
+        ctrl.$parsers.unshift(function(value) {
+          // Strip white space
+          var nhsNum = value.replace(/\s+/, '');
+          var valid = !isNaN(value) && nhsNum.length === 10;
+
+          ctrl.$setValidity('invalidNHSNumFormat', valid);
+
+          return valid ? value : '';
+        });
+      }
+    }
+  })
+
   .constant('keyCodes', {
     esc: 27,
     enter: 13

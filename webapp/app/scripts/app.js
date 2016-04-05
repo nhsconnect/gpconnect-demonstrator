@@ -359,8 +359,8 @@ angular
       link: function(scope, elem, attrs, ctrl) {
         ctrl.$parsers.unshift(function(value) {
           // Strip white space
-          var nhsNum = value.replace(/\s+/, '');
-          var valid = !isNaN(value) && nhsNum.length === 10;
+          var nhsNum = value.replace(/\s+/g, '');
+          var valid = !isNaN(nhsNum) && nhsNum.length === 10;
 
           ctrl.$setValidity('invalidNHSNumFormat', valid);
 

@@ -7,11 +7,6 @@ angular.module('rippleDemonstrator')
       var self = this;
       _.extend(this, attributes);
 
-      self.nhsNumber = (function () {
-        var number = self.nhsNumber;
-        return number.slice(0,3) + " " + number.slice(3,6) + " " + number.slice(6);
-      })();
-
       self.age = function () {
         return $window.moment().diff(self.dateOfBirth, 'years');
       };

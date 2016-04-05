@@ -370,6 +370,12 @@ angular
     }
   })
 
+  .filter('formatNHSNumber', function() {
+    return function(number) {
+      return number.slice(0,3) + " " + number.slice(3,6) + " " + number.slice(6);
+    };
+  })
+
   .constant('keyCodes', {
     esc: 27,
     enter: 13

@@ -25,7 +25,7 @@
         <ul class="list-inline">
           <li><label>Gender:</label> <strong>{{ patient.gender }}</strong></li>
           <li><label>DOB:</label>  <strong>{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</strong></li>
-          <li class="nhsLabel"><label>NHS No.:</label> <strong>{{ patient.nhsNumber }}</strong></li>
+          <li class="nhsLabel"><label>NHS No.:</label> <strong><span ng-bind="patient.nhsNumber | formatNHSNumber"></span></strong></li>
         </ul>
       </div>
     </div>

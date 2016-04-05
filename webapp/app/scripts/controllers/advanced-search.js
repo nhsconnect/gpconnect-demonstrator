@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller("AdvancedSearchController", function($scope, $modalInstance, modal) {
+  .controller("AdvancedSearchController", function($scope, $modalInstance, modal, searchParams) {
 
     $scope.modal = modal;
-    $scope.searchParams = {};
+    $scope.searchParams = searchParams;
     $scope.formSubmitted = false;
     $scope.detailsFocused = false;
 

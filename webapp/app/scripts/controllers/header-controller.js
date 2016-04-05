@@ -134,7 +134,7 @@ angular.module('rippleDemonstrator')
       $scope.checkExpression = function () {
         if($scope.autoAdvancedSearch) {
           if($scope.searchExpression.length >= 3) {
-            AdvancedSearch.openAdvancedSearch();
+            AdvancedSearch.openAdvancedSearch($scope.searchExpression);
           }
         }
         else if ($rootScope.searchMode) {

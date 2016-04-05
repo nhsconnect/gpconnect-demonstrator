@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .factory('AdvancedSearch', function ($modal) {
+  .factory('AdvancedSearch', function($modal) {
 
     var isModalClosed = true;
 
-    var openAdvancedSearch = function() {
+    var openAdvancedSearch = function(expression) {
       if (isModalClosed) {
         isModalClosed = false;
 
@@ -14,10 +14,20 @@ angular.module('rippleDemonstrator')
           size: 'lg',
           controller: 'AdvancedSearchController',
           resolve: {
-            modal: function () {
+            modal: function() {
               return {
                 title: 'Advanced Search'
               };
+            },
+            searchParams: function() {
+              var params = {};
+              if (!isNaN(expression)) {
+                params.nhsNumber = expression;
+              } else {
+                params.lastName = expression;
+              }
+
+              return params;
             }
           }
         });

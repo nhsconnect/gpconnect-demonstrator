@@ -816,21 +816,11 @@ i.clearAll {
 
 
 /* Footer */
-footer {
-  display: block;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
 .footer-background {
   background-color: #EEEEEE;
   height: 40px;
   padding-top: 10px;
   padding-bottom: 10px;
-  line-height: 0;
-  margin-right: 0px;
 }
 
 .footer-title-1 {
@@ -850,11 +840,13 @@ footer {
 .footer-left {
   padding-left: 40px;
   text-align: left;
+  float: left;
 }
 
 .footer-right {
   padding-right: 40px;
   text-align: right;
+  float: right;
 }
 
 .footer-icon {

@@ -352,20 +352,49 @@ angular
     };
   })
 
+  .directive('autoFocus', function($timeout) {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      scope : {
+        ngModel: '='
+      },
+      link: function(scope, elem, attrs, ctrl) {
+        scope.$watch("ngModel", function(value) {
+          if(value) {
+            $timeout(function() {
+              elem[0].focus();
+            });
+          }
+        });
+      }
+    };
+  })
+
   .directive('isValidNhsNumber', function() {
     return {
       restrict: 'A',
       require: 'ngModel',
       link: function(scope, elem, attrs, ctrl) {
-        ctrl.$parsers.unshift(function(value) {
-          // Strip white space
-          var nhsNum = value.replace(/\s+/g, '');
-          var valid = !isNaN(nhsNum) && nhsNum.length === 10;
-
-          ctrl.$setValidity('invalidNHSNumFormat', valid);
-
-          return valid ? value : '';
+        scope.$watch(attrs.ngModel, function(value) {
+          checkFormat(value);
         });
+
+        ctrl.$parsers.unshift(function(value) {
+          return checkFormat(value);
+        });
+
+        var checkFormat = function(value) {
+          // Strip white space
+          if(value) {
+            var nhsNum = value.replace(/\s+/g, '');
+            var valid = !isNaN(nhsNum) && nhsNum.length === 10;
+
+            ctrl.$setValidity('invalidNHSNumFormat', valid);
+
+            return valid ? nhsNum : '';
+          }
+        }
       }
     }
   })

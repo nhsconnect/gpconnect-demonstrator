@@ -14,7 +14,7 @@
           <label for="nhsNumber" class="control-label col-md-12">NHS Number</label>
           <div class="col-md-6">
             <div class="input-group">
-              <input type="text" tabindex="1" class="form-control input-sm" id="nhsNumber" name="nhsNumber" ng-model="searchParams.nhsNumber" is-valid-nhs-number ng-click="detailsFocused=false" ng-required="!detailsFocused"/>
+              <input type="text" tabindex="1" class="form-control input-sm" id="nhsNumber" name="nhsNumber" ng-model="searchParams.nhsNumber" auto-focus is-valid-nhs-number ng-focus="detailsFocused=false" ng-required="!detailsFocused"/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && advancedSearchForm.nhsNumber.$invalid && !detailsFocused">You must enter a value.</span>
           </div>
@@ -28,11 +28,11 @@
 
         <div class="form-group"
              ng-class="{'has-error': advancedSearchForm.lastName.$error.required && advancedSearchForm.lastName.$invalid,
-                        'has-success': detailsFocused && advancedSearchForm.lastName.$valid && advancedSearchForm.lastName.$dirty}">
+                        'has-success': detailsFocused && advancedSearchForm.lastName.$valid}">
           <label for="lastName" class="control-label col-md-12">Last Name</label>
           <div class="col-md-6">
             <div class="input-group">
-              <input type="text" tabindex="2" class="form-control input-sm" id="lastName" name="lastName" ng-model="searchParams.lastName" ng-click="detailsFocused=true" ng-required='detailsFocused'/>
+              <input type="text" tabindex="2" class="form-control input-sm" id="lastName" name="lastName" ng-model="searchParams.lastName" auto-focus ng-focus="detailsFocused=true" ng-required='detailsFocused'/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && advancedSearchForm.lastName.$error.required">You must enter a value.</span>
           </div>
@@ -50,7 +50,7 @@
           <label for="firstName" class="control-label col-md-12">First Name</label>
           <div class="col-md-6">
             <div class="input-group">
-              <input type="text" tabindex="3" class="form-control input-sm" id="firstName" name="firstName" ng-model="searchParams.firstName" ng-click="detailsFocused=true" ng-required='detailsFocused'/>
+              <input type="text" tabindex="3" class="form-control input-sm" id="firstName" name="firstName" ng-model="searchParams.firstName" ng-focus="detailsFocused=true" ng-required='detailsFocused'/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && advancedSearchForm.firstName.$error.required">You must enter a value.</span>
           </div>
@@ -69,9 +69,9 @@
           <div class="col-md-4">
             <div class="input-group">
               <span class="input-group-btn">
-                <button type="button" class="btn btn-default btn-sm" ng-click="detailsFocused=true; openDatePicker($event, 'isOpen')"><i class="fa fa-calendar"></i></button>
+                <button type="button" class="btn btn-default btn-sm" ng-focus="detailsFocused=true" ng-click="openDatePicker($event, 'isOpen')"><i class="fa fa-calendar"></i></button>
               </span>
-              <input type="text" tabindex="4" class="form-control popupinputs" id="dateOfBirth" name="dateOfBirth" ng-model="searchParams.dateOfBirth" datepicker-popup="dd-MMM-y" is-open="isOpen" ng-click="detailsFocused=true; openDatePicker($event, 'isOpen')" ui-date-format ng-required='detailsFocused'/>
+              <input type="text" tabindex="4" class="form-control popupinputs" id="dateOfBirth" name="dateOfBirth" ng-model="searchParams.dateOfBirth" datepicker-popup="dd-MMM-y" is-open="isOpen" ng-focus="detailsFocused=true" ng-click="openDatePicker($event, 'isOpen')" ui-date-format ng-required='detailsFocused'/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && advancedSearchForm.dateOfBirth.$error.required">You must enter a value.</span>
           </div>

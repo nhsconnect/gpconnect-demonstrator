@@ -52,6 +52,20 @@ public class EtherCISProcedureDetailsQueryStrategy extends AbstractEtherCISQuery
 
             .append("ehr.entry.entry #>> ")
             .append("'{")
+                .append("/composition[openEHR-EHR-COMPOSITION.care_summary.v0 and name/value=''Procedures list''], ")
+                .append("/content[openEHR-EHR-SECTION.procedures_rcp.v1],0, ")
+                .append("/items[openEHR-EHR-ACTION.procedure.v1],0,/description[at0001],/items[at0002 and name/value=''Procedure name''],/value,definingCode,terminologyId,value")
+            .append("}' as procedure_terminology, ")
+
+            .append("ehr.entry.entry #>> ")
+            .append("'{")
+                .append("/composition[openEHR-EHR-COMPOSITION.care_summary.v0 and name/value=''Procedures list''], ")
+                .append("/content[openEHR-EHR-SECTION.procedures_rcp.v1],0, ")
+                .append("/items[openEHR-EHR-ACTION.procedure.v1],0,/description[at0001],/items[at0002 and name/value=''Procedure name''],/value,definingCode,codeString")
+            .append("}' as procedure_code, ")
+
+            .append("ehr.entry.entry #>> ")
+            .append("'{")
                  .append("/composition[openEHR-EHR-COMPOSITION.care_summary.v0 and name/value=''Procedures list''], ")
                  .append("/content[openEHR-EHR-SECTION.procedures_rcp.v1],0, ")
                  .append("/items[openEHR-EHR-ACTION.procedure.v1],0,/description[at0001],/items[at0049 and name/value=''Procedure notes''],/value,value")
@@ -70,20 +84,6 @@ public class EtherCISProcedureDetailsQueryStrategy extends AbstractEtherCISQuery
                 .append("/content[openEHR-EHR-SECTION.procedures_rcp.v1],0, ")
                 .append("/items[openEHR-EHR-ACTION.procedure.v1],0,/ism_transition/current_state,/value,value")
             .append("}' as procedure_status, ")
-
-            .append("ehr.entry.entry #>> ")
-            .append("'{")
-                .append("/composition[openEHR-EHR-COMPOSITION.care_summary.v0 and name/value=''Procedures list''], ")
-                .append("/content[openEHR-EHR-SECTION.procedures_rcp.v1],0, ")
-                .append("/items[openEHR-EHR-ACTION.procedure.v1],0,/ism_transition/current_state,/value,definingCode,terminologyId,name")
-            .append("}' as procedure_status_terminology, ")
-
-            .append("ehr.entry.entry #>> ")
-            .append("'{")
-                .append("/composition[openEHR-EHR-COMPOSITION.care_summary.v0 and name/value=''Procedures list''], ")
-                .append("/content[openEHR-EHR-SECTION.procedures_rcp.v1],0, ")
-                .append("/items[openEHR-EHR-ACTION.procedure.v1],0,/ism_transition/current_state,/value,definingCode,terminologyId,value")
-            .append("}' as procedure_status_code, ")
 
             .append("ehr.event_context.start_time ")
 

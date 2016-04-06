@@ -17,9 +17,6 @@ angular.module('rippleDemonstrator')
       $scope.procedure.date = new Date($scope.procedure.date).toISOString().slice(0, 10);
     }
 
-    $scope.procedure.currentStatusCode = '1234567';
-    $scope.procedure.currentStatusTerminology = 'ICD-10';
-
     $scope.dateofProcedureDatepicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();

@@ -46,9 +46,13 @@ public class ProceduresController {
     @RequestMapping(method = RequestMethod.GET)
     public List<ProcedureSummary> findAllProcedures(@PathVariable("patientId") String patientId,
                                                     @RequestParam(required = false) String source) {
-        ProcedureSearch procedureSearch = procedureSearchFactory.select(source);
+        ProcedureSearch etherCISProcedureSearch = procedureSearchFactory.select(source);
+        List<ProcedureSummary> procedures = etherCISProcedureSearch.findAllProcedures(patientId);
 
-        return procedureSearch.findAllProcedures(patientId);
+        ProcedureSearch marandProcedureSearch = procedureSearchFactory.select("Marand");
+        procedures.addAll(marandProcedureSearch.findAllProcedures(patientId));
+
+        return procedures;
     }
 
     @RequestMapping(value = "/{procedureId}", method = RequestMethod.GET)

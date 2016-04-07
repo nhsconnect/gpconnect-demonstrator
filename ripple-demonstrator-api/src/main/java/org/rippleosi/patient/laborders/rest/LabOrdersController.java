@@ -47,12 +47,12 @@ public class LabOrdersController {
     public List<LabOrderSummary> findAllLabOrders(@PathVariable("patientId") String patientId,
                                                   @RequestParam(required = false) String source) {
         LabOrderSearch labOrderSearch = labOrderSearchFactory.select(source);
-        List<LabOrderSummary> allergies = labOrderSearch.findAllLabOrders(patientId);
+        List<LabOrderSummary> labOrders = labOrderSearch.findAllLabOrders(patientId);
 
         LabOrderSearch openehrSearch = labOrderSearchFactory.select("Marand");
-        allergies.addAll(openehrSearch.findAllLabOrders(patientId));
+        labOrders.addAll(openehrSearch.findAllLabOrders(patientId));
 
-        return allergies;
+        return labOrders;
     }
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.GET)

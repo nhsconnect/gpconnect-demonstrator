@@ -87,7 +87,6 @@ angular.module('rippleDemonstrator')
           newItem.author = 'Dr John Smith';
           newItem.code = orders[i].code;
           newItem.name = orders[i].text;
-          newItem.source = 'openehr';
           toAdd.push(newItem);
         }
 

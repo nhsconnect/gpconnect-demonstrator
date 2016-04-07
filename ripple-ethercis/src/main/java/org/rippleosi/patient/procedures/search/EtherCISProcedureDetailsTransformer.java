@@ -45,14 +45,13 @@ public class EtherCISProcedureDetailsTransformer implements Transformer<Map<Stri
 
         procedure.setAuthor(MapUtils.getString(input, "author"));
         procedure.setDateSubmitted(dateSubmitted);
-        procedure.setName(MapUtils.getString(input, "procedure_name"));
+        procedure.setProcedureName(MapUtils.getString(input, "procedure_name"));
+        procedure.setProcedureCode(MapUtils.getString(input, "procedure_code"));
+        procedure.setProcedureTerminology(MapUtils.getString(input, "procedure_terminology"));
         procedure.setNotes(MapUtils.getString(input, "procedure_notes"));
         procedure.setPerformer(MapUtils.getString(input, "performer"));
         procedure.setDate(procedureDate);
         procedure.setTime(procedureTime);
-        procedure.setCurrentStatus(MapUtils.getString(input, "procedure_status"));
-        procedure.setCurrentStatusCode(MapUtils.getString(input, "procedure_code"));
-        procedure.setCurrentStatusTerminology(MapUtils.getString(input, "procedure_terminology"));
 
         return procedure;
     }

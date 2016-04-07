@@ -119,7 +119,7 @@ angular
       })
 
       .state('medications-detail', {
-        url: '/patients/{patientId:int}/medications/{medicationIndex}?filter&page&reportType&searchString&queryType',
+        url: '/patients/{patientId:int}/medications/{medicationIndex}?filter&page&reportType&searchString&queryType&source',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -401,6 +401,10 @@ angular
 
   .filter('formatNHSNumber', function() {
     return function(number) {
+      if (number === undefined) {
+        return;
+      }
+
       return number.slice(0,3) + " " + number.slice(3,6) + " " + number.slice(6);
     };
   })

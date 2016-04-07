@@ -9,7 +9,7 @@ angular.module('rippleDemonstrator')
       $scope.patient = patient;
     });
 
-    Medication.get($stateParams.patientId, $stateParams.medicationIndex).then(function (result) {
+    Medication.get($stateParams.patientId, $stateParams.medicationIndex, $stateParams.source).then(function (result) {
       $scope.medication = result.data;
       usSpinnerService.stop('medicationsDetail-spinner');
     });
@@ -48,14 +48,14 @@ angular.module('rippleDemonstrator')
           name: medication.name,
           startDate: medication.startDate,
           startTime: medication.startTime,
-          source: 'openehr'
+          source: medication.source
         };
 
         Medication.update($scope.patient.id, toUpdate).then(function () {
           setTimeout(function () {
             $state.go('medications-detail', {
               patientId: $scope.patient.id,
-              medicationIndex: Helper.updateId(medication.sourceId),
+              medicationIndex: medication.source === 'Marand' ? medication.updateId(medication.sourceId) : medication.sourceId,
               page: $scope.currentPage,
               reportType: $stateParams.reportType,
               searchString: $stateParams.searchString,

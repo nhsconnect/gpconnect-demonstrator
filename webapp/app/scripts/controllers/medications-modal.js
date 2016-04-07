@@ -23,7 +23,7 @@ angular.module('rippleDemonstrator')
       $scope.medication.startDate = new Date($scope.medication.startDate).toISOString().slice(0, 10);
       $scope.medication.dateCreated = new Date($scope.medication.dateCreated).toISOString().slice(0, 10);
     }else {
-      $scope.medication.terminologyCode = '12393890';
+      $scope.medication.medicationCode = $scope.medication.medicationCode == undefined ? '123456789' : $scope.medication.medicationCode;
       $scope.medication.dateCreated = new Date().toISOString().slice(0, 10);
     }
 

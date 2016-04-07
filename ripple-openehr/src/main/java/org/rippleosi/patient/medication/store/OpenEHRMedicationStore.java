@@ -69,7 +69,7 @@ public class OpenEHRMedicationStore extends AbstractOpenEhrService implements Me
         content.put("ctx/territory", "GB");
         content.put("ctx/composer_name", medication.getAuthor());
 
-        String medicationCode = StringUtils.isEmpty(medication.getMedicationCode()) ? "DefaultCode" : medication.getMedicationCode();
+        String medicationCode = StringUtils.isEmpty(medication.getMedicationCode()) ? "123456789" : medication.getMedicationCode();
 
         String startDateTime = DateFormatter.combineDateTime(medication.getStartDate(), medication.getStartTime());
 

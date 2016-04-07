@@ -69,10 +69,10 @@ public class OpenEHRProcedureStore extends AbstractOpenEhrService implements Pro
 
         String dateTime = DateFormatter.combineDateTime(procedure.getDate(), procedure.getTime());
 
-        content.put(PROCEDURE_PREFIX + "/procedure_name", procedure.getName());
+        content.put(PROCEDURE_PREFIX + "/procedure_name", procedure.getProcedureName());
         content.put(PROCEDURE_PREFIX + "/procedure_notes", procedure.getNotes());
-        content.put(PROCEDURE_PREFIX + "/ism_transition/careflow_step|code", procedure.getCurrentStatusCode());
-        content.put(PROCEDURE_PREFIX + "/ism_transition/careflow_step|terminology", procedure.getCurrentStatusTerminology());
+        content.put(PROCEDURE_PREFIX + "/ism_transition/careflow_step|code", "at0047");
+        content.put(PROCEDURE_PREFIX + "/ism_transition/careflow_step|terminology", "local");
         content.put(PROCEDURE_PREFIX + "/_other_participation:0|function", "Performer");
         content.put(PROCEDURE_PREFIX + "/_other_participation:0|name", procedure.getPerformer());
         content.put(PROCEDURE_PREFIX + "/time", dateTime);

@@ -25,14 +25,14 @@ public class ProcedureDetails implements Serializable {
     private String sourceId;
     private String author;
     private Date dateSubmitted;
-    private String name;
+    private String procedureName;
+    private String procedureCode;
+    private String procedureTerminology;
     private String notes;
     private String performer;
     private Date date;
     private Date time;
     private String currentStatus;
-    private String currentStatusCode;
-    private String currentStatusTerminology;
     private String source;
 
     public String getSourceId() {
@@ -59,12 +59,28 @@ public class ProcedureDetails implements Serializable {
         this.dateSubmitted = dateSubmitted;
     }
 
-    public String getName() {
-        return name;
+    public String getProcedureName() {
+        return procedureName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProcedureName(String procedureName) {
+        this.procedureName = procedureName;
+    }
+
+    public String getProcedureCode() {
+        return procedureCode;
+    }
+
+    public void setProcedureCode(String procedureCode) {
+        this.procedureCode = procedureCode;
+    }
+
+    public String getProcedureTerminology() {
+        return procedureTerminology;
+    }
+
+    public void setProcedureTerminology(String procedureTerminology) {
+        this.procedureTerminology = procedureTerminology;
     }
 
     public String getNotes() {
@@ -105,22 +121,6 @@ public class ProcedureDetails implements Serializable {
 
     public void setCurrentStatus(String currentStatus) {
         this.currentStatus = currentStatus;
-    }
-
-    public String getCurrentStatusCode() {
-        return currentStatusCode;
-    }
-
-    public void setCurrentStatusCode(String currentStatusCode) {
-        this.currentStatusCode = currentStatusCode;
-    }
-
-    public String getCurrentStatusTerminology() {
-        return currentStatusTerminology;
-    }
-
-    public void setCurrentStatusTerminology(String currentStatusTerminology) {
-        this.currentStatusTerminology = currentStatusTerminology;
     }
 
     public String getSource() {

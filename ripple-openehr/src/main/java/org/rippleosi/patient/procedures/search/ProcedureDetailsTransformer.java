@@ -41,14 +41,14 @@ public class ProcedureDetailsTransformer implements Transformer<Map<String, Obje
         procedure.setSourceId(MapUtils.getString(input, "uid"));
         procedure.setAuthor(MapUtils.getString(input, "author"));
         procedure.setDateSubmitted(dateSubmitted);
-        procedure.setName(MapUtils.getString(input, "procedure_name"));
+        procedure.setProcedureName(MapUtils.getString(input, "procedure_name"));
         procedure.setNotes(MapUtils.getString(input, "procedure_notes"));
         procedure.setPerformer(MapUtils.getString(input, "performer"));
         procedure.setDate(procedureDate);
         procedure.setTime(procedureTime);
         procedure.setCurrentStatus(MapUtils.getString(input, "status"));
-        procedure.setCurrentStatusCode(MapUtils.getString(input, "status_code"));
-        procedure.setCurrentStatusTerminology(MapUtils.getString(input, "terminology"));
+        procedure.setProcedureCode(MapUtils.getString(input, "status_code"));
+        procedure.setProcedureTerminology(MapUtils.getString(input, "terminology"));
         procedure.setSource("Marand");
 
         return procedure;

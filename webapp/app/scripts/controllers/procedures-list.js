@@ -87,16 +87,15 @@ angular.module('rippleDemonstrator')
 
         var toAdd = {
           sourceId: '',
-          name: procedure.name,
+          procedureName: procedure.procedureName,
+          procedureTerminology: procedure.procedureTerminology,
+          procedureCode: procedure.procedureCode,
           notes: procedure.notes,
           author: procedure.author,
-          currentStatusTerminology: 'local',
-          currentStatusCode: 'at0047',
           date: procedure.date,
           time: procedure.time,
           performer: procedure.performer,
-          dateSubmitted: procedure.dateSubmitted,
-          source: 'openehr'
+          dateSubmitted: procedure.dateSubmitted
         };
 
         Procedure.create($scope.patient.id, toAdd).then(function () {

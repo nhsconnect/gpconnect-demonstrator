@@ -41,27 +41,28 @@ angular.module('rippleDemonstrator')
 
         var toUpdate = {
           sourceId: procedure.sourceId,
-          name: procedure.name,
+          procedureName: procedure.procedureName,
+          procedureCode: procedure.procedureCode,
+          procedureTerminology: procedure.procedureTerminology,
           notes: procedure.notes,
           author: procedure.author,
-          currentStatusTerminology: 'local',
-          currentStatusCode: 'at0047',
           date: procedure.date,
           time: procedure.time,
           performer: procedure.performer,
           dateSubmitted: procedure.dateSubmitted,
-          source: 'openehr'
+          source: procedure.source
         };
 
         Procedure.update($scope.patient.id, toUpdate).then(function () {
           setTimeout(function () {
             $state.go('procedures-detail', {
               patientId: $scope.patient.id,
-              procedureId: Helper.updateId(procedure.sourceId),
+              procedureId: procedure.source === 'Marand' ? procedure.updateId(medication.sourceId) : procedure.sourceId,
               page: $scope.currentPage,
               reportType: $stateParams.reportType,
               searchString: $stateParams.searchString,
-              queryType: $stateParams.queryType
+              queryType: $stateParams.queryType,
+              source: $stateParams.source
             });
           }, 2000);
         });

@@ -17,11 +17,13 @@
 package org.rippleosi.patient.problems.search;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.AbstractEtherCISListQueryStrategy;
+import org.rippleosi.patient.allergies.search.EtherCISNullAllergyPredicate;
 import org.rippleosi.patient.problems.model.ProblemSummary;
 
 /**
@@ -59,6 +61,8 @@ public class EtherCISProblemSummaryQueryStrategy extends AbstractEtherCISListQue
 
     @Override
     public List<ProblemSummary> transform(List<Map<String, Object>> resultSet) {
-        return CollectionUtils.collect(resultSet, new EtherCISProblemSummaryTransformer(), new ArrayList<>());
+        Collection<Map<String, Object>> filtered = CollectionUtils.select(resultSet, new EtherCISNullProblemPredicate());
+
+        return CollectionUtils.collect(filtered, new EtherCISProblemSummaryTransformer(), new ArrayList<>());
     }
 }

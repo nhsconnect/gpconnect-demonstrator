@@ -29,16 +29,18 @@ angular.module('rippleDemonstrator')
       $scope[name] = true;
     };
 
-    $scope.isNhsNumberRequired = function (nhsNumberFormField) {
-      var nhsNumber = nhsNumberFormField.$viewValue;
+    $scope.isNhsNumberRequired = function (advancedSearchForm) {
+      var nhsNumber = advancedSearchForm.nhsNumber.$viewValue;
 
-      if (nhsNumber === undefined) {
+      if (nhsNumber === undefined && $scope.areDetailsFieldsClean(advancedSearchForm)) {
         return true;
       }
 
       nhsNumber = nhsNumber.replace(/\s+/g, '');
 
-      return isNaN(nhsNumber) || (nhsNumberFormField.$invalid && nhsNumber.length === 0);
+      var nhsNumberInvalid = isNaN(nhsNumber) || (advancedSearchForm.nhsNumber.$invalid && nhsNumber.length === 0);
+
+      return nhsNumberInvalid && $scope.areDetailsFieldsClean(advancedSearchForm);
     };
 
     $scope.isNhsNumberTooShort = function (value) {
@@ -60,4 +62,24 @@ angular.module('rippleDemonstrator')
 
       return !isNaN(nhsNumber) && nhsNumber.length > 10;
     };
+
+    $scope.isNhsNumberFieldInvalid = function (nhsNumberField) {
+      return nhsNumberField.$invalid || nhsNumberField.$pristine;
+    };
+
+    $scope.areDetailsFieldsClean = function(advancedSearchForm) {
+      var lastName = advancedSearchForm.lastName;
+      var firstName = advancedSearchForm.firstName;
+      var dateOfBirth = advancedSearchForm.dateOfBirth;
+
+      var lastNameValid = lastName.$invalid || lastName.$pristine || lastName.$viewValue === '';
+      var firstNameValid = firstName.$invalid || firstName.$pristine || firstName.$viewValue === '';
+      var dateOfBirthValid = dateOfBirth.$invalid || dateOfBirth.$pristine || dateOfBirth.$viewValue === '';
+
+      return lastNameValid && firstNameValid && dateOfBirthValid;
+    };
+
+    $scope.areDetailsFieldsInvalid = function (advancedSearchForm) {
+      return advancedSearchForm.lastName.$invalid || advancedSearchForm.firstName.$invalid || advancedSearchForm.dateOfBirth.$invalid;
+    }
   });

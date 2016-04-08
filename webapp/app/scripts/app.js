@@ -360,12 +360,10 @@ angular
         ngModel: '='
       },
       link: function(scope, elem, attrs, ctrl) {
-        scope.$watch("ngModel", function(value) {
-          if(value) {
-            $timeout(function() {
-              elem[0].focus();
-            });
-          }
+        scope.$watch("ngModel", function (value) {
+          $timeout(function () {
+            elem[0].focus();
+          });
         });
       }
     };

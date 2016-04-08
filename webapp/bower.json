@@ -33,6 +33,8 @@
   "appPath": "app",
   "resolutions": {
     "angular": "1.3.12",
-    "fullcalendar": "2.4.0"
+    "fullcalendar": "2.4.0",
+    "jquery": "~2.2.0",
+    "cornerstone": "~0.9.0"
   }
 }

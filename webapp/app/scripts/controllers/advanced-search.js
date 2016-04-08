@@ -28,4 +28,36 @@ angular.module('rippleDemonstrator')
 
       $scope[name] = true;
     };
+
+    $scope.isNhsNumberRequired = function (nhsNumberFormField) {
+      var nhsNumber = nhsNumberFormField.$viewValue;
+
+      if (nhsNumber === undefined) {
+        return true;
+      }
+
+      nhsNumber = nhsNumber.replace(/\s+/g, '');
+
+      return isNaN(nhsNumber) || (nhsNumberFormField.$invalid && nhsNumber.length === 0);
+    };
+
+    $scope.isNhsNumberTooShort = function (value) {
+      if (value === undefined) {
+        return false;
+      }
+
+      var nhsNumber = value.replace(/\s+/g, '');
+
+      return !isNaN(nhsNumber) && nhsNumber.length > 0 && nhsNumber.length < 10;
+    };
+
+    $scope.isNhsNumberTooLong = function (value) {
+      if (value === undefined) {
+        return false;
+      }
+
+      var nhsNumber = value.replace(/\s+/g, '');
+
+      return !isNaN(nhsNumber) && nhsNumber.length > 10;
+    };
   });

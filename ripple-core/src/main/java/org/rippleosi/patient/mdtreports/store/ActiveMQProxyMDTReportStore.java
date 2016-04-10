@@ -16,6 +16,7 @@
 package org.rippleosi.patient.mdtreports.store;
 
 import org.apache.camel.Produce;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.mdtreports.model.MDTReportDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +45,8 @@ public class ActiveMQProxyMDTReportStore implements MDTReportStore {
     }
 
     @Override
-    public String getSource() {
-        return "activemq";
+    public RepoSourceType getSource() {
+        return RepoSourceType.ACTIVEMQ;
     }
 
     @Override

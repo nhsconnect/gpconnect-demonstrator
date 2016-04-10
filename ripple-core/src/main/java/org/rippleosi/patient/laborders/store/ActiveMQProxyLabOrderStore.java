@@ -18,6 +18,7 @@ package org.rippleosi.patient.laborders.store;
 import java.util.List;
 
 import org.apache.camel.Produce;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.laborders.model.LabOrderDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +44,8 @@ public class ActiveMQProxyLabOrderStore implements LabOrderStore {
     }
 
     @Override
-    public String getSource() {
-        return "activemq";
+    public RepoSourceType getSource() {
+        return RepoSourceType.ACTIVEMQ;
     }
 
     @Override

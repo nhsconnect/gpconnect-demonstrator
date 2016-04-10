@@ -23,6 +23,8 @@ import org.rippleosi.common.model.InstanceDetailsResponse;
 import org.rippleosi.common.model.SeriesDetailsResponse;
 import org.rippleosi.common.model.StudyDetailsResponse;
 import org.rippleosi.common.service.AbstractOrthancService;
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.dicom.model.DicomInstanceId;
 import org.rippleosi.patient.dicom.model.DicomInstanceSummary;
 import org.rippleosi.patient.dicom.model.DicomSeriesDetails;
@@ -34,7 +36,7 @@ import org.springframework.stereotype.Service;
 public class OrthancSearch extends AbstractOrthancService implements DicomSearch {
 
     @Override
-    public List<DicomStudySummary> findAllDicomStudies(String patientId, String source) {
+    public List<DicomStudySummary> findAllDicomStudies(String patientId, RepoSource source) {
         List<String> studiesIds = findAllStudiesIds();
 
         List<StudyDetailsResponse> studiesDetails = new ArrayList<>();
@@ -48,28 +50,28 @@ public class OrthancSearch extends AbstractOrthancService implements DicomSearch
     }
 
     @Override
-    public DicomSeriesSummary findAllDicomSeriesInStudy(String patientId, String studyId, String source) {
+    public DicomSeriesSummary findAllDicomSeriesInStudy(String patientId, String studyId, RepoSource source) {
         StudyDetailsResponse studyDetails = findStudyDetails(studyId);
 
         return new DicomStudyToSeriesSummaryTransformer().transform(studyDetails);
     }
 
     @Override
-    public DicomSeriesDetails findSeriesDetails(String patientId, String seriesId, String source) {
+    public DicomSeriesDetails findSeriesDetails(String patientId, String seriesId, RepoSource source) {
         SeriesDetailsResponse seriesDetails = findSeriesDetails(seriesId);
 
         return new DicomSeriesToSeriesDetailsTransformer().transform(seriesDetails);
     }
 
     @Override
-    public DicomInstanceSummary findInstanceSummary(String patientId, String instanceId, String source) {
+    public DicomInstanceSummary findInstanceSummary(String patientId, String instanceId, RepoSource source) {
         InstanceDetailsResponse instanceDetails = findInstanceDetails(instanceId);
 
         return new DicomInstanceDetailsToSummaryTransformer().transform(instanceDetails);
     }
 
     @Override
-    public DicomInstanceId findFirstInstanceIdInSeries(String patientId, String seriesId, String source) {
+    public DicomInstanceId findFirstInstanceIdInSeries(String patientId, String seriesId, RepoSource source) {
         SeriesDetailsResponse seriesDetails = findSeriesDetails(seriesId);
 
         return new DicomSeriesToInstanceIdTransformer().transform(seriesDetails);

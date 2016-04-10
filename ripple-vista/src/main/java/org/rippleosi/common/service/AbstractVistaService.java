@@ -16,23 +16,20 @@
 package org.rippleosi.common.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import net.sf.saxon.om.Item;
 import org.rippleosi.common.exception.DataNotFoundException;
 import org.rippleosi.common.model.Result;
 import org.rippleosi.common.model.VistaRestResponse;
 import org.rippleosi.common.repo.Repository;
-import org.rippleosi.patient.problems.search.model.VistaProblem;
+import org.rippleosi.common.types.RepoSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.CollectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class AbstractVistaService implements Repository {
 
@@ -43,8 +40,8 @@ public abstract class AbstractVistaService implements Repository {
     private VistaRequestProxy requestProxy;
 
     @Override
-    public String getSource() {
-        return "vista";
+    public RepoSourceType getSource() {
+        return RepoSourceType.VISTA;
     }
 
     @Override

@@ -16,6 +16,7 @@
 package org.rippleosi.patient.contacts.store;
 
 import org.apache.camel.Produce;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.contacts.model.ContactDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +45,8 @@ public class ActiveMQProxyContactStore implements ContactStore {
     }
 
     @Override
-    public String getSource() {
-        return "activemq";
+    public RepoSourceType getSource() {
+        return RepoSourceType.ACTIVEMQ;
     }
 
     @Override

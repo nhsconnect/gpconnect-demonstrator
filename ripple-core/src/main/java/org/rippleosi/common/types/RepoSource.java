@@ -13,21 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.rippleosi.common.repo;
 
-import org.rippleosi.common.types.RepoSource;
+package org.rippleosi.common.types;
 
-/**
- */
-public interface Repository {
-
-    /**
-     * @return Used to identify a specific implementation of a Repository
-     */
-    RepoSource getSource();
-
-    /**
-     * @return Used to determine order of preference for a Repository's data
-     */
-    int getPriority();
+public interface RepoSource {
+    public String getSourceName();
 }

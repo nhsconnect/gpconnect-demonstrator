@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.rippleosi.common.exception.ConfigurationException;
+import org.rippleosi.common.types.RepoSourceType;
 
 /**
  */
@@ -34,7 +35,7 @@ public class NotConfiguredReferralSearchTest {
 
     @Test
     public void shouldReportAsNotConfiguredImplementation() {
-        assertEquals("not configured", referralSearch.getSource());
+        assertEquals(RepoSourceType.NONE, referralSearch.getSource());
     }
 
     @Test(expected = ConfigurationException.class)

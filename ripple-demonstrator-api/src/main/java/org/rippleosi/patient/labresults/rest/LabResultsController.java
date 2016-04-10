@@ -17,6 +17,8 @@ package org.rippleosi.patient.labresults.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.labresults.model.LabResultDetails;
 import org.rippleosi.patient.labresults.model.LabResultSummary;
 import org.rippleosi.patient.labresults.search.LabResultSearch;
@@ -40,10 +42,11 @@ public class LabResultsController {
     @RequestMapping(method = RequestMethod.GET)
     public List<LabResultSummary> findAllLabResults(@PathVariable("patientId") String patientId,
                                                     @RequestParam(required = false) String source) {
-        LabResultSearch labResultSearch = labResultSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        LabResultSearch labResultSearch = labResultSearchFactory.select(sourceType);
         List<LabResultSummary> results = labResultSearch.findAllLabResults(patientId);
 
-        LabResultSearch openEhrSearch = labResultSearchFactory.select("Marand");
+        LabResultSearch openEhrSearch = labResultSearchFactory.select(RepoSourceType.MARAND);
         results.addAll(openEhrSearch.findAllLabResults(patientId));
 
         return results;
@@ -53,7 +56,8 @@ public class LabResultsController {
     public LabResultDetails findLabResult(@PathVariable("patientId") String patientId,
                                           @PathVariable("resultId") String resultId,
                                           @RequestParam(required = false) String source) {
-        LabResultSearch labResultSearch = labResultSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        LabResultSearch labResultSearch = labResultSearchFactory.select(sourceType);
 
         return labResultSearch.findLabResult(patientId, resultId);
     }

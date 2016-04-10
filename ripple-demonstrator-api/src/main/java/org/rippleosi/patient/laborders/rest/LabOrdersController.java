@@ -17,6 +17,8 @@ package org.rippleosi.patient.laborders.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.laborders.model.LabOrderDetails;
 import org.rippleosi.patient.laborders.model.LabOrderSummary;
 import org.rippleosi.patient.laborders.search.LabOrderSearch;
@@ -46,10 +48,11 @@ public class LabOrdersController {
     @RequestMapping(method = RequestMethod.GET)
     public List<LabOrderSummary> findAllLabOrders(@PathVariable("patientId") String patientId,
                                                   @RequestParam(required = false) String source) {
-        LabOrderSearch labOrderSearch = labOrderSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        LabOrderSearch labOrderSearch = labOrderSearchFactory.select(sourceType);
         List<LabOrderSummary> allergies = labOrderSearch.findAllLabOrders(patientId);
 
-        LabOrderSearch openehrSearch = labOrderSearchFactory.select("Marand");
+        LabOrderSearch openehrSearch = labOrderSearchFactory.select(RepoSourceType.MARAND);
         allergies.addAll(openehrSearch.findAllLabOrders(patientId));
 
         return allergies;
@@ -59,7 +62,8 @@ public class LabOrdersController {
     public LabOrderDetails findLabOrder(@PathVariable("patientId") String patientId,
                                         @PathVariable("orderId") String orderId,
                                         @RequestParam(required = false) String source) {
-        LabOrderSearch labOrderSearch = labOrderSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        LabOrderSearch labOrderSearch = labOrderSearchFactory.select(sourceType);
 
         return labOrderSearch.findLabOrder(patientId, orderId);
     }
@@ -68,7 +72,8 @@ public class LabOrdersController {
     public void createLabOrders(@PathVariable("patientId") String patientId,
                                 @RequestParam(required = false) String source,
                                 @RequestBody List<LabOrderDetails> labOrders) {
-        LabOrderStore labOrderStore = labOrderStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        LabOrderStore labOrderStore = labOrderStoreFactory.select(sourceType);
 
         labOrderStore.create(patientId, labOrders);
     }

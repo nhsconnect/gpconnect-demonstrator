@@ -17,6 +17,8 @@ package org.rippleosi.patient.contacts.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.contacts.model.ContactDetails;
 import org.rippleosi.patient.contacts.model.ContactHeadline;
 import org.rippleosi.patient.contacts.model.ContactSummary;
@@ -47,7 +49,8 @@ public class ContactsController {
     @RequestMapping(method = RequestMethod.GET)
     public List<ContactSummary> findAllContacts(@PathVariable("patientId") String patientId,
                                                 @RequestParam(required = false) String source) {
-        ContactSearch contactSearch = contactSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ContactSearch contactSearch = contactSearchFactory.select(sourceType);
 
         return contactSearch.findAllContacts(patientId);
     }
@@ -55,7 +58,8 @@ public class ContactsController {
     @RequestMapping(value = "/headlines", method = RequestMethod.GET)
     public List<ContactHeadline> findContactHeadlines(@PathVariable("patientId") String patientId,
                                                       @RequestParam(required = false) String source) {
-        ContactSearch contactSearch = contactSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ContactSearch contactSearch = contactSearchFactory.select(sourceType);
 
         return contactSearch.findContactHeadlines(patientId);
     }
@@ -64,7 +68,8 @@ public class ContactsController {
     public ContactDetails findContact(@PathVariable("patientId") String patientId,
                                       @PathVariable("contactId") String contactId,
                                       @RequestParam(required = false) String source) {
-        ContactSearch contactSearch = contactSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ContactSearch contactSearch = contactSearchFactory.select(sourceType);
 
         return contactSearch.findContact(patientId, contactId);
     }
@@ -73,7 +78,8 @@ public class ContactsController {
     public void createContact(@PathVariable("patientId") String patientId,
                               @RequestParam(required = false) String source,
                               @RequestBody ContactDetails contact) {
-        ContactStore contactStore = contactStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ContactStore contactStore = contactStoreFactory.select(sourceType);
 
         contactStore.create(patientId, contact);
     }
@@ -82,7 +88,8 @@ public class ContactsController {
     public void updateContact(@PathVariable("patientId") String patientId,
                               @RequestParam(required = false) String source,
                               @RequestBody ContactDetails contact) {
-        ContactStore contactStore = contactStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ContactStore contactStore = contactStoreFactory.select(sourceType);
 
         contactStore.update(patientId, contact);
     }

@@ -18,12 +18,14 @@ package org.rippleosi.search.setting;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.patient.summary.search.PatientSearch;
 import org.rippleosi.patient.summary.search.PatientSearchFactory;
-import org.rippleosi.search.patient.stats.model.SearchTableResults;
 import org.rippleosi.search.patient.stats.PatientStatsSearch;
 import org.rippleosi.search.patient.stats.PatientStatsSearchFactory;
+import org.rippleosi.search.patient.stats.model.SearchTableResults;
 import org.rippleosi.search.setting.table.model.SettingTableQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,10 +48,12 @@ public class SearchBySettingController {
     public SearchTableResults findSettingTableData(@RequestParam(required = false) String patientSource,
                                                    @RequestParam(required = false) String patientDataSource,
                                                    @RequestBody SettingTableQuery tableQuery) {
-        PatientSearch patientSearch = patientSearchFactory.select(patientSource);
+        final RepoSource patientSourceType = RepoSourceType.fromString(patientSource);
+        PatientSearch patientSearch = patientSearchFactory.select(patientSourceType);
         List<PatientSummary> patientSummaries = patientSearch.findAllPatientsByDepartment(tableQuery);
 
-        PatientStatsSearch patientStatsSearch = patientStatsSearchFactory.select(patientDataSource);
+        final RepoSource patientDataSourceType = RepoSourceType.fromString(patientDataSource);
+        PatientStatsSearch patientStatsSearch = patientStatsSearchFactory.select(patientDataSourceType);
         SearchTableResults associatedData = patientStatsSearch.findAssociatedPatientData(tableQuery, patientSummaries);
 
         Long countByDepartment = patientSearch.findPatientCountByDepartment(tableQuery.getSearchString());

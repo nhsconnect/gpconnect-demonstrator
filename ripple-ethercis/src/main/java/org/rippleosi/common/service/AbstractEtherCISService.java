@@ -62,8 +62,6 @@ public class AbstractEtherCISService implements Repository {
     private final Map<String, String> idCache = Collections.synchronizedMap(LazyMap.lazyMap(new LRUMap<>(), new EtherCISEhrIdLookup()));
 
     @Override
-    public String getSource() {
-        return "EtherCIS";
     }
 
     @Override

@@ -16,6 +16,7 @@
 package org.rippleosi.patient.procedures.store;
 
 import org.apache.camel.Produce;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.procedures.model.ProcedureDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +45,8 @@ public class ActiveMQProxyProcedureStore implements ProcedureStore {
     }
 
     @Override
-    public String getSource() {
-        return "activemq";
+    public RepoSourceType getSource() {
+        return RepoSourceType.ACTIVEMQ;
     }
 
     @Override

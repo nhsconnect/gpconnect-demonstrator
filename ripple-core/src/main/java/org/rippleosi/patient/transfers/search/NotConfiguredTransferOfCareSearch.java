@@ -18,14 +18,15 @@ package org.rippleosi.patient.transfers.search;
 import java.util.List;
 
 import org.rippleosi.common.exception.ConfigurationException;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.transfers.model.TransferOfCareDetails;
 import org.rippleosi.patient.transfers.model.TransferOfCareSummary;
 
 public class NotConfiguredTransferOfCareSearch implements TransferOfCareSearch {
 
     @Override
-    public String getSource() {
-        return "not configured";
+    public RepoSourceType getSource() {
+        return RepoSourceType.NONE;
     }
 
     @Override

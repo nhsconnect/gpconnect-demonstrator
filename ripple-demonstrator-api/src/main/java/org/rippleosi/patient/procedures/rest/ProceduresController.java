@@ -17,6 +17,8 @@ package org.rippleosi.patient.procedures.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.procedures.model.ProcedureDetails;
 import org.rippleosi.patient.procedures.model.ProcedureSummary;
 import org.rippleosi.patient.procedures.search.ProcedureSearch;
@@ -46,7 +48,8 @@ public class ProceduresController {
     @RequestMapping(method = RequestMethod.GET)
     public List<ProcedureSummary> findAllProcedures(@PathVariable("patientId") String patientId,
                                                     @RequestParam(required = false) String source) {
-        ProcedureSearch procedureSearch = procedureSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ProcedureSearch procedureSearch = procedureSearchFactory.select(sourceType);
 
         return procedureSearch.findAllProcedures(patientId);
     }
@@ -55,7 +58,8 @@ public class ProceduresController {
     public ProcedureDetails findProcedure(@PathVariable("patientId") String patientId,
                                           @PathVariable("procedureId") String procedureId,
                                           @RequestParam(required = false) String source) {
-        ProcedureSearch procedureSearch = procedureSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ProcedureSearch procedureSearch = procedureSearchFactory.select(sourceType);
 
         return procedureSearch.findProcedure(patientId, procedureId);
     }
@@ -64,7 +68,8 @@ public class ProceduresController {
     public void createProcedure(@PathVariable("patientId") String patientId,
                                 @RequestParam(required = false) String source,
                                 @RequestBody ProcedureDetails procedure) {
-        ProcedureStore procedureStore = procedureStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ProcedureStore procedureStore = procedureStoreFactory.select(sourceType);
 
         procedureStore.create(patientId, procedure);
     }
@@ -73,7 +78,8 @@ public class ProceduresController {
     public void updateProcedure(@PathVariable("patientId") String patientId,
                                 @RequestParam(required = false) String source,
                                 @RequestBody ProcedureDetails procedure) {
-        ProcedureStore procedureStore = procedureStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ProcedureStore procedureStore = procedureStoreFactory.select(sourceType);
 
         procedureStore.update(patientId, procedure);
     }

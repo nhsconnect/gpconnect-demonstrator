@@ -18,6 +18,8 @@ package org.rippleosi.patient.appointments.store;
 import org.apache.camel.Body;
 import org.apache.camel.Header;
 import org.rippleosi.common.exception.ConfigurationException;
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.appointments.model.AppointmentDetails;
 
 /**
@@ -25,8 +27,8 @@ import org.rippleosi.patient.appointments.model.AppointmentDetails;
 public class NotConfiguredAppointmentStore implements AppointmentStore {
 
     @Override
-    public String getSource() {
-        return "not configured";
+    public RepoSource getSource() {
+        return RepoSourceType.NONE;
     }
 
     @Override

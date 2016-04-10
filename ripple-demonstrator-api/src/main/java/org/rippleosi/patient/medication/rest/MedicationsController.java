@@ -17,6 +17,8 @@ package org.rippleosi.patient.medication.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.medication.model.MedicationDetails;
 import org.rippleosi.patient.medication.model.MedicationHeadline;
 import org.rippleosi.patient.medication.model.MedicationSummary;
@@ -47,7 +49,8 @@ public class MedicationsController {
     @RequestMapping(method = RequestMethod.GET)
     public List<MedicationSummary> findAllMedications(@PathVariable("patientId") String patientId,
                                                       @RequestParam(required = false) String source) {
-        MedicationSearch medicationSearch = medicationSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        MedicationSearch medicationSearch = medicationSearchFactory.select(sourceType);
 
         return medicationSearch.findAllMedication(patientId);
     }
@@ -55,7 +58,8 @@ public class MedicationsController {
     @RequestMapping(value = "/headlines", method = RequestMethod.GET)
     public List<MedicationHeadline> findMedicationHeadlines(@PathVariable("patientId") String patientId,
                                                             @RequestParam(required = false) String source) {
-        MedicationSearch medicationSearch = medicationSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        MedicationSearch medicationSearch = medicationSearchFactory.select(sourceType);
 
         return medicationSearch.findMedicationHeadlines(patientId);
     }
@@ -64,7 +68,8 @@ public class MedicationsController {
     public MedicationDetails findMedication(@PathVariable("patientId") String patientId,
                                             @PathVariable("medicationId") String medicationId,
                                             @RequestParam(required = false) String source) {
-        MedicationSearch medicationSearch = medicationSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        MedicationSearch medicationSearch = medicationSearchFactory.select(sourceType);
 
         return medicationSearch.findMedication(patientId, medicationId);
     }
@@ -73,7 +78,8 @@ public class MedicationsController {
     public void createMedication(@PathVariable("patientId") String patientId,
                                  @RequestParam(required = false) String source,
                                  @RequestBody MedicationDetails medication) {
-        MedicationStore medicationStore = medicationStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        MedicationStore medicationStore = medicationStoreFactory.select(sourceType);
 
         medicationStore.create(patientId, medication);
     }
@@ -82,7 +88,8 @@ public class MedicationsController {
     public void updateMedication(@PathVariable("patientId") String patientId,
                                  @RequestParam(required = false) String source,
                                  @RequestBody MedicationDetails medication) {
-        MedicationStore medicationStore = medicationStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        MedicationStore medicationStore = medicationStoreFactory.select(sourceType);
 
         medicationStore.update(patientId, medication);
     }

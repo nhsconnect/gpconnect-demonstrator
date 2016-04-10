@@ -17,8 +17,11 @@ package org.rippleosi.common.repo;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.annotation.PostConstruct;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -26,7 +29,7 @@ import org.springframework.context.ApplicationContext;
  */
 public abstract class AbstractRepositoryFactory<R extends Repository> implements RepositoryFactory<R> {
 
-    private final Map<String, R> repositories = new HashMap<>();
+    private final Map<RepoSource, R> repositories = new HashMap<>();
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -35,7 +38,7 @@ public abstract class AbstractRepositoryFactory<R extends Repository> implements
     protected abstract Class<R> repositoryClass();
 
     @Override
-    public R select(String source) {
+    public R select(RepoSource source) {
 
         R repository = selectSpecifiedRepository(source);
 
@@ -50,7 +53,7 @@ public abstract class AbstractRepositoryFactory<R extends Repository> implements
         return repository;
     }
 
-    private R selectSpecifiedRepository(String source) {
+    private R selectSpecifiedRepository(RepoSource source) {
         return repositories.get(source);
     }
 

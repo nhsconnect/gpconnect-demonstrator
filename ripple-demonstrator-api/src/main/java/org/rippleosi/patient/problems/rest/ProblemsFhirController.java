@@ -21,6 +21,8 @@ import java.util.List;
 
 import org.hl7.fhir.instance.formats.JsonParser;
 import org.hl7.fhir.instance.model.Condition;
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.problems.search.ProblemSearch;
 import org.rippleosi.patient.problems.search.ProblemSearchFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +41,10 @@ public class ProblemsFhirController {
 
     @RequestMapping(method = RequestMethod.GET)
     public List<String> findAllConditions(@PathVariable("patientId") String patientId,
-                                          @RequestParam(required = false) String source) throws Exception {
-        ProblemSearch search = problemSearchFactory.select(source);
+                                          @RequestParam(required = false) String source)
+            throws Exception {
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ProblemSearch search = problemSearchFactory.select(sourceType);
 
         List<Condition> conditions = search.findAllFhirConditions(patientId);
         List<String> output = new ArrayList<>();
@@ -57,8 +61,10 @@ public class ProblemsFhirController {
     @RequestMapping(value = "/{conditionId}", method = RequestMethod.GET)
     public String findCondition(@PathVariable("patientId") String patientId,
                                 @PathVariable("conditionId") String conditionId,
-                                @RequestParam(required = false) String source) throws Exception {
-        ProblemSearch search = problemSearchFactory.select(source);
+                                @RequestParam(required = false) String source)
+            throws Exception {
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ProblemSearch search = problemSearchFactory.select(sourceType);
 
         Condition condition = search.findFhirCondition(patientId, conditionId);
 

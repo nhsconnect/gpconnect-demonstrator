@@ -16,6 +16,8 @@
 package org.rippleosi.patient.appointments.store;
 
 import org.apache.camel.Produce;
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.appointments.model.AppointmentDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +46,8 @@ public class ActiveMQProxyAppointmentStore implements AppointmentStore {
     }
 
     @Override
-    public String getSource() {
-        return "activemq";
+    public RepoSource getSource() {
+        return RepoSourceType.ACTIVEMQ;
     }
 
     @Override

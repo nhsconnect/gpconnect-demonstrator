@@ -18,6 +18,7 @@ package org.rippleosi.patient.dicom.search;
 import java.util.List;
 
 import org.rippleosi.common.repo.Repository;
+import org.rippleosi.common.types.RepoSource;
 import org.rippleosi.patient.dicom.model.DicomInstanceId;
 import org.rippleosi.patient.dicom.model.DicomInstanceSummary;
 import org.rippleosi.patient.dicom.model.DicomSeriesDetails;
@@ -26,13 +27,13 @@ import org.rippleosi.patient.dicom.model.DicomStudySummary;
 
 public interface DicomSearch extends Repository {
 
-    List<DicomStudySummary> findAllDicomStudies(String patientId, String source);
+    List<DicomStudySummary> findAllDicomStudies(String patientId, RepoSource source);
 
-    DicomSeriesSummary findAllDicomSeriesInStudy(String patientId, String studyId, String source);
+    DicomSeriesSummary findAllDicomSeriesInStudy(String patientId, String studyId, RepoSource source);
 
-    DicomSeriesDetails findSeriesDetails(String patientId, String seriesId, String source);
+    DicomSeriesDetails findSeriesDetails(String patientId, String seriesId, RepoSource source);
 
-    DicomInstanceSummary findInstanceSummary(String patientId, String instanceId, String source);
+    DicomInstanceSummary findInstanceSummary(String patientId, String instanceId, RepoSource source);
 
-    DicomInstanceId findFirstInstanceIdInSeries(String patientId, String seriesId, String source);
+    DicomInstanceId findFirstInstanceIdInSeries(String patientId, String seriesId, RepoSource source);
 }

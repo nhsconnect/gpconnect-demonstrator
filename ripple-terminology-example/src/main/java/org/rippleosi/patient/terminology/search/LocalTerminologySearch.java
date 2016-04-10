@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.terminology.model.Terminology;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,8 +40,8 @@ public class LocalTerminologySearch implements TerminologySearch {
     private Environment localTerminologyResources;
 
     @Override
-    public String getSource() {
-        return "local-terminology";
+    public RepoSourceType getSource() {
+        return RepoSourceType.TERMINOLOGY;
     }
 
     @Override

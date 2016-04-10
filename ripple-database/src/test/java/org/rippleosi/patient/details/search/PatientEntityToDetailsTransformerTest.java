@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.rippleosi.common.exception.DataNotFoundException;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.medical.practicitioners.doctor.model.GPEntity;
 import org.rippleosi.patient.allergies.search.AllergySearch;
 import org.rippleosi.patient.allergies.search.AllergySearchFactory;
@@ -94,7 +95,7 @@ public class PatientEntityToDetailsTransformerTest {
         when(mockContactSearchFactory.select(null)).thenReturn(mockContactSearch);
         when(mockMedicationSearchFactory.select(null)).thenReturn(mockMedicationSearch);
         when(mockProblemSearchFactory.select(null)).thenReturn(mockProblemSearch);
-        when(mockProblemSearchFactory.select("vista")).thenReturn(mockProblemSearch);
+        when(mockProblemSearchFactory.select(RepoSourceType.VISTA)).thenReturn(mockProblemSearch);
         when(mockTransferSearchFactory.select(null)).thenReturn(mockTransferSearch);
     }
 

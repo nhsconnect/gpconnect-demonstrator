@@ -25,6 +25,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
+import org.rippleosi.common.types.TestSourceType;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -32,14 +35,13 @@ import org.springframework.test.util.ReflectionTestUtils;
  */
 public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<R>, R extends Repository> {
 
-    private static final String SOURCE = "source ";
-
     private F factory;
 
     @Mock
     private ApplicationContext mockApplicationContext;
 
     protected abstract F createRepositoryFactory();
+
     protected abstract Class<R> getRepositoryClass();
 
     @Before
@@ -55,7 +57,7 @@ public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<
         initContext(0);
 
         R repository = factory.select(null);
-        assertEquals("not configured", repository.getSource());
+        assertEquals(RepoSourceType.NONE, repository.getSource());
     }
 
     @Test
@@ -64,10 +66,10 @@ public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<
         initContext(1);
 
         R nullSource = factory.select(null);
-        R source1 = factory.select(SOURCE + 1);
-        R source2 = factory.select(SOURCE + 2);
+        R source1 = factory.select(TestSourceType.SOURCE1);
+        R source2 = factory.select(TestSourceType.SOURCE2);
 
-        String expected = SOURCE + 1;
+        TestSourceType expected = TestSourceType.SOURCE1;
         assertEquals(expected, nullSource.getSource());
         assertEquals(expected, source1.getSource());
         assertEquals(expected, source2.getSource());
@@ -78,9 +80,9 @@ public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<
 
         initContext(4);
 
-        R source = factory.select(SOURCE + 2);
+        R source = factory.select(TestSourceType.SOURCE2);
 
-        assertEquals(SOURCE + 2, source.getSource());
+        assertEquals(TestSourceType.SOURCE2, source.getSource());
     }
 
     @Test
@@ -88,9 +90,9 @@ public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<
 
         initContext(2);
 
-        R source = factory.select("invalid");
+        R source = factory.select(null);
 
-        assertEquals(SOURCE + 1, source.getSource());
+        assertEquals(TestSourceType.SOURCE1, source.getSource());
     }
 
     private void initContext(int count) {
@@ -107,11 +109,12 @@ public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<
 
         Map<String, R> repositoryMap = new HashMap<>();
         for (int i = 1; i <= count; i++) {
+            RepoSource source = TestSourceType.fromString("Source " + i);
             R repository = Mockito.mock(cls);
-            when(repository.getSource()).thenReturn(SOURCE + i);
+            when(repository.getSource()).thenReturn(source);
             when(repository.getPriority()).thenReturn(i);
 
-            repositoryMap.put(SOURCE + i, repository);
+            repositoryMap.put("Source " + i, repository);
         }
 
         return repositoryMap;

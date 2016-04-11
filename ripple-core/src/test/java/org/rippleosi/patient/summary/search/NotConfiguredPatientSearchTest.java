@@ -15,11 +15,11 @@
  */
 package org.rippleosi.patient.summary.search;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.rippleosi.common.exception.ConfigurationException;
+
+import static org.junit.Assert.assertEquals;
 
 public class NotConfiguredPatientSearchTest {
 
@@ -52,12 +52,12 @@ public class NotConfiguredPatientSearchTest {
 
     @Test(expected = ConfigurationException.class)
     public void shouldThrowExceptionWhenTryingToFindPatientsByQuery() {
-        patientSearch.findPatientsByQuery(null);
+        patientSearch.findPatientsBySearchString(null);
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldThrowExceptionWhenTryingToCountPatientsByQuery() {
-        patientSearch.countPatientsByQuery(null);
+        patientSearch.countPatientsBySearchString(null);
     }
 
     @Test(expected = ConfigurationException.class)
@@ -73,5 +73,10 @@ public class NotConfiguredPatientSearchTest {
     @Test(expected = ConfigurationException.class)
     public void shouldThrowExceptionWhenTryingToFindPatientCountByDepartment() {
         patientSearch.findPatientCountByDepartment(null);
+    }
+
+    @Test(expected = ConfigurationException.class)
+    public void shouldThrowExceptionWhenTryingToFindPatientsByQueryObject() {
+        patientSearch.findPatientsByQueryObject(null);
     }
 }

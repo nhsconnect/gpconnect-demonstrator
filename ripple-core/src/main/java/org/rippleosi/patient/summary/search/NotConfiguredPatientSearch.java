@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.rippleosi.common.exception.ConfigurationException;
 import org.rippleosi.patient.summary.model.PatientDetails;
+import org.rippleosi.patient.summary.model.PatientQueryParams;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.search.patient.stats.model.PatientTableQuery;
 import org.rippleosi.search.reports.table.model.ReportTableQuery;
@@ -54,12 +55,12 @@ public class NotConfiguredPatientSearch implements PatientSearch {
     }
 
     @Override
-    public List<PatientSummary> findPatientsByQuery(PatientTableQuery tableQuery) {
+    public List<PatientSummary> findPatientsBySearchString(PatientTableQuery tableQuery) {
         throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
     }
 
     @Override
-    public Long countPatientsByQuery(PatientTableQuery tableQuery) {
+    public Long countPatientsBySearchString(PatientTableQuery tableQuery) {
         throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
     }
 
@@ -75,6 +76,11 @@ public class NotConfiguredPatientSearch implements PatientSearch {
 
     @Override
     public Long findPatientCountByDepartment(String department) {
+        throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
+    }
+
+    @Override
+    public List<PatientSummary> findPatientsByQueryObject(PatientQueryParams patientQueryParams) {
         throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
     }
 }

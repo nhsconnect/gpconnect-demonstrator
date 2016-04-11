@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .factory('AdvancedSearch', function($modal) {
+  .factory('AdvancedSearch', function($modal, $http) {
 
     var isModalClosed = true;
 
@@ -40,8 +40,18 @@ angular.module('rippleDemonstrator')
       });
     };
 
+    var searchByNhsNumber = function (nhsNumber) {
+      return $http.get('/api/patients/' + nhsNumber);
+    };
+
+    var searchByDetails = function (queryParams) {
+      return $http.post('/api/patients/search', queryParams);
+    };
+
     return {
       isModalClosed: isModalClosed,
-      openAdvancedSearch: openAdvancedSearch
+      openAdvancedSearch: openAdvancedSearch,
+      searchByNhsNumber: searchByNhsNumber,
+      searchByDetails: searchByDetails
     }
   });

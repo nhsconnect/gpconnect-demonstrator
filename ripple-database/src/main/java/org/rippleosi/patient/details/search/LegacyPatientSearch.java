@@ -15,7 +15,11 @@
  */
 package org.rippleosi.patient.details.search;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -23,11 +27,13 @@ import com.mysema.query.BooleanBuilder;
 import com.mysema.util.ArrayUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.details.model.PatientEntity;
 import org.rippleosi.patient.details.model.QPatientEntity;
 import org.rippleosi.patient.details.repo.PatientRepository;
 import org.rippleosi.patient.summary.model.PatientDetails;
+import org.rippleosi.patient.summary.model.PatientQueryParams;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.patient.summary.search.PatientSearch;
 import org.rippleosi.search.common.model.PageableTableQuery;
@@ -101,7 +107,7 @@ public class LegacyPatientSearch implements PatientSearch {
     }
 
     @Override
-    public List<PatientSummary> findPatientsByQuery(PatientTableQuery tableQuery) {
+    public List<PatientSummary> findPatientsBySearchString(PatientTableQuery tableQuery) {
         BooleanBuilder predicate = generateSearchByPatientReportTablePredicate(tableQuery);
 
         if (predicate == null) {
@@ -113,7 +119,7 @@ public class LegacyPatientSearch implements PatientSearch {
     }
 
     @Override
-    public Long countPatientsByQuery(PatientTableQuery tableQuery) {
+    public Long countPatientsBySearchString(PatientTableQuery tableQuery) {
         BooleanBuilder predicate = generateSearchByPatientReportTablePredicate(tableQuery);
         return predicate == null ? 0 : patientRepository.count(predicate);
     }
@@ -236,6 +242,30 @@ public class LegacyPatientSearch implements PatientSearch {
     @Override
     public Long findPatientCountByDepartment(String department) {
         return patientRepository.countByDepartmentDepartmentIgnoreCase(department);
+    }
+
+    @Override
+    public List<PatientSummary> findPatientsByQueryObject(PatientQueryParams params) {
+        QPatientEntity blueprint = QPatientEntity.patientEntity;
+        BooleanBuilder predicate = new BooleanBuilder();
+
+        if (params.getSurname() != null) {
+            predicate.and(blueprint.lastName.equalsIgnoreCase(params.getSurname()));
+        }
+        if (params.getForename() != null) {
+            predicate.and(blueprint.firstName.equalsIgnoreCase(params.getForename()));
+        }
+        if (params.getDateOfBirth() != null) {
+            Date dateOfBirth = DateUtils.truncate(params.getDateOfBirth(), Calendar.DATE);
+
+            predicate.and(blueprint.dateOfBirth.eq(dateOfBirth));
+        }
+        if (params.getGender() != null) {
+            predicate.and(blueprint.gender.eq(params.getGender()));
+        }
+
+        Iterable<PatientEntity> patients = patientRepository.findAll(predicate);
+        return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
     }
 
     private PageRequest generatePageRequest(PageableTableQuery tableQuery) {

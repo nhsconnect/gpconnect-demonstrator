@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller("AdvancedSearchController", function($scope, $modalInstance, modal, searchParams) {
+  .controller("AdvancedSearchController", function ($scope, $modalInstance, modal, searchParams, AdvancedSearch) {
 
     $scope.modal = modal;
     $scope.searchParams = searchParams;
@@ -12,17 +12,29 @@ angular.module('rippleDemonstrator')
       $modalInstance.dismiss('cancel');
     };
 
-    $scope.ok = function(searchForm) {
-      $scope.formSubmitted = true;
+    $scope.ok = function (searchForm) {
+      var nhsNumber = $scope.searchParams.nhsNumber;
 
-      if ((!$scope.detailsFocused && searchForm.nhsNumber.$valid) ||
-           ($scope.detailsFocused && searchForm.lastName.$valid && searchForm.firstName.$valid && searchForm.dateOfBirth.$valid)) {
+      if (nhsNumber != undefined && !$scope.isNhsNumberRequired(searchForm) && !$scope.isNhsNumberTooShort(nhsNumber) && !$scope.isNhsNumberTooShort(nhsNumber)) {
+        AdvancedSearch.searchByNhsNumber(nhsNumber).then(function (result) {
+          $scope.patients = [];
+          $scope.patients.push(result.data);
+        });
 
-        $modalInstance.close($scope.searchParams);
+        $scope.formSubmitted = true;
+        $modalInstance.close();
+      }
+      else if (!$scope.areDetailsFieldsClean(searchForm)) {
+        AdvancedSearch.searchByDetails($scope.searchParams).then(function (result) {
+          $scope.patients = result.data;
+        });
+
+        $scope.formSubmitted = true;
+        $modalInstance.close();
       }
     };
 
-    $scope.openDatePicker = function($event, name) {
+    $scope.openDatePicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();
 
@@ -30,7 +42,7 @@ angular.module('rippleDemonstrator')
     };
 
     $scope.isNhsNumberRequired = function (advancedSearchForm) {
-      var nhsNumber = advancedSearchForm.nhsNumber.$viewValue;
+      var nhsNumber = $scope.searchParams.nhsNumber;
 
       if (nhsNumber === undefined && $scope.areDetailsFieldsClean(advancedSearchForm)) {
         return true;
@@ -67,19 +79,15 @@ angular.module('rippleDemonstrator')
       return nhsNumberField.$invalid || nhsNumberField.$pristine;
     };
 
-    $scope.areDetailsFieldsClean = function(advancedSearchForm) {
-      var lastName = advancedSearchForm.lastName;
-      var firstName = advancedSearchForm.firstName;
+    $scope.areDetailsFieldsClean = function (advancedSearchForm) {
+      var surname = advancedSearchForm.surname;
+      var forename = advancedSearchForm.forename;
       var dateOfBirth = advancedSearchForm.dateOfBirth;
 
-      var lastNameValid = lastName.$invalid || lastName.$pristine || lastName.$viewValue === '';
-      var firstNameValid = firstName.$invalid || firstName.$pristine || firstName.$viewValue === '';
-      var dateOfBirthValid = dateOfBirth.$invalid || dateOfBirth.$pristine || dateOfBirth.$viewValue === '';
+      var surnameClean = surname.$invalid || surname.$pristine || $scope.searchParams.surname == '';
+      var forenameClean = forename.$invalid || forename.$pristine || $scope.searchParams.forename == '';
+      var dateOfBirthClean = dateOfBirth.$invalid || dateOfBirth.$pristine || $scope.searchParams.dateOfBirth == '';
 
-      return lastNameValid && firstNameValid && dateOfBirthValid;
+      return surnameClean && forenameClean && dateOfBirthClean;
     };
-
-    $scope.areDetailsFieldsInvalid = function (advancedSearchForm) {
-      return advancedSearchForm.lastName.$invalid || advancedSearchForm.firstName.$invalid || advancedSearchForm.dateOfBirth.$invalid;
-    }
   });

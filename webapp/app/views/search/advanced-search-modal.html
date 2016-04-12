@@ -14,7 +14,7 @@
           <label for="nhsNumber" class="control-label col-md-12">NHS Number</label>
           <div class="col-md-6">
             <div class="input-group">
-              <input type="text" tabindex="1" class="form-control input-sm" id="nhsNumber" name="nhsNumber" ng-model="searchParams.nhsNumber" auto-focus is-valid-nhs-number ng-focus="detailsFocused=false" ng-required="!detailsFocused"/>
+              <input type="text" tabindex="1" class="form-control input-sm" id="nhsNumber" name="nhsNumber" ng-model="searchParams.nhsNumber" focus-element="nhsNumberFocus" is-valid-nhs-number ng-focus="detailsFocused=false" ng-required="!detailsFocused"/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && advancedSearchForm.nhsNumber.$invalid && !detailsFocused">You must enter a value.</span>
           </div>
@@ -34,7 +34,7 @@
           <label for="surname" class="control-label col-md-12">Last Name</label>
           <div class="col-md-6">
             <div class="input-group">
-              <input type="text" tabindex="2" class="form-control input-sm" id="surname" name="surname" ng-model="searchParams.surname" ng-focus="detailsFocused=true" ng-required='detailsFocused'/>
+              <input type="text" tabindex="2" class="form-control input-sm" id="surname" name="surname" ng-model="searchParams.surname" focus-element="surnameFocus" ng-focus="detailsFocused=true" ng-required='detailsFocused'/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && advancedSearchForm.surname.$error.required && isNhsNumberFieldInvalid(advancedSearchForm.nhsNumber)">You must enter a value.</span>
           </div>
@@ -42,7 +42,7 @@
             <div class="col-inline-label">
               e.g. Smith
             </div>
-            <span class="required-label" ng-show="detailsFocused && isNhsNumberFieldInvalid(advancedSearchForm.nhsNumber) && (advancedSearchForm.lastName.$invalid || advancedSearchForm.firstName.$invalid || advancedSearchForm.dateOfBirth.$invalid)">*Required</span>
+            <span class="required-label" ng-show="detailsFocused && isNhsNumberFieldInvalid(advancedSearchForm.nhsNumber) && (advancedSearchForm.surname.$invalid || advancedSearchForm.forename.$invalid || advancedSearchForm.dateOfBirth.$invalid)">*Required</span>
           </div>
         </div>
 
@@ -60,7 +60,7 @@
             <div class="col-inline-label">
               e.g. John
             </div>
-            <span class="required-label" ng-show="detailsFocused && isNhsNumberFieldInvalid(advancedSearchForm.nhsNumber) && (advancedSearchForm.lastName.$invalid || advancedSearchForm.firstName.$invalid || advancedSearchForm.dateOfBirth.$invalid)">*Required</span>
+            <span class="required-label" ng-show="detailsFocused && isNhsNumberFieldInvalid(advancedSearchForm.nhsNumber) && (advancedSearchForm.surname.$invalid || advancedSearchForm.forename.$invalid || advancedSearchForm.dateOfBirth.$invalid)">*Required</span>
           </div>
         </div>
 
@@ -81,7 +81,7 @@
             <div class="col-inline-label">
               e.g. 01-Jan-1945
             </div>
-            <span class="required-label" ng-show="detailsFocused && isNhsNumberFieldInvalid(advancedSearchForm.nhsNumber) && (advancedSearchForm.lastName.$invalid || advancedSearchForm.firstName.$invalid || advancedSearchForm.dateOfBirth.$invalid)">*Required</span>
+            <span class="required-label" ng-show="detailsFocused && isNhsNumberFieldInvalid(advancedSearchForm.nhsNumber) && (advancedSearchForm.surname.$invalid || advancedSearchForm.surname.$invalid || advancedSearchForm.dateOfBirth.$invalid)">*Required</span>
           </div>
         </div>
 
@@ -106,5 +106,3 @@
   <a class="btn btn-danger" ng-click="cancel()">Cancel</a>
   <button class="btn btn-success" ng-click="ok(advancedSearchForm)"><i class="fa fa-search"></i> Search</button>
 </div>
-
-

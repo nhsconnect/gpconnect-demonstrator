@@ -32,18 +32,30 @@
       </div>
     </div>
 
-    <div class="col-md-3 col-sm-4 col-xs-12 form-group" ng-if="!filters.department && !filters.ageRange">
+    <div class="col-md-3 col-sm-4 col-xs-12 form-group" ng-if="!filters.department && !filters.ageRange && !filters.advancedSearch">
       <div class="search-left-inner-addon">
         <i class="glyphicon glyphicon-list glyphicon-list-patients" style="color: black"></i>
-        <input class="form-control" placeholder=" All Patients" readonly />
+        <input class="form-control" placeholder=" Patients: All" readonly />
       </div>
     </div>
 
-    <div class="col-md-3 col-sm-4 col-xs-12 form-group" style="float:right">
+    <div class="col-md-3 col-sm-4 col-xs-12 form-group" ng-if="filters.advancedSearch">
+      <div class="search-left-inner-addon">
+        <i class="glyphicon glyphicon-list glyphicon-list-patients" style="color: black"></i>
+        <input class="form-control patientFilterOptions" placeholder="Patients: {{filters.advancedSearchParams.forename}} {{filters.advancedSearchParams.surname}}, {{filters.advancedSearchParams.dateOfBirth | date:'dd-MMM-yyyy'}}" readonly ng-click="openAdvancedSearch()" />
+        <i class="glyphicon fa fa-pencil" style="margin-left: 422px; color: #7cbe31;"></i>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-4 col-xs-12 col-lg-offset-1 form-group">
       <div class="search-left-inner-addon">
         <i class="fi-filter icon-searchbar"></i>
         <input type="search" class="form-control" placeholder=" Filter..." ng-model="search" />
       </div>
+    </div>
+
+    <div class="col-md-5 col-sm-5 col-xs-12 patient-details-tabs" style="float:right">
+      <span class="selectedTab patientInfoTab">Patient Info</span>
     </div>
   </div>
 
@@ -52,7 +64,7 @@
       <tr>
         <th ng-click="sort('name')" ng-class="sortClass('name')">Name</th>
         <th ng-click="sort('address')" ng-class="sortClass('address')">Address</th>
-        <th ng-click="sort('dateOfBirth')" ng-class="sortClass('dateOfBirth')">DOB</th>
+        <th ng-click="sort('dateOfBirth')" ng-class="sortClass('dateOfBirth')">Date of Birth</th>
         <th ng-click="sort('gender')" ng-class="sortClass('gender')">Gender</th>
         <th ng-click="sort('nhsNumber')" ng-class="sortClass('nhsNumber')">NHS No.</th>
       </tr>
@@ -64,7 +76,10 @@
         <td class="dateTime">{{ patient.dateOfBirth | date:'dd-MMM-yyyy' }}</td>
         <td>{{ patient.gender }}</td>
         <td>{{ patient.nhsNumber | formatNHSNumber }} <span class="glyphicon glyphicon-chevron-right" style="float: right"></span> </td>
+      </tr>
 
+      <tr ng-if="!patients.length">
+        <td colspan="3"><span class="label label-default">No patients found</span></td>
       </tr>
     </tbody>
   </table>

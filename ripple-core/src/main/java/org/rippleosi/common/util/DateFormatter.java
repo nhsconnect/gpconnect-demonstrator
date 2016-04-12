@@ -58,7 +58,7 @@ public final class DateFormatter {
     public static Date toDateOnly(String input) {
         Date date = toDate(input);
         if (date != null) {
-            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("BST"));
             calendar.setTime(date);
 
             calendar = DateUtils.truncate(calendar, Calendar.DATE);
@@ -72,7 +72,7 @@ public final class DateFormatter {
     public static Date toTimeOnly(String input) {
         Date date = toDate(input);
         if (date != null) {
-            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("BST"));
             calendar.setTime(date);
 
             calendar.set(Calendar.YEAR, 1970);

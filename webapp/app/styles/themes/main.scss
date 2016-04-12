@@ -2283,3 +2283,8 @@ div#age-chart div.morris-hover.morris-default-style {
 .dicomImageMetadata {
   margin-top: 5px;
 }
+
+.patientFilterOptions:hover {
+  text-decoration: overline;
+  cursor: pointer !important;
+}

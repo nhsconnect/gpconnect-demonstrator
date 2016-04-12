@@ -54,7 +54,7 @@ public class PatientsController {
         return patientSearch.findPatient(patientId);
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @RequestMapping(value = "/advancedSearch", method = RequestMethod.POST)
     public List<PatientSummary> findPatientsByQueryObject(@RequestParam(required = false) String source,
                                                           @RequestBody PatientQueryParams queryParams) {
         PatientSearch patientSearch = patientSearchFactory.select(source);

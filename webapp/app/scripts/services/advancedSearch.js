@@ -24,7 +24,7 @@ angular.module('rippleDemonstrator')
               if (!isNaN(expression)) {
                 params.nhsNumber = expression;
               } else {
-                params.lastName = expression;
+                params.surname = expression;
               }
 
               return params;
@@ -40,18 +40,13 @@ angular.module('rippleDemonstrator')
       });
     };
 
-    var searchByNhsNumber = function (nhsNumber) {
-      return $http.get('/api/patients/' + nhsNumber);
-    };
-
     var searchByDetails = function (queryParams) {
-      return $http.post('/api/patients/search', queryParams);
+      return $http.post('/api/patients/advancedSearch', queryParams);
     };
 
     return {
       isModalClosed: isModalClosed,
       openAdvancedSearch: openAdvancedSearch,
-      searchByNhsNumber: searchByNhsNumber,
       searchByDetails: searchByDetails
     }
   });

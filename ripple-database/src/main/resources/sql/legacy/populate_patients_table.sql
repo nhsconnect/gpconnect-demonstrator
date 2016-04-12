@@ -4,7 +4,7 @@ INSERT INTO poc_legacy.patients
   (id,    title,   first_name,   last_name,    address_1,                              address_2,            address_3,            postcode,   phone,              date_of_birth, gender,   nhs_number,  pas_number,   department_id, gp_id)
 VALUE
   (1,     'Mr',    'Ivor',       'Cox',        '6948 Et St.',                          'Halesowen',          'Worcestershire',     'VX27 5DV', '(011981) 32362',   '1944-06-06',  'Male',   9999999000,  352541,       1,             1),
-  (2,     'Mrs',   'Ahmed',      'Puckett',    'Ap #126-6226 Mi. St.',                 'Oakham',             'Rutland',            'XM9 4RF',  '(0112) 740 5408',  '1920-08-08',  'Male',   9999999001,  623454,       1,             2),
+  (2,     'Mr',    'Ivor',       'Cox',        'Ap #126-6226 Mi. St.',                 'Oakham',             'Rutland',            'XM9 4RF',  '(0112) 740 5408',  '1944-06-06',  'Male',   9999999001,  623454,       1,             2),
   (3,     'Mrs',   'Larissa',    'Mathews',    'P.O. Box 138, 7496 Cursus Avenue',     'Selkirk',            'Selkirkshire',       'X09 3OC',  '0800 1111',        '1937-09-28',  'Female', 9999999002,  346574,       2,             3),
   (4,     'Mr',    'Freya',      'Blackwell',  'P.O. Box 306, 6801 Tellus Street',     'Kirkby Lonsdale',    'Westmorland',        'P32 4GY',  '07624 647524',     '1980-02-03',  'Female', 9999999003,  332546,       1,             4),
   (5,     'Mrs',   'Bertha',     'Case',       'Ap #229-5050 Egestas Avenue',          'St. Albans',         'Hertfordshire',      'B9 8YO',   '0964 934 2028',    '1958-05-14',  'Male',   9999999004,  345267,       3,             5),

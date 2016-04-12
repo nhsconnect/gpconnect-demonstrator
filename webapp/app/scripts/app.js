@@ -23,7 +23,8 @@ angular
         url: '/patients?ageRange&department&order&reverse',
         views: {
           main: { templateUrl: 'views/patients/patients-list.html', controller: 'PatientsListCtrl' }
-        }
+        },
+        params: { patientsList: [], advancedSearchParams: [], displayEmptyTable: false }
       })
 
       .state('patients-list-full', {

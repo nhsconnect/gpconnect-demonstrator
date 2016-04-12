@@ -246,26 +246,44 @@ public class LegacyPatientSearch implements PatientSearch {
 
     @Override
     public List<PatientSummary> findPatientsByQueryObject(PatientQueryParams params) {
-        QPatientEntity blueprint = QPatientEntity.patientEntity;
-        BooleanBuilder predicate = new BooleanBuilder();
-
-        if (params.getSurname() != null) {
-            predicate.and(blueprint.lastName.equalsIgnoreCase(params.getSurname()));
-        }
-        if (params.getForename() != null) {
-            predicate.and(blueprint.firstName.equalsIgnoreCase(params.getForename()));
-        }
-        if (params.getDateOfBirth() != null) {
-            Date dateOfBirth = DateUtils.truncate(params.getDateOfBirth(), Calendar.DATE);
-
-            predicate.and(blueprint.dateOfBirth.eq(dateOfBirth));
-        }
-        if (params.getGender() != null) {
-            predicate.and(blueprint.gender.eq(params.getGender()));
-        }
+        BooleanBuilder predicate = generateAdvancedSearchPredicate(params);
 
         Iterable<PatientEntity> patients = patientRepository.findAll(predicate);
         return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
+    }
+
+    private BooleanBuilder generateAdvancedSearchPredicate(PatientQueryParams params) {
+        QPatientEntity blueprint = QPatientEntity.patientEntity;
+        BooleanBuilder predicate = new BooleanBuilder();
+
+        String nhsNumber = params.getNhsNumber();
+
+        if (nhsNumber != null) {
+            predicate.and(blueprint.nhsNumber.eq(nhsNumber));
+        }
+        else {
+            String surname = StringUtils.stripToNull(params.getSurname());
+            String forename = StringUtils.stripToNull(params.getForename());
+            Date dateOfBirth = params.getDateOfBirth();
+            String gender = StringUtils.stripToNull(params.getGender());
+
+            if (surname != null) {
+                predicate.and(blueprint.lastName.like(surname));
+            }
+            if (forename != null) {
+                predicate.and(blueprint.firstName.like(forename));
+            }
+            if (dateOfBirth != null) {
+                Date truncatedDateOfBirth = DateUtils.truncate(dateOfBirth, Calendar.DATE);
+
+                predicate.and(blueprint.dateOfBirth.eq(truncatedDateOfBirth));
+            }
+            if (gender != null) {
+                predicate.and(blueprint.gender.eq(gender));
+            }
+        }
+
+        return predicate;
     }
 
     private PageRequest generatePageRequest(PageableTableQuery tableQuery) {

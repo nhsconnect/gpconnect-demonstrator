@@ -16,17 +16,20 @@
 package org.rippleosi.patient.details.search;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.rippleosi.common.types.RepoSourceType;
+import org.apache.commons.lang3.time.DateUtils;
 import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.details.model.PatientEntity;
 import org.rippleosi.patient.details.model.QPatientEntity;
 import org.rippleosi.patient.details.repo.PatientRepository;
 import org.rippleosi.patient.summary.model.PatientDetails;
+import org.rippleosi.patient.summary.model.PatientQueryParams;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.patient.summary.search.PatientSearch;
 import org.rippleosi.search.common.model.PageableTableQuery;
@@ -103,7 +106,7 @@ public class LegacyPatientSearch implements PatientSearch {
     }
 
     @Override
-    public List<PatientSummary> findPatientsByQuery(PatientTableQuery tableQuery) {
+    public List<PatientSummary> findPatientsBySearchString(PatientTableQuery tableQuery) {
         BooleanBuilder predicate = generateSearchByPatientReportTablePredicate(tableQuery);
 
         if (predicate == null) {
@@ -115,7 +118,7 @@ public class LegacyPatientSearch implements PatientSearch {
     }
 
     @Override
-    public Long countPatientsByQuery(PatientTableQuery tableQuery) {
+    public Long countPatientsBySearchString(PatientTableQuery tableQuery) {
         BooleanBuilder predicate = generateSearchByPatientReportTablePredicate(tableQuery);
         return predicate == null ? 0 : patientRepository.count(predicate);
     }
@@ -232,6 +235,48 @@ public class LegacyPatientSearch implements PatientSearch {
     @Override
     public Long findPatientCountByDepartment(String department) {
         return patientRepository.countByDepartmentDepartmentIgnoreCase(department);
+    }
+
+    @Override
+    public List<PatientSummary> findPatientsByQueryObject(PatientQueryParams params) {
+        BooleanBuilder predicate = generateAdvancedSearchPredicate(params);
+
+        Iterable<PatientEntity> patients = patientRepository.findAll(predicate);
+        return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
+    }
+
+    private BooleanBuilder generateAdvancedSearchPredicate(PatientQueryParams params) {
+        QPatientEntity blueprint = QPatientEntity.patientEntity;
+        BooleanBuilder predicate = new BooleanBuilder();
+
+        String nhsNumber = params.getNhsNumber();
+
+        if (nhsNumber != null) {
+            predicate.and(blueprint.nhsNumber.eq(nhsNumber));
+        }
+        else {
+            String surname = StringUtils.stripToNull(params.getSurname());
+            String forename = StringUtils.stripToNull(params.getForename());
+            Date dateOfBirth = params.getDateOfBirth();
+            String gender = StringUtils.stripToNull(params.getGender());
+
+            if (surname != null) {
+                predicate.and(blueprint.lastName.like(surname));
+            }
+            if (forename != null) {
+                predicate.and(blueprint.firstName.like(forename));
+            }
+            if (dateOfBirth != null) {
+                Date truncatedDateOfBirth = DateUtils.truncate(dateOfBirth, Calendar.DATE);
+
+                predicate.and(blueprint.dateOfBirth.eq(truncatedDateOfBirth));
+            }
+            if (gender != null) {
+                predicate.and(blueprint.gender.eq(gender));
+            }
+        }
+
+        return predicate;
     }
 
     private PageRequest generatePageRequest(PageableTableQuery tableQuery) {

@@ -43,7 +43,7 @@
           <label for="name" class="control-label col-md-12">Procedure Name</label>
           <div class="col-md-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="name" name="name" ng-model="procedure.name"  required/>
+              <input type="text" class="form-control input-sm" id="name" name="name" ng-model="procedure.procedureName"  required/>
             </div>
             <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.name.$error.required">You must enter a value.</span>
           </div>
@@ -74,24 +74,24 @@
           <row>
             <div class="col-md-12 procedureRightModal">
                 <div class="col-md-6">
-         <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || procedureForm.terminology.$dirty) && procedureForm.terminology.$invalid, 'has-success': procedureForm.terminology.$valid && procedureForm.terminology.$dirty}">
-          <label for="terminology" class="control-label col-md-6">Terminology</label>
+         <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || procedureForm.procedureTerminology.$dirty) && procedureForm.procedureTerminology.$invalid, 'has-success': procedureForm.procedureTerminology.$valid && procedureForm.procedureTerminology.$dirty}">
+          <label for="procedureTerminology" class="control-label col-md-6">Terminology</label>
           <div class="col-md-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="terminology" name="terminology" ng-model="procedure.currentStatusTerminology"  required/>
+              <input type="text" class="form-control input-sm" id="procedureTerminology" name="procedureTerminology" ng-model="procedure.procedureTerminology"  required/>
             </div>
-            <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.terminology.$error.required">You must enter a value.</span>
+            <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.procedureTerminology.$error.required">You must enter a value.</span>
           </div>
         </div>
         </div>
         <div class="col-md-6">
-         <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || procedureForm.terminology.$dirty) && procedureForm.code.$invalid, 'has-success': procedureForm.code.$valid && procedureForm.code.$dirty}">
-          <label for="code" class="control-label col-md-6">Code</label>
+         <div class="form-group form-group-sm" ng-class="{'has-error': (formSubmitted || procedureForm.procedureCode.$dirty) && procedureForm.procedureCode.$invalid, 'has-success': procedureForm.procedureCode.$valid && procedureForm.procedureCode.$dirty}">
+          <label for="procedureCode" class="control-label col-md-6">Code</label>
           <div class="col-md-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="code" name="code" ng-model="procedure.currentStatusCode"  required/>
+              <input type="text" class="form-control input-sm" id="procedureCode" name="procedureCode" ng-model="procedure.procedureCode"  required/>
             </div>
-            <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.code.$error.required">You must enter a value.</span>
+            <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.procedureCode.$error.required">You must enter a value.</span>
           </div>
         </div>
      </div>
@@ -157,22 +157,22 @@
       <div class="procedureMobileform col-xs-12 col-sm-12 hidden-md hidden-lg">
 
 
-         <div ng-class="{'has-error': (formSubmitted || procedureForm.terminology.$dirty) && procedureForm.terminology.$invalid, 'has-success': procedureForm.terminology.$valid && procedureForm.terminology.$dirty}">
-          <label class="terminologylabel" for="terminology" >Terminology</label>
+         <div ng-class="{'has-error': (formSubmitted || procedureForm.procedureTerminology.$dirty) && procedureForm.procedureTerminology.$invalid, 'has-success': procedureForm.procedureTerminology.$valid && procedureForm.procedureTerminology.$dirty}">
+          <label class="terminologylabel" for="procedureTerminology" >Terminology</label>
           <div class="col-xs-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="terminology" name="terminology" ng-model="procedure.currentStatusTerminology"  required/>
+              <input type="text" class="form-control input-sm" id="procedureTerminology" name="procedureTerminology" ng-model="procedure.procedureTerminology"  required/>
             </div>
-            <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.terminology.$error.required">You must enter a value.</span>
+            <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.procedureTerminology.$error.required">You must enter a value.</span>
           </div>
 
-         <div  ng-class="{'has-error': (formSubmitted || procedureForm.terminology.$dirty) && procedureForm.code.$invalid, 'has-success': procedureForm.code.$valid && procedureForm.code.$dirty}">
-          <label for="name" class="codelabel col-xs-12">Code</label>
+         <div  ng-class="{'has-error': (formSubmitted || procedureForm.procedureCode.$dirty) && procedureForm.procedureCode.$invalid, 'has-success': procedureForm.procedureCode.$valid && procedureForm.procedureCode.$dirty}">
+          <label class="codelabel col-xs-12" for="procedureCode">Code</label>
           <div class="col-xs-12">
             <div class="input-group">
-              <input type="text" class="form-control input-sm" id="code" name="code" ng-model="procedure.currentStatusCode"  required/>
+              <input type="text" class="form-control input-sm" id="procedureCode" name="procedureCode" ng-model="procedure.procedureCode"  required/>
             </div>
-            <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.code.$error.required">You must enter a value.</span>
+            <span class="help-block animate-fade" ng-show="formSubmitted && procedureForm.procedureCode.$error.required">You must enter a value.</span>
           </div>
         </div>
 

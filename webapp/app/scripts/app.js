@@ -23,7 +23,8 @@ angular
         url: '/patients?ageRange&department&order&reverse',
         views: {
           main: { templateUrl: 'views/patients/patients-list.html', controller: 'PatientsListCtrl' }
-        }
+        },
+        params: { patientsList: [], advancedSearchParams: [], displayEmptyTable: false }
       })
 
       .state('patients-list-full', {
@@ -119,7 +120,7 @@ angular
       })
 
       .state('medications-detail', {
-        url: '/patients/{patientId:int}/medications/{medicationIndex}?filter&page&reportType&searchString&queryType',
+        url: '/patients/{patientId:int}/medications/{medicationIndex}?filter&page&reportType&searchString&queryType&source',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
@@ -360,12 +361,10 @@ angular
         ngModel: '='
       },
       link: function(scope, elem, attrs, ctrl) {
-        scope.$watch("ngModel", function(value) {
-          if(value) {
-            $timeout(function() {
-              elem[0].focus();
-            });
-          }
+        scope.$watch("ngModel", function (value) {
+          $timeout(function () {
+            elem[0].focus();
+          });
         });
       }
     };
@@ -401,6 +400,10 @@ angular
 
   .filter('formatNHSNumber', function() {
     return function(number) {
+      if (number === undefined) {
+        return;
+      }
+
       return number.slice(0,3) + " " + number.slice(3,6) + " " + number.slice(6);
     };
   })

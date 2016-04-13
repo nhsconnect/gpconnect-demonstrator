@@ -1,15 +1,29 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('PatientsListCtrl', function ($scope, $state, $stateParams, PatientService) {
+  .controller('PatientsListCtrl', function ($scope, $state, $stateParams, $location, $modal, PatientService) {
 
-    PatientService.all().then(function (patients) {
-      $scope.patients = patients;
-    });
+    if ($stateParams.patientsList.length == 0 && !$stateParams.displayEmptyTable) {
+      PatientService.all().then(function (patients) {
+        $scope.patients = patients;
+      });
 
-    $scope.order = $stateParams.order || 'name';
-    $scope.reverse = $stateParams.reverse === 'true';
-    $scope.filters = { department: $stateParams.department, ageRange: $stateParams.ageRange };
+      $scope.order = $stateParams.order || 'name';
+      $scope.reverse = $stateParams.reverse === 'true';
+      $scope.filters = {
+        department: $stateParams.department,
+        ageRange: $stateParams.ageRange
+      };
+    }
+    else {
+      $scope.patients = $stateParams.patientsList;
+      $location.url($location.path());
+
+      $scope.filters = {
+        advancedSearch: true,
+        advancedSearchParams: $stateParams.advancedSearchParams
+      };
+    }
 
     $scope.sort = function (field) {
       var reverse = $scope.reverse;
@@ -18,7 +32,7 @@ angular.module('rippleDemonstrator')
         reverse = !reverse;
       }
 
-      $state.transitionTo($state.current, _.extend($stateParams, { order: field, reverse: reverse }));
+      $state.transitionTo($state.current, _.extend($stateParams, {order: field, reverse: reverse}));
     };
 
     $scope.sortClass = function (field) {
@@ -28,7 +42,10 @@ angular.module('rippleDemonstrator')
     };
 
     $scope.go = function (patient) {
-      $state.go('patients-summary', { patientId: patient.id });
+      $state.go('patients-summary', {
+        patientId: patient.id,
+        patientsList: $scope.patients
+      });
     };
 
     $scope.patientFilter = function (patient) {
@@ -43,4 +60,21 @@ angular.module('rippleDemonstrator')
       return true;
     };
 
+    $scope.openAdvancedSearch = function () {
+      var modalInstance = $modal.open({
+        templateUrl: 'views/search/advanced-search-modal.html',
+        size: 'lg',
+        controller: 'AdvancedSearchController',
+        resolve: {
+          modal: function () {
+            return {
+              title: 'Advanced Search'
+            };
+          },
+          searchParams: function () {
+            return $stateParams.advancedSearchParams;
+          }
+        }
+      });
+    };
   });

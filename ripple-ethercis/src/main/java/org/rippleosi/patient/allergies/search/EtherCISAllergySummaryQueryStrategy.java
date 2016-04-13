@@ -17,6 +17,7 @@
 package org.rippleosi.patient.allergies.search;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +59,8 @@ public class EtherCISAllergySummaryQueryStrategy extends AbstractEtherCISListQue
 
     @Override
     public List<AllergySummary> transform(List<Map<String, Object>> resultSet) {
-        return CollectionUtils.collect(resultSet, new EtherCISAllergySummaryTransformer(), new ArrayList<>());
+        Collection<Map<String, Object>> filtered = CollectionUtils.select(resultSet, new EtherCISNullAllergyPredicate());
+
+        return CollectionUtils.collect(filtered, new EtherCISAllergySummaryTransformer(), new ArrayList<>());
     }
 }

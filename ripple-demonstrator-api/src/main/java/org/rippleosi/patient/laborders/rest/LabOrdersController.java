@@ -50,12 +50,12 @@ public class LabOrdersController {
                                                   @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
         LabOrderSearch labOrderSearch = labOrderSearchFactory.select(sourceType);
-        List<LabOrderSummary> allergies = labOrderSearch.findAllLabOrders(patientId);
+        List<LabOrderSummary> labOrders = labOrderSearch.findAllLabOrders(patientId);
 
         LabOrderSearch openehrSearch = labOrderSearchFactory.select(RepoSourceType.MARAND);
-        allergies.addAll(openehrSearch.findAllLabOrders(patientId));
+        labOrders.addAll(openehrSearch.findAllLabOrders(patientId));
 
-        return allergies;
+        return labOrders;
     }
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.GET)

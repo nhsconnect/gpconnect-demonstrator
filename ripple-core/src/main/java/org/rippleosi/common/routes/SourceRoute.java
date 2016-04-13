@@ -16,7 +16,7 @@ public class SourceRoute extends RouteBuilder {
                 .to("activemq:topic:VirtualTopic.Marand.Allergies.Update");
 
         // Appointment Routes
-        from("activemq:topic:VirtualTopic.Ripple.Appointment.Create").to("activemq:topic:VirtualTopic.EtherCIS.Appointment.Create");
+        from("activemq:topic:VirtualTopic.Ripple.Appointment.Create").to("activemq:topic:VirtualTopic.Marand.Appointment.Create");
 
         from("activemq:topic:VirtualTopic.Ripple.Appointment.Update")
                 .choice()
@@ -25,7 +25,7 @@ public class SourceRoute extends RouteBuilder {
                 .to("activemq:topic:VirtualTopic.Marand.Appointment.Update");
 
         // Care Plan Routes
-        from("activemq:topic:VirtualTopic.Ripple.CarePlan.Create").to("activemq:topic:VirtualTopic.EtherCIS.CarePlan.Create");
+        from("activemq:topic:VirtualTopic.Ripple.CarePlan.Create").to("activemq:topic:VirtualTopic.Marand.CarePlan.Create");
 
         from("activemq:topic:VirtualTopic.Ripple.CarePlan.Update")
                 .choice()
@@ -34,7 +34,7 @@ public class SourceRoute extends RouteBuilder {
                 .to("activemq:topic:VirtualTopic.Marand.CarePlan.Update");
 
         // Contact Routes
-        from("activemq:topic:VirtualTopic.Ripple.Contacts.Create").to("activemq:topic:VirtualTopic.EtherCIS.Contacts.Create");
+        from("activemq:topic:VirtualTopic.Ripple.Contacts.Create").to("activemq:topic:VirtualTopic.Marand.Contacts.Create");
 
         from("activemq:topic:VirtualTopic.Ripple.Contacts.Update")
                 .choice()
@@ -46,7 +46,7 @@ public class SourceRoute extends RouteBuilder {
         from("activemq:topic:VirtualTopic.Ripple.LabOrder.Create").to("activemq:topic:VirtualTopic.EtherCIS.LabOrder.Create");
 
         // MDT Report Routes
-        from("activemq:topic:VirtualTopic.Ripple.MDTReport.Create").to("activemq:topic:VirtualTopic.EtherCIS.MDTReport.Create");
+        from("activemq:topic:VirtualTopic.Ripple.MDTReport.Create").to("activemq:topic:VirtualTopic.Marand.MDTReport.Create");
 
         from("activemq:topic:VirtualTopic.Ripple.MDTReport.Update")
                 .choice()
@@ -55,7 +55,7 @@ public class SourceRoute extends RouteBuilder {
                 .to("activemq:topic:VirtualTopic.Marand.MDTReport.Update");
 
         // Medication Routes
-        from("activemq:topic:VirtualTopic.Ripple.Medication.Create").to("activemq:topic:VirtualTopic.EtherCIS.Medication.Create");
+        from("activemq:topic:VirtualTopic.Ripple.Medication.Create").to("activemq:topic:VirtualTopic.Marand.Medication.Create");
 
         from("activemq:topic:VirtualTopic.Ripple.Medication.Update")
                 .choice()
@@ -73,7 +73,7 @@ public class SourceRoute extends RouteBuilder {
                 .to("activemq:topic:VirtualTopic.Marand.Problems.Update");
 
         // Procedure Routes
-        from("activemq:topic:VirtualTopic.Ripple.Procedures.Create").to("activemq:topic:VirtualTopic.EtherCIS.Procedures.Create");
+        from("activemq:topic:VirtualTopic.Ripple.Procedures.Create").to("activemq:topic:VirtualTopic.Marand.Procedures.Create");
 
         from("activemq:topic:VirtualTopic.Ripple.Procedures.Update")
                 .choice()
@@ -82,7 +82,7 @@ public class SourceRoute extends RouteBuilder {
                 .to("activemq:topic:VirtualTopic.Marand.Procedures.Update");
 
         // Referral Routes
-        from("activemq:topic:VirtualTopic.Ripple.Referrals.Create").to("activemq:topic:VirtualTopic.EtherCIS.Referrals.Create");
+        from("activemq:topic:VirtualTopic.Ripple.Referrals.Create").to("activemq:topic:VirtualTopic.Marand.Referrals.Create");
 
         from("activemq:topic:VirtualTopic.Ripple.Referrals.Update")
                 .choice()
@@ -91,7 +91,6 @@ public class SourceRoute extends RouteBuilder {
                 .to("activemq:topic:VirtualTopic.Marand.Referrals.Update");
 
         // Transfer Routes
-        from("activemq:topic:VirtualTopic.Ripple.Transfers.Create").to("activemq:topic:VirtualTopic.EtherCIS.Transfers.Create");
+        from("activemq:topic:VirtualTopic.Ripple.Transfers.Create").to("activemq:topic:VirtualTopic.Legacy.Transfers.Create");
     }
-
 }

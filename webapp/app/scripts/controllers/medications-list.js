@@ -34,7 +34,7 @@ angular.module('rippleDemonstrator')
       usSpinnerService.stop('patientSummary-spinner');
     });
 
-    $scope.go = function (id) {
+    $scope.go = function (id, source) {
       $state.go('medications-detail', {
         patientId: $scope.patient.id,
         medicationIndex: id,
@@ -42,7 +42,8 @@ angular.module('rippleDemonstrator')
         page: $scope.currentPage,
         reportType: $stateParams.reportType,
         searchString: $stateParams.searchString,
-        queryType: $stateParams.queryType
+        queryType: $stateParams.queryType,
+        source: source
       });
     };
 
@@ -86,8 +87,7 @@ angular.module('rippleDemonstrator')
           startDate: medication.startDate,
           startTime: medication.startTime,
           author: medication.author,
-          dateCreated: medication.dateCreated,
-          source: 'openehr'
+          dateCreated: medication.dateCreated
         };
 
         Medication.create($scope.patient.id, toAdd).then(function () {

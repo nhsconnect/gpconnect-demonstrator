@@ -17,6 +17,7 @@
 package org.rippleosi.patient.problems.search;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,8 @@ public class EtherCISProblemHeadlineQueryStrategy extends AbstractEtherCISListQu
 
     @Override
     public List<ProblemHeadline> transform(List<Map<String, Object>> resultSet) {
-        return CollectionUtils.collect(resultSet, new EtherCISProblemHeadlineTransformer(), new ArrayList<>());
+        Collection<Map<String, Object>> filtered = CollectionUtils.select(resultSet, new EtherCISNullProblemHeadlinePredicate());
+
+        return CollectionUtils.collect(filtered, new EtherCISProblemHeadlineTransformer(), new ArrayList<>());
     }
 }

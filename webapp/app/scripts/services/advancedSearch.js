@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .factory('AdvancedSearch', function($modal) {
+  .factory('AdvancedSearch', function($modal, $http) {
 
     var isModalClosed = true;
 
@@ -24,7 +24,7 @@ angular.module('rippleDemonstrator')
               if (!isNaN(expression)) {
                 params.nhsNumber = expression;
               } else {
-                params.lastName = expression;
+                params.surname = expression;
               }
 
               return params;
@@ -40,8 +40,13 @@ angular.module('rippleDemonstrator')
       });
     };
 
+    var searchByDetails = function (queryParams) {
+      return $http.post('/api/patients/advancedSearch', queryParams);
+    };
+
     return {
       isModalClosed: isModalClosed,
-      openAdvancedSearch: openAdvancedSearch
+      openAdvancedSearch: openAdvancedSearch,
+      searchByDetails: searchByDetails
     }
   });

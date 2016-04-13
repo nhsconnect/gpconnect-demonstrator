@@ -17,9 +17,11 @@ package org.rippleosi.patient.laborders.search;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.rippleosi.common.service.AbstractEtherCISListQueryStrategy;
+import org.rippleosi.patient.allergies.search.EtherCISNullAllergyPredicate;
 import org.rippleosi.patient.laborders.model.LabOrderSummary;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +59,8 @@ public class EtherCISLabOrderSummaryQueryStrategy extends AbstractEtherCISListQu
 
     @Override
     public List<LabOrderSummary> transform(List<Map<String, Object>> resultSet) {
-        return CollectionUtils.collect(resultSet, new EtherCISLabOrderSummaryTransformer(), new ArrayList<>());
+        Collection<Map<String, Object>> filtered = CollectionUtils.select(resultSet, new EtherCISNullLabOrderPredicate());
+
+        return CollectionUtils.collect(filtered, new EtherCISLabOrderSummaryTransformer(), new ArrayList<>());
     }
 }

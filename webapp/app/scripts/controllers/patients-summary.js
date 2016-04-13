@@ -4,6 +4,7 @@ angular.module('rippleDemonstrator')
   .controller('PatientsSummaryCtrl', function ($scope, $stateParams, $state, SearchInput, $rootScope, $location, usSpinnerService, PatientService) {
 
     SearchInput.update();
+    $scope.patients = $stateParams.patientsList;
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;

@@ -11,7 +11,7 @@
   </thead>
 
   <tbody>
-    <tr dir-paginate="medication in medications| filter:query | itemsPerPage: 9 " current-page="currentPage"  ng-click="go('{{medication.sourceId}}')" ng-class="{info: selected(medication.sourceId)}">
+    <tr dir-paginate="medication in medications| filter:query | itemsPerPage: 9 " current-page="currentPage"  ng-click="go('{{ medication.sourceId }}', '{{ medication.source }}')" ng-class="{info: selected(medication.sourceId)}">
       <td>{{ medication.name }}</td>
       <td>{{ medication.doseAmount }}</td>
       <td>{{ medication.source}}</td>

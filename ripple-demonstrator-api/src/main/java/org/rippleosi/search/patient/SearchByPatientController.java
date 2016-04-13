@@ -50,13 +50,13 @@ public class SearchByPatientController {
                                                    @RequestBody PatientTableQuery tableQuery) {
         final RepoSource patientSourceType = RepoSourceType.fromString(patientSource);
         PatientSearch patientSearch = patientSearchFactory.select(patientSourceType);
-        List<PatientSummary> patientSummaries = patientSearch.findPatientsByQuery(tableQuery);
+        List<PatientSummary> patientSummaries = patientSearch.findPatientsBySearchString(tableQuery);
 
         final RepoSource patientDataSourceType = RepoSourceType.fromString(patientDataSource);
         PatientStatsSearch patientStatsSearch = patientStatsSearchFactory.select(patientDataSourceType);
         SearchTableResults associatedData = patientStatsSearch.findAssociatedPatientData(tableQuery, patientSummaries);
 
-        Long total = patientSearch.countPatientsByQuery(tableQuery);
+        Long total = patientSearch.countPatientsBySearchString(tableQuery);
         associatedData.setTotalPatients(String.valueOf(total));
 
         return associatedData;

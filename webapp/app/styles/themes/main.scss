@@ -589,7 +589,7 @@ legend {
 
 .header-icon {
   width: auto;
-  height: 70px;
+  height: 60px;
   cursor: pointer;
   content: url($header-logo-url);
 }
@@ -816,11 +816,16 @@ i.clearAll {
 
 
 /* Footer */
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%
+}
+
 .footer-background {
   background-color: #EEEEEE;
   height: 40px;
   padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 .footer-title-1 {
@@ -2282,4 +2287,9 @@ div#age-chart div.morris-hover.morris-default-style {
 
 .dicomImageMetadata {
   margin-top: 5px;
+}
+
+.patientFilterOptions:hover {
+  text-decoration: overline;
+  cursor: pointer !important;
 }

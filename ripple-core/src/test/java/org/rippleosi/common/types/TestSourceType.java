@@ -13,7 +13,6 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
 package org.rippleosi.common.types;
 
 /**
@@ -28,6 +27,7 @@ public enum TestSourceType implements RepoSource {
         this.sourceName = sourceName;
     }
 
+    @Override
     public String getSourceName() {
         return sourceName;
     }

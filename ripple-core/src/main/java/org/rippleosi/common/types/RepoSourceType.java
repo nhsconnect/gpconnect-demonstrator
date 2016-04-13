@@ -35,6 +35,7 @@ public enum RepoSourceType implements RepoSource {
         this.sourceName = sourceName;
     }
 
+    @Override
     public String getSourceName() {
         return sourceName;
     }

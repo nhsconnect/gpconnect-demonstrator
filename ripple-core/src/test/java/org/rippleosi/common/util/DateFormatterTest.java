@@ -18,12 +18,26 @@ package org.rippleosi.common.util;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 /**
  */
 public class DateFormatterTest {
+
+    @Test
+    public void shouldReturnNullForNull() {
+        Date date = DateFormatter.toDate(null);
+        assertNull(date);
+    }
+
+    @Test
+    public void shouldReturnNullForBogusDate() {
+        Date date = DateFormatter.toDate("Bogus");
+        assertNull(date);
+    }
 
     @Test
     public void shouldParseISO8601DateWithNoTimeZone() {
@@ -47,5 +61,45 @@ public class DateFormatterTest {
     public void shouldParseISO8601DateWithColonSeparatedFourDigitTimeZone() {
         Date date = DateFormatter.toDate("2015-08-24T13:06:38.012+02:00");
         assertNotNull(date);
+    }
+
+    @Test
+    public void shouldReturnDateOnly() {
+        Date date = DateFormatter.toDateOnly("2015-08-24T13:06:38.012");
+        assertNotNull(date);
+        assertEquals("Mon Aug 24 00:00:00 BST 2015", date.toString());
+    }
+
+    @Test
+    public void shouldReturnNullForNullWhenParsingDateOnly() {
+        Date date = DateFormatter.toDateOnly(null);
+        assertNull(date);
+    }
+
+    @Test
+    public void shouldReturnTimeOnly() {
+        Date date = DateFormatter.toTimeOnly("2015-08-24T13:06:38.012");
+        assertNotNull(date);
+        assertEquals("Thu Jan 01 13:06:38 GMT 1970", date.toString());
+    }
+
+    @Test
+    public void shouldReturnNullForNullWhenParsingTimeOnly() {
+        Date date = DateFormatter.toTimeOnly(null);
+        assertNull(date);
+    }
+
+    @Test
+    public void shouldReturnDateInSpecificFormat() {
+        Date sourceDate = DateFormatter.toDate("2015-08-24T13:06:38.012");
+        String parsedDate = DateFormatter.toString(sourceDate);
+        assertNotNull(parsedDate);
+        assertEquals("2015-08-24T13:06:38.012+0100", parsedDate);
+    }
+
+    @Test
+    public void shouldReturnNullForNullWhenConvertingDateToString() {
+        String parsedDate = DateFormatter.toString(null);
+        assertNull(parsedDate);
     }
 }

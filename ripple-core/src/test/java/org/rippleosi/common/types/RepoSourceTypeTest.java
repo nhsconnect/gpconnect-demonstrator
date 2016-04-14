@@ -93,6 +93,12 @@ public class RepoSourceTypeTest {
     }
 
     @Test
+    public void reverseLookupOfTSEFromNull() {
+        RepoSource sourceType = RepoSourceType.fromString(null);
+        assertNull(sourceType);
+    }
+
+    @Test
     public void reverseLookupOfTSEFromCaseSensitivePopulatedString() {
         final String tseAsString = "EtherCIS";
         RepoSource sourceType = RepoSourceType.fromString(tseAsString);

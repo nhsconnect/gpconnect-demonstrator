@@ -18,7 +18,7 @@ package org.rippleosi.common.util;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
@@ -100,6 +100,35 @@ public class DateFormatterTest {
     @Test
     public void shouldReturnNullForNullWhenConvertingDateToString() {
         String parsedDate = DateFormatter.toString(null);
+        assertNull(parsedDate);
+    }
+
+    @Test
+    public void shouldReturnDateAsJSONDateString() {
+        Date sourceDate = DateFormatter.toDate("2015-08-24T13:06:38.012");
+        String parsedDate = DateFormatter.toJSONDateString(sourceDate);
+        assertNotNull(parsedDate);
+        assertEquals("2015-08-24T13:06:38.012Z", parsedDate);
+    }
+
+    @Test
+    public void shouldReturnNullForNullWhenConvertingDateToJSONDateString() {
+        String parsedDate = DateFormatter.toJSONDateString(null);
+        assertNull(parsedDate);
+    }
+
+    @Test
+    public void shouldReturnCombinedDateAndTimeString() {
+        Date sourceDate = DateFormatter.toDateOnly("2015-08-24T13:06:38.012");
+        Date sourceTime= DateFormatter.toTimeOnly("2015-08-23T15:15:30.015");
+        String parsedDate = DateFormatter.combineDateTime(sourceDate, sourceTime);
+        assertNotNull(parsedDate);
+        assertEquals("2015-08-24T15:15:30.015+0100", parsedDate);
+    }
+
+    @Test
+    public void shouldReturnNullForNullWhenCombiningDateAndTimeString() {
+        String parsedDate = DateFormatter.combineDateTime(null, null);
         assertNull(parsedDate);
     }
 }

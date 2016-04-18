@@ -20,6 +20,7 @@ import java.util.Map;
 import org.rippleosi.common.exception.DataNotFoundException;
 import org.rippleosi.common.model.QueryResponse;
 import org.rippleosi.common.repo.Repository;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.search.common.model.OpenEHRDatesAndCountsResponse;
 import org.rippleosi.search.reports.graph.model.ReportGraphResults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,8 @@ public abstract class AbstractC4HReportingService implements Repository {
     private C4HReportingRequestProxy requestProxy;
 
     @Override
-    public String getSource() {
-        return "openehr";
+    public RepoSourceType getSource() {
+        return RepoSourceType.MARAND;
     }
 
     @Override

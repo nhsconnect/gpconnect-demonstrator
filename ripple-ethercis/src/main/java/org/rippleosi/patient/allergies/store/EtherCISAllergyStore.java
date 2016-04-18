@@ -27,6 +27,8 @@ import org.rippleosi.patient.allergies.model.AllergyDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ */
 @Service
 public class EtherCISAllergyStore extends AbstractEtherCISService implements AllergyStore {
 

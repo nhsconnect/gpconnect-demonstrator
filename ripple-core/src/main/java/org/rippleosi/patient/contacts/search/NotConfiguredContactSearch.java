@@ -18,6 +18,8 @@ package org.rippleosi.patient.contacts.search;
 import java.util.List;
 
 import org.rippleosi.common.exception.ConfigurationException;
+import org.rippleosi.common.repo.Repository;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.contacts.model.ContactDetails;
 import org.rippleosi.patient.contacts.model.ContactHeadline;
 import org.rippleosi.patient.contacts.model.ContactSummary;
@@ -27,8 +29,8 @@ import org.rippleosi.patient.contacts.model.ContactSummary;
 public class NotConfiguredContactSearch implements ContactSearch {
 
     @Override
-    public String getSource() {
-        return "not configured";
+    public RepoSourceType getSource() {
+        return RepoSourceType.NONE;
     }
 
     @Override

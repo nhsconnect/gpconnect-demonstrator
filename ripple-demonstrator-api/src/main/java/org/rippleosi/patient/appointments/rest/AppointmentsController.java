@@ -17,6 +17,8 @@ package org.rippleosi.patient.appointments.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.appointments.model.AppointmentDetails;
 import org.rippleosi.patient.appointments.model.AppointmentSummary;
 import org.rippleosi.patient.appointments.search.AppointmentSearch;
@@ -46,7 +48,8 @@ public class AppointmentsController {
     @RequestMapping(method = RequestMethod.GET)
     public List<AppointmentSummary> findAllAppointments(@PathVariable("patientId") String patientId,
                                                         @RequestParam(required = false) String source) {
-        AppointmentSearch appointmentSearch = appointmentSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        AppointmentSearch appointmentSearch = appointmentSearchFactory.select(sourceType);
 
         return appointmentSearch.findAllAppointments(patientId);
     }
@@ -55,7 +58,8 @@ public class AppointmentsController {
     public AppointmentDetails findAppointment(@PathVariable("patientId") String patientId,
                                               @PathVariable("orderId") String appointmentId,
                                               @RequestParam(required = false) String source) {
-        AppointmentSearch appointmentSearch = appointmentSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        AppointmentSearch appointmentSearch = appointmentSearchFactory.select(sourceType);
 
         return appointmentSearch.findAppointment(patientId, appointmentId);
     }
@@ -64,7 +68,8 @@ public class AppointmentsController {
     public void createAppointment(@PathVariable("patientId") String patientId,
                                   @RequestParam(required = false) String source,
                                   @RequestBody AppointmentDetails appointment) {
-        AppointmentStore appointmentStore = appointmentStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        AppointmentStore appointmentStore = appointmentStoreFactory.select(sourceType);
 
         appointmentStore.create(patientId, appointment);
     }
@@ -73,7 +78,8 @@ public class AppointmentsController {
     public void updateAppointment(@PathVariable("patientId") String patientId,
                                   @RequestParam(required = false) String source,
                                   @RequestBody AppointmentDetails appointment) {
-        AppointmentStore appointmentStore = appointmentStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        AppointmentStore appointmentStore = appointmentStoreFactory.select(sourceType);
 
         appointmentStore.update(patientId, appointment);
     }

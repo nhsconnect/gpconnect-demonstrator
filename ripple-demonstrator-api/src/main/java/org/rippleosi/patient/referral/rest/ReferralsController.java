@@ -17,6 +17,8 @@ package org.rippleosi.patient.referral.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.referral.model.ReferralDetails;
 import org.rippleosi.patient.referral.model.ReferralSummary;
 import org.rippleosi.patient.referral.search.ReferralSearch;
@@ -46,7 +48,8 @@ public class ReferralsController {
     @RequestMapping(method = RequestMethod.GET)
     public List<ReferralSummary> findAllReferrals(@PathVariable("patientId") String patientId,
                                                   @RequestParam(required = false) String source) {
-        ReferralSearch referralSearch = referralSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ReferralSearch referralSearch = referralSearchFactory.select(sourceType);
 
         return referralSearch.findAllReferrals(patientId);
     }
@@ -55,7 +58,8 @@ public class ReferralsController {
     public ReferralDetails findReferral(@PathVariable("patientId") String patientId,
                                         @PathVariable("referralId") String referralId,
                                         @RequestParam(required = false) String source) {
-        ReferralSearch referralSearch = referralSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ReferralSearch referralSearch = referralSearchFactory.select(sourceType);
 
         return referralSearch.findReferral(patientId, referralId);
     }
@@ -64,7 +68,8 @@ public class ReferralsController {
     public void createReferral(@PathVariable("patientId") String patientId,
                                @RequestParam(required = false) String source,
                                @RequestBody ReferralDetails referral) {
-        ReferralStore referralStore = referralStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ReferralStore referralStore = referralStoreFactory.select(sourceType);
 
         referralStore.create(patientId, referral);
     }
@@ -73,7 +78,8 @@ public class ReferralsController {
     public void updateReferral(@PathVariable("patientId") String patientId,
                                @RequestParam(required = false) String source,
                                @RequestBody ReferralDetails referral) {
-        ReferralStore referralStore = referralStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ReferralStore referralStore = referralStoreFactory.select(sourceType);
 
         referralStore.update(patientId, referral);
     }

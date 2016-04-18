@@ -28,15 +28,13 @@ import org.apache.commons.lang3.time.DateUtils;
  */
 public final class DateFormatter {
 
-    private DateFormatter() {
-        // Prevent construction
-    }
-
     public static Date toDate(String input) {
 
         if (input == null) {
             return null;
         }
+
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/London"));
 
         try {
             return DateUtils.parseDate(input, "yyyy-MM-dd",
@@ -55,15 +53,12 @@ public final class DateFormatter {
         }
     }
 
-    public static Date toDateOnly(String input) {
+    public static Date toDateOnly(final String input) {
         Date date = toDate(input);
         if (date != null) {
-            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("BST"));
-            calendar.setTime(date);
+            date = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
 
-            calendar = DateUtils.truncate(calendar, Calendar.DATE);
-
-            return calendar.getTime();
+            return date;
         }
 
         return null;
@@ -72,14 +67,11 @@ public final class DateFormatter {
     public static Date toTimeOnly(String input) {
         Date date = toDate(input);
         if (date != null) {
-            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("BST"));
-            calendar.setTime(date);
+            date = DateUtils.setYears(date,1970);
+            date = DateUtils.setMonths(date,0);
+            date = DateUtils.setDays(date,1);
 
-            calendar.set(Calendar.YEAR, 1970);
-            calendar.set(Calendar.MONTH, 0);
-            calendar.set(Calendar.DATE, 1);
-
-            return calendar.getTime();
+            return date;
         }
 
         return null;

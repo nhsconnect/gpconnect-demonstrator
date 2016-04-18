@@ -15,9 +15,11 @@
  */
 package org.rippleosi.common.repo;
 
+import org.rippleosi.common.types.RepoSource;
+
 /**
  */
 @FunctionalInterface
 public interface RepositoryFactory<R> {
-    R select(String source);
+    R select(RepoSource source);
 }

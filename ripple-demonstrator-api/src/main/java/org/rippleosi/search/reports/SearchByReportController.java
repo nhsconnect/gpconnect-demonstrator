@@ -18,6 +18,8 @@ package org.rippleosi.search.reports;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.patient.summary.search.PatientSearch;
 import org.rippleosi.patient.summary.search.PatientSearchFactory;
@@ -57,7 +59,8 @@ public class SearchByReportController {
     @RequestMapping(value = "/chart", method = RequestMethod.POST)
     public ReportGraphResults findReportGraphData(@RequestParam(required = false) String source,
                                                   @RequestBody ReportGraphQuery graphQuery) {
-        ReportGraphSearch search = reportGraphSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ReportGraphSearch search = reportGraphSearchFactory.select(sourceType);
 
         return search.findPatientDemographicsByQuery(graphQuery);
     }
@@ -67,15 +70,17 @@ public class SearchByReportController {
                                                   @RequestParam(required = false) String patientDataSource,
                                                   @RequestBody ReportTableQuery tableQuery) {
         // retrieve all nhsNumbers associated with the query
-        ReportTableSearch reportTableSearch = reportTableSearchFactory.select(patientDataSource);
+        final RepoSource patientDataSourceType = RepoSourceType.fromString(patientDataSource);
+        ReportTableSearch reportTableSearch = reportTableSearchFactory.select(patientDataSourceType);
         List<String> nhsNumbers = reportTableSearch.findAllPatientsByQuery(tableQuery);
 
         // do a local search for a page of results
-        PatientSearch patientSearch = patientSearchFactory.select(patientSource);
+        final RepoSource patientSourceType = RepoSourceType.fromString(patientSource);
+        PatientSearch patientSearch = patientSearchFactory.select(patientSourceType);
         List<PatientSummary> patientSummaries = patientSearch.findAllMatchingPatients(nhsNumbers, tableQuery);
 
         // search and aggregate the associated data
-        PatientStatsSearch patientStatsSearch = patientStatsSearchFactory.select(patientDataSource);
+        PatientStatsSearch patientStatsSearch = patientStatsSearchFactory.select(patientDataSourceType);
         SearchTableResults associatedData = patientStatsSearch.findAssociatedPatientData(tableQuery, patientSummaries);
 
         // finally, set the total

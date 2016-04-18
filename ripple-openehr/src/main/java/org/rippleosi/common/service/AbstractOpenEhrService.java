@@ -29,6 +29,7 @@ import org.rippleosi.common.model.ActionRestResponse;
 import org.rippleosi.common.model.EhrResponse;
 import org.rippleosi.common.model.QueryResponse;
 import org.rippleosi.common.repo.Repository;
+import org.rippleosi.common.types.RepoSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -55,8 +56,8 @@ public abstract class AbstractOpenEhrService implements Repository {
     private final Map<String, String> idCache = Collections.synchronizedMap(LazyMap.lazyMap(new LRUMap<>(), new EhrIdLookup()));
 
     @Override
-    public String getSource() {
-        return "Marand";
+    public RepoSourceType getSource() {
+        return RepoSourceType.MARAND;
     }
 
     @Override
@@ -118,30 +119,30 @@ public abstract class AbstractOpenEhrService implements Repository {
 
     private String getQueryURI(String query) {
         UriComponents components = UriComponentsBuilder
-                                    .fromHttpUrl(openEhrAddress + "/query")
-                                    .queryParam("aql", query)
-                                    .build();
+                .fromHttpUrl(openEhrAddress + "/query")
+                .queryParam("aql", query)
+                .build();
         return components.toUriString();
     }
 
     private String getCreateURI(String template, String ehrId) {
         UriComponents components = UriComponentsBuilder
-                                    .fromHttpUrl(openEhrAddress + "/composition")
-                                    .queryParam("templateId", template)
-                                    .queryParam("ehrId", ehrId)
-                                    .queryParam("format", "FLAT")
-                                    .build();
+                .fromHttpUrl(openEhrAddress + "/composition")
+                .queryParam("templateId", template)
+                .queryParam("ehrId", ehrId)
+                .queryParam("format", "FLAT")
+                .build();
 
         return components.toUriString();
     }
 
     private String getUpdateURI(String compositionId, String template, String ehrId) {
         UriComponents components = UriComponentsBuilder
-                                    .fromHttpUrl(openEhrAddress + "/composition/" + compositionId)
-                                    .queryParam("templateId", template)
-                                    .queryParam("ehrId", ehrId)
-                                    .queryParam("format", "FLAT")
-                                    .build();
+                .fromHttpUrl(openEhrAddress + "/composition/" + compositionId)
+                .queryParam("templateId", template)
+                .queryParam("ehrId", ehrId)
+                .queryParam("format", "FLAT")
+                .build();
 
         return components.toUriString();
     }
@@ -160,10 +161,10 @@ public abstract class AbstractOpenEhrService implements Repository {
 
         private String getEhrIdUri(String nhsNumber) {
             UriComponents components = UriComponentsBuilder
-                                        .fromHttpUrl(openEhrAddress + "/ehr")
-                                        .queryParam("subjectId", nhsNumber)
-                                        .queryParam("subjectNamespace", openEhrSubjectNamespace)
-                                        .build();
+                    .fromHttpUrl(openEhrAddress + "/ehr")
+                    .queryParam("subjectId", nhsNumber)
+                    .queryParam("subjectNamespace", openEhrSubjectNamespace)
+                    .build();
             return components.toUriString();
         }
     }

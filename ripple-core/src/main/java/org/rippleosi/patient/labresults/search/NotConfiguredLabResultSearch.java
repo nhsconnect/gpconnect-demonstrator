@@ -18,6 +18,7 @@ package org.rippleosi.patient.labresults.search;
 import java.util.List;
 
 import org.rippleosi.common.exception.ConfigurationException;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.labresults.model.LabResultDetails;
 import org.rippleosi.patient.labresults.model.LabResultSummary;
 
@@ -26,8 +27,8 @@ import org.rippleosi.patient.labresults.model.LabResultSummary;
 public class NotConfiguredLabResultSearch implements LabResultSearch {
 
     @Override
-    public String getSource() {
-        return "not configured";
+    public RepoSourceType getSource() {
+        return RepoSourceType.NONE;
     }
 
     @Override

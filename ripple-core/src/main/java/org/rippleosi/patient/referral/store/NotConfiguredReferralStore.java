@@ -16,6 +16,7 @@
 package org.rippleosi.patient.referral.store;
 
 import org.rippleosi.common.exception.ConfigurationException;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.referral.model.ReferralDetails;
 
 /**
@@ -23,8 +24,8 @@ import org.rippleosi.patient.referral.model.ReferralDetails;
 public class NotConfiguredReferralStore implements ReferralStore {
 
     @Override
-    public String getSource() {
-        return "not configured";
+    public RepoSourceType getSource() {
+        return RepoSourceType.NONE;
     }
 
     @Override

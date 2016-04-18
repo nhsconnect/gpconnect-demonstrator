@@ -17,6 +17,8 @@ package org.rippleosi.patient.summary.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientQueryParams;
 import org.rippleosi.patient.summary.model.PatientSummary;
@@ -41,7 +43,8 @@ public class PatientsController {
 
     @RequestMapping(method = RequestMethod.GET)
     public List<PatientSummary> findAllPatients(@RequestParam(required = false) String source) {
-        PatientSearch patientSearch = patientSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        PatientSearch patientSearch = patientSearchFactory.select(sourceType);
 
         return patientSearch.findAllPatients();
     }
@@ -49,7 +52,8 @@ public class PatientsController {
     @RequestMapping(value = "/{patientId}", method = RequestMethod.GET)
     public PatientDetails findPatientByNHSNumber(@PathVariable("patientId") String patientId,
                                                  @RequestParam(required = false) String source) {
-        PatientSearch patientSearch = patientSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        PatientSearch patientSearch = patientSearchFactory.select(sourceType);
 
         return patientSearch.findPatient(patientId);
     }
@@ -57,7 +61,8 @@ public class PatientsController {
     @RequestMapping(value = "/advancedSearch", method = RequestMethod.POST)
     public List<PatientSummary> findPatientsByQueryObject(@RequestParam(required = false) String source,
                                                           @RequestBody PatientQueryParams queryParams) {
-        PatientSearch patientSearch = patientSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        PatientSearch patientSearch = patientSearchFactory.select(sourceType);
 
         return patientSearch.findPatientsByQueryObject(queryParams);
     }

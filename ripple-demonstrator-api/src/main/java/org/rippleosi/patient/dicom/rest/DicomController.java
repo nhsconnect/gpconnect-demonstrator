@@ -17,6 +17,8 @@ package org.rippleosi.patient.dicom.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.dicom.model.DicomInstanceId;
 import org.rippleosi.patient.dicom.model.DicomInstanceSummary;
 import org.rippleosi.patient.dicom.model.DicomSeriesDetails;
@@ -41,44 +43,49 @@ public class DicomController {
     @RequestMapping(value = "/studies", method = RequestMethod.GET)
     public List<DicomStudySummary> findAllDicomStudies(@PathVariable("patientId") String patientId,
                                                        @RequestParam(required = false) String source) {
-        DicomSearch dicomSearch = dicomSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        DicomSearch dicomSearch = dicomSearchFactory.select(sourceType);
 
-        return dicomSearch.findAllDicomStudies(patientId, source);
+        return dicomSearch.findAllDicomStudies(patientId, sourceType);
     }
 
     @RequestMapping(value = "/studies/{studyId}/series", method = RequestMethod.GET)
     public DicomSeriesSummary findAllDicomSeriesInStudy(@PathVariable("patientId") String patientId,
                                                         @PathVariable("studyId") String studyId,
                                                         @RequestParam(required = false) String source) {
-        DicomSearch dicomSearch = dicomSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        DicomSearch dicomSearch = dicomSearchFactory.select(sourceType);
 
-        return dicomSearch.findAllDicomSeriesInStudy(patientId, studyId, source);
+        return dicomSearch.findAllDicomSeriesInStudy(patientId, studyId, sourceType);
     }
 
     @RequestMapping(value = "/series/{seriesId}", method = RequestMethod.GET)
     public DicomSeriesDetails findSeriesDetails(@PathVariable("patientId") String patientId,
                                                 @PathVariable("seriesId") String seriesId,
                                                 @RequestParam(required = false) String source) {
-        DicomSearch dicomSearch = dicomSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        DicomSearch dicomSearch = dicomSearchFactory.select(sourceType);
 
-        return dicomSearch.findSeriesDetails(patientId, seriesId, source);
+        return dicomSearch.findSeriesDetails(patientId, seriesId, sourceType);
     }
 
     @RequestMapping(value = "/instances/{instanceId}", method = RequestMethod.GET)
     public DicomInstanceSummary findInstanceSummary(@PathVariable("patientId") String patientId,
                                                     @PathVariable("instanceId") String instanceId,
                                                     @RequestParam(required = false) String source) {
-        DicomSearch dicomSearch = dicomSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        DicomSearch dicomSearch = dicomSearchFactory.select(sourceType);
 
-        return dicomSearch.findInstanceSummary(patientId, instanceId, source);
+        return dicomSearch.findInstanceSummary(patientId, instanceId, sourceType);
     }
 
     @RequestMapping(value = "/series/{seriesId}/instance", method = RequestMethod.GET)
     public DicomInstanceId findFirstInstanceIdInSeries(@PathVariable("patientId") String patientId,
                                                        @PathVariable("seriesId") String seriesId,
                                                        @RequestParam(required = false) String source) {
-        DicomSearch dicomSearch = dicomSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        DicomSearch dicomSearch = dicomSearchFactory.select(sourceType);
 
-        return dicomSearch.findFirstInstanceIdInSeries(patientId, seriesId, source);
+        return dicomSearch.findFirstInstanceIdInSeries(patientId, seriesId, sourceType);
     }
 }

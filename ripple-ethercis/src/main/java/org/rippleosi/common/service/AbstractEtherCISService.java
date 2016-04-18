@@ -33,6 +33,7 @@ import org.rippleosi.common.model.EtherCISEHRResponse;
 import org.rippleosi.common.model.EtherCISQueryResponse;
 import org.rippleosi.common.model.EtherCISSessionResponse;
 import org.rippleosi.common.repo.Repository;
+import org.rippleosi.common.types.RepoSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -62,8 +63,8 @@ public class AbstractEtherCISService implements Repository {
     private final Map<String, String> idCache = Collections.synchronizedMap(LazyMap.lazyMap(new LRUMap<>(), new EtherCISEhrIdLookup()));
 
     @Override
-    public String getSource() {
-        return "EtherCIS";
+    public RepoSourceType getSource() {
+        return RepoSourceType.ETHERCIS ;
     }
 
     @Override

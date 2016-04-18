@@ -17,6 +17,8 @@ package org.rippleosi.patient.terminology.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.terminology.model.Terminology;
 import org.rippleosi.patient.terminology.search.TerminologySearch;
 import org.rippleosi.patient.terminology.search.TerminologySearchFactory;
@@ -37,7 +39,8 @@ public class TerminologyController {
     @RequestMapping(value = "/list/{type}", method = RequestMethod.GET)
     public List<Terminology> findTerms(@PathVariable("type") String type,
                                        @RequestParam(required = false) String source) {
-        TerminologySearch search = terminologySearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        TerminologySearch search = terminologySearchFactory.select(sourceType);
 
         return search.findTerms(type);
     }

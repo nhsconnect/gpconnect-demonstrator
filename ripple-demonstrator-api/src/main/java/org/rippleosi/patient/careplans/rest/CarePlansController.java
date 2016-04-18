@@ -17,6 +17,8 @@ package org.rippleosi.patient.careplans.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.careplans.model.CarePlanDetails;
 import org.rippleosi.patient.careplans.model.CarePlanSummary;
 import org.rippleosi.patient.careplans.search.CarePlanSearch;
@@ -46,7 +48,8 @@ public class CarePlansController {
     @RequestMapping(method = RequestMethod.GET)
     public List<CarePlanSummary> findAllCarePlans(@PathVariable("patientId") String patientId,
                                                   @RequestParam(required = false) String source) {
-        CarePlanSearch carePlanSearch = carePlanSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        CarePlanSearch carePlanSearch = carePlanSearchFactory.select(sourceType);
 
         return carePlanSearch.findAllCarePlans(patientId);
     }
@@ -55,7 +58,8 @@ public class CarePlansController {
     public CarePlanDetails findCarePlan(@PathVariable("patientId") String patientId,
                                         @PathVariable("planId") String planId,
                                         @RequestParam(required = false) String source) {
-        CarePlanSearch carePlanSearch = carePlanSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        CarePlanSearch carePlanSearch = carePlanSearchFactory.select(sourceType);
 
         return carePlanSearch.findCarePlan(patientId, planId);
     }
@@ -64,7 +68,8 @@ public class CarePlansController {
     public void createCarePlan(@PathVariable("patientId") String patientId,
                                @RequestParam(required = false) String source,
                                @RequestBody CarePlanDetails carePlan) {
-        CarePlanStore carePlanStore = carePlanStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        CarePlanStore carePlanStore = carePlanStoreFactory.select(sourceType);
 
         carePlanStore.create(patientId, carePlan);
     }
@@ -73,7 +78,8 @@ public class CarePlansController {
     public void updateCarePlan(@PathVariable("patientId") String patientId,
                                @RequestParam(required = false) String source,
                                @RequestBody CarePlanDetails carePlan) {
-        CarePlanStore carePlanStore = carePlanStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        CarePlanStore carePlanStore = carePlanStoreFactory.select(sourceType);
 
         carePlanStore.update(patientId, carePlan);
     }

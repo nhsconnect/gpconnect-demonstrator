@@ -22,6 +22,7 @@ import org.rippleosi.common.model.InstanceDetailsResponse;
 import org.rippleosi.common.model.SeriesDetailsResponse;
 import org.rippleosi.common.model.StudyDetailsResponse;
 import org.rippleosi.common.repo.Repository;
+import org.rippleosi.common.types.RepoSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -40,8 +41,8 @@ public class AbstractOrthancService implements Repository {
     private DicomRequestProxy dicomRequestProxy;
 
     @Override
-    public String getSource() {
-        return "orthanc";
+    public RepoSourceType getSource() {
+        return RepoSourceType.ORTHANC;
     }
 
     @Override

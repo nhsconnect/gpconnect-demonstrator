@@ -15,18 +15,14 @@
  */
 package org.rippleosi.patient.details.search;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.mysema.query.BooleanBuilder;
-import com.mysema.util.ArrayUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.rippleosi.common.types.RepoSourceType;
 import org.apache.commons.lang3.time.DateUtils;
 import org.rippleosi.common.util.DateFormatter;
 import org.rippleosi.patient.details.model.PatientEntity;
@@ -49,6 +45,9 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysema.query.BooleanBuilder;
+import com.mysema.util.ArrayUtils;
+
 @Service
 @Transactional
 public class LegacyPatientSearch implements PatientSearch {
@@ -66,8 +65,8 @@ public class LegacyPatientSearch implements PatientSearch {
     private PatientEntityToSummaryTransformer patientEntityToSummaryTransformer;
 
     @Override
-    public String getSource() {
-        return "legacy";
+    public RepoSourceType getSource() {
+        return RepoSourceType.LEGACY;
     }
 
     @Override
@@ -150,8 +149,7 @@ public class LegacyPatientSearch implements PatientSearch {
                 predicate.andAnyOf(blueprint.firstName.equalsIgnoreCase((String) param),
                                    blueprint.lastName.equalsIgnoreCase((String) param));
             }
-        }
-        else if (totalParams == 2) {
+        } else if (totalParams == 2) {
             Object firstParam = searchParams[0];
             Object secondParam = searchParams[1];
 
@@ -160,8 +158,7 @@ public class LegacyPatientSearch implements PatientSearch {
                 predicate.and(blueprint.dateOfBirth.eq((Date) firstParam));
                 predicate.andAnyOf(blueprint.firstName.equalsIgnoreCase((String) secondParam),
                                    blueprint.lastName.equalsIgnoreCase((String) secondParam));
-            }
-            else if (secondParam instanceof Date) {
+            } else if (secondParam instanceof Date) {
                 predicate.and(blueprint.dateOfBirth.eq((Date) secondParam));
                 predicate.andAnyOf(blueprint.firstName.equalsIgnoreCase((String) firstParam),
                                    blueprint.lastName.equalsIgnoreCase((String) firstParam));
@@ -173,8 +170,7 @@ public class LegacyPatientSearch implements PatientSearch {
                 predicate.andAnyOf(blueprint.lastName.equalsIgnoreCase((String) firstParam),
                                    blueprint.lastName.equalsIgnoreCase((String) secondParam));
             }
-        }
-        else if (totalParams > 2) {
+        } else if (totalParams > 2) {
             Object firstParam = searchParams[0];
             Object secondParam = searchParams[1];
             Object thirdParam = searchParams[2];
@@ -185,15 +181,13 @@ public class LegacyPatientSearch implements PatientSearch {
                                    blueprint.firstName.equalsIgnoreCase((String) thirdParam));
                 predicate.andAnyOf(blueprint.lastName.equalsIgnoreCase((String) secondParam),
                                    blueprint.lastName.equalsIgnoreCase((String) thirdParam));
-            }
-            else if (secondParam instanceof Date) {
+            } else if (secondParam instanceof Date) {
                 predicate.and(blueprint.dateOfBirth.eq((Date) secondParam));
                 predicate.andAnyOf(blueprint.firstName.equalsIgnoreCase((String) firstParam),
                                    blueprint.firstName.equalsIgnoreCase((String) thirdParam));
                 predicate.andAnyOf(blueprint.lastName.equalsIgnoreCase((String) firstParam),
                                    blueprint.lastName.equalsIgnoreCase((String) thirdParam));
-            }
-            else if (thirdParam instanceof Date) {
+            } else if (thirdParam instanceof Date) {
                 predicate.and(blueprint.dateOfBirth.eq((Date) thirdParam));
                 predicate.andAnyOf(blueprint.firstName.equalsIgnoreCase((String) firstParam),
                                    blueprint.firstName.equalsIgnoreCase((String) secondParam));
@@ -232,9 +226,8 @@ public class LegacyPatientSearch implements PatientSearch {
 
     @Override
     public List<PatientSummary> findAllPatientsByDepartment(SettingTableQuery tableQuery) {
-        List<PatientEntity> patients =
-            patientRepository.findPatientsByDepartmentDepartmentIgnoreCase(tableQuery.getSearchString(),
-                                                                           generatePageRequest(tableQuery));
+        List<PatientEntity> patients = patientRepository.findPatientsByDepartmentDepartmentIgnoreCase(tableQuery.getSearchString(),
+                                                                                                      generatePageRequest(tableQuery));
 
         return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
     }

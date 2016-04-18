@@ -18,13 +18,15 @@ package org.rippleosi.search.patient;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.summary.model.PatientSummary;
 import org.rippleosi.patient.summary.search.PatientSearch;
 import org.rippleosi.patient.summary.search.PatientSearchFactory;
-import org.rippleosi.search.patient.stats.model.SearchTableResults;
-import org.rippleosi.search.patient.stats.model.PatientTableQuery;
 import org.rippleosi.search.patient.stats.PatientStatsSearch;
 import org.rippleosi.search.patient.stats.PatientStatsSearchFactory;
+import org.rippleosi.search.patient.stats.model.PatientTableQuery;
+import org.rippleosi.search.patient.stats.model.SearchTableResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,10 +48,12 @@ public class SearchByPatientController {
     public SearchTableResults findPatientTableData(@RequestParam(required = false) String patientSource,
                                                    @RequestParam(required = false) String patientDataSource,
                                                    @RequestBody PatientTableQuery tableQuery) {
-        PatientSearch patientSearch = patientSearchFactory.select(patientSource);
+        final RepoSource patientSourceType = RepoSourceType.fromString(patientSource);
+        PatientSearch patientSearch = patientSearchFactory.select(patientSourceType);
         List<PatientSummary> patientSummaries = patientSearch.findPatientsBySearchString(tableQuery);
 
-        PatientStatsSearch patientStatsSearch = patientStatsSearchFactory.select(patientDataSource);
+        final RepoSource patientDataSourceType = RepoSourceType.fromString(patientDataSource);
+        PatientStatsSearch patientStatsSearch = patientStatsSearchFactory.select(patientDataSourceType);
         SearchTableResults associatedData = patientStatsSearch.findAssociatedPatientData(tableQuery, patientSummaries);
 
         Long total = patientSearch.countPatientsBySearchString(tableQuery);

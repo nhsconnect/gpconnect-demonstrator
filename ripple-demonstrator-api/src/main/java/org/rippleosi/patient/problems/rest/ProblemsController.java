@@ -17,6 +17,8 @@ package org.rippleosi.patient.problems.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.problems.model.ProblemDetails;
 import org.rippleosi.patient.problems.model.ProblemHeadline;
 import org.rippleosi.patient.problems.model.ProblemSummary;
@@ -47,13 +49,14 @@ public class ProblemsController {
     @RequestMapping(method = RequestMethod.GET)
     public List<ProblemSummary> findAllProblems(@PathVariable("patientId") String patientId,
                                                 @RequestParam(required = false) String source) {
-        ProblemSearch problemSearch = problemSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
         List<ProblemSummary> problems = problemSearch.findAllProblems(patientId);
 
-        ProblemSearch openehrSearch = problemSearchFactory.select("Marand");
+        ProblemSearch openehrSearch = problemSearchFactory.select(RepoSourceType.MARAND);
         problems.addAll(openehrSearch.findAllProblems(patientId));
 
-        ProblemSearch vistaSearch = problemSearchFactory.select("vista");
+        ProblemSearch vistaSearch = problemSearchFactory.select(RepoSourceType.VISTA);
         problems.addAll(vistaSearch.findAllProblems("17"));
 
         return problems;
@@ -62,10 +65,11 @@ public class ProblemsController {
     @RequestMapping(value = "/headlines", method = RequestMethod.GET)
     public List<ProblemHeadline> findProblemHeadlines(@PathVariable("patientId") String patientId,
                                                       @RequestParam(required = false) String source) {
-        ProblemSearch problemSearch = problemSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
         List<ProblemHeadline> problemHeadlines = problemSearch.findProblemHeadlines(patientId);
 
-        ProblemSearch vistaSearch = problemSearchFactory.select("vista");
+        ProblemSearch vistaSearch = problemSearchFactory.select(RepoSourceType.VISTA);
         problemHeadlines.addAll(vistaSearch.findProblemHeadlines("17"));
 
         return problemHeadlines;
@@ -75,9 +79,10 @@ public class ProblemsController {
     public ProblemDetails findProblem(@PathVariable("patientId") String patientId,
                                       @PathVariable("problemId") String problemId,
                                       @RequestParam(required = false) String source) {
-        ProblemSearch problemSearch = problemSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
 
-        if (source != null && source.equalsIgnoreCase("vista")) {
+        if (source != null && source.equalsIgnoreCase(RepoSourceType.VISTA.name())) {
             patientId = "17";
         }
 
@@ -88,7 +93,8 @@ public class ProblemsController {
     public void createProblem(@PathVariable("patientId") String patientId,
                               @RequestParam(required = false) String source,
                               @RequestBody ProblemDetails problem) {
-        ProblemStore problemStore = problemStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ProblemStore problemStore = problemStoreFactory.select(sourceType);
 
         problemStore.create(patientId, problem);
     }
@@ -97,7 +103,8 @@ public class ProblemsController {
     public void updateProblem(@PathVariable("patientId") String patientId,
                               @RequestParam(required = false) String source,
                               @RequestBody ProblemDetails problem) {
-        ProblemStore problemStore = problemStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        ProblemStore problemStore = problemStoreFactory.select(sourceType);
 
         problemStore.update(patientId, problem);
     }

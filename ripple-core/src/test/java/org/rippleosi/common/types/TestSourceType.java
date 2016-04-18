@@ -13,25 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
 package org.rippleosi.common.types;
 
 /**
  */
-public enum RepoSourceType implements RepoSource {
-    NONE("Not Configured"),
-    ACTIVEMQ("ActiveMQ"),
-    LEGACY("Legacy"),
-    MARAND("Marand"),
-    ETHERCIS("EtherCIS"),
-    ORTHANC("Orthanc"),
-    VISTA("Vista"),
-    AUDIT("Audit"),
-    TERMINOLOGY("Terminology");
+public enum TestSourceType implements RepoSource {
+    SOURCE1("Source 1"),
+    SOURCE2("Source 2");
 
     private final String sourceName;
 
-    private RepoSourceType(final String sourceName) {
+    private TestSourceType(final String sourceName) {
         this.sourceName = sourceName;
     }
 
@@ -45,13 +37,12 @@ public enum RepoSourceType implements RepoSource {
             return null;
         }
 
-        for (RepoSource enumValue : RepoSourceType.values()) {
+        for (RepoSource enumValue : TestSourceType.values()) {
             if (enumValue.getSourceName().equalsIgnoreCase(sourceName)) {
                 return enumValue;
             }
         }
 
-        // TODO Log this
         return null;
     }
 }

@@ -17,6 +17,8 @@ package org.rippleosi.patient.transfers.rest;
 
 import java.util.List;
 
+import org.rippleosi.common.types.RepoSource;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.transfers.model.TransferOfCareDetails;
 import org.rippleosi.patient.transfers.model.TransferOfCareSummary;
 import org.rippleosi.patient.transfers.search.TransferOfCareSearch;
@@ -43,45 +45,59 @@ public class TransfersOfCareController {
 
     /**
      * Find all Transfer of Care summaries
-     * @param patientId The ID of the patient
-     * @param source The source of the data
+     * 
+     * @param patientId
+     *            The ID of the patient
+     * @param source
+     *            The source of the data
      * @return A list of Transfer of Care excerpts
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<TransferOfCareSummary> findAllTransfersOfCare(@PathVariable("patientId") String patientId,
                                                               @RequestParam(required = false) String source) {
-        TransferOfCareSearch search = transferOfCareSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        TransferOfCareSearch search = transferOfCareSearchFactory.select(sourceType);
 
         return search.findAllTransfers(patientId);
     }
 
     /**
      * Find a specific Transfer of Care
-     * @param patientId The ID of the patient
-     * @param transferId The ID of the transfer from the persistence store
-     * @param source The source of the data
+     * 
+     * @param patientId
+     *            The ID of the patient
+     * @param transferId
+     *            The ID of the transfer from the persistence store
+     * @param source
+     *            The source of the data
      * @return A Transfer of Care
      */
     @RequestMapping(value = "/{transferId}", method = RequestMethod.GET)
     public TransferOfCareDetails findTransferOfCare(@PathVariable("patientId") String patientId,
                                                     @PathVariable("transferId") String transferId,
                                                     @RequestParam(required = false) String source) {
-        TransferOfCareSearch search = transferOfCareSearchFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        TransferOfCareSearch search = transferOfCareSearchFactory.select(sourceType);
 
         return search.findTransferOfCare(patientId, transferId);
     }
 
     /**
      * Create a new Transfer of Care
-     * @param patientId The ID of the patient
-     * @param source The source of the data
-     * @param transferOfCare The Transfer of Care to be persisted
+     * 
+     * @param patientId
+     *            The ID of the patient
+     * @param source
+     *            The source of the data
+     * @param transferOfCare
+     *            The Transfer of Care to be persisted
      */
     @RequestMapping(method = RequestMethod.POST)
     public void createTransferOfCare(@PathVariable("patientId") String patientId,
                                      @RequestParam(required = false) String source,
                                      @RequestBody TransferOfCareDetails transferOfCare) {
-        TransferOfCareStore store = transferOfCareStoreFactory.select(source);
+        final RepoSource sourceType = RepoSourceType.fromString(source);
+        TransferOfCareStore store = transferOfCareStoreFactory.select(sourceType);
 
         store.create(patientId, transferOfCare);
     }

@@ -18,6 +18,7 @@ package org.rippleosi.patient.summary.search;
 import java.util.List;
 
 import org.rippleosi.common.exception.ConfigurationException;
+import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientQueryParams;
 import org.rippleosi.patient.summary.model.PatientSummary;
@@ -30,8 +31,8 @@ import org.rippleosi.search.setting.table.model.SettingTableQuery;
 public class NotConfiguredPatientSearch implements PatientSearch {
 
     @Override
-    public String getSource() {
-        return "not configured";
+    public RepoSourceType getSource() {
+        return RepoSourceType.NONE;
     }
 
     @Override

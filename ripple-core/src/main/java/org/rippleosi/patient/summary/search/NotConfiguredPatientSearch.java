@@ -22,9 +22,6 @@ import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientQueryParams;
 import org.rippleosi.patient.summary.model.PatientSummary;
-import org.rippleosi.search.patient.stats.model.PatientTableQuery;
-import org.rippleosi.search.reports.table.model.ReportTableQuery;
-import org.rippleosi.search.setting.table.model.SettingTableQuery;
 
 /**
  */
@@ -46,37 +43,12 @@ public class NotConfiguredPatientSearch implements PatientSearch {
     }
 
     @Override
-    public List<PatientSummary> findAllMatchingPatients(List<String> nhsNumbers, ReportTableQuery tableQuery) {
-        throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
-    }
-
-    @Override
     public PatientDetails findPatient(String patientId) {
         throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
     }
 
     @Override
-    public List<PatientSummary> findPatientsBySearchString(PatientTableQuery tableQuery) {
-        throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
-    }
-
-    @Override
-    public Long countPatientsBySearchString(PatientTableQuery tableQuery) {
-        throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
-    }
-
-    @Override
     public PatientSummary findPatientSummary(String patientId) {
-        throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
-    }
-
-    @Override
-    public List<PatientSummary> findAllPatientsByDepartment(SettingTableQuery tableQuery) {
-        throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
-    }
-
-    @Override
-    public Long findPatientCountByDepartment(String department) {
         throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
     }
 

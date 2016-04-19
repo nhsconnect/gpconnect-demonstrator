@@ -21,9 +21,6 @@ import org.rippleosi.common.repo.Repository;
 import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientQueryParams;
 import org.rippleosi.patient.summary.model.PatientSummary;
-import org.rippleosi.search.patient.stats.model.PatientTableQuery;
-import org.rippleosi.search.reports.table.model.ReportTableQuery;
-import org.rippleosi.search.setting.table.model.SettingTableQuery;
 
 /**
  */
@@ -31,19 +28,9 @@ public interface PatientSearch extends Repository {
 
     List<PatientSummary> findAllPatients();
 
-    List<PatientSummary> findAllMatchingPatients(List<String> nhsNumbers, ReportTableQuery tableQuery);
-
     PatientDetails findPatient(String patientId);
 
-    List<PatientSummary> findPatientsBySearchString(PatientTableQuery tableQuery);
-
-    Long countPatientsBySearchString(PatientTableQuery tableQuery);
-
     PatientSummary findPatientSummary(String patientId);
-
-    List<PatientSummary> findAllPatientsByDepartment(SettingTableQuery tableQuery);
-
-    Long findPatientCountByDepartment(String department);
 
     List<PatientSummary> findPatientsByQueryObject(PatientQueryParams patientQueryParams);
 }

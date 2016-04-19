@@ -42,38 +42,13 @@ public class NotConfiguredPatientSearchTest {
     }
 
     @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindAllMatchingPatients() {
-        patientSearch.findAllMatchingPatients(null, null);
-    }
-
-    @Test(expected = ConfigurationException.class)
     public void shouldThrowExceptionWhenTryingToFindPatient() {
         patientSearch.findPatient(null);
     }
 
     @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindPatientsByQuery() {
-        patientSearch.findPatientsBySearchString(null);
-    }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToCountPatientsByQuery() {
-        patientSearch.countPatientsBySearchString(null);
-    }
-
-    @Test(expected = ConfigurationException.class)
     public void shouldThrowExceptionWhenTryingToFindAPatientSummary() {
         patientSearch.findPatientSummary(null);
-    }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindAllPatientsByDepartment() {
-        patientSearch.findAllPatientsByDepartment(null);
-    }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindPatientCountByDepartment() {
-        patientSearch.findPatientCountByDepartment(null);
     }
 
     @Test(expected = ConfigurationException.class)

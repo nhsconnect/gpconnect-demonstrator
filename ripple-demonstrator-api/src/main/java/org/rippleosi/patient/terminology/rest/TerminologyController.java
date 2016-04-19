@@ -40,7 +40,7 @@ public class TerminologyController {
     public List<Terminology> findTerms(@PathVariable("type") String type,
                                        @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        TerminologySearch search = terminologySearchFactory.select(sourceType);
+        final TerminologySearch search = terminologySearchFactory.select(sourceType);
 
         return search.findTerms(type);
     }

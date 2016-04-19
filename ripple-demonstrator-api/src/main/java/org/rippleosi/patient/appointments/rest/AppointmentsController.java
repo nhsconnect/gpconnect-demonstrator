@@ -49,7 +49,7 @@ public class AppointmentsController {
     public List<AppointmentSummary> findAllAppointments(@PathVariable("patientId") String patientId,
                                                         @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        AppointmentSearch appointmentSearch = appointmentSearchFactory.select(sourceType);
+        final AppointmentSearch appointmentSearch = appointmentSearchFactory.select(sourceType);
 
         return appointmentSearch.findAllAppointments(patientId);
     }
@@ -59,7 +59,7 @@ public class AppointmentsController {
                                               @PathVariable("orderId") String appointmentId,
                                               @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        AppointmentSearch appointmentSearch = appointmentSearchFactory.select(sourceType);
+        final AppointmentSearch appointmentSearch = appointmentSearchFactory.select(sourceType);
 
         return appointmentSearch.findAppointment(patientId, appointmentId);
     }
@@ -69,7 +69,7 @@ public class AppointmentsController {
                                   @RequestParam(required = false) String source,
                                   @RequestBody AppointmentDetails appointment) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        AppointmentStore appointmentStore = appointmentStoreFactory.select(sourceType);
+        final AppointmentStore appointmentStore = appointmentStoreFactory.select(sourceType);
 
         appointmentStore.create(patientId, appointment);
     }
@@ -79,7 +79,7 @@ public class AppointmentsController {
                                   @RequestParam(required = false) String source,
                                   @RequestBody AppointmentDetails appointment) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        AppointmentStore appointmentStore = appointmentStoreFactory.select(sourceType);
+        final AppointmentStore appointmentStore = appointmentStoreFactory.select(sourceType);
 
         appointmentStore.update(patientId, appointment);
     }

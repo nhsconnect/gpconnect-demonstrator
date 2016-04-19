@@ -49,13 +49,9 @@ public class LabOrdersController {
     public List<LabOrderSummary> findAllLabOrders(@PathVariable("patientId") String patientId,
                                                   @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        LabOrderSearch labOrderSearch = labOrderSearchFactory.select(sourceType);
-        List<LabOrderSummary> labOrders = labOrderSearch.findAllLabOrders(patientId);
+        final LabOrderSearch labOrderSearch = labOrderSearchFactory.select(sourceType);
 
-        LabOrderSearch openehrSearch = labOrderSearchFactory.select(RepoSourceType.MARAND);
-        labOrders.addAll(openehrSearch.findAllLabOrders(patientId));
-
-        return labOrders;
+        return labOrderSearch.findAllLabOrders(patientId);
     }
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.GET)
@@ -63,7 +59,7 @@ public class LabOrdersController {
                                         @PathVariable("orderId") String orderId,
                                         @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        LabOrderSearch labOrderSearch = labOrderSearchFactory.select(sourceType);
+        final LabOrderSearch labOrderSearch = labOrderSearchFactory.select(sourceType);
 
         return labOrderSearch.findLabOrder(patientId, orderId);
     }
@@ -73,7 +69,7 @@ public class LabOrdersController {
                                 @RequestParam(required = false) String source,
                                 @RequestBody List<LabOrderDetails> labOrders) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        LabOrderStore labOrderStore = labOrderStoreFactory.select(sourceType);
+        final LabOrderStore labOrderStore = labOrderStoreFactory.select(sourceType);
 
         labOrderStore.create(patientId, labOrders);
     }

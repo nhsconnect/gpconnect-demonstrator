@@ -44,7 +44,7 @@ public class PatientsController {
     @RequestMapping(method = RequestMethod.GET)
     public List<PatientSummary> findAllPatients(@RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        PatientSearch patientSearch = patientSearchFactory.select(sourceType);
+        final PatientSearch patientSearch = patientSearchFactory.select(sourceType);
 
         return patientSearch.findAllPatients();
     }
@@ -53,7 +53,7 @@ public class PatientsController {
     public PatientDetails findPatientByNHSNumber(@PathVariable("patientId") String patientId,
                                                  @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        PatientSearch patientSearch = patientSearchFactory.select(sourceType);
+        final PatientSearch patientSearch = patientSearchFactory.select(sourceType);
 
         return patientSearch.findPatient(patientId);
     }
@@ -62,7 +62,7 @@ public class PatientsController {
     public List<PatientSummary> findPatientsByQueryObject(@RequestParam(required = false) String source,
                                                           @RequestBody PatientQueryParams queryParams) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        PatientSearch patientSearch = patientSearchFactory.select(sourceType);
+        final PatientSearch patientSearch = patientSearchFactory.select(sourceType);
 
         return patientSearch.findPatientsByQueryObject(queryParams);
     }

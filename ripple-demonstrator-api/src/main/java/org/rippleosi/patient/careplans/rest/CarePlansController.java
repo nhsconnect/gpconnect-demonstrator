@@ -49,7 +49,7 @@ public class CarePlansController {
     public List<CarePlanSummary> findAllCarePlans(@PathVariable("patientId") String patientId,
                                                   @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        CarePlanSearch carePlanSearch = carePlanSearchFactory.select(sourceType);
+        final CarePlanSearch carePlanSearch = carePlanSearchFactory.select(sourceType);
 
         return carePlanSearch.findAllCarePlans(patientId);
     }
@@ -59,7 +59,7 @@ public class CarePlansController {
                                         @PathVariable("planId") String planId,
                                         @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        CarePlanSearch carePlanSearch = carePlanSearchFactory.select(sourceType);
+        final CarePlanSearch carePlanSearch = carePlanSearchFactory.select(sourceType);
 
         return carePlanSearch.findCarePlan(patientId, planId);
     }
@@ -69,7 +69,7 @@ public class CarePlansController {
                                @RequestParam(required = false) String source,
                                @RequestBody CarePlanDetails carePlan) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        CarePlanStore carePlanStore = carePlanStoreFactory.select(sourceType);
+        final CarePlanStore carePlanStore = carePlanStoreFactory.select(sourceType);
 
         carePlanStore.create(patientId, carePlan);
     }
@@ -79,7 +79,7 @@ public class CarePlansController {
                                @RequestParam(required = false) String source,
                                @RequestBody CarePlanDetails carePlan) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        CarePlanStore carePlanStore = carePlanStoreFactory.select(sourceType);
+        final CarePlanStore carePlanStore = carePlanStoreFactory.select(sourceType);
 
         carePlanStore.update(patientId, carePlan);
     }

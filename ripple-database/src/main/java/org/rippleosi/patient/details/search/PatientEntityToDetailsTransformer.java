@@ -142,10 +142,8 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
     private List<PatientHeadline> findProblems(String patientId) {
         try {
             ProblemSearch problemSearch = problemSearchFactory.select(null);
-            List<ProblemHeadline> problems = problemSearch.findProblemHeadlines(patientId);
 
-            ProblemSearch vistaSearch = problemSearchFactory.select(RepoSourceType.VISTA);
-            problems.addAll(vistaSearch.findProblemHeadlines("17"));
+            List<ProblemHeadline> problems = problemSearch.findProblemHeadlines(patientId);
 
             return CollectionUtils.collect(problems, new ProblemTransformer(), new ArrayList<>());
         } catch (DataNotFoundException ignore) {

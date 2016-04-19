@@ -50,26 +50,18 @@ public class AllergiesController {
     public List<AllergySummary> findAllAllergies(@PathVariable("patientId") String patientId,
                                                  @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        AllergySearch ethercisSearch = allergySearchFactory.select(sourceType);
-        List<AllergySummary> allergies = ethercisSearch.findAllAllergies(patientId);
+        final AllergySearch allergySearch = allergySearchFactory.select(sourceType);
 
-        AllergySearch openehrSearch = allergySearchFactory.select(RepoSourceType.MARAND);
-        allergies.addAll(openehrSearch.findAllAllergies(patientId));
-
-        return allergies;
+        return allergySearch.findAllAllergies(patientId);
     }
 
     @RequestMapping(value = "/headlines", method = RequestMethod.GET)
     public List<AllergyHeadline> findAllergyHeadlines(@PathVariable("patientId") String patientId,
                                                       @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        AllergySearch ethercisSearch = allergySearchFactory.select(sourceType);
-        List<AllergyHeadline> allergies = ethercisSearch.findAllergyHeadlines(patientId);
+        final AllergySearch allergySearch = allergySearchFactory.select(sourceType);
 
-        AllergySearch openehrSearch = allergySearchFactory.select(RepoSourceType.MARAND);
-        allergies.addAll(openehrSearch.findAllergyHeadlines(patientId));
-
-        return allergies;
+        return allergySearch.findAllergyHeadlines(patientId);
     }
 
     @RequestMapping(value = "/{allergyId}", method = RequestMethod.GET)
@@ -77,7 +69,7 @@ public class AllergiesController {
                                       @PathVariable("allergyId") String allergyId,
                                       @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        AllergySearch allergySearch = allergySearchFactory.select(sourceType);
+        final AllergySearch allergySearch = allergySearchFactory.select(sourceType);
 
         return allergySearch.findAllergy(patientId, allergyId);
     }
@@ -87,7 +79,7 @@ public class AllergiesController {
                               @RequestParam(required = false) String source,
                               @RequestBody AllergyDetails allergy) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        AllergyStore allergyStore = allergyStoreFactory.select(sourceType);
+        final AllergyStore allergyStore = allergyStoreFactory.select(sourceType);
 
         allergyStore.create(patientId, allergy);
     }
@@ -97,7 +89,7 @@ public class AllergiesController {
                               @RequestParam(required = false) String source,
                               @RequestBody AllergyDetails allergy) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        AllergyStore allergyStore = allergyStoreFactory.select(sourceType);
+        final AllergyStore allergyStore = allergyStoreFactory.select(sourceType);
 
         allergyStore.update(patientId, allergy);
     }

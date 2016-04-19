@@ -49,13 +49,9 @@ public class ProceduresController {
     public List<ProcedureSummary> findAllProcedures(@PathVariable("patientId") String patientId,
                                                     @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ProcedureSearch etherCISProcedureSearch = procedureSearchFactory.select(sourceType);
-        List<ProcedureSummary> procedures = etherCISProcedureSearch.findAllProcedures(patientId);
+        final ProcedureSearch etherCISProcedureSearch = procedureSearchFactory.select(sourceType);
 
-        ProcedureSearch marandProcedureSearch = procedureSearchFactory.select(RepoSourceType.MARAND);
-        procedures.addAll(marandProcedureSearch.findAllProcedures(patientId));
-
-        return procedures;
+        return etherCISProcedureSearch.findAllProcedures(patientId);
     }
 
     @RequestMapping(value = "/{procedureId}", method = RequestMethod.GET)
@@ -63,7 +59,7 @@ public class ProceduresController {
                                           @PathVariable("procedureId") String procedureId,
                                           @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ProcedureSearch procedureSearch = procedureSearchFactory.select(sourceType);
+        final ProcedureSearch procedureSearch = procedureSearchFactory.select(sourceType);
 
         return procedureSearch.findProcedure(patientId, procedureId);
     }
@@ -73,7 +69,7 @@ public class ProceduresController {
                                 @RequestParam(required = false) String source,
                                 @RequestBody ProcedureDetails procedure) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ProcedureStore procedureStore = procedureStoreFactory.select(sourceType);
+        final ProcedureStore procedureStore = procedureStoreFactory.select(sourceType);
 
         procedureStore.create(patientId, procedure);
     }
@@ -83,7 +79,7 @@ public class ProceduresController {
                                 @RequestParam(required = false) String source,
                                 @RequestBody ProcedureDetails procedure) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ProcedureStore procedureStore = procedureStoreFactory.select(sourceType);
+        final ProcedureStore procedureStore = procedureStoreFactory.select(sourceType);
 
         procedureStore.update(patientId, procedure);
     }

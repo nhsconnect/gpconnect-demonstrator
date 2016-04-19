@@ -49,7 +49,7 @@ public class ReferralsController {
     public List<ReferralSummary> findAllReferrals(@PathVariable("patientId") String patientId,
                                                   @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ReferralSearch referralSearch = referralSearchFactory.select(sourceType);
+        final ReferralSearch referralSearch = referralSearchFactory.select(sourceType);
 
         return referralSearch.findAllReferrals(patientId);
     }
@@ -59,7 +59,7 @@ public class ReferralsController {
                                         @PathVariable("referralId") String referralId,
                                         @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ReferralSearch referralSearch = referralSearchFactory.select(sourceType);
+        final ReferralSearch referralSearch = referralSearchFactory.select(sourceType);
 
         return referralSearch.findReferral(patientId, referralId);
     }
@@ -69,7 +69,7 @@ public class ReferralsController {
                                @RequestParam(required = false) String source,
                                @RequestBody ReferralDetails referral) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ReferralStore referralStore = referralStoreFactory.select(sourceType);
+        final ReferralStore referralStore = referralStoreFactory.select(sourceType);
 
         referralStore.create(patientId, referral);
     }
@@ -79,7 +79,7 @@ public class ReferralsController {
                                @RequestParam(required = false) String source,
                                @RequestBody ReferralDetails referral) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ReferralStore referralStore = referralStoreFactory.select(sourceType);
+        final ReferralStore referralStore = referralStoreFactory.select(sourceType);
 
         referralStore.update(patientId, referral);
     }

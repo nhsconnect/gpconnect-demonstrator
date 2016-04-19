@@ -49,7 +49,7 @@ public class MDTReportsController {
     public List<MDTReportSummary> findAllMDTReports(@PathVariable("patientId") String patientId,
                                                     @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        MDTReportSearch mdtReportSearch = mdtReportSearchFactory.select(sourceType);
+        final MDTReportSearch mdtReportSearch = mdtReportSearchFactory.select(sourceType);
 
         return mdtReportSearch.findAllMDTReports(patientId);
     }
@@ -59,7 +59,7 @@ public class MDTReportsController {
                                           @PathVariable("reportId") String reportId,
                                           @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        MDTReportSearch mdtReportSearch = mdtReportSearchFactory.select(sourceType);
+        final MDTReportSearch mdtReportSearch = mdtReportSearchFactory.select(sourceType);
 
         return mdtReportSearch.findMDTReport(patientId, reportId);
     }
@@ -69,7 +69,7 @@ public class MDTReportsController {
                                 @RequestParam(required = false) String source,
                                 @RequestBody MDTReportDetails mdtReport) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        MDTReportStore mdtReportStore = mdtReportStoreFactory.select(sourceType);
+        final MDTReportStore mdtReportStore = mdtReportStoreFactory.select(sourceType);
 
         mdtReportStore.create(patientId, mdtReport);
     }
@@ -79,7 +79,7 @@ public class MDTReportsController {
                                 @RequestParam(required = false) String source,
                                 @RequestBody MDTReportDetails mdtReport) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        MDTReportStore mdtReportStore = mdtReportStoreFactory.select(sourceType);
+        final MDTReportStore mdtReportStore = mdtReportStoreFactory.select(sourceType);
 
         mdtReportStore.update(patientId, mdtReport);
     }

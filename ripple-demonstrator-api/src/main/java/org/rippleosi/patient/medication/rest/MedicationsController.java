@@ -51,26 +51,18 @@ public class MedicationsController {
     public List<MedicationSummary> findAllMedications(@PathVariable("patientId") String patientId,
                                                       @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        MedicationSearch etherCISSearch = medicationSearchFactory.select(sourceType);
-        List<MedicationSummary> medication = etherCISSearch.findAllMedication(patientId);
+        final MedicationSearch medicationSearch = medicationSearchFactory.select(sourceType);
 
-        MedicationSearch openehrSearch = medicationSearchFactory.select(RepoSourceType.MARAND);
-        medication.addAll(openehrSearch.findAllMedication(patientId));
-
-        return medication;
+        return medicationSearch.findAllMedication(patientId);
     }
 
     @RequestMapping(value = "/headlines", method = RequestMethod.GET)
     public List<MedicationHeadline> findMedicationHeadlines(@PathVariable("patientId") String patientId,
                                                             @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        MedicationSearch etherCISSearch = medicationSearchFactory.select(sourceType);
-        List<MedicationHeadline> medicationHeadlines = etherCISSearch.findMedicationHeadlines(patientId);
+        final MedicationSearch medicationSearch = medicationSearchFactory.select(sourceType);
 
-        MedicationSearch openehrSearch = medicationSearchFactory.select(RepoSourceType.MARAND);
-        medicationHeadlines.addAll(openehrSearch.findMedicationHeadlines(patientId));
-
-        return medicationHeadlines;
+        return medicationSearch.findMedicationHeadlines(patientId);
     }
 
     @RequestMapping(value = "/{medicationId}", method = RequestMethod.GET)
@@ -78,7 +70,7 @@ public class MedicationsController {
                                             @PathVariable("medicationId") String medicationId,
                                             @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        MedicationSearch medicationSearch = medicationSearchFactory.select(sourceType);
+        final MedicationSearch medicationSearch = medicationSearchFactory.select(sourceType);
 
         return medicationSearch.findMedication(patientId, medicationId);
     }
@@ -88,7 +80,7 @@ public class MedicationsController {
                                  @RequestParam(required = false) String source,
                                  @RequestBody MedicationDetails medication) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        MedicationStore medicationStore = medicationStoreFactory.select(sourceType);
+        final MedicationStore medicationStore = medicationStoreFactory.select(sourceType);
 
         medicationStore.create(patientId, medication);
     }
@@ -98,7 +90,7 @@ public class MedicationsController {
                                  @RequestParam(required = false) String source,
                                  @RequestBody MedicationDetails medication) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        MedicationStore medicationStore = medicationStoreFactory.select(sourceType);
+        final MedicationStore medicationStore = medicationStoreFactory.select(sourceType);
 
         medicationStore.update(patientId, medication);
     }

@@ -50,29 +50,18 @@ public class ProblemsController {
     public List<ProblemSummary> findAllProblems(@PathVariable("patientId") String patientId,
                                                 @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
-        List<ProblemSummary> problems = problemSearch.findAllProblems(patientId);
+        final ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
 
-        ProblemSearch openehrSearch = problemSearchFactory.select(RepoSourceType.MARAND);
-        problems.addAll(openehrSearch.findAllProblems(patientId));
-
-        ProblemSearch vistaSearch = problemSearchFactory.select(RepoSourceType.VISTA);
-        problems.addAll(vistaSearch.findAllProblems("17"));
-
-        return problems;
+        return problemSearch.findAllProblems(patientId);
     }
 
     @RequestMapping(value = "/headlines", method = RequestMethod.GET)
     public List<ProblemHeadline> findProblemHeadlines(@PathVariable("patientId") String patientId,
                                                       @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
-        List<ProblemHeadline> problemHeadlines = problemSearch.findProblemHeadlines(patientId);
+        final ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
 
-        ProblemSearch vistaSearch = problemSearchFactory.select(RepoSourceType.VISTA);
-        problemHeadlines.addAll(vistaSearch.findProblemHeadlines("17"));
-
-        return problemHeadlines;
+        return problemSearch.findProblemHeadlines(patientId);
     }
 
     @RequestMapping(value = "/{problemId}", method = RequestMethod.GET)
@@ -80,11 +69,7 @@ public class ProblemsController {
                                       @PathVariable("problemId") String problemId,
                                       @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
-
-        if (source != null && source.equalsIgnoreCase(RepoSourceType.VISTA.name())) {
-            patientId = "17";
-        }
+        final ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
 
         return problemSearch.findProblem(patientId, problemId);
     }
@@ -94,7 +79,7 @@ public class ProblemsController {
                               @RequestParam(required = false) String source,
                               @RequestBody ProblemDetails problem) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ProblemStore problemStore = problemStoreFactory.select(sourceType);
+        final ProblemStore problemStore = problemStoreFactory.select(sourceType);
 
         problemStore.create(patientId, problem);
     }
@@ -104,7 +89,7 @@ public class ProblemsController {
                               @RequestParam(required = false) String source,
                               @RequestBody ProblemDetails problem) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        ProblemStore problemStore = problemStoreFactory.select(sourceType);
+        final ProblemStore problemStore = problemStoreFactory.select(sourceType);
 
         problemStore.update(patientId, problem);
     }

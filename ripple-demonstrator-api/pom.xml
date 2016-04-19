@@ -54,12 +54,6 @@
 
         <dependency>
             <groupId>org.rippleosi</groupId>
-            <artifactId>ripple-ethercis</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.rippleosi</groupId>
             <artifactId>ripple-openehr</artifactId>
             <scope>runtime</scope>
         </dependency>

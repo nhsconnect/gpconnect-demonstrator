@@ -43,13 +43,9 @@ public class LabResultsController {
     public List<LabResultSummary> findAllLabResults(@PathVariable("patientId") String patientId,
                                                     @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        LabResultSearch labResultSearch = labResultSearchFactory.select(sourceType);
-        List<LabResultSummary> results = labResultSearch.findAllLabResults(patientId);
+        final LabResultSearch labResultSearch = labResultSearchFactory.select(sourceType);
 
-        LabResultSearch openEhrSearch = labResultSearchFactory.select(RepoSourceType.MARAND);
-        results.addAll(openEhrSearch.findAllLabResults(patientId));
-
-        return results;
+        return labResultSearch.findAllLabResults(patientId);
     }
 
     @RequestMapping(value = "/{resultId}", method = RequestMethod.GET)
@@ -57,7 +53,7 @@ public class LabResultsController {
                                           @PathVariable("resultId") String resultId,
                                           @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
-        LabResultSearch labResultSearch = labResultSearchFactory.select(sourceType);
+        final LabResultSearch labResultSearch = labResultSearchFactory.select(sourceType);
 
         return labResultSearch.findLabResult(patientId, resultId);
     }

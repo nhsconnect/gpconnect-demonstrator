@@ -232,26 +232,7 @@ angular
           detail: { templateUrl: 'views/care-plans/eolcareplans-detail.html', controller: 'EolcareplansDetailCtrl' }
         }
       })
-
-     .state('appointments', {
-        url: '/patients/{patientId:int}/appointments?reportType&searchString&queryType',
-        views: {
-          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
-          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/appointments/appointments-list.html', controller: 'AppointmentsListCtrl' }
-        }
-      })
-
-      .state('appointments-detail', {
-        url: '/patients/{patientId:int}/appointments/{appointmentIndex}?filter&page&reportType&searchString&queryType',
-        views: {
-          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
-          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/appointments/appointments-list.html', controller: 'AppointmentsListCtrl' },
-          detail: { templateUrl: 'views/appointments/appointments-detail.html', controller: 'AppointmentsDetailCtrl' }
-        }
-      })
-
+      
       .state('orders', {
         url: '/patients/{patientId:int}/orders?reportType&searchString&queryType',
         views: {

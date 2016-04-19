@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('TransferOfCareListCtrl', function ($scope, $location, $stateParams, SearchInput, $modal, $state, usSpinnerService, PatientService, TransferOfCare) {
+  .controller('TransferOfCareListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, TransferOfCare) {
 
-    SearchInput.update();
     $scope.query = {};
     $scope.queryBy = '$';
 
@@ -39,10 +38,7 @@ angular.module('rippleDemonstrator')
         patientId: $scope.patient.id,
         transferOfCareIndex: id,
         filter: $scope.query.$,
-        page: $scope.currentPage,
-        reportType: $stateParams.reportType,
-        searchString: $stateParams.searchString,
-        queryType: $stateParams.queryType
+        page: $scope.currentPage
       });
     };
 
@@ -54,10 +50,7 @@ angular.module('rippleDemonstrator')
       $state.go('transferOfCare-create', {
         patientId: $scope.patient.id,
         filter: $scope.query.$,
-        page: $scope.currentPage,
-        reportType: $stateParams.reportType,
-        searchString: $stateParams.searchString,
-        queryType: $stateParams.queryType
+        page: $scope.currentPage
       });
     };
 

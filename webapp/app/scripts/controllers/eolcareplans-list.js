@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('EolcareplansListCtrl', function ($scope, $location, $stateParams, SearchInput, $modal, usSpinnerService, $state, PatientService, Eolcareplan) {
+  .controller('EolcareplansListCtrl', function ($scope, $location, $stateParams, $modal, usSpinnerService, $state, PatientService, Eolcareplan) {
 
     $scope.currentPage = 1;
-    SearchInput.update();
 
     $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
@@ -47,10 +46,7 @@ angular.module('rippleDemonstrator')
         patientId: $scope.patient.id,
         eolcareplansIndex: id,
         filter: $scope.query,
-        page: $scope.currentPage,
-        reportType: $stateParams.reportType,
-        searchString: $stateParams.searchString,
-        queryType: $stateParams.queryType
+        page: $scope.currentPage
       });
     };
 
@@ -98,10 +94,7 @@ angular.module('rippleDemonstrator')
             $state.go('eolcareplans', {
               patientId: $scope.patient.id,
               filter: $scope.query,
-              page: $scope.currentPage,
-              reportType: $stateParams.reportType,
-              searchString: $stateParams.searchString,
-              queryType: $stateParams.queryType
+              page: $scope.currentPage
             }, {
               reload: true
             });

@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('CancerMdtListCtrl', function ($scope, $location, $stateParams, SearchInput, $modal, $state, usSpinnerService, PatientService, CancerMdt) {
+  .controller('CancerMdtListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, CancerMdt) {
 
     $scope.currentPage = 1;
-    SearchInput.update();
 
     $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
@@ -46,10 +45,7 @@ angular.module('rippleDemonstrator')
         patientId: $scope.patient.id,
         cancerMdtIndex: id,
         filter: $scope.query,
-        page: $scope.currentPage,
-        reportType: $stateParams.reportType,
-        searchString: $stateParams.searchString,
-        queryType: $stateParams.queryType
+        page: $scope.currentPage
       });
     };
 
@@ -97,10 +93,7 @@ angular.module('rippleDemonstrator')
             $state.go('cancerMdt', {
               patientId: $scope.patient.id,
               filter: $scope.query,
-              page: $scope.currentPage,
-              reportType: $stateParams.reportType,
-              searchString: $stateParams.searchString,
-              queryType: $stateParams.queryType
+              page: $scope.currentPage
             }, {
               reload: true
             });

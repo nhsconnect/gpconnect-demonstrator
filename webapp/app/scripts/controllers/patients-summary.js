@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('PatientsSummaryCtrl', function ($scope, $stateParams, $state, SearchInput, $rootScope, $location, usSpinnerService, PatientService) {
+  .controller('PatientsSummaryCtrl', function ($scope, $stateParams, $state, $rootScope, $location, usSpinnerService, PatientService) {
 
-    SearchInput.update();
     $scope.patients = $stateParams.patientsList;
 
     PatientService.get($stateParams.patientId).then(function (patient) {
@@ -39,10 +38,7 @@ angular.module('rippleDemonstrator')
 
     $scope.goToSection = function (section) {
       var requestHeader = {
-        patientId: $stateParams.patientId,
-        reportType: $stateParams.reportType,
-        searchString: $stateParams.searchString,
-        queryType: $stateParams.queryType
+        patientId: $stateParams.patientId
       };
 
       var toState = '';

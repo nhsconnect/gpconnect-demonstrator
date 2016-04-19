@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('OrdersDetailCtrl', function ($scope, $stateParams, SearchInput, $modal, $location, usSpinnerService, PatientService, Order) {
-
-    SearchInput.update();
+  .controller('OrdersDetailCtrl', function ($scope, $stateParams, $modal, $location, usSpinnerService, PatientService, Order) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;

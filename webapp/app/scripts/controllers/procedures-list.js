@@ -1,11 +1,9 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ProceduresListCtrl', function ($scope, $location, $stateParams, SearchInput, $modal, $state, usSpinnerService, PatientService, Procedure) {
+  .controller('ProceduresListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Procedure) {
 
     $scope.currentPage = 1;
-
-    SearchInput.update();
 
     $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
@@ -48,9 +46,6 @@ angular.module('rippleDemonstrator')
         procedureId: id,
         filter: $scope.query,
         page: $scope.currentPage,
-        reportType: $stateParams.reportType,
-        searchString: $stateParams.searchString,
-        queryType: $stateParams.queryType,
         source: procedureSource
       });
     };
@@ -103,10 +98,7 @@ angular.module('rippleDemonstrator')
             $state.go('procedures', {
               patientId: $scope.patient.id,
               filter: $scope.query,
-              page: $scope.currentPage,
-              reportType: $stateParams.reportType,
-              searchString: $stateParams.searchString,
-              queryType: $stateParams.queryType
+              page: $scope.currentPage
             }, {
               reload: true
             });

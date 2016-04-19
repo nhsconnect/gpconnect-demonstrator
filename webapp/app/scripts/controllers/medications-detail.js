@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('MedicationsDetailCtrl', function ($scope, $stateParams, SearchInput, $modal, $location, $state, Helper, usSpinnerService, PatientService, Medication) {
-
-    SearchInput.update();
+  .controller('MedicationsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, Helper, usSpinnerService, PatientService, Medication) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -56,10 +54,7 @@ angular.module('rippleDemonstrator')
             $state.go('medications-detail', {
               patientId: $scope.patient.id,
               medicationIndex: medication.source === 'Marand' ? medication.updateId(medication.sourceId) : medication.sourceId,
-              page: $scope.currentPage,
-              reportType: $stateParams.reportType,
-              searchString: $stateParams.searchString,
-              queryType: $stateParams.queryType
+              page: $scope.currentPage
             });
           }, 2000);
         });

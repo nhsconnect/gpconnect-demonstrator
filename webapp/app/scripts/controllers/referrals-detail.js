@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ReferralsDetailCtrl', function ($scope, $stateParams, SearchInput, $modal, $location, $state, Helper, usSpinnerService, PatientService, Referral) {
+  .controller('ReferralsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, Helper, usSpinnerService, PatientService, Referral) {
 
-    SearchInput.update();
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
@@ -54,10 +53,7 @@ angular.module('rippleDemonstrator')
             $state.go('referrals-detail', {
               patientId: $scope.patient.id,
               referralId: Helper.updateId(referral.sourceId),
-              page: $scope.currentPage,
-              reportType: $stateParams.reportType,
-              searchString: $stateParams.searchString,
-              queryType: $stateParams.queryType
+              page: $scope.currentPage
             });
           }, 2000);
         });

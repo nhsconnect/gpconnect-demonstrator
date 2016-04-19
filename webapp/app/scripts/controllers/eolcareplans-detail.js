@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('EolcareplansDetailCtrl', function ($scope, $stateParams, SearchInput, $modal, $location, $state, Helper, usSpinnerService, PatientService, Eolcareplan) {
+  .controller('EolcareplansDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, Helper, usSpinnerService, PatientService, Eolcareplan) {
 
-    SearchInput.update();
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
@@ -53,10 +52,7 @@ angular.module('rippleDemonstrator')
             $state.go('eolcareplans-detail', {
               patientId: $scope.patient.id,
               eolcareplansIndex: Helper.updateId(eolcareplan.sourceId),
-              page: $scope.currentPage,
-              reportType: $stateParams.reportType,
-              searchString: $stateParams.searchString,
-              queryType: $stateParams.queryType
+              page: $scope.currentPage
             });
           }, 2000);
         });

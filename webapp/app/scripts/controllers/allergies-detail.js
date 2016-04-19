@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('AllergiesDetailCtrl', function ($scope, $stateParams, SearchInput, $modal, $state, $location, Helper, usSpinnerService, PatientService, Allergy) {
+  .controller('AllergiesDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, Helper, usSpinnerService, PatientService, Allergy) {
 
-    SearchInput.update();
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
@@ -48,10 +47,7 @@ angular.module('rippleDemonstrator')
             $state.go('allergies-detail', {
               patientId: $scope.patient.id,
               allergyIndex: allergy.source === 'openehr' ? Helper.updateId(allergy.sourceId) : allergy.sourceId,
-              page: $scope.currentPage,
-              reportType: $stateParams.reportType,
-              searchString: $stateParams.searchString,
-              queryType: $stateParams.queryType
+              page: $scope.currentPage
             });
           }, 2000);
         });

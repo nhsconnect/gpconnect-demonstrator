@@ -1,11 +1,10 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('MedicationsListCtrl', function ($scope, $location, $stateParams, SearchInput, $modal, $state, usSpinnerService, PatientService, Medication) {
+  .controller('MedicationsListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Medication) {
 
     $scope.query = {};
     $scope.queryBy = '$';
-    SearchInput.update();
 
     /*At the request of the product owner we have removed the filtering function, however we will leave the controller code intact
       to allow the function to be added back in should the client chose to revert back to having a filtering function for medications
@@ -40,9 +39,6 @@ angular.module('rippleDemonstrator')
         medicationIndex: id,
         filter: $scope.query.$,
         page: $scope.currentPage,
-        reportType: $stateParams.reportType,
-        searchString: $stateParams.searchString,
-        queryType: $stateParams.queryType,
         source: source
       });
     };
@@ -95,10 +91,7 @@ angular.module('rippleDemonstrator')
             $state.go('medications', {
               patientId: $scope.patient.id,
               filter: $scope.query.$,
-              page: $scope.currentPage,
-              reportType: $stateParams.reportType,
-              searchString: $stateParams.searchString,
-              queryType: $stateParams.queryType
+              page: $scope.currentPage
             }, {
               reload: true
             });

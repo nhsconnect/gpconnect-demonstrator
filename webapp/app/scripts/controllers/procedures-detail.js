@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('ProceduresDetailCtrl', function ($scope, $stateParams, SearchInput, $modal, $state, $location, Helper, usSpinnerService, PatientService, Procedure) {
-
-    SearchInput.update();
+  .controller('ProceduresDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, Helper, usSpinnerService, PatientService, Procedure) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
@@ -59,9 +57,6 @@ angular.module('rippleDemonstrator')
               patientId: $scope.patient.id,
               procedureId: procedure.source === 'Marand' ? procedure.updateId(medication.sourceId) : procedure.sourceId,
               page: $scope.currentPage,
-              reportType: $stateParams.reportType,
-              searchString: $stateParams.searchString,
-              queryType: $stateParams.queryType,
               source: $stateParams.source
             });
           }, 2000);

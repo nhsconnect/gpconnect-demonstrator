@@ -1,19 +1,15 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('PatientsDetailCtrl', function ($scope, $stateParams, $state, SearchInput, PatientService) {
+  .controller('PatientsDetailCtrl', function ($scope, $stateParams, $state, PatientService) {
 
-    SearchInput.update();
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
 
     $scope.goTo = function (section) {
       var requestHeader = {
-        patientId: $stateParams.patientId,
-        reportType: $stateParams.reportType,
-        searchString: $stateParams.searchString,
-        queryType: $stateParams.queryType
+        patientId: $stateParams.patientId
       };
 
       var toState = '';

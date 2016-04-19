@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('OrdersListCtrl', function ($scope, $location, $stateParams, SearchInput, usSpinnerService, $modal, $state, PatientService, Order) {
-
-    SearchInput.update();
+  .controller('OrdersListCtrl', function ($scope, $location, $stateParams, usSpinnerService, $modal, $state, PatientService, Order) {
 
     $scope.currentPage = 1;
 
@@ -47,9 +45,6 @@ angular.module('rippleDemonstrator')
         orderId: id,
         filter: $scope.query,
         page: $scope.currentPage,
-        reportType: $stateParams.reportType,
-        searchString: $stateParams.searchString,
-        queryType: $stateParams.queryType,
         source: source
       });
     };
@@ -95,10 +90,7 @@ angular.module('rippleDemonstrator')
             $state.go('orders', {
               patientId: $scope.patient.id,
               filter: $scope.query,
-              page: $scope.currentPage,
-              reportType: $stateParams.reportType,
-              searchString: $stateParams.searchString,
-              queryType: $stateParams.queryType
+              page: $scope.currentPage
             }, {
               reload: true
             });

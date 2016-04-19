@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('DiagnosesListCtrl', function ($scope, $state, $stateParams, SearchInput, $location, $modal, usSpinnerService, PatientService, Diagnosis) {
+  .controller('DiagnosesListCtrl', function ($scope, $state, $stateParams, $location, $modal, usSpinnerService, PatientService, Diagnosis) {
 
-    SearchInput.update();
     $scope.currentPage = 1;
 
     $scope.pageChangeHandler = function (newPage) {
@@ -94,10 +93,7 @@ angular.module('rippleDemonstrator')
             $state.go('diagnoses-list', {
               patientId: $scope.patient.id,
               filter: $scope.query,
-              page: $scope.currentPage,
-              reportType: $stateParams.reportType,
-              searchString: $stateParams.searchString,
-              queryType: $stateParams.queryType
+              page: $scope.currentPage
                }, {
               reload: true
             });

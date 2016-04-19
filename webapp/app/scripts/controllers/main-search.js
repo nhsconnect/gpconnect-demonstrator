@@ -15,9 +15,13 @@ angular.module('rippleDemonstrator')
       var nhsNumber = expression.replace(/\s+/g, '');
 
       if (!isNaN(nhsNumber) && nhsNumber.length == 10) {
+
         PatientService.get(nhsNumber).then(function (patient) {
           $scope.errorOccurred = false;
           goToPatientSummary(patient.nhsNumber);
+
+        }).catch(function () {
+          $scope.errorOccurred = true;
         });
       }
       else {

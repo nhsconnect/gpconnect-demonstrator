@@ -6,13 +6,12 @@ angular.module('rippleDemonstrator')
     "given_name": "Bob",
     "family_name": "Smith",
     "email": "bob.smith@gmail.com",
+    "date_of_birth": "10/05/1970",
     "scope": {
-      "homeView": "chart",
-      "autoAdvancedSearch": false,
-      "setting2": true,
-      "setting3": true
+      "setting1": true,
+      "setting2": true
     },
-    "tenant_id": "Ripple",
-    "tenant_name": "Ripple Demonstrator",
+    "tenant_id": "HSCIC",
+    "tenant_name": "GP Connect",
     "role": "idcr"
   });

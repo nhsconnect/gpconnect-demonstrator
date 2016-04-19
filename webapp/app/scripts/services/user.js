@@ -12,6 +12,7 @@ angular.module('rippleDemonstrator')
       },
       firstName: claims.given_name,
       surname: claims.family_name,
+      dateOfBirth: claims.date_of_birth,
       isAuthenticated: true,
       feature: claims.scope
     };

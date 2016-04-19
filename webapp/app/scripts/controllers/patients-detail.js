@@ -27,9 +27,6 @@ angular.module('rippleDemonstrator')
       case 'medications':
         toState = 'medications';
         break;
-      case 'orders':
-        toState = 'orders';
-        break;
       case 'results':
         toState = 'results';
         break;

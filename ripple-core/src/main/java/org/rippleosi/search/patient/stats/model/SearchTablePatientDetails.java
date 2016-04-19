@@ -29,7 +29,6 @@ public class SearchTablePatientDetails {
     private String nhsNumber;
 
     private RecordHeadline vitalsHeadline;
-    private RecordHeadline ordersHeadline;
     private RecordHeadline medsHeadline;
     private RecordHeadline resultsHeadline;
     private RecordHeadline treatmentsHeadline;
@@ -96,14 +95,6 @@ public class SearchTablePatientDetails {
 
     public void setVitalsHeadline(RecordHeadline vitalsHeadline) {
         this.vitalsHeadline = vitalsHeadline;
-    }
-
-    public RecordHeadline getOrdersHeadline() {
-        return ordersHeadline;
-    }
-
-    public void setOrdersHeadline(RecordHeadline ordersHeadline) {
-        this.ordersHeadline = ordersHeadline;
     }
 
     public RecordHeadline getMedsHeadline() {

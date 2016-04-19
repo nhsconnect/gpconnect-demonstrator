@@ -18,9 +18,6 @@ public class SourceRoute extends RouteBuilder {
         from("activemq:topic:VirtualTopic.Ripple.CarePlan.Create").to("activemq:topic:VirtualTopic.Marand.CarePlan.Create");
         from("activemq:topic:VirtualTopic.Ripple.CarePlan.Update").to("activemq:topic:VirtualTopic.Marand.CarePlan.Update");
 
-        // Lab Order Routes
-        from("activemq:topic:VirtualTopic.Ripple.LabOrder.Create").to("activemq:topic:VirtualTopic.Marand.LabOrder.Create");
-
         // MDT Report Routes
         from("activemq:topic:VirtualTopic.Ripple.MDTReport.Create").to("activemq:topic:VirtualTopic.Marand.MDTReport.Create");
         from("activemq:topic:VirtualTopic.Ripple.MDTReport.Update").to("activemq:topic:VirtualTopic.Marand.MDTReport.Update");

@@ -52,13 +52,11 @@ public class PatientStatsPatientDetailsTransformer implements Transformer<Patien
         }
 
         RecordHeadline vitalsHeadline = populateVitalsHeadline(associatedData);
-        RecordHeadline ordersHeadline = populateOrdersHeadline(associatedData);
         RecordHeadline medsHeadline = populateMedsHeadline(associatedData);
         RecordHeadline resultsHeadline = populateResultsHeadline(associatedData);
         RecordHeadline treatmentsHeadline = populateTreatmentsHeadline(associatedData);
 
         details.setVitalsHeadline(vitalsHeadline);
-        details.setOrdersHeadline(ordersHeadline);
         details.setMedsHeadline(medsHeadline);
         details.setResultsHeadline(resultsHeadline);
         details.setTreatmentsHeadline(treatmentsHeadline);
@@ -73,17 +71,6 @@ public class PatientStatsPatientDetailsTransformer implements Transformer<Patien
         headline.setSourceId(data.getVitalsId());
         headline.setTotalEntries(data.getVitalsCount());
         headline.setLatestEntry(data.getVitalsDate());
-
-        return headline;
-    }
-
-    private RecordHeadline populateOrdersHeadline(OpenEHRDatesAndCountsResponse data) {
-        RecordHeadline headline = new RecordHeadline();
-
-        headline.setSource("c4hOpenEHR");
-        headline.setSourceId(data.getOrdersId());
-        headline.setTotalEntries(data.getOrdersCount());
-        headline.setLatestEntry(data.getOrdersDate());
 
         return headline;
     }

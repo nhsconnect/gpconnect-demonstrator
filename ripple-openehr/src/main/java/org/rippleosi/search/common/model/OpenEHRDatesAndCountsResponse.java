@@ -29,19 +29,16 @@ public class OpenEHRDatesAndCountsResponse {
     private String nhsNumber;
 
     private String vitalsId;
-    private String ordersId;
     private String labsId;
     private String medsId;
     private String proceduresId;
 
     private String vitalsCount;
-    private String ordersCount;
     private String labsCount;
     private String medsCount;
     private String proceduresCount;
 
     private Date vitalsDate;
-    private Date ordersDate;
     private Date labsDate;
     private Date medsDate;
     private Date proceduresDate;
@@ -69,14 +66,6 @@ public class OpenEHRDatesAndCountsResponse {
 
     public void setVitalsId(String vitalsId) {
         this.vitalsId = vitalsId;
-    }
-
-    public String getOrdersId() {
-        return ordersId;
-    }
-
-    public void setOrdersId(String ordersId) {
-        this.ordersId = ordersId;
     }
 
     public String getLabsId() {
@@ -111,14 +100,6 @@ public class OpenEHRDatesAndCountsResponse {
         this.vitalsCount = vitalsCount;
     }
 
-    public String getOrdersCount() {
-        return ordersCount;
-    }
-
-    public void setOrdersCount(String ordersCount) {
-        this.ordersCount = ordersCount;
-    }
-
     public String getLabsCount() {
         return labsCount;
     }
@@ -149,14 +130,6 @@ public class OpenEHRDatesAndCountsResponse {
 
     public void setVitalsDate(Date vitalsDate) {
         this.vitalsDate = vitalsDate;
-    }
-
-    public Date getOrdersDate() {
-        return ordersDate;
-    }
-
-    public void setOrdersDate(Date ordersDate) {
-        this.ordersDate = ordersDate;
     }
 
     public Date getLabsDate() {

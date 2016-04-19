@@ -1,25 +1,35 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('MainSearchController', function($scope, AdvancedSearch, UserService) {
+  .controller('MainSearchController', function ($scope, $state, AdvancedSearch, PatientService) {
     $scope.mainSearchEnabled = true;
     $scope.searchExpression = '';
-    $scope.isClickToAdvancedSearch = UserService.getCurrentUser().feature.autoAdvancedSearch;
+
     $scope.openAdvancedSearch = AdvancedSearch.openAdvancedSearch;
 
-    $scope.$emit('toggleHeaderSearchEnabled', false);
-
-    $scope.hideSearch = function() {
-      $scope.mainSearchEnabled = false;
-      $scope.$emit('toggleHeaderSearchEnabled', true);
-      $scope.$emit('populateHeaderSearch', $scope.searchExpression);
+    $scope.cancelSearchMode = function () {
+      $scope.searchExpression = '';
     };
 
-    $scope.searchFunction = function() {
-        if($scope.isClickToAdvancedSearch) {
-          $scope.openAdvancedSearch();
-        }
+    $scope.searchFunction = function(expression) {
+      var nhsNumber = expression.replace(/\s+/g, '');
+
+      if (!isNaN(nhsNumber) && nhsNumber.length == 10) {
+        PatientService.get(nhsNumber).then(function (patient) {
+          $scope.errorOccurred = false;
+          goToPatientSummary(patient.nhsNumber);
+        });
+      }
+      else {
+        $scope.errorOccurred = true;
+      }
+    };
+
+    var goToPatientSummary = function (nhsNumber) {
+      $state.go('patients-summary', {
+        patientId: nhsNumber,
+        filter: $scope.query
+      });
     };
 
   });
-

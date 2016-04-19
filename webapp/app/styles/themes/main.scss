@@ -744,6 +744,8 @@ i.clearAll {
   padding-right: 40px;
   text-align: right;
   font-family: "Hero";
+  position: absolute;
+  right: 0;
 }
 
 .header-right-mobile {
@@ -2249,4 +2251,8 @@ div#age-chart div.morris-hover.morris-default-style {
 .patientFilterOptions:hover {
   text-decoration: overline;
   cursor: pointer !important;
+}
+
+.no-patient-found-error {
+  text-align: center;
 }

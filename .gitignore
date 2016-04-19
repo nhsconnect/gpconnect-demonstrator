@@ -8,6 +8,9 @@ webapp/.idea/
 .classpath
 .settings/
 
+# NetBeans #
+nb-configuration.xml
+
 # Misc #
 target/
 .springBeans

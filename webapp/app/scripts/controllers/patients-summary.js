@@ -19,9 +19,6 @@ angular.module('rippleDemonstrator')
       $scope.medicationsCount = patient.medications.length;
       $scope.medications = patient.medications.slice(0, 5);
 
-      $scope.contactsCount = patient.contacts.length;
-      $scope.contacts = patient.contacts.slice(0, 5);
-
       $scope.transferofCaresCount = patient.transfers.length;
       $scope.transferofCareComposition = patient;
 
@@ -58,9 +55,6 @@ angular.module('rippleDemonstrator')
         break;
       case 'Medications':
         toState = 'medications';
-        break;
-      case 'Contacts':
-        toState = 'contacts';
         break;
       case 'Transfer':
         toState = 'transferOfCare';

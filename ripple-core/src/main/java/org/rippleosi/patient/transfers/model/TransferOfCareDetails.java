@@ -25,7 +25,6 @@ public class TransferOfCareDetails implements Serializable {
     private List<ProblemHeadline> problems;
     private List<MedicationHeadline> medications;
     private List<AllergyHeadline> allergies;
-    private List<ContactHeadline> contacts;
     private String reasonForContact;
     private String clinicalSummary;
     private String siteFrom;
@@ -63,14 +62,6 @@ public class TransferOfCareDetails implements Serializable {
 
     public void setAllergies(List<AllergyHeadline> allergies) {
         this.allergies = allergies;
-    }
-
-    public List<ContactHeadline> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<ContactHeadline> contacts) {
-        this.contacts = contacts;
     }
 
     public String getReasonForContact() {

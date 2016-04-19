@@ -33,15 +33,6 @@ public class SourceRoute extends RouteBuilder {
                 .otherwise()
                 .to("activemq:topic:VirtualTopic.Marand.CarePlan.Update");
 
-        // Contact Routes
-        from("activemq:topic:VirtualTopic.Ripple.Contacts.Create").to("activemq:topic:VirtualTopic.Marand.Contacts.Create");
-
-        from("activemq:topic:VirtualTopic.Ripple.Contacts.Update")
-                .choice()
-                .when().simple("${body.args[1].source} == 'EtherCIS'").to("activemq:topic:VirtualTopic.EtherCIS.Contacts.Update")
-                .otherwise()
-                .to("activemq:topic:VirtualTopic.Marand.Contacts.Update");
-
         // Lab Order Routes
         from("activemq:topic:VirtualTopic.Ripple.LabOrder.Create").to("activemq:topic:VirtualTopic.EtherCIS.LabOrder.Create");
 

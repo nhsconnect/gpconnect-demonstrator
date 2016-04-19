@@ -22,8 +22,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 import org.rippleosi.patient.transfers.model.AllergyHeadline;
 import org.rippleosi.patient.transfers.model.AllergyHeadlineEntity;
-import org.rippleosi.patient.transfers.model.ContactHeadline;
-import org.rippleosi.patient.transfers.model.ContactHeadlineEntity;
 import org.rippleosi.patient.transfers.model.MedicationHeadline;
 import org.rippleosi.patient.transfers.model.MedicationHeadlineEntity;
 import org.rippleosi.patient.transfers.model.ProblemHeadline;
@@ -49,16 +47,11 @@ public class TransferEntityToDetailsTransformer implements Transformer<TransferO
                                                                   new AllergyHeadlineEntityTransformer(),
                                                                   new ArrayList<>());
 
-        List<ContactHeadline> contacts = CollectionUtils.collect(transferEntity.getContacts(),
-                                                                 new ContactHeadlineEntityTransformer(),
-                                                                 new ArrayList<>());
-
         TransferOfCareDetails transferDetails = new TransferOfCareDetails();
         transferDetails.setSourceId(transferEntity.getId().toString());
         transferDetails.setProblems(problems);
         transferDetails.setMedications(medications);
         transferDetails.setAllergies(allergies);
-        transferDetails.setContacts(contacts);
         transferDetails.setReasonForContact(transferEntity.getReasonForContact());
         transferDetails.setClinicalSummary(transferEntity.getClinicalSummary());
         transferDetails.setSiteFrom(transferEntity.getSiteFrom());
@@ -108,20 +101,6 @@ public class TransferEntityToDetailsTransformer implements Transformer<TransferO
             allergyHeadline.setSource(allergyHeadlineEntity.getSource());
 
             return allergyHeadline;
-        }
-    }
-
-    private static class ContactHeadlineEntityTransformer implements Transformer<ContactHeadlineEntity, ContactHeadline> {
-
-        @Override
-        public ContactHeadline transform(ContactHeadlineEntity contactHeadlineEntity) {
-            ContactHeadline contactHeadline = new ContactHeadline();
-
-            contactHeadline.setSourceId(contactHeadlineEntity.getSourceId());
-            contactHeadline.setContactName(contactHeadlineEntity.getContactName());
-            contactHeadline.setSource(contactHeadlineEntity.getSource());
-
-            return contactHeadline;
         }
     }
 }

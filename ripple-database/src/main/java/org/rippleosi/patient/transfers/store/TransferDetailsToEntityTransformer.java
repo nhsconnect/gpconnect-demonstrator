@@ -22,8 +22,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 import org.rippleosi.patient.transfers.model.AllergyHeadline;
 import org.rippleosi.patient.transfers.model.AllergyHeadlineEntity;
-import org.rippleosi.patient.transfers.model.ContactHeadline;
-import org.rippleosi.patient.transfers.model.ContactHeadlineEntity;
 import org.rippleosi.patient.transfers.model.MedicationHeadline;
 import org.rippleosi.patient.transfers.model.MedicationHeadlineEntity;
 import org.rippleosi.patient.transfers.model.ProblemHeadline;
@@ -51,14 +49,9 @@ public class TransferDetailsToEntityTransformer implements Transformer<TransferO
                                                                         new AllergyHeadlineToEntityTransformer(),
                                                                         new ArrayList<>());
 
-        List<ContactHeadlineEntity> contacts = CollectionUtils.collect(transferDetails.getContacts(),
-                                                                       new ContactHeadlineToEntityTransformer(),
-                                                                       new ArrayList<>());
-
         transferEntity.setProblems(problems);
         transferEntity.setMedications(medications);
         transferEntity.setAllergies(allergies);
-        transferEntity.setContacts(contacts);
         transferEntity.setReasonForContact(transferDetails.getReasonForContact());
         transferEntity.setClinicalSummary(transferDetails.getClinicalSummary());
         transferEntity.setSiteFrom(transferDetails.getSiteFrom());
@@ -111,21 +104,6 @@ public class TransferDetailsToEntityTransformer implements Transformer<TransferO
             allergyHeadlineEntity.setSource(allergyHeadline.getSource());
 
             return allergyHeadlineEntity;
-        }
-    }
-
-    private class ContactHeadlineToEntityTransformer implements Transformer<ContactHeadline, ContactHeadlineEntity> {
-
-        @Override
-        public ContactHeadlineEntity transform(ContactHeadline contactHeadline) {
-            ContactHeadlineEntity contactHeadlineEntity = new ContactHeadlineEntity();
-
-            contactHeadlineEntity.setSourceId(contactHeadline.getSourceId());
-            contactHeadlineEntity.setTransferOfCare(transferEntity);
-            contactHeadlineEntity.setContactName(contactHeadline.getContactName());
-            contactHeadlineEntity.setSource(contactHeadline.getSource());
-
-            return contactHeadlineEntity;
         }
     }
 }

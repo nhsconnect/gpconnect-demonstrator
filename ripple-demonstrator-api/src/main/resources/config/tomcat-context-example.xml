@@ -7,7 +7,6 @@
     <Environment name="c4hOpenEHR.subjectNamespace" type="java.lang.String" override="false" value="uk.nhs.nhs_number"/>
 
     <Environment name="c4hOpenEHR.allergiesTemplate"    type="java.lang.String" override="false" value="LCR Allergies List.v0"/>
-    <Environment name="c4hOpenEHR.contactsTemplate"     type="java.lang.String" override="false" value="LCR Relevant Contacts List.v0"/>
     <Environment name="c4hOpenEHR.endOfLifeTemplate"    type="java.lang.String" override="false" value="IDCR - End of Life Patient Preferences.v0"/>
     <Environment name="c4hOpenEHR.labOrderTemplate"     type="java.lang.String" override="false" value="IDCR - Laboratory Order.v0"/>
     <Environment name="c4hOpenEHR.mdtReportTemplate"    type="java.lang.String" override="false" value="IDCR - Generic MDT Output Report.v0"/>

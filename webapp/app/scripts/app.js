@@ -129,25 +129,6 @@ angular
         }
       })
 
-      .state('contacts', {
-        url: '/patients/{patientId:int}/contacts?reportType&searchString&queryType',
-        views: {
-          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
-          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/contacts/contacts-list.html', controller: 'ContactsListCtrl' }
-        }
-      })
-
-      .state('contacts-detail', {
-        url: '/patients/{patientId:int}/contacts/{contactIndex}?filter&page&reportType&searchString&queryType',
-        views: {
-          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
-          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/contacts/contacts-list.html', controller: 'ContactsListCtrl' },
-          detail: { templateUrl: 'views/contacts/contacts-detail.html', controller: 'ContactsDetailCtrl' }
-        }
-      })
-
       .state('transferOfCare', {
         url: '/patients/{patientId:int}/transfer-of-care-list?reportType&searchString&queryType',
         views: {

@@ -56,10 +56,6 @@ public class TransferOfCareEntity {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<AllergyHeadlineEntity> allergies;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<ContactHeadlineEntity> contacts;
-
     @Column(name = "reason_for_contact")
     private String reasonForContact;
 
@@ -116,14 +112,6 @@ public class TransferOfCareEntity {
 
     public void setAllergies(List<AllergyHeadlineEntity> allergies) {
         this.allergies = allergies;
-    }
-
-    public List<ContactHeadlineEntity> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<ContactHeadlineEntity> contacts) {
-        this.contacts = contacts;
     }
 
     public String getReasonForContact() {

@@ -83,23 +83,6 @@
       </ul>
     </div>
 
-    <div class="col-md-3">
-      <ul class="list-group">
-        <li class="list-group-item" style="font-weight: bold">Contacts <span class="badge badge-default">{{ transferOfCare.contacts.contacts.length }}</span> </li>
-        <li class="list-group-item" ng-repeat="contact in contacts" ng-click="selectTransferOfCareItem($index, 'contacts')" ng-class="isItemSelected($index,'contacts')">
-          <div class="row">
-            <div class="col-xs-9">
-              {{contact.name}}
-            </div>
-            <div class="col-xs-3">
-              <span ng-class="isItemSelectedIcon($index,'contacts')"></span>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-
   <form class="form-horizontal" name="transferOfCareForm" ng-show="!displayDetail">
     <fieldset>
       <legend>Details</legend>
@@ -178,12 +161,6 @@
                   <li ng-repeat="(key,value) in selectedAllergies">{{value.cause}}</li>
                 </ul>
                 <span class="transfer-of-care-no-selected-items" ng-if="!selectedAllergies.length">No allergies selected</span>
-
-                <h5>Contacts</h5>
-                <ul>
-                  <li ng-repeat="(key,value) in selectedContacts">{{value.name}}</li>
-                </ul>
-                <span class="transfer-of-care-no-selected-items" ng-if="!selectedContacts.length">No contacts selected</span>
 
               </div>
             </div>

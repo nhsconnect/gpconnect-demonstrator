@@ -11,7 +11,6 @@ angular.module('rippleDemonstrator')
     TransferOfCare.get($stateParams.patientId, $stateParams.transferOfCareIndex).then(function (result) {
       $scope.transferOfCare = result.data;
       $scope.allergies = $scope.transferOfCare.allergies;
-      $scope.contacts = $scope.transferOfCare.contacts;
       $scope.problems = $scope.transferOfCare.problems;
       $scope.medications = $scope.transferOfCare.medications;
       $scope.dateOfTransfer = $scope.transferOfCare.dateOfTransfer;

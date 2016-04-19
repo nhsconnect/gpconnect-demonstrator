@@ -70,23 +70,6 @@
       </div>
 
       <div class="board problems col-md-4">
-        <h2><a ng-click="goToSection('Contacts')"><i class="fi-torsos-all"></i> Contacts</a>
-          <span class="resultcount" ng-if="contactsCount == 0">0 of 0</span>
-          <span class="resultcount" ng-if="contactsCount > 0 && contactsCount < 5">{{contactsCount}} of {{contactsCount}}</span>
-          <span class="resultcount" ng-if="contactsCount > 0 && contactsCount >= 5">5 of {{contactsCount}}</span>
-          <a ui-sref="contacts({patientId: patient.id})" class="resultcount" ng-if="contactsCount > 0" style="padding-right: 10px;">View All</a>
-        </h2>
-
-        <table class="table table-striped clickable">
-          <tbody>
-            <tr ng-repeat="contact in contacts">
-              <td ng-click="go('/patients/{{patient.id}}/contacts/{{contact.sourceId}}')"> {{ contact.text }} <span class="glyphicon glyphicon-chevron-right"></span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="board problems col-md-4">
         <h2><a ng-click="goToSection('Transfer')"><i class="fa fa-ambulance"></i> Transfer of Care</a>
           <span class="resultcount" ng-if="transferofCaresCount == 0">0 of 0</span>
           <span class="resultcount" ng-if="transferofCaresCount > 0 && transferofCaresCount < 5">{{transferofCaresCount}} of {{transferofCaresCount}}</span>

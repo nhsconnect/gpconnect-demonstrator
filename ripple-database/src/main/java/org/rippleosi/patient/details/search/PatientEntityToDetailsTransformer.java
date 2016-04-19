@@ -25,13 +25,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
 import org.rippleosi.common.exception.DataNotFoundException;
-import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.patient.allergies.model.AllergyHeadline;
 import org.rippleosi.patient.allergies.search.AllergySearch;
 import org.rippleosi.patient.allergies.search.AllergySearchFactory;
-import org.rippleosi.patient.contacts.model.ContactHeadline;
-import org.rippleosi.patient.contacts.search.ContactSearch;
-import org.rippleosi.patient.contacts.search.ContactSearchFactory;
 import org.rippleosi.patient.details.model.PatientEntity;
 import org.rippleosi.patient.medication.model.MedicationHeadline;
 import org.rippleosi.patient.medication.search.MedicationSearch;
@@ -53,9 +49,6 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
 
     @Autowired
     private AllergySearchFactory allergySearchFactory;
-
-    @Autowired
-    private ContactSearchFactory contactSearchFactory;
 
     @Autowired
     private MedicationSearchFactory medicationSearchFactory;
@@ -95,7 +88,6 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         patient.setPasNumber(patientEntity.getPasNumber());
 
         patient.setAllergies(findAllergies(patientId));
-        patient.setContacts(findContacts(patientId));
         patient.setMedications(findMedications(patientId));
         patient.setProblems(findProblems(patientId));
         patient.setTransfers(findTransfers(patientId));
@@ -110,18 +102,6 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
             List<AllergyHeadline> allergies = allergySearch.findAllergyHeadlines(patientId);
 
             return CollectionUtils.collect(allergies, new AllergyTransformer(), new ArrayList<>());
-        } catch (DataNotFoundException ignore) {
-            return Collections.emptyList();
-        }
-    }
-
-    private List<PatientHeadline> findContacts(String patientId) {
-        try {
-            ContactSearch contactSearch = contactSearchFactory.select(null);
-
-            List<ContactHeadline> contacts = contactSearch.findContactHeadlines(patientId);
-
-            return CollectionUtils.collect(contacts, new ContactTransformer(), new ArrayList<>());
         } catch (DataNotFoundException ignore) {
             return Collections.emptyList();
         }

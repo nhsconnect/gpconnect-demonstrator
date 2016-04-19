@@ -30,8 +30,6 @@ import org.rippleosi.common.types.RepoSourceType;
 import org.rippleosi.medical.practicitioners.doctor.model.GPEntity;
 import org.rippleosi.patient.allergies.search.AllergySearch;
 import org.rippleosi.patient.allergies.search.AllergySearchFactory;
-import org.rippleosi.patient.contacts.search.ContactSearch;
-import org.rippleosi.patient.contacts.search.ContactSearchFactory;
 import org.rippleosi.patient.details.model.PatientEntity;
 import org.rippleosi.patient.medication.search.MedicationSearch;
 import org.rippleosi.patient.medication.search.MedicationSearchFactory;
@@ -53,9 +51,6 @@ public class PatientEntityToDetailsTransformerTest {
     private AllergySearch mockAllergySearch;
 
     @Mock
-    private ContactSearch mockContactSearch;
-
-    @Mock
     private MedicationSearch mockMedicationSearch;
 
     @Mock
@@ -66,9 +61,6 @@ public class PatientEntityToDetailsTransformerTest {
 
     @Mock
     private AllergySearchFactory mockAllergySearchFactory;
-
-    @Mock
-    private ContactSearchFactory mockContactSearchFactory;
 
     @Mock
     private MedicationSearchFactory mockMedicationSearchFactory;
@@ -86,13 +78,11 @@ public class PatientEntityToDetailsTransformerTest {
         transformer = new PatientEntityToDetailsTransformer();
 
         ReflectionTestUtils.setField(transformer, "allergySearchFactory", mockAllergySearchFactory);
-        ReflectionTestUtils.setField(transformer, "contactSearchFactory", mockContactSearchFactory);
         ReflectionTestUtils.setField(transformer, "problemSearchFactory", mockProblemSearchFactory);
         ReflectionTestUtils.setField(transformer, "medicationSearchFactory", mockMedicationSearchFactory);
         ReflectionTestUtils.setField(transformer, "transferOfCareSearchFactory", mockTransferSearchFactory);
 
         when(mockAllergySearchFactory.select(null)).thenReturn(mockAllergySearch);
-        when(mockContactSearchFactory.select(null)).thenReturn(mockContactSearch);
         when(mockMedicationSearchFactory.select(null)).thenReturn(mockMedicationSearch);
         when(mockProblemSearchFactory.select(null)).thenReturn(mockProblemSearch);
         when(mockProblemSearchFactory.select(RepoSourceType.VISTA)).thenReturn(mockProblemSearch);
@@ -122,19 +112,6 @@ public class PatientEntityToDetailsTransformerTest {
         PatientEntity patientEntity = dummyPatientEntity();
 
         when(mockAllergySearch.findAllergyHeadlines(PATIENT_ID)).thenThrow(new DataNotFoundException("Expected test exception"));
-
-        PatientDetails patientDetails = transformer.transform(patientEntity);
-
-        assertNotNull(patientDetails);
-        assertTrue(patientDetails.getAllergies().isEmpty());
-    }
-
-    @Test
-    public void shouldReturnEmptyContactListWhenContactSearchThrowsException() {
-
-        PatientEntity patientEntity = dummyPatientEntity();
-
-        when(mockContactSearch.findContactHeadlines(PATIENT_ID)).thenThrow(new DataNotFoundException("Expected test exception"));
 
         PatientDetails patientDetails = transformer.transform(patientEntity);
 

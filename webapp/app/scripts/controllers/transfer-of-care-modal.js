@@ -2,7 +2,7 @@
 
 /*jshint loopfunc: true*/
 angular.module('rippleDemonstrator')
-  .controller('TransferOfCareCtrl', function ($modal, $state, $scope, $q, $stateParams, PatientService, TransferOfCare, Allergy, Diagnosis, Medication, Contact) {
+  .controller('TransferOfCareCtrl', function ($modal, $state, $scope, $q, $stateParams, PatientService, TransferOfCare, Allergy, Diagnosis, Medication) {
 
     $modal.open({
       templateUrl: 'views/transfer-of-care/transfer-of-care-modal.html',
@@ -28,22 +28,18 @@ angular.module('rippleDemonstrator')
           Allergy.all($stateParams.patientId),
           Diagnosis.all($stateParams.patientId),
           Medication.all($stateParams.patientId),
-          Contact.all($stateParams.patientId)
         ]).then(function (allResult) {
           $scope.transferOfCare.allergies = {};
           $scope.transferOfCare.problems = {};
           $scope.transferOfCare.medication = {};
-          $scope.transferOfCare.contacts = {};
 
           $scope.transferOfCare.allergies.allergies = allResult[0].data;
           $scope.transferOfCare.problems.problems = allResult[1].data;
           $scope.transferOfCare.medication.medications = allResult[2].data;
-          $scope.transferOfCare.contacts.contacts = allResult[3].data;
 
           $scope.allergies = $scope.transferOfCare.allergies.allergies;
           $scope.problems = $scope.transferOfCare.problems.problems;
           $scope.medications = $scope.transferOfCare.medication.medications;
-          $scope.contacts = $scope.transferOfCare.contacts.contacts;
         });
 
         $scope.patient = patient;
@@ -52,7 +48,6 @@ angular.module('rippleDemonstrator')
 
         $scope.selectedItems = {
           allergies: [],
-          contacts: [],
           medications: [],
           problems: []
         };
@@ -84,7 +79,6 @@ angular.module('rippleDemonstrator')
             $scope.selectedItemsForSummary = updateTransferOfCare();
 
             $scope.selectedAllergies = $scope.selectedItemsForSummary.allergies;
-            $scope.selectedContacts = $scope.selectedItemsForSummary.contacts;
             $scope.selectedProblems = $scope.selectedItemsForSummary.problems;
             $scope.selectedMedications = $scope.selectedItemsForSummary.medications;
 
@@ -101,7 +95,6 @@ angular.module('rippleDemonstrator')
         function updateTransferOfCare() {
           var updatedTransferOfCare = jQuery.extend(true, {},
             $scope.transferOfCare.allergies,
-            $scope.transferOfCare.contacts,
             $scope.transferOfCare.medication,
             $scope.transferOfCare.problems);
 
@@ -110,8 +103,6 @@ angular.module('rippleDemonstrator')
           for (var type in $scope.selectedItems) {
             switch (type) {
             case 'allergies':
-              break;
-            case 'contacts':
               break;
             case 'medications':
               break;
@@ -163,14 +154,6 @@ angular.module('rippleDemonstrator')
             };
           });
 
-          angular.forEach($scope.transferOfCare.contacts, function (value, key) {
-            $scope.transferOfCare.contacts[key] = {
-              contactName: value.name,
-              source: value.source,
-              sourceId: value.sourceId
-            };
-          });
-
           angular.forEach($scope.transferOfCare.medication, function (value, key) {
             $scope.transferOfCare.medication[key] = {
               medication: value.name,
@@ -182,7 +165,6 @@ angular.module('rippleDemonstrator')
           var todayDate = new Date();
           var toAdd = {
             allergies: $scope.transferOfCare.allergies,
-            contacts: $scope.transferOfCare.contacts,
             medications: $scope.transferOfCare.medication,
             problems: $scope.transferOfCare.problems,
             clinicalSummary: $scope.transferDetail.clinicalSummary,

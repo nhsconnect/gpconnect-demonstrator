@@ -17,5 +17,5 @@
 package org.rippleosi.common.types;
 
 public interface RepoSource {
-    public String getSourceName();
+    String getSourceName();
 }

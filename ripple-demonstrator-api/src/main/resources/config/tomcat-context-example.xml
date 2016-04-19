@@ -18,10 +18,6 @@
     <Environment name="c4hOpenEHR.referralsTemplate"    type="java.lang.String" override="false" value="RIPPLE - Minimal referral.v0"/>
     <Environment name="c4hOpenEHR.appointmentsTemplate" type="java.lang.String" override="false" value="RIPPLE - Minimal referral.v0"/>
 
-    <Environment name="etherCIS.allergyTemplate"        type="java.lang.String" override="false" value="IDCR - Adverse Reaction List.v1"/>
-    <Environment name="etherCIS.labOrderTemplate"       type="java.lang.String" override="false" value="IDCR - Laboratory Order.v0"/>
-    <Environment name="etherCIS.problemTemplate"       type="java.lang.String" override="false" value="IDCR Problem List.v1"/>
-
     <Environment name="legacy.datasource.vendor"    type="java.lang.String"  override="false" value="mysql"/>
     <Environment name="legacy.datasource.host"      type="java.lang.String"  override="false" value="127.0.0.1"/>
     <Environment name="legacy.datasource.port"      type="java.lang.String"  override="false" value="3306"/>
@@ -29,8 +25,6 @@
     <Environment name="legacy.datasource.username"  type="java.lang.String"  override="false" value="answer"/>
     <Environment name="legacy.datasource.password"  type="java.lang.String"  override="false" value="answer99q"/>
     <Environment name="legacy.datasource.showSql"   type="java.lang.Boolean" override="false" value="false"/>
-
-    <Environment name="vista.address"               type="java.lang.String" override="false" value="https://46.101.0.93:8000/ec2/vista/"/>
 
     <Environment name="orthancServer.address"       type="java.lang.String"  override="false" value="http://ripple-orthanc.answerappcloud.com"/>
 

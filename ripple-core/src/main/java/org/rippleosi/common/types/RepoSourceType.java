@@ -23,15 +23,13 @@ public enum RepoSourceType implements RepoSource {
     ACTIVEMQ("ActiveMQ"),
     LEGACY("Legacy"),
     MARAND("Marand"),
-    ETHERCIS("EtherCIS"),
     ORTHANC("Orthanc"),
-    VISTA("Vista"),
     AUDIT("Audit"),
     TERMINOLOGY("Terminology");
 
     private final String sourceName;
 
-    private RepoSourceType(final String sourceName) {
+    RepoSourceType(final String sourceName) {
         this.sourceName = sourceName;
     }
 

@@ -23,7 +23,7 @@ public enum TestSourceType implements RepoSource {
 
     private final String sourceName;
 
-    private TestSourceType(final String sourceName) {
+    TestSourceType(final String sourceName) {
         this.sourceName = sourceName;
     }
 

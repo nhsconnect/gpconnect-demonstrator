@@ -27,7 +27,7 @@ public class RepoSourceTypeTest {
     //
     @Test
     public void validateTSESize() {
-        assertEquals(9, RepoSourceType.values().length);
+        assertEquals(7, RepoSourceType.values().length);
     }
 
     @Test
@@ -55,21 +55,9 @@ public class RepoSourceTypeTest {
     }
 
     @Test
-    public void verifyETHERCISSourceName() {
-        final String repoSourceName = RepoSourceType.ETHERCIS.getSourceName();
-        assertEquals("EtherCIS", repoSourceName);
-    }
-
-    @Test
     public void verifyORTHANCSourceName() {
         final String repoSourceName = RepoSourceType.ORTHANC.getSourceName();
         assertEquals("Orthanc", repoSourceName);
-    }
-
-    @Test
-    public void verifyVISTASourceName() {
-        final String repoSourceName = RepoSourceType.VISTA.getSourceName();
-        assertEquals("Vista", repoSourceName);
     }
 
     @Test
@@ -100,16 +88,16 @@ public class RepoSourceTypeTest {
 
     @Test
     public void reverseLookupOfTSEFromCaseSensitivePopulatedString() {
-        final String tseAsString = "EtherCIS";
+        final String tseAsString = "Legacy";
         RepoSource sourceType = RepoSourceType.fromString(tseAsString);
-        assertEquals(RepoSourceType.ETHERCIS, sourceType);
+        assertEquals(RepoSourceType.LEGACY, sourceType);
     }
 
     @Test
     public void reverseLookupOfTSEFromLowercasePopulatedString() {
-        final String tseAsString = "ethercis";
+        final String tseAsString = "legacy";
         RepoSource sourceType = RepoSourceType.fromString(tseAsString);
-        assertEquals(RepoSourceType.ETHERCIS, sourceType);
+        assertEquals(RepoSourceType.LEGACY, sourceType);
     }
 
     @Test

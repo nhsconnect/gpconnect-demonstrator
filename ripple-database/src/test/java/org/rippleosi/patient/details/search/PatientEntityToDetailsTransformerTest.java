@@ -85,7 +85,6 @@ public class PatientEntityToDetailsTransformerTest {
         when(mockAllergySearchFactory.select(null)).thenReturn(mockAllergySearch);
         when(mockMedicationSearchFactory.select(null)).thenReturn(mockMedicationSearch);
         when(mockProblemSearchFactory.select(null)).thenReturn(mockProblemSearch);
-        when(mockProblemSearchFactory.select(RepoSourceType.VISTA)).thenReturn(mockProblemSearch);
         when(mockTransferSearchFactory.select(null)).thenReturn(mockTransferSearch);
     }
 

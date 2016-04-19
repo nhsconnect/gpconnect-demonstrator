@@ -55,9 +55,6 @@ angular.module('rippleDemonstrator')
       case 'mdt':
         toState = 'cancerMdt';
         break;
-      case 'images':
-        toState = 'images';
-        break;
       }
       $state.go(toState, requestHeader);
     };

@@ -21,7 +21,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.rippleosi.common.types.RepoSource;
-import org.rippleosi.common.types.RepoSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 

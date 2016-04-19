@@ -2237,21 +2237,6 @@ div#age-chart div.morris-hover.morris-default-style {
   text-decoration: underline;
 }
 
-.dicom-image {
-  margin: auto;
-  display: block;
-  max-height: 680px;
-  min-height: 650px;
-  max-width: 768px;
-  height: auto;
-  width: auto;
-}
-
-.dicomImageMini {
-  height: 50ch;
-  width: 30ch;
-}
-
 .thumb {
   padding-left: 0;
   padding-right: 0;
@@ -2259,10 +2244,6 @@ div#age-chart div.morris-hover.morris-default-style {
 
 .thumbnail {
   margin-bottom: 0;
-}
-
-.dicomImageMetadata {
-  margin-top: 5px;
 }
 
 .patientFilterOptions:hover {

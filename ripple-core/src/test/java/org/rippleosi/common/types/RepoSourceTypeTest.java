@@ -27,7 +27,7 @@ public class RepoSourceTypeTest {
     //
     @Test
     public void validateTSESize() {
-        assertEquals(7, RepoSourceType.values().length);
+        assertEquals(6, RepoSourceType.values().length);
     }
 
     @Test
@@ -52,12 +52,6 @@ public class RepoSourceTypeTest {
     public void verifyMARANDSourceName() {
         final String repoSourceName = RepoSourceType.MARAND.getSourceName();
         assertEquals("Marand", repoSourceName);
-    }
-
-    @Test
-    public void verifyORTHANCSourceName() {
-        final String repoSourceName = RepoSourceType.ORTHANC.getSourceName();
-        assertEquals("Orthanc", repoSourceName);
     }
 
     @Test

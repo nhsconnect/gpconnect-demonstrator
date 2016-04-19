@@ -23,7 +23,6 @@ public enum RepoSourceType implements RepoSource {
     ACTIVEMQ("ActiveMQ"),
     LEGACY("Legacy"),
     MARAND("Marand"),
-    ORTHANC("Orthanc"),
     AUDIT("Audit"),
     TERMINOLOGY("Terminology");
 

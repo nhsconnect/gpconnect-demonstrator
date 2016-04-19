@@ -26,6 +26,4 @@
     <Environment name="legacy.datasource.password"  type="java.lang.String"  override="false" value="answer99q"/>
     <Environment name="legacy.datasource.showSql"   type="java.lang.Boolean" override="false" value="false"/>
 
-    <Environment name="orthancServer.address"       type="java.lang.String"  override="false" value="http://ripple-orthanc.answerappcloud.com"/>
-
 </Context>

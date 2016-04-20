@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .factory('UserService', function ($location, $http, claims, content) {
 
     var currentUser = {

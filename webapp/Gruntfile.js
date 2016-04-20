@@ -365,26 +365,14 @@ module.exports = function (grunt) {
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
       },
-      tenant_ripple: {
-        cwd: '<%= yeoman.app %>/scripts/tenant/ripple/',
+      tenant_gpconnect: {
+        cwd: '<%= yeoman.app %>/scripts/tenant/gpconnect/',
         src: '*.js',
         dest: '<%= yeoman.app %>/scripts/tenant/',
         expand: true
       },
-      tenant_stft: {
-        cwd: '<%= yeoman.app %>/scripts/tenant/stft/',
-        src: '*.js',
-        dest: '<%= yeoman.app %>/scripts/tenant/',
-        expand: true
-      },
-      theme_ripple: {
-        cwd: '<%= yeoman.app %>/styles/themes/ripple/',
-        src: '*.scss',
-        dest: '<%= yeoman.app %>/styles/themes/',
-        expand: true
-      },
-      theme_stft: {
-        cwd: '<%= yeoman.app %>/styles/themes/stft/',
+      theme_gpconnect: {
+        cwd: '<%= yeoman.app %>/styles/themes/gpconnect/',
         src: '*.scss',
         dest: '<%= yeoman.app %>/styles/themes/',
         expand: true
@@ -420,7 +408,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-sass');
 
-  var tenant = grunt.option('tenant') || 'ripple';
+  var tenant = grunt.option('tenant') || 'gpconnect';
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {

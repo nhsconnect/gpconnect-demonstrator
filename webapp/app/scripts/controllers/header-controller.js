@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .controller('headerController', function ($scope, $rootScope, $state, usSpinnerService, $stateParams, UserService) {
 
     // Get current user
@@ -9,7 +9,7 @@ angular.module('rippleDemonstrator')
 
     // Direct different roles to different pages at login
     switch ($scope.currentUser.role) {
-    case 'idcr':
+    case 'gpconnect':
       $state.go('main-search');
       break;
     case 'phr':
@@ -89,17 +89,17 @@ angular.module('rippleDemonstrator')
         });
       };
 
-      if ($scope.currentUser.role === 'idcr') {
-        $scope.title = UserService.getContent('idcr_title');
+      if ($scope.currentUser.role === 'gpconnect') {
+        $scope.title = UserService.getContent('gpconnect_title');
       }
       if ($scope.currentUser.role === 'phr') {
         $scope.title = UserService.getContent('phr_title');
       }
 
-      $scope.footer = UserService.getContent('idcr_footer');
+      $scope.footer = UserService.getContent('gpconnect_footer');
 
       $scope.goHome = function () {
-        if ($scope.currentUser.role === 'idcr') {
+        if ($scope.currentUser.role === 'gpconnect') {
           $state.go('main-search');
         }
         if ($scope.currentUser.role === 'phr') {

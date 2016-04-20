@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .controller('MainSearchController', function ($scope, $state, $timeout, AdvancedSearch, PatientService) {
 
     $scope.mainSearchEnabled = true;

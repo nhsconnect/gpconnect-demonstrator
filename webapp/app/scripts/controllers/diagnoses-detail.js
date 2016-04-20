@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .controller('DiagnosesDetailCtrl', function ($scope, $stateParams, $location, $modal, Helper, $state, usSpinnerService, PatientService, Diagnosis) {
 
     $scope.UnlockedSources = [

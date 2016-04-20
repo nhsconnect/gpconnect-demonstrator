@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .controller('MedicationsListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Medication) {
 
     $scope.query = {};

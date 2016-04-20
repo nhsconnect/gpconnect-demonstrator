@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .controller('PatientsSummaryCtrl', function ($scope, $stateParams, $state, $rootScope, $location, usSpinnerService, PatientService) {
 
     $scope.patients = $stateParams.patientsList;

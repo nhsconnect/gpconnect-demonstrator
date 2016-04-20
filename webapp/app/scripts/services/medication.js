@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .factory('Medication', function ($http) {
 
     var all = function (patientId) {

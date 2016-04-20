@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .controller('ResultsListCtrl', function ($scope, $location, $stateParams, $modal, usSpinnerService, $state, PatientService, Result) {
 
     $scope.currentPage = 1;

@@ -307,14 +307,14 @@ label {
   border-top-right-radius: 6px;
   padding-bottom: 0;
   border-bottom: 0;
-  background-color: #007a41;
+  background-color: #004480;
 }
 
 .modal-title {
   padding: 4px 10px 10px;
   font-weight: bold;
   color: #fff;
-  background-color: #007a41;
+  background-color: #004480;
 }
 
 .modal-footer {
@@ -564,7 +564,6 @@ legend {
   background-color: #FFFFFF;
   padding-top: 20px;
   padding-bottom: 5px;
-  line-height: 0;
   margin-right: 0px;
 }
 
@@ -626,7 +625,7 @@ legend {
 }
 
 .icon-searchbar:before {
-  color: #82BE36;
+  color: #004480;
   font-size: 20px;
 }
 
@@ -864,7 +863,7 @@ footer {
 /* Dashboard */
 
 .button-icons:before {
-  color: #82BE36;
+  color: #004480;
   font-size: 70px;
 }
 
@@ -1078,7 +1077,7 @@ svg {
 
 .user-profile-image {
   margin-bottom: 0;
-  color: #82BE36;
+  color: #004480;
   font-size: 60px;
   border: 1px solid #c0c2be;
   border-radius: 3px;
@@ -1117,7 +1116,7 @@ svg {
 /* Patient List */
 
 .glyphicon-list-patients:before {
-  color: #7cbe31;
+  color: #007ae6;
 }
 
 /* Patient Landing */
@@ -1222,8 +1221,8 @@ table.table {
 }
 
 .table .view .dropdown-toggle:hover {
-  background-color: #7dbe31;
-  border-color: #7dbe31;
+  background-color: #006dcc;
+  border-color: #006dcc;
 }
 
 .table .view .dropdown-menu>li>a:hover {
@@ -1275,7 +1274,7 @@ table.table {
 }
 
 .pagination li.selected a {
-  color: #7dbe31;
+  color: #006dcc;
 }
 
 .pagination .increment a {
@@ -1324,19 +1323,19 @@ table.table {
 }
 
 .board h2 a:hover {
-  color: #7dbe31;
+  color: #006dcc;
   text-decoration: none;
 }
 
 .board h2 .resultcount {
   float: right;
   font-size: 12px;
-  color: #106333;
+  color: #004480;
   line-height: 2.4em;
 }
 
 .board h2 i {
-  color: #7dbf31;
+  color: #004480;
   margin-right: 4px;
 }
 
@@ -1709,7 +1708,7 @@ textarea#procedureNotes {
 }
 
 .fa-filter {
-  color: #82BF36;
+  color: #004480;
 }
 
 .fa-ellipsis-h {

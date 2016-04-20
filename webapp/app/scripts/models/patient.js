@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .factory('Patient', function ($window) {
 
     var patient = function (attributes) {

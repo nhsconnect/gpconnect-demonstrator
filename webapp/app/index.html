@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  ~  Copyright 2015 Ripple OSI
+  ~  Copyright 2016 GPConnect
   ~
   ~      Licensed under the Apache License, Version 2.0 (the "License");
   ~      you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>IDCR POC</title>
+  <title>GPConnect</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -139,7 +139,7 @@
 
 </head>
 
-<body ng-app="rippleDemonstrator" ng-cloak ng-controller="headerController">
+<body ng-app="gpConnect" ng-cloak ng-controller="headerController">
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -150,7 +150,7 @@
   <div class="row header-background hidden-xs">
     <div class="col-md-4 col-sm-4 header-left">
       <div class="glyphs g">
-        <p class="header-title-1" ng-if="title"><img alt="Ripple Icon" class="header-icon" ng-click="goHome()"> {{title}}</p>
+        <p class="header-title-1" ng-if="title"><img alt="GPConnect" class="header-icon" ng-click="goHome()"></p>
       </div>
     </div>
 
@@ -193,7 +193,7 @@
   <div class="row header-background-mobile visible-xs">
     <div class="col-xs-12 header-left-mobile">
       <div class="glyphs g">
-        <p class="header-title-1" ng-if="title"><img alt="Ripple Icon" class="header-icon" ng-click="goHome()"> {{ title }}</p>
+        <p class="header-title-1" ng-if="title"><img alt="GPConnect" class="header-icon" ng-click="goHome()"> {{ title }}</p>
       </div>
     </div>
 
@@ -239,8 +239,8 @@
   <!-- Header toolbar -->
   <div class="row header-toolbar hidden-xs">
     <div class="col-sm-5 previousGroup">
-      <span class="glyphicon glyphicon-arrow-left previous-page-arrow" ng-if="previousPage && currentUser.role=='idcr'" ng-click="goBack()"></span>
-      <span class="previous-page-title" ng-if="previousPage && currentUser.role=='idcr'">Back</span>
+      <span class="glyphicon glyphicon-arrow-left previous-page-arrow" ng-if="previousPage && currentUser.role=='gpconnect'" ng-click="goBack()"></span>
+      <span class="previous-page-title" ng-if="previousPage && currentUser.role=='gpconnect'">Back</span>
 
     </div>
     <div class="col-sm-6">
@@ -252,7 +252,7 @@
   <!-- Header toolbar mobile -->
   <div class="row header-toolbar visible-xs">
     <div class="col-xs-2">
-      <span class="glyphicon glyphicon-arrow-left previous-page-arrow" ng-if="previousPage && currentUser.role=='idcr'" ng-click="goBack()"></span>
+      <span class="glyphicon glyphicon-arrow-left previous-page-arrow" ng-if="previousPage && currentUser.role=='gpconnect'" ng-click="goBack()"></span>
     </div>
     <div class="col-xs-8 current-page-title-mobile">
       <span>{{pageHeader}}</span>
@@ -306,18 +306,5 @@
     ga('send', 'pageview');
   </script>
 
-
 </body>
-
-<footer>
-<div class="row footer-background">
-  <div class="footer-left">
-    <p class="footer-title-1">{{footer}}</p>
-  </div>
-  <div class="footer-right">
-    <p class="footer-title-1">Powered By <img src="images/ripple-icon.png" alt="Ripple Icon" class="footer-icon"><p class="footer-title-2"> Ripple</p></p>
-  </div>
-</div>
-</footer>
-
 </html>

@@ -3,7 +3,7 @@
 describe('DiagnosesDetailCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('rippleDemonstrator'));
+  beforeEach(module('gpConnect'));
 
   var DiagnosesDetailCtrl, scope, $location, $stateParams, $state, PatientService, Contact, $modal;
   var fakeModal = {

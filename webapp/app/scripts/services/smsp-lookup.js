@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .factory('SmspLookup', function ($http, Patient) {
 
     var byName = function (firstname, lastname) {

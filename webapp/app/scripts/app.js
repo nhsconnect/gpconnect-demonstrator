@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-  .module('rippleDemonstrator', [
+  .module('gpConnect', [
     'ngResource',
     'ngTouch',
     'ngAnimate',

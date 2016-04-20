@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .controller('ReferralsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, Helper, usSpinnerService, PatientService, Referral) {
 
     PatientService.get($stateParams.patientId).then(function (patient) {

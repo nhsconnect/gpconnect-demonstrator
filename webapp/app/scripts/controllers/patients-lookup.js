@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .controller('PatientsLookupCtrl', function ($modal, $state) {
 
     $modal.open({

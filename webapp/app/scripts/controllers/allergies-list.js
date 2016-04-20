@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Allergy) {
 
     $scope.currentPage = 1;

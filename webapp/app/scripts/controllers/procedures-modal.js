@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .controller('ProceduresModalCtrl', function ($scope, $filter, $modalInstance, UserService, patient, modal, procedure) {
 
     $scope.currentUser = UserService.getCurrentUser();

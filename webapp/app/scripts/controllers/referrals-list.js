@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .controller('ReferralsListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Referral) {
 
     $scope.currentPage = 1;

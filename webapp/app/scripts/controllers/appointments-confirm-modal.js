@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .controller('AppointmentsConfirmModalCtrl', function ($scope, $modalInstance, time) {
 
     $scope.modal = $modalInstance;

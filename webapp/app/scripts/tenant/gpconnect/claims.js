@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rippleDemonstrator')
+angular.module('gpConnect')
   .value("claims", {
     "sub": "28AD8576-1948-4C84-8B5E-55FB7EE027CE",
     "given_name": "Bob",
@@ -13,5 +13,5 @@ angular.module('rippleDemonstrator')
     },
     "tenant_id": "HSCIC",
     "tenant_name": "GP Connect",
-    "role": "idcr"
+    "role": "gpconnect"
   });

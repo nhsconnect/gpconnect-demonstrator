@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('rippleDemonstrator')
-  .controller('MainSearchController', function ($scope, $state, AdvancedSearch, PatientService) {
+  .controller('MainSearchController', function ($scope, $state, $timeout, AdvancedSearch, PatientService) {
+
     $scope.mainSearchEnabled = true;
     $scope.searchExpression = '';
+    $scope.errorOccurred = false;
 
     $scope.openAdvancedSearch = AdvancedSearch.openAdvancedSearch;
 
@@ -11,22 +13,45 @@ angular.module('rippleDemonstrator')
       $scope.searchExpression = '';
     };
 
-    $scope.searchFunction = function(expression) {
+    $scope.searchFunction = function (expression) {
       var nhsNumber = expression.replace(/\s+/g, '');
 
       if (!isNaN(nhsNumber) && nhsNumber.length == 10) {
 
         PatientService.get(nhsNumber).then(function (patient) {
-          $scope.errorOccurred = false;
           goToPatientSummary(patient.nhsNumber);
 
         }).catch(function () {
-          $scope.errorOccurred = true;
+          $scope.applyError();
         });
       }
       else {
-        $scope.errorOccurred = true;
+        $scope.applyError();
       }
+    };
+
+    $scope.applyError = function () {
+      $timeout(function () {
+        $scope.$apply(function () {
+          $scope.errorOccurred = true;
+        }, 1000);
+      });
+    };
+
+    $scope.removeError = function () {
+      $timeout(function () {
+        $scope.$apply(function () {
+          $scope.errorOccurred = false;
+        }, 1000);
+      });
+    };
+
+    $scope.populateSearchField = function (nhsNumber) {
+      $timeout(function () {
+        $scope.$apply(function () {
+          $scope.searchExpression = nhsNumber;
+        }, 1000);
+      });
     };
 
     var goToPatientSummary = function (nhsNumber) {
@@ -35,5 +60,4 @@ angular.module('rippleDemonstrator')
         filter: $scope.query
       });
     };
-
   });

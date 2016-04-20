@@ -12,7 +12,17 @@
 
   <button class="btn btn-info mainSearchButton" ng-click="searchFunction(searchExpression)"><i class="fa fa-search"></i> Search</button>
 
-  <div class="no-patient-found-error">
-    <label ng-if="errorOccurred" class="alert alert-danger">We couldn't find a patient corresponding to that NHS Number</label>
+  <div class="alert alert-danger alert-dismissible fade in no-patient-found-error" role="alert" ng-if="errorOccurred">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true" ng-click="removeError()">×</span>
+    </button>
+    <h4>We couldn't find a patient corresponding to that NHS Number</h4>
+    <h6>If you are unsure about which NHS Numbers work, why not try one of the ones below:</h6>
+    <p>
+      <button type="button" class="btn btn-default" ng-click="populateSearchField('999 999 9000')">{{ '9999999000' | formatNHSNumber }}</button>
+      <button type="button" class="btn btn-default" ng-click="populateSearchField('999 999 9001')">{{ '9999999001' | formatNHSNumber }}</button>
+      <button type="button" class="btn btn-default" ng-click="populateSearchField('999 999 9002')">{{ '9999999002' | formatNHSNumber }}</button>
+      <button type="button" class="btn btn-default" ng-click="populateSearchField('999 999 9003')">{{ '9999999003' | formatNHSNumber }}</button>
+    </p>
   </div>
 </div>

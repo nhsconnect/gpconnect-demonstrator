@@ -32,6 +32,9 @@ public class BrokerConfig extends CamelConfiguration {
 
     @Value("${queue.broker.directory:activemq-data}")
     private String dataDirectory;
+    
+    @Value("${queue.broker.name:embedded}")
+    private String dataName;
 
     @Bean
     public RouteBuilder route() {
@@ -41,8 +44,8 @@ public class BrokerConfig extends CamelConfiguration {
     @Bean
     public BrokerService brokerService() throws Exception {
         BrokerService brokerService = new BrokerService();
-        brokerService.setBrokerName("embedded");
-        brokerService.addConnector("vm://embedded");
+        brokerService.setBrokerName(dataName);
+        brokerService.addConnector("vm://"+dataName);
         brokerService.setDataDirectory(dataDirectory);
         return brokerService;
     }
@@ -56,7 +59,7 @@ public class BrokerConfig extends CamelConfiguration {
     @Bean(name = "activemq")
 	public ActiveMQConnectionFactory activeMQConnectionFactory() throws Exception {
 		ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
-		activeMQConnectionFactory.setBrokerURL("vm://embedded?create=false");
+		activeMQConnectionFactory.setBrokerURL("vm://"+dataName+"?create=false");
         activeMQConnectionFactory.setTrustAllPackages(true);
 
         return activeMQConnectionFactory;

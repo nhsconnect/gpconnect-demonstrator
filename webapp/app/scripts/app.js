@@ -27,20 +27,6 @@ angular
         params: { patientsList: [], advancedSearchParams: [], displayEmptyTable: false }
       })
 
-      .state('patients-list-full', {
-        url: '/patients-full-details?ageFrom&ageTo&orderType&pageNumber&reportType&searchString&queryType',
-        views: {
-          main: { templateUrl: 'views/search/patients-list-full.html', controller: 'PatientsListFullCtrl' }
-        }
-      })
-
-      .state('patients-charts', {
-         url: '/charts',
-        views: {
-          main: { templateUrl: 'views/patients/patients-charts.html', controller: 'PatientsChartsCtrl' }
-        }
-      })
-
       .state('main-search', {
         url: '/search',
         views: {

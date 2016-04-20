@@ -357,25 +357,3 @@ table.dataTable thead .sorting:after {
 .panel-yellow a:hover {
   color: #df8a13;
 }
-
-.transfer-of-care-red{
-  color: #a94442;
-}
-
-.transfer-of-care-green {
-  color: #3c763d;
-}
-
-.transfer-of-care-no-selected-items{
-  padding-left:26px;
-}
-
-.transfer-of-care-detail{
-  margin-left: 0;
-  margin-right: 0;
-  margin-top: 20px;
-}
-
-.transfer-of-care-detail-fieldset{
-  padding:34px 10px 10px 10px;
-}

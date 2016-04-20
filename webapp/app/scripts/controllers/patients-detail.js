@@ -39,9 +39,6 @@ angular.module('rippleDemonstrator')
       case 'appointments':
         toState = 'appointments';
         break;
-      case 'transfers':
-        toState = 'transferOfCare';
-        break;
       case 'careplans':
         toState = 'eolcareplans';
         break;

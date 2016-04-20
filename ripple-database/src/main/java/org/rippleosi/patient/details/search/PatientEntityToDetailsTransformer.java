@@ -38,9 +38,6 @@ import org.rippleosi.patient.problems.search.ProblemSearchFactory;
 import org.rippleosi.patient.summary.model.PatientDetails;
 import org.rippleosi.patient.summary.model.PatientHeadline;
 import org.rippleosi.patient.summary.model.TransferHeadline;
-import org.rippleosi.patient.transfers.model.TransferOfCareSummary;
-import org.rippleosi.patient.transfers.search.TransferOfCareSearch;
-import org.rippleosi.patient.transfers.search.TransferOfCareSearchFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -55,9 +52,6 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
 
     @Autowired
     private ProblemSearchFactory problemSearchFactory;
-
-    @Autowired
-    private TransferOfCareSearchFactory transferOfCareSearchFactory;
 
     @Override
     public PatientDetails transform(PatientEntity patientEntity) {
@@ -90,7 +84,6 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         patient.setAllergies(findAllergies(patientId));
         patient.setMedications(findMedications(patientId));
         patient.setProblems(findProblems(patientId));
-        patient.setTransfers(findTransfers(patientId));
 
         return patient;
     }
@@ -126,18 +119,6 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
             List<ProblemHeadline> problems = problemSearch.findProblemHeadlines(patientId);
 
             return CollectionUtils.collect(problems, new ProblemTransformer(), new ArrayList<>());
-        } catch (DataNotFoundException ignore) {
-            return Collections.emptyList();
-        }
-    }
-
-    private List<TransferHeadline> findTransfers(String patientId) {
-        try {
-            TransferOfCareSearch transferOfCareSearch = transferOfCareSearchFactory.select(null);
-
-            List<TransferOfCareSummary> transfers = transferOfCareSearch.findAllTransfers(patientId);
-
-            return CollectionUtils.collect(transfers, new TransferOfCareTransformer(), new ArrayList<>());
         } catch (DataNotFoundException ignore) {
             return Collections.emptyList();
         }

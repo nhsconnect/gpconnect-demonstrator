@@ -68,27 +68,6 @@
           </tbody>
         </table>
       </div>
-
-      <div class="board problems col-md-4">
-        <h2><a ng-click="goToSection('Transfer')"><i class="fa fa-ambulance"></i> Transfer of Care</a>
-          <span class="resultcount" ng-if="transferofCaresCount == 0">0 of 0</span>
-          <span class="resultcount" ng-if="transferofCaresCount > 0 && transferofCaresCount < 5">{{transferofCaresCount}} of {{transferofCaresCount}}</span>
-          <span class="resultcount" ng-if="transferofCaresCount > 0 && transferofCaresCount >= 5">5 of {{transferofCaresCount}}</span>
-          <a ui-sref="transferOfCare({patientId: patient.id})" class="resultcount" ng-if="transferofCaresCount > 0" style="padding-right: 10px;">View All</a>
-        </h2>
-
-        <table class="table table-striped clickable">
-          <tbody>
-            <tr ng-repeat="transfer in transferofCareComposition">
-              <td ng-click="go('/patients/{{patient.id}}/transfer-of-care-detail/{{transfer.sourceId}}')">
-                <span class="glyphicon glyphicon-chevron-right"></span> From {{transfer.from}}
-                <br> to {{transfer.to}}
-                <br> {{transfer.dateOfTransfer | date:'dd-MMM-y' }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
     <!-- END Patient Dashboard -->
   </div>

@@ -18,17 +18,6 @@ angular.module('rippleDemonstrator')
       $scope.medicationsCount = patient.medications.length;
       $scope.medications = patient.medications.slice(0, 5);
 
-      $scope.transferofCaresCount = patient.transfers.length;
-      $scope.transferofCareComposition = patient;
-
-      var descendingTransferofCareComposition = [];
-      for (var x = $scope.transferofCareComposition.transfers.length - 1; x >= 0; x--) {
-        descendingTransferofCareComposition.push($scope.transferofCareComposition.transfers[x]);
-      }
-
-      $scope.transferofCareComposition.transfers = descendingTransferofCareComposition;
-      $scope.transferofCareComposition = $scope.transferofCareComposition.transfers.slice(0, 5);
-
       usSpinnerService.stop('patientSummary-spinner');
     });
 
@@ -51,9 +40,6 @@ angular.module('rippleDemonstrator')
         break;
       case 'Medications':
         toState = 'medications';
-        break;
-      case 'Transfer':
-        toState = 'transferOfCare';
         break;
       }
       $state.go(toState, requestHeader);

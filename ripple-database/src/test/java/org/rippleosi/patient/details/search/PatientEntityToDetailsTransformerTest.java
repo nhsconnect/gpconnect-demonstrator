@@ -36,8 +36,6 @@ import org.rippleosi.patient.medication.search.MedicationSearchFactory;
 import org.rippleosi.patient.problems.search.ProblemSearch;
 import org.rippleosi.patient.problems.search.ProblemSearchFactory;
 import org.rippleosi.patient.summary.model.PatientDetails;
-import org.rippleosi.patient.transfers.search.TransferOfCareSearch;
-import org.rippleosi.patient.transfers.search.TransferOfCareSearchFactory;
 import org.springframework.test.util.ReflectionTestUtils;
 
 /**
@@ -57,9 +55,6 @@ public class PatientEntityToDetailsTransformerTest {
     private ProblemSearch mockProblemSearch;
 
     @Mock
-    private TransferOfCareSearch mockTransferSearch;
-
-    @Mock
     private AllergySearchFactory mockAllergySearchFactory;
 
     @Mock
@@ -67,9 +62,6 @@ public class PatientEntityToDetailsTransformerTest {
 
     @Mock
     private ProblemSearchFactory mockProblemSearchFactory;
-
-    @Mock
-    private TransferOfCareSearchFactory mockTransferSearchFactory;
 
     private PatientEntityToDetailsTransformer transformer;
 
@@ -80,12 +72,10 @@ public class PatientEntityToDetailsTransformerTest {
         ReflectionTestUtils.setField(transformer, "allergySearchFactory", mockAllergySearchFactory);
         ReflectionTestUtils.setField(transformer, "problemSearchFactory", mockProblemSearchFactory);
         ReflectionTestUtils.setField(transformer, "medicationSearchFactory", mockMedicationSearchFactory);
-        ReflectionTestUtils.setField(transformer, "transferOfCareSearchFactory", mockTransferSearchFactory);
 
         when(mockAllergySearchFactory.select(null)).thenReturn(mockAllergySearch);
         when(mockMedicationSearchFactory.select(null)).thenReturn(mockMedicationSearch);
         when(mockProblemSearchFactory.select(null)).thenReturn(mockProblemSearch);
-        when(mockTransferSearchFactory.select(null)).thenReturn(mockTransferSearch);
     }
 
     @Test
@@ -137,19 +127,6 @@ public class PatientEntityToDetailsTransformerTest {
         PatientEntity patientEntity = dummyPatientEntity();
 
         when(mockProblemSearch.findProblemHeadlines(PATIENT_ID)).thenThrow(new DataNotFoundException("Expected test exception"));
-
-        PatientDetails patientDetails = transformer.transform(patientEntity);
-
-        assertNotNull(patientDetails);
-        assertTrue(patientDetails.getAllergies().isEmpty());
-    }
-
-    @Test
-    public void shouldReturnEmptyTransferListWhenTransferSearchThrowsException() {
-
-        PatientEntity patientEntity = dummyPatientEntity();
-
-        when(mockTransferSearch.findAllTransfers(PATIENT_ID)).thenThrow(new DataNotFoundException("Expected test exception"));
 
         PatientDetails patientDetails = transformer.transform(patientEntity);
 

@@ -12,7 +12,6 @@
     <Environment name="c4hOpenEHR.medicationTemplate"   type="java.lang.String" override="false" value="LCR Medication List.v0"/>
     <Environment name="c4hOpenEHR.problemTemplate"      type="java.lang.String" override="false" value="LCR Problem List.v0"/>
     <Environment name="c4hOpenEHR.proceduresTemplate"   type="java.lang.String" override="false" value="IDCR Procedures List.v0"/>
-    <Environment name="c4hOpenEHR.transferTemplate"     type="java.lang.String" override="false" value="LCR Handover Summary Report.v0"/>
     <Environment name="c4hOpenEHR.cancermdtTemplate"    type="java.lang.String" override="false" value="IDCR - Cancer MDT Output Report.v0"/>
     <Environment name="c4hOpenEHR.referralsTemplate"    type="java.lang.String" override="false" value="RIPPLE - Minimal referral.v0"/>
     <Environment name="c4hOpenEHR.appointmentsTemplate" type="java.lang.String" override="false" value="RIPPLE - Minimal referral.v0"/>

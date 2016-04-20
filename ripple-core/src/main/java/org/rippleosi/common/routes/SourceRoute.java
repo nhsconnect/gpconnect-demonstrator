@@ -38,7 +38,5 @@ public class SourceRoute extends RouteBuilder {
         from("activemq:topic:VirtualTopic.Ripple.Referrals.Create").to("activemq:topic:VirtualTopic.Marand.Referrals.Create");
         from("activemq:topic:VirtualTopic.Ripple.Referrals.Update").to("activemq:topic:VirtualTopic.Marand.Referrals.Update");
 
-        // Transfer Routes
-        from("activemq:topic:VirtualTopic.Ripple.Transfers.Create").to("activemq:topic:VirtualTopic.Legacy.Transfers.Create");
     }
 }

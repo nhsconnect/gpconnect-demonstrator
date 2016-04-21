@@ -21,11 +21,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.rippleosi</groupId>
-    <artifactId>ripple</artifactId>
+    <artifactId>gpconnect</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Ripple OSI</name>
+    <name>GPConnect</name>
 
     <properties>
         <java.version>1.8</java.version>
@@ -45,12 +45,12 @@
     </properties>
 
     <modules>
-        <module>ripple-audit-example</module>
-        <module>ripple-core</module>
-        <module>ripple-database</module>
-        <module>ripple-demonstrator-api</module>
-        <module>ripple-openehr</module>
-        <module>ripple-terminology-example</module>
+        <module>gpconnect-audit-example</module>
+        <module>gpconnect-core</module>
+        <module>gpconnect-database</module>
+        <module>gpconnect-demonstrator-api</module>
+        <module>gpconnect-openehr</module>
+        <module>gpconnect-terminology-example</module>
     </modules>
 
     <dependencyManagement>

@@ -307,14 +307,14 @@ label {
   border-top-right-radius: 6px;
   padding-bottom: 0;
   border-bottom: 0;
-  background-color: #004480;
+  background-color: #19568c;
 }
 
 .modal-title {
   padding: 4px 10px 10px;
   font-weight: bold;
   color: #fff;
-  background-color: #004480;
+  background-color: #19568c;
 }
 
 .modal-footer {
@@ -625,7 +625,7 @@ legend {
 }
 
 .icon-searchbar:before {
-  color: #004480;
+  color: #19568c;
   font-size: 20px;
 }
 
@@ -863,7 +863,7 @@ footer {
 /* Dashboard */
 
 .button-icons:before {
-  color: #004480;
+  color: #19568c;
   font-size: 70px;
 }
 
@@ -1077,7 +1077,7 @@ svg {
 
 .user-profile-image {
   margin-bottom: 0;
-  color: #004480;
+  color: #19568c;
   font-size: 60px;
   border: 1px solid #c0c2be;
   border-radius: 3px;
@@ -1245,7 +1245,7 @@ table.table {
 .table > thead > tr.info > th,
 .table > tbody > tr.info > th,
 .table > tfoot > tr.info > th {
-  background-color: #EDF2C3;
+  background-color: #bbdae4;
 }
 
 .table-hover > tbody > tr > td.info:hover,
@@ -1253,7 +1253,7 @@ table.table {
 .table-hover > tbody > tr.info:hover > td,
 .table-hover > tbody > tr:hover > .info,
 .table-hover > tbody > tr.info:hover > th {
-  background-color: #EDF2C3;
+  background-color: #bbdae4;
 }
 
 .pagination {
@@ -1330,12 +1330,12 @@ table.table {
 .board h2 .resultcount {
   float: right;
   font-size: 12px;
-  color: #004480;
+  color: #19568c;
   line-height: 2.4em;
 }
 
 .board h2 i {
-  color: #004480;
+  color: #19568c;
   margin-right: 4px;
 }
 
@@ -1708,7 +1708,7 @@ textarea#procedureNotes {
 }
 
 .fa-filter {
-  color: #004480;
+  color: #19568c;
 }
 
 .fa-ellipsis-h {
@@ -1853,7 +1853,7 @@ td.dateTime {
 }
 
 tr.ng-scope.selectedItemLeft {
-  background-color: #EDF2C3;
+  background-color: #bbdae4;
 }
 
 #switchImg {
@@ -1999,7 +1999,7 @@ span.selectedTab {
 
 .pagination > li > a,
 .pagination > li > a:hover {
-  background-color: #EDF6E3;
+  background-color: #e3edf6;
   color: #030303;
   text-decoration: underline;
   border: 1px solid #CCCCCC;
@@ -2012,7 +2012,7 @@ span.selectedTab {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-  background-color: #EDF6E3;
+  background-color: #e3edf6;
   color: #030303;
   font-weight: bolder;
   text-decoration: none;
@@ -2025,7 +2025,7 @@ span.selectedTab {
 .pagination > .disabled > a:hover,
 .pagination > .disabled > a:focus,
 .pagination > .disabled > a {
-  background-color: #EDF6E3;
+  background-color: #e3edf6;
   text-decoration: underline;
   color: #030303;
 }

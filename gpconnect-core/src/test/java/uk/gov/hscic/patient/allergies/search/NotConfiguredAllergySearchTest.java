@@ -40,17 +40,7 @@ public class NotConfiguredAllergySearchTest {
     }
 
     @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindAllergyHeadlines() {
-        allergySearch.findAllergyHeadlines(null);
-    }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindAllAllergies() {
-        allergySearch.findAllAllergies(null);
-    }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindAllergyDetails() {
-        allergySearch.findAllergy(null, null);
+    public void shouldThrowExceptionWhenTryingToFindAllergyHTMLTables() {
+        allergySearch.findAllAllergyHTMLTables(null);
     }
 }

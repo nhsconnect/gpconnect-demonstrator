@@ -24,7 +24,7 @@ import com.mysema.query.BooleanBuilder;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import uk.gov.hscic.common.types.RepoSourceType;
+import uk.gov.hscic.common.service.AbstractLegacyService;
 import uk.gov.hscic.patient.details.model.PatientEntity;
 import uk.gov.hscic.patient.details.model.QPatientEntity;
 import uk.gov.hscic.patient.details.repo.PatientRepository;
@@ -33,17 +33,13 @@ import uk.gov.hscic.patient.summary.model.PatientQueryParams;
 import uk.gov.hscic.patient.summary.model.PatientSummary;
 import uk.gov.hscic.patient.summary.search.PatientSearch;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class LegacyPatientSearch implements PatientSearch {
-
-    @Value("${legacy.datasource.priority:900}")
-    private int priority;
+public class LegacyPatientSearch extends AbstractLegacyService implements PatientSearch {
 
     @Autowired
     private PatientRepository patientRepository;
@@ -53,16 +49,6 @@ public class LegacyPatientSearch implements PatientSearch {
 
     @Autowired
     private PatientEntityToSummaryTransformer patientEntityToSummaryTransformer;
-
-    @Override
-    public RepoSourceType getSource() {
-        return RepoSourceType.LEGACY;
-    }
-
-    @Override
-    public int getPriority() {
-        return priority;
-    }
 
     @Override
     public List<PatientSummary> findAllPatients() {

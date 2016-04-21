@@ -1,20 +1,22 @@
 /* Create a new poc_legacy database and begin configuration */
-DROP DATABASE IF EXISTS poc_legacy;
-CREATE DATABASE         poc_legacy DEFAULT CHARACTER SET utf8;
-USE poc_legacy;
+DROP DATABASE IF EXISTS gpconnect;
+CREATE DATABASE         gpconnect DEFAULT CHARACTER SET utf8;
+USE                     gpconnect;
 
 /* Destroy all existing data */
-DROP TABLE IF EXISTS poc_legacy.general_practitioners;
-DROP TABLE IF EXISTS poc_legacy.medical_departments;
-DROP TABLE IF EXISTS poc_legacy.patients;
-DROP TABLE IF EXISTS poc_legacy.transfers_of_care;
-DROP TABLE IF EXISTS poc_legacy.allergy_headlines;
-DROP TABLE IF EXISTS poc_legacy.contact_headlines;
-DROP TABLE IF EXISTS poc_legacy.medication_headlines;
-DROP TABLE IF EXISTS poc_legacy.problem_headlines;
+DROP TABLE IF EXISTS gpconnect.general_practitioners;
+DROP TABLE IF EXISTS gpconnect.medical_departments;
+DROP TABLE IF EXISTS gpconnect.patients;
+DROP TABLE IF EXISTS gpconnect.allergies;
+
+DROP TABLE IF EXISTS gpconnect.transfers_of_care;
+DROP TABLE IF EXISTS gpconnect.allergy_headlines;
+DROP TABLE IF EXISTS gpconnect.contact_headlines;
+DROP TABLE IF EXISTS gpconnect.medication_headlines;
+DROP TABLE IF EXISTS gpconnect.problem_headlines;
 
 /* Create new table schemas */
-CREATE TABLE poc_legacy.general_practitioners (
+CREATE TABLE gpconnect.general_practitioners (
   id            BIGINT        NOT NULL    AUTO_INCREMENT,
   gp_name       VARCHAR(150)  NULL,
   address_1     VARCHAR(100)  NULL,
@@ -26,13 +28,13 @@ CREATE TABLE poc_legacy.general_practitioners (
   PRIMARY KEY   (id)
 );
 
-CREATE TABLE poc_legacy.medical_departments (
+CREATE TABLE gpconnect.medical_departments (
   id            BIGINT        NOT NULL    AUTO_INCREMENT,
   department    VARCHAR(150)  NULL,
   PRIMARY KEY   (id)
 );
 
-CREATE TABLE poc_legacy.patients (
+CREATE TABLE gpconnect.patients (
   id              BIGINT          NOT NULL    AUTO_INCREMENT,
   title           VARCHAR(10)     NULL,
   first_name      VARCHAR(30)     NULL,
@@ -51,11 +53,18 @@ CREATE TABLE poc_legacy.patients (
   department_id   BIGINT          NOT NULL,
   gp_id           BIGINT          NOT NULL,
   PRIMARY KEY     (id),
-  FOREIGN KEY     (department_id) REFERENCES  poc_legacy.medical_departments(id),
-  FOREIGN KEY     (gp_id)         REFERENCES  poc_legacy.general_practitioners(id)
+  FOREIGN KEY     (department_id) REFERENCES  gpconnect.medical_departments(id),
+  FOREIGN KEY     (gp_id)         REFERENCES  gpconnect.general_practitioners(id)
 );
 
-CREATE TABLE poc_legacy.transfers_of_care (
+CREATE TABLE gpconnect.allergies (
+  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
+  html                VARCHAR(2048) NULL,
+  provider            VARCHAR(10)   NULL,
+  PRIMARY KEY         (id)
+);
+
+CREATE TABLE gpconnect.transfers_of_care (
   id                  BIGINT        NOT NULL    AUTO_INCREMENT,
   patient_id          BIGINT        NOT NULL,
   reason_for_contact  VARCHAR(256)  NULL,
@@ -65,56 +74,56 @@ CREATE TABLE poc_legacy.transfers_of_care (
   date_of_transfer    DATE          NULL,
   source              VARCHAR(30)   NOT NULL,
   PRIMARY KEY         (id),
-  FOREIGN KEY         (patient_id)  REFERENCES  poc_legacy.patients(id)
+  FOREIGN KEY         (patient_id)  REFERENCES  gpconnect.patients(id)
 );
 
-CREATE TABLE poc_legacy.allergy_headlines (
+CREATE TABLE gpconnect.allergy_headlines (
   id            BIGINT        NOT NULL    AUTO_INCREMENT,
   source_id     VARCHAR(100)  NOT NULL,
   transfer_id   BIGINT        NOT NULL,
   allergy       VARCHAR(256)  NULL,
   source        VARCHAR(30)   NOT NULL,
   PRIMARY KEY   (id),
-  FOREIGN KEY   (transfer_id)  REFERENCES  poc_legacy.transfers_of_care(id)
+  FOREIGN KEY   (transfer_id)  REFERENCES  gpconnect.transfers_of_care(id)
 );
 
-CREATE TABLE poc_legacy.contact_headlines (
+CREATE TABLE gpconnect.contact_headlines (
   id            BIGINT        NOT NULL    AUTO_INCREMENT,
   source_id     VARCHAR(100)  NOT NULL,
   transfer_id   BIGINT        NOT NULL,
   contact_name  VARCHAR(256)  NULL,
   source        VARCHAR(30)   NOT NULL,
   PRIMARY KEY   (id),
-  FOREIGN KEY   (transfer_id)  REFERENCES  poc_legacy.transfers_of_care(id)
+  FOREIGN KEY   (transfer_id)  REFERENCES  gpconnect.transfers_of_care(id)
 );
 
-CREATE TABLE poc_legacy.medication_headlines (
+CREATE TABLE gpconnect.medication_headlines (
   id            BIGINT        NOT NULL    AUTO_INCREMENT,
   source_id     VARCHAR(100)  NOT NULL,
   transfer_id   BIGINT        NOT NULL,
   medication    VARCHAR(256)  NULL,
   source        VARCHAR(30)   NOT NULL,
   PRIMARY KEY   (id),
-  FOREIGN KEY   (transfer_id)  REFERENCES  poc_legacy.transfers_of_care(id)
+  FOREIGN KEY   (transfer_id)  REFERENCES  gpconnect.transfers_of_care(id)
 );
 
-CREATE TABLE poc_legacy.problem_headlines (
+CREATE TABLE gpconnect.problem_headlines (
   id            BIGINT        NOT NULL    AUTO_INCREMENT,
   source_id     VARCHAR(100)  NOT NULL,
   transfer_id   BIGINT        NOT NULL,
   problem       VARCHAR(256)  NULL,
   source        VARCHAR(30)   NOT NULL,
   PRIMARY KEY   (id),
-  FOREIGN KEY   (transfer_id)  REFERENCES  poc_legacy.transfers_of_care(id)
+  FOREIGN KEY   (transfer_id)  REFERENCES  gpconnect.transfers_of_care(id)
 );
 
-/* Delete the answer user (grant all to workaround MySQL not supporting 'IF EXISTS') */
-GRANT ALL ON poc_legacy.* TO 'answer' IDENTIFIED BY 'answer99q';
+/* Delete the answer user (grant all to workaround MySQL not supporting 'IF EXISTS' for users) */
+GRANT ALL ON gpconnect.* TO 'answer' IDENTIFIED BY 'answer99q';
 DROP USER 'answer';
 FLUSH PRIVILEGES;
 
 /* Create a new answer user with full privileges */
 CREATE USER 'answer'                              IDENTIFIED BY 'answer99q';
-GRANT ALL ON poc_legacy.* TO 'answer'@'%'         IDENTIFIED BY 'answer99q';
-GRANT ALL ON poc_legacy.* TO 'answer'@'localhost' IDENTIFIED BY 'answer99q';
+GRANT ALL ON gpconnect.* TO 'answer'@'%'          IDENTIFIED BY 'answer99q';
+GRANT ALL ON gpconnect.* TO 'answer'@'localhost'  IDENTIFIED BY 'answer99q';
 FLUSH PRIVILEGES;

@@ -47,9 +47,6 @@ public class PatientEntityToDetailsTransformerTest {
     private static final String PATIENT_ID = "PATIENT";
 
     @Mock
-    private AllergySearch mockAllergySearch;
-
-    @Mock
     private MedicationSearch mockMedicationSearch;
 
     @Mock
@@ -70,11 +67,9 @@ public class PatientEntityToDetailsTransformerTest {
     public void setUp() throws Exception {
         transformer = new PatientEntityToDetailsTransformer();
 
-        ReflectionTestUtils.setField(transformer, "allergySearchFactory", mockAllergySearchFactory);
         ReflectionTestUtils.setField(transformer, "problemSearchFactory", mockProblemSearchFactory);
         ReflectionTestUtils.setField(transformer, "medicationSearchFactory", mockMedicationSearchFactory);
 
-        when(mockAllergySearchFactory.select(null)).thenReturn(mockAllergySearch);
         when(mockMedicationSearchFactory.select(null)).thenReturn(mockMedicationSearch);
         when(mockProblemSearchFactory.select(null)).thenReturn(mockProblemSearch);
     }
@@ -97,19 +92,6 @@ public class PatientEntityToDetailsTransformerTest {
     }
 
     @Test
-    public void shouldReturnEmptyAllergyListWhenAllergySearchThrowsException() {
-
-        PatientEntity patientEntity = dummyPatientEntity();
-
-        when(mockAllergySearch.findAllergyHeadlines(PATIENT_ID)).thenThrow(new DataNotFoundException("Expected test exception"));
-
-        PatientDetails patientDetails = transformer.transform(patientEntity);
-
-        assertNotNull(patientDetails);
-        assertTrue(patientDetails.getAllergies().isEmpty());
-    }
-
-    @Test
     public void shouldReturnEmptyMedicationListWhenMedicationSearchThrowsException() {
 
         PatientEntity patientEntity = dummyPatientEntity();
@@ -119,7 +101,6 @@ public class PatientEntityToDetailsTransformerTest {
         PatientDetails patientDetails = transformer.transform(patientEntity);
 
         assertNotNull(patientDetails);
-        assertTrue(patientDetails.getAllergies().isEmpty());
     }
 
     @Test
@@ -132,7 +113,6 @@ public class PatientEntityToDetailsTransformerTest {
         PatientDetails patientDetails = transformer.transform(patientEntity);
 
         assertNotNull(patientDetails);
-        assertTrue(patientDetails.getAllergies().isEmpty());
     }
 
     private PatientEntity dummyPatientEntity() {

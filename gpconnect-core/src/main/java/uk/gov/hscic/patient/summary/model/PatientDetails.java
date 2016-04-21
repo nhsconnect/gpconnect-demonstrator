@@ -33,9 +33,7 @@ public class PatientDetails {
     private String pasNumber;
 
     private List<PatientHeadline> problems;
-    private List<PatientHeadline> allergies;
     private List<PatientHeadline> medications;
-    private List<TransferHeadline> transfers;
 
     public String getId() {
         return id;
@@ -117,27 +115,11 @@ public class PatientDetails {
         this.problems = problems;
     }
 
-    public List<PatientHeadline> getAllergies() {
-        return allergies;
-    }
-
-    public void setAllergies(List<PatientHeadline> allergies) {
-        this.allergies = allergies;
-    }
-
     public List<PatientHeadline> getMedications() {
         return medications;
     }
 
     public void setMedications(List<PatientHeadline> medications) {
         this.medications = medications;
-    }
-
-    public List<TransferHeadline> getTransfers() {
-        return transfers;
-    }
-
-    public void setTransfers(List<TransferHeadline> transfers) {
-        this.transfers = transfers;
     }
 }

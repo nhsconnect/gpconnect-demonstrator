@@ -8,10 +8,6 @@ angular.module('gpConnect')
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
 
-
-      $scope.allergiesCount = patient.allergies.length;
-      $scope.allergies = patient.allergies.slice(0, 5);
-
       $scope.diagnosesCount = patient.problems.length;
       $scope.diagnoses = patient.problems.slice(0, 5);
 
@@ -32,15 +28,12 @@ angular.module('gpConnect')
 
       var toState = '';
       switch (section) {
-      case 'Problems':
-        toState = 'diagnoses-list';
-        break;
-      case 'Allergies':
-        toState = 'allergies';
-        break;
-      case 'Medications':
-        toState = 'medications';
-        break;
+        case 'Problems':
+          toState = 'diagnoses-list';
+          break;
+        case 'Medications':
+          toState = 'medications';
+          break;
       }
       $state.go(toState, requestHeader);
     };

@@ -1,6 +1,6 @@
-LOCK TABLES poc_legacy.general_practitioners WRITE;
+LOCK TABLES gpconnect.general_practitioners WRITE;
 
-INSERT INTO poc_legacy.general_practitioners
+INSERT INTO gpconnect.general_practitioners
   (id,  gp_name,                    address_1,  address_2,  address_3,  address_4,  address_5,  postcode)
 VALUES
   (1,   'Goff, Carolyn D.',         NULL,       NULL,       NULL,       NULL,       NULL,       NULL),

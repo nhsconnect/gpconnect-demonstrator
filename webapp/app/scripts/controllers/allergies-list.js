@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Allergy) {
+  .controller('AllergiesListCtrl', function ($scope, $location, $stateParams, $sce, $modal, $state, usSpinnerService, PatientService, Allergy) {
 
     $scope.currentPage = 1;
 
@@ -29,9 +29,14 @@ angular.module('gpConnect')
       $scope.patient = patient;
     });
 
-    Allergy.all($stateParams.patientId).then(function (result) {
-      $scope.allergies = result.data;
-      usSpinnerService.stop('patientSummary-spinner');
+    Allergy.findAllHTMLTables($stateParams.patientId).then(function (result) {
+      $scope.allergyTables = result.data;
+
+      for (var i = 0; i < $scope.allergyTables.length; i++) {
+        $scope.allergyTables[i].html = $sce.trustAsHtml($scope.allergyTables[i].html);
+      }
+
+      usSpinnerService.stop('allergySummary-spinner');
     });
 
     $scope.go = function (id, source) {

@@ -22,6 +22,7 @@ import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.patient.allergies.model.AllergyDetails;
 import uk.gov.hscic.patient.allergies.model.AllergyHeadline;
+import uk.gov.hscic.patient.allergies.model.AllergyListHTML;
 import uk.gov.hscic.patient.allergies.model.AllergySummary;
 
 /**
@@ -39,17 +40,7 @@ public class NotConfiguredAllergySearch implements AllergySearch {
     }
 
     @Override
-    public List<AllergyHeadline> findAllergyHeadlines(String patientId) {
-        throw ConfigurationException.unimplementedTransaction(AllergySearch.class);
-    }
-
-    @Override
-    public List<AllergySummary> findAllAllergies(String patientId) {
-        throw ConfigurationException.unimplementedTransaction(AllergySearch.class);
-    }
-
-    @Override
-    public AllergyDetails findAllergy(String patientId, String allergyId) {
+    public List<AllergyListHTML> findAllAllergyHTMLTables(String patientId) {
         throw ConfigurationException.unimplementedTransaction(AllergySearch.class);
     }
 }

@@ -13,24 +13,28 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package uk.gov.hscic.patient.details.search;
+package uk.gov.hscic.common.config;
 
-import org.apache.commons.collections4.Transformer;
-import uk.gov.hscic.patient.allergies.model.AllergyHeadline;
-import uk.gov.hscic.patient.summary.model.PatientHeadline;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
  */
-public class AllergyTransformer implements Transformer<AllergyHeadline, PatientHeadline> {
+public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+    private static final Class<?>[] SERVLET_CONFIG_CLASSES = new Class<?>[0];
 
     @Override
-    public PatientHeadline transform(AllergyHeadline input) {
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[]{ RestConfig.class };
+    }
 
-        PatientHeadline headline = new PatientHeadline();
-        headline.setSource(input.getSource());
-        headline.setSourceId(input.getSourceId());
-        headline.setText(input.getCause());
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return SERVLET_CONFIG_CLASSES;
+    }
 
-        return headline;
+    @Override
+    protected String[] getServletMappings() {
+        return new String[]{ "/api/*" };
     }
 }

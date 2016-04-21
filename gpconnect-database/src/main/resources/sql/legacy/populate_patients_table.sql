@@ -1,6 +1,6 @@
-LOCK TABLES poc_legacy.patients WRITE;
+LOCK TABLES gpconnect.patients WRITE;
 
-INSERT INTO poc_legacy.patients
+INSERT INTO gpconnect.patients
   (id,    title,   first_name,   last_name,    address_1,                              address_2,            address_3,            postcode,   phone,              date_of_birth, gender,   nhs_number,  pas_number,   department_id, gp_id)
 VALUE
   (1,     'Mr',    'Ivor',       'Cox',        '6948 Et St.',                          'Halesowen',          'Worcestershire',     'VX27 5DV', '(011981) 32362',   '1944-06-06',  'Male',   9999999000,  352541,       1,             1),

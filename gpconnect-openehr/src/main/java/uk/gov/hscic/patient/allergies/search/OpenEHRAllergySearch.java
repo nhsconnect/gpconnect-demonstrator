@@ -17,11 +17,12 @@ package uk.gov.hscic.patient.allergies.search;
 
 import java.util.List;
 
+import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.service.AbstractOpenEhrService;
 import uk.gov.hscic.patient.allergies.model.AllergyDetails;
 import uk.gov.hscic.patient.allergies.model.AllergyHeadline;
 import uk.gov.hscic.patient.allergies.model.AllergySummary;
-import uk.gov.hscic.patient.allergies.search.AllergySearch;
+import uk.gov.hscic.patient.allergies.model.AllergyListHTML;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,24 +30,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpenEHRAllergySearch extends AbstractOpenEhrService implements AllergySearch {
 
-    @Override
     public List<AllergyHeadline> findAllergyHeadlines(String patientId) {
         AllergyHeadlineQueryStrategy query = new AllergyHeadlineQueryStrategy(patientId);
 
         return findData(query);
     }
 
-    @Override
     public List<AllergySummary> findAllAllergies(String patientId) {
         AllergySummaryQueryStrategy query = new AllergySummaryQueryStrategy(patientId);
 
         return findData(query);
     }
 
-    @Override
     public AllergyDetails findAllergy(String patientId, String allergyId) {
         AllergyDetailsQueryStrategy query = new AllergyDetailsQueryStrategy(patientId, allergyId);
 
         return findData(query);
+    }
+
+    @Override
+    public List<AllergyListHTML> findAllAllergyHTMLTables(String patientId) {
+        throw ConfigurationException.unimplementedTransaction(AllergySearch.class);
     }
 }

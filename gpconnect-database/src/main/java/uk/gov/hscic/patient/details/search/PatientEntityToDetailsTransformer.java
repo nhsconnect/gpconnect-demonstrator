@@ -25,9 +25,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.hscic.common.exception.DataNotFoundException;
-import uk.gov.hscic.patient.allergies.model.AllergyHeadline;
-import uk.gov.hscic.patient.allergies.search.AllergySearch;
-import uk.gov.hscic.patient.allergies.search.AllergySearchFactory;
 import uk.gov.hscic.patient.details.model.PatientEntity;
 import uk.gov.hscic.patient.medication.model.MedicationHeadline;
 import uk.gov.hscic.patient.medication.search.MedicationSearch;
@@ -37,15 +34,11 @@ import uk.gov.hscic.patient.problems.search.ProblemSearch;
 import uk.gov.hscic.patient.problems.search.ProblemSearchFactory;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
 import uk.gov.hscic.patient.summary.model.PatientHeadline;
-import uk.gov.hscic.patient.summary.model.TransferHeadline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PatientEntityToDetailsTransformer implements Transformer<PatientEntity, PatientDetails> {
-
-    @Autowired
-    private AllergySearchFactory allergySearchFactory;
 
     @Autowired
     private MedicationSearchFactory medicationSearchFactory;
@@ -81,23 +74,10 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         patient.setGpDetails(patientEntity.getGp().getName());
         patient.setPasNumber(patientEntity.getPasNumber());
 
-        patient.setAllergies(findAllergies(patientId));
         patient.setMedications(findMedications(patientId));
         patient.setProblems(findProblems(patientId));
 
         return patient;
-    }
-
-    private List<PatientHeadline> findAllergies(String patientId) {
-        try {
-            AllergySearch allergySearch = allergySearchFactory.select(null);
-
-            List<AllergyHeadline> allergies = allergySearch.findAllergyHeadlines(patientId);
-
-            return CollectionUtils.collect(allergies, new AllergyTransformer(), new ArrayList<>());
-        } catch (DataNotFoundException ignore) {
-            return Collections.emptyList();
-        }
     }
 
     private List<PatientHeadline> findMedications(String patientId) {

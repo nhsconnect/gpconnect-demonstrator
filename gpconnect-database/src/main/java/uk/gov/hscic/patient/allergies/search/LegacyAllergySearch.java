@@ -19,7 +19,7 @@ public class LegacyAllergySearch extends AbstractLegacyService implements Allerg
 
     @Override
     public List<AllergyListHTML> findAllAllergyHTMLTables(String patientId) {
-        List<AllergyEntity> allergyLists = allergyRepository.findAll();
+        final List<AllergyEntity> allergyLists = allergyRepository.findAll();
 
         return CollectionUtils.collect(allergyLists, new AllergyEntityToListTransformer(), new ArrayList<>());
     }

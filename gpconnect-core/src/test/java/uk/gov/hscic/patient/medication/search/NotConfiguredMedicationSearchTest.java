@@ -15,13 +15,12 @@
  */
 package uk.gov.hscic.patient.medication.search;
 
-import uk.gov.hscic.patient.medication.search.NotConfiguredMedicationSearch;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSourceType;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  */
@@ -40,17 +39,7 @@ public class NotConfiguredMedicationSearchTest {
     }
 
     @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindMedicationHeadlines() {
-        medicationSearch.findMedicationHeadlines(null);
-    }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindAllMedication() {
-        medicationSearch.findAllMedication(null);
-    }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindMedicationDetails() {
-        medicationSearch.findMedication(null, null);
+    public void shouldThrowExceptionWhenTryingToFindMedicationHTMLTables() {
+        medicationSearch.findMedicationHTMLTables(null);
     }
 }

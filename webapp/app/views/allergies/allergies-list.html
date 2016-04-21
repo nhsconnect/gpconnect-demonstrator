@@ -4,6 +4,7 @@
   <h4><strong>{{ allergyTable.provider }}</strong></h4>
 
   <div ng-bind-html="allergyTable.html">
+
   </div>
 </div>
 
@@ -11,13 +12,4 @@
   <div class="col-md-12">
     <span class="patientSummary-spinner" us-spinner="{radius:20, width:8, length: 16}" spinner-key="allergySummary-spinner" spinner-start-active="true"></span>
   </div>
-</div>
-
-<div class="row" ng-show="false">
-  <div class="col-md-6 hidden-xs"><div class="text-right"><dir-pagination-controls on-page-change="pageChangeHandler(newPageNumber)" boundary-links="false"></dir-pagination-controls></div></div>
-  <div class="col-md-6 hidden-xs"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
-</div>
-<div class="row" ng-show="false">
-  <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right"><dir-pagination-controls on-page-change="pageChangeHandler(newPageNumber)" boundary-links="false"></dir-pagination-controls></div></div>
-  <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
 </div>

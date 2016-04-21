@@ -24,6 +24,10 @@ import com.mysema.query.BooleanBuilder;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hscic.common.service.AbstractLegacyService;
 import uk.gov.hscic.patient.details.model.PatientEntity;
 import uk.gov.hscic.patient.details.model.QPatientEntity;
@@ -32,10 +36,6 @@ import uk.gov.hscic.patient.summary.model.PatientDetails;
 import uk.gov.hscic.patient.summary.model.PatientQueryParams;
 import uk.gov.hscic.patient.summary.model.PatientSummary;
 import uk.gov.hscic.patient.summary.search.PatientSearch;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional

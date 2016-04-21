@@ -34,26 +34,8 @@
         </table>
       </div>
       <!-- END Board -->
-
-      <div class="board problems col-md-4">
-        <h2><a ng-click="goToSection('Medications')"><i class="fi-clipboard-pencil"></i> Medications</a>
-          <span class="resultcount" ng-if="medicationsCount == 0">0 of 0</span>
-          <span class="resultcount" ng-if="medicationsCount > 0 && medicationsCount < 5">{{medicationsCount}} of {{medicationsCount}}</span>
-          <span class="resultcount" ng-if="medicationsCount > 0 && medicationsCount >= 5">5 of {{medicationsCount}}</span>
-          <a ui-sref="medications({patientId: patient.id})" class="resultcount" ng-if="medicationsCount > 0" style="padding-right: 10px;">View All</a>
-        </h2>
-
-        <table class="table table-striped clickable">
-          <tbody>
-            <tr ng-repeat="medication in medications">
-              <td ng-click="go('/patients/{{patient.id}}/medications/{{medication.sourceId}}')"> {{ medication.text }}<span class="glyphicon glyphicon-chevron-right"></span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
     <!-- END Patient Dashboard -->
   </div>
   <!-- END Main Content Area -->
-
 </div>

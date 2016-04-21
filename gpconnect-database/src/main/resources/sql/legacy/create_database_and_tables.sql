@@ -59,7 +59,14 @@ CREATE TABLE gpconnect.patients (
 
 CREATE TABLE gpconnect.allergies (
   id                  BIGINT        NOT NULL    AUTO_INCREMENT,
-  html                VARCHAR(2048) NULL,
+  html                VARCHAR(4096) NULL,
+  provider            VARCHAR(10)   NULL,
+  PRIMARY KEY         (id)
+);
+
+CREATE TABLE gpconnect.medications (
+  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
+  html                VARCHAR(4096) NULL,
   provider            VARCHAR(10)   NULL,
   PRIMARY KEY         (id)
 );

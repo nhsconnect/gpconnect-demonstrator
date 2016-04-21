@@ -11,9 +11,6 @@ angular.module('gpConnect')
       $scope.diagnosesCount = patient.problems.length;
       $scope.diagnoses = patient.problems.slice(0, 5);
 
-      $scope.medicationsCount = patient.medications.length;
-      $scope.medications = patient.medications.slice(0, 5);
-
       usSpinnerService.stop('patientSummary-spinner');
     });
 
@@ -30,9 +27,6 @@ angular.module('gpConnect')
       switch (section) {
         case 'Problems':
           toState = 'diagnoses-list';
-          break;
-        case 'Medications':
-          toState = 'medications';
           break;
       }
       $state.go(toState, requestHeader);

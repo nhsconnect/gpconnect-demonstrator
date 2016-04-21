@@ -1,14 +1,10 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('MedicationsListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Medication) {
+  .controller('MedicationsListCtrl', function ($scope, $location, $stateParams, $modal, $state, $sce, usSpinnerService, PatientService, Medication) {
 
     $scope.query = {};
     $scope.queryBy = '$';
-
-    /*At the request of the product owner we have removed the filtering function, however we will leave the controller code intact
-      to allow the function to be added back in should the client chose to revert back to having a filtering function for medications
-    */
 
     $scope.currentPage = 1;
 
@@ -28,9 +24,14 @@ angular.module('gpConnect')
       $scope.query.$ = $stateParams.filter;
     }
 
-    Medication.all($stateParams.patientId).then(function (result) {
-      $scope.medications = result.data;
-      usSpinnerService.stop('patientSummary-spinner');
+    Medication.findAllHTMLTables($stateParams.patientId).then(function (result) {
+      $scope.medicationTables = result.data;
+
+      for (var i = 0; i < $scope.medicationTables.length; i++) {
+        $scope.medicationTables[i].html = $sce.trustAsHtml($scope.medicationTables[i].html);
+      }
+
+      usSpinnerService.stop('medicationSummary-spinner');
     });
 
     $scope.go = function (id, source) {

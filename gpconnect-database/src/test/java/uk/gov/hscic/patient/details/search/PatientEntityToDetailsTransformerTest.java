@@ -15,21 +15,14 @@
  */
 package uk.gov.hscic.patient.details.search;
 
-import uk.gov.hscic.patient.details.search.PatientEntityToDetailsTransformer;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hscic.common.exception.DataNotFoundException;
-import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.medical.practicitioners.doctor.model.GPEntity;
-import uk.gov.hscic.patient.allergies.search.AllergySearch;
 import uk.gov.hscic.patient.allergies.search.AllergySearchFactory;
 import uk.gov.hscic.patient.details.model.PatientEntity;
 import uk.gov.hscic.patient.medication.search.MedicationSearch;
@@ -37,7 +30,10 @@ import uk.gov.hscic.patient.medication.search.MedicationSearchFactory;
 import uk.gov.hscic.patient.problems.search.ProblemSearch;
 import uk.gov.hscic.patient.problems.search.ProblemSearchFactory;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
-import org.springframework.test.util.ReflectionTestUtils;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 
 /**
  */
@@ -47,16 +43,7 @@ public class PatientEntityToDetailsTransformerTest {
     private static final String PATIENT_ID = "PATIENT";
 
     @Mock
-    private MedicationSearch mockMedicationSearch;
-
-    @Mock
     private ProblemSearch mockProblemSearch;
-
-    @Mock
-    private AllergySearchFactory mockAllergySearchFactory;
-
-    @Mock
-    private MedicationSearchFactory mockMedicationSearchFactory;
 
     @Mock
     private ProblemSearchFactory mockProblemSearchFactory;
@@ -68,9 +55,7 @@ public class PatientEntityToDetailsTransformerTest {
         transformer = new PatientEntityToDetailsTransformer();
 
         ReflectionTestUtils.setField(transformer, "problemSearchFactory", mockProblemSearchFactory);
-        ReflectionTestUtils.setField(transformer, "medicationSearchFactory", mockMedicationSearchFactory);
 
-        when(mockMedicationSearchFactory.select(null)).thenReturn(mockMedicationSearch);
         when(mockProblemSearchFactory.select(null)).thenReturn(mockProblemSearch);
     }
 
@@ -95,8 +80,6 @@ public class PatientEntityToDetailsTransformerTest {
     public void shouldReturnEmptyMedicationListWhenMedicationSearchThrowsException() {
 
         PatientEntity patientEntity = dummyPatientEntity();
-
-        when(mockMedicationSearch.findMedicationHeadlines(PATIENT_ID)).thenThrow(new DataNotFoundException("Expected test exception"));
 
         PatientDetails patientDetails = transformer.transform(patientEntity);
 

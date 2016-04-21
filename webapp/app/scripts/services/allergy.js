@@ -15,11 +15,11 @@ angular.module('gpConnect')
       return $http.get('/api/patients/' + patientId + '/allergies/htmlTables' + '?source=' + source);
     };
 
-    var create = function (patientId, composition) {
+    var createAllergy = function (patientId, composition) {
       return $http.post('/api/patients/' + patientId + '/allergies', composition);
     };
 
-    var update = function (patientId, composition) {
+    var updateAllergy = function (patientId, composition) {
       return $http.put('/api/patients/' + patientId + '/allergies', composition);
     };
 
@@ -27,7 +27,7 @@ angular.module('gpConnect')
       findAllSummaries: findAllSummaries,
       findDetails: findDetails,
       findAllHTMLTables: findAllHTMLTables,
-      update: update,
-      create: create
+      createAllergy: createAllergy,
+      updateAllergy: updateAllergy
     };
   });

@@ -21,8 +21,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>ripple</artifactId>
-        <groupId>org.rippleosi</groupId>
+        <artifactId>gpconnect</artifactId>
+        <groupId>uk.gov.hscic</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -30,8 +30,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.rippleosi</groupId>
-            <artifactId>ripple-core</artifactId>
+            <groupId>uk.gov.hscic</groupId>
+            <artifactId>gpconnect-core</artifactId>
         </dependency>
 
         <dependency>

@@ -18,7 +18,7 @@ module.exports = function (grunt) {
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
-    dist: '../ripple-demonstrator-api/src/main/webapp'
+    dist: '../gpconnect-demonstrator-api/src/main/webapp'
   };
 
   // Define the configuration for all the tasks

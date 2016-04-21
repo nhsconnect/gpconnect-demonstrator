@@ -20,8 +20,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.rippleosi</groupId>
-        <artifactId>ripple</artifactId>
+        <groupId>uk.gov.hscic</groupId>
+        <artifactId>gpconnect</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -30,31 +30,31 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.rippleosi</groupId>
-            <artifactId>ripple-audit-example</artifactId>
+            <groupId>uk.gov.hscic</groupId>
+            <artifactId>gpconnect-audit-example</artifactId>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.rippleosi</groupId>
-            <artifactId>ripple-core</artifactId>
+            <groupId>uk.gov.hscic</groupId>
+            <artifactId>gpconnect-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.rippleosi</groupId>
-            <artifactId>ripple-database</artifactId>
+            <groupId>uk.gov.hscic</groupId>
+            <artifactId>gpconnect-database</artifactId>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.rippleosi</groupId>
-            <artifactId>ripple-openehr</artifactId>
+            <groupId>uk.gov.hscic</groupId>
+            <artifactId>gpconnect-openehr</artifactId>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.rippleosi</groupId>
-            <artifactId>ripple-terminology-example</artifactId>
+            <groupId>uk.gov.hscic</groupId>
+            <artifactId>gpconnect-terminology-example</artifactId>
             <scope>runtime</scope>
         </dependency>
 
@@ -159,7 +159,7 @@
     </dependencies>
 
     <build>
-        <finalName>ripple-demonstrator-api</finalName>
+        <finalName>gpconnect-demonstrator-api</finalName>
     </build>
 
     <profiles>
@@ -196,7 +196,7 @@
                         <configuration>
                             <path>/</path>
                             <port>19191</port>
-                            <contextFile>${project.basedir}/../context-ripple.xml</contextFile>
+                            <contextFile>${project.basedir}/../context-gpconnect.xml</contextFile>
                         </configuration>
                     </plugin>
                 </plugins>

@@ -20,8 +20,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.rippleosi</groupId>
-        <artifactId>ripple</artifactId>
+        <groupId>uk.gov.hscic</groupId>
+        <artifactId>gpconnect</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 

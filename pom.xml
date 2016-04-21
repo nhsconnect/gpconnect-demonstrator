@@ -20,7 +20,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.rippleosi</groupId>
+    <groupId>uk.gov.hscic</groupId>
     <artifactId>gpconnect</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -56,32 +56,32 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.rippleosi</groupId>
-                <artifactId>ripple-audit-example</artifactId>
+                <groupId>uk.gov.hscic</groupId>
+                <artifactId>gpconnect-audit-example</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.rippleosi</groupId>
-                <artifactId>ripple-core</artifactId>
+                <groupId>uk.gov.hscic</groupId>
+                <artifactId>gpconnect-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.rippleosi</groupId>
-                <artifactId>ripple-database</artifactId>
+                <groupId>uk.gov.hscic</groupId>
+                <artifactId>gpconnect-database</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.rippleosi</groupId>
-                <artifactId>ripple-openehr</artifactId>
+                <groupId>uk.gov.hscic</groupId>
+                <artifactId>gpconnect-openehr</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.rippleosi</groupId>
-                <artifactId>ripple-terminology-example</artifactId>
+                <groupId>uk.gov.hscic</groupId>
+                <artifactId>gpconnect-terminology-example</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

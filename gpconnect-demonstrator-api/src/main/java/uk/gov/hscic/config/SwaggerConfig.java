@@ -44,8 +44,8 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfo("Ripple OSI Demonstrator REST API",
-                           "The Ripple OSI Demonstrator API.",
+        return new ApiInfo("GPConnect Demonstrator REST API",
+                           "The GPConnect Demonstrator API.",
                            "0.0.1-SNAPSHOT",
                            "",
                            "",

@@ -150,7 +150,7 @@
   <div class="row header-background hidden-xs">
     <div class="col-md-4 col-sm-4 header-left">
       <div class="glyphs g">
-        <p class="header-title-1" ng-if="title" ng-click="goHome()"><img class="header-icon" ng-click="goHome()"> {{ title }}</p>
+        <p class="header-title-1" ng-if="title" ng-click="goHome()">{{ title }}</p>
       </div>
     </div>
 
@@ -172,9 +172,8 @@
                       <div class="user-profile-image"><i class="glyphicon glyphicon-user"></i></div>
                     </div>
                     <div class="col-md-8 col-sm-8">
-                      <p class="dropdown-profile-text"><b>User</b></p>
                       <p class="dropdown-profile-text"><b>{{currentUser.role}}</b></p>
-                      <p class="dropdown-profile-text"> {{currentUser.email}} </p>
+                      <p class="dropdown-profile-text">{{currentUser.email}}</p>
                       <p class="dropdown-profile-text">{{ currentUser.dateOfBirth }}</p>
                     </div>
                   </div>
@@ -193,7 +192,7 @@
   <div class="row header-background-mobile visible-xs">
     <div class="col-xs-12 header-left-mobile">
       <div class="glyphs g">
-        <p class="header-title-1" ng-if="title" ng-click="goHome()"><img class="header-icon" ng-click="goHome()"> {{ title }}</p>
+        <p class="header-title-1" ng-if="title" ng-click="goHome()">{{ title }}</p>
       </div>
     </div>
 
@@ -219,9 +218,8 @@
                       <div class="user-profile-image"><i class="glyphicon glyphicon-user"></i></div>
                     </div>
                     <div class="col-xs-8">
-                      <p class="dropdown-profile-text"><b>User</b></p>
                       <p class="dropdown-profile-text"><b>{{ currentUser.role }}</b></p>
-                      <p class="dropdown-profile-text"> {{ currentUser.email }} </p>
+                      <p class="dropdown-profile-text">{{ currentUser.email }}</p>
                       <p class="dropdown-profile-text">{{ currentUser.dateOfBirth }}</p>
                     </div>
                   </div>

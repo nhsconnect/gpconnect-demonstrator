@@ -15,9 +15,6 @@
  */
 package uk.gov.hscic.patient.referral.search;
 
-import uk.gov.hscic.patient.referral.search.DefaultReferralSearchFactory;
-import uk.gov.hscic.patient.referral.search.ReferralSearchFactory;
-import uk.gov.hscic.patient.referral.search.ReferralSearch;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;

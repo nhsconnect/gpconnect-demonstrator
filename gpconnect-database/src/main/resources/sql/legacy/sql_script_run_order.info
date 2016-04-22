@@ -5,3 +5,4 @@ populate_patients_table.sql
 populate_allergies_table.sql
 populate_medications_table.sql
 populate_problems_table.sql
+populate_referrals_table.sql

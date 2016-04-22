@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('ReferralsListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Referral) {
+  .controller('ReferralsListCtrl', function ($scope, $location, $stateParams, $sce, $modal, $state, usSpinnerService, PatientService, Referral) {
 
     $scope.currentPage = 1;
 
@@ -30,15 +30,10 @@ angular.module('gpConnect')
       $scope.query = $stateParams.filter;
     }
 
-    Referral.all($stateParams.patientId).then(function (result) {
-      $scope.result = result.data;
-
-      if (result.data.length > 0) {
-        $scope.referrals = $scope.result;
-
-        for (var i = 0; i < $scope.referrals.length; i++) {
-          $scope.referrals[i].dateOfReferral = moment($scope.referrals[i].dateOfReferral).format('DD-MMM-YYYY');
-        }
+    Referral.findAllHTMLTables($stateParams.patientId).then(function (result) {
+      $scope.referralTables = result.data;
+      for (var i = 0; i < $scope.referralTables.length; i++) {
+         $scope.referralTables[i].html = $sce.trustAsHtml($scope.referralTables[i].html);
       }
       usSpinnerService.stop('patientSummary-spinner');
     });

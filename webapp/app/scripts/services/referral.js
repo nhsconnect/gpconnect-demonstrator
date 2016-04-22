@@ -3,29 +3,30 @@
 angular.module('gpConnect')
   .factory('Referral', function ($http) {
 
-    var all = function (patientId) {
+    var findAllSummaries = function (patientId) {
       return $http.get('/api/patients/' + patientId + '/referrals');
     };
 
-    var get = function (patientId, compositionId) {
+    var findDetails = function (patientId, compositionId) {
       return $http.get('/api/patients/' + patientId + '/referrals/' + compositionId);
+    };
+    
+    var findAllHTMLTables = function (patientId, source) {
+      return $http.get('/api/patients/' + patientId + '/referrals/htmlTables?source=' + source);
     };
 
     var create = function (patientId, composition) {
-      console.log('post referral comp:');
-      console.log(composition);
       return $http.post('/api/patients/' + patientId + '/referrals', composition);
     };
 
     var update = function (patientId, composition) {
-      console.log('put referral comp:');
-      console.log(composition);
       return $http.put('/api/patients/' + patientId + '/referrals', composition);
     };
 
     return {
-      all: all,
-      get: get,
+      findAllSummaries: findAllSummaries,
+      findDetails: findDetails,
+      findAllHTMLTables: findAllHTMLTables,
       update: update,
       create: create
     };

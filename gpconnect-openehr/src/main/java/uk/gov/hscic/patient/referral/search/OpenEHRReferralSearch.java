@@ -20,25 +20,29 @@ import java.util.List;
 import uk.gov.hscic.common.service.AbstractOpenEhrService;
 import uk.gov.hscic.patient.referral.model.ReferralDetails;
 import uk.gov.hscic.patient.referral.model.ReferralSummary;
-import uk.gov.hscic.patient.referral.search.ReferralSearch;
 import org.springframework.stereotype.Service;
+import uk.gov.hscic.common.exception.ConfigurationException;
+import uk.gov.hscic.patient.referral.model.ReferralListHTML;
 
 /**
  */
 @Service
 public class OpenEHRReferralSearch extends AbstractOpenEhrService implements ReferralSearch {
 
-    @Override
     public List<ReferralSummary> findAllReferrals(String patientId) {
         ReferralSummaryQueryStrategy query = new ReferralSummaryQueryStrategy(patientId);
 
         return findData(query);
     }
 
-    @Override
     public ReferralDetails findReferral(String patientId, String referralId) {
         ReferralDetailsQueryStrategy query = new ReferralDetailsQueryStrategy(patientId, referralId);
 
         return findData(query);
+    }
+
+    @Override
+    public List<ReferralListHTML> findAllReferralHTMLTables(String patientId) {
+        throw ConfigurationException.unimplementedTransaction(ReferralSearch.class);
     }
 }

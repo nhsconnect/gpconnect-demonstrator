@@ -222,6 +222,14 @@ a[ui-sref] {
   padding-right: 22px;
 }
 
+.btn-danger
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger.active {
+  background-color: $btn-danger-background;
+}
+
 label {
   font-weight: normal;
   color: #A4A4A4;

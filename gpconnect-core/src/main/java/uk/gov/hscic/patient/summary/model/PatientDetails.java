@@ -17,8 +17,6 @@ public class PatientDetails {
     private String gpDetails;
     private String pasNumber;
 
-    private List<PatientHeadline> problems;
-
     public String getId() {
         return id;
     }
@@ -89,13 +87,5 @@ public class PatientDetails {
 
     public void setPasNumber(String pasNumber) {
         this.pasNumber = pasNumber;
-    }
-
-    public List<PatientHeadline> getProblems() {
-        return problems;
-    }
-
-    public void setProblems(List<PatientHeadline> problems) {
-        this.problems = problems;
     }
 }

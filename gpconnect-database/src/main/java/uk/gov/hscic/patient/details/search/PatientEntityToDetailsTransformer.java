@@ -9,21 +9,13 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
+import uk.gov.hscic.patient.details.model.PatientEntity;
+import uk.gov.hscic.patient.summary.model.PatientDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.common.exception.DataNotFoundException;
-import uk.gov.hscic.patient.details.model.PatientEntity;
-import uk.gov.hscic.patient.problems.model.ProblemHeadline;
-import uk.gov.hscic.patient.problems.search.ProblemSearch;
-import uk.gov.hscic.patient.problems.search.ProblemSearchFactory;
-import uk.gov.hscic.patient.summary.model.PatientDetails;
-import uk.gov.hscic.patient.summary.model.PatientHeadline;
 
 @Component
 public class PatientEntityToDetailsTransformer implements Transformer<PatientEntity, PatientDetails> {
-
-    @Autowired
-    private ProblemSearchFactory problemSearchFactory;
 
     @Override
     public PatientDetails transform(PatientEntity patientEntity) {
@@ -53,20 +45,6 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         patient.setGpDetails(patientEntity.getGp().getName());
         patient.setPasNumber(patientEntity.getPasNumber());
 
-        patient.setProblems(findProblems(patientId));
-
         return patient;
-    }
-
-    private List<PatientHeadline> findProblems(String patientId) {
-        try {
-            ProblemSearch problemSearch = problemSearchFactory.select(null);
-
-            List<ProblemHeadline> problems = problemSearch.findProblemHeadlines(patientId);
-
-            return CollectionUtils.collect(problems, new ProblemTransformer(), new ArrayList<>());
-        } catch (DataNotFoundException ignore) {
-            return Collections.emptyList();
-        }
     }
 }

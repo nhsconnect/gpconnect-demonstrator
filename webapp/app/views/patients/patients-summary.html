@@ -7,35 +7,7 @@
         <span class="patientSummary-spinner" us-spinner="{radius:20, width:8, length: 16}" spinner-key="patientSummary-spinner" spinner-start-active="true"></span>
       </div>
       </div>
-    <!-- START Patient Dashboard -->
-    <div class="dashboard row">
-      <!-- START Board
-                        Note: Make sure the 4th board always does a clear left
-                        Note: In our design, all boards have 5 rows, so the board below
-                            (which might only have 2 records, would still output 5 rows - 3 would be blank.
-                            We've also set a height on each TD of 37px so that blank cells are the same / similar height,
-                            which will stretch if there's more content
-                    -->
-      <div class="board problems col-md-4">
-        <h2><a ng-click="goToSection('Problems')"><i class="fa fa-stethoscope"></i> Problems</a>
-          <span class="resultcount" ng-if="diagnosesCount == 0">0 of 0</span>
-          <span class="resultcount" ng-if="diagnosesCount > 0 && diagnosesCount < 5">{{diagnosesCount}} of {{diagnosesCount}}</span>
-          <span class="resultcount" ng-if="diagnosesCount > 0 && diagnosesCount >= 5">5 of {{diagnosesCount}}</span>
-          <a ng-href="#/patients/{{patient.id}}/diagnoses" class="resultcount" ng-if="diagnosesCount > 0" style="padding-right: 10px;">View All</a>
-        </h2>
-
-        <table class="table table-striped clickable">
-          <tbody>
-            <tr ng-repeat="diagnosis in diagnoses" data-target="patient-detail.html">
-              <!--data target-->
-              <td ng-click="go('/patients/{{patient.id}}/diagnoses/{{diagnosis.sourceId}}')">{{ diagnosis.text }} <span class="glyphicon glyphicon-chevron-right"></span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- END Board -->
-    </div>
-    <!-- END Patient Dashboard -->
   </div>
   <!-- END Main Content Area -->
+
 </div>

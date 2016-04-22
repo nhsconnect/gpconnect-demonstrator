@@ -7,10 +7,6 @@ angular.module('gpConnect')
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
-
-      $scope.diagnosesCount = patient.problems.length;
-      $scope.diagnoses = patient.problems.slice(0, 5);
-
       usSpinnerService.stop('patientSummary-spinner');
     });
 
@@ -22,14 +18,6 @@ angular.module('gpConnect')
       var requestHeader = {
         patientId: $stateParams.patientId
       };
-
-      var toState = '';
-      switch (section) {
-        case 'Problems':
-          toState = 'diagnoses-list';
-          break;
-      }
-      $state.go(toState, requestHeader);
     };
 
   });

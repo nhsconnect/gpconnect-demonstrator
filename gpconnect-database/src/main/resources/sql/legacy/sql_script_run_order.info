@@ -4,3 +4,4 @@ populate_medical_departments_table.sql
 populate_patients_table.sql
 populate_allergies_table.sql
 populate_medications_table.sql
+populate_problems_table.sql

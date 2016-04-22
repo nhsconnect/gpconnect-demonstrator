@@ -80,59 +80,6 @@ CREATE TABLE gpconnect.problems (
  PRIMARY KEY         (id)
  );
 
-CREATE TABLE gpconnect.transfers_of_care (
-  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
-  patient_id          BIGINT        NOT NULL,
-  reason_for_contact  VARCHAR(256)  NULL,
-  clinical_summary    VARCHAR(256)  NULL,
-  site_from           VARCHAR(256)  NULL,
-  site_to             VARCHAR(256)  NULL,
-  date_of_transfer    DATE          NULL,
-  source              VARCHAR(30)   NOT NULL,
-  PRIMARY KEY         (id),
-  FOREIGN KEY         (patient_id)  REFERENCES  gpconnect.patients(id)
-);
-
-CREATE TABLE gpconnect.allergy_headlines (
-  id            BIGINT        NOT NULL    AUTO_INCREMENT,
-  source_id     VARCHAR(100)  NOT NULL,
-  transfer_id   BIGINT        NOT NULL,
-  allergy       VARCHAR(256)  NULL,
-  source        VARCHAR(30)   NOT NULL,
-  PRIMARY KEY   (id),
-  FOREIGN KEY   (transfer_id)  REFERENCES  gpconnect.transfers_of_care(id)
-);
-
-CREATE TABLE gpconnect.contact_headlines (
-  id            BIGINT        NOT NULL    AUTO_INCREMENT,
-  source_id     VARCHAR(100)  NOT NULL,
-  transfer_id   BIGINT        NOT NULL,
-  contact_name  VARCHAR(256)  NULL,
-  source        VARCHAR(30)   NOT NULL,
-  PRIMARY KEY   (id),
-  FOREIGN KEY   (transfer_id)  REFERENCES  gpconnect.transfers_of_care(id)
-);
-
-CREATE TABLE gpconnect.medication_headlines (
-  id            BIGINT        NOT NULL    AUTO_INCREMENT,
-  source_id     VARCHAR(100)  NOT NULL,
-  transfer_id   BIGINT        NOT NULL,
-  medication    VARCHAR(256)  NULL,
-  source        VARCHAR(30)   NOT NULL,
-  PRIMARY KEY   (id),
-  FOREIGN KEY   (transfer_id)  REFERENCES  gpconnect.transfers_of_care(id)
-);
-
-CREATE TABLE gpconnect.problem_headlines (
-  id            BIGINT        NOT NULL    AUTO_INCREMENT,
-  source_id     VARCHAR(100)  NOT NULL,
-  transfer_id   BIGINT        NOT NULL,
-  problem       VARCHAR(256)  NULL,
-  source        VARCHAR(30)   NOT NULL,
-  PRIMARY KEY   (id),
-  FOREIGN KEY   (transfer_id)  REFERENCES  gpconnect.transfers_of_care(id)
-);
-
 /* Delete the answer user (grant all to workaround MySQL not supporting 'IF EXISTS' for users) */
 GRANT ALL ON gpconnect.* TO 'answer' IDENTIFIED BY 'answer99q';
 DROP USER 'answer';

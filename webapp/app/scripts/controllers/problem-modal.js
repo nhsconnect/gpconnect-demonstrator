@@ -1,20 +1,20 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('DiagnosesModalCtrl', function ($scope, $modalInstance, UserService, diagnosis, patient, modal) {
+  .controller('ProblemModalCtrl', function ($scope, $modalInstance, UserService, problem, patient, modal) {
 
     $scope.currentUser = UserService.getCurrentUser();
-    $scope.diagnosis = diagnosis;
+    $scope.problem = problem;
     $scope.patient = patient;
     $scope.modal = modal;
     $scope.protocol = 'http://';
 
-    if (modal.title === 'Edit Problem / Diagnosis') {
-      $scope.diagnosis.dateSubmitted = new Date().toISOString().slice(0, 10);
-      $scope.diagnosis.dateOfOnset = new Date($scope.diagnosis.dateOfOnset).toISOString().slice(0, 10);
+    if (modal.title === 'Edit Problem') {
+      $scope.problem.dateSubmitted = new Date().toISOString().slice(0, 10);
+      $scope.problem.dateOfOnset = new Date($scope.problem.dateOfOnset).toISOString().slice(0, 10);
     }else {
-      $scope.diagnosis.dateSubmitted = new Date().toISOString().slice(0, 10);
-      $scope.diagnosis.code = '12393890';
+      $scope.problem.dateSubmitted = new Date().toISOString().slice(0, 10);
+      $scope.problem.code = '12393890';
     }
 
     $scope.changeProtocol = function (protocol) {
@@ -30,11 +30,11 @@ angular.module('gpConnect')
       }
     };
 
-    $scope.ok = function (diagnosisForm, diagnosis) {
+    $scope.ok = function (problemForm, problem) {
       $scope.formSubmitted = true;
 
-      if (diagnosisForm.$valid) {
-        $modalInstance.close(diagnosis);
+      if (problemForm.$valid) {
+        $modalInstance.close(problem);
       }
     };
 

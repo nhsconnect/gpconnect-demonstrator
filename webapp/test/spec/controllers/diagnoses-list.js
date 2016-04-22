@@ -1,11 +1,11 @@
 'use strict';
 
-describe('DiagnosesListCtrl', function () {
+describe('ProblemListCtrl', function () {
 
   // load the controller's module
   beforeEach(module('gpConnect'));
 
-  var DiagnosesListCtrl, scope, $location, $stateParams, $state, PatientService, Contact, $modal;
+  var ProblemListCtrl, scope, $location, $stateParams, $state, PatientService, Contact, $modal;
   var fakeModal = {
         result: {
         then: function(confirmCallback, cancelCallback) {
@@ -30,14 +30,14 @@ describe('DiagnosesListCtrl', function () {
     Contact = _Contact_;
     $modal = _$modal_;
 
-    DiagnosesListCtrl = $controller('DiagnosesListCtrl', {
+    ProblemListCtrl = $controller('ProblemListCtrl', {
       '$scope': scope,
     });
   }));
 
   describe('Initial state', function () {
     it('should instantiate the controller properly', function () {
-      expect(DiagnosesListCtrl).not.toBeUndefined();
+      expect(ProblemListCtrl).not.toBeUndefined();
     });
 
     it('should close the modal with result "true" when accepted', function () {

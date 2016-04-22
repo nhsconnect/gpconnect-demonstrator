@@ -1,96 +1,34 @@
-/*
- * Copyright 2015 Ripple OSI
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package uk.gov.hscic.patient.problems.rest;
 
 import java.util.List;
 
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.problems.model.ProblemDetails;
-import uk.gov.hscic.patient.problems.model.ProblemHeadline;
-import uk.gov.hscic.patient.problems.model.ProblemSummary;
 import uk.gov.hscic.patient.problems.search.ProblemSearch;
 import uk.gov.hscic.patient.problems.search.ProblemSearchFactory;
-import uk.gov.hscic.patient.problems.store.ProblemStore;
-import uk.gov.hscic.patient.problems.store.ProblemStoreFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.hscic.patient.problems.model.ProblemListHTML;
 
 /**
  */
 @RestController
-@RequestMapping("/patients/{patientId}/diagnoses")
+@RequestMapping("/patients/{patientId}/problem")
 public class ProblemsController {
 
     @Autowired
     private ProblemSearchFactory problemSearchFactory;
 
-    @Autowired
-    private ProblemStoreFactory problemStoreFactory;
-
-    @RequestMapping(method = RequestMethod.GET)
-    public List<ProblemSummary> findAllProblems(@PathVariable("patientId") String patientId,
+    @RequestMapping(value="/htmlTables", method = RequestMethod.GET)
+    public List<ProblemListHTML> findAllProblemHTMLTables(@PathVariable("patientId") String patientId,
                                                 @RequestParam(required = false) String source) {
         final RepoSource sourceType = RepoSourceType.fromString(source);
         final ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
 
-        return problemSearch.findAllProblems(patientId);
-    }
-
-    @RequestMapping(value = "/headlines", method = RequestMethod.GET)
-    public List<ProblemHeadline> findProblemHeadlines(@PathVariable("patientId") String patientId,
-                                                      @RequestParam(required = false) String source) {
-        final RepoSource sourceType = RepoSourceType.fromString(source);
-        final ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
-
-        return problemSearch.findProblemHeadlines(patientId);
-    }
-
-    @RequestMapping(value = "/{problemId}", method = RequestMethod.GET)
-    public ProblemDetails findProblem(@PathVariable("patientId") String patientId,
-                                      @PathVariable("problemId") String problemId,
-                                      @RequestParam(required = false) String source) {
-        final RepoSource sourceType = RepoSourceType.fromString(source);
-        final ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
-
-        return problemSearch.findProblem(patientId, problemId);
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    public void createProblem(@PathVariable("patientId") String patientId,
-                              @RequestParam(required = false) String source,
-                              @RequestBody ProblemDetails problem) {
-        final RepoSource sourceType = RepoSourceType.fromString(source);
-        final ProblemStore problemStore = problemStoreFactory.select(sourceType);
-
-        problemStore.create(patientId, problem);
-    }
-
-    @RequestMapping(method = RequestMethod.PUT)
-    public void updateProblem(@PathVariable("patientId") String patientId,
-                              @RequestParam(required = false) String source,
-                              @RequestBody ProblemDetails problem) {
-        final RepoSource sourceType = RepoSourceType.fromString(source);
-        final ProblemStore problemStore = problemStoreFactory.select(sourceType);
-
-        problemStore.update(patientId, problem);
+        return problemSearch.findAllProblemHTMLTables(patientId);
     }
 }

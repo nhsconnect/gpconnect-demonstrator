@@ -58,22 +58,22 @@ angular
         }
       })
 
-      .state('diagnoses-list', {
-        url: '/patients/{patientId:int}/diagnoses',
+      .state('problem-list', {
+        url: '/patients/{patientId:int}/problem',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/diagnoses/diagnoses-list.html', controller: 'DiagnosesListCtrl' }
+          main: { templateUrl: 'views/problem/problem-list.html', controller: 'ProblemListCtrl' }
         }
       })
 
-      .state('diagnoses-detail', {
-        url: '/patients/{patientId:int}/diagnoses/{diagnosisIndex}?filter&source',
+      .state('problem-detail', {
+        url: '/patients/{patientId:int}/problem/{problemIndex}?filter&source',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/diagnoses/diagnoses-list.html', controller: 'DiagnosesListCtrl' },
-          detail: { templateUrl: 'views/diagnoses/diagnoses-detail.html', controller: 'DiagnosesDetailCtrl' }
+          main: { templateUrl: 'views/problem/problem-list.html', controller: 'ProblemListCtrl' },
+          detail: { templateUrl: 'views/problem/problem-detail.html', controller: 'ProblemDetailCtrl' }
         }
       })
 

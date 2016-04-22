@@ -47,11 +47,11 @@ angular.module('gpConnect')
       return $http.put('/api/patients', sendPatient);
     };
 
-    var update = function (patient, updatedDiagnosis) {
-      var diagnosis = _.findWhere(patient.diagnoses, {
-        id: updatedDiagnosis.id
+    var update = function (patient, updatedProblem) {
+      var problem = _.findWhere(patient.problem, {
+        id: updatedProblem.id
       });
-      angular.extend(diagnosis, updatedDiagnosis);
+      angular.extend(problem, updatedProblem);
     };
 
     var swapArrayElements = function (arr, indexA, indexB) {

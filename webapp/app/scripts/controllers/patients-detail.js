@@ -18,8 +18,8 @@ angular.module('gpConnect')
       case 'summary':
         toState = 'patients-summary';
         break;
-      case 'diagnosis':
-        toState = 'diagnoses-list';
+      case 'problem':
+        toState = 'problem-list';
         break;
       case 'allergies':
         toState = 'allergies';

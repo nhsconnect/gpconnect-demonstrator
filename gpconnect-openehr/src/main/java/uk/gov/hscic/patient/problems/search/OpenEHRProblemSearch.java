@@ -22,9 +22,10 @@ import uk.gov.hscic.common.service.AbstractOpenEhrService;
 import uk.gov.hscic.patient.problems.model.ProblemDetails;
 import uk.gov.hscic.patient.problems.model.ProblemHeadline;
 import uk.gov.hscic.patient.problems.model.ProblemSummary;
-import uk.gov.hscic.patient.problems.search.ProblemSearch;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import uk.gov.hscic.common.exception.ConfigurationException;
+import uk.gov.hscic.patient.problems.model.ProblemListHTML;
 
 /**
  */
@@ -34,28 +35,24 @@ public class OpenEHRProblemSearch extends AbstractOpenEhrService implements Prob
     @Value("${c4hOpenEHR.address}")
     private String openEhrAddress;
 
-    @Override
     public List<ProblemHeadline> findProblemHeadlines(String patientId) {
         ProblemHeadlineQueryStrategy query = new ProblemHeadlineQueryStrategy(patientId);
 
         return findData(query);
     }
 
-    @Override
     public List<ProblemSummary> findAllProblems(String patientId) {
         ProblemSummaryQueryStrategy query = new ProblemSummaryQueryStrategy(patientId);
 
         return findData(query);
     }
 
-    @Override
     public ProblemDetails findProblem(String patientId, String problemId) {
         ProblemDetailsQueryStrategy query = new ProblemDetailsQueryStrategy(patientId, problemId);
 
         return findData(query);
     }
 
-    @Override
     public List<Condition> findAllFhirConditions(String patientId) {
         String ehrId = new EhrIdLookup().transform(patientId);
 
@@ -64,7 +61,6 @@ public class OpenEHRProblemSearch extends AbstractOpenEhrService implements Prob
         return findData(query);
     }
 
-    @Override
     public Condition findFhirCondition(String patientId, String conditionId) {
         String ehrId = new EhrIdLookup().transform(patientId);
 
@@ -72,4 +68,11 @@ public class OpenEHRProblemSearch extends AbstractOpenEhrService implements Prob
 
         return findData(query);
     }
+
+    @Override
+    public List<ProblemListHTML> findAllProblemHTMLTables(String patientId) {
+        throw ConfigurationException.unimplementedTransaction(ProblemSearch.class);
+    }
+    
+    
 }

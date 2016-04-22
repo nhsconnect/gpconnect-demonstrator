@@ -1,0 +1,14 @@
+<h3><strong>Problems</strong></h3>
+
+<div class="providerHTMLTables" ng-repeat="problemTable in problemTables">
+  <h4><strong>{{ problemTable.provider }}</strong></h4>
+
+  <div ng-bind-html="problemTable.html">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <span class="patientSummary-spinner" us-spinner="{radius:20, width:8, length: 16}" spinner-key="problemSummary-spinner" spinner-start-active="true"></span>
+  </div>
+</div>

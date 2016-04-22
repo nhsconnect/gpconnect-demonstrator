@@ -2094,7 +2094,7 @@ i.fa.cancel-reportType.fa-times {
 
 .allergyForm .row,
 .medicationForm .row,
-.diagnosisForm > .row {
+.problemForm > .row {
   margin-right: 0px;
   margin-left: 0px;
 }
@@ -2110,18 +2110,18 @@ i.fa.cancel-reportType.fa-times {
 }
 
 
-.diagnosisForm .input-group,
+.problemForm .input-group,
 .medicationForm .input-group
 {
   width: 100%;
   padding-top: 8px;
 }
 
-.diagnosisForm .linkButton {
+.problemForm .linkButton {
   height: 30px;
 }
 
-.diagnosisForm label.control-label.codeLabel
+.problemForm label.control-label.codeLabel
 {
   padding-top: 8px;
 }
@@ -2131,7 +2131,7 @@ i.fa.cancel-reportType.fa-times {
   padding-top: 13px;
 }
 
-.diagnosisForm label.control-label.rightColumnLabel {
+.problemForm label.control-label.rightColumnLabel {
   padding-top: 7px;
 }
 

@@ -11,7 +11,6 @@ import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.hscic.patient.details.model.PatientEntity;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

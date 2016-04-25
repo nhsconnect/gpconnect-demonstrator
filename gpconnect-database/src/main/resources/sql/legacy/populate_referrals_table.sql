@@ -2,7 +2,8 @@ INSERT INTO gpconnect.referrals
   (id, html, provider)
 VALUES (
   1,
-  "<table class=\"table table-bordered table-striped table-hover\">
+  "<h5>Current<h5>
+  <table class=\"table table-bordered table-striped table-hover\">
     <tr>
       <th>Date</th>
       <th>From</th>

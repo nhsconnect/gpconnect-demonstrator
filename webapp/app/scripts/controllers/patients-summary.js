@@ -1,12 +1,19 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('PatientsSummaryCtrl', function ($scope, $stateParams, $state, $rootScope, $location, usSpinnerService, PatientService) {
+  .controller('PatientsSummaryCtrl', function ($scope, $stateParams, $state, $rootScope, $location, $sce, usSpinnerService, PatientService) {
 
     $scope.patients = $stateParams.patientsList;
 
     PatientService.get($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
+    });
+    
+    PatientService.getSummary($stateParams.patientId).then(function (patientSummaries) {
+      $scope.patientSummaries = patientSummaries.data;
+      for (var i = 0; i < $scope.patientSummaries.length; i++) {
+        $scope.patientSummaries[i].html = $sce.trustAsHtml($scope.patientSummaries[i].html);
+      }
       usSpinnerService.stop('patientSummary-spinner');
     });
 

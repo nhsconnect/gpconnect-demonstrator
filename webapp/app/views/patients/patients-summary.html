@@ -1,5 +1,15 @@
 <div class="row">
 
+    <div id='patientSummary'>
+        <h3><strong>Patient Summary</strong></h3>
+
+        <div class="providerHTMLTables" ng-repeat="patientSummary in patientSummaries">
+          <h4><strong>{{ patientSummary.provider }}</strong></h4>
+          <div ng-bind-html="patientSummary.html">
+          </div>
+        </div>
+    </div>
+    
   <!-- START Main Content Area -->
   <div class="main col-sm-12 col-md-12 patient-dashboard opaque-bg">
       <div class="row">

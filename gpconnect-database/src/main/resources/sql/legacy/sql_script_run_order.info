@@ -7,3 +7,4 @@ populate_medications_table.sql
 populate_problems_table.sql
 populate_referrals_table.sql
 populate_encounters_table.sql
+populate_patientsummary_table.sql

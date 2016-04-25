@@ -24,6 +24,10 @@ angular.module('gpConnect')
       });
     };
 
+    var getSummary = function (id) {
+      return $http.get('/api/patients/' + id + '/patientsummary/htmlTables');
+    };
+    
     var create = function (patient) {
       var sendPatient = {
         address1: patient.address1,
@@ -108,6 +112,7 @@ angular.module('gpConnect')
     return {
       all: all,
       get: get,
+      getSummary: getSummary,
       update: update,
       summaries: summaries,
       create: create

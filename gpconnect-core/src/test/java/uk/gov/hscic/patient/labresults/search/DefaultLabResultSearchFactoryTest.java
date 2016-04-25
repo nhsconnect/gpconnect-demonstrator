@@ -15,9 +15,6 @@
  */
 package uk.gov.hscic.patient.labresults.search;
 
-import uk.gov.hscic.patient.labresults.search.DefaultLabResultSearchFactory;
-import uk.gov.hscic.patient.labresults.search.LabResultSearchFactory;
-import uk.gov.hscic.patient.labresults.search.LabResultSearch;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;

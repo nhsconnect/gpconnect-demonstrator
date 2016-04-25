@@ -54,14 +54,14 @@ public class LegacyJPATransactionalConfig {
 
     @Bean
     public EntityManagerFactory legacyEntityManagerFactory() {
-        Database database = Database.valueOf(vendor.toUpperCase());
+        final Database database = Database.valueOf(vendor.toUpperCase());
 
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setShowSql(showSql);
         vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setDatabase(database);
 
-        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+        final LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("uk.gov.hscic");
         factory.setDataSource(legacyDataSource);
@@ -72,8 +72,9 @@ public class LegacyJPATransactionalConfig {
 
     @Bean
     public PlatformTransactionManager legacyTransactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        final JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(legacyEntityManagerFactory());
+
         return transactionManager;
     }
 }

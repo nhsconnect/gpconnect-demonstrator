@@ -8,7 +8,7 @@ import uk.gov.hscic.patient.problems.model.ProblemListHTML;
 public class ProblemEntityToListTransformer implements Transformer<ProblemEntity, ProblemListHTML> {
 
     @Override
-    public ProblemListHTML transform(ProblemEntity problemEntity) {
+    public ProblemListHTML transform(final ProblemEntity problemEntity) {
         final ProblemListHTML problemList = new ProblemListHTML();
 
         problemList.setSourceId(String.valueOf(problemEntity.getId()));

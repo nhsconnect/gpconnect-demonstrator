@@ -15,8 +15,6 @@
  */
 package uk.gov.hscic.common.types;
 
-import uk.gov.hscic.common.types.RepoSource;
-
 /**
  */
 public enum TestSourceType implements RepoSource {

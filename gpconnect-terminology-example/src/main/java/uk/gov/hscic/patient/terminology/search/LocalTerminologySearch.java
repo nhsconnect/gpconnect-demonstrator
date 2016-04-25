@@ -51,14 +51,14 @@ public class LocalTerminologySearch implements TerminologySearch {
     }
 
     @Override
-    public List<Terminology> findTerms(String type) {
-        String[] keyList = StringUtils.split(localTerminologyResources.getProperty(type + ".type"), ",");
+    public List<Terminology> findTerms(final String type) {
+        final String[] keyList = StringUtils.split(localTerminologyResources.getProperty(type + ".type"), ",");
 
-        List<Terminology> terminologyList = new ArrayList<>();
+        final List<Terminology> terminologyList = new ArrayList<>();
 
-        for (String key : keyList) {
-            String code = localTerminologyResources.getProperty(key + ".code");
-            String text = localTerminologyResources.getProperty(key + ".text");
+        for (final String key : keyList) {
+            final String code = localTerminologyResources.getProperty(key + ".code");
+            final String text = localTerminologyResources.getProperty(key + ".text");
 
             terminologyList.add(new Terminology(code, text));
         }

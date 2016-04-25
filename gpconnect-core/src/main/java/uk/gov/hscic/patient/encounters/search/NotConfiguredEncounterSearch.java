@@ -36,7 +36,7 @@ public class NotConfiguredEncounterSearch implements EncounterSearch {
     }
 
     @Override
-    public List<EncounterListHTML> findAllEncounterHTMLTables(String patientId) {
+    public List<EncounterListHTML> findAllEncounterHTMLTables(final String patientId) {
         throw ConfigurationException.unimplementedTransaction(EncounterSearch.class);
     }
 }

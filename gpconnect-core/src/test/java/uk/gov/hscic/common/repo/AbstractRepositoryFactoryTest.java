@@ -15,11 +15,6 @@
  */
 package uk.gov.hscic.common.repo;
 
-import uk.gov.hscic.common.repo.Repository;
-import uk.gov.hscic.common.repo.RepositoryFactory;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,11 +22,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.common.types.TestSourceType;
-import org.springframework.context.ApplicationContext;
-import org.springframework.test.util.ReflectionTestUtils;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 /**
  */
@@ -55,21 +53,19 @@ public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<
 
     @Test
     public void shouldReturnDefaultImplementationWhenNoneAreConfigured() {
-
         initContext(0);
 
-        R repository = factory.select(null);
+        final R repository = factory.select(null);
         assertEquals(RepoSourceType.NONE, repository.getSource());
     }
 
     @Test
     public void shouldReturnSameImplementationRegardlessOfSourceWhenOnlyOneIsConfigured() {
-
         initContext(1);
 
-        R nullSource = factory.select(null);
-        R source1 = factory.select(TestSourceType.SOURCE1);
-        R source2 = factory.select(TestSourceType.SOURCE2);
+        final R nullSource = factory.select(null);
+        final R source1 = factory.select(TestSourceType.SOURCE1);
+        final R source2 = factory.select(TestSourceType.SOURCE2);
 
         TestSourceType expected = TestSourceType.SOURCE1;
         assertEquals(expected, nullSource.getSource());
@@ -79,40 +75,38 @@ public abstract class AbstractRepositoryFactoryTest<F extends RepositoryFactory<
 
     @Test
     public void shouldReturnCorrectImplementationWhenSourceIsSpecified() {
-
         initContext(4);
 
-        R source = factory.select(TestSourceType.SOURCE2);
+        final R source = factory.select(TestSourceType.SOURCE2);
 
         assertEquals(TestSourceType.SOURCE2, source.getSource());
     }
 
     @Test
     public void shouldReturnLowestPriorityImplementationWhenInvalidSourceIsSpecified() {
-
         initContext(2);
 
-        R source = factory.select(null);
+        final R source = factory.select(null);
 
         assertEquals(TestSourceType.SOURCE1, source.getSource());
     }
 
     private void initContext(int count) {
+        final Class<R> cls = getRepositoryClass();
+        final Map<String, R> repositoryMap = configureRepository(cls, count);
 
-        Class<R> cls = getRepositoryClass();
-
-        Map<String, R> repositoryMap = configureRepository(cls, count);
         when(mockApplicationContext.getBeansOfType(cls)).thenReturn(repositoryMap);
 
         ReflectionTestUtils.invokeMethod(factory, "postConstruct");
     }
 
     private Map<String, R> configureRepository(Class<R> cls, int count) {
+        final Map<String, R> repositoryMap = new HashMap<>();
 
-        Map<String, R> repositoryMap = new HashMap<>();
         for (int i = 1; i <= count; i++) {
-            RepoSource source = TestSourceType.fromString("Source " + i);
-            R repository = Mockito.mock(cls);
+            final RepoSource source = TestSourceType.fromString("Source " + i);
+            final R repository = Mockito.mock(cls);
+
             when(repository.getSource()).thenReturn(source);
             when(repository.getPriority()).thenReturn(i);
 

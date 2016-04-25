@@ -15,13 +15,12 @@
  */
 package uk.gov.hscic.patient.appointments.search;
 
-import uk.gov.hscic.patient.appointments.search.NotConfiguredAppointmentSearch;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSourceType;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  */

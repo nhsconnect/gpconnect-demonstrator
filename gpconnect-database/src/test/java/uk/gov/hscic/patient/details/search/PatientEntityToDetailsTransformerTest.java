@@ -34,8 +34,8 @@ public class PatientEntityToDetailsTransformerTest {
 
     @Test
     public void shouldRemoveEmptyLinesFromAddressString() {
+        final PatientEntity patientEntity = dummyPatientEntity();
 
-        PatientEntity patientEntity = dummyPatientEntity();
         patientEntity.setAddress1("line 1");
         patientEntity.setAddress2(null);
         patientEntity.setAddress3("line 3");
@@ -43,24 +43,23 @@ public class PatientEntityToDetailsTransformerTest {
         patientEntity.setAddress5("line 5");
         patientEntity.setPostcode("postcode");
 
-        PatientDetails patientDetails = transformer.transform(patientEntity);
-        assertNotNull(patientDetails);
+        final PatientDetails patientDetails = transformer.transform(patientEntity);
 
+        assertNotNull(patientDetails);
         assertEquals("line 1, line 3, postcode", patientDetails.getAddress());
     }
 
     @Test
     public void shouldReturnEmptyMedicationListWhenMedicationSearchThrowsException() {
+        final PatientEntity patientEntity = dummyPatientEntity();
 
-        PatientEntity patientEntity = dummyPatientEntity();
-
-        PatientDetails patientDetails = transformer.transform(patientEntity);
+        final PatientDetails patientDetails = transformer.transform(patientEntity);
 
         assertNotNull(patientDetails);
     }
 
     private PatientEntity dummyPatientEntity() {
-        PatientEntity patient = new PatientEntity();
+        final PatientEntity patient = new PatientEntity();
         patient.setNhsNumber(PATIENT_ID);
         patient.setGp(new GPEntity());
 

@@ -25,7 +25,7 @@ public class NotConfiguredAllergySearch implements AllergySearch {
     }
 
     @Override
-    public List<AllergyListHTML> findAllAllergyHTMLTables(String patientId) {
+    public List<AllergyListHTML> findAllAllergyHTMLTables(final String patientId) {
         throw ConfigurationException.unimplementedTransaction(AllergySearch.class);
     }
 }

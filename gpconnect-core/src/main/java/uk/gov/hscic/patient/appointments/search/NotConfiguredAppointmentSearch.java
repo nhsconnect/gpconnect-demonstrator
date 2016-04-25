@@ -38,12 +38,12 @@ public class NotConfiguredAppointmentSearch implements AppointmentSearch {
     }
 
     @Override
-    public List<AppointmentSummary> findAllAppointments(String patientId) {
+    public List<AppointmentSummary> findAllAppointments(final String patientId) {
         throw ConfigurationException.unimplementedTransaction(AppointmentSearch.class);
     }
 
     @Override
-    public AppointmentDetails findAppointment(String patientId, String appointmentId) {
+    public AppointmentDetails findAppointment(final String patientId, final String appointmentId) {
         throw ConfigurationException.unimplementedTransaction(AppointmentSearch.class);
     }
 }

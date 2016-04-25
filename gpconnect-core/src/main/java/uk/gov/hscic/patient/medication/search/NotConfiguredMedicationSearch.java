@@ -19,7 +19,7 @@ public class NotConfiguredMedicationSearch implements MedicationSearch {
     }
 
     @Override
-    public List<MedicationListHTML> findMedicationHTMLTables(String patientId) {
+    public List<MedicationListHTML> findMedicationHTMLTables(final String patientId) {
         throw ConfigurationException.unimplementedTransaction(MedicationSearch.class);
     }
 }

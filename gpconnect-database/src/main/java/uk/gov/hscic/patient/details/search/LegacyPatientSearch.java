@@ -52,45 +52,48 @@ public class LegacyPatientSearch extends AbstractLegacyService implements Patien
 
     @Override
     public List<PatientSummary> findAllPatients() {
-        Sort sort = new Sort("nhsNumber");
-        Iterable<PatientEntity> patients = patientRepository.findAll(sort);
+        final Sort sort = new Sort("nhsNumber");
+        final Iterable<PatientEntity> patients = patientRepository.findAll(sort);
+
         return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
     }
 
     @Override
-    public PatientDetails findPatient(String patientId) {
-        PatientEntity patient = patientRepository.findByNhsNumber(patientId);
+    public PatientDetails findPatient(final String patientId) {
+        final PatientEntity patient = patientRepository.findByNhsNumber(patientId);
+
         return patientEntityToDetailsTransformer.transform(patient);
     }
 
     @Override
-    public PatientSummary findPatientSummary(String patientId) {
-        PatientEntity patient = patientRepository.findByNhsNumber(patientId);
+    public PatientSummary findPatientSummary(final String patientId) {
+        final PatientEntity patient = patientRepository.findByNhsNumber(patientId);
+
         return patientEntityToSummaryTransformer.transform(patient);
     }
 
     @Override
-    public List<PatientSummary> findPatientsByQueryObject(PatientQueryParams params) {
-        BooleanBuilder predicate = generateAdvancedSearchPredicate(params);
+    public List<PatientSummary> findPatientsByQueryObject(final PatientQueryParams params) {
+        final BooleanBuilder predicate = generateAdvancedSearchPredicate(params);
+        final Iterable<PatientEntity> patients = patientRepository.findAll(predicate);
 
-        Iterable<PatientEntity> patients = patientRepository.findAll(predicate);
         return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
     }
 
-    private BooleanBuilder generateAdvancedSearchPredicate(PatientQueryParams params) {
-        QPatientEntity blueprint = QPatientEntity.patientEntity;
-        BooleanBuilder predicate = new BooleanBuilder();
+    private BooleanBuilder generateAdvancedSearchPredicate(final PatientQueryParams params) {
+        final QPatientEntity blueprint = QPatientEntity.patientEntity;
+        final BooleanBuilder predicate = new BooleanBuilder();
 
-        String nhsNumber = params.getNhsNumber();
+        final String nhsNumber = params.getNhsNumber();
 
         if (nhsNumber != null) {
             predicate.and(blueprint.nhsNumber.eq(nhsNumber));
         }
         else {
-            String surname = StringUtils.stripToNull(params.getSurname());
-            String forename = StringUtils.stripToNull(params.getForename());
-            Date dateOfBirth = params.getDateOfBirth();
-            String gender = StringUtils.stripToNull(params.getGender());
+            final String surname = StringUtils.stripToNull(params.getSurname());
+            final String forename = StringUtils.stripToNull(params.getForename());
+            final Date dateOfBirth = params.getDateOfBirth();
+            final String gender = StringUtils.stripToNull(params.getGender());
 
             if (surname != null) {
                 predicate.and(blueprint.lastName.like(surname));
@@ -99,7 +102,7 @@ public class LegacyPatientSearch extends AbstractLegacyService implements Patien
                 predicate.and(blueprint.firstName.like(forename));
             }
             if (dateOfBirth != null) {
-                Date truncatedDateOfBirth = DateUtils.truncate(dateOfBirth, Calendar.DATE);
+                final Date truncatedDateOfBirth = DateUtils.truncate(dateOfBirth, Calendar.DATE);
 
                 predicate.and(blueprint.dateOfBirth.eq(truncatedDateOfBirth));
             }

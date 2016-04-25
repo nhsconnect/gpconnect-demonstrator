@@ -34,8 +34,8 @@ public class LegacyEncounterSearch extends AbstractLegacyService implements Enco
     private EncounterRepository encounterRepository;
 
     @Override
-    public List<EncounterListHTML> findAllEncounterHTMLTables(String patientId) {
-        List<EncounterEntity> encounters = encounterRepository.findAll();
+    public List<EncounterListHTML> findAllEncounterHTMLTables(final String patientId) {
+        final List<EncounterEntity> encounters = encounterRepository.findAll();
 
         return CollectionUtils.collect(encounters, new EncounterEntityToListTransformer(), new ArrayList<>());
     }

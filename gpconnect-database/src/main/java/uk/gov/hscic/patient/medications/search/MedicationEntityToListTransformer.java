@@ -8,7 +8,7 @@ import uk.gov.hscic.patient.medications.model.MedicationEntity;
 public class MedicationEntityToListTransformer implements Transformer<MedicationEntity, MedicationListHTML> {
 
     @Override
-    public MedicationListHTML transform(MedicationEntity medicationEntity) {
+    public MedicationListHTML transform(final MedicationEntity medicationEntity) {
         final MedicationListHTML medicationList = new MedicationListHTML();
 
         medicationList.setSourceId(String.valueOf(medicationEntity.getId()));

@@ -38,7 +38,7 @@ public class RestConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public RequestMappingHandlerMapping requestMappingHandlerMapping() {
-        RequestMappingHandlerMapping handlerMapping = new RequestMappingHandlerMapping();
+        final RequestMappingHandlerMapping handlerMapping = new RequestMappingHandlerMapping();
         handlerMapping.setUseSuffixPatternMatch(false);
 
         return handlerMapping;

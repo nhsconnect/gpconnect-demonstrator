@@ -21,7 +21,7 @@ public class NotConfiguredProblemSearch implements ProblemSearch {
     }
 
     @Override
-    public List<ProblemListHTML> findAllProblemHTMLTables(String patientId) {
+    public List<ProblemListHTML> findAllProblemHTMLTables(final String patientId) {
         throw ConfigurationException.unimplementedTransaction(ProblemSearch.class);
     }
 

@@ -43,10 +43,12 @@ public class BrokerConfig extends CamelConfiguration {
     
     @Bean
     public BrokerService brokerService() throws Exception {
-        BrokerService brokerService = new BrokerService();
+        final BrokerService brokerService = new BrokerService();
+
         brokerService.setBrokerName(dataName);
         brokerService.addConnector("vm://"+dataName);
         brokerService.setDataDirectory(dataDirectory);
+
         return brokerService;
     }
 
@@ -58,7 +60,8 @@ public class BrokerConfig extends CamelConfiguration {
 
     @Bean(name = "activemq")
 	public ActiveMQConnectionFactory activeMQConnectionFactory() throws Exception {
-		ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
+		final ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
+
 		activeMQConnectionFactory.setBrokerURL("vm://"+dataName+"?create=false");
         activeMQConnectionFactory.setTrustAllPackages(true);
 

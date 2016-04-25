@@ -15,7 +15,6 @@
  */
 package uk.gov.hscic.patient.summary.search;
 
-import uk.gov.hscic.patient.summary.search.NotConfiguredPatientSearch;
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.hscic.common.exception.ConfigurationException;

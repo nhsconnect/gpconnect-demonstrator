@@ -24,11 +24,11 @@ import org.springframework.stereotype.Component;
 public class PatientEntityToSummaryTransformer implements Transformer<PatientEntity, PatientSummary> {
 
     @Override
-    public PatientSummary transform(PatientEntity patientEntity) {
-        PatientSummary patientSummary = new PatientSummary();
+    public PatientSummary transform(final PatientEntity patientEntity) {
+        final PatientSummary patientSummary = new PatientSummary();
 
-        String name = patientEntity.getFirstName() + " " + patientEntity.getLastName();
-        String address = patientEntity.getAddress1() + ", " +
+        final String name = patientEntity.getFirstName() + " " + patientEntity.getLastName();
+        final String address = patientEntity.getAddress1() + ", " +
             patientEntity.getAddress2() + ", " +
             patientEntity.getAddress3() + ", " +
             patientEntity.getPostcode();

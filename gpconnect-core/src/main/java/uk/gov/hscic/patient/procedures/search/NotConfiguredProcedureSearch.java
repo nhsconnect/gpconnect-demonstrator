@@ -37,12 +37,12 @@ public class NotConfiguredProcedureSearch implements ProcedureSearch {
     }
 
     @Override
-    public List<ProcedureSummary> findAllProcedures(String patientId) {
+    public List<ProcedureSummary> findAllProcedures(final String patientId) {
         throw ConfigurationException.unimplementedTransaction(ProcedureSearch.class);
     }
 
     @Override
-    public ProcedureDetails findProcedure(String patientId, String procedureId) {
+    public ProcedureDetails findProcedure(final String patientId, final String procedureId) {
         throw ConfigurationException.unimplementedTransaction(ProcedureSearch.class);
     }
 

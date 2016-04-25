@@ -46,7 +46,8 @@ public class LegacyDataConfig {
 
     @Bean(destroyMethod = "close")
     public DataSource legacyDataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
+        final BasicDataSource dataSource = new BasicDataSource();
+
         dataSource.setDriverClassName(Driver.class.getName());
         dataSource.setUrl("jdbc:" + vendor + "://" + host + ":" + port + "/" + schema);
         dataSource.setUsername(username);

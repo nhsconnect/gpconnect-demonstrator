@@ -42,7 +42,7 @@ public enum RepoSourceType implements RepoSource {
             return null;
         }
 
-        for (RepoSource enumValue : RepoSourceType.values()) {
+        for (final RepoSource enumValue : RepoSourceType.values()) {
             if (enumValue.getSourceName().equalsIgnoreCase(sourceName)) {
                 return enumValue;
             }

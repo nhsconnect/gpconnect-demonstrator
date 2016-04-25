@@ -37,7 +37,7 @@ public abstract class AbstractRepositoryFactory<R extends Repository> implements
     protected abstract Class<R> repositoryClass();
 
     @Override
-    public R select(RepoSource source) {
+    public R select(final RepoSource source) {
 
         R repository = selectSpecifiedRepository(source);
 
@@ -52,17 +52,17 @@ public abstract class AbstractRepositoryFactory<R extends Repository> implements
         return repository;
     }
 
-    private R selectSpecifiedRepository(RepoSource source) {
+    private R selectSpecifiedRepository(final RepoSource source) {
         return repositories.get(source);
     }
 
     private R selectRepositoryByPriority() {
-
         int currentPriority = Integer.MAX_VALUE;
         R selectedRepository = null;
-        for (R repository : repositories.values()) {
 
-            int priority = repository.getPriority();
+        for (R repository : repositories.values()) {
+            final int priority = repository.getPriority();
+
             if (priority < currentPriority) {
                 currentPriority = priority;
                 selectedRepository = repository;
@@ -74,7 +74,7 @@ public abstract class AbstractRepositoryFactory<R extends Repository> implements
 
     @PostConstruct
     public void postConstruct() {
-        Map<String, R> beans = applicationContext.getBeansOfType(repositoryClass());
+        final Map<String, R> beans = applicationContext.getBeansOfType(repositoryClass());
 
         for (R repository : beans.values()) {
             repositories.put(repository.getSource(), repository);

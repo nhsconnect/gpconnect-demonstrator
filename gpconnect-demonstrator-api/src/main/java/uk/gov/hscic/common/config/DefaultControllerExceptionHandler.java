@@ -32,19 +32,19 @@ public class DefaultControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ExceptionHandler(DataNotFoundException.class)
-    public String handleDataNotFoundException(DataNotFoundException ex) {
+    public String handleDataNotFoundException(final DataNotFoundException ex) {
         return ex.getMessage();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidDataException.class)
-    public String handleInvalidDataException(InvalidDataException ex) {
+    public String handleInvalidDataException(final InvalidDataException ex) {
         return ex.getMessage();
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ConfigurationException.class)
-    public String handleConfigurationException(ConfigurationException ex) {
+    public String handleConfigurationException(final ConfigurationException ex) {
         return ex.getMessage();
     }
 }

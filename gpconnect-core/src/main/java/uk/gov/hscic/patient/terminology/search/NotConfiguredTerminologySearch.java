@@ -34,7 +34,7 @@ public class NotConfiguredTerminologySearch implements TerminologySearch {
     }
 
     @Override
-    public List<Terminology> findTerms(String type) {
+    public List<Terminology> findTerms(final String type) {
         throw ConfigurationException.unimplementedTransaction(TerminologySearch.class);
     }
 }

@@ -8,7 +8,7 @@ import uk.gov.hscic.patient.referrals.model.ReferralEntity;
 public class ReferralEntityToListTransformer implements Transformer<ReferralEntity, ReferralListHTML> {
 
     @Override
-    public ReferralListHTML transform(ReferralEntity referralEntity) {
+    public ReferralListHTML transform(final ReferralEntity referralEntity) {
         final ReferralListHTML referralList = new ReferralListHTML();
 
         referralList.setSourceId(String.valueOf(referralEntity.getId()));

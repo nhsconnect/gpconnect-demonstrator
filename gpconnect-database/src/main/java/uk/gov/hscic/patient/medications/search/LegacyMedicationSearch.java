@@ -19,7 +19,7 @@ public class LegacyMedicationSearch extends AbstractLegacyService implements Med
     private MedicationRepository medicationRepository;
 
     @Override
-    public List<MedicationListHTML> findMedicationHTMLTables(String patientId) {
+    public List<MedicationListHTML> findMedicationHTMLTables(final String patientId) {
         final List<MedicationEntity> medicationTables = medicationRepository.findAll();
 
         return CollectionUtils.collect(medicationTables, new MedicationEntityToListTransformer(), new ArrayList<>());

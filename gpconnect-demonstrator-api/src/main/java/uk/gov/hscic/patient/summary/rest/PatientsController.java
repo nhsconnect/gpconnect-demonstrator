@@ -17,13 +17,6 @@ package uk.gov.hscic.patient.summary.rest;
 
 import java.util.List;
 
-import uk.gov.hscic.common.types.RepoSource;
-import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.summary.model.PatientDetails;
-import uk.gov.hscic.patient.summary.model.PatientQueryParams;
-import uk.gov.hscic.patient.summary.model.PatientSummary;
-import uk.gov.hscic.patient.summary.search.PatientSearch;
-import uk.gov.hscic.patient.summary.search.PatientSearchFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +24,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.hscic.common.types.RepoSource;
+import uk.gov.hscic.common.types.RepoSourceType;
+import uk.gov.hscic.patient.summary.model.PatientDetails;
+import uk.gov.hscic.patient.summary.model.PatientQueryParams;
+import uk.gov.hscic.patient.summary.model.PatientSummary;
+import uk.gov.hscic.patient.summary.search.PatientSearch;
+import uk.gov.hscic.patient.summary.search.PatientSearchFactory;
 
 /**
  */

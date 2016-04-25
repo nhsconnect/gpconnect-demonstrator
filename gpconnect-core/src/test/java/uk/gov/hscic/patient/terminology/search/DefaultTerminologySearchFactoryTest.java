@@ -15,9 +15,6 @@
  */
 package uk.gov.hscic.patient.terminology.search;
 
-import uk.gov.hscic.patient.terminology.search.DefaultTerminologySearchFactory;
-import uk.gov.hscic.patient.terminology.search.TerminologySearchFactory;
-import uk.gov.hscic.patient.terminology.search.TerminologySearch;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;

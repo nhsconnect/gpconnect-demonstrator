@@ -28,8 +28,7 @@ import org.apache.commons.lang3.time.DateUtils;
  */
 public final class DateFormatter {
 
-    public static Date toDate(String input) {
-
+    public static Date toDate(final String input) {
         if (input == null) {
             return null;
         }
@@ -48,24 +47,24 @@ public final class DateFormatter {
                                        "HH:mm:ss",
                                        "yyyy.MM.dd",
                                        "yyyyMMdd");
-        } catch (ParseException ignore) {
+        } catch (final ParseException ignore) {
             return null;
         }
     }
 
     public static Date toDateOnly(final String input) {
-        Date date = toDate(input);
-        if (date != null) {
-            date = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
+        final Date date = toDate(input);
 
-            return date;
+        if (date != null) {
+            return DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
         }
 
         return null;
     }
 
-    public static Date toTimeOnly(String input) {
+    public static Date toTimeOnly(final String input) {
         Date date = toDate(input);
+
         if (date != null) {
             date = DateUtils.setYears(date,1970);
             date = DateUtils.setMonths(date,0);
@@ -77,7 +76,7 @@ public final class DateFormatter {
         return null;
     }
 
-    public static String toString(Date input) {
+    public static String toString(final Date input) {
         if (input == null) {
             return null;
         }
@@ -85,7 +84,7 @@ public final class DateFormatter {
         return DateFormatUtils.format(input, "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     }
 
-    public static String toJSONDateString(Date input) {
+    public static String toJSONDateString(final Date input) {
         if (input == null) {
             return null;
         }
@@ -93,10 +92,9 @@ public final class DateFormatter {
         return DateFormatUtils.format(input, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     }
 
-    public static String combineDateTime(Date date, Date time) {
-
-        String dateAsString = toString(date);
-        String timeAsString = toString(time);
+    public static String combineDateTime(final Date date, final Date time) {
+        final String dateAsString = toString(date);
+        final String timeAsString = toString(time);
 
         if (dateAsString == null || timeAsString == null) {
             return null;

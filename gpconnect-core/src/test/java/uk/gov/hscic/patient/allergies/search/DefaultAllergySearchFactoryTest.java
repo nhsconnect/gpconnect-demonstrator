@@ -15,9 +15,6 @@
  */
 package uk.gov.hscic.patient.allergies.search;
 
-import uk.gov.hscic.patient.allergies.search.AllergySearch;
-import uk.gov.hscic.patient.allergies.search.AllergySearchFactory;
-import uk.gov.hscic.patient.allergies.search.DefaultAllergySearchFactory;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;

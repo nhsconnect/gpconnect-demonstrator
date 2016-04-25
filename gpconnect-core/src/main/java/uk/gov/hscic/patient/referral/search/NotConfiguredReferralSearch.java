@@ -20,7 +20,7 @@ public class NotConfiguredReferralSearch implements ReferralSearch {
     }
 
     @Override
-    public List<ReferralListHTML> findAllReferralHTMLTables(String patientId) {
+    public List<ReferralListHTML> findAllReferralHTMLTables(final String patientId) {
         throw ConfigurationException.unimplementedTransaction(ReferralSearch.class);
     }
 }

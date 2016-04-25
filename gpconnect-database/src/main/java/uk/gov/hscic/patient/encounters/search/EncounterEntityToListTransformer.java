@@ -24,7 +24,7 @@ import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
 public class EncounterEntityToListTransformer implements Transformer<EncounterEntity, EncounterListHTML> {
 
     @Override
-    public EncounterListHTML transform(EncounterEntity encounterEntity) {
+    public EncounterListHTML transform(final EncounterEntity encounterEntity) {
         final EncounterListHTML encounterList = new EncounterListHTML();
 
         encounterList.setSourceId(String.valueOf(encounterEntity.getId()));

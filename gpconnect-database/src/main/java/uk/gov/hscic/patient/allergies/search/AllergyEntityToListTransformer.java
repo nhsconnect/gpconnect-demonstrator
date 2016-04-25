@@ -8,7 +8,7 @@ import uk.gov.hscic.patient.allergies.model.AllergyListHTML;
 public class AllergyEntityToListTransformer implements Transformer<AllergyEntity, AllergyListHTML> {
 
     @Override
-    public AllergyListHTML transform(AllergyEntity allergyEntity) {
+    public AllergyListHTML transform(final AllergyEntity allergyEntity) {
         final AllergyListHTML allergyList = new AllergyListHTML();
 
         allergyList.setSourceId(String.valueOf(allergyEntity.getId()));

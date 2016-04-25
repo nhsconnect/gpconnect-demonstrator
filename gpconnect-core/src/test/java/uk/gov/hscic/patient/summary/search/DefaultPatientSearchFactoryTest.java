@@ -15,9 +15,6 @@
  */
 package uk.gov.hscic.patient.summary.search;
 
-import uk.gov.hscic.patient.summary.search.PatientSearch;
-import uk.gov.hscic.patient.summary.search.DefaultPatientSearchFactory;
-import uk.gov.hscic.patient.summary.search.PatientSearchFactory;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;

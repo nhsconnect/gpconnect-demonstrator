@@ -37,12 +37,12 @@ public class NotConfiguredLabResultSearch implements LabResultSearch {
     }
 
     @Override
-    public List<LabResultSummary> findAllLabResults(String patientId) {
+    public List<LabResultSummary> findAllLabResults(final String patientId) {
         throw ConfigurationException.unimplementedTransaction(LabResultSearch.class);
     }
 
     @Override
-    public LabResultDetails findLabResult(String patientId, String labResultId) {
+    public LabResultDetails findLabResult(final String patientId, final String labResultId) {
         throw ConfigurationException.unimplementedTransaction(LabResultSearch.class);
     }
 }

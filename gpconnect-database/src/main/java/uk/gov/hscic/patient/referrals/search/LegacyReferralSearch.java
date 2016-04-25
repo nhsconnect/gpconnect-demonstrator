@@ -19,8 +19,8 @@ public class LegacyReferralSearch extends AbstractLegacyService implements Refer
     private ReferralRepository referralRepository;
 
     @Override
-    public List<ReferralListHTML> findAllReferralHTMLTables(String patientId) {
-        List<ReferralEntity> referralList = referralRepository.findAll();
+    public List<ReferralListHTML> findAllReferralHTMLTables(final String patientId) {
+        final List<ReferralEntity> referralList = referralRepository.findAll();
 
         return CollectionUtils.collect(referralList, new ReferralEntityToListTransformer(), new ArrayList<>());
     }

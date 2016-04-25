@@ -15,9 +15,6 @@
  */
 package uk.gov.hscic.patient.appointments.search;
 
-import uk.gov.hscic.patient.appointments.search.DefaultAppointmentSearchFactory;
-import uk.gov.hscic.patient.appointments.search.AppointmentSearchFactory;
-import uk.gov.hscic.patient.appointments.search.AppointmentSearch;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;

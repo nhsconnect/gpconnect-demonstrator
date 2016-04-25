@@ -39,11 +39,8 @@ angular.module('gpConnect')
       case 'appointments':
         toState = 'appointments';
         break;
-      case 'careplans':
-        toState = 'eolcareplans';
-        break;
-      case 'mdt':
-        toState = 'cancerMdt';
+      case 'encounters':
+        toState = 'encounters';
         break;
       }
       $state.go(toState, requestHeader);

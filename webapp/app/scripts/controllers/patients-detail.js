@@ -27,12 +27,6 @@ angular.module('gpConnect')
       case 'medications':
         toState = 'medications';
         break;
-      case 'results':
-        toState = 'results';
-        break;
-      case 'procedures':
-        toState = 'procedures';
-        break;
       case 'referrals':
         toState = 'referrals';
         break;

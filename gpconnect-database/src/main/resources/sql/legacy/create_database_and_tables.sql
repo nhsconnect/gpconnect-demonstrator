@@ -11,12 +11,7 @@ DROP TABLE IF EXISTS gpconnect.allergies;
 DROP TABLE IF EXISTS gpconnect.medications;
 DROP TABLE IF EXISTS gpconnect.problems;
 DROP TABLE IF EXISTS gpconnect.referrals;
-
-DROP TABLE IF EXISTS gpconnect.transfers_of_care;
-DROP TABLE IF EXISTS gpconnect.allergy_headlines;
-DROP TABLE IF EXISTS gpconnect.contact_headlines;
-DROP TABLE IF EXISTS gpconnect.medication_headlines;
-DROP TABLE IF EXISTS gpconnect.problem_headlines;
+DROP TABLE IF EXISTS gpconnect.encounters;
 
 /* Create new table schemas */
 CREATE TABLE gpconnect.general_practitioners (
@@ -79,14 +74,21 @@ CREATE TABLE gpconnect.problems (
  html                VARCHAR(4096) NULL,
  provider            VARCHAR(10)   NULL,
  PRIMARY KEY         (id)
- );
+);
 
 CREATE TABLE gpconnect.referrals (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                VARCHAR(4096) NULL,
  provider            VARCHAR(10)   NULL,
  PRIMARY KEY         (id)
- );
+);
+
+CREATE TABLE gpconnect.encounters (
+ id                  BIGINT        NOT NULL    AUTO_INCREMENT,
+ html                VARCHAR(4096) NULL,
+ provider            VARCHAR(10)   NULL,
+ PRIMARY KEY         (id)
+);
 
 /* Delete the answer user (grant all to workaround MySQL not supporting 'IF EXISTS' for users) */
 GRANT ALL ON gpconnect.* TO 'answer' IDENTIFIED BY 'answer99q';

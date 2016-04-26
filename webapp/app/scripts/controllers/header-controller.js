@@ -50,8 +50,8 @@ angular.module('gpConnect')
         previousState = 'patients-list';
         pageHeader = 'Patient Summary';
         previousPage = 'Patient Lists';
-        mainWidth = 12;
-        detailWidth = 0;
+        mainWidth = 8;
+        detailWidth = 4;
         break;
       case 'patients-lookup':
         previousState = '';

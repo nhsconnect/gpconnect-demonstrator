@@ -207,6 +207,9 @@ functionality.
 The current tenants programmed into GPConnect are:  
 * gpconnect
 
+Currently the default and only tenant is *gpconnect*, meaning that there is no need to specify the *--tenant* flag on a 
+serve or build. However, the mechanism is there so that different tenants, and their associated profile, can be developed. 
+
 In order to make use of a tenant's version of the site, you may either serve or build the site with the *--tenant* argument 
 appended to the grunt command, e.g.  
 ```sh

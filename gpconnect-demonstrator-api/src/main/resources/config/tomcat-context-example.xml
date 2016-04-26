@@ -7,12 +7,9 @@
     <Environment name="c4hOpenEHR.subjectNamespace" type="java.lang.String" override="false" value="uk.nhs.nhs_number"/>
 
     <Environment name="c4hOpenEHR.allergiesTemplate"    type="java.lang.String" override="false" value="LCR Allergies List.v0"/>
-    <Environment name="c4hOpenEHR.endOfLifeTemplate"    type="java.lang.String" override="false" value="IDCR - End of Life Patient Preferences.v0"/>
-    <Environment name="c4hOpenEHR.mdtReportTemplate"    type="java.lang.String" override="false" value="IDCR - Generic MDT Output Report.v0"/>
     <Environment name="c4hOpenEHR.medicationTemplate"   type="java.lang.String" override="false" value="LCR Medication List.v0"/>
     <Environment name="c4hOpenEHR.problemTemplate"      type="java.lang.String" override="false" value="LCR Problem List.v0"/>
     <Environment name="c4hOpenEHR.proceduresTemplate"   type="java.lang.String" override="false" value="IDCR Procedures List.v0"/>
-    <Environment name="c4hOpenEHR.cancermdtTemplate"    type="java.lang.String" override="false" value="IDCR - Cancer MDT Output Report.v0"/>
     <Environment name="c4hOpenEHR.referralsTemplate"    type="java.lang.String" override="false" value="RIPPLE - Minimal referral.v0"/>
     <Environment name="c4hOpenEHR.appointmentsTemplate" type="java.lang.String" override="false" value="RIPPLE - Minimal referral.v0"/>
 

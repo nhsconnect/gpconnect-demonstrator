@@ -29,8 +29,8 @@ angular.module('gpConnect')
       $scope.currentPage = $stateParams.page;
     }
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
     Encounter.findAllHTMLTables($stateParams.patientId).then(function (result) {

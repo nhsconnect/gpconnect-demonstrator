@@ -5,15 +5,17 @@ angular.module('gpConnect')
 
     $scope.patients = $stateParams.patientsList;
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
-    
+
     PatientService.getSummary($stateParams.patientId).then(function (patientSummaries) {
       $scope.patientSummaries = patientSummaries.data;
+
       for (var i = 0; i < $scope.patientSummaries.length; i++) {
         $scope.patientSummaries[i].html = $sce.trustAsHtml($scope.patientSummaries[i].html);
       }
+
       usSpinnerService.stop('patientSummary-spinner');
     });
 

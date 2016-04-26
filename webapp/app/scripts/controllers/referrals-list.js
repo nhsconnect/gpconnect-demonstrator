@@ -22,8 +22,8 @@ angular.module('gpConnect')
       );
     };
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
     if ($stateParams.filter) {
@@ -32,9 +32,11 @@ angular.module('gpConnect')
 
     Referral.findAllHTMLTables($stateParams.patientId).then(function (result) {
       $scope.referralTables = result.data;
+
       for (var i = 0; i < $scope.referralTables.length; i++) {
          $scope.referralTables[i].html = $sce.trustAsHtml($scope.referralTables[i].html);
       }
+
       usSpinnerService.stop('patientSummary-spinner');
     });
 
@@ -76,15 +78,13 @@ angular.module('gpConnect')
         referral.dateOfReferral.setMinutes(referral.dateOfReferral.getMinutes() - referral.dateOfReferral.getTimezoneOffset());
 
         var toAdd = {
-          sourceId: '',
           author: referral.author,
           clinicalSummary: referral.clinicalSummary,
           dateCreated: new Date(referral.dateCreated),
           dateOfReferral: referral.dateOfReferral,
           reason: referral.reason,
           referralFrom: referral.referralFrom,
-          referralTo: referral.referralTo,
-          source: 'openehr'
+          referralTo: referral.referralTo
         };
 
         Referral.create($scope.patient.id, toAdd).then(function () {

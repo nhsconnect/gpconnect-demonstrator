@@ -3,31 +3,32 @@
 angular.module('gpConnect')
   .factory('Medication', function ($http) {
 
-    var findAllMedications = function (patientId) {
+    var findAllSummaries = function (patientId) {
       return $http.get('/api/patients/' + patientId + '/medications');
     };
 
-    var findMedication = function (patientId, compositionId, source) {
-      return $http.get('/api/patients/' + patientId + '/medications/' + compositionId + '?source=' + source);
+    var findDetails = function (patientId, medicationId, source) {
+      return $http.get('/api/patients/' + patientId + '/medications/' + medicationId + '?source=' + source);
     };
 
     var findAllHTMLTables = function(patientId, source) {
       return $http.get('/api/patients/' + patientId + '/medications/htmlTables' + '?source=' + source);
     };
 
-    var createMedication = function (patientId, composition) {
-      return $http.post('/api/patients/' + patientId + '/medications', composition);
+    var create = function (patientId, medication) {
+      return $http.post('/api/patients/' + patientId + '/medications', medication);
     };
 
-    var updateMedication = function (patientId, composition) {
-      return $http.put('/api/patients/' + patientId + '/medications', composition);
+    var update = function (patientId, medication) {
+      return $http.put('/api/patients/' + patientId + '/medications', medication);
     };
 
     return {
-      findAllMedications: findAllMedications,
-      findMedication: findMedication,
+      findAllSummaries: findAllSummaries,
+      findDetails: findDetails,
       findAllHTMLTables: findAllHTMLTables,
-      createMedication: createMedication,
-      updateMedication: updateMedication
+      create: create,
+      update: update
     };
+
   });

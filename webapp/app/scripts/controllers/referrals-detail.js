@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('ReferralsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, Helper, usSpinnerService, PatientService, Referral) {
+  .controller('ReferralsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, usSpinnerService, PatientService, Referral) {
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
-    Referral.get($stateParams.patientId, $stateParams.referralId).then(function (result) {
+    Referral.findDetails($stateParams.patientId, $stateParams.referralId).then(function (result) {
       $scope.referral = result.data;
       usSpinnerService.stop('referralsDetail-spinner');
     });
@@ -45,14 +45,14 @@ angular.module('gpConnect')
           reason: referral.reason,
           referralFrom: referral.referralFrom,
           referralTo: referral.referralTo,
-          source: 'openehr'
+          source: referral.source
         };
 
         Referral.update($scope.patient.id, toUpdate).then(function () {
           setTimeout(function () {
             $state.go('referrals-detail', {
               patientId: $scope.patient.id,
-              referralId: Helper.updateId(referral.sourceId),
+              referralId: referral.sourceId,
               page: $scope.currentPage
             });
           }, 2000);

@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('AllergiesDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, Helper, usSpinnerService, PatientService, Allergy) {
+  .controller('AllergiesDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, usSpinnerService, PatientService, Allergy) {
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
-    Allergy.get($stateParams.patientId, $stateParams.allergyIndex, $stateParams.source).then(function (result) {
+    Allergy.findDetails($stateParams.patientId, $stateParams.allergyIndex, $stateParams.source).then(function (result) {
       $scope.allergy = result.data;
       usSpinnerService.stop('allergiesDetail-spinner');
     });
@@ -46,7 +46,7 @@ angular.module('gpConnect')
           setTimeout(function () {
             $state.go('allergies-detail', {
               patientId: $scope.patient.id,
-              allergyIndex: allergy.source === 'openehr' ? Helper.updateId(allergy.sourceId) : allergy.sourceId,
+              allergyIndex: allergy.sourceId,
               page: $scope.currentPage
             });
           }, 2000);

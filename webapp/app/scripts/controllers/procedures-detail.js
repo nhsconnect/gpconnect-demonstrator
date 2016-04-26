@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('ProceduresDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, Helper, usSpinnerService, PatientService, Procedure) {
+  .controller('ProceduresDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, usSpinnerService, PatientService, Procedure) {
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
     Procedure.get($stateParams.patientId, $stateParams.procedureId, $stateParams.source).then(function (result) {
@@ -55,7 +55,7 @@ angular.module('gpConnect')
           setTimeout(function () {
             $state.go('procedures-detail', {
               patientId: $scope.patient.id,
-              procedureId: procedure.source === 'Marand' ? procedure.updateId(medication.sourceId) : procedure.sourceId,
+              procedureId: procedure.sourceId,
               page: $scope.currentPage,
               source: $stateParams.source
             });

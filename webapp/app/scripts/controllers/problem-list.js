@@ -25,8 +25,8 @@ angular.module('gpConnect')
       $scope.query = $stateParams.filter;
     }
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
     Problem.findAllHTMLTables($stateParams.patientId).then(function (result) {
@@ -83,8 +83,6 @@ angular.module('gpConnect')
           dateOfOnset: problem.dateOfOnset,
           description: problem.description,
           problem: problem.problem,
-          source: problem.source,
-          sourceId: '',
           terminology: problem.terminology
         };
 

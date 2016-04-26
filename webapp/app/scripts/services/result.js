@@ -3,17 +3,17 @@
 angular.module('gpConnect')
   .factory('Result', function ($http) {
 
-    var get = function (patientId, compositionId, source) {
-      return $http.get('/api/patients/' + patientId + '/labresults/' + compositionId + '?source=' + source);
-    };
-
-    var all = function (patientId) {
+    var findAllSummaries = function (patientId) {
       return $http.get('/api/patients/' + patientId + '/labresults');
     };
 
+    var findDetails = function (patientId, labResultId, source) {
+      return $http.get('/api/patients/' + patientId + '/labresults/' + labResultId + '?source=' + source);
+    };
+
     return {
-      all: all,
-      get: get
+      findAllSummaries: findAllSummaries,
+      findDetails: findDetails
     };
 
   });

@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('MedicationsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, Helper, usSpinnerService, PatientService, Medication) {
+  .controller('MedicationsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, usSpinnerService, PatientService, Medication) {
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
-    Medication.get($stateParams.patientId, $stateParams.medicationIndex, $stateParams.source).then(function (result) {
+    Medication.findDetails($stateParams.patientId, $stateParams.medicationIndex, $stateParams.source).then(function (result) {
       $scope.medication = result.data;
       usSpinnerService.stop('medicationsDetail-spinner');
     });
@@ -53,7 +53,7 @@ angular.module('gpConnect')
           setTimeout(function () {
             $state.go('medications-detail', {
               patientId: $scope.patient.id,
-              medicationIndex: medication.source === 'Marand' ? medication.updateId(medication.sourceId) : medication.sourceId,
+              medicationIndex: medication.sourceId,
               page: $scope.currentPage
             });
           }, 2000);

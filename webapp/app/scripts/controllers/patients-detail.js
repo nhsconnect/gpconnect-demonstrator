@@ -3,8 +3,8 @@
 angular.module('gpConnect')
   .controller('PatientsDetailCtrl', function ($scope, $stateParams, $state, PatientService) {
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
     $scope.goTo = function (section) {

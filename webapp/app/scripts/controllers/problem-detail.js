@@ -1,17 +1,13 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('ProblemDetailCtrl', function ($scope, $stateParams, $location, $modal, Helper, $state, usSpinnerService, PatientService, Problem) {
+  .controller('ProblemDetailCtrl', function ($scope, $stateParams, $location, $modal, $state, usSpinnerService, PatientService, Problem) {
 
-    $scope.UnlockedSources = [
-      'handi.ehrscape.com'
-    ];
-
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
-    Problem.get($stateParams.patientId, $stateParams.problemIndex, $stateParams.source).then(function (result) {
+    Problem.findDetails($stateParams.patientId, $stateParams.problemIndex, $stateParams.source).then(function (result) {
       $scope.problem = result.data;
       usSpinnerService.stop('problemDetail-spinner');
     });
@@ -53,25 +49,12 @@ angular.module('gpConnect')
           setTimeout(function () {
             $state.go('problem-detail', {
               patientId: $scope.patient.id,
-              problemIndex: problem.source === 'openehr' ? Helper.updateId(problem.sourceId) : problem.sourceId,
+              problemIndex: problem.sourceId,
               page: $scope.currentPage
             });
           }, 2000);
         });
       });
-    };
-
-    $scope.isLocked = function (problem) {
-      if (!(problem && problem.id)) {
-        return true;
-      }
-
-      var problemIdSegments = problem.id.toString().split('::');
-      if (problemIdSegments.length > 1) {
-        return ($scope.UnlockedSources.indexOf(problemIdSegments[1]) < 0);
-      }
-
-      return true;
     };
 
     $scope.convertToLabel = function (text) {

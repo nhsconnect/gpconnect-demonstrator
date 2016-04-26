@@ -7,20 +7,20 @@ angular.module('gpConnect')
       return $http.get('/api/patients/' + patientId + '/referrals');
     };
 
-    var findDetails = function (patientId, compositionId) {
-      return $http.get('/api/patients/' + patientId + '/referrals/' + compositionId);
+    var findDetails = function (patientId, referralId) {
+      return $http.get('/api/patients/' + patientId + '/referrals/' + referralId);
     };
-    
+
     var findAllHTMLTables = function (patientId, source) {
       return $http.get('/api/patients/' + patientId + '/referrals/htmlTables?source=' + source);
     };
 
-    var create = function (patientId, composition) {
-      return $http.post('/api/patients/' + patientId + '/referrals', composition);
+    var create = function (patientId, referral) {
+      return $http.post('/api/patients/' + patientId + '/referrals', referral);
     };
 
-    var update = function (patientId, composition) {
-      return $http.put('/api/patients/' + patientId + '/referrals', composition);
+    var update = function (patientId, referral) {
+      return $http.put('/api/patients/' + patientId + '/referrals', referral);
     };
 
     return {

@@ -18,30 +18,22 @@ angular.module('gpConnect')
 
       if (!isNaN(nhsNumber) && nhsNumber.length == 10) {
 
-        PatientService.get(nhsNumber).then(function (patient) {
-          goToPatientSummary(patient.nhsNumber);
+        PatientService.findDetails(nhsNumber).then(function (patient) {
+          goToPatientSummary(patient.data.nhsNumber);
 
         }).catch(function () {
-          $scope.applyError();
+          $scope.setErrorOccurred(true);
         });
       }
       else {
-        $scope.applyError();
+        $scope.setErrorOccurred(true);
       }
     };
 
-    $scope.applyError = function () {
+    $scope.setErrorOccurred = function (errorOccurred) {
       $timeout(function () {
         $scope.$apply(function () {
-          $scope.errorOccurred = true;
-        }, 1000);
-      });
-    };
-
-    $scope.removeError = function () {
-      $timeout(function () {
-        $scope.$apply(function () {
-          $scope.errorOccurred = false;
+          $scope.errorOccurred = errorOccurred;
         }, 1000);
       });
     };

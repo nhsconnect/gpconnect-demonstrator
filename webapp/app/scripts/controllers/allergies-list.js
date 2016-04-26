@@ -25,8 +25,8 @@ angular.module('gpConnect')
       $scope.query = $stateParams.filter;
     }
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
     Allergy.findAllHTMLTables($stateParams.patientId).then(function (result) {

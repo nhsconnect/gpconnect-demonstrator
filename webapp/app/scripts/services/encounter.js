@@ -19,31 +19,32 @@
 angular.module('gpConnect')
   .factory('Encounter', function ($http) {
 
-    var findAllEncounters = function (patientId) {
+    var findAllSummaries = function (patientId) {
       return $http.get('/api/patients/' + patientId + '/encounters');
+    };
+
+    var findDetails = function (patientId, encounterId) {
+      return $http.get('/api/patients/' + patientId + '/encounters/' + encounterId);
     };
 
     var findAllHTMLTables = function (patientId) {
       return $http.get('/api/patients/' + patientId + '/encounters/htmlTables');
     };
 
-    var findEncounter = function (patientId, encounterId) {
-      return $http.get('/api/patients/' + patientId + '/encounters/' + encounterId);
-    };
-
-    var createEncounter = function (patientId, encounter) {
+    var create = function (patientId, encounter) {
       return $http.post('/api/patients/' + patientId + '/encounters', encounter);
     };
 
-    var updateEncounter = function (patientId, encounter) {
+    var update = function (patientId, encounter) {
       return $http.put('/api/patients/' + patientId + '/encounters', encounter);
     };
 
     return {
-      findAllEncounters: findAllEncounters,
+      findAllSummaries: findAllSummaries,
+      findDetails: findDetails,
       findAllHTMLTables: findAllHTMLTables,
-      findEncounter: findEncounter,
-      createEncounter: createEncounter,
-      updateEncounter: updateEncounter
+      create: create,
+      update: update
     };
+
   });

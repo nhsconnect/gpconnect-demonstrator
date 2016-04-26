@@ -16,8 +16,8 @@ angular.module('gpConnect')
       $scope.currentPage = $stateParams.page;
     }
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
     if ($stateParams.filter) {
@@ -73,7 +73,6 @@ angular.module('gpConnect')
         medication.startTime = new Date(medication.startTime.valueOf() - medication.startTime.getTimezoneOffset() * 60000);
 
         var toAdd = {
-          sourceId: '',
           doseAmount: medication.doseAmount,
           doseDirections: medication.doseDirections,
           doseTiming: medication.doseTiming,

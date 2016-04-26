@@ -3,25 +3,25 @@
 angular.module('gpConnect')
   .factory('Procedure', function ($http) {
 
-    var all = function (patientId) {
+    var findAllSummaries = function (patientId) {
       return $http.get('/api/patients/' + patientId + '/procedures');
     };
 
-    var get = function (patientId, compositionId, source) {
-      return $http.get('/api/patients/' + patientId + '/procedures/' + compositionId + '?source=' + source);
+    var findDetails = function (patientId, procedureId, source) {
+      return $http.get('/api/patients/' + patientId + '/procedures/' + procedureId + '?source=' + source);
     };
 
-    var create = function (patientId, composition) {
-      return $http.post('/api/patients/' + patientId + '/procedures', composition);
+    var create = function (patientId, procedure) {
+      return $http.post('/api/patients/' + patientId + '/procedures', procedure);
     };
 
-    var update = function (patientId, composition) {
-      return $http.put('/api/patients/' + patientId + '/procedures', composition);
+    var update = function (patientId, procedure) {
+      return $http.put('/api/patients/' + patientId + '/procedures', procedure);
     };
 
     return {
-      all: all,
-      get: get,
+      findAllSummaries: findAllSummaries,
+      findDetails: findDetails,
       update: update,
       create: create
     };

@@ -1,15 +1,16 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('AppointmentsDetailCtrl', function ($scope, $stateParams, $modal, Helper, $state, $location, usSpinnerService, PatientService, Appointment) {
+  .controller('AppointmentsDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, usSpinnerService, PatientService, Appointment) {
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
-    Appointment.get($stateParams.patientId, $stateParams.appointmentIndex).then(function (result) {
+    Appointment.findDetails($stateParams.patientId, $stateParams.appointmentIndex).then(function (result) {
       $scope.appointment = result.data;
       $scope.timeOfAppointment = moment($scope.appointment.timeOfAppointment).format('h:mma') + '-' + moment($scope.appointment.timeOfAppointment).add(59, 'm').format('h:mma');
+
       usSpinnerService.stop('appointmentsDetail-spinner');
     });
 
@@ -45,7 +46,7 @@ angular.module('gpConnect')
           status: appointment.status,
           author: 'example@email.com',
           dateCreated: appointment.dateCreated,
-          source: 'openehr',
+          source: appointment.source,
           timeOfAppointment: appointment.timeOfAppointment
         };
 
@@ -53,7 +54,7 @@ angular.module('gpConnect')
           setTimeout(function () {
             $state.go('appointments-detail', {
               patientId: $scope.patient.id,
-              appointmentIndex: Helper.updateId(appointment.sourceId)
+              appointmentIndex: appointment.sourceId
             });
           }, 2000);
         });

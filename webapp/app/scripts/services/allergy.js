@@ -7,27 +7,27 @@ angular.module('gpConnect')
       return $http.get('/api/patients/' + patientId + '/allergies');
     };
 
-    var findDetails = function (patientId, compositionId, source) {
-      return $http.get('/api/patients/' + patientId + '/allergies/' + compositionId + '?source=' + source);
+    var findDetails = function (patientId, allergyId, source) {
+      return $http.get('/api/patients/' + patientId + '/allergies/' + allergyId + '?source=' + source);
     };
 
     var findAllHTMLTables = function(patientId, source) {
       return $http.get('/api/patients/' + patientId + '/allergies/htmlTables' + '?source=' + source);
     };
 
-    var createAllergy = function (patientId, composition) {
-      return $http.post('/api/patients/' + patientId + '/allergies', composition);
+    var create = function (patientId, allergy) {
+      return $http.post('/api/patients/' + patientId + '/allergies', allergy);
     };
 
-    var updateAllergy = function (patientId, composition) {
-      return $http.put('/api/patients/' + patientId + '/allergies', composition);
+    var update = function (patientId, allergy) {
+      return $http.put('/api/patients/' + patientId + '/allergies', allergy);
     };
 
     return {
       findAllSummaries: findAllSummaries,
       findDetails: findDetails,
       findAllHTMLTables: findAllHTMLTables,
-      createAllergy: createAllergy,
-      updateAllergy: updateAllergy
+      create: create,
+      update: update
     };
   });

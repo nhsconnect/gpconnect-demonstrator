@@ -22,7 +22,7 @@ angular.module('gpConnect')
       );
     };
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
     });
 
@@ -30,13 +30,14 @@ angular.module('gpConnect')
       $scope.query = $stateParams.filter;
     }
 
-    Appointment.all($stateParams.patientId).then(function (result) {
+    Appointment.findAllSummaries($stateParams.patientId).then(function (result) {
       $scope.appointments = result.data;
 
       for (var i = 0; i < $scope.appointments.length; i++) {
         $scope.appointments[i].dateOfAppointment = moment($scope.appointments[i].dateOfAppointment).format('DD-MMM-YYYY');
         $scope.appointments[i].timeOfAppointment = moment($scope.appointments[i].timeOfAppointment).format('h:mma') + '-' + moment($scope.appointments[i].timeOfAppointment).add(59, 'm').format('h:mma');
       }
+
       usSpinnerService.stop('patientSummary-spinner');
     });
 
@@ -78,14 +79,12 @@ angular.module('gpConnect')
         appointment.dateCreated = new Date(appointment.dateCreated);
 
         var toAdd = {
-          compositionId: '',
           serviceTeam: appointment.serviceTeam,
           dateOfAppointment: appointment.dateOfAppointment,
           location: appointment.location,
           status: appointment.status,
           author: 'example@email.com',
           dateCreated: appointment.dateCreated,
-          source: 'openehr',
           timeOfAppointment: appointment.timeOfAppointment
         };
 

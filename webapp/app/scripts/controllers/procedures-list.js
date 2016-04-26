@@ -22,8 +22,8 @@ angular.module('gpConnect')
       );
     };
 
-    PatientService.get($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient.data;
     });
 
     if ($stateParams.filter) {
@@ -37,6 +37,7 @@ angular.module('gpConnect')
         $scope.procedures[i].date = moment($scope.procedures[i].date).format('DD-MMM-YYYY');
         $scope.procedures[i].time = moment($scope.procedures[i].time).format('HH:mm');
       }
+
       usSpinnerService.stop('patientSummary-spinner');
     });
 
@@ -81,7 +82,6 @@ angular.module('gpConnect')
         procedure.time = new Date(procedure.time.valueOf() - procedure.time.getTimezoneOffset() * 60000);
 
         var toAdd = {
-          sourceId: '',
           procedureName: procedure.procedureName,
           procedureTerminology: procedure.procedureTerminology,
           procedureCode: procedure.procedureCode,

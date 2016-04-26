@@ -5,55 +5,55 @@ VALUES (
   "<h5>Warnings</h5>
 <table class=\"table table-bordered table-striped table-hover\">
 	<tr>
-		<th>Date</th>
+		<th width=\"120px\">Date</th>
 		<th>Details</th>
 	</tr>
-	<tr><td>23 Feb 2005</td><td>Loses temper easily</td></tr>
+	<tr><td width=\"120px\">23 Feb 2005</td><td>Loses temper easily</td></tr>
 </table>
 
 <h5>Key Indicators</h5>
 <table class=\"table table-bordered table-striped table-hover\">
 	<tr>
-		<th>Date</th>
+		<th width=\"120px\">Date</th>
 		<th>Indicator</th>
 	</tr>
-	<tr><td>20 Feb 2015</td><td>Has an end of life care plan</td></tr>
-	<tr><td>13 Jan 1999</td><td>Asthmatic</td></tr>
+	<tr><td width=\"120px\">20 Feb 2015</td><td>Has an end of life care plan</td></tr>
+	<tr><td width=\"120px\">13 Jan 1999</td><td>Asthmatic</td></tr>
 </table>
 
 <h5>Active Problems & Summary Items</h5>
 <table class=\"table table-bordered table-striped table-hover\">
 	<tr>
-		<th>Start Date</th>
+		<th width=\"120px\">Start Date</th>
 		<th>Entry</th>
 		<th>Significance</th>
 		<th>Details</th>
 	</tr>
-	<tr><td>23 Feb 2005</td><td>Type II diabetes mellitus</td><td>Major</td><td></td></tr>
-	<tr><td>10 Apr 2000</td><td>Low back pain</td><td>Minor</td><td></td></tr>
-	<tr><td>13 Jan 1999</td><td>Asthma</td><td>Major</td><td></td></tr>
+	<tr><td width=\"120px\">23 Feb 2005</td><td>Type II diabetes mellitus</td><td>Major</td><td></td></tr>
+	<tr><td width=\"120px\">10 Apr 2000</td><td>Low back pain</td><td>Minor</td><td></td></tr>
+	<tr><td width=\"120px\">13 Jan 1999</td><td>Asthma</td><td>Major</td><td></td></tr>
 </table>
 
 <h5>Current Medication Issues</h5>
 <table class=\"table table-bordered table-striped table-hover\">
 	<tr>
-		<th>Start date</th>
+		<th width=\"120px\">Start date</th>
 		<th>Drug</th>
-		<th>Scheduled end</th>
+		<th width=\"120px\">Scheduled end</th>
 		<th>Days duration</th>
 		<th>Details</th>
 	</tr>
 	<tr>
-		<td>10 Apr 2016</td>
+		<td width=\"120px\">10 Apr 2016</td>
 		<td>Paracetemol 500mg tablets - 32 tablet - take 1 or 2 4 times/day</td>
-		<td>14 Apr 2016</td>
+		<td width=\"120px\">14 Apr 2016</td>
 		<td>4</td>
 		<td></td>
 	</tr>
 	<tr>
-		<td>08 Apr 2016</td>
+		<td width=\"120px\">08 Apr 2016</td>
 		<td>Metformin 500mg tablets - 42 tablet - take one 3 times/day</td>
-		<td>22 Apr 2016</td>
+		<td width=\"120px\">22 Apr 2016</td>
 		<td>14</td>
 		<td>Repeat issue</td>
 	</tr>
@@ -62,21 +62,21 @@ VALUES (
 <h5>Current Repeat Templates</h5>
 <table class=\"table table-bordered table-striped table-hover\">
 	<tr>
-		<th>Start date</th>
+		<th width=\"120px\">Start date</th>
 		<th>Drug</th>
 		<th>Type</th>
-		<th>Last issued</th>
-		<th>Review date</th>
+		<th width=\"120px\">Last issued</th>
+		<th width=\"120px\">Review date</th>
 		<th>Number issued</th>
 		<th>Max issues</th>		
 		<th>Details</th>
 	</tr>
 	<tr>
-		<td>01 Mar 2016</td>
+		<td width=\"120px\">01 Mar 2016</td>
 		<td>Metformin 500mg tablets - 42 tablet - take one 3 times/day</td>
 		<td>Repeat</td>
-		<td>08 Apr 2016</td>
-		<td>30 Sep 2016</td>
+		<td width=\"120px\">08 Apr 2016</td>
+		<td width=\"120px\">30 Sep 2016</td>
 		<td>2</td>
 		<td>12</td>
 		<td></td>
@@ -86,19 +86,19 @@ VALUES (
 <h5>Current Allergies and Sensitivities</h5>
 <table class=\"table table-bordered table-striped table-hover\">
 	<tr>
-		<th>Start date</th>
+		<th width=\"120px\">Start date</th>
 		<th>Details</th>
 	</tr>
 	<tr>
-		<td>10 Mar 2016</td>
+		<td width=\"120px\">10 Mar 2016</td>
 		<td>PENICILLIN VK</td>
 	</tr>
 	<tr>
-		<td>29 Mar 2016</td>
+		<td width=\"120px\">29 Mar 2016</td>
 		<td>Nurofen Express 256mg caplets (Reckitt Benckiser Healthcare (UK) Ltd)</td>
 	</tr>
 	<tr>
-		<td>29 Mar 2016</td>
+		<td width=\"120px\">29 Mar 2016</td>
 		<td>Nut allergy</td>
 	</tr>
 </table>
@@ -106,15 +106,15 @@ VALUES (
 <h5>Current Recalls</h5>
 <table class=\"table table-bordered table-striped table-hover\">
 	<tr>
-		<th>Recall date</th>
+		<th width=\"120px\">Recall date</th>
 		<th>Details</th>
 	</tr>
 	<tr>
-		<td>29 Jan 2017</td>
+		<td width=\"120px\">29 Jan 2017</td>
 		<td>Asthma monitoring</td>
 	</tr>
 	<tr>
-		<td>10 Sep 2016</td>
+		<td width=\"120px\">10 Sep 2016</td>
 		<td>Influenza Vaccination</td>
 	</tr>	
 </table>
@@ -122,7 +122,7 @@ VALUES (
 <h5>Last 3 Encounters</h5>
 <table class=\"table table-bordered table-striped table-hover\">
 	<tr>
-		<th>10 Dec 2014 - 12:17</td>
+		<th width=\"150px\">10 Dec 2014 - 12:17</td>
 		<th>Jeffrey Johnson - Dr Johnson and Partners (J12345)</td>
 	</tr>
 	<tr>
@@ -130,19 +130,19 @@ VALUES (
 		<td>History: Family history of diabetes mellitus type II.<br>Came to nurse last week with Polyuria Very worried that he is diabetic - confirmed on blood tests. Very amenable to change of lifestyle; no other symptoms at present.<br>Examination: O/E - Diastolic BP reading 98 mmHg. , O/E - Systolic BP reading 152 mmHg.<br>Diagnosis: Type II diabetes mellitus.<br>Procedure: Wants to avoid tabs for the moment - watch TChol as well as HbA1c. Review 1/12.<br>Metformin 500mg tablets - 168 tablets - take one three times a day - Patient has read up on metformin and is keen to start.<br></td>
 	</tr>
 	<tr>
-		<th>01 Jan 2015 - 15:47</td>
+		<th width=\"150px\">01 Jan 2015 - 15:47</td>
 		<th>Jeffrey Johnson - Dr Johnson and Partners (J12345)</td>
 	</tr>
 	<tr>
-		<td></td>
+		<td width=\"150px\"></td>
 		<td>Type II diabetic dietary review.<br>Haemoglobin A1c level - IFCC standardised 20.5 mmol/mol.<br>Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 10ml vials - 5 vials - use as directed.</td>
 	</tr>
 	<tr>
-		<th>04 Jul 2015 - 12:10</td>
+		<th width=\"150px\">04 Jul 2015 - 12:10</td>
 		<th>Thomas Turnpike - Dr Johnson and Partners (J12345)</td>
 	</tr>
 	<tr>
-		<td></td>
+		<td width=\"150px\"></td>
 		<td>Contact method: Telephone<br>Care plan created: Diabetes management plan.<br>Haemoglobin A1c level - IFCC standardised 23.5 mmol/mol.</td>
 	</tr>
 </table>
@@ -150,11 +150,11 @@ VALUES (
 <h5>Recent Investigations (last 3 months)</h5>
 <table  class=\"table table-bordered table-striped table-hover\">
 	<tr>
-		<th>12 Mar 2016</td>
+		<th width=\"120px\">12 Mar 2016</td>
 		<th>Full blood count</td>
 	</tr>
 	<tr>
-		<td></td>
+		<td width=\"120px\"></td>
 		<td>
 			Result indicator: Borderline<br>
 			Follow-up action: Make an appointment to see doctor<br>
@@ -184,11 +184,11 @@ VALUES (
 		</td>
 	</tr>
 	<tr>
-		<th>23 Jan 2016</td>
+		<th width=\"120px\">23 Jan 2016</td>
 		<th>Serum TSH level</td>
 	</tr>
 	<tr>
-		<td></td>
+		<td width=\"120px\"></td>
 		<td>
 			Result indicator: Normal<br>
 			No further action required.<br>

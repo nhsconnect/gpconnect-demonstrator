@@ -138,12 +138,12 @@ angular
         }
       })
 
-       .state('results', {
-        url: '/patients/{patientId:int}/results',
+       .state('observations', {
+        url: '/patients/{patientId:int}/observations',
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/results/results-list.html', controller: 'ResultsListCtrl' }
+          main: { templateUrl: 'views/observations/observations-list.html', controller: 'ObservationsListCtrl' }
         }
       })
 
@@ -152,8 +152,8 @@ angular
         views: {
           'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
           actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/results/results-list.html', controller: 'ResultsListCtrl' },
-          detail: { templateUrl: 'views/results/results-detail.html', controller: 'ResultsDetailCtrl' }
+          main: { templateUrl: 'views/results/observations-list.html', controller: 'ResultsListCtrl' },
+          detail: { templateUrl: 'views/results/observations-detail.html', controller: 'ResultsDetailCtrl' }
         }
       })
 

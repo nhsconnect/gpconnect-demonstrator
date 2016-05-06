@@ -19,11 +19,17 @@ angular.module('gpConnect')
       return $http.put('/api/patients/' + patientId + '/procedures', procedure);
     };
 
+    var findAllHTMLTables = function(patientId, source) {
+      return $http.get('/api/patients/' + patientId + '/procedures/htmlTables' + '?source=' + source);
+    };
+
+
     return {
       findAllSummaries: findAllSummaries,
       findDetails: findDetails,
       update: update,
-      create: create
+      create: create,
+      findAllHTMLTables: findAllHTMLTables
     };
 
   });

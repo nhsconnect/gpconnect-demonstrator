@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS gpconnect.problems;
 DROP TABLE IF EXISTS gpconnect.referrals;
 DROP TABLE IF EXISTS gpconnect.encounters;
 DROP TABLE IF EXISTS gpconnect.patientsummary;
+DROP TABLE IF EXISTS gpconnect.procedures;
 
 /* Create new table schemas */
 CREATE TABLE gpconnect.general_practitioners (
@@ -94,6 +95,13 @@ CREATE TABLE gpconnect.encounters (
 CREATE TABLE gpconnect.patientsummary (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                VARCHAR(7168) NULL,
+ provider            VARCHAR(10)   NULL,
+ PRIMARY KEY         (id)
+);
+
+CREATE TABLE gpconnect.procedures (
+ id                  BIGINT        NOT NULL    AUTO_INCREMENT,
+ html                VARCHAR(4096) NULL,
  provider            VARCHAR(10)   NULL,
  PRIMARY KEY         (id)
 );

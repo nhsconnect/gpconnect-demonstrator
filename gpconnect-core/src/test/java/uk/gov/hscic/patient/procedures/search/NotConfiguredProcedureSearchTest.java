@@ -37,14 +37,4 @@ public class NotConfiguredProcedureSearchTest {
     public void shouldReportAsNotConfiguredImplementation() {
         assertEquals(RepoSourceType.NONE, procedureSearch.getSource());
     }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindAllProcedures() {
-        procedureSearch.findAllProcedures(null);
-    }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindProcedureDetails() {
-        procedureSearch.findProcedure(null, null);
-    }
 }

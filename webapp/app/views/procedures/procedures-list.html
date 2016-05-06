@@ -1,32 +1,11 @@
 <h3><strong>Procedures</strong></h3>
 
-<div class="inner-addon left-addon filterInput">
-  <i class="fa fa-filter"></i>
-  <input type="text" class="form-control" placeholder="Filter..." ng-model="query" />
+<div class="providerHTMLTables" ng-repeat="procedureTable in procedureTables">
+  <h4><strong>{{ procedureTable.provider }}</strong></h4>
+
+  <div ng-bind-html="procedureTable.html">
+  </div>
 </div>
-
-
-<table class="table table-bordered table-striped table-hover">
-  <thead>
-    <tr>
-      <th>Procedure Name</th>
-      <th>Procedure Date</th>
-      <th>Time</th>
-      <th>Source</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr dir-paginate="procedure in procedures | filter:search  | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{procedure.sourceId}}','{{procedure.source}}')" ng-class="{info: selected(procedure.sourceId)}">
-      <td>{{procedure.name}}</td>
-      <td class="dateTime">{{procedure.date}}</td>
-      <td>{{procedure.time}}</td>
-      <td>{{procedure.source}}</td>
-    </tr>
-    <tr ng-if="!procedures.length">
-      <td colspan="4"><span class="label label-default">No procedures</span></td>
-    </tr>
-  </tbody>
-</table>
 
 <div class="row">
   <div class="col-md-12">
@@ -34,11 +13,3 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-6 hidden-xs"><div class="text-right"><dir-pagination-controls on-page-change="pageChangeHandler(newPageNumber)" boundary-links="false"></dir-pagination-controls></div></div>
-  <div class="col-md-6 hidden-xs"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
-</div>
-<div class="row">
-  <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right"><dir-pagination-controls on-page-change="pageChangeHandler(newPageNumber)" boundary-links="false"></dir-pagination-controls></div></div>
-  <div class="col-xs-6 hidden-sm hidden-md hidden-lg"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
-</div>

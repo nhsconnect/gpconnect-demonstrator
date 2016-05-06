@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('ProceduresListCtrl', function ($scope, $location, $stateParams, $modal, $state, usSpinnerService, PatientService, Procedure) {
+  .controller('ProceduresListCtrl', function ($scope, $location, $stateParams, $sce, $modal, $state, usSpinnerService, PatientService, Procedure) {
 
     $scope.currentPage = 1;
 
@@ -30,14 +30,12 @@ angular.module('gpConnect')
       $scope.query = $stateParams.filter;
     }
 
-    Procedure.all($stateParams.patientId).then(function (result) {
-      $scope.procedures = result.data;
+    Procedure.findAllHTMLTables($stateParams.patientId).then(function (result) {
+      $scope.procedureTables = result.data;
 
-      for (var i = 0; i < $scope.procedures.length; i++) {
-        $scope.procedures[i].date = moment($scope.procedures[i].date).format('DD-MMM-YYYY');
-        $scope.procedures[i].time = moment($scope.procedures[i].time).format('HH:mm');
+      for (var i = 0; i < $scope.procedureTables.length; i++) {
+        $scope.procedureTables[i].html = $sce.trustAsHtml($scope.procedureTables[i].html);
       }
-
       usSpinnerService.stop('patientSummary-spinner');
     });
 

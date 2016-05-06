@@ -36,6 +36,9 @@ angular.module('gpConnect')
       case 'encounters':
         toState = 'encounters';
         break;
+      case 'procedures':
+        toState = 'procedures';
+        break;
       }
       $state.go(toState, requestHeader);
     };

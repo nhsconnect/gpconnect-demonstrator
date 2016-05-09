@@ -45,6 +45,9 @@ angular.module('gpConnect')
       case 'immunisations':
           toState = 'immunisations';
           break;
+      case 'adminitems':
+          toState = 'adminitems';
+          break;
       }
       $state.go(toState, requestHeader);
     };

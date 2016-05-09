@@ -12,3 +12,4 @@ populate_adminitems_table.sql
 populate_immunisations_table.sql
 populate_observations_table.sql
 populate_procedures_table.sql
+populate_clinicalitems_table.sql

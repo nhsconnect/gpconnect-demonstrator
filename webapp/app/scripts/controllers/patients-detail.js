@@ -48,7 +48,11 @@ angular.module('gpConnect')
       case 'adminitems':
           toState = 'adminitems';
           break;
+      case 'clinicalitems':
+          toState = 'clinicalitems';
+          break;
       }
+
       $state.go(toState, requestHeader);
     };
 

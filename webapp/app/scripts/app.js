@@ -213,6 +213,26 @@ angular
           detail: { templateUrl: 'views/adminitems/adminitems-detail.html', controller: 'AdminItemsDetailCtrl' }
         }
       })
+
+      .state('clinicalitems', {
+        url: '/patients/{patientId:int}/clinicalitems',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/clinicalitems/clinicalitems-list.html', controller: 'ClinicalItemsListCtrl' }
+        }
+      })
+
+      .state('clinicalitems-detail', {
+        url: '/patients/{patientId:int}/clinicalitems/{clinicalItemIndex}?filter&source',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/clinicalitems/clinicalitems-list.html', controller: 'ClinicalItemsListCtrl' },
+          detail: { templateUrl: 'views/clinicalitems/clinicalitems-detail.html', controller: 'ClinicalItemsDetailCtrl' }
+        }
+      })
+
   })
 
   .directive('datepickerPopup', function () {

@@ -8,3 +8,7 @@ populate_problems_table.sql
 populate_referrals_table.sql
 populate_encounters_table.sql
 populate_patientsummary_table.sql
+populate_adminitems_table.sql
+populate_immunisations_table.sql
+populate_observations_table.sql
+populate_procedures_table.sql

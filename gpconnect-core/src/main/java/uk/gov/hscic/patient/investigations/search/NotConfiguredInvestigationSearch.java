@@ -1,9 +1,9 @@
-package uk.gov.hscic.patient.investigation.search;
+package uk.gov.hscic.patient.investigations.search;
 
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.investigation.model.InvestigationListHTML;
+import uk.gov.hscic.patient.investigations.model.InvestigationListHTML;
 
 import java.util.List;
 

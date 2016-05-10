@@ -1,7 +1,7 @@
-package uk.gov.hscic.patient.investigation.search;
+package uk.gov.hscic.patient.investigations.search;
 
 import uk.gov.hscic.common.repo.Repository;
-import uk.gov.hscic.patient.investigation.model.InvestigationListHTML;
+import uk.gov.hscic.patient.investigations.model.InvestigationListHTML;
 
 import java.util.List;
 

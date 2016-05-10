@@ -1,4 +1,4 @@
-package uk.gov.hscic.patient.investigation.search;
+package uk.gov.hscic.patient.investigations.search;
 
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactory;

@@ -4,8 +4,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.common.service.AbstractLegacyService;
-import uk.gov.hscic.patient.investigation.model.InvestigationListHTML;
-import uk.gov.hscic.patient.investigation.search.InvestigationSearch;
+import uk.gov.hscic.patient.investigations.model.InvestigationListHTML;
 import uk.gov.hscic.patient.investigations.model.InvestigationEntity;
 import uk.gov.hscic.patient.investigations.repo.InvestigationRepository;
 

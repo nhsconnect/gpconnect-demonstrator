@@ -233,6 +233,25 @@ angular
         }
       })
 
+      .state('investigations', {
+        url: '/patients/{patientId:int}/investigations',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/investigations/investigations-list.html', controller: 'InvestigationsListCtrl' }
+        }
+      })
+
+      .state('investigations-detail', {
+        url: '/patients/{patientId:int}/investigations/{investigationIndex}?filter&source',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/investigations/investigations-list.html', controller: 'InvestigationsListCtrl' },
+          detail: { templateUrl: 'views/investigations/investigations-detail.html', controller: 'InvestigationsDetailCtrl' }
+        }
+      })
+
   })
 
   .directive('datepickerPopup', function () {

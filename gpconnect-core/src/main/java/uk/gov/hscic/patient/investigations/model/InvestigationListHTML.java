@@ -1,4 +1,4 @@
-package uk.gov.hscic.patient.investigation.model;
+package uk.gov.hscic.patient.investigations.model;
 
 public class InvestigationListHTML {
 

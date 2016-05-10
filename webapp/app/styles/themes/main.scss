@@ -2176,7 +2176,30 @@ div#age-chart div.morris-hover.morris-default-style {
 }
 
 .providerHTMLTables {
-  border-top: 1px dashed lightgrey;
+  margin-top: 24px;
+}
+
+.providerHTMLTables table {
+  background-color: #f8f8f8;
+  width: 100%;
+}
+
+.providerHTMLTables th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.providerHTMLTables td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.providerHTMLTables h2 {
+  font-size: 1.4em;
 }
 
 .innertable td{

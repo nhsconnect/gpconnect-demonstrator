@@ -1,12 +1,15 @@
-<h3><strong>Medications</strong></h3>
+<div ng-repeat="medicationTable in medicationTables">
 
-<div class="providerHTMLTables" ng-repeat="medicationTable in medicationTables">
-  <h4><strong>{{ medicationTable.provider }}</strong></h4>
+  <h3>
+    <strong>Medications</strong>
+    <div class="glyphicon glyphicon-info-sign" tooltip="Source: {{ medicationTable.provider }}" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+  </h3>
 
-  <div ng-bind-html="medicationTable.html">
-
+  <div class="providerHTMLTables" >
+    <div ng-bind-html="medicationTable.html"></div>
   </div>
 </div>
+
 
 <div class="row">
   <div class="col-md-12">

@@ -1,10 +1,11 @@
-<h3><strong>Key Indicators</strong></h3>
+<div ng-repeat="keyIndicatorTable in keyIndicatorTables">
+  <h3>
+    <strong>Key Indicators</strong>
+    <div class="glyphicon glyphicon-info-sign" tooltip="Source: {{ keyIndicatorTable.provider }}" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+  </h3>
 
-<div class="providerHTMLTables" ng-repeat="keyIndicatorTable in keyIndicatorTables">
-  <h4><strong>{{ keyIndicatorTable.provider }}</strong></h4>
-
-  <div ng-bind-html="keyIndicatorTable.html">
-
+  <div class="providerHTMLTables" >
+    <div ng-bind-html="keyIndicatorTable.html"></div>
   </div>
 </div>
 

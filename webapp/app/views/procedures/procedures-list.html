@@ -1,9 +1,11 @@
-<h3><strong>Procedures</strong></h3>
+<div ng-repeat="procedureTable in procedureTables">
+  <h3>
+    <strong>Procedures</strong>
+    <div class="glyphicon glyphicon-info-sign" tooltip="Source: {{ procedureTable.provider }}" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+  </h3>
 
-<div class="providerHTMLTables" ng-repeat="procedureTable in procedureTables">
-  <h4><strong>{{ procedureTable.provider }}</strong></h4>
-
-  <div ng-bind-html="procedureTable.html">
+  <div class="providerHTMLTables">
+    <div ng-bind-html="procedureTable.html"></div>
   </div>
 </div>
 

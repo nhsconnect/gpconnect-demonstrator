@@ -1,8 +1,11 @@
-<h3><strong>Referrals</strong></h3>
+<div ng-repeat="referralTable in referralTables">
+  <h3>
+    <strong>Referrals</strong>
+    <div class="glyphicon glyphicon-info-sign" tooltip="Source: {{ referralTable.provider }}" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+  </h3>
 
-<div class="providerHTMLTables" ng-repeat="referralTable in referralTables">
-  <h4><strong>{{ referralTable.provider }}</strong></h4>
-  <div ng-bind-html="referralTable.html">
+  <div class="providerHTMLTables" >
+    <div ng-bind-html="referralTable.html"></div>
   </div>
 </div>
 

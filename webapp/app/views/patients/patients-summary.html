@@ -1,10 +1,11 @@
-<h3><strong>Patient Summary</strong></h3>
+<div ng-repeat="patientSummary in patientSummaries">
+  <h3>
+    <strong>Patient Summary</strong>
+    <div class="glyphicon glyphicon-info-sign" tooltip="Source: {{ patientSummary.provider }}" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+  </h3>
 
-<div class="providerHTMLTables" ng-repeat="patientSummary in patientSummaries">
-  <h4><strong>{{ patientSummary.provider }}</strong></h4>
-
-  <div ng-bind-html="patientSummary.html">
-
+  <div class="providerHTMLTables">
+    <div ng-bind-html="patientSummary.html"></div>
   </div>
 </div>
 

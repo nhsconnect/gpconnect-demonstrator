@@ -1,10 +1,12 @@
-<h3><strong>Allergies</strong></h3>
+<div ng-repeat="allergyTable in allergyTables">
 
-<div class="providerHTMLTables" ng-repeat="allergyTable in allergyTables">
-  <h4><strong>{{ allergyTable.provider }}</strong></h4>
+  <h3>
+    <strong>Allergies</strong>
+    <div class="glyphicon glyphicon-info-sign" tooltip="Source: {{ allergyTable.provider }}" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+  </h3>
 
-  <div ng-bind-html="allergyTable.html">
-
+  <div class="providerHTMLTables" >
+    <div ng-bind-html="allergyTable.html"></div>
   </div>
 </div>
 

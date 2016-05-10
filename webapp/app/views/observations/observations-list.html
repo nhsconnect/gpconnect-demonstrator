@@ -1,9 +1,11 @@
-<h3><strong>Observations & Investigations</strong></h3>
+<div ng-repeat="observationTable in observationTables">
+  <h3>
+    <strong>Observations & Investigations</strong>
+    <div class="glyphicon glyphicon-info-sign" tooltip="Source: {{ observationTable.provider }}" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+  </h3>
 
-<div class="providerHTMLTables" ng-repeat="observationTable in observationTables">
-  <h4><strong>{{ observationTable.provider }}</strong></h4>
-
-  <div ng-bind-html="observationTable.html">
+  <div class="providerHTMLTables">
+    <div ng-bind-html="observationTable.html"></div>
   </div>
 </div>
 

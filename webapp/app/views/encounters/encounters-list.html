@@ -14,13 +14,14 @@
   ~    limitations under the License.
   -->
 
-<h3><strong>Encounters</strong></h3>
+<div ng-repeat="encounterTable in encounterTables">
+  <h3>
+    <strong>Encounters</strong>
+    <div class="glyphicon glyphicon-info-sign" tooltip="Source: {{ encounterTable.provider }}" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+  </h3>
 
-<div class="providerHTMLTables" ng-repeat="encounterTable in encounterTables">
-  <h4><strong>{{ encounterTable.provider }}</strong></h4>
-
-  <div ng-bind-html="encounterTable.html">
-
+  <div class="providerHTMLTables">
+    <div ng-bind-html="encounterTable.html"></div>
   </div>
 </div>
 

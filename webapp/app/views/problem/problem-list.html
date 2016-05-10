@@ -1,9 +1,11 @@
-<h3><strong>Problems</strong></h3>
+<div ng-repeat="problemTable in problemTables">
+  <h3>
+    <strong>Problems</strong>
+    <div class="glyphicon glyphicon-info-sign" tooltip="Source: {{ problemTable.provider }}" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+  </h3>
 
-<div class="providerHTMLTables" ng-repeat="problemTable in problemTables">
-  <h4><strong>{{ problemTable.provider }}</strong></h4>
-
-  <div ng-bind-html="problemTable.html">
+  <div class="providerHTMLTables" >
+    <div ng-bind-html="problemTable.html"></div>
   </div>
 </div>
 

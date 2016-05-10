@@ -1,6 +1,6 @@
-package uk.gov.hscic.patient.keyindicator.model;
+package uk.gov.hscic.patient.investigation.model;
 
-public class KeyIndicatorListHTML {
+public class InvestigationListHTML {
 
     private String sourceId;
     private String source;

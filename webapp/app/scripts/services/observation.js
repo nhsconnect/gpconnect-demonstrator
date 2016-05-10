@@ -7,8 +7,13 @@ angular.module('gpConnect')
       return $http.get('/api/patients/' + patientId + '/observations/htmlTables' + '?source=' + source);
     };
 
+    var findAllInvestigationHTMLTables = function(patientId, source) {
+      return $http.get('/api/patients/' + patientId + '/investigations/htmlTables');
+    };
+
     return {
-      findAllHTMLTables: findAllHTMLTables
+      findAllHTMLTables: findAllHTMLTables,
+      findAllInvestigationHTMLTables: findAllInvestigationHTMLTables
     };
 
   });

@@ -1,10 +1,10 @@
-package uk.gov.hscic.patient.keyindicators.model;
+package uk.gov.hscic.patient.investigations.model;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "keyindicators")
-public class KeyIndicatorEntity {
+@Table(name = "investigations")
+public class InvestigationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,15 +2,4 @@ create_database_and_tables.sql
 populate_general_practitioners_table.sql
 populate_medical_departments_table.sql
 populate_patients_table.sql
-populate_allergies_table.sql
-populate_medications_table.sql
-populate_problems_table.sql
-populate_referrals_table.sql
-populate_encounters_table.sql
-populate_patientsummary_table.sql
-populate_adminitems_table.sql
-populate_immunisations_table.sql
-populate_observations_table.sql
-populate_procedures_table.sql
-populate_clinicalitems_table.sql
-populate_keyindicators_table.sql
+pupulateTPPData.sql

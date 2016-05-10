@@ -233,25 +233,6 @@ angular
         }
       })
 
-      .state('keyindicators', {
-        url: '/patients/{patientId:int}/keyindicators',
-        views: {
-          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
-          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/keyindicators/keyindicators-list.html', controller: 'KeyIndicatorsListCtrl' }
-        }
-      })
-
-      .state('keyindicators-detail', {
-        url: '/patients/{patientId:int}/keyindicators/{keyIndicatorIndex}?filter&source',
-        views: {
-          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
-          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/keyindicators/keyindicators-list.html', controller: 'KeyIndicatorsListCtrl' },
-          detail: { templateUrl: 'views/keyindicators/keyindicators-detail.html', controller: 'KeyIndicatorsDetailCtrl' }
-        }
-      })
-
   })
 
   .directive('datepickerPopup', function () {

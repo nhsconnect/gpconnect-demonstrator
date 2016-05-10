@@ -36,6 +36,14 @@ angular.module('gpConnect')
       for (var i = 0; i < $scope.observationTables.length; i++) {
         $scope.observationTables[i].html = $sce.trustAsHtml($scope.observationTables[i].html);
       }
+    });
+
+    Observation.findAllInvestigationHTMLTables($stateParams.patientId).then(function (result) {
+      $scope.investigationTables = result.data;
+
+      for (var i = 0; i < $scope.investigationTables.length; i++) {
+        $scope.investigationTables[i].html = $sce.trustAsHtml($scope.investigationTables[i].html);
+      }
       usSpinnerService.stop('patientSummary-spinner');
     });
 

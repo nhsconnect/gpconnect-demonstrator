@@ -1,9 +1,8 @@
 package uk.gov.hscic.patient.allergies.search;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.collections4.CollectionUtils;
 import uk.gov.hscic.common.service.AbstractLegacyService;
 import uk.gov.hscic.patient.allergies.model.AllergyEntity;
 import uk.gov.hscic.patient.allergies.model.AllergyListHTML;
@@ -17,10 +16,17 @@ public class LegacyAllergySearch extends AbstractLegacyService implements Allerg
     @Autowired
     private AllergyRepository allergyRepository;
 
+    private final AllergyEntityToListTransformer transformer = new AllergyEntityToListTransformer();
+
     @Override
     public List<AllergyListHTML> findAllAllergyHTMLTables(final String patientId) {
-        final List<AllergyEntity> allergyLists = allergyRepository.findAll();
 
-        return CollectionUtils.collect(allergyLists, new AllergyEntityToListTransformer(), new ArrayList<>());
+        final AllergyEntity item = allergyRepository.findOne(Long.parseLong(patientId));
+
+        if(item == null){
+            return null;
+        } else {
+            return Collections.singletonList(transformer.transform(item));
+        }
     }
 }

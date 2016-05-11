@@ -1,6 +1,7 @@
 package uk.gov.hscic.patient.medications.search;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -18,10 +19,17 @@ public class LegacyMedicationSearch extends AbstractLegacyService implements Med
     @Autowired
     private MedicationRepository medicationRepository;
 
+    private final MedicationEntityToListTransformer transformer = new MedicationEntityToListTransformer();
+
     @Override
     public List<MedicationListHTML> findMedicationHTMLTables(final String patientId) {
-        final List<MedicationEntity> medicationTables = medicationRepository.findAll();
 
-        return CollectionUtils.collect(medicationTables, new MedicationEntityToListTransformer(), new ArrayList<>());
+        final MedicationEntity item = medicationRepository.findOne(Long.parseLong(patientId));
+
+        if(item == null){
+            return null;
+        } else {
+            return Collections.singletonList(transformer.transform(item));
+        }
     }
 }

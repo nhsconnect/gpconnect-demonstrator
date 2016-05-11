@@ -3,3 +3,4 @@ populate_general_practitioners_table.sql
 populate_medical_departments_table.sql
 populate_patients_table.sql
 pupulateTPPData.sql
+pupulateMicroTestData.sql

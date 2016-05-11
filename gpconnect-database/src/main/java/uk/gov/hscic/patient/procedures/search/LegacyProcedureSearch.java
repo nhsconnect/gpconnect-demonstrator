@@ -9,6 +9,7 @@ import uk.gov.hscic.patient.procedures.model.ProcedureEntity;
 import uk.gov.hscic.patient.procedures.repo.ProcedureRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -17,10 +18,17 @@ public class LegacyProcedureSearch extends AbstractLegacyService implements Proc
     @Autowired
     private ProcedureRepository procedureRepository;
 
+    private final ProcedureEntityToListTransformer transformer = new ProcedureEntityToListTransformer();
+
     @Override
     public List<ProcedureListHTML> findAllProceduresHTMLTables(final String patientId) {
-        final List<ProcedureEntity> procedureLists = procedureRepository.findAll();
 
-        return CollectionUtils.collect(procedureLists, new ProcedureEntityToListTransformer(), new ArrayList<>());
+        final ProcedureEntity item = procedureRepository.findOne(Long.parseLong(patientId));
+
+        if(item == null){
+            return null;
+        } else {
+            return Collections.singletonList(transformer.transform(item));
+        }
     }
 }

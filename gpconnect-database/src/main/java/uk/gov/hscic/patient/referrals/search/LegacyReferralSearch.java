@@ -1,6 +1,7 @@
 package uk.gov.hscic.patient.referrals.search;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -18,10 +19,17 @@ public class LegacyReferralSearch extends AbstractLegacyService implements Refer
     @Autowired
     private ReferralRepository referralRepository;
 
+    private final ReferralEntityToListTransformer transformer = new ReferralEntityToListTransformer();
+
     @Override
     public List<ReferralListHTML> findAllReferralHTMLTables(final String patientId) {
-        final List<ReferralEntity> referralList = referralRepository.findAll();
 
-        return CollectionUtils.collect(referralList, new ReferralEntityToListTransformer(), new ArrayList<>());
+        final ReferralEntity item = referralRepository.findOne(Long.parseLong(patientId));
+
+        if(item == null){
+            return null;
+        } else {
+            return Collections.singletonList(transformer.transform(item));
+        }
     }
 }

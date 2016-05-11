@@ -9,6 +9,7 @@ import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
 import uk.gov.hscic.patient.adminitems.repo.AdminItemRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -17,10 +18,17 @@ public class LegacyAdminItemSearch extends AbstractLegacyService implements Admi
     @Autowired
     private AdminItemRepository adminItemRepository;
 
+    private final AdminItemEntityToListTransformer transformer = new AdminItemEntityToListTransformer();;
+
     @Override
     public List<AdminItemListHTML> findAllAdminItemHTMLTables(final String patientId) {
-        final List<AdminItemEntity> adminItems = adminItemRepository.findAll();
 
-        return CollectionUtils.collect(adminItems, new AdminItemEntityToListTransformer(), new ArrayList<>());
+        final AdminItemEntity item = adminItemRepository.findOne(Long.parseLong(patientId));
+
+        if(item == null){
+            return null;
+        } else {
+            return Collections.singletonList(transformer.transform(item));
+        }
     }
 }

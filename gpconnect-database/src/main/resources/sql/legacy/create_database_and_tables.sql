@@ -71,7 +71,7 @@ CREATE TABLE gpconnect.allergies (
 
 CREATE TABLE gpconnect.medications (
   id                  BIGINT        NOT NULL    AUTO_INCREMENT,
-  html                VARCHAR(4096) NULL,
+  html                TEXT(25000) NULL,
   provider            VARCHAR(10)   NULL,
   PRIMARY KEY         (id)
 );
@@ -113,7 +113,7 @@ CREATE TABLE gpconnect.procedures (
 
 CREATE TABLE gpconnect.observations (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
- html                VARCHAR(15000) NULL,
+ html                TEXT(25000) NULL,
  provider            VARCHAR(10)   NULL,
  PRIMARY KEY         (id)
 );
@@ -127,14 +127,14 @@ CREATE TABLE gpconnect.immunisations (
 
 CREATE TABLE gpconnect.adminitems (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
- html                VARCHAR(4096) NULL,
+ html                VARCHAR(15000) NULL,
  provider            VARCHAR(10)   NULL,
  PRIMARY KEY         (id)
 );
 
 CREATE TABLE gpconnect.clinicalitems (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
- html                VARCHAR(7168) NULL,
+ html                TEXT(25000) NULL,
  provider            VARCHAR(10)   NULL,
  PRIMARY KEY         (id)
 );

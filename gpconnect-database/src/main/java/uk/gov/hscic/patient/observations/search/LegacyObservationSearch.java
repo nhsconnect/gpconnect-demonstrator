@@ -9,6 +9,7 @@ import uk.gov.hscic.patient.observations.repo.ObservationRepository;
 import uk.gov.hscic.patient.observations.model.ObservationListHTML;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -17,10 +18,17 @@ public class LegacyObservationSearch extends AbstractLegacyService implements uk
     @Autowired
     private ObservationRepository observationRepository;
 
+    private final ObservationEntityToListTransformer transformer = new ObservationEntityToListTransformer();
+
     @Override
     public List<ObservationListHTML> findAllObservationHTMLTables(final String patientId) {
-        final List<ObservationEntity> observationLists = observationRepository.findAll();
 
-        return CollectionUtils.collect(observationLists, new ObservationEntityToListTransformer(), new ArrayList<>());
+        final ObservationEntity item = observationRepository.findOne(Long.parseLong(patientId));
+
+        if(item == null){
+            return null;
+        } else {
+            return Collections.singletonList(transformer.transform(item));
+        }
     }
 }

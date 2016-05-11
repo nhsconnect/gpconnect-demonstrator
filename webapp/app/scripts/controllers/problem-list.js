@@ -30,7 +30,12 @@ angular.module('gpConnect')
     });
 
     Problem.findAllHTMLTables($stateParams.patientId).then(function (result) {
-      $scope.problemTables = result.data;
+      if (result.data.length == 0) {
+        var text = '[{"sourceId":"1","source":"Legacy","provider":"No Data","html":"No problems data available for this patient."}]';
+        $scope.problemTables = JSON.parse(text);
+      } else {
+        $scope.problemTables = result.data;
+      }
 
       for (var i = 0; i < $scope.problemTables.length; i++) {
         $scope.problemTables[i].html = $sce.trustAsHtml($scope.problemTables[i].html);

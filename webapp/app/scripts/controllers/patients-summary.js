@@ -10,7 +10,12 @@ angular.module('gpConnect')
     });
 
     PatientService.getSummary($stateParams.patientId).then(function (patientSummaries) {
-      $scope.patientSummaries = patientSummaries.data;
+      if (patientSummaries.data.length == 0) {
+        var text = '[{"sourceId":"1","source":"Legacy","provider":"No Data","html":"No patient summary available for this patient."}]';
+        $scope.patientSummaries = JSON.parse(text);
+      } else {
+        $scope.patientSummaries = patientSummaries.data;
+      }
 
       for (var i = 0; i < $scope.patientSummaries.length; i++) {
         $scope.patientSummaries[i].html = $sce.trustAsHtml($scope.patientSummaries[i].html);

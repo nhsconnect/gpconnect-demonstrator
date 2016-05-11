@@ -30,7 +30,13 @@ angular.module('gpConnect')
     });
 
     Allergy.findAllHTMLTables($stateParams.patientId).then(function (result) {
-      $scope.allergyTables = result.data;
+
+      if (result.data.length == 0) {
+        var text = '[{"sourceId":"1","source":"Legacy","provider":"No Data","html":"No allergies data available for this patient."}]';
+        $scope.allergyTables = JSON.parse(text);
+      } else {
+        $scope.allergyTables = result.data;
+      }
 
       for (var i = 0; i < $scope.allergyTables.length; i++) {
         $scope.allergyTables[i].html = $sce.trustAsHtml($scope.allergyTables[i].html);

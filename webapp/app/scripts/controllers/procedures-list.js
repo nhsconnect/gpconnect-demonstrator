@@ -31,11 +31,18 @@ angular.module('gpConnect')
     }
 
     Procedure.findAllHTMLTables($stateParams.patientId).then(function (result) {
-      $scope.procedureTables = result.data;
+
+      if (result.data.length == 0) {
+        var text = '[{"sourceId":"1","source":"Legacy","provider":"No Data","html":"No procedures data available for this patient."}]';
+        $scope.procedureTables = JSON.parse(text);
+      } else {
+        $scope.procedureTables = result.data;
+      }
 
       for (var i = 0; i < $scope.procedureTables.length; i++) {
         $scope.procedureTables[i].html = $sce.trustAsHtml($scope.procedureTables[i].html);
       }
+
       usSpinnerService.stop('patientSummary-spinner');
     });
 

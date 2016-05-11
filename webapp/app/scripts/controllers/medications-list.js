@@ -25,7 +25,12 @@ angular.module('gpConnect')
     }
 
     Medication.findAllHTMLTables($stateParams.patientId).then(function (result) {
-      $scope.medicationTables = result.data;
+      if (result.data.length == 0) {
+        var text = '[{"sourceId":"1","source":"Legacy","provider":"No Data","html":"No medication data available for this patient."}]';
+        $scope.medicationTables = JSON.parse(text);
+      } else {
+        $scope.medicationTables = result.data;
+      }
 
       for (var i = 0; i < $scope.medicationTables.length; i++) {
         $scope.medicationTables[i].html = $sce.trustAsHtml($scope.medicationTables[i].html);

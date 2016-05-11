@@ -18,7 +18,12 @@ angular.module('gpConnect')
     });
 
     Investigation.findAllHTMLTables($stateParams.patientId).then(function (result) {
-      $scope.investigationTables = result.data;
+      if (result.data.length == 0) {
+        var text = '[{"sourceId":"1","source":"Legacy","provider":"No Data","html":"No investigation data available for this patient."}]';
+        $scope.investigationTables = JSON.parse(text);
+      } else {
+        $scope.investigationTables = result.data;
+      }
 
       for (var i = 0; i < $scope.investigationTables.length; i++) {
         $scope.investigationTables[i].html = $sce.trustAsHtml($scope.investigationTables[i].html);

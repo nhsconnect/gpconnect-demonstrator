@@ -31,18 +31,15 @@ angular.module('gpConnect')
     });
 
     Observation.findAllHTMLTables($stateParams.patientId).then(function (result) {
-      $scope.observationTables = result.data;
+      if (result.data.length == 0) {
+        var text = '[{"sourceId":"1","source":"Legacy","provider":"No Data","html":"No observation data available for this patient."}]';
+        $scope.observationTables = JSON.parse(text);
+      } else {
+        $scope.observationTables = result.data;
+      }
 
       for (var i = 0; i < $scope.observationTables.length; i++) {
         $scope.observationTables[i].html = $sce.trustAsHtml($scope.observationTables[i].html);
-      }
-    });
-
-    Observation.findAllInvestigationHTMLTables($stateParams.patientId).then(function (result) {
-      $scope.investigationTables = result.data;
-
-      for (var i = 0; i < $scope.investigationTables.length; i++) {
-        $scope.investigationTables[i].html = $sce.trustAsHtml($scope.investigationTables[i].html);
       }
       usSpinnerService.stop('patientSummary-spinner');
     });

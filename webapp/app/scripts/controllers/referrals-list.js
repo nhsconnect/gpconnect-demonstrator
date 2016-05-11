@@ -31,7 +31,12 @@ angular.module('gpConnect')
     }
 
     Referral.findAllHTMLTables($stateParams.patientId).then(function (result) {
-      $scope.referralTables = result.data;
+      if (result.data.length == 0) {
+        var text = '[{"sourceId":"1","source":"Legacy","provider":"No Data","html":"No referrals data available for this patient."}]';
+        $scope.referralTables = JSON.parse(text);
+      } else {
+        $scope.referralTables = result.data;
+      }
 
       for (var i = 0; i < $scope.referralTables.length; i++) {
          $scope.referralTables[i].html = $sce.trustAsHtml($scope.referralTables[i].html);

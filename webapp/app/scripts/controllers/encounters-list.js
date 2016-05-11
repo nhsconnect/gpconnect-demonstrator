@@ -34,7 +34,12 @@ angular.module('gpConnect')
     });
 
     Encounter.findAllHTMLTables($stateParams.patientId).then(function (result) {
-      $scope.encounterTables = result.data;
+      if (result.data.length == 0) {
+        var text = '[{"sourceId":"1","source":"Legacy","provider":"No Data","html":"No encounters data available for this patient."}]';
+        $scope.encounterTables = JSON.parse(text);
+      } else {
+        $scope.encounterTables = result.data;
+      }
 
       for (var i = 0; i < $scope.encounterTables.length; i++) {
         $scope.encounterTables[i].html = $sce.trustAsHtml($scope.encounterTables[i].html);

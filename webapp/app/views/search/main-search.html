@@ -13,6 +13,9 @@
       <span aria-hidden="true" ng-click="setErrorOccurred(false)">×</span>
     </button>
     <h4>We couldn't find a patient corresponding to that NHS Number</h4>
+  </div>
+
+  <div class="alert alert-danger alert-dismissible fade in no-patient-found-error" role="alert">
     <h6>If you are unsure about which NHS Numbers work, why not try one of the ones below:</h6>
     <p>
       <button type="button" class="btn btn-default" ng-click="populateSearchField('999 999 9000')">{{ '9999999000 (TPP)' | formatNHSNumber }}</button>

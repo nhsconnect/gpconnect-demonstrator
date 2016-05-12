@@ -44,8 +44,8 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfo("GPConnect Demonstrator REST API",
-                           "The GPConnect Demonstrator API.",
+        return new ApiInfo("GP Connect Demonstrator REST API",
+                           "The GP Connect Demonstrator API.",
                            "0.0.1-SNAPSHOT",
                            "",
                            "",

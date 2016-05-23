@@ -15,7 +15,7 @@ public class FhirRestfulServlet extends RestfulServer {
     
     @Override
     protected void initialize() throws ServletException {
-        List<IResourceProvider> resourceProviders = new ArrayList<IResourceProvider>();
+        List<IResourceProvider> resourceProviders = new ArrayList<>();
         resourceProviders.add(new PatientResourceProvider());
         setResourceProviders(resourceProviders);
     }

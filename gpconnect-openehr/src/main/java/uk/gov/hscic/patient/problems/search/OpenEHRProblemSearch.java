@@ -17,7 +17,6 @@ package uk.gov.hscic.patient.problems.search;
 
 import java.util.List;
 
-import org.hl7.fhir.instance.model.Condition;
 import uk.gov.hscic.common.service.AbstractOpenEhrService;
 import uk.gov.hscic.patient.problems.model.ProblemDetails;
 import uk.gov.hscic.patient.problems.model.ProblemHeadline;
@@ -49,22 +48,6 @@ public class OpenEHRProblemSearch extends AbstractOpenEhrService implements Prob
 
     public ProblemDetails findProblem(String patientId, String problemId) {
         ProblemDetailsQueryStrategy query = new ProblemDetailsQueryStrategy(patientId, problemId);
-
-        return findData(query);
-    }
-
-    public List<Condition> findAllFhirConditions(String patientId) {
-        String ehrId = new EhrIdLookup().transform(patientId);
-
-        FhirConditionsQueryStrategy query = new FhirConditionsQueryStrategy(patientId, ehrId, openEhrAddress);
-
-        return findData(query);
-    }
-
-    public Condition findFhirCondition(String patientId, String conditionId) {
-        String ehrId = new EhrIdLookup().transform(patientId);
-
-        FhirConditionQueryStrategy query = new FhirConditionQueryStrategy(patientId, ehrId, openEhrAddress, conditionId);
 
         return findData(query);
     }

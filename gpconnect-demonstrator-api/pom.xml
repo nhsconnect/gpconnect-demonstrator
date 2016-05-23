@@ -91,11 +91,6 @@
         </dependency>
 
         <dependency>
-            <groupId>me.fhir</groupId>
-            <artifactId>fhir-dstu2</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-broker</artifactId>
         </dependency>
@@ -155,6 +150,18 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-base</artifactId>
+            <version>1.5</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-structures-dstu2</artifactId>
+            <version>1.5</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 

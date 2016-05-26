@@ -115,7 +115,7 @@ public class PatientResourceProvider implements IResourceProvider {
                         case "Summary" :
                                 PatientSummarySearch patientSummarySearch = applicationContext.getBean(PatientSummarySearchFactory.class).select(sourceType);
                                 List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch.findAllPatientSummaryHTMLTables(nhsNumber);
-                                if(patientSummaryList.size() > 0){
+                                if(patientSummaryList != null && patientSummaryList.size() > 0){
                                     //We have a result so build section
                                     Section section = new Section();
                                     section.setTitle("Summary");

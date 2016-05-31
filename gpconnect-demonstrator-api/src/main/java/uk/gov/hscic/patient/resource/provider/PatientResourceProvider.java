@@ -88,13 +88,24 @@ public class PatientResourceProvider implements IResourceProvider {
             // Set Composition Mandatory Fields
             careRecordComposition.setDate(new DateTimeDt(Calendar.getInstance().getTime()));
             CodingDt coding = new CodingDt();
-            coding.setSystem("http://fhir.nhs.net/ValueSet/document-type-codes-1-0");
-            coding.setCode("CAR");
-            coding.setDisplay("Care Record");
+            coding.setSystem("http://snomed.info/sct");
+            coding.setCode("425173008");
+            coding.setDisplay("record extract (record artifact)");
             CodeableConceptDt codableConcept = new CodeableConceptDt();
             codableConcept.addCoding(coding);
-            codableConcept.setText("Care Record");
+            codableConcept.setText("record extract (record artifact)");
             careRecordComposition.setType(codableConcept);
+            
+            CodingDt classCoding = new CodingDt();
+            classCoding.setSystem("http://snomed.info/sct");
+            classCoding.setCode("700232004");
+            classCoding.setDisplay("general medical service (qualifier value)");
+            CodeableConceptDt classCodableConcept = new CodeableConceptDt();
+            classCodableConcept.addCoding(classCoding);
+            classCodableConcept.setText("general medical service (qualifier value)");
+            careRecordComposition.setClassElement(classCodableConcept);
+            
+            
             careRecordComposition.setTitle("Patient Care Record");
             careRecordComposition.setStatus(CompositionStatusEnum.FINAL);
             careRecordComposition.setSubject(new ResourceReferenceDt());
@@ -109,17 +120,17 @@ public class PatientResourceProvider implements IResourceProvider {
                 
                 for(String sectionName : sectionsParamList){
                     switch(sectionName){
-                        case "Summary" :
+                        case "Patient Details" :
                                 PatientSummarySearch patientSummarySearch = applicationContext.getBean(PatientSummarySearchFactory.class).select(sourceType);
                                 List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch.findAllPatientSummaryHTMLTables(nhsNumber);
                                 if(patientSummaryList != null && patientSummaryList.size() > 0){
                                     //We have a result so build section
                                     Section section = new Section();
-                                    section.setTitle("Summary");
+                                    section.setTitle("Patient Details");
                                     CodingDt summaryCoding = new CodingDt();
                                     summaryCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0");
-                                    summaryCoding.setCode("SUM");
-                                    summaryCoding.setDisplay("Summary");
+                                    summaryCoding.setCode("PAT");
+                                    summaryCoding.setDisplay("Patient Details");
                                     CodeableConceptDt summaryCodableConcept = new CodeableConceptDt();
                                     summaryCodableConcept.addCoding(summaryCoding);
                                     summaryCodableConcept.setText(patientSummaryList.get(0).getProvider());

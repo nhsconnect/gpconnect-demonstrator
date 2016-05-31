@@ -43,7 +43,7 @@ angular.module('gpConnect')
         if (value.resource.resourceType == "Patient") { // Find Patient Entry
             //alert(value.resource.identifier[0].value);
         }
-        if (value.resource.resourceType == "Composition" && value.resource.type.coding[0].code == "CAR") { // Find Care Record Entry
+            if (value.resource.resourceType == "Composition" && value.resource.type.coding[0].code == "425173008") { // Find Care Record Entry
             // Check if the requested section exists, if it does not in the back end it will not be passed to the front end
             if (value.resource.section != undefined){
                 // We are only going to ever request one setion within the care record entry, this will be the section for displaying on the page 

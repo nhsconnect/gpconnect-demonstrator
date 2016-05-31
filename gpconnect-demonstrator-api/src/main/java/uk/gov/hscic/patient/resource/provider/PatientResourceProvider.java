@@ -64,11 +64,9 @@ public class PatientResourceProvider implements IResourceProvider {
             }
         }
         
-        
         // Build Bundle
         Bundle bundle = new Bundle();
         bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
-
         
         // Validate request fields
         if(nhsNumber == null || nhsNumber.isEmpty()){
@@ -77,13 +75,8 @@ public class PatientResourceProvider implements IResourceProvider {
             
         } else {
             
-            // Build the Patient Resource in the response
-            Entry patientEntry = new Entry();    
-            Patient patient = new Patient();
-            patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", nhsNumber));
-            patientEntry.setResource(patient);
-            bundle.addEntry(patientEntry);
-            
+            // Build the Patient Resource and add it to the bundle
+            bundle.addEntry(buildPatientEntry(nhsNumber));
             
             //Build the Care Record Composition
             Entry careRecordEntry = new Entry();
@@ -91,7 +84,6 @@ public class PatientResourceProvider implements IResourceProvider {
                         
             // Set Composition Mandatory Fields
             careRecordComposition.setDate(new DateTimeDt(Calendar.getInstance().getTime()));
-            
             CodingDt coding = new CodingDt();
             coding.setSystem("http://fhir.nhs.net/ValueSet/document-type-codes-1-0");
             coding.setCode("CAR");
@@ -100,16 +92,10 @@ public class PatientResourceProvider implements IResourceProvider {
             codableConcept.addCoding(coding);
             codableConcept.setText("Care Record");
             careRecordComposition.setType(codableConcept);
-            
             careRecordComposition.setTitle("Patient Care Record");
-            
             careRecordComposition.setStatus(CompositionStatusEnum.FINAL);
-            
-            ResourceReferenceDt patientReference = new ResourceReferenceDt("/Patient/" + nhsNumber);
-            careRecordComposition.setSubject(patientReference);
-            
-            ResourceReferenceDt clinicianReference = new ResourceReferenceDt("/123456");
-            careRecordComposition.setAuthor(Collections.singletonList(clinicianReference));
+            careRecordComposition.setSubject(new ResourceReferenceDt());
+            careRecordComposition.setAuthor(Collections.singletonList(new ResourceReferenceDt()));
             
             
             // Build requested sections
@@ -174,4 +160,15 @@ public class PatientResourceProvider implements IResourceProvider {
         return bundle;
     }
     
+    public Entry buildPatientEntry(String nhsNumber){
+            
+            // Build the Patient Resource in the response
+            Entry patientEntry = new Entry();    
+            
+            Patient patient = new Patient();
+            patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", nhsNumber));
+            
+            patientEntry.setResource(patient);
+            return patientEntry;
+    }
 }

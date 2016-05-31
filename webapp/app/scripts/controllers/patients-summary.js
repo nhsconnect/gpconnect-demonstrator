@@ -24,12 +24,14 @@ angular.module('gpConnect')
             //alert(value.resource.identifier[0].value);
         }
         if (value.resource.resourceType == "Composition" && value.resource.type.coding[0].code == "CAR") { // Find Care Record Entry
-            // We are only going to ever request one setion within the care record entry, this will be the section for displaying on the page 
-            // so we can assume the first section is the one we want to display.
-            $scope.patientSummary.html = $sce.trustAsHtml(value.resource.section[0].text.div);
-            $scope.patientSummary.provider = value.resource.section[0].code.text;
+            // Check if the requested section exists, if it does not in the back end it will not be passed to the front end
+            if (value.resource.section != undefined){
+                // We are only going to ever request one setion within the care record entry, this will be the section for displaying on the page 
+                // so we can assume the first section is the one we want to display.
+                $scope.patientSummary.html = $sce.trustAsHtml(value.resource.section[0].text.div);
+                $scope.patientSummary.provider = value.resource.section[0].code.text;
+            }
         }
-        
       });
       
       usSpinnerService.stop('patientSummary-spinner');

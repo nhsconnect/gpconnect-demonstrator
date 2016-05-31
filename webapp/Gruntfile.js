@@ -85,6 +85,13 @@ module.exports = function (grunt) {
           port: 19191,
           https: false,
           xforward: false
+        },
+        {
+          context: '/fhir',
+          host: 'localhost',
+          port: 19191,
+          https: false,
+          xforward: false
         }
       ],
       livereload: {

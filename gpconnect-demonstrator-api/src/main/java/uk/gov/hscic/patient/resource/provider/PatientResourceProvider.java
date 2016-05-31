@@ -65,11 +65,10 @@ public class PatientResourceProvider implements IResourceProvider {
         }
         
         
-        // Build
+        // Build Bundle
         Bundle bundle = new Bundle();
-        bundle.setType(BundleTypeEnum.SEARCH_RESULTS);  // This type is possibly wrong but the type "searchset" is not available in the API enum.
-        Entry entry = new Entry();
-        
+        bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
+
         
         // Validate request fields
         if(nhsNumber == null || nhsNumber.isEmpty()){
@@ -77,10 +76,19 @@ public class PatientResourceProvider implements IResourceProvider {
             
             
         } else {
-            //Build the Composition
+            
+            // Build the Patient Resource in the response
+            Entry patientEntry = new Entry();    
+            Patient patient = new Patient();
+            patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", nhsNumber));
+            patientEntry.setResource(patient);
+            bundle.addEntry(patientEntry);
+            
+            
+            //Build the Care Record Composition
+            Entry careRecordEntry = new Entry();
             Composition careRecordComposition = new Composition();
-            
-            
+                        
             // Set Composition Mandatory Fields
             careRecordComposition.setDate(new DateTimeDt(Calendar.getInstance().getTime()));
             
@@ -158,11 +166,11 @@ public class PatientResourceProvider implements IResourceProvider {
                 careRecordComposition.setSection(sectionsList);
             }
             
-            entry.setResource(careRecordComposition);
+            careRecordEntry.setResource(careRecordComposition);
+            bundle.addEntry(careRecordEntry);
             
         }
         
-        bundle.addEntry(entry);
         return bundle;
     }
     

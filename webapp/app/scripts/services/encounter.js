@@ -28,7 +28,7 @@ angular.module('gpConnect')
     };
 
     var findAllHTMLTables = function (patientId) {
-      return $http.get('/api/patients/' + patientId + '/encounters/htmlTables');
+      return $http.post('/fhir/Patient/$getcarerecord', '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "Encounters"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}');
     };
 
     var create = function (patientId, encounter) {

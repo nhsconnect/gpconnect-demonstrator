@@ -28,6 +28,9 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
+import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
+import uk.gov.hscic.patient.encounters.search.EncounterSearch;
+import uk.gov.hscic.patient.encounters.search.EncounterSearchFactory;
 import uk.gov.hscic.patient.patientsummary.model.PatientSummaryListHTML;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearchFactory;
@@ -167,22 +170,43 @@ public class PatientResourceProvider implements IResourceProvider {
                             break;
                             
                         case "Encounters" :
+                            EncounterSearch encounterSearch = applicationContext.getBean(EncounterSearchFactory.class).select(sourceType);
+                                List<EncounterListHTML> encounterList = encounterSearch.findAllEncounterHTMLTables(nhsNumber);
+                                if(encounterList != null && encounterList.size() > 0){
+                                    //We have a result so build section
+                                    Section section = new Section();
+                                    section.setTitle("Encounters");
+                                    CodingDt encounterCoding = new CodingDt();
+                                    encounterCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0");
+                                    encounterCoding.setCode("ENC");
+                                    encounterCoding.setDisplay("Encounters");
+                                    CodeableConceptDt encounterCodableConcept = new CodeableConceptDt();
+                                    encounterCodableConcept.addCoding(encounterCoding);
+                                    encounterCodableConcept.setText(encounterList.get(0).getProvider());
+                                    section.setCode(encounterCodableConcept);
+                                    NarrativeDt narrative = new NarrativeDt();
+                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
+                                    narrative.setDivAsString(encounterList.get(0).getHtml());
+                                    section.setText(narrative);
+                                    sectionsList.add(section);
+                                }
                             break;
-                        case "Clinical Items" :
+                            
+                        case "Clinical Items" : //(Clinical Items)
                             break;
-                        case "Allergies" :
+                        case "Allergies" :  //(Allergies and Sensitivities)
                             break;
-                        case "Medications" :
+                        case "Medications" :    //(Medications)
                             break;
-                        case "Referrals" :
+                        case "Referrals" :  //(Referrals)
                             break;
-                        case "Observations" :
+                        case "Observations" :   //(Observations)
                             break;
-                        case "Investigations" :
+                        case "Investigations" : //(Investigations)
                             break;
-                        case "Immunisations" :
+                        case "Immunisations" :  // (Immunisations)
                             break;
-                        case "Administrative Items" :
+                        case "Administrative Items" :   //(Administrative Items)
                             break;
                         
                     }

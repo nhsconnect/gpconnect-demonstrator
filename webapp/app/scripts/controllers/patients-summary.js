@@ -20,7 +20,7 @@ angular.module('gpConnect')
       var fhirJSON = patientSummaryResponse.data;
       var entryObj = fhirJSON.entry;
       $.each(entryObj, function(key,value) {
-        if (value.resource.resourceType == "Patient Details") { // Find Patient Entry
+        if (value.resource.resourceType == "Patient") { // Find Patient Entry
             //alert(value.resource.identifier[0].value);
         }
         if (value.resource.resourceType == "Composition" && value.resource.type.coding[0].code == "425173008") { // Find Care Record Entry

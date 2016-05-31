@@ -120,17 +120,17 @@ public class PatientResourceProvider implements IResourceProvider {
                 
                 for(String sectionName : sectionsParamList){
                     switch(sectionName){
-                        case "Patient Details" :
+                        case "Summary" :
                                 PatientSummarySearch patientSummarySearch = applicationContext.getBean(PatientSummarySearchFactory.class).select(sourceType);
                                 List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch.findAllPatientSummaryHTMLTables(nhsNumber);
                                 if(patientSummaryList != null && patientSummaryList.size() > 0){
                                     //We have a result so build section
                                     Section section = new Section();
-                                    section.setTitle("Patient Details");
+                                    section.setTitle("Summary");
                                     CodingDt summaryCoding = new CodingDt();
                                     summaryCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0");
-                                    summaryCoding.setCode("PAT");
-                                    summaryCoding.setDisplay("Patient Details");
+                                    summaryCoding.setCode("SUM");
+                                    summaryCoding.setDisplay("Summary");
                                     CodeableConceptDt summaryCodableConcept = new CodeableConceptDt();
                                     summaryCodableConcept.addCoding(summaryCoding);
                                     summaryCodableConcept.setText(patientSummaryList.get(0).getProvider());
@@ -166,21 +166,23 @@ public class PatientResourceProvider implements IResourceProvider {
                                 }
                             break;
                             
-                        case "Events" :
+                        case "Encounters" :
                             break;
-                        case "Risks and Warnings" :
+                        case "Clinical Items" :
+                            break;
+                        case "Allergies" :
                             break;
                         case "Medications" :
-                            break; 
+                            break;
+                        case "Referrals" :
+                            break;
                         case "Observations" :
                             break;
                         case "Investigations" :
                             break;
                         case "Immunisations" :
                             break;
-                        case "Diagnosis" :
-                            break;
-                        case "Procedures" :
+                        case "Administrative Items" :
                             break;
                         
                     }

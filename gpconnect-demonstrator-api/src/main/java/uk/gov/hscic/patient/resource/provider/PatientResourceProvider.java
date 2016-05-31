@@ -31,6 +31,9 @@ import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.patient.patientsummary.model.PatientSummaryListHTML;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearchFactory;
+import uk.gov.hscic.patient.problems.model.ProblemListHTML;
+import uk.gov.hscic.patient.problems.search.ProblemSearch;
+import uk.gov.hscic.patient.problems.search.ProblemSearchFactory;
 
 public class PatientResourceProvider implements IResourceProvider {
     
@@ -118,7 +121,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     summaryCoding.setCode("SUM");
                                     summaryCoding.setDisplay("Summary");
                                     CodeableConceptDt summaryCodableConcept = new CodeableConceptDt();
-                                    summaryCodableConcept.addCoding(coding);
+                                    summaryCodableConcept.addCoding(summaryCoding);
                                     summaryCodableConcept.setText(patientSummaryList.get(0).getProvider());
                                     section.setCode(summaryCodableConcept);
                                     NarrativeDt narrative = new NarrativeDt();
@@ -128,24 +131,47 @@ public class PatientResourceProvider implements IResourceProvider {
                                     sectionsList.add(section);
                                 }
                             break;
-                        case "Diagnosis" :
-                            break;
-                        case "Events" :
-                            break;
-                        case "Immunisations" :
-                            break;
-                        case "Investigations" :
-                            break;
-                        case "Medications" :
-                            break;
-                        case "Observations" :
-                            break;
+                        
                         case "Problems" :
+                            ProblemSearch problemSearch = applicationContext.getBean(ProblemSearchFactory.class).select(sourceType);
+                                List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber);
+                                if(problemList != null && problemList.size() > 0){
+                                    //We have a result so build section
+                                    Section section = new Section();
+                                    section.setTitle("Problems");
+                                    CodingDt problemCoding = new CodingDt();
+                                    problemCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0");
+                                    problemCoding.setCode("PRB");
+                                    problemCoding.setDisplay("Problems");
+                                    CodeableConceptDt problemCodableConcept = new CodeableConceptDt();
+                                    problemCodableConcept.addCoding(problemCoding);
+                                    problemCodableConcept.setText(problemList.get(0).getProvider());
+                                    section.setCode(problemCodableConcept);
+                                    NarrativeDt narrative = new NarrativeDt();
+                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
+                                    narrative.setDivAsString(problemList.get(0).getHtml());
+                                    section.setText(narrative);
+                                    sectionsList.add(section);
+                                }
                             break;
-                        case "Procedures" :
+                            
+                        case "Events" :
                             break;
                         case "Risks and Warnings" :
                             break;
+                        case "Medications" :
+                            break; 
+                        case "Observations" :
+                            break;
+                        case "Investigations" :
+                            break;
+                        case "Immunisations" :
+                            break;
+                        case "Diagnosis" :
+                            break;
+                        case "Procedures" :
+                            break;
+                        
                     }
                 }
                 

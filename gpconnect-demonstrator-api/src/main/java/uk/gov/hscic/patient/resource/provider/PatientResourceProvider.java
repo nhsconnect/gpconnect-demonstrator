@@ -31,6 +31,9 @@ import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.patient.allergies.model.AllergyListHTML;
 import uk.gov.hscic.patient.allergies.search.AllergySearch;
 import uk.gov.hscic.patient.allergies.search.AllergySearchFactory;
+import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemListHTML;
+import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearch;
+import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearchFactory;
 import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
 import uk.gov.hscic.patient.encounters.search.EncounterSearch;
 import uk.gov.hscic.patient.encounters.search.EncounterSearchFactory;
@@ -219,6 +222,26 @@ public class PatientResourceProvider implements IResourceProvider {
                             break;
                             
                         case "Clinical Items" : //(Clinical Items)
+                            ClinicalItemSearch clinicalItemsSearch = applicationContext.getBean(ClinicalItemSearchFactory.class).select(sourceType);
+                                List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch.findAllClinicalItemHTMLTables(nhsNumber);
+                                if(clinicalItemList != null && clinicalItemList.size() > 0){
+                                    //We have a result so build section
+                                    Section section = new Section();
+                                    section.setTitle("Clinical Items");
+                                    CodingDt clinicalItemCoding = new CodingDt();
+                                    clinicalItemCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0");
+                                    clinicalItemCoding.setCode("CLI");
+                                    clinicalItemCoding.setDisplay("Clinical Items");
+                                    CodeableConceptDt clinicalItemCodableConcept = new CodeableConceptDt();
+                                    clinicalItemCodableConcept.addCoding(clinicalItemCoding);
+                                    clinicalItemCodableConcept.setText(clinicalItemList.get(0).getProvider());
+                                    section.setCode(clinicalItemCodableConcept);
+                                    NarrativeDt narrative = new NarrativeDt();
+                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
+                                    narrative.setDivAsString(clinicalItemList.get(0).getHtml());
+                                    section.setText(narrative);
+                                    sectionsList.add(section);
+                                }
                             break;
                         case "Medications" :    //(Medications)
                             break;

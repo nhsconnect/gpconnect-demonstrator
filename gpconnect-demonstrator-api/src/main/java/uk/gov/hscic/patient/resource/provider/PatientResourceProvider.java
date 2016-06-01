@@ -40,6 +40,9 @@ import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearchFactory;
 import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
 import uk.gov.hscic.patient.encounters.search.EncounterSearch;
 import uk.gov.hscic.patient.encounters.search.EncounterSearchFactory;
+import uk.gov.hscic.patient.immunisations.model.ImmunisationListHTML;
+import uk.gov.hscic.patient.immunisations.search.ImmunisationSearch;
+import uk.gov.hscic.patient.immunisations.search.ImmunisationSearchFactory;
 import uk.gov.hscic.patient.investigations.model.InvestigationListHTML;
 import uk.gov.hscic.patient.investigations.search.InvestigationSearch;
 import uk.gov.hscic.patient.investigations.search.InvestigationSearchFactory;
@@ -353,6 +356,26 @@ public class PatientResourceProvider implements IResourceProvider {
                             break;
                             
                         case "Immunisations" :
+                            ImmunisationSearch immunisationSearch = applicationContext.getBean(ImmunisationSearchFactory.class).select(sourceType);
+                                List<ImmunisationListHTML> immunisationList = immunisationSearch.findAllImmunisationHTMLTables(nhsNumber);
+                                if(immunisationList != null && immunisationList.size() > 0){
+                                    //We have a result so build section
+                                    Section section = new Section();
+                                    section.setTitle("Immunisations");
+                                    CodingDt immunisationCoding = new CodingDt();
+                                    immunisationCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0");
+                                    immunisationCoding.setCode("IMM");
+                                    immunisationCoding.setDisplay("Immunisations");
+                                    CodeableConceptDt immunisationCodableConcept = new CodeableConceptDt();
+                                    immunisationCodableConcept.addCoding(immunisationCoding);
+                                    immunisationCodableConcept.setText(immunisationList.get(0).getProvider());
+                                    section.setCode(immunisationCodableConcept);
+                                    NarrativeDt narrative = new NarrativeDt();
+                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
+                                    narrative.setDivAsString(immunisationList.get(0).getHtml());
+                                    section.setText(narrative);
+                                    sectionsList.add(section);
+                                }
                             break;
                             
                         case "Administrative Items" :

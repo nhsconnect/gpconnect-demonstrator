@@ -12,7 +12,7 @@ angular.module('gpConnect')
     };
 
     var findAllHTMLTables = function (patientId) {
-      return $http.get('/api/patients/' + patientId + '/immunisations/htmlTables');
+      return $http.post('/fhir/Patient/$getcarerecord', '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "Immunisations"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}');
     };
 
     var create = function (patientId, immunisation) {

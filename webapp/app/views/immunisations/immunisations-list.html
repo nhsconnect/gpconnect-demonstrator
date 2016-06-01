@@ -1,10 +1,10 @@
-<div ng-repeat="immunisationTable in immunisationTables">
+<div>
   <h3>
     <strong>Immunisations</strong>
     <div class="glyphicon glyphicon-info-sign" tooltip="Source: {{ immunisationTable.provider }}" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
   </h3>
 
-  <div class="providerHTMLTables" ng-repeat="immunisationTable in immunisationTables">
+  <div class="providerHTMLTables">
     <div ng-bind-html="immunisationTable.html"></div>
   </div>
 </div>

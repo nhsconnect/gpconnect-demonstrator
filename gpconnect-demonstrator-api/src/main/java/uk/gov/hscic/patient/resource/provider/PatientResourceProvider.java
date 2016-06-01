@@ -40,6 +40,9 @@ import uk.gov.hscic.patient.encounters.search.EncounterSearchFactory;
 import uk.gov.hscic.patient.medication.model.MedicationListHTML;
 import uk.gov.hscic.patient.medication.search.MedicationSearch;
 import uk.gov.hscic.patient.medication.search.MedicationSearchFactory;
+import uk.gov.hscic.patient.observations.model.ObservationListHTML;
+import uk.gov.hscic.patient.observations.search.ObservationSearch;
+import uk.gov.hscic.patient.observations.search.ObservationSearchFactory;
 import uk.gov.hscic.patient.patientsummary.model.PatientSummaryListHTML;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearchFactory;
@@ -134,6 +137,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 RepoSource sourceType = RepoSourceType.fromString(null);
                 
                 for(String sectionName : sectionsParamList){
+                    
                     switch(sectionName){
                         case "Summary" :
                                 PatientSummarySearch patientSummarySearch = applicationContext.getBean(PatientSummarySearchFactory.class).select(sourceType);
@@ -227,7 +231,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 }
                             break;
                             
-                        case "Clinical Items" : //(Clinical Items)
+                        case "Clinical Items" :
                             ClinicalItemSearch clinicalItemsSearch = applicationContext.getBean(ClinicalItemSearchFactory.class).select(sourceType);
                                 List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch.findAllClinicalItemHTMLTables(nhsNumber);
                                 if(clinicalItemList != null && clinicalItemList.size() > 0){
@@ -250,7 +254,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 }
                             break;
                             
-                        case "Medications" :    //(Medications)
+                        case "Medications" :
                             MedicationSearch medicationSearch = applicationContext.getBean(MedicationSearchFactory.class).select(sourceType);
                                 List<MedicationListHTML> medicationList = medicationSearch.findMedicationHTMLTables(nhsNumber);
                                 if(medicationList != null && medicationList.size() > 0){
@@ -273,7 +277,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 }
                             break;
                             
-                        case "Referrals" :  //(Referrals)
+                        case "Referrals" :
                             ReferralSearch referralSearch = applicationContext.getBean(ReferralSearchFactory.class).select(sourceType);
                                 List<ReferralListHTML> referralList = referralSearch.findAllReferralHTMLTables(nhsNumber);
                                 if(referralList != null && referralList.size() > 0){
@@ -296,8 +300,29 @@ public class PatientResourceProvider implements IResourceProvider {
                                 }
                             break;
                             
-                        case "Observations" :   //(Observations)
+                        case "Observations" :
+                            ObservationSearch observationSearch = applicationContext.getBean(ObservationSearchFactory.class).select(sourceType);
+                                List<ObservationListHTML> observationList = observationSearch.findAllObservationHTMLTables(nhsNumber);
+                                if(observationList != null && observationList.size() > 0){
+                                    //We have a result so build section
+                                    Section section = new Section();
+                                    section.setTitle("Observations");
+                                    CodingDt observationCoding = new CodingDt();
+                                    observationCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0");
+                                    observationCoding.setCode("OBS");
+                                    observationCoding.setDisplay("Observations");
+                                    CodeableConceptDt observationCodableConcept = new CodeableConceptDt();
+                                    observationCodableConcept.addCoding(observationCoding);
+                                    observationCodableConcept.setText(observationList.get(0).getProvider());
+                                    section.setCode(observationCodableConcept);
+                                    NarrativeDt narrative = new NarrativeDt();
+                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
+                                    narrative.setDivAsString(observationList.get(0).getHtml());
+                                    section.setText(narrative);
+                                    sectionsList.add(section);
+                                }
                             break;
+                            
                         case "Investigations" : //(Investigations)
                             break;
                         case "Immunisations" :  // (Immunisations)

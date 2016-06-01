@@ -46,6 +46,9 @@ import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearchFactory;
 import uk.gov.hscic.patient.problems.model.ProblemListHTML;
 import uk.gov.hscic.patient.problems.search.ProblemSearch;
 import uk.gov.hscic.patient.problems.search.ProblemSearchFactory;
+import uk.gov.hscic.patient.referral.model.ReferralListHTML;
+import uk.gov.hscic.patient.referral.search.ReferralSearch;
+import uk.gov.hscic.patient.referral.search.ReferralSearchFactory;
 
 public class PatientResourceProvider implements IResourceProvider {
     
@@ -271,7 +274,28 @@ public class PatientResourceProvider implements IResourceProvider {
                             break;
                             
                         case "Referrals" :  //(Referrals)
+                            ReferralSearch referralSearch = applicationContext.getBean(ReferralSearchFactory.class).select(sourceType);
+                                List<ReferralListHTML> referralList = referralSearch.findAllReferralHTMLTables(nhsNumber);
+                                if(referralList != null && referralList.size() > 0){
+                                    //We have a result so build section
+                                    Section section = new Section();
+                                    section.setTitle("Referrals");
+                                    CodingDt referralCoding = new CodingDt();
+                                    referralCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0");
+                                    referralCoding.setCode("REF");
+                                    referralCoding.setDisplay("Referrals");
+                                    CodeableConceptDt referralCodableConcept = new CodeableConceptDt();
+                                    referralCodableConcept.addCoding(referralCoding);
+                                    referralCodableConcept.setText(referralList.get(0).getProvider());
+                                    section.setCode(referralCodableConcept);
+                                    NarrativeDt narrative = new NarrativeDt();
+                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
+                                    narrative.setDivAsString(referralList.get(0).getHtml());
+                                    section.setText(narrative);
+                                    sectionsList.add(section);
+                                }
                             break;
+                            
                         case "Observations" :   //(Observations)
                             break;
                         case "Investigations" : //(Investigations)

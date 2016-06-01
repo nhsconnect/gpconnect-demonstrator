@@ -37,6 +37,9 @@ import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearchFactory;
 import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
 import uk.gov.hscic.patient.encounters.search.EncounterSearch;
 import uk.gov.hscic.patient.encounters.search.EncounterSearchFactory;
+import uk.gov.hscic.patient.medication.model.MedicationListHTML;
+import uk.gov.hscic.patient.medication.search.MedicationSearch;
+import uk.gov.hscic.patient.medication.search.MedicationSearchFactory;
 import uk.gov.hscic.patient.patientsummary.model.PatientSummaryListHTML;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearchFactory;
@@ -243,8 +246,30 @@ public class PatientResourceProvider implements IResourceProvider {
                                     sectionsList.add(section);
                                 }
                             break;
+                            
                         case "Medications" :    //(Medications)
+                            MedicationSearch medicationSearch = applicationContext.getBean(MedicationSearchFactory.class).select(sourceType);
+                                List<MedicationListHTML> medicationList = medicationSearch.findMedicationHTMLTables(nhsNumber);
+                                if(medicationList != null && medicationList.size() > 0){
+                                    //We have a result so build section
+                                    Section section = new Section();
+                                    section.setTitle("Medications");
+                                    CodingDt medicationCoding = new CodingDt();
+                                    medicationCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0");
+                                    medicationCoding.setCode("MED");
+                                    medicationCoding.setDisplay("Medications");
+                                    CodeableConceptDt medicationCodableConcept = new CodeableConceptDt();
+                                    medicationCodableConcept.addCoding(medicationCoding);
+                                    medicationCodableConcept.setText(medicationList.get(0).getProvider());
+                                    section.setCode(medicationCodableConcept);
+                                    NarrativeDt narrative = new NarrativeDt();
+                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
+                                    narrative.setDivAsString(medicationList.get(0).getHtml());
+                                    section.setText(narrative);
+                                    sectionsList.add(section);
+                                }
                             break;
+                            
                         case "Referrals" :  //(Referrals)
                             break;
                         case "Observations" :   //(Observations)

@@ -37,6 +37,9 @@ import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearchFactory;
 import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
 import uk.gov.hscic.patient.encounters.search.EncounterSearch;
 import uk.gov.hscic.patient.encounters.search.EncounterSearchFactory;
+import uk.gov.hscic.patient.investigations.model.InvestigationListHTML;
+import uk.gov.hscic.patient.investigations.search.InvestigationSearch;
+import uk.gov.hscic.patient.investigations.search.InvestigationSearchFactory;
 import uk.gov.hscic.patient.medication.model.MedicationListHTML;
 import uk.gov.hscic.patient.medication.search.MedicationSearch;
 import uk.gov.hscic.patient.medication.search.MedicationSearchFactory;
@@ -324,6 +327,26 @@ public class PatientResourceProvider implements IResourceProvider {
                             break;
                             
                         case "Investigations" : //(Investigations)
+                            InvestigationSearch investigationSearch = applicationContext.getBean(InvestigationSearchFactory.class).select(sourceType);
+                                List<InvestigationListHTML> investigationList = investigationSearch.findAllInvestigationHTMLTables(nhsNumber);
+                                if(investigationList != null && investigationList.size() > 0){
+                                    //We have a result so build section
+                                    Section section = new Section();
+                                    section.setTitle("Investigations");
+                                    CodingDt investigationCoding = new CodingDt();
+                                    investigationCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0");
+                                    investigationCoding.setCode("INV");
+                                    investigationCoding.setDisplay("Investigations");
+                                    CodeableConceptDt investigationCodableConcept = new CodeableConceptDt();
+                                    investigationCodableConcept.addCoding(investigationCoding);
+                                    investigationCodableConcept.setText(investigationList.get(0).getProvider());
+                                    section.setCode(investigationCodableConcept);
+                                    NarrativeDt narrative = new NarrativeDt();
+                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
+                                    narrative.setDivAsString(investigationList.get(0).getHtml());
+                                    section.setText(narrative);
+                                    sectionsList.add(section);
+                                }
                             break;
                         case "Immunisations" :  // (Immunisations)
                             break;

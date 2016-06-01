@@ -28,6 +28,9 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
+import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
+import uk.gov.hscic.patient.adminitems.search.AdminItemSearch;
+import uk.gov.hscic.patient.adminitems.search.AdminItemSearchFactory;
 import uk.gov.hscic.patient.allergies.model.AllergyListHTML;
 import uk.gov.hscic.patient.allergies.search.AllergySearch;
 import uk.gov.hscic.patient.allergies.search.AllergySearchFactory;
@@ -348,9 +351,31 @@ public class PatientResourceProvider implements IResourceProvider {
                                     sectionsList.add(section);
                                 }
                             break;
-                        case "Immunisations" :  // (Immunisations)
+                            
+                        case "Immunisations" :
                             break;
-                        case "Administrative Items" :   //(Administrative Items)
+                            
+                        case "Administrative Items" :
+                            AdminItemSearch adminItemSearch = applicationContext.getBean(AdminItemSearchFactory.class).select(sourceType);
+                                List<AdminItemListHTML> adminItemList = adminItemSearch.findAllAdminItemHTMLTables(nhsNumber);
+                                if(adminItemList != null && adminItemList.size() > 0){
+                                    //We have a result so build section
+                                    Section section = new Section();
+                                    section.setTitle("Administrative Items");
+                                    CodingDt adminItemCoding = new CodingDt();
+                                    adminItemCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0");
+                                    adminItemCoding.setCode("ADM");
+                                    adminItemCoding.setDisplay("Administrative Items");
+                                    CodeableConceptDt adminItemCodableConcept = new CodeableConceptDt();
+                                    adminItemCodableConcept.addCoding(adminItemCoding);
+                                    adminItemCodableConcept.setText(adminItemList.get(0).getProvider());
+                                    section.setCode(adminItemCodableConcept);
+                                    NarrativeDt narrative = new NarrativeDt();
+                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
+                                    narrative.setDivAsString(adminItemList.get(0).getHtml());
+                                    section.setText(narrative);
+                                    sectionsList.add(section);
+                                }
                             break;
                         
                     }

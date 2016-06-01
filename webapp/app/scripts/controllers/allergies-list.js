@@ -31,16 +31,28 @@ angular.module('gpConnect')
 
     Allergy.findAllHTMLTables($stateParams.patientId).then(function (result) {
 
-      if (result.data.length == 0) {
-        var text = '[{"sourceId":"1","source":"Legacy","provider":"No Data","html":"No allergies data available for this patient."}]';
-        $scope.allergyTables = JSON.parse(text);
-      } else {
-        $scope.allergyTables = result.data;
-      }
-
-      for (var i = 0; i < $scope.allergyTables.length; i++) {
-        $scope.allergyTables[i].html = $sce.trustAsHtml($scope.allergyTables[i].html);
-      }
+      // Default Page Content
+      var text = '{"provider":"No Data","html":"No allergies data available for this patient."}';
+      $scope.allergyTable = JSON.parse(text);
+      $scope.allergyTable.html = $sce.trustAsHtml($scope.allergyTable.html);
+      
+      // Process Returned Data
+      var fhirJSON = result.data;
+      var entryObj = fhirJSON.entry;
+      $.each(entryObj, function(key,value) {
+        if (value.resource.resourceType == "Patient") { // Find Patient Entry
+            //alert(value.resource.identifier[0].value);
+        }
+        if (value.resource.resourceType == "Composition" && value.resource.type.coding[0].code == "425173008") { // Find Care Record Entry
+            // Check if the requested section exists, if it does not in the back end it will not be passed to the front end
+            if (value.resource.section != undefined){
+                // We are only going to ever request one setion within the care record entry, this will be the section for displaying on the page 
+                // so we can assume the first section is the one we want to display.
+                $scope.allergyTable.html = $sce.trustAsHtml(value.resource.section[0].text.div);
+                $scope.allergyTable.provider = value.resource.section[0].code.text;
+            }
+        }
+      });
 
       usSpinnerService.stop('allergySummary-spinner');
     });

@@ -28,6 +28,9 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
+import uk.gov.hscic.patient.allergies.model.AllergyListHTML;
+import uk.gov.hscic.patient.allergies.search.AllergySearch;
+import uk.gov.hscic.patient.allergies.search.AllergySearchFactory;
 import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
 import uk.gov.hscic.patient.encounters.search.EncounterSearch;
 import uk.gov.hscic.patient.encounters.search.EncounterSearchFactory;
@@ -192,9 +195,30 @@ public class PatientResourceProvider implements IResourceProvider {
                                 }
                             break;
                             
-                        case "Clinical Items" : //(Clinical Items)
+                        case "Allergies and Sensitivities" :
+                            AllergySearch allergySearch = applicationContext.getBean(AllergySearchFactory.class).select(sourceType);
+                                List<AllergyListHTML> allergyList = allergySearch.findAllAllergyHTMLTables(nhsNumber);
+                                if(allergyList != null && allergyList.size() > 0){
+                                    //We have a result so build section
+                                    Section section = new Section();
+                                    section.setTitle("Allergies and Sensitivities");
+                                    CodingDt allergyCoding = new CodingDt();
+                                    allergyCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0");
+                                    allergyCoding.setCode("ALL");
+                                    allergyCoding.setDisplay("Allergies and Sensitivities");
+                                    CodeableConceptDt allergyCodableConcept = new CodeableConceptDt();
+                                    allergyCodableConcept.addCoding(allergyCoding);
+                                    allergyCodableConcept.setText(allergyList.get(0).getProvider());
+                                    section.setCode(allergyCodableConcept);
+                                    NarrativeDt narrative = new NarrativeDt();
+                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
+                                    narrative.setDivAsString(allergyList.get(0).getHtml());
+                                    section.setText(narrative);
+                                    sectionsList.add(section);
+                                }
                             break;
-                        case "Allergies" :  //(Allergies and Sensitivities)
+                            
+                        case "Clinical Items" : //(Clinical Items)
                             break;
                         case "Medications" :    //(Medications)
                             break;

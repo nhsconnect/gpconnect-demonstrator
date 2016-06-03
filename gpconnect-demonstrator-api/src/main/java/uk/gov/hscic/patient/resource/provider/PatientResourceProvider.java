@@ -1,8 +1,10 @@
 package uk.gov.hscic.patient.resource.provider;
 
 import ca.uhn.fhir.model.api.IDatatype;
+import ca.uhn.fhir.model.dstu2.composite.AddressDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.NarrativeDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
@@ -14,12 +16,16 @@ import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
+import ca.uhn.fhir.model.dstu2.valueset.AddressTypeEnum;
+import ca.uhn.fhir.model.dstu2.valueset.AddressUseEnum;
+import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.CompositionStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
+import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
@@ -28,7 +34,6 @@ import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -70,6 +75,9 @@ import uk.gov.hscic.patient.problems.search.ProblemSearchFactory;
 import uk.gov.hscic.patient.referral.model.ReferralListHTML;
 import uk.gov.hscic.patient.referral.search.ReferralSearch;
 import uk.gov.hscic.patient.referral.search.ReferralSearchFactory;
+import uk.gov.hscic.patient.summary.model.PatientDetails;
+import uk.gov.hscic.patient.summary.search.PatientSearch;
+import uk.gov.hscic.patient.summary.search.PatientSearchFactory;
 
 public class PatientResourceProvider implements IResourceProvider {
     
@@ -433,43 +441,42 @@ public class PatientResourceProvider implements IResourceProvider {
         return bundle;
     }
     
+    @Read()
+    public Patient getResourceById(@IdParam IdDt patientId) {
+        
+        Patient patient = new Patient();
+        
+        // Get patient details from dataabase
+        RepoSource sourceType = RepoSourceType.fromString(null);
+        PatientSearch patientSearch = applicationContext.getBean(PatientSearchFactory.class).select(sourceType);
+        PatientDetails patientDetails = patientSearch.findPatient(patientId.getIdPart());
+        
+        patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", patientId.getIdPart()));
+
+        HumanNameDt name = patient.addName();
+        name.setText(patientDetails.getName());
+        name.addFamily("FHIRTestSurname");
+        name.addGiven("FHIRTestForename");
+        name.addPrefix("Mr");
+        name.setUse(NameUseEnum.USUAL);
+        
+        patient.setBirthDate(new DateDt(patientDetails.getDateOfBirth()));
+
+        AddressDt address = patient.addAddress();
+        address.setUse(AddressUseEnum.HOME);
+        address.setType(AddressTypeEnum.PHYSICAL);
+        address.setText(patientDetails.getAddress());
+        
+        return patient;
+    }
+    
+    
     private Entry buildPatientEntry(String nhsNumber){
             
             // Build the Patient Resource in the response
             Entry patientEntry = new Entry();    
             patientEntry.setResource(getResourceById(new IdDt("Patient/"+nhsNumber)));
+            patientEntry.setFullUrl("Patient/"+nhsNumber);
             return patientEntry;
-    }
-    
-    @Read()
-    public Patient getResourceById(@IdParam IdDt patientId) {
-        Patient patient = new Patient();
-        patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", patientId.getIdPart()));
-        
-        switch(patientId.getIdPart()){
-            case "9999999000":
-                patient.addName().addFamily("TPPSurname");
-                patient.getName().get(0).addGiven("TPPForename");
-                patient.getName().get(0).addPrefix("Mr");
-                patient.getName().get(0).setUse(NameUseEnum.USUAL);
-                break;
-            case "9999999001":
-                patient.addName().addFamily("MicroSurname");
-                patient.getName().get(0).addGiven("MicroForename");
-                patient.getName().get(0).addSuffix("Junior");
-                break;
-            case "9999999002":
-                patient.addName().addFamily("INPSForename");
-                patient.getName().get(0).addGiven("INPSSurname");
-                patient.getName().get(0).setText("TestText FullName");
-                break;
-            default :
-                patient.addName().addFamily("TestForename");
-                patient.getName().get(0).addGiven("TestSurname");
-                patient.getName().get(0).setUse(NameUseEnum.NICKNAME);
-                break;
-        }
-        
-        return patient;
     }
 }

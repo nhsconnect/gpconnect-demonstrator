@@ -1,7 +1,6 @@
 package uk.gov.hscic.patient.summary.model;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  */

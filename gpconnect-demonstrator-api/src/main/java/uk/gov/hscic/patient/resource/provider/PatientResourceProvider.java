@@ -10,17 +10,25 @@ import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
 import ca.uhn.fhir.model.dstu2.resource.Composition;
 import ca.uhn.fhir.model.dstu2.resource.Composition.Section;
+import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.CompositionStatusEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
+import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
+import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -28,6 +36,7 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
+import uk.gov.hscic.common.util.NhsCodeValidator;
 import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
 import uk.gov.hscic.patient.adminitems.search.AdminItemSearch;
 import uk.gov.hscic.patient.adminitems.search.AdminItemSearchFactory;
@@ -99,9 +108,18 @@ public class PatientResourceProvider implements IResourceProvider {
         bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
         
         // Validate request fields
-        if(nhsNumber == null || nhsNumber.isEmpty()){
-            // Build the OperationOutcome response
+        if(nhsNumber == null || nhsNumber.isEmpty() || !NhsCodeValidator.nhsNumberValid(nhsNumber)){
             
+            OperationOutcome operationOutcome = new OperationOutcome();
+            CodingDt errorCoding = new CodingDt();
+            errorCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-getrecord-response-code-1-0");
+            errorCoding.setCode("GCR-0002");
+            CodeableConceptDt errorCodableConcept = new CodeableConceptDt();
+            errorCodableConcept.addCoding(errorCoding);
+            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.INVALID_CONTENT).setDetails(errorCodableConcept).setDiagnostics("NHS Number Invalid");
+            Entry operationOutcomeEntry = new Entry();
+            operationOutcomeEntry.setResource(operationOutcome);
+            bundle.addEntry(operationOutcomeEntry);
             
         } else {
             
@@ -135,7 +153,7 @@ public class PatientResourceProvider implements IResourceProvider {
             
             careRecordComposition.setTitle("Patient Care Record");
             careRecordComposition.setStatus(CompositionStatusEnum.FINAL);
-            careRecordComposition.setSubject(new ResourceReferenceDt());
+            careRecordComposition.setSubject(new ResourceReferenceDt("Patient/"+nhsNumber));
             careRecordComposition.setAuthor(Collections.singletonList(new ResourceReferenceDt()));
             
             
@@ -415,15 +433,43 @@ public class PatientResourceProvider implements IResourceProvider {
         return bundle;
     }
     
-    public Entry buildPatientEntry(String nhsNumber){
+    private Entry buildPatientEntry(String nhsNumber){
             
             // Build the Patient Resource in the response
             Entry patientEntry = new Entry();    
-            
-            Patient patient = new Patient();
-            patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", nhsNumber));
-            
-            patientEntry.setResource(patient);
+            patientEntry.setResource(getResourceById(new IdDt("Patient/"+nhsNumber)));
             return patientEntry;
+    }
+    
+    @Read()
+    public Patient getResourceById(@IdParam IdDt patientId) {
+        Patient patient = new Patient();
+        patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", patientId.getIdPart()));
+        
+        switch(patientId.getIdPart()){
+            case "9999999000":
+                patient.addName().addFamily("TPPSurname");
+                patient.getName().get(0).addGiven("TPPForename");
+                patient.getName().get(0).addPrefix("Mr");
+                patient.getName().get(0).setUse(NameUseEnum.USUAL);
+                break;
+            case "9999999001":
+                patient.addName().addFamily("MicroSurname");
+                patient.getName().get(0).addGiven("MicroForename");
+                patient.getName().get(0).addSuffix("Junior");
+                break;
+            case "9999999002":
+                patient.addName().addFamily("INPSForename");
+                patient.getName().get(0).addGiven("INPSSurname");
+                patient.getName().get(0).setText("TestText FullName");
+                break;
+            default :
+                patient.addName().addFamily("TestForename");
+                patient.getName().get(0).addGiven("TestSurname");
+                patient.getName().get(0).setUse(NameUseEnum.NICKNAME);
+                break;
+        }
+        
+        return patient;
     }
 }

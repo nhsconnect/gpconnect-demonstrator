@@ -5,6 +5,7 @@ USE                     gpconnect;
 
 /* Destroy all existing data */
 DROP TABLE IF EXISTS gpconnect.general_practitioners;
+DROP TABLE IF EXISTS gpconnect.practitioners;
 DROP TABLE IF EXISTS gpconnect.medical_departments;
 DROP TABLE IF EXISTS gpconnect.patients;
 DROP TABLE IF EXISTS gpconnect.allergies;
@@ -30,6 +31,22 @@ CREATE TABLE gpconnect.general_practitioners (
   address_4     VARCHAR(100)  NULL,
   address_5     VARCHAR(100)  NULL,
   postcode      VARCHAR(10)   NULL,
+  PRIMARY KEY   (id)
+);
+
+CREATE TABLE gpconnect.practitioners (
+  id            		BIGINT        	NOT NULL    AUTO_INCREMENT,
+  p_user_id				VARCHAR(30)  	NULL,
+  p_role_id				VARCHAR(30)  	NULL,
+  p_name_family			VARCHAR(100)  	NULL,
+  p_name_given			VARCHAR(100)  	NULL,
+  p_name_prefix			VARCHAR(20)  	NULL,
+  p_gender				VARCHAR(10)  	NULL,
+  p_organization_id		BIGINT  		NULL,
+  p_role_code			VARCHAR(30)  	NULL,
+  p_role_display		VARCHAR(100)  	NULL,
+  p_com_code			VARCHAR(30)  	NULL,
+  p_com_display			VARCHAR(100)  	NULL,
   PRIMARY KEY   (id)
 );
 

@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import uk.gov.hscic.patient.resource.provider.PatientResourceProvider;
+import uk.gov.hscic.practitioner.resource.provider.PractitionerResourceProvider;
 
 @WebServlet(urlPatterns={"/fhir/*"}, displayName="FHIR Server")
 public class FhirRestfulServlet extends RestfulServer {
@@ -18,8 +19,12 @@ public class FhirRestfulServlet extends RestfulServer {
     protected void initialize() throws ServletException {
         List<IResourceProvider> resourceProviders = new ArrayList<>();
         
+        PractitionerResourceProvider practitionerResourceProvider = new PractitionerResourceProvider();
+        practitionerResourceProvider.setApplicationContext(WebApplicationContextUtils.getWebApplicationContext(this.getServletContext()));
+        resourceProviders.add(practitionerResourceProvider);
+        
         PatientResourceProvider patientResourceProvider = new PatientResourceProvider();
-        patientResourceProvider.setApplicationContext(WebApplicationContextUtils.getWebApplicationContext(this.getServletContext()));
+        patientResourceProvider.setResourceProviderLinks(WebApplicationContextUtils.getWebApplicationContext(this.getServletContext()), practitionerResourceProvider);
         resourceProviders.add(patientResourceProvider);
         
         setResourceProviders(resourceProviders);

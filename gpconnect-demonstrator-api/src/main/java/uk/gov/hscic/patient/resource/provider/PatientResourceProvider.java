@@ -18,7 +18,6 @@ import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AddressTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.AddressUseEnum;
-import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.CompositionStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
@@ -78,6 +77,7 @@ import uk.gov.hscic.patient.referral.search.ReferralSearchFactory;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
 import uk.gov.hscic.patient.summary.search.PatientSearch;
 import uk.gov.hscic.patient.summary.search.PatientSearchFactory;
+import uk.gov.hscic.practitioner.resource.provider.PractitionerResourceProvider;
 
 public class PatientResourceProvider implements IResourceProvider {
     
@@ -87,11 +87,13 @@ public class PatientResourceProvider implements IResourceProvider {
     }
     
     ApplicationContext applicationContext;
+    PractitionerResourceProvider practitionerResourceProvider;
     
-    public void setApplicationContext(ApplicationContext applicationContext){
+    public void setResourceProviderLinks(ApplicationContext applicationContext, PractitionerResourceProvider practitionerResourceProvider){
         this.applicationContext = applicationContext;
+        this.practitionerResourceProvider = practitionerResourceProvider;
     }
-            
+    
     @Operation(name="$getcarerecord")
     public Bundle getPatientCareRecord(@ResourceParam Parameters params){
                 
@@ -132,7 +134,8 @@ public class PatientResourceProvider implements IResourceProvider {
         } else {
             
             // Build the Patient Resource and add it to the bundle
-            bundle.addEntry(buildPatientEntry(nhsNumber));
+            Entry patientEntry = buildPatientEntry(nhsNumber);
+            bundle.addEntry(patientEntry);
             
             //Build the Care Record Composition
             Entry careRecordEntry = new Entry();
@@ -162,7 +165,18 @@ public class PatientResourceProvider implements IResourceProvider {
             careRecordComposition.setTitle("Patient Care Record");
             careRecordComposition.setStatus(CompositionStatusEnum.FINAL);
             careRecordComposition.setSubject(new ResourceReferenceDt("Patient/"+nhsNumber));
-            careRecordComposition.setAuthor(Collections.singletonList(new ResourceReferenceDt()));
+            
+            List<ResourceReferenceDt> careProviderPractitionerList = ((Patient)patientEntry.getResource()).getCareProvider();
+            if(careProviderPractitionerList.size() > 0){
+                String practitionerReferenceStr = careProviderPractitionerList.get(0).getReference().getValue();
+                ResourceReferenceDt practitionerReference = new ResourceReferenceDt(practitionerReferenceStr);
+                careRecordComposition.setAuthor(Collections.singletonList(practitionerReference));
+                
+                Entry practitionerEntry = new Entry();
+                practitionerEntry.setResource(practitionerResourceProvider.getPractitionerById(new IdDt(practitionerReferenceStr)));
+                practitionerEntry.setFullUrl(practitionerReferenceStr);
+                bundle.addEntry(practitionerEntry);
+            }
             
             
             // Build requested sections
@@ -466,6 +480,8 @@ public class PatientResourceProvider implements IResourceProvider {
         address.setUse(AddressUseEnum.HOME);
         address.setType(AddressTypeEnum.PHYSICAL);
         address.setText(patientDetails.getAddress());
+        
+        patient.getCareProvider().add(new ResourceReferenceDt("Practitioner/"+patientDetails.getGpId()));
         
         return patient;
     }

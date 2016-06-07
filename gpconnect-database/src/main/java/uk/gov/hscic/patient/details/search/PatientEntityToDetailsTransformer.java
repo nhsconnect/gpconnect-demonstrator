@@ -39,6 +39,7 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         patient.setTelephone(patientEntity.getPhone());
         patient.setGpDetails(patientEntity.getGp().getName());
         patient.setPasNumber(patientEntity.getPasNumber());
+        patient.setGpId(patientEntity.getGp().getId());
 
         return patient;
     }

@@ -15,6 +15,7 @@ public class PatientDetails {
     private String telephone;
     private String gpDetails;
     private String pasNumber;
+    private Long gpId;
 
     public String getId() {
         return id;
@@ -87,4 +88,13 @@ public class PatientDetails {
     public void setPasNumber(String pasNumber) {
         this.pasNumber = pasNumber;
     }
+
+    public Long getGpId() {
+        return gpId;
+    }
+
+    public void setGpId(Long gpId) {
+        this.gpId = gpId;
+    }
+    
 }

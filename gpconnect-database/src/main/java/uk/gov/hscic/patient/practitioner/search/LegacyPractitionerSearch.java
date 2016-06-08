@@ -20,6 +20,10 @@ public class LegacyPractitionerSearch extends AbstractLegacyService implements P
 
         final PractitionerEntity item = practitionerRepository.findOne(Long.parseLong(practitionerId));
 
-        return transformer.transform(item);
+        if(item == null){
+            return null;
+        } else {
+            return transformer.transform(item);
+        }
     }
 }

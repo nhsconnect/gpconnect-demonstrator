@@ -4,14 +4,18 @@ import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Practitioner;
 import ca.uhn.fhir.model.dstu2.resource.Practitioner.PractitionerRole;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
@@ -33,12 +37,17 @@ public class PractitionerResourceProvider  implements IResourceProvider {
     }
     
     @Read()
-    public Practitioner getPractitionerById(@IdParam IdDt patientId) {
+    public Practitioner getPractitionerById(@IdParam IdDt practitionerId) {
         
         RepoSource sourceType = RepoSourceType.fromString(null);
         PractitionerSearch practitionerSearch = applicationContext.getBean(PractitionerSearchFactory.class).select(sourceType);
-        PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerDetails(patientId.getIdPart());
- 
+        PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerDetails(practitionerId.getIdPart());
+
+        if(practitionerDetails == null){
+            OperationOutcome operationalOutcome = new OperationOutcome();
+            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No practitioner details found for practitioner ID: "+practitionerId.getIdPart());
+            throw new InternalErrorException("No practitioner details found for practitioner ID: "+practitionerId.getIdPart(), operationalOutcome);
+        }
         
         Practitioner practitioner = new Practitioner();
         
@@ -67,7 +76,8 @@ public class PractitionerResourceProvider  implements IResourceProvider {
         roleCodableConcept.addCoding(roleCoding);
         PractitionerRole practitionerRole = practitioner.addPractitionerRole();
         practitionerRole.setRole(roleCodableConcept);
-        //practitionerRole.setManagingOrganization(null); // Associated Organisation
+        
+        practitionerRole.setManagingOrganization(new ResourceReferenceDt("Organization/"+practitionerDetails.getOrganizationId())); // Associated Organisation
         
         CodingDt comCoding = new CodingDt();
         comCoding.setSystem("http://fhir.nhs.net/ValueSet/human-language-1-0");

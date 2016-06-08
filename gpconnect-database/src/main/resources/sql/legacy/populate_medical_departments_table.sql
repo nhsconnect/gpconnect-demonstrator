@@ -1,5 +1,3 @@
-LOCK TABLES gpconnect.medical_departments WRITE;
-
 INSERT INTO gpconnect.medical_departments
   (id,      department)
 VALUES
@@ -9,4 +7,9 @@ VALUES
   (4,       'Primary Care'),
   (5,       'Mental Health');
 
-UNLOCK TABLES;
+INSERT INTO gpconnect.organizations
+  (id,  org_code,	site_code,	org_name)
+VALUES
+  (1,	'R1A02',	'Z26556',	'Test Hopsital 1'),
+  (2,	'R1A14',	'Z33433',	'Test GP Care Trust'),
+  (3,	'R3B46',	'Z12345',	'New GP Practice');

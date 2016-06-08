@@ -223,6 +223,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                         narrative.setDivAsString(patientSummaryList.get(0).getHtml());
                                         section.setText(narrative);
                                         sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Summary");
                                     }
                                 break;
 
@@ -246,6 +248,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                         narrative.setDivAsString(problemList.get(0).getHtml());
                                         section.setText(narrative);
                                         sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Problems");
                                     }
                                 break;
 
@@ -269,6 +273,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                         narrative.setDivAsString(encounterList.get(0).getHtml());
                                         section.setText(narrative);
                                         sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Encounters");
                                     }
                                 break;
 
@@ -292,6 +298,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                         narrative.setDivAsString(allergyList.get(0).getHtml());
                                         section.setText(narrative);
                                         sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Allergies and Sensitivities");
                                     }
                                 break;
 
@@ -315,6 +323,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                         narrative.setDivAsString(clinicalItemList.get(0).getHtml());
                                         section.setText(narrative);
                                         sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Clinical Items");
                                     }
                                 break;
 
@@ -338,6 +348,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                         narrative.setDivAsString(medicationList.get(0).getHtml());
                                         section.setText(narrative);
                                         sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Medication");
                                     }
                                 break;
 
@@ -361,6 +373,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                         narrative.setDivAsString(referralList.get(0).getHtml());
                                         section.setText(narrative);
                                         sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Referrals");
                                     }
                                 break;
 
@@ -384,6 +398,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                         narrative.setDivAsString(observationList.get(0).getHtml());
                                         section.setText(narrative);
                                         sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Observations");
                                     }
                                 break;
 
@@ -407,6 +423,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                         narrative.setDivAsString(investigationList.get(0).getHtml());
                                         section.setText(narrative);
                                         sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Investigations");
                                     }
                                 break;
 
@@ -430,6 +448,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                         narrative.setDivAsString(immunisationList.get(0).getHtml());
                                         section.setText(narrative);
                                         sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Immunisations");
                                     }
                                 break;
 
@@ -453,7 +473,13 @@ public class PatientResourceProvider implements IResourceProvider {
                                         narrative.setDivAsString(adminItemList.get(0).getHtml());
                                         section.setText(narrative);
                                         sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: AdministrativeItems");
                                     }
+                                break;
+                                
+                            default :
+                                operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("The requested section '" + sectionName + "' is not a valid section.");
                                 break;
 
                         }

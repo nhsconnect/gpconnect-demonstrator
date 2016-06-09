@@ -1,6 +1,6 @@
-package uk.gov.hscic.patient.practitioner.repo;
+package uk.gov.hscic.practitioner.repo;
 
-import uk.gov.hscic.patient.practitioner.model.PractitionerEntity;
+import uk.gov.hscic.practitioner.model.PractitionerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PractitionerRepository extends JpaRepository<PractitionerEntity, Long> {

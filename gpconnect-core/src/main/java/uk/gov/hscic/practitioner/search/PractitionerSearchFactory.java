@@ -1,4 +1,4 @@
-package uk.gov.hscic.patient.practitioner.search;
+package uk.gov.hscic.practitioner.search;
 
 import uk.gov.hscic.common.repo.RepositoryFactory;
 

@@ -1,8 +1,8 @@
-package uk.gov.hscic.patient.practitioner.search;
+package uk.gov.hscic.practitioner.search;
 
 import org.apache.commons.collections4.Transformer;
-import uk.gov.hscic.patient.practitioner.model.PractitionerDetails;
-import uk.gov.hscic.patient.practitioner.model.PractitionerEntity;
+import uk.gov.hscic.practitioner.model.PractitionerDetails;
+import uk.gov.hscic.practitioner.model.PractitionerEntity;
 
 public class PractitionerEntityToObjectTransformer implements Transformer<PractitionerEntity, PractitionerDetails> {
 

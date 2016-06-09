@@ -1,4 +1,4 @@
-package uk.gov.hscic.patient.practitioner.model;
+package uk.gov.hscic.practitioner.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

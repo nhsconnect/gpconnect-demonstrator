@@ -1,9 +1,9 @@
-package uk.gov.hscic.patient.practitioner.search;
+package uk.gov.hscic.practitioner.search;
 
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.practitioner.model.PractitionerDetails;
+import uk.gov.hscic.practitioner.model.PractitionerDetails;
 
 public class NotConfiguredPractitionerSearch implements PractitionerSearch {
 

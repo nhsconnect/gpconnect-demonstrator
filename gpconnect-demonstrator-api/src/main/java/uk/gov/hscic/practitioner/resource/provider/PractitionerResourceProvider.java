@@ -19,9 +19,9 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.practitioner.model.PractitionerDetails;
-import uk.gov.hscic.patient.practitioner.search.PractitionerSearch;
-import uk.gov.hscic.patient.practitioner.search.PractitionerSearchFactory;
+import uk.gov.hscic.practitioner.model.PractitionerDetails;
+import uk.gov.hscic.practitioner.search.PractitionerSearch;
+import uk.gov.hscic.practitioner.search.PractitionerSearchFactory;
 
 public class PractitionerResourceProvider  implements IResourceProvider {
     

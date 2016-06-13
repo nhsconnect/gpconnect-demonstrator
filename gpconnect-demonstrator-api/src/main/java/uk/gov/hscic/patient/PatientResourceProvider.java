@@ -1,4 +1,4 @@
-package uk.gov.hscic.patient.resource.provider;
+package uk.gov.hscic.patient;
 
 import ca.uhn.fhir.model.api.IDatatype;
 import ca.uhn.fhir.model.dstu2.composite.AddressDt;
@@ -43,7 +43,7 @@ import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.common.util.NhsCodeValidator;
-import uk.gov.hscic.organization.resource.provider.OrganizationResourceProvider;
+import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.adminitems.model.*;
 import uk.gov.hscic.patient.adminitems.search.*;
 import uk.gov.hscic.patient.allergies.model.*;
@@ -68,7 +68,7 @@ import uk.gov.hscic.patient.referral.model.*;
 import uk.gov.hscic.patient.referral.search.*;
 import uk.gov.hscic.patient.summary.model.*;
 import uk.gov.hscic.patient.summary.search.*;
-import uk.gov.hscic.practitioner.resource.provider.PractitionerResourceProvider;
+import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 public class PatientResourceProvider implements IResourceProvider {
         
@@ -86,6 +86,44 @@ public class PatientResourceProvider implements IResourceProvider {
     public Class<Patient> getResourceType() {
         return Patient.class;
     }
+    
+    @Read()
+    public Patient getPatientById(@IdParam IdDt patientId) {
+        
+        Patient patient = new Patient();
+        
+        // Get patient details from dataabase
+        RepoSource sourceType = RepoSourceType.fromString(null);
+        PatientSearch patientSearch = applicationContext.getBean(PatientSearchFactory.class).select(sourceType);
+        PatientDetails patientDetails = patientSearch.findPatient(patientId.getIdPart());
+        
+        if(patientDetails == null){
+            OperationOutcome operationOutcome = new OperationOutcome();
+            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No patient details found for patient ID: "+patientId.getIdPart());
+            throw new InternalErrorException("No patient details found for patient ID: "+patientId.getIdPart(), operationOutcome);
+        }
+        
+        patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", patientId.getIdPart()));
+
+        HumanNameDt name = patient.addName();
+        name.setText(patientDetails.getName());
+        name.addFamily("FHIRTestSurname");
+        name.addGiven("FHIRTestForename");
+        name.addPrefix("Mr");
+        name.setUse(NameUseEnum.USUAL);
+        
+        patient.setBirthDate(new DateDt(patientDetails.getDateOfBirth()));
+
+        AddressDt address = patient.addAddress();
+        address.setUse(AddressUseEnum.HOME);
+        address.setType(AddressTypeEnum.PHYSICAL);
+        address.setText(patientDetails.getAddress());
+        
+        patient.getCareProvider().add(new ResourceReferenceDt("Practitioner/"+patientDetails.getGpId()));
+        
+        return patient;
+    }
+    
     
     @Operation(name="$getcarerecord")
     public Bundle getPatientCareRecord(@ResourceParam Parameters params){
@@ -368,43 +406,6 @@ public class PatientResourceProvider implements IResourceProvider {
         }
         
         return bundle;
-    }
-    
-    @Read()
-    public Patient getPatientById(@IdParam IdDt patientId) {
-        
-        Patient patient = new Patient();
-        
-        // Get patient details from dataabase
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        PatientSearch patientSearch = applicationContext.getBean(PatientSearchFactory.class).select(sourceType);
-        PatientDetails patientDetails = patientSearch.findPatient(patientId.getIdPart());
-        
-        if(patientDetails == null){
-            OperationOutcome operationOutcome = new OperationOutcome();
-            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No patient details found for patient ID: "+patientId.getIdPart());
-            throw new InternalErrorException("No patient details found for patient ID: "+patientId.getIdPart(), operationOutcome);
-        }
-        
-        patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", patientId.getIdPart()));
-
-        HumanNameDt name = patient.addName();
-        name.setText(patientDetails.getName());
-        name.addFamily("FHIRTestSurname");
-        name.addGiven("FHIRTestForename");
-        name.addPrefix("Mr");
-        name.setUse(NameUseEnum.USUAL);
-        
-        patient.setBirthDate(new DateDt(patientDetails.getDateOfBirth()));
-
-        AddressDt address = patient.addAddress();
-        address.setUse(AddressUseEnum.HOME);
-        address.setType(AddressTypeEnum.PHYSICAL);
-        address.setText(patientDetails.getAddress());
-        
-        patient.getCareProvider().add(new ResourceReferenceDt("Practitioner/"+patientDetails.getGpId()));
-        
-        return patient;
     }
     
     

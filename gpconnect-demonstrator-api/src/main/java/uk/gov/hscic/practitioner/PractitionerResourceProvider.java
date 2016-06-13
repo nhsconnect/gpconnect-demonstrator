@@ -1,4 +1,4 @@
-package uk.gov.hscic.practitioner.resource.provider;
+package uk.gov.hscic.practitioner;
 
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;

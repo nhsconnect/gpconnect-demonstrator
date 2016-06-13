@@ -10,9 +10,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import uk.gov.hscic.organization.resource.provider.OrganizationResourceProvider;
-import uk.gov.hscic.patient.resource.provider.PatientResourceProvider;
-import uk.gov.hscic.practitioner.resource.provider.PractitionerResourceProvider;
+import uk.gov.hscic.organization.OrganizationResourceProvider;
+import uk.gov.hscic.patient.PatientResourceProvider;
+import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 @Configuration
 @WebServlet(urlPatterns={"/fhir/*"}, displayName="FHIR Server")

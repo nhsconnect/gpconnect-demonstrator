@@ -1,4 +1,4 @@
-package uk.gov.hscic.organization.resource.provider;
+package uk.gov.hscic.organization;
 
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;

@@ -5,7 +5,7 @@ import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.medication.model.PatientMedicationHTML;
 import uk.gov.hscic.medications.model.PatientMedicationHtmlEntity;
 
-public class MedicationEntityToListTransformer implements Transformer<PatientMedicationHtmlEntity, PatientMedicationHTML> {
+public class MedicationEntityToHtmlObjectTransformer implements Transformer<PatientMedicationHtmlEntity, PatientMedicationHTML> {
 
     @Override
     public PatientMedicationHTML transform(final PatientMedicationHtmlEntity medicationHtmlEntity) {

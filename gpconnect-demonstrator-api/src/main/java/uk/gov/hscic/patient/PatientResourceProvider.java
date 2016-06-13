@@ -1,5 +1,8 @@
 package uk.gov.hscic.patient;
 
+import uk.gov.hscic.medication.search.MedicationSearchFactory;
+import uk.gov.hscic.medication.search.MedicationSearch;
+import uk.gov.hscic.medication.model.PatientMedicationHTML;
 import ca.uhn.fhir.model.api.IDatatype;
 import ca.uhn.fhir.model.dstu2.composite.AddressDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
@@ -56,8 +59,6 @@ import uk.gov.hscic.patient.immunisations.model.*;
 import uk.gov.hscic.patient.immunisations.search.*;
 import uk.gov.hscic.patient.investigations.model.*;
 import uk.gov.hscic.patient.investigations.search.*;
-import uk.gov.hscic.patient.medication.model.*;
-import uk.gov.hscic.patient.medication.search.*;
 import uk.gov.hscic.patient.observations.model.*;
 import uk.gov.hscic.patient.observations.search.*;
 import uk.gov.hscic.patient.patientsummary.model.*;
@@ -285,7 +286,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                             case "Medications" :
                                 MedicationSearch medicationSearch = applicationContext.getBean(MedicationSearchFactory.class).select(sourceType);
-                                    List<MedicationListHTML> medicationList = medicationSearch.findMedicationHTMLTables(nhsNumber);
+                                    List<PatientMedicationHTML> medicationList = medicationSearch.findPatientMedicationHTML(nhsNumber);
                                     if(medicationList != null && medicationList.size() > 0){
                                         CodingDt medicationCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("MED").setDisplay("Medications");
                                         CodeableConceptDt medicationCodableConcept = new CodeableConceptDt().addCoding(medicationCoding).setText(medicationList.get(0).getProvider());

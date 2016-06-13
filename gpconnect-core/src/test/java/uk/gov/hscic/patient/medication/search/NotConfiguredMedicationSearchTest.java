@@ -15,6 +15,7 @@
  */
 package uk.gov.hscic.patient.medication.search;
 
+import uk.gov.hscic.medication.search.NotConfiguredMedicationSearch;
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.hscic.common.exception.ConfigurationException;
@@ -40,6 +41,6 @@ public class NotConfiguredMedicationSearchTest {
 
     @Test(expected = ConfigurationException.class)
     public void shouldThrowExceptionWhenTryingToFindMedicationHTMLTables() {
-        medicationSearch.findMedicationHTMLTables(null);
+        medicationSearch.findPatientMedicationHTML(null);
     }
 }

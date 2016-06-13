@@ -1,10 +1,10 @@
-package uk.gov.hscic.patient.medication.search;
+package uk.gov.hscic.medication.search;
 
 import java.util.List;
 
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.medication.model.MedicationListHTML;
+import uk.gov.hscic.medication.model.PatientMedicationHTML;
 
 public class NotConfiguredMedicationSearch implements MedicationSearch {
 
@@ -19,7 +19,7 @@ public class NotConfiguredMedicationSearch implements MedicationSearch {
     }
 
     @Override
-    public List<MedicationListHTML> findMedicationHTMLTables(final String patientId) {
+    public List<PatientMedicationHTML> findPatientMedicationHTML(final String patientId) {
         throw ConfigurationException.unimplementedTransaction(MedicationSearch.class);
     }
 }

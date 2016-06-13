@@ -1,4 +1,4 @@
-package uk.gov.hscic.patient.medications.model;
+package uk.gov.hscic.medications.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,8 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "medications")
-public class MedicationEntity {
+@Table(name = "medications_html")
+public class PatientMedicationHtmlEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

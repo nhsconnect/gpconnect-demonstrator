@@ -1,6 +1,6 @@
-package uk.gov.hscic.patient.medication.model;
+package uk.gov.hscic.medication.model;
 
-public class MedicationListHTML {
+public class PatientMedicationHTML {
 
     private String sourceId;
     private String source;

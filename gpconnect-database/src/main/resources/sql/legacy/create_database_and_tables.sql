@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS gpconnect.organizations;
 DROP TABLE IF EXISTS gpconnect.medical_departments;
 DROP TABLE IF EXISTS gpconnect.patients;
 DROP TABLE IF EXISTS gpconnect.allergies;
-DROP TABLE IF EXISTS gpconnect.medications;
+DROP TABLE IF EXISTS gpconnect.medications_html;
 DROP TABLE IF EXISTS gpconnect.problems;
 DROP TABLE IF EXISTS gpconnect.referrals;
 DROP TABLE IF EXISTS gpconnect.encounters;
@@ -95,7 +95,7 @@ CREATE TABLE gpconnect.allergies (
   PRIMARY KEY         (id)
 );
 
-CREATE TABLE gpconnect.medications (
+CREATE TABLE gpconnect.medications_html (
   id                  BIGINT        NOT NULL    AUTO_INCREMENT,
   html                TEXT(25000) NULL,
   provider            VARCHAR(10)   NULL,

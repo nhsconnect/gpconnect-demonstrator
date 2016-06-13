@@ -25,15 +25,15 @@ import uk.gov.hscic.practitioner.search.PractitionerSearchFactory;
 
 public class PractitionerResourceProvider  implements IResourceProvider {
     
+    ApplicationContext applicationContext;
+    
+    public PractitionerResourceProvider(ApplicationContext applicationContext){
+        this.applicationContext = applicationContext;
+    }
+    
     @Override
     public Class<Practitioner> getResourceType() {
         return Practitioner.class;
-    }
-    
-    ApplicationContext applicationContext;
-    
-    public void setApplicationContext(ApplicationContext applicationContext){
-        this.applicationContext = applicationContext;
     }
     
     @Read()

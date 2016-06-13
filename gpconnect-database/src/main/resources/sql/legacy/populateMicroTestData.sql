@@ -30,7 +30,7 @@ VALUES (
   "Microtest"
 );
 
-INSERT INTO gpconnect.medications
+INSERT INTO gpconnect.medications_html
   (id, html, provider)
 VALUES (
   9000000009,

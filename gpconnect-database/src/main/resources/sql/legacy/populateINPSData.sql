@@ -46,7 +46,7 @@ VALUES (
   "INPS"
 );
 
-INSERT INTO gpconnect.medications
+INSERT INTO gpconnect.medications_html
   (id, html, provider)
 VALUES (
   9000000041,

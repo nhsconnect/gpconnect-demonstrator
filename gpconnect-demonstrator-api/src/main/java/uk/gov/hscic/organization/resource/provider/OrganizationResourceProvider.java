@@ -17,18 +17,18 @@ import uk.gov.hscic.organization.search.OrganizationSearch;
 import uk.gov.hscic.organization.search.OrganizationSearchFactory;
 
 public class OrganizationResourceProvider  implements IResourceProvider {
+     
+    ApplicationContext applicationContext;
+     
+    public OrganizationResourceProvider(ApplicationContext applicationContext){
+        this.applicationContext = applicationContext;
+    }
     
     @Override
     public Class<Organization> getResourceType() {
         return Organization.class;
     }
-    
-    ApplicationContext applicationContext;
-    
-    public void setApplicationContext(ApplicationContext applicationContext){
-        this.applicationContext = applicationContext;
-    }
-    
+   
     @Read()
     public Organization getOrganizationById(@IdParam IdDt organizationId) {
         

@@ -71,20 +71,20 @@ import uk.gov.hscic.patient.summary.search.*;
 import uk.gov.hscic.practitioner.resource.provider.PractitionerResourceProvider;
 
 public class PatientResourceProvider implements IResourceProvider {
-    
-    @Override
-    public Class<Patient> getResourceType() {
-        return Patient.class;
-    }
-    
+        
     ApplicationContext applicationContext;
     PractitionerResourceProvider practitionerResourceProvider;
     OrganizationResourceProvider organizationResourceProvider;
     
-    public void setResourceProviderLinks(ApplicationContext applicationContext, PractitionerResourceProvider practitionerResourceProvider, OrganizationResourceProvider organizationResourceProvider){
+    public PatientResourceProvider(ApplicationContext applicationContext){
         this.applicationContext = applicationContext;
-        this.practitionerResourceProvider = practitionerResourceProvider;
-        this.organizationResourceProvider = organizationResourceProvider;
+        this.practitionerResourceProvider = (PractitionerResourceProvider)applicationContext.getBean("practitionerResourceProvider", applicationContext);
+        this.organizationResourceProvider = (OrganizationResourceProvider)applicationContext.getBean("organizationResourceProvider", applicationContext);
+    }
+
+    @Override
+    public Class<Patient> getResourceType() {
+        return Patient.class;
     }
     
     @Operation(name="$getcarerecord")

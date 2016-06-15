@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS gpconnect.patients;
 DROP TABLE IF EXISTS gpconnect.allergies;
 DROP TABLE IF EXISTS gpconnect.medications_html;
 DROP TABLE IF EXISTS gpconnect.medications;
+DROP TABLE IF EXISTS gpconnect.medication_orders;
 DROP TABLE IF EXISTS gpconnect.problems;
 DROP TABLE IF EXISTS gpconnect.referrals;
 DROP TABLE IF EXISTS gpconnect.encounters;
@@ -107,6 +108,21 @@ CREATE TABLE gpconnect.medications (
   id                  BIGINT        NOT NULL    AUTO_INCREMENT,
   name                TEXT(100) 	NULL,
   PRIMARY KEY         (id)
+);
+
+CREATE TABLE gpconnect.medication_orders (
+  id                		BIGINT      NOT NULL    AUTO_INCREMENT,
+  date_written				DATETIME 	NULL,
+  order_status				TEXT(50) 	NULL,
+  patient_id				BIGINT 		NULL,
+  author_id					BIGINT 		NULL,
+  medication_id				BIGINT 		NULL,
+  dosage_text				TEXT(300) 	NULL,
+  dispense_quantity_text	TEXT(300) 	NULL,
+  dispense_review_date		DATETIME 	NULL,
+  dispense_medication_id	BIGINT 		NULL,
+  dispense_repeats_allowed	INT 		NULL,
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE gpconnect.problems (

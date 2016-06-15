@@ -15,6 +15,7 @@ import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
 import ca.uhn.fhir.model.dstu2.resource.Composition;
 import ca.uhn.fhir.model.dstu2.resource.Composition.Section;
+import ca.uhn.fhir.model.dstu2.resource.MedicationOrder;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
@@ -36,16 +37,20 @@ import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
+import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.common.util.NhsCodeValidator;
+import uk.gov.hscic.medications.MedicationOrderResourceProvider;
+import uk.gov.hscic.medications.MedicationResourceProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.adminitems.model.*;
 import uk.gov.hscic.patient.adminitems.search.*;
@@ -76,11 +81,15 @@ public class PatientResourceProvider implements IResourceProvider {
     ApplicationContext applicationContext;
     PractitionerResourceProvider practitionerResourceProvider;
     OrganizationResourceProvider organizationResourceProvider;
+    MedicationResourceProvider medicationResourceProvider;
+    MedicationOrderResourceProvider medicationOrderResourceProvider;
     
     public PatientResourceProvider(ApplicationContext applicationContext){
         this.applicationContext = applicationContext;
         this.practitionerResourceProvider = (PractitionerResourceProvider)applicationContext.getBean("practitionerResourceProvider", applicationContext);
         this.organizationResourceProvider = (OrganizationResourceProvider)applicationContext.getBean("organizationResourceProvider", applicationContext);
+        this.medicationResourceProvider = (MedicationResourceProvider)applicationContext.getBean("medicationResourceProvider", applicationContext);
+        this.medicationOrderResourceProvider = (MedicationOrderResourceProvider)applicationContext.getBean("medicationOrderResourceProvider", applicationContext);
     }
 
     @Override
@@ -203,6 +212,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     
                     for(String sectionName : sectionsParamList){
                         
+                        Section section = new Section();
+                        
                         switch(sectionName){
                             case "Summary" :
                                     PatientSummarySearch patientSummarySearch = applicationContext.getBean(PatientSummarySearchFactory.class).select(sourceType);
@@ -213,7 +224,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         NarrativeDt narrative = new NarrativeDt();
                                         narrative.setStatus(NarrativeStatusEnum.GENERATED);
                                         narrative.setDivAsString(patientSummaryList.get(0).getHtml());
-                                        Section section = new Section().setTitle("Summary").setCode(summaryCodableConcept).setText(narrative);
+                                        section.setTitle("Summary").setCode(summaryCodableConcept).setText(narrative);
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Summary");
@@ -229,7 +240,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         NarrativeDt narrative = new NarrativeDt();
                                         narrative.setStatus(NarrativeStatusEnum.GENERATED);
                                         narrative.setDivAsString(problemList.get(0).getHtml());
-                                        Section section = new Section().setTitle("Problems").setCode(problemCodableConcept).setText(narrative);
+                                        section.setTitle("Problems").setCode(problemCodableConcept).setText(narrative);
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Problems");
@@ -245,7 +256,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         NarrativeDt narrative = new NarrativeDt();
                                         narrative.setStatus(NarrativeStatusEnum.GENERATED);
                                         narrative.setDivAsString(encounterList.get(0).getHtml());
-                                        Section section = new Section().setTitle("Encounters").setCode(encounterCodableConcept).setText(narrative);
+                                        section.setTitle("Encounters").setCode(encounterCodableConcept).setText(narrative);
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Encounters");
@@ -261,7 +272,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         NarrativeDt narrative = new NarrativeDt();
                                         narrative.setStatus(NarrativeStatusEnum.GENERATED);
                                         narrative.setDivAsString(allergyList.get(0).getHtml());
-                                        Section section = new Section().setTitle("Allergies and Sensitivities").setCode(allergyCodableConcept).setText(narrative);
+                                        section.setTitle("Allergies and Sensitivities").setCode(allergyCodableConcept).setText(narrative);
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Allergies and Sensitivities");
@@ -277,7 +288,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         NarrativeDt narrative = new NarrativeDt();
                                         narrative.setStatus(NarrativeStatusEnum.GENERATED);
                                         narrative.setDivAsString(clinicalItemList.get(0).getHtml());
-                                        Section section = new Section().setTitle("Clinical Items").setCode(clinicalItemCodableConcept).setText(narrative);
+                                        section.setTitle("Clinical Items").setCode(clinicalItemCodableConcept).setText(narrative);
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Clinical Items");
@@ -285,19 +296,62 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "Medications" :
+                                
+                                section = null;
+                                
                                 MedicationSearch medicationSearch = applicationContext.getBean(MedicationSearchFactory.class).select(sourceType);
-                                    List<PatientMedicationHTML> medicationList = medicationSearch.findPatientMedicationHTML(nhsNumber);
-                                    if(medicationList != null && medicationList.size() > 0){
-                                        CodingDt medicationCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("MED").setDisplay("Medications");
-                                        CodeableConceptDt medicationCodableConcept = new CodeableConceptDt().addCoding(medicationCoding).setText(medicationList.get(0).getProvider());
-                                        NarrativeDt narrative = new NarrativeDt();
-                                        narrative.setStatus(NarrativeStatusEnum.GENERATED);
-                                        narrative.setDivAsString(medicationList.get(0).getHtml());
-                                        Section section = new Section().setTitle("Medications").setCode(medicationCodableConcept).setText(narrative);
-                                        sectionsList.add(section);
-                                    } else {
-                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Medication");
+                                List<PatientMedicationHTML> medicationList = medicationSearch.findPatientMedicationHTML(nhsNumber);
+                                if(medicationList != null && medicationList.size() > 0){
+                                    section = new Section();
+                                    CodingDt medicationCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("MED").setDisplay("Medications");
+                                    CodeableConceptDt medicationCodableConcept = new CodeableConceptDt().addCoding(medicationCoding).setText(medicationList.get(0).getProvider());
+                                    NarrativeDt narrative = new NarrativeDt();
+                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
+                                    narrative.setDivAsString(medicationList.get(0).getHtml());
+                                    section.setTitle("Medications").setCode(medicationCodableConcept).setText(narrative);
+                                } else {
+                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Medication");
+                                }
+                                
+                                List<MedicationOrder> medicationOrders = medicationOrderResourceProvider.getMedicationOrdersForPatientId(nhsNumber, null, null);
+                                HashSet<IdDt> medicationOrderMedicationsList = new HashSet();
+                                for(MedicationOrder medicationOrder : medicationOrders){
+                                    if(section == null) section = new Section();
+
+                                    // Add the medication Order to the bundle
+                                    Entry medicationOrderEntry = new Entry();
+                                    medicationOrderEntry.setFullUrl("MedicationOrder/"+medicationOrder.getId().getValue());
+                                    medicationOrderEntry.setResource(medicationOrder);
+
+                                    section.addEntry().setReference(medicationOrderEntry.getFullUrl());
+                                    bundle.addEntry(medicationOrderEntry);
+
+                                    // Store the referenced medicaitons in a set so we can get all the medications once and we won't have duplicates
+                                    IdDt medicationId = ((ResourceReferenceDt)medicationOrder.getMedication()).getReference();
+                                    medicationOrderMedicationsList.add(medicationId);
+
+                                    medicationId = ((ResourceReferenceDt)medicationOrder.getDispenseRequest().getMedication()).getReference();
+                                    medicationOrderMedicationsList.add(medicationId);
+                                }
+
+                                if(medicationOrderMedicationsList.size() > 0){
+                                    for(IdDt medicationId : medicationOrderMedicationsList){
+
+                                        try{
+                                            Entry medicationEntry = new Entry();
+                                            medicationEntry.setFullUrl(medicationId.getValue());
+                                            medicationEntry.setResource(medicationResourceProvider.getMedicationById(medicationId));
+                                            section.addEntry().setReference(medicationEntry.getFullUrl());
+                                            bundle.addEntry(medicationEntry);
+                                        } catch (Exception ex){
+                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Medication for MedicaitonOrder could not be found in database");
+                                        }
                                     }
+                                }
+                                
+                                if(section != null){
+                                    sectionsList.add(section);
+                                }
                                 break;
 
                             case "Referrals" :
@@ -309,7 +363,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         NarrativeDt narrative = new NarrativeDt();
                                         narrative.setStatus(NarrativeStatusEnum.GENERATED);
                                         narrative.setDivAsString(referralList.get(0).getHtml());
-                                        Section section = new Section().setTitle("Referrals").setCode(referralCodableConcept).setText(narrative);
+                                        section.setTitle("Referrals").setCode(referralCodableConcept).setText(narrative);
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Referrals");
@@ -325,7 +379,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         NarrativeDt narrative = new NarrativeDt();
                                         narrative.setStatus(NarrativeStatusEnum.GENERATED);
                                         narrative.setDivAsString(observationList.get(0).getHtml());
-                                        Section section = new Section().setTitle("Observations").setCode(observationCodableConcept).setText(narrative);
+                                        section.setTitle("Observations").setCode(observationCodableConcept).setText(narrative);
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Observations");
@@ -341,7 +395,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         NarrativeDt narrative = new NarrativeDt();
                                         narrative.setStatus(NarrativeStatusEnum.GENERATED);
                                         narrative.setDivAsString(investigationList.get(0).getHtml());
-                                        Section section = new Section().setTitle("Investigations").setCode(investigationCodableConcept).setText(narrative);
+                                        section.setTitle("Investigations").setCode(investigationCodableConcept).setText(narrative);
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Investigations");
@@ -357,7 +411,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         NarrativeDt narrative = new NarrativeDt();
                                         narrative.setStatus(NarrativeStatusEnum.GENERATED);
                                         narrative.setDivAsString(immunisationList.get(0).getHtml());
-                                        Section section = new Section().setTitle("Immunisations").setCode(immunisationCodableConcept).setText(narrative);
+                                        section.setTitle("Immunisations").setCode(immunisationCodableConcept).setText(narrative);
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: Immunisations");
@@ -373,7 +427,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         NarrativeDt narrative = new NarrativeDt();
                                         narrative.setStatus(NarrativeStatusEnum.GENERATED);
                                         narrative.setDivAsString(adminItemList.get(0).getHtml());
-                                        Section section = new Section().setTitle("Administrative Items").setCode(adminItemCodableConcept).setText(narrative);
+                                        section.setTitle("Administrative Items").setCode(adminItemCodableConcept).setText(narrative);
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No data available for the requested section: AdministrativeItems");
@@ -409,6 +463,10 @@ public class PatientResourceProvider implements IResourceProvider {
         return bundle;
     }
     
+    @Search(compartmentName="MedicationOrder")
+    public List<MedicationOrder> getPatientMedicationOrders(@IdParam IdDt patientId) {
+        return medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientId.getIdPart(), null, null);
+    }
     
     private Entry buildPatientEntry(String nhsNumber){
             

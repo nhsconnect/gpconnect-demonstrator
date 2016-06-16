@@ -2,6 +2,7 @@ package uk.gov.hscic.medication.dispense.search;
 
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactory;
+
 @Service
 public class DefaultMedicationDispenseSearchFactory extends AbstractRepositoryFactory<MedicationDispenseSearch> implements MedicationDispenseSearchFactory {
 

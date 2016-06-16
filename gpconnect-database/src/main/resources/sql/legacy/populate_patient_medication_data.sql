@@ -15,3 +15,9 @@ VALUES (1, 'completed', 9000000033, 2, 7774008, 'MedicationName From Medication 
 (5, 'active', 9000000009, 4, 32050003, 'MedicationName From Medication Dispenses 5', 'Dispense Dosage Text 5'),
 (6, 'completed', 9000000033, 2, 40924008, 'MedicationName From Medication Dispenses 6', 'Dispense Dosage Text 6'),
 (7, 'stopped', 9000000033, 3, 34953000, 'MedicationName From Medication Dispenses 7', 'Dispense Dosage Text 7');
+
+INSERT INTO gpconnect.medication_administrations
+  (id, patientId, practitionerId, encounterId, prescriptionId, administrationDate, medicationId)
+VALUES (1, 9000000033, 2, null, 3, '2013-12-22 11:46:22', 44068004),
+(2, 9000000041, 3, null, 5, '2013-02-04 12:13:14', 7774008),
+(3, 9000000033, 2, null, 3, '2014-01-16 09:04:19', 34953000);

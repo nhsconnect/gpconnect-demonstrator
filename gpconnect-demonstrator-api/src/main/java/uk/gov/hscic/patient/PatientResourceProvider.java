@@ -15,6 +15,7 @@ import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
 import ca.uhn.fhir.model.dstu2.resource.Composition;
 import ca.uhn.fhir.model.dstu2.resource.Composition.Section;
+import ca.uhn.fhir.model.dstu2.resource.MedicationAdministration;
 import ca.uhn.fhir.model.dstu2.resource.MedicationDispense;
 import ca.uhn.fhir.model.dstu2.resource.MedicationOrder;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
@@ -50,6 +51,7 @@ import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.common.util.NhsCodeValidator;
+import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.medications.MedicationResourceProvider;
@@ -86,6 +88,7 @@ public class PatientResourceProvider implements IResourceProvider {
     MedicationResourceProvider medicationResourceProvider;
     MedicationOrderResourceProvider medicationOrderResourceProvider;
     MedicationDispenseResourceProvider medicationDispenseResourceProvider;
+    MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
     
     public PatientResourceProvider(ApplicationContext applicationContext){
         this.applicationContext = applicationContext;
@@ -94,6 +97,7 @@ public class PatientResourceProvider implements IResourceProvider {
         this.medicationResourceProvider = (MedicationResourceProvider)applicationContext.getBean("medicationResourceProvider", applicationContext);
         this.medicationOrderResourceProvider = (MedicationOrderResourceProvider)applicationContext.getBean("medicationOrderResourceProvider", applicationContext);
         this.medicationDispenseResourceProvider = (MedicationDispenseResourceProvider)applicationContext.getBean("medicationDispenseResourceProvider", applicationContext);
+        this.medicationAdministrationResourceProvider = (MedicationAdministrationResourceProvider)applicationContext.getBean("medicationAdministrationResourceProvider", applicationContext);
     }
 
     @Override
@@ -365,6 +369,35 @@ public class PatientResourceProvider implements IResourceProvider {
                                         }
                                     }
                                 }
+                                List<MedicationAdministration> medicationAdministrations = medicationAdministrationResourceProvider.getMedicationAdministrationsForPatientId(nhsNumber, null, null);
+                                for(MedicationAdministration medicationAdministration : medicationAdministrations){
+                                    if(section == null) section = new Section();
+                                    Entry medicationAdministrationEntry = new Entry();
+                                    medicationAdministrationEntry.setFullUrl("MedicationAdministration/"+medicationAdministration.getId().getValue());
+                                    medicationAdministrationEntry.setResource(medicationAdministration);
+                                    section.addEntry().setReference(medicationAdministrationEntry.getFullUrl());
+                                    bundle.addEntry(medicationAdministrationEntry);
+                                    // If we have any new medicationOrders which were not found in the search for MedicationOrders for a patient we need to add them.
+                                    if(!medicationOrderList.contains(medicationAdministration.getPrescription().getReference().getValue())){
+                                        try{
+                                            Entry medicationOrderEntry = new Entry();
+                                            medicationOrderEntry.setFullUrl(medicationAdministration.getPrescription().getReference().getValue());
+                                            MedicationOrder medicationOrder = medicationOrderResourceProvider.getMedicationOrderById(medicationAdministration.getPrescription().getReference());
+                                            medicationOrderEntry.setResource(medicationOrder);
+                                            section.addEntry().setReference(medicationOrderEntry.getFullUrl());
+                                            bundle.addEntry(medicationOrderEntry);
+                                            // Add medications from medication order to the list of medications
+                                            IdDt medicationId = ((ResourceReferenceDt)medicationOrder.getMedication()).getReference();
+                                            medicationOrderMedicationsList.add(medicationId.getValue());
+                                            medicationId = ((ResourceReferenceDt)medicationOrder.getDispenseRequest().getMedication()).getReference();
+                                            medicationOrderMedicationsList.add(medicationId.getValue());
+                                            // Add medication order to list of medication orders so we don't duplicate if dispenses have same medication order
+                                            medicationOrderList.add(medicationOrderEntry.getFullUrl());
+                                        } catch (Exception ex){
+                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("MedicationOrder for MedicaitonAdministration could not be found in database");
+                                        }
+                                    }
+                                }
                                 // Add all the found medicaitons as medication resources
                                 if(medicationOrderMedicationsList.size() > 0){
                                     for(String medicationId : medicationOrderMedicationsList){
@@ -502,6 +535,11 @@ public class PatientResourceProvider implements IResourceProvider {
     @Search(compartmentName="MedicationDispense")
     public List<MedicationDispense> getPatientMedicationDispenses(@IdParam IdDt patientId) {
         return medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientId.getIdPart(), null, null);
+    }
+    
+    @Search(compartmentName="MedicationAdministration")
+    public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdDt patientId) {
+        return medicationAdministrationResourceProvider.getMedicationAdministrationsForPatientId(patientId.getIdPart(), null, null);
     }
     
     private Entry buildPatientEntry(String nhsNumber){

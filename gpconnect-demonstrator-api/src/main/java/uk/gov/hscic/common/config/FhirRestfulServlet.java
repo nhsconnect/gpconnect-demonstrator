@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.medications.MedicationResourceProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
@@ -33,6 +34,7 @@ public class FhirRestfulServlet extends RestfulServer {
         resourceProviders.add(patientResourceProvider(applicationContext));
         resourceProviders.add(medicationResourceProvider(applicationContext));
         resourceProviders.add(medicationOrderResourceProvider(applicationContext));
+        resourceProviders.add(medicationDispenseResourceProvider(applicationContext));
 
         setResourceProviders(resourceProviders);
     }
@@ -60,5 +62,10 @@ public class FhirRestfulServlet extends RestfulServer {
     @Bean(name = "medicationOrderResourceProvider")
     public MedicationOrderResourceProvider medicationOrderResourceProvider(ApplicationContext applicationContext) {
         return new MedicationOrderResourceProvider(applicationContext);
+    }
+    
+    @Bean(name = "medicationDispenseResourceProvider")
+    public MedicationDispenseResourceProvider medicationDispenseResourceProvider(ApplicationContext applicationContext) {
+        return new MedicationDispenseResourceProvider(applicationContext);
     }
 }

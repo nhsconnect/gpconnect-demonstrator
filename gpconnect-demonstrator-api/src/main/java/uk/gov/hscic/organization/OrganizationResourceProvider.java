@@ -38,8 +38,8 @@ public class OrganizationResourceProvider  implements IResourceProvider {
         
         if(organizationDetails == null){
             OperationOutcome operationalOutcome = new OperationOutcome();
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No practitioner details found for practitioner ID: "+organizationId.getIdPart());
-            throw new InternalErrorException("No practitioner details found for practitioner ID: "+organizationId.getIdPart(), operationalOutcome);
+            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No organization details found for organization ID: "+organizationId.getIdPart());
+            throw new InternalErrorException("No organization details found for organization ID: "+organizationId.getIdPart(), operationalOutcome);
         }
         
         Organization organization = new Organization();

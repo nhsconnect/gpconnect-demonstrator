@@ -1,45 +1,16 @@
 package uk.gov.hscic.patient;
 
-import uk.gov.hscic.medication.search.MedicationSearchFactory;
-import uk.gov.hscic.medication.search.MedicationSearch;
+import uk.gov.hscic.medication.search.*;
 import uk.gov.hscic.medication.model.PatientMedicationHTML;
 import ca.uhn.fhir.model.api.IDatatype;
-import ca.uhn.fhir.model.dstu2.composite.AddressDt;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
-import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
-import ca.uhn.fhir.model.dstu2.composite.NarrativeDt;
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
+import ca.uhn.fhir.model.dstu2.composite.*;
+import ca.uhn.fhir.model.dstu2.resource.*;
 import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
-import ca.uhn.fhir.model.dstu2.resource.Composition;
 import ca.uhn.fhir.model.dstu2.resource.Composition.Section;
-import ca.uhn.fhir.model.dstu2.resource.MedicationAdministration;
-import ca.uhn.fhir.model.dstu2.resource.MedicationDispense;
-import ca.uhn.fhir.model.dstu2.resource.MedicationOrder;
-import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
-import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
-import ca.uhn.fhir.model.dstu2.resource.Patient;
-import ca.uhn.fhir.model.dstu2.resource.Practitioner;
-import ca.uhn.fhir.model.dstu2.valueset.AddressTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.AddressUseEnum;
-import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.CompositionStatusEnum;
-import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
-import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
-import ca.uhn.fhir.model.primitive.DateDt;
-import ca.uhn.fhir.model.primitive.DateTimeDt;
-import ca.uhn.fhir.model.primitive.IdDt;
-import ca.uhn.fhir.model.primitive.StringDt;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.Operation;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
-import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.model.dstu2.valueset.*;
+import ca.uhn.fhir.model.primitive.*;
+import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
@@ -48,13 +19,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import org.springframework.context.ApplicationContext;
-import uk.gov.hscic.common.types.RepoSource;
-import uk.gov.hscic.common.types.RepoSourceType;
+import uk.gov.hscic.common.types.*;
 import uk.gov.hscic.common.util.NhsCodeValidator;
-import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
-import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
-import uk.gov.hscic.medications.MedicationOrderResourceProvider;
-import uk.gov.hscic.medications.MedicationResourceProvider;
+import uk.gov.hscic.medications.*;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.adminitems.model.*;
 import uk.gov.hscic.patient.adminitems.search.*;
@@ -175,7 +142,9 @@ public class PatientResourceProvider implements IResourceProvider {
             
             // Build the Patient Resource and add it to the bundle
             try{
-                Entry patientEntry = buildPatientEntry(nhsNumber);
+                Entry patientEntry = new Entry();    
+                patientEntry.setResource(getPatientById(new IdDt("Patient/"+nhsNumber)));
+                patientEntry.setFullUrl("Patient/"+nhsNumber);
                 bundle.addEntry(patientEntry);
 
                 //Build the Care Record Composition
@@ -388,7 +357,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         section.addEntry().setReference(medicationEntry.getFullUrl());
                                         bundle.addEntry(medicationEntry);
                                     } catch (Exception ex){
-                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Medication for MedicaitonOrder could not be found in database");
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Medication (ID: "+medicationId+") for MedicaitonOrder could not be found in database");
                                     }
                                 }
                                 
@@ -518,14 +487,5 @@ public class PatientResourceProvider implements IResourceProvider {
     @Search(compartmentName="MedicationAdministration")
     public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdDt patientId) {
         return medicationAdministrationResourceProvider.getMedicationAdministrationsForPatientId(patientId.getIdPart(), null, null);
-    }
-    
-    private Entry buildPatientEntry(String nhsNumber){
-            
-            // Build the Patient Resource in the response
-            Entry patientEntry = new Entry();    
-            patientEntry.setResource(getPatientById(new IdDt("Patient/"+nhsNumber)));
-            patientEntry.setFullUrl("Patient/"+nhsNumber);
-            return patientEntry;
     }
 }

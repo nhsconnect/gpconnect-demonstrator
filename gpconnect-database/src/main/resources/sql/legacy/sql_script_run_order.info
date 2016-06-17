@@ -1,7 +1,2 @@
 create_database_and_tables.sql
-populate_general_practitioners_table.sql
-populate_medical_departments_table.sql
-populate_patients_table.sql
-pupulateTPPData.sql
-pupulateMicroTestData.sql
-pupulateINPSData.sql
+then run all other sql scripts. The order does not change the outcome.

@@ -325,19 +325,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 HashSet<String> medicationOrderMedicationsList = new HashSet();
                                 HashSet<String> medicationOrderList = new HashSet();
                                 for(MedicationOrder medicationOrder : medicationOrders){
-                                    if(section == null) section = new Section();
-                                    // Add the medication Order to the bundle
-                                    Entry medicationOrderEntry = new Entry();
-                                    medicationOrderEntry.setFullUrl("MedicationOrder/"+medicationOrder.getId().getValue());
-                                    medicationOrderEntry.setResource(medicationOrder);
-                                    section.addEntry().setReference(medicationOrderEntry.getFullUrl());
-                                    bundle.addEntry(medicationOrderEntry);
-                                    // Store the referenced medicaitons in a set so we can get all the medications once and we won't have duplicates
-                                    IdDt medicationId = ((ResourceReferenceDt)medicationOrder.getMedication()).getReference();
-                                    medicationOrderMedicationsList.add(medicationId.getValue());
-                                    medicationId = ((ResourceReferenceDt)medicationOrder.getDispenseRequest().getMedication()).getReference();
-                                    medicationOrderMedicationsList.add(medicationId.getValue());
-                                    medicationOrderList.add(medicationOrderEntry.getFullUrl()); // Store set of medication order ids so we can quickly check for duplicates in medication dispense resources
+                                    medicationOrderList.add(medicationOrder.getId().getValue());
                                 }
                                 List<MedicationDispense> medicationDispenses = medicationDispenseResourceProvider.getMedicationDispensesForPatientId(nhsNumber, null, null);
                                 for(MedicationDispense medicationDispense : medicationDispenses){
@@ -349,23 +337,13 @@ public class PatientResourceProvider implements IResourceProvider {
                                     section.addEntry().setReference(medicationDispenseEntry.getFullUrl());
                                     bundle.addEntry(medicationDispenseEntry);
                                     // If we have any new medicationOrders which were not found in the search for MedicationOrders for a patient we need to add them.
-                                    if(!medicationOrderList.contains(medicationDispense.getAuthorizingPrescription().get(0).getReference().getValue())){
+                                    if(!medicationOrderList.contains(medicationDispense.getAuthorizingPrescription().get(0).getReference().getIdPart())){
                                         try{
-                                            Entry medicationOrderEntry = new Entry();
-                                            medicationOrderEntry.setFullUrl(medicationDispense.getAuthorizingPrescription().get(0).getReference().getValue());
                                             MedicationOrder medicationOrder = medicationOrderResourceProvider.getMedicationOrderById(medicationDispense.getAuthorizingPrescription().get(0).getReference());
-                                            medicationOrderEntry.setResource(medicationOrder);
-                                            section.addEntry().setReference(medicationOrderEntry.getFullUrl());
-                                            bundle.addEntry(medicationOrderEntry);
-                                            // Add medications from medication order to the list of medications
-                                            IdDt medicationId = ((ResourceReferenceDt)medicationOrder.getMedication()).getReference();
-                                            medicationOrderMedicationsList.add(medicationId.getValue());
-                                            medicationId = ((ResourceReferenceDt)medicationOrder.getDispenseRequest().getMedication()).getReference();
-                                            medicationOrderMedicationsList.add(medicationId.getValue());
-                                            // Add medication order to list of medication orders so we don't duplicate if dispenses have same medication order
-                                            medicationOrderList.add(medicationOrderEntry.getFullUrl());
+                                            medicationOrders.add(medicationOrder);
+                                            medicationOrderList.add(medicationOrder.getId().getValue());
                                         } catch (Exception ex){
-                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("MedicationOrder for MedicaitonDispense could not be found in database");
+                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("MedicationOrder for MedicaitonDispense (id: "+medicationDispense.getId().getIdPart()+") could not be found in database");
                                         }
                                     }
                                 }
@@ -378,39 +356,39 @@ public class PatientResourceProvider implements IResourceProvider {
                                     section.addEntry().setReference(medicationAdministrationEntry.getFullUrl());
                                     bundle.addEntry(medicationAdministrationEntry);
                                     // If we have any new medicationOrders which were not found in the search for MedicationOrders for a patient we need to add them.
-                                    if(!medicationOrderList.contains(medicationAdministration.getPrescription().getReference().getValue())){
+                                    if(!medicationOrderList.contains(medicationAdministration.getPrescription().getReference().getIdPart())){
                                         try{
-                                            Entry medicationOrderEntry = new Entry();
-                                            medicationOrderEntry.setFullUrl(medicationAdministration.getPrescription().getReference().getValue());
                                             MedicationOrder medicationOrder = medicationOrderResourceProvider.getMedicationOrderById(medicationAdministration.getPrescription().getReference());
-                                            medicationOrderEntry.setResource(medicationOrder);
-                                            section.addEntry().setReference(medicationOrderEntry.getFullUrl());
-                                            bundle.addEntry(medicationOrderEntry);
-                                            // Add medications from medication order to the list of medications
-                                            IdDt medicationId = ((ResourceReferenceDt)medicationOrder.getMedication()).getReference();
-                                            medicationOrderMedicationsList.add(medicationId.getValue());
-                                            medicationId = ((ResourceReferenceDt)medicationOrder.getDispenseRequest().getMedication()).getReference();
-                                            medicationOrderMedicationsList.add(medicationId.getValue());
-                                            // Add medication order to list of medication orders so we don't duplicate if dispenses have same medication order
-                                            medicationOrderList.add(medicationOrderEntry.getFullUrl());
+                                            medicationOrders.add(medicationOrder);
+                                            medicationOrderList.add(medicationOrder.getId().getValue());
                                         } catch (Exception ex){
-                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("MedicationOrder for MedicaitonAdministration could not be found in database");
+                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("MedicationOrder for MedicaitonAdministration (id: "+medicationAdministration.getId().getIdPart()+") could not be found in database");
                                         }
                                     }
                                 }
-                                // Add all the found medicaitons as medication resources
-                                if(medicationOrderMedicationsList.size() > 0){
-                                    for(String medicationId : medicationOrderMedicationsList){
-
-                                        try{
-                                            Entry medicationEntry = new Entry();
-                                            medicationEntry.setFullUrl(medicationId);
-                                            medicationEntry.setResource(medicationResourceProvider.getMedicationById(new IdDt(medicationId)));
-                                            section.addEntry().setReference(medicationEntry.getFullUrl());
-                                            bundle.addEntry(medicationEntry);
-                                        } catch (Exception ex){
-                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Medication for MedicaitonOrder could not be found in database");
-                                        }
+                                for(MedicationOrder medicationOrder : medicationOrders){
+                                    if(section == null) section = new Section();
+                                    // Add the medication Order to the bundle
+                                    Entry medicationOrderEntry = new Entry();
+                                    medicationOrderEntry.setFullUrl("MedicationOrder/"+medicationOrder.getId().getValue());
+                                    medicationOrderEntry.setResource(medicationOrder);
+                                    section.addEntry().setReference(medicationOrderEntry.getFullUrl());
+                                    bundle.addEntry(medicationOrderEntry);
+                                    // Store the referenced medicaitons in a set so we can get all the medications once and we won't have duplicates
+                                    IdDt medicationId = ((ResourceReferenceDt)medicationOrder.getMedication()).getReference();
+                                    medicationOrderMedicationsList.add(medicationId.getValue());
+                                    medicationId = ((ResourceReferenceDt)medicationOrder.getDispenseRequest().getMedication()).getReference();
+                                    medicationOrderMedicationsList.add(medicationId.getValue());
+                                }
+                                for(String medicationId : medicationOrderMedicationsList){
+                                    try{
+                                        Entry medicationEntry = new Entry();
+                                        medicationEntry.setFullUrl(medicationId);
+                                        medicationEntry.setResource(medicationResourceProvider.getMedicationById(new IdDt(medicationId)));
+                                        section.addEntry().setReference(medicationEntry.getFullUrl());
+                                        bundle.addEntry(medicationEntry);
+                                    } catch (Exception ex){
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Medication for MedicaitonOrder could not be found in database");
                                     }
                                 }
                                 

@@ -21,7 +21,6 @@ import uk.gov.hscic.patient.details.model.PatientEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface PatientRepository extends JpaRepository<PatientEntity, Long>, QueryDslPredicateExecutor<PatientEntity> {
 
@@ -30,4 +29,6 @@ public interface PatientRepository extends JpaRepository<PatientEntity, Long>, Q
     Long countByDepartmentDepartmentIgnoreCase(String department);
 
     List<PatientEntity> findPatientsByDepartmentDepartmentIgnoreCase(String department, Pageable pageable);
+
+    PatientEntity findById(Long id);
 }

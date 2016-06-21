@@ -29,7 +29,7 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         final String name = patientEntity.getFirstName() + " " + patientEntity.getLastName();
         final String patientId = patientEntity.getNhsNumber();
 
-        patient.setId(patientId);
+        patient.setId(String.valueOf(patientEntity.getId()));
         patient.setName(name);
         patient.setGender(patientEntity.getGender());
         patient.setDateOfBirth(patientEntity.getDateOfBirth());

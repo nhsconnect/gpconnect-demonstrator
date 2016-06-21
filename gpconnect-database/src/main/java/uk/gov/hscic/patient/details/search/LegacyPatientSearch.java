@@ -59,8 +59,19 @@ public class LegacyPatientSearch extends AbstractLegacyService implements Patien
     }
 
     @Override
-    public PatientDetails findPatient(final String patientId) {
-        final PatientEntity patient = patientRepository.findByNhsNumber(patientId);
+    public PatientDetails findPatient(final String patientNHSNumber) {
+        final PatientEntity patient = patientRepository.findByNhsNumber(patientNHSNumber);
+        
+        if(patient == null){
+            return null;
+        } else{
+            return patientEntityToDetailsTransformer.transform(patient);
+        }
+    }
+    
+    @Override
+    public PatientDetails findPatientByInternalID(final String internalID) {
+        final PatientEntity patient = patientRepository.findById(Long.valueOf(internalID));
         
         if(patient == null){
             return null;

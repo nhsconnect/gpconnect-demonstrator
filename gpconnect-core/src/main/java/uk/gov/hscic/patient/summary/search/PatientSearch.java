@@ -29,6 +29,8 @@ public interface PatientSearch extends Repository {
     List<PatientSummary> findAllPatients();
 
     PatientDetails findPatient(String patientId);
+    
+    PatientDetails findPatientByInternalID(String patientId);
 
     PatientSummary findPatientSummary(String patientId);
 

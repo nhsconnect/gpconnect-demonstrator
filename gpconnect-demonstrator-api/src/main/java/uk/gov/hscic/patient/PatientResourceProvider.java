@@ -49,13 +49,13 @@ import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 public class PatientResourceProvider implements IResourceProvider {
         
-    ApplicationContext applicationContext;
-    PractitionerResourceProvider practitionerResourceProvider;
-    OrganizationResourceProvider organizationResourceProvider;
-    MedicationResourceProvider medicationResourceProvider;
-    MedicationOrderResourceProvider medicationOrderResourceProvider;
-    MedicationDispenseResourceProvider medicationDispenseResourceProvider;
-    MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
+    private final ApplicationContext applicationContext;
+    private final PractitionerResourceProvider practitionerResourceProvider;
+    private final OrganizationResourceProvider organizationResourceProvider;
+    private final MedicationResourceProvider medicationResourceProvider;
+    private final MedicationOrderResourceProvider medicationOrderResourceProvider;
+    private final MedicationDispenseResourceProvider medicationDispenseResourceProvider;
+    private final MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
     
     public PatientResourceProvider(ApplicationContext applicationContext){
         this.applicationContext = applicationContext;
@@ -73,40 +73,36 @@ public class PatientResourceProvider implements IResourceProvider {
     }
     
     @Read()
-    public Patient getPatientById(@IdParam IdDt patientId) {
-        
+    public Patient getPatientById(@IdParam IdDt internalId) {
         Patient patient = new Patient();
-        
         // Get patient details from dataabase
         RepoSource sourceType = RepoSourceType.fromString(null);
         PatientSearch patientSearch = applicationContext.getBean(PatientSearchFactory.class).select(sourceType);
-        PatientDetails patientDetails = patientSearch.findPatient(patientId.getIdPart());
-        
+        PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
         if(patientDetails == null){
             OperationOutcome operationOutcome = new OperationOutcome();
-            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No patient details found for patient ID: "+patientId.getIdPart());
-            throw new InternalErrorException("No patient details found for patient ID: "+patientId.getIdPart(), operationOutcome);
+            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No patient details found for patient ID: "+internalId.getIdPart());
+            throw new InternalErrorException("No patient details found for patient ID: "+internalId.getIdPart(), operationOutcome);
         }
-        
-        patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", patientId.getIdPart()));
-
-        HumanNameDt name = patient.addName();
-        name.setText(patientDetails.getName());
-        name.addFamily("FHIRTestSurname");
-        name.addGiven("FHIRTestForename");
-        name.addPrefix("Mr");
-        name.setUse(NameUseEnum.USUAL);
-        
-        patient.setBirthDate(new DateDt(patientDetails.getDateOfBirth()));
-
-        AddressDt address = patient.addAddress();
-        address.setUse(AddressUseEnum.HOME);
-        address.setType(AddressTypeEnum.PHYSICAL);
-        address.setText(patientDetails.getAddress());
-        
-        patient.getCareProvider().add(new ResourceReferenceDt("Practitioner/"+patientDetails.getGpId()));
-        
-        return patient;
+        return patientDetailsToPatientResourceConverter(patientDetails);
+    }
+    
+    
+    @Search
+    public List<Patient> getPatientByPatientId(@RequiredParam(name = "patientId") String patientId) {
+        RepoSource sourceType = RepoSourceType.fromString(null);
+        PatientSearch patientSearch = applicationContext.getBean(PatientSearchFactory.class).select(sourceType);
+        ArrayList<Patient> patients = new ArrayList();
+        List<PatientDetails> PatientDetailsList = Collections.singletonList(patientSearch.findPatient(patientId));
+        if (PatientDetailsList != null && PatientDetailsList.size() > 0) {
+            for(PatientDetails patientDetails : PatientDetailsList){
+                Patient patient = patientDetailsToPatientResourceConverter(patientDetails);
+                patient.setId(patientDetails.getId());
+                patients.add(patient);
+                
+            }
+        }
+        return patients;
     }
     
     
@@ -142,9 +138,18 @@ public class PatientResourceProvider implements IResourceProvider {
             
             // Build the Patient Resource and add it to the bundle
             try{
+                String patientID;
                 Entry patientEntry = new Entry();    
-                patientEntry.setResource(getPatientById(new IdDt("Patient/"+nhsNumber)));
-                patientEntry.setFullUrl("Patient/"+nhsNumber);
+                List<Patient> patients = getPatientByPatientId(nhsNumber);
+                if(patients != null && patients.size() > 0){
+                    patientEntry.setResource(patients.get(0));
+                    patientEntry.setFullUrl("Patient/"+patients.get(0).getId());
+                    patientID = patients.get(0).getId().getIdPart();
+                } else {
+                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No patient details found for patient NHS Number: "+nhsNumber);
+                    throw new InternalErrorException("No patient details found for patient NHS Number: "+nhsNumber, operationOutcome);
+                
+                }
                 bundle.addEntry(patientEntry);
 
                 //Build the Care Record Composition
@@ -162,7 +167,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 careRecordComposition.setTitle("Patient Care Record");
                 careRecordComposition.setStatus(CompositionStatusEnum.FINAL);
-                careRecordComposition.setSubject(new ResourceReferenceDt("Patient/"+nhsNumber));
+                careRecordComposition.setSubject(new ResourceReferenceDt("Patient/"+patientID));
 
                 List<ResourceReferenceDt> careProviderPractitionerList = ((Patient)patientEntry.getResource()).getCareProvider();
                 if(careProviderPractitionerList.size() > 0){
@@ -290,13 +295,13 @@ public class PatientResourceProvider implements IResourceProvider {
                                 }
                                 
                                 // Sructured Data Search
-                                List<MedicationOrder> medicationOrders = medicationOrderResourceProvider.getMedicationOrdersForPatientId(nhsNumber, null, null);
+                                List<MedicationOrder> medicationOrders = medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientID, null, null);
                                 HashSet<String> medicationOrderMedicationsList = new HashSet();
                                 HashSet<String> medicationOrderList = new HashSet();
                                 for(MedicationOrder medicationOrder : medicationOrders){
                                     medicationOrderList.add(medicationOrder.getId().getValue());
                                 }
-                                List<MedicationDispense> medicationDispenses = medicationDispenseResourceProvider.getMedicationDispensesForPatientId(nhsNumber, null, null);
+                                List<MedicationDispense> medicationDispenses = medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientID, null, null);
                                 for(MedicationDispense medicationDispense : medicationDispenses){
                                     if(section == null) section = new Section();
                                     // Add the medication Order to the bundle
@@ -316,7 +321,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         }
                                     }
                                 }
-                                List<MedicationAdministration> medicationAdministrations = medicationAdministrationResourceProvider.getMedicationAdministrationsForPatientId(nhsNumber, null, null);
+                                List<MedicationAdministration> medicationAdministrations = medicationAdministrationResourceProvider.getMedicationAdministrationsForPatientId(patientID, null, null);
                                 for(MedicationAdministration medicationAdministration : medicationAdministrations){
                                     if(section == null) section = new Section();
                                     Entry medicationAdministrationEntry = new Entry();
@@ -475,17 +480,41 @@ public class PatientResourceProvider implements IResourceProvider {
     }
     
     @Search(compartmentName="MedicationOrder")
-    public List<MedicationOrder> getPatientMedicationOrders(@IdParam IdDt patientId) {
-        return medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientId.getIdPart(), null, null);
+    public List<MedicationOrder> getPatientMedicationOrders(@IdParam IdDt patientLocalId) {
+        return medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientLocalId.getIdPart(), null, null);
     }
     
     @Search(compartmentName="MedicationDispense")
-    public List<MedicationDispense> getPatientMedicationDispenses(@IdParam IdDt patientId) {
-        return medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientId.getIdPart(), null, null);
+    public List<MedicationDispense> getPatientMedicationDispenses(@IdParam IdDt patientLocalId) {
+        return medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientLocalId.getIdPart(), null, null);
     }
     
     @Search(compartmentName="MedicationAdministration")
-    public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdDt patientId) {
-        return medicationAdministrationResourceProvider.getMedicationAdministrationsForPatientId(patientId.getIdPart(), null, null);
+    public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdDt patientLocalId) {
+        return medicationAdministrationResourceProvider.getMedicationAdministrationsForPatientId(patientLocalId.getIdPart(), null, null);
+    }
+    
+    
+    public Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails){
+        Patient patient = new Patient();
+        patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", patientDetails.getNhsNumber()));
+
+        HumanNameDt name = patient.addName();
+        name.setText(patientDetails.getName());
+        name.addFamily("FHIRTestSurname");
+        name.addGiven("FHIRTestForename");
+        name.addPrefix("Mr");
+        name.setUse(NameUseEnum.USUAL);
+        
+        patient.setBirthDate(new DateDt(patientDetails.getDateOfBirth()));
+
+        AddressDt address = patient.addAddress();
+        address.setUse(AddressUseEnum.HOME);
+        address.setType(AddressTypeEnum.PHYSICAL);
+        address.setText(patientDetails.getAddress());
+        
+        patient.getCareProvider().add(new ResourceReferenceDt("Practitioner/"+patientDetails.getGpId()));
+        
+        return patient;
     }
 }

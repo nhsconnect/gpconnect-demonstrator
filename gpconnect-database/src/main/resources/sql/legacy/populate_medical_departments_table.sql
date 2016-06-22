@@ -12,4 +12,5 @@ INSERT INTO gpconnect.organizations
 VALUES
   (1,	'R1A02',	'Z26556',	'Test Hopsital 1'),
   (2,	'R1A14',	'Z33433',	'Test GP Care Trust'),
-  (3,	'R3B46',	'Z12345',	'New GP Practice');
+  (3,	'R3B46',	'Z12345',	'New GP Practice'),
+  (4,	'R1A14',	'Z33432',	'Test GP Second Care Trust');

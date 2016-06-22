@@ -6,9 +6,14 @@ import ca.uhn.fhir.model.dstu2.resource.Organization;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
+import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Read;
+import ca.uhn.fhir.rest.annotation.RequiredParam;
+import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
@@ -41,13 +46,39 @@ public class OrganizationResourceProvider  implements IResourceProvider {
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No organization details found for organization ID: "+organizationId.getIdPart());
             throw new InternalErrorException("No organization details found for organization ID: "+organizationId.getIdPart(), operationalOutcome);
         }
+        return organizaitonDetailsToOrganizationResourceConverter(organizationDetails);
+    }
+    
+    @Search
+    public List<Organization> getOrganizations(@RequiredParam(name = "organizationODS") String organizationODSCode, @OptionalParam(name = "siteODSCode") String siteODSCode) {
         
+        RepoSource sourceType = RepoSourceType.fromString(null);
+        OrganizationSearch organizationSearch = applicationContext.getBean(OrganizationSearchFactory.class).select(sourceType);
+        ArrayList<Organization> organizations = new ArrayList();
+        
+        List<OrganizationDetails> organizationDetailsList = null;
+        
+        if(organizationODSCode != null && siteODSCode != null){
+            organizationDetailsList = organizationSearch.findOrganizationDetailsByOrgODSCodeAndSiteODSCode(organizationODSCode, siteODSCode);
+        } else if (organizationODSCode != null){
+            organizationDetailsList = organizationSearch.findOrganizationDetailsByOrgODSCode(organizationODSCode);
+        }
+        
+        if(organizationDetailsList != null){
+            for(OrganizationDetails organizationDetails : organizationDetailsList){
+                organizations.add(organizaitonDetailsToOrganizationResourceConverter(organizationDetails));
+            }
+        }
+        
+        return organizations;
+    }
+    
+    public Organization organizaitonDetailsToOrganizationResourceConverter(OrganizationDetails organizationDetails){
         Organization organization = new Organization();
-        
+        organization.setId(String.valueOf(organizationDetails.getId()));
         organization.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/ods-organization-code", organizationDetails.getOrgCode()));
         organization.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/ods-site-code", organizationDetails.getSiteCode()));
         organization.setName(organizationDetails.getOrgName());
-        
         return organization;
     }
 }

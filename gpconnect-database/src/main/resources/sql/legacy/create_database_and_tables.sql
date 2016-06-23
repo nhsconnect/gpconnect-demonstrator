@@ -4,6 +4,7 @@ CREATE DATABASE         gpconnect DEFAULT CHARACTER SET utf8;
 USE                     gpconnect;
 
 /* Destroy all existing data */
+DROP TABLE IF EXISTS gpconnect.appointment_schedules;
 DROP TABLE IF EXISTS gpconnect.general_practitioners;
 DROP TABLE IF EXISTS gpconnect.practitioners;
 DROP TABLE IF EXISTS gpconnect.organizations;
@@ -27,6 +28,20 @@ DROP TABLE IF EXISTS gpconnect.clinicalitems;
 DROP TABLE IF EXISTS gpconnect.investigations;
 
 /* Create new table schemas */
+
+CREATE TABLE gpconnect.appointment_schedules (
+  id                		BIGINT      NOT NULL    AUTO_INCREMENT,
+  practitionerId			BIGINT 		NULL,
+  identifier				TEXT(50) 	NULL,
+  typeCode					TEXT(50) 	NULL,
+  typeDescription			TEXT(250) 	NULL,
+  locationId				BIGINT 		NULL,
+  startDateTime				DATETIME 	NULL,
+  endDateTime				DATETIME 	NULL,
+  scheduleComment			TEXT(300) 	NULL,
+  PRIMARY KEY (id)
+);
+
 CREATE TABLE gpconnect.general_practitioners (
   id            BIGINT        NOT NULL    AUTO_INCREMENT,
   gp_name       VARCHAR(150)  NULL,

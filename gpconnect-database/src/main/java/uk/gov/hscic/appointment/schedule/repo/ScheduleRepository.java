@@ -7,6 +7,6 @@ import uk.gov.hscic.appointment.schedule.model.ScheduleEntity;
 
 public interface ScheduleRepository extends JpaRepository<ScheduleEntity, Long> {
     
-    List<ScheduleEntity> findByLocationIdAndEndDateAfterAndStartDateBefore(Long locationId, Date startDate, Date endDate);
+    List<ScheduleEntity> findByLocationIdAndEndDateTimeAfterAndStartDateTimeBefore(Long locationId, Date startDate, Date endDate);
     
 }

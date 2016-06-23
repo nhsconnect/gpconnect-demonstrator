@@ -1,6 +1,7 @@
 package uk.gov.hscic.appointment.schedule.search;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,8 @@ public class LegacyScheduleSearch extends AbstractLegacyService implements Sched
     }
 
     @Override
-    public List<ScheduleDetail> findScheduleForLocationId(Long locationId) {
-        List<ScheduleEntity> items = scheduleRepository.findByLocationId(locationId);
+    public List<ScheduleDetail> findScheduleForLocationId(Long locationId, Date startDate, Date endDate) {
+        List<ScheduleEntity> items = scheduleRepository.findByLocationIdAndEndDateAfterAndStartDateBefore(locationId, startDate, endDate);
         ArrayList<ScheduleDetail> scheduleDetails = new ArrayList();
         for(ScheduleEntity entity : items){
             scheduleDetails.add(transformer.transform(entity));

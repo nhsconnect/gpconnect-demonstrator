@@ -1,5 +1,6 @@
 package uk.gov.hscic.appointment.schedule.search;
 
+import java.util.Date;
 import java.util.List;
 import uk.gov.hscic.appointment.schedule.model.ScheduleDetail;
 import uk.gov.hscic.common.exception.ConfigurationException;
@@ -23,7 +24,7 @@ public class NotConfiguredScheduleSearch  implements ScheduleSearch {
     }
 
     @Override
-    public List<ScheduleDetail> findScheduleForLocationId(Long locationId) {
+    public List<ScheduleDetail> findScheduleForLocationId(Long locationId, Date startDate, Date endDate) {
         throw ConfigurationException.unimplementedTransaction(ScheduleSearch.class);
     }
 }

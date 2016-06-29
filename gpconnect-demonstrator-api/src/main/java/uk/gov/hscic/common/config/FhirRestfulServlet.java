@@ -37,6 +37,7 @@ public class FhirRestfulServlet extends RestfulServer {
         resourceProviders.add(medicationAdministrationResourceProvider(applicationContext));
         resourceProviders.add(scheduleResourceProvider(applicationContext));
         resourceProviders.add(slotResourceProvider(applicationContext));
+        resourceProviders.add(appointmentResourceProvider(applicationContext));
 
         setResourceProviders(resourceProviders);
     }
@@ -84,5 +85,10 @@ public class FhirRestfulServlet extends RestfulServer {
     @Bean(name = "slotResourceProvider")
     public SlotResourceProvider slotResourceProvider(ApplicationContext applicationContext) {
         return new SlotResourceProvider(applicationContext);
+    }
+    
+    @Bean(name = "appointmentResourceProvider")
+    public AppointmentResourceProvider appointmentResourceProvider(ApplicationContext applicationContext) {
+        return new AppointmentResourceProvider(applicationContext);
     }
 }

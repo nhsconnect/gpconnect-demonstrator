@@ -4,9 +4,7 @@ CREATE DATABASE         gpconnect DEFAULT CHARACTER SET utf8;
 USE                     gpconnect;
 
 /* Destroy all existing data */
-DROP TABLE IF EXISTS gpconnect.appointment_appointments;
 DROP TABLE IF EXISTS gpconnect.appointment_schedules;
-DROP TABLE IF EXISTS gpconnect.appointment_slots;
 DROP TABLE IF EXISTS gpconnect.general_practitioners;
 DROP TABLE IF EXISTS gpconnect.practitioners;
 DROP TABLE IF EXISTS gpconnect.organizations;
@@ -28,26 +26,9 @@ DROP TABLE IF EXISTS gpconnect.immunisations;
 DROP TABLE IF EXISTS gpconnect.adminitems;
 DROP TABLE IF EXISTS gpconnect.clinicalitems;
 DROP TABLE IF EXISTS gpconnect.investigations;
+DROP TABLE IF EXISTS gpconnect.locations;
 
 /* Create new table schemas */
-
-CREATE TABLE gpconnect.appointment_appointments (
-  id                		BIGINT      NOT NULL    AUTO_INCREMENT,
-  cancellationReason		TEXT(300)	NULL,
-  status					TEXT(50) 	NULL,
-  typeCode					BIGINT	 	NULL,
-  typeDisplay				TEXT(100) 	NULL,
-  reasonCode				BIGINT 		NULL,
-  reasonDisplay				TEXT(100) 	NULL,
-  startDateTime				DATETIME 	NULL,
-  endDateTime				DATETIME 	NULL,
-  slotId					BIGINT 		NULL,
-  commentText				TEXT(300) 	NULL,
-  patientId					BIGINT 		NULL,
-  practitionerId			BIGINT 		NULL,
-  locationId				BIGINT 		NULL,
-  PRIMARY KEY (id)
-);
 
 CREATE TABLE gpconnect.appointment_schedules (
   id                		BIGINT      NOT NULL    AUTO_INCREMENT,
@@ -59,17 +40,6 @@ CREATE TABLE gpconnect.appointment_schedules (
   startDateTime				DATETIME 	NULL,
   endDateTime				DATETIME 	NULL,
   scheduleComment			TEXT(300) 	NULL,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE gpconnect.appointment_slots (
-  id                		BIGINT      NOT NULL    AUTO_INCREMENT,
-  typeCode					BIGINT 		NULL,
-  typeDisplay				TEXT(300) 	NULL,
-  scheduleReference			BIGINT 		NULL,
-  freeBusyType				TEXT(50) 	NULL,
-  startDateTime				DATETIME 	NULL,
-  endDateTime				DATETIME 	NULL,
   PRIMARY KEY (id)
 );
 
@@ -262,6 +232,14 @@ CREATE TABLE gpconnect.investigations (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                VARCHAR(7168) NULL,
  provider            VARCHAR(10)   NULL,
+ PRIMARY KEY         (id)
+);
+
+CREATE TABLE gpconnect.locations (
+ id                  BIGINT        NOT NULL    AUTO_INCREMENT,
+ name                VARCHAR(250)  NOT NULL,
+ site_ods_code       VARCHAR(250)  NOT NULL,
+ site_ods_code_name  VARCHAR(250)  NOT NULL,
  PRIMARY KEY         (id)
 );
 

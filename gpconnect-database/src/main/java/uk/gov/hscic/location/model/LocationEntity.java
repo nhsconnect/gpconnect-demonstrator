@@ -1,16 +1,29 @@
 package uk.gov.hscic.location.model;
 
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-public class LocationDetails implements Serializable {
+@Entity
+@Table(name = "locations")
+public class LocationEntity {
 
-	private static final long serialVersionUID = 1L;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+    
+    @Column(name = "name")
 	private String name;
-	private String siteOdsCode;
-	private String siteOdsCodeName;
 	
+    @Column(name = "site_ods_code")
+    private String siteOdsCode;
+	
+    @Column(name = "site_ods_code_name")
+    private String siteOdsCodeName;
+
 	public Long getId() {
 		return id;
 	}
@@ -42,5 +55,4 @@ public class LocationDetails implements Serializable {
 	public void setSiteOdsCodeName(String siteOdsCodeName) {
 		this.siteOdsCodeName = siteOdsCodeName;
 	}
-
 }

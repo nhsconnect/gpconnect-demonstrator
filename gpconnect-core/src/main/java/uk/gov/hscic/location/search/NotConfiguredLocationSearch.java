@@ -1,8 +1,5 @@
 package uk.gov.hscic.location.search;
 
-import java.net.URI;
-import java.util.List;
-
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
@@ -21,12 +18,7 @@ public class NotConfiguredLocationSearch implements LocationSearch {
     }
 
     @Override
-	public LocationDetails findLocationDetailsByOdsSiteCode(URI odsSiteCode) {
-        throw ConfigurationException.unimplementedTransaction(LocationSearch.class);
-	}
-
-	@Override
-	public List<LocationDetails> findLocationDetailsByManagingOrganisationOdsSiteCode(URI managingOrgOdsSiteCode) {
+	public LocationDetails findLocationDetailsBySiteOdsCode(String siteOdsCode) {
         throw ConfigurationException.unimplementedTransaction(LocationSearch.class);
 	}
 }

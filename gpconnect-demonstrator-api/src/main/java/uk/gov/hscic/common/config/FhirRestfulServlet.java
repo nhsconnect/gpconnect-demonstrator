@@ -1,20 +1,27 @@
 package uk.gov.hscic.common.config;
 
-import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.RestfulServer;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import uk.gov.hscic.appointments.*;
-import uk.gov.hscic.medications.*;
-import uk.gov.hscic.organization.*;
-import uk.gov.hscic.patient.*;
-import uk.gov.hscic.practitioner.*;
+
+import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.RestfulServer;
+import uk.gov.hscic.appointments.ScheduleResourceProvider;
+import uk.gov.hscic.location.LocationResourceProvider;
+import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
+import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
+import uk.gov.hscic.medications.MedicationOrderResourceProvider;
+import uk.gov.hscic.medications.MedicationResourceProvider;
+import uk.gov.hscic.organization.OrganizationResourceProvider;
+import uk.gov.hscic.patient.PatientResourceProvider;
+import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 @Configuration
 @WebServlet(urlPatterns={"/fhir/*"}, displayName="FHIR Server")
@@ -36,8 +43,7 @@ public class FhirRestfulServlet extends RestfulServer {
         resourceProviders.add(medicationDispenseResourceProvider(applicationContext));
         resourceProviders.add(medicationAdministrationResourceProvider(applicationContext));
         resourceProviders.add(scheduleResourceProvider(applicationContext));
-        resourceProviders.add(slotResourceProvider(applicationContext));
-        resourceProviders.add(appointmentResourceProvider(applicationContext));
+        resourceProviders.add(locationResourceProvider(applicationContext));
 
         setResourceProviders(resourceProviders);
     }
@@ -82,13 +88,8 @@ public class FhirRestfulServlet extends RestfulServer {
         return new ScheduleResourceProvider(applicationContext);
     }
     
-    @Bean(name = "slotResourceProvider")
-    public SlotResourceProvider slotResourceProvider(ApplicationContext applicationContext) {
-        return new SlotResourceProvider(applicationContext);
-    }
-    
-    @Bean(name = "appointmentResourceProvider")
-    public AppointmentResourceProvider appointmentResourceProvider(ApplicationContext applicationContext) {
-        return new AppointmentResourceProvider(applicationContext);
-    }
+    @Bean(name = "locationResourceProvider")
+    public LocationResourceProvider locationResourceProvider(ApplicationContext applicationContext) {
+        return new LocationResourceProvider(applicationContext);
+    }    
 }

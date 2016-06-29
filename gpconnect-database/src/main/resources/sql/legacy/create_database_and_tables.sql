@@ -5,6 +5,7 @@ USE                     gpconnect;
 
 /* Destroy all existing data */
 DROP TABLE IF EXISTS gpconnect.appointment_schedules;
+DROP TABLE IF EXISTS gpconnect.appointment_slots;
 DROP TABLE IF EXISTS gpconnect.general_practitioners;
 DROP TABLE IF EXISTS gpconnect.practitioners;
 DROP TABLE IF EXISTS gpconnect.organizations;
@@ -39,6 +40,17 @@ CREATE TABLE gpconnect.appointment_schedules (
   startDateTime				DATETIME 	NULL,
   endDateTime				DATETIME 	NULL,
   scheduleComment			TEXT(300) 	NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE gpconnect.appointment_slots (
+  id                		BIGINT      NOT NULL    AUTO_INCREMENT,
+  typeCode					BIGINT 		NULL,
+  typeDisplay				TEXT(300) 	NULL,
+  scheduleReference			BIGINT 		NULL,
+  freeBusyType				TEXT(50) 	NULL,
+  startDateTime				DATETIME 	NULL,
+  endDateTime				DATETIME 	NULL,
   PRIMARY KEY (id)
 );
 

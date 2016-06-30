@@ -72,7 +72,7 @@ public class OrganizationResourceProvider  implements IResourceProvider {
         
         return organizations;
     }
-    
+
     public Organization organizaitonDetailsToOrganizationResourceConverter(OrganizationDetails organizationDetails){
         Organization organization = new Organization();
         organization.setId(String.valueOf(organizationDetails.getId()));

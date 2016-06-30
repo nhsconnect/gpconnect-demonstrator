@@ -13,6 +13,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
+import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
@@ -44,6 +45,7 @@ public class FhirRestfulServlet extends RestfulServer {
         resourceProviders.add(medicationAdministrationResourceProvider(applicationContext));
         resourceProviders.add(scheduleResourceProvider(applicationContext));
         resourceProviders.add(locationResourceProvider(applicationContext));
+        resourceProviders.add(appointmentResourceProvider(applicationContext));
 
         setResourceProviders(resourceProviders);
     }
@@ -92,4 +94,9 @@ public class FhirRestfulServlet extends RestfulServer {
     public LocationResourceProvider locationResourceProvider(ApplicationContext applicationContext) {
         return new LocationResourceProvider(applicationContext);
     }    
+    
+    @Bean(name = "appointmentResourceProvider")
+    public AppointmentResourceProvider appointmentResourceProvider(ApplicationContext applicationContext) {
+        return new AppointmentResourceProvider(applicationContext);
+    }
 }

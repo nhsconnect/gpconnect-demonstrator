@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import org.springframework.context.ApplicationContext;
+import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.types.*;
 import uk.gov.hscic.common.util.NhsCodeValidator;
 import uk.gov.hscic.medications.*;
@@ -56,6 +57,7 @@ public class PatientResourceProvider implements IResourceProvider {
     private final MedicationOrderResourceProvider medicationOrderResourceProvider;
     private final MedicationDispenseResourceProvider medicationDispenseResourceProvider;
     private final MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
+    private final AppointmentResourceProvider appointmentResourceProvider;
     
     public PatientResourceProvider(ApplicationContext applicationContext){
         this.applicationContext = applicationContext;
@@ -65,6 +67,7 @@ public class PatientResourceProvider implements IResourceProvider {
         this.medicationOrderResourceProvider = (MedicationOrderResourceProvider)applicationContext.getBean("medicationOrderResourceProvider", applicationContext);
         this.medicationDispenseResourceProvider = (MedicationDispenseResourceProvider)applicationContext.getBean("medicationDispenseResourceProvider", applicationContext);
         this.medicationAdministrationResourceProvider = (MedicationAdministrationResourceProvider)applicationContext.getBean("medicationAdministrationResourceProvider", applicationContext);
+        this.appointmentResourceProvider = (AppointmentResourceProvider)applicationContext.getBean("appointmentResourceProvider", applicationContext);
     }
 
     @Override
@@ -492,6 +495,11 @@ public class PatientResourceProvider implements IResourceProvider {
     @Search(compartmentName="MedicationAdministration")
     public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdDt patientLocalId) {
         return medicationAdministrationResourceProvider.getMedicationAdministrationsForPatientId(patientLocalId.getIdPart(), null, null);
+    }
+    
+    @Search(compartmentName="Appointment")
+    public List<Appointment> getPatientAppointments(@IdParam IdDt patientLocalId) {
+        return appointmentResourceProvider.getAppointmentsForPatientId(patientLocalId.getIdPart(), null, null);
     }
     
     

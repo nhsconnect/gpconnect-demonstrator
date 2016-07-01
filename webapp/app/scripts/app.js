@@ -251,6 +251,15 @@ angular
           detail: { templateUrl: 'views/investigations/investigations-detail.html', controller: 'InvestigationsDetailCtrl' }
         }
       })
+      
+      .state('appointments', {
+        url: '/patients/{patientId:int}/appointments',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/appointments/appointments.html', controller: 'AppointmentsCtrl' }
+        }
+      })
 
   })
 

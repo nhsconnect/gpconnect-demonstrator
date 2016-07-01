@@ -1,0 +1,54 @@
+'use strict';
+
+angular.module('gpConnect')
+  .controller('AppointmentsCtrl', function ($scope, $stateParams, $state, PatientService, usSpinnerService, Appointment) {
+
+    $scope.currentPage = 1;
+
+    $scope.pageChangeHandler = function (newPage) {
+      $scope.currentPage = newPage;
+    };
+
+    if ($stateParams.page) {
+      $scope.currentPage = $stateParams.page;
+    }
+
+    PatientService.findDetails($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient;
+    });
+
+    if ($stateParams.filter) {
+      $scope.query = $stateParams.filter;
+    }
+
+    Appointment.findAllAppointments($stateParams.patientId).then(function (result) {
+      var appointmentsJson = result.data;
+      $scope.appointments = appointmentsJson.entry;
+      
+      $.each($scope.appointments, function(key, value){
+          var startDate = Date.parse(value.resource.start.toString());
+          value.resource.start = moment(startDate).format('DD-MMM-YYYY HH:mm');
+          var endDate = Date.parse(value.resource.end.toString());
+          value.resource.end = moment(endDate).format('DD-MMM-YYYY HH:mm');
+      });
+      
+      usSpinnerService.stop('patientSummary-spinner');
+    });
+
+    $scope.go = function (id) {
+        // Change detail view fields to show the appointment selected
+        var appointment;
+        for (var index = 0; index < $scope.appointments.length; ++index) {
+            appointment = $scope.appointments[index];
+            if (appointment.resource.id == id) {
+                $scope.appointmentDetail = appointment;
+                break;
+            }
+        }
+    };
+
+    $scope.selected = function (appointmentIndex) {
+      return appointmentIndex === $stateParams.appointmentIndex;
+    };
+
+  });

@@ -12,6 +12,8 @@ import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
+import ca.uhn.fhir.rest.annotation.IdParam;
+import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -52,7 +54,22 @@ public class LocationResourceProvider implements IResourceProvider {
         
         return locationDetailsToLocation(locationDetails);
 	}
-	
+
+    @Read()
+    public Location getLocationById(@IdParam IdDt locationId) {
+        
+        RepoSource sourceType = RepoSourceType.fromString(null);
+        LocationSearch locationSearch = applicationContext.getBean(LocationSearchFactory.class).select(sourceType);
+        LocationDetails locationDetails = locationSearch.findLocationById(locationId.getIdPart());
+        
+        if(locationDetails == null){
+            OperationOutcome operationalOutcome = new OperationOutcome();
+            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No location details found for location ID: "+locationId.getIdPart());
+            throw new InternalErrorException("No location details found for location ID: "+locationId.getIdPart(), operationalOutcome);
+        }
+        return locationDetailsToLocation(locationDetails);
+    }
+    
 	private Location locationDetailsToLocation(LocationDetails locationDetails) {
 		Location location = new Location();
 		

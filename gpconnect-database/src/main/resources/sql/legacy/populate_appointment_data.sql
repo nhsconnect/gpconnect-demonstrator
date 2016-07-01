@@ -29,3 +29,9 @@ VALUES
 	(2, 'The Moore Surgery', 'A23456', 'THE MOORE SURGERY'),
 	(3, 'The Hockey Surgery', 'A34567', 'THE HOCKNEY SURGERY'),
 	(4, 'The Lowry Surgery', 'A45678', 'THE LOWRY SURGERY');
+	
+INSERT INTO gpconnect.appointment_appointments
+  (id, cancellationReason, status, typeCode, typeDisplay, reasonCode, reasonDisplay, startDateTime, endDateTime, slotId, commentText, patientId, practitionerId, locationId)
+VALUES (1, '', 'booked', 394802001, 'General medicine', 17436001, 'Medical consultation with outpatient (procedure)', '2016-06-29 16:32:11', '2016-06-29 16:35:12', 1, 'Test Comment', 4, 3, 1),
+(2, '', 'booked', 123, 'Test Type 2', 12345, 'Test Reason 2', '2016-06-29 12:15:11', '2016-06-29 12:40:14', 1, 'Test Comment 2', 3, 2, 1),
+(3, '', 'booked', 1234, 'Test Type 3', 123456, 'Test Reason 3', '2016-06-28 09:00:00', '2016-06-28 09:14:59', 1, 'Test Comment 3', 4, 1, 1);

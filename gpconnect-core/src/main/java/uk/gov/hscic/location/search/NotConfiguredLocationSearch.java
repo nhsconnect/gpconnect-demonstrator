@@ -21,4 +21,9 @@ public class NotConfiguredLocationSearch implements LocationSearch {
 	public LocationDetails findLocationDetailsBySiteOdsCode(String siteOdsCode) {
         throw ConfigurationException.unimplementedTransaction(LocationSearch.class);
 	}
+
+    @Override
+    public LocationDetails findLocationById(String locationId) {
+        throw ConfigurationException.unimplementedTransaction(LocationSearch.class);
+    }
 }

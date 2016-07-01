@@ -12,6 +12,11 @@ angular.module('gpConnect')
       });
       
     };
+    
+    var findResourceByReference = function (resourceReference) {
+      var response;
+      return $http.get('/fhir/'+resourceReference);
+    };
 
     var create = function (patientId, appointment) {
       return $http.post('/api/patients/' + patientId + '/appointments', appointment);
@@ -19,6 +24,7 @@ angular.module('gpConnect')
 
     return {
       findAllAppointments: findAllAppointments,
+      findResourceByReference: findResourceByReference,
       create: create
     };
 

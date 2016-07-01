@@ -15,6 +15,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
+import uk.gov.hscic.appointments.SlotResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
@@ -46,6 +47,7 @@ public class FhirRestfulServlet extends RestfulServer {
         resourceProviders.add(scheduleResourceProvider(applicationContext));
         resourceProviders.add(locationResourceProvider(applicationContext));
         resourceProviders.add(appointmentResourceProvider(applicationContext));
+        resourceProviders.add(slotResourceProvider(applicationContext));
 
         setResourceProviders(resourceProviders);
     }
@@ -98,5 +100,10 @@ public class FhirRestfulServlet extends RestfulServer {
     @Bean(name = "appointmentResourceProvider")
     public AppointmentResourceProvider appointmentResourceProvider(ApplicationContext applicationContext) {
         return new AppointmentResourceProvider(applicationContext);
+    }
+    
+    @Bean(name = "slotResourceProvider")
+    public SlotResourceProvider slotResourceProvider(ApplicationContext applicationContext) {
+        return new SlotResourceProvider(applicationContext);
     }
 }

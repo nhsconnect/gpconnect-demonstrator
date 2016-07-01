@@ -29,4 +29,16 @@ public class LegacyLocationSearch extends AbstractLegacyService implements Locat
 
 		return locationDetails;
 	}
+    
+    @Override
+    public LocationDetails findLocationById(final String locationId) {
+
+        final LocationEntity item = locationRepository.findOne(Long.parseLong(locationId));
+
+        if(item == null){
+            return null;
+        } else {
+            return transformer.transform(item);
+        }
+    }
 }

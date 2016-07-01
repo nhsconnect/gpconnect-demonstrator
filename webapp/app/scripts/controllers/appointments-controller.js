@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('AppointmentsCtrl', function ($scope, $stateParams, $state, PatientService, usSpinnerService, Appointment) {
+  .controller('AppointmentsCtrl', function ($scope, $http, $stateParams, $state, PatientService, usSpinnerService, Appointment) {
 
     $scope.currentPage = 1;
 
@@ -25,18 +25,29 @@ angular.module('gpConnect')
       var appointmentsJson = result.data;
       $scope.appointments = appointmentsJson.entry;
       
-      $.each($scope.appointments, function(key, value){
-          var startDate = Date.parse(value.resource.start.toString());
-          value.resource.start = moment(startDate).format('DD-MMM-YYYY HH:mm');
-          var endDate = Date.parse(value.resource.end.toString());
-          value.resource.end = moment(endDate).format('DD-MMM-YYYY HH:mm');
-      });
-      
+      if($scope.appointments != undefined){
+        $scope.appointments = $scope.appointments.sort(function (a, b) {
+          return a.resource.start.localeCompare( b.resource.start );
+        });
+
+        $.each($scope.appointments, function(key, value){
+            var startDate = Date.parse(value.resource.start.toString());
+            value.resource.start = moment(startDate).format('DD-MMM-YYYY HH:mm');
+            var endDate = Date.parse(value.resource.end.toString());
+            value.resource.end = moment(endDate).format('DD-MMM-YYYY HH:mm');
+        });
+      }
+    }).catch(function (e) {
+      usSpinnerService.stop('patientSummary-spinner');
+    }) .finally(function () {
       usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {
-        // Change detail view fields to show the appointment selected
+        
+        usSpinnerService.spin('patientSummary-spinner');
+        $scope.appointmentDetail = undefined;
+        
         var appointment;
         for (var index = 0; index < $scope.appointments.length; ++index) {
             appointment = $scope.appointments[index];
@@ -45,6 +56,22 @@ angular.module('gpConnect')
                 break;
             }
         }
+        
+        $.each($scope.appointmentDetail.resource.participant, function(key, value){
+          var reference = value.actor.reference.toString();
+          if(reference.indexOf("Location") != -1){
+              Appointment.findResourceByReference(reference).then(function(response) {
+                  $scope.appointmentDetail.appointmentLocation = response.data.name;
+              });
+          } else if(reference.indexOf("Practitioner") != -1){
+              Appointment.findResourceByReference(reference).then(function(response) {
+                  $scope.appointmentDetail.practitionerName = response.data.name.prefix[0] + " " + response.data.name.given[0] + " " + response.data.name.family[0];
+              });
+          }
+          
+        });
+        
+        usSpinnerService.stop('patientSummary-spinner');
     };
 
     $scope.selected = function (appointmentIndex) {

@@ -57,7 +57,6 @@ public class FhirRestfulServlet extends RestfulServer {
 		setResourceProviders(resourceProviders);
         
        // factory.initializeBean( bean, "bean" );
-
     }
 
     @Bean(name = "organizationResourceProvider")
@@ -114,5 +113,4 @@ public class FhirRestfulServlet extends RestfulServer {
     public SlotResourceProvider slotResourceProvider(ApplicationContext applicationContext) {
         return new SlotResourceProvider(applicationContext);
     }
-    
 }

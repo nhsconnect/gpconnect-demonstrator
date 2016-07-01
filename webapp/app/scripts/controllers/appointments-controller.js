@@ -35,13 +35,16 @@ angular.module('gpConnect')
           var endDate = Date.parse(value.resource.end.toString());
           value.resource.end = moment(endDate).format('DD-MMM-YYYY HH:mm');
       });
-      
+    }).catch(function (e) {
+      usSpinnerService.stop('patientSummary-spinner');
+    }) .finally(function () {
       usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {
         
         usSpinnerService.spin('patientSummary-spinner');
+        $scope.appointmentDetail = undefined;
         
         var appointment;
         for (var index = 0; index < $scope.appointments.length; ++index) {

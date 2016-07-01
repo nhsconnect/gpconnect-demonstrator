@@ -1,20 +1,31 @@
 package uk.gov.hscic.organization;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Organization;
+import ca.uhn.fhir.model.dstu2.resource.Parameters;
+import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
+import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
+import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
+import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
+import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.organization.model.OrganizationDetails;
@@ -24,6 +35,9 @@ import uk.gov.hscic.organization.search.OrganizationSearchFactory;
 public class OrganizationResourceProvider  implements IResourceProvider {
      
     ApplicationContext applicationContext;
+    
+    @Autowired
+    GetScheduleOperation getScheduleOperation;
      
     public OrganizationResourceProvider(ApplicationContext applicationContext){
         this.applicationContext = applicationContext;
@@ -72,6 +86,35 @@ public class OrganizationResourceProvider  implements IResourceProvider {
         
         return organizations;
     }
+    
+    @Operation(name="$getschedule")
+    public Bundle getSchedule(@ResourceParam Parameters params) {
+    	Bundle bundle = new Bundle();
+        bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
+        
+        OperationOutcome operationOutcome = new OperationOutcome();
+        
+        // params
+    	List<Parameter> parameters = params.getParameter();
+    	String orgOdsCode = getNamedParameterValue("orgOdsCode", parameters);
+    	String siteOdsCode = getNamedParameterValue("siteOdsCode", parameters);
+    	String planningHorizonStart = getNamedParameterValue("planningHorizonStart", parameters);
+    	String planningHorizonEnd = getNamedParameterValue("planningHorizonEnd", parameters);
+    	
+       	if(orgOdsCode != null && siteOdsCode != null && planningHorizonStart != null && planningHorizonEnd != null) {    
+       		getScheduleOperation.populateBundle(bundle, operationOutcome, orgOdsCode, siteOdsCode, planningHorizonStart, planningHorizonEnd);
+       	}
+        else {
+        	String msg = String.format("Not all of the mandatory parameters were provided - orgOdsCode - %s siteOdsCode - %s planningHorizonStart - %s planningHorizonEnd - %s", orgOdsCode, siteOdsCode, planningHorizonStart, planningHorizonEnd);
+        	operationOutcome.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(msg);
+        	
+        	Entry operationOutcomeEntry = new Entry();
+        	operationOutcomeEntry.setResource(operationOutcome);
+        	bundle.addEntry(operationOutcomeEntry);
+        }
+   
+        return bundle;
+    }
 
     public Organization organizaitonDetailsToOrganizationResourceConverter(OrganizationDetails organizationDetails){
         Organization organization = new Organization();
@@ -81,4 +124,16 @@ public class OrganizationResourceProvider  implements IResourceProvider {
         organization.setName(organizationDetails.getOrgName());
         return organization;
     }
+    
+	private String getNamedParameterValue(String name, List<Parameter> parameters) {
+		String value = null;
+		for(int p = 0; (p < parameters.size() && value == null); p++) {
+			Parameter parameter = parameters.get(p);
+			if(parameter.getName().equals(name)) {
+				value = ((StringDt)parameter.getValue()).getValue();
+			}
+		}
+		
+		return value;
+	} 
 }

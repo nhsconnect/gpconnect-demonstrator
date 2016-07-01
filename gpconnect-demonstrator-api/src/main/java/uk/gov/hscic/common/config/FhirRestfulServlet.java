@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
+import uk.gov.hscic.appointments.SlotResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
@@ -35,19 +37,27 @@ public class FhirRestfulServlet extends RestfulServer {
         List<IResourceProvider> resourceProviders = new ArrayList<>();
         
         ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-
-        resourceProviders.add(organizationResourceProvider(applicationContext));
+        AutowireCapableBeanFactory factory = applicationContext.getAutowireCapableBeanFactory();
+  
+        OrganizationResourceProvider organizationResourceProvider = organizationResourceProvider(applicationContext);
+        factory.autowireBean(organizationResourceProvider);
+        
+        resourceProviders.add(organizationResourceProvider);
         resourceProviders.add(practitionerResourceProvider(applicationContext));
         resourceProviders.add(patientResourceProvider(applicationContext));
         resourceProviders.add(medicationResourceProvider(applicationContext));
         resourceProviders.add(medicationOrderResourceProvider(applicationContext));
         resourceProviders.add(medicationDispenseResourceProvider(applicationContext));
         resourceProviders.add(medicationAdministrationResourceProvider(applicationContext));
-        resourceProviders.add(scheduleResourceProvider(applicationContext));
         resourceProviders.add(locationResourceProvider(applicationContext));
         resourceProviders.add(appointmentResourceProvider(applicationContext));
+		resourceProviders.add(scheduleResourceProvider(applicationContext));
+		resourceProviders.add(slotResourceProvider(applicationContext));
+		
+		setResourceProviders(resourceProviders);
+        
+       // factory.initializeBean( bean, "bean" );
 
-        setResourceProviders(resourceProviders);
     }
 
     @Bean(name = "organizationResourceProvider")
@@ -99,4 +109,10 @@ public class FhirRestfulServlet extends RestfulServer {
     public AppointmentResourceProvider appointmentResourceProvider(ApplicationContext applicationContext) {
         return new AppointmentResourceProvider(applicationContext);
     }
+    
+    @Bean(name = "slotResourceProvider")
+    public SlotResourceProvider slotResourceProvider(ApplicationContext applicationContext) {
+        return new SlotResourceProvider(applicationContext);
+    }
+    
 }

@@ -1,5 +1,14 @@
 package uk.gov.hscic.appointments;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.context.ApplicationContext;
+
+import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
@@ -15,12 +24,6 @@ import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.appointment.schedule.model.ScheduleDetail;
 import uk.gov.hscic.appointment.schedule.search.ScheduleSearch;
 import uk.gov.hscic.appointment.schedule.search.ScheduleSearchFactory;
@@ -29,8 +32,10 @@ import uk.gov.hscic.common.types.RepoSourceType;
 
 public class ScheduleResourceProvider implements IResourceProvider {
 
-    ApplicationContext applicationContext;
+    private static final String EXTENSION_GPCONNECT_PRACTITIONER_1_0 = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1-0";
 
+	ApplicationContext applicationContext;
+    
     public ScheduleResourceProvider(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
@@ -79,13 +84,13 @@ public class ScheduleResourceProvider implements IResourceProvider {
         
         return schedules;
     }
-    
+     
     public Schedule scheduleDetailToScheduleResourceConverter(ScheduleDetail scheduleDetail){
         
         Schedule schedule = new Schedule();
         schedule.setId(String.valueOf(scheduleDetail.getId()));
         
-        schedule.addUndeclaredExtension(true, "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1-0", new ResourceReferenceDt("Practitioner/"+scheduleDetail.getPractitionerId()));
+        schedule.addUndeclaredExtension(true, EXTENSION_GPCONNECT_PRACTITIONER_1_0, new ResourceReferenceDt("Practitioner/"+scheduleDetail.getPractitionerId()));
         
         schedule.setIdentifier(Collections.singletonList(new IdentifierDt("http://fhir.nhs.net/Id/gpconnect-schedule-identifier", scheduleDetail.getIdentifier())));
         
@@ -104,5 +109,9 @@ public class ScheduleResourceProvider implements IResourceProvider {
         schedule.setComment(scheduleDetail.getComment());
         
         return schedule;
+    }
+    
+    public List<ExtensionDt> getPractitionerReferences(Schedule schedule) {
+    	return schedule.getUndeclaredExtensionsByUrl(EXTENSION_GPCONNECT_PRACTITIONER_1_0);
     }
 }

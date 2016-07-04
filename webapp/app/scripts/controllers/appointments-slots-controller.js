@@ -3,7 +3,7 @@
 angular.module('gpConnect')
         .controller('AppointmentsSlotsCtrl', function ($scope, usSpinnerService, Appointment) {
 
-            Appointment.getScheduleOperation("R1A15", "Z33435", "2016-03-22T10:00:00+00:00", "2016-12-22T17:59:59+00:00").then(function (result) {
+            Appointment.getScheduleOperation("R1A15", "Z33435", "2015-03-22 10:00:00", "2017-12-22 17:59:59").then(function (result) {
                 var getScheduleJson = result.data;
 
                 // go through response and build arrays of all returned data
@@ -18,7 +18,7 @@ angular.module('gpConnect')
                         responseSlots.push(slot);
                     }
                     if (value.resource.resourceType == "Schedule") {
-                        responseSchedules[value.fullUrl] = { "locationRef" : value.resource.actor.reference, "practitionerRef" : value.resource.modifierExtension.valueReference.reference };
+                        responseSchedules[value.fullUrl] = { "locationRef" : value.resource.actor.reference, "practitionerRef" : value.resource.modifierExtension[0].valueReference.reference };
                     }
                     if (value.resource.resourceType == "Practitioner"){
                         var prefix = "";

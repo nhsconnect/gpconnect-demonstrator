@@ -80,7 +80,7 @@ angular.module('gpConnect')
 
     $scope.create = function () {
       $modal.open({
-        templateUrl: 'views/appointments/appointment-search-modal.html',
+        templateUrl: 'views/appointments/appointments-search-modal.html',
         size: 'md',
         controller: 'AppointmentsModalCtrl',
         resolve: {

@@ -21,64 +21,65 @@
                 </tr>
             </tbody>
         </table>
+
+      <div class="row">
+        <div class="col-md-6 hidden-xs"><div class="text-right"><dir-pagination-controls on-page-change="pageChangeHandler(newPageNumber)" boundary-links="false"></dir-pagination-controls></div></div>
+        <div class="col-md-6 hidden-xs"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
+      </div>
     </div>
 
     <div class="col-md-7" ng-show="appointmentDetail" >
         <div class="transbox">
             <div class="innerTransbox">
                 <h3><strong>Appointment</strong></h3>
-                
+
                 <div class="form-horizontal text-left">
-                    
                     <div class="form-group form-group-sm">
                         <label class="control-label col-md-12">Practitioner</label>
                         <div class="col-md-12">
                             <div class="form-control-static">{{ appointmentDetail.practitionerName }}</div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group form-group-sm">
                         <label class="control-label col-md-12">Location</label>
                         <div class="col-md-12">
                             <div class="form-control-static">{{ appointmentDetail.appointmentLocation }}</div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group form-group-sm">
                         <label class="control-label col-md-12">Start Date and Time:</label>
                         <div class="col-md-12">
                             <div class="form-control-static">{{ appointmentDetail.resource.start}}</div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group form-group-sm">
                         <label class="control-label col-md-12">End Date and Time:</label>
                         <div class="col-md-12">
                             <div class="form-control-static">{{ appointmentDetail.resource.end}}</div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group form-group-sm">
                         <label class="control-label col-md-12">Reason:</label>
                         <div class="col-md-12">
                             <div class="form-control-static">{{ appointmentDetail.resource.reason.text}}</div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group form-group-sm">
                         <label class="control-label col-md-12">Comments:</label>
                         <div class="col-md-12">
                             <div class="form-control-static">{{ appointmentDetail.resource.comment}}</div>
                         </div>
                     </div>
-                    
                 </div>
-                
             </div>
         </div>
     </div>
 </div>
-
 
 <div class="row">
     <div class="col-md-12">

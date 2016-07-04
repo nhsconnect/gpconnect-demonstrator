@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('AppointmentsCtrl', function ($scope, $http, $stateParams, $state, PatientService, usSpinnerService, Appointment) {
+  .controller('AppointmentsCtrl', function ($scope, $http, $stateParams, $state, $modal, PatientService, usSpinnerService, Appointment) {
 
     $scope.currentPage = 1;
 
@@ -24,7 +24,7 @@ angular.module('gpConnect')
     Appointment.findAllAppointments($stateParams.patientId).then(function (result) {
       var appointmentsJson = result.data;
       $scope.appointments = appointmentsJson.entry;
-      
+
       if($scope.appointments != undefined){
         $scope.appointments = $scope.appointments.sort(function (a, b) {
           return a.resource.start.localeCompare( b.resource.start );
@@ -44,10 +44,10 @@ angular.module('gpConnect')
     });
 
     $scope.go = function (id) {
-        
+
         usSpinnerService.spin('patientSummary-spinner');
         $scope.appointmentDetail = undefined;
-        
+
         var appointment;
         for (var index = 0; index < $scope.appointments.length; ++index) {
             appointment = $scope.appointments[index];
@@ -56,7 +56,7 @@ angular.module('gpConnect')
                 break;
             }
         }
-        
+
         $.each($scope.appointmentDetail.resource.participant, function(key, value){
           var reference = value.actor.reference.toString();
           if(reference.indexOf("Location") != -1){
@@ -68,14 +68,29 @@ angular.module('gpConnect')
                   $scope.appointmentDetail.practitionerName = response.data.name.prefix[0] + " " + response.data.name.given[0] + " " + response.data.name.family[0];
               });
           }
-          
+
         });
-        
+
         usSpinnerService.stop('patientSummary-spinner');
     };
 
     $scope.selected = function (appointmentIndex) {
       return appointmentIndex === $stateParams.appointmentIndex;
     };
+
+    $scope.create = function () {
+      $modal.open({
+        templateUrl: 'views/appointments/appointment-search-modal.html',
+        size: 'md',
+        controller: 'AppointmentsModalCtrl',
+        resolve: {
+          modal: function () {
+            return {
+              title: 'Appointment Search'
+            };
+          }
+        }
+      });
+    }
 
   });

@@ -774,6 +774,16 @@ i.clearAll {
   color: $icon-chevron-color;
 }
 
+.glyphicon-chevron-left:before {
+  float: left;
+  font-size: 8px;
+  color: #19568c;
+  line-height: 2.4em; }
+
+.glyphicon-chevron-left {
+  float: left;
+  color: #19568c;
+}
 
 /* Toolbar */
 

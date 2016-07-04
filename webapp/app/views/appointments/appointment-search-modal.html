@@ -1,0 +1,84 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ modal.title }}</h4>
+</div>
+
+<div class="modal-body">
+  <form name="appointmentSearchForm" class="form-horizontal text-left">
+
+    <div>
+      <strong>Please specify a date range:</strong>
+    </div>
+
+    <div class="col-md-6" style="margin: 0; padding: 0;">
+      <div class="col-md-11">
+        <label for="startDate">From:</label>
+      </div>
+      <div class="col-md-11">
+        <button class="glyphicon glyphicon-chevron-left" ng-click="previousDate(startDate)"></button>
+        <div class="col-md-9" style="margin-right: 0;">
+          <div class="col-md-12 input-group">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default btn-sm" ng-click="openStartDatePicker($event, 'startDate')">
+                <i class="fa fa-calendar"></i>
+              </button>
+            </span>
+            <input type="text" class="form-control input-sm popupinputs" ui-date id="startDate" name="startDate"
+                   ng-model="appointmentSearch.startDate " ng-click="openDatePicker($event, 'startDate')"
+                   datepicker-popup="dd-MMM-y" is-open="startDate" required/>
+          </div>
+          <span class="help-block animate-fade" ng-show="formSubmitted && appointmentSearchForm.startDate.$error.required">You must enter a valid start date.</span>
+        </div>
+        <button class="glyphicon glyphicon-chevron-right" ng-click="nextDate(startDate)"></button>
+      </div>
+    </div>
+
+    <div class="col-md-6" style="margin: 0; padding: 0;">
+      <div class="col-md-11">
+        <label for="endDate">Until:</label>
+      </div>
+      <div class="col-md-11">
+        <button class="glyphicon glyphicon-chevron-left" ng-click="previousDate(endDate)"></button>
+        <div class="col-md-9" style="margin-right: 0;">
+          <div class="col-md-12 input-group">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default btn-sm" ng-click="openDatePicker($event, 'endDate')">
+                <i class="fa fa-calendar"></i>
+              </button>
+            </span>
+            <input type="text" class="form-control input-sm popupinputs" ui-date id="endDate" name="endDate"
+                   ng-model="appointmentSearch.endDate " ng-click="openDatePicker($event, 'endDate')"
+                   datepicker-popup="dd-MMM-y" is-open="endDate" required/>
+          </div>
+          <span class="help-block animate-fade" ng-show="formSubmitted && appointmentSearchForm.endDate.$error.required">You must enter a valid end date.</span>
+        </div>
+        <button class="glyphicon glyphicon-chevron-right" ng-click="nextDate(endDate)"></button>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div>
+        <strong>Primary Practice:</strong>
+      </div>
+
+      <div class="col-md-5">
+        blah
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div>
+        <strong>Federated Practice(s):</strong>
+      </div>
+
+      <div class="col-md-5">
+        blah
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<div class="modal-footer">
+  <a class="btn btn-danger" ng-click="cancel()">Cancel</a>
+  <button class="btn btn-success" ng-click="formSubmitted = true; ok(appointmentSearchForm.startDate, appointmentSearchForm.endDate);"><i class="fa fa-check"></i> Search</button>
+</div>

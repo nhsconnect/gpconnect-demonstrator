@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('AppointmentsSlotsCtrl', function ($scope, usSpinnerService, Appointment) {
+        .controller('AppointmentsSlotsCtrl', function ($scope, usSpinnerService, Appointment, appointmentSearchParams) {
+
+            var appointmentSearchParams = appointmentSearchParams;
 
             Appointment.getScheduleOperation("R1A15", "Z33435", "2016-03-22T10:00:00+00:00", "2016-12-22T17:59:59+00:00").then(function (result) {
                 var getScheduleJson = result.data;
@@ -39,7 +41,7 @@ angular.module('gpConnect')
 
 
                 var internalGetScheduleModel = {};
-                
+
                 $.each(responseSlots, function (key, value) {
                     // Build slot object
                     var slot = { "startDateTime" : value.startDateTime, "endDateTime" : value.endDateTime, "type" : value.type };
@@ -121,11 +123,11 @@ angular.module('gpConnect')
                                 }
                             }
                         }
-                        
+
                     }
-                    
+
                 });
-                
+
                 $scope.scheduleModel = internalGetScheduleModel;
 
             });
@@ -141,5 +143,5 @@ function getDayFromDate(date){
     weekday[5] = "Friday";
     weekday[6] = "Saturday";
 
-    return weekday[date.getDay()]; 
+    return weekday[date.getDay()];
 }

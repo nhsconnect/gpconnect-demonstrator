@@ -125,7 +125,7 @@ public class GetScheduleOperation {
         			}
         		}
         		else {
-                	String msg = String.format("No slots could be found for the schedule %s within the specified planning horizon (start - %s end - %s)", schedule.getId().getElementSpecificId(), planningHorizonStart, planningHorizonEnd);
+                	String msg = String.format("No slots could be found for the schedule %s within the specified planning horizon (start - %s end - %s)", schedule.getId().getValue(), planningHorizonStart, planningHorizonEnd);
                 	operationOutcome.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(msg);
                 	
                 	Entry operationOutcomeEntry = new Entry();

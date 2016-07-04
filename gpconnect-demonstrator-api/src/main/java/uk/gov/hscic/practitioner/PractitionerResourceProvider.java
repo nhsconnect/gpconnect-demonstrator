@@ -51,6 +51,8 @@ public class PractitionerResourceProvider  implements IResourceProvider {
         
         Practitioner practitioner = new Practitioner();
         
+        practitioner.setId(new IdDt(practitionerDetails.getId()));
+        
         practitioner.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/sds-user-id", practitionerDetails.getUserId()));
         practitioner.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/sds-role-profile-id", practitionerDetails.getRoleId()));
         

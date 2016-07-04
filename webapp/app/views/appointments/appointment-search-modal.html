@@ -9,12 +9,12 @@
       <strong>Please specify a date range:</strong>
     </div>
 
-    <div class="col-md-6" style="margin: 0; padding: 0;">
+    <div class="col-md-6" style="margin-bottom: 25px; padding: 0;">
       <div class="col-md-11">
         <label for="startDate">From:</label>
       </div>
       <div class="col-md-11">
-        <button class="glyphicon glyphicon-chevron-left" ng-click="previousDate(startDate)"></button>
+        <button class="glyphicon glyphicon-chevron-left" ng-click="setPreviousStartDate()"></button>
         <div class="col-md-9" style="margin-right: 0;">
           <div class="col-md-12 input-group">
             <span class="input-group-btn">
@@ -23,21 +23,21 @@
               </button>
             </span>
             <input type="text" class="form-control input-sm popupinputs" ui-date id="startDate" name="startDate"
-                   ng-model="appointmentSearch.startDate " ng-click="openDatePicker($event, 'startDate')"
+                   ng-model="appointmentSearch.startDate" ng-click="openDatePicker($event, 'startDate')"
                    datepicker-popup="dd-MMM-y" is-open="startDate" required/>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && appointmentSearchForm.startDate.$error.required">You must enter a valid start date.</span>
         </div>
-        <button class="glyphicon glyphicon-chevron-right" ng-click="nextDate(startDate)"></button>
+        <button class="glyphicon glyphicon-chevron-right" ng-click="setNextStartDate()"></button>
       </div>
     </div>
 
-    <div class="col-md-6" style="margin: 0; padding: 0;">
+    <div class="col-md-6" style="margin-bottom: 25px; padding: 0;">
       <div class="col-md-11">
         <label for="endDate">Until:</label>
       </div>
       <div class="col-md-11">
-        <button class="glyphicon glyphicon-chevron-left" ng-click="previousDate(endDate)"></button>
+        <button class="glyphicon glyphicon-chevron-left" ng-click="setPreviousEndDate()"></button>
         <div class="col-md-9" style="margin-right: 0;">
           <div class="col-md-12 input-group">
             <span class="input-group-btn">
@@ -46,32 +46,42 @@
               </button>
             </span>
             <input type="text" class="form-control input-sm popupinputs" ui-date id="endDate" name="endDate"
-                   ng-model="appointmentSearch.endDate " ng-click="openDatePicker($event, 'endDate')"
+                   ng-model="appointmentSearch.endDate" ng-click="openDatePicker($event, 'endDate')"
                    datepicker-popup="dd-MMM-y" is-open="endDate" required/>
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && appointmentSearchForm.endDate.$error.required">You must enter a valid end date.</span>
         </div>
-        <button class="glyphicon glyphicon-chevron-right" ng-click="nextDate(endDate)"></button>
+        <button class="glyphicon glyphicon-chevron-right" ng-click="setNextEndDate()"></button>
       </div>
     </div>
 
-    <div class="col-md-12">
-      <div>
-        <strong>Primary Practice:</strong>
+    <div style="margin-top: 5px;">
+      <strong>Primary Practice:</strong>
+    </div>
+    <div class="col-md-12" style="margin-bottom: 25px; padding: 0;">
+      <div class="col-md-4">
+        <input type="checkbox" name="hepworthSurgery" id="hepworthSurgery" ng-model="appointmentSearch.hepworthSurgery" value="The Hepworth Surgery">
+        <label for="hepworthSurgery"> The Hepworth Surgery</label>
       </div>
 
-      <div class="col-md-5">
-        blah
+      <div class="col-md-4">
+        <input type="checkbox" name="mooreSurgery" id="mooreSurgery" ng-model="appointmentSearch.mooreSurgery" value="The Moore Surgery">
+        <label for="mooreSurgery"> The Moore Surgery</label>
       </div>
     </div>
 
-    <div class="col-md-12">
-      <div>
-        <strong>Federated Practice(s):</strong>
+    <div>
+      <strong>Federated Practice(s):</strong>
+    </div>
+    <div class="col-md-12" style="margin-bottom: 25px; padding: 0;">
+      <div class="col-md-4">
+        <input type="checkbox" name="federatedPracticeOne" id="federatedPracticeOne" value="Federated Practice 1" disabled>
+        <label for="federatedPracticeOne"> Federated Practice 1</label>
       </div>
 
-      <div class="col-md-5">
-        blah
+      <div class="col-md-4">
+        <input type="checkbox" name="federatedPracticeTwo" id="federatedPracticeTwo" value="Federated Practice 2" disabled>
+        <label for="federatedPracticeTwo"> Federated Practice 2</label>
       </div>
     </div>
 
@@ -80,5 +90,5 @@
 
 <div class="modal-footer">
   <a class="btn btn-danger" ng-click="cancel()">Cancel</a>
-  <button class="btn btn-success" ng-click="formSubmitted = true; ok(appointmentSearchForm.startDate, appointmentSearchForm.endDate);"><i class="fa fa-check"></i> Search</button>
+  <button class="btn btn-success" ng-click="formSubmitted = true; ok(appointmentSearchForm);"><i class="fa fa-check"></i> Search</button>
 </div>

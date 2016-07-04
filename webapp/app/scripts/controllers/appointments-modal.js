@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('AppointmentsModalCtrl', function ($scope, $modalInstance, $modal, modal) {
+  .controller('AppointmentsModalCtrl', function ($scope, $modalInstance, $modal, $timeout, modal) {
 
     $scope.modal = modal;
 
@@ -12,18 +12,39 @@ angular.module('gpConnect')
       $scope[name] = true;
     };
 
-    $scope.nextDate = function () {
-
+    $scope.setPreviousStartDate = function () {
+      if ($scope.appointmentSearch && $scope.appointmentSearch.startDate) {
+        var currentDate = $scope.appointmentSearch.startDate.getDate();
+        $scope.appointmentSearch.startDate.setDate(currentDate - 1);
+      }
     };
 
-    $scope.previousDate = function () {
-
+    $scope.setPreviousEndDate = function () {
+      if ($scope.appointmentSearch && $scope.appointmentSearch.endDate) {
+        var currentDate = $scope.appointmentSearch.endDate.getDate();
+        $scope.appointmentSearch.endDate.setDate(currentDate - 1);
+      }
     };
 
-    $scope.ok = function (startDate, endDate) {
+    $scope.setNextStartDate = function () {
+      if ($scope.appointmentSearch && $scope.appointmentSearch.startDate) {
+        var currentDate = $scope.appointmentSearch.startDate.getDate();
+        $scope.appointmentSearch.startDate.setDate(currentDate + 1);
+      }
+    };
+
+    $scope.setNextEndDate = function () {
+      if ($scope.appointmentSearch && $scope.appointmentSearch.endDate) {
+        var currentDate = $scope.appointmentSearch.endDate.getDate();
+        $scope.appointmentSearch.endDate.setDate(currentDate + 1);
+      }
+    };
+
+    $scope.ok = function (appointmentSearchForm) {
       $scope.formSubmitted = true;
+      var appointmentSearch = $scope.appointmentSearch;
 
-      if (startDate.$valid && endDate.$valid) {
+      if (appointmentSearchForm.$valid) {
         $modal.open({
           templateUrl: 'views/appointments/appointments-slots-modal.html',
           size: 'md',
@@ -35,7 +56,7 @@ angular.module('gpConnect')
               };
             },
             appointmentSearchParams: function () {
-              return $scope.appointmentSearch;
+              return appointmentSearch;
             }
           }
         });

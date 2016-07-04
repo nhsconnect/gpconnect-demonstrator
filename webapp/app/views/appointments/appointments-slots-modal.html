@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ modal.title }}</h4>
+</div>
+
+<div class="modal-body">
+
+<!-- for each location get the name (and index) and render a button -->
+<div>
+		<button ng-repeat="location in locations" ng-click="onSelectLocation(location.name)">location.name</button>
+</div>
+<div>
+		<ul class="nav nav-pills nav-stacked col-md-3">
+			<li ng-repeat="dayBlockOfSlots in selectedLocation.daysBlockOfSlots" ng-class="{active:isDaySelected(dayBlockOfSlots.date)}" ><a href="onSelectDay(dayBlockOfSlots.date)"></a></li>
+		</ul>
+</div>
+
+</div>

@@ -131,7 +131,45 @@ angular.module('gpConnect')
                 $scope.scheduleModel = internalGetScheduleModel;
                 console.log(internalGetScheduleModel);
             });
-        });
+			
+		$scope.onSelectLocation = function(locationName) {
+			// get the right location
+			var locations = $scope.locations;
+			
+			for (var l = 0; l < locations.length; l++) { 
+				var location = locations[l];
+				if(locationName === location.name) {
+					$scope.selectedLocation = location;
+				}
+			}
+		};
+
+		$scope.isDaySelected = function(date) {
+			var isDaySelected = false;
+			
+			var daysBlockOfSlots = $scope.selectedLocation.daysBlockOfSlots;
+			
+			for(var d = 0; (d < daysBlockOfSlots &&  isDaySelected !== true); d++) {
+				var dayBlockOfSlots = daysBlockOfSlots[d];
+				if(date === dayBlockOfSlots.date) {
+					isDaySelected = true;
+				}
+			}
+			
+			return isDaySelected;
+		};
+		
+		$scope.onSelectDay = function(date) {
+			var daysBlockOfSlots = $scope.selectedLocation.daysBlockOfSlots;
+			
+			for(var d = 0; d < daysBlockOfSlots; d++) {
+				var dayBlockOfSlots = daysBlockOfSlots[d];
+				if(date === daysBlockOfSlots.date) {
+					$scope.selectedDay = dayBlockOfSlots;
+				}
+			}
+		};			
+ });
 
 function getDayFromDate(date){
     var weekday = new Array(7);
@@ -145,3 +183,4 @@ function getDayFromDate(date){
 
     return weekday[date.getDay()];
 }
+

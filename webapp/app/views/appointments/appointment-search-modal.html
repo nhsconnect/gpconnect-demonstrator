@@ -14,8 +14,8 @@
         <label for="startDate">From:</label>
       </div>
       <div class="col-md-11">
-        <button class="glyphicon glyphicon-chevron-left" ng-click="setPreviousStartDate()"></button>
-        <div class="col-md-9" style="margin-right: 0;">
+        <button class="glyphicon glyphicon-chevron-left" style="margin-top: 1px;" ng-click="setPreviousStartDate()"></button>
+        <div class="col-md-9" style="padding-left: 9px; padding-right: 0;">
           <div class="col-md-12 input-group">
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="openStartDatePicker($event, 'startDate')">
@@ -28,7 +28,7 @@
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && appointmentSearchForm.startDate.$error.required">You must enter a valid start date.</span>
         </div>
-        <button class="glyphicon glyphicon-chevron-right" ng-click="setNextStartDate()"></button>
+        <button class="glyphicon glyphicon-chevron-right" style="margin-top: 1px;" ng-click="setNextStartDate()"></button>
       </div>
     </div>
 
@@ -37,8 +37,8 @@
         <label for="endDate">Until:</label>
       </div>
       <div class="col-md-11">
-        <button class="glyphicon glyphicon-chevron-left" ng-click="setPreviousEndDate()"></button>
-        <div class="col-md-9" style="margin-right: 0;">
+        <button class="glyphicon glyphicon-chevron-left" style="margin-top: 1px;" ng-click="setPreviousEndDate()"></button>
+        <div class="col-md-9" style="padding-left: 9px; padding-right: 0;">
           <div class="col-md-12 input-group">
             <span class="input-group-btn">
               <button type="button" class="btn btn-default btn-sm" ng-click="openDatePicker($event, 'endDate')">
@@ -51,7 +51,7 @@
           </div>
           <span class="help-block animate-fade" ng-show="formSubmitted && appointmentSearchForm.endDate.$error.required">You must enter a valid end date.</span>
         </div>
-        <button class="glyphicon glyphicon-chevron-right" ng-click="setNextEndDate()"></button>
+        <button class="glyphicon glyphicon-chevron-right" style="margin-top: 1px;" ng-click="setNextEndDate()"></button>
       </div>
     </div>
 

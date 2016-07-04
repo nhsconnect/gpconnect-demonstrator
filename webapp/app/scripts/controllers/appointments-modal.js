@@ -4,6 +4,7 @@ angular.module('gpConnect')
   .controller('AppointmentsModalCtrl', function ($scope, $modalInstance, $modal, $timeout, modal) {
 
     $scope.modal = modal;
+    $scope.appointmentSearch = undefined;
 
     $scope.openDatePicker = function ($event, name) {
       $event.preventDefault();
@@ -46,7 +47,7 @@ angular.module('gpConnect')
 
       if (appointmentSearchForm.$valid) {
         $modal.open({
-          templateUrl: 'views/appointments/appointments-slots-modal.html',
+          templateUrl: 'views/appointments/appointment-search-modal.html',
           size: 'md',
           controller: 'AppointmentsSlotsCtrl',
           resolve: {

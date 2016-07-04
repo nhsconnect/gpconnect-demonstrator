@@ -59,6 +59,7 @@ angular.module('gpConnect')
                         practitioners.push(practitionerModel);
                         var dayBlockOfSlots = [];
                         var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : slot.startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
+                        dayBlockOfSlots.push(dayBlockOfSlotsModel);
                         var locations = [];
                         var locationModel = { "name" : locationName, "freeSlots" : 1, "dayBlockOfSlots" : dayBlockOfSlots };
                         locations.push(locationModel);

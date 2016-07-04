@@ -5,7 +5,7 @@ angular.module('gpConnect')
 
             var appointmentSearchParams = appointmentSearchParams;
 
-            Appointment.getScheduleOperation("R1A15", "Z33435", "2016-03-22T10:00:00+00:00", "2016-12-22T17:59:59+00:00").then(function (result) {
+            Appointment.getScheduleOperation("R1A15", "Z33435", "2015-03-22 10:00:00", "2017-12-22 17:59:59").then(function (result) {
                 var getScheduleJson = result.data;
 
                 // go through response and build arrays of all returned data
@@ -20,7 +20,7 @@ angular.module('gpConnect')
                         responseSlots.push(slot);
                     }
                     if (value.resource.resourceType == "Schedule") {
-                        responseSchedules[value.fullUrl] = { "locationRef" : value.resource.actor.reference, "practitionerRef" : value.resource.modifierExtension.valueReference.reference };
+                        responseSchedules[value.fullUrl] = { "locationRef" : value.resource.actor.reference, "practitionerRef" : value.resource.modifierExtension[0].valueReference.reference };
                     }
                     if (value.resource.resourceType == "Practitioner"){
                         var prefix = "";
@@ -38,13 +38,12 @@ angular.module('gpConnect')
                         responseLocations[value.fullUrl] = { "name" : value.resource.name };
                     }
                 });
-
-
+                
                 var internalGetScheduleModel = {};
 
                 $.each(responseSlots, function (key, value) {
                     // Build slot object
-                    var slot = { "startDateTime" : value.startDateTime, "endDateTime" : value.endDateTime, "type" : value.type };
+                    var slot = { "startDateTime" : new Date(value.startDateTime), "endDateTime" : new Date(value.endDateTime), "type" : value.type };
                     // Find the schedule for that slot from array
                     var schedule = responseSchedules[value.scheduleRef];
                     // Find Location and practitioner for that schedule
@@ -59,7 +58,7 @@ angular.module('gpConnect')
                         var practitionerModel = { "fullName" : practitionerName, "slots" : slots };
                         practitioners.push(practitionerModel);
                         var dayBlockOfSlots = [];
-                        var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : slot.startDateTime.withoutTime(), "freeSlots" : 1, "practitioners" : practitioners };
+                        var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : slot.startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
                         var locations = [];
                         var locationModel = { "name" : locationName, "freeSlots" : 1, "dayBlockOfSlots" : dayBlockOfSlots };
                         locations.push(locationModel);
@@ -67,7 +66,7 @@ angular.module('gpConnect')
                     } else {
                         var locationIndex = -1;
                         // search locations for location
-                        for(i = 0; i < internalGetScheduleModel.locations.length; i++) {
+                        for(var i = 0; i < internalGetScheduleModel.locations.length; i++) {
                             if(locationName == internalGetScheduleModel.locations[i].name){
                                 locationIndex = i; break;
                             }
@@ -80,7 +79,7 @@ angular.module('gpConnect')
                             var practitionerModel = { "fullName" : practitionerName, "slots" : slots };
                             practitioners.push(practitionerModel);
                             var dayBlockOfSlots = [];
-                            var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : slot.startDateTime.withoutTime(), "freeSlots" : 1, "practitioners" : practitioners };
+                            var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : slot.startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
                             var locationModel = { "name" : locationName, "freeSlots" : 1, "dayBlockOfSlots" : dayBlockOfSlots };
                             internalGetScheduleModel.locations.push(locationModel);
                         }else{
@@ -88,8 +87,8 @@ angular.module('gpConnect')
                             internalGetScheduleModel.locations[locationIndex].freeSlots++;  // Increment free slots
                             //try and find the dayBlockOfSlots for same date
                             var dayBlockOfSlotsIndex = -1;
-                            for(i = 0; i < internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots.length; i++) {
-                                if(slot.startDateTime.withoutTime() == internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[i].date){
+                            for(var i = 0; i < internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots.length; i++) {
+                                if(slot.startDateTime.setHours(0, 0, 0, 0) == internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[i].date){
                                     dayBlockOfSlotsIndex = i; break;
                                 }
                             };
@@ -101,13 +100,13 @@ angular.module('gpConnect')
                                 var practitionerModel = { "fullName" : practitionerName, "slots" : slots };
                                 practitioners.push(practitionerModel);
                                 var dayBlockOfSlots = [];
-                                var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : slot.startDateTime.withoutTime(), "freeSlots" : 1, "practitioners" : practitioners };
+                                var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : slot.startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
                                 internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots.push(dayBlockOfSlotsModel);
                             } else {
                                 // If we have found a block of slots for the day we can see if the practitioner exists and is so add our new slot to them
                                 internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].freeSlots++;  // Increment free slots
                                 var practitionerIndex = -1;
-                                for(i = 0; i < internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners.length; i++) {
+                                for(var i = 0; i < internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners.length; i++) {
                                     if(practitionerName == internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners[i].fullName){
                                         practitionerIndex = i; break;
                                     }
@@ -129,7 +128,7 @@ angular.module('gpConnect')
                 });
 
                 $scope.scheduleModel = internalGetScheduleModel;
-
+                console.log(internalGetScheduleModel);
             });
         });
 

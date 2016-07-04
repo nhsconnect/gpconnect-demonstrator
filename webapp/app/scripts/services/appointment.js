@@ -11,7 +11,7 @@ angular.module('gpConnect')
     };
     
     var getScheduleOperation = function (organizationODSCode, siteODSCode, startDateTime, endDateTime) {
-      return $http.post('/fhir/$getschedule', '{ "resourceType": "Parameters", "parameter": [{ "name": "odsOrganisationCode", "valueIdentifier": { "value": "'+organizationODSCode+'" } }, { "name": "odsSiteCode", "valueIdentifier": { "value": "'+siteODSCode+'" } }, { "name": "timePeriod", "valuePeriod": { "start": "'+startDateTime+'", "end": "'+endDateTime+'" } }] }');
+      return $http.post('/fhir/Organization/$getschedule', '{ "resourceType": "Parameters", "parameter": [{ "name": "odsOrganisationCode", "valueIdentifier": { "value": "'+organizationODSCode+'" } }, { "name": "odsSiteCode", "valueIdentifier": { "value": "'+siteODSCode+'" } }, { "name" : "planningHorizonStart", "valueString" : "2016-06-29 11:45:00" }, { "name" : "planningHorizonEnd", "valueString" : "2016-06-29 15:15:00" }] }');
     };
     
     var findResourceByReference = function (resourceReference) {

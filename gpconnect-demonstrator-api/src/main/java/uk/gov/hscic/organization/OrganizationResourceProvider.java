@@ -96,8 +96,8 @@ public class OrganizationResourceProvider  implements IResourceProvider {
         
         // params
     	List<Parameter> parameters = params.getParameter();
-    	String orgOdsCode = getNamedParameterValue("orgOdsCode", parameters);
-    	String siteOdsCode = getNamedParameterValue("siteOdsCode", parameters);
+    	String orgOdsCode = getNamedParameterValue("odsOrganisationCode", parameters);
+    	String siteOdsCode = getNamedParameterValue("odsSiteCode", parameters);
     	String planningHorizonStart = getNamedParameterValue("planningHorizonStart", parameters);
     	String planningHorizonEnd = getNamedParameterValue("planningHorizonEnd", parameters);
     	

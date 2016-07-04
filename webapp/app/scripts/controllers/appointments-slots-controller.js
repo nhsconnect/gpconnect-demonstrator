@@ -3,7 +3,7 @@
 angular.module('gpConnect')
         .controller('AppointmentsSlotsCtrl', function ($scope, usSpinnerService, Appointment, appointmentSearchParams) {
 
-            var appointmentSearchParams = appointmentSearchParams;
+            var appointmentSearch = appointmentSearchParams;
 
             Appointment.getScheduleOperation("R1A15", "Z33435", "2015-03-22 10:00:00", "2017-12-22 17:59:59").then(function (result) {
                 var getScheduleJson = result.data;
@@ -38,7 +38,7 @@ angular.module('gpConnect')
                         responseLocations[value.fullUrl] = { "name" : value.resource.name };
                     }
                 });
-                
+
                 var internalGetScheduleModel = {};
 
                 $.each(responseSlots, function (key, value) {

@@ -26,9 +26,11 @@
                    ng-model="appointmentSearch.startDate" ng-click="openDatePicker($event, 'startDate')"
                    datepicker-popup="dd-MMM-y" is-open="startDate" required/>
           </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && appointmentSearchForm.startDate.$error.required">You must enter a valid start date.</span>
         </div>
         <button class="glyphicon glyphicon-chevron-right" style="margin-top: 1px;" ng-click="setNextStartDate()"></button>
+      </div>
+      <div class="col-md-11">
+        <span class="help-block animate-fade" ng-show="formSubmitted && appointmentSearchForm.startDate.$error.required">You must enter a valid start date.</span>
       </div>
     </div>
 
@@ -49,9 +51,11 @@
                    ng-model="appointmentSearch.endDate" ng-click="openDatePicker($event, 'endDate')"
                    datepicker-popup="dd-MMM-y" is-open="endDate" required/>
           </div>
-          <span class="help-block animate-fade" ng-show="formSubmitted && appointmentSearchForm.endDate.$error.required">You must enter a valid end date.</span>
         </div>
         <button class="glyphicon glyphicon-chevron-right" style="margin-top: 1px;" ng-click="setNextEndDate()"></button>
+      </div>
+      <div class="col-md-11">
+        <span class="help-block animate-fade" ng-show="formSubmitted && appointmentSearchForm.endDate.$error.required">You must enter a valid end date.</span>
       </div>
     </div>
 

@@ -12,7 +12,7 @@
 
             <tbody>
                 <tr dir-paginate="appointment in appointments | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{appointment.resource.id}}')" ng-class="{info: selected(appointment.resource.id)}">
-                    <td class="dateTime">{{ appointment.resource.start}}</td>
+                    <td class="dateTime" style="width:155px">{{ appointment.resource.start}}</td>
                     <td>{{ appointment.resource.type.text}}</td>
                 </tr>
 

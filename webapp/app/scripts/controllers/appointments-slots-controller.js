@@ -130,50 +130,60 @@ angular.module('gpConnect')
 
                 $scope.scheduleModel = internalGetScheduleModel;
                 console.log(internalGetScheduleModel);
+                
+                // select the default location
+                $scope.selectDefaultLocation(internalGetScheduleModel.locations);
             });
 			
-		$scope.onSelectLocation = function(locationName) {
-			// get the right location
-			var locations = $scope.scheduleModel.locations;
+		$scope.onSelectLocation = function(location) {
+			$scope.selectedLocation = location;
+			// grab the default day and select it
+			$scope.selectDefaultDay(location);
+		};
+		
+		$scope.isLocationSelected = function(location) {
+			var isLocationSelected = location === $scope.selectedLocation;
 			
-			for (var l = 0; l < locations.length; l++) { 
-				var location = locations[l];
-				if(locationName === location.name) {
-					$scope.selectedLocation = location;
-				}
-			}
+			return isLocationSelected;
 		};
 
-		$scope.isDaySelected = function(date) {
-			var isDaySelected = false;
-			
-			var allDayBlockOfSlots = $scope.selectedLocation.dayBlockOfSlots;
-			
-			for(var d = 0; d < allDayBlockOfSlots.length; d++) {
-				var dayBlockOfSlots = allDayBlockOfSlots[d];
-				if(date === dayBlockOfSlots.date) {
-					isDaySelected = true;
-					break;
-				}
+		$scope.selectDefaultLocation = function(locations) {
+			// grab the first day and select it
+			if(locations.length > 0) {
+				var firstLocation = locations[0];
+				$scope.onSelectLocation(firstLocation);
 			}
+		};			
+		
+		$scope.isDaySelected = function(day) {
+			var isDaySelected = day === $scope.selectedDay;
 			
 			return isDaySelected;
 		};
 		
-		$scope.onSelectDay = function(date) {
-			var daysBlockOfSlots = $scope.selectedLocation.daysBlockOfSlots;
-			
-			for(var d = 0; d < daysBlockOfSlots; d++) {
-				var dayBlockOfSlots = daysBlockOfSlots[d];
-				if(date === daysBlockOfSlots.date) {
-					$scope.selectedDay = dayBlockOfSlots;
-				}
-			}
+		$scope.onSelectDay = function(day) {
+			$scope.selectedDay = day;
 		};	
+		
+		$scope.selectDefaultDay = function(location) {
+			// grab the first day and select it
+			if(location.dayBlockOfSlots.length > 0) {
+				var firstDay = location.dayBlockOfSlots[0];
+				$scope.onSelectDay(firstDay);
+			}
+		};		
 		
 	    $scope.cancel = function () {
 	        $modalInstance.dismiss('cancel');
-	      };		
+	    };	
+	    
+	    $scope.getFormattedDate = function(day) {
+	    	var date = new Date(day.date);
+	    	var options = { weekday: 'short', year: '2-digit', month: 'short', day: 'numeric' };
+	    	var formattedDate = date.toLocaleString('en-GB', options);
+	    	
+	    	return formattedDate
+	    }
  });
 
 function getDayFromDate(date){

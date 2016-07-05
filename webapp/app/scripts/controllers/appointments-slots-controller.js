@@ -3,9 +3,17 @@
 angular.module('gpConnect')
         .controller('AppointmentsSlotsCtrl', function ($scope, usSpinnerService, Appointment, appointmentSearchParams, $modalInstance, $modal, modal) {
 
-            var appointmentSearch = appointmentSearchParams;
+            $scope.ganttModel = [];
+            $scope.ganttHeaderFormats = {
+                day: 'DD MMMM YYYY',
+                hour: 'HH:mm'
+            };
 
-            Appointment.getScheduleOperation("R1A15", "Z33435", "2015-03-22 10:00:00", "2017-12-22 17:59:59").then(function (result) {
+            var startDate = moment(appointmentSearchParams.startDate).format('YYYY-MM-DD HH:mm:ss');
+            var endDate = moment(appointmentSearchParams.endDate).format('YYYY-MM-DD HH:mm:ss');
+            // TODO - set the correct codes relating to the selected practices instead of hardcoding, as below
+
+            Appointment.getScheduleOperation('R1A15', 'Z33435', startDate, endDate).then( function (result) {
                 var getScheduleJson = result.data;
 
                 // go through response and build arrays of all returned data
@@ -58,7 +66,8 @@ angular.module('gpConnect')
                         var practitionerModel = { "fullName" : practitionerName, "slots" : slots };
                         practitioners.push(practitionerModel);
                         var dayBlockOfSlots = [];
-                        var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : slot.startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
+                        var startDateTime = new Date(slot.startDateTime);
+                        var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
                         dayBlockOfSlots.push(dayBlockOfSlotsModel);
                         var locations = [];
                         var locationModel = { "name" : locationName, "freeSlots" : 1, "dayBlockOfSlots" : dayBlockOfSlots };
@@ -80,7 +89,8 @@ angular.module('gpConnect')
                             var practitionerModel = { "fullName" : practitionerName, "slots" : slots };
                             practitioners.push(practitionerModel);
                             var dayBlockOfSlots = [];
-                            var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : slot.startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
+                            var startDateTime = new Date(slot.startDateTime);
+                            var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
                             var locationModel = { "name" : locationName, "freeSlots" : 1, "dayBlockOfSlots" : dayBlockOfSlots };
                             internalGetScheduleModel.locations.push(locationModel);
                         }else{
@@ -89,7 +99,8 @@ angular.module('gpConnect')
                             //try and find the dayBlockOfSlots for same date
                             var dayBlockOfSlotsIndex = -1;
                             for(var i = 0; i < internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots.length; i++) {
-                                if(slot.startDateTime.setHours(0, 0, 0, 0) == internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[i].date){
+                                var startDateTime = new Date(slot.startDateTime);
+                                if(startDateTime.setHours(0, 0, 0, 0) == internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[i].date){
                                     dayBlockOfSlotsIndex = i; break;
                                 }
                             };
@@ -101,7 +112,8 @@ angular.module('gpConnect')
                                 var practitionerModel = { "fullName" : practitionerName, "slots" : slots };
                                 practitioners.push(practitionerModel);
                                 var dayBlockOfSlots = [];
-                                var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : slot.startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
+                                var startDateTime = new Date(slot.startDateTime);
+                                var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
                                 internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots.push(dayBlockOfSlotsModel);
                             } else {
                                 // If we have found a block of slots for the day we can see if the practitioner exists and is so add our new slot to them
@@ -130,21 +142,47 @@ angular.module('gpConnect')
 
                 $scope.scheduleModel = internalGetScheduleModel;
                 console.log(internalGetScheduleModel);
-                
+
                 // select the default location
                 $scope.selectDefaultLocation(internalGetScheduleModel.locations);
             });
-			
+
+          $scope.loadDaySlots = function (day) {
+            $scope.ganttModel = [];
+            var practitioners = day.practitioners;
+
+            for (var i = 0; i < practitioners.length; i++) {
+              var practitionerSchedule = {
+                name: practitioners[i].fullName,
+                height: '3em',
+                sortable: false,
+                tasks: []
+              };
+
+              var slots = practitioners[i].slots;
+              for (var j = 0; j < slots.length; j++) {
+                var slot = {
+                  name: slots[j].type,
+                  color: '#99ccff',
+                  from: slots[j].startDateTime,
+                  to: slots[j].endDateTime
+                };
+
+                practitionerSchedule.tasks.push(slot);
+              }
+
+              $scope.ganttModel.push(practitionerSchedule);
+            }
+          };
+
 		$scope.onSelectLocation = function(location) {
 			$scope.selectedLocation = location;
 			// grab the default day and select it
 			$scope.selectDefaultDay(location);
 		};
-		
+
 		$scope.isLocationSelected = function(location) {
-			var isLocationSelected = location === $scope.selectedLocation;
-			
-			return isLocationSelected;
+			return location === $scope.selectedLocation;
 		};
 
 		$scope.selectDefaultLocation = function(locations) {
@@ -153,35 +191,34 @@ angular.module('gpConnect')
 				var firstLocation = locations[0];
 				$scope.onSelectLocation(firstLocation);
 			}
-		};			
-		
-		$scope.isDaySelected = function(day) {
-			var isDaySelected = day === $scope.selectedDay;
-			
-			return isDaySelected;
 		};
-		
+
+		$scope.isDaySelected = function(day) {
+			return day === $scope.selectedDay;
+		};
+
 		$scope.onSelectDay = function(day) {
 			$scope.selectedDay = day;
-		};	
-		
+      $scope.loadDaySlots(day);
+		};
+
 		$scope.selectDefaultDay = function(location) {
 			// grab the first day and select it
 			if(location.dayBlockOfSlots.length > 0) {
 				var firstDay = location.dayBlockOfSlots[0];
 				$scope.onSelectDay(firstDay);
 			}
-		};		
-		
+		};
+
 	    $scope.cancel = function () {
 	        $modalInstance.dismiss('cancel');
-	    };	
-	    
+	    };
+
 	    $scope.getFormattedDate = function(day) {
 	    	var date = new Date(day.date);
 	    	var options = { weekday: 'short', year: '2-digit', month: 'short', day: 'numeric' };
 	    	var formattedDate = date.toLocaleString('en-GB', options);
-	    	
+
 	    	return formattedDate
 	    }
  });

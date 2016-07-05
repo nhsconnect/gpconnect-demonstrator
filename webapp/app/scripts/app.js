@@ -12,7 +12,16 @@ angular
     'angularUtils.directives.dirPagination',
     'ui.timepicker',
     'ui.calendar',
-    'angularSpinner'
+    'angularSpinner',
+    'ui.tree',
+    'gantt',
+    'gantt.sortable',
+    'gantt.tooltips',
+    'gantt.bounds',
+    'gantt.progress',
+    'gantt.table',
+    'gantt.tree',
+    'gantt.groups'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
 
@@ -251,7 +260,7 @@ angular
           detail: { templateUrl: 'views/investigations/investigations-detail.html', controller: 'InvestigationsDetailCtrl' }
         }
       })
-      
+
       .state('appointments', {
         url: '/patients/{patientId:int}/appointments',
         views: {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('AppointmentsModalCtrl', function ($scope, $modalInstance, $modal, $timeout, modal) {
+  .controller('AppointmentsSearchModalCtrl', function ($scope, $modalInstance, $modal, $timeout, modal) {
 
     $scope.modal = modal;
     $scope.appointmentSearch = undefined;

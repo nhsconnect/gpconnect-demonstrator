@@ -82,7 +82,7 @@ angular.module('gpConnect')
       $modal.open({
         templateUrl: 'views/appointments/appointments-search-modal.html',
         size: 'md',
-        controller: 'AppointmentsModalCtrl',
+        controller: 'AppointmentsSearchModalCtrl',
         resolve: {
           modal: function () {
             return {

@@ -12,7 +12,7 @@
 			<div ng-if="selectedLocation == null">
 				No selection made
 			</div>
-	
+
 			<ul ng-if="selectedLocation !== null" class="nav nav-pills nav-stacked col-sm-1">
 				<li ng-repeat="day in selectedLocation.dayBlockOfSlots" ng-class="{active:isDaySelected(day.date)}" ><a ng-href="#" ng-click="onSelectDay(day.date)">{{day.dayOfWeek}}</a></li>
 			</ul>

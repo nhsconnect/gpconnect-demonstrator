@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('AppointmentsSlotsCtrl', function ($scope, usSpinnerService, Appointment, appointmentSearchParams) {
+        .controller('AppointmentsSlotsCtrl', function ($scope, usSpinnerService, Appointment, appointmentSearchParams, $modalInstance, $modal, modal) {
 
             var appointmentSearch = appointmentSearchParams;
 
@@ -134,7 +134,7 @@ angular.module('gpConnect')
 			
 		$scope.onSelectLocation = function(locationName) {
 			// get the right location
-			var locations = $scope.locations;
+			var locations = $scope.scheduleModel.locations;
 			
 			for (var l = 0; l < locations.length; l++) { 
 				var location = locations[l];
@@ -147,12 +147,13 @@ angular.module('gpConnect')
 		$scope.isDaySelected = function(date) {
 			var isDaySelected = false;
 			
-			var daysBlockOfSlots = $scope.selectedLocation.daysBlockOfSlots;
+			var allDayBlockOfSlots = $scope.selectedLocation.dayBlockOfSlots;
 			
-			for(var d = 0; (d < daysBlockOfSlots &&  isDaySelected !== true); d++) {
-				var dayBlockOfSlots = daysBlockOfSlots[d];
+			for(var d = 0; d < allDayBlockOfSlots.length; d++) {
+				var dayBlockOfSlots = allDayBlockOfSlots[d];
 				if(date === dayBlockOfSlots.date) {
 					isDaySelected = true;
+					break;
 				}
 			}
 			
@@ -168,7 +169,11 @@ angular.module('gpConnect')
 					$scope.selectedDay = dayBlockOfSlots;
 				}
 			}
-		};			
+		};	
+		
+	    $scope.cancel = function () {
+	        $modalInstance.dismiss('cancel');
+	      };		
  });
 
 function getDayFromDate(date){

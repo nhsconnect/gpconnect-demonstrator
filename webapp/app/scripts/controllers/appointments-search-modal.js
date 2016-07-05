@@ -46,9 +46,12 @@ angular.module('gpConnect')
       var appointmentSearch = $scope.appointmentSearch;
 
       if (appointmentSearchForm.$valid) {
-        $modal.open({
+       
+    	  $modalInstance.close();
+    	  
+    	  $modal.open({
           templateUrl: 'views/appointments/appointments-slots-modal.html',
-          size: 'md',
+          size: 'lg',
           controller: 'AppointmentsSlotsCtrl',
           resolve: {
             modal: function () {

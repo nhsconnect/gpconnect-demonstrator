@@ -51,7 +51,25 @@ VALUES
 (33, 408443003, 'General medical practice', 9, 'FREE', '2016-06-29 12:00:00', '2016-06-29 12:59:59'),
 (34, 408443003, 'General medical practice', 10, 'FREE', '2016-06-29 11:00:00', '2016-06-29 11:59:59'),
 (35, 408443003, 'General medical practice', 10, 'FREE', '2016-06-29 12:00:00', '2016-06-29 12:59:59'),
-(36, 408443003, 'General medical practice', 10, 'FREE', '2016-06-29 13:00:00', '2016-06-29 13:59:59');
+(36, 408443003, 'General medical practice', 10, 'FREE', '2016-06-29 13:00:00', '2016-06-29 13:59:59'),
+(37, 408443003, 'General medical practice', 4, 'FREE', '2016-06-30 12:00:00', '2016-06-30 12:59:59'),
+(38, 408443003, 'General medical practice', 4, 'FREE', '2016-06-30 13:00:00', '2016-06-30 13:59:59'),
+(39, 408443003, 'General medical practice', 4, 'FREE', '2016-06-30 14:00:00', '2016-06-30 14:59:59'),
+(40, 408443003, 'General medical practice', 4, 'FREE', '2016-07-01 12:00:00', '2016-07-01 12:59:59'),
+(41, 408443003, 'General medical practice', 4, 'FREE', '2016-07-01 13:00:00', '2016-07-01 13:59:59'),
+(42, 408443003, 'General medical practice', 4, 'FREE', '2016-07-01 14:00:00', '2016-07-01 14:59:59'),
+(43, 408443003, 'General medical practice', 4, 'FREE', '2016-07-02 12:00:00', '2016-07-02 12:59:59'),
+(44, 408443003, 'General medical practice', 4, 'FREE', '2016-07-02 13:00:00', '2016-07-02 13:59:59'),
+(45, 408443003, 'General medical practice', 4, 'FREE', '2016-07-02 14:00:00', '2016-07-02 14:59:59'),
+(46, 408443003, 'General medical practice', 5, 'FREE', '2016-06-30 12:00:00', '2016-06-30 12:59:59'),
+(47, 408443003, 'General medical practice', 5, 'FREE', '2016-06-30 13:00:00', '2016-06-30 13:59:59'),
+(48, 408443003, 'General medical practice', 5, 'FREE', '2016-06-30 14:00:00', '2016-06-30 14:59:59'),
+(49, 408443003, 'General medical practice', 5, 'FREE', '2016-07-01 12:00:00', '2016-07-01 12:59:59'),
+(50, 408443003, 'General medical practice', 5, 'FREE', '2016-07-01 13:00:00', '2016-07-01 13:59:59'),
+(51, 408443003, 'General medical practice', 5, 'FREE', '2016-07-01 14:00:00', '2016-07-01 14:59:59'),
+(52, 408443003, 'General medical practice', 5, 'FREE', '2016-07-02 12:00:00', '2016-07-02 12:59:59'),
+(53, 408443003, 'General medical practice', 5, 'FREE', '2016-07-02 13:00:00', '2016-07-02 13:59:59'),
+(54, 408443003, 'General medical practice', 5, 'FREE', '2016-07-02 14:00:00', '2016-07-02 14:59:59');
 
 INSERT INTO gpconnect.locations
 	(id, name, site_ods_code, site_ods_code_name)

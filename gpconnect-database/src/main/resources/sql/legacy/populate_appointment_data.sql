@@ -77,7 +77,11 @@ VALUES
 	(1, 'Main Building', 'Z33435', 'MAIN BUILDING'),
 	(2, 'Main Building', 'Z33436', 'MAIN BUILDING'),
 	(3, 'Main Building', 'Z33437', 'MAIN BUILDING'),
-	(4, 'Annex',         'Z33437', 'ANNEX');
+	(4, 'Annex',         'Z33437', 'ANNEX'),
+	(5, 'Building 5',    'Z26556', 'ANNEX'),
+	(6, 'Building 6',    'Z33433', 'ANNEX'),
+	(7, 'Building 7',    'Z12345', 'ANNEX'),
+	(8, 'Building 8',    'Z33432', 'ANNEX');
 	
 INSERT INTO gpconnect.appointment_appointments
   (id, cancellationReason, status, typeCode, typeDisplay, reasonCode, reasonDisplay, startDateTime, endDateTime, slotId, commentText, patientId, practitionerId, locationId)

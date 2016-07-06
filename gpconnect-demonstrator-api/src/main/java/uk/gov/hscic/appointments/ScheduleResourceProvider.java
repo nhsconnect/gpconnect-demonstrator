@@ -1,7 +1,5 @@
 package uk.gov.hscic.appointments;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +22,7 @@ import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import java.util.Date;
 import uk.gov.hscic.appointment.schedule.model.ScheduleDetail;
 import uk.gov.hscic.appointment.schedule.search.ScheduleSearch;
 import uk.gov.hscic.appointment.schedule.search.ScheduleSearchFactory;
@@ -68,14 +67,7 @@ public class ScheduleResourceProvider implements IResourceProvider {
         ArrayList<Schedule> schedules = new ArrayList();
 
         List<ScheduleDetail> scheduleDetails = null;
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try{
-            scheduleDetails = scheduleSearch.findScheduleForLocationId(Long.valueOf(locationId), format.parse(startDateTime), format.parse(endDateTime));
-        } catch (Exception e){
-            OperationOutcome operationalOutcome = new OperationOutcome();
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("The date format could not be parsed, please use the format yyyy-MM-dd HH:mm:ss");
-            throw new InternalErrorException("The date format could not be parsed, please use the format yyyy-MM-dd HH:mm:ss");
-        }
+        scheduleDetails = scheduleSearch.findScheduleForLocationId(Long.valueOf(locationId), new Date(startDateTime), new Date(endDateTime));
         if (scheduleDetails != null && scheduleDetails.size() > 0) {
             for(ScheduleDetail scheduleDetail : scheduleDetails){
                 schedules.add(scheduleDetailToScheduleResourceConverter(scheduleDetail));

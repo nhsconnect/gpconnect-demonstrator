@@ -7,7 +7,6 @@ import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.Appointment;
 import ca.uhn.fhir.model.dstu2.resource.Appointment.Participant;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
-import ca.uhn.fhir.model.dstu2.resource.Schedule;
 import ca.uhn.fhir.model.dstu2.valueset.AppointmentStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ParticipationStatusEnum;
@@ -20,18 +19,14 @@ import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.appointment.appointment.model.AppointmentDetail;
 import uk.gov.hscic.appointment.appointment.search.AppointmentSearch;
 import uk.gov.hscic.appointment.appointment.search.AppointmentSearchFactory;
-import uk.gov.hscic.appointment.schedule.model.ScheduleDetail;
-import uk.gov.hscic.appointment.schedule.search.ScheduleSearch;
-import uk.gov.hscic.appointment.schedule.search.ScheduleSearchFactory;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 
@@ -72,20 +67,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
         ArrayList<Appointment> appointments = new ArrayList();
 
         List<AppointmentDetail> appointmentDetails = null;
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try{
-            if(patientId != null && startDateTime != null && endDateTime != null){
-                appointmentDetails = appointmentSearch.findAppointmentForPatientId(Long.valueOf(patientId), format.parse(startDateTime), format.parse(endDateTime));
-            } else if(patientId != null && startDateTime != null){
-                appointmentDetails = appointmentSearch.findAppointmentForPatientId(Long.valueOf(patientId), format.parse(startDateTime));
-            } else if(patientId != null){
-                appointmentDetails = appointmentSearch.findAppointmentForPatientId(Long.valueOf(patientId));
-            }   
-        } catch (Exception e){
-            OperationOutcome operationalOutcome = new OperationOutcome();
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("The date format could not be parsed, please use the format yyyy-MM-dd HH:mm:ss");
-            throw new InternalErrorException("The date format could not be parsed, please use the format yyyy-MM-dd HH:mm:ss");
-        }
+        
+        if(patientId != null && startDateTime != null && endDateTime != null){
+            appointmentDetails = appointmentSearch.findAppointmentForPatientId(Long.valueOf(patientId), new Date(startDateTime), new Date(endDateTime));
+        } else if(patientId != null && startDateTime != null){
+            appointmentDetails = appointmentSearch.findAppointmentForPatientId(Long.valueOf(patientId), new Date(startDateTime));
+        } else if(patientId != null){
+            appointmentDetails = appointmentSearch.findAppointmentForPatientId(Long.valueOf(patientId));
+        }   
         
         if (appointmentDetails != null && appointmentDetails.size() > 0) {
             for(AppointmentDetail appointmentDetail : appointmentDetails){

@@ -14,10 +14,9 @@ import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.appointment.slot.model.SlotDetail;
@@ -62,14 +61,7 @@ public class SlotResourceProvider  implements IResourceProvider {
         ArrayList<Slot> slots = new ArrayList();
 
         List<SlotDetail> slotDetails = null;
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try{
-            slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), format.parse(startDateTime), format.parse(endDateTime));
-        } catch (Exception e){
-            OperationOutcome operationalOutcome = new OperationOutcome();
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("The date format could not be parsed, please use the format yyyy-MM-dd HH:mm:ss");
-            throw new InternalErrorException("The date format could not be parsed, please use the format yyyy-MM-dd HH:mm:ss");
-        }
+        slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), new Date(startDateTime), new Date(endDateTime));
         if (slotDetails != null && slotDetails.size() > 0) {
             for(SlotDetail slotDetail : slotDetails){
                 slots.add(slotDetailToSlotResourceConverter(slotDetail));

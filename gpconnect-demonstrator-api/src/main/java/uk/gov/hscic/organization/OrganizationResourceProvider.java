@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
+import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Organization;
@@ -16,7 +17,6 @@ import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
-import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
@@ -26,6 +26,7 @@ import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import java.text.SimpleDateFormat;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.organization.model.OrganizationDetails;
@@ -96,12 +97,31 @@ public class OrganizationResourceProvider  implements IResourceProvider {
         
         // params
     	List<Parameter> parameters = params.getParameter();
-    	String orgOdsCode = getNamedParameterValue("odsOrganisationCode", parameters);
-    	String siteOdsCode = getNamedParameterValue("odsSiteCode", parameters);
-    	String planningHorizonStart = getNamedParameterValue("planningHorizonStart", parameters);
-    	String planningHorizonEnd = getNamedParameterValue("planningHorizonEnd", parameters);
-    	
-       	if(orgOdsCode != null && siteOdsCode != null && planningHorizonStart != null && planningHorizonEnd != null) {    
+        
+        String orgOdsCode = null;
+        String siteOdsCode = null;
+        String planningHorizonStart = null;
+        String planningHorizonEnd = null;
+        
+        for(int p = 0; p < parameters.size(); p++) {
+			Parameter parameter = parameters.get(p);
+			switch(parameter.getName()){
+                case "odsOrganisationCode" :
+                    orgOdsCode = ((IdentifierDt)parameter.getValue()).getValue();
+                    break;
+                case "odsSiteCode" :
+                    siteOdsCode = ((IdentifierDt)parameter.getValue()).getValue();
+                    break;
+                case "timePeriod" :
+                    PeriodDt timePeriod = (PeriodDt)parameter.getValue();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+                    planningHorizonStart = dateFormat.format(timePeriod.getStart());
+                    planningHorizonEnd = dateFormat.format(timePeriod.getEnd());
+                    break;
+			}
+		}
+        
+       	if(orgOdsCode != null && planningHorizonStart != null && planningHorizonEnd != null) {    
        		getScheduleOperation.populateBundle(bundle, operationOutcome, orgOdsCode, siteOdsCode, planningHorizonStart, planningHorizonEnd);
        	}
         else {
@@ -125,15 +145,4 @@ public class OrganizationResourceProvider  implements IResourceProvider {
         return organization;
     }
     
-	private String getNamedParameterValue(String name, List<Parameter> parameters) {
-		String value = null;
-		for(int p = 0; (p < parameters.size() && value == null); p++) {
-			Parameter parameter = parameters.get(p);
-			if(parameter.getName().equals(name)) {
-				value = ((StringDt)parameter.getValue()).getValue();
-			}
-		}
-		
-		return value;
-	} 
 }

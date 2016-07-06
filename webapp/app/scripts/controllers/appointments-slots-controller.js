@@ -9,8 +9,8 @@ angular.module('gpConnect')
                 hour: 'HH:mm'
             };
 
-            var startDate = moment(appointmentSearchParams.startDate).format('YYYY-MM-DD HH:mm:ss');
-            var endDate = moment(appointmentSearchParams.endDate).format('YYYY-MM-DD HH:mm:ss');
+            var startDate = moment(appointmentSearchParams.startDate).format('YYYY-MM-DDTHH:mm:ss');
+            var endDate = moment(appointmentSearchParams.endDate).format('YYYY-MM-DDTHH:mm:ss');
             // TODO - set the correct codes relating to the selected practices instead of hardcoding, as below
 
             Appointment.getScheduleOperation('R1A15', 'Z33435', startDate, endDate).then( function (result) {
@@ -141,7 +141,6 @@ angular.module('gpConnect')
                 });
 
                 $scope.scheduleModel = internalGetScheduleModel;
-                console.log(internalGetScheduleModel);
 
                 // select the default location
                 $scope.selectDefaultLocation(internalGetScheduleModel.locations);

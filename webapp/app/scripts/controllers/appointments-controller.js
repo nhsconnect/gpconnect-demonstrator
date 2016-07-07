@@ -21,26 +21,33 @@ angular.module('gpConnect')
       $scope.query = $stateParams.filter;
     }
 
-    Appointment.findAllAppointments($stateParams.patientId).then(function (result) {
-      var appointmentsJson = result.data;
-      $scope.appointments = appointmentsJson.entry;
+    PatientService.getPatientFhirId($stateParams.patientId).then(function (result) {
+        return result;
+    }).then(function (result) {
+        
+        $scope.patientFhirId = result;
+        
+        Appointment.findAllAppointments($scope.patientFhirId).then(function (result) {
+          var appointmentsJson = result.data;
+          $scope.appointments = appointmentsJson.entry;
 
-      if($scope.appointments != undefined){
-        $scope.appointments = $scope.appointments.sort(function (a, b) {
-          return a.resource.start.localeCompare( b.resource.start );
-        });
+          if($scope.appointments != undefined){
+            $scope.appointments = $scope.appointments.sort(function (a, b) {
+              return a.resource.start.localeCompare( b.resource.start );
+            });
 
-        $.each($scope.appointments, function(key, value){
-            var startDate = Date.parse(value.resource.start.toString());
-            value.resource.start = moment(startDate).format('DD-MMM-YYYY HH:mm');
-            var endDate = Date.parse(value.resource.end.toString());
-            value.resource.end = moment(endDate).format('DD-MMM-YYYY HH:mm');
+            $.each($scope.appointments, function(key, value){
+                var startDate = Date.parse(value.resource.start.toString());
+                value.resource.start = moment(startDate).format('DD-MMM-YYYY HH:mm');
+                var endDate = Date.parse(value.resource.end.toString());
+                value.resource.end = moment(endDate).format('DD-MMM-YYYY HH:mm');
+            });
+          }
+        }).catch(function (e) {
+          usSpinnerService.stop('patientSummary-spinner');
+        }) .finally(function () {
+          usSpinnerService.stop('patientSummary-spinner');
         });
-      }
-    }).catch(function (e) {
-      usSpinnerService.stop('patientSummary-spinner');
-    }) .finally(function () {
-      usSpinnerService.stop('patientSummary-spinner');
     });
 
     $scope.go = function (id) {

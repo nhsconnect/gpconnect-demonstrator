@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ modal.title}}</h4>
+</div>
+
+<div class="modal-body">
+    <form name="appointmentCreateForm" class="form-horizontal text-left">
+
+        <div class="col-md-12" style="margin-bottom: 25px; padding: 0;">
+            <div>
+                Practitioner: {{ practitionerName }}
+            </div>
+            <div>
+                Type: {{ appointmentCreate.type.text }}
+            </div>
+        </div>
+        
+        <div class="col-md-12" style="margin-bottom: 25px; padding: 0;">
+            <div>
+                Start Date & Time: {{ appointmentCreate.start | amDateFormat:'DD-MMM-YYYY HH:mm' }}
+            </div>
+            <div>
+                End Date & Time: {{ appointmentCreate.end | amDateFormat:'DD-MMM-YYYY HH:mm' }}
+            </div>
+        </div>
+        
+        <div class="col-md-12" style="margin-bottom: 25px; padding: 0;">
+            <div>Comment</div>
+             <textarea cols="150" rows="5" name="comment" id="appointmentComment" ng-model="appointmentCreate.comment"></textarea>
+        </div>
+
+    </form>
+</div>
+
+<div class="modal-footer">
+    <a class="btn btn-danger" ng-click="cancel()">Cancel</a>
+    <button class="btn btn-success" ng-click="formSubmitted = true;
+      ok(appointmentCreateForm);"><i class="fa fa-check"></i> Book Appointment</button>
+</div>

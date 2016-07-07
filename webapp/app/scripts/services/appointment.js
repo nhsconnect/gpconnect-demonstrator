@@ -4,10 +4,7 @@ angular.module('gpConnect')
   .factory('Appointment', function ($http) {
 
     var findAllAppointments = function (patientId) {
-      var response;
-      return $http.get('/fhir/Patient?patientId='+patientId).then(function(response) {
-         return $http.get('/fhir/Patient/' + response.data.entry[0].resource.id + '/Appointment');
-      });
+        return $http.get('/fhir/Patient/' + patientId + '/Appointment');
     };
     
     var getScheduleOperation = function (organizationODSCode, siteODSCode, startDateTime, endDateTime) {
@@ -18,8 +15,8 @@ angular.module('gpConnect')
       return $http.get('/fhir/'+resourceReference);
     };
     
-    var create = function (patientId, appointment) {
-      return $http.post('/api/patients/' + patientId + '/appointments', appointment);
+    var create = function (appointment) {
+      return $http.post('/fhir/Appointment', appointment);
     };
 
     return {

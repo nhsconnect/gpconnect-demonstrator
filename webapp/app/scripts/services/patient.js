@@ -16,11 +16,19 @@ angular.module('gpConnect')
     var getSummary = function (patientId) {
       return $http.post('/fhir/Patient/$getcarerecord', '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "Summary"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}');
     };
+    
+    var getPatientFhirId = function (patientId) {
+      var response;
+      return $http.get('/fhir/Patient?patientId='+patientId).then(function(response) {
+         return response.data.entry[0].resource.id;
+      });
+    };
 
     return {
       findAllSummaries: findAllSummaries,
       findDetails: findDetails,
-      getSummary: getSummary
+      getSummary: getSummary,
+      getPatientFhirId: getPatientFhirId
     };
 
   });

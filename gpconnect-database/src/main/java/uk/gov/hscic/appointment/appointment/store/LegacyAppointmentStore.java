@@ -20,7 +20,7 @@ public class LegacyAppointmentStore extends AbstractLegacyService implements App
     @Override
     public AppointmentDetail saveAppointment(AppointmentDetail appointment){
         AppointmentEntity appointmentEntity = detailToEntityTransformer.transform(appointment);
-        appointmentEntity = appointmentRepository.save(appointmentEntity);
+        appointmentEntity = appointmentRepository.saveAndFlush(appointmentEntity);
         return entityToDetailTransformer.transform(appointmentEntity);
     }
     

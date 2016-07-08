@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('AppointmentsCreateModalCtrl', function ($state, $scope, $stateParams, $modalInstance, PatientService, Appointment, modal, appointmentBookingParams) {
+  .controller('AppointmentsCreateModalCtrl', function ($state, $scope, $stateParams, $modalInstance, PatientService, Appointment, modal, appointmentBookingParams, usSpinnerService) {
 
     PatientService.getPatientFhirId($stateParams.patientId).then(function (result) {
         $scope.patientFhirId = result;
@@ -28,7 +28,7 @@ angular.module('gpConnect')
                 {
                     "system": "http://snomed.info/sct",
                     "code": "00001",
-                    "display": "Generic Booking"
+                    "display": "Default Appointment Type"
                 }
             ],
             "text": "Generic Booking"
@@ -63,12 +63,14 @@ angular.module('gpConnect')
     $scope.ok = function (appointmentCreateForm) {
       $scope.formSubmitted = true;
       if (appointmentCreateForm.$valid) {
+          usSpinnerService.spin('appointmentCreate-spinner');
           Appointment.create($scope.appointmentCreate).then(function(response){
               if(response.status != "201"){
                   alert("An error occurred storing appointment, please try booking again");
               }
               $modalInstance.close();
               $state.reload();
+              usSpinnerService.stop('appointmentCreate-spinner');
           });
       }
     };

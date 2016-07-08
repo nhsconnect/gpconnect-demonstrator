@@ -3,6 +3,8 @@
 angular.module('gpConnect')
         .controller('AppointmentsSlotsCtrl', function ($scope, usSpinnerService, Appointment, appointmentSearchParams, $modalInstance, $modal, modal) {
 
+            usSpinnerService.spin('appointmentSlots-spinner');
+    
             $scope.ganttModel = [];
             $scope.ganttHeaderFormats = {
                 day: 'DD MMMM YYYY',
@@ -50,42 +52,25 @@ angular.module('gpConnect')
 
                 var internalGetScheduleModel = {};
 
-                $.each(responseSlots, function (key, value) {
-                    // Build slot object
-                    var slot = { "startDateTime" : new Date(value.startDateTime), "endDateTime" : new Date(value.endDateTime), "type" : value.type, "typeCode" : value.typeCode, "id" : value.id };
-                    // Find the schedule for that slot from array
-                    var schedule = responseSchedules[value.scheduleRef];
-                    // Find Location and practitioner for that schedule
-                    var practitionerName = responsePractitioners[schedule.practitionerRef].fullName;
-                    var practitionerId = responsePractitioners[schedule.practitionerRef].id;
-                    var locationName = responseLocations[schedule.locationRef].name;
-                    var locationId = responseLocations[schedule.locationRef].id;
+                if(responseSlots.length <= 0){
+                    usSpinnerService.stop('appointmentSlots-spinner');
+                    $modalInstance.close();
+                    alert("No appointment slots found for the search parameters.");
+                } else {
+                    
+                    $.each(responseSlots, function (key, value) {
+                        // Build slot object
+                        var slot = { "startDateTime" : new Date(value.startDateTime), "endDateTime" : new Date(value.endDateTime), "type" : value.type, "typeCode" : value.typeCode, "id" : value.id };
+                        // Find the schedule for that slot from array
+                        var schedule = responseSchedules[value.scheduleRef];
+                        // Find Location and practitioner for that schedule
+                        var practitionerName = responsePractitioners[schedule.practitionerRef].fullName;
+                        var practitionerId = responsePractitioners[schedule.practitionerRef].id;
+                        var locationName = responseLocations[schedule.locationRef].name;
+                        var locationId = responseLocations[schedule.locationRef].id;
 
-                    // Look at constructed object to see if the location exists already, is so add to existing or add new
-                    if(internalGetScheduleModel.locations == undefined){
-                        var slots = [];
-                        slots.push(slot);
-                        var practitioners = [];
-                        var practitionerModel = { "fullName" : practitionerName, "slots" : slots, "id" : practitionerId };
-                        practitioners.push(practitionerModel);
-                        var dayBlockOfSlots = [];
-                        var startDateTime = new Date(slot.startDateTime);
-                        var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
-                        dayBlockOfSlots.push(dayBlockOfSlotsModel);
-                        var locations = [];
-                        var locationModel = { "name" : locationName, "freeSlots" : 1, "dayBlockOfSlots" : dayBlockOfSlots, "id" : locationId };
-                        locations.push(locationModel);
-                        internalGetScheduleModel.locations = locations;
-                    } else {
-                        var locationIndex = -1;
-                        // search locations for location
-                        for(var i = 0; i < internalGetScheduleModel.locations.length; i++) {
-                            if(locationId == internalGetScheduleModel.locations[i].id){
-                                locationIndex = i; break;
-                            }
-                        };
-                        if (locationIndex == -1){
-                            // if location is not found we need to build all the structure add it to the model
+                        // Look at constructed object to see if the location exists already, is so add to existing or add new
+                        if(internalGetScheduleModel.locations == undefined){
                             var slots = [];
                             slots.push(slot);
                             var practitioners = [];
@@ -94,21 +79,21 @@ angular.module('gpConnect')
                             var dayBlockOfSlots = [];
                             var startDateTime = new Date(slot.startDateTime);
                             var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
+                            dayBlockOfSlots.push(dayBlockOfSlotsModel);
+                            var locations = [];
                             var locationModel = { "name" : locationName, "freeSlots" : 1, "dayBlockOfSlots" : dayBlockOfSlots, "id" : locationId };
-                            internalGetScheduleModel.locations.push(locationModel);
-                        }else{
-                            // else get the existing model and add the new slot to it.
-                            internalGetScheduleModel.locations[locationIndex].freeSlots++;  // Increment free slots
-                            //try and find the dayBlockOfSlots for same date
-                            var dayBlockOfSlotsIndex = -1;
-                            for(var i = 0; i < internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots.length; i++) {
-                                var startDateTime = new Date(slot.startDateTime);
-                                if(startDateTime.setHours(0, 0, 0, 0) == internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[i].date){
-                                    dayBlockOfSlotsIndex = i; break;
+                            locations.push(locationModel);
+                            internalGetScheduleModel.locations = locations;
+                        } else {
+                            var locationIndex = -1;
+                            // search locations for location
+                            for(var i = 0; i < internalGetScheduleModel.locations.length; i++) {
+                                if(locationId == internalGetScheduleModel.locations[i].id){
+                                    locationIndex = i; break;
                                 }
                             };
-                            if(dayBlockOfSlotsIndex == -1){
-                                // If we did not find a block of slots we need to make one
+                            if (locationIndex == -1){
+                                // if location is not found we need to build all the structure add it to the model
                                 var slots = [];
                                 slots.push(slot);
                                 var practitioners = [];
@@ -117,36 +102,62 @@ angular.module('gpConnect')
                                 var dayBlockOfSlots = [];
                                 var startDateTime = new Date(slot.startDateTime);
                                 var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
-                                internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots.push(dayBlockOfSlotsModel);
-                            } else {
-                                // If we have found a block of slots for the day we can see if the practitioner exists and is so add our new slot to them
-                                internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].freeSlots++;  // Increment free slots
-                                var practitionerIndex = -1;
-                                for(var i = 0; i < internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners.length; i++) {
-                                    if(practitionerId == internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners[i].id){
-                                        practitionerIndex = i; break;
+                                var locationModel = { "name" : locationName, "freeSlots" : 1, "dayBlockOfSlots" : dayBlockOfSlots, "id" : locationId };
+                                internalGetScheduleModel.locations.push(locationModel);
+                            }else{
+                                // else get the existing model and add the new slot to it.
+                                internalGetScheduleModel.locations[locationIndex].freeSlots++;  // Increment free slots
+                                //try and find the dayBlockOfSlots for same date
+                                var dayBlockOfSlotsIndex = -1;
+                                for(var i = 0; i < internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots.length; i++) {
+                                    var startDateTime = new Date(slot.startDateTime);
+                                    if(startDateTime.setHours(0, 0, 0, 0) == internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[i].date){
+                                        dayBlockOfSlotsIndex = i; break;
                                     }
                                 };
-                                if(practitionerIndex == -1){
+                                if(dayBlockOfSlotsIndex == -1){
                                     // If we did not find a block of slots we need to make one
                                     var slots = [];
                                     slots.push(slot);
+                                    var practitioners = [];
                                     var practitionerModel = { "fullName" : practitionerName, "slots" : slots, "id" : practitionerId };
-                                    internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners.push(practitionerModel);
+                                    practitioners.push(practitionerModel);
+                                    var dayBlockOfSlots = [];
+                                    var startDateTime = new Date(slot.startDateTime);
+                                    var dayBlockOfSlotsModel = { "dayOfWeek" : getDayFromDate(slot.startDateTime), "date" : startDateTime.setHours(0, 0, 0, 0), "freeSlots" : 1, "practitioners" : practitioners };
+                                    internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots.push(dayBlockOfSlotsModel);
                                 } else {
-                                    internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners[practitionerIndex].slots.push(slot);
+                                    // If we have found a block of slots for the day we can see if the practitioner exists and is so add our new slot to them
+                                    internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].freeSlots++;  // Increment free slots
+                                    var practitionerIndex = -1;
+                                    for(var i = 0; i < internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners.length; i++) {
+                                        if(practitionerId == internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners[i].id){
+                                            practitionerIndex = i; break;
+                                        }
+                                    };
+                                    if(practitionerIndex == -1){
+                                        // If we did not find a block of slots we need to make one
+                                        var slots = [];
+                                        slots.push(slot);
+                                        var practitionerModel = { "fullName" : practitionerName, "slots" : slots, "id" : practitionerId };
+                                        internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners.push(practitionerModel);
+                                    } else {
+                                        internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners[practitionerIndex].slots.push(slot);
+                                    }
                                 }
                             }
+
                         }
 
-                    }
+                    });
 
-                });
-
-                $scope.scheduleModel = internalGetScheduleModel;
-
-                // select the default location
-                $scope.selectDefaultLocation(internalGetScheduleModel.locations);
+                    $scope.scheduleModel = internalGetScheduleModel;
+                    // select the default location
+                    $scope.selectDefaultLocation(internalGetScheduleModel.locations);
+                
+                }
+                
+                usSpinnerService.stop('appointmentSlots-spinner');
             });
 
           $scope.loadDaySlots = function (day) {

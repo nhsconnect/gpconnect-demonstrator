@@ -7,6 +7,7 @@ import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Slot;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
+import ca.uhn.fhir.model.dstu2.valueset.SlotStatusEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
@@ -82,6 +83,10 @@ public class SlotResourceProvider  implements IResourceProvider {
         slot.setSchedule(new ResourceReferenceDt("Schedule/"+slotDetail.getScheduleReference()));
         slot.setStartWithMillisPrecision(slotDetail.getStartDateTime());
         slot.setEndWithMillisPrecision(slotDetail.getEndDateTime());
+        switch(slotDetail.getFreeBusyType().toLowerCase()){
+            case "free" : slot.setFreeBusyType(SlotStatusEnum.FREE); break;
+            default : slot.setFreeBusyType(SlotStatusEnum.BUSY); break;
+        }
         return slot;
     }
 }

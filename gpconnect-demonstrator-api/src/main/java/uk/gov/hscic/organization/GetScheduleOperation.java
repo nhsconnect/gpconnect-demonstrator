@@ -107,10 +107,12 @@ public class GetScheduleOperation {
                             List<Slot> slots = slotResourceProvider.getSlotsForScheduleId(schedule.getId().getIdPart(), planningHorizonStart, planningHorizonEnd);
                             if(slots.isEmpty() == false) {
                                 for(Slot slot : slots) {
-                                    Entry slotEntry = new Entry();
-                                    slotEntry.setResource(slot);
-                                    slotEntry.setFullUrl("Slot/" + slot.getId());
-                                    bundle.addEntry(slotEntry);
+                                    if("FREE".equalsIgnoreCase(slot.getFreeBusyType())){
+                                        Entry slotEntry = new Entry();
+                                        slotEntry.setResource(slot);
+                                        slotEntry.setFullUrl("Slot/" + slot.getId());
+                                        bundle.addEntry(slotEntry);
+                                    }
                                 }
                             }
                             else {

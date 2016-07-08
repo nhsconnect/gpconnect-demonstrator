@@ -34,6 +34,11 @@ import uk.gov.hscic.appointment.appointment.search.AppointmentSearch;
 import uk.gov.hscic.appointment.appointment.search.AppointmentSearchFactory;
 import uk.gov.hscic.appointment.appointment.store.AppointmentStore;
 import uk.gov.hscic.appointment.appointment.store.AppointmentStoreFactory;
+import uk.gov.hscic.appointment.slot.model.SlotDetail;
+import uk.gov.hscic.appointment.slot.search.SlotSearch;
+import uk.gov.hscic.appointment.slot.search.SlotSearchFactory;
+import uk.gov.hscic.appointment.slot.store.SlotStore;
+import uk.gov.hscic.appointment.slot.store.SlotStoreFactory;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 
@@ -114,6 +119,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
         RepoSource sourceType = RepoSourceType.fromString(null);
         AppointmentStore appointmentStore = applicationContext.getBean(AppointmentStoreFactory.class).select(sourceType);
         appointmentDetail = appointmentStore.saveAppointment(appointmentDetail);
+        
+        SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
+        SlotDetail slotDetail = slotSearch.findSlotByID(appointmentDetail.getSlotId());
+        slotDetail.setFreeBusyType("BUSY");
+        SlotStore slotStore = applicationContext.getBean(SlotStoreFactory.class).select(sourceType);
+        slotDetail = slotStore.saveSlot(slotDetail);
                 
         // Build response containing the new resource id
         MethodOutcome methodOutcome = new MethodOutcome();

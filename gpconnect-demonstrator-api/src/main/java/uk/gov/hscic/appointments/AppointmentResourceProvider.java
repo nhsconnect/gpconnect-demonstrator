@@ -171,6 +171,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
             oldAppointmentDetail.setCancellationReason(appointmentDetail.getCancellationReason());
             oldAppointmentDetail.setStatus("cancelled");
             appointmentDetail = oldAppointmentDetail;
+            
+            SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
+            SlotDetail slotDetail = slotSearch.findSlotByID(appointmentDetail.getSlotId());
+            slotDetail.setFreeBusyType("FREE");
+            SlotStore slotStore = applicationContext.getBean(SlotStoreFactory.class).select(sourceType);
+            slotDetail = slotStore.saveSlot(slotDetail);
         } else {
             // This is an Amend
             oldAppointmentDetail.setComment(appointmentDetail.getComment());

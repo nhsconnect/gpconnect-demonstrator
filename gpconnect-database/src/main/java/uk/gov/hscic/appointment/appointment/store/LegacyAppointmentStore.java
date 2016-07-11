@@ -2,6 +2,7 @@ package uk.gov.hscic.appointment.appointment.store;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hscic.appointment.appointment.model.AppointmentDetail;
 import uk.gov.hscic.appointment.appointment.model.AppointmentEntity;
 import uk.gov.hscic.appointment.appointment.repo.AppointmentRepository;
@@ -18,6 +19,7 @@ public class LegacyAppointmentStore extends AbstractLegacyService implements App
     private final AppointmentDetailToAppointmentEntityTransformer detailToEntityTransformer = new AppointmentDetailToAppointmentEntityTransformer();
         
     @Override
+    @Transactional
     public AppointmentDetail saveAppointment(AppointmentDetail appointment){
         AppointmentEntity appointmentEntity = detailToEntityTransformer.transform(appointment);
         appointmentEntity = appointmentRepository.saveAndFlush(appointmentEntity);

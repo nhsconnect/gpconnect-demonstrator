@@ -7,6 +7,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Type</th>
+                    <th>Status</th>
                 </tr>
             </thead>
 
@@ -14,6 +15,7 @@
                 <tr dir-paginate="appointment in appointments | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{appointment.resource.id}}')" ng-class="{info: selected(appointment.resource.id)}">
                     <td class="dateTime" style="width:155px">{{ appointment.resource.start | amDateFormat:'DD-MMM-YYYY HH:mm' }}</td>
                     <td>{{ appointment.resource.type.text}}</td>
+                    <td>{{ appointment.resource.status}}</td>
                 </tr>
 
                 <tr ng-if="!appointments.length">
@@ -82,7 +84,7 @@
                         </div>
                     </div>
                     
-                    <div class="form-group form-group-sm"><div class="text-right col-md-12"><button class="btn btn-danger" ng-click="cancelAppointment()">Cancel Appointment</button></div></div>
+                    <div class="form-group form-group-sm"><div class="text-right col-md-12"><button class="btn btn-danger" ng-click="cancelAppointment()" ng-show="!appointmentDetail.cancellationReason" >Cancel Appointment</button></div></div>
                 </div>
             </div>
         </div>

@@ -18,12 +18,17 @@ angular.module('gpConnect')
     var create = function (appointment) {
       return $http.post('/fhir/Appointment', appointment);
     };
+    
+    var save = function (appointmentId, appointment) {
+      return $http.put('/fhir/Appointment/'+appointmentId, appointment);
+    };
 
     return {
       findAllAppointments: findAllAppointments,
       getScheduleOperation: getScheduleOperation,
       findResourceByReference: findResourceByReference,
-      create: create
+      create: create,
+      save: save
     };
 
   });

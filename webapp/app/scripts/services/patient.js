@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .factory('PatientService', function ($http) {
+  .factory('PatientService', function ($http, EnvConfig) {
 
     var findAllSummaries = function () {
       return $http.get('/api/patients');

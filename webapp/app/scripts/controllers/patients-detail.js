@@ -36,9 +36,6 @@ angular.module('gpConnect')
       case 'encounters':
         toState = 'encounters';
         break;
-      case 'procedures':
-        toState = 'procedures';
-        break;
       case 'observations':
           toState = 'observations';
           break;

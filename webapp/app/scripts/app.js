@@ -109,25 +109,6 @@ angular
         }
       })
 
-     .state('procedures', {
-        url: '/patients/{patientId:int}/procedures',
-        views: {
-          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
-          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/procedures/procedures-list.html', controller: 'ProceduresListCtrl' }
-        }
-      })
-
-      .state('procedures-detail', {
-        url: '/patients/{patientId:int}/procedures/{procedureId}?filter&source',
-        views: {
-          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
-          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
-          main: { templateUrl: 'views/procedures/procedures-list.html', controller: 'ProceduresListCtrl' },
-          detail: { templateUrl: 'views/procedures/procedures-detail.html', controller: 'ProceduresDetailCtrl' }
-        }
-      })
-
     .state('referrals', {
         url: '/patients/{patientId:int}/referrals',
         views: {
@@ -415,4 +396,23 @@ angular
 
   .config(function (paginationTemplateProvider) {
     paginationTemplateProvider.setPath('views/dirPagination.tpl.html');
+  })
+  
+  .provider("EnvConfig", function() {
+        var envConfig = {
+            "restUrlPrefix" : "",
+            "fromASID" : "",
+            "toASID" : ""
+        };
+        this.$get = function() {
+        //console.log(envConfig);
+        var q = jQuery.ajax({
+            type: 'GET', url: '/spineproxy.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
+        });
+        if (q.status === 200) {
+            angular.extend(envConfig, angular.fromJson(q.responseText));
+        }
+        //console.log(envConfig);
+        return envConfig;
+        };
   });

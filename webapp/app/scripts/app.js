@@ -405,14 +405,12 @@ angular
             "toASID" : ""
         };
         this.$get = function() {
-        //console.log(envConfig);
         var q = jQuery.ajax({
             type: 'GET', url: '/spineproxy.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
         });
         if (q.status === 200) {
             angular.extend(envConfig, angular.fromJson(q.responseText));
         }
-        //console.log(envConfig);
         return envConfig;
         };
   });

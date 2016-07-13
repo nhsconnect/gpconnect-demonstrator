@@ -14,12 +14,29 @@ angular.module('gpConnect')
     };
 
     var getSummary = function (patientId) {
-      return $http.post('/fhir/Patient/$getcarerecord', '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "Summary"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}');
+      return $http.post(EnvConfig.restUrlPrefix+'/fhir/Patient/$getcarerecord',
+                '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "Summary"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}',
+                {
+                    headers: {
+                        'Ssp-From': EnvConfig.fromASID,
+                        'Ssp-To': EnvConfig.toASID,
+                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord"
+                    }
+                }
+              );
     };
     
     var getPatientFhirId = function (patientId) {
       var response;
-      return $http.get('/fhir/Patient?patientId='+patientId).then(function(response) {
+      return $http.get(EnvConfig.restUrlPrefix+'/fhir/Patient?patientId='+patientId,
+                {
+                    headers: {
+                        'Ssp-From': EnvConfig.fromASID,
+                        'Ssp-To': EnvConfig.toASID,
+                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient"
+                    }
+                }
+                ).then(function(response) {
          return response.data.entry[0].resource.id;
       });
     };

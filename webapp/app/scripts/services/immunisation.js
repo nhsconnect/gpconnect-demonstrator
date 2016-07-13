@@ -1,10 +1,19 @@
 'use strict';
 
 angular.module('gpConnect')
-  .factory('Immunisation', function ($http) {
+  .factory('Immunisation', function ($http, EnvConfig) {
 
     var findAllHTMLTables = function (patientId) {
-      return $http.post('/fhir/Patient/$getcarerecord', '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "Immunisations"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}');
+      return $http.post(EnvConfig.restUrlPrefix+'/fhir/Patient/$getcarerecord',
+        '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "Immunisations"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}',
+        {
+            headers: {
+                'Ssp-From': EnvConfig.fromASID,
+                'Ssp-To': EnvConfig.toASID,
+                'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord"
+            }
+        }
+        );
     };
 
     return {

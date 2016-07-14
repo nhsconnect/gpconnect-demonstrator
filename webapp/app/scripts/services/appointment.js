@@ -4,7 +4,7 @@ angular.module('gpConnect')
   .factory('Appointment', function ($http, EnvConfig) {
 
     var findAllAppointments = function (patientId) {
-        return $http.get(EnvConfig.restUrlPrefix+'/fhir/Patient/' + patientId + '/Appointment',
+        return $http.get(EnvConfig.restUrlPrefix+'/Patient/' + patientId + '/Appointment',
         {
           headers: {
               'Ssp-From': EnvConfig.fromASID,
@@ -15,7 +15,7 @@ angular.module('gpConnect')
     };
     
     var getScheduleOperation = function (organizationODSCode, siteODSCode, startDateTime, endDateTime) {
-      return $http.post(EnvConfig.restUrlPrefix+'/fhir/Organization/$getschedule',
+      return $http.post(EnvConfig.restUrlPrefix+'/Organization/$getschedule',
       '{ "resourceType" : "Parameters", "parameter" : [ { "name" : "odsOrganisationCode", "valueIdentifier" : { "value" : "'+organizationODSCode+'" } }, { "name" : "odsSiteCode", "valueIdentifier" : { "value" : "'+siteODSCode+'" } }, { "name" : "timePeriod", "valuePeriod" : { "start" : "'+startDateTime+'", "end" : "'+endDateTime+'" } } ] }',
       {
           headers: {
@@ -27,8 +27,8 @@ angular.module('gpConnect')
     };
     
     var findResourceByReference = function (resourceReference) {
-        if(resourceReference == "Location"){
-            return $http.get(EnvConfig.restUrlPrefix+'/fhir/'+resourceReference,
+        if(resourceReference.indexOf("Location") > -1){
+            return $http.get(EnvConfig.restUrlPrefix+'/'+resourceReference,
             {
                 headers: {
                     'Ssp-From': EnvConfig.fromASID,
@@ -36,8 +36,8 @@ angular.module('gpConnect')
                     'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:location"
                 }
             });
-        } else if(resourceReference == "Practitioner"){
-            return $http.get(EnvConfig.restUrlPrefix+'/fhir/'+resourceReference,
+        } else if(resourceReference.indexOf("Practitioner") > -1){
+            return $http.get(EnvConfig.restUrlPrefix+'/'+resourceReference,
             {
                 headers: {
                     'Ssp-From': EnvConfig.fromASID,
@@ -49,7 +49,7 @@ angular.module('gpConnect')
     };
     
     var create = function (appointment) {
-      return $http.post(EnvConfig.restUrlPrefix+'/fhir/Appointment',
+      return $http.post(EnvConfig.restUrlPrefix+'/Appointment',
         appointment,
         {
           headers: {
@@ -61,7 +61,7 @@ angular.module('gpConnect')
     };
     
     var save = function (appointmentId, appointment) {
-      return $http.put(EnvConfig.restUrlPrefix+'/fhir/Appointment/'+appointmentId, 
+      return $http.put(EnvConfig.restUrlPrefix+'/Appointment/'+appointmentId, 
         appointment,
         {
           headers: {

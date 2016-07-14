@@ -1,5 +1,5 @@
 {
-    "restUrlPrefix": "",
+    "restUrlPrefix": "/fhir",
     "fromASID": "200000000359",
     "toASID": "200000000360"
 }

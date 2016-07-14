@@ -4,7 +4,7 @@ angular.module('gpConnect')
   .factory('Immunisation', function ($http, EnvConfig) {
 
     var findAllHTMLTables = function (patientId) {
-      return $http.post(EnvConfig.restUrlPrefix+'/fhir/Patient/$getcarerecord',
+      return $http.post(EnvConfig.restUrlPrefix+'/Patient/$getcarerecord',
         '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "Immunisations"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}',
         {
             headers: {

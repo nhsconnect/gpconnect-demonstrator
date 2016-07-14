@@ -14,7 +14,7 @@ angular.module('gpConnect')
     };
 
     var getSummary = function (patientId) {
-      return $http.post(EnvConfig.restUrlPrefix+'/fhir/Patient/$getcarerecord',
+      return $http.post(EnvConfig.restUrlPrefix+'/Patient/$getcarerecord',
                 '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "Summary"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}',
                 {
                     headers: {
@@ -28,7 +28,7 @@ angular.module('gpConnect')
     
     var getPatientFhirId = function (patientId) {
       var response;
-      return $http.get(EnvConfig.restUrlPrefix+'/fhir/Patient?patientId='+patientId,
+      return $http.get(EnvConfig.restUrlPrefix+'/Patient?patientId='+patientId,
                 {
                     headers: {
                         'Ssp-From': EnvConfig.fromASID,

@@ -246,7 +246,7 @@ angular.module('gpConnect')
                             $modalInstance.close();
                             $modal.open({
                                 templateUrl: 'views/appointments/appointments-create-modal.html',
-                                size: 'lg',
+                                size: 'md',
                                 controller: 'AppointmentsCreateModalCtrl',
                                 resolve: {
                                     modal: function () {

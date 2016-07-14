@@ -11,6 +11,7 @@ import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.valueset.*;
 import ca.uhn.fhir.model.primitive.*;
 import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
@@ -92,11 +93,11 @@ public class PatientResourceProvider implements IResourceProvider {
     
     
     @Search
-    public List<Patient> getPatientByPatientId(@RequiredParam(name = "patientId") String patientId) {
+    public List<Patient> getPatientByPatientId(@RequiredParam(name=Patient.SP_IDENTIFIER) TokenParam patientId) {
         RepoSource sourceType = RepoSourceType.fromString(null);
         PatientSearch patientSearch = applicationContext.getBean(PatientSearchFactory.class).select(sourceType);
         ArrayList<Patient> patients = new ArrayList();
-        List<PatientDetails> PatientDetailsList = Collections.singletonList(patientSearch.findPatient(patientId));
+        List<PatientDetails> PatientDetailsList = Collections.singletonList(patientSearch.findPatient(patientId.getValue()));
         if (PatientDetailsList != null && PatientDetailsList.size() > 0) {
             for(PatientDetails patientDetails : PatientDetailsList){
                 Patient patient = patientDetailsToPatientResourceConverter(patientDetails);
@@ -143,7 +144,7 @@ public class PatientResourceProvider implements IResourceProvider {
             try{
                 String patientID;
                 Entry patientEntry = new Entry();    
-                List<Patient> patients = getPatientByPatientId(nhsNumber);
+                List<Patient> patients = getPatientByPatientId(new TokenParam("",nhsNumber));
                 if(patients != null && patients.size() > 0){
                     patientEntry.setResource(patients.get(0));
                     patientEntry.setFullUrl("Patient/"+patients.get(0).getId());

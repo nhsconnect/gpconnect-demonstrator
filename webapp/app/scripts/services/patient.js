@@ -28,7 +28,7 @@ angular.module('gpConnect')
     
     var getPatientFhirId = function (patientId) {
       var response;
-      return $http.get(EnvConfig.restUrlPrefix+'/Patient?patientId='+patientId,
+      return $http.get(EnvConfig.restUrlPrefix+'/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|'+patientId,
                 {
                     headers: {
                         'Ssp-From': EnvConfig.fromASID,

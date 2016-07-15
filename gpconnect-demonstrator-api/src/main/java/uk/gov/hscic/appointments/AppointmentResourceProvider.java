@@ -130,6 +130,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
         // Build response containing the new resource id
         MethodOutcome methodOutcome = new MethodOutcome();
         methodOutcome.setId(new IdDt("Appointment", appointmentDetail.getId()));
+        methodOutcome.setResource(appointmentDetailToAppointmentResourceConverter(appointmentDetail));
+        methodOutcome.setCreated(Boolean.TRUE);
 
         return methodOutcome;
     }
@@ -191,6 +193,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentDetail = appointmentStore.saveAppointment(appointmentDetail);
 
         methodOutcome.setId(new IdDt("Appointment", appointmentDetail.getId()));
+        methodOutcome.setResource(appointmentDetailToAppointmentResourceConverter(appointmentDetail));
         return methodOutcome;
     }
 

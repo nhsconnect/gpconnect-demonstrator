@@ -55,7 +55,8 @@ angular.module('gpConnect')
           headers: {
               'Ssp-From': EnvConfig.fromASID,
               'Ssp-To': EnvConfig.toASID,
-              'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:create:appointment"
+              'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:create:appointment",
+              'Prefer' : "return=representation"
           }
         });
     };
@@ -67,7 +68,8 @@ angular.module('gpConnect')
           headers: {
               'Ssp-From': EnvConfig.fromASID,
               'Ssp-To': EnvConfig.toASID,
-              'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:appointment"
+              'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:appointment",
+              'Prefer' : "return=representation"
           }
         });
     };

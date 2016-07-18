@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(entityManagerFactoryRef = "legacyEntityManagerFactory",
-                       transactionManagerRef = "legacyTransactionManager",
+                       transactionManagerRef = "transactionManager",
                        basePackages = "uk.gov.hscic")
 public class LegacyJPATransactionalConfig {
 
@@ -71,7 +71,7 @@ public class LegacyJPATransactionalConfig {
     }
 
     @Bean
-    public PlatformTransactionManager legacyTransactionManager() {
+    public PlatformTransactionManager transactionManager() {
         final JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(legacyEntityManagerFactory());
 

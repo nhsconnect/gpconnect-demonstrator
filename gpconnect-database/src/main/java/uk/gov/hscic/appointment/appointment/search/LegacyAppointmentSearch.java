@@ -15,7 +15,7 @@ public class LegacyAppointmentSearch extends AbstractLegacyService implements Ap
 
     @Autowired
     private AppointmentRepository appointmentRepository;
-    
+
     private final AppointmentEntityToAppointmentDetailTransformer transformer = new AppointmentEntityToAppointmentDetailTransformer();
     
     @Override

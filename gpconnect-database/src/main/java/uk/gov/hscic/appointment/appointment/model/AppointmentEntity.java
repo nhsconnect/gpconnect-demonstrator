@@ -1,6 +1,7 @@
 package uk.gov.hscic.appointment.appointment.model;
 
 import java.util.Date;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "appointment_appointments")
+@Cacheable(false)
 public class AppointmentEntity {
     
     @Id

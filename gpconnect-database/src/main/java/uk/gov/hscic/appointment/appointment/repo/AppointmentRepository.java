@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hscic.appointment.appointment.model.AppointmentEntity;
 
-@Transactional(readOnly = true)
+@Transactional
 public interface AppointmentRepository  extends JpaRepository<AppointmentEntity, Long> {
     
     List<AppointmentEntity> findByPatientId(Long patientId);

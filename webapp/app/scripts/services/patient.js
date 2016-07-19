@@ -14,7 +14,7 @@ angular.module('gpConnect')
     };
 
     var getSummary = function (patientId) {
-      return $http.post(EnvConfig.restUrlPrefix+'/Patient/$getcarerecord',
+      return $http.post(EnvConfig.restUrlPrefix+'/Patient/$gpc.getcarerecord',
                 '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "Summary"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}',
                 {
                     headers: {

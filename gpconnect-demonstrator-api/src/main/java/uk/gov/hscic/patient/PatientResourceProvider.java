@@ -110,7 +110,7 @@ public class PatientResourceProvider implements IResourceProvider {
     }
     
     
-    @Operation(name="$getcarerecord")
+    @Operation(name="$gpc.getcarerecord")
     public Bundle getPatientCareRecord(@ResourceParam Parameters params){
                 
         OperationOutcome operationOutcome = new OperationOutcome();

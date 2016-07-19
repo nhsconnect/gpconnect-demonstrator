@@ -15,7 +15,7 @@ angular.module('gpConnect')
     };
     
     var getScheduleOperation = function (organizationODSCode, siteODSCode, startDateTime, endDateTime) {
-      return $http.post(EnvConfig.restUrlPrefix+'/Organization/$getschedule',
+      return $http.post(EnvConfig.restUrlPrefix+'/Organization/$gpc.getschedule',
       '{ "resourceType" : "Parameters", "parameter" : [ { "name" : "odsOrganisationCode", "valueIdentifier" : { "value" : "'+organizationODSCode+'" } }, { "name" : "odsSiteCode", "valueIdentifier" : { "value" : "'+siteODSCode+'" } }, { "name" : "timePeriod", "valuePeriod" : { "start" : "'+startDateTime+'", "end" : "'+endDateTime+'" } } ] }',
       {
           headers: {

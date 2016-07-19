@@ -24,7 +24,7 @@ import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 /**
- * A Plain Provider. The $getschedule operation is not tied to a specific resource.
+ * A Plain Provider. The $gpc.getschedule operation is not tied to a specific resource.
  */
 @Component
 public class GetScheduleOperation {

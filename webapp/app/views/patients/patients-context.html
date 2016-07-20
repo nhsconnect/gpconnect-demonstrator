@@ -23,7 +23,7 @@
       </div>
       <div class="col-md-7 text-right">
         <ul class="list-inline">
-          <li><label>Gender:</label> <strong>Not In FHIR Resource</strong></li>
+          <li><label>Gender:</label> <strong>N/A</strong></li>
           <li><label>DOB:</label>  <strong>{{ patient.birthDate | date:'dd-MMM-yyyy' }}</strong></li>
           <li class="nhsLabel"><label>NHS No.:</label> <strong><span ng-bind="patientNhsNumber | formatNHSNumber"></span></strong></li>
         </ul>
@@ -35,8 +35,8 @@
       <tbody>
         <tr>
           <td width="40%"><label>Address:</label>  <strong>{{ patient.address[0].text }}</strong></td>
-          <td width="20%"><label>Phone:</label> <strong>Not In FHIR Resorce</strong></td>
-          <td width="20%"><label>GP Details:</label> <strong>Not In FHIR Resorce</strong></td>
+          <td width="20%"><label>Phone:</label> <strong>N/A</strong></td>
+          <td width="20%"><label>GP Details:</label> <strong>N/A</strong></td>
           <td width="20%"><label>PAS No.:</label> <strong>{{ patientLocalIdentifier }}</strong></td>
         </tr>
       </tbody>

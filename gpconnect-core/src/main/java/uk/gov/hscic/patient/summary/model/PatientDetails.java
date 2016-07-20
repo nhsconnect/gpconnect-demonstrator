@@ -8,6 +8,9 @@ public class PatientDetails {
 
     private String id;
     private String name;
+    private String title;
+    private String forename;
+    private String surname;
     private String gender;
     private Date dateOfBirth;
     private String nhsNumber;
@@ -33,6 +36,30 @@ public class PatientDetails {
         this.name = name;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getForename() {
+        return forename;
+    }
+
+    public void setForename(String forename) {
+        this.forename = forename;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+    
     public String getGender() {
         return gender;
     }

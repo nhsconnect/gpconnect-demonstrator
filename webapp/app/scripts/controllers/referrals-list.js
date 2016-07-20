@@ -22,10 +22,6 @@ angular.module('gpConnect')
       );
     };
 
-    PatientService.findDetails($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient.data;
-    });
-
     if ($stateParams.filter) {
       $scope.query = $stateParams.filter;
     }

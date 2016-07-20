@@ -35,6 +35,9 @@ public class PatientEntityToSummaryTransformer implements Transformer<PatientEnt
 
         patientSummary.setId(patientEntity.getNhsNumber());
         patientSummary.setName(name);
+        patientSummary.setTitle(patientEntity.getTitle());
+        patientSummary.setForename(patientEntity.getFirstName());
+        patientSummary.setSurname(patientEntity.getLastName());
         patientSummary.setAddress(address);
         patientSummary.setDateOfBirth(patientEntity.getDateOfBirth());
         patientSummary.setGender(patientEntity.getGender());

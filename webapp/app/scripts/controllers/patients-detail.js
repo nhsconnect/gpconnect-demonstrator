@@ -3,8 +3,14 @@
 angular.module('gpConnect')
   .controller('PatientsDetailCtrl', function ($scope, $stateParams, $state, PatientService) {
 
-    PatientService.findDetails($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient.data;
+    PatientService.getFhirPatient($stateParams.patientId).then(function (patient) {
+      $scope.patient = patient;
+      $.each(patient.identifier, function (key, identifier) {
+        if(identifier.system == "http://fhir.nhs.net/Id/nhs-number"){
+            $scope.patientNhsNumber = identifier.value;
+        }
+      });
+      $scope.patientLocalIdentifier = patient.id;
     });
 
     $scope.goTo = function (section) {

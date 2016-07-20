@@ -13,10 +13,6 @@ angular.module('gpConnect')
       $scope.currentPage = $stateParams.page;
     }
 
-    PatientService.findDetails($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient.data;
-    });
-
     ClinicalItem.findAllHTMLTables($stateParams.patientId).then(function (result) {
         
       // Default Page Content

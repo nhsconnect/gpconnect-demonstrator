@@ -3,10 +3,6 @@
 angular.module('gpConnect')
   .controller('MedicationsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, usSpinnerService, PatientService, Medication) {
 
-    PatientService.findDetails($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient.data;
-    });
-
     Medication.findDetails($stateParams.patientId, $stateParams.medicationIndex, $stateParams.source).then(function (result) {
       $scope.medication = result.data;
       usSpinnerService.stop('medicationsDetail-spinner');

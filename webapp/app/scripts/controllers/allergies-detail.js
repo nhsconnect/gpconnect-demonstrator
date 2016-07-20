@@ -3,10 +3,6 @@
 angular.module('gpConnect')
   .controller('AllergiesDetailCtrl', function ($scope, $stateParams, $modal, $state, $location, usSpinnerService, PatientService, Allergy) {
 
-    PatientService.findDetails($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient.data;
-    });
-
     Allergy.findDetails($stateParams.patientId, $stateParams.allergyIndex, $stateParams.source).then(function (result) {
       $scope.allergy = result.data;
       usSpinnerService.stop('allergiesDetail-spinner');

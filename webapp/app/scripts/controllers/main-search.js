@@ -18,8 +18,8 @@ angular.module('gpConnect')
 
       if (!isNaN(nhsNumber) && nhsNumber.length == 10) {
 
-        PatientService.findDetails(nhsNumber).then(function (patient) {
-          goToPatientSummary(patient.data.nhsNumber);
+        PatientService.getFhirPatient(nhsNumber).then(function (patient) {
+          goToPatientSummary(nhsNumber);
 
         }).catch(function () {
           $scope.setErrorOccurred(true);

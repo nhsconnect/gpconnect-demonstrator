@@ -31,6 +31,9 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
 
         patient.setId(String.valueOf(patientEntity.getId()));
         patient.setName(name);
+        patient.setTitle(patientEntity.getTitle());
+        patient.setForename(patientEntity.getFirstName());
+        patient.setSurname(patientEntity.getLastName());
         patient.setGender(patientEntity.getGender());
         patient.setDateOfBirth(patientEntity.getDateOfBirth());
         patient.setNhsNumber(patientId);

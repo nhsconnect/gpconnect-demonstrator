@@ -510,9 +510,9 @@ public class PatientResourceProvider implements IResourceProvider {
 
         HumanNameDt name = patient.addName();
         name.setText(patientDetails.getName());
-        name.addFamily("FHIRTestSurname");
-        name.addGiven("FHIRTestForename");
-        name.addPrefix("Mr");
+        name.addFamily(patientDetails.getSurname());
+        name.addGiven(patientDetails.getForename());
+        name.addPrefix(patientDetails.getTitle());
         name.setUse(NameUseEnum.USUAL);
         
         patient.setBirthDate(new DateDt(patientDetails.getDateOfBirth()));

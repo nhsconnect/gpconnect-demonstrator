@@ -5,10 +5,6 @@ angular.module('gpConnect')
 
     $scope.patients = $stateParams.patientsList;
 
-    PatientService.findDetails($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient.data;
-    });
-
     PatientService.getSummary($stateParams.patientId).then(function (patientSummaryResponse) {
       
       // Default Page Content

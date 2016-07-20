@@ -3,10 +3,6 @@
 angular.module('gpConnect')
   .controller('ReferralsDetailCtrl', function ($scope, $stateParams, $modal, $location, $state, usSpinnerService, PatientService, Referral) {
 
-    PatientService.findDetails($stateParams.patientId).then(function (patient) {
-      $scope.patient = patient.data;
-    });
-
     Referral.findDetails($stateParams.patientId, $stateParams.referralId).then(function (result) {
       $scope.referral = result.data;
       usSpinnerService.stop('referralsDetail-spinner');

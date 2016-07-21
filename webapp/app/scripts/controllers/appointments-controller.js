@@ -103,6 +103,23 @@ angular.module('gpConnect')
                 });
             };
 
+            $scope.amendAppointment = function () {
+                $modal.open({
+                    templateUrl: 'views/appointments/appointments-amend-modal.html',
+                    size: 'md',
+                    controller: 'AppointmentsAmendModalCtrl',
+                    resolve: {
+                        appointment: function () {
+                            return {
+                                appointmentResource: $scope.appointmentDetail,
+                                practitionerName: $scope.practitionerName,
+                                appointmentLocation: $scope.appointmentLocation
+                            };
+                        }
+                    }
+                });
+            };
+            
             $scope.create = function () {
                 $modal.open({
                     templateUrl: 'views/appointments/appointments-search-modal.html',

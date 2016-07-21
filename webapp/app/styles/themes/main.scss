@@ -1166,6 +1166,7 @@ table.table {
 
 .table thead {
   background-color: $table-header-background;
+  color: white;
 }
 
 .table thead tr th {
@@ -2230,4 +2231,20 @@ div#age-chart div.morris-hover.morris-default-style {
 
 .gantt-side {
     min-width: 155px;
+}
+
+.appAmendBtn {
+    margin-right: 10px;
+}
+
+.buttonBox {
+    margin-top: 15px;
+}
+
+.appointmentStatus {
+    background-color: #1b5d98;
+    border-radius: 5px;
+    color: white;
+    padding: 0 4px;
+    display:inline-block;
 }

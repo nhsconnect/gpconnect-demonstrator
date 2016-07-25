@@ -23,6 +23,7 @@ public class AppointmentEntityToAppointmentDetailTransformer implements Transfor
         appointmentDetail.setPatientId(item.getPatientId());
         appointmentDetail.setPractitionerId(item.getPractitionerId());
         appointmentDetail.setLocationId(item.getLocationId());
+        appointmentDetail.setLastUpdated(item.getLastUpdated());
         return appointmentDetail;
     }
     

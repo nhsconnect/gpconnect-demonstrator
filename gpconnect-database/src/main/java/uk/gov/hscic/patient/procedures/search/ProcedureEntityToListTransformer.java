@@ -17,6 +17,7 @@ public class ProcedureEntityToListTransformer implements Transformer<ProcedureEn
         procedureList.setProvider(procedureEntity.getProvider());
         procedureList.setHtml(procedureEntity.getHtml());
 
+        procedureList.setLastUpdated(procedureEntity.getLastUpdated());
         return procedureList;
     }
 }

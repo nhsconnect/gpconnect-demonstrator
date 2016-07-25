@@ -15,6 +15,7 @@
  */
 package uk.gov.hscic.medical.department.model;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,6 +33,9 @@ public class DepartmentEntity {
 
     @Column(name = "department")
     private String department;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -47,5 +51,13 @@ public class DepartmentEntity {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

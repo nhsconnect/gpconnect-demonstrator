@@ -46,6 +46,9 @@ public class MedicationOrderEntity {
     @Column(name = "dispense_repeats_allowed")
     private int dispenseRepeatsAllowed;
 
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
+    
     public Long getId() {
         return id;
     }
@@ -133,5 +136,12 @@ public class MedicationOrderEntity {
     public void setDispenseRepeatsAllowed(int dispenseRepeatsAllowed) {
         this.dispenseRepeatsAllowed = dispenseRepeatsAllowed;
     }
-    
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }

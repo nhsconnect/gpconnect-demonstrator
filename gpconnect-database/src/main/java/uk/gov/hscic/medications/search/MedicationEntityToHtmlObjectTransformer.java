@@ -16,6 +16,7 @@ public class MedicationEntityToHtmlObjectTransformer implements Transformer<Pati
 
         medicationList.setProvider(medicationHtmlEntity.getProvider());
         medicationList.setHtml(medicationHtmlEntity.getHtml());
+        medicationList.setLastUpdated(medicationHtmlEntity.getLastUpdated());
 
         return medicationList;
     }

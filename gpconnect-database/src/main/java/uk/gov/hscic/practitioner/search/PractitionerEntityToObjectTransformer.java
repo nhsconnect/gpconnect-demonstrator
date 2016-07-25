@@ -23,7 +23,7 @@ public class PractitionerEntityToObjectTransformer implements Transformer<Practi
         practitioner.setRoleDisplay(practitionerEntity.getP_role_display());
         practitioner.setComCode(practitionerEntity.getP_com_code());
         practitioner.setComDisplay(practitionerEntity.getP_com_display());
-        
+        practitioner.setLastUpdated(practitionerEntity.getLastUpdated());
         return practitioner;
     }
 }

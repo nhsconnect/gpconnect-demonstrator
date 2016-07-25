@@ -35,6 +35,9 @@ public class SlotEntity {
     
     @Column(name = "endDateTime")
     private Date endDateTime;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -92,4 +95,11 @@ public class SlotEntity {
         this.endDateTime = endDateTime;
     }
 
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }

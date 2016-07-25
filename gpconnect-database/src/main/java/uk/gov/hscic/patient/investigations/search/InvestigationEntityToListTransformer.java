@@ -17,6 +17,7 @@ public class InvestigationEntityToListTransformer implements Transformer<Investi
         investigationList.setProvider(investigationEntity.getProvider());
         investigationList.setHtml(investigationEntity.getHtml());
 
+        investigationList.setLastUpdated(investigationEntity.getLastUpdated());
         return investigationList;
     }
 }

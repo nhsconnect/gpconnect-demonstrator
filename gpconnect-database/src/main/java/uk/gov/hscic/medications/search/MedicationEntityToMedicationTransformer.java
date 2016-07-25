@@ -12,6 +12,7 @@ public class MedicationEntityToMedicationTransformer  implements Transformer<Med
         MedicationDetails medication = new MedicationDetails();
         medication.setId(String.valueOf(item.getId()));
         medication.setName(item.getName());
+        medication.setLastUpdated(item.getLastUpdated());
         
         return medication;
     }

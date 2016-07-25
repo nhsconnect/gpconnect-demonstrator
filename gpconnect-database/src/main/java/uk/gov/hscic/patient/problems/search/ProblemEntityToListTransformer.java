@@ -17,6 +17,7 @@ public class ProblemEntityToListTransformer implements Transformer<ProblemEntity
         problemList.setProvider(problemEntity.getProvider());
         problemList.setHtml(problemEntity.getHtml());
 
+        problemList.setLastUpdated(problemEntity.getLastUpdated());
         return problemList;
     }
 }

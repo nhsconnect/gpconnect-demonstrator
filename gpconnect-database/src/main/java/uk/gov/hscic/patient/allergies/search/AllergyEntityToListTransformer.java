@@ -17,6 +17,7 @@ public class AllergyEntityToListTransformer implements Transformer<AllergyEntity
         allergyList.setProvider(allergyEntity.getProvider());
         allergyList.setHtml(allergyEntity.getHtml());
 
+        allergyList.setLastUpdated(allergyEntity.getLastUpdated());
         return allergyList;
     }
 }

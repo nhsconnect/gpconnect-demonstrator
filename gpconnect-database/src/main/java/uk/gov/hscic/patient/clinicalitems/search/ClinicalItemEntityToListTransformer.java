@@ -17,6 +17,7 @@ public class ClinicalItemEntityToListTransformer implements Transformer<Clinical
         clinicalItemList.setProvider(clinicalItemEntity.getProvider());
         clinicalItemList.setHtml(clinicalItemEntity.getHtml());
 
+        clinicalItemList.setLastUpdated(clinicalItemEntity.getLastUpdated());
         return clinicalItemList;
     }
 }

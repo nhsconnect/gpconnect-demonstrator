@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient.procedures.model;
 
+import java.util.Date;
 import javax.persistence.*;
 
 @Entity
@@ -15,6 +16,9 @@ public class ProcedureEntity {
 
     @Column(name = "provider")
     private String provider;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -38,5 +42,13 @@ public class ProcedureEntity {
 
     public void setProvider(String provider) {
         this.provider = provider;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

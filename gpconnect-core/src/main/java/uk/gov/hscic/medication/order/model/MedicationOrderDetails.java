@@ -15,6 +15,7 @@ public class MedicationOrderDetails {
     private Date dispenseReviewDate;
     private Long dispenseMedicationId;
     private int dispenseRepeatsAllowed;
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -102,6 +103,14 @@ public class MedicationOrderDetails {
 
     public void setDispenseRepeatsAllowed(int dispenseRepeatsAllowed) {
         this.dispenseRepeatsAllowed = dispenseRepeatsAllowed;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
 }

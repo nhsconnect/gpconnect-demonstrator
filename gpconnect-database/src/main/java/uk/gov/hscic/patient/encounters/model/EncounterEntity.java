@@ -16,6 +16,7 @@
 
 package uk.gov.hscic.patient.encounters.model;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,6 +37,9 @@ public class EncounterEntity {
 
     @Column(name = "provider")
     private String provider;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -59,5 +63,13 @@ public class EncounterEntity {
 
     public void setProvider(String provider) {
         this.provider = provider;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

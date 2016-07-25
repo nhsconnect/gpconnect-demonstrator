@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient.adminitems.model;
 
+import java.util.Date;
 import javax.persistence.*;
 
 @Entity
@@ -16,6 +17,9 @@ public class AdminItemEntity {
     @Column(name = "provider")
     private String provider;
 
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
+    
     public Long getId() {
         return id;
     }
@@ -38,5 +42,13 @@ public class AdminItemEntity {
 
     public void setProvider(String provider) {
         this.provider = provider;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

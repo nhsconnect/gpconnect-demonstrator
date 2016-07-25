@@ -1,11 +1,14 @@
 package uk.gov.hscic.patient.adminitems.model;
 
+import java.util.Date;
+
 public class AdminItemListHTML {
 
     private String sourceId;
     private String source;
     private String provider;
     private String html;
+    private Date lastUpdated;
 
     public String getSourceId() {
         return sourceId;
@@ -37,5 +40,13 @@ public class AdminItemListHTML {
 
     public void setHtml(String html) {
         this.html = html;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

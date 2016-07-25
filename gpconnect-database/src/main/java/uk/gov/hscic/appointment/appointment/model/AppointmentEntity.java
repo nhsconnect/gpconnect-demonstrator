@@ -56,6 +56,9 @@ public class AppointmentEntity {
     
     @Column(name = "locationId")
     private Long locationId;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -167,6 +170,14 @@ public class AppointmentEntity {
 
     public void setLocationId(Long locationId) {
         this.locationId = locationId;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
     
 }

@@ -16,6 +16,7 @@ public class MedicationAdministrationEntityToMedicationAdministrationDetailTrans
         administrationDetail.setPrescriptionId(item.getPrescriptionId());
         administrationDetail.setAdministrationDate(item.getAdministrationDate());
         administrationDetail.setMedicationId(item.getMedicationId());
+        administrationDetail.setLastUpdated(item.getLastUpdated());
         return administrationDetail;
     }
 }

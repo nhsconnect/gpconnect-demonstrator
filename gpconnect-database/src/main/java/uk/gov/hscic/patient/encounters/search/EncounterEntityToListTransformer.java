@@ -33,6 +33,7 @@ public class EncounterEntityToListTransformer implements Transformer<EncounterEn
         encounterList.setProvider(encounterEntity.getProvider());
         encounterList.setHtml(encounterEntity.getHtml());
 
+        encounterList.setLastUpdated(encounterEntity.getLastUpdated());
         return encounterList;
     }
 }

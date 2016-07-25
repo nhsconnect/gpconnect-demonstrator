@@ -31,6 +31,7 @@ public class PatientSummary {
     private String gender;
     private String nhsNumber;
     private String department;
+    private Date lastUpdated;
 
     public String getId() {
         return id;
@@ -110,5 +111,13 @@ public class PatientSummary {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

@@ -18,6 +18,7 @@ public class AppointmentDetail {
     private Long patientId;
     private Long practitionerId;
     private Long locationId;
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -130,4 +131,13 @@ public class AppointmentDetail {
     public void setLocationId(Long locationId) {
         this.locationId = locationId;
     }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+    
 }

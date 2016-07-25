@@ -1,6 +1,7 @@
 package uk.gov.hscic.location.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class LocationDetails implements Serializable {
 
@@ -10,6 +11,7 @@ public class LocationDetails implements Serializable {
 	private String name;
 	private String siteOdsCode;
 	private String siteOdsCodeName;
+    private Date lastUpdated;
 	
 	public Long getId() {
 		return id;
@@ -43,4 +45,11 @@ public class LocationDetails implements Serializable {
 		this.siteOdsCodeName = siteOdsCodeName;
 	}
 
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }

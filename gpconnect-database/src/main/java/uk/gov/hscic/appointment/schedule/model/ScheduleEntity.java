@@ -39,6 +39,9 @@ public class ScheduleEntity {
     
     @Column(name = "scheduleComment")
     private String comment;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -110,5 +113,13 @@ public class ScheduleEntity {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

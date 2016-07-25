@@ -1,6 +1,7 @@
 package uk.gov.hscic.organization.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class OrganizationDetails implements Serializable {
 
@@ -8,6 +9,7 @@ public class OrganizationDetails implements Serializable {
     private String orgCode;
     private String siteCode;
     private String orgName;
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -39,5 +41,13 @@ public class OrganizationDetails implements Serializable {
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

@@ -15,6 +15,8 @@
  */
 package uk.gov.hscic.patient.summary.model;
 
+import java.util.Date;
+
 /**
  */
 public class PatientHeadline {
@@ -22,6 +24,7 @@ public class PatientHeadline {
     private String sourceId;
     private String source;
     private String text;
+    private Date lastUpdated;
 
     public String getSourceId() {
         return sourceId;
@@ -45,5 +48,13 @@ public class PatientHeadline {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

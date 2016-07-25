@@ -19,6 +19,7 @@ public class PatientDetails {
     private String gpDetails;
     private String pasNumber;
     private Long gpId;
+    private Date lastUpdated;
 
     public String getId() {
         return id;
@@ -123,5 +124,12 @@ public class PatientDetails {
     public void setGpId(Long gpId) {
         this.gpId = gpId;
     }
-    
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }

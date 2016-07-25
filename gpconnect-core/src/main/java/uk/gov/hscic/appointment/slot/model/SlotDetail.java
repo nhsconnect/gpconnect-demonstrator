@@ -11,6 +11,7 @@ public class SlotDetail {
     private String freeBusyType;
     private Date startDateTime;
     private Date endDateTime;
+    private Date lastUpdated;
 
     public Long getId() {
         return Id;
@@ -66,6 +67,14 @@ public class SlotDetail {
 
     public void setEndDateTime(Date endDateTime) {
         this.endDateTime = endDateTime;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
     
 }

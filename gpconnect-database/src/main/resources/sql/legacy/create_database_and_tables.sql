@@ -47,6 +47,7 @@ CREATE TABLE gpconnect.appointment_appointments (
   patientId					BIGINT 		NULL,
   practitionerId			BIGINT 		NULL,
   locationId				BIGINT 		NULL,
+  lastUpdated				DATETIME 	NULL,
   PRIMARY KEY (id)
 );
 
@@ -60,6 +61,7 @@ CREATE TABLE gpconnect.appointment_schedules (
   startDateTime				DATETIME 	NULL,
   endDateTime				DATETIME 	NULL,
   scheduleComment			TEXT(300) 	NULL,
+  lastUpdated				DATETIME 	NULL,
   PRIMARY KEY (id)
 );
 
@@ -71,6 +73,7 @@ CREATE TABLE gpconnect.appointment_slots (
   freeBusyType				TEXT(50) 	NULL,
   startDateTime				DATETIME 	NULL,
   endDateTime				DATETIME 	NULL,
+  lastUpdated				DATETIME 	NULL,
   PRIMARY KEY (id)
 );
 
@@ -83,6 +86,7 @@ CREATE TABLE gpconnect.general_practitioners (
   address_4     VARCHAR(100)  NULL,
   address_5     VARCHAR(100)  NULL,
   postcode      VARCHAR(10)   NULL,
+  lastUpdated	DATETIME 	  NULL,
   PRIMARY KEY   (id)
 );
 
@@ -99,6 +103,7 @@ CREATE TABLE gpconnect.practitioners (
   p_role_display		VARCHAR(100)  	NULL,
   p_com_code			VARCHAR(30)  	NULL,
   p_com_display			VARCHAR(100)  	NULL,
+  lastUpdated			DATETIME 		NULL,
   PRIMARY KEY   (id)
 );
 
@@ -107,12 +112,14 @@ CREATE TABLE gpconnect.organizations (
   org_code				VARCHAR(30)  	NULL,
   site_code				VARCHAR(30)  	NULL,
   org_name				VARCHAR(100)  	NULL,
+  lastUpdated			DATETIME 		NULL,
   PRIMARY KEY   (id)
 );
 
 CREATE TABLE gpconnect.medical_departments (
   id            BIGINT        NOT NULL    AUTO_INCREMENT,
   department    VARCHAR(150)  NULL,
+  lastUpdated	DATETIME 	  NULL,
   PRIMARY KEY   (id)
 );
 
@@ -134,6 +141,7 @@ CREATE TABLE gpconnect.patients (
   pas_number      VARCHAR(20)     NULL,
   department_id   BIGINT          NOT NULL,
   gp_id           BIGINT          NOT NULL,
+  lastUpdated	  DATETIME 		  NULL,
   PRIMARY KEY     (id),
   FOREIGN KEY     (department_id) REFERENCES  gpconnect.medical_departments(id),
   FOREIGN KEY     (gp_id)         REFERENCES  gpconnect.general_practitioners(id)
@@ -143,6 +151,7 @@ CREATE TABLE gpconnect.allergies (
   id                  BIGINT        NOT NULL    AUTO_INCREMENT,
   html                VARCHAR(4096) NULL,
   provider            VARCHAR(10)   NULL,
+  lastUpdated		  DATETIME 		NULL,
   PRIMARY KEY         (id)
 );
 
@@ -150,12 +159,14 @@ CREATE TABLE gpconnect.medications_html (
   id                  BIGINT        NOT NULL    AUTO_INCREMENT,
   html                TEXT(25000) 	NULL,
   provider            VARCHAR(10)   NULL,
+  lastUpdated		  DATETIME 		NULL,
   PRIMARY KEY         (id)
 );
 
 CREATE TABLE gpconnect.medications (
   id                  BIGINT        NOT NULL    AUTO_INCREMENT,
   name                TEXT(100) 	NULL,
+  lastUpdated		  DATETIME 		NULL,
   PRIMARY KEY         (id)
 );
 
@@ -171,6 +182,7 @@ CREATE TABLE gpconnect.medication_orders (
   dispense_review_date		DATETIME 	NULL,
   dispense_medication_id	BIGINT 		NULL,
   dispense_repeats_allowed	INT 		NULL,
+  lastUpdated				DATETIME 	NULL,
   PRIMARY KEY (id)
 );
 
@@ -182,6 +194,7 @@ CREATE TABLE gpconnect.medication_dispenses (
   medicationId			BIGINT 		NULL,
   medicationName		TEXT(300) 	NULL,
   dosageText			TEXT(300) 	NULL,
+  lastUpdated			DATETIME 	NULL,
   PRIMARY KEY (id)
 );
 
@@ -193,6 +206,7 @@ CREATE TABLE gpconnect.medication_administrations (
   prescriptionId		BIGINT 		NULL,
   administrationDate	DATETIME 	NULL,
   medicationId			BIGINT 		NULL,
+  lastUpdated			DATETIME 	NULL,
   PRIMARY KEY (id)
 );
 
@@ -200,6 +214,7 @@ CREATE TABLE gpconnect.problems (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                VARCHAR(4096) NULL,
  provider            VARCHAR(10)   NULL,
+ lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
 );
 
@@ -207,6 +222,7 @@ CREATE TABLE gpconnect.referrals (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                VARCHAR(4096) NULL,
  provider            VARCHAR(10)   NULL,
+ lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
 );
 
@@ -214,6 +230,7 @@ CREATE TABLE gpconnect.encounters (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                VARCHAR(4096) NULL,
  provider            VARCHAR(10)   NULL,
+ lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
 );
 
@@ -221,6 +238,7 @@ CREATE TABLE gpconnect.patientsummary (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                VARCHAR(7168) NULL,
  provider            VARCHAR(10)   NULL,
+ lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
 );
 
@@ -228,6 +246,7 @@ CREATE TABLE gpconnect.procedures (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                VARCHAR(4096) NULL,
  provider            VARCHAR(10)   NULL,
+ lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
 );
 
@@ -235,6 +254,7 @@ CREATE TABLE gpconnect.observations (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                TEXT(25000) NULL,
  provider            VARCHAR(10)   NULL,
+ lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
 );
 
@@ -242,6 +262,7 @@ CREATE TABLE gpconnect.immunisations (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                VARCHAR(4096) NULL,
  provider            VARCHAR(10)   NULL,
+ lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
 );
 
@@ -249,6 +270,7 @@ CREATE TABLE gpconnect.adminitems (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                VARCHAR(15000) NULL,
  provider            VARCHAR(10)   NULL,
+ lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
 );
 
@@ -256,6 +278,7 @@ CREATE TABLE gpconnect.clinicalitems (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                TEXT(25000) NULL,
  provider            VARCHAR(10)   NULL,
+ lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
 );
 
@@ -263,6 +286,7 @@ CREATE TABLE gpconnect.investigations (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  html                VARCHAR(7168) NULL,
  provider            VARCHAR(10)   NULL,
+ lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
 );
 
@@ -271,6 +295,7 @@ CREATE TABLE gpconnect.locations (
  name                VARCHAR(250)  NOT NULL,
  site_ods_code       VARCHAR(250)  NOT NULL,
  site_ods_code_name  VARCHAR(250)  NOT NULL,
+ lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
 );
 

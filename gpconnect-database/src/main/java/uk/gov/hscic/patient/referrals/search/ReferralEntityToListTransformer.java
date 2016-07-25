@@ -17,6 +17,7 @@ public class ReferralEntityToListTransformer implements Transformer<ReferralEnti
         referralList.setProvider(referralEntity.getProvider());
         referralList.setHtml(referralEntity.getHtml());
 
+        referralList.setLastUpdated(referralEntity.getLastUpdated());
         return referralList;
     }
 }

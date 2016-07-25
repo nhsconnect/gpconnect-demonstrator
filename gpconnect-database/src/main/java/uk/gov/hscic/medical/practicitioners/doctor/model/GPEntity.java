@@ -15,6 +15,7 @@
  */
 package uk.gov.hscic.medical.practicitioners.doctor.model;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -50,6 +51,9 @@ public class GPEntity {
 
     @Column(name = "postcode")
     private String postcode;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -113,5 +117,13 @@ public class GPEntity {
 
     public void setPostcode(String postcode) {
         this.postcode = postcode;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

@@ -1,9 +1,12 @@
 package uk.gov.hscic.medication.model;
 
+import java.util.Date;
+
 public class MedicationDetails {
 
     private String id;
     private String name;
+    private Date lastUpdated;
 
     public String getId() {
         return id;
@@ -21,4 +24,11 @@ public class MedicationDetails {
         this.name = name;
     }
 
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }

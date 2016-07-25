@@ -16,6 +16,7 @@ public class MedicationDispenseEntityToMedicationDispenseDetailTransformer imple
         dispenseDetail.setMedicationId(item.getMedicationId());
         dispenseDetail.setMedicationName(item.getMedicationName());
         dispenseDetail.setDosageText(item.getDosageText());
+        dispenseDetail.setLastUpdated(item.getLastUpdated());
         return dispenseDetail;
     }
 }

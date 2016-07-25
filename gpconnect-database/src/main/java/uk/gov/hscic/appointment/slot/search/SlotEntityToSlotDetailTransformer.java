@@ -16,6 +16,7 @@ public class SlotEntityToSlotDetailTransformer  implements Transformer<SlotEntit
         slotDetail.setFreeBusyType(item.getFreeBusyType());
         slotDetail.setStartDateTime(item.getStartDateTime());
         slotDetail.setEndDateTime(item.getEndDateTime());
+        slotDetail.setLastUpdated(item.getLastUpdated());
         return slotDetail;
     }
     

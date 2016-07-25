@@ -1,5 +1,6 @@
 package uk.gov.hscic.location.model;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,6 +24,9 @@ public class LocationEntity {
 	
     @Column(name = "site_ods_code_name")
     private String siteOdsCodeName;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
 	public Long getId() {
 		return id;
@@ -55,4 +59,12 @@ public class LocationEntity {
 	public void setSiteOdsCodeName(String siteOdsCodeName) {
 		this.siteOdsCodeName = siteOdsCodeName;
 	}
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }

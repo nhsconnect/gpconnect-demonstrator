@@ -34,6 +34,9 @@ public class MedicationAdministrationEntity {
     @Column(name = "medicationId")
     private Long medicationId;
 
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
+    
     public Long getId() {
         return id;
     }
@@ -88,5 +91,13 @@ public class MedicationAdministrationEntity {
 
     public void setMedicationId(Long medicationId) {
         this.medicationId = medicationId;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient.referrals.model;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +21,9 @@ public class ReferralEntity {
 
     @Column(name = "provider")
     private String provider;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -43,5 +47,13 @@ public class ReferralEntity {
 
     public void setProvider(String provider) {
         this.provider = provider;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

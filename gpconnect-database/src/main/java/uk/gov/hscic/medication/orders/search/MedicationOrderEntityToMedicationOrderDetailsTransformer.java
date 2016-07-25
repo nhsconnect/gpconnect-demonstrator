@@ -20,6 +20,7 @@ public class MedicationOrderEntityToMedicationOrderDetailsTransformer  implement
         medicationOrderDetails.setDispenseReviewDate(item.getDispenseReviewDate());
         medicationOrderDetails.setDispenseMedicationId(item.getDispenseMedicationId());
         medicationOrderDetails.setDispenseRepeatsAllowed(item.getDispenseRepeatsAllowed());
+        medicationOrderDetails.setLastUpdated(item.getLastUpdated());
         return medicationOrderDetails;
     }
     

@@ -1,5 +1,6 @@
 package uk.gov.hscic.organization.model;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,8 +24,10 @@ public class OrganizationEntity {
     
     @Column(name = "org_name")
     private String orgName;
-
     
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
+
     public Long getId() {
         return id;
     }
@@ -55,5 +58,13 @@ public class OrganizationEntity {
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

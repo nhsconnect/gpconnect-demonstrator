@@ -13,6 +13,7 @@ public class ScheduleDetail {
     private Date startDateTime;
     private Date endDateTime;
     private String comment;
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -85,6 +86,13 @@ public class ScheduleDetail {
     public void setComment(String comment) {
         this.comment = comment;
     }
-    
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
     
 }

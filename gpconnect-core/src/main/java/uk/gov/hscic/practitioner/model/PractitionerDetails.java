@@ -1,6 +1,7 @@
 package uk.gov.hscic.practitioner.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class PractitionerDetails implements Serializable {
 
@@ -16,6 +17,7 @@ public class PractitionerDetails implements Serializable {
     private String roleDisplay;
     private String comCode;
     private String comDisplay;
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -111,5 +113,13 @@ public class PractitionerDetails implements Serializable {
 
     public void setComDisplay(String comDisplay) {
         this.comDisplay = comDisplay;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

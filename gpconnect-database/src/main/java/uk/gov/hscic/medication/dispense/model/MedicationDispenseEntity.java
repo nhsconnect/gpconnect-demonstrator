@@ -1,5 +1,6 @@
 package uk.gov.hscic.medication.dispense.model;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,6 +33,9 @@ public class MedicationDispenseEntity {
     
     @Column(name = "dosageText")
     private String dosageText;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -87,5 +91,13 @@ public class MedicationDispenseEntity {
 
     public void setDosageText(String dosageText) {
         this.dosageText = dosageText;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

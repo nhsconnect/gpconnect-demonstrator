@@ -15,6 +15,7 @@ public class OrganizationEntityToObjectTransformer implements Transformer<Organi
         organization.setOrgCode(organizationEntity.getOrgCode());
         organization.setSiteCode(organizationEntity.getSiteCode());
         organization.setOrgName(organizationEntity.getOrgName());
+        organization.setLastUpdated(organizationEntity.getLastUpdated());
         
         return organization;
         

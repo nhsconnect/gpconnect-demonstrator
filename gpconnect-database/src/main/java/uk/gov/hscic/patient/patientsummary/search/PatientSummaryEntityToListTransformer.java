@@ -17,6 +17,7 @@ public class PatientSummaryEntityToListTransformer implements Transformer<Patien
         patientSummaryList.setProvider(patientSummaryEntity.getProvider());
         patientSummaryList.setHtml(patientSummaryEntity.getHtml());
 
+        patientSummaryList.setLastUpdated(patientSummaryEntity.getLastUpdated());
         return patientSummaryList;
     }
 }

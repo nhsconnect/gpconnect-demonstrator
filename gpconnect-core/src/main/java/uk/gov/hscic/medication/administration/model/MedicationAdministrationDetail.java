@@ -11,6 +11,7 @@ public class MedicationAdministrationDetail {
     private Long prescriptionId;
     private Date administrationDate;
     private Long medicationId;
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -66,5 +67,13 @@ public class MedicationAdministrationDetail {
 
     public void setMedicationId(Long medicationId) {
         this.medicationId = medicationId;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

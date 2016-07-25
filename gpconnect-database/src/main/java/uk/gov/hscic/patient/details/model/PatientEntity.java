@@ -85,6 +85,9 @@ public class PatientEntity {
     @ManyToOne
     @JoinColumn(name = "gp_id")
     private GPEntity gp;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -220,5 +223,13 @@ public class PatientEntity {
 
     public void setGp(GPEntity gp) {
         this.gp = gp;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

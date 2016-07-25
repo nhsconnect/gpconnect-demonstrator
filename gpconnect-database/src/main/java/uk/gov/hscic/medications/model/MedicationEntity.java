@@ -1,5 +1,6 @@
 package uk.gov.hscic.medications.model;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +19,9 @@ public class MedicationEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
+    
     public Long getId() {
         return id;
     }
@@ -34,4 +38,11 @@ public class MedicationEntity {
         this.name = name;
     }
 
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }

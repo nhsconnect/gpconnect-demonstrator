@@ -17,6 +17,7 @@ public class ObservationEntityToListTransformer implements Transformer<Observati
         observationList.setProvider(observationEntity.getProvider());
         observationList.setHtml(observationEntity.getHtml());
 
+        observationList.setLastUpdated(observationEntity.getLastUpdated());
         return observationList;
     }
 }

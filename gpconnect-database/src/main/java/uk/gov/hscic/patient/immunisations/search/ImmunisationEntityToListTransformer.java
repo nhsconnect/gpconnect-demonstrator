@@ -17,6 +17,7 @@ public class ImmunisationEntityToListTransformer implements Transformer<Immunisa
         immunisationList.setProvider(immunisationEntity.getProvider());
         immunisationList.setHtml(immunisationEntity.getHtml());
 
+        immunisationList.setLastUpdated(immunisationEntity.getLastUpdated());
         return immunisationList;
     }
 }

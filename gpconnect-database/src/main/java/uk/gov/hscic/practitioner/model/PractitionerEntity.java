@@ -1,5 +1,6 @@
 package uk.gov.hscic.practitioner.model;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,6 +49,8 @@ public class PractitionerEntity {
     @Column(name = "p_com_display")
     private String p_com_display;
 
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
     
     public Long getId() {
         return id;
@@ -143,5 +146,13 @@ public class PractitionerEntity {
 
     public void setP_com_display(String p_com_display) {
         this.p_com_display = p_com_display;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

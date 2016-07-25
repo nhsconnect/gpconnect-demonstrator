@@ -142,6 +142,8 @@ public class OrganizationResourceProvider  implements IResourceProvider {
         organization.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/ods-organization-code", organizationDetails.getOrgCode()));
         organization.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/ods-site-code", organizationDetails.getSiteCode()));
         organization.setName(organizationDetails.getOrgName());
+        organization.getMeta().setLastUpdated(organizationDetails.getLastUpdated());
+        organization.getMeta().setVersionId(String.valueOf(organizationDetails.getLastUpdated().getTime()));
         return organization;
     }
     

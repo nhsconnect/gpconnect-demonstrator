@@ -46,6 +46,8 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
                 
                 MedicationDispense medicationDispense = new MedicationDispense();
                 medicationDispense.setId(String.valueOf(medicationDispenseDetail.getId()));
+                medicationDispense.getMeta().setLastUpdated(medicationDispenseDetail.getLastUpdated());
+                medicationDispense.getMeta().setVersionId(String.valueOf(medicationDispenseDetail.getLastUpdated().getTime()));
                 
                 switch(medicationDispenseDetail.getStatus().toLowerCase()){
                     case "completed" : medicationDispense.setStatus(MedicationDispenseStatusEnum.COMPLETED); break;

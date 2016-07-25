@@ -41,6 +41,8 @@ public class MedicationAdministrationResourceProvider  implements IResourceProvi
             for(MedicationAdministrationDetail medicationAdministrationDetail : medicationAdministrationDetailList){
                 MedicationAdministration medicationAdministration = new MedicationAdministration();
                 medicationAdministration.setId(String.valueOf(medicationAdministrationDetail.getId()));
+                medicationAdministration.getMeta().setLastUpdated(medicationAdministrationDetail.getLastUpdated());
+                medicationAdministration.getMeta().setVersionId(String.valueOf(medicationAdministrationDetail.getLastUpdated().getTime()));
                 medicationAdministration.setPatient(new ResourceReferenceDt("Patient/"+medicationAdministrationDetail.getPatientId()));
                 medicationAdministration.setPractitioner(new ResourceReferenceDt("Practitioner/"+medicationAdministrationDetail.getPractitionerId()));
                 medicationAdministration.setPrescription(new ResourceReferenceDt("MedicationOrder/"+medicationAdministrationDetail.getPrescriptionId()));

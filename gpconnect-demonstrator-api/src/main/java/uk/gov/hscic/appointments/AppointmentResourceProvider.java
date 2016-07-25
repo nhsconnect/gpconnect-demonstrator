@@ -99,7 +99,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
     }
 
     @Create
-    public MethodOutcome createPatient(@ResourceParam Appointment appointment) {
+    public MethodOutcome createAppointment(@ResourceParam Appointment appointment) {
 
         if (appointment.getStatus().isEmpty()) {
             throw new UnprocessableEntityException("No status supplied");
@@ -201,6 +201,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         Appointment appointment = new Appointment();
         appointment.setId(String.valueOf(appointmentDetail.getId()));
+        appointment.getMeta().setLastUpdated(appointmentDetail.getLastUpdated());
+        appointment.getMeta().setVersionId(String.valueOf(appointmentDetail.getLastUpdated().getTime()));
         appointment.addUndeclaredExtension(true, "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0", new StringDt(appointmentDetail.getCancellationReason()));
         appointment.setIdentifier(Collections.singletonList(new IdentifierDt("http://fhir.nhs.net/Id/gpconnect-appointment-identifier", String.valueOf(appointmentDetail.getId()))));
 
@@ -262,6 +264,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         AppointmentDetail appointmentDetail = new AppointmentDetail();
         appointmentDetail.setId(appointment.getId().getIdPartAsLong());
+        if(appointment.getMeta().getLastUpdated() == null){
+            appointmentDetail.setLastUpdated(new Date());
+        } else {
+            appointmentDetail.setLastUpdated(appointment.getMeta().getLastUpdated());
+        }
 
         List<ExtensionDt> extension = appointment.getUndeclaredExtensionsByUrl("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0");
         if (extension != null && extension.size() > 0) {

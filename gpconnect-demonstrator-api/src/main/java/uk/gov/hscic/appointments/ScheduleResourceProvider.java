@@ -82,6 +82,9 @@ public class ScheduleResourceProvider implements IResourceProvider {
         Schedule schedule = new Schedule();
         schedule.setId(String.valueOf(scheduleDetail.getId()));
         
+        schedule.getMeta().setLastUpdated(scheduleDetail.getLastUpdated());
+        schedule.getMeta().setVersionId(String.valueOf(scheduleDetail.getLastUpdated().getTime()));
+        
         schedule.addUndeclaredExtension(true, EXTENSION_GPCONNECT_PRACTITIONER_1_0, new ResourceReferenceDt("Practitioner/"+scheduleDetail.getPractitionerId()));
         
         schedule.setIdentifier(Collections.singletonList(new IdentifierDt("http://fhir.nhs.net/Id/gpconnect-schedule-identifier", scheduleDetail.getIdentifier())));

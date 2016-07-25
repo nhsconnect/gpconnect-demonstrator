@@ -51,6 +51,9 @@ public class MedicationResourceProvider implements IResourceProvider {
         CodeableConceptDt codableConcept = new CodeableConceptDt();
         codableConcept.addCoding(coding);
         medication.setCode(codableConcept);
+        medication.setId(medicationDetails.getId());
+        medication.getMeta().setLastUpdated(medicationDetails.getLastUpdated());
+        medication.getMeta().setVersionId(String.valueOf(medicationDetails.getLastUpdated().getTime()));
         return medication;
     }
 }

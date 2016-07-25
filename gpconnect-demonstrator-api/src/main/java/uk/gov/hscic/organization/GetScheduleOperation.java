@@ -54,7 +54,7 @@ public class GetScheduleOperation {
         	for(Organization organization : organizations) {
         		Entry organisationEntry = new Entry();
         		organisationEntry.setResource(organization);
-        		organisationEntry.setFullUrl("Organisation/" + organization.getId());
+        		organisationEntry.setFullUrl("Organisation/" + organization.getId().getIdPart());
         		bundle.addEntry(organisationEntry);
                 
                 // location
@@ -69,16 +69,16 @@ public class GetScheduleOperation {
                     Location location = locationResourceProvider.getBySiteOdsCode(organizationSiteOdsCode);
                     Entry locationEntry = new Entry();
                     locationEntry.setResource(location);
-                    locationEntry.setFullUrl("Location/" + location.getId());       
+                    locationEntry.setFullUrl("Location/" + location.getId().getIdPart());       
                     bundle.addEntry(locationEntry);
                     
                     // schedules
-                    List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(location.getId().getValue(), planningHorizonStart, planningHorizonEnd);
+                    List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(location.getId().getIdPart(), planningHorizonStart, planningHorizonEnd);
                     if(schedules.isEmpty() == false) {
                         for(Schedule schedule : schedules) {
                             Entry scheduleEntry = new Entry();
                             scheduleEntry.setResource(schedule);
-                            scheduleEntry.setFullUrl("Schedule/" + schedule.getId());
+                            scheduleEntry.setFullUrl("Schedule/" + schedule.getId().getIdPart());
                             bundle.addEntry(scheduleEntry);
 
                             // practitioners
@@ -90,12 +90,12 @@ public class GetScheduleOperation {
 
                                     Entry practionerEntry = new Entry();
                                     practionerEntry.setResource(practitioner);
-                                    practionerEntry.setFullUrl("Practitioner/" + practitioner.getId());
+                                    practionerEntry.setFullUrl("Practitioner/" + practitioner.getId().getIdPart());
                                     bundle.addEntry(practionerEntry);
                                 }
                             }
                             else {
-                                String msg = String.format("No practitioners could be found for the schedule %s", schedule.getId().getElementSpecificId());
+                                String msg = String.format("No practitioners could be found for the schedule %s", schedule.getId().getIdPart());
                                 operationOutcome.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(msg);
 
                                 Entry operationOutcomeEntry = new Entry();
@@ -110,13 +110,13 @@ public class GetScheduleOperation {
                                     if("FREE".equalsIgnoreCase(slot.getFreeBusyType())){
                                         Entry slotEntry = new Entry();
                                         slotEntry.setResource(slot);
-                                        slotEntry.setFullUrl("Slot/" + slot.getId());
+                                        slotEntry.setFullUrl("Slot/" + slot.getId().getIdPart());
                                         bundle.addEntry(slotEntry);
                                     }
                                 }
                             }
                             else {
-                                String msg = String.format("No slots could be found for the schedule %s within the specified planning horizon (start - %s end - %s)", schedule.getId().getValue(), planningHorizonStart, planningHorizonEnd);
+                                String msg = String.format("No slots could be found for the schedule %s within the specified planning horizon (start - %s end - %s)", schedule.getId().getIdPart(), planningHorizonStart, planningHorizonEnd);
                                 operationOutcome.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(msg);
 
                                 Entry operationOutcomeEntry = new Entry();

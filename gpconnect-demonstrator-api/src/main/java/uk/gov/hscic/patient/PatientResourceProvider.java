@@ -147,7 +147,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 List<Patient> patients = getPatientByPatientId(new TokenParam("",nhsNumber));
                 if(patients != null && patients.size() > 0){
                     patientEntry.setResource(patients.get(0));
-                    patientEntry.setFullUrl("Patient/"+patients.get(0).getId());
+                    patientEntry.setFullUrl("Patient/"+patients.get(0).getId().getIdPart());
                     patientID = patients.get(0).getId().getIdPart();
                 } else {
                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No patient details found for patient NHS Number: "+nhsNumber);
@@ -303,14 +303,14 @@ public class PatientResourceProvider implements IResourceProvider {
                                 HashSet<String> medicationOrderMedicationsList = new HashSet();
                                 HashSet<String> medicationOrderList = new HashSet();
                                 for(MedicationOrder medicationOrder : medicationOrders){
-                                    medicationOrderList.add(medicationOrder.getId().getValue());
+                                    medicationOrderList.add(medicationOrder.getId().getIdPart());
                                 }
                                 List<MedicationDispense> medicationDispenses = medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientID, null, null);
                                 for(MedicationDispense medicationDispense : medicationDispenses){
                                     if(section == null) section = new Section();
                                     // Add the medication Order to the bundle
                                     Entry medicationDispenseEntry = new Entry();
-                                    medicationDispenseEntry.setFullUrl("MedicationDispense/"+medicationDispense.getId().getValue());
+                                    medicationDispenseEntry.setFullUrl("MedicationDispense/"+medicationDispense.getId().getIdPart());
                                     medicationDispenseEntry.setResource(medicationDispense);
                                     section.addEntry().setReference(medicationDispenseEntry.getFullUrl());
                                     bundle.addEntry(medicationDispenseEntry);
@@ -319,7 +319,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         try{
                                             MedicationOrder medicationOrder = medicationOrderResourceProvider.getMedicationOrderById(medicationDispense.getAuthorizingPrescription().get(0).getReference());
                                             medicationOrders.add(medicationOrder);
-                                            medicationOrderList.add(medicationOrder.getId().getValue());
+                                            medicationOrderList.add(medicationOrder.getId().getIdPart());
                                         } catch (Exception ex){
                                             operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("MedicationOrder for MedicaitonDispense (id: "+medicationDispense.getId().getIdPart()+") could not be found in database");
                                         }
@@ -329,7 +329,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 for(MedicationAdministration medicationAdministration : medicationAdministrations){
                                     if(section == null) section = new Section();
                                     Entry medicationAdministrationEntry = new Entry();
-                                    medicationAdministrationEntry.setFullUrl("MedicationAdministration/"+medicationAdministration.getId().getValue());
+                                    medicationAdministrationEntry.setFullUrl("MedicationAdministration/"+medicationAdministration.getId().getIdPart());
                                     medicationAdministrationEntry.setResource(medicationAdministration);
                                     section.addEntry().setReference(medicationAdministrationEntry.getFullUrl());
                                     bundle.addEntry(medicationAdministrationEntry);
@@ -338,7 +338,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         try{
                                             MedicationOrder medicationOrder = medicationOrderResourceProvider.getMedicationOrderById(medicationAdministration.getPrescription().getReference());
                                             medicationOrders.add(medicationOrder);
-                                            medicationOrderList.add(medicationOrder.getId().getValue());
+                                            medicationOrderList.add(medicationOrder.getId().getIdPart());
                                         } catch (Exception ex){
                                             operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("MedicationOrder for MedicaitonAdministration (id: "+medicationAdministration.getId().getIdPart()+") could not be found in database");
                                         }
@@ -348,7 +348,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     if(section == null) section = new Section();
                                     // Add the medication Order to the bundle
                                     Entry medicationOrderEntry = new Entry();
-                                    medicationOrderEntry.setFullUrl("MedicationOrder/"+medicationOrder.getId().getValue());
+                                    medicationOrderEntry.setFullUrl("MedicationOrder/"+medicationOrder.getId().getIdPart());
                                     medicationOrderEntry.setResource(medicationOrder);
                                     section.addEntry().setReference(medicationOrderEntry.getFullUrl());
                                     bundle.addEntry(medicationOrderEntry);
@@ -506,7 +506,11 @@ public class PatientResourceProvider implements IResourceProvider {
     
     public Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails){
         Patient patient = new Patient();
+        patient.setId(patientDetails.getId());
         patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", patientDetails.getNhsNumber()));
+        
+        patient.getMeta().setLastUpdated(patientDetails.getLastUpdated());
+        patient.getMeta().setVersionId(String.valueOf(patientDetails.getLastUpdated().getTime()));
 
         HumanNameDt name = patient.addName();
         name.setText(patientDetails.getName());

@@ -75,6 +75,8 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
         
         MedicationOrder medicationOrder = new MedicationOrder();
         medicationOrder.setId(String.valueOf(medicationOrderDetails.getId()));
+        medicationOrder.getMeta().setLastUpdated(medicationOrderDetails.getLastUpdated());
+        medicationOrder.getMeta().setVersionId(String.valueOf(medicationOrderDetails.getLastUpdated().getTime()));
         medicationOrder.setDateWritten(new DateTimeDt(medicationOrderDetails.getDateWritten()));
 
         switch(medicationOrderDetails.getOrderStatus().toLowerCase()){

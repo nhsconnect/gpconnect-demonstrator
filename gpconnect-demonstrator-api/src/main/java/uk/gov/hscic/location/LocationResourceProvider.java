@@ -77,6 +77,8 @@ public class LocationResourceProvider implements IResourceProvider {
 		identifier.add(new IdentifierDt(locationDetails.getSiteOdsCode(), locationDetails.getSiteOdsCodeName()));
 		
 		location.setId(new IdDt(locationDetails.getId()));
+        location.getMeta().setLastUpdated(locationDetails.getLastUpdated());
+        location.getMeta().setVersionId(String.valueOf(locationDetails.getLastUpdated().getTime()));
 		location.setName(new StringDt(locationDetails.getName()));
 		location.setIdentifier(identifier);
 		

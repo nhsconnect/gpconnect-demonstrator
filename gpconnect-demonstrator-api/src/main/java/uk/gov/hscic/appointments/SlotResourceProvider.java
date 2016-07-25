@@ -74,7 +74,11 @@ public class SlotResourceProvider  implements IResourceProvider {
     
     public Slot slotDetailToSlotResourceConverter(SlotDetail slotDetail){
         Slot slot = new Slot();
+        
         slot.setId(String.valueOf(slotDetail.getId()));
+        slot.getMeta().setLastUpdated(slotDetail.getLastUpdated());
+        slot.getMeta().setVersionId(String.valueOf(slotDetail.getLastUpdated().getTime()));
+        
         slot.setIdentifier(Collections.singletonList(new IdentifierDt("http://fhir.nhs.net/Id/gpconnect-schedule-identifier", String.valueOf(slotDetail.getId()))));
         CodingDt coding = new CodingDt().setSystem("http://hl7.org/fhir/ValueSet/c80-practice-codes").setCode(String.valueOf(slotDetail.getTypeCode())).setDisplay(slotDetail.getTypeDisply());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);

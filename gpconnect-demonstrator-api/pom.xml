@@ -154,13 +154,13 @@
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
             <artifactId>hapi-fhir-base</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
             <artifactId>hapi-fhir-structures-dstu2</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
             <type>jar</type>
         </dependency>
     </dependencies>

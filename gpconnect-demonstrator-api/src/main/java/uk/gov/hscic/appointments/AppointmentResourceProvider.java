@@ -24,6 +24,7 @@ import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -147,11 +148,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         // URL ID and Resource ID must be the same
         if (appointmentId.getIdPartAsLong() != appointmentDetail.getId()) {
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Id in URL ("+appointmentId.getIdPart()+") should match Id in Resource ("+appointmentDetail.getId()+")");
+            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Id in URL (" + appointmentId.getIdPart() + ") should match Id in Resource (" + appointmentDetail.getId() + ")");
             methodOutcome.setOperationOutcome(operationalOutcome);
             return methodOutcome;
         }
-        
+
         // Make sure there is an existing appointment to be amended
         RepoSource sourceType = RepoSourceType.fromString(null);
         AppointmentSearch appointmentSearch = applicationContext.getBean(AppointmentSearchFactory.class).select(sourceType);
@@ -161,11 +162,17 @@ public class AppointmentResourceProvider implements IResourceProvider {
             methodOutcome.setOperationOutcome(operationalOutcome);
             return methodOutcome;
         }
-        
+
+        String oldAppointmentVersionId = String.valueOf(oldAppointmentDetail.getLastUpdated().getTime());
+        String newAppointmentVersionId = appointmentId.getVersionIdPart();
+        if (newAppointmentVersionId != null && !newAppointmentVersionId.equalsIgnoreCase(oldAppointmentVersionId)) {
+            throw new ResourceVersionConflictException("The specified version ("+newAppointmentVersionId+") did not match the current resource version ("+oldAppointmentVersionId+")");
+        }
+
         //Determin if it is a cancel or an amend
         if (appointmentDetail.getCancellationReason() != null) {
-            
-            if(appointmentDetail.getCancellationReason().isEmpty()){
+
+            if (appointmentDetail.getCancellationReason().isEmpty()) {
                 operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("The cancellation reason can not be blank");
                 methodOutcome.setOperationOutcome(operationalOutcome);
                 return methodOutcome;
@@ -175,8 +182,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
             String oldStatus = oldAppointmentDetail.getStatus();
             appointmentDetail = oldAppointmentDetail;
             appointmentDetail.setStatus("cancelled");
-            
-            if(!"cancelled".equalsIgnoreCase(oldStatus)){
+
+            if (!"cancelled".equalsIgnoreCase(oldStatus)) {
                 SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
                 SlotDetail slotDetail = slotSearch.findSlotByID(appointmentDetail.getSlotId());
                 slotDetail.setFreeBusyType("FREE");
@@ -193,7 +200,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             oldAppointmentDetail.setTypeDisplay(appointmentDetail.getTypeDisplay());
             appointmentDetail = oldAppointmentDetail;
         }
-        
+
         appointmentDetail.setLastUpdated(new Date()); // Update version and lastUpdated timestamp
         AppointmentStore appointmentStore = applicationContext.getBean(AppointmentStoreFactory.class).select(sourceType);
         appointmentDetail = appointmentStore.saveAppointment(appointmentDetail);
@@ -270,7 +277,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         AppointmentDetail appointmentDetail = new AppointmentDetail();
         appointmentDetail.setId(appointment.getId().getIdPartAsLong());
-        if(appointment.getMeta().getLastUpdated() == null){
+        if (appointment.getMeta().getLastUpdated() == null) {
             appointmentDetail.setLastUpdated(new Date());
         } else {
             appointmentDetail.setLastUpdated(appointment.getMeta().getLastUpdated());

@@ -12,7 +12,7 @@ public class PractitionerEntityToObjectTransformer implements Transformer<Practi
         PractitionerDetails practitioner = new PractitionerDetails();
         
         practitioner.setId(practitionerEntity.getId());
-        practitioner.setUserId(practitionerEntity.getP_user_id());
+        practitioner.setUserId(practitionerEntity.getUserid());
         practitioner.setRoleId(practitionerEntity.getP_role_id());
         practitioner.setNameFamily(practitionerEntity.getP_name_family());
         practitioner.setNameGiven(practitionerEntity.getP_name_given());

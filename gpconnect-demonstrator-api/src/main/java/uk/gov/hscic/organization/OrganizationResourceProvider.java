@@ -24,6 +24,7 @@ import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.text.SimpleDateFormat;
@@ -77,6 +78,28 @@ public class OrganizationResourceProvider  implements IResourceProvider {
             organizationDetailsList = organizationSearch.findOrganizationDetailsByOrgODSCodeAndSiteODSCode(organizationODSCode, siteODSCode);
         } else if (organizationODSCode != null){
             organizationDetailsList = organizationSearch.findOrganizationDetailsByOrgODSCode(organizationODSCode);
+        }
+        
+        if(organizationDetailsList != null){
+            for(OrganizationDetails organizationDetails : organizationDetailsList){
+                organizations.add(organizaitonDetailsToOrganizationResourceConverter(organizationDetails));
+            }
+        }
+        
+        return organizations;
+    }
+    
+    @Search
+    public List<Organization> getOrganizationsByODSCode(@RequiredParam(name=Organization.SP_IDENTIFIER) TokenParam organizationId) {
+        
+        RepoSource sourceType = RepoSourceType.fromString(null);
+        OrganizationSearch organizationSearch = applicationContext.getBean(OrganizationSearchFactory.class).select(sourceType);
+        ArrayList<Organization> organizations = new ArrayList();
+        
+        List<OrganizationDetails> organizationDetailsList = null;
+        
+        if (organizationId.getValue() != null){
+            organizationDetailsList = organizationSearch.findOrganizationDetailsByOrgODSCode(organizationId.getValue());
         }
         
         if(organizationDetailsList != null){

@@ -97,9 +97,9 @@ public class PatientResourceProvider implements IResourceProvider {
         RepoSource sourceType = RepoSourceType.fromString(null);
         PatientSearch patientSearch = applicationContext.getBean(PatientSearchFactory.class).select(sourceType);
         ArrayList<Patient> patients = new ArrayList();
-        List<PatientDetails> PatientDetailsList = Collections.singletonList(patientSearch.findPatient(patientId.getValue()));
-        if (PatientDetailsList != null && PatientDetailsList.size() > 0) {
-            for(PatientDetails patientDetails : PatientDetailsList){
+        List<PatientDetails> patientDetailsList = Collections.singletonList(patientSearch.findPatient(patientId.getValue()));
+        if (patientDetailsList != null && patientDetailsList.size() > 0) {
+            for(PatientDetails patientDetails : patientDetailsList){
                 Patient patient = patientDetailsToPatientResourceConverter(patientDetails);
                 patient.setId(patientDetails.getId());
                 patients.add(patient);

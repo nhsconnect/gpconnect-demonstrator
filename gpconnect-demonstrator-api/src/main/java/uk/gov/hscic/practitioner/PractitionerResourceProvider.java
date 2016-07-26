@@ -14,8 +14,14 @@ import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
+import ca.uhn.fhir.rest.annotation.RequiredParam;
+import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.springframework.context.ApplicationContext;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
@@ -49,6 +55,28 @@ public class PractitionerResourceProvider  implements IResourceProvider {
             throw new InternalErrorException("No practitioner details found for practitioner ID: "+practitionerId.getIdPart(), operationalOutcome);
         }
         
+        return practitionerDetailsToPractitionerResourceConverter(practitionerDetails);
+    }
+    
+    @Search
+    public List<Practitioner> getPractitionerByPractitionerUserId(@RequiredParam(name=Practitioner.SP_IDENTIFIER) TokenParam practitionerId) {
+        RepoSource sourceType = RepoSourceType.fromString(null);
+        PractitionerSearch practitionerSearch = applicationContext.getBean(PractitionerSearchFactory.class).select(sourceType);
+        ArrayList<Practitioner> practitioners = new ArrayList();
+        List<PractitionerDetails> practitionerDetailsList = Collections.singletonList(practitionerSearch.findPractitionerByUserId(practitionerId.getValue()));
+        if (practitionerDetailsList != null && practitionerDetailsList.size() > 0) {
+            for(PractitionerDetails practitionerDetails : practitionerDetailsList){
+                Practitioner practitioner = practitionerDetailsToPractitionerResourceConverter(practitionerDetails);
+                practitioner.setId(String.valueOf(practitionerDetails.getId()));
+                practitioners.add(practitioner);
+                
+            }
+        }
+        return practitioners;
+    }
+    
+    public Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails){
+
         Practitioner practitioner = new Practitioner();
         
         practitioner.setId(new IdDt(practitionerDetails.getId()));
@@ -91,4 +119,5 @@ public class PractitionerResourceProvider  implements IResourceProvider {
         
         return practitioner;
     }
+    
 }

@@ -16,8 +16,8 @@ public class PractitionerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "p_user_id")
-    private String p_user_id;
+    @Column(name = "userid")
+    private String userid;
     
     @Column(name = "p_role_id")
     private String p_role_id;
@@ -60,12 +60,12 @@ public class PractitionerEntity {
         this.id = id;
     }
 
-    public String getP_user_id() {
-        return p_user_id;
+    public String getUserid() {
+        return userid;
     }
 
-    public void setP_user_id(String p_user_id) {
-        this.p_user_id = p_user_id;
+    public void setUserid(String userid) {
+        this.userid = userid;
     }
 
     public String getP_role_id() {

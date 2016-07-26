@@ -26,4 +26,15 @@ public class LegacyPractitionerSearch extends AbstractLegacyService implements P
             return transformer.transform(item);
         }
     }
+    
+    @Override
+    public PractitionerDetails findPractitionerByUserId(final String practitionerUserId) {
+        final PractitionerEntity practitioner = practitionerRepository.findByuserid(practitionerUserId);
+        
+        if(practitioner == null){
+            return null;
+        } else{
+            return transformer.transform(practitioner);
+        }
+    }
 }

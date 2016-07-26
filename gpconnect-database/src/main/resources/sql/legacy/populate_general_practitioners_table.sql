@@ -102,7 +102,7 @@ VALUES
   (99,  'Boone, Aretha M.',         NULL,       NULL,       NULL,       NULL,       NULL,       NULL, '2016-07-25 12:00:00');
 
 INSERT INTO gpconnect.practitioners
-  (id,	p_user_id,		p_role_id,	p_name_family,	p_name_given,	p_name_prefix,	p_gender,	p_organization_id,	p_role_code,	p_role_display,	p_com_code,	p_com_display, lastUpdated)
+  (id,	userid,		p_role_id,	p_name_family,	p_name_given,	p_name_prefix,	p_gender,	p_organization_id,	p_role_code,	p_role_display,	p_com_code,	p_com_display, lastUpdated)
 VALUES
   (1,	'G13579135',	'PT1234',	'Gilbert',		'Nichole',		'Miss',			'FEMALE',	2,					'R0050',		'Consultant',	'en',		'English', '2016-07-25 12:00:00'),
   (2,	'G22345655',	'PT1122',	'Slater',		'Kibo',			'Mr',			'MALE',		1,					'R0050',		'Consultant',	'en',		'English', '2016-07-25 12:00:00'),

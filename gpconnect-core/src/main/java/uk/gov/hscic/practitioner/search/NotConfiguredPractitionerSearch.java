@@ -21,4 +21,9 @@ public class NotConfiguredPractitionerSearch implements PractitionerSearch {
     public PractitionerDetails findPractitionerDetails(final String practitionerId) {
         throw ConfigurationException.unimplementedTransaction(PractitionerSearch.class);
     }
+
+    @Override
+    public PractitionerDetails findPractitionerByUserId(String practitionerUserId) {
+        throw ConfigurationException.unimplementedTransaction(PractitionerSearch.class);
+    }
 }

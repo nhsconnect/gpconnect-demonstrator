@@ -201,7 +201,7 @@ public class PatientResourceProvider implements IResourceProvider {
                         Section section = new Section();
                         
                         switch(sectionName){
-                            case "Summary" :
+                            case "SUM" :
                                     PatientSummarySearch patientSummarySearch = applicationContext.getBean(PatientSummarySearchFactory.class).select(sourceType);
                                     List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch.findAllPatientSummaryHTMLTables(nhsNumber);
                                     if(patientSummaryList != null && patientSummaryList.size() > 0){
@@ -217,7 +217,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     }
                                 break;
 
-                            case "Problems" :
+                            case "PRB" :
                                 ProblemSearch problemSearch = applicationContext.getBean(ProblemSearchFactory.class).select(sourceType);
                                     List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber);
                                     if(problemList != null && problemList.size() > 0){
@@ -233,7 +233,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     }
                                 break;
 
-                            case "Encounters" :
+                            case "ENC" :
                                 EncounterSearch encounterSearch = applicationContext.getBean(EncounterSearchFactory.class).select(sourceType);
                                     List<EncounterListHTML> encounterList = encounterSearch.findAllEncounterHTMLTables(nhsNumber);
                                     if(encounterList != null && encounterList.size() > 0){
@@ -249,7 +249,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     }
                                 break;
 
-                            case "Allergies and Sensitivities" :
+                            case "ALL" :
                                 AllergySearch allergySearch = applicationContext.getBean(AllergySearchFactory.class).select(sourceType);
                                     List<AllergyListHTML> allergyList = allergySearch.findAllAllergyHTMLTables(nhsNumber);
                                     if(allergyList != null && allergyList.size() > 0){
@@ -265,7 +265,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     }
                                 break;
 
-                            case "Clinical Items" :
+                            case "CLI" :
                                 ClinicalItemSearch clinicalItemsSearch = applicationContext.getBean(ClinicalItemSearchFactory.class).select(sourceType);
                                     List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch.findAllClinicalItemHTMLTables(nhsNumber);
                                     if(clinicalItemList != null && clinicalItemList.size() > 0){
@@ -281,7 +281,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     }
                                 break;
 
-                            case "Medications" :
+                            case "MED" :
                                 section = null;
                                 // HTML Section Search
                                 MedicationSearch medicationSearch = applicationContext.getBean(MedicationSearchFactory.class).select(sourceType);
@@ -375,7 +375,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 }
                                 break;
 
-                            case "Referrals" :
+                            case "REF" :
                                 ReferralSearch referralSearch = applicationContext.getBean(ReferralSearchFactory.class).select(sourceType);
                                     List<ReferralListHTML> referralList = referralSearch.findAllReferralHTMLTables(nhsNumber);
                                     if(referralList != null && referralList.size() > 0){
@@ -391,7 +391,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     }
                                 break;
 
-                            case "Observations" :
+                            case "OBS" :
                                 ObservationSearch observationSearch = applicationContext.getBean(ObservationSearchFactory.class).select(sourceType);
                                     List<ObservationListHTML> observationList = observationSearch.findAllObservationHTMLTables(nhsNumber);
                                     if(observationList != null && observationList.size() > 0){
@@ -407,7 +407,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     }
                                 break;
 
-                            case "Investigations" :
+                            case "INV" :
                                 InvestigationSearch investigationSearch = applicationContext.getBean(InvestigationSearchFactory.class).select(sourceType);
                                     List<InvestigationListHTML> investigationList = investigationSearch.findAllInvestigationHTMLTables(nhsNumber);
                                     if(investigationList != null && investigationList.size() > 0){
@@ -423,7 +423,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     }
                                 break;
 
-                            case "Immunisations" :
+                            case "IMM" :
                                 ImmunisationSearch immunisationSearch = applicationContext.getBean(ImmunisationSearchFactory.class).select(sourceType);
                                     List<ImmunisationListHTML> immunisationList = immunisationSearch.findAllImmunisationHTMLTables(nhsNumber);
                                     if(immunisationList != null && immunisationList.size() > 0){
@@ -439,7 +439,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     }
                                 break;
 
-                            case "Administrative Items" :
+                            case "ADM" :
                                 AdminItemSearch adminItemSearch = applicationContext.getBean(AdminItemSearchFactory.class).select(sourceType);
                                     List<AdminItemListHTML> adminItemList = adminItemSearch.findAllAdminItemHTMLTables(nhsNumber);
                                     if(adminItemList != null && adminItemList.size() > 0){

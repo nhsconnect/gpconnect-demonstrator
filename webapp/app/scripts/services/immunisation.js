@@ -5,7 +5,7 @@ angular.module('gpConnect')
 
     var findAllHTMLTables = function (patientId) {
       return $http.post(EnvConfig.restUrlPrefix+'/Patient/$gpc.getcarerecord',
-        '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "Immunisations"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}',
+        '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "IMM"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}',
         {
             headers: {
                 'Ssp-From': EnvConfig.fromASID,

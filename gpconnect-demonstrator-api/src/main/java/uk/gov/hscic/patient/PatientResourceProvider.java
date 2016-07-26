@@ -499,8 +499,8 @@ public class PatientResourceProvider implements IResourceProvider {
     }
     
     @Search(compartmentName="Appointment")
-    public List<Appointment> getPatientAppointments(@IdParam IdDt patientLocalId) {
-        return appointmentResourceProvider.getAppointmentsForPatientId(patientLocalId.getIdPart(), null, null);
+    public List<Appointment> getPatientAppointments(@IdParam IdDt patientLocalId, @OptionalParam(name = "start") String startDate, @OptionalParam(name = "end") String endDate) {
+        return appointmentResourceProvider.getAppointmentsForPatientId(patientLocalId.getIdPart(), startDate, endDate);
     }
     
     

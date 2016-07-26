@@ -124,6 +124,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
         SlotDetail slotDetail = slotSearch.findSlotByID(appointmentDetail.getSlotId());
         slotDetail.setFreeBusyType("BUSY");
+        slotDetail.setLastUpdated(new Date());
         SlotStore slotStore = applicationContext.getBean(SlotStoreFactory.class).select(sourceType);
         slotDetail = slotStore.saveSlot(slotDetail);
 
@@ -160,7 +161,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             methodOutcome.setOperationOutcome(operationalOutcome);
             return methodOutcome;
         }
-
+        
         //Determin if it is a cancel or an amend
         if (appointmentDetail.getCancellationReason() != null) {
             
@@ -171,14 +172,18 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
             // This is a Cancellation - so copy across fields which can be altered
             oldAppointmentDetail.setCancellationReason(appointmentDetail.getCancellationReason());
-            oldAppointmentDetail.setStatus("cancelled");
+            String oldStatus = oldAppointmentDetail.getStatus();
             appointmentDetail = oldAppointmentDetail;
+            appointmentDetail.setStatus("cancelled");
             
-            SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
-            SlotDetail slotDetail = slotSearch.findSlotByID(appointmentDetail.getSlotId());
-            slotDetail.setFreeBusyType("FREE");
-            SlotStore slotStore = applicationContext.getBean(SlotStoreFactory.class).select(sourceType);
-            slotDetail = slotStore.saveSlot(slotDetail);
+            if(!"cancelled".equalsIgnoreCase(oldStatus)){
+                SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
+                SlotDetail slotDetail = slotSearch.findSlotByID(appointmentDetail.getSlotId());
+                slotDetail.setFreeBusyType("FREE");
+                slotDetail.setLastUpdated(new Date());
+                SlotStore slotStore = applicationContext.getBean(SlotStoreFactory.class).select(sourceType);
+                slotDetail = slotStore.saveSlot(slotDetail);
+            }
         } else {
             // This is an Amend
             oldAppointmentDetail.setComment(appointmentDetail.getComment());
@@ -189,6 +194,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             appointmentDetail = oldAppointmentDetail;
         }
         
+        appointmentDetail.setLastUpdated(new Date()); // Update version and lastUpdated timestamp
         AppointmentStore appointmentStore = applicationContext.getBean(AppointmentStoreFactory.class).select(sourceType);
         appointmentDetail = appointmentStore.saveAppointment(appointmentDetail);
 

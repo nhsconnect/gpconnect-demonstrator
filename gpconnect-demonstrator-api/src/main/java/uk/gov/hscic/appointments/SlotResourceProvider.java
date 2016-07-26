@@ -76,6 +76,9 @@ public class SlotResourceProvider  implements IResourceProvider {
         Slot slot = new Slot();
         
         slot.setId(String.valueOf(slotDetail.getId()));
+        if(slotDetail.getLastUpdated() == null){
+            slotDetail.setLastUpdated(new Date());
+        }
         slot.getMeta().setLastUpdated(slotDetail.getLastUpdated());
         slot.getMeta().setVersionId(String.valueOf(slotDetail.getLastUpdated().getTime()));
         

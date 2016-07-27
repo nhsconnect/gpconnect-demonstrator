@@ -347,7 +347,8 @@ module.exports = function (grunt) {
             'images/{,*/}*.{webp}',
             'fonts/*',
             'styles/{,*/}/*.{woff,eot,svg,ttf}',
-            'styles/**/svgs/*'
+            'styles/**/svgs/*',
+			'WEB-INF/web.xml'
           ]
         }, {
           expand: true,

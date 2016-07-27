@@ -43,6 +43,15 @@ import uk.gov.hscic.appointment.slot.store.SlotStore;
 import uk.gov.hscic.appointment.slot.store.SlotStoreFactory;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
+import uk.gov.hscic.location.model.LocationDetails;
+import uk.gov.hscic.location.search.LocationSearch;
+import uk.gov.hscic.location.search.LocationSearchFactory;
+import uk.gov.hscic.patient.summary.model.PatientDetails;
+import uk.gov.hscic.patient.summary.search.PatientSearch;
+import uk.gov.hscic.patient.summary.search.PatientSearchFactory;
+import uk.gov.hscic.practitioner.model.PractitionerDetails;
+import uk.gov.hscic.practitioner.search.PractitionerSearch;
+import uk.gov.hscic.practitioner.search.PractitionerSearchFactory;
 
 public class AppointmentResourceProvider implements IResourceProvider {
 
@@ -114,20 +123,53 @@ public class AppointmentResourceProvider implements IResourceProvider {
         if (appointment.getParticipant().size() <= 0) {
             throw new UnprocessableEntityException("Atleast one participant is required");
         }
-
+        for(Participant participant : appointment.getParticipant()){
+            String resourcePart = participant.getActor().getReference().getResourceType();
+            String idPart = participant.getActor().getReference().getIdPart();
+            RepoSource sourceType = RepoSourceType.fromString(null);
+            switch(resourcePart){
+                case "Patient" :
+                    PatientSearch patientSearch = applicationContext.getBean(PatientSearchFactory.class).select(sourceType);
+                    PatientDetails patient = patientSearch.findPatientByInternalID(idPart);
+                    if(patient == null){
+                        throw new UnprocessableEntityException("Patient resource reference is not a valid resource");
+                    }
+                    break;
+                case "Practitioner" :
+                    PractitionerSearch practitionerSearch = applicationContext.getBean(PractitionerSearchFactory.class).select(sourceType);
+                    PractitionerDetails practitioner = practitionerSearch.findPractitionerDetails(idPart);
+                    if(practitioner == null){
+                        throw new UnprocessableEntityException("Practitioner resource reference is not a valid resource");
+                    }
+                    break;
+                case "Location" :
+                    LocationSearch locationSearch = applicationContext.getBean(LocationSearchFactory.class).select(sourceType);
+                    LocationDetails location = locationSearch.findLocationById(idPart);
+                    if(location == null){
+                        throw new UnprocessableEntityException("Location resource reference is not a valid resource");
+                    }
+                    break;
+            }
+        }
+        
+        
         // Store New Appointment
         AppointmentDetail appointmentDetail = appointmentResourceConverterToAppointmentDetail(appointment);
 
         RepoSource sourceType = RepoSourceType.fromString(null);
-        AppointmentStore appointmentStore = applicationContext.getBean(AppointmentStoreFactory.class).select(sourceType);
-        appointmentDetail = appointmentStore.saveAppointment(appointmentDetail);
 
         SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
         SlotDetail slotDetail = slotSearch.findSlotByID(appointmentDetail.getSlotId());
+        if(slotDetail == null){
+            throw new UnprocessableEntityException("Slot resource reference is not a valid resource");
+        }
         slotDetail.setFreeBusyType("BUSY");
         slotDetail.setLastUpdated(new Date());
         SlotStore slotStore = applicationContext.getBean(SlotStoreFactory.class).select(sourceType);
         slotDetail = slotStore.saveSlot(slotDetail);
+        
+        AppointmentStore appointmentStore = applicationContext.getBean(AppointmentStoreFactory.class).select(sourceType);
+        appointmentDetail = appointmentStore.saveAppointment(appointmentDetail);
 
         // Build response containing the new resource id
         MethodOutcome methodOutcome = new MethodOutcome();

@@ -16,6 +16,7 @@ import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import uk.gov.hscic.common.types.RepoSource;
@@ -37,22 +38,33 @@ public class LocationResourceProvider implements IResourceProvider {
 		return Location.class;
 	}
 
-	@SuppressWarnings("deprecation")
-	@Search
-	public Location getBySiteOdsCode(@RequiredParam(name = "siteODSCode") String siteODSCode) {
+    @Search
+	public List<Location> getByIdentifierCode(@RequiredParam(name=Location.SP_IDENTIFIER) TokenParam identifierCode) {
+        
 		RepoSource sourceType = RepoSourceType.fromString(null);
         LocationSearch locationSearch = applicationContext.getBean(LocationSearchFactory.class).select(sourceType);
-        LocationDetails locationDetails = locationSearch.findLocationDetailsBySiteOdsCode(siteODSCode);
         
-        if(locationDetails == null){
-            String msg = String.format("No location details found for site ODS code: %s", siteODSCode);
+        List<LocationDetails> locationDetails = null;
+        
+        if("http://fhir.nhs.net/Id/ods-organization-code".equalsIgnoreCase(identifierCode.getSystem())){
+            locationDetails = locationSearch.findLocationDetailsByOrgOdsCode(identifierCode.getValue());
+        } else {
+            locationDetails = locationSearch.findLocationDetailsBySiteOdsCode(identifierCode.getValue());
+        }
+        
+        if(locationDetails.size() <= 0){
+            String msg = String.format("No location details found for code: %s", identifierCode.getValue());
         	
         	OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(msg);
             throw new InternalErrorException(msg, operationalOutcome);
         }
         
-        return locationDetailsToLocation(locationDetails);
+        ArrayList<Location> locations = new ArrayList();
+        for(LocationDetails locationDetail : locationDetails){
+            locations.add(locationDetailsToLocation(locationDetail));
+        }
+        return locations;
 	}
 
     @Read()

@@ -9,6 +9,8 @@ public class LocationDetails implements Serializable {
 
 	private Long id;
 	private String name;
+    private String orgOdsCode;
+	private String orgOdsCodeName;
 	private String siteOdsCode;
 	private String siteOdsCodeName;
     private Date lastUpdated;
@@ -28,6 +30,22 @@ public class LocationDetails implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+    public String getOrgOdsCode() {
+        return orgOdsCode;
+    }
+
+    public void setOrgOdsCode(String orgOdsCode) {
+        this.orgOdsCode = orgOdsCode;
+    }
+
+    public String getOrgOdsCodeName() {
+        return orgOdsCodeName;
+    }
+
+    public void setOrgOdsCodeName(String orgOdsCodeName) {
+        this.orgOdsCodeName = orgOdsCodeName;
+    }
 
 	public String getSiteOdsCode() {
 		return siteOdsCode;

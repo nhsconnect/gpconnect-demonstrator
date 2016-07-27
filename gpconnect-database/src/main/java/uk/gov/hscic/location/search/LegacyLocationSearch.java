@@ -1,5 +1,7 @@
 package uk.gov.hscic.location.search;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,24 +19,28 @@ public class LegacyLocationSearch extends AbstractLegacyService implements Locat
 	private LocationEntityToLocationDetailsTransformer transformer = new LocationEntityToLocationDetailsTransformer();
 	
 	@Override
-	public LocationDetails findLocationDetailsBySiteOdsCode(String siteOdsCode) {
-		LocationDetails locationDetails = null;
-		
-		if(siteOdsCode != null) {
-			LocationEntity locationEntity = locationRepository.getBySiteOdsCode(siteOdsCode);
-			if(locationEntity != null) {
-				locationDetails = transformer.transform(locationEntity);
-			}
-		}
-
+	public List<LocationDetails> findLocationDetailsBySiteOdsCode(String siteOdsCode) {
+		List<LocationEntity> locationEntities = locationRepository.findBySiteOdsCode(siteOdsCode);
+        ArrayList<LocationDetails> locationDetails = new ArrayList();
+        for(LocationEntity location : locationEntities){
+            locationDetails.add(transformer.transform(location));
+        }
+		return locationDetails;
+	}
+    
+    @Override
+	public List<LocationDetails> findLocationDetailsByOrgOdsCode(String orgOdsCode) {
+        List<LocationEntity> locationEntities = locationRepository.findByOrgOdsCode(orgOdsCode);
+        ArrayList<LocationDetails> locationDetails = new ArrayList();
+        for(LocationEntity location : locationEntities){
+            locationDetails.add(transformer.transform(location));
+        }
 		return locationDetails;
 	}
     
     @Override
     public LocationDetails findLocationById(final String locationId) {
-
         final LocationEntity item = locationRepository.findOne(Long.parseLong(locationId));
-
         if(item == null){
             return null;
         } else {

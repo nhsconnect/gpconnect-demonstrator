@@ -18,6 +18,7 @@ import ca.uhn.fhir.model.dstu2.resource.Practitioner;
 import ca.uhn.fhir.model.dstu2.resource.Schedule;
 import ca.uhn.fhir.model.dstu2.resource.Slot;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
+import ca.uhn.fhir.rest.param.TokenParam;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.appointments.SlotResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
@@ -66,14 +67,14 @@ public class GetScheduleOperation {
                     }
                 }
                 if(organizationSiteOdsCode != null){
-                    Location location = locationResourceProvider.getBySiteOdsCode(organizationSiteOdsCode);
+                    List<Location> locations = locationResourceProvider.getByIdentifierCode(new TokenParam("http://fhir.nhs.net/Id/ods-site-code", organizationSiteOdsCode));
                     Entry locationEntry = new Entry();
-                    locationEntry.setResource(location);
-                    locationEntry.setFullUrl("Location/" + location.getId().getIdPart());       
+                    locationEntry.setResource(locations.get(0));
+                    locationEntry.setFullUrl("Location/" + locations.get(0).getId().getIdPart());       
                     bundle.addEntry(locationEntry);
                     
                     // schedules
-                    List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(location.getId().getIdPart(), planningHorizonStart, planningHorizonEnd);
+                    List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(locations.get(0).getId().getIdPart(), planningHorizonStart, planningHorizonEnd);
                     if(schedules.isEmpty() == false) {
                         for(Schedule schedule : schedules) {
                             Entry scheduleEntry = new Entry();

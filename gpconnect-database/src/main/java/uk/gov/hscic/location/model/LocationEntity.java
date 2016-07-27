@@ -19,6 +19,12 @@ public class LocationEntity {
     @Column(name = "name")
 	private String name;
 	
+    @Column(name = "org_ods_code")
+    private String orgOdsCode;
+	
+    @Column(name = "org_ods_code_name")
+    private String orgOdsCodeName;
+    
     @Column(name = "site_ods_code")
     private String siteOdsCode;
 	
@@ -43,6 +49,22 @@ public class LocationEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+    public String getOrgOdsCode() {
+        return orgOdsCode;
+    }
+
+    public void setOrgOdsCode(String orgOdsCode) {
+        this.orgOdsCode = orgOdsCode;
+    }
+
+    public String getOrgOdsCodeName() {
+        return orgOdsCodeName;
+    }
+
+    public void setOrgOdsCodeName(String orgOdsCodeName) {
+        this.orgOdsCodeName = orgOdsCodeName;
+    }
 
 	public String getSiteOdsCode() {
 		return siteOdsCode;

@@ -293,6 +293,8 @@ CREATE TABLE gpconnect.investigations (
 CREATE TABLE gpconnect.locations (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
  name                VARCHAR(250)  NOT NULL,
+ org_ods_code        VARCHAR(250)  NOT NULL,
+ org_ods_code_name   VARCHAR(250)  NOT NULL,
  site_ods_code       VARCHAR(250)  NOT NULL,
  site_ods_code_name  VARCHAR(250)  NOT NULL,
  lastUpdated			 DATETIME 	   NULL,

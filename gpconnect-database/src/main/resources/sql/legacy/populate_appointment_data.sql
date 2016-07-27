@@ -71,13 +71,13 @@ VALUES
 (54, 408443003, 'General medical practice', 5, 'FREE', '2016-07-02 14:00:00', '2016-07-02 14:59:59', '2016-07-25 12:00:00');
 
 INSERT INTO gpconnect.locations
-	(id, name, site_ods_code, site_ods_code_name, lastUpdated)
+	(id, name, org_ods_code, org_ods_code_name, site_ods_code, site_ods_code_name, lastUpdated)
 VALUES 
-	(1, 'Building A', 'Z33435', 'BUILDING A', '2016-07-25 12:00:00'),
-	(2, 'Building B', 'Z33436', 'BUILDING B', '2016-07-25 12:00:00'),
-	(3, 'Building C', 'Z33437', 'BUILDING C', '2016-07-25 12:00:00'),
-	(4, 'Annex A',    'Z33437', 'ANNEX A', '2016-07-25 12:00:00'),
-	(5, 'Building 5', 'Z26556', 'ANNEX', '2016-07-25 12:00:00'),
-	(6, 'Building 6', 'Z33433', 'ANNEX', '2016-07-25 12:00:00'),
-	(7, 'Building 7', 'Z12345', 'ANNEX', '2016-07-25 12:00:00'),
-	(8, 'Building 8', 'Z33432', 'ANNEX', '2016-07-25 12:00:00');
+	(1, 'Building A', 'ORG111', 'BUILDING A', 'Z33435', 'BUILDING A', '2016-07-25 12:00:00'),
+	(2, 'Building B', 'ORG112', 'BUILDING A', 'Z33436', 'BUILDING B', '2016-07-25 12:00:00'),
+	(3, 'Building C', 'ORG111', 'BUILDING A', 'Z33437', 'BUILDING C', '2016-07-25 12:00:00'),
+	(4, 'Annex A',	  'ORG111', 'BUILDING A', 'Z33437', 'ANNEX A', '2016-07-25 12:00:00'),
+	(5, 'Building 5', 'ORG113', 'BUILDING A', 'Z26556', 'ANNEX', '2016-07-25 12:00:00'),
+	(6, 'Building 6', 'ORG114', 'BUILDING A', 'Z33433', 'ANNEX', '2016-07-25 12:00:00'),
+	(7, 'Building 7', 'ORG115', 'BUILDING A', 'Z12345', 'ANNEX', '2016-07-25 12:00:00'),
+	(8, 'Building 8', 'ORG111', 'BUILDING A', 'Z33432', 'ANNEX', '2016-07-25 12:00:00');

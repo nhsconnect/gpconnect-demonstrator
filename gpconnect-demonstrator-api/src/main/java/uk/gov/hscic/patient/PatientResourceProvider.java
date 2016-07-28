@@ -11,12 +11,15 @@ import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.valueset.*;
 import ca.uhn.fhir.model.primitive.*;
 import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.param.DateParam;
+import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import org.springframework.context.ApplicationContext;
@@ -499,8 +502,8 @@ public class PatientResourceProvider implements IResourceProvider {
     }
     
     @Search(compartmentName="Appointment")
-    public List<Appointment> getPatientAppointments(@IdParam IdDt patientLocalId, @OptionalParam(name = "start") String startDate, @OptionalParam(name = "end") String endDate) {
-        return appointmentResourceProvider.getAppointmentsForPatientId(patientLocalId.getIdPart(), startDate, endDate);
+    public List<Appointment> getPatientAppointments(@IdParam IdDt patientLocalId, @OptionalParam(name = "start") DateRangeParam startDate) {
+        return appointmentResourceProvider.getAppointmentsForPatientIdAndDates(patientLocalId, startDate);
     }
     
     

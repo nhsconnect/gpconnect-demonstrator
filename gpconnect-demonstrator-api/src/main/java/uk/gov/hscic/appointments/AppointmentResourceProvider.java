@@ -1,6 +1,7 @@
 package uk.gov.hscic.appointments;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
+import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
@@ -22,6 +23,8 @@ import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ParamPrefixEnum;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
@@ -83,7 +86,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public List<Appointment> getAppointmentsForPatientId(@RequiredParam(name = "patientId") String patientId, @OptionalParam(name = "startDateTime") String startDateTime, @OptionalParam(name = "endDateTime") String endDateTime) {
+    public List<Appointment> getAppointmentsForPatientId(@RequiredParam(name = "patientId") String patientId, @RequiredParam(name = "startDateTime") String startDateTime, @RequiredParam(name = "endDateTime") String endDateTime) {
 
         RepoSource sourceType = RepoSourceType.fromString(null);
         AppointmentSearch appointmentSearch = applicationContext.getBean(AppointmentSearchFactory.class).select(sourceType);
@@ -99,6 +102,51 @@ public class AppointmentResourceProvider implements IResourceProvider {
             appointmentDetails = appointmentSearch.findAppointmentForPatientId(Long.valueOf(patientId));
         }
 
+        if (appointmentDetails != null && appointmentDetails.size() > 0) {
+            for (AppointmentDetail appointmentDetail : appointmentDetails) {
+                appointments.add(appointmentDetailToAppointmentResourceConverter(appointmentDetail));
+            }
+        }
+
+        return appointments;
+    }
+    
+    @Search
+    public List<Appointment> getAppointmentsForPatientIdAndDates(@RequiredParam(name = "patient") IdDt patientLocalId, @OptionalParam(name = "start") DateRangeParam startDate) {
+
+        Date startLowerDate = null;
+        Date startUppderDate = null;
+        
+        if(startDate != null){
+            if(startDate.getLowerBound() != null){
+                if(startDate.getLowerBound().getPrefix() == ParamPrefixEnum.GREATERTHAN){
+                    startLowerDate = startDate.getLowerBound().getValue();
+                } else {
+                    if(startDate.getLowerBound().getPrecision() == TemporalPrecisionEnum.DAY){
+                        startLowerDate = startDate.getLowerBound().getValue(); // Remove a day to make time inclusive of parameter date
+                    } else {
+                        startLowerDate = new Date(startDate.getLowerBound().getValue().getTime() - 1000); // Remove a second to make time inclusive of parameter date
+                    }
+                }
+            }
+            if(startDate.getUpperBound() != null){
+                if(startDate.getUpperBound().getPrefix() == ParamPrefixEnum.LESSTHAN){
+                    startUppderDate = startDate.getUpperBound().getValue();
+                } else {
+                    if(startDate.getUpperBound().getPrecision() == TemporalPrecisionEnum.DAY){
+                        startUppderDate = new Date(startDate.getUpperBound().getValue().getTime() + 86400000); // Add a day to make time inclusive of parameter date
+                    } else {
+                        startUppderDate = new Date(startDate.getUpperBound().getValue().getTime() + 1000); // Add a second to make time inclusive of parameter date
+                    }
+                }
+            }
+        }
+
+        RepoSource sourceType = RepoSourceType.fromString(null);
+        AppointmentSearch appointmentSearch = applicationContext.getBean(AppointmentSearchFactory.class).select(sourceType);
+        List<AppointmentDetail> appointmentDetails = appointmentSearch.searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUppderDate);
+        
+        ArrayList<Appointment> appointments = new ArrayList();
         if (appointmentDetails != null && appointmentDetails.size() > 0) {
             for (AppointmentDetail appointmentDetail : appointmentDetails) {
                 appointments.add(appointmentDetailToAppointmentResourceConverter(appointmentDetail));

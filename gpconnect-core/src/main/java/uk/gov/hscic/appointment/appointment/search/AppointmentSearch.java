@@ -11,5 +11,6 @@ public interface AppointmentSearch extends Repository {
     List<AppointmentDetail> findAppointmentForPatientId(Long patientId);
     List<AppointmentDetail> findAppointmentForPatientId(Long patientId, Date startDate);
     List<AppointmentDetail> findAppointmentForPatientId(Long patientId, Date startDate, Date endDate);
-    
+
+    List<AppointmentDetail> searchAppointments(Long patientId, Date startLowerDate, Date startUpperDate);
 }

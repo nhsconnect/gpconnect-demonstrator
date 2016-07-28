@@ -57,5 +57,21 @@ public class LegacyAppointmentSearch extends AbstractLegacyService implements Ap
         }
         return appointmentDetails;
     }
+
+    @Override
+    public List<AppointmentDetail> searchAppointments(Long patientId, Date startLowerDate, Date startUpperDate){
+        String queryParameter = "";
+        List<AppointmentEntity> items = appointmentRepository.findByPatientId(patientId);
+        ArrayList<AppointmentDetail> appointmentDetails = new ArrayList();
+        for(AppointmentEntity entity : items){
+            boolean addAppointment = true;
+            if(startLowerDate != null && entity.getStartDateTime().before(startLowerDate)){ addAppointment = false; }
+            if(startUpperDate != null && entity.getStartDateTime().after(startUpperDate)){ addAppointment = false; }
+            if(addAppointment){
+                appointmentDetails.add(transformer.transform(entity));
+            }
+        }
+        return appointmentDetails;
+    }
     
 }

@@ -37,4 +37,9 @@ public class NotConfiguredAppointmentSearch implements AppointmentSearch {
     public List<AppointmentDetail> findAppointmentForPatientId(Long patientId, Date startDate, Date endDate) {
         throw ConfigurationException.unimplementedTransaction(AppointmentSearch.class);
     }
+
+    @Override
+    public List<AppointmentDetail> searchAppointments(Long patientId, Date startLowerDate, Date startUpperDate) {
+        throw ConfigurationException.unimplementedTransaction(AppointmentSearch.class);
+    }
 }

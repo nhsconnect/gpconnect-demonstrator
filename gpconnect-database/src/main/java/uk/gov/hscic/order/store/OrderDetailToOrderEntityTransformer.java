@@ -1,0 +1,25 @@
+package uk.gov.hscic.order.store;
+
+import org.apache.commons.collections4.Transformer;
+import uk.gov.hscic.order.model.OrderDetail;
+import uk.gov.hscic.order.model.OrderEntity;
+
+public class OrderDetailToOrderEntityTransformer implements Transformer<OrderDetail, OrderEntity> {
+
+    @Override
+    public OrderEntity transform(OrderDetail item) {
+        OrderEntity order = new OrderEntity();
+        order.setId(item.getId());
+        order.setIdentifier(item.getIdentifier());
+        order.setOrderDate(item.getOrderDate());
+        order.setSubjectPatientId(item.getSubjectPatientId());
+        order.setSourceOrgId(item.getSourceOrgId());
+        order.setTargetOrgId(item.getTargetOrgId());
+        order.setReasonCode(item.getReasonCode());
+        order.setReasonDescription(item.getReasonDescription());
+        order.setDetail(item.getDetail());
+        order.setRecieved(item.getRecieved());
+        return order;
+    }
+    
+}

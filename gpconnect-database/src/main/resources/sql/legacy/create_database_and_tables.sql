@@ -29,6 +29,7 @@ DROP TABLE IF EXISTS gpconnect.adminitems;
 DROP TABLE IF EXISTS gpconnect.clinicalitems;
 DROP TABLE IF EXISTS gpconnect.investigations;
 DROP TABLE IF EXISTS gpconnect.locations;
+DROP TABLE IF EXISTS gpconnect.orders;
 
 /* Create new table schemas */
 
@@ -298,6 +299,20 @@ CREATE TABLE gpconnect.locations (
  site_ods_code       VARCHAR(250)  NOT NULL,
  site_ods_code_name  VARCHAR(250)  NOT NULL,
  lastUpdated			 DATETIME 	   NULL,
+ PRIMARY KEY         (id)
+);
+
+CREATE TABLE gpconnect.orders (
+ id           		BIGINT        	NOT NULL    AUTO_INCREMENT,
+ identifier			VARCHAR(250)  	NULL,
+ orderDate			DATETIME 	   	NULL,
+ subjectPatientId 	BIGINT			NULL,
+ sourceOrgId		BIGINT			NULL,
+ targetOrgId    	BIGINT			NULL,
+ reasonCode    		BIGINT			NULL,
+ reasonDescription	VARCHAR(250)  	NULL,
+ detail				VARCHAR(300)  	NULL,
+ recieved			BOOLEAN			NULL,
  PRIMARY KEY         (id)
 );
 

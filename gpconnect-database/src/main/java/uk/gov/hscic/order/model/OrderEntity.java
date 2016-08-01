@@ -37,6 +37,9 @@ public class OrderEntity {
     @Column(name = "reasonDescription")
     private String reasonDescription;
     
+    @Column(name = "reasonText")
+    private String reasonText;
+    
     @Column(name = "detail")
     private String detail;
     
@@ -105,6 +108,14 @@ public class OrderEntity {
 
     public void setReasonDescription(String reasonDescription) {
         this.reasonDescription = reasonDescription;
+    }
+
+    public String getReasonText() {
+        return reasonText;
+    }
+
+    public void setReasonText(String reasonText) {
+        this.reasonText = reasonText;
     }
 
     public String getDetail() {

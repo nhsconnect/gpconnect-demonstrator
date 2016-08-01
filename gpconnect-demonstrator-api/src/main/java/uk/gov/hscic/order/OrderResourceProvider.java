@@ -1,12 +1,18 @@
 package uk.gov.hscic.order;
 
+import ca.uhn.fhir.model.base.composite.BaseNarrativeDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.composite.ContainedDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
+import ca.uhn.fhir.model.dstu2.composite.NarrativeDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.Basic;
 import ca.uhn.fhir.model.dstu2.resource.Order;
+import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.model.primitive.XhtmlDt;
 import ca.uhn.fhir.rest.annotation.Create;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.api.MethodOutcome;
@@ -53,10 +59,11 @@ public class OrderResourceProvider implements IResourceProvider {
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setId(order.getId().getIdPartAsLong());
         orderDetail.setIdentifier(order.getIdentifierFirstRep().getValue());
-        orderDetail.setDetail(order.getDetail().get(0).getDisplay().getValue());
+        orderDetail.setDetail(order.getContained().getContainedResources().get(0).getText().getDivAsString());
         orderDetail.setOrderDate(new Date());
         orderDetail.setReasonCode(((CodeableConceptDt)order.getReason()).getCodingFirstRep().getCode());
         orderDetail.setReasonDescription(((CodeableConceptDt)order.getReason()).getCodingFirstRep().getDisplay());
+        orderDetail.setReasonText(((CodeableConceptDt)order.getReason()).getText());
         orderDetail.setSourceOrgId(order.getSource().getReference().getIdPartAsLong());
         orderDetail.setSubjectPatientId(order.getSubject().getReference().getIdPartAsLong());
         orderDetail.setTargetOrgId(order.getTarget().getReference().getIdPartAsLong());
@@ -68,12 +75,16 @@ public class OrderResourceProvider implements IResourceProvider {
         Order order = new Order();
         order.setId(new IdDt(orderDetail.getId()));
         order.setIdentifier(Collections.singletonList(new IdentifierDt("",orderDetail.getIdentifier())));
-        order.setDetail(Collections.singletonList(new ResourceReferenceDt().setDisplay(orderDetail.getDetail())));
-        order.setDate(new DateTimeDt(orderDetail.getOrderDate()));
         
+        Basic basic = new Basic();
+        basic.setCode(new CodeableConceptDt("http://hl7.org/fhir/basic-resource-type", "OrderDetails"));
+        basic.getText().setDiv(new XhtmlDt(orderDetail.getDetail()));
+        order.setDetail(Collections.singletonList(new ResourceReferenceDt(basic)));
+        
+        order.setDate(new DateTimeDt(orderDetail.getOrderDate()));
         CodingDt coding = new CodingDt("http://fhir.nhs.net/ValueSet/gpconnect-reason-type-1-0",orderDetail.getReasonCode());
         coding.setDisplay(orderDetail.getReasonDescription());
-        CodeableConceptDt codeConcept = new CodeableConceptDt().setCoding(Collections.singletonList(coding));
+        CodeableConceptDt codeConcept = new CodeableConceptDt().setCoding(Collections.singletonList(coding)).setText(orderDetail.getReasonText());
         order.setReason(codeConcept);
         
         order.setSource(new ResourceReferenceDt("Organization/"+orderDetail.getSourceOrgId()));

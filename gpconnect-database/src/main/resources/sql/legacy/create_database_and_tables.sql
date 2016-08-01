@@ -311,6 +311,7 @@ CREATE TABLE gpconnect.orders (
  targetOrgId    	BIGINT			NULL,
  reasonCode    		BIGINT			NULL,
  reasonDescription	VARCHAR(250)  	NULL,
+ reasonText			VARCHAR(300)  	NULL,
  detail				VARCHAR(300)  	NULL,
  recieved			BOOLEAN			NULL,
  PRIMARY KEY         (id)

@@ -17,6 +17,7 @@ public class OrderDetailToOrderEntityTransformer implements Transformer<OrderDet
         order.setTargetOrgId(item.getTargetOrgId());
         order.setReasonCode(item.getReasonCode());
         order.setReasonDescription(item.getReasonDescription());
+        order.setReasonText(item.getReasonText());
         order.setDetail(item.getDetail());
         order.setRecieved(item.getRecieved());
         return order;

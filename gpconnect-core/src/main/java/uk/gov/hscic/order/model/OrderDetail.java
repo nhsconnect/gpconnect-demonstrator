@@ -12,6 +12,7 @@ public class OrderDetail {
     private Long targetOrgId;
     private String reasonCode;
     private String reasonDescription;
+    private String reasonText;
     private String detail;
     private boolean recieved;
 
@@ -77,6 +78,14 @@ public class OrderDetail {
 
     public void setReasonDescription(String reasonDescription) {
         this.reasonDescription = reasonDescription;
+    }
+
+    public String getReasonText() {
+        return reasonText;
+    }
+
+    public void setReasonText(String reasonText) {
+        this.reasonText = reasonText;
     }
 
     public String getDetail() {

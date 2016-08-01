@@ -1,56 +1,37 @@
 <div class="container-fluid">
     <div class="col-md-5" >
         
-        <h3><strong>Received Tasks</strong></h3>
+        <h3><strong>Tasks</strong></h3>
         <table class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Received</th>
-                    <th>From</th>
+                    <th>Sent/Received</th>
+                    <th>From/To</th>
                 </tr>
             </thead>
 
+            
             <tbody>
                 <tr dir-paginate="order in orders | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{order.id}}')" ng-class="{info: selected(order.id)}">
-                    <td class="dateTime" style="width:155px">{{ order.date | amDateFormat:'DD-MMM-YYYY HH:mm' }}</td>
+                    <td class="dateTime" style="width:155px">{{ order.orderDate | amDateFormat:'DD-MMM-YYYY HH:mm' }}</td>
                     <td>{{ order.recieved == true ? "Received" : "Sent"}}</td>
-                    <td>{{ order.sourceOrgId}}</td>
+                    <td>{{ order.sourceOrgId}} / {{ order.targetOrgId}}</td>
                 </tr>
 
                 <tr ng-if="!orders.length">
                     <td colspan="4"><span class="label label-default">No Tasks</span></td>
                 </tr>
             </tbody>
+            
         </table>
         
-        <h3><strong>Sent Tasks</strong></h3>
-        <table class="table table-bordered table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Sent</th>
-                    <th>To</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr dir-paginate="order in orders | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{order.id}}')" ng-class="{info: selected(order.id)}">
-                    <td class="dateTime" style="width:155px">{{ order.date | amDateFormat:'DD-MMM-YYYY HH:mm' }}</td>
-                    <td>{{ order.recieved == true ? "Received" : "Sent"}}</td>
-                    <td>{{ order.targetOrgId}}</td>
-                </tr>
-
-                <tr ng-if="!orders.length">
-                    <td colspan="4"><span class="label label-default">No Tasks</span></td>
-                </tr>
-            </tbody>
-        </table>
-
+        
       <div class="row">
         <div class="col-md-6 hidden-xs"><div class="text-right"><dir-pagination-controls on-page-change="pageChangeHandler(newPageNumber)" boundary-links="false"></dir-pagination-controls></div></div>
-        <div class="col-md-6 hidden-xs"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>
+        <!--<div class="col-md-6 hidden-xs"><div class="text-right create-button"><button class="btn btn-info" ng-click="create();"><i class="fa fa-plus"></i> Create</button></div></div>-->
       </div>
+
     </div>
 
     <div class="col-md-7" ng-show="orderDetail" >
@@ -59,6 +40,7 @@
                 <h3><strong>Task</strong></h3>
 
                 <div class="form-horizontal text-left">
+
                     
                     <div class="form-group form-group-sm">
                         <label class="control-label col-md-12">From:</label>
@@ -84,7 +66,7 @@
                     <div class="form-group form-group-sm">
                         <label class="control-label col-md-12">Date/Time:</label>
                         <div class="col-md-12">
-                            <div class="form-control-static">{{ orderDetail.resource.start | orderDetail'DD-MMM-YYYY HH:mm' }}</div>
+                            <div class="form-control-static">{{ orderDetail.orderDate | amDateFormat:'DD-MMM-YYYY HH:mm' }}</div>
                         </div>
                     </div>
                     
@@ -95,7 +77,19 @@
                         </div>
                     </div>
                     
+                    <div class="form-group form-group-sm">
+                        <label class="control-label col-md-12">Reason:</label>
+                        <div class="col-md-12">
+                            <div class="form-control-static">{{ orderDetail.reasonText}}</div>
+                        </div>
+                    </div>
                     
+                    <div class="form-group form-group-sm">
+                        <label class="control-label col-md-12">Requested Action:</label>
+                        <div class="col-md-12">
+                            <div class="form-control-static" ng-bind-html="orderDetail.detail"></div>
+                        </div>
+                    </div>
                     
                 </div>
             </div>

@@ -250,6 +250,15 @@ angular
           main: { templateUrl: 'views/appointments/appointments.html', controller: 'AppointmentsCtrl' }
         }
       })
+      
+      .state('orders', {
+        url: '/patients/{patientId:int}/orders',
+        views: {
+          'user-context': { templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl' },
+          actions: { templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl' },
+          main: { templateUrl: 'views/orders/orders.html', controller: 'OrdersCtrl' }
+        }
+      })
 
   })
 

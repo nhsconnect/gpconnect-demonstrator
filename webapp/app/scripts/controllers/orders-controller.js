@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('OrdersCtrl', function ($scope, $http, $sce, $stateParams, $state, $modal, PatientService, usSpinnerService, Order) {
+        .controller('OrdersCtrl', function ($scope, $http, $sce, $stateParams, $state, $modal, PatientService, usSpinnerService, Order, Organization) {
 
             $scope.currentPage = 1;
 
@@ -24,10 +24,15 @@ angular.module('gpConnect')
                 $scope.patientFhirId = result;
 
                 Order.findAllOrders($scope.patientFhirId).then(function (result) {
-                    console.log(result.data);
                     $scope.orders = result.data;
                     $.each($scope.orders, function (key, order) {
                         order.detail = $sce.trustAsHtml(order.detail);
+                        order.sourceOrg = Organization.findOrganisation(order.sourceOrgId).then(function(result){
+                            order.sourceOrg =  result.data.name;
+                        });
+                        order.targetOrg = Organization.findOrganisation(order.targetOrgId).then(function(result){
+                             order.targetOrg = result.data.name;
+                        });
                     });
                 }).catch(function (e) {
                     usSpinnerService.stop('patientSummary-spinner');

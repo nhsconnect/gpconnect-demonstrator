@@ -16,7 +16,7 @@
                 <tr dir-paginate="order in orders | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{order.id}}')" ng-class="{info: selected(order.id)}">
                     <td class="dateTime" style="width:155px">{{ order.orderDate | amDateFormat:'DD-MMM-YYYY HH:mm' }}</td>
                     <td>{{ order.recieved == true ? "Received" : "Sent"}}</td>
-                    <td>{{ order.sourceOrgId}} / {{ order.targetOrgId}}</td>
+                    <td>{{ order.sourceOrg}} / {{ order.targetOrg}}</td>
                 </tr>
 
                 <tr ng-if="!orders.length">

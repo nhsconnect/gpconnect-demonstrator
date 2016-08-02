@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('OrdersCtrl', function ($scope, $http, $sce, $stateParams, $state, $modal, PatientService, usSpinnerService, Order, Organization) {
+        .controller('OrdersCtrl', function ($scope, $http, $sce, $cacheFactory, $stateParams, $state, $modal, PatientService, usSpinnerService, Order, Organization) {
 
             $scope.currentPage = 1;
 
@@ -25,14 +25,27 @@ angular.module('gpConnect')
 
                 Order.findAllOrders($scope.patientFhirId).then(function (result) {
                     $scope.orders = result.data;
+                    
+                    var orgCache = $cacheFactory.get('orgCache');
+                    if(orgCache == undefined){
+                        orgCache = $cacheFactory('orgCache');
+                    }
                     $.each($scope.orders, function (key, order) {
                         order.detail = $sce.trustAsHtml(order.detail);
-                        order.sourceOrg = Organization.findOrganisation(order.sourceOrgId).then(function(result){
-                            order.sourceOrg =  result.data.name;
-                        });
-                        order.targetOrg = Organization.findOrganisation(order.targetOrgId).then(function(result){
-                             order.targetOrg = result.data.name;
-                        });
+                        order.sourceOrg = orgCache.get(order.sourceOrgId);
+                        if(order.sourceOrg == undefined){
+                            order.sourceOrg = Organization.findOrganisation(order.sourceOrgId).then(function(result){
+                                order.sourceOrg =  result.data.name;
+                                orgCache.put(order.sourceOrgId, order.sourceOrg);
+                            });
+                        }
+                        order.targetOrg = orgCache.get(order.targetOrgId);
+                        if(order.targetOrg == undefined){
+                            order.targetOrg = Organization.findOrganisation(order.targetOrgId).then(function(result){
+                                order.targetOrg = result.data.name;
+                                orgCache.put(order.targetOrgId, order.targetOrg);
+                            });
+                        }
                     });
                 }).catch(function (e) {
                     usSpinnerService.stop('patientSummary-spinner');

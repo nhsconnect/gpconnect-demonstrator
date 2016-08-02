@@ -24,4 +24,7 @@ public class LegacyAppointmentStore extends AbstractLegacyService implements App
         return entityToDetailTransformer.transform(appointmentEntity);
     }
     
+    public void clearAppointments(){
+        appointmentRepository.deleteAll();
+    }
 }

@@ -22,8 +22,11 @@ import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 @Configuration
+@EnableScheduling
 public class LegacyDataConfig {
 
     @Value("${legacy.datasource.vendor:mysql}")
@@ -43,7 +46,7 @@ public class LegacyDataConfig {
 
     @Value("${legacy.datasource.password:password}")
     private String password;
-
+            
     @Bean(destroyMethod = "close")
     public DataSource legacyDataSource() {
         final BasicDataSource dataSource = new BasicDataSource();
@@ -57,5 +60,17 @@ public class LegacyDataConfig {
         dataSource.setTestOnBorrow(true);
 
         return dataSource;
+    }
+    
+    @Bean
+    public RefreshData getRefreshData(){
+        return new RefreshData();
+    }
+    
+    @Scheduled(cron="0 1 1 * * ?")
+    public void scheduledResetOfData() {
+        RefreshData refreshData = getRefreshData();
+        refreshData.clearTasks();
+        refreshData.resetAppointments();
     }
 }

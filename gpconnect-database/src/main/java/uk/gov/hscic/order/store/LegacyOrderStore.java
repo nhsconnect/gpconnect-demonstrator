@@ -24,4 +24,7 @@ public class LegacyOrderStore extends AbstractLegacyService implements OrderStor
         return entityToDetailTransformer.transform(orderEntity);
     }
     
+    public void clearOrders(){
+        orderRepository.deleteAll();
+    }
 }

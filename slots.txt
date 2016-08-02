@@ -1,0 +1,5 @@
+9,0,0,9,30,0,408443003,General medical practice,2,FREE,1
+9,30,0,10,0,0,408443003,General medical practice,2,FREE,2
+10,0,0,10,30,0,408443003,General medical practice,2,FREE,3
+10,30,0,11,0,0,408443003,General medical practice,2,FREE,4
+11,0,0,11,30,0,408443003,General medical practice,2,FREE,5

@@ -23,4 +23,9 @@ public class LegacySlotStore extends AbstractLegacyService implements SlotStore 
         slotEntity = slotRepository.saveAndFlush(slotEntity);
         return entityToDetailTransformer.transform(slotEntity);
     }
+    
+    public void clearSlots(){
+        slotRepository.deleteAll();
+        slotRepository.flush();
+    }
 }

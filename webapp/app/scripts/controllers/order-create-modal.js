@@ -15,7 +15,7 @@ angular.module('gpConnect')
 
             $scope.newOrder = {};
             $scope.newOrder.fromOrg = "GP Connect Demonstrator";
-            $scope.newOrder.toOrg = "GPConnectDemonstrator";
+            $scope.newOrder.toOrg = "1";
             $scope.newOrder.type = "1";
 
             $scope.ok = function (orderCreateForm) {
@@ -27,7 +27,7 @@ angular.module('gpConnect')
                 localModel.identifier = "ID" + new Date().getTime();
                 localModel.subjectPatientId = $scope.patientLocalIdentifier;
                 localModel.sourceOrgId = "1";
-                localModel.targetOrgId = "1";
+                localModel.targetOrgId = $scope.newOrder.toOrg;
                 if ($scope.newOrder.type == "1") {
                     localModel.reasonCode = "1";
                     localModel.reasonDescription = "For your information";

@@ -25,23 +25,23 @@ angular.module('gpConnect')
 
                 Order.findAllOrders($scope.patientFhirId).then(function (result) {
                     $scope.orders = result.data;
-                    
+
                     var orgCache = $cacheFactory.get('orgCache');
-                    if(orgCache == undefined){
+                    if (orgCache == undefined) {
                         orgCache = $cacheFactory('orgCache');
                     }
                     $.each($scope.orders, function (key, order) {
                         order.detail = $sce.trustAsHtml(order.detail);
                         order.sourceOrg = orgCache.get(order.sourceOrgId);
-                        if(order.sourceOrg == undefined){
-                            order.sourceOrg = Organization.findOrganisation(order.sourceOrgId).then(function(result){
-                                order.sourceOrg =  result.data.name;
+                        if (order.sourceOrg == undefined) {
+                            order.sourceOrg = Organization.findOrganisation(order.sourceOrgId).then(function (result) {
+                                order.sourceOrg = result.data.name;
                                 orgCache.put(order.sourceOrgId, order.sourceOrg);
                             });
                         }
                         order.targetOrg = orgCache.get(order.targetOrgId);
-                        if(order.targetOrg == undefined){
-                            order.targetOrg = Organization.findOrganisation(order.targetOrgId).then(function(result){
+                        if (order.targetOrg == undefined) {
+                            order.targetOrg = Organization.findOrganisation(order.targetOrgId).then(function (result) {
                                 order.targetOrg = result.data.name;
                                 orgCache.put(order.targetOrgId, order.targetOrg);
                             });
@@ -58,7 +58,7 @@ angular.module('gpConnect')
 
                 usSpinnerService.spin('patientSummary-spinner');
                 $scope.orderDetail = undefined;
-                
+
                 var order;
                 for (var index = 0; index < $scope.orders.length; ++index) {
                     order = $scope.orders[index];
@@ -73,6 +73,14 @@ angular.module('gpConnect')
 
             $scope.selected = function (orderIndex) {
                 return orderIndex === $stateParams.orderIndex;
+            };
+
+            $scope.create = function () {
+                $modal.open({
+                    templateUrl: 'views/orders/order-create.html',
+                    size: 'md',
+                    controller: 'OrderCreateModalCtrl'
+                });
             };
 
         });

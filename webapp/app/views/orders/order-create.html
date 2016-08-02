@@ -1,0 +1,58 @@
+<div class="modal-header">
+    <h4 class="modal-title">New Task</h4>
+</div>
+
+<div class="modal-body">
+
+    
+    <div class="col-md-12 modalBanner">
+        <div class="col-md-4 modalBannerSection">{{ patient.name[0].prefix[0]}} {{ patient.name[0].given[0]}} {{ patient.name[0].family[0]}}</div>
+        <div class="col-md-4 modalBannerSection">DOB: {{ patient.birthDate | date:'dd-MMM-yyyy' }}</div>
+        <div class="col-md-4 modalBannerSection">NHS No. <span ng-bind="patientNhsNumber | formatNHSNumber"></span></div>
+    </div>
+    
+    <form name="orderCreateForm" class="form-horizontal text-left">
+
+        <div class="col-md-12" style="margin-bottom: 25px; padding: 0;">
+            <label for="author" class="control-label col-md-12">From</label>
+            <div class="col-md-10">
+                <input type="text" value="GPConnectDemonstrator" class="form-control input-sm" name="fromOrg" disabled ng-model="newOrder.fromOrg"/>
+            </div>
+            <label for="author" class="control-label col-md-12">To</label>
+            <div class="col-md-10">
+                <select class="form-control input-sm" name="toOrg" ng-model="newOrder.toOrg">
+                    <option value="GPConnectDemonstrator" selected >GP Connect Demonstrator</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-12" style="margin-bottom: 25px; padding: 0;">
+            <label for="author" class="control-label col-md-12">Task Type</label>
+            <div class="col-md-5">
+                <select class="form-control input-sm" name="tasktype" ng-model="newOrder.type">
+                    <option value="1" selected >1 - For your information</option>
+                    <option value="2" >2 - Action needed</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-12" style="margin-bottom: 25px; padding: 0;">
+            <label for="details" class="control-label col-md-12">Details</label>
+            <div class="col-md-12">
+                <textarea class="form-control input-sm" cols="85" rows="5" name="details" id="orderDetails" ng-model="newOrder.details"></textarea>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div class="modal-footer">
+    <a class="btn btn-danger" ng-click="cancel()">Cancel</a>
+    <button class="btn btn-success" ng-click="ok(orderCreateForm);">Send</button>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <span class="orderCreate-spinner" us-spinner="{radius:20, width:8, length: 16}" spinner-key="orderCreate-spinner" spinner-start-active="false"></span>
+    </div>
+</div>

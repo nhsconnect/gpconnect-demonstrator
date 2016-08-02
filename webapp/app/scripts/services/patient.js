@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .factory('PatientService', function ($http, EnvConfig) {
+  .factory('PatientService', function ($http, EnvConfig, $cacheFactory) {
 
     var findAllSummaries = function () {
       return $http.get('/api/patients');
@@ -21,23 +21,40 @@ angular.module('gpConnect')
     };
     
     var getPatientFhirId = function (patientId) {
-      var response;
-      return $http.get(EnvConfig.restUrlPrefix+'/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|'+patientId,
-                {
-                    headers: {
-                        'Ssp-From': EnvConfig.fromASID,
-                        'Ssp-To': EnvConfig.toASID,
-                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient"
+        var response;
+        var patientFhirIdCache = $cacheFactory.get('patientFhirIdCache');
+        if (patientFhirIdCache == undefined) {
+            patientFhirIdCache = $cacheFactory('patientFhirIdCache');
+        }
+        var patientFhirId = patientFhirIdCache.get(patientId);
+        if (patientFhirId == undefined) {
+            response = $http.get(EnvConfig.restUrlPrefix+'/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|'+patientId,
+                    {
+                        headers: {
+                            'Ssp-From': EnvConfig.fromASID,
+                            'Ssp-To': EnvConfig.toASID,
+                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient"
+                        }
                     }
-                }
-                ).then(function(response) {
-         return response.data.entry[0].resource.id;
-      });
+                    ).then(function(response) {
+                return response.data.entry[0].resource.id;
+            });
+            patientFhirIdCache.put(patientId, response);
+            return response;
+        } else {
+            return patientFhirId;
+        }
     };
     
     var getFhirPatient = function (patientId) {
       var response;
-      return $http.get(EnvConfig.restUrlPrefix+'/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|'+patientId,
+      var patientFhirCache = $cacheFactory.get('patientFhirCache');
+        if (patientFhirCache == undefined) {
+            patientFhirCache = $cacheFactory('patientFhirCache');
+        }
+        var patientFhir = patientFhirCache.get(patientId);
+        if (patientFhir == undefined) {
+            var response = $http.get(EnvConfig.restUrlPrefix+'/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|'+patientId,
                 {
                     headers: {
                         'Ssp-From': EnvConfig.fromASID,
@@ -46,8 +63,13 @@ angular.module('gpConnect')
                     }
                 }
                 ).then(function(response) {
-         return response.data.entry[0].resource;
-      });
+                    return response.data.entry[0].resource;
+            });
+            patientFhirCache.put(patientId, response);
+            return response;
+        } else {
+            return patientFhir;
+        }
     };
 
     return {

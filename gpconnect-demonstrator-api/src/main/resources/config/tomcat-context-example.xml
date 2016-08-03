@@ -20,5 +20,6 @@
     <Environment name="legacy.datasource.username"  type="java.lang.String"  override="false" value="answer"/>
     <Environment name="legacy.datasource.password"  type="java.lang.String"  override="false" value="answer99q"/>
     <Environment name="legacy.datasource.showSql"   type="java.lang.Boolean" override="false" value="false"/>
-
+	<Environment name="legacy.datasource.cleardown.cron"   type="java.lang.String" override="false" value="0 1 1 * * ?"/>
+	
 </Context>

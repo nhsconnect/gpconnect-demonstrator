@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.appointment.appointment.store.AppointmentStoreFactory;
@@ -55,15 +56,15 @@ public class RefreshData {
             while ((text = reader.readLine()) != null) {
                 String[] line = text.split(",");
                 Date currentDate = new Date();
-                Date startDate = new Date();
-                startDate.setHours(Integer.parseInt(line[0]));
-                startDate.setMinutes(Integer.parseInt(line[1]));
-                startDate.setSeconds(Integer.parseInt(line[2]));
-                Date endDate = new Date();
-                endDate.setHours(Integer.parseInt(line[3]));
-                endDate.setMinutes(Integer.parseInt(line[4]));
-                endDate.setSeconds(Integer.parseInt(line[5]));
-                slotStore.saveSlot(createSlot(Long.parseLong(line[6]), line[7], Long.parseLong(line[8]), line[9], startDate, endDate, currentDate));
+                Date startDate = DateUtils.addDays(currentDate, Integer.parseInt(line[0]));
+                Date endDate = DateUtils.addDays(currentDate, Integer.parseInt(line[0]));
+                startDate.setHours(Integer.parseInt(line[1]));
+                startDate.setMinutes(Integer.parseInt(line[2]));
+                startDate.setSeconds(Integer.parseInt(line[3]));
+                endDate.setHours(Integer.parseInt(line[4]));
+                endDate.setMinutes(Integer.parseInt(line[5]));
+                endDate.setSeconds(Integer.parseInt(line[6]));
+                slotStore.saveSlot(createSlot(Long.parseLong(line[7]), line[8], Long.parseLong(line[9]), line[10], startDate, endDate, currentDate));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

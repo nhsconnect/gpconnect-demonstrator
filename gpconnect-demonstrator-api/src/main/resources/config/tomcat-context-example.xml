@@ -21,5 +21,6 @@
     <Environment name="legacy.datasource.password"  type="java.lang.String"  override="false" value="answer99q"/>
     <Environment name="legacy.datasource.showSql"   type="java.lang.Boolean" override="false" value="false"/>
 	<Environment name="legacy.datasource.cleardown.cron"   type="java.lang.String" override="false" value="0 1 1 * * ?"/>
+	<Environment name="legacy.datasource.refresh.slots.file"   type="java.lang.String" override="false" value="slots.txt"/>
 	
 </Context>

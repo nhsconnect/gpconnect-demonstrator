@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Date;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.appointment.appointment.store.AppointmentStoreFactory;
 import uk.gov.hscic.appointment.appointment.store.LegacyAppointmentStore;
@@ -22,6 +23,9 @@ import uk.gov.hscic.order.store.OrderStoreFactory;
 @Service
 public class RefreshData {
 
+    @Value("${legacy.datasource.refresh.slots.file}")
+    private String slotsFile;
+    
     @Autowired
     OrderStoreFactory orderStoreFactory;
 
@@ -46,8 +50,7 @@ public class RefreshData {
         LegacySlotStore slotStore = (LegacySlotStore) slotStoreFactory.select(sourceType);
         slotStore.clearSlots();
 
-        File file = new File("slots.txt");
-        System.out.println("Slots: " + file.getAbsolutePath());
+        File file = new File(slotsFile);
         BufferedReader reader = null;
 
         try {

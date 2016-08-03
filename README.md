@@ -194,6 +194,15 @@ such as Tomcat, with the front end code packaged with it.
 
 With front end code and server-side code is packaged as one, it makes things easy to handle in a deployment scenario.
 
+
+### Data Clear Down
+For Appointments and Tasks there is a clear down process which is scheduled using a Spring Scheduled event configured with a "cron" string. When the clear down task runs it will delete all GP Connect Demonstrator Tasks previously added. It will also delete all Appointments and remove the currently available Slots, after which it will try and build a new set of slots using a slots sample data file.
+
+The "cron" string which controls the scheduled event can be found in the environmental properties files with the name "legacy.datasource.cleardown.cron"
+The file which it uses to build slots should be pointed to by the environmental properties with the name "legacy.datasource.refresh.slots.file"
+
+The properties can be found in the tomcat-context-example.xml file and the example slots data file can be found in the root of the project folder, named "slots.txt"
+  
   
 
 ### A Bit More on Tenants
@@ -220,7 +229,6 @@ Or...
 ```sh
 grunt build --tenant=gpconnect
 ```
-
 
 
 ##### ENJOY!

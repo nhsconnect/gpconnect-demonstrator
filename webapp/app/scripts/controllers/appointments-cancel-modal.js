@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('AppointmentsCancelModalCtrl', function ($state, $scope, $modalInstance, $modal, usSpinnerService, appointment, Appointment) {
+        .controller('AppointmentsCancelModalCtrl', function ($state, $stateParams, $scope, $modalInstance, $modal, usSpinnerService, appointment, Appointment) {
 
             $scope.appointmentCancel = appointment;
             $scope.validationError = "";
@@ -26,7 +26,7 @@ angular.module('gpConnect')
                 $scope.formSubmitted = true;
                 if ($scope.appointmentCancel.appointmentResource.resource.modifierExtension[$scope.cancelReasonIndex].valueString.length > 0) {
                     usSpinnerService.spin('appointmentCancel-spinner');
-                    Appointment.save($scope.appointmentCancel.appointmentResource.resource.id, $scope.appointmentCancel.appointmentResource.resource).then(function (response) {
+                    Appointment.save($stateParams.patientId, $scope.appointmentCancel.appointmentResource.resource.id, $scope.appointmentCancel.appointmentResource.resource).then(function (response) {
                         if (response.status != "200") {
                             alert("An error occurred updating appointment, please try cancelling again");
                         }

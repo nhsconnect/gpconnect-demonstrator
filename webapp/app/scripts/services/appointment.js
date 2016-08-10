@@ -1,15 +1,16 @@
 'use strict';
 
 angular.module('gpConnect')
-  .factory('Appointment', function ($http, EnvConfig) {
+  .factory('Appointment', function ($http, EnvConfig, fhirJWTFactory) {
 
-    var findAllAppointments = function (patientId) {
+    var findAllAppointments = function (patientNHSNumber, patientId) {
         return $http.get(EnvConfig.restUrlPrefix+'/Patient/' + patientId + '/Appointment',
         {
           headers: {
               'Ssp-From': EnvConfig.fromASID,
               'Ssp-To': EnvConfig.toASID,
-              'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments"
+              'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments",
+              'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientNHSNumber)
           }
         });
     };
@@ -21,19 +22,21 @@ angular.module('gpConnect')
           headers: {
               'Ssp-From': EnvConfig.fromASID,
               'Ssp-To': EnvConfig.toASID,
-              'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule"
+              'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule",
+              'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", organizationODSCode)
           }
         });
     };
     
-    var findResourceByReference = function (resourceReference) {
+    var findResourceByReference = function (patientId, resourceReference) {
         if(resourceReference.indexOf("Location") > -1){
             return $http.get(EnvConfig.restUrlPrefix+'/'+resourceReference,
             {
                 headers: {
                     'Ssp-From': EnvConfig.fromASID,
                     'Ssp-To': EnvConfig.toASID,
-                    'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:location"
+                    'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:location",
+                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
                 }
             });
         } else if(resourceReference.indexOf("Practitioner") > -1){
@@ -42,13 +45,14 @@ angular.module('gpConnect')
                 headers: {
                     'Ssp-From': EnvConfig.fromASID,
                     'Ssp-To': EnvConfig.toASID,
-                    'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner"
+                    'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner",
+                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
                 }
             });
         }
     };
     
-    var create = function (appointment) {
+    var create = function (patientId, appointment) {
       return $http.post(EnvConfig.restUrlPrefix+'/Appointment',
         appointment,
         {
@@ -56,12 +60,13 @@ angular.module('gpConnect')
               'Ssp-From': EnvConfig.fromASID,
               'Ssp-To': EnvConfig.toASID,
               'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:create:appointment",
+              'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "write", patientId),
               'Prefer' : "return=representation"
           }
         });
     };
     
-    var save = function (appointmentId, appointment) {
+    var save = function (patientNHSNumber, appointmentId, appointment) {
       return $http.put(EnvConfig.restUrlPrefix+'/Appointment/'+appointmentId, 
         appointment,
         {
@@ -69,7 +74,8 @@ angular.module('gpConnect')
               'Ssp-From': EnvConfig.fromASID,
               'Ssp-To': EnvConfig.toASID,
               'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:appointment",
-              'Prefer' : "return=representation"
+              'Prefer' : "return=representation",
+              'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "write", patientNHSNumber)
           }
         });
     };

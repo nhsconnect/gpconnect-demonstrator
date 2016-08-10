@@ -76,7 +76,7 @@ angular.module('gpConnect')
                         }]
                 };
 
-                Order.sendOrder(fhirModel).then(function(result){
+                Order.sendOrder($stateParams.patientId, fhirModel).then(function(result){
                     localModel.orderDate = result.data.date;
                     Order.saveOrder(localModel).then(function(result){
                         $modalInstance.close();

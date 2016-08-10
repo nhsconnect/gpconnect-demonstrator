@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('AppointmentsAmendModalCtrl', function ($state, $scope, $modalInstance, $modal, usSpinnerService, appointment, Appointment) {
+        .controller('AppointmentsAmendModalCtrl', function ($state, $stateParams, $scope, $modalInstance, $modal, usSpinnerService, appointment, Appointment) {
 
             $scope.appointmentAmend = appointment;
             $scope.validationError = "";
@@ -22,7 +22,7 @@ angular.module('gpConnect')
                     // Amend cancelled appointment
                     if ($scope.appointmentAmend.appointmentResource.resource.modifierExtension[$scope.cancelReasonIndex].valueString.length > 0) {
                         usSpinnerService.spin('appointmentAmend-spinner');
-                        Appointment.save($scope.appointmentAmend.appointmentResource.resource.id, $scope.appointmentAmend.appointmentResource.resource).then(function (response) {
+                        Appointment.save($stateParams.patientId, $scope.appointmentAmend.appointmentResource.resource.id, $scope.appointmentAmend.appointmentResource.resource).then(function (response) {
                             if (response.status != "200") {
                                 alert("An error occurred updating appointment, please try cancelling again");
                             }
@@ -38,7 +38,7 @@ angular.module('gpConnect')
                     if ($scope.commentDisplayText.length > 0) {
                         $scope.appointmentAmend.appointmentResource.resource.comment = $scope.commentDisplayText;
                         usSpinnerService.spin('appointmentAmend-spinner');
-                        Appointment.save($scope.appointmentAmend.appointmentResource.resource.id, $scope.appointmentAmend.appointmentResource.resource).then(function (response) {
+                        Appointment.save($stateParams.patientId, $scope.appointmentAmend.appointmentResource.resource.id, $scope.appointmentAmend.appointmentResource.resource).then(function (response) {
                             if (response.status != "200") {
                                 alert("An error occurred updating appointment, please try cancelling again");
                             }

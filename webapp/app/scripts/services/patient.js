@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .factory('PatientService', function ($http, EnvConfig, $cacheFactory) {
+  .factory('PatientService', function ($http, EnvConfig, $cacheFactory, fhirJWTFactory) {
 
     var findAllSummaries = function () {
       return $http.get('/api/patients');
@@ -14,7 +14,8 @@ angular.module('gpConnect')
                     headers: {
                         'Ssp-From': EnvConfig.fromASID,
                         'Ssp-To': EnvConfig.toASID,
-                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord"
+                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord",
+                        'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
                     }
                 }
               );
@@ -33,7 +34,8 @@ angular.module('gpConnect')
                         headers: {
                             'Ssp-From': EnvConfig.fromASID,
                             'Ssp-To': EnvConfig.toASID,
-                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient"
+                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient",
+                            'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
                         }
                     }
                     ).then(function(response) {
@@ -59,7 +61,8 @@ angular.module('gpConnect')
                     headers: {
                         'Ssp-From': EnvConfig.fromASID,
                         'Ssp-To': EnvConfig.toASID,
-                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient"
+                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient",
+                        'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
                     }
                 }
                 ).then(function(response) {

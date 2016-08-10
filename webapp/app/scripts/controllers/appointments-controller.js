@@ -23,7 +23,7 @@ angular.module('gpConnect')
 
                 $scope.patientFhirId = result;
 
-                Appointment.findAllAppointments($scope.patientFhirId).then(function (result) {
+                Appointment.findAllAppointments($stateParams.patientId, $scope.patientFhirId).then(function (result) {
                     var appointmentsJson = result.data;
                     $scope.appointments = appointmentsJson.entry;
 
@@ -68,11 +68,11 @@ angular.module('gpConnect')
                 $.each($scope.appointmentDetail.resource.participant, function (key, value) {
                     var reference = value.actor.reference.toString();
                     if (reference.indexOf("Location") != -1) {
-                        Appointment.findResourceByReference(reference).then(function (response) {
+                        Appointment.findResourceByReference($stateParams.patientId, reference).then(function (response) {
                             $scope.appointmentLocation = response.data.name;
                         });
                     } else if (reference.indexOf("Practitioner") != -1) {
-                        Appointment.findResourceByReference(reference).then(function (response) {
+                        Appointment.findResourceByReference($stateParams.patientId, reference).then(function (response) {
                             $scope.practitionerName = response.data.name.prefix[0] + " " + response.data.name.given[0] + " " + response.data.name.family[0];
                         });
                     }

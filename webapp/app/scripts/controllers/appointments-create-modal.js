@@ -64,7 +64,7 @@ angular.module('gpConnect')
       $scope.formSubmitted = true;
       if (appointmentCreateForm.$valid) {
           usSpinnerService.spin('appointmentCreate-spinner');
-          Appointment.create($scope.appointmentCreate).then(function(response){
+          Appointment.create($stateParams.patientId, $scope.appointmentCreate).then(function(response){
               if(response.status != "201"){
                   alert("An error occurred storing appointment, please try booking again");
               }

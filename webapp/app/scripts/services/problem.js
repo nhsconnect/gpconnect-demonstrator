@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .factory('Problem', function ($http, EnvConfig) {
+  .factory('Problem', function ($http, EnvConfig, fhirJWTFactory) {
 
     var findAllHTMLTables = function(patientId, source) {
         return $http.post(EnvConfig.restUrlPrefix+'/Patient/$gpc.getcarerecord',
@@ -10,7 +10,8 @@ angular.module('gpConnect')
                 headers: {
                     'Ssp-From': EnvConfig.fromASID,
                     'Ssp-To': EnvConfig.toASID,
-                    'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord"
+                    'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord",
+                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
                 }
             }
             );

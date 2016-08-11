@@ -14,9 +14,11 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
+import ca.uhn.fhir.rest.server.interceptor.auth.AuthorizationInterceptor;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.appointments.SlotResourceProvider;
+import uk.gov.hscic.common.filters.FhirRequestInterceptor;
 import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
@@ -57,6 +59,7 @@ public class FhirRestfulServlet extends RestfulServer {
         resourceProviders.add(orderResourceProvider(applicationContext));
 		
 		setResourceProviders(resourceProviders);
+        registerInterceptor(new FhirRequestInterceptor());
         
        // factory.initializeBean( bean, "bean" );
     }

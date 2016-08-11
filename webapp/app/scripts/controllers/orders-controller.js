@@ -34,14 +34,14 @@ angular.module('gpConnect')
                         order.detail = $sce.trustAsHtml(order.detail);
                         order.sourceOrg = orgCache.get(order.sourceOrgId);
                         if (order.sourceOrg == undefined) {
-                            order.sourceOrg = Organization.findOrganisation(order.sourceOrgId).then(function (result) {
+                            order.sourceOrg = Organization.findOrganisation($stateParams.patientId, order.sourceOrgId).then(function (result) {
                                 order.sourceOrg = result.data.name;
                                 orgCache.put(order.sourceOrgId, order.sourceOrg);
                             });
                         }
                         order.targetOrg = orgCache.get(order.targetOrgId);
                         if (order.targetOrg == undefined) {
-                            order.targetOrg = Organization.findOrganisation(order.targetOrgId).then(function (result) {
+                            order.targetOrg = Organization.findOrganisation($stateParams.patientId, order.targetOrgId).then(function (result) {
                                 order.targetOrg = result.data.name;
                                 orgCache.put(order.targetOrgId, order.targetOrg);
                             });

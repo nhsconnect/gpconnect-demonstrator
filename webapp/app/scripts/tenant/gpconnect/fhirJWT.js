@@ -5,6 +5,8 @@ angular.module('gpConnect')
 
             var getJWT = function (scope, operation, identifier) {
 
+                identifier = '' + identifier; // Force value to be a string as it does not alway come through as one
+                
                 // Header
                 var oHeader = {alg: 'HS256', typ: 'JWT'};
 
@@ -82,7 +84,7 @@ angular.module('gpConnect')
                 // Sign JWT, password=123456
                 var sHeader = JSON.stringify(oHeader);
                 var sPayload = JSON.stringify(oPayload);
-                var sJWT = KJUR.jws.JWS.sign("HS256", sHeader, sPayload, "123456");
+                var sJWT = KJUR.jws.JWS.sign("HS256", sHeader, sPayload, {utf8: "123456"});
                 return sJWT;
             };
             

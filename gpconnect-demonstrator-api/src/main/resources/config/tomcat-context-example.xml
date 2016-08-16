@@ -25,8 +25,8 @@
 	
 	<Environment name="ldap.context.url" type="java.lang.String" override="false" value="localhost"/>
 	<Environment name="ldap.context.port" type="java.lang.Integer" override="false" value="10636"/>
-	<Environment name="ldap.context.useSSL" type="java.lang.Boolean" override="false" value="true"/>
-    <Environment name="ldap.context.keystore" type="java.lang.String" override="false" value="ldapKeystore.jks"/>
+	<Environment name="ldap.context.useSSL" type="java.lang.Boolean" override="false" value="false"/>
+	<Environment name="ldap.context.keystore" type="java.lang.String" override="false" value="ldapKeystore.jks"/>
 	<Environment name="ldap.context.keystore.pwd" type="java.lang.String" override="false" value="password"/>
 	<Environment name="ldap.context.keystore.type" type="java.lang.String" override="false" value="JKS"/>
 	

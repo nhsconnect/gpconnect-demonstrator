@@ -23,4 +23,10 @@
 	<Environment name="legacy.datasource.cleardown.cron"   type="java.lang.String" override="false" value="0 1 1 * * ?"/>
 	<Environment name="legacy.datasource.refresh.slots.file"   type="java.lang.String" override="false" value="slots.txt"/>
 	
+	<Environment name="ldap.context.url" type="java.lang.String" override="false" value="localhost"/>
+	<Environment name="ldap.context.port" type="java.lang.Integer" override="false" value="10636"/>
+    <Environment name="ldap.context.keystore" type="java.lang.String" override="false" value="ldapKeystore.jks"/>
+	<Environment name="ldap.context.keystore.pwd" type="java.lang.String" override="false" value="password"/>
+	<Environment name="ldap.context.keystore.type" type="java.lang.String" override="false" value="JKS"/>
+	
 </Context>

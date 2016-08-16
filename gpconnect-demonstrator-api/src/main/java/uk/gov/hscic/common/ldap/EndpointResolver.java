@@ -29,6 +29,9 @@ public class EndpointResolver {
     @Value("${ldap.context.port}")
     private int ldapPort;
     
+    @Value("${ldap.context.useSSL}")
+    private boolean ldapUseSSL;
+    
     @Value("${ldap.context.keystore}")
     private String keystore;
     
@@ -43,6 +46,7 @@ public class EndpointResolver {
             @RequestParam(value = "interactionId", required = true) String interactionId,
             @RequestParam(value = "pUrl", required = false) String pUrl,                                // Temp parameters to allow query configuration
             @RequestParam(value = "pPort", required = false) Integer pPort,                             // Temp parameters to allow query configuration
+            @RequestParam(value = "pSSL", required = false) Boolean pSSL,                             // Temp parameters to allow query configuration
             @RequestParam(value = "pBase", required = false) String pBase,                              // Temp parameters to allow query configuration
             @RequestParam(value = "pFilter", required = false) String pFilter) throws IOException {     // Temp parameters to allow query configuration
 
@@ -55,10 +59,10 @@ public class EndpointResolver {
         LdapNetworkConnection connection = null;
         try {
 
-            if (pUrl != null && pPort != null) {
-                connection = new LdapNetworkConnection(pUrl, pPort, true);
+            if (pUrl != null && pPort != null && pSSL != null) {
+                connection = new LdapNetworkConnection(pUrl, pPort, pSSL);
             } else {
-                connection = new LdapNetworkConnection(ldapUrl, ldapPort, true);
+                connection = new LdapNetworkConnection(ldapUrl, ldapPort, ldapUseSSL);
             }
 
             // Create Key Manager
@@ -91,7 +95,7 @@ public class EndpointResolver {
             } else {
 
                 // Lookup the PartyKey for the Organization ODS Code
-                String asidFilter = "(&(nhsIDCode=" + odsCode + ") (objectClass=nhsAS)(nhsAsSvcIA=" + interactionId + "))";
+                String asidFilter = "(&(nhsIDCode=" + odsCode + ")(objectClass=nhsAS)(nhsAsSvcIA=" + interactionId + "))";
                 EntryCursor asidCursor = connection.search("ou=services, o=nhs", asidFilter, SearchScope.SUBTREE);
 
                 while (asidCursor.next()) {
@@ -107,7 +111,7 @@ public class EndpointResolver {
 
                 // Lookup the GP Connect endpoint URL
                 if (partyKey != null) {
-                    String mhsFilter = "(&(nhsMhsPartyKey=[partKey]) (objectClass=nhsMhs) (nhsMhsSvcIA=" + interactionId + "))";
+                    String mhsFilter = "(&(nhsMhsPartyKey=[partKey])(objectClass=nhsMhs)(nhsMhsSvcIA=" + interactionId + "))";
                     EntryCursor mhsCursor = connection.search("ou=services, o=nhs", mhsFilter, SearchScope.SUBTREE);
 
                     while (mhsCursor.next()) {

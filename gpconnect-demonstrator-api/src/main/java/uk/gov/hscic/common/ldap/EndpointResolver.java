@@ -3,11 +3,13 @@ package uk.gov.hscic.common.ldap;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.KeyStore;
+import java.util.ArrayList;
 import java.util.Collection;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
 import org.apache.directory.api.ldap.model.cursor.EntryCursor;
 import org.apache.directory.api.ldap.model.entry.Attribute;
+import org.apache.directory.api.ldap.model.exception.LdapInvalidAttributeValueException;
 import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
 import org.apache.log4j.Logger;
@@ -28,112 +30,124 @@ public class EndpointResolver {
 
     @Value("${ldap.context.port}")
     private int ldapPort;
-    
+
     @Value("${ldap.context.useSSL}")
     private boolean ldapUseSSL;
-    
+
     @Value("${ldap.context.keystore}")
     private String keystore;
-    
+
     @Value("${ldap.context.keystore.pwd}")
     private String keystorePassword;
-    
+
     @Value("${ldap.context.keystore.type}")
     private String keystoreType;
 
+    private KeyManagerFactory serverKeyManager = null;
+    private TrustManagerFactory trustManager = null;
+
     @RequestMapping(value = "/endpointLookup", method = RequestMethod.GET)
     public String findEndpointFromODSCode(@RequestParam(value = "odsCode", required = true) String odsCode,
-            @RequestParam(value = "interactionId", required = true) String interactionId,
-            @RequestParam(value = "pUrl", required = false) String pUrl,                                // Temp parameters to allow query configuration
-            @RequestParam(value = "pPort", required = false) Integer pPort,                             // Temp parameters to allow query configuration
-            @RequestParam(value = "pSSL", required = false) Boolean pSSL,                             // Temp parameters to allow query configuration
-            @RequestParam(value = "pBase", required = false) String pBase,                              // Temp parameters to allow query configuration
-            @RequestParam(value = "pFilter", required = false) String pFilter) throws IOException {     // Temp parameters to allow query configuration
+            @RequestParam(value = "interactionId", required = true) String interactionId) throws IOException, LdapInvalidAttributeValueException {
 
         String uuid = java.util.UUID.randomUUID().toString();
+
         ldapLog.info(uuid + " Endpoint Lookup - ODSCode:" + odsCode + " InteractionId:" + interactionId);
 
         String partyKey = null;
         String endpointURL = "";
 
-        LdapNetworkConnection connection = null;
-        try {
+        // Lookup the PartyKey for the Organization ODS Code
+        String asidFilter = "(&(nhsIDCode=" + odsCode + ")(objectClass=nhsAS)(nhsAsSvcIA=" + interactionId + "))";
+        ArrayList<Collection<Attribute>> asidResult = ldapQueryRequest("ou=services, o=nhs", asidFilter);
 
-            if (pUrl != null && pPort != null && pSSL != null) {
-                connection = new LdapNetworkConnection(pUrl, pPort, pSSL);
-            } else {
-                connection = new LdapNetworkConnection(ldapUrl, ldapPort, ldapUseSSL);
+        for (Collection<Attribute> attributes : asidResult) {
+            for (Attribute attribute : attributes) {
+                ldapLog.debug(uuid + " ASID Arribute - " + attribute.getId() + " : " + attribute.getString());
+                // Extract PartyKey
+                if ("nhsMhsPartyKey".equalsIgnoreCase(attribute.getId())) {
+                    partyKey = attribute.getString();
+                    break;
+                }
+                if (partyKey != null) {
+                    break;
+                }
+            }
+        }
+
+        // Lookup the GP Connect endpoint URL
+        if (partyKey != null) {
+            String mhsFilter = "(&(nhsMhsPartyKey=" + partyKey + ")(objectClass=nhsMhs)(nhsMhsSvcIA=" + interactionId + "))";
+            ArrayList<Collection<Attribute>> mhsResult = ldapQueryRequest("ou=services, o=nhs", mhsFilter);
+
+            for (Collection<Attribute> attributes : mhsResult) {
+                for (Attribute attribute : attributes) {
+                    ldapLog.debug(uuid + " MHS Arribute - " + attribute.getId() + " : " + attribute.getString());
+                    if ("nhsMhsEndPoint".equalsIgnoreCase(attribute.getId())) {
+                        endpointURL = attribute.getString();
+                        break;
+                    }
+                }
+                if (!endpointURL.isEmpty()) {
+                    break;
+                }
+            }
+        }
+
+        return endpointURL;
+    }
+
+    public ArrayList<Collection<Attribute>> ldapQueryRequest(@RequestParam(value = "queryBase", required = true) String queryBase,
+            @RequestParam(value = "queryFilter", required = true) String queryFilter) throws IOException {
+
+        String uuid = java.util.UUID.randomUUID().toString();
+        ArrayList<Collection<Attribute>> returnList = new ArrayList();
+        LdapNetworkConnection connection = null;
+
+        ldapLog.debug(uuid + " ldapSDSQuery (Base:" + queryBase + " Filter:" + queryFilter + ")");
+
+        try {
+            connection = new LdapNetworkConnection(ldapUrl, ldapPort, ldapUseSSL);
+
+            if (serverKeyManager == null && trustManager == null) {
+                // Create Key Manager
+                KeyStore serverKeys = KeyStore.getInstance(keystoreType);
+                serverKeys.load(new FileInputStream(keystore), keystorePassword.toCharArray());
+                serverKeyManager = KeyManagerFactory.getInstance("SunX509");
+                serverKeyManager.init(serverKeys, keystorePassword.toCharArray());
+
+                // Create New Trust Store
+                KeyStore serverTrustStore = KeyStore.getInstance(keystoreType);
+                serverTrustStore.load(new FileInputStream(keystore), keystorePassword.toCharArray());
+                trustManager = TrustManagerFactory.getInstance("SunX509");
+                trustManager.init(serverTrustStore);
             }
 
-            // Create Key Manager
-            KeyStore serverKeys = KeyStore.getInstance(keystoreType);
-            serverKeys.load(new FileInputStream(keystore), keystorePassword.toCharArray());
-            KeyManagerFactory serverKeyManager = KeyManagerFactory.getInstance("SunX509");
-            serverKeyManager.init(serverKeys, keystorePassword.toCharArray());
-
-            // Create New Trust Store
-            KeyStore serverTrustStore = KeyStore.getInstance(keystoreType);
-            serverTrustStore.load(new FileInputStream(keystore), keystorePassword.toCharArray());
-            TrustManagerFactory trustManager = TrustManagerFactory.getInstance("SunX509");
-            trustManager.init(serverTrustStore);
-        
             // Set SSL Trust and Key stores in the config
             connection.getConfig().setKeyManagers(serverKeyManager.getKeyManagers());
             connection.getConfig().setTrustManagers(trustManager.getTrustManagers());
 
             connection.bind();
 
-            if (pBase != null && pFilter != null) {
-                EntryCursor asidCursor = connection.search(pBase, pFilter, SearchScope.SUBTREE);
+            EntryCursor cursor = connection.search(queryBase, queryFilter, SearchScope.SUBTREE);
 
-                while (asidCursor.next()) {
-                    Collection<Attribute> attributes = asidCursor.get().getAttributes();
-                    for (Attribute attribute : attributes) {
-                        ldapLog.info(uuid + " param Query Arribute - " + attribute.getId() + " : " + attribute.getString());
-                    }
-                }
-            } else {
-
-                // Lookup the PartyKey for the Organization ODS Code
-                String asidFilter = "(&(nhsIDCode=" + odsCode + ")(objectClass=nhsAS)(nhsAsSvcIA=" + interactionId + "))";
-                EntryCursor asidCursor = connection.search("ou=services, o=nhs", asidFilter, SearchScope.SUBTREE);
-
-                while (asidCursor.next()) {
-                    Collection<Attribute> attributes = asidCursor.get().getAttributes();
-                    for (Attribute attribute : attributes) {
-                        ldapLog.info(uuid + " ASID Arribute - " + attribute.getId() + " : " + attribute.getString());
-                        // Extract PartyKey
-                        if ("nhsMhsPartyKey".equalsIgnoreCase(attribute.getId())) {
-                            partyKey = attribute.getString();
-                        }
-                    }
-                }
-
-                // Lookup the GP Connect endpoint URL
-                if (partyKey != null) {
-                    String mhsFilter = "(&(nhsMhsPartyKey=[partKey])(objectClass=nhsMhs)(nhsMhsSvcIA=" + interactionId + "))";
-                    EntryCursor mhsCursor = connection.search("ou=services, o=nhs", mhsFilter, SearchScope.SUBTREE);
-
-                    while (mhsCursor.next()) {
-                        Collection<Attribute> attributes = mhsCursor.get().getAttributes();
-                        for (Attribute attribute : attributes) {
-                            ldapLog.info(uuid + " MHS Arribute - " + attribute.getId() + " : " + attribute.getString());
-                            // Extract endpoint URL
-                        }
-                    }
+            while (cursor.next()) {
+                returnList.add(cursor.get().getAttributes());
+                for (Attribute attribute : cursor.get().getAttributes()) {
+                    ldapLog.debug(attribute.getId() + ":" + attribute.getString());
                 }
             }
 
             connection.unBind();
 
         } catch (Exception e) {
-            ldapLog.info(uuid + " Error - " + e.getMessage());
+            ldapLog.error(uuid + " Error - " + e.getMessage());
             if (connection != null) {
                 connection.close();
             }
         }
 
-        return endpointURL;
+        return returnList;
     }
 
 }

@@ -17,17 +17,14 @@ public class FhirRequestInterceptor extends AuthorizationInterceptor {
     @Override
     public List<IAuthRule> buildRuleList(RequestDetails theRequestDetails) {
 
-        String uuid = java.util.UUID.randomUUID().toString();
         String authorizationStr = theRequestDetails.getHeader("Authorization");
-
-        authLog.info("FullJWT (ReqProcessId: " + uuid + ") - " + theRequestDetails.getCompleteUrl() + " " + authorizationStr);
 
         String[] jwtHeaderComponents = authorizationStr.split(" ");
         if (jwtHeaderComponents.length == 2 && "Bearer".equalsIgnoreCase(jwtHeaderComponents[0])) {
             String[] tokenComponents = jwtHeaderComponents[1].split("\\.");
             String claimsJsonString = new String(Base64.getDecoder().decode(tokenComponents[1]));
 
-            authLog.info("JWTClaims (ReqProcessId: " + uuid + ") - " + claimsJsonString);
+            authLog.info("JWTClaims - " + claimsJsonString);
 
             JSONObject claimsJsonObject = new JSONObject(claimsJsonString);
             String requestScopeType = claimsJsonObject.getJSONObject("requested_record").getString("resourceType");

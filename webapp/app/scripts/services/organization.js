@@ -1,22 +1,25 @@
 'use strict';
 
 angular.module('gpConnect')
-    .factory('Organization', function ($http, EnvConfig, fhirJWTFactory) {
+        .factory('Organization', function ($rootScope, $http, FhirEndpointLookup, fhirJWTFactory) {
 
-        var findOrganisation = function (patientId, orgId) {
-            return $http.get('/fhir/Organization/' + orgId,
-                    {
-                        headers: {
-                            'Ssp-From': EnvConfig.fromASID,
-                            'Ssp-To': EnvConfig.toASID,
-                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:location",
-                            'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
-                        }
-                    });
-        };
+            var findOrganisation = function (patientId, orgId) {
+                return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:read:location").then(function (response) {
+                    var endpointLookupResult = response;
+                    return $http.get(endpointLookupResult.restUrlPrefix + '/Organization/' + orgId,
+                            {
+                                headers: {
+                                    'Ssp-From': endpointLookupResult.fromASID,
+                                    'Ssp-To': endpointLookupResult.toASID,
+                                    'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:location",
+                                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
+                                }
+                            });
+                });
+            };
 
-        return {
-            findOrganisation: findOrganisation
-        };
+            return {
+                findOrganisation: findOrganisation
+            };
 
-    });
+        });

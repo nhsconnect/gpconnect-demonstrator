@@ -1,20 +1,23 @@
 'use strict';
 
 angular.module('gpConnect')
-  .factory('Order', function ($http, EnvConfig, fhirJWTFactory) {
+  .factory('Order', function ($rootScope,  $http, FhirEndpointLookup, fhirJWTFactory) {
 
     var findAllOrders = function (patientId) {
         return $http.get('/api/notfhir/orders/patient/' + patientId + '?recieved=false&sent=true');
     };
     
     var sendOrder = function (patientId, fhirOrder) {
-        return $http.post('/fhir/Order', fhirOrder,{
-          headers: {
-              'Ssp-From': EnvConfig.fromASID,
-              'Ssp-To': EnvConfig.toASID,
-              'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule",
-              'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "write", patientId)
-          }
+        return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode,"urn:nhs:names:services:gpconnect:fhir:rest:create:order").then(function (response) {
+        var endpointLookupResult = response;
+            return $http.post(endpointLookupResult.restUrlPrefix+'/Order', fhirOrder,{
+              headers: {
+                  'Ssp-From': endpointLookupResult.fromASID,
+                  'Ssp-To': endpointLookupResult.toASID,
+                  'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:create:order",
+                  'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "write", patientId)
+              }
+            });
         });
     };
     

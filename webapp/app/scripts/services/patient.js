@@ -1,85 +1,97 @@
 'use strict';
 
 angular.module('gpConnect')
-  .factory('PatientService', function ($http, EnvConfig, $cacheFactory, fhirJWTFactory) {
+        .factory('PatientService', function ($rootScope, $http, FhirEndpointLookup, $cacheFactory, fhirJWTFactory) {
 
-    var findAllSummaries = function () {
-      return $http.get('/api/patients');
-    };
+            var findAllSummaries = function () {
+                return $http.get('/api/patients');
+            };
 
-    var getSummary = function (patientId) {
-      return $http.post(EnvConfig.restUrlPrefix+'/Patient/$gpc.getcarerecord',
-                '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "SUM"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}',
-                {
-                    headers: {
-                        'Ssp-From': EnvConfig.fromASID,
-                        'Ssp-To': EnvConfig.toASID,
-                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord",
-                        'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
-                    }
+            var getSummary = function (patientId) {
+                return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord").then(function (response) {
+                    var endpointLookupResult = response;
+                    return $http.post(endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getcarerecord',
+                            '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "' + patientId + '" }},{"name" : "recordSection","valueString" : "SUM"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}',
+                            {
+                                headers: {
+                                    'Ssp-From': endpointLookupResult.fromASID,
+                                    'Ssp-To': endpointLookupResult.toASID,
+                                    'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord",
+                                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
+                                }
+                            }
+                    );
+                });
+            };
+
+            var getPatientFhirId = function (patientId) {
+                var patientFhirIdCache = $cacheFactory.get('patientFhirIdCache');
+                if (patientFhirIdCache == undefined) {
+                    patientFhirIdCache = $cacheFactory('patientFhirIdCache');
                 }
-              );
-    };
-    
-    var getPatientFhirId = function (patientId) {
-        var response;
-        var patientFhirIdCache = $cacheFactory.get('patientFhirIdCache');
-        if (patientFhirIdCache == undefined) {
-            patientFhirIdCache = $cacheFactory('patientFhirIdCache');
-        }
-        var patientFhirId = patientFhirIdCache.get(patientId);
-        if (patientFhirId == undefined) {
-            response = $http.get(EnvConfig.restUrlPrefix+'/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|'+patientId,
-                    {
-                        headers: {
-                            'Ssp-From': EnvConfig.fromASID,
-                            'Ssp-To': EnvConfig.toASID,
-                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient",
-                            'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
-                        }
-                    }
-                    ).then(function(response) {
-                return response.data.entry[0].resource.id;
-            });
-            patientFhirIdCache.put(patientId, response);
-            return response;
-        } else {
-            return patientFhirId;
-        }
-    };
-    
-    var getFhirPatient = function (patientId) {
-      var response;
-      var patientFhirCache = $cacheFactory.get('patientFhirCache');
-        if (patientFhirCache == undefined) {
-            patientFhirCache = $cacheFactory('patientFhirCache');
-        }
-        var patientFhir = patientFhirCache.get(patientId);
-        if (patientFhir == undefined) {
-            var response = $http.get(EnvConfig.restUrlPrefix+'/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|'+patientId,
-                {
-                    headers: {
-                        'Ssp-From': EnvConfig.fromASID,
-                        'Ssp-To': EnvConfig.toASID,
-                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient",
-                        'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
-                    }
+                var patientFhirId = patientFhirIdCache.get(patientId);
+                if (patientFhirId == undefined) {
+                    return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function (endpointResponse) {
+                        var endpointLookupResult = endpointResponse;
+                        var partientLookupResponse = $http.get(endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|' + patientId,
+                                {
+                                    headers: {
+                                        'Ssp-From': endpointLookupResult.fromASID,
+                                        'Ssp-To': endpointLookupResult.toASID,
+                                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient",
+                                        'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
+                                    }
+                                }
+                        ).then(function (response) {
+                            return response.data.entry[0].resource.id;
+                        });
+
+                        patientFhirIdCache.put(patientId, partientLookupResponse);
+                        return partientLookupResponse;
+                    });
+                } else {
+                    return patientFhirId;
                 }
-                ).then(function(response) {
-                    return response.data.entry[0].resource;
-            });
-            patientFhirCache.put(patientId, response);
-            return response;
-        } else {
-            return patientFhir;
-        }
-    };
+            };
 
-    return {
-      findAllSummaries: findAllSummaries,
-      getSummary: getSummary,
-      getPatientFhirId: getPatientFhirId,
-      getFhirPatient: getFhirPatient
-    };
+            var getFhirPatient = function (patientId) {
+                var response;
+                var patientFhirCache = $cacheFactory.get('patientFhirCache');
+                if (patientFhirCache == undefined) {
+                    patientFhirCache = $cacheFactory('patientFhirCache');
+                }
+                var patientFhir = patientFhirCache.get(patientId);
+                if (patientFhir == undefined) {
 
-  });
+                    $rootScope.patientOdsCode = "PatientGpOdsCode"; // Store the ODS code for the GP Practice which holds the patients data
+
+                    return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function (response) {
+                        var endpointLookupResult = response;
+                        var response = $http.get(endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|' + patientId,
+                                {
+                                    headers: {
+                                        'Ssp-From': endpointLookupResult.fromASID,
+                                        'Ssp-To': endpointLookupResult.toASID,
+                                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient",
+                                        'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
+                                    }
+                                }
+                        ).then(function (response) {
+                            return response.data.entry[0].resource;
+                        });
+                        patientFhirCache.put(patientId, response);
+                        return response;
+                    });
+                } else {
+                    return patientFhir;
+                }
+            };
+
+            return {
+                findAllSummaries: findAllSummaries,
+                getSummary: getSummary,
+                getPatientFhirId: getPatientFhirId,
+                getFhirPatient: getFhirPatient
+            };
+
+        });

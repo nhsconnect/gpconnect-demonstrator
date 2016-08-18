@@ -55,6 +55,7 @@ public class EndpointResolver {
         ldapLog.info(uuid + " Endpoint Lookup - ODSCode:" + odsCode + " InteractionId:" + interactionId);
 
         String partyKey = null;
+        String asid = "";
         String endpointURL = "";
 
         // Lookup the PartyKey for the Organization ODS Code
@@ -66,11 +67,10 @@ public class EndpointResolver {
                 ldapLog.debug(uuid + " ASID Arribute - " + attribute.getId() + " : " + attribute.getString());
                 // Extract PartyKey
                 if ("nhsMhsPartyKey".equalsIgnoreCase(attribute.getId())) {
-                    partyKey = attribute.getString();
-                    break;
+                    partyKey = attribute.getString();   
                 }
-                if (partyKey != null) {
-                    break;
+                else if ("uniqueIdentifier".equalsIgnoreCase(attribute.getId())) {
+                    asid = attribute.getString();   
                 }
             }
         }
@@ -94,9 +94,10 @@ public class EndpointResolver {
             }
         }
 
-        return endpointURL;
+        return "{ \"endpointURL\" : \"" + endpointURL + "\", \"recievingSysASID\" : \""  + asid + "\"}";
+        
     }
-
+    
     public ArrayList<Collection<Attribute>> ldapQueryRequest(@RequestParam(value = "queryBase", required = true) String queryBase,
             @RequestParam(value = "queryFilter", required = true) String queryFilter) throws IOException {
 

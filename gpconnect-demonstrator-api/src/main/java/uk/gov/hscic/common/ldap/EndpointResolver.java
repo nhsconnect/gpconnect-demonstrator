@@ -2,6 +2,8 @@ package uk.gov.hscic.common.ldap;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.json.*;
 
 @RestController
 @RequestMapping("/ldap")
@@ -67,10 +70,9 @@ public class EndpointResolver {
                 ldapLog.debug(uuid + " ASID Arribute - " + attribute.getId() + " : " + attribute.getString());
                 // Extract PartyKey
                 if ("nhsMhsPartyKey".equalsIgnoreCase(attribute.getId())) {
-                    partyKey = attribute.getString();   
-                }
-                else if ("uniqueIdentifier".equalsIgnoreCase(attribute.getId())) {
-                    asid = attribute.getString();   
+                    partyKey = attribute.getString();
+                } else if ("uniqueIdentifier".equalsIgnoreCase(attribute.getId())) {
+                    asid = attribute.getString();
                 }
             }
         }
@@ -94,10 +96,20 @@ public class EndpointResolver {
             }
         }
 
-        return "{ \"endpointURL\" : \"" + endpointURL + "\", \"recievingSysASID\" : \""  + asid + "\"}";
-        
+        if (endpointURL == null || endpointURL.isEmpty()) {
+            try {
+                String spineProxyJsonFileContent = new String(Files.readAllBytes(Paths.get("gpc/gpconnect-demonstrator-api/spineproxy.json")));
+                JSONObject jsonObj = new JSONObject(spineProxyJsonFileContent);
+                endpointURL = (String) jsonObj.get("restUrlPrefix");
+                asid = (String) jsonObj.get("toASID");
+            } catch (Exception e) {
+                ldapLog.error("Failed to read from default file: " + e.getMessage());
+            }
+        }
+        return "{ \"endpointURL\" : \"" + endpointURL + "\", \"recievingSysASID\" : \"" + asid + "\"}";
+
     }
-    
+
     public ArrayList<Collection<Attribute>> ldapQueryRequest(@RequestParam(value = "queryBase", required = true) String queryBase,
             @RequestParam(value = "queryFilter", required = true) String queryFilter) throws IOException {
 

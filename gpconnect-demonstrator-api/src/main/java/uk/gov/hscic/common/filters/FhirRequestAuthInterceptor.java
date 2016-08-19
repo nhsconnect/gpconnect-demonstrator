@@ -10,7 +10,7 @@ import java.util.Base64;
 import org.json.*;
 import uk.gov.hscic.common.util.NhsCodeValidator;
 
-public class FhirRequestInterceptor extends AuthorizationInterceptor {
+public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
     static Logger authLog = Logger.getLogger("AuthLog");
 

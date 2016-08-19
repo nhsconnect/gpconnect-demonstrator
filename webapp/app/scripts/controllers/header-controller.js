@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('headerController', function ($scope, $rootScope, $state, usSpinnerService, $stateParams, UserService) {
+  .controller('headerController', function ($scope, $rootScope, $state, usSpinnerService, $stateParams, UserService, $modal) {
 
     // Get current user
     UserService.setCurrentUserFromQueryString();
@@ -108,5 +108,14 @@ angular.module('gpConnect')
           }); // Id is hardcoded
         }
       };
+      
+      $scope.gpConnectInfo = function () {
+        $modal.open({
+            templateUrl: 'views/application/information-modal.html',
+            size: 'lg',
+            controller: 'InformationModalCtrl'
+        });
+      };
+      
     });
   });

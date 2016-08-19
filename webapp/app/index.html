@@ -136,6 +136,7 @@
   <script src="scripts/controllers/investigations-list.js"></script>
   <script src="scripts/controllers/orders-controller.js"></script>
   <script src="scripts/controllers/order-create-modal.js"></script>
+  <script src="scripts/controllers/information-modal.js"></script>
   <!-- endbuild -->
 
 </head>
@@ -148,14 +149,13 @@
   <!-- Add your site or application content here -->
 
   <!-- Header -->
-  <div class="row header-background hidden-xs">
-    <div class="col-md-4 col-sm-4 header-left">
-      <div class="glyphs g">
-        <p class="header-title-1" ng-if="title" ng-click="goHome()">{{ title }}</p>
-      </div>
+  <div class="col-md-12 col-sm-12 header-background hidden-xs">
+      
+    <div class="col-md-8 col-sm-8 headerBannerTitle">
+      <div class="header-title-1" ng-if="title" ng-click="goHome()">{{ title }}</div>
     </div>
-
-    <div class="col-md-offset-1 col-sm-offset-1 col-md-3 col-sm-4 header-right">
+      
+    <div class="col-md-3 col-sm-3 headerBannerUser">
       <!-- User Profile -->
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
@@ -185,6 +185,12 @@
         </ul>
       </div>
       <!-- /.User Profile -->
+    </div>
+      
+    <div class="col-md-1 col-sm-1 headerBannerInfo">
+      <div class="glyphs g">
+        <span class="glyphicon glyphicon-info-sign" ng-click="gpConnectInfo()"></span>
+      </div>
     </div>
   </div>
   <!-- /.Header -->

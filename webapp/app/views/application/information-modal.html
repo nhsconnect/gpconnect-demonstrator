@@ -1,0 +1,36 @@
+<div class="modal-header">
+    <h4 class="modal-title">Information</h4>
+</div>
+
+<div class="modal-body">
+
+    <div class="infoSection">
+        <div class="infoHeader">Introduction</div>
+        <div>The GP Connect Demonstrator was built to test and demonstrate the specification during its development, feeding back information to allow improvements of the design and 
+            documentation of specification. The GP Connect Demonstrator is an evolving example of the GP Connect Specification closely following changes and updates to the specification.</div>
+        
+        <div>Due to the environment in which the GP Connect demonstrator is deployed not all the functionality the demonstrator is capable of is used, such as making calls through the spine proxy
+            or looking up a GP system's FHIR endpoints as there is currently no connection to a Spine instance or the SDS. The demonstrator is capable of talking to a number of these services if 
+            they were available and was used to make the first tests of the Spine Proxy and it is capable of making calls to the SDS to lookup GP Practice FHIR endpoints from a organisation ODS 
+            code.</div>
+    </div>
+
+    <div class="infoSection">
+        <div class="infoHeader">Overnight Data Reset</div>
+        <div>To aid in testing and to stop the demonstrator becoming cluttered with old test data we have implemented a clear down and reset process which happens every night at just after 1am. This
+            resets all the appointment and task data.</div>
+        
+        <div>A number of operations are performed when clearing down the appointments. All appointments previously created are deleted along with all the slots which can be booked as appointments 
+            for patients. A new set of slots are added using a pattern taken from a configuration file, this creates slots starting from the current date and covers the next seven days. As the 
+            slots are added from a static configuration file, this allows us to setup specific test scenarios as well as allowing consistent testing from one day to another.
+        </div>
+        
+        <div>The clear down of Tasks is much more simple as we only need to delete the record of the Tasks we have sent and all the tasks our system has received by running a simple query in our 
+            database.</div>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <a class="btn btn-success" ng-click="close()">Close</a>
+</div>

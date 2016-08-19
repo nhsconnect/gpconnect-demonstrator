@@ -49,32 +49,36 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     @Override
     public boolean incomingRequestPreProcessed(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         
+        String failedMsg = "";
+        
         // Check there is a SSP-From header
         String fromASIDHeader = httpRequest.getHeader("SSP-From");
         if (fromASIDHeader == null || fromASIDHeader.isEmpty()) {
-            // SSP-From header does not exist in request
-            return false;
+            failedMsg = failedMsg + "SSP-From header blank,";
         }
 
         // Check the SSP-To header is present and directed to our system
         String toASIDHeader = httpRequest.getHeader("SSP-To");
         if (toASIDHeader == null || toASIDHeader.isEmpty()) {
-            // SSP-To header does not exist in request
-            return false;
+            failedMsg = failedMsg + "SSP-To header blank,";
         }
         if (systemSspToHeader != null && !toASIDHeader.equalsIgnoreCase(systemSspToHeader)) {
             // We loaded our ASID but the SSP-To header does not match the value
-            return false;
+            failedMsg = failedMsg + "SSP-To header does not match ASID of system,";
         }
 
         // Check the interactionID header is valid on our white list of interaction IDs
         String interactionIdHeader = httpRequest.getHeader("SSP-InteractionID");
         if(interactionIdWhiteList != null && !interactionIdWhiteList.contains(interactionIdHeader)){
             // We managed to load our whilte list but the interaction Id in the header does not exist in the list
+            failedMsg = failedMsg + "SSP-InteractionID in not a valid interaction ID for the system,";
+        }
+        
+        if(!failedMsg.isEmpty()){
             try{
-                httpResponse.sendError(400, "Invalid interactionId");
+                httpResponse.sendError(400, failedMsg);
             } catch (Exception e){
-                log.error("Error adding response message for Failed InteractionID validation: " + e.getMessage());
+                log.error("Error adding response message for Failed validation: ("+failedMsg+") " + e.getMessage());
             }
             return false;
         }

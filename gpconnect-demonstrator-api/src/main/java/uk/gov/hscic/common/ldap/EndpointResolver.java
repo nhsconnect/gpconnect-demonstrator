@@ -96,16 +96,6 @@ public class EndpointResolver {
             }
         }
 
-        if (endpointURL == null || endpointURL.isEmpty()) {
-            try {
-                String spineProxyJsonFileContent = new String(Files.readAllBytes(Paths.get("gpc/gpconnect-demonstrator-api/spineproxy.json")));
-                JSONObject jsonObj = new JSONObject(spineProxyJsonFileContent);
-                endpointURL = (String) jsonObj.get("restUrlPrefix");
-                asid = (String) jsonObj.get("toASID");
-            } catch (Exception e) {
-                ldapLog.error("Failed to read from default file: " + e.getMessage());
-            }
-        }
         return "{ \"endpointURL\" : \"" + endpointURL + "\", \"recievingSysASID\" : \"" + asid + "\"}";
 
     }

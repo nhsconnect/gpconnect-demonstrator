@@ -14,18 +14,22 @@ angular.module('gpConnect')
                 if (endpointCache == undefined) {
                     endpointCache = $cacheFactory('endpointCache');
                 }
-                var endpointCacheResponse = endpointCache.get(odsCode + interactionId);
+                
+                var key = '' + odsCode + interactionId;
+                
+                var endpointCacheResponse = endpointCache.get(key);
 
                 if (endpointCacheResponse == undefined) {
-                    return $http.get('/api/ldap/endpointLookup?odsCode=' + odsCode + '&interactionId=' + interactionId).then(function (response) {
+                    var lookupReturn = $http.get('/api/ldap/endpointLookup?odsCode=' + odsCode + '&interactionId=' + interactionId).then(function (response) {
                         var lookupResult = response.data;
                         if (lookupResult.endpointURL && lookupResult.recievingSysASID) {
                             returnEndpointDetails.restUrlPrefix = lookupResult.endpointURL;
                             returnEndpointDetails.toASID = lookupResult.recievingSysASID;
-                            endpointCache.put(odsCode + interactionId, returnEndpointDetails);
                         }
                         return returnEndpointDetails;
                     });
+                    endpointCache.put(key, lookupReturn);
+                    return lookupReturn
                 } else {
                     return endpointCacheResponse;
                 }

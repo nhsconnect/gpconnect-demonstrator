@@ -6,7 +6,7 @@ angular.module('gpConnect')
             var getJWT = function (scope, operation, identifier) {
 
                 identifier = '' + identifier; // Force value to be a string as it does not alway come through as one
-                
+
                 // Header
                 var oHeader = {alg: 'none', typ: 'JWT'};
 
@@ -22,8 +22,8 @@ angular.module('gpConnect')
                 oPayload.exp = tEnd;
                 oPayload.iat = tNow;
                 oPayload.reason_for_request = "directcare";
-                
-                if(scope.indexOf("patient") > -1){
+
+                if (scope.indexOf("patient") > -1) {
                     oPayload.requested_record = {
                         "resourceType": "Patient",
                         "identifier": [{
@@ -31,7 +31,7 @@ angular.module('gpConnect')
                                 "value": identifier
                             }]
                     };
-                    oPayload.requested_scope = "patient/*."+operation;
+                    oPayload.requested_scope = "patient/*." + operation;
                 } else {
                     oPayload.requested_record = {
                         "resourceType": "Organization",
@@ -40,9 +40,9 @@ angular.module('gpConnect')
                                 "value": identifier
                             }]
                     };
-                    oPayload.requested_scope = "organization/*."+operation;
+                    oPayload.requested_scope = "organization/*." + operation;
                 }
-                
+
                 oPayload.requesting_device = {
                     "resourceType": "Device",
                     "id": "1",
@@ -79,7 +79,6 @@ angular.module('gpConnect')
                         "prefix": ["Mr"]
                     }
                 };
-                oPayload.audit_event_id = guid();
 
                 // Sign JWT, password=123456
                 var sHeader = JSON.stringify(oHeader);
@@ -87,18 +86,20 @@ angular.module('gpConnect')
                 var sJWT = KJUR.jws.JWS.sign("none", sHeader, sPayload, "");
                 return sJWT;
             };
-            
+
+            var guid = function() {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                            .toString(16)
+                            .substring(1);
+                }
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                        s4() + '-' + s4() + s4() + s4();
+            }
+
             return {
-                getJWT: getJWT
+                getJWT: getJWT,
+                guid: guid
             };
         });
 
-function guid() {
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-                .toString(16)
-                .substring(1);
-    }
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-            s4() + '-' + s4() + s4() + s4();
-}

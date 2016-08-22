@@ -17,6 +17,7 @@ angular.module('gpConnect')
                                     'Ssp-From': endpointLookupResult.fromASID,
                                     'Ssp-To': endpointLookupResult.toASID,
                                     'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord",
+                                    'Ssp-TraceID': fhirJWTFactory.guid(),
                                     'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
                                 }
                             }
@@ -39,6 +40,7 @@ angular.module('gpConnect')
                                         'Ssp-From': endpointLookupResult.fromASID,
                                         'Ssp-To': endpointLookupResult.toASID,
                                         'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient",
+                                        'Ssp-TraceID': fhirJWTFactory.guid(),
                                         'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
                                     }
                                 }
@@ -73,6 +75,7 @@ angular.module('gpConnect')
                                         'Ssp-From': endpointLookupResult.fromASID,
                                         'Ssp-To': endpointLookupResult.toASID,
                                         'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient",
+                                        'Ssp-TraceID': fhirJWTFactory.guid(),
                                         'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
                                     }
                                 }

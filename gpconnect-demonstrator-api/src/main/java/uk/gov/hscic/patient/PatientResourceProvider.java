@@ -529,7 +529,19 @@ public class PatientResourceProvider implements IResourceProvider {
         address.setType(AddressTypeEnum.PHYSICAL);
         address.setText(patientDetails.getAddress());
         
-        patient.getCareProvider().add(new ResourceReferenceDt("Practitioner/"+patientDetails.getGpId()));
+        
+        Practitioner practitioner = practitionerResourceProvider.getPractitionerById(new IdDt(patientDetails.getGpId()));
+        ResourceReferenceDt practitionerReference = new ResourceReferenceDt("Practitioner/"+patientDetails.getGpId());
+        practitionerReference.setDisplay(practitioner.getName().getPrefixFirstRep() + " " + practitioner.getName().getGivenFirstRep() + " " + practitioner.getName().getFamilyFirstRep());
+        patient.getCareProvider().add(practitionerReference);
+        
+        patient.setGender(AdministrativeGenderEnum.forCode(patientDetails.getGender().toLowerCase()));
+        
+        ContactPointDt telephone = new ContactPointDt();
+        telephone.setSystem(ContactPointSystemEnum.PHONE);
+        telephone.setValue(patientDetails.getTelephone());
+        telephone.setUse(ContactPointUseEnum.HOME);
+        patient.setTelecom(Collections.singletonList(telephone));
         
         return patient;
     }

@@ -48,7 +48,6 @@
         <module>gpconnect-core</module>
         <module>gpconnect-database</module>
         <module>gpconnect-demonstrator-api</module>
-        <module>gpconnect-openehr</module>
         <module>gpconnect-terminology-example</module>
     </modules>
 
@@ -69,12 +68,6 @@
             <dependency>
                 <groupId>uk.gov.hscic</groupId>
                 <artifactId>gpconnect-database</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>uk.gov.hscic</groupId>
-                <artifactId>gpconnect-openehr</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

@@ -48,12 +48,6 @@
 
         <dependency>
             <groupId>uk.gov.hscic</groupId>
-            <artifactId>gpconnect-openehr</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>uk.gov.hscic</groupId>
             <artifactId>gpconnect-terminology-example</artifactId>
             <scope>runtime</scope>
         </dependency>

@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="" reloadable="true">
 
-    <Environment name="c4hOpenEHR.address"          type="java.lang.String" override="false" value="https://ehrscape.code-4-health.org/rest/v1/"/>
-    <Environment name="c4hOpenEHR.user"             type="java.lang.String" override="false" value="c4h_ripple_osi"/>
-    <Environment name="c4hOpenEHR.password"         type="java.lang.String" override="false" value="InDeCoMP"/>
-    <Environment name="c4hOpenEHR.subjectNamespace" type="java.lang.String" override="false" value="uk.nhs.nhs_number"/>
-
-    <Environment name="c4hOpenEHR.allergiesTemplate"    type="java.lang.String" override="false" value="LCR Allergies List.v0"/>
-    <Environment name="c4hOpenEHR.medicationTemplate"   type="java.lang.String" override="false" value="LCR Medication List.v0"/>
-    <Environment name="c4hOpenEHR.problemTemplate"      type="java.lang.String" override="false" value="LCR Problem List.v0"/>
-    <Environment name="c4hOpenEHR.proceduresTemplate"   type="java.lang.String" override="false" value="IDCR Procedures List.v0"/>
-    <Environment name="c4hOpenEHR.referralsTemplate"    type="java.lang.String" override="false" value="RIPPLE - Minimal referral.v0"/>
-    <Environment name="c4hOpenEHR.appointmentsTemplate" type="java.lang.String" override="false" value="RIPPLE - Minimal referral.v0"/>
-
     <Environment name="legacy.datasource.vendor"    type="java.lang.String"  override="false" value="mysql"/>
     <Environment name="legacy.datasource.host"      type="java.lang.String"  override="false" value="127.0.0.1"/>
     <Environment name="legacy.datasource.port"      type="java.lang.String"  override="false" value="3306"/>

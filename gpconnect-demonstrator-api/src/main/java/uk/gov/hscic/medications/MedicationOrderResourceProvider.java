@@ -39,7 +39,7 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public List<MedicationOrder> getMedicationOrdersForPatientId(@RequiredParam(name = "patientId") String patientId, @OptionalParam(name = "fromDate") String fromDate, @OptionalParam(name = "toDate") String toDate) {
+    public List<MedicationOrder> getMedicationOrdersForPatientId(@RequiredParam(name = "patient") String patientId) {
         RepoSource sourceType = RepoSourceType.fromString(null);
         MedicationOrderSearch medicationOrderSearch = applicationContext.getBean(MedicationOrderSearchFactory.class).select(sourceType);
         ArrayList<MedicationOrder> medicationOrders = new ArrayList();

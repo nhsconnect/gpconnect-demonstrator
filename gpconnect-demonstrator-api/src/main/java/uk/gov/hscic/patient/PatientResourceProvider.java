@@ -302,13 +302,13 @@ public class PatientResourceProvider implements IResourceProvider {
                                 }
                                 
                                 // Sructured Data Search
-                                List<MedicationOrder> medicationOrders = medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientID, null, null);
+                                List<MedicationOrder> medicationOrders = medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientID);
                                 HashSet<String> medicationOrderMedicationsList = new HashSet();
                                 HashSet<String> medicationOrderList = new HashSet();
                                 for(MedicationOrder medicationOrder : medicationOrders){
                                     medicationOrderList.add(medicationOrder.getId().getIdPart());
                                 }
-                                List<MedicationDispense> medicationDispenses = medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientID, null, null);
+                                List<MedicationDispense> medicationDispenses = medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientID);
                                 for(MedicationDispense medicationDispense : medicationDispenses){
                                     if(section == null) section = new Section();
                                     // Add the medication Order to the bundle
@@ -328,7 +328,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         }
                                     }
                                 }
-                                List<MedicationAdministration> medicationAdministrations = medicationAdministrationResourceProvider.getMedicationAdministrationsForPatientId(patientID, null, null);
+                                List<MedicationAdministration> medicationAdministrations = medicationAdministrationResourceProvider.getMedicationAdministrationsForPatientId(patientID);
                                 for(MedicationAdministration medicationAdministration : medicationAdministrations){
                                     if(section == null) section = new Section();
                                     Entry medicationAdministrationEntry = new Entry();
@@ -488,17 +488,17 @@ public class PatientResourceProvider implements IResourceProvider {
     
     @Search(compartmentName="MedicationOrder")
     public List<MedicationOrder> getPatientMedicationOrders(@IdParam IdDt patientLocalId) {
-        return medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientLocalId.getIdPart(), null, null);
+        return medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientLocalId.getIdPart());
     }
     
     @Search(compartmentName="MedicationDispense")
     public List<MedicationDispense> getPatientMedicationDispenses(@IdParam IdDt patientLocalId) {
-        return medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientLocalId.getIdPart(), null, null);
+        return medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientLocalId.getIdPart());
     }
     
     @Search(compartmentName="MedicationAdministration")
     public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdDt patientLocalId) {
-        return medicationAdministrationResourceProvider.getMedicationAdministrationsForPatientId(patientLocalId.getIdPart(), null, null);
+        return medicationAdministrationResourceProvider.getMedicationAdministrationsForPatientId(patientLocalId.getIdPart());
     }
     
     @Search(compartmentName="Appointment")

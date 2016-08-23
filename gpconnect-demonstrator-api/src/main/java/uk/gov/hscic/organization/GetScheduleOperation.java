@@ -50,7 +50,7 @@ public class GetScheduleOperation {
     @SuppressWarnings("deprecation")
 	void populateBundle(Bundle bundle, OperationOutcome operationOutcome, String orgOdsCode, String siteOdsCode, String planningHorizonStart, String planningHorizonEnd) { 
         // organisation
-        List<Organization> organizations = organizationResourceProvider.getOrganizations(orgOdsCode, siteOdsCode);
+        List<Organization> organizations = organizationResourceProvider.getOrganizationsByODSCode(new TokenParam("http://fhir.nhs.net/Id/ods-organization-code", orgOdsCode));
         if(organizations.isEmpty() == false) {
         	for(Organization organization : organizations) {
         		Entry organisationEntry = new Entry();

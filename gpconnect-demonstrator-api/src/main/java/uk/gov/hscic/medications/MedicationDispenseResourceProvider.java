@@ -6,7 +6,6 @@ import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.Medication;
 import ca.uhn.fhir.model.dstu2.resource.MedicationDispense;
 import ca.uhn.fhir.model.dstu2.valueset.MedicationDispenseStatusEnum;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -34,7 +33,7 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public List<MedicationDispense> getMedicationDispensesForPatientId(@RequiredParam(name = "patientId") String patientId, @OptionalParam(name = "fromDate") String fromDate, @OptionalParam(name = "toDate") String toDate) {
+    public List<MedicationDispense> getMedicationDispensesForPatientId(@RequiredParam(name = "patient") String patientId) {
         
         RepoSource sourceType = RepoSourceType.fromString(null);
         MedicationDispenseSearch medicationDispenseSearch = applicationContext.getBean(MedicationDispenseSearchFactory.class).select(sourceType);

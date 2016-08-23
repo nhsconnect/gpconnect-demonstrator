@@ -55,8 +55,7 @@ public class SlotResourceProvider  implements IResourceProvider {
         return slotDetailToSlotResourceConverter(slotDetail);
     }
     
-    @Search
-    public List<Slot> getSlotsForScheduleId(@RequiredParam(name = "scheduleId") String scheduleId, @RequiredParam(name = "startDateTime") String startDateTime, @RequiredParam(name = "endDateTime") String endDateTime) {
+    public List<Slot> getSlotsForScheduleId(String scheduleId, String startDateTime, String endDateTime) {
         RepoSource sourceType = RepoSourceType.fromString(null);
         SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
         ArrayList<Slot> slots = new ArrayList();

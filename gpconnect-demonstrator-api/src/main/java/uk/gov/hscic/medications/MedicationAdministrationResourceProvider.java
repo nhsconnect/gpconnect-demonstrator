@@ -3,7 +3,6 @@ package uk.gov.hscic.medications;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.MedicationAdministration;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -30,7 +29,7 @@ public class MedicationAdministrationResourceProvider  implements IResourceProvi
     }
 
     @Search
-    public List<MedicationAdministration> getMedicationAdministrationsForPatientId(@RequiredParam(name = "patientId") String patientId, @OptionalParam(name = "fromDate") String fromDate, @OptionalParam(name = "toDate") String toDate) {
+    public List<MedicationAdministration> getMedicationAdministrationsForPatientId(@RequiredParam(name = "patient") String patientId) {
         
         RepoSource sourceType = RepoSourceType.fromString(null);
         MedicationAdministrationSearch medicationAdministrationSearch = applicationContext.getBean(MedicationAdministrationSearchFactory.class).select(sourceType);

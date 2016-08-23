@@ -86,32 +86,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public List<Appointment> getAppointmentsForPatientId(@RequiredParam(name = "patientId") String patientId, @RequiredParam(name = "startDateTime") String startDateTime, @RequiredParam(name = "endDateTime") String endDateTime) {
-
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        AppointmentSearch appointmentSearch = applicationContext.getBean(AppointmentSearchFactory.class).select(sourceType);
-        ArrayList<Appointment> appointments = new ArrayList();
-
-        List<AppointmentDetail> appointmentDetails = null;
-
-        if (patientId != null && startDateTime != null && endDateTime != null) {
-            appointmentDetails = appointmentSearch.findAppointmentForPatientId(Long.valueOf(patientId), new Date(startDateTime), new Date(endDateTime));
-        } else if (patientId != null && startDateTime != null) {
-            appointmentDetails = appointmentSearch.findAppointmentForPatientId(Long.valueOf(patientId), new Date(startDateTime));
-        } else if (patientId != null) {
-            appointmentDetails = appointmentSearch.findAppointmentForPatientId(Long.valueOf(patientId));
-        }
-
-        if (appointmentDetails != null && appointmentDetails.size() > 0) {
-            for (AppointmentDetail appointmentDetail : appointmentDetails) {
-                appointments.add(appointmentDetailToAppointmentResourceConverter(appointmentDetail));
-            }
-        }
-
-        return appointments;
-    }
-    
-    @Search
     public List<Appointment> getAppointmentsForPatientIdAndDates(@RequiredParam(name = "patient") IdDt patientLocalId, @OptionalParam(name = "start") DateRangeParam startDate) {
 
         Date startLowerDate = null;

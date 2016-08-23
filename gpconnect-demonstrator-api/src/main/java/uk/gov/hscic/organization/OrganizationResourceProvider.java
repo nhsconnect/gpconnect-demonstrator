@@ -66,30 +66,6 @@ public class OrganizationResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public List<Organization> getOrganizations(@RequiredParam(name = "organizationODS") String organizationODSCode, @OptionalParam(name = "siteODSCode") String siteODSCode) {
-
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        OrganizationSearch organizationSearch = applicationContext.getBean(OrganizationSearchFactory.class).select(sourceType);
-        ArrayList<Organization> organizations = new ArrayList();
-
-        List<OrganizationDetails> organizationDetailsList = null;
-
-        if (organizationODSCode != null && siteODSCode != null) {
-            organizationDetailsList = organizationSearch.findOrganizationDetailsByOrgODSCodeAndSiteODSCode(organizationODSCode, siteODSCode);
-        } else if (organizationODSCode != null) {
-            organizationDetailsList = organizationSearch.findOrganizationDetailsByOrgODSCode(organizationODSCode);
-        }
-
-        if (organizationDetailsList != null) {
-            for (OrganizationDetails organizationDetails : organizationDetailsList) {
-                organizations.add(organizaitonDetailsToOrganizationResourceConverter(organizationDetails));
-            }
-        }
-
-        return organizations;
-    }
-
-    @Search
     public List<Organization> getOrganizationsByODSCode(@RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam organizationId) {
 
         RepoSource sourceType = RepoSourceType.fromString(null);

@@ -60,8 +60,7 @@ public class ScheduleResourceProvider implements IResourceProvider {
         return scheduleDetailToScheduleResourceConverter(scheduleDetail);
     }
     
-    @Search
-    public List<Schedule> getSchedulesForLocationId(@RequiredParam(name = "locationId") String locationId, @RequiredParam(name = "startDateTime") String startDateTime, @RequiredParam(name = "endDateTime") String endDateTime) {
+    public List<Schedule> getSchedulesForLocationId(String locationId, String startDateTime, String endDateTime) {
         RepoSource sourceType = RepoSourceType.fromString(null);
         ScheduleSearch scheduleSearch = applicationContext.getBean(ScheduleSearchFactory.class).select(sourceType);
         ArrayList<Schedule> schedules = new ArrayList();

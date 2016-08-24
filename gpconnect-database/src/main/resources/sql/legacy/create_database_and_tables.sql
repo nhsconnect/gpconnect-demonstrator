@@ -213,7 +213,7 @@ CREATE TABLE gpconnect.medication_administrations (
 
 CREATE TABLE gpconnect.problems (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
- html                VARCHAR(4096) NULL,
+ html                TEXT(25000) NULL,
  provider            VARCHAR(10)   NULL,
  lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
@@ -237,7 +237,7 @@ CREATE TABLE gpconnect.encounters (
 
 CREATE TABLE gpconnect.patientsummary (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
- html                VARCHAR(7168) NULL,
+ html                VARCHAR(21000) NULL,
  provider            VARCHAR(10)   NULL,
  lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
@@ -261,7 +261,7 @@ CREATE TABLE gpconnect.observations (
 
 CREATE TABLE gpconnect.immunisations (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
- html                VARCHAR(4096) NULL,
+ html                TEXT(25000) NULL,
  provider            VARCHAR(10)   NULL,
  lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)
@@ -285,7 +285,7 @@ CREATE TABLE gpconnect.clinicalitems (
 
 CREATE TABLE gpconnect.investigations (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
- html                VARCHAR(7168) NULL,
+ html                VARCHAR(21000) NULL,
  provider            VARCHAR(10)   NULL,
  lastUpdated			 DATETIME 	   NULL,
  PRIMARY KEY         (id)

@@ -14,7 +14,7 @@
 			</div>
 
 			<ul ng-if="selectedLocation !== null" class="nav nav-pills nav-stacked col-sm-1" style="padding-right:0; margin-right: 20px; width:180px;">
-				<li ng-repeat="day in selectedLocation.dayBlockOfSlots" ng-class="{active:isDaySelected(day)}" ><a ng-href="#" ng-click="onSelectDay(day)">{{getFormattedDate(day)}} <span class="badge">{{day.freeSlots}}</span></a></li>
+				<li ng-repeat="day in selectedLocation.dayBlockOfSlots | orderBy:'date'" ng-class="{active:isDaySelected(day)}" ><a ng-href="#" ng-click="onSelectDay(day)">{{getFormattedDate(day)}} <span class="badge">{{day.freeSlots}}</span></a></li>
 			</ul>
 	</div>
 

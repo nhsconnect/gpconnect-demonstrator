@@ -24,3 +24,4 @@ activemq-data/
 
 # Config #
 context-gpconnect.xml
+/log/

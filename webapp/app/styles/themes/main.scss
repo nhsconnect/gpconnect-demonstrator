@@ -2296,3 +2296,12 @@ div#age-chart div.morris-hover.morris-default-style {
     color: #19568c;
     font-weight: bold;
 }
+
+.gantt-task {
+    z-index: auto;
+}
+
+.gantt-task-info {
+    left: auto !important;
+    top: auto !important;
+}

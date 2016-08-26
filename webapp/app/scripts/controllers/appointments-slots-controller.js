@@ -12,7 +12,7 @@ angular.module('gpConnect')
             };
 
             var startDate = moment(appointmentSearchParams.startDate).format('YYYY-MM-DDTHH:mm:ss');
-            var endDate = moment(appointmentSearchParams.endDate).format('YYYY-MM-DDTHH:mm:ss');
+            var endDate = moment(appointmentSearchParams.endDate).add(23,'hours').add(59,'minutes').add(59,'seconds').format('YYYY-MM-DDTHH:mm:ss');
             // TODO - set the correct codes relating to the selected practices instead of hardcoding, as below
 
             var responseSlots = [];             // Slots is an array to cycle through easily

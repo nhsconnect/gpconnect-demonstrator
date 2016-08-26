@@ -113,7 +113,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
                     break;
                 case "timePeriod":
                     PeriodDt timePeriod = (PeriodDt) parameter.getValue();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                     planningHorizonStart = dateFormat.format(timePeriod.getStart());
                     planningHorizonEnd = dateFormat.format(timePeriod.getEnd());
                     break;

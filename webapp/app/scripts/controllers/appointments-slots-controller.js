@@ -188,6 +188,8 @@ angular.module('gpConnect')
               }
 
               $scope.ganttModel.push(practitionerSchedule);
+              $scope.displayFromDate = day.date;
+              $scope.displayToDate = day.date;
             }
           };
 
@@ -271,7 +273,7 @@ angular.module('gpConnect')
                         });
                     }
             });
-
+        
         };
         
  });

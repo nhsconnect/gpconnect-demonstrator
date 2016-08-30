@@ -154,12 +154,12 @@ angular.module('gpConnect')
                     $scope.scheduleModel = internalGetScheduleModel;
                     // select the default location
                     $scope.selectDefaultLocation(internalGetScheduleModel.locations);
-                
+                    setTimeout(function(){ $('.gantt-scrollable').scrollLeft(100); }, 10);
                 }
                 
                 usSpinnerService.stop('appointmentSlots-spinner');
             });
-
+        
           $scope.loadDaySlots = function (day) {
             $scope.ganttModel = [];
             var practitioners = day.practitioners;

@@ -1,5 +1,6 @@
 {
     "restUrlPrefix": "/fhir",
+    "spineProxy" : "",
     "fromASID": "200000000359",
     "toASID": "200000000360"
 }

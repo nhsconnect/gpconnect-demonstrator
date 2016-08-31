@@ -410,6 +410,7 @@ angular
   .provider("EnvConfig", function() {
         var envConfig = {
             "restUrlPrefix" : "",
+            "spineProxy" : "",
             "fromASID" : "",
             "toASID" : ""
         };

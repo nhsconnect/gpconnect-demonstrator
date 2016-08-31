@@ -2298,10 +2298,39 @@ div#age-chart div.morris-hover.morris-default-style {
 }
 
 .gantt-task {
+    border: 1px solid white;
+    border-radius: 1px;
     z-index: auto;
 }
 
 .gantt-task-info {
     left: auto !important;
     top: auto !important;
+}
+
+.gantt-task-content span {
+    display: none;
+}
+
+.gantt-task-content:hover {
+    background-color: #428bca;
+    border: 1px solid #428bca;
+    border-radius: 3px;
+}
+
+.gantt-header-row-first {
+    background-color: #eeeeee;
+}
+
+.gantt-body {
+    min-height: 200px;
+}
+
+.appointmentFormSection {
+    padding-bottom: 11px;
+}
+
+.appointmentFormSection div {
+    margin-bottom: 2px;
+    padding-left: 0;
 }

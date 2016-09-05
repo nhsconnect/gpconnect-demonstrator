@@ -26,12 +26,26 @@ VALUES (
 );
 
 INSERT INTO gpconnect.encounters
-  (id, html, provider, lastUpdated)
+  (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (
-  9000000033,
-  "<div><table class='\&quot;groupedtable\&quot;'><tbody><tr><th>10 Dec 2014 - 12:17</th><th>Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)</th></tr><tr><td /><td>History: Family history of diabetes mellitus type II.<br />Came to nurse last week with Polyuria Very worried that he is diabetic - confirmed on blood tests. Very amenable to change of lifestyle; no other symptoms at present.<br />Examination: O/E - Diastolic BP reading 98 mmHg. , O/E - Systolic BP reading 152 mmHg.<br />Diagnosis: Type II diabetes mellitus.<br />Procedure: Wants to avoid tabs for the moment - watch TChol as well as HbA1c. Review 1/12.<br />Metformin 500mg tablets - 168 tablets - take one three times a day - Patient has read up on metformin and is keen to start.<br /></td></tr><tr><th>01 Jan 2015 - 15:47</th><th>Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)</th></tr><tr><td /><td>Type II diabetic dietary review.<br />Haemoglobin A1c level - IFCC standardised 20.5 mmol/mol.<br />Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 10ml vials - 5 vials - use as directed.</td></tr><tr><th>04 Jul 2015 - 12:10</th><th>Miss Tanya Turnpike (Practice Nurse) - Dr Johnson and Partners (J12345)</th></tr><tr><td /><td>Contact method: Telephone<br />Care plan created: Diabetes management plan.<br />Haemoglobin A1c level - IFCC standardised 23.5 mmol/mol.</td></tr><tr><th>08 Jan 2016 - 09:22</th><th>Cynthia Carlson (Practice Nurse) - Dandelion Medical Practice (D12345)</th></tr><tr><td /><td>Peanut allergy<br />Sensitivity: Penicillin<br />Haemoglobin A1c level - IFCC standardised 25.5 mmol/mol.<br />Here is some free text that applies to the whole encounter.<br /></td></tr></tbody></table></div>",
-  "TPP",
-  '2016-07-25 12:00:00'
+  9000000033, '2014-12-10 12:17:00',
+  "<table><thead><tr><th>10 Dec 2014 - 12:17</th><th>Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)</th>				</tr></thead><tbody><tr><td></td><td>History: Family history of diabetes mellitus type II.<br />Came to nurse last week with Polyuria Very worried that he is diabetic - confirmed on blood tests. Very amenable to change of lifestyle; no other symptoms at present.<br />Examination: O/E - Diastolic BP reading 98 mmHg. , O/E - Systolic BP reading 152 mmHg.<br />Diagnosis: Type II diabetes mellitus.<br />Procedure: Wants to avoid tabs for the moment - watch TChol as well as HbA1c. Review 1/12.<br />Metformin 500mg tablets - 168 tablets - take one three times a day - Patient has read up on metformin and is keen to start.</td></tr></tbody></table>",
+  "TPP", '2016-07-25 12:00:00'
+),
+(
+  9000000033, '2015-01-01 15:47:00',
+  "<table><thead><tr><th>01 Jan 2015 - 15:47</th><th>Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)</th>				</tr></thead><tbody><tr><td></td><td>Type II diabetic dietary review.<br />Haemoglobin A1c level - IFCC standardised 20.5 mmol/mol.<br />Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 10ml vials - 5 vials - use as directed.</td></tr></tbody></table>",
+  "TPP", '2016-07-25 12:00:00'
+),
+(
+  9000000033, '2015-07-04 12:10:00',
+  "<table><thead><tr><th>04 Jul 2015 - 12:10</th><th>Miss Tanya Turnpike (Practice Nurse) - Dr Johnson and Partners (J12345)</th></tr></thead><tbody><tr><td></td><td>Contact method: Telephone<br />Care plan created: Diabetes management plan.<br />Haemoglobin A1c level - IFCC standardised 23.5 mmol/mol.</td></tr></tbody></table>",
+  "TPP", '2016-07-25 12:00:00'
+),
+(
+  9000000033, '2016-01-08 09:22:00',
+  "<table><thead><tr><th>08 Jan 2016 - 09:22</th><th>Cynthia Carlson (Practice Nurse) - Dandelion Medical Practice (D12345)</th> </tr></thead><tbody><tr><td></td><td>Peanut allergy<br />Sensitivity: Penicillin<br />Haemoglobin A1c level - IFCC standardised 25.5 mmol/mol.<br />Here is some free text that applies to the whole encounter.</td></tr></tbody></table>",
+  "TPP", '2016-07-25 12:00:00'
 );
 
 INSERT INTO gpconnect.immunisations

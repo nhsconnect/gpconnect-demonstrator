@@ -26,12 +26,21 @@ VALUES (
 );
 
 INSERT INTO gpconnect.encounters
-  (id, html, provider, lastUpdated)
+  (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (
-  9000000041,
-  "<div><table><tbody><tr><td><div class='encounters'><h3>20-Apr-2016 Clinic</h3><table><thead><tr><th>Notes</th><th>Clinician</th></tr></thead><tbody><tr><td>BP 120 / 80 at 15:20:00 taken Sitting Cuff: Standard O/E - blood pressure reading</td><td>Dr Bob Ash</td></tr><tr><td>Repeat Cetirizine 10mg tablets Last issued: 01-Mar-2016 maximum 4 allowed Supply ( 7 ) tablet TAKE 1 A DAY FOR UP TO 7 DAYS</td><td>Dr Bob Ash</td></tr><tr><td>Issue 1 Cetirizine 10mg tablets Supply ( 7 ) tablet TAKE 1 A DAY FOR UP TO 7 DAYS</td><td>Dr Bob Ash</td></tr></tbody></table><h3>02-Jun-2013 Surgery Consultation</h3><table><thead><tr><th>Notes</th><th>Clinician</th></tr></thead><tbody><tr><td>BP 120 / 72 at: 02-Jun-2013 09:56:00 taken Sitting from Left Cuff: Standard O/E - blood pressure reading</td><td>Dr Bob Ash</td></tr><tr><td>O/E - pulse rate 79 beats/min</td><td>Dr Bob Ash</td></tr></tbody></table><h3>02-Sep-2010 Surgery Consultation</h3><table><thead><tr><th>Notes</th><th>Clinician</th></tr></thead><tbody><tr><td>Mechanical low back pain</td><td>Dr Bob Ash</td></tr></tbody></table></div></td></tr></tbody></table></div>",
-  "INPS",
-  '2016-07-25 12:00:00'
+  9000000041, '2016-04-20 00:00:01',
+  "<table><thead><tr><th>20-Apr-2016</th><th>Clinic - Dr Bob Ash</th></tr></thead><tbody><tr><td></td><td><div>BP 120 / 80 at 15:20:00 taken Sitting Cuff: Standard O/E - blood pressure reading</div><div>Repeat Cetirizine 10mg tablets Last issued: 01-Mar-2016 maximum 4 allowed Supply ( 7 ) tablet TAKE 1 A DAY FOR UP TO 7 DAYS</div><div>Issue 1 Cetirizine 10mg tablets Supply ( 7 ) tablet TAKE 1 A DAY FOR UP TO 7 DAYS</div></td></tr></tbody></table>",
+  "INPS", '2016-07-25 12:00:00'
+),
+(
+  9000000041, '2013-06-02 00:00:01',
+  "<table><thead><tr><th>02-Jun-2013</th><th>Surgery Consultation - Dr Bob Ash</th></tr></thead><tbody><tr><td/><td><div>BP 120 / 72 at: 02-Jun-2013 09:56:00 taken Sitting from Left Cuff: Standard O/E - blood pressure reading</div><div>O/E - pulse rate 79 beats/min</div></td></tr></tbody></table>",
+  "INPS", '2016-07-25 12:00:00'
+),
+(
+  9000000041, '2010-09-02 00:00:01',
+  "<table><thead><tr><th>02-Sep-2010</th><th>Surgery Consultation - Dr Bob Ash</th></tr></thead><tbody><tr><td/><td><div>Mechanical low back pain</div></td></tr></tbody></table>",
+  "INPS", '2016-07-25 12:00:00'
 );
 
 INSERT INTO gpconnect.immunisations

@@ -16,6 +16,7 @@
 
 package uk.gov.hscic.patient.encounters.search;
 
+import java.util.Date;
 import java.util.List;
 
 import uk.gov.hscic.common.exception.ConfigurationException;
@@ -36,7 +37,7 @@ public class NotConfiguredEncounterSearch implements EncounterSearch {
     }
 
     @Override
-    public List<EncounterListHTML> findAllEncounterHTMLTables(final String patientId) {
+    public List<EncounterListHTML> findAllEncounterHTMLTables(final String patientId, Date fromDate, Date toDate) {
         throw ConfigurationException.unimplementedTransaction(EncounterSearch.class);
     }
 }

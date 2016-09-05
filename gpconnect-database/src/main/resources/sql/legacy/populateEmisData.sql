@@ -17,12 +17,11 @@ VALUES (
 );
 
 INSERT INTO gpconnect.encounters
-  (id, html, provider, lastUpdated)
+  (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (
-  9000000084,
-  "<div><div><div><div><table><thead><tr><th>Date</th><th>Term</th><th>User/Role</th></tr></thead><tbody><tr><td>16-Apr-2013</td><td><em>GP Surgery</em></td><td>Dr Emis Test </td></tr><tr><td/><td><table><tbody><tr><td>Person recorded</td><td>Dr Emis Test</td></tr><tr><td>Role of person</td><td>General Medical Practitioner</td></tr><tr><td>Organisation name</td><td>EMISWebCR1 50003</td></tr><tr><td>Organisation id</td><td>A00003</td></tr><tr><td>Time recorded</td><td>19-Mar-2013 09:57:50</td></tr><tr><td>Record element identifier</td><td>213c7c53-19f6-41a5-8682-fe72ba876f6e</td></tr><tr><td>Source system identity</td><td>EMIS</td></tr><tr><td>Source system type</td><td>GP System</td></tr><tr><td>Extract identifier</td><td>22230c0a-e7e4-4a8e-bc6c-d982bf5d5ec8</td></tr><tr><td>Extract time</td><td>16-Apr-2013</td></tr></tbody></table></td></tr></tbody></table></div></div></div></div>",
-  "EMIS",
-  '2016-08-24 12:00:00'
+  9000000084, '2013-04-16 00:00:01',
+  "<table><thead><tr><th>16-Apr-2013</th><th>GP Surgery - Dr Emis Test</th></tr></thead><tbody><tr><td/><td><div>No additional details available</div></td></tr></tbody></table>",
+  "INPS", '2016-07-25 12:00:00'
 );
 
 INSERT INTO gpconnect.immunisations

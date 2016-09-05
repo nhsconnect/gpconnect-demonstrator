@@ -25,15 +25,6 @@ VALUES (
   '2016-07-25 12:00:00'
 );
 
-INSERT INTO gpconnect.encounters
-  (id, html, provider, lastUpdated)
-VALUES (
-  9000000009,
-  "<div><name>Adams</name></div>",
-  "Microtest",
-  '2016-07-25 12:00:00'
-);
-
 INSERT INTO gpconnect.medications_html
   (id, html, provider, lastUpdated)
 VALUES (

@@ -3,6 +3,7 @@ package uk.gov.hscic.patient;
 import uk.gov.hscic.medication.search.*;
 import uk.gov.hscic.medication.model.PatientMedicationHTML;
 import ca.uhn.fhir.model.api.IDatatype;
+import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.dstu2.composite.*;
 import ca.uhn.fhir.model.dstu2.resource.*;
 import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
@@ -120,6 +121,8 @@ public class PatientResourceProvider implements IResourceProvider {
         String nhsNumber = null;
         ArrayList<String> sectionsParamList = new ArrayList();
         
+        Date fromDate = null;
+        Date toDate = null;
         // Extract the parameters
         for(Parameter param : params.getParameter()){
             String paramName = param.getName();
@@ -128,6 +131,21 @@ public class PatientResourceProvider implements IResourceProvider {
                 nhsNumber = ((IdentifierDt)value).getValue();
             }else if(value instanceof StringDt){
                 sectionsParamList.add(((StringDt)value).getValue());
+            }else if(value instanceof PeriodDt){
+                fromDate = ((PeriodDt)value).getStart();
+                Calendar toCalendar = Calendar.getInstance();
+                toDate = ((PeriodDt)value).getEnd();
+                if(toDate != null){
+                    toCalendar.setTime(toDate);
+                    if(((PeriodDt)value).getEndElement().getPrecision() == TemporalPrecisionEnum.YEAR){
+                        toCalendar.add(Calendar.YEAR, 1);
+                    } else if(((PeriodDt)value).getEndElement().getPrecision() == TemporalPrecisionEnum.MONTH){
+                        toCalendar.add(Calendar.MONTH, 1);
+                    } else if(((PeriodDt)value).getEndElement().getPrecision() == TemporalPrecisionEnum.DAY){
+                        toCalendar.add(Calendar.DATE, 1);
+                    }
+                    toDate = toCalendar.getTime();
+                }
             }
         }
         
@@ -238,7 +256,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                             case "ENC" :
                                 EncounterSearch encounterSearch = applicationContext.getBean(EncounterSearchFactory.class).select(sourceType);
-                                    List<EncounterListHTML> encounterList = encounterSearch.findAllEncounterHTMLTables(nhsNumber);
+                                    List<EncounterListHTML> encounterList = encounterSearch.findAllEncounterHTMLTables(nhsNumber, fromDate, toDate);
                                     if(encounterList != null && encounterList.size() > 0){
                                         CodingDt encounterCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("ENC").setDisplay("Encounters");
                                         CodeableConceptDt encounterCodableConcept = new CodeableConceptDt().addCoding(encounterCoding).setText(encounterList.get(0).getProvider());

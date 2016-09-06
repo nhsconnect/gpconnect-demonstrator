@@ -18,6 +18,8 @@ angular.module('gpConnect')
             $scope.openDatePicker = function ($event, name) {
                 $event.preventDefault();
                 $event.stopPropagation();
+                $scope.toDate = false;
+                $scope.fromDate = false;
                 $scope[name] = true;
             };
 

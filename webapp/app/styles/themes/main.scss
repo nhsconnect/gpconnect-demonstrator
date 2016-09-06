@@ -2338,3 +2338,13 @@ div#age-chart div.morris-hover.morris-default-style {
 #appointmentComment {
     width: 100%;
 }
+
+.dateRangePanel {
+    background-color: lightgrey;
+    margin-top: 22px;
+    padding: 2px 5px;
+}
+
+.providerHTMLTables table tr td:first-child {
+    width: 180px; 
+}

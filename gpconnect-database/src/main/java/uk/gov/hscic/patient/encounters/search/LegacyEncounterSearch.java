@@ -25,13 +25,13 @@ public class LegacyEncounterSearch extends AbstractLegacyService implements Enco
         List<EncounterEntity> items = null;
 
         if (fromDate != null && toDate != null) {
-            items = encounterRepository.findBynhsNumberAndSectionDateAfterAndSectionDateBefore(Long.valueOf(patientId), fromDate, toDate);
+            items = encounterRepository.findBynhsNumberAndSectionDateAfterAndSectionDateBeforeOrderBySectionDateDesc(Long.valueOf(patientId), fromDate, toDate);
         } else if (fromDate != null) {
-            items = encounterRepository.findBynhsNumberAndSectionDateAfter(Long.valueOf(patientId), fromDate);
+            items = encounterRepository.findBynhsNumberAndSectionDateAfterOrderBySectionDateDesc(Long.valueOf(patientId), fromDate);
         } else if (toDate != null) {
-            items = encounterRepository.findBynhsNumberAndSectionDateBefore(Long.valueOf(patientId), toDate);
+            items = encounterRepository.findBynhsNumberAndSectionDateBeforeOrderBySectionDateDesc(Long.valueOf(patientId), toDate);
         } else {
-            items = encounterRepository.findBynhsNumber(Long.valueOf(patientId));
+            items = encounterRepository.findBynhsNumberOrderBySectionDateDesc(Long.valueOf(patientId));
         }
 
         if (items == null || items.size() <= 0) {

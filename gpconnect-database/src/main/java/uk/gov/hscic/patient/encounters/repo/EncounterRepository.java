@@ -7,9 +7,9 @@ import uk.gov.hscic.patient.encounters.model.EncounterEntity;
 
 public interface EncounterRepository extends JpaRepository<EncounterEntity, Long> {
 
-    List<EncounterEntity> findBynhsNumber(Long patientNHSNumber);
-    List<EncounterEntity> findBynhsNumberAndSectionDateAfter(Long patientNHSNumber, Date startDate);
-    List<EncounterEntity> findBynhsNumberAndSectionDateBefore(Long patientNHSNumber, Date endDate);
-    List<EncounterEntity> findBynhsNumberAndSectionDateAfterAndSectionDateBefore(Long patientNHSNumber, Date startDate, Date endDate);
+    List<EncounterEntity> findBynhsNumberOrderBySectionDateDesc(Long patientNHSNumber);
+    List<EncounterEntity> findBynhsNumberAndSectionDateAfterOrderBySectionDateDesc(Long patientNHSNumber, Date startDate);
+    List<EncounterEntity> findBynhsNumberAndSectionDateBeforeOrderBySectionDateDesc(Long patientNHSNumber, Date endDate);
+    List<EncounterEntity> findBynhsNumberAndSectionDateAfterAndSectionDateBeforeOrderBySectionDateDesc(Long patientNHSNumber, Date startDate, Date endDate);
     
 }

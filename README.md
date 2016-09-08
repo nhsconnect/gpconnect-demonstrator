@@ -230,5 +230,8 @@ Or...
 grunt build --tenant=gpconnect
 ```
 
+### For information on configuration and additional information on deployment there is a piece of additional documentaion in the root folder of this project
+
+"Demonstrator Config and Setup.docx"
 
 ##### ENJOY!

@@ -20,9 +20,7 @@
             </div>
             <label for="author" class="control-label col-md-12">To</label>
             <div class="col-md-10">
-                <select class="form-control input-sm" name="toOrg" ng-model="newOrder.toOrg">
-                    <option value="1" selected >GP Connect Demonstrator</option>
-                </select>
+                <select class="form-control input-sm" name="toOrg" ng-model="newOrder.toOrg" ng-options="practice as practice.name for practice in federatedPractices track by practice.id"></select>
             </div>
         </div>
 
@@ -42,7 +40,11 @@
                 <textarea class="form-control input-sm" cols="85" rows="5" name="details" id="orderDetails" ng-model="newOrder.details"></textarea>
             </div>
         </div>
-
+        
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-danger" ng-show="validationError" >{{ validationError }}</div>
+        </div>
+        
     </form>
 </div>
 

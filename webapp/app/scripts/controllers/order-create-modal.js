@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('OrderCreateModalCtrl', function ($state, $stateParams, $scope, $modalInstance, usSpinnerService, Order, PatientService) {
+        .controller('OrderCreateModalCtrl', function ($state, $stateParams, $scope, $modalInstance, usSpinnerService, Order, PatientService, FederatedPractices) {
+
+            $scope.federatedPractices = FederatedPractices.practices;
 
             PatientService.getFhirPatient($stateParams.patientId).then(function (patient) {
                 $scope.patient = patient;
@@ -15,75 +17,83 @@ angular.module('gpConnect')
 
             $scope.newOrder = {};
             $scope.newOrder.fromOrg = "GP Connect Demonstrator";
-            $scope.newOrder.toOrg = "1";
+            $scope.newOrder.toOrg = $scope.federatedPractices[0];
             $scope.newOrder.type = "1";
 
             $scope.ok = function (orderCreateForm) {
-                
+
                 $scope.formSubmitted = true;
-                usSpinnerService.spin('appointmentCreate-spinner');
 
-                var localModel = {};
-                localModel.identifier = "ID" + new Date().getTime();
-                localModel.subjectPatientId = $scope.patientLocalIdentifier;
-                localModel.sourceOrgId = "1";
-                localModel.targetOrgId = $scope.newOrder.toOrg;
-                if ($scope.newOrder.type == "1") {
-                    localModel.reasonCode = "1";
-                    localModel.reasonDescription = "For your information";
-                } else {
-                    localModel.reasonCode = "2";
-                    localModel.reasonDescription = "Action needed";
-                }
-                localModel.detail = $scope.newOrder.details;
+                if ($scope.newOrder.details != undefined && $scope.newOrder.details.length > 0) {
+                    
+                    usSpinnerService.spin('appointmentCreate-spinner');
 
-                var fhirModel = {
-                    "resourceType": "Order",
-                    "identifier": [{
-                            "value": localModel.identifier
-                        }],
-                    "contained": [{
-                            "resourceType": "Basic",
-                            "id": "1",
-                            "text": {
-                                "div": "<div>"+localModel.detail+"</div>"
-                            },
-                            "code": {
-                                "coding": [{
-                                        "system": "http://hl7.org/fhir/basic-resource-type",
-                                        "code": "OrderDetails"
-                                    }]
-                            }
-                        }],
-                    "subject": {
-                        "reference": "Patient/"+localModel.subjectPatientId
-                    },
-                    "source": {
-                        "reference": "Organization/"+localModel.sourceOrgId
-                    },
-                    "target": {
-                        "reference": "Organization/"+localModel.targetOrgId
-                    },
-                    "reasonCodeableConcept": {
-                        "coding": [{
-                                "system": "http://hl7.org/fhir/ValueSet/c80-practice-codes",
-                                "code": localModel.reasonCode,
-                                "display": localModel.reasonDescription
+                    var localModel = {};
+                    localModel.identifier = "ID" + new Date().getTime();
+                    localModel.subjectPatientId = $scope.patientLocalIdentifier;
+                    localModel.sourceOrgId = "1";
+                    localModel.targetOrgId = $scope.newOrder.toOrg.id;
+                    if ($scope.newOrder.type == "1") {
+                        localModel.reasonCode = "1";
+                        localModel.reasonDescription = "For your information";
+                    } else {
+                        localModel.reasonCode = "2";
+                        localModel.reasonDescription = "Action needed";
+                    }
+                    localModel.detail = $scope.newOrder.details;
+
+                    var fhirModel = {
+                        "resourceType": "Order",
+                        "identifier": [{
+                                "value": localModel.identifier
+                            }],
+                        "contained": [{
+                                "resourceType": "Basic",
+                                "id": "1",
+                                "text": {
+                                    "div": "<div>" + localModel.detail + "</div>"
+                                },
+                                "code": {
+                                    "coding": [{
+                                            "system": "http://hl7.org/fhir/basic-resource-type",
+                                            "code": "OrderDetails"
+                                        }]
+                                }
+                            }],
+                        "subject": {
+                            "reference": "Patient/" + localModel.subjectPatientId
+                        },
+                        "source": {
+                            "reference": "Organization/" + localModel.sourceOrgId
+                        },
+                        "target": {
+                            "reference": "Organization/" + localModel.targetOrgId
+                        },
+                        "reasonCodeableConcept": {
+                            "coding": [{
+                                    "system": "http://hl7.org/fhir/ValueSet/c80-practice-codes",
+                                    "code": localModel.reasonCode,
+                                    "display": localModel.reasonDescription
+                                }]
+                        },
+                        "detail": [{
+                                "reference": "#1"
                             }]
-                    },
-                    "detail": [{
-                            "reference": "#1"
-                        }]
-                };
+                    };
 
-                Order.sendOrder($stateParams.patientId, fhirModel).then(function(result){
-                    localModel.orderDate = result.data.date;
-                    Order.saveOrder(localModel).then(function(result){
-                        $modalInstance.close();
-                        $state.reload();
-                        usSpinnerService.stop('appointmentCreate-spinner');
+
+                    Order.sendOrder($stateParams.patientId, fhirModel, $scope.newOrder.toOrg.odsCode).then(function (result) {
+                        localModel.orderDate = result.data.date;
+                        Order.saveOrder(localModel).then(function (result) {
+                            $modalInstance.close();
+                            $state.reload();
+                            usSpinnerService.stop('appointmentCreate-spinner');
+                        });
                     });
-                });
+                    
+                } else {
+                    $scope.validationError = "A task description is required.";
+                }
             };
 
             $scope.cancel = function () {

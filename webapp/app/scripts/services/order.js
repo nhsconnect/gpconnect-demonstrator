@@ -7,8 +7,8 @@ angular.module('gpConnect')
         return $http.get('/api/notfhir/orders/patient/' + patientId + '?recieved=false&sent=true');
     };
     
-    var sendOrder = function (patientId, fhirOrder) {
-        return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode,"urn:nhs:names:services:gpconnect:fhir:rest:create:order").then(function (response) {
+    var sendOrder = function (patientId, fhirOrder, practiceOdsCode) {
+        return FhirEndpointLookup.getEndpoint(practiceOdsCode,"urn:nhs:names:services:gpconnect:fhir:rest:create:order").then(function (response) {
         var endpointLookupResult = response;
             return $http.post(endpointLookupResult.restUrlPrefix+'/Order', fhirOrder,{
               headers: {

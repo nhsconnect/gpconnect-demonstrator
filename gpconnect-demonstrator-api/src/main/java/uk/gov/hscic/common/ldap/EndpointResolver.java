@@ -8,8 +8,6 @@ import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.net.ssl.KeyManagerFactory;
@@ -27,9 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 @RestController
 @RequestMapping("/ldap")
@@ -55,18 +54,18 @@ public class EndpointResolver {
     @Value("${ldap.context.keystore.type}")
     private String keystoreType;
     
-    @Value("${external.systems.file}")
-    protected String externalSystemsFile;   
+    @Value("${provider.routing.file}")
+    protected String providerRoutingFile;   
     
-    private Path externalSystemsFilePath;
+    private Path providerRoutingFilePath;
 
     private KeyManagerFactory serverKeyManager = null;
     private TrustManagerFactory trustManager = null;
     
     @PostConstruct
     public void postConstruct() {
-    	 if(externalSystemsFile != null) {
-         	externalSystemsFilePath = Paths.get(externalSystemsFile);
+    	 if(providerRoutingFile != null) {
+         	providerRoutingFilePath = Paths.get(providerRoutingFile);
     	 }
     }
 
@@ -86,33 +85,46 @@ public class EndpointResolver {
     
     private String fileLookup(String odsCode, String interactionId) throws Exception  {
     	String result = null;
-    	
-    	List<Map<String, String>> localMappings = loadLocalMappings();
-    	if(localMappings != null) {
-    		for(int m = 0; m < localMappings.size() && result == null; m++) {
-    			Map<String, String> localMapping = localMappings.get(m);
-    			if(odsCode.equals(localMapping.get("odsCode")) && interactionId.equals(localMapping.get("interactionId"))) {
-    				result = format(localMapping.get("endpointURL"), localMapping.get("asid"));
+  	
+    	ArrayNode practicesNode = loadPractices();
+    	if(practicesNode != null) {
+    		for(int m = 0; m < practicesNode.size() && result == null; m++) {
+    			JsonNode practiceNode = practicesNode.get(m);
+    			if(odsCode.equals(practiceNode.get("odsCode").asText())) {
+    				ArrayNode interactionIdsNode = (ArrayNode) practiceNode.get("interactionIds");
+    				
+    				if(interactionIdsNode.size() > 0) {
+    					for(int i = 0; i < interactionIdsNode.size() && result == null; i++) {
+    						String interactionIdText = interactionIdsNode.get(i).asText();
+							if(interactionId.equals(interactionIdText) || "*".equals(interactionIdText)) {
+    							result = format(practiceNode.get("endpointURL").asText(), practiceNode.get("ASID").asText());
+    						}
+    					}
+	    			}
     			}
     		}
     	}
     	
+		if(result == null) {
+			ldapLog.warn(String.format("Unable to match one or both of the given odsCode (%s) and interactionId (%s)", odsCode, interactionId));
+		}
+    	
     	return result;
     }
     
-	private List<Map<String, String>> loadLocalMappings() throws JsonParseException, JsonMappingException, IOException {
+	private ArrayNode loadPractices() throws JsonParseException, JsonMappingException, IOException {
 
-		List<Map<String, String>> localLookup = null;
+		ArrayNode practicesNode = null;
 
-		if (Files.exists(externalSystemsFilePath)) {
+		if (Files.exists(providerRoutingFilePath)) {
 			ObjectMapper mapper = new ObjectMapper();
-			localLookup = mapper.readValue(Files.readAllBytes(externalSystemsFilePath), new TypeReference<List<Map<String, String>>>() {});
-
+			JsonNode rootNode = mapper.readValue(Files.readAllBytes(providerRoutingFilePath), JsonNode.class);
+			practicesNode = (ArrayNode) rootNode.get("practices"); 
 		} else {
-			ldapLog.warn(String.format("The file %s does not exist", externalSystemsFilePath.toUri()));
+			ldapLog.warn(String.format("The file %s does not exist", providerRoutingFilePath.toUri()));
 		}
 
-		return localLookup;
+		return practicesNode;
 	}
 	
     private String ldapLookup(String odsCode, String interactionId) throws Exception {

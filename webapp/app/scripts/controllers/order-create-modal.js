@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('OrderCreateModalCtrl', function ($state, $stateParams, $scope, $rootScope, $sce, $modalInstance, usSpinnerService, Order, PatientService, FederatedPractices, Organization) {
+        .controller('OrderCreateModalCtrl', function ($state, $stateParams, $scope, $sce, $modalInstance, usSpinnerService, Order, PatientService, FederatedPractices, Organization) {
 
             $scope.federatedPractices = FederatedPractices.practices;
 

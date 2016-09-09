@@ -15,15 +15,21 @@ angular.module('gpConnect')
                 $scope.patientLocalIdentifier = patient.id;
             });
 
+            // Set Default Values for screen
             $scope.newOrder = {};
             $scope.newOrder.fromOrg = "GP Connect Demonstrator";
             $scope.newOrder.toOrg = $scope.federatedPractices[0];
             $scope.newOrder.type = "1";
 
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+
+
             $scope.ok = function (orderCreateForm) {
 
-                $scope.validationError = "";
-                
+                clearErrorMsg();
                 $scope.formSubmitted = true;
 
                 if ($scope.newOrder.details != undefined && $scope.newOrder.details.length > 0) {
@@ -44,8 +50,8 @@ angular.module('gpConnect')
                     }
                     localModel.detail = $scope.newOrder.details;
 
-                    // Lookup the internal ids for the to, from and patient resources on the recieving system. If we fail to find any we should show an error
 
+                    // Lookup the internal ids for the to, from and patient resources on the recieving system. If we fail to find any we should show an error
                     var recievingPracticeOdsCode = $scope.newOrder.toOrg.odsCode;
 
                     PatientService.getFhirPatient(recievingPracticeOdsCode, $stateParams.patientId).then(function (patientFhirResource) {
@@ -53,9 +59,7 @@ angular.module('gpConnect')
                             $scope.recievingSysPatientLocalId = patientFhirResource.id;
                             sendOrder(localModel);
                         } else {
-                            //Error handling if we can not find the id for the patient on the recieving system
-                            $scope.validationError = $scope.validationError + "<div>The recieving system does not have a local identifier for the patient with NHS Number " + $stateParams.patientId + ".</div>";
-                            $scope.validationError = $sce.trustAsHtml($scope.validationError);
+                            addErrorMsg("<div>The recieving system does not have a local identifier for the patient with NHS Number " + $stateParams.patientId + ".</div>");
                         }
                     });
 
@@ -65,9 +69,7 @@ angular.module('gpConnect')
                             $scope.recievingSysRecOrgLocalId = recievingPracticeOrgResource.data.entry[0].resource.id;
                             sendOrder(localModel);
                         } else {
-                            //Error handling if we can not find the id for the recieving system
-                            $scope.validationError = $scope.validationError + "<div>The recieving system does not have a local identifier for it's own ODS code.</div>";
-                            $scope.validationError = $sce.trustAsHtml($scope.validationError);
+                            addErrorMsg("<div>The recieving system does not have a local identifier for it's own ODS code.</div>");
                         }
                     });
 
@@ -82,9 +84,7 @@ angular.module('gpConnect')
                                         $scope.recievingSysSndOrgLocalId = sendingPracticeOrgResource.data.entry[0].resource.id;
                                         sendOrder(localModel);
                                     } else {
-                                        //Error handling if we can not find the id for the sending system
-                                        $scope.validationError = $scope.validationError + "<div>The recieving system does not have a local identifier for the sending system's ODS code.</div>";
-                                        $scope.validationError = $sce.trustAsHtml($scope.validationError);
+                                        addErrorMsg("<div>The recieving system does not have a local identifier for the sending system's ODS code.</div>");
                                     }
                                 });
                             }
@@ -92,11 +92,10 @@ angular.module('gpConnect')
                     });
 
                 } else {
-                    $scope.validationError = "<div>A task description is required.</div>";
+                    addErrorMsg("<div>A task description is required.</div>");
                 }
-                
-                $scope.validationError = $sce.trustAsHtml($scope.validationError);
             };
+
 
             var sendOrder = function (localModel) {
 
@@ -105,31 +104,19 @@ angular.module('gpConnect')
 
                     var fhirModel = {
                         "resourceType": "Order",
-                        "identifier": [{
-                                "value": localModel.identifier
-                            }],
+                        "identifier": [{"value": localModel.identifier}],
                         "contained": [{
                                 "resourceType": "Basic",
                                 "id": "1",
-                                "text": {
-                                    "div": "<div>" + localModel.detail + "</div>"
-                                },
-                                "code": {
-                                    "coding": [{
+                                "text": {"div": "<div>" + localModel.detail + "</div>"},
+                                "code": {"coding": [{
                                             "system": "http://hl7.org/fhir/basic-resource-type",
-                                            "code": "OrderDetails"
-                                        }]
+                                            "code": "OrderDetails"}]
                                 }
                             }],
-                        "subject": {
-                            "reference": "Patient/" + $scope.recievingSysPatientLocalId
-                        },
-                        "source": {
-                            "reference": "Organization/" + $scope.recievingSysSndOrgLocalId
-                        },
-                        "target": {
-                            "reference": "Organization/" + $scope.recievingSysRecOrgLocalId
-                        },
+                        "subject": {"reference": "Patient/" + $scope.recievingSysPatientLocalId},
+                        "source": {"reference": "Organization/" + $scope.recievingSysSndOrgLocalId},
+                        "target": {"reference": "Organization/" + $scope.recievingSysRecOrgLocalId},
                         "reasonCodeableConcept": {
                             "coding": [{
                                     "system": "http://hl7.org/fhir/ValueSet/c80-practice-codes",
@@ -137,11 +124,8 @@ angular.module('gpConnect')
                                     "display": localModel.reasonDescription
                                 }]
                         },
-                        "detail": [{
-                                "reference": "#1"
-                            }]
+                        "detail": [{"reference": "#1"}]
                     };
-
 
                     Order.sendOrder($stateParams.patientId, fhirModel, $scope.newOrder.toOrg.odsCode).then(function (result) {
                         localModel.orderDate = result.data.date;
@@ -155,8 +139,11 @@ angular.module('gpConnect')
 
             };
 
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
+            var addErrorMsg = function (errorHTML) {
+                $scope.validationError = $sce.trustAsHtml($scope.validationError + errorHTML);
             };
 
+            var clearErrorMsg = function () {
+                $scope.validationError = "";
+            };
         });

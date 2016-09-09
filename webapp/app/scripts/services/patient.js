@@ -56,7 +56,7 @@ angular.module('gpConnect')
                 }
             };
 
-            var getFhirPatient = function (patientId) {
+            var getFhirPatient = function (practiceOdsCode, patientId) {
                 var response;
                 var patientFhirCache = $cacheFactory.get('patientFhirCache');
                 if (patientFhirCache == undefined) {
@@ -65,9 +65,9 @@ angular.module('gpConnect')
                 var patientFhir = patientFhirCache.get(patientId);
                 if (patientFhir == undefined) {
 
-                    $rootScope.patientOdsCode = "PatientGpOdsCode"; // Store the ODS code for the GP Practice which holds the patients data
+                    $rootScope.patientOdsCode = practiceOdsCode;
 
-                    return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function (response) {
+                    return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function (response) {
                         var endpointLookupResult = response;
                         var response = $http.get(endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|' + patientId,
                                 {

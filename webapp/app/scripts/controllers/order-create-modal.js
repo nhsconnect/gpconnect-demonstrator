@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('OrderCreateModalCtrl', function ($state, $stateParams, $scope, $modalInstance, usSpinnerService, Order, PatientService, FederatedPractices) {
+        .controller('OrderCreateModalCtrl', function ($state, $stateParams, $scope, $rootScope, $sce, $modalInstance, usSpinnerService, Order, PatientService, FederatedPractices, Organization) {
 
             $scope.federatedPractices = FederatedPractices.practices;
 
-            PatientService.getFhirPatient($stateParams.patientId).then(function (patient) {
+            PatientService.getFhirPatient("PatientGpOdsCode", $stateParams.patientId).then(function (patient) {
                 $scope.patient = patient;
                 $.each(patient.identifier, function (key, identifier) {
                     if (identifier.system == "http://fhir.nhs.net/Id/nhs-number") {
@@ -22,10 +22,12 @@ angular.module('gpConnect')
 
             $scope.ok = function (orderCreateForm) {
 
+                $scope.validationError = "";
+                
                 $scope.formSubmitted = true;
 
                 if ($scope.newOrder.details != undefined && $scope.newOrder.details.length > 0) {
-                    
+
                     usSpinnerService.spin('appointmentCreate-spinner');
 
                     var localModel = {};
@@ -41,6 +43,65 @@ angular.module('gpConnect')
                         localModel.reasonDescription = "Action needed";
                     }
                     localModel.detail = $scope.newOrder.details;
+
+                    // Lookup the internal ids for the to, from and patient resources on the recieving system. If we fail to find any we should show an error
+
+                    var recievingPracticeOdsCode = $scope.newOrder.toOrg.odsCode;
+
+                    PatientService.getFhirPatient(recievingPracticeOdsCode, $stateParams.patientId).then(function (patientFhirResource) {
+                        if (patientFhirResource != undefined) {
+                            $scope.recievingSysPatientLocalId = patientFhirResource.id;
+                            sendOrder(localModel);
+                        } else {
+                            //Error handling if we can not find the id for the patient on the recieving system
+                            $scope.validationError = $scope.validationError + "<div>The recieving system does not have a local identifier for the patient with NHS Number " + $stateParams.patientId + ".</div>";
+                            $scope.validationError = $sce.trustAsHtml($scope.validationError);
+                        }
+                    });
+
+                    // Find the remote systems internal reference to its self for use in the fhir resource
+                    Organization.searchForOrganisation(recievingPracticeOdsCode, $stateParams.patientId, recievingPracticeOdsCode).then(function (recievingPracticeOrgResource) {
+                        if (recievingPracticeOrgResource.data.entry != undefined) {
+                            $scope.recievingSysRecOrgLocalId = recievingPracticeOrgResource.data.entry[0].resource.id;
+                            sendOrder(localModel);
+                        } else {
+                            //Error handling if we can not find the id for the recieving system
+                            $scope.validationError = $scope.validationError + "<div>The recieving system does not have a local identifier for it's own ODS code.</div>";
+                            $scope.validationError = $sce.trustAsHtml($scope.validationError);
+                        }
+                    });
+
+                    // Find the local organization Ods Code for the sending organization, so that we can lookup the local identifier for the organization on the recieving system
+                    // so we can use that internal reference in the fhir model
+                    Organization.findOrganisation($stateParams.patientId, localModel.sourceOrgId).then(function (localOrganizationFhirResourceResponse) {
+                        for (var i = 0; i < localOrganizationFhirResourceResponse.data.identifier.length; i++) {
+                            if (localOrganizationFhirResourceResponse.data.identifier[i].system == "http://fhir.nhs.net/Id/ods-organization-code") {
+                                var sendingPracticeOdsCode = localOrganizationFhirResourceResponse.data.identifier[i].value;
+                                Organization.searchForOrganisation(recievingPracticeOdsCode, $stateParams.patientId, sendingPracticeOdsCode).then(function (sendingPracticeOrgResource) {
+                                    if (sendingPracticeOrgResource.data.entry != undefined) {
+                                        $scope.recievingSysSndOrgLocalId = sendingPracticeOrgResource.data.entry[0].resource.id;
+                                        sendOrder(localModel);
+                                    } else {
+                                        //Error handling if we can not find the id for the sending system
+                                        $scope.validationError = $scope.validationError + "<div>The recieving system does not have a local identifier for the sending system's ODS code.</div>";
+                                        $scope.validationError = $sce.trustAsHtml($scope.validationError);
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                } else {
+                    $scope.validationError = "<div>A task description is required.</div>";
+                }
+                
+                $scope.validationError = $sce.trustAsHtml($scope.validationError);
+            };
+
+            var sendOrder = function (localModel) {
+
+                // If we have looked up all the recieving system local identifiers for the order fhir resource then proceed to save
+                if ($scope.recievingSysPatientLocalId != undefined && $scope.recievingSysRecOrgLocalId != undefined && $scope.recievingSysSndOrgLocalId != undefined) {
 
                     var fhirModel = {
                         "resourceType": "Order",
@@ -61,13 +122,13 @@ angular.module('gpConnect')
                                 }
                             }],
                         "subject": {
-                            "reference": "Patient/" + localModel.subjectPatientId
+                            "reference": "Patient/" + $scope.recievingSysPatientLocalId
                         },
                         "source": {
-                            "reference": "Organization/" + localModel.sourceOrgId
+                            "reference": "Organization/" + $scope.recievingSysSndOrgLocalId
                         },
                         "target": {
-                            "reference": "Organization/" + localModel.targetOrgId
+                            "reference": "Organization/" + $scope.recievingSysRecOrgLocalId
                         },
                         "reasonCodeableConcept": {
                             "coding": [{
@@ -90,10 +151,8 @@ angular.module('gpConnect')
                             usSpinnerService.stop('appointmentCreate-spinner');
                         });
                     });
-                    
-                } else {
-                    $scope.validationError = "A task description is required.";
                 }
+
             };
 
             $scope.cancel = function () {

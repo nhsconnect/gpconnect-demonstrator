@@ -18,7 +18,7 @@ angular.module('gpConnect')
 
       if (!isNaN(nhsNumber) && nhsNumber.length == 10) {
 
-        PatientService.getFhirPatient(nhsNumber).then(function (patient) {
+        PatientService.getFhirPatient("PatientGpOdsCode", nhsNumber).then(function (patient) {
           goToPatientSummary(nhsNumber);
 
         }).catch(function () {

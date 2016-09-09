@@ -42,7 +42,7 @@
         </div>
         
         <div class="col-md-12">
-            <div class="col-md-12 alert alert-danger" ng-show="validationError" >{{ validationError }}</div>
+            <div class="col-md-12 alert alert-danger" ng-show="validationError" ng-bind-html="validationError"></div>
         </div>
         
     </form>

@@ -17,6 +17,8 @@
 	<Environment name="ldap.context.keystore" type="java.lang.String" override="false" value="ldapKeystore.jks"/>
 	<Environment name="ldap.context.keystore.pwd" type="java.lang.String" override="false" value="password"/>
 	<Environment name="ldap.context.keystore.type" type="java.lang.String" override="false" value="JKS"/>
+	<Environment name="endpoints.file"   type="java.lang.String" override="false" value="endpoints.json"/>
+	
 	
 	<Environment name="gp.connect.spineproxyconf.path" type="java.lang.String" override="false" value="gpc/gpconnect-demonstrator-api/spineproxy.json"/>
 	<Environment name="gp.connect.interactionwhitelist.path" type="java.lang.String" override="false" value="gpc/gpconnect-demonstrator-api/interactionIdWhiteList.json"/>

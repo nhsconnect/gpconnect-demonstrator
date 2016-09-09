@@ -1,0 +1,14 @@
+[
+	{
+		"odsCode" 		:	"odsCode_A",
+		"interactionId" :	"interactionId_A",
+		"endpointURL"	:	"http://endpointUrl/A",
+		"asid"			:	"asid_A"
+	},
+	{
+		"odsCode" 		:	"odsCode_B",
+		"interactionId" :	"interactionId_B",
+		"endpointURL"	:	"http://endpointUrl/B",
+		"asid"			:	"asid_B"
+	}	
+]

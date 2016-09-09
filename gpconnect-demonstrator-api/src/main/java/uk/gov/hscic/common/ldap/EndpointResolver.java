@@ -3,15 +3,20 @@ package uk.gov.hscic.common.ldap;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
+
 import org.apache.directory.api.ldap.model.cursor.EntryCursor;
 import org.apache.directory.api.ldap.model.entry.Attribute;
-import org.apache.directory.api.ldap.model.exception.LdapInvalidAttributeValueException;
 import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
 import org.apache.log4j.Logger;
@@ -20,7 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.json.*;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/ldap")
@@ -45,14 +54,68 @@ public class EndpointResolver {
 
     @Value("${ldap.context.keystore.type}")
     private String keystoreType;
+    
+    @Value("${external.systems.file}")
+    protected String externalSystemsFile;   
+    
+    private Path externalSystemsFilePath;
 
     private KeyManagerFactory serverKeyManager = null;
     private TrustManagerFactory trustManager = null;
+    
+    @PostConstruct
+    public void postConstruct() {
+    	 if(externalSystemsFile != null) {
+         	externalSystemsFilePath = Paths.get(externalSystemsFile);
+    	 }
+    }
 
     @RequestMapping(value = "/endpointLookup", method = RequestMethod.GET)
     public String findEndpointFromODSCode(@RequestParam(value = "odsCode", required = true) String odsCode,
-            @RequestParam(value = "interactionId", required = true) String interactionId) throws IOException, LdapInvalidAttributeValueException {
+            							  @RequestParam(value = "interactionId", required = true) String interactionId) throws Exception {
 
+    	String result = fileLookup(odsCode, interactionId);
+    	
+    	if(result == null) {
+    		ldapLog.warn(String.format("File-based endpoint lookup returned no results. Falling back on LDAP (url - %s port - %d)", ldapUrl, ldapPort));
+    		result = ldapLookup(odsCode, interactionId);
+    	}
+    	
+    	return result;
+    }
+    
+    private String fileLookup(String odsCode, String interactionId) throws Exception  {
+    	String result = null;
+    	
+    	List<Map<String, String>> localMappings = loadLocalMappings();
+    	if(localMappings != null) {
+    		for(int m = 0; m < localMappings.size() && result == null; m++) {
+    			Map<String, String> localMapping = localMappings.get(m);
+    			if(odsCode.equals(localMapping.get("odsCode")) && interactionId.equals(localMapping.get("interactionId"))) {
+    				result = format(localMapping.get("endpointURL"), localMapping.get("asid"));
+    			}
+    		}
+    	}
+    	
+    	return result;
+    }
+    
+	private List<Map<String, String>> loadLocalMappings() throws JsonParseException, JsonMappingException, IOException {
+
+		List<Map<String, String>> localLookup = null;
+
+		if (Files.exists(externalSystemsFilePath)) {
+			ObjectMapper mapper = new ObjectMapper();
+			localLookup = mapper.readValue(Files.readAllBytes(externalSystemsFilePath), new TypeReference<List<Map<String, String>>>() {});
+
+		} else {
+			ldapLog.warn(String.format("The file %s does not exist", externalSystemsFilePath.toUri()));
+		}
+
+		return localLookup;
+	}
+	
+    private String ldapLookup(String odsCode, String interactionId) throws Exception {
         String uuid = java.util.UUID.randomUUID().toString();
 
         ldapLog.info(uuid + " Endpoint Lookup - ODSCode:" + odsCode + " InteractionId:" + interactionId);
@@ -96,15 +159,14 @@ public class EndpointResolver {
             }
         }
 
-        return "{ \"endpointURL\" : \"" + endpointURL + "\", \"recievingSysASID\" : \"" + asid + "\"}";
-
+        return format(endpointURL, asid);
     }
-
-    public ArrayList<Collection<Attribute>> ldapQueryRequest(@RequestParam(value = "queryBase", required = true) String queryBase,
-            @RequestParam(value = "queryFilter", required = true) String queryFilter) throws IOException {
+    
+    private ArrayList<Collection<Attribute>> ldapQueryRequest(String queryBase, String queryFilter) throws IOException {
 
         String uuid = java.util.UUID.randomUUID().toString();
-        ArrayList<Collection<Attribute>> returnList = new ArrayList();
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+		ArrayList<Collection<Attribute>> returnList = new ArrayList();
         LdapNetworkConnection connection = null;
 
         ldapLog.debug(uuid + " ldapSDSQuery (Base:" + queryBase + " Filter:" + queryFilter + ")");
@@ -151,6 +213,10 @@ public class EndpointResolver {
         }
 
         return returnList;
-    }
+    }    
+	
+	private String format(String endpointURL, String asid) {
+		 return "{ \"endpointURL\" : \"" + endpointURL + "\", \"recievingSysASID\" : \"" + asid + "\"}";
+	}
 
 }

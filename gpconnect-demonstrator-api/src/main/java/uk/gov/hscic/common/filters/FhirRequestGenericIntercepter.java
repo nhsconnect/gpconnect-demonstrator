@@ -9,9 +9,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
+    @Value("${gp.connect.spineproxyconf.path}")
+    private String spineroxyConfigPath;
+    
+    @Value("${gp.connect.interactionwhitelist.path}")
+    private String interactionWhiteListPath;
+    
     Logger log = Logger.getLogger(FhirRequestGenericIntercepter.class);
 
     private String systemSspToHeader = null;
@@ -22,7 +29,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         // Load config file
         try {
-            String configJson = new String(Files.readAllBytes(Paths.get("gpc/gpconnect-demonstrator-api/spineproxy.json")));
+            String configJson = new String(Files.readAllBytes(Paths.get(spineroxyConfigPath)));
             JSONObject configJSonObj = new JSONObject(configJson);
             systemSspToHeader = configJSonObj.getString("toASID");
         } catch (Exception e) {
@@ -31,7 +38,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         // Load interactionId white list
         try {
-            String whiteListJson = new String(Files.readAllBytes(Paths.get("gpc/gpconnect-demonstrator-api/interactionIdWhiteList.json")));
+            String whiteListJson = new String(Files.readAllBytes(Paths.get(interactionWhiteListPath)));
             JSONObject whiteListJSonObj = new JSONObject(whiteListJson);
             JSONArray whiteListJSONArray = (JSONArray) whiteListJSonObj.get("interactionIds");
             if (whiteListJSONArray.length() > 0) {

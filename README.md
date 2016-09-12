@@ -1,6 +1,8 @@
 GPConnect Demonstrator
 =========
   
+The following README contains information related to developing and running the GP Connect Demonstrator locally. If you wish to deploy the demonstrator there is a setup guide within the "Documents" folder of this project named "Deployment Document.docx" which will give you a simple guide to getting a basic instance of the GP Connect Demonstrator up and running.
+
 ### Requirements
 
 To develop and run the application locally you must have the following installed:  
@@ -229,9 +231,5 @@ Or...
 ```sh
 grunt build --tenant=gpconnect
 ```
-
-### For information on configuration and additional information on deployment there is a piece of additional documentaion in the root folder of this project
-
-"Demonstrator Config and Setup.docx"
 
 ##### ENJOY!

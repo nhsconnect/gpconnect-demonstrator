@@ -167,6 +167,10 @@
             <artifactId>api-all</artifactId>
             <version>1.0.0-M25</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>        
     </dependencies>
 
     <build>

@@ -54,7 +54,7 @@ public class EndpointResolver {
     @Value("${ldap.context.keystore.type}")
     private String keystoreType;
     
-    @Value("${provider.routing.file}")
+    @Value("${gp.connect.provider.routing.file:#{null}}")
     protected String providerRoutingFile;   
     
     private Path providerRoutingFilePath;
@@ -64,7 +64,7 @@ public class EndpointResolver {
     
     @PostConstruct
     public void postConstruct() {
-    	 if(providerRoutingFile != null) {
+    	if(providerRoutingFile != null) {
          	providerRoutingFilePath = Paths.get(providerRoutingFile);
     	 }
     }

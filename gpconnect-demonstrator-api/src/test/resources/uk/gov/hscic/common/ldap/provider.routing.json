@@ -14,7 +14,7 @@
 		"id": 				"2",
 		"odsCode": 			"R1A14",
 		"name": 			"Test GP Care Trust",
-		"interactionIds":	["*"],
+		"interactionIds":	["urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord", "urn:nhs:names:services:gpconnect:fhir:rest:update:appointment"],
 		"endpointURL":		"http://endpointUrl/B",
 		"ASID":				"200000000361"		
 	},

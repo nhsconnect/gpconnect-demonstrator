@@ -406,35 +406,29 @@ angular
         .config(function (paginationTemplateProvider) {
             paginationTemplateProvider.setPath('views/dirPagination.tpl.html');
         })
-
-        .provider("EnvConfig", function () {
-            var envConfig = {
-                "restUrlPrefix": "",
-                "spineProxy": "",
-                "fromASID": "",
-                "toASID": ""
+        
+        .provider("ProviderRouting", function () {
+            var providerRouting = {
+                    "spineProxy": 	"",
+                    "ASID": 		"",
+                    "practices": 	[]
             };
             this.$get = function () {
                 var q = jQuery.ajax({
-                    type: 'GET', url: '/spineproxy.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
+                    type: 'GET', url: '/providerRouting.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
                 });
                 if (q.status === 200) {
-                    angular.extend(envConfig, angular.fromJson(q.responseText));
+                	 providerRouting = angular.fromJson(q.responseText);
+                	 
+                	 providerRouting.defaultPractice = function () {
+                    	for(var p = 0; p < this.practices.length; p++) {
+                    		var practice = this.practices[p];
+                    		if(practice.default == "true") {
+                    			return practice;
+                    		}
+                    	}
+                    };
                 }
-                return envConfig;
-            };
-        })
-        .provider("FederatedPractices", function () {
-            var practicesJson = {
-                "practices": []
-            };
-            this.$get = function () {
-                var q = jQuery.ajax({
-                    type: 'GET', url: '/federatedPractices.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
-                });
-                if (q.status === 200) {
-                    practicesJson = angular.fromJson(q.responseText);
-                }
-                return practicesJson;
+                return providerRouting;
             };
         });

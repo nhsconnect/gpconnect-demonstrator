@@ -23,17 +23,33 @@ public class EndpointResolverTest {
 
 	@Test
 	public void testFindEndpointFromODSCode() throws Exception {
-		// known + wildcard interaction
+		// 1) known + wildcard interaction
 		assertEquals("Make sure that the result is as expected", "{ \"endpointURL\" : \"http://endpointUrl/A\", \"recievingSysASID\" : \"200000000360\"}", endpointResolver.findEndpointFromODSCode("GPC001", "interactionId_A"));	
-		assertEquals("Make sure that the result is as expected", "{ \"endpointURL\" : \"http://endpointUrl/B\", \"recievingSysASID\" : \"200000000361\"}", endpointResolver.findEndpointFromODSCode("R1A14", "interactionId_B"));
+		
+		// 2) multiple interaction IDs registered for same provider
+		
+		// 2a) known ODS + known interactionId
+		assertEquals("Make sure that the result is as expected", "{ \"endpointURL\" : \"http://endpointUrl/B\", \"recievingSysASID\" : \"200000000361\"}", endpointResolver.findEndpointFromODSCode("R1A14", "urn:nhs:names:services:gpconnect:fhir:rest:update:appointment"));
+		
+		// 2b) known ODS + known interactionId
+		assertEquals("Make sure that the result is as expected", "{ \"endpointURL\" : \"http://endpointUrl/B\", \"recievingSysASID\" : \"200000000361\"}", endpointResolver.findEndpointFromODSCode("R1A14", "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord"));
 	
-		// known ODS + known interactionId
+		// 2c) known ODS + unknown interactionId
+		assertEquals("Make sure that the result is as expected", "{ \"endpointURL\" : \"\", \"recievingSysASID\" : \"\"}", endpointResolver.findEndpointFromODSCode("R1A14", "urn:nhs:names:services:gpconnect:fhir:rest:create:order"));
+				
+		// 3) known ODS + known interactionId
 		assertEquals("Make sure that the result is as expected", "{ \"endpointURL\" : \"http://endpointUrl/C\", \"recievingSysASID\" : \"200000000362\"}", endpointResolver.findEndpointFromODSCode("R3B46", "urn:nhs:names:services:gpconnect:fhir:rest:search:practitioner"));
 		
-		// known ODS + unknown interaction
+		// 4) blank ODS + known interactionId
+		assertEquals("Make sure that the result is as expected", "{ \"endpointURL\" : \"\", \"recievingSysASID\" : \"\"}", endpointResolver.findEndpointFromODSCode("", "urn:nhs:names:services:gpconnect:fhir:rest:search:practitioner"));
+
+		// 5) known ODS + blank interactionId
+		assertEquals("Make sure that the result is as expected", "{ \"endpointURL\" : \"\", \"recievingSysASID\" : \"\"}", endpointResolver.findEndpointFromODSCode("R3B46", ""));
+		
+		// 6) known ODS + unknown interaction
 		assertEquals("Make sure that the result is as expected", "{ \"endpointURL\" : \"\", \"recievingSysASID\" : \"\"}", endpointResolver.findEndpointFromODSCode("odsCode_C", "urn:nhs:names:services:gpconnect:fhir:rest:search:organization"));
 		
-		// unknown ODS + wildcard interaction
+		// 7) unknown ODS + wildcard interaction
 		assertEquals("Make sure that the result is as expected", "{ \"endpointURL\" : \"\", \"recievingSysASID\" : \"\"}", endpointResolver.findEndpointFromODSCode("odsCode_C", "*"));
 	}
 

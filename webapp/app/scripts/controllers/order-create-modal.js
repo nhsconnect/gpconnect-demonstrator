@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('OrderCreateModalCtrl', function ($state, $stateParams, $scope, $sce, $modalInstance, usSpinnerService, Order, PatientService, FederatedPractices, Organization) {
+        .controller('OrderCreateModalCtrl', function ($state, $stateParams, $scope, $sce, $modalInstance, usSpinnerService, Order, PatientService, ProviderRouting, Organization) {
 
-            $scope.federatedPractices = FederatedPractices.practices;
+            $scope.federatedPractices = PatientService.practices;
 
-            PatientService.getFhirPatient("PatientGpOdsCode", $stateParams.patientId).then(function (patient) {
+            PatientService.getFhirPatient(ProviderRouting.defaultPractice().odsCode, $stateParams.patientId).then(function (patient) {
                 $scope.patient = patient;
                 $.each(patient.identifier, function (key, identifier) {
                     if (identifier.system == "http://fhir.nhs.net/Id/nhs-number") {

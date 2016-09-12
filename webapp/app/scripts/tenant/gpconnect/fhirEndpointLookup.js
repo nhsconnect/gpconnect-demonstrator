@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('gpConnect')
-        .factory('FhirEndpointLookup', function ($http, $cacheFactory, EnvConfig) {
+        .factory('FhirEndpointLookup', function ($http, $cacheFactory, ProviderRouting) {
 
             var returnEndpointDetails = {
-                "restUrlPrefix": EnvConfig.spineProxy + EnvConfig.restUrlPrefix,
-                "fromASID": EnvConfig.fromASID,
-                "toASID": EnvConfig.toASID
+                "restUrlPrefix": 	"",
+                "fromASID": 		ProviderRouting.ASID,
+                "toASID": 			""
             };
 
             var getEndpoint = function (odsCode, interactionId) {
@@ -23,7 +23,7 @@ angular.module('gpConnect')
                     var lookupReturn = $http.get('/api/ldap/endpointLookup?odsCode=' + odsCode + '&interactionId=' + interactionId).then(function (response) {
                         var lookupResult = response.data;
                         if (lookupResult.endpointURL && lookupResult.recievingSysASID) {
-                            returnEndpointDetails.restUrlPrefix = EnvConfig.spineProxy + lookupResult.endpointURL;
+                            returnEndpointDetails.restUrlPrefix = ProviderRouting.spineProxy + lookupResult.endpointURL;
                             returnEndpointDetails.toASID = lookupResult.recievingSysASID;
                         }
                         return returnEndpointDetails;

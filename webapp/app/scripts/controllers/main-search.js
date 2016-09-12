@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('MainSearchController', function ($scope, $state, $timeout, AdvancedSearch, PatientService) {
+  .controller('MainSearchController', function ($scope, $state, $timeout, AdvancedSearch, PatientService, ProviderRouting) {
 
     $scope.mainSearchEnabled = true;
     $scope.searchExpression = '';
@@ -18,7 +18,7 @@ angular.module('gpConnect')
 
       if (!isNaN(nhsNumber) && nhsNumber.length == 10) {
 
-        PatientService.getFhirPatient("PatientGpOdsCode", nhsNumber).then(function (patient) {
+        PatientService.getFhirPatient(ProviderRouting.defaultPractice().odsCode, nhsNumber).then(function (patient) {
           goToPatientSummary(nhsNumber);
 
         }).catch(function () {

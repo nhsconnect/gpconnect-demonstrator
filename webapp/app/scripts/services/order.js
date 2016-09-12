@@ -1,12 +1,16 @@
 'use strict';
 
 angular.module('gpConnect')
-  .factory('Order', function ($rootScope,  $http, FhirEndpointLookup, fhirJWTFactory) {
+  .factory('OrderService', function ($rootScope,  $http, FhirEndpointLookup, fhirJWTFactory) {
 
-    var findAllOrders = function (patientId) {
+    var findAllReceivedOrders = function (patientId) {
+        return $http.get('/api/notfhir/orders/patient/' + patientId + '?recieved=true&sent=false');
+    };
+
+    var findAllSentOrders = function (patientId) {
         return $http.get('/api/notfhir/orders/patient/' + patientId + '?recieved=false&sent=true');
     };
-    
+
     var sendOrder = function (patientId, fhirOrder, practiceOdsCode) {
         return FhirEndpointLookup.getEndpoint(practiceOdsCode,"urn:nhs:names:services:gpconnect:fhir:rest:create:order").then(function (response) {
         var endpointLookupResult = response;
@@ -21,13 +25,14 @@ angular.module('gpConnect')
             });
         });
     };
-    
+
     var saveOrder = function (order) {
         return $http.post('/api/notfhir/orders/order', order);
     };
-    
+
     return {
-      findAllOrders: findAllOrders,
+      findAllReceivedOrders: findAllReceivedOrders,
+      findAllSentOrders: findAllSentOrders,
       sendOrder: sendOrder,
       saveOrder: saveOrder
     };

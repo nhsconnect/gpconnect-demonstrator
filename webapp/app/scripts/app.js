@@ -251,12 +251,21 @@ angular
                         }
                     })
 
-                    .state('orders', {
-                        url: '/patients/{patientId:int}/orders',
+                    .state('orders-sent', {
+                        url: '/patients/{patientId:int}/orders/sent',
                         views: {
                             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
                             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-                            main: {templateUrl: 'views/orders/orders.html', controller: 'OrdersCtrl'}
+                            main: {templateUrl: 'views/orders/sent/orders-sent.html', controller: 'OrdersSentCtrl'}
+                        }
+                    })
+
+                    .state('orders-received', {
+                        url: '/patients/{patientId:int}/orders/received',
+                        views: {
+                            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
+                            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
+                            main: {templateUrl: 'views/orders/received/orders-received.html', controller: 'OrdersReceivedCtrl'}
                         }
                     })
 
@@ -406,7 +415,7 @@ angular
         .config(function (paginationTemplateProvider) {
             paginationTemplateProvider.setPath('views/dirPagination.tpl.html');
         })
-        
+
         .provider("ProviderRouting", function () {
             var providerRouting = {
                     "spineProxy": 	"",
@@ -419,7 +428,7 @@ angular
                 });
                 if (q.status === 200) {
                 	 providerRouting = angular.fromJson(q.responseText);
-                	 
+
                 	 providerRouting.defaultPractice = function () {
                     	for(var p = 0; p < this.practices.length; p++) {
                     		var practice = this.practices[p];

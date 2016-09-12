@@ -57,8 +57,11 @@ angular.module('gpConnect')
       case 'clinicalitems':
           toState = 'clinicalitems';
           break;
-      case 'orders':
-          toState = 'orders';
+      case 'orders-sent':
+          toState = 'orders-sent';
+          break;
+      case 'orders-received':
+          toState = 'orders-received';
           break;
       }
 

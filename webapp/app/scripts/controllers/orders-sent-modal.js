@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('OrderCreateModalCtrl', function ($state, $stateParams, $scope, $sce, $modalInstance, usSpinnerService, Order, PatientService, ProviderRouting, Organization) {
+        .controller('OrderCreateModalCtrl', function ($state, $stateParams, $scope, $sce, $modalInstance, usSpinnerService, OrderService, PatientService, ProviderRouting, Organization) {
 
-            $scope.federatedPractices = PatientService.practices;
+            $scope.federatedPractices = ProviderRouting.practices;
 
             PatientService.getFhirPatient(ProviderRouting.defaultPractice().odsCode, $stateParams.patientId).then(function (patient) {
                 $scope.patient = patient;
@@ -127,9 +127,9 @@ angular.module('gpConnect')
                         "detail": [{"reference": "#1"}]
                     };
 
-                    Order.sendOrder($stateParams.patientId, fhirModel, $scope.newOrder.toOrg.odsCode).then(function (result) {
+                    OrderService.sendOrder($stateParams.patientId, fhirModel, $scope.newOrder.toOrg.odsCode).then(function (result) {
                         localModel.orderDate = result.data.date;
-                        Order.saveOrder(localModel).then(function (result) {
+                        OrderService.saveOrder(localModel).then(function (result) {
                             $modalInstance.close();
                             $state.reload();
                             usSpinnerService.stop('appointmentCreate-spinner');

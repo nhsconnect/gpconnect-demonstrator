@@ -134,8 +134,10 @@
   <script src="scripts/controllers/adminitems-list.js"></script>
   <script src="scripts/controllers/clinicalitems-list.js"></script>
   <script src="scripts/controllers/investigations-list.js"></script>
-  <script src="scripts/controllers/orders-controller.js"></script>
-  <script src="scripts/controllers/order-create-modal.js"></script>
+  <script src="scripts/controllers/orders-sent-controller.js"></script>
+  <script src="scripts/controllers/orders-sent-modal.js"></script>
+  <script src="scripts/controllers/orders-received-controller.js"></script>
+  <script src="scripts/controllers/orders-sent-modal.js"></script>
   <script src="scripts/controllers/information-modal.js"></script>
   <!-- endbuild -->
 
@@ -150,11 +152,11 @@
 
   <!-- Header -->
   <div class="col-md-12 col-sm-12 header-background hidden-xs">
-      
+
     <div class="col-md-8 col-sm-8 headerBannerTitle">
       <div class="header-title-1" ng-if="title" ng-click="goHome()">{{ title }}</div>
     </div>
-      
+
     <div class="col-md-3 col-sm-3 headerBannerUser">
       <!-- User Profile -->
       <div class="collapse navbar-collapse">
@@ -186,7 +188,7 @@
       </div>
       <!-- /.User Profile -->
     </div>
-      
+
     <div class="col-md-1 col-sm-1 headerBannerInfo">
       <div class="glyphs g">
         <span class="glyphicon glyphicon-info-sign" ng-click="gpConnectInfo()"></span>

@@ -4,13 +4,13 @@
 
 <div class="modal-body">
 
-    
+
     <div class="col-md-12 modalBanner">
         <div class="col-md-4 modalBannerSection">{{ patient.name[0].prefix[0]}} {{ patient.name[0].given[0]}} {{ patient.name[0].family[0]}}</div>
         <div class="col-md-4 modalBannerSection">DOB: {{ patient.birthDate | date:'dd-MMM-yyyy' }}</div>
         <div class="col-md-4 modalBannerSection">NHS No. <span ng-bind="patientNhsNumber | formatNHSNumber"></span></div>
     </div>
-    
+
     <form name="orderCreateForm" class="form-horizontal text-left">
 
         <div class="col-md-12" style="margin-bottom: 25px; padding: 0;">
@@ -40,11 +40,11 @@
                 <textarea class="form-control input-sm" cols="85" rows="5" name="details" id="orderDetails" ng-model="newOrder.details"></textarea>
             </div>
         </div>
-        
+
         <div class="col-md-12">
             <div class="col-md-12 alert alert-danger" ng-show="validationError" ng-bind-html="validationError"></div>
         </div>
-        
+
     </form>
 </div>
 

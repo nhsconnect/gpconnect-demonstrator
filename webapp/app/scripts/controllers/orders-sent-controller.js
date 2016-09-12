@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('OrdersCtrl', function ($scope, $http, $sce, $cacheFactory, $stateParams, $state, $modal, PatientService, usSpinnerService, Order, Organization) {
+        .controller('OrdersSentCtrl', function ($scope, $http, $sce, $cacheFactory, $stateParams, $state, $modal, PatientService, usSpinnerService, OrderService, Organization) {
 
             $scope.currentPage = 1;
 
@@ -23,7 +23,7 @@ angular.module('gpConnect')
 
                 $scope.patientFhirId = result;
 
-                Order.findAllOrders($scope.patientFhirId).then(function (result) {
+                OrderService.findAllSentOrders($scope.patientFhirId).then(function (result) {
                     $scope.orders = result.data;
 
                     var orgCache = $cacheFactory.get('orgCache');
@@ -77,7 +77,7 @@ angular.module('gpConnect')
 
             $scope.create = function () {
                 $modal.open({
-                    templateUrl: 'views/orders/order-create.html',
+                    templateUrl: 'views/orders/sent/order-create.html',
                     size: 'md',
                     controller: 'OrderCreateModalCtrl'
                 });

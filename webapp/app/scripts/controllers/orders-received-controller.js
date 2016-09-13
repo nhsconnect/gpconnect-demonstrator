@@ -23,7 +23,7 @@ angular.module('gpConnect')
 
                 $scope.patientFhirId = result;
 
-                OrderService.findAllSentOrders($scope.patientFhirId).then(function (result) {
+                OrderService.findAllReceivedOrders($scope.patientFhirId).then(function (result) {
                     $scope.orders = result.data;
 
                     var orgCache = $cacheFactory.get('orgCache');

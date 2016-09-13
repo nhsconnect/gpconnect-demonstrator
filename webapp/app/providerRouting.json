@@ -7,7 +7,7 @@
 		"odsCode": 			"GPC001",
 		"name": 			"GP Connect Demonstrator",
 		"interactionIds":	["*"],
-		"endpointURL":		"http://localhost:19191/fhir", 
+		"endpointURL":		"/fhir", 
 		"ASID":				"200000000360",
 		"default":			"true"
 	},
@@ -16,7 +16,7 @@
 		"odsCode": 			"R1A14",
 		"name": 			"Test GP Care Trust",
 		"interactionIds":	["*"],
-		"endpointURL":		"http://localhost:19191/fhir",
+		"endpointURL":		"/fhir",
 		"ASID":				"200000000361",
 		"default":			"false"
 				
@@ -26,7 +26,7 @@
 		"odsCode": 			"R3B46",
 		"name": 			"New GP Practice",
 		"interactionIds":	["*"],
-		"endpointURL":		"http://localhost:19191/fhir",
+		"endpointURL":		"/fhir",
 		"ASID":				"200000000362",
 		"default":			"false"
 	}]

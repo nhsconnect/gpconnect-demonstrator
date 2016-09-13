@@ -13,33 +13,52 @@ angular.module('gpConnect')
       $scope[name] = true;
     };
 
-    $scope.setPreviousStartDate = function () {
-      if ($scope.appointmentSearch && $scope.appointmentSearch.startDate) {
-        var currentDate = $scope.appointmentSearch.startDate.getDate();
-        $scope.appointmentSearch.startDate.setDate(currentDate - 1);
-      }
+    $scope.initaliseDates = function() {
+        $scope.minStartDate = new Date();
+        $scope.endDateInvalid = false;
     };
+    $scope.initaliseDates();
+        
+    $scope.onStartDate = function() {
+    	var startDate = $scope.appointmentSearch.startDate
+    	$scope.minEndDate = startDate;
 
-    $scope.setPreviousEndDate = function () {
-      if ($scope.appointmentSearch && $scope.appointmentSearch.endDate) {
-        var currentDate = $scope.appointmentSearch.endDate.getDate();
-        $scope.appointmentSearch.endDate.setDate(currentDate - 1);
-      }
+    	var maxEndDateMoment = moment(startDate).add(2, 'weeks')
+    	$scope.maxEndDate = maxEndDateMoment.toDate();
+    	
+    	var endDate = $scope.appointmentSearch.endDate;
+    	if(endDate) {
+    		// does the end date need resetting?
+    		if(moment(maxEndDateMoment).isBefore(endDate)) {
+    			$scope.appointmentSearch.endDate = null;
+    			$scope.endDateInvalid = true;
+    		}
+    	}
     };
+    
+    $scope.onEndDate = function() {
+    	var endDate = $scope.appointmentSearch.endDate;
 
-    $scope.setNextStartDate = function () {
-      if ($scope.appointmentSearch && $scope.appointmentSearch.startDate) {
-        var currentDate = $scope.appointmentSearch.startDate.getDate();
-        $scope.appointmentSearch.startDate.setDate(currentDate + 1);
-      }
+    	if(endDate) {
+    		var maxEndDate = moment($scope.maxEndDate)
+    		
+    		if(maxEndDate.isSame(endDate) || maxEndDate.isAfter(endDate)) {
+    			$scope.endDateInvalid = false;
+    		}
+    	}
     };
-
-    $scope.setNextEndDate = function () {
-      if ($scope.appointmentSearch && $scope.appointmentSearch.endDate) {
-        var currentDate = $scope.appointmentSearch.endDate.getDate();
-        $scope.appointmentSearch.endDate.setDate(currentDate + 1);
-      }
-    };
+  
+    $scope.$watch("appointmentSearch.startDate", function(newValue, oldValue) {
+        if($scope.appointmentSearch !== undefined) {
+        	$scope.onStartDate();
+        }
+    }); 
+    
+    $scope.$watch("appointmentSearch.endDate", function(newValue, oldValue) {
+        if($scope.appointmentSearch !== undefined) {
+        	$scope.onEndDate();
+        }
+    });      
 
     $scope.ok = function (appointmentSearchForm) {
       $scope.formSubmitted = true;

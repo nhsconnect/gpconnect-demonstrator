@@ -7,16 +7,16 @@
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Sent</th>
-                    <th>To</th>
+                    <th>Received</th>
+                    <th>From</th>
                 </tr>
             </thead>
 
             <tbody>
                 <tr dir-paginate="order in orders | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{order.id}}')" ng-class="{info: selected(order.id)}">
                     <td class="dateTime" style="width:155px">{{ order.orderDate | amDateFormat:'DD-MMM-YYYY HH:mm' }}</td>
-                    <td>Sent</td>
-                    <td>{{ order.targetOrg }}</td>
+                    <td>Received</td>
+                    <td>{{ order.sourceOrg }}</td>
                 </tr>
 
                 <tr ng-if="!orders.length">

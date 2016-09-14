@@ -17,7 +17,7 @@ angular.module('gpConnect')
 
             // Set Default Values for screen
             $scope.newOrder = {};
-            $scope.newOrder.fromOrg = "GP Connect Demonstrator";
+            $scope.newOrder.fromOrg = ProviderRouting.defaultPractice().name;
             $scope.newOrder.toOrg = $scope.federatedPractices[0];
             $scope.newOrder.type = "1";
 
@@ -39,7 +39,7 @@ angular.module('gpConnect')
                     var localModel = {};
                     localModel.identifier = "ID" + new Date().getTime();
                     localModel.subjectPatientId = $scope.patientLocalIdentifier;
-                    localModel.sourceOrgId = "1";
+                    localModel.sourceOrgId = ProviderRouting.defaultPractice().id;
                     localModel.targetOrgId = $scope.newOrder.toOrg.id;
                     if ($scope.newOrder.type == "1") {
                         localModel.reasonCode = "1";

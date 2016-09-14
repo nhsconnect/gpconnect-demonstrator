@@ -16,7 +16,7 @@
 		"odsCode": 			"R1A14",
 		"name": 			"Test GP Care Trust",
 		"interactionIds":	["*"],
-		"endpointURL":		"/fhir",
+		"endpointURL":		"/Server2/fhir",
 		"ASID":				"200000000361",
 		"default":			"false"
 				
@@ -26,7 +26,7 @@
 		"odsCode": 			"R3B46",
 		"name": 			"New GP Practice",
 		"interactionIds":	["*"],
-		"endpointURL":		"/fhir",
+		"endpointURL":		"/Server3/fhir",
 		"ASID":				"200000000362",
 		"default":			"false"
 	}]

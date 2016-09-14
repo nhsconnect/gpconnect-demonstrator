@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-  .factory('AdvancedSearch', function($modal, $http) {
+  .factory('AdvancedSearch', function($modal, $http, ProviderRouting) {
 
     var isModalClosed = true;
 
@@ -41,7 +41,7 @@ angular.module('gpConnect')
     };
 
     var searchByDetails = function (queryParams) {
-      return $http.post('/api/patients/advancedSearch', queryParams);
+      return $http.post(ProviderRouting.defaultPractice().apiEndpointURL + '/patients/advancedSearch', queryParams);
     };
 
     return {

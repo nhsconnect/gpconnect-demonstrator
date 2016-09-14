@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('gpConnect')
-        .factory('PatientService', function ($rootScope, $http, FhirEndpointLookup, $cacheFactory, fhirJWTFactory) {
+        .factory('PatientService', function ($rootScope, $http, FhirEndpointLookup, $cacheFactory, fhirJWTFactory, ProviderRouting) {
 
             var findAllSummaries = function () {
-                return $http.get('/api/patients');
+                return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/patients');
             };
 
             var getSummary = function (patientId) {

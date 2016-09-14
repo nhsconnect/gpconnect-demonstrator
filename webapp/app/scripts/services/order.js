@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('gpConnect')
-  .factory('OrderService', function ($rootScope,  $http, FhirEndpointLookup, fhirJWTFactory) {
+  .factory('OrderService', function ($rootScope,  $http, FhirEndpointLookup, fhirJWTFactory, ProviderRouting) {
 
     var findAllReceivedOrders = function (patientId) {
-        return $http.get('/api/notfhir/orders/patient/' + patientId + '?recieved=true&sent=false');
+        return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/notfhir/orders/patient/' + patientId + '?recieved=true&sent=false');
     };
 
     var findAllSentOrders = function (patientId) {
-        return $http.get('/api/notfhir/orders/patient/' + patientId + '?recieved=false&sent=true');
+        return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/notfhir/orders/patient/' + patientId + '?recieved=false&sent=true');
     };
 
     var sendOrder = function (patientId, fhirOrder, practiceOdsCode) {
@@ -27,7 +27,7 @@ angular.module('gpConnect')
     };
 
     var saveOrder = function (order) {
-        return $http.post('/api/notfhir/orders/order', order);
+        return $http.post(ProviderRouting.defaultPractice().apiEndpointURL + '/notfhir/orders/order', order);
     };
 
     return {

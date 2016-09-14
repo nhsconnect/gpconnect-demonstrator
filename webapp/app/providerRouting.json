@@ -8,8 +8,8 @@
 		"name": 			"GP Connect Demonstrator",
 		"interactionIds":	["*"],
 		"endpointURL":		"/fhir", 
-		"ASID":				"200000000360",
-		"default":			"true"
+		"apiEndpointURL":	"/api",
+		"ASID":				"200000000360"
 	},
 	{
 		"id": 				"2",
@@ -17,9 +17,8 @@
 		"name": 			"Test GP Care Trust",
 		"interactionIds":	["*"],
 		"endpointURL":		"/fhir",
-		"ASID":				"200000000361",
-		"default":			"false"
-				
+		"apiEndpointURL":	"/api",
+		"ASID":				"200000000361"
 	},
 	{
 		"id": 				"3",
@@ -27,7 +26,7 @@
 		"name": 			"New GP Practice",
 		"interactionIds":	["*"],
 		"endpointURL":		"/fhir",
-		"ASID":				"200000000362",
-		"default":			"false"
+		"apiEndpointURL":	"/api",
+		"ASID":				"200000000362"
 	}]
 }

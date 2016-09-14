@@ -430,9 +430,10 @@ angular
                 	 providerRouting = angular.fromJson(q.responseText);
 
                 	 providerRouting.defaultPractice = function () {
+                        var defaultPracticeOdsCode = $('#defaultPracticeOdsCode').html();
                     	for(var p = 0; p < this.practices.length; p++) {
                     		var practice = this.practices[p];
-                    		if(practice.default == "true") {
+                    		if(practice.odsCode == defaultPracticeOdsCode) {
                     			return practice;
                     		}
                     	}

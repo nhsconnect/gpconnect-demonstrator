@@ -9,6 +9,8 @@ angular.module('gpConnect')
     
         $scope.modal = modal;
         $scope.practitionerName = appointmentBookingParams.practitionerFullName;
+        $scope.practiceName = appointmentBookingParams.location.practiceName;
+        $scope.locationName = appointmentBookingParams.location.name;
 
         $scope.appointmentCreate = {};
         $scope.appointmentCreate.resourceType = "Appointment";
@@ -64,7 +66,7 @@ angular.module('gpConnect')
       $scope.formSubmitted = true;
       if (appointmentCreateForm.$valid) {
           usSpinnerService.spin('appointmentCreate-spinner');
-          Appointment.create($stateParams.patientId, $scope.appointmentCreate).then(function(response){
+          Appointment.create(appointmentBookingParams.location.odsCode, $stateParams.patientId, $scope.appointmentCreate).then(function(response){
               if(response.status != "201"){
                   alert("An error occurred storing appointment, please try booking again");
               }

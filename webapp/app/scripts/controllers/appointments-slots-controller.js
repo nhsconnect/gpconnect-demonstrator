@@ -292,6 +292,7 @@ angular.module('gpConnect')
                                     },
                                     appointmentBookingParams: function () {
                                         var appointmentBookingParameters = {};
+                                        appointmentBookingParameters.location = $scope.selectedLocation;
                                         appointmentBookingParameters.slotId = dScope.task.model.id;
                                         appointmentBookingParameters.startTime = dScope.task.model.from;
                                         appointmentBookingParameters.endTime = dScope.task.model.to;

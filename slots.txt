@@ -139,7 +139,7 @@
 1,14,30,0,15,0,0,408443003,General medical practice,8,FREE
 0,9,0,0,10,0,0,408443003,General medical practice,11,FREE
 0,10,0,0,11,0,0,408443003,General medical practice,11,FREE
-1,9,0,0,10,00,0,408443003,General medical practice,11,FREE
+1,9,0,0,10,0,0,408443003,General medical practice,11,FREE
 1,10,0,0,11,0,0,408443003,General medical practice,11,FREE
-2,9,0,0,10,00,0,408443003,General medical practice,11,FREE
+2,9,0,0,10,0,0,408443003,General medical practice,11,FREE
 2,10,0,0,11,0,0,408443003,General medical practice,11,FREE

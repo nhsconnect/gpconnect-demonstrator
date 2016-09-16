@@ -77,8 +77,8 @@ angular.module('gpConnect')
                 }
             };
 
-            var create = function (patientId, appointment) {
-                return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:create:appointment").then(function (response) {
+            var create = function (practiceOdsCode, patientId, appointment) {
+                return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:create:appointment").then(function (response) {
                     var endpointLookupResult = response;
                     return $http.post(endpointLookupResult.restUrlPrefix + '/Appointment',
                             appointment,

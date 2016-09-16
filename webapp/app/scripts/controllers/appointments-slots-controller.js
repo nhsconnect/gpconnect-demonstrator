@@ -13,12 +13,18 @@ angular.module('gpConnect')
             };
 
             var internalGetScheduleModel = {}
+            $scope.practicesSearchingAndFails = [];
 
             var startDate = moment(appointmentSearchParams.startDate).format('YYYY-MM-DDTHH:mm:ss');
             var endDate = moment(appointmentSearchParams.endDate).add(23, 'hours').add(59, 'minutes').add(59, 'seconds').format('YYYY-MM-DDTHH:mm:ss');
 
-            var poputlateModel = function (practicOdsCode, practiceName, startDate, endDate, primary) {
-
+            var poputlateModel = function (practiceOdsCode, practiceName, startDate, endDate, primary) {
+                var practiceState = {};
+                practiceState.practiceName = practiceName;
+                practiceState.practiceOdsCode = practiceOdsCode;
+                practiceState.status = "Searching";
+                $scope.practicesSearchingAndFails.push(practiceState);
+                
                 numberOfSearches++;
                 usSpinnerService.spin('appointmentSlots-spinner');
 
@@ -27,7 +33,7 @@ angular.module('gpConnect')
                 var responsePractitioners = {};     // We will lookup practitioner from the schedule using reference so we can use the reference as the key/name
                 var responseLocations = {};         // We will lookup location from the schedule using reference so we can use the reference as the key/name
 
-                Appointment.getScheduleOperation(practicOdsCode, startDate, endDate, $stateParams.patientId).then(function (result) {
+                Appointment.getScheduleOperation(practiceOdsCode, startDate, endDate, $stateParams.patientId).then(function (result) {
 
                     var getScheduleJson = result.data;
 
@@ -88,14 +94,14 @@ angular.module('gpConnect')
                                 var dayBlockOfSlotsModel = {"dayOfWeek": getDayFromDate(slot.startDateTime), "date": startDateTime.setHours(0, 0, 0, 0), "freeSlots": 1, "practitioners": practitioners};
                                 dayBlockOfSlots.push(dayBlockOfSlotsModel);
                                 var locations = [];
-                                var locationModel = {"name": locationName, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practicOdsCode, "practiceName": practiceName, "primary": primary};
+                                var locationModel = {"name": locationName, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practiceOdsCode, "practiceName": practiceName, "primary": primary};
                                 locations.push(locationModel);
                                 internalGetScheduleModel.locations = locations;
                             } else {
                                 var locationIndex = -1;
                                 // search locations for location
                                 for (var i = 0; i < internalGetScheduleModel.locations.length; i++) {
-                                    if (locationId == internalGetScheduleModel.locations[i].id && practicOdsCode == internalGetScheduleModel.locations[i].odsCode) {
+                                    if (locationId == internalGetScheduleModel.locations[i].id && practiceOdsCode == internalGetScheduleModel.locations[i].odsCode) {
                                         locationIndex = i;
                                         break;
                                     }
@@ -111,7 +117,7 @@ angular.module('gpConnect')
                                     var dayBlockOfSlots = [];
                                     var startDateTime = new Date(slot.startDateTime);
                                     var dayBlockOfSlotsModel = {"dayOfWeek": getDayFromDate(slot.startDateTime), "date": startDateTime.setHours(0, 0, 0, 0), "freeSlots": 1, "practitioners": practitioners};
-                                    var locationModel = {"name": locationName, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practicOdsCode, "practiceName": practiceName, "primary": primary};
+                                    var locationModel = {"name": locationName, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practiceOdsCode, "practiceName": practiceName, "primary": primary};
                                     internalGetScheduleModel.locations.push(locationModel);
                                 } else {
                                     // else get the existing model and add the new slot to it.
@@ -172,10 +178,14 @@ angular.module('gpConnect')
                         }, 10);
                     }
                     numberOfSearches--;
+                    var indexOfElement = $scope.practicesSearchingAndFails.indexOf(practiceState);
+                    $scope.practicesSearchingAndFails.splice(indexOfElement,1);
+                    practiceState.status = "Success";
                     if (numberOfSearches <= 0) {
                         usSpinnerService.stop('appointmentSlots-spinner');
                     }
                 },function (result) {
+                    practiceState.status = "Failed";
                     numberOfSearches--;
                     if (numberOfSearches <= 0) {
                         usSpinnerService.stop('appointmentSlots-spinner');

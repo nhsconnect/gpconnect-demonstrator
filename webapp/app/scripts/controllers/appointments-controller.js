@@ -65,7 +65,7 @@ angular.module('gpConnect')
 	            	if (practiceAppointment.resource.modifierExtension != undefined) {
 	                    for (var i = 0; i < practiceAppointment.resource.modifierExtension.length; i++) {
 	                        if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0" == practiceAppointment.resource.modifierExtension[i].url) {
-	                            appointment.cancellationReason = practiceAppointment.resource.modifierExtension[i].valueString;
+	                        	practiceAppointment.cancellationReason = practiceAppointment.resource.modifierExtension[i].valueString;
 	                            i = practiceAppointment.resource.modifierExtension.length;
 	                        }
 	                    }

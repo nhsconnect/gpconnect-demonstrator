@@ -17,7 +17,7 @@ angular.module('gpConnect')
             var startDate = moment(appointmentSearchParams.startDate).format('YYYY-MM-DDTHH:mm:ss');
             var endDate = moment(appointmentSearchParams.endDate).add(23, 'hours').add(59, 'minutes').add(59, 'seconds').format('YYYY-MM-DDTHH:mm:ss');
 
-            var poputlateModel = function (practicOdsCode, practiceName, startDate, endDate) {
+            var poputlateModel = function (practicOdsCode, practiceName, startDate, endDate, primary) {
 
                 numberOfSearches++;
                 usSpinnerService.spin('appointmentSlots-spinner');
@@ -28,7 +28,7 @@ angular.module('gpConnect')
                 var responseLocations = {};         // We will lookup location from the schedule using reference so we can use the reference as the key/name
 
                 Appointment.getScheduleOperation(practicOdsCode, startDate, endDate, $stateParams.patientId).then(function (result) {
-                   
+
                     var getScheduleJson = result.data;
 
                     // go through response and build arrays of all returned data
@@ -88,7 +88,7 @@ angular.module('gpConnect')
                                 var dayBlockOfSlotsModel = {"dayOfWeek": getDayFromDate(slot.startDateTime), "date": startDateTime.setHours(0, 0, 0, 0), "freeSlots": 1, "practitioners": practitioners};
                                 dayBlockOfSlots.push(dayBlockOfSlotsModel);
                                 var locations = [];
-                                var locationModel = {"name": locationName, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practicOdsCode, "practiceName": practiceName};
+                                var locationModel = {"name": locationName, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practicOdsCode, "practiceName": practiceName, "primary": primary};
                                 locations.push(locationModel);
                                 internalGetScheduleModel.locations = locations;
                             } else {
@@ -111,7 +111,7 @@ angular.module('gpConnect')
                                     var dayBlockOfSlots = [];
                                     var startDateTime = new Date(slot.startDateTime);
                                     var dayBlockOfSlotsModel = {"dayOfWeek": getDayFromDate(slot.startDateTime), "date": startDateTime.setHours(0, 0, 0, 0), "freeSlots": 1, "practitioners": practitioners};
-                                    var locationModel = {"name": locationName, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practicOdsCode, "practiceName": practiceName};
+                                    var locationModel = {"name": locationName, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practicOdsCode, "practiceName": practiceName, "primary": primary};
                                     internalGetScheduleModel.locations.push(locationModel);
                                 } else {
                                     // else get the existing model and add the new slot to it.
@@ -179,11 +179,11 @@ angular.module('gpConnect')
             };
 
             if (appointmentSearchParams.primaryPractice.checked == true) {
-                poputlateModel(appointmentSearchParams.primaryPractice.odsCode, appointmentSearchParams.primaryPractice.name, startDate, endDate);
+                poputlateModel(appointmentSearchParams.primaryPractice.odsCode, appointmentSearchParams.primaryPractice.name, startDate, endDate, true);
             }
             $.each(appointmentSearchParams.federatedPractices, function (index, practice) {
                 if (practice.checked == true) {
-                    poputlateModel(practice.odsCode, practice.name, startDate, endDate);
+                    poputlateModel(practice.odsCode, practice.name, startDate, endDate, false);
                 }
             });
 
@@ -235,6 +235,12 @@ angular.module('gpConnect')
                 // grab the first day and select it
                 if (locations.length > 0) {
                     var firstLocation = locations[0];
+                    for(var peimaryLocationIndex = 0; peimaryLocationIndex < locations.length; peimaryLocationIndex++){
+                        if(locations[peimaryLocationIndex].primary == true){
+                            firstLocation = locations[peimaryLocationIndex];
+                            peimaryLocationIndex = locations.length;
+                        }
+                    }
                     $scope.onSelectLocation(firstLocation);
                 }
             };

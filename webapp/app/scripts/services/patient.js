@@ -25,14 +25,16 @@ angular.module('gpConnect')
                 });
             };
 
-            var getPatientFhirId = function (patientId) {
-                var patientFhirIdCache = $cacheFactory.get('patientFhirIdCache');
+            var getPatientFhirId = function (patientId, odsCode) {
+            	var odsCode = (typeof odsCode !== 'undefined') ?  odsCode : $rootScope.patientOdsCode;
+            	
+            	var patientFhirIdCache = $cacheFactory.get('patientFhirIdCache');
                 if (patientFhirIdCache == undefined) {
                     patientFhirIdCache = $cacheFactory('patientFhirIdCache');
                 }
                 var patientFhirId = patientFhirIdCache.get(patientId);
                 if (patientFhirId == undefined) {
-                    return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function (endpointResponse) {
+                    return FhirEndpointLookup.getEndpoint(odsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function (endpointResponse) {
                         var endpointLookupResult = endpointResponse;
                         var partientLookupResponse = $http.get(endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|' + patientId,
                                 {

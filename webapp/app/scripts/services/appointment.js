@@ -3,8 +3,10 @@
 angular.module('gpConnect')
         .factory('Appointment', function ($rootScope, $http, FhirEndpointLookup, fhirJWTFactory, Organization) {
 
-            var findAllAppointments = function (patientNHSNumber, patientId) {
-                return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments").then(function (response) {
+            var findAllAppointments = function (patientNHSNumber, patientId, odsCode) {
+    			var odsCode = (typeof odsCode !== 'undefined') ?  odsCode : $rootScope.patientOdsCode;
+                
+                return FhirEndpointLookup.getEndpoint(odsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments").then(function (response) {
                     var endpointLookupResult = response;
                     return $http.get(endpointLookupResult.restUrlPrefix + '/Patient/' + patientId + '/Appointment',
                             {

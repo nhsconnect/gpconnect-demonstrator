@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('AppointmentsCtrl', function ($scope, $http, $stateParams, $state, $modal, PatientService, usSpinnerService, Appointment) {
+        .controller('AppointmentsCtrl', function ($scope, $http, $stateParams, $state, $modal, $q, PatientService, usSpinnerService, Appointment, ProviderRouting, FhirEndpointLookup) {
 
             $scope.currentPage = 1;
 
@@ -16,38 +16,62 @@ angular.module('gpConnect')
             if ($stateParams.filter) {
                 $scope.query = $stateParams.filter;
             }
-
-            PatientService.getPatientFhirId($stateParams.patientId).then(function (result) {
-                return result;
-            }).then(function (result) {
-
-                $scope.patientFhirId = result;
-
-                Appointment.findAllAppointments($stateParams.patientId, $scope.patientFhirId).then(function (result) {
-                    var appointmentsJson = result.data;
-                    $scope.appointments = appointmentsJson.entry;
-
-                    if ($scope.appointments != undefined) {
-                        $scope.appointments = $scope.appointments.sort(function (a, b) {
+            
+            initAppointments($stateParams.patientId);
+            
+            function initAppointments(externalPatientId) {
+            	var patientIdPromises = [];
+            	for(var practiceIndex in ProviderRouting.practices) {
+                	var practice = ProviderRouting.practices[practiceIndex];
+            		
+                	var patientIdPromise = PatientService.getPatientFhirId(externalPatientId, practice.odsCode)
+                	patientIdPromises.push(patientIdPromise);
+            	}
+            	
+            	var appointmentsPromises = [];
+            	$q.all(patientIdPromises).then(function(patientIdResponses) {
+            		for(var patientIdIndex in patientIdResponses) {
+            			var patientId = patientIdResponses[patientIdIndex];
+            			
+            			var appointmentsPromise = Appointment.findAllAppointments(externalPatientId, patientId, practice.odsCode);
+            			appointmentsPromises.push(appointmentsPromise);
+            		}
+            		
+            		var allPracticeAppointments = [];
+                	$q.all(appointmentsPromises).then(function(appointmentsResponses) {
+                		for(var appointmentsIndex in appointmentsResponses) {
+                			var appointmentsResponse = appointmentsResponses[appointmentsIndex];
+                			var appointments = appointmentsResponse.data.entry
+                			
+                			setCancellationReason(appointments);
+                			allPracticeAppointments = allPracticeAppointments.concat(appointments);
+                		}
+                		
+                    	// sort by appointment start datetime ascending
+                    	allPracticeAppointments.sort(function (a, b) {
                             return a.resource.start.localeCompare(b.resource.start);
                         });
-                        $.each($scope.appointments, function (key, appointment) {
-                            if (appointment.resource.modifierExtension != undefined) {
-                                for (var i = 0; i < appointment.resource.modifierExtension.length; i++) {
-                                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0" == appointment.resource.modifierExtension[i].url) {
-                                        appointment.cancellationReason = appointment.resource.modifierExtension[i].valueString;
-                                        i = appointment.resource.modifierExtension.length;
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }).catch(function (e) {
-                    usSpinnerService.stop('patientSummary-spinner');
-                }).finally(function () {
-                    usSpinnerService.stop('patientSummary-spinner');
-                });
-            });
+                    	
+                    	$scope.appointments = allPracticeAppointments;
+                    	usSpinnerService.stop('patientSummary-spinner');
+                	});            		
+            	});    	
+            }
+            
+            function setCancellationReason(practiceAppointments) {
+                for(var practiceAppointmentIndex in practiceAppointments) {  	
+                	var practiceAppointment = practiceAppointments[practiceAppointmentIndex];
+                	
+	            	if (practiceAppointment.resource.modifierExtension != undefined) {
+	                    for (var i = 0; i < practiceAppointment.resource.modifierExtension.length; i++) {
+	                        if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0" == practiceAppointment.resource.modifierExtension[i].url) {
+	                            appointment.cancellationReason = practiceAppointment.resource.modifierExtension[i].valueString;
+	                            i = practiceAppointment.resource.modifierExtension.length;
+	                        }
+	                    }
+	                }
+            	}
+            }
 
             $scope.go = function (id) {
 

@@ -1,11 +1,21 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('AppointmentsSearchModalCtrl', function ($scope, $modalInstance, $modal, $timeout, modal) {
+  .controller('AppointmentsSearchModalCtrl', function ($scope, $modalInstance, $modal, $timeout, modal, ProviderRouting) {
 
     $scope.modal = modal;
-    $scope.appointmentSearch = undefined;
-
+    $scope.appointmentSearch = {};
+    
+    $scope.appointmentSearch.primaryPractice = ProviderRouting.defaultPractice();
+    $scope.appointmentSearch.primaryPractice.checked = true;
+    $scope.appointmentSearch.federatedPractices = [];
+    $.each(ProviderRouting.practices, function (index, practice) {
+        if (practice.odsCode != $scope.appointmentSearch.primaryPractice.odsCode) {
+            practice.checked = false;
+            $scope.appointmentSearch.federatedPractices.push(practice);
+        }
+    });
+    
     $scope.openDatePicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();

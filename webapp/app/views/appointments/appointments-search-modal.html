@@ -62,13 +62,8 @@
             </div>
             <div class="col-md-12">
                 <div class="col-md-5">
-                    <input type="checkbox" name="hepworthSurgery" id="hepworthSurgery" ng-model="appointmentSearch.hepworthSurgery" value="The Hepworth Surgery" ng-checked="true">
-                    <label for="hepworthSurgery"> The Hepworth Surgery</label>
-                </div>
-
-                <div class="col-md-5">
-                    <input type="checkbox" name="mooreSurgery" id="mooreSurgery" ng-model="appointmentSearch.mooreSurgery" value="The Moore Surgery" disabled>
-                    <label for="mooreSurgery"> The Moore Surgery</label>
+                    <input type="checkbox" id="primaryPracticeCheck"  name="primaryPracticeCheck" ng-model="appointmentSearch.primaryPractice.checked" ng-checked="true">
+                    <label for="primaryPracticeCheck">{{appointmentSearch.primaryPractice.name}}</label>
                 </div>
             </div>
 
@@ -78,14 +73,9 @@
                 <strong>Federated Practice(s):</strong>
             </div>
             <div class="col-md-12">
-                <div class="col-md-5">
-                    <input type="checkbox" name="federatedPracticeOne" id="federatedPracticeOne" value="Federated Practice 1" disabled>
-                    <label for="federatedPracticeOne"> Federated Practice 1</label>
-                </div>
-
-                <div class="col-md-5">
-                    <input type="checkbox" name="federatedPracticeTwo" id="federatedPracticeTwo" value="Federated Practice 2" disabled>
-                    <label for="federatedPracticeTwo"> Federated Practice 2</label>
+                <div class="col-md-5" ng-repeat="practice in appointmentSearch.federatedPractices">
+                    <input type="checkbox" id="{{practice.name}}" name="{{practice.name}}" ng-model="practice.checked" >
+                    <label for="{{practice.name}}">{{practice.name}}</label>
                 </div>
             </div>
         </div>

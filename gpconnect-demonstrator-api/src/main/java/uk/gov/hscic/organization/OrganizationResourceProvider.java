@@ -88,29 +88,19 @@ public class OrganizationResourceProvider implements IResourceProvider {
     }
 
     @Operation(name = "$gpc.getschedule")
-    public Bundle getSchedule(@ResourceParam Parameters params) {
+    public Bundle getSchedule(@IdParam IdDt organizationId, @ResourceParam Parameters params) {
         Bundle bundle = new Bundle();
         bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
-
         OperationOutcome operationOutcome = new OperationOutcome();
 
         // params
         List<Parameter> parameters = params.getParameter();
-
-        String orgOdsCode = null;
-        String siteOdsCode = null;
         String planningHorizonStart = null;
         String planningHorizonEnd = null;
 
         for (int p = 0; p < parameters.size(); p++) {
             Parameter parameter = parameters.get(p);
             switch (parameter.getName()) {
-                case "odsOrganisationCode":
-                    orgOdsCode = ((IdentifierDt) parameter.getValue()).getValue();
-                    break;
-                case "odsSiteCode":
-                    siteOdsCode = ((IdentifierDt) parameter.getValue()).getValue();
-                    break;
                 case "timePeriod":
                     PeriodDt timePeriod = (PeriodDt) parameter.getValue();
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -120,10 +110,10 @@ public class OrganizationResourceProvider implements IResourceProvider {
             }
         }
 
-        if (orgOdsCode != null && planningHorizonStart != null && planningHorizonEnd != null) {
-            getScheduleOperation.populateBundle(bundle, operationOutcome, orgOdsCode, siteOdsCode, planningHorizonStart, planningHorizonEnd);
+        if (organizationId != null && planningHorizonStart != null && planningHorizonEnd != null) {
+            getScheduleOperation.populateBundle(bundle, operationOutcome, organizationId, planningHorizonStart, planningHorizonEnd);
         } else {
-            String msg = String.format("Not all of the mandatory parameters were provided - orgOdsCode - %s siteOdsCode - %s planningHorizonStart - %s planningHorizonEnd - %s", orgOdsCode, siteOdsCode, planningHorizonStart, planningHorizonEnd);
+            String msg = String.format("Not all of the mandatory parameters were provided - orgId - %s planningHorizonStart - %s planningHorizonEnd - %s", organizationId, planningHorizonStart, planningHorizonEnd);
             operationOutcome.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(msg);
 
             Entry operationOutcomeEntry = new Entry();

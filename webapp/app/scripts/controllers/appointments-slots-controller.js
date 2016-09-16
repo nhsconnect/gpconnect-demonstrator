@@ -175,6 +175,11 @@ angular.module('gpConnect')
                     if (numberOfSearches <= 0) {
                         usSpinnerService.stop('appointmentSlots-spinner');
                     }
+                },function (result) {
+                    numberOfSearches--;
+                    if (numberOfSearches <= 0) {
+                        usSpinnerService.stop('appointmentSlots-spinner');
+                    }
                 });
             };
 

@@ -2,11 +2,10 @@
 
 angular.module('gpConnect')
   .controller('AppointmentsCreateModalCtrl', function ($state, $scope, $stateParams, $modalInstance, PatientService, Appointment, modal, appointmentBookingParams, usSpinnerService) {
-
-    PatientService.getPatientFhirId($stateParams.patientId).then(function (result) {
+      
+    PatientService.getPatientFhirId($stateParams.patientId, appointmentBookingParams.location.odsCode).then(function (result) {
         $scope.patientFhirId = result;
     }).then(function(){
-    
         $scope.modal = modal;
         $scope.practitionerName = appointmentBookingParams.practitionerFullName;
         $scope.practiceName = appointmentBookingParams.location.practiceName;

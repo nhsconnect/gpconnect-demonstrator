@@ -231,6 +231,19 @@ a[ui-sref] {
   background-color: $btn-danger-background;
 }
 
+.btn.Failed {
+    background-color: #ffcccc;
+    color: darkgrey;
+}
+
+.btn.Success {
+    background-color: #d7e6f4;
+}
+
+.btn.btn-primary {
+    background-color: #428bca;
+}
+
 label {
   font-weight: normal;
   color: #A4A4A4;

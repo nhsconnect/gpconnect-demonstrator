@@ -5,9 +5,9 @@
 <div class="modal-body">
 
 	<div>
-			<button class="btn" ng-repeat="location in scheduleModel.locations | filter : { primary : 'true'}" ng-class="{'btn-primary':isLocationSelected(location)}" ng-click="onSelectLocation(location)">{{location.practiceName}}<br/>{{location.name}} <span class="badge">{{location.freeSlots}}</span></button>
-            <button class="btn" ng-repeat="location in scheduleModel.locations | filter : { primary : 'false'}" ng-class="{'btn-primary':isLocationSelected(location)}" ng-click="onSelectLocation(location)">{{location.practiceName}}<br/>{{location.name}} <span class="badge">{{location.freeSlots}}</span></button>
-            <button class="btn" ng-repeat="practice in practicesSearchingAndFails" >{{practice.practiceName}}<br/>status: {{practice.status}}</button>
+			<button class="btn Success" ng-class="{'btn-primary':isLocationSelected(location)}" ng-repeat="location in scheduleModel.locations | filter : { primary : 'true'}" ng-click="onSelectLocation(location)">{{location.practiceName}}<br/>{{location.name}} <span class="badge">{{location.freeSlots}}</span></button>
+            <button class="btn Success" ng-class="{'btn-primary':isLocationSelected(location)}" ng-repeat="location in scheduleModel.locations | filter : { primary : 'false'}" ng-click="onSelectLocation(location)">{{location.practiceName}}<br/>{{location.name}} <span class="badge">{{location.freeSlots}}</span></button>
+            <button class="btn" ng-class="practice.status" ng-repeat="practice in practicesSearchingAndFails" >{{practice.practiceName}}<br/>status: {{practice.status}}</button>
             
 	</div>
 	<p>

@@ -178,11 +178,15 @@ angular.module('gpConnect')
                         }, 10);
                     }
                     numberOfSearches--;
-                    var indexOfElement = $scope.practicesSearchingAndFails.indexOf(practiceState);
-                    $scope.practicesSearchingAndFails.splice(indexOfElement,1);
-                    practiceState.status = "Success";
                     if (numberOfSearches <= 0) {
                         usSpinnerService.stop('appointmentSlots-spinner');
+                    }
+                    if(responseSlots.length > 0){
+                        var indexOfElement = $scope.practicesSearchingAndFails.indexOf(practiceState);
+                        $scope.practicesSearchingAndFails.splice(indexOfElement,1);
+                        practiceState.status = "Success";
+                    } else {
+                        practiceState.status = "No Slots";
                     }
                 },function (result) {
                     practiceState.status = "Failed";

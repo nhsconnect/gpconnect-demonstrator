@@ -34,7 +34,7 @@ angular.module('gpConnect')
 
                 if ($scope.newOrder.details != undefined && $scope.newOrder.details.length > 0) {
 
-                    usSpinnerService.spin('appointmentCreate-spinner');
+                    usSpinnerService.spin('orderCreate-spinner');
 
                     var localModel = {};
                     localModel.identifier = "ID" + new Date().getTime();
@@ -71,6 +71,8 @@ angular.module('gpConnect')
                         } else {
                             addErrorMsg("<div>The recieving system does not have a local identifier for it's own ODS code.</div>");
                         }
+                    },function (patientFhirResource) {
+                        addErrorMsg("<div>Unable to connect to "+$scope.newOrder.toOrg.name+".</div>");
                     });
 
                     // Find the local organization Ods Code for the sending organization, so that we can lookup the local identifier for the organization on the recieving system
@@ -89,6 +91,8 @@ angular.module('gpConnect')
                                 });
                             }
                         }
+                    },function (patientFhirResource) {
+                        //addErrorMsg("<div>Unable to connect to remote system.</div>");  // Failed to call the remote system but error will show from above
                     });
 
                 } else {
@@ -132,7 +136,7 @@ angular.module('gpConnect')
                         OrderService.saveOrder(localModel).then(function (result) {
                             $modalInstance.close();
                             $state.reload();
-                            usSpinnerService.stop('appointmentCreate-spinner');
+                            usSpinnerService.stop('orderCreate-spinner');
                         });
                     });
                 }
@@ -141,6 +145,7 @@ angular.module('gpConnect')
 
             var addErrorMsg = function (errorHTML) {
                 $scope.validationError = $sce.trustAsHtml($scope.validationError + errorHTML);
+                usSpinnerService.stop('orderCreate-spinner');
             };
 
             var clearErrorMsg = function () {

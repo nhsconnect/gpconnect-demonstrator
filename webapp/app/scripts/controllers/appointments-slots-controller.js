@@ -1,8 +1,12 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('AppointmentsSlotsCtrl', function ($stateParams, $scope, usSpinnerService, Appointment, appointmentSearchParams, $modalInstance, $modal, modal) {
+        .controller('AppointmentsSlotsCtrl', function ($stateParams, $scope, usSpinnerService, Appointment, appointmentSearchParams, $modalInstance, $modal, modal, PatientService, ProviderRouting) {
 
+            PatientService.getFhirPatient(ProviderRouting.defaultPractice().odsCode, $stateParams.patientId).then(function (patient) {
+                $scope.patientDetails = patient;
+            });
+            
             var numberOfSearches = 0;
             usSpinnerService.spin('appointmentSlots-spinner');
 
@@ -24,7 +28,7 @@ angular.module('gpConnect')
                 practiceState.practiceOdsCode = practiceOdsCode;
                 practiceState.status = "Searching";
                 $scope.practicesSearchingAndFails.push(practiceState);
-                
+
                 numberOfSearches++;
                 usSpinnerService.spin('appointmentSlots-spinner');
 
@@ -181,14 +185,14 @@ angular.module('gpConnect')
                     if (numberOfSearches <= 0) {
                         usSpinnerService.stop('appointmentSlots-spinner');
                     }
-                    if(responseSlots.length > 0){
+                    if (responseSlots.length > 0) {
                         var indexOfElement = $scope.practicesSearchingAndFails.indexOf(practiceState);
-                        $scope.practicesSearchingAndFails.splice(indexOfElement,1);
+                        $scope.practicesSearchingAndFails.splice(indexOfElement, 1);
                         practiceState.status = "Success";
                     } else {
                         practiceState.status = "No Slots";
                     }
-                },function (result) {
+                }, function (result) {
                     practiceState.status = "Failed";
                     numberOfSearches--;
                     if (numberOfSearches <= 0) {
@@ -254,8 +258,8 @@ angular.module('gpConnect')
                 // grab the first day and select it
                 if (locations.length > 0) {
                     var firstLocation = locations[0];
-                    for(var peimaryLocationIndex = 0; peimaryLocationIndex < locations.length; peimaryLocationIndex++){
-                        if(locations[peimaryLocationIndex].primary == true){
+                    for (var peimaryLocationIndex = 0; peimaryLocationIndex < locations.length; peimaryLocationIndex++) {
+                        if (locations[peimaryLocationIndex].primary == true) {
                             firstLocation = locations[peimaryLocationIndex];
                             peimaryLocationIndex = locations.length;
                         }
@@ -297,33 +301,64 @@ angular.module('gpConnect')
                 eventFunctions.directives.on.new($scope, function (dName, dScope, dElement, dAttrs, dController) {
                     if (dName === 'ganttTask') {
                         dElement.bind('click', function (event) {
-                            // If a task on the gantt chart is clicked then we open the appointment booking modal for that slot
-                            $modalInstance.close();
-                            $modal.open({
-                                templateUrl: 'views/appointments/appointments-create-modal.html',
-                                size: 'md',
-                                controller: 'AppointmentsCreateModalCtrl',
-                                resolve: {
-                                    modal: function () {
-                                        return {
-                                            title: 'Book Appointment'
-                                        };
-                                    },
-                                    appointmentBookingParams: function () {
-                                        var appointmentBookingParameters = {};
-                                        appointmentBookingParameters.location = $scope.selectedLocation;
-                                        appointmentBookingParameters.slotId = dScope.task.model.id;
-                                        appointmentBookingParameters.startTime = dScope.task.model.from;
-                                        appointmentBookingParameters.endTime = dScope.task.model.to;
-                                        appointmentBookingParameters.practitionerId = dScope.task.row.model.id;
-                                        appointmentBookingParameters.practitionerFullName = dScope.task.row.model.name;
-                                        appointmentBookingParameters.locationId = $scope.selectedLocation.id;
-                                        appointmentBookingParameters.typeCode = dScope.task.model.typeCode;
-                                        appointmentBookingParameters.type = dScope.task.model.name;
-                                        return appointmentBookingParameters;
-                                    }
+
+                            usSpinnerService.spin('appointmentSlots-spinner');
+
+                            $scope.appointmentBookingParameters = {};
+                            $scope.appointmentBookingParameters.location = $scope.selectedLocation;
+                            $scope.appointmentBookingParameters.slotId = dScope.task.model.id;
+                            $scope.appointmentBookingParameters.startTime = dScope.task.model.from;
+                            $scope.appointmentBookingParameters.endTime = dScope.task.model.to;
+                            $scope.appointmentBookingParameters.practitionerId = dScope.task.row.model.id;
+                            $scope.appointmentBookingParameters.practitionerFullName = dScope.task.row.model.name;
+                            $scope.appointmentBookingParameters.locationId = $scope.selectedLocation.id;
+                            $scope.appointmentBookingParameters.typeCode = dScope.task.model.typeCode;
+                            $scope.appointmentBookingParameters.type = dScope.task.model.name;
+
+                            // Check the patient is on the remote system
+                            PatientService.getPatientFhirId($stateParams.patientId, $scope.appointmentBookingParameters.location.odsCode).then(function (patientFhirIDResult) {
+
+                                if (patientFhirIDResult == undefined) {
+                                    // The patient does not exist on the remote system so needs to be created
+                                    usSpinnerService.stop('appointmentSlots-spinner');
+                                    $modalInstance.close();
+                                    $modal.open({
+                                        templateUrl: 'views/appointments/appointments-patient-create-modal.html',
+                                        size: 'md',
+                                        controller: 'AppointmentsPatientCreateModalCtrl',
+                                        resolve: {
+                                            patient: function(){ return $scope.patientDetails; },
+                                            appointmentBookingParameters: function () {
+                                                return $scope.appointmentBookingParameters;
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    // Patient already exists so just create the appointment
+                                    usSpinnerService.stop('appointmentSlots-spinner');
+                                    $modalInstance.close();
+                                    $modal.open({
+                                        templateUrl: 'views/appointments/appointments-create-modal.html',
+                                        size: 'md',
+                                        controller: 'AppointmentsCreateModalCtrl',
+                                        resolve: {
+                                            modal: function () {
+                                                return {
+                                                    title: 'Book Appointment'
+                                                };
+                                            },
+                                            appointmentBookingParams: function () {
+                                                $scope.appointmentBookingParameters.patientFhirId = patientFhirIDResult;
+                                                return $scope.appointmentBookingParameters;
+                                            }
+                                        }
+                                    });
                                 }
-                            });
+                            }, function (result) {
+                                // Error calling the remote server
+                                alert($scope.appointmentBookingParameters.location.practiceName + " cannot be connected to at this current time");
+                                $modalInstance.dismiss('cancel');
+                            })
                         });
                     }
                 });

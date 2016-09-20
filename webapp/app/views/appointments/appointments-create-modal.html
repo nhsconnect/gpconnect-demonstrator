@@ -40,6 +40,10 @@
     </form>
 </div>
 
+<div class="col-md-12">
+    <div class="col-md-12 alert alert-danger" ng-show="validationError" >{{ validationError }}</div>
+</div>
+
 <div class="modal-footer">
     <a class="btn btn-danger" ng-click="cancel()">Cancel</a>
     <button class="btn btn-success" ng-click="formSubmitted = true;

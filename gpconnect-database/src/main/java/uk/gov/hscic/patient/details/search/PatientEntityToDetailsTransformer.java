@@ -8,6 +8,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+
+import uk.gov.hscic.medical.practicitioners.doctor.model.GPEntity;
 import uk.gov.hscic.patient.details.model.PatientEntity;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
 
@@ -40,10 +42,18 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         patient.setPasNumber(patientEntity.getPasNumber());
         patient.setAddress(address);
         patient.setTelephone(patientEntity.getPhone());
-        patient.setGpDetails(patientEntity.getGp().getName());
         patient.setPasNumber(patientEntity.getPasNumber());
-        patient.setGpId(patientEntity.getGp().getId());
         patient.setLastUpdated(patientEntity.getLastUpdated());
+        patient.setRegistrationStartDateTime(patientEntity.getRegistrationStartDateTime());
+        patient.setRegistrationEndDateTime(patientEntity.getRegistrationEndDateTime());
+        patient.setRegistrationStatus(patientEntity.getRegistrationStatus());
+        patient.setRegistrationType(patientEntity.getRegistrationType());
+        
+        GPEntity gp = patientEntity.getGp();
+        if(gp != null) {
+        	patient.setGpDetails(gp.getName());
+        	patient.setGpId(gp.getId());
+        }
         
         return patient;
     }

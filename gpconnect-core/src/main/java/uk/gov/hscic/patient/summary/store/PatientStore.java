@@ -13,14 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package uk.gov.hscic.medical.practicitioners.doctor.repo;
+package uk.gov.hscic.patient.summary.store;
 
-import uk.gov.hscic.medical.practicitioners.doctor.model.GPEntity;
+import org.apache.camel.Body;
+import org.apache.camel.InOnly;
 
-import java.util.List;
+import uk.gov.hscic.common.repo.Repository;
+import uk.gov.hscic.patient.summary.model.PatientDetails;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+/**
+ */
+@InOnly
+public interface PatientStore extends Repository {
 
-public interface GPRepository extends JpaRepository<GPEntity, Long> {
-	List<GPEntity> findByName(String name);
+    void create(@Body PatientDetails patientDetails);
 }

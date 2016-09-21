@@ -20,6 +20,10 @@ public class PatientDetails {
     private String pasNumber;
     private Long gpId;
     private Date lastUpdated;
+    private Date registrationStartDateTime;
+    private Date registrationEndDateTime;
+    private String registrationStatus;
+    private String registrationType;
 
     public String getId() {
         return id;
@@ -132,4 +136,36 @@ public class PatientDetails {
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+
+	public Date getRegistrationStartDateTime() {
+		return registrationStartDateTime;
+	}
+
+	public Date getRegistrationEndDateTime() {
+		return registrationEndDateTime;
+	}
+
+	public void setRegistrationStartDateTime(Date registrationStartDateTime) {
+		this.registrationStartDateTime = registrationStartDateTime;
+	}
+
+	public void setRegistrationEndDateTime(Date registrationEndDateTime) {
+		this.registrationEndDateTime = registrationEndDateTime;
+	}
+
+	public String getRegistrationStatus() {
+		return registrationStatus;
+	}
+
+	public String getRegistrationType() {
+		return registrationType;
+	}
+
+	public void setRegistrationStatus(String registrationStatus) {
+		this.registrationStatus = registrationStatus;
+	}
+
+	public void setRegistrationType(String registrationType) {
+		this.registrationType = registrationType;
+	}  
 }

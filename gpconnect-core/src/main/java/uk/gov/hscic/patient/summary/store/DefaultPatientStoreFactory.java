@@ -13,14 +13,23 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package uk.gov.hscic.medical.practicitioners.doctor.repo;
+package uk.gov.hscic.patient.summary.store;
 
-import uk.gov.hscic.medical.practicitioners.doctor.model.GPEntity;
+import uk.gov.hscic.common.repo.AbstractRepositoryFactory;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+/**
+ */
+@Service
+public class DefaultPatientStoreFactory extends AbstractRepositoryFactory<PatientStore> implements PatientStoreFactory {
 
-import org.springframework.data.jpa.repository.JpaRepository;
+    @Override
+    protected PatientStore defaultRepository() {
+        return new NotConfiguredPatientStore();
+    }
 
-public interface GPRepository extends JpaRepository<GPEntity, Long> {
-	List<GPEntity> findByName(String name);
+    @Override
+    protected Class<PatientStore> repositoryClass() {
+        return PatientStore.class;
+    }
 }

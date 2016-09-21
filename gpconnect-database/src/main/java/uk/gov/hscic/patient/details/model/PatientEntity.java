@@ -88,6 +88,18 @@ public class PatientEntity {
     
     @Column(name = "lastUpdated")
     private Date lastUpdated;
+    
+    @Column(name = "registration_start")
+    private Date registrationStartDateTime;
+    
+    @Column(name = "registration_end")
+    private Date registrationEndDateTime;
+    
+    @Column(name = "registration_status")
+    private String registrationStatus;
+    
+    @Column(name = "registration_type")
+    private String registrationType;
 
     public Long getId() {
         return id;
@@ -232,4 +244,36 @@ public class PatientEntity {
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+
+	public Date getRegistrationStartDateTime() {
+		return registrationStartDateTime;
+	}
+
+	public Date getRegistrationEndDateTime() {
+		return registrationEndDateTime;
+	}
+
+	public String getRegistrationStatus() {
+		return registrationStatus;
+	}
+
+	public String getRegistrationType() {
+		return registrationType;
+	}
+
+	public void setRegistrationStartDateTime(Date registrationStartDateTime) {
+		this.registrationStartDateTime = registrationStartDateTime;
+	}
+
+	public void setRegistrationEndDateTime(Date registrationEndDateTime) {
+		this.registrationEndDateTime = registrationEndDateTime;
+	}
+
+	public void setRegistrationStatus(String registrationStatus) {
+		this.registrationStatus = registrationStatus;
+	}
+
+	public void setRegistrationType(String registrationType) {
+		this.registrationType = registrationType;
+	}
 }

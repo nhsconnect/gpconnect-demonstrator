@@ -13,14 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package uk.gov.hscic.medical.practicitioners.doctor.repo;
+package uk.gov.hscic.patient.summary.store;
 
-import uk.gov.hscic.medical.practicitioners.doctor.model.GPEntity;
+import uk.gov.hscic.common.repo.RepositoryFactory;
 
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface GPRepository extends JpaRepository<GPEntity, Long> {
-	List<GPEntity> findByName(String name);
+/**
+ */
+@FunctionalInterface
+public interface PatientStoreFactory extends RepositoryFactory<PatientStore> {
 }

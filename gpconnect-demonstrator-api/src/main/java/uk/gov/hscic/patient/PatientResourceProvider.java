@@ -1,61 +1,145 @@
 package uk.gov.hscic.patient;
 
-import uk.gov.hscic.medication.search.*;
-import uk.gov.hscic.medication.model.PatientMedicationHTML;
-import ca.uhn.fhir.model.api.IDatatype;
-import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
-import ca.uhn.fhir.model.dstu2.composite.*;
-import ca.uhn.fhir.model.dstu2.resource.*;
-import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
-import ca.uhn.fhir.model.dstu2.resource.Composition.Section;
-import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
-import ca.uhn.fhir.model.dstu2.valueset.*;
-import ca.uhn.fhir.model.primitive.*;
-import ca.uhn.fhir.rest.annotation.*;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.DateRangeParam;
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+
+import ca.uhn.fhir.model.api.ExtensionDt;
+import ca.uhn.fhir.model.api.IDatatype;
+import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
+import ca.uhn.fhir.model.dstu2.composite.AddressDt;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.composite.ContactPointDt;
+import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
+import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
+import ca.uhn.fhir.model.dstu2.composite.NarrativeDt;
+import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.Appointment;
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
+import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
+import ca.uhn.fhir.model.dstu2.resource.Composition;
+import ca.uhn.fhir.model.dstu2.resource.Composition.Section;
+import ca.uhn.fhir.model.dstu2.resource.MedicationAdministration;
+import ca.uhn.fhir.model.dstu2.resource.MedicationDispense;
+import ca.uhn.fhir.model.dstu2.resource.MedicationOrder;
+import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
+import ca.uhn.fhir.model.dstu2.resource.Organization;
+import ca.uhn.fhir.model.dstu2.resource.Parameters;
+import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
+import ca.uhn.fhir.model.dstu2.resource.Patient;
+import ca.uhn.fhir.model.dstu2.resource.Practitioner;
+import ca.uhn.fhir.model.dstu2.valueset.AddressTypeEnum;
+import ca.uhn.fhir.model.dstu2.valueset.AddressUseEnum;
+import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
+import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
+import ca.uhn.fhir.model.dstu2.valueset.CompositionStatusEnum;
+import ca.uhn.fhir.model.dstu2.valueset.ContactPointSystemEnum;
+import ca.uhn.fhir.model.dstu2.valueset.ContactPointUseEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
+import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
+import ca.uhn.fhir.model.primitive.DateDt;
+import ca.uhn.fhir.model.primitive.DateTimeDt;
+import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.model.primitive.StringDt;
+import ca.uhn.fhir.rest.annotation.IdParam;
+import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OptionalParam;
+import ca.uhn.fhir.rest.annotation.Read;
+import ca.uhn.fhir.rest.annotation.RequiredParam;
+import ca.uhn.fhir.rest.annotation.ResourceParam;
+import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
-import uk.gov.hscic.common.types.*;
+import uk.gov.hscic.common.types.RepoSource;
+import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.common.util.NhsCodeValidator;
-import uk.gov.hscic.medications.*;
+import uk.gov.hscic.medication.model.PatientMedicationHTML;
+import uk.gov.hscic.medication.search.MedicationSearch;
+import uk.gov.hscic.medication.search.MedicationSearchFactory;
+import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
+import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
+import uk.gov.hscic.medications.MedicationOrderResourceProvider;
+import uk.gov.hscic.medications.MedicationResourceProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
-import uk.gov.hscic.patient.adminitems.model.*;
-import uk.gov.hscic.patient.adminitems.search.*;
-import uk.gov.hscic.patient.allergies.model.*;
-import uk.gov.hscic.patient.allergies.search.*;
-import uk.gov.hscic.patient.clinicalitems.model.*;
-import uk.gov.hscic.patient.clinicalitems.search.*;
-import uk.gov.hscic.patient.encounters.model.*;
-import uk.gov.hscic.patient.encounters.search.*;
-import uk.gov.hscic.patient.immunisations.model.*;
-import uk.gov.hscic.patient.immunisations.search.*;
-import uk.gov.hscic.patient.investigations.model.*;
-import uk.gov.hscic.patient.investigations.search.*;
-import uk.gov.hscic.patient.observations.model.*;
-import uk.gov.hscic.patient.observations.search.*;
-import uk.gov.hscic.patient.patientsummary.model.*;
-import uk.gov.hscic.patient.patientsummary.search.*;
-import uk.gov.hscic.patient.problems.model.*;
-import uk.gov.hscic.patient.problems.search.*;
-import uk.gov.hscic.patient.referral.model.*;
-import uk.gov.hscic.patient.referral.search.*;
-import uk.gov.hscic.patient.summary.model.*;
-import uk.gov.hscic.patient.summary.search.*;
+import uk.gov.hscic.organization.model.OrganizationDetails;
+import uk.gov.hscic.organization.search.OrganizationSearch;
+import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
+import uk.gov.hscic.patient.adminitems.search.AdminItemSearch;
+import uk.gov.hscic.patient.adminitems.search.AdminItemSearchFactory;
+import uk.gov.hscic.patient.allergies.model.AllergyListHTML;
+import uk.gov.hscic.patient.allergies.search.AllergySearch;
+import uk.gov.hscic.patient.allergies.search.AllergySearchFactory;
+import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemListHTML;
+import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearch;
+import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearchFactory;
+import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
+import uk.gov.hscic.patient.encounters.search.EncounterSearch;
+import uk.gov.hscic.patient.encounters.search.EncounterSearchFactory;
+import uk.gov.hscic.patient.immunisations.model.ImmunisationListHTML;
+import uk.gov.hscic.patient.immunisations.search.ImmunisationSearch;
+import uk.gov.hscic.patient.immunisations.search.ImmunisationSearchFactory;
+import uk.gov.hscic.patient.investigations.model.InvestigationListHTML;
+import uk.gov.hscic.patient.investigations.search.InvestigationSearch;
+import uk.gov.hscic.patient.investigations.search.InvestigationSearchFactory;
+import uk.gov.hscic.patient.observations.model.ObservationListHTML;
+import uk.gov.hscic.patient.observations.search.ObservationSearch;
+import uk.gov.hscic.patient.observations.search.ObservationSearchFactory;
+import uk.gov.hscic.patient.patientsummary.model.PatientSummaryListHTML;
+import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
+import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearchFactory;
+import uk.gov.hscic.patient.problems.model.ProblemListHTML;
+import uk.gov.hscic.patient.problems.search.ProblemSearch;
+import uk.gov.hscic.patient.problems.search.ProblemSearchFactory;
+import uk.gov.hscic.patient.referral.model.ReferralListHTML;
+import uk.gov.hscic.patient.referral.search.ReferralSearch;
+import uk.gov.hscic.patient.referral.search.ReferralSearchFactory;
+import uk.gov.hscic.patient.summary.model.PatientDetails;
+import uk.gov.hscic.patient.summary.search.PatientSearch;
+import uk.gov.hscic.patient.summary.search.PatientSearchFactory;
+import uk.gov.hscic.patient.summary.store.PatientStore;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
+import uk.gov.hscic.practitioner.model.PractitionerDetails;
+import uk.gov.hscic.practitioner.search.PractitionerSearch;
 
 public class PatientResourceProvider implements IResourceProvider {
 
-    private final ApplicationContext applicationContext;
+    private static final String REGISTRATION_TYPE_EXTENSION_URL = "http://fhir.nhs.net/StructureDefinition/extension-registration-type-1";
+
+	private static final String REGISTRATION_STATUS_EXTENSION_URL = "http://fhir.nhs.net/StructureDefinition/extension-registration-status-1";
+
+	private static final String REGISTRATION_PERIOD_EXTENSION_URL = "http://fhir.nhs.net/StructureDefinition/extension-registration-period-1";
+
+	private static final String TEMPORARY_RESIDENT_REGISTRATION_TYPE = "T";
+
+	private static final String ACTIVE_REGISTRATION_STATUS = "A";
+
+	@Autowired
+    PatientStore patientStore;
+    
+    @Autowired
+    PatientSearch patientSearch;
+    
+    @Autowired
+    OrganizationSearch organizationSearch;
+    
+    @Autowired
+    PractitionerSearch practitionerSearch;
+	
+	private final ApplicationContext applicationContext;
     private final PractitionerResourceProvider practitionerResourceProvider;
     private final OrganizationResourceProvider organizationResourceProvider;
     private final MedicationResourceProvider medicationResourceProvider;
@@ -529,6 +613,109 @@ public class PatientResourceProvider implements IResourceProvider {
         return appointmentResourceProvider.getAppointmentsForPatientIdAndDates(patientLocalId, startDate);
     }
 
+	@Operation(name = "$gpc.registerpatient")
+    public Patient registerPatient(@ResourceParam Patient unregisteredPatient) {
+    	Patient registeredPatient = null;
+    	
+    	if(unregisteredPatient != null) {
+	    	//check NHS number doesn't exist first	
+    		
+    		patientStore.create(registerPatientResourceConverterToPatientDetail(unregisteredPatient));
+	    		
+	    	registeredPatient = patientDetailsToRegisterPatientResourceConverter(patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
+    	}
+    	else {
+            throw new IllegalArgumentException("No patient found when attempting gpc.registerpatient operation");
+    	}
+    	
+    	return registeredPatient;
+    }
+
+	private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
+    	PatientDetails patientDetails = new PatientDetails();
+    	
+    	HumanNameDt name = patientResource.getNameFirstRep();
+    	patientDetails.setForename(name.getGivenAsSingleString());
+    	patientDetails.setSurname(name.getFamilyAsSingleString());
+    	patientDetails.setDateOfBirth(patientResource.getBirthDate());
+    	patientDetails.setGender(patientResource.getGender());
+    	patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
+    	
+    	Date now = new Date();
+    	
+    	List<ExtensionDt> registrationPeriodExtensions = patientResource.getUndeclaredExtensionsByUrl(REGISTRATION_PERIOD_EXTENSION_URL);
+    	ExtensionDt registrationPeriodExtension = registrationPeriodExtensions.get(0);
+    	PeriodDt registrationPeriod = (PeriodDt) registrationPeriodExtension.getValue();
+    	Date registrationStart = registrationPeriod.getStart();
+		
+    	if(registrationStart.compareTo(now) <= 1) {
+    		patientDetails.setRegistrationStartDateTime(registrationStart);    		
+    	}
+    	else {
+    		throw new IllegalArgumentException(String.format("The given registration start (%c) is not valid. The registration start cannot be in the future.", registrationStart));
+    	}
+    	
+    	Date registrationEnd = registrationPeriod.getEnd();
+    	if(registrationEnd != null) {
+    		throw new IllegalArgumentException(String.format("The given registration end (%c) is not valid. The registration end should be left blank to indicate an open-ended registration period.", registrationStart));
+    	}
+		 	
+    	List<ExtensionDt> registrationStatusExtensions = patientResource.getUndeclaredExtensionsByUrl(REGISTRATION_STATUS_EXTENSION_URL);
+    	ExtensionDt registrationStatusExtension = registrationStatusExtensions.get(0);
+    	CodeableConceptDt registrationStatusCode = (CodeableConceptDt) registrationStatusExtension.getValue();
+    	String registrationStatus = registrationStatusCode.getCodingFirstRep().getCode();
+    	
+    	if(ACTIVE_REGISTRATION_STATUS.equals(registrationStatus)) {
+    		patientDetails.setRegistrationStatus(registrationStatus);
+    	}
+    	else {
+    		throw new IllegalArgumentException(String.format("The given registration status is not valid. Expected - A. Actual - %s", registrationStatus));
+    	}
+    	
+    	List<ExtensionDt> registrationTypeExtensions = patientResource.getUndeclaredExtensionsByUrl(REGISTRATION_TYPE_EXTENSION_URL);
+    	ExtensionDt registrationTypeExtension = registrationTypeExtensions.get(0);
+    	CodeableConceptDt registrationTypeCode = (CodeableConceptDt) registrationTypeExtension.getValue();
+    	String registrationType = registrationTypeCode.getCodingFirstRep().getCode();
+    	
+    	if(TEMPORARY_RESIDENT_REGISTRATION_TYPE.equals(registrationType)) {
+    		patientDetails.setRegistrationType(registrationType);
+    	}
+    	else {
+    		throw new IllegalArgumentException(String.format("The given registration type is not valid. Expected - T. Actual - %s", registrationType));
+    	}
+    	    	
+    	return patientDetails;
+    }
+	
+	// a cut-down Patient
+	private Patient patientDetailsToRegisterPatientResourceConverter(PatientDetails patientDetails) {
+	        Patient patient = new Patient();
+	        patient.setId(patientDetails.getId());
+	        patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", patientDetails.getNhsNumber()));
+
+	        HumanNameDt name = patient.addName();
+	        name.addFamily(patientDetails.getSurname());
+	        name.addGiven(patientDetails.getForename());
+	        name.setUse(NameUseEnum.USUAL);
+
+	        patient.setBirthDate(new DateDt(patientDetails.getDateOfBirth()));
+	        
+	        patient.setGender(AdministrativeGenderEnum.forCode(patientDetails.getGender().toLowerCase()));
+
+	        PeriodDt registrationPeriod = new PeriodDt();
+	        registrationPeriod.setStartWithSecondsPrecision(patientDetails.getRegistrationStartDateTime());
+	        registrationPeriod.setEndWithSecondsPrecision(patientDetails.getRegistrationEndDateTime());
+	        patient.addUndeclaredExtension(true, REGISTRATION_PERIOD_EXTENSION_URL, registrationPeriod);
+	 
+	        CodeableConceptDt registrationStatus = new CodeableConceptDt("http://fhir.nhs.net/ValueSet/registration-status-1", patientDetails.getRegistrationStatus()); 
+	        patient.addUndeclaredExtension(true, REGISTRATION_STATUS_EXTENSION_URL, registrationStatus);
+	          
+	        CodeableConceptDt registrationType = new CodeableConceptDt("http://fhir.nhs.net/ValueSet/registration-type-1", patientDetails.getRegistrationType()); 
+	        patient.addUndeclaredExtension(true, REGISTRATION_TYPE_EXTENSION_URL, registrationType);
+	        
+	        return patient;
+	    }	
+
     public Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) {
         Patient patient = new Patient();
         patient.setId(patientDetails.getId());
@@ -564,6 +751,17 @@ public class PatientResourceProvider implements IResourceProvider {
         telephone.setUse(ContactPointUseEnum.HOME);
         patient.setTelecom(Collections.singletonList(telephone));
 
+        PeriodDt registrationPeriod = new PeriodDt();
+        registrationPeriod.setStartWithSecondsPrecision(patientDetails.getRegistrationStartDateTime());
+        registrationPeriod.setEndWithSecondsPrecision(patientDetails.getRegistrationEndDateTime());
+        patient.addUndeclaredExtension(true, REGISTRATION_PERIOD_EXTENSION_URL, registrationPeriod);
+ 
+        CodeableConceptDt registrationStatus = new CodeableConceptDt("http://fhir.nhs.net/ValueSet/registration-status-1", patientDetails.getRegistrationStatus()); 
+        patient.addUndeclaredExtension(true, REGISTRATION_STATUS_EXTENSION_URL, registrationStatus);
+          
+        CodeableConceptDt registrationType = new CodeableConceptDt("http://fhir.nhs.net/ValueSet/registration-type-1", patientDetails.getRegistrationType()); 
+        patient.addUndeclaredExtension(true, REGISTRATION_TYPE_EXTENSION_URL, registrationType);
+        
         return patient;
     }
 }

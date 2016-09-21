@@ -45,9 +45,12 @@ public class FhirRestfulServlet extends RestfulServer {
         OrganizationResourceProvider organizationResourceProvider = organizationResourceProvider(applicationContext);
         factory.autowireBean(organizationResourceProvider);
         
+        PatientResourceProvider patientResourceProvider = patientResourceProvider(applicationContext);
+        factory.autowireBean(patientResourceProvider);
+        
         resourceProviders.add(organizationResourceProvider);
+        resourceProviders.add(patientResourceProvider);
         resourceProviders.add(practitionerResourceProvider(applicationContext));
-        resourceProviders.add(patientResourceProvider(applicationContext));
         resourceProviders.add(medicationResourceProvider(applicationContext));
         resourceProviders.add(medicationOrderResourceProvider(applicationContext));
         resourceProviders.add(medicationDispenseResourceProvider(applicationContext));

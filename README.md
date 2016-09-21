@@ -6,15 +6,25 @@ The following README contains information related to developing and running the 
 ### Requirements
 
 To develop and run the application locally you must have the following installed:  
-* Java JDK 8  
-* Maven 3  
-* MySQL  
-* NodeJS  
-* Ruby  
-* Ruby Gems
-  
 
-### Installation of Development Tools and Languages
+| Component | Description |
+|---|---|
+| Java JDK 8 | is a development support environment for Java. It includes a Java Runtime Environment (JRE), an interpreter (java), a compiler (javac) and many other tools needed in Java development. |
+| Maven 3  | A tool for building and managing java projects |
+| MySQL  | An open source relational database management system |
+| NodeJS | An open source, cross-platform runtime environment for developing networking applications in JavaScript. |
+| Ruby | An open source programming language |
+| Ruby Gems | A package manager for the Ruby programming language, providing a standard format for distributing Ruby programs and libraries. |  
+
+***
+
+### Getting Started
+
+The first task will be to download the code from github. This can be done using the desktop git tool, an IDE which supports git or by downloading the code as a zip file which you can extract onto your development computer.
+
+Once you have downloaded the code the next action will be to install the development tools and dependancies required to build the project.
+
+### Installation of Development Tools and Programming Languages
 
 Install the JavaScript package manager NodeJS:  
 https://nodejs.org/download/
@@ -40,7 +50,7 @@ M2_HOME C:\Maven\apache-maven-3.3.3
 
 JAVA_HOME should point to the install directory of your local Java JDK install folder, e.g.  
 ```
-JAVA_HOME C:\Java\jdk1.8.0_65
+JAVA_HOME C:\Program Files\Java\jdk1.8.0_65
 ```
 
 RUBY_HOME should point to the install directory of your local Ruby lang install folder, e.g.  
@@ -191,11 +201,15 @@ The build task minifies and uglifies the front end code in the webapp directory 
 in the gpconnect-demonstrator-api module under the following directory:  
 *gpconnect-demonstrator-api\src\main\webapp* 
 
+Once you have run the grunt build you can compile and package the project using maven which will create the WAR file you can deploy to a application server and it will contain all the latest frontend and backend code.
+```sh
+mvn clean package
+```  
+
 This is so that the packaged *gpconnect-demonstrator-api* module can then be deployed to an application container, 
 such as Tomcat, with the front end code packaged with it.
 
 With front end code and server-side code is packaged as one, it makes things easy to handle in a deployment scenario.
-
 
 ### Data Clear Down
 For Appointments and Tasks there is a clear down process which is scheduled using a Spring Scheduled event configured with a "cron" string. When the clear down task runs it will delete all GP Connect Demonstrator Tasks previously added. It will also delete all Appointments and remove the currently available Slots, after which it will try and build a new set of slots using a slots sample data file.

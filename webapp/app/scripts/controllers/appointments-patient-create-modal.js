@@ -20,7 +20,7 @@ angular.module('gpConnect')
                         "valuePeriod": {"start": DateFormatter.clean(new Date())}
                     },
                     {
-                        "url": "http://fhir.nhs.net/StructureDefinition/extension--registration-status-1",
+                        "url": "http://fhir.nhs.net/StructureDefinition/extension-registration-status-1",
                         "valueCodeableConcept": {"coding": [{"system": "http://fhir.nhs.net/ValueSet/registration-status-1", "code": "A", "display": "Active"}]}
                     },
                     {

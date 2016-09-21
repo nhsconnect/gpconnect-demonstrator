@@ -43,8 +43,10 @@ angular.module('gpConnect')
                 			var appointmentsResponse = appointmentsResponses[appointmentsIndex];
                 			var appointments = appointmentsResponse.data.entry
                 			
-                			setCancellationReason(appointments);
-                			allPracticeAppointments = allPracticeAppointments.concat(appointments);
+                			if(appointments != undefined && appointments.length > 0) {
+                				setCancellationReason(appointments);
+                				allPracticeAppointments = allPracticeAppointments.concat(appointments);
+                			}
                 		}
                 		
                     	// sort by appointment start datetime ascending
@@ -54,7 +56,12 @@ angular.module('gpConnect')
                     	
                     	$scope.appointments = allPracticeAppointments;
                     	usSpinnerService.stop('patientSummary-spinner');
+                    	
+                	}).catch(function(e) {
+                		usSpinnerService.stop('patientSummary-spinner');
                 	});            		
+            	}).catch(function(e) {
+            		usSpinnerService.stop('patientSummary-spinner');
             	});    	
             }
             

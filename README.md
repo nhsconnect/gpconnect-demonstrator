@@ -9,6 +9,7 @@ To develop and run the application locally you must have the following installed
 
 | Component | Description |
 |---|---|
+| Git | A revision control system. |
 | Java JDK 8 | is a development support environment for Java. It includes a Java Runtime Environment (JRE), an interpreter (java), a compiler (javac) and many other tools needed in Java development. |
 | Maven 3  | A tool for building and managing java projects |
 | MySQL  | An open source relational database management system |
@@ -26,20 +27,30 @@ Once you have downloaded the code the next action will be to install the develop
 
 ### Installation of Development Tools and Programming Languages
 
-Install the JavaScript package manager NodeJS:  
+#### Install Git for windows:
+
+Install official git release from:   
+https://git-scm.com/download/win  
+
+Or install github which includes a git release as well as a GUI interface for git management:   
+https://desktop.github.com/   
+
+#### Install the JavaScript package manager NodeJS:  
 https://nodejs.org/download/
 
-Install Java Development Kit 8:  
+#### Install Java Development Kit 8:  
 http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
-Install Maven 3:  
+#### Install Maven 3:  
 https://maven.apache.org/download.cgi
 
-Install Ruby:  
+#### Install Ruby:  
 http://rubyinstaller.org/downloads
 
-Install Ruby Gems:  
+#### Install Ruby Gems:  
 https://rubygems.org/pages/download
+
+#### Environment Variables
 
 Ensure that the system environment variables for Java, Maven, Ruby, and Ruby Gems are set correctly, as described below...
 

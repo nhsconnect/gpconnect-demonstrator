@@ -163,7 +163,7 @@ mvn clean package -Pwebapp:run
 
 If you're experiencing build errors, execute the following commands:   
 ```sh
-java --version
+java -version
 ```
 
 ```sh

@@ -17,31 +17,40 @@ angular.module('gpConnect')
                 $scope.query = $stateParams.filter;
             }
             
-            initAppointments($stateParams.patientId);
+            initAppointments();
             
-            function initAppointments(externalPatientId) {
+            function initAppointments() {
             	var patientIdPromises = [];
-            	for(var practiceIndex in ProviderRouting.practices) {
-                	var practice = ProviderRouting.practices[practiceIndex];
-            		
-                	var patientIdPromise = PatientService.getPatientFhirId(externalPatientId, practice.odsCode)
-                	patientIdPromises.push(patientIdPromise);
+            	
+            	$scope.missingPractices = [];
+            	var allPractices = ProviderRouting.practices;
+            	var appointmentsPromises = [];
+            	var practiceMap = {};
+            	
+            	for(var practiceIndex in allPractices) {
+                	var practice = allPractices[practiceIndex];
+                	practiceMap[practice.ASID] = practice;
+                	            		
+                	var practiceOdsCode = practice.odsCode;
+                	var patientIdPromise = PatientService.getPatientFhirId($stateParams.patientId, practiceOdsCode).then(
+            			function(getPatientFhirIdSuccess) {
+            				var appointmentsPromise = Appointment.findAllAppointments($stateParams.patientId, getPatientFhirIdSuccess, practiceOdsCode);
+            				appointmentsPromises.push(appointmentsPromise);
+            			}, 
+            			function(getPatientFhirIdFailure) {		
+            				var sspTo = getPatientFhirIdFailure.config.headers['Ssp-To'];
+            				$scope.missingPractices.push(practiceMap[sspTo]);
+            			}
+                	);                	
             	}
             	
-            	var appointmentsPromises = [];
-            	$q.all(patientIdPromises).then(function(patientIdResponses) {
-            		for(var patientIdIndex in patientIdResponses) {
-            			var patientId = patientIdResponses[patientIdIndex];
-            			
-            			var appointmentsPromise = Appointment.findAllAppointments(externalPatientId, patientId, practice.odsCode);
-            			appointmentsPromises.push(appointmentsPromise);
-            		}
-            		
-            		var allPracticeAppointments = [];
-                	$q.all(appointmentsPromises).then(function(appointmentsResponses) {
-                		for(var appointmentsIndex in appointmentsResponses) {
+            	$q.all(appointmentsPromises).then(
+        			function(findAllAppointmentsSuccess) {
+                    	var allPracticeAppointments = [];
+                    	
+                    	for(var appointmentsIndex in findAllAppointmentsSuccess) {
                 			var appointmentsResponse = appointmentsResponses[appointmentsIndex];
-                			var appointments = appointmentsResponse.data.entry
+                			var appointments = appointmentsResponse.data.entry;
                 			
                 			if(appointments != undefined && appointments.length > 0) {
                 				setCancellationReason(appointments);
@@ -55,14 +64,38 @@ angular.module('gpConnect')
                         });
                     	
                     	$scope.appointments = allPracticeAppointments;
-                    	usSpinnerService.stop('patientSummary-spinner');
-                    	
-                	}).catch(function(e) {
-                		usSpinnerService.stop('patientSummary-spinner');
-                	});            		
-            	}).catch(function(e) {
-            		usSpinnerService.stop('patientSummary-spinner');
-            	});    	
+                    	usSpinnerService.stop('patientSummary-spinner');            				
+        			},
+        			function(findAllAppoitnmentFailure) {
+        				usSpinnerService.stop('patientSummary-spinner');   
+        			}
+            	);
+            }
+            
+            function onFindAllAppointmentsSuccess(appointmentsResponses) {
+            	var allPracticeAppointments = [];
+            	
+            	for(var appointmentsIndex in appointmentsResponses) {
+        			var appointmentsResponse = appointmentsResponses[appointmentsIndex];
+        			var appointments = appointmentsResponse.data.entry;
+        			
+        			if(appointments != undefined && appointments.length > 0) {
+        				setCancellationReason(appointments);
+        				allPracticeAppointments = allPracticeAppointments.concat(appointments);
+        			}
+        		}
+        		
+            	// sort by appointment start datetime ascending
+            	allPracticeAppointments.sort(function (a, b) {
+                    return a.resource.start.localeCompare(b.resource.start);
+                });
+            	
+            	$scope.appointments = allPracticeAppointments;
+            	usSpinnerService.stop('patientSummary-spinner');        	
+            }
+            
+            function onFindAllAppointmentsFailure(appointmentsResponses) {
+            	alert("Shit went bad");
             }
             
             function setCancellationReason(practiceAppointments) {

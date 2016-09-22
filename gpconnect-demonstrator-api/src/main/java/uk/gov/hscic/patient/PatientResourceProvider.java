@@ -721,9 +721,12 @@ public class PatientResourceProvider implements IResourceProvider {
         patient.setId(patientDetails.getId());
         patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", patientDetails.getNhsNumber()));
 
-        patient.getMeta().setLastUpdated(patientDetails.getLastUpdated());
-        patient.getMeta().setVersionId(String.valueOf(patientDetails.getLastUpdated().getTime()));
-
+        Date lastUpdated = patientDetails.getLastUpdated();
+	        if(lastUpdated != null) {
+			patient.getMeta().setLastUpdated(lastUpdated);
+	        patient.getMeta().setVersionId(String.valueOf(lastUpdated.getTime()));
+        }
+        
         HumanNameDt name = patient.addName();
         name.setText(patientDetails.getName());
         name.addFamily(patientDetails.getSurname());
@@ -733,34 +736,55 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.setBirthDate(new DateDt(patientDetails.getDateOfBirth()));
 
-        AddressDt address = patient.addAddress();
-        address.setUse(AddressUseEnum.HOME);
-        address.setType(AddressTypeEnum.PHYSICAL);
-        address.setText(patientDetails.getAddress());
+        String addressLines = patientDetails.getAddress();
+	    if(addressLines != null) {
+	        AddressDt address = patient.addAddress();
+	        address.setUse(AddressUseEnum.HOME);
+	        address.setType(AddressTypeEnum.PHYSICAL);
+	        address.setText(addressLines);
+        }
+        
+        Long gpId = patientDetails.getGpId();
+        if(gpId != null) {
+			Practitioner practitioner = practitionerResourceProvider.getPractitionerById(new IdDt(gpId));
+	        ResourceReferenceDt practitionerReference = new ResourceReferenceDt("Practitioner/" + gpId);
+	        practitionerReference.setDisplay(practitioner.getName().getPrefixFirstRep() + " " + practitioner.getName().getGivenFirstRep() + " " + practitioner.getName().getFamilyFirstRep());
+	        patient.getCareProvider().add(practitionerReference);
+        }
+        
+        String gender = patientDetails.getGender();
+        if(gender != null) {
+        	patient.setGender(AdministrativeGenderEnum.forCode(gender.toLowerCase()));
+        }
+		
+        String telephoneNumber = patientDetails.getTelephone();
+        if(telephoneNumber != null) {
+	        ContactPointDt telephone = new ContactPointDt();
+	        telephone.setSystem(ContactPointSystemEnum.PHONE);
+			telephone.setValue(telephoneNumber);
+	        telephone.setUse(ContactPointUseEnum.HOME);
+	        patient.setTelecom(Collections.singletonList(telephone));
+        }
+        
+        Date registrationStartDateTime = patientDetails.getRegistrationStartDateTime();
+        if(registrationStartDateTime != null) {
+	        PeriodDt registrationPeriod = new PeriodDt();
+			registrationPeriod.setStartWithSecondsPrecision(registrationStartDateTime);
+	        registrationPeriod.setEndWithSecondsPrecision(patientDetails.getRegistrationEndDateTime());
+	        patient.addUndeclaredExtension(true, REGISTRATION_PERIOD_EXTENSION_URL, registrationPeriod);
+        }
+        
+        String registrationStatusValue = patientDetails.getRegistrationStatus();
+        if(registrationStatusValue != null) {
+			CodeableConceptDt registrationStatus = new CodeableConceptDt("http://fhir.nhs.net/ValueSet/registration-status-1", registrationStatusValue); 
+	        patient.addUndeclaredExtension(true, REGISTRATION_STATUS_EXTENSION_URL, registrationStatus);
+        }
 
-        Practitioner practitioner = practitionerResourceProvider.getPractitionerById(new IdDt(patientDetails.getGpId()));
-        ResourceReferenceDt practitionerReference = new ResourceReferenceDt("Practitioner/" + patientDetails.getGpId());
-        practitionerReference.setDisplay(practitioner.getName().getPrefixFirstRep() + " " + practitioner.getName().getGivenFirstRep() + " " + practitioner.getName().getFamilyFirstRep());
-        patient.getCareProvider().add(practitionerReference);
-
-        patient.setGender(AdministrativeGenderEnum.forCode(patientDetails.getGender().toLowerCase()));
-
-        ContactPointDt telephone = new ContactPointDt();
-        telephone.setSystem(ContactPointSystemEnum.PHONE);
-        telephone.setValue(patientDetails.getTelephone());
-        telephone.setUse(ContactPointUseEnum.HOME);
-        patient.setTelecom(Collections.singletonList(telephone));
-
-        PeriodDt registrationPeriod = new PeriodDt();
-        registrationPeriod.setStartWithSecondsPrecision(patientDetails.getRegistrationStartDateTime());
-        registrationPeriod.setEndWithSecondsPrecision(patientDetails.getRegistrationEndDateTime());
-        patient.addUndeclaredExtension(true, REGISTRATION_PERIOD_EXTENSION_URL, registrationPeriod);
- 
-        CodeableConceptDt registrationStatus = new CodeableConceptDt("http://fhir.nhs.net/ValueSet/registration-status-1", patientDetails.getRegistrationStatus()); 
-        patient.addUndeclaredExtension(true, REGISTRATION_STATUS_EXTENSION_URL, registrationStatus);
-          
-        CodeableConceptDt registrationType = new CodeableConceptDt("http://fhir.nhs.net/ValueSet/registration-type-1", patientDetails.getRegistrationType()); 
-        patient.addUndeclaredExtension(true, REGISTRATION_TYPE_EXTENSION_URL, registrationType);
+        String registrationTypeValue = patientDetails.getRegistrationType();
+        if(registrationTypeValue != null) {
+			CodeableConceptDt registrationType = new CodeableConceptDt("http://fhir.nhs.net/ValueSet/registration-type-1", registrationTypeValue); 
+	        patient.addUndeclaredExtension(true, REGISTRATION_TYPE_EXTENSION_URL, registrationType);
+        }
         
         return patient;
     }

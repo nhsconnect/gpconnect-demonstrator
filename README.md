@@ -181,7 +181,9 @@ gem --version
 If they do not return a suitable response, ensure that the system environment variables described above are pointing
 to the correct install directory, and that the *\bin* directories within them are on your PATH system environment variable.
 
-Now that the server is running, open up a second shell and serve the web assets.
+### Running the front end
+
+Now that the server is running you can start up the front end of the GP Connect demonstrator. You will need to open up a second command shell and use grunt to serve the web assets as follows:
 
 Firstly, change the current directory to the webapp package within the root directory of the project.  
 ```sh
@@ -217,10 +219,16 @@ Once you have run the grunt build you can compile and package the project using 
 mvn clean package
 ```  
 
-This is so that the packaged *gpconnect-demonstrator-api* module can then be deployed to an application container, 
-such as Tomcat, with the front end code packaged with it.
+It is important to run the "grunt build" before the "mvn clean package" as this means that the packaged *gpconnect-demonstrator-api* module will contain the built front end along with the back end code.
 
-With front end code and server-side code is packaged as one, it makes things easy to handle in a deployment scenario.
+The built project will appear as a WAR file in the following directory, with the name "gpconnect-demonstrator-api.war":
+```sh
+{projectRoot}\gpconnect-demonstrator-api\target
+```
+The WAR file can be deployed to an application server, such as tomcat. For information on creating a simple tomcat deployment for testing purposes take a look at the "Deployment Document.docx" in the following directory:
+```sh
+{projectRoot}\Documents
+```
 
 ### Data Clear Down
 For Appointments and Tasks there is a clear down process which is scheduled using a Spring Scheduled event configured with a "cron" string. When the clear down task runs it will delete all GP Connect Demonstrator Tasks previously added. It will also delete all Appointments and remove the currently available Slots, after which it will try and build a new set of slots using a slots sample data file.

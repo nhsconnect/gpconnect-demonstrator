@@ -43,7 +43,6 @@ CREATE TABLE gpconnect.appointment_appointments (
   reasonDisplay				TEXT(100) 	NULL,
   startDateTime				DATETIME 	NULL,
   endDateTime				DATETIME 	NULL,
-  slotId					BIGINT 		NULL,
   commentText				TEXT(300) 	NULL,
   patientId					BIGINT 		NULL,
   practitionerId			BIGINT 		NULL,
@@ -68,6 +67,7 @@ CREATE TABLE gpconnect.appointment_schedules (
 
 CREATE TABLE gpconnect.appointment_slots (
   id                		BIGINT      NOT NULL    AUTO_INCREMENT,
+  appointmentId				BIGINT 		NULL,
   typeCode					BIGINT 		NULL,
   typeDisplay				TEXT(300) 	NULL,
   scheduleReference			BIGINT 		NULL,
@@ -75,7 +75,8 @@ CREATE TABLE gpconnect.appointment_slots (
   startDateTime				DATETIME 	NULL,
   endDateTime				DATETIME 	NULL,
   lastUpdated				DATETIME 	NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  FOREIGN KEY (appointmentId) REFERENCES gpconnect.appointment_appointments(id)
 );
 
 CREATE TABLE gpconnect.general_practitioners (

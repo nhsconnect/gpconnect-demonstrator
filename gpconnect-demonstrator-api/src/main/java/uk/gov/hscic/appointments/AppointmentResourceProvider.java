@@ -90,24 +90,24 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         Date startLowerDate = null;
         Date startUppderDate = null;
-        
-        if(startDate != null){
-            if(startDate.getLowerBound() != null){
-                if(startDate.getLowerBound().getPrefix() == ParamPrefixEnum.GREATERTHAN){
+
+        if (startDate != null) {
+            if (startDate.getLowerBound() != null) {
+                if (startDate.getLowerBound().getPrefix() == ParamPrefixEnum.GREATERTHAN) {
                     startLowerDate = startDate.getLowerBound().getValue();
                 } else {
-                    if(startDate.getLowerBound().getPrecision() == TemporalPrecisionEnum.DAY){
+                    if (startDate.getLowerBound().getPrecision() == TemporalPrecisionEnum.DAY) {
                         startLowerDate = startDate.getLowerBound().getValue(); // Remove a day to make time inclusive of parameter date
                     } else {
                         startLowerDate = new Date(startDate.getLowerBound().getValue().getTime() - 1000); // Remove a second to make time inclusive of parameter date
                     }
                 }
             }
-            if(startDate.getUpperBound() != null){
-                if(startDate.getUpperBound().getPrefix() == ParamPrefixEnum.LESSTHAN){
+            if (startDate.getUpperBound() != null) {
+                if (startDate.getUpperBound().getPrefix() == ParamPrefixEnum.LESSTHAN) {
                     startUppderDate = startDate.getUpperBound().getValue();
                 } else {
-                    if(startDate.getUpperBound().getPrecision() == TemporalPrecisionEnum.DAY){
+                    if (startDate.getUpperBound().getPrecision() == TemporalPrecisionEnum.DAY) {
                         startUppderDate = new Date(startDate.getUpperBound().getValue().getTime() + 86400000); // Add a day to make time inclusive of parameter date
                     } else {
                         startUppderDate = new Date(startDate.getUpperBound().getValue().getTime() + 1000); // Add a second to make time inclusive of parameter date
@@ -119,7 +119,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         RepoSource sourceType = RepoSourceType.fromString(null);
         AppointmentSearch appointmentSearch = applicationContext.getBean(AppointmentSearchFactory.class).select(sourceType);
         List<AppointmentDetail> appointmentDetails = appointmentSearch.searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUppderDate);
-        
+
         ArrayList<Appointment> appointments = new ArrayList();
         if (appointmentDetails != null && appointmentDetails.size() > 0) {
             for (AppointmentDetail appointmentDetail : appointmentDetails) {
@@ -145,53 +145,61 @@ public class AppointmentResourceProvider implements IResourceProvider {
         if (appointment.getParticipant().size() <= 0) {
             throw new UnprocessableEntityException("Atleast one participant is required");
         }
-        for(Participant participant : appointment.getParticipant()){
+        for (Participant participant : appointment.getParticipant()) {
             String resourcePart = participant.getActor().getReference().getResourceType();
             String idPart = participant.getActor().getReference().getIdPart();
             RepoSource sourceType = RepoSourceType.fromString(null);
-            switch(resourcePart){
-                case "Patient" :
+            switch (resourcePart) {
+                case "Patient":
                     PatientSearch patientSearch = applicationContext.getBean(PatientSearchFactory.class).select(sourceType);
                     PatientDetails patient = patientSearch.findPatientByInternalID(idPart);
-                    if(patient == null){
+                    if (patient == null) {
                         throw new UnprocessableEntityException("Patient resource reference is not a valid resource");
                     }
                     break;
-                case "Practitioner" :
+                case "Practitioner":
                     PractitionerSearch practitionerSearch = applicationContext.getBean(PractitionerSearchFactory.class).select(sourceType);
                     PractitionerDetails practitioner = practitionerSearch.findPractitionerDetails(idPart);
-                    if(practitioner == null){
+                    if (practitioner == null) {
                         throw new UnprocessableEntityException("Practitioner resource reference is not a valid resource");
                     }
                     break;
-                case "Location" :
+                case "Location":
                     LocationSearch locationSearch = applicationContext.getBean(LocationSearchFactory.class).select(sourceType);
                     LocationDetails location = locationSearch.findLocationById(idPart);
-                    if(location == null){
+                    if (location == null) {
                         throw new UnprocessableEntityException("Location resource reference is not a valid resource");
                     }
                     break;
             }
         }
-        
-        
+
         // Store New Appointment
         AppointmentDetail appointmentDetail = appointmentResourceConverterToAppointmentDetail(appointment);
 
         RepoSource sourceType = RepoSourceType.fromString(null);
 
         SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
-        SlotDetail slotDetail = slotSearch.findSlotByID(appointmentDetail.getSlotId());
-        if(slotDetail == null){
-            throw new UnprocessableEntityException("Slot resource reference is not a valid resource");
+        
+        List<SlotDetail> slots = new ArrayList<>();
+        for (Long slotId : appointmentDetail.getSlotIds()) {
+            SlotDetail slotDetail = slotSearch.findSlotByID(slotId);
+            if (slotDetail == null) {
+                throw new UnprocessableEntityException("Slot resource reference is not a valid resource");
+            }
+            slots.add(slotDetail);
         }
-        slotDetail.setFreeBusyType("BUSY");
-        slotDetail.setLastUpdated(new Date());
-        SlotStore slotStore = applicationContext.getBean(SlotStoreFactory.class).select(sourceType);
-        slotDetail = slotStore.saveSlot(slotDetail);
         
         AppointmentStore appointmentStore = applicationContext.getBean(AppointmentStoreFactory.class).select(sourceType);
-        appointmentDetail = appointmentStore.saveAppointment(appointmentDetail);
+        appointmentDetail = appointmentStore.saveAppointment(appointmentDetail, slots);
+
+        for (SlotDetail slot : slots) {
+            slot.setAppointmentId(appointmentDetail.getId());
+            slot.setFreeBusyType("BUSY");
+            slot.setLastUpdated(new Date());
+            SlotStore slotStore = applicationContext.getBean(SlotStoreFactory.class).select(sourceType);
+            slot = slotStore.saveSlot(slot);
+        }
 
         // Build response containing the new resource id
         MethodOutcome methodOutcome = new MethodOutcome();
@@ -230,7 +238,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         String oldAppointmentVersionId = String.valueOf(oldAppointmentDetail.getLastUpdated().getTime());
         String newAppointmentVersionId = appointmentId.getVersionIdPart();
         if (newAppointmentVersionId != null && !newAppointmentVersionId.equalsIgnoreCase(oldAppointmentVersionId)) {
-            throw new ResourceVersionConflictException("The specified version ("+newAppointmentVersionId+") did not match the current resource version ("+oldAppointmentVersionId+")");
+            throw new ResourceVersionConflictException("The specified version (" + newAppointmentVersionId + ") did not match the current resource version (" + oldAppointmentVersionId + ")");
         }
 
         //Determin if it is a cancel or an amend
@@ -249,11 +257,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             if (!"cancelled".equalsIgnoreCase(oldStatus)) {
                 SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
-                SlotDetail slotDetail = slotSearch.findSlotByID(appointmentDetail.getSlotId());
-                slotDetail.setFreeBusyType("FREE");
-                slotDetail.setLastUpdated(new Date());
-                SlotStore slotStore = applicationContext.getBean(SlotStoreFactory.class).select(sourceType);
-                slotDetail = slotStore.saveSlot(slotDetail);
+                for (Long slotId : appointmentDetail.getSlotIds()) {
+                    SlotDetail slotDetail = slotSearch.findSlotByID(slotId);
+                    slotDetail.setAppointmentId(null);
+                    slotDetail.setFreeBusyType("FREE");
+                    slotDetail.setLastUpdated(new Date());
+                    SlotStore slotStore = applicationContext.getBean(SlotStoreFactory.class).select(sourceType);
+                    slotDetail = slotStore.saveSlot(slotDetail);
+                }
             }
         } else {
             // This is an Amend
@@ -265,9 +276,19 @@ public class AppointmentResourceProvider implements IResourceProvider {
             appointmentDetail = oldAppointmentDetail;
         }
 
+        SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
+        List<SlotDetail> slots = new ArrayList<>();
+        for (Long slotId : appointmentDetail.getSlotIds()) {
+            SlotDetail slotDetail = slotSearch.findSlotByID(slotId);
+            if (slotDetail == null) {
+                throw new UnprocessableEntityException("Slot resource reference is not a valid resource");
+            }
+            slots.add(slotDetail);
+        }
+        
         appointmentDetail.setLastUpdated(new Date()); // Update version and lastUpdated timestamp
         AppointmentStore appointmentStore = applicationContext.getBean(AppointmentStoreFactory.class).select(sourceType);
-        appointmentDetail = appointmentStore.saveAppointment(appointmentDetail);
+        appointmentDetail = appointmentStore.saveAppointment(appointmentDetail, slots);
 
         methodOutcome.setId(new IdDt("Appointment", appointmentDetail.getId()));
         methodOutcome.setResource(appointmentDetailToAppointmentResourceConverter(appointmentDetail));
@@ -319,7 +340,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         appointment.setStartWithMillisPrecision(appointmentDetail.getStartDateTime());
         appointment.setEndWithMillisPrecision(appointmentDetail.getEndDateTime());
-        appointment.setSlot(Collections.singletonList(new ResourceReferenceDt("Slot/" + appointmentDetail.getSlotId())));
+
+        List<ResourceReferenceDt> slotResources = new ArrayList<>();
+        for (Long slotId : appointmentDetail.getSlotIds()) {
+            slotResources.add(new ResourceReferenceDt("Slot/" + slotId));
+        }
+        appointment.setSlot(slotResources);
+
         appointment.setComment(appointmentDetail.getComment());
 
         Participant patientParticipant = appointment.addParticipant();
@@ -360,7 +387,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentDetail.setReasonDisplay(appointment.getReason().getCodingFirstRep().getDisplay());
         appointmentDetail.setStartDateTime(appointment.getStart());
         appointmentDetail.setEndDateTime(appointment.getEnd());
-        appointmentDetail.setSlotId(appointment.getSlot().get(0).getReference().getIdPartAsLong());
+
+        List<Long> slotIds = new ArrayList<>();
+        for (ResourceReferenceDt slotReference : appointment.getSlot()) {
+            slotIds.add(slotReference.getReference().getIdPartAsLong());
+        }
+        appointmentDetail.setSlotIds(slotIds);
+
         appointmentDetail.setComment(appointment.getComment());
 
         for (Appointment.Participant participant : appointment.getParticipant()) {

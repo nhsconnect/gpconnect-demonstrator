@@ -44,11 +44,12 @@ public class RefreshData {
     public void resetAppointments() {
 
         RepoSource sourceType = RepoSourceType.fromString(null);
-        LegacyAppointmentStore appointmentStore = (LegacyAppointmentStore) appointmentStoreFactory.select(sourceType);
-        appointmentStore.clearAppointments();
-
+        
         LegacySlotStore slotStore = (LegacySlotStore) slotStoreFactory.select(sourceType);
         slotStore.clearSlots();
+        
+        LegacyAppointmentStore appointmentStore = (LegacyAppointmentStore) appointmentStoreFactory.select(sourceType);
+        appointmentStore.clearAppointments();
 
         File file = new File(slotsFile);
         BufferedReader reader = null;

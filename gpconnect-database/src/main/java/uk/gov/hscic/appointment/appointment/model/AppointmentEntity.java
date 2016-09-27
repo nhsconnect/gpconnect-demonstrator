@@ -1,13 +1,17 @@
 package uk.gov.hscic.appointment.appointment.model;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import uk.gov.hscic.appointment.slot.model.SlotEntity;
 
 @Entity
 @Table(name = "appointment_appointments")
@@ -42,8 +46,8 @@ public class AppointmentEntity {
     @Column(name = "endDateTime")
     private Date endDateTime;
     
-    @Column(name = "slotId")
-    private Long slotId;
+    @OneToMany(mappedBy="appointmentId", targetEntity=SlotEntity.class, fetch=FetchType.EAGER)
+    private List<SlotEntity> slots;
     
     @Column(name = "commentText")
     private String comment;
@@ -132,12 +136,12 @@ public class AppointmentEntity {
         this.endDateTime = endDateTime;
     }
 
-    public Long getSlotId() {
-        return slotId;
+    public List<SlotEntity> getSlots() {
+        return slots;
     }
 
-    public void setSlotId(Long slotId) {
-        this.slotId = slotId;
+    public void setSlots(List<SlotEntity> slots) {
+        this.slots = slots;
     }
 
     public String getComment() {
@@ -179,5 +183,4 @@ public class AppointmentEntity {
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
-    
 }

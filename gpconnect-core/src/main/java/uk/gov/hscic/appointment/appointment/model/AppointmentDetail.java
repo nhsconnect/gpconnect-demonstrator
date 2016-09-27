@@ -1,10 +1,12 @@
 package uk.gov.hscic.appointment.appointment.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class AppointmentDetail {
 
     private Long id;    
+    private List<Long> slotIds;
     private String cancellationReason; 
     private String status;
     private Long typeCode;
@@ -13,7 +15,6 @@ public class AppointmentDetail {
     private String reasonDisplay;
     private Date startDateTime;
     private Date endDateTime;
-    private Long slotId;
     private String comment;
     private Long patientId;
     private Long practitionerId;
@@ -28,6 +29,14 @@ public class AppointmentDetail {
         this.id = id;
     }
 
+    public List<Long> getSlotIds() {
+        return slotIds;
+    }
+
+    public void setSlotIds(List<Long> slotIds) {
+        this.slotIds = slotIds;
+    }
+    
     public String getCancellationReason() {
         return cancellationReason;
     }
@@ -90,14 +99,6 @@ public class AppointmentDetail {
 
     public void setEndDateTime(Date endDateTime) {
         this.endDateTime = endDateTime;
-    }
-
-    public Long getSlotId() {
-        return slotId;
-    }
-
-    public void setSlotId(Long slotId) {
-        this.slotId = slotId;
     }
 
     public String getComment() {

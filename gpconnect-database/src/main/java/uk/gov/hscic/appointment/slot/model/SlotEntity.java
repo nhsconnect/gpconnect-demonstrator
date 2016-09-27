@@ -7,7 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import uk.gov.hscic.appointment.appointment.model.AppointmentEntity;
 
 @Entity
 @Table(name = "appointment_slots")
@@ -18,6 +21,10 @@ public class SlotEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(optional=true)
+    @JoinColumn(name="appointmentId", referencedColumnName="id")
+    private AppointmentEntity appointmentId;
+    
     @Column(name = "typeCode")
     private Long typeCode;
     
@@ -101,5 +108,13 @@ public class SlotEntity {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public AppointmentEntity getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(AppointmentEntity appointmentId) {
+        this.appointmentId = appointmentId;
     }
 }

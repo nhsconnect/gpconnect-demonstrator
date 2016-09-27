@@ -4,7 +4,8 @@ import java.util.Date;
 
 public class SlotDetail {
     
-    private Long Id;
+    private Long id;
+    private Long appointmentId;
     private Long typeCode;
     private String typeDisply;
     private Long scheduleReference;
@@ -14,13 +15,21 @@ public class SlotDetail {
     private Date lastUpdated;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
-    public void setId(Long Id) {
-        this.Id = Id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
+    public Long getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+    
     public Long getTypeCode() {
         return typeCode;
     }

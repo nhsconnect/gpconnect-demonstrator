@@ -1,5 +1,6 @@
 package uk.gov.hscic.appointment.slot.store;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.appointment.slot.model.SlotDetail;
@@ -26,6 +27,5 @@ public class LegacySlotStore extends AbstractLegacyService implements SlotStore 
     
     public void clearSlots(){
         slotRepository.deleteAll();
-        slotRepository.flush();
     }
 }

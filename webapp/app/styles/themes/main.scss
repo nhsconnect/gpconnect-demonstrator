@@ -2331,6 +2331,17 @@ div#age-chart div.morris-hover.morris-default-style {
     border: 1px solid #428bca;
     border-radius: 3px;
 }
+.selectedSlot .gantt-task-content {
+    background-color: #428bca;
+    border: 1px solid #428bca;
+    border-radius: 3px;
+}
+
+.removeSelectedSlot .gantt-task-content {
+    background-color: #d9534f;
+    border: 1px solid #d9534f;
+    border-radius: 3px;
+}
 
 .gantt-header-row-first {
     background-color: #eeeeee;

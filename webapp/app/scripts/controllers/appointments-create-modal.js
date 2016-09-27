@@ -34,7 +34,13 @@ angular.module('gpConnect')
             $scope.appointmentCreate.description = "";
             $scope.appointmentCreate.start = appointmentBookingParams.startTime;
             $scope.appointmentCreate.end = appointmentBookingParams.endTime;
-            $scope.appointmentCreate.slot = [{"reference": "Slot/" + appointmentBookingParams.slotId}];
+            
+            $scope.appointmentCreate.slot = [];
+            for(var slotIndex = 0; slotIndex < appointmentBookingParams.slotIds.length; slotIndex++){
+                var reference = {"reference": "Slot/" + appointmentBookingParams.slotIds[slotIndex]};
+                $scope.appointmentCreate.slot.push(reference);
+            }
+            
             $scope.appointmentCreate.comment = "";
             $scope.appointmentCreate.participant = [
                 {

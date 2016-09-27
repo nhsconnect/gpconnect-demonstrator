@@ -32,6 +32,7 @@
 
 <div class="modal-footer">
   <a class="btn btn-danger" ng-click="cancel()">Cancel</a>
+  <button class="btn btn-success" ng-click="bookAppointment()" ng-disabled="selectedSlots.length <= 0">Book Appointment</button>
 </div>
 
 <div class="row">

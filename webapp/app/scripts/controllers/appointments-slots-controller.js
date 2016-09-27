@@ -6,7 +6,15 @@ angular.module('gpConnect')
             PatientService.getFhirPatient(ProviderRouting.defaultPractice().odsCode, $stateParams.patientId).then(function (patient) {
                 $scope.patientDetails = patient;
             });
-            
+
+            $scope.selectedSlots = [];
+            var slotEnum = {
+                ADJACENT: 0,
+                NOTADJACENT: 1,
+                SAMESLOT: 2,
+                SAMESLOTMIDDLE: 3
+            };
+
             var numberOfSearches = 0;
             usSpinnerService.spin('appointmentSlots-spinner');
 
@@ -248,6 +256,7 @@ angular.module('gpConnect')
                 $scope.selectedLocation = location;
                 // grab the default day and select it
                 $scope.selectDefaultDay(location);
+                clearSelectedSlots();
             };
 
             $scope.isLocationSelected = function (location) {
@@ -275,6 +284,7 @@ angular.module('gpConnect')
             $scope.onSelectDay = function (day) {
                 $scope.selectedDay = day;
                 $scope.loadDaySlots(day);
+                clearSelectedSlots();
             };
 
             $scope.selectDefaultDay = function (location) {
@@ -297,68 +307,172 @@ angular.module('gpConnect')
                 return formattedDate
             };
 
+            $scope.bookAppointment = function () {
+                if ($scope.selectedSlots.length <= 0) {
+                    alert("You must select slots before booking an appointment");
+                }
+
+                usSpinnerService.spin('appointmentSlots-spinner');
+
+                var earliestFromDate = $scope.selectedSlots[0].model.from;
+                var lastToDate = $scope.selectedSlots[0].model.to;
+                var slotIds = [];
+                for (var slotIndex = 0; slotIndex < $scope.selectedSlots.length; slotIndex++) {
+                    slotIds.push($scope.selectedSlots[slotIndex].model.id);
+                    if ($scope.selectedSlots[slotIndex].model.from.isBefore(earliestFromDate)) {
+                        earliestFromDate = $scope.selectedSlots[slotIndex].model.from;
+                    }
+                    if ($scope.selectedSlots[slotIndex].model.to.isAfter(lastToDate)) {
+                        lastToDate = $scope.selectedSlots[slotIndex].model.to;
+                    }
+                }
+
+                $scope.appointmentBookingParameters = {};
+                $scope.appointmentBookingParameters.location = $scope.selectedLocation;
+                $scope.appointmentBookingParameters.slotIds = slotIds;
+                $scope.appointmentBookingParameters.startTime = earliestFromDate;
+                $scope.appointmentBookingParameters.endTime = lastToDate;
+                $scope.appointmentBookingParameters.practitionerId = $scope.selectedSlots[0].row.model.id;
+                $scope.appointmentBookingParameters.practitionerFullName = $scope.selectedSlots[0].row.model.name;
+                $scope.appointmentBookingParameters.locationId = $scope.selectedLocation.id;
+                $scope.appointmentBookingParameters.typeCode = $scope.selectedSlots[0].model.typeCode;
+                $scope.appointmentBookingParameters.type = $scope.selectedSlots[0].model.name;
+
+                // Check the patient is on the remote system
+                PatientService.getPatientFhirId($stateParams.patientId, $scope.appointmentBookingParameters.location.odsCode).then(function (patientFhirIDResult) {
+
+                    if (patientFhirIDResult == undefined) {
+                        // The patient does not exist on the remote system so needs to be created
+                        usSpinnerService.stop('appointmentSlots-spinner');
+                        $modalInstance.close();
+                        $modal.open({
+                            templateUrl: 'views/appointments/appointments-patient-create-modal.html',
+                            size: 'md',
+                            controller: 'AppointmentsPatientCreateModalCtrl',
+                            resolve: {
+                                patient: function () {
+                                    return $scope.patientDetails;
+                                },
+                                appointmentBookingParameters: function () {
+                                    return $scope.appointmentBookingParameters;
+                                }
+                            }
+                        });
+                    } else {
+                        // Patient already exists so just create the appointment
+                        usSpinnerService.stop('appointmentSlots-spinner');
+                        $modalInstance.close();
+                        $modal.open({
+                            templateUrl: 'views/appointments/appointments-create-modal.html',
+                            size: 'md',
+                            controller: 'AppointmentsCreateModalCtrl',
+                            resolve: {
+                                modal: function () {
+                                    return {
+                                        title: 'Book Appointment'
+                                    };
+                                },
+                                appointmentBookingParams: function () {
+                                    $scope.appointmentBookingParameters.patientFhirId = patientFhirIDResult;
+                                    return $scope.appointmentBookingParameters;
+                                }
+                            }
+                        });
+                    }
+                }, function (result) {
+                    // Error calling the remote server
+                    alert($scope.appointmentBookingParameters.location.practiceName + " cannot be connected to at this current time");
+                    $modalInstance.dismiss('cancel');
+                });
+            };
+
+            var slotAdjacent = function (task) {
+                if ($scope.selectedSlots.length > 0) {
+                    // check the practitioner is the same practitioner
+                    if ($scope.selectedSlots[0].row.model.id != task.row.model.id) {
+                        // Slot is for a different practitioner
+                        return slotEnum.NOTADJACENT;
+                    }
+
+                    var sameSlot = false;
+                    var adjacentSlotToLeft = false;
+                    var adjacentSlotToRight = false;
+
+                    // If the slot start date or end date match one in the list of currently selected slots then adjacent
+                    for (var slotIndex = 0; slotIndex < $scope.selectedSlots.length; slotIndex++) {
+                        if (task.model.from.isSame($scope.selectedSlots[slotIndex].model.from) && task.model.to.isSame($scope.selectedSlots[slotIndex].model.to)) {
+                            sameSlot = true;
+                        }
+                        if (task.model.from.isSame($scope.selectedSlots[slotIndex].model.to)) {
+                            adjacentSlotToLeft = true;
+                        }
+                        if (task.model.to.isSame($scope.selectedSlots[slotIndex].model.from)) {
+                            adjacentSlotToRight = true;
+                        }
+                    }
+
+                    if (sameSlot && adjacentSlotToLeft && adjacentSlotToRight) {
+                        // Trying to delete a slot by clicking on it but it is in the middle of adjacent slots so would create a gap
+                        return slotEnum.SAMESLOTMIDDLE;
+                    } else if (sameSlot && !(adjacentSlotToLeft && adjacentSlotToRight)) {
+                        // Trying to delete a slot and slot is on the end it does not have a selected slot on its left and right
+                        return slotEnum.SAMESLOT;
+                    } else if (adjacentSlotToLeft || adjacentSlotToRight) {
+                        // Slots exist in selected slots but they are not adjacent to the current slot
+                        return slotEnum.ADJACENT;
+                    } else {
+                        return slotEnum.NOTADJACENT;
+                    }
+                }
+
+                // Slot is the only slot so can be treated as adjacent
+                return slotEnum.ADJACENT;
+            };
+
+            var clearSelectedSlots = function () {
+                $scope.selectedSlots = [];
+                $(".selectedSlot").removeClass("selectedSlot");
+            };
+            
             $scope.registerEventFunctions = function (eventFunctions) {
                 eventFunctions.directives.on.new($scope, function (dName, dScope, dElement, dAttrs, dController) {
                     if (dName === 'ganttTask') {
                         dElement.bind('click', function (event) {
-
-                            usSpinnerService.spin('appointmentSlots-spinner');
-
-                            $scope.appointmentBookingParameters = {};
-                            $scope.appointmentBookingParameters.location = $scope.selectedLocation;
-                            $scope.appointmentBookingParameters.slotId = dScope.task.model.id;
-                            $scope.appointmentBookingParameters.startTime = dScope.task.model.from;
-                            $scope.appointmentBookingParameters.endTime = dScope.task.model.to;
-                            $scope.appointmentBookingParameters.practitionerId = dScope.task.row.model.id;
-                            $scope.appointmentBookingParameters.practitionerFullName = dScope.task.row.model.name;
-                            $scope.appointmentBookingParameters.locationId = $scope.selectedLocation.id;
-                            $scope.appointmentBookingParameters.typeCode = dScope.task.model.typeCode;
-                            $scope.appointmentBookingParameters.type = dScope.task.model.name;
-
-                            // Check the patient is on the remote system
-                            PatientService.getPatientFhirId($stateParams.patientId, $scope.appointmentBookingParameters.location.odsCode).then(function (patientFhirIDResult) {
-
-                                if (patientFhirIDResult == undefined) {
-                                    // The patient does not exist on the remote system so needs to be created
-                                    usSpinnerService.stop('appointmentSlots-spinner');
-                                    $modalInstance.close();
-                                    $modal.open({
-                                        templateUrl: 'views/appointments/appointments-patient-create-modal.html',
-                                        size: 'md',
-                                        controller: 'AppointmentsPatientCreateModalCtrl',
-                                        resolve: {
-                                            patient: function(){ return $scope.patientDetails; },
-                                            appointmentBookingParameters: function () {
-                                                return $scope.appointmentBookingParameters;
-                                            }
-                                        }
-                                    });
-                                } else {
-                                    // Patient already exists so just create the appointment
-                                    usSpinnerService.stop('appointmentSlots-spinner');
-                                    $modalInstance.close();
-                                    $modal.open({
-                                        templateUrl: 'views/appointments/appointments-create-modal.html',
-                                        size: 'md',
-                                        controller: 'AppointmentsCreateModalCtrl',
-                                        resolve: {
-                                            modal: function () {
-                                                return {
-                                                    title: 'Book Appointment'
-                                                };
-                                            },
-                                            appointmentBookingParams: function () {
-                                                $scope.appointmentBookingParameters.patientFhirId = patientFhirIDResult;
-                                                return $scope.appointmentBookingParameters;
-                                            }
-                                        }
-                                    });
+                            var isSlotAdjacent = slotAdjacent(dScope.task);
+                            if (isSlotAdjacent == slotEnum.ADJACENT) {                  // A new slot which is adjacent to an existing slot
+                                $scope.selectedSlots.push(dScope.task);
+                                $(this).addClass("selectedSlot");
+                            } else if (isSlotAdjacent == slotEnum.SAMESLOT) {           // A currently selected end slot can be removed from selected slots leaving a block of adjacent slots
+                                var oldSelectedSlots = $scope.selectedSlots;
+                                $scope.selectedSlots = [];
+                                for (var slotIndex = 0; slotIndex < oldSelectedSlots.length; slotIndex++) {
+                                    if (oldSelectedSlots[slotIndex].model.id != dScope.task.model.id) {
+                                        $scope.selectedSlots.push(oldSelectedSlots[slotIndex]);
+                                    }
                                 }
-                            }, function (result) {
-                                // Error calling the remote server
-                                alert($scope.appointmentBookingParameters.location.practiceName + " cannot be connected to at this current time");
-                                $modalInstance.dismiss('cancel');
-                            })
+                                $(this).removeClass("selectedSlot");
+                            } else if (isSlotAdjacent == slotEnum.SAMESLOTMIDDLE) {     // A currently selected slot in the middle of a block so remove all selected slots
+                                clearSelectedSlots();
+                            } else {                                                    // New slot not adjacent to the currently selected slots
+                                clearSelectedSlots();
+                                $(this).addClass("selectedSlot");
+                                $scope.selectedSlots.push(dScope.task);
+                            }
+                            $(".removeSelectedSlot").removeClass("removeSelectedSlot");
+                        });
+
+                        dElement.bind('mouseenter', function (event) {
+                            var isAnAdjacentSlot = slotAdjacent(dScope.task);
+                            if (isAnAdjacentSlot == slotEnum.NOTADJACENT ||
+                                    isAnAdjacentSlot == slotEnum.SAMESLOTMIDDLE) {
+                                $(".selectedSlot").addClass("removeSelectedSlot");
+                            } else if (isAnAdjacentSlot == slotEnum.SAMESLOT) {
+                                $(this).addClass("removeSelectedSlot");
+                            }
+                        });
+
+                        dElement.bind('mouseleave', function (event) {
+                            $(".selectedSlot").removeClass("removeSelectedSlot");
                         });
                     }
                 });

@@ -2364,6 +2364,25 @@ div#age-chart div.morris-hover.morris-default-style {
     width: 100%;
 }
 
+.appointmentPracticeTable {
+    width: 100%;
+}
+
+.appointmentPracticeTable td {
+    border: 1px solid;
+    padding: 1px 15px 1px 5px;
+    width: 50%;
+}
+
+.appointmentPracticeTable .Searching {
+    color: orange;
+    border-color: inherit;
+}
+.appointmentPracticeTable .Failed {
+    color: red;
+    border-color: inherit;
+}
+
 .dateRangePanel {
     background-color: lightgrey;
     margin-top: 22px;

@@ -2,13 +2,18 @@
     <div class="col-md-5" >
         <h3><strong>Appointments</strong></h3>
 
-        <div class="col-md-12 alert alert-info noteBox" >Any amendments to appointments may take up to a minute to propagate through the system. You may need to refresh the page to see your changes.</div>
-
-		<div ng-show="missingPractices.length > 0" class="col-md-12  alert alert-danger noteBox" role="alert">Appointments from the following practices could not be retrieved - 
-			<ol>
-				<li ng-repeat='missingPractice in missingPractices'>{{missingPractice.name}}</li>
-			</ol>
-		</div>
+        <div class="col-md-12 alert alert-info noteBox" >
+            <div>Any amendments to appointments may take up to a minute to propagate through the system. You may need to refresh the page to see your changes.</div>
+            <h5>Federated practices:</h5>
+            <table class="appointmentPracticeTable">
+                <tr>
+                    <th>Practice</th><th>Status</th>
+                </tr>
+                <tr ng-repeat='practice in allPractices'>
+                    <td>{{practice.name}}</td><td class="{{practice.status}}">{{practice.statusMsg}}</td>
+                </tr>
+            </table>
+        </div>
 
         <table class="table table-bordered table-striped table-hover">
             <thead>

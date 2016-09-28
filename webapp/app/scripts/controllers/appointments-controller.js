@@ -20,96 +20,72 @@ angular.module('gpConnect')
             initAppointments();
             
             function initAppointments() {
-            	$scope.missingPractices = [];
-            	$scope.foundPractices = [];
-            	var allPractices = ProviderRouting.practices;
-            	var practiceMap = {};
-            	
-            	var appointmentsMap = {};
-            	
-            	for(var practiceIndex in allPractices) {
-                	var practice = allPractices[practiceIndex];
-                	practiceMap[practice.ASID] = practice;
-                	            		
-                	PatientService.getFhirPatientResponse($stateParams.patientId, practice.odsCode).then(
-            			function(getPatientFhirIdSuccess) {
-            				// lookup ODS code
-            				var sspTo = getPatientFhirIdSuccess.config.headers['Ssp-To'];
-            				var practice = practiceMap[sspTo]
-            				
-            				$scope.foundPractices.push(practiceMap[sspTo]);
-            				
-            				var patient = PatientService.getPatientFromResponse(getPatientFhirIdSuccess);
-            				
+                $scope.appointments = [];
+            	$scope.allPractices = ProviderRouting.practices;	
+                $.each($scope.allPractices, function (key, practice) {
+                    if($scope.searchCount == undefined){
+                        $scope.searchCount = 1;
+                    } else {
+                        $scope.searchCount++;
+                    }
+                    practice.statusMsg = "Searching";
+                    practice.status = "Searching";
+                	PatientService.getFhirPatient(practice.odsCode, $stateParams.patientId).then(
+            			function(patient) {
             				Appointment.findAllAppointments($stateParams.patientId, patient.id, practice.odsCode).then(
         						function(findAllAppointmentsSuccess) {
         							var appointments = findAllAppointmentsSuccess.data.entry;
-                        			
-                        			if(appointments != undefined && appointments.length > 0) {
-                        				setCancellationReason(appointments);
-                        				var sspTo = findAllAppointmentsSuccess.config.headers['Ssp-To'];
-                        				appointmentsMap[sspTo] = appointments;
-                        				
-                        				// now check if we're done by comparing the number of keys to the number of
-                        				// practices
-                        				if(Object.keys(appointmentsMap).length == $scope.foundPractices.length) {
-                        					onFindAllAppointmentsDone(appointmentsMap);
-                        				}
-                        			}
+                        			if (appointments != undefined) {
+                                        $scope.appointments.push(appointments); // Add appointments to total list
+                                        practice.statusMsg = "Appointments found";
+                                        practice.status = "Success";
+                                        onFindAppointmentDone();
+                                    } else {
+                                        practice.statusMsg = "No appointments found";
+                                        practice.status = "Success";
+                                        onFindAppointmentDone();
+                                    }
         						},
         						function(findAllAppointmentsFailure) {
-        							var sspTo = findAllAppointmentsFailure.config.headers['Ssp-To'];
-                    				appointmentsMap[sspTo] = [];
-                    				
-                    				// now check if we're done by comparing the number of keys to the number of
-                    				// practices
-                    				if(Object.keys(appointmentsMap).length == $scope.foundPractices.length) {
-                    					onFindAllAppointmentsDone(appointmentsMap);
-                    				}                    				
+        							practice.statusMsg = "Failed appointment search";
+                                    practice.status = "Failed";
+                                    onFindAppointmentDone();
         						}
             				);
             			}, 
-            			function(getPatientFhirIdFailure) {		
-            				var sspTo = getPatientFhirIdFailure.config.headers['Ssp-To'];
-            				$scope.missingPractices.push(practiceMap[sspTo]);
+            			function(getPatientFhirIdFailure) {	
+            				practice.statusMsg = "Failed to find patient";
+                            practice.status = "Failed";
+                            onFindAppointmentDone();
             			}
                 	);                	
-            	}
+            	});
             }
             
-            function onFindAllAppointmentsDone(appointmentsMap) {
-            	var allPracticeAppointments = [];
-            	
-            	for(var practice in appointmentsMap) {
-            		allPracticeAppointments = allPracticeAppointments.concat(appointmentsMap[practice]);
-            	}
-            	
-            	// sort by appointment start datetime ascending
-            	allPracticeAppointments.sort(function (a, b) {
-                    return a.resource.start.localeCompare(b.resource.start);
-                });
-            	
-            	$scope.appointments = allPracticeAppointments;
-            	usSpinnerService.stop('patientSummary-spinner');   
+            function onFindAppointmentDone() {
+                $scope.searchCount--;
+                if($scope.searchCount <= 0){
+                    if ($scope.appointments != undefined) {
+                        $scope.appointments = $scope.appointments.sort(function (a, b) {
+                            return a.resource.start.localeCompare(b.resource.start);
+                        });
+                        $.each($scope.appointments, function (key, appointment) {
+                            if (appointment.resource.modifierExtension != undefined) {
+                                for (var i = 0; i < appointment.resource.modifierExtension.length; i++) {
+                                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0" == appointment.resource.modifierExtension[i].url) {
+                                        appointment.cancellationReason = appointment.resource.modifierExtension[i].valueString;
+                                        i = appointment.resource.modifierExtension.length;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    console.log($scope.allPractices);
+                    usSpinnerService.stop('patientSummary-spinner');
+                }           	
             }
             
-            function setCancellationReason(practiceAppointments) {
-                for(var practiceAppointmentIndex in practiceAppointments) {  	
-                	var practiceAppointment = practiceAppointments[practiceAppointmentIndex];
-                	
-	            	if (practiceAppointment.resource.modifierExtension != undefined) {
-	                    for (var i = 0; i < practiceAppointment.resource.modifierExtension.length; i++) {
-	                        if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0" == practiceAppointment.resource.modifierExtension[i].url) {
-	                        	practiceAppointment.cancellationReason = practiceAppointment.resource.modifierExtension[i].valueString;
-	                            i = practiceAppointment.resource.modifierExtension.length;
-	                        }
-	                    }
-	                }
-            	}
-            }
-
             $scope.go = function (id) {
-
                 usSpinnerService.spin('patientSummary-spinner');
                 $scope.appointmentDetail = undefined;
                 $scope.appointmentLocation = undefined;

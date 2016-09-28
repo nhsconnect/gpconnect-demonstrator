@@ -80,30 +80,6 @@ angular.module('gpConnect')
                 });
             };
             
-            var getFhirPatientResponse = function (patientId, practiceOdsCode) {
-                var response;
-                $rootScope.patientOdsCode = practiceOdsCode;
-
-                return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function (response) {
-                    var endpointLookupResult = response;
-                    var response = $http.get(endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|' + patientId,
-                            {
-                                headers: {
-                                    'Ssp-From': endpointLookupResult.fromASID,
-                                    'Ssp-To': endpointLookupResult.toASID,
-                                    'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient",
-                                    'Ssp-TraceID': fhirJWTFactory.guid(),
-                                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
-                                }
-                            }
-                    ).then(function (response) {
-                        return response;
-                    });
-
-                    return response;
-                });
-            };            
-
             var registerPatient = function (practiceOdsCode, patient, patientId) {
 
                 return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient").then(function (endpointLookupResult) {
@@ -123,18 +99,12 @@ angular.module('gpConnect')
                 });
 
             };
-            
-            var getPatientFromResponse = function(getPatientResponse) {
-            	return getPatientResponse.data.entry[0].resource;
-            };
 
             return {
                 findAllSummaries: findAllSummaries,
                 getSummary: getSummary,
                 getPatientFhirId: getPatientFhirId,
                 getFhirPatient: getFhirPatient,
-                getFhirPatientResponse: getFhirPatientResponse,
-                getPatientFromResponse: getPatientFromResponse,
                 registerPatient: registerPatient
             };
 

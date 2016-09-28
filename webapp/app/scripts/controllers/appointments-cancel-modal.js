@@ -26,7 +26,7 @@ angular.module('gpConnect')
                 $scope.formSubmitted = true;
                 if ($scope.appointmentCancel.appointmentResource.resource.modifierExtension[$scope.cancelReasonIndex].valueString.length > 0) {
                     usSpinnerService.spin('appointmentCancel-spinner');
-                    Appointment.save($stateParams.patientId, $scope.appointmentCancel.appointmentResource.resource.id, $scope.appointmentCancel.appointmentResource.resource).then(function (response) {
+                    Appointment.save($scope.appointmentCancel.appointmentResource.appointmentPracticeOdsCode, $stateParams.patientId, $scope.appointmentCancel.appointmentResource.resource.id, $scope.appointmentCancel.appointmentResource.resource).then(function (response) {
                         if (response.status != "200") {
                             alert("An error occurred updating appointment, please try cancelling again");
                         }

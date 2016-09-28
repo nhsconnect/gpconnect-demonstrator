@@ -95,8 +95,8 @@ angular.module('gpConnect')
                 });
             };
 
-            var save = function (patientNHSNumber, appointmentId, appointment) {
-                return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:read:appointment").then(function (response) {
+            var save = function (practiceOdsCode, patientNHSNumber, appointmentId, appointment) {
+                return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:read:appointment").then(function (response) {
                     var endpointLookupResult = response;
                     return $http.put(endpointLookupResult.restUrlPrefix + '/Appointment/' + appointmentId,
                             appointment,

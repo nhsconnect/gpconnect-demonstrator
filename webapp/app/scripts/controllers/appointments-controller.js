@@ -36,6 +36,10 @@ angular.module('gpConnect')
         						function(findAllAppointmentsSuccess) {
         							var appointments = findAllAppointmentsSuccess.data.entry;
                         			if (appointments != undefined) {
+                                        $.each(appointments, function(key, appointment){
+                                            appointment.appointmentPractice = practice.name;
+                                            appointment.appointmentPracticeOdsCode = practice.odsCode;
+                                        });
                                         $scope.appointments = $scope.appointments.concat(appointments); // Add appointments to total list
                                         practice.statusMsg = "Appointments found";
                                         practice.status = "Success";
@@ -65,7 +69,6 @@ angular.module('gpConnect')
             function onFindAppointmentDone() {
                 $scope.searchCount--;
                 if($scope.searchCount <= 0){
-                    console.log($scope.appointments);
                     if ($scope.appointments != undefined) {
                         $scope.appointments = $scope.appointments.sort(function (a, b) {
                             return a.resource.start.localeCompare(b.resource.start);
@@ -81,7 +84,6 @@ angular.module('gpConnect')
                             }
                         });
                     }
-                    console.log($scope.appointments);
                     usSpinnerService.stop('patientSummary-spinner');
                 }           	
             }

@@ -398,15 +398,15 @@ angular.module('gpConnect')
                     var adjacentSlotToLeft = false;
                     var adjacentSlotToRight = false;
 
-                    // If the slot start date or end date match one in the list of currently selected slots then adjacent
+                    // If the slot start date or end date match one in the list of currently selected slots then adjacent (Ignoring seconds accuracy as not indicated on front end)
                     for (var slotIndex = 0; slotIndex < $scope.selectedSlots.length; slotIndex++) {
                         if (task.model.from.isSame($scope.selectedSlots[slotIndex].model.from) && task.model.to.isSame($scope.selectedSlots[slotIndex].model.to)) {
                             sameSlot = true;
                         }
-                        if (task.model.from.isSame($scope.selectedSlots[slotIndex].model.to)) {
+                        if (task.model.from.seconds(0).milliseconds(0).isSame($scope.selectedSlots[slotIndex].model.to.seconds(0).milliseconds(0))) {
                             adjacentSlotToLeft = true;
                         }
-                        if (task.model.to.isSame($scope.selectedSlots[slotIndex].model.from)) {
+                        if (task.model.to.seconds(0).milliseconds(0).isSame($scope.selectedSlots[slotIndex].model.from.seconds(0).milliseconds(0))) {
                             adjacentSlotToRight = true;
                         }
                     }

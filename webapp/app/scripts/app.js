@@ -446,11 +446,9 @@ angular
             // Useful interceptor information https://docs.angularjs.org/api/ng/service/$http
             var service = this;
             service.response = function (response) {
-                console.log(response.status);
                 return response;
             };
             service.responseError = function (response) {
-                console.log(response.status);
 //                var modal = $injector.get('$modal');
 //                var loginModal = modal.open({
 //                    template: '<div><h3>Test Modal</h3><div>We can do anything!</div></div>'

@@ -45,9 +45,9 @@ angular.module('gpConnect')
 
             };
 
-            var findResourceByReference = function (patientId, resourceReference) {
+            var findResourceByReference = function (practiceOdsCode, patientId, resourceReference) {
                 if (resourceReference.indexOf("Location") > -1) {
-                    return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:read:location").then(function (response) {
+                    return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:read:location").then(function (response) {
                         var endpointLookupResult = response;
                         return $http.get(endpointLookupResult.restUrlPrefix + '/' + resourceReference,
                                 {
@@ -61,7 +61,7 @@ angular.module('gpConnect')
                                 });
                     });
                 } else if (resourceReference.indexOf("Practitioner") > -1) {
-                    return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner").then(function (response) {
+                    return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner").then(function (response) {
                         var endpointLookupResult = response;
                         return $http.get(endpointLookupResult.restUrlPrefix + '/' + resourceReference,
                                 {

@@ -16,59 +16,65 @@ angular.module('gpConnect')
             if ($stateParams.filter) {
                 $scope.query = $stateParams.filter;
             }
-            
+
             initAppointments();
-            
+
             function initAppointments() {
                 $scope.appointments = [];
-            	$scope.allPractices = ProviderRouting.practices;	
+                $scope.allPractices = ProviderRouting.practices;
                 $.each($scope.allPractices, function (key, practice) {
-                    if($scope.searchCount == undefined){
+                    if ($scope.searchCount == undefined) {
                         $scope.searchCount = 1;
                     } else {
                         $scope.searchCount++;
                     }
                     practice.statusMsg = "Searching";
                     practice.status = "Searching";
-                	PatientService.getFhirPatient(practice.odsCode, $stateParams.patientId).then(
-            			function(patient) {
-            				Appointment.findAllAppointments($stateParams.patientId, patient.id, practice.odsCode).then(
-        						function(findAllAppointmentsSuccess) {
-        							var appointments = findAllAppointmentsSuccess.data.entry;
-                        			if (appointments != undefined) {
-                                        $.each(appointments, function(key, appointment){
-                                            appointment.appointmentPractice = practice.name;
-                                            appointment.appointmentPracticeOdsCode = practice.odsCode;
-                                        });
-                                        $scope.appointments = $scope.appointments.concat(appointments); // Add appointments to total list
-                                        practice.statusMsg = "Appointments found";
-                                        practice.status = "Success";
-                                        onFindAppointmentDone();
-                                    } else {
-                                        practice.statusMsg = "No appointments found";
-                                        practice.status = "Success";
-                                        onFindAppointmentDone();
-                                    }
-        						},
-        						function(findAllAppointmentsFailure) {
-        							practice.statusMsg = "Failed appointment search";
+                    PatientService.getFhirPatient(practice.odsCode, $stateParams.patientId).then(
+                            function (patient) {
+                                if (patient == undefined) {
+                                    practice.statusMsg = "Failed to find patient";
                                     practice.status = "Failed";
                                     onFindAppointmentDone();
-        						}
-            				);
-            			}, 
-            			function(getPatientFhirIdFailure) {	
-            				practice.statusMsg = "Failed to find patient";
-                            practice.status = "Failed";
-                            onFindAppointmentDone();
-            			}
-                	);                	
-            	});
+                                } else {
+                                    Appointment.findAllAppointments($stateParams.patientId, patient.id, practice.odsCode).then(
+                                            function (findAllAppointmentsSuccess) {
+                                                var appointments = findAllAppointmentsSuccess.data.entry;
+                                                if (appointments != undefined) {
+                                                    $.each(appointments, function (key, appointment) {
+                                                        appointment.appointmentPractice = practice.name;
+                                                        appointment.appointmentPracticeOdsCode = practice.odsCode;
+                                                    });
+                                                    $scope.appointments = $scope.appointments.concat(appointments); // Add appointments to total list
+                                                    practice.statusMsg = "Appointments found";
+                                                    practice.status = "Success";
+                                                    onFindAppointmentDone();
+                                                } else {
+                                                    practice.statusMsg = "No appointments found";
+                                                    practice.status = "Success";
+                                                    onFindAppointmentDone();
+                                                }
+                                            },
+                                            function (findAllAppointmentsFailure) {
+                                                practice.statusMsg = "Failed appointment search";
+                                                practice.status = "Failed";
+                                                onFindAppointmentDone();
+                                            }
+                                    );
+                                }
+                            },
+                            function (getPatientFhirIdFailure) {
+                                practice.statusMsg = "Failed to connect";
+                                practice.status = "Failed";
+                                onFindAppointmentDone();
+                            }
+                    );
+                });
             }
-            
+
             function onFindAppointmentDone() {
                 $scope.searchCount--;
-                if($scope.searchCount <= 0){
+                if ($scope.searchCount <= 0) {
                     if ($scope.appointments != undefined) {
                         $scope.appointments = $scope.appointments.sort(function (a, b) {
                             return a.resource.start.localeCompare(b.resource.start);
@@ -85,9 +91,9 @@ angular.module('gpConnect')
                         });
                     }
                     usSpinnerService.stop('patientSummary-spinner');
-                }           	
+                }
             }
-            
+
             $scope.go = function (id) {
                 usSpinnerService.spin('patientSummary-spinner');
                 $scope.appointmentDetail = undefined;
@@ -106,12 +112,28 @@ angular.module('gpConnect')
                 $.each($scope.appointmentDetail.resource.participant, function (key, value) {
                     var reference = value.actor.reference.toString();
                     if (reference.indexOf("Location") != -1) {
-                        Appointment.findResourceByReference($stateParams.patientId, reference).then(function (response) {
-                            $scope.appointmentLocation = response.data.name;
+                        $scope.appointmentLocation = "[Searching...]";
+                        Appointment.findResourceByReference($scope.appointmentDetail.appointmentPracticeOdsCode, $stateParams.patientId, reference).then(function (response) {
+                            if(response.data == undefined || response.data == null){
+                                $scope.appointmentLocation = "[Lookup failed]";
+                            } else {
+                                $scope.appointmentLocation = response.data.name;
+                            }
+                        },
+                        function (failedResponse) {
+                            $scope.appointmentLocation = "[Lookup failed]";
                         });
                     } else if (reference.indexOf("Practitioner") != -1) {
-                        Appointment.findResourceByReference($stateParams.patientId, reference).then(function (response) {
-                            $scope.practitionerName = response.data.name.prefix[0] + " " + response.data.name.given[0] + " " + response.data.name.family[0];
+                        $scope.practitionerName = "[Searching...]";
+                        Appointment.findResourceByReference($scope.appointmentDetail.appointmentPracticeOdsCode, $stateParams.patientId, reference).then(function (response) {
+                            if(response.data == undefined || response.data == null){
+                                $scope.practitionerName = "[Lookup failed]";
+                            } else {
+                                $scope.practitionerName = response.data.name.prefix[0] + " " + response.data.name.given[0] + " " + response.data.name.family[0];
+                            }
+                        },
+                        function (failedResponse) {
+                            $scope.practitionerName = "[Lookup failed]";
                         });
                     }
 
@@ -157,7 +179,7 @@ angular.module('gpConnect')
                     }
                 });
             };
-            
+
             $scope.create = function () {
                 $modal.open({
                     templateUrl: 'views/appointments/appointments-search-modal.html',

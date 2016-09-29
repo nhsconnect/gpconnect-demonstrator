@@ -69,7 +69,7 @@ angular.module('gpConnect')
                                 }
                             }
                     ).then(function (response) {
-                        if (response.data.entry != undefined) {
+                        if (response.data != undefined && response.data.entry != undefined) {
                             return response.data.entry[0].resource;
                         } else {
                             return undefined;

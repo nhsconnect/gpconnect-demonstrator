@@ -463,8 +463,19 @@ var errorModal = function (httpStatus, httpStatusText, $injector) {
     var errorMsg = errorMapping(httpStatus, httpStatusText);
     if (errorMsg != undefined) {
         var modal = $injector.get('$modal');
-        var loginModal = modal.open({
-            template: '<div><h3>Test Error</h3><div>'+httpStatus+' - '+errorMsg+'</div></div>'
+        modal.open({
+            templateUrl: 'views/application/generic-error-modal.html',
+            size: 'mg',
+            controller: 'GenericErrorModalCtrl',
+            resolve: {
+                errorInfo: function () {
+                    return {
+                        "status": httpStatus,
+                        "statusText": httpStatusText,
+                        "errorMsg" : errorMsg
+                    };
+                }
+            }
         });
     }
 };

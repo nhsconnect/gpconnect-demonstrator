@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h4 class="modal-title">Information</h4>
+</div>
+
+<div class="modal-body">
+
+    <div class="infoSection">
+        
+        <div class="infoHeader">Error Response</div>
+        <div>An authorisation error has been returned by the GP practice and the access to the patient data is not possible.</div>
+        
+        <div class="infoHeader">Error Type</div>
+        <div>{{ errorInfo.errorMsg }}</div>
+        
+    </div>
+    
+</div>
+
+<div class="modal-footer">
+    <a class="btn btn-success" ng-click="close()">Close</a>
+</div>

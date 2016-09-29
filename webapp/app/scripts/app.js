@@ -446,16 +446,25 @@ angular
             // Useful interceptor information https://docs.angularjs.org/api/ng/service/$http
             var service = this;
             service.response = function (response) {
+                errorModal(response.status, response.statusText, $injector);
                 return response;
             };
-            service.responseError = function (response) {
-//                var modal = $injector.get('$modal');
-//                var loginModal = modal.open({
-//                    template: '<div><h3>Test Modal</h3><div>We can do anything!</div></div>'
-//                });
-                return response;
+            service.responseError = function (errorResponse) {
+                errorModal(errorResponse.status, errorResponse.statusText, $injector);
+                return errorResponse;
             };
         })
         .config(['$httpProvider', function ($httpProvider) {
                 $httpProvider.interceptors.push('genericHttpInterceptor');
             }]);
+
+
+var errorModal = function (httpStatus, httpStatusText, $injector) {
+    var errorMsg = errorMapping(httpStatus, httpStatusText);
+    if (errorMsg != undefined) {
+        var modal = $injector.get('$modal');
+        var loginModal = modal.open({
+            template: '<div><h3>Test Error</h3><div>'+httpStatus+' - '+errorMsg+'</div></div>'
+        });
+    }
+};

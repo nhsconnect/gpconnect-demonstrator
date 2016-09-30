@@ -446,11 +446,11 @@ angular
             // Useful interceptor information https://docs.angularjs.org/api/ng/service/$http
             var service = this;
             service.response = function (response) {
-                errorModal(response.status, response.statusText, $injector);
+                errorModal(response, $injector);
                 return response;
             };
             service.responseError = function (errorResponse) {
-                errorModal(errorResponse.status, errorResponse.statusText, $injector);
+                errorModal(errorResponse, $injector);
                 return errorResponse;
             };
         })
@@ -459,8 +459,8 @@ angular
             }]);
 
 
-var errorModal = function (httpStatus, httpStatusText, $injector) {
-    var errorMsg = errorMapping(httpStatus, httpStatusText);
+var errorModal = function (httpResponse, $injector) {
+    var errorMsg = errorMapping(httpResponse.status);
     if (errorMsg != undefined) {
         var modal = $injector.get('$modal');
         modal.open({
@@ -470,8 +470,7 @@ var errorModal = function (httpStatus, httpStatusText, $injector) {
             resolve: {
                 errorInfo: function () {
                     return {
-                        "status": httpStatus,
-                        "statusText": httpStatusText,
+                        "response": httpResponse,
                         "errorMsg" : errorMsg
                     };
                 }

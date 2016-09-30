@@ -62,10 +62,9 @@ public class FhirRestfulServlet extends RestfulServer {
         resourceProviders.add(orderResourceProvider(applicationContext));
 		
 		setResourceProviders(resourceProviders);
-        registerInterceptor(new FhirRequestAuthInterceptor());
-        registerInterceptor(new FhirRequestGenericIntercepter());
         
-       // factory.initializeBean( bean, "bean" );
+        registerInterceptor(new FhirRequestAuthInterceptor());
+        registerInterceptor(applicationContext.getBean(FhirRequestGenericIntercepter.class));
     }
 
     @Bean(name = "organizationResourceProvider")

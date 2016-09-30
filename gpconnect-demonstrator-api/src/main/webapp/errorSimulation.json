@@ -1,0 +1,16 @@
+{
+    "errors": [
+        {
+            "errorCode" : "403",
+			"errorReason" : "NO_PATIENT_CONSENT"
+        },
+		{
+            "errorCode" : "403",
+			"errorReason" : "NO_ORGANISATIONAL_CONSENT"
+        },
+		{
+            "errorCode" : "403",
+			"errorReason" : "NON_AUTHORITATIVE"
+        }
+    ]
+}

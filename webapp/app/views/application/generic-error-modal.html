@@ -5,15 +5,37 @@
 <div class="modal-body">
 
     <div class="infoSection">
-        
+
         <div class="infoHeader">Error Response</div>
         <div>An authorisation error has been returned by the GP practice and the access to the patient data is not possible.</div>
-        
+
         <div class="infoHeader">Error Type</div>
-        <div>{{ errorInfo.errorMsg }}</div>
-        
+        <div>{{ errorInfo.errorMsg}}</div>
+
+        <div class="infoHeader">Error Info</div>
+        <div>Status: {{ errorInfo.response.status}}</div>
+        <div>StatusText: {{ errorInfo.response.statusText}}</div>
+
+        <table class="providerHTMLTables">
+            <tr>
+                <td>Request URL</td><td>{{ errorInfo.response.config.url}}</td>
+            </tr>
+            <tr>
+                <td>Ssp-To</td><td>{{ errorInfo.response.config.headers["Ssp-To"]}}</td>
+            </tr>
+            <tr>
+                <td>Ssp-From</td><td>{{ errorInfo.response.config.headers["Ssp-From"]}}</td>
+            </tr>
+            <tr>
+                <td>Ssp-InteractionID</td><td>{{ errorInfo.response.config.headers["Ssp-InteractionID"]}}</td>
+            </tr>
+            <tr>
+                <td>Ssp-TraceID</td><td>{{ errorInfo.response.config.headers["Ssp-TraceID"]}}</td>
+            </tr>
+        </table>
+
     </div>
-    
+
 </div>
 
 <div class="modal-footer">

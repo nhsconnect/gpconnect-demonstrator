@@ -3,14 +3,19 @@ package uk.gov.hscic.common.filters;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     @Value("${gp.connect.spineproxyconf.path}")
@@ -19,13 +24,18 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     @Value("${gp.connect.interactionwhitelist.path}")
     private String interactionWhiteListPath;
     
+    @Value("${gp.connect.ErrorSimulation.path}")
+    private String errorSimulationPath;
+    
     Logger log = Logger.getLogger(FhirRequestGenericIntercepter.class);
 
     private String systemSspToHeader = null;
     private HashSet interactionIdWhiteList = null;
+    private List<String> errorSimulationCodes = null;
+    private int simulationErrorIndex = 0;
 
-    public FhirRequestGenericIntercepter() {
-        super();
+    @PostConstruct
+    public void postConstruct() {
 
         // Load config file
         try {
@@ -51,6 +61,23 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         } catch (Exception e) {
             log.error("Error loading interactionID White List from file: " + e.getMessage());
         }
+        
+        // Load Error File if exists
+        try {
+            String errorSimulationJson = new String(Files.readAllBytes(Paths.get(errorSimulationPath)));
+            JSONObject errorSimulationJSonObj = new JSONObject(errorSimulationJson);
+            JSONArray errorsJSONArray = (JSONArray) errorSimulationJSonObj.get("errors");
+            if (errorsJSONArray.length() > 0) {
+                errorSimulationCodes = new ArrayList<>();
+                for (int index = 0; index < errorsJSONArray.length(); index++) {
+                    errorSimulationCodes.add(errorsJSONArray.getJSONObject(index).getString("errorCode"));
+                }
+            }
+
+        } catch (Exception e) {
+            log.error("Error loading error simulation file: " + e.getMessage());
+        }
+        
     }
 
     @Override
@@ -88,6 +115,21 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                 log.error("Error adding response message for Failed validation: ("+failedMsg+") " + e.getMessage());
             }
             return false;
+        }
+        
+        
+        // Mock Spine Error test component
+        if(errorSimulationCodes != null){
+            if(simulationErrorIndex >= 0 && simulationErrorIndex < errorSimulationCodes.size()){
+                try{
+                    httpResponse.sendError(Integer.parseInt(errorSimulationCodes.get(simulationErrorIndex)));
+                    simulationErrorIndex++;
+                    if(simulationErrorIndex == errorSimulationCodes.size()) simulationErrorIndex = 0;
+                    return false;
+                } catch (Exception e){
+                    log.error(e);
+                }
+            }
         }
 
         return true;

@@ -1,15 +1,15 @@
-var errorMapping = function (httpStatus, httpStatusText) {
+var errorMapping = function (httpStatus) {
     switch (httpStatus) {
         case 403:
-            if(httpStatusText == "NO_PATIENT_CONSENT"){
-                return "No Patient Consent To Share, patient has not given consent.";
-            } else if(httpStatusText == "NO_ORGANISATIONAL_CONSENT"){
-                return "No Organisational Consent To Share, data sharing consent has not been given.";
-            } else if(httpStatusText == "NON_AUTHORITATIVE"){
-                return "Non Authoritative, data can not be shared.";
-            } else {
-                return "Data Authorization Error, data can not be shared.";
-            }
+            return "Data Authorization Error.";
+        case 429:
+            return "Too many requests are being made to the recieving system and no response is available.";
+        case 495:
+            return "SSL Certificate Error, the certificate used for the request is invalid.";
+        case 496:
+            return "SSL Certificate is required and was not supplied with the request.";
+        case 503:
+            return "Service Unavailable, cannot retrieve data.";
         default:
             return undefined;
     }

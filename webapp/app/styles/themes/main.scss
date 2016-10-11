@@ -2274,22 +2274,19 @@ div#age-chart div.morris-hover.morris-default-style {
     margin-bottom: 15px;
 }
 
-.modalBannerSection {
-    padding: 2px;
-}
-
 .modalBannerUpper {
-    border: 2px solid #19568c;
-    margin-top: 5px;
+    border: 1px solid black;
     font-weight: bold;
+    margin-top: 5px;
+    padding: 3px 5px;
 }
 
 .modalBannerLower {
-    background-color: #19568c;
-    color: white;
+    border: 1px solid black;
+    border-top: 0px;
     font-size: 0.8em;
-    margin-bottom: 3px;
-    padding-top: 2px;
+    padding-top: 1px;
+    padding: 3px 5px;
 }
 
 .headerBannerTitle {

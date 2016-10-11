@@ -3,6 +3,10 @@
 angular.module('gpConnect')
         .controller('AppointmentsAmendModalCtrl', function ($state, $stateParams, $scope, $modalInstance, $modal, usSpinnerService, appointment, Appointment) {
 
+            $.each(appointment.patient.identifier, function (key, identifier) {
+                if (identifier.system == "http://fhir.nhs.net/Id/nhs-number") { $scope.patientNhsNumber = identifier.value; }
+            });
+            
             $scope.appointmentAmend = appointment;
             $scope.validationError = "";
             $scope.cancelReasonIndex = -1;

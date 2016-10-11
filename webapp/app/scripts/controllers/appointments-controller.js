@@ -173,6 +173,7 @@ angular.module('gpConnect')
                     resolve: {
                         appointment: function () {
                             return {
+                                patient: $scope.fhirPatient,
                                 appointmentResource: $scope.appointmentDetail,
                                 practitionerName: $scope.practitionerName,
                                 appointmentLocation: $scope.appointmentLocation

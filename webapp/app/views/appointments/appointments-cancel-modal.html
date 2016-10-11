@@ -5,15 +5,11 @@
 <div class="modal-body">
 
     <div class="col-md-12 modalBanner">
-        <div class="col-md-12 modalBannerUpper">
-            <div class="col-md-12 modalBannerSection">{{ appointmentCancel.patient.name[0].prefix[0]}} {{ appointmentCancel.patient.name[0].given[0]}} {{ appointmentCancel.patient.name[0].family[0]}}</div>
-        </div>
-        <div class="col-md-12 modalBannerLower">
-            <div class="col-md-4 modalBannerSection">DOB: <b>{{ appointmentCancel.patient.birthDate | date:'dd-MMM-yyyy' }}</b></div>
-            <div class="col-md-4 modalBannerSection">Gender: <b>{{ appointmentCancel.patient.gender | uppercase }}</b></div>
-            <div class="col-md-4 modalBannerSection">NHS No. <b><span ng-bind="patientNhsNumber | formatNHSNumber"></span></b></div>
-            <div class="col-md-12 modalBannerSection">Address: <b>{{ appointmentCancel.patient.address[0].text }}</b></div>
-        </div>
+        <div class="col-md-12 modalBannerUpper">{{ appointmentCancel.patient.name[0].prefix[0]}} {{ appointmentCancel.patient.name[0].given[0]}} {{ appointmentCancel.patient.name[0].family[0]}}</div>
+        <div class="col-md-4 modalBannerLower">DOB: <b>{{ appointmentCancel.patient.birthDate | date:'dd-MMM-yyyy' }}</b></div>
+        <div class="col-md-3 modalBannerLower">Gender: <b>{{ appointmentCancel.patient.gender | uppercase }}</b></div>
+        <div class="col-md-5 modalBannerLower">NHS No. <b><span ng-bind="patientNhsNumber | formatNHSNumber"></span></b></div>
+        <div class="col-md-12 modalBannerLower">Address: <b>{{ appointmentCancel.patient.address[0].text}}</b></div>
     </div>
 
     <div class="col-md-12">

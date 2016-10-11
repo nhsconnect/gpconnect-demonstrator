@@ -4,11 +4,12 @@
 
 <div class="modal-body">
 
-
     <div class="col-md-12 modalBanner">
-        <div class="col-md-4 modalBannerSection">{{ patient.name[0].prefix[0]}} {{ patient.name[0].given[0]}} {{ patient.name[0].family[0]}}</div>
-        <div class="col-md-4 modalBannerSection">DOB: {{ patient.birthDate | date:'dd-MMM-yyyy' }}</div>
-        <div class="col-md-4 modalBannerSection">NHS No. <span ng-bind="patientNhsNumber | formatNHSNumber"></span></div>
+        <div class="col-md-12 modalBannerUpper">{{ patient.name[0].prefix[0]}} {{ patient.name[0].given[0]}} {{ patient.name[0].family[0]}}</div>
+        <div class="col-md-4 modalBannerLower">DOB: <b>{{ patient.birthDate | date:'dd-MMM-yyyy' }}</b></div>
+        <div class="col-md-3 modalBannerLower">Gender: <b>{{ patient.gender | uppercase }}</b></div>
+        <div class="col-md-5 modalBannerLower">NHS No. <b><span ng-bind="patientNhsNumber | formatNHSNumber"></span></b></div>
+        <div class="col-md-12 modalBannerLower">Address: <b>{{ patient.address[0].text}}</b></div>
     </div>
 
     <form name="orderCreateForm" class="form-horizontal text-left">

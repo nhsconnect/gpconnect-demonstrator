@@ -46,14 +46,14 @@
             <div ng-hide="appointmentAmend.appointmentResource.resource.modifierExtension[cancelReasonIndex].valueString" class="form-group form-group-sm">
                 <label class="control-label col-md-12">Comment</label>
                 <div class="col-md-12">
-                    <textarea ngRequired="true" class="col-md-12" name="amendComment" id="comment" ng-model="commentDisplayText"></textarea>
+                    <textarea ngRequired="true" class="col-md-12" name="amendComment" id="comment" ng-model="commentDisplayText" rows="4"></textarea>
                 </div>
             </div>
 
             <div ng-show="appointmentAmend.appointmentResource.resource.modifierExtension[cancelReasonIndex].valueString" class="form-group form-group-sm">
                 <label class="control-label col-md-12">Cancellation Reason</label>
                 <div class="col-md-12">
-                    <textarea ngRequired="true" class="col-md-12" name="cancelReason" id="cancelReason" ng-model="appointmentAmend.appointmentResource.resource.modifierExtension[cancelReasonIndex].valueString"></textarea>
+                    <textarea ngRequired="true" class="col-md-12" name="cancelReason" id="cancelReason" ng-model="appointmentAmend.appointmentResource.resource.modifierExtension[cancelReasonIndex].valueString" rows="4"></textarea>
                 </div>
             </div>
 

@@ -3,6 +3,10 @@
 angular.module('gpConnect')
         .controller('AppointmentsCreateModalCtrl', function ($state, $scope, $stateParams, $modalInstance, modal, appointmentBookingParams, Appointment, usSpinnerService) {
 
+            $.each(appointmentBookingParams.patient.identifier, function (key, identifier) {
+                if (identifier.system == "http://fhir.nhs.net/Id/nhs-number") { $scope.patientNhsNumber = identifier.value; }
+            });
+            $scope.patient = appointmentBookingParams.patient;
             $scope.modal = modal;
             $scope.practitionerName = appointmentBookingParams.practitionerFullName;
             $scope.practiceName = appointmentBookingParams.location.practiceName;

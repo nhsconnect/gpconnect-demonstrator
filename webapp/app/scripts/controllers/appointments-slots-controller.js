@@ -328,6 +328,7 @@ angular.module('gpConnect')
                 }
 
                 $scope.appointmentBookingParameters = {};
+                $scope.appointmentBookingParameters.patient = $scope.patientDetails;
                 $scope.appointmentBookingParameters.location = $scope.selectedLocation;
                 $scope.appointmentBookingParameters.slotIds = slotIds;
                 $scope.appointmentBookingParameters.startTime = earliestFromDate;

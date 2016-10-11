@@ -37,6 +37,7 @@ angular.module('gpConnect')
                                     practice.status = "Failed";
                                     onFindAppointmentDone();
                                 } else {
+                                    $scope.fhirPatient = patient;
                                     Appointment.findAllAppointments($stateParams.patientId, patient.id, practice.odsCode).then(
                                             function (findAllAppointmentsSuccess) {
                                                 var appointments = findAllAppointmentsSuccess.data.entry;
@@ -154,6 +155,7 @@ angular.module('gpConnect')
                     resolve: {
                         appointment: function () {
                             return {
+                                patient: $scope.fhirPatient,
                                 appointmentResource: $scope.appointmentDetail,
                                 practitionerName: $scope.practitionerName,
                                 appointmentLocation: $scope.appointmentLocation

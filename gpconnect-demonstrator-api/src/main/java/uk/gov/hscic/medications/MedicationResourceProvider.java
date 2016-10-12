@@ -10,21 +10,21 @@ import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.medication.model.MedicationDetails;
 import uk.gov.hscic.medication.search.MedicationSearch;
 import uk.gov.hscic.medication.search.MedicationSearchFactory;
 
+@Component
 public class MedicationResourceProvider implements IResourceProvider {
 
-    ApplicationContext applicationContext;
-
-    public MedicationResourceProvider(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
+    @Autowired
+    MedicationSearchFactory medicationSearchFactory;
+    
     @Override
     public Class<Medication> getResourceType() {
         return Medication.class;
@@ -34,7 +34,7 @@ public class MedicationResourceProvider implements IResourceProvider {
     public Medication getMedicationById(@IdParam IdDt medicationId) {
 
         RepoSource sourceType = RepoSourceType.fromString(null);
-        MedicationSearch medicationSearch = applicationContext.getBean(MedicationSearchFactory.class).select(sourceType);
+        MedicationSearch medicationSearch = medicationSearchFactory.select(sourceType);
         MedicationDetails medicationDetails = medicationSearch.findMedicationByID(medicationId.getIdPartAsLong());
 
         if (medicationDetails == null) {

@@ -11,29 +11,26 @@ import ca.uhn.fhir.model.dstu2.valueset.SlotStatusEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.RequiredParam;
-import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointment.slot.model.SlotDetail;
 import uk.gov.hscic.appointment.slot.search.SlotSearch;
 import uk.gov.hscic.appointment.slot.search.SlotSearchFactory;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 
+@Component
 public class SlotResourceProvider  implements IResourceProvider {
 
-    ApplicationContext applicationContext;
-
-    public SlotResourceProvider(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
+    @Autowired
+    SlotSearchFactory slotSearchFactory;
+    
     @Override
     public Class<Slot> getResourceType() {
         return Slot.class;
@@ -43,7 +40,7 @@ public class SlotResourceProvider  implements IResourceProvider {
     public Slot getSlotById(@IdParam IdDt slotId) {
 
         RepoSource sourceType = RepoSourceType.fromString(null);
-        SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
+        SlotSearch slotSearch = slotSearchFactory.select(sourceType);
         SlotDetail slotDetail = slotSearch.findSlotByID(slotId.getIdPartAsLong());
 
         if (slotDetail == null) {
@@ -57,7 +54,7 @@ public class SlotResourceProvider  implements IResourceProvider {
     
     public List<Slot> getSlotsForScheduleId(String scheduleId, String startDateTime, String endDateTime) {
         RepoSource sourceType = RepoSourceType.fromString(null);
-        SlotSearch slotSearch = applicationContext.getBean(SlotSearchFactory.class).select(sourceType);
+        SlotSearch slotSearch = slotSearchFactory.select(sourceType);
         ArrayList<Slot> slots = new ArrayList();
 
         List<SlotDetail> slotDetails = null;

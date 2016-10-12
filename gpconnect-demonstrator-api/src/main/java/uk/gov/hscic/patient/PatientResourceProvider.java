@@ -5,11 +5,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.IDatatype;
@@ -32,7 +30,6 @@ import ca.uhn.fhir.model.dstu2.resource.MedicationAdministration;
 import ca.uhn.fhir.model.dstu2.resource.MedicationDispense;
 import ca.uhn.fhir.model.dstu2.resource.MedicationOrder;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
-import ca.uhn.fhir.model.dstu2.resource.Organization;
 import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
@@ -63,6 +60,7 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
@@ -75,7 +73,6 @@ import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.medications.MedicationResourceProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
-import uk.gov.hscic.organization.model.OrganizationDetails;
 import uk.gov.hscic.organization.search.OrganizationSearch;
 import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
 import uk.gov.hscic.patient.adminitems.search.AdminItemSearch;
@@ -102,19 +99,16 @@ import uk.gov.hscic.patient.patientsummary.model.PatientSummaryListHTML;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearchFactory;
 import uk.gov.hscic.patient.problems.model.ProblemListHTML;
-import uk.gov.hscic.patient.problems.search.ProblemSearch;
-import uk.gov.hscic.patient.problems.search.ProblemSearchFactory;
-import uk.gov.hscic.patient.referral.model.ReferralListHTML;
-import uk.gov.hscic.patient.referral.search.ReferralSearch;
-import uk.gov.hscic.patient.referral.search.ReferralSearchFactory;
-import uk.gov.hscic.patient.summary.model.PatientDetails;
-import uk.gov.hscic.patient.summary.search.PatientSearch;
-import uk.gov.hscic.patient.summary.search.PatientSearchFactory;
-import uk.gov.hscic.patient.summary.store.PatientStore;
+import uk.gov.hscic.patient.problems.search.*;
+import uk.gov.hscic.patient.referral.model.*;
+import uk.gov.hscic.patient.referral.search.*;
+import uk.gov.hscic.patient.summary.model.*;
+import uk.gov.hscic.patient.summary.search.*;
+import uk.gov.hscic.patient.summary.store.*;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
-import uk.gov.hscic.practitioner.model.PractitionerDetails;
 import uk.gov.hscic.practitioner.search.PractitionerSearch;
 
+@Component
 public class PatientResourceProvider implements IResourceProvider {
 
     private static final String REGISTRATION_TYPE_EXTENSION_URL = "http://fhir.nhs.net/StructureDefinition/extension-registration-type-1";
@@ -127,38 +121,30 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	private static final String ACTIVE_REGISTRATION_STATUS = "A";
 
-	@Autowired
-    PatientStore patientStore;
+	@Autowired PatientStore patientStore;
+    @Autowired PatientSearch patientSearch;
+    @Autowired OrganizationSearch organizationSearch;
+    @Autowired PractitionerSearch practitionerSearch;
+	@Autowired PractitionerResourceProvider practitionerResourceProvider;
+    @Autowired OrganizationResourceProvider organizationResourceProvider;
+    @Autowired MedicationResourceProvider medicationResourceProvider;
+    @Autowired MedicationOrderResourceProvider medicationOrderResourceProvider;
+    @Autowired MedicationDispenseResourceProvider medicationDispenseResourceProvider;
+    @Autowired MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
+    @Autowired AppointmentResourceProvider appointmentResourceProvider;
+    @Autowired PatientSearchFactory patientSearchFactory;
+    @Autowired PatientSummarySearchFactory patientSummarySearchFactory;
+    @Autowired ProblemSearchFactory problemSearchFactory;
+    @Autowired EncounterSearchFactory encounterSearchFactory;
+    @Autowired AllergySearchFactory allergySearchFactory;
+    @Autowired ClinicalItemSearchFactory clinicalItemSearchFactory;
+    @Autowired MedicationSearchFactory medicationSearchFactory;
+    @Autowired ReferralSearchFactory referralSearchFactory;
+    @Autowired ObservationSearchFactory observationSearchFactory;
+    @Autowired InvestigationSearchFactory investigationSearchFactory;
+    @Autowired ImmunisationSearchFactory immunisationSearchFactory;
+    @Autowired AdminItemSearchFactory adminItemSearchFactory;
     
-    @Autowired
-    PatientSearch patientSearch;
-    
-    @Autowired
-    OrganizationSearch organizationSearch;
-    
-    @Autowired
-    PractitionerSearch practitionerSearch;
-	
-	private final ApplicationContext applicationContext;
-    private final PractitionerResourceProvider practitionerResourceProvider;
-    private final OrganizationResourceProvider organizationResourceProvider;
-    private final MedicationResourceProvider medicationResourceProvider;
-    private final MedicationOrderResourceProvider medicationOrderResourceProvider;
-    private final MedicationDispenseResourceProvider medicationDispenseResourceProvider;
-    private final MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
-    private final AppointmentResourceProvider appointmentResourceProvider;
-
-    public PatientResourceProvider(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-        this.practitionerResourceProvider = (PractitionerResourceProvider) applicationContext.getBean("practitionerResourceProvider", applicationContext);
-        this.organizationResourceProvider = (OrganizationResourceProvider) applicationContext.getBean("organizationResourceProvider", applicationContext);
-        this.medicationResourceProvider = (MedicationResourceProvider) applicationContext.getBean("medicationResourceProvider", applicationContext);
-        this.medicationOrderResourceProvider = (MedicationOrderResourceProvider) applicationContext.getBean("medicationOrderResourceProvider", applicationContext);
-        this.medicationDispenseResourceProvider = (MedicationDispenseResourceProvider) applicationContext.getBean("medicationDispenseResourceProvider", applicationContext);
-        this.medicationAdministrationResourceProvider = (MedicationAdministrationResourceProvider) applicationContext.getBean("medicationAdministrationResourceProvider", applicationContext);
-        this.appointmentResourceProvider = (AppointmentResourceProvider) applicationContext.getBean("appointmentResourceProvider", applicationContext);
-    }
-
     @Override
     public Class<Patient> getResourceType() {
         return Patient.class;
@@ -169,7 +155,7 @@ public class PatientResourceProvider implements IResourceProvider {
         Patient patient = new Patient();
         // Get patient details from dataabase
         RepoSource sourceType = RepoSourceType.fromString(null);
-        PatientSearch patientSearch = applicationContext.getBean(PatientSearchFactory.class).select(sourceType);
+        PatientSearch patientSearch = patientSearchFactory.select(sourceType);
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
         if (patientDetails == null) {
             OperationOutcome operationOutcome = new OperationOutcome();
@@ -182,7 +168,7 @@ public class PatientResourceProvider implements IResourceProvider {
     @Search
     public List<Patient> getPatientByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam patientId) {
         RepoSource sourceType = RepoSourceType.fromString(null);
-        PatientSearch patientSearch = applicationContext.getBean(PatientSearchFactory.class).select(sourceType);
+        PatientSearch patientSearch = patientSearchFactory.select(sourceType);
         ArrayList<Patient> patients = new ArrayList();
         PatientDetails patientDetailsReturned = patientSearch.findPatient(patientId.getValue());
         if (patientDetailsReturned != null) {
@@ -306,7 +292,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                         switch (sectionName) {
                             case "SUM":
-                                PatientSummarySearch patientSummarySearch = applicationContext.getBean(PatientSummarySearchFactory.class).select(sourceType);
+                                PatientSummarySearch patientSummarySearch = patientSummarySearchFactory.select(sourceType);
                                 List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch.findAllPatientSummaryHTMLTables(nhsNumber);
                                 if (patientSummaryList != null && patientSummaryList.size() > 0) {
                                     CodingDt summaryCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("SUM").setDisplay("Summary");
@@ -322,7 +308,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "PRB":
-                                ProblemSearch problemSearch = applicationContext.getBean(ProblemSearchFactory.class).select(sourceType);
+                                ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
                                 List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber);
                                 if (problemList != null && problemList.size() > 0) {
                                     CodingDt problemCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("PRB").setDisplay("Problems");
@@ -338,7 +324,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "ENC":
-                                EncounterSearch encounterSearch = applicationContext.getBean(EncounterSearchFactory.class).select(sourceType);
+                                EncounterSearch encounterSearch = encounterSearchFactory.select(sourceType);
                                 List<EncounterListHTML> encounterList = encounterSearch.findAllEncounterHTMLTables(nhsNumber, fromDate, toDate);
                                 if (encounterList != null && encounterList.size() > 0) {
                                     CodingDt encounterCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("ENC").setDisplay("Encounters");
@@ -354,7 +340,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "ALL":
-                                AllergySearch allergySearch = applicationContext.getBean(AllergySearchFactory.class).select(sourceType);
+                                AllergySearch allergySearch = allergySearchFactory.select(sourceType);
                                 List<AllergyListHTML> allergyList = allergySearch.findAllAllergyHTMLTables(nhsNumber);
                                 if (allergyList != null && allergyList.size() > 0) {
                                     CodingDt allergyCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("ALL").setDisplay("Allergies and Sensitivities");
@@ -370,7 +356,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "CLI":
-                                ClinicalItemSearch clinicalItemsSearch = applicationContext.getBean(ClinicalItemSearchFactory.class).select(sourceType);
+                                ClinicalItemSearch clinicalItemsSearch = clinicalItemSearchFactory.select(sourceType);
                                 List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch.findAllClinicalItemHTMLTables(nhsNumber);
                                 if (clinicalItemList != null && clinicalItemList.size() > 0) {
                                     CodingDt clinicalItemCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("CLI").setDisplay("Clinical Items");
@@ -388,7 +374,7 @@ public class PatientResourceProvider implements IResourceProvider {
                             case "MED":
                                 section = null;
                                 // HTML Section Search
-                                MedicationSearch medicationSearch = applicationContext.getBean(MedicationSearchFactory.class).select(sourceType);
+                                MedicationSearch medicationSearch = medicationSearchFactory.select(sourceType);
                                 List<PatientMedicationHTML> medicationList = medicationSearch.findPatientMedicationHTML(nhsNumber);
                                 if (medicationList != null && medicationList.size() > 0) {
                                     section = new Section();
@@ -486,7 +472,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "REF":
-                                ReferralSearch referralSearch = applicationContext.getBean(ReferralSearchFactory.class).select(sourceType);
+                                ReferralSearch referralSearch = referralSearchFactory.select(sourceType);
                                 List<ReferralListHTML> referralList = referralSearch.findAllReferralHTMLTables(nhsNumber);
                                 if (referralList != null && referralList.size() > 0) {
                                     CodingDt referralCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("REF").setDisplay("Referrals");
@@ -502,7 +488,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "OBS":
-                                ObservationSearch observationSearch = applicationContext.getBean(ObservationSearchFactory.class).select(sourceType);
+                                ObservationSearch observationSearch = observationSearchFactory.select(sourceType);
                                 List<ObservationListHTML> observationList = observationSearch.findAllObservationHTMLTables(nhsNumber);
                                 if (observationList != null && observationList.size() > 0) {
                                     CodingDt observationCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("OBS").setDisplay("Observations");
@@ -518,7 +504,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "INV":
-                                InvestigationSearch investigationSearch = applicationContext.getBean(InvestigationSearchFactory.class).select(sourceType);
+                                InvestigationSearch investigationSearch = investigationSearchFactory.select(sourceType);
                                 List<InvestigationListHTML> investigationList = investigationSearch.findAllInvestigationHTMLTables(nhsNumber);
                                 if (investigationList != null && investigationList.size() > 0) {
                                     CodingDt investigationCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("INV").setDisplay("Investigations");
@@ -534,7 +520,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "IMM":
-                                ImmunisationSearch immunisationSearch = applicationContext.getBean(ImmunisationSearchFactory.class).select(sourceType);
+                                ImmunisationSearch immunisationSearch = immunisationSearchFactory.select(sourceType);
                                 List<ImmunisationListHTML> immunisationList = immunisationSearch.findAllImmunisationHTMLTables(nhsNumber);
                                 if (immunisationList != null && immunisationList.size() > 0) {
                                     CodingDt immunisationCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("IMM").setDisplay("Immunisations");
@@ -550,7 +536,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "ADM":
-                                AdminItemSearch adminItemSearch = applicationContext.getBean(AdminItemSearchFactory.class).select(sourceType);
+                                AdminItemSearch adminItemSearch = adminItemSearchFactory.select(sourceType);
                                 List<AdminItemListHTML> adminItemList = adminItemSearch.findAllAdminItemHTMLTables(nhsNumber);
                                 if (adminItemList != null && adminItemList.size() > 0) {
                                     CodingDt adminItemCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("ADM").setDisplay("Administrative Items");

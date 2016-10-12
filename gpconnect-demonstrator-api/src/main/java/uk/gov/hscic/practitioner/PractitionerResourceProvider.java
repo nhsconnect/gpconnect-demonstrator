@@ -22,20 +22,19 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.practitioner.model.PractitionerDetails;
 import uk.gov.hscic.practitioner.search.PractitionerSearch;
 import uk.gov.hscic.practitioner.search.PractitionerSearchFactory;
 
+@Component
 public class PractitionerResourceProvider  implements IResourceProvider {
     
-    ApplicationContext applicationContext;
-    
-    public PractitionerResourceProvider(ApplicationContext applicationContext){
-        this.applicationContext = applicationContext;
-    }
+    @Autowired
+    PractitionerSearchFactory practitionerSearchFactory;
     
     @Override
     public Class<Practitioner> getResourceType() {
@@ -46,7 +45,7 @@ public class PractitionerResourceProvider  implements IResourceProvider {
     public Practitioner getPractitionerById(@IdParam IdDt practitionerId) {
         
         RepoSource sourceType = RepoSourceType.fromString(null);
-        PractitionerSearch practitionerSearch = applicationContext.getBean(PractitionerSearchFactory.class).select(sourceType);
+        PractitionerSearch practitionerSearch = practitionerSearchFactory.select(sourceType);
         PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerDetails(practitionerId.getIdPart());
 
         if(practitionerDetails == null){
@@ -61,7 +60,7 @@ public class PractitionerResourceProvider  implements IResourceProvider {
     @Search
     public List<Practitioner> getPractitionerByPractitionerUserId(@RequiredParam(name=Practitioner.SP_IDENTIFIER) TokenParam practitionerId) {
         RepoSource sourceType = RepoSourceType.fromString(null);
-        PractitionerSearch practitionerSearch = applicationContext.getBean(PractitionerSearchFactory.class).select(sourceType);
+        PractitionerSearch practitionerSearch = practitionerSearchFactory.select(sourceType);
         ArrayList<Practitioner> practitioners = new ArrayList();
         List<PractitionerDetails> practitionerDetailsList = Collections.singletonList(practitionerSearch.findPractitionerByUserId(practitionerId.getValue()));
         if (practitionerDetailsList != null && practitionerDetailsList.size() > 0) {

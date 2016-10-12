@@ -10,7 +10,6 @@ import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
@@ -18,21 +17,20 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.medication.order.model.MedicationOrderDetails;
 import uk.gov.hscic.medication.order.search.MedicationOrderSearch;
 import uk.gov.hscic.medication.order.search.MedicationOrderSearchFactory;
 
+@Component
 public class MedicationOrderResourceProvider implements IResourceProvider {
 
-    ApplicationContext applicationContext;
-
-    public MedicationOrderResourceProvider(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
+    @Autowired
+    MedicationOrderSearchFactory medicationOrderSearchFactory;
+    
     @Override
     public Class<MedicationOrder> getResourceType() {
         return MedicationOrder.class;
@@ -41,7 +39,7 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
     @Search
     public List<MedicationOrder> getMedicationOrdersForPatientId(@RequiredParam(name = "patient") String patientId) {
         RepoSource sourceType = RepoSourceType.fromString(null);
-        MedicationOrderSearch medicationOrderSearch = applicationContext.getBean(MedicationOrderSearchFactory.class).select(sourceType);
+        MedicationOrderSearch medicationOrderSearch = medicationOrderSearchFactory.select(sourceType);
         ArrayList<MedicationOrder> medicationOrders = new ArrayList();
 
         List<MedicationOrderDetails> medicationOrderDetailsList = medicationOrderSearch.findMedicationOrdersForPatient(Long.parseLong(patientId));
@@ -58,7 +56,7 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
     public MedicationOrder getMedicationOrderById(@IdParam IdDt medicationOrderId) {
 
         RepoSource sourceType = RepoSourceType.fromString(null);
-        MedicationOrderSearch medicationOrderSearch = applicationContext.getBean(MedicationOrderSearchFactory.class).select(sourceType);
+        MedicationOrderSearch medicationOrderSearch = medicationOrderSearchFactory.select(sourceType);
         MedicationOrderDetails medicationOrderDetails = medicationOrderSearch.findMedicationOrderByID(medicationOrderId.getIdPartAsLong());
 
         if (medicationOrderDetails == null) {

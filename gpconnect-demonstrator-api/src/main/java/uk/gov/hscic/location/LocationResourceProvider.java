@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.springframework.context.ApplicationContext;
-
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
@@ -19,20 +17,20 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.location.model.LocationDetails;
 import uk.gov.hscic.location.search.LocationSearch;
 import uk.gov.hscic.location.search.LocationSearchFactory;
 
+@Component
 public class LocationResourceProvider implements IResourceProvider {
 
-    ApplicationContext applicationContext;
+    @Autowired
+    LocationSearchFactory locationSearchFactory;
     
-	public LocationResourceProvider(ApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
-	}
-
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return Location.class;
@@ -42,7 +40,7 @@ public class LocationResourceProvider implements IResourceProvider {
 	public List<Location> getByIdentifierCode(@RequiredParam(name=Location.SP_IDENTIFIER) TokenParam identifierCode) {
         
 		RepoSource sourceType = RepoSourceType.fromString(null);
-        LocationSearch locationSearch = applicationContext.getBean(LocationSearchFactory.class).select(sourceType);
+        LocationSearch locationSearch = locationSearchFactory.select(sourceType);
         
         List<LocationDetails> locationDetails = null;
         
@@ -71,7 +69,7 @@ public class LocationResourceProvider implements IResourceProvider {
     public Location getLocationById(@IdParam IdDt locationId) {
         
         RepoSource sourceType = RepoSourceType.fromString(null);
-        LocationSearch locationSearch = applicationContext.getBean(LocationSearchFactory.class).select(sourceType);
+        LocationSearch locationSearch = locationSearchFactory.select(sourceType);
         LocationDetails locationDetails = locationSearch.findLocationById(locationId.getIdPart());
         
         if(locationDetails == null){

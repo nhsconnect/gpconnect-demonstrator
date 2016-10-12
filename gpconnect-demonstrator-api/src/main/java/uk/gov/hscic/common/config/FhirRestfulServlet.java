@@ -40,90 +40,23 @@ public class FhirRestfulServlet extends RestfulServer {
         List<IResourceProvider> resourceProviders = new ArrayList<>();
         
         ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        AutowireCapableBeanFactory factory = applicationContext.getAutowireCapableBeanFactory();
-  
-        OrganizationResourceProvider organizationResourceProvider = organizationResourceProvider(applicationContext);
-        factory.autowireBean(organizationResourceProvider);
         
-        PatientResourceProvider patientResourceProvider = patientResourceProvider(applicationContext);
-        factory.autowireBean(patientResourceProvider);
-        
-        resourceProviders.add(organizationResourceProvider);
-        resourceProviders.add(patientResourceProvider);
-        resourceProviders.add(practitionerResourceProvider(applicationContext));
-        resourceProviders.add(medicationResourceProvider(applicationContext));
-        resourceProviders.add(medicationOrderResourceProvider(applicationContext));
-        resourceProviders.add(medicationDispenseResourceProvider(applicationContext));
-        resourceProviders.add(medicationAdministrationResourceProvider(applicationContext));
-        resourceProviders.add(locationResourceProvider(applicationContext));
-        resourceProviders.add(appointmentResourceProvider(applicationContext));
-		resourceProviders.add(scheduleResourceProvider(applicationContext));
-		resourceProviders.add(slotResourceProvider(applicationContext));
-        resourceProviders.add(orderResourceProvider(applicationContext));
+        resourceProviders.add(applicationContext.getBean(PatientResourceProvider.class));
+        resourceProviders.add(applicationContext.getBean(OrganizationResourceProvider.class));
+        resourceProviders.add(applicationContext.getBean(PractitionerResourceProvider.class));
+        resourceProviders.add(applicationContext.getBean(MedicationResourceProvider.class));
+        resourceProviders.add(applicationContext.getBean(MedicationOrderResourceProvider.class));
+        resourceProviders.add(applicationContext.getBean(MedicationDispenseResourceProvider.class));
+        resourceProviders.add(applicationContext.getBean(MedicationAdministrationResourceProvider.class));
+        resourceProviders.add(applicationContext.getBean(LocationResourceProvider.class));
+        resourceProviders.add(applicationContext.getBean(AppointmentResourceProvider.class));
+		resourceProviders.add(applicationContext.getBean(ScheduleResourceProvider.class));
+		resourceProviders.add(applicationContext.getBean(SlotResourceProvider.class));
+        resourceProviders.add(applicationContext.getBean(OrderResourceProvider.class));
 		
 		setResourceProviders(resourceProviders);
         
-        registerInterceptor(new FhirRequestAuthInterceptor());
+        registerInterceptor(applicationContext.getBean(FhirRequestAuthInterceptor.class));
         registerInterceptor(applicationContext.getBean(FhirRequestGenericIntercepter.class));
-    }
-
-    @Bean(name = "organizationResourceProvider")
-    public OrganizationResourceProvider organizationResourceProvider(ApplicationContext applicationContext) {
-        return new OrganizationResourceProvider(applicationContext);
-    }
-
-    @Bean(name = "practitionerResourceProvider")
-    public PractitionerResourceProvider practitionerResourceProvider(ApplicationContext applicationContext) {
-        return new PractitionerResourceProvider(applicationContext);
-    }
-
-    @Bean(name = "patientResourceProvider")
-    public PatientResourceProvider patientResourceProvider(ApplicationContext applicationContext) {
-        return new PatientResourceProvider(applicationContext);
-    }
-    
-    @Bean(name = "medicationResourceProvider")
-    public MedicationResourceProvider medicationResourceProvider(ApplicationContext applicationContext) {
-        return new MedicationResourceProvider(applicationContext);
-    }
-    
-    @Bean(name = "medicationOrderResourceProvider")
-    public MedicationOrderResourceProvider medicationOrderResourceProvider(ApplicationContext applicationContext) {
-        return new MedicationOrderResourceProvider(applicationContext);
-    }
-    
-    @Bean(name = "medicationDispenseResourceProvider")
-    public MedicationDispenseResourceProvider medicationDispenseResourceProvider(ApplicationContext applicationContext) {
-        return new MedicationDispenseResourceProvider(applicationContext);
-    }
-    
-    @Bean(name = "medicationAdministrationResourceProvider")
-    public MedicationAdministrationResourceProvider medicationAdministrationResourceProvider(ApplicationContext applicationContext) {
-        return new MedicationAdministrationResourceProvider(applicationContext);
-    }
-    
-    @Bean(name = "scheduleResourceProvider")
-    public ScheduleResourceProvider scheduleResourceProvider(ApplicationContext applicationContext) {
-        return new ScheduleResourceProvider(applicationContext);
-    }
-    
-    @Bean(name = "locationResourceProvider")
-    public LocationResourceProvider locationResourceProvider(ApplicationContext applicationContext) {
-        return new LocationResourceProvider(applicationContext);
-    }    
-    
-    @Bean(name = "appointmentResourceProvider")
-    public AppointmentResourceProvider appointmentResourceProvider(ApplicationContext applicationContext) {
-        return new AppointmentResourceProvider(applicationContext);
-    }
-    
-    @Bean(name = "slotResourceProvider")
-    public SlotResourceProvider slotResourceProvider(ApplicationContext applicationContext) {
-        return new SlotResourceProvider(applicationContext);
-    }
-    
-    @Bean(name = "orderResourceProvider")
-    public OrderResourceProvider orderResourceProvider(ApplicationContext applicationContext) {
-        return new OrderResourceProvider(applicationContext);
     }
 }

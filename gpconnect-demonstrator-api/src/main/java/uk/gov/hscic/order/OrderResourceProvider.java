@@ -15,21 +15,20 @@ import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import java.util.Collections;
 import java.util.Date;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.order.model.OrderDetail;
 import uk.gov.hscic.order.store.OrderStore;
 import uk.gov.hscic.order.store.OrderStoreFactory;
 
+@Component
 public class OrderResourceProvider implements IResourceProvider {
 
-    ApplicationContext applicationContext;
-
-    public OrderResourceProvider(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
+    @Autowired
+    OrderStoreFactory orderStoreFactory;
+    
     @Override
     public Class<Order> getResourceType() {
         return Order.class;
@@ -39,7 +38,7 @@ public class OrderResourceProvider implements IResourceProvider {
     public MethodOutcome createOrder(@ResourceParam Order order) {
         OrderDetail orderDetail = orderResourceToOrderDetailConverter(order);
         RepoSource sourceType = RepoSourceType.fromString(null);
-        OrderStore orderStore = applicationContext.getBean(OrderStoreFactory.class).select(sourceType);
+        OrderStore orderStore = orderStoreFactory.select(sourceType);
         orderDetail = orderStore.saveOrder(orderDetail);
 
         // Build response containing the new resource id

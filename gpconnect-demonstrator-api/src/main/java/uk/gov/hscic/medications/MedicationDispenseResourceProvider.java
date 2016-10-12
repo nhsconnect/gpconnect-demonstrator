@@ -12,21 +12,20 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.medication.dispense.model.MedicationDispenseDetail;
 import uk.gov.hscic.medication.dispense.search.MedicationDispenseSearch;
 import uk.gov.hscic.medication.dispense.search.MedicationDispenseSearchFactory;
 
+@Component
 public class MedicationDispenseResourceProvider implements IResourceProvider {
 
-    ApplicationContext applicationContext;
-
-    public MedicationDispenseResourceProvider(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
+    @Autowired
+    MedicationDispenseSearchFactory medicationDispenseSearchFactory;
+    
     @Override
     public Class<MedicationDispense> getResourceType() {
         return MedicationDispense.class;
@@ -36,7 +35,7 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
     public List<MedicationDispense> getMedicationDispensesForPatientId(@RequiredParam(name = "patient") String patientId) {
         
         RepoSource sourceType = RepoSourceType.fromString(null);
-        MedicationDispenseSearch medicationDispenseSearch = applicationContext.getBean(MedicationDispenseSearchFactory.class).select(sourceType);
+        MedicationDispenseSearch medicationDispenseSearch = medicationDispenseSearchFactory.select(sourceType);
         ArrayList<MedicationDispense> medicationDispenses = new ArrayList();
 
         List<MedicationDispenseDetail> medicationDispenseDetailList = medicationDispenseSearch.findMedicationDispenseForPatient(Long.parseLong(patientId));

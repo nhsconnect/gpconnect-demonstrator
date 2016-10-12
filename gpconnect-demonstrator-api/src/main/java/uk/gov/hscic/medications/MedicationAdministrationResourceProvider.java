@@ -8,21 +8,20 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.medication.administration.model.MedicationAdministrationDetail;
 import uk.gov.hscic.medication.administration.search.MedicationAdministrationSearch;
 import uk.gov.hscic.medication.administration.search.MedicationAdministrationSearchFactory;
 
+@Component
 public class MedicationAdministrationResourceProvider  implements IResourceProvider {
 
-    ApplicationContext applicationContext;
-
-    public MedicationAdministrationResourceProvider(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
+    @Autowired
+    MedicationAdministrationSearchFactory medicationAdministrationSearchFactory;
+    
     @Override
     public Class<MedicationAdministration> getResourceType() {
         return MedicationAdministration.class;
@@ -32,7 +31,7 @@ public class MedicationAdministrationResourceProvider  implements IResourceProvi
     public List<MedicationAdministration> getMedicationAdministrationsForPatientId(@RequiredParam(name = "patient") String patientId) {
         
         RepoSource sourceType = RepoSourceType.fromString(null);
-        MedicationAdministrationSearch medicationAdministrationSearch = applicationContext.getBean(MedicationAdministrationSearchFactory.class).select(sourceType);
+        MedicationAdministrationSearch medicationAdministrationSearch = medicationAdministrationSearchFactory.select(sourceType);
         ArrayList<MedicationAdministration> medicationAdministrations = new ArrayList();
 
         List<MedicationAdministrationDetail> medicationAdministrationDetailList = medicationAdministrationSearch.findMedicationAdministrationForPatient(Long.parseLong(patientId));

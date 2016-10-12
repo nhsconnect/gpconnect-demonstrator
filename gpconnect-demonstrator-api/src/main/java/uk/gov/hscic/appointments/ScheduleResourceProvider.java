@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.context.ApplicationContext;
-
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -18,26 +16,24 @@ import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.RequiredParam;
-import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.Date;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointment.schedule.model.ScheduleDetail;
 import uk.gov.hscic.appointment.schedule.search.ScheduleSearch;
 import uk.gov.hscic.appointment.schedule.search.ScheduleSearchFactory;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 
+@Component
 public class ScheduleResourceProvider implements IResourceProvider {
 
-    private static final String EXTENSION_GPCONNECT_PRACTITIONER_1_0 = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1-0";
-
-	ApplicationContext applicationContext;
+    @Autowired
+    ScheduleSearchFactory scheduleSearchFactory;
     
-    public ScheduleResourceProvider(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
+    private static final String EXTENSION_GPCONNECT_PRACTITIONER_1_0 = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1-0";
 
     @Override
     public Class<Schedule> getResourceType() {
@@ -48,7 +44,7 @@ public class ScheduleResourceProvider implements IResourceProvider {
     public Schedule getScheduleById(@IdParam IdDt scheduleId) {
 
         RepoSource sourceType = RepoSourceType.fromString(null);
-        ScheduleSearch scheduleSearch = applicationContext.getBean(ScheduleSearchFactory.class).select(sourceType);
+        ScheduleSearch scheduleSearch = scheduleSearchFactory.select(sourceType);
         ScheduleDetail scheduleDetail = scheduleSearch.findScheduleByID(scheduleId.getIdPartAsLong());
 
         if (scheduleDetail == null) {
@@ -62,7 +58,7 @@ public class ScheduleResourceProvider implements IResourceProvider {
     
     public List<Schedule> getSchedulesForLocationId(String locationId, String startDateTime, String endDateTime) {
         RepoSource sourceType = RepoSourceType.fromString(null);
-        ScheduleSearch scheduleSearch = applicationContext.getBean(ScheduleSearchFactory.class).select(sourceType);
+        ScheduleSearch scheduleSearch = scheduleSearchFactory.select(sourceType);
         ArrayList<Schedule> schedules = new ArrayList();
 
         List<ScheduleDetail> scheduleDetails = null;

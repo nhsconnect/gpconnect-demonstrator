@@ -8,8 +8,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import java.util.Base64;
 import org.json.*;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.common.util.NhsCodeValidator;
 
+@Component
 public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
     static Logger authLog = Logger.getLogger("AuthLog");

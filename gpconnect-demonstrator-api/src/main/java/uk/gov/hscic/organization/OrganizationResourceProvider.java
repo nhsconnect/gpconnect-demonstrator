@@ -2,10 +2,7 @@ package uk.gov.hscic.organization;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
@@ -19,7 +16,6 @@ import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
@@ -28,22 +24,21 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.text.SimpleDateFormat;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.organization.model.OrganizationDetails;
 import uk.gov.hscic.organization.search.OrganizationSearch;
 import uk.gov.hscic.organization.search.OrganizationSearchFactory;
 
+@Component
 public class OrganizationResourceProvider implements IResourceProvider {
-
-    ApplicationContext applicationContext;
 
     @Autowired
     GetScheduleOperation getScheduleOperation;
-
-    public OrganizationResourceProvider(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
+    
+    @Autowired
+    OrganizationSearchFactory organizationSearchFactory;
 
     @Override
     public Class<Organization> getResourceType() {
@@ -54,7 +49,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
     public Organization getOrganizationById(@IdParam IdDt organizationId) {
 
         RepoSource sourceType = RepoSourceType.fromString(null);
-        OrganizationSearch organizationSearch = applicationContext.getBean(OrganizationSearchFactory.class).select(sourceType);
+        OrganizationSearch organizationSearch = organizationSearchFactory.select(sourceType);
         OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId.getIdPart());
 
         if (organizationDetails == null) {
@@ -69,7 +64,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
     public List<Organization> getOrganizationsByODSCode(@RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam organizationId) {
 
         RepoSource sourceType = RepoSourceType.fromString(null);
-        OrganizationSearch organizationSearch = applicationContext.getBean(OrganizationSearchFactory.class).select(sourceType);
+        OrganizationSearch organizationSearch = organizationSearchFactory.select(sourceType);
         ArrayList<Organization> organizations = new ArrayList();
 
         List<OrganizationDetails> organizationDetailsList = null;

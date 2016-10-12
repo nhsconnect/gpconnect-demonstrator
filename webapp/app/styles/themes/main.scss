@@ -2275,6 +2275,7 @@ div#age-chart div.morris-hover.morris-default-style {
 }
 
 .modalBannerUpper {
+    background-color: #a6cff2;
     border: 1px solid black;
     font-weight: bold;
     margin-top: 5px;
@@ -2282,6 +2283,7 @@ div#age-chart div.morris-hover.morris-default-style {
 }
 
 .modalBannerLower {
+    background-color: #d3e7f8;
     border: 1px solid black;
     border-top: 0px;
     font-size: 0.8em;
@@ -2362,7 +2364,7 @@ div#age-chart div.morris-hover.morris-default-style {
 }
 
 .appointmentFormSection {
-    padding-bottom: 11px;
+    margin-bottom: 11px;
 }
 
 .appointmentFormSection div {
@@ -2370,8 +2372,15 @@ div#age-chart div.morris-hover.morris-default-style {
     padding-left: 0;
 }
 
+.appointmentFormBorderSection {
+    border-bottom: 1px solid #19568c;
+    margin-bottom: 5px;
+    padding: 5px;
+}
+
 #appointmentComment {
     width: 100%;
+    background-color: #e9f3fc;
 }
 
 .appointmentPracticeTable {

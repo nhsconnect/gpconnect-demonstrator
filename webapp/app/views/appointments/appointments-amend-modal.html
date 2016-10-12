@@ -15,45 +15,51 @@
     <div class="col-md-12">
         <form name="appointmentAmendForm" class="form-horizontal text-left">
 
-            <div class="form-group form-group-sm">
-                <label class="control-label col-md-3">Practitioner</label>
-                <div class="col-md-9">
-                    {{ appointmentAmend.practitionerName}}
+            <div class="col-md-12 appointmentFormBorderSection">
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-md-3">Practitioner</label>
+                    <div class="col-md-9">
+                        {{ appointmentAmend.practitionerName}}
+                    </div>
+                </div>
+
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-md-3">Type</label>
+                    <div class="col-md-9">
+                        {{ appointmentAmend.appointmentResource.resource.type.text}}
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group form-group-sm">
-                <label class="control-label col-md-3">Type</label>
-                <div class="col-md-9">
-                    {{ appointmentAmend.appointmentResource.resource.type.text}}
+            <div class="col-md-12 appointmentFormBorderSection">
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-md-3">Start Date & Time</label>
+                    <div class="col-md-9">
+                        {{ appointmentAmend.appointmentResource.resource.start | amDateFormat:'DD-MMM-YYYY HH:mm' }}
+                    </div>
+                </div>
+
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-md-3">End Date & Time</label>
+                    <div class="col-md-9">
+                        {{ appointmentAmend.appointmentResource.resource.end | amDateFormat:'DD-MMM-YYYY HH:mm' }}
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group form-group-sm">
-                <label class="control-label col-md-3">Start Date & Time</label>
-                <div class="col-md-9">
-                    {{ appointmentAmend.appointmentResource.resource.start | amDateFormat:'DD-MMM-YYYY HH:mm' }}
+            <div class="col-md-12 appointmentFormBorderSection">
+                <div ng-hide="appointmentAmend.appointmentResource.resource.modifierExtension[cancelReasonIndex].valueString" class="form-group form-group-sm">
+                    <label class="control-label col-md-12">Comment:</label>
+                    <div class="col-md-12">
+                        <textarea ngRequired="true" class="col-md-12" name="amendComment" id="appointmentComment" ng-model="commentDisplayText" rows="3"></textarea>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group form-group-sm">
-                <label class="control-label col-md-3">End Date & Time</label>
-                <div class="col-md-9">
-                    {{ appointmentAmend.appointmentResource.resource.end | amDateFormat:'DD-MMM-YYYY HH:mm' }}
-                </div>
-            </div>
-
-            <div ng-hide="appointmentAmend.appointmentResource.resource.modifierExtension[cancelReasonIndex].valueString" class="form-group form-group-sm">
-                <label class="control-label col-md-12">Comment</label>
-                <div class="col-md-12">
-                    <textarea ngRequired="true" class="col-md-12" name="amendComment" id="comment" ng-model="commentDisplayText" rows="4"></textarea>
-                </div>
-            </div>
-
-            <div ng-show="appointmentAmend.appointmentResource.resource.modifierExtension[cancelReasonIndex].valueString" class="form-group form-group-sm">
-                <label class="control-label col-md-12">Cancellation Reason</label>
-                <div class="col-md-12">
-                    <textarea ngRequired="true" class="col-md-12" name="cancelReason" id="cancelReason" ng-model="appointmentAmend.appointmentResource.resource.modifierExtension[cancelReasonIndex].valueString" rows="4"></textarea>
+                <div ng-show="appointmentAmend.appointmentResource.resource.modifierExtension[cancelReasonIndex].valueString" class="form-group form-group-sm">
+                    <label class="control-label col-md-12">Cancellation Reason:</label>
+                    <div class="col-md-12">
+                        <textarea ngRequired="true" class="col-md-12" name="cancelReason" id="appointmentComment" ng-model="appointmentAmend.appointmentResource.resource.modifierExtension[cancelReasonIndex].valueString" rows="3"></textarea>
+                    </div>
                 </div>
             </div>
 

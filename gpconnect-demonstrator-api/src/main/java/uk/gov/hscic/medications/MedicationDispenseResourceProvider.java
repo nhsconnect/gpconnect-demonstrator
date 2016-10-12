@@ -14,17 +14,14 @@ import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.common.types.RepoSource;
-import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.medication.dispense.model.MedicationDispenseDetail;
 import uk.gov.hscic.medication.dispense.search.MedicationDispenseSearch;
-import uk.gov.hscic.medication.dispense.search.MedicationDispenseSearchFactory;
 
 @Component
 public class MedicationDispenseResourceProvider implements IResourceProvider {
 
     @Autowired
-    MedicationDispenseSearchFactory medicationDispenseSearchFactory;
+    MedicationDispenseSearch medicationDispenseSearch;
     
     @Override
     public Class<MedicationDispense> getResourceType() {
@@ -34,14 +31,13 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
     @Search
     public List<MedicationDispense> getMedicationDispensesForPatientId(@RequiredParam(name = "patient") String patientId) {
         
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        MedicationDispenseSearch medicationDispenseSearch = medicationDispenseSearchFactory.select(sourceType);
         ArrayList<MedicationDispense> medicationDispenses = new ArrayList();
 
         List<MedicationDispenseDetail> medicationDispenseDetailList = medicationDispenseSearch.findMedicationDispenseForPatient(Long.parseLong(patientId));
+        
         if (medicationDispenseDetailList != null && medicationDispenseDetailList.size() > 0) {
+            
             for(MedicationDispenseDetail medicationDispenseDetail : medicationDispenseDetailList){
-                
                 MedicationDispense medicationDispense = new MedicationDispense();
                 medicationDispense.setId(String.valueOf(medicationDispenseDetail.getId()));
                 medicationDispense.getMeta().setLastUpdated(medicationDispenseDetail.getLastUpdated());
@@ -68,7 +64,6 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
                 medication.setCode(codeableConcept);
                 
                 medicationDispense.addDosageInstruction().setText(medicationDispenseDetail.getDosageText());
-                
                 medicationDispenses.add(medicationDispense);
             }
         }

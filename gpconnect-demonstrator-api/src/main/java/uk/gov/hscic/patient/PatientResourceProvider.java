@@ -62,12 +62,9 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
-import uk.gov.hscic.common.types.RepoSource;
-import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.common.util.NhsCodeValidator;
 import uk.gov.hscic.medication.model.PatientMedicationHTML;
 import uk.gov.hscic.medication.search.MedicationSearch;
-import uk.gov.hscic.medication.search.MedicationSearchFactory;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
@@ -76,35 +73,27 @@ import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.organization.search.OrganizationSearch;
 import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
 import uk.gov.hscic.patient.adminitems.search.AdminItemSearch;
-import uk.gov.hscic.patient.adminitems.search.AdminItemSearchFactory;
 import uk.gov.hscic.patient.allergies.model.AllergyListHTML;
 import uk.gov.hscic.patient.allergies.search.AllergySearch;
-import uk.gov.hscic.patient.allergies.search.AllergySearchFactory;
 import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemListHTML;
 import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearch;
-import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearchFactory;
 import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
 import uk.gov.hscic.patient.encounters.search.EncounterSearch;
-import uk.gov.hscic.patient.encounters.search.EncounterSearchFactory;
 import uk.gov.hscic.patient.immunisations.model.ImmunisationListHTML;
 import uk.gov.hscic.patient.immunisations.search.ImmunisationSearch;
-import uk.gov.hscic.patient.immunisations.search.ImmunisationSearchFactory;
 import uk.gov.hscic.patient.investigations.model.InvestigationListHTML;
 import uk.gov.hscic.patient.investigations.search.InvestigationSearch;
-import uk.gov.hscic.patient.investigations.search.InvestigationSearchFactory;
 import uk.gov.hscic.patient.observations.model.ObservationListHTML;
 import uk.gov.hscic.patient.observations.search.ObservationSearch;
-import uk.gov.hscic.patient.observations.search.ObservationSearchFactory;
 import uk.gov.hscic.patient.patientsummary.model.PatientSummaryListHTML;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
-import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearchFactory;
 import uk.gov.hscic.patient.problems.model.ProblemListHTML;
-import uk.gov.hscic.patient.problems.search.*;
-import uk.gov.hscic.patient.referral.model.*;
-import uk.gov.hscic.patient.referral.search.*;
-import uk.gov.hscic.patient.summary.model.*;
-import uk.gov.hscic.patient.summary.search.*;
-import uk.gov.hscic.patient.summary.store.*;
+import uk.gov.hscic.patient.problems.search.ProblemSearch;
+import uk.gov.hscic.patient.referral.model.ReferralListHTML;
+import uk.gov.hscic.patient.referral.search.ReferralSearch;
+import uk.gov.hscic.patient.summary.model.PatientDetails;
+import uk.gov.hscic.patient.summary.search.PatientSearch;
+import uk.gov.hscic.patient.summary.store.PatientStore;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 import uk.gov.hscic.practitioner.search.PractitionerSearch;
 
@@ -112,19 +101,11 @@ import uk.gov.hscic.practitioner.search.PractitionerSearch;
 public class PatientResourceProvider implements IResourceProvider {
 
     private static final String REGISTRATION_TYPE_EXTENSION_URL = "http://fhir.nhs.net/StructureDefinition/extension-registration-type-1";
-
 	private static final String REGISTRATION_STATUS_EXTENSION_URL = "http://fhir.nhs.net/StructureDefinition/extension-registration-status-1";
-
 	private static final String REGISTRATION_PERIOD_EXTENSION_URL = "http://fhir.nhs.net/StructureDefinition/extension-registration-period-1";
-
 	private static final String TEMPORARY_RESIDENT_REGISTRATION_TYPE = "T";
-
 	private static final String ACTIVE_REGISTRATION_STATUS = "A";
 
-	@Autowired PatientStore patientStore;
-    @Autowired PatientSearch patientSearch;
-    @Autowired OrganizationSearch organizationSearch;
-    @Autowired PractitionerSearch practitionerSearch;
 	@Autowired PractitionerResourceProvider practitionerResourceProvider;
     @Autowired OrganizationResourceProvider organizationResourceProvider;
     @Autowired MedicationResourceProvider medicationResourceProvider;
@@ -132,18 +113,21 @@ public class PatientResourceProvider implements IResourceProvider {
     @Autowired MedicationDispenseResourceProvider medicationDispenseResourceProvider;
     @Autowired MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
     @Autowired AppointmentResourceProvider appointmentResourceProvider;
-    @Autowired PatientSearchFactory patientSearchFactory;
-    @Autowired PatientSummarySearchFactory patientSummarySearchFactory;
-    @Autowired ProblemSearchFactory problemSearchFactory;
-    @Autowired EncounterSearchFactory encounterSearchFactory;
-    @Autowired AllergySearchFactory allergySearchFactory;
-    @Autowired ClinicalItemSearchFactory clinicalItemSearchFactory;
-    @Autowired MedicationSearchFactory medicationSearchFactory;
-    @Autowired ReferralSearchFactory referralSearchFactory;
-    @Autowired ObservationSearchFactory observationSearchFactory;
-    @Autowired InvestigationSearchFactory investigationSearchFactory;
-    @Autowired ImmunisationSearchFactory immunisationSearchFactory;
-    @Autowired AdminItemSearchFactory adminItemSearchFactory;
+    @Autowired PatientStore patientStore;
+    @Autowired PatientSearch patientSearch;
+    @Autowired OrganizationSearch organizationSearch;
+    @Autowired PractitionerSearch practitionerSearch;
+    @Autowired PatientSummarySearch patientSummarySearch;
+    @Autowired ProblemSearch problemSearch;
+    @Autowired EncounterSearch encounterSearch;
+    @Autowired AllergySearch allergySearch;
+    @Autowired ClinicalItemSearch clinicalItemsSearch;
+    @Autowired MedicationSearch medicationSearch;
+    @Autowired ReferralSearch referralSearch;
+    @Autowired ObservationSearch observationSearch;
+    @Autowired InvestigationSearch investigationSearch;
+    @Autowired ImmunisationSearch immunisationSearch;
+    @Autowired AdminItemSearch adminItemSearch;
     
     @Override
     public Class<Patient> getResourceType() {
@@ -152,10 +136,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Read()
     public Patient getPatientById(@IdParam IdDt internalId) {
-        Patient patient = new Patient();
-        // Get patient details from dataabase
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        PatientSearch patientSearch = patientSearchFactory.select(sourceType);
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
         if (patientDetails == null) {
             OperationOutcome operationOutcome = new OperationOutcome();
@@ -167,8 +147,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Search
     public List<Patient> getPatientByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam patientId) {
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        PatientSearch patientSearch = patientSearchFactory.select(sourceType);
         ArrayList<Patient> patients = new ArrayList();
         PatientDetails patientDetailsReturned = patientSearch.findPatient(patientId.getValue());
         if (patientDetailsReturned != null) {
@@ -177,7 +155,6 @@ public class PatientResourceProvider implements IResourceProvider {
                 Patient patient = patientDetailsToPatientResourceConverter(patientDetails);
                 patient.setId(patientDetails.getId());
                 patients.add(patient);
-
             }
         }
         return patients;
@@ -194,7 +171,6 @@ public class PatientResourceProvider implements IResourceProvider {
         Date toDate = null;
         // Extract the parameters
         for (Parameter param : params.getParameter()) {
-            String paramName = param.getName();
             IDatatype value = param.getValue();
             if (value instanceof IdentifierDt) {
                 nhsNumber = ((IdentifierDt) value).getValue();
@@ -221,15 +197,11 @@ public class PatientResourceProvider implements IResourceProvider {
         // Build Bundle
         Bundle bundle = new Bundle();
         bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
-
         if (nhsNumber == null || nhsNumber.isEmpty() || !NhsCodeValidator.nhsNumberValid(nhsNumber)) {
-
             CodingDt errorCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-getrecord-response-code-1-0").setCode("GCR-0002");
             CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
             operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.INVALID_CONTENT).setDetails(errorCodableConcept).setDiagnostics("NHS Number Invalid");
-
         } else {
-
             // Build the Patient Resource and add it to the bundle
             try {
                 String patientID;
@@ -242,7 +214,6 @@ public class PatientResourceProvider implements IResourceProvider {
                 } else {
                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No patient details found for patient NHS Number: " + nhsNumber);
                     throw new InternalErrorException("No patient details found for patient NHS Number: " + nhsNumber, operationOutcome);
-
                 }
                 bundle.addEntry(patientEntry);
 
@@ -282,17 +253,11 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 // Build requested sections
                 if (sectionsParamList.size() > 0) {
-
                     ArrayList<Section> sectionsList = new ArrayList();
-                    RepoSource sourceType = RepoSourceType.fromString(null);
-
                     for (String sectionName : sectionsParamList) {
-
                         Section section = new Section();
-
                         switch (sectionName) {
                             case "SUM":
-                                PatientSummarySearch patientSummarySearch = patientSummarySearchFactory.select(sourceType);
                                 List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch.findAllPatientSummaryHTMLTables(nhsNumber);
                                 if (patientSummaryList != null && patientSummaryList.size() > 0) {
                                     CodingDt summaryCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("SUM").setDisplay("Summary");
@@ -308,7 +273,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "PRB":
-                                ProblemSearch problemSearch = problemSearchFactory.select(sourceType);
                                 List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber);
                                 if (problemList != null && problemList.size() > 0) {
                                     CodingDt problemCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("PRB").setDisplay("Problems");
@@ -324,7 +288,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "ENC":
-                                EncounterSearch encounterSearch = encounterSearchFactory.select(sourceType);
                                 List<EncounterListHTML> encounterList = encounterSearch.findAllEncounterHTMLTables(nhsNumber, fromDate, toDate);
                                 if (encounterList != null && encounterList.size() > 0) {
                                     CodingDt encounterCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("ENC").setDisplay("Encounters");
@@ -340,7 +303,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "ALL":
-                                AllergySearch allergySearch = allergySearchFactory.select(sourceType);
                                 List<AllergyListHTML> allergyList = allergySearch.findAllAllergyHTMLTables(nhsNumber);
                                 if (allergyList != null && allergyList.size() > 0) {
                                     CodingDt allergyCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("ALL").setDisplay("Allergies and Sensitivities");
@@ -356,7 +318,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "CLI":
-                                ClinicalItemSearch clinicalItemsSearch = clinicalItemSearchFactory.select(sourceType);
                                 List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch.findAllClinicalItemHTMLTables(nhsNumber);
                                 if (clinicalItemList != null && clinicalItemList.size() > 0) {
                                     CodingDt clinicalItemCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("CLI").setDisplay("Clinical Items");
@@ -374,7 +335,6 @@ public class PatientResourceProvider implements IResourceProvider {
                             case "MED":
                                 section = null;
                                 // HTML Section Search
-                                MedicationSearch medicationSearch = medicationSearchFactory.select(sourceType);
                                 List<PatientMedicationHTML> medicationList = medicationSearch.findPatientMedicationHTML(nhsNumber);
                                 if (medicationList != null && medicationList.size() > 0) {
                                     section = new Section();
@@ -472,7 +432,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "REF":
-                                ReferralSearch referralSearch = referralSearchFactory.select(sourceType);
                                 List<ReferralListHTML> referralList = referralSearch.findAllReferralHTMLTables(nhsNumber);
                                 if (referralList != null && referralList.size() > 0) {
                                     CodingDt referralCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("REF").setDisplay("Referrals");
@@ -488,7 +447,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "OBS":
-                                ObservationSearch observationSearch = observationSearchFactory.select(sourceType);
                                 List<ObservationListHTML> observationList = observationSearch.findAllObservationHTMLTables(nhsNumber);
                                 if (observationList != null && observationList.size() > 0) {
                                     CodingDt observationCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("OBS").setDisplay("Observations");
@@ -504,7 +462,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "INV":
-                                InvestigationSearch investigationSearch = investigationSearchFactory.select(sourceType);
                                 List<InvestigationListHTML> investigationList = investigationSearch.findAllInvestigationHTMLTables(nhsNumber);
                                 if (investigationList != null && investigationList.size() > 0) {
                                     CodingDt investigationCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("INV").setDisplay("Investigations");
@@ -520,7 +477,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "IMM":
-                                ImmunisationSearch immunisationSearch = immunisationSearchFactory.select(sourceType);
                                 List<ImmunisationListHTML> immunisationList = immunisationSearch.findAllImmunisationHTMLTables(nhsNumber);
                                 if (immunisationList != null && immunisationList.size() > 0) {
                                     CodingDt immunisationCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("IMM").setDisplay("Immunisations");
@@ -536,7 +492,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "ADM":
-                                AdminItemSearch adminItemSearch = adminItemSearchFactory.select(sourceType);
                                 List<AdminItemListHTML> adminItemList = adminItemSearch.findAllAdminItemHTMLTables(nhsNumber);
                                 if (adminItemList != null && adminItemList.size() > 0) {
                                     CodingDt adminItemCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0").setCode("ADM").setDisplay("Administrative Items");
@@ -602,24 +557,19 @@ public class PatientResourceProvider implements IResourceProvider {
 	@Operation(name = "$gpc.registerpatient")
     public Patient registerPatient(@ResourceParam Patient unregisteredPatient) {
     	Patient registeredPatient = null;
-    	
     	if(unregisteredPatient != null) {
-	    	//check NHS number doesn't exist first	
-    		
+	    	//check NHS number doesn't exist first
     		patientStore.create(registerPatientResourceConverterToPatientDetail(unregisteredPatient));
-	    		
 	    	registeredPatient = patientDetailsToRegisterPatientResourceConverter(patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
     	}
     	else {
             throw new IllegalArgumentException("No patient found when attempting gpc.registerpatient operation");
     	}
-    	
     	return registeredPatient;
     }
 
 	private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
     	PatientDetails patientDetails = new PatientDetails();
-    	
     	HumanNameDt name = patientResource.getNameFirstRep();
     	patientDetails.setForename(name.getGivenAsSingleString());
     	patientDetails.setSurname(name.getFamilyAsSingleString());
@@ -627,20 +577,19 @@ public class PatientResourceProvider implements IResourceProvider {
     	patientDetails.setGender(patientResource.getGender());
     	patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
     	
-    	Date now = new Date();
-    	
+        Date now = new Date();
     	List<ExtensionDt> registrationPeriodExtensions = patientResource.getUndeclaredExtensionsByUrl(REGISTRATION_PERIOD_EXTENSION_URL);
     	ExtensionDt registrationPeriodExtension = registrationPeriodExtensions.get(0);
     	PeriodDt registrationPeriod = (PeriodDt) registrationPeriodExtension.getValue();
+        
     	Date registrationStart = registrationPeriod.getStart();
-		
-    	if(registrationStart.compareTo(now) <= 1) {
+        if(registrationStart.compareTo(now) <= 1) {
     		patientDetails.setRegistrationStartDateTime(registrationStart);    		
     	}
     	else {
     		throw new IllegalArgumentException(String.format("The given registration start (%c) is not valid. The registration start cannot be in the future.", registrationStart));
     	}
-    	
+        
     	Date registrationEnd = registrationPeriod.getEnd();
     	if(registrationEnd != null) {
     		throw new IllegalArgumentException(String.format("The given registration end (%c) is not valid. The registration end should be left blank to indicate an open-ended registration period.", registrationStart));

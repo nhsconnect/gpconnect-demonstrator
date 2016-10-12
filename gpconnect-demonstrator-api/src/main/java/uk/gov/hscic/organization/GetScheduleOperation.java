@@ -3,7 +3,6 @@ package uk.gov.hscic.organization;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
@@ -31,8 +30,6 @@ import uk.gov.hscic.practitioner.PractitionerResourceProvider;
  */
 @Component
 public class GetScheduleOperation {
-
-    ApplicationContext applicationContext;
 
     @Autowired
     LocationResourceProvider locationResourceProvider;

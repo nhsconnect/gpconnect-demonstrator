@@ -19,17 +19,14 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.common.types.RepoSource;
-import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.location.model.LocationDetails;
 import uk.gov.hscic.location.search.LocationSearch;
-import uk.gov.hscic.location.search.LocationSearchFactory;
 
 @Component
 public class LocationResourceProvider implements IResourceProvider {
 
     @Autowired
-    LocationSearchFactory locationSearchFactory;
+    LocationSearch locationSearch;
     
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
@@ -38,26 +35,18 @@ public class LocationResourceProvider implements IResourceProvider {
 
     @Search
 	public List<Location> getByIdentifierCode(@RequiredParam(name=Location.SP_IDENTIFIER) TokenParam identifierCode) {
-        
-		RepoSource sourceType = RepoSourceType.fromString(null);
-        LocationSearch locationSearch = locationSearchFactory.select(sourceType);
-        
         List<LocationDetails> locationDetails = null;
-        
         if("http://fhir.nhs.net/Id/ods-organization-code".equalsIgnoreCase(identifierCode.getSystem())){
             locationDetails = locationSearch.findLocationDetailsByOrgOdsCode(identifierCode.getValue());
         } else {
             locationDetails = locationSearch.findLocationDetailsBySiteOdsCode(identifierCode.getValue());
         }
-        
         if(locationDetails.size() <= 0){
-            String msg = String.format("No location details found for code: %s", identifierCode.getValue());
-        	
+            String msg = String.format("No location details found for code: %s", identifierCode.getValue());	
         	OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(msg);
             throw new InternalErrorException(msg, operationalOutcome);
         }
-        
         ArrayList<Location> locations = new ArrayList();
         for(LocationDetails locationDetail : locationDetails){
             locations.add(locationDetailsToLocation(locationDetail));
@@ -67,11 +56,7 @@ public class LocationResourceProvider implements IResourceProvider {
 
     @Read()
     public Location getLocationById(@IdParam IdDt locationId) {
-        
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        LocationSearch locationSearch = locationSearchFactory.select(sourceType);
         LocationDetails locationDetails = locationSearch.findLocationById(locationId.getIdPart());
-        
         if(locationDetails == null){
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No location details found for location ID: "+locationId.getIdPart());
@@ -82,16 +67,13 @@ public class LocationResourceProvider implements IResourceProvider {
     
 	private Location locationDetailsToLocation(LocationDetails locationDetails) {
 		Location location = new Location();
-		
 		List<IdentifierDt> identifier = new ArrayList<IdentifierDt>();
 		identifier.add(new IdentifierDt(locationDetails.getSiteOdsCode(), locationDetails.getSiteOdsCodeName()));
-		
 		location.setId(new IdDt(locationDetails.getId()));
         location.getMeta().setLastUpdated(locationDetails.getLastUpdated());
         location.getMeta().setVersionId(String.valueOf(locationDetails.getLastUpdated().getTime()));
 		location.setName(new StringDt(locationDetails.getName()));
 		location.setIdentifier(identifier);
-		
 		return location;
 	}
 }

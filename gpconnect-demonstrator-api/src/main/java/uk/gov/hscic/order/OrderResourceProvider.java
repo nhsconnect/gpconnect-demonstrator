@@ -17,17 +17,14 @@ import java.util.Collections;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.common.types.RepoSource;
-import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.order.model.OrderDetail;
 import uk.gov.hscic.order.store.OrderStore;
-import uk.gov.hscic.order.store.OrderStoreFactory;
 
 @Component
 public class OrderResourceProvider implements IResourceProvider {
 
     @Autowired
-    OrderStoreFactory orderStoreFactory;
+    OrderStore orderStore;
     
     @Override
     public Class<Order> getResourceType() {
@@ -37,16 +34,12 @@ public class OrderResourceProvider implements IResourceProvider {
     @Create
     public MethodOutcome createOrder(@ResourceParam Order order) {
         OrderDetail orderDetail = orderResourceToOrderDetailConverter(order);
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        OrderStore orderStore = orderStoreFactory.select(sourceType);
         orderDetail = orderStore.saveOrder(orderDetail);
-
         // Build response containing the new resource id
         MethodOutcome methodOutcome = new MethodOutcome();
         methodOutcome.setId(new IdDt("Order", orderDetail.getId()));
         methodOutcome.setResource(orderDetailToOrderResourceConverter(orderDetail));
         methodOutcome.setCreated(Boolean.TRUE);
-
         return methodOutcome;
     }
 

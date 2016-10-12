@@ -25,11 +25,8 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.text.SimpleDateFormat;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.common.types.RepoSource;
-import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.organization.model.OrganizationDetails;
 import uk.gov.hscic.organization.search.OrganizationSearch;
-import uk.gov.hscic.organization.search.OrganizationSearchFactory;
 
 @Component
 public class OrganizationResourceProvider implements IResourceProvider {
@@ -38,7 +35,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
     GetScheduleOperation getScheduleOperation;
     
     @Autowired
-    OrganizationSearchFactory organizationSearchFactory;
+    OrganizationSearch organizationSearch;
 
     @Override
     public Class<Organization> getResourceType() {
@@ -47,11 +44,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
     @Read()
     public Organization getOrganizationById(@IdParam IdDt organizationId) {
-
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        OrganizationSearch organizationSearch = organizationSearchFactory.select(sourceType);
         OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId.getIdPart());
-
         if (organizationDetails == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No organization details found for organization ID: " + organizationId.getIdPart());
@@ -62,13 +55,10 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
     @Search
     public List<Organization> getOrganizationsByODSCode(@RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam organizationId) {
-
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        OrganizationSearch organizationSearch = organizationSearchFactory.select(sourceType);
+        
         ArrayList<Organization> organizations = new ArrayList();
-
         List<OrganizationDetails> organizationDetailsList = null;
-
+        
         if (organizationId.getValue() != null) {
             organizationDetailsList = organizationSearch.findOrganizationDetailsByOrgODSCode(organizationId.getValue());
         }

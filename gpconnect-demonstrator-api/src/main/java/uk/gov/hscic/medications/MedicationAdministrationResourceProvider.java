@@ -10,17 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.common.types.RepoSource;
-import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.medication.administration.model.MedicationAdministrationDetail;
 import uk.gov.hscic.medication.administration.search.MedicationAdministrationSearch;
-import uk.gov.hscic.medication.administration.search.MedicationAdministrationSearchFactory;
 
 @Component
 public class MedicationAdministrationResourceProvider  implements IResourceProvider {
 
     @Autowired
-    MedicationAdministrationSearchFactory medicationAdministrationSearchFactory;
+    MedicationAdministrationSearch medicationAdministrationSearch;
     
     @Override
     public Class<MedicationAdministration> getResourceType() {
@@ -30,11 +27,10 @@ public class MedicationAdministrationResourceProvider  implements IResourceProvi
     @Search
     public List<MedicationAdministration> getMedicationAdministrationsForPatientId(@RequiredParam(name = "patient") String patientId) {
         
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        MedicationAdministrationSearch medicationAdministrationSearch = medicationAdministrationSearchFactory.select(sourceType);
         ArrayList<MedicationAdministration> medicationAdministrations = new ArrayList();
-
+        
         List<MedicationAdministrationDetail> medicationAdministrationDetailList = medicationAdministrationSearch.findMedicationAdministrationForPatient(Long.parseLong(patientId));
+        
         if (medicationAdministrationDetailList != null && medicationAdministrationDetailList.size() > 0) {
             for(MedicationAdministrationDetail medicationAdministrationDetail : medicationAdministrationDetailList){
                 MedicationAdministration medicationAdministration = new MedicationAdministration();

@@ -37,49 +37,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointment.appointment.model.AppointmentDetail;
 import uk.gov.hscic.appointment.appointment.search.AppointmentSearch;
-import uk.gov.hscic.appointment.appointment.search.AppointmentSearchFactory;
 import uk.gov.hscic.appointment.appointment.store.AppointmentStore;
-import uk.gov.hscic.appointment.appointment.store.AppointmentStoreFactory;
 import uk.gov.hscic.appointment.slot.model.SlotDetail;
 import uk.gov.hscic.appointment.slot.search.SlotSearch;
-import uk.gov.hscic.appointment.slot.search.SlotSearchFactory;
 import uk.gov.hscic.appointment.slot.store.SlotStore;
-import uk.gov.hscic.appointment.slot.store.SlotStoreFactory;
-import uk.gov.hscic.common.types.RepoSource;
-import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.location.model.LocationDetails;
 import uk.gov.hscic.location.search.LocationSearch;
-import uk.gov.hscic.location.search.LocationSearchFactory;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
 import uk.gov.hscic.patient.summary.search.PatientSearch;
-import uk.gov.hscic.patient.summary.search.PatientSearchFactory;
 import uk.gov.hscic.practitioner.model.PractitionerDetails;
 import uk.gov.hscic.practitioner.search.PractitionerSearch;
-import uk.gov.hscic.practitioner.search.PractitionerSearchFactory;
 
 @Component
 public class AppointmentResourceProvider implements IResourceProvider {
 
-    @Autowired
-    AppointmentSearchFactory appointmentSearchFactory;
-    
-    @Autowired
-    AppointmentStoreFactory appointmentStoreFactory;
-    
-    @Autowired
-    SlotSearchFactory slotSearchFactory;
-    
-    @Autowired
-    SlotStoreFactory slotStoreFactory;
-    
-    @Autowired
-    PatientSearchFactory patientSearchFactory;
-    
-    @Autowired
-    PractitionerSearchFactory practitionerSearchFactory;
-
-    @Autowired
-    LocationSearchFactory locationSearchFactory;
+    @Autowired AppointmentSearch appointmentSearch;
+    @Autowired AppointmentStore appointmentStore;
+    @Autowired SlotSearch slotSearch;
+    @Autowired SlotStore slotStore;
+    @Autowired PatientSearch patientSearch;
+    @Autowired PractitionerSearch practitionerSearch;
+    @Autowired LocationSearch locationSearch;
     
     @Override
     public Class<Appointment> getResourceType() {
@@ -89,8 +67,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
     @Read()
     public Appointment getAppointmentById(@IdParam IdDt appointmentId) {
 
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        AppointmentSearch appointmentSearch = appointmentSearchFactory.select(sourceType);
         AppointmentDetail appointmentDetail = appointmentSearch.findAppointmentByID(appointmentId.getIdPartAsLong());
 
         if (appointmentDetail == null) {
@@ -133,8 +109,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
         }
 
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        AppointmentSearch appointmentSearch = appointmentSearchFactory.select(sourceType);
         List<AppointmentDetail> appointmentDetails = appointmentSearch.searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUppderDate);
 
         ArrayList<Appointment> appointments = new ArrayList();
@@ -165,24 +139,20 @@ public class AppointmentResourceProvider implements IResourceProvider {
         for (Participant participant : appointment.getParticipant()) {
             String resourcePart = participant.getActor().getReference().getResourceType();
             String idPart = participant.getActor().getReference().getIdPart();
-            RepoSource sourceType = RepoSourceType.fromString(null);
             switch (resourcePart) {
                 case "Patient":
-                    PatientSearch patientSearch = patientSearchFactory.select(sourceType);
                     PatientDetails patient = patientSearch.findPatientByInternalID(idPart);
                     if (patient == null) {
                         throw new UnprocessableEntityException("Patient resource reference is not a valid resource");
                     }
                     break;
                 case "Practitioner":
-                    PractitionerSearch practitionerSearch = practitionerSearchFactory.select(sourceType);
                     PractitionerDetails practitioner = practitionerSearch.findPractitionerDetails(idPart);
                     if (practitioner == null) {
                         throw new UnprocessableEntityException("Practitioner resource reference is not a valid resource");
                     }
                     break;
                 case "Location":
-                    LocationSearch locationSearch = locationSearchFactory.select(sourceType);
                     LocationDetails location = locationSearch.findLocationById(idPart);
                     if (location == null) {
                         throw new UnprocessableEntityException("Location resource reference is not a valid resource");
@@ -193,11 +163,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         // Store New Appointment
         AppointmentDetail appointmentDetail = appointmentResourceConverterToAppointmentDetail(appointment);
-
-        RepoSource sourceType = RepoSourceType.fromString(null);
-
-        SlotSearch slotSearch = slotSearchFactory.select(sourceType);
-        
         List<SlotDetail> slots = new ArrayList<>();
         for (Long slotId : appointmentDetail.getSlotIds()) {
             SlotDetail slotDetail = slotSearch.findSlotByID(slotId);
@@ -207,14 +172,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
             slots.add(slotDetail);
         }
         
-        AppointmentStore appointmentStore = appointmentStoreFactory.select(sourceType);
         appointmentDetail = appointmentStore.saveAppointment(appointmentDetail, slots);
 
         for (SlotDetail slot : slots) {
             slot.setAppointmentId(appointmentDetail.getId());
             slot.setFreeBusyType("BUSY");
             slot.setLastUpdated(new Date());
-            SlotStore slotStore = slotStoreFactory.select(sourceType);
             slot = slotStore.saveSlot(slot);
         }
 
@@ -243,8 +206,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
 
         // Make sure there is an existing appointment to be amended
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        AppointmentSearch appointmentSearch = appointmentSearchFactory.select(sourceType);
         AppointmentDetail oldAppointmentDetail = appointmentSearch.findAppointmentByID(appointmentId.getIdPartAsLong());
         if (oldAppointmentDetail == null) {
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No appointment details found for ID: " + appointmentId.getIdPart());
@@ -273,13 +234,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
             appointmentDetail.setStatus("cancelled");
 
             if (!"cancelled".equalsIgnoreCase(oldStatus)) {
-                SlotSearch slotSearch = slotSearchFactory.select(sourceType);
                 for (Long slotId : appointmentDetail.getSlotIds()) {
                     SlotDetail slotDetail = slotSearch.findSlotByID(slotId);
                     slotDetail.setAppointmentId(null);
                     slotDetail.setFreeBusyType("FREE");
                     slotDetail.setLastUpdated(new Date());
-                    SlotStore slotStore = slotStoreFactory.select(sourceType);
                     slotDetail = slotStore.saveSlot(slotDetail);
                 }
             }
@@ -293,7 +252,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
             appointmentDetail = oldAppointmentDetail;
         }
 
-        SlotSearch slotSearch = slotSearchFactory.select(sourceType);
         List<SlotDetail> slots = new ArrayList<>();
         for (Long slotId : appointmentDetail.getSlotIds()) {
             SlotDetail slotDetail = slotSearch.findSlotByID(slotId);
@@ -304,7 +262,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
         
         appointmentDetail.setLastUpdated(new Date()); // Update version and lastUpdated timestamp
-        AppointmentStore appointmentStore = appointmentStoreFactory.select(sourceType);
         appointmentDetail = appointmentStore.saveAppointment(appointmentDetail, slots);
 
         methodOutcome.setId(new IdDt("Appointment", appointmentDetail.getId()));

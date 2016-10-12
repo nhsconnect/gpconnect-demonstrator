@@ -21,15 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointment.slot.model.SlotDetail;
 import uk.gov.hscic.appointment.slot.search.SlotSearch;
-import uk.gov.hscic.appointment.slot.search.SlotSearchFactory;
-import uk.gov.hscic.common.types.RepoSource;
-import uk.gov.hscic.common.types.RepoSourceType;
 
 @Component
 public class SlotResourceProvider  implements IResourceProvider {
 
     @Autowired
-    SlotSearchFactory slotSearchFactory;
+    SlotSearch slotSearch;
     
     @Override
     public Class<Slot> getResourceType() {
@@ -38,25 +35,17 @@ public class SlotResourceProvider  implements IResourceProvider {
 
     @Read()
     public Slot getSlotById(@IdParam IdDt slotId) {
-
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        SlotSearch slotSearch = slotSearchFactory.select(sourceType);
         SlotDetail slotDetail = slotSearch.findSlotByID(slotId.getIdPartAsLong());
-
         if (slotDetail == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No slot details found for ID: " + slotId.getIdPart());
             throw new InternalErrorException("No slot details found for ID: " + slotId.getIdPart(), operationalOutcome);
         }
-        
         return slotDetailToSlotResourceConverter(slotDetail);
     }
     
     public List<Slot> getSlotsForScheduleId(String scheduleId, String startDateTime, String endDateTime) {
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        SlotSearch slotSearch = slotSearchFactory.select(sourceType);
         ArrayList<Slot> slots = new ArrayList();
-
         List<SlotDetail> slotDetails = null;
         slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), new Date(startDateTime), new Date(endDateTime));
         if (slotDetails != null && slotDetails.size() > 0) {
@@ -64,20 +53,17 @@ public class SlotResourceProvider  implements IResourceProvider {
                 slots.add(slotDetailToSlotResourceConverter(slotDetail));
             }
         }
-        
         return slots;
     }
     
     public Slot slotDetailToSlotResourceConverter(SlotDetail slotDetail){
         Slot slot = new Slot();
-        
         slot.setId(String.valueOf(slotDetail.getId()));
         if(slotDetail.getLastUpdated() == null){
             slotDetail.setLastUpdated(new Date());
         }
         slot.getMeta().setLastUpdated(slotDetail.getLastUpdated());
         slot.getMeta().setVersionId(String.valueOf(slotDetail.getLastUpdated().getTime()));
-        
         slot.setIdentifier(Collections.singletonList(new IdentifierDt("http://fhir.nhs.net/Id/gpconnect-schedule-identifier", String.valueOf(slotDetail.getId()))));
         CodingDt coding = new CodingDt().setSystem("http://hl7.org/fhir/ValueSet/c80-practice-codes").setCode(String.valueOf(slotDetail.getTypeCode())).setDisplay(slotDetail.getTypeDisply());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);

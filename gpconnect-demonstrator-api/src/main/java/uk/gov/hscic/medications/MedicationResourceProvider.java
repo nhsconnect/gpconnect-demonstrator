@@ -11,19 +11,15 @@ import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.common.types.RepoSource;
-import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.medication.model.MedicationDetails;
 import uk.gov.hscic.medication.search.MedicationSearch;
-import uk.gov.hscic.medication.search.MedicationSearchFactory;
 
 @Component
 public class MedicationResourceProvider implements IResourceProvider {
 
     @Autowired
-    MedicationSearchFactory medicationSearchFactory;
+    MedicationSearch medicationSearch;
     
     @Override
     public Class<Medication> getResourceType() {
@@ -32,11 +28,9 @@ public class MedicationResourceProvider implements IResourceProvider {
 
     @Read()
     public Medication getMedicationById(@IdParam IdDt medicationId) {
-
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        MedicationSearch medicationSearch = medicationSearchFactory.select(sourceType);
+        
         MedicationDetails medicationDetails = medicationSearch.findMedicationByID(medicationId.getIdPartAsLong());
-
+        
         if (medicationDetails == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No medication details found for ID: " + medicationId.getIdPart());

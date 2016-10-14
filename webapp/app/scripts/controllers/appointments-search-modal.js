@@ -16,13 +16,21 @@ angular.module('gpConnect')
         }
     });
     
+    var highlightMonth = function(){
+        $(".text-muted").parent().addClass("otherMonth");
+        $("button").unbind('click', highlightMonth);
+        $("button").bind('click', highlightMonth);
+    };
+    
     $scope.openDatePicker = function ($event, name) {
       $event.preventDefault();
       $event.stopPropagation();
-
+      $scope.startDate = false;
+      $scope.endDate = false;
       $scope[name] = true;
+      highlightMonth();
     };
-
+    
     $scope.initaliseDates = function() {
         $scope.minStartDate = new Date();
         $scope.endDateInvalid = false;
@@ -39,7 +47,7 @@ angular.module('gpConnect')
     	var endDate = $scope.appointmentSearch.endDate;
     	if(endDate) {
     		// does the end date need resetting?
-    		if(moment(maxEndDateMoment).isBefore(endDate)) {
+    		if(moment(maxEndDateMoment).isBefore(endDate) || moment(startDate).isAfter(endDate)) {
     			$scope.appointmentSearch.endDate = null;
     			$scope.endDateInvalid = true;
     		}

@@ -60,6 +60,8 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.util.NhsCodeValidator;
@@ -139,8 +141,11 @@ public class PatientResourceProvider implements IResourceProvider {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
         if (patientDetails == null) {
             OperationOutcome operationOutcome = new OperationOutcome();
-            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No patient details found for patient ID: " + internalId.getIdPart());
-            throw new InternalErrorException("No patient details found for patient ID: " + internalId.getIdPart(), operationOutcome);
+            CodingDt errorCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1").setCode("PATIENT_NOT_FOUND");
+            CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+            errorCodableConcept.setText("Patient Record Not Found");
+            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
+            throw new  ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart(), operationOutcome);
         }
         return patientDetailsToPatientResourceConverter(patientDetails);
     }

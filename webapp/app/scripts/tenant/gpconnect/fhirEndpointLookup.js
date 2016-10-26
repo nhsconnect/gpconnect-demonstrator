@@ -13,6 +13,11 @@ angular.module('gpConnect')
                 var lookupReturn = $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/ldap/endpointLookup?odsCode=' + odsCode + '&interactionId=' + interactionId).then(function (response) {
                     var lookupResult = response.data;
                     if (lookupResult.endpointURL && lookupResult.recievingSysASID) {
+                        if(ProviderRouting.getPersistentData.testingOdsCode == undefined || ProviderRouting.getPersistentData.testingOdsCode.length <= 0){
+                            if(ProviderRouting.getPersistentData.testingFhirUrl != undefined && ProviderRouting.getPersistentData.testingFhirUrl.length > 0){
+                                lookupResult.endpointURL = ProviderRouting.getPersistentData.testingFhirUrl;
+                            }
+                        }
                         returnEndpointDetails.restUrlPrefix = ProviderRouting.spineProxy + lookupResult.endpointURL;
                         returnEndpointDetails.toASID = lookupResult.recievingSysASID;
                     }

@@ -7,7 +7,7 @@ angular.module('gpConnect')
     $scope.searchExpression = '';
     $scope.errorOccurred = false;
     $scope.testingPracticeODSCode = ProviderRouting.getPersistentData.testingOdsCode;
-    $scope.testingFhirUrl = "";
+    $scope.testingFhirUrl = ProviderRouting.getPersistentData.testingFhirUrl;
 
     $scope.openAdvancedSearch = AdvancedSearch.openAdvancedSearch;
 
@@ -63,6 +63,7 @@ angular.module('gpConnect')
     $scope.saveTestingConfig = function () {
         usSpinnerService.spin('search-spinner');
         ProviderRouting.setPersistentData("testingOdsCode", $scope.testingPracticeODSCode);
+        ProviderRouting.setPersistentData("testingFhirUrl", $scope.testingFhirUrl);
         usSpinnerService.stop('search-spinner');
         $scope.saveBtnText = "Saved";
     };

@@ -45,6 +45,12 @@
             <label class="col-md-2" for="testingPracticeODSCode">Practice ODS Code : </label>
             <input class="col-md-2" type="text" id="testingPracticeODSCode" ng-model="testingPracticeODSCode" >
         </div>
+        
+        <div class="col-md-12 testConfigField">
+            <label class="col-md-2" for="testingFhirUrl">FHIR Base URL : </label>
+            <input class="col-md-2" type="text" id="testingFhirUrl" ng-model="testingFhirUrl" >
+            <div class="col-md-8">(The target ODS Code will be used in priority to this target URL if both are supplied)</div>
+        </div>
 
         <button class="btn btn-success configSaveButton" ng-click="saveTestingConfig()"  ng-blur="btnReset()" >{{saveBtnText}}</button>
     </div>

@@ -422,21 +422,29 @@ angular
                     "ASID": 		"",
                     "practices": 	[]
             };
+            var persistentDataModel = {};   // Holds configuration values
             this.$get = function () {
                 var q = jQuery.ajax({
                     type: 'GET', url: '/providerRouting.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
                 });
                 if (q.status === 200) {
                 	 providerRouting = angular.fromJson(q.responseText);
-
                 	 providerRouting.defaultPractice = function () {
-                        var defaultPracticeOdsCode = $('#defaultPracticeOdsCode').html();
+                        if(persistentDataModel.testingOdsCode != undefined && persistentDataModel.testingOdsCode.length > 0){
+                            var defaultPracticeOdsCode = persistentDataModel.testingOdsCode;
+                        } else {
+                            var defaultPracticeOdsCode = $('#defaultPracticeOdsCode').html();
+                        }
                     	for(var p = 0; p < this.practices.length; p++) {
                     		var practice = this.practices[p];
                     		if(practice.odsCode == defaultPracticeOdsCode) {
                     			return practice;
                     		}
                     	}
+                    };
+                    providerRouting.getPersistentData = persistentDataModel;
+                    providerRouting.setPersistentData = function (name, value){
+                        persistentDataModel[name] = value;
                     };
                 }
                 return providerRouting;

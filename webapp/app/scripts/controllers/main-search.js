@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('MainSearchController', function ($scope, $state, $timeout, AdvancedSearch, PatientService, ProviderRouting) {
+  .controller('MainSearchController', function ($scope, $state, $timeout, AdvancedSearch, PatientService, ProviderRouting, usSpinnerService) {
 
     $scope.mainSearchEnabled = true;
     $scope.searchExpression = '';
     $scope.errorOccurred = false;
+    $scope.testingPracticeODSCode = ProviderRouting.getPersistentData.testingOdsCode;
+    $scope.testingFhirUrl = "";
 
     $scope.openAdvancedSearch = AdvancedSearch.openAdvancedSearch;
 
@@ -18,14 +20,18 @@ angular.module('gpConnect')
 
       if (!isNaN(nhsNumber) && nhsNumber.length == 10) {
 
+        usSpinnerService.spin('search-spinner');
+
         PatientService.getFhirPatient(ProviderRouting.defaultPractice().odsCode, nhsNumber).then(function (patient) {
           goToPatientSummary(nhsNumber);
 
         }).catch(function () {
+          usSpinnerService.stop('search-spinner');
           $scope.setErrorOccurred(true);
         });
       }
       else {
+        usSpinnerService.stop('search-spinner');
         $scope.setErrorOccurred(true);
       }
     };
@@ -52,4 +58,16 @@ angular.module('gpConnect')
         filter: $scope.query
       });
     };
+    
+    $scope.saveBtnText = "Save";
+    $scope.saveTestingConfig = function () {
+        usSpinnerService.spin('search-spinner');
+        ProviderRouting.setPersistentData("testingOdsCode", $scope.testingPracticeODSCode);
+        usSpinnerService.stop('search-spinner');
+        $scope.saveBtnText = "Saved";
+    };
+    $scope.btnReset = function () {
+        $scope.saveBtnText = "Save";
+    };
+    
   });

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('AppointmentsCtrl', function ($scope, $http, $stateParams, $state, $modal, $q, PatientService, usSpinnerService, Appointment, ProviderRouting, FhirEndpointLookup) {
+        .controller('AppointmentsCtrl', function ($scope, $http, $stateParams, $state, $modal, $q, PatientService, usSpinnerService, Appointment, ProviderRouting) {
 
             $scope.currentPage = 1;
 

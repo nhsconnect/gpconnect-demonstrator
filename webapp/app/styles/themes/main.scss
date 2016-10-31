@@ -638,11 +638,7 @@ legend {
 }
 
 .searchPagePanel {
-    background-color: white;
-    border: 1px solid #19568c;
     border-radius: 5px;
-    margin-top: 5%;
-    margin-bottom: 20px;
     padding: 5px;
 }
 
@@ -655,6 +651,9 @@ legend {
 }
 
 #testingConfigBody {
+    background-color: white;
+    border: 1px solid #19568c;
+    border-radius: 5px;
     padding: 5px;
 }
 

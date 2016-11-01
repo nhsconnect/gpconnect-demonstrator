@@ -10,6 +10,12 @@ angular.module('gpConnect')
     $scope.testingFhirUrl = ProviderRouting.getPersistentData.testingFhirUrl;
     $scope.toASID = ProviderRouting.getPersistentData.toASID;
     $scope.fromASID = ProviderRouting.getPersistentData.fromASID;
+    $scope.jwtIss = ProviderRouting.getPersistentData.jwtIss;
+    $scope.jwtSub = ProviderRouting.getPersistentData.jwtSub;
+    $scope.jwtRequesting_practitioner = ProviderRouting.getPersistentData.jwtRequesting_practitioner;
+    $scope.jwtRequesting_organization = ProviderRouting.getPersistentData.jwtRequesting_organization;
+    $scope.jwtRequesting_device = ProviderRouting.getPersistentData.jwtRequesting_device;
+    $scope.jwtReason_for_request = ProviderRouting.getPersistentData.jwtReason_for_request;
 
     $scope.openAdvancedSearch = AdvancedSearch.openAdvancedSearch;
 
@@ -68,6 +74,12 @@ angular.module('gpConnect')
         ProviderRouting.setPersistentData("testingFhirUrl", $scope.testingFhirUrl);
         ProviderRouting.setPersistentData("toASID", $scope.toASID);
         ProviderRouting.setPersistentData("fromASID", $scope.fromASID);
+        ProviderRouting.setPersistentData("jwtIss", $scope.jwtIss);
+        ProviderRouting.setPersistentData("jwtSub", $scope.jwtSub);
+        ProviderRouting.setPersistentData("jwtRequesting_practitioner", $scope.jwtRequesting_practitioner);
+        ProviderRouting.setPersistentData("jwtRequesting_organization", $scope.jwtRequesting_organization);
+        ProviderRouting.setPersistentData("jwtRequesting_device", $scope.jwtRequesting_device);
+        ProviderRouting.setPersistentData("jwtReason_for_request", $scope.jwtReason_for_request);
         usSpinnerService.stop('search-spinner');
         $scope.saveBtnText = "Saved";
     };

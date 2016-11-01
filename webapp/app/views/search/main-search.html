@@ -20,6 +20,7 @@
             <div class="col-md-8">(The target ODS Code will be used in priority to this target URL if both are supplied)</div>
         </div>
         
+        
         <div class="col-md-12 testConfigHeader">
             Request Meta Data - Configurable HTTP Headers
         </div>
@@ -33,6 +34,48 @@
             <label class="col-md-2" for="toASID">Ssp-To : </label>
             <input class="col-md-2" type="text" id="toASID" ng-model="toASID" >
         </div>
+        
+        
+        <div class="col-md-12 testConfigHeader">
+            Request Meta Data - JSON Web Token Elements
+        </div>
+        
+        <div class="col-md-12 testConfigField">
+            <label class="col-md-2" for="iss">iss</label>
+            <label class="col-md-4">(Requesting systems URI) : </label>
+            <input class="col-md-5" type="text" id="iss" ng-model="jwtIss" placeholder='http://gpconnect-uat.answerappcloud.com'>
+        </div>
+        
+        <div class="col-md-12 testConfigField">
+            <label class="col-md-2" for="sub">sub</label>
+            <label class="col-md-4">(practitioner local ID, matches requesting_practitioner.id) : </label>
+            <input class="col-md-2" type="text" id="sub" ng-model="jwtSub" placeholder='1'>
+        </div>
+        
+        <div class="col-md-12 testConfigField">
+            <label class="col-md-2" for="requesting_practitioner">requesting_practitioner</label>
+            <label class="col-md-4">(FHIR resource, Practitioner making request) : </label>
+            <input class="col-md-5" type="text" id="requesting_practitioner" ng-model="jwtRequesting_practitioner" placeholder='{ "resourceType": "Practitioner", "id": "1", "identifier": [{ "system": "http://fhir.nhs.net/sds-user-id", "value": "G13579135" }, { "system": "localSystem", "value": "1" }], "name": { "family": ["Demonstrator"], "given": ["GPConnect"], "prefix": ["Mr"] } }'>
+        </div>
+        
+        <div class="col-md-12 testConfigField">
+            <label class="col-md-2" for="requesting_organization">requesting_organization</label>
+            <label class="col-md-4">(FHIR resource, Organisation making request) : </label>
+            <input class="col-md-5" type="text" id="requesting_organization" ng-model="jwtRequesting_organization" placeholder='{ "resourceType": "Organization", "id": "1", "identifier": [{ "system": "http://fhir.nhs.net/Id/ods-organization-code", "value": "[ODSCode]" }], "name": "GP Connect Demonstrator" }'>
+        </div>
+        
+        <div class="col-md-12 testConfigField">
+            <label class="col-md-2" for="requesting_device">requesting_device</label>
+            <label class="col-md-4">(FHIR resource, device making request) : </label>
+            <input class="col-md-5" type="text" id="requesting_device" ng-model="jwtRequesting_device" placeholder='{ "resourceType": "Device", "id": "1", "identifier": [{ "system": "Web Interface", "value": "GP Connect Demonstrator" }], "model": "Demonstrator", "version": "1.0" }'>
+        </div>
+        
+        <div class="col-md-12 testConfigField">
+            <label class="col-md-2" for="reason_for_request">reason_for_request</label>
+            <label class="col-md-4">(Purpose for which access is being requested) : </label>
+            <input class="col-md-4" type="text" id="reason_for_request" ng-model="jwtReason_for_request" placeholder="directcare">
+        </div>
+        
 
         <button class="btn btn-success configSaveButton" ng-click="saveTestingConfig()"  ng-blur="btnReset()" >{{saveBtnText}}</button>
     </div>

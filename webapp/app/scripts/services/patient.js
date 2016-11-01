@@ -80,10 +80,10 @@ angular.module('gpConnect')
                 });
             };
             
-            var registerPatient = function (practiceOdsCode, patient, patientId) {
+            var registerPatient = function (practiceOdsCode, requestParameters, patientId) {
 
                 return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient").then(function (endpointLookupResult) {
-                    return $http.post(endpointLookupResult.restUrlPrefix + '/Patient/$gpc.registerpatient', patient,
+                    return $http.post(endpointLookupResult.restUrlPrefix + '/Patient/$gpc.registerpatient', requestParameters,
                             {
                                 headers: {
                                     'Ssp-From': endpointLookupResult.fromASID,

@@ -60,7 +60,6 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
@@ -560,17 +559,35 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
 	@Operation(name = "$gpc.registerpatient")
-    public Patient registerPatient(@ResourceParam Patient unregisteredPatient) {
+    public Bundle registerPatient(@ResourceParam Parameters params) {
+        
+        Patient unregisteredPatient = null;
     	Patient registeredPatient = null;
+        
+        for (Parameter param : params.getParameter()) {
+            if ("registerPatient".equalsIgnoreCase(param.getName())) {
+                unregisteredPatient = (Patient) param.getResource();
+            }
+        }
+        
     	if(unregisteredPatient != null) {
-	    	//check NHS number doesn't exist first
-    		patientStore.create(registerPatientResourceConverterToPatientDetail(unregisteredPatient));
-	    	registeredPatient = patientDetailsToRegisterPatientResourceConverter(patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
+	    	//check if the patient already exists
+            PatientDetails patientDetails = patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue());
+            if(patientDetails == null){
+                patientStore.create(registerPatientResourceConverterToPatientDetail(unregisteredPatient));
+                registeredPatient = patientDetailsToRegisterPatientResourceConverter(patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
+            } else {
+                registeredPatient = patientDetailsToRegisterPatientResourceConverter(patientDetails);
+            }
     	}
     	else {
-            throw new IllegalArgumentException("No patient found when attempting gpc.registerpatient operation");
+            throw new IllegalArgumentException("No patient found in request when attempting gpc.registerpatient operation");
     	}
-    	return registeredPatient;
+        
+        Bundle bundle = new Bundle();
+        bundle.setType(BundleTypeEnum.TRANSACTION_RESPONSE);
+        bundle.addEntry().setResource(registeredPatient);
+    	return bundle;
     }
 
 	private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {

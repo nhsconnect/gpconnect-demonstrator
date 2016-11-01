@@ -33,8 +33,18 @@ angular.module('gpConnect')
                 newPatient.gender = $scope.patientDetails.gender;
                 newPatient.birthDate = $scope.patientDetails.birthDate;
                 
+                var requestParameters = {
+                    "resourceType": "Parameters",
+                    "parameter": [
+                        {
+                            "name": "registerPatient",
+                            "resource": newPatient
+                        }
+                    ]
+                };
+                
                 // Create patient on remote system
-                PatientService.registerPatient(appointmentBookingParameters.location.odsCode, newPatient, $stateParams.patientId).then(function (registeredPatientResource) {
+                PatientService.registerPatient(appointmentBookingParameters.location.odsCode, requestParameters, $stateParams.patientId).then(function (registeredPatientResource) {
                     usSpinnerService.stop('patientCreate-spinner');
                     $modalInstance.close();
                     $modal.open({
@@ -51,7 +61,7 @@ angular.module('gpConnect')
                                 return $scope.patientDetails;
                             },
                             appointmentBookingParams: function () {
-                                appointmentBookingParameters.patientFhirId = registeredPatientResource.id; // Copy new fhir id from returned patient resource
+                                appointmentBookingParameters.patientFhirId = registeredPatientResource.entry[0].resource.id; // Copy new fhir id from returned patient resource
                                 return appointmentBookingParameters;
                             }
                         }

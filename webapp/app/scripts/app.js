@@ -468,8 +468,7 @@ angular
 
 
 var errorModal = function (httpResponse, $injector) {
-    var errorMsg = errorMapping(httpResponse.status);
-    if (errorMsg != undefined) {
+    if (httpResponse.status >= 400) {
         var modal = $injector.get('$modal');
         modal.open({
             templateUrl: 'views/application/generic-error-modal.html',
@@ -478,8 +477,7 @@ var errorModal = function (httpResponse, $injector) {
             resolve: {
                 errorInfo: function () {
                     return {
-                        "response": httpResponse,
-                        "errorMsg" : errorMsg
+                        "response": httpResponse
                     };
                 }
             }

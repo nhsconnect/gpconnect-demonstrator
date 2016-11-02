@@ -1,6 +1,7 @@
 package uk.gov.hscic.common.filters;
 
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private String systemSspToHeader = null;
     private HashSet interactionIdWhiteList = null;
-    private List<String> errorSimulationCodes = null;
+    private List<JSONObject> errorSimulationCodes = null;
     private int simulationErrorIndex = 0;
 
     @PostConstruct
@@ -70,7 +71,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             if (errorsJSONArray.length() > 0) {
                 errorSimulationCodes = new ArrayList<>();
                 for (int index = 0; index < errorsJSONArray.length(); index++) {
-                    errorSimulationCodes.add(errorsJSONArray.getJSONObject(index).getString("errorCode"));
+                    errorSimulationCodes.add(errorsJSONArray.getJSONObject(index));
                 }
             }
 
@@ -122,7 +123,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         if(errorSimulationCodes != null){
             if(simulationErrorIndex >= 0 && simulationErrorIndex < errorSimulationCodes.size()){
                 try{
-                    httpResponse.sendError(Integer.parseInt(errorSimulationCodes.get(simulationErrorIndex)));
+                    httpResponse.setStatus(errorSimulationCodes.get(simulationErrorIndex).getInt("httpError"));
+                    httpResponse.setHeader("Content-Type", "application/json+fhir");
+                    PrintWriter writer = httpResponse.getWriter();
+                    writer.write("{ \"resourceType\": \"OperationOutcome\", \"issue\": [ { \"severity\": \"error\", \"code\": \"forbidden\", \"details\": { \"coding\": [ { \"system\": \"http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1\", \"code\": \""+ errorSimulationCodes.get(simulationErrorIndex).getString("errorCode") +"\" } ], \"text\": \""+ errorSimulationCodes.get(simulationErrorIndex).getString("errorDescription") +"\" }}]}");
+                    writer.flush();
+                    writer.close();
                     simulationErrorIndex++;
                     if(simulationErrorIndex == errorSimulationCodes.size()) simulationErrorIndex = 0;
                     return false;

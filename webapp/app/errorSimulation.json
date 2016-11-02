@@ -1,16 +1,24 @@
 {
     "errors": [
         {
-            "errorCode" : "403",
-			"errorReason" : "NO_PATIENT_CONSENT"
+			"httpError" : 403,
+            "errorCode" : "NO_PATIENT_CONSENT",
+			"errorDescription" : "No Patient Consent To Share"
         },
 		{
-            "errorCode" : "403",
-			"errorReason" : "NO_ORGANISATIONAL_CONSENT"
+			"httpError" : 403,
+            "errorCode" : "NO_ORGANISATIONAL_CONSENT",
+			"errorDescription" : "No Organisational Consent To Share"
         },
 		{
-            "errorCode" : "403",
-			"errorReason" : "NON_AUTHORITATIVE"
+			"httpError" : 403,
+            "errorCode" : "NON_AUTHORITATIVE",
+			"errorDescription" : "Non Authoritative"
+        },
+		{
+			"httpError" : 422,
+            "errorCode" : "INVALID_RESOURCE",
+			"errorDescription" : "Submitted resource is not valid."
         }
     ]
 }

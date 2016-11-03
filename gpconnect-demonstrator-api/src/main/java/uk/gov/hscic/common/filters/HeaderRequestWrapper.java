@@ -18,6 +18,9 @@ public class HeaderRequestWrapper extends HttpServletRequestWrapper {
         if("Prefer".equalsIgnoreCase(name) && (header == null || header.isEmpty())){
             header = "return=representation";
         }
+        if("Accept".equalsIgnoreCase(name) && (header == null || !header.contains("application"))){
+            header = super.getHeader("content-type");
+        }
         return header;
     }
 
@@ -27,6 +30,26 @@ public class HeaderRequestWrapper extends HttpServletRequestWrapper {
         if(!names.contains("Prefer")){
             names.add("Prefer");
         }
+        if(!names.contains("Accept")){
+            names.add("Accept");
+        }
         return Collections.enumeration(names);
     }
+    
+    @Override
+    public Enumeration<String> getHeaders(String name) {
+        
+        if("Accept".equalsIgnoreCase(name)){
+            List<String> values = Collections.list(super.getHeaders(name));
+            for(String value : values){
+                if(!value.contains("application")){
+                    values.remove(value);
+                    values.add(getHeader(name));
+                }
+            }
+            return Collections.enumeration(values);
+        }
+        
+        return super.getHeaders(name);
+    } 
 }

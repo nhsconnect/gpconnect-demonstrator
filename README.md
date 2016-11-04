@@ -1,7 +1,7 @@
 GPConnect Demonstrator
 =========
   
-The following README contains information related to developing and running the GP Connect Demonstrator locally. If you wish to deploy the demonstrator there is a setup guide within the "Documents" folder of this project named "Deployment Document.docx" which will give you a simple guide to getting a basic instance of the GP Connect Demonstrator up and running.
+The following README contains information related to developing and running the GP Connect Demonstrator locally, including how to peroform a build. If you wish to setup a basic deployed instance of the demonstrator on a tomcat server there is a setup guide within the "Documents" folder at the root of this project. This will give you a simple guide to getting a basic instance of the GP Connect Demonstrator up and running and some basic configuration information. There is a second document within the "Documents" folder which goes into more detail about configuration options for the GP Connect Demonstrator.
 
 ### Requirements
 
@@ -225,7 +225,7 @@ The built project will appear as a WAR file in the following directory, with the
 ```sh
 {projectRoot}\gpconnect-demonstrator-api\target
 ```
-The WAR file can be deployed to an application server, such as tomcat. For information on creating a simple tomcat deployment for testing purposes take a look at the "Deployment Document.docx" in the following directory:
+The WAR file can be deployed to an application server, such as tomcat. For information on creating a simple tomcat deployment for testing purposes take a look at the "1 - Basic Server Deployment & Configuration.docx" in the following directory:
 ```sh
 {projectRoot}\Documents
 ```

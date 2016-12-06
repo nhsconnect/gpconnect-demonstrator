@@ -58,6 +58,18 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			} else {
 				return new RuleBuilder().denyAll().build();
 			}
+			
+			
+			
+			JSONObject requestingPractitionerArray = claimsJsonObject.getJSONObject("requesting_practitioner");
+			String practionerId = requestingPractitionerArray.getString("id") ;
+			String sub = claimsJsonObject.getString("sub");
+			
+			if(!(practionerId.equals(sub)))
+			{
+				return new RuleBuilder().denyAll().build();
+			}
+			
 
 			JSONArray organizationIdentifierArray = claimsJsonObject.getJSONObject("requesting_organization")
 					.getJSONArray("identifier");
@@ -87,18 +99,6 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			 * } } } else { return new RuleBuilder().denyAll().build(); }
 			 */
 
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			
 			JSONArray practitionerIdentifierArray = claimsJsonObject.getJSONObject("requesting_practitioner")
 					.getJSONArray("identifier");

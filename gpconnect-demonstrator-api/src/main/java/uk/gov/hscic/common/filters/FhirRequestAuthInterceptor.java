@@ -33,6 +33,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			authLog.info("JWTClaims - " + claimsJsonString);
 
 			JSONObject claimsJsonObject = new JSONObject(claimsJsonString);
+
 			String requestScopeType = claimsJsonObject.getJSONObject("requested_record").getString("resourceType");
 			JSONArray requestIdentifiersArray = claimsJsonObject.getJSONObject("requested_record")
 					.getJSONArray("identifier");
@@ -70,8 +71,9 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			} else {
 				return new RuleBuilder().denyAll().build();
 			}
-			//The method has been commented out to allow continuation of work. The method 
-			//fails the response due to the wrong identifier being in place
+			// The method has been commented out to allow continuation of work.
+			// The method
+			// fails the response due to the wrong identifier being in place
 			/*
 			 * JSONArray practitionerIdentifierArray =
 			 * claimsJsonObject.getJSONObject("requesting_practitioner")
@@ -85,6 +87,19 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			 * } } } else { return new RuleBuilder().denyAll().build(); }
 			 */
 
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			JSONArray practitionerIdentifierArray = claimsJsonObject.getJSONObject("requesting_practitioner")
 					.getJSONArray("identifier");
 			if (practitionerIdentifierArray.length() > 0) {
@@ -101,10 +116,32 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			if (timeValidationIdentifierInt > System.currentTimeMillis()) {
 				return new RuleBuilder().denyAll().build();
 			}
+			
+			String reasonForRequestValid = claimsJsonObject.getString("reason_for_request");
+			if (!reasonForRequestValid.equals("directcare"))
+			{
+				return new RuleBuilder().denyAll().build();
+			}
+			
+			
+			
 
 			int timeValidationExpiryTime = claimsJsonObject.getInt("exp");
 			int expiryTime = 300000;
+			
 			if ((timeValidationExpiryTime - timeValidationIdentifierInt) != expiryTime) {
+				return new RuleBuilder().denyAll().build();
+			}
+
+			String requestedScopeValue = claimsJsonObject.getString("requested_scope");
+			boolean comparisonResultPR = requestedScopeValue.equals("patient/*.read");
+			boolean comparisonResultPW = requestedScopeValue.equals("patient/*.write");
+			boolean comparisonResultOR = requestedScopeValue.equals("organization/*.read");
+			boolean comparisonResultOW = requestedScopeValue.equals("organization/*.write");
+
+			if (comparisonResultPR == true || comparisonResultPW == true || comparisonResultOR == true
+					|| comparisonResultOW == true) {
+			} else {
 				return new RuleBuilder().denyAll().build();
 			}
 		}

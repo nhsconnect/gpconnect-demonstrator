@@ -7,8 +7,11 @@ import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.Time;
 import java.util.Base64;
 import org.json.*;
@@ -24,8 +27,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 	public List<IAuthRule> buildRuleList(RequestDetails theRequestDetails) {
 
 		String authorizationStr = theRequestDetails.getHeader("Authorization");
-
 		String[] jwtHeaderComponents = authorizationStr.split(" ");
+
 		if (jwtHeaderComponents.length == 2 && "Bearer".equalsIgnoreCase(jwtHeaderComponents[0])) {
 			String[] tokenComponents = jwtHeaderComponents[1].split("\\.");
 			String claimsJsonString = new String(Base64.getDecoder().decode(tokenComponents[1]));
@@ -37,6 +40,16 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			String requestScopeType = claimsJsonObject.getJSONObject("requested_record").getString("resourceType");
 			JSONArray requestIdentifiersArray = claimsJsonObject.getJSONObject("requested_record")
 					.getJSONArray("identifier");
+
+			String requestOperation = theRequestDetails.getRequestPath();
+
+			if (requestOperation.equals("Patient/$gpc.getcarerecord")) {
+				// "REQUEST_RECORD" = patient resource //DONE
+				if (!requestScopeType.equals("Patient")) {
+					return new RuleBuilder().denyAll().build();
+				}
+
+			}
 
 			if (requestIdentifiersArray.length() > 0) {
 				String identifierSystem = ((JSONObject) requestIdentifiersArray.get(0)).getString("system");
@@ -58,19 +71,17 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			} else {
 				return new RuleBuilder().denyAll().build();
 			}
-			
-			
-			
+
+			// Checking the practionerId and the sub are equal in value
 			JSONObject requestingPractitionerArray = claimsJsonObject.getJSONObject("requesting_practitioner");
-			String practionerId = requestingPractitionerArray.getString("id") ;
+			String practionerId = requestingPractitionerArray.getString("id");
 			String sub = claimsJsonObject.getString("sub");
-			
-			if(!(practionerId.equals(sub)))
-			{
+
+			if (!(practionerId.equals(sub))) {
 				return new RuleBuilder().denyAll().build();
 			}
-			
 
+			// Checking organization identifier is correct
 			JSONArray organizationIdentifierArray = claimsJsonObject.getJSONObject("requesting_organization")
 					.getJSONArray("identifier");
 			if (organizationIdentifierArray.length() > 0) {
@@ -99,7 +110,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			 * } } } else { return new RuleBuilder().denyAll().build(); }
 			 */
 
-			
+			// Checking practitioner identifier is correct
 			JSONArray practitionerIdentifierArray = claimsJsonObject.getJSONObject("requesting_practitioner")
 					.getJSONArray("identifier");
 			if (practitionerIdentifierArray.length() > 0) {
@@ -112,27 +123,27 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 				return new RuleBuilder().denyAll().build();
 			}
 
+			// Checking the creation date is not in the future
 			int timeValidationIdentifierInt = claimsJsonObject.getInt("iat");
 			if (timeValidationIdentifierInt > System.currentTimeMillis()) {
 				return new RuleBuilder().denyAll().build();
 			}
-			
+
+			// Checking th reason for request is dircetcare
 			String reasonForRequestValid = claimsJsonObject.getString("reason_for_request");
-			if (!reasonForRequestValid.equals("directcare"))
-			{
+			if (!reasonForRequestValid.equals("directcare")) {
 				return new RuleBuilder().denyAll().build();
 			}
-			
-			
-			
 
+			// Checking the expiary time is 5 minutes after creation
 			int timeValidationExpiryTime = claimsJsonObject.getInt("exp");
 			int expiryTime = 300000;
-			
+
 			if ((timeValidationExpiryTime - timeValidationIdentifierInt) != expiryTime) {
 				return new RuleBuilder().denyAll().build();
 			}
 
+			// Checking the requested scope is valid
 			String requestedScopeValue = claimsJsonObject.getString("requested_scope");
 			boolean comparisonResultPR = requestedScopeValue.equals("patient/*.read");
 			boolean comparisonResultPW = requestedScopeValue.equals("patient/*.write");
@@ -144,9 +155,100 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			} else {
 				return new RuleBuilder().denyAll().build();
 			}
-		}
 
+			// Checks the aud is the correct link
+			String aud = claimsJsonObject.getString("aud");
+			if (!(aud.equals("https://authorize.fhir.nhs.net/token"))) {
+				return new RuleBuilder().denyAll().build();
+			}
+
+			// Checks the JWT has the correct propertys
+			boolean JWTHasCorrectJsonPropertys = true;
+			JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestedRecordIsValidated(claimsJsonObject);
+			JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestingDeviceIsValidated(claimsJsonObject);
+			JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestingOrganizationIsValidated(claimsJsonObject);
+			JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestingPractitionerIsValidated(claimsJsonObject);
+
+			if (JWTHasCorrectJsonPropertys == false) {
+				return new RuleBuilder().denyAll().build();
+			}
+
+		}
 		return new RuleBuilder().allowAll().build();
+	}
+
+	private boolean checkJWTJSONResponseRequestedRecordIsValidated(JSONObject claimsJsonObject) {
+		// Done
+		try {
+			claimsJsonObject.getJSONObject("requested_record").getString("resourceType");
+			JSONArray RESULTS = claimsJsonObject.getJSONObject("requested_record").getJSONArray("identifier");
+			if (RESULTS.length() > 0) {
+				((JSONObject) RESULTS.get(0)).getString("system");
+				((JSONObject) RESULTS.get(0)).getString("value");
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+
+		}
+	}
+
+	private boolean checkJWTJSONResponseRequestingDeviceIsValidated(JSONObject claimsJsonObject) {
+		try {
+			claimsJsonObject.getJSONObject("requesting_device").getString("resourceType");
+			claimsJsonObject.getJSONObject("requesting_device").getString("id");
+			claimsJsonObject.getJSONObject("requesting_device").getString("model");
+			claimsJsonObject.getJSONObject("requesting_device").getString("version");
+			JSONArray RESULTS = claimsJsonObject.getJSONObject("requesting_device").getJSONArray("identifier");
+			if (RESULTS.length() > 0) {
+				((JSONObject) RESULTS.get(0)).getString("system");
+				((JSONObject) RESULTS.get(0)).getString("value");
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+
+		}
+	}
+
+	private boolean checkJWTJSONResponseRequestingOrganizationIsValidated(JSONObject claimsJsonObject) {
+		try {
+			claimsJsonObject.getJSONObject("requesting_organization").getString("resourceType");
+			claimsJsonObject.getJSONObject("requesting_organization").getString("id");
+			claimsJsonObject.getJSONObject("requesting_organization").getString("name");
+			JSONArray RESULTS = claimsJsonObject.getJSONObject("requesting_organization").getJSONArray("identifier");
+			if (RESULTS.length() > 0) {
+				((JSONObject) RESULTS.get(0)).getString("system");
+				((JSONObject) RESULTS.get(0)).getString("value");
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	private boolean checkJWTJSONResponseRequestingPractitionerIsValidated(JSONObject claimsJsonObject) {
+		try {
+			claimsJsonObject.getJSONObject("requesting_practitioner").getString("resourceType");
+			claimsJsonObject.getJSONObject("requesting_practitioner").getString("id");
+			JSONArray RESULTS = claimsJsonObject.getJSONObject("requesting_practitioner").getJSONArray("identifier");
+			if (RESULTS.length() > 0) {
+				((JSONObject) RESULTS.get(0)).getString("system");
+				((JSONObject) RESULTS.get(0)).getString("value");
+			}
+			JSONObject RESULTS1 = claimsJsonObject.getJSONObject("requesting_practitioner").getJSONObject("name");
+
+			if (RESULTS1.length() > 0) {
+				RESULTS1.get("family");
+				RESULTS1.get("given");
+				RESULTS1.get("prefix");
+			}
+			// This is where practitionerRole should be tested, Issue accessing
+			// inner property
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 }

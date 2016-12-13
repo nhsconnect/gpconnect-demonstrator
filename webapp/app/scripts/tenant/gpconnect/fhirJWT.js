@@ -15,7 +15,7 @@ angular.module('gpConnect')
                 // Payload
                 var oPayload = {};
                 var tNow = KJUR.jws.IntDate.get('now');
-                var endTime = KJUR.jws.IntDate.get('now') + 300000;
+                var endTime = KJUR.jws.IntDate.get('now') + 300;
                 endTime = '' + endTime; // Convert to string
                 var tEnd = KJUR.jws.IntDate.get(endTime); //Add 5 minutes, the library does not have a default mthod dor adding minutes
                 

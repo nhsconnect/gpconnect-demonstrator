@@ -117,7 +117,6 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 				String identifierSystem = ((JSONObject) practitionerIdentifierArray.get(0)).getString("system");
 				if (!"http://fhir.nhs.net/sds-user-id".equalsIgnoreCase(identifierSystem)) {
 					return new RuleBuilder().denyAll().build();
-
 				}
 			} else {
 				return new RuleBuilder().denyAll().build();
@@ -125,21 +124,21 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 			// Checking the creation date is not in the future
 			int timeValidationIdentifierInt = claimsJsonObject.getInt("iat");
-			if (timeValidationIdentifierInt > System.currentTimeMillis()) {
-				return new RuleBuilder().denyAll().build();
+			
+			if (timeValidationIdentifierInt > (System.currentTimeMillis())/1000) {
+					return new RuleBuilder().denyAll().build();
 			}
-
 			// Checking th reason for request is dircetcare
 			String reasonForRequestValid = claimsJsonObject.getString("reason_for_request");
 			if (!reasonForRequestValid.equals("directcare")) {
 				return new RuleBuilder().denyAll().build();
 			}
-
+			
 			// Checking the expiary time is 5 minutes after creation
 			int timeValidationExpiryTime = claimsJsonObject.getInt("exp");
-			int expiryTime = 300000;
-
-			if ((timeValidationExpiryTime - timeValidationIdentifierInt) != expiryTime) {
+			int expiryTime = 300;
+		
+			if ((timeValidationExpiryTime) - (timeValidationIdentifierInt) != expiryTime) {
 				return new RuleBuilder().denyAll().build();
 			}
 

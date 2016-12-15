@@ -1,0 +1,17 @@
+urn:nhs:names:services:gpconnect:fhir:rest:read:metadata
+urn:nhs:names:services:gpconnect:fhir:rest:read:patient 
+urn:nhs:names:services:gpconnect:fhir:rest:search:patient 
+urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner 
+urn:nhs:names:services:gpconnect:fhir:rest:search:practitioner 
+urn:nhs:names:services:gpconnect:fhir:rest:read:organization 
+urn:nhs:names:services:gpconnect:fhir:rest:search:organization 
+urn:nhs:names:services:gpconnect:fhir:rest:read:location 
+urn:nhs:names:services:gpconnect:fhir:rest:search:location 
+urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord 
+urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule 
+urn:nhs:names:services:gpconnect:fhir:rest:read:appointment"
+urn:nhs:names:services:gpconnect:fhir:rest:create:appointment
+urn:nhs:names:services:gpconnect:fhir:rest:update:appointment
+urn:nhs:names:services:gpconnect:fhir:rest:create:order
+urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments
+urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient

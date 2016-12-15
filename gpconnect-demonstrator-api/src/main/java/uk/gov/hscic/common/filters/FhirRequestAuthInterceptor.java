@@ -7,6 +7,9 @@ import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 
+import javax.json.JsonException;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
@@ -37,138 +40,145 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 			JSONObject claimsJsonObject = new JSONObject(claimsJsonString);
 
-			String requestScopeType = claimsJsonObject.getJSONObject("requested_record").getString("resourceType");
-			JSONArray requestIdentifiersArray = claimsJsonObject.getJSONObject("requested_record")
-					.getJSONArray("identifier");
+			try {
 
-			String requestOperation = theRequestDetails.getRequestPath();
+				String requestScopeType = claimsJsonObject.getJSONObject("requested_record").getString("resourceType");
+				JSONArray requestIdentifiersArray = claimsJsonObject.getJSONObject("requested_record")
+						.getJSONArray("identifier");
 
-			if (requestOperation.equals("Patient/$gpc.getcarerecord")) {
-				// "REQUEST_RECORD" = patient resource //DONE
-				if (!requestScopeType.equals("Patient")) {
-					return new RuleBuilder().denyAll().build();
-				}
+				String requestOperation = theRequestDetails.getRequestPath();
 
-			}
-
-			if (requestIdentifiersArray.length() > 0) {
-				String identifierSystem = ((JSONObject) requestIdentifiersArray.get(0)).getString("system");
-
-				String identifierValue = ((JSONObject) requestIdentifiersArray.get(0)).getString("value");
-				if ("Patient".equalsIgnoreCase(requestScopeType)) {
-					// If it is a patient orientated request
-					if (!"http://fhir.nhs.net/Id/nhs-number".equalsIgnoreCase(identifierSystem)
-							|| !NhsCodeValidator.nhsNumberValid(identifierValue)) {
+				if (requestOperation.equals("Patient/$gpc.getcarerecord")) {
+					// "REQUEST_RECORD" = patient resource //DONE
+					if (!requestScopeType.equals("Patient")) {
 						return new RuleBuilder().denyAll().build();
 					}
 
+				}
+
+				if (requestIdentifiersArray.length() > 0) {
+					String identifierSystem = ((JSONObject) requestIdentifiersArray.get(0)).getString("system");
+
+					String identifierValue = ((JSONObject) requestIdentifiersArray.get(0)).getString("value");
+					if ("Patient".equalsIgnoreCase(requestScopeType)) {
+						// If it is a patient orientated request
+						if (!"http://fhir.nhs.net/Id/nhs-number".equalsIgnoreCase(identifierSystem)
+								|| !NhsCodeValidator.nhsNumberValid(identifierValue)) {
+							return new RuleBuilder().denyAll().build();
+						}
+
+					} else {
+						// If it is an organization oriantated request
+						if (!"http://fhir.nhs.net/Id/ods-organization-code".equalsIgnoreCase(identifierSystem)) {
+							return new RuleBuilder().denyAll().build();
+						}
+					}
 				} else {
-					// If it is an organization oriantated request
-					if (!"http://fhir.nhs.net/Id/ods-organization-code".equalsIgnoreCase(identifierSystem)) {
-						return new RuleBuilder().denyAll().build();
-					}
-				}
-			} else {
-				return new RuleBuilder().denyAll().build();
-			}
-
-			// Checking the practionerId and the sub are equal in value
-			JSONObject requestingPractitionerArray = claimsJsonObject.getJSONObject("requesting_practitioner");
-			String practionerId = requestingPractitionerArray.getString("id");
-			String sub = claimsJsonObject.getString("sub");
-
-			if (!(practionerId.equals(sub))) {
-				return new RuleBuilder().denyAll().build();
-			}
-
-			// Checking organization identifier is correct
-			JSONArray organizationIdentifierArray = claimsJsonObject.getJSONObject("requesting_organization")
-					.getJSONArray("identifier");
-			if (organizationIdentifierArray.length() > 0) {
-				for (int i = 0; i < organizationIdentifierArray.length(); i++) {
-					String identifierSystem = ((JSONObject) organizationIdentifierArray.get(i)).getString("system");
-					if (!"http://fhir.nhs.net/Id/ods-organization-code".equalsIgnoreCase(identifierSystem)) {
-						return new RuleBuilder().denyAll().build();
-					}
-				}
-			} else {
-				return new RuleBuilder().denyAll().build();
-			}
-			// The method has been commented out to allow continuation of work.
-			// The method
-			// fails the response due to the wrong identifier being in place
-			/*
-			 * JSONArray practitionerIdentifierArray =
-			 * claimsJsonObject.getJSONObject("requesting_practitioner")
-			 * .getJSONArray("identifier"); if
-			 * (practitionerIdentifierArray.length() > 0) { for (int i = 0; i <
-			 * practitionerIdentifierArray.length(); i++) { String
-			 * identifierSystem = ((JSONObject)
-			 * practitionerIdentifierArray.get(i)).getString("system"); if
-			 * (!"http://fhir.nhs.net/sds-user-id".equalsIgnoreCase(
-			 * identifierSystem)) { return new RuleBuilder().denyAll().build();
-			 * } } } else { return new RuleBuilder().denyAll().build(); }
-			 */
-
-			// Checking practitioner identifier is correct
-			JSONArray practitionerIdentifierArray = claimsJsonObject.getJSONObject("requesting_practitioner")
-					.getJSONArray("identifier");
-			if (practitionerIdentifierArray.length() > 0) {
-				String identifierSystem = ((JSONObject) practitionerIdentifierArray.get(0)).getString("system");
-				if (!"http://fhir.nhs.net/sds-user-id".equalsIgnoreCase(identifierSystem)) {
 					return new RuleBuilder().denyAll().build();
 				}
-			} else {
-				return new RuleBuilder().denyAll().build();
-			}
 
-			// Checking the creation date is not in the future
-			int timeValidationIdentifierInt = claimsJsonObject.getInt("iat");
-			
-			if (timeValidationIdentifierInt > (System.currentTimeMillis())/1000) {
+				// Checking the practionerId and the sub are equal in value
+				JSONObject requestingPractitionerArray = claimsJsonObject.getJSONObject("requesting_practitioner");
+				String practionerId = requestingPractitionerArray.getString("id");
+				String sub = claimsJsonObject.getString("sub");
+				System.out.println("Getting default policy " + getDefaultPolicy());
+				if (!(practionerId.equals(sub))) {
 					return new RuleBuilder().denyAll().build();
-			}
-			// Checking th reason for request is dircetcare
-			String reasonForRequestValid = claimsJsonObject.getString("reason_for_request");
-			if (!reasonForRequestValid.equals("directcare")) {
-				return new RuleBuilder().denyAll().build();
-			}
-			
-			// Checking the expiary time is 5 minutes after creation
-			int timeValidationExpiryTime = claimsJsonObject.getInt("exp");
-			int expiryTime = 300;
-		
-			if ((timeValidationExpiryTime) - (timeValidationIdentifierInt) != expiryTime) {
-				return new RuleBuilder().denyAll().build();
-			}
+				}
 
-			// Checking the requested scope is valid
-			String requestedScopeValue = claimsJsonObject.getString("requested_scope");
-			boolean comparisonResultPR = requestedScopeValue.equals("patient/*.read");
-			boolean comparisonResultPW = requestedScopeValue.equals("patient/*.write");
-			boolean comparisonResultOR = requestedScopeValue.equals("organization/*.read");
-			boolean comparisonResultOW = requestedScopeValue.equals("organization/*.write");
+				// Checking organization identifier is correct
+				JSONArray organizationIdentifierArray = claimsJsonObject.getJSONObject("requesting_organization")
+						.getJSONArray("identifier");
+				if (organizationIdentifierArray.length() > 0) {
+					for (int i = 0; i < organizationIdentifierArray.length(); i++) {
+						String identifierSystem = ((JSONObject) organizationIdentifierArray.get(i)).getString("system");
+						if (!"http://fhir.nhs.net/Id/ods-organization-code".equalsIgnoreCase(identifierSystem)) {
+							return new RuleBuilder().denyAll().build();
+						}
+					}
+				} else {
+					return new RuleBuilder().denyAll().build();
+				}
+				// The method has been commented out to allow continuation of
+				// work.
+				// The method
+				// fails the response due to the wrong identifier being in place
+				/*
+				 * JSONArray practitionerIdentifierArray =
+				 * claimsJsonObject.getJSONObject("requesting_practitioner")
+				 * .getJSONArray("identifier"); if
+				 * (practitionerIdentifierArray.length() > 0) { for (int i = 0;
+				 * i < practitionerIdentifierArray.length(); i++) { String
+				 * identifierSystem = ((JSONObject)
+				 * practitionerIdentifierArray.get(i)).getString("system"); if
+				 * (!"http://fhir.nhs.net/sds-user-id".equalsIgnoreCase(
+				 * identifierSystem)) { return new
+				 * RuleBuilder().denyAll().build(); } } } else { return new
+				 * RuleBuilder().denyAll().build(); }
+				 */
 
-			if (comparisonResultPR == true || comparisonResultPW == true || comparisonResultOR == true
-					|| comparisonResultOW == true) {
-			} else {
-				return new RuleBuilder().denyAll().build();
-			}
+				// Checking practitioner identifier is correct
+				JSONArray practitionerIdentifierArray = claimsJsonObject.getJSONObject("requesting_practitioner")
+						.getJSONArray("identifier");
+				if (practitionerIdentifierArray.length() > 0) {
+					String identifierSystem = ((JSONObject) practitionerIdentifierArray.get(0)).getString("system");
+					if (!"http://fhir.nhs.net/sds-user-id".equalsIgnoreCase(identifierSystem)) {
+						return new RuleBuilder().denyAll().build();
+					}
+				} else {
+					return new RuleBuilder().denyAll().build();
+				}
 
-			// Checks the aud is the correct link
-			String aud = claimsJsonObject.getString("aud");
-			if (!(aud.equals("https://authorize.fhir.nhs.net/token"))) {
-				return new RuleBuilder().denyAll().build();
-			}
+				// Checking the creation date is not in the future
+				int timeValidationIdentifierInt = claimsJsonObject.getInt("iat");
 
-			// Checks the JWT has the correct propertys
-			boolean JWTHasCorrectJsonPropertys = true;
-			JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestedRecordIsValidated(claimsJsonObject);
-			JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestingDeviceIsValidated(claimsJsonObject);
-			JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestingOrganizationIsValidated(claimsJsonObject);
-			JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestingPractitionerIsValidated(claimsJsonObject);
+				if (timeValidationIdentifierInt > (System.currentTimeMillis()) / 1000) {
+					return new RuleBuilder().denyAll().build();
+				}
+				// Checking th reason for request is dircetcare
+				String reasonForRequestValid = claimsJsonObject.getString("reason_for_request");
+				if (!reasonForRequestValid.equals("directcare")) {
+					return new RuleBuilder().denyAll().build();
+				}
 
-			if (JWTHasCorrectJsonPropertys == false) {
+				// Checking the expiary time is 5 minutes after creation
+				int timeValidationExpiryTime = claimsJsonObject.getInt("exp");
+				int expiryTime = 300;
+
+				if ((timeValidationExpiryTime) - (timeValidationIdentifierInt) != expiryTime) {
+					return new RuleBuilder().denyAll().build();
+				}
+
+				// Checking the requested scope is valid
+				String requestedScopeValue = claimsJsonObject.getString("requested_scope");
+				boolean comparisonResultPR = requestedScopeValue.equals("patient/*.read");
+				boolean comparisonResultPW = requestedScopeValue.equals("patient/*.write");
+				boolean comparisonResultOR = requestedScopeValue.equals("organization/*.read");
+				boolean comparisonResultOW = requestedScopeValue.equals("organization/*.write");
+
+				if (comparisonResultPR == true || comparisonResultPW == true || comparisonResultOR == true
+						|| comparisonResultOW == true) {
+				} else {
+					return new RuleBuilder().denyAll().build();
+				}
+
+				// Checks the aud is the correct link
+				String aud = claimsJsonObject.getString("aud");
+				if (!(aud.equals("https://authorize.fhir.nhs.net/token"))) {
+					return new RuleBuilder().denyAll().build();
+				}
+
+				// Checks the JWT has the correct propertys
+				boolean JWTHasCorrectJsonPropertys = true;
+				JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestedRecordIsValidated(claimsJsonObject);
+				JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestingDeviceIsValidated(claimsJsonObject);
+				JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestingOrganizationIsValidated(claimsJsonObject);
+				JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestingPractitionerIsValidated(claimsJsonObject);
+
+				if (JWTHasCorrectJsonPropertys == false) {
+					return new RuleBuilder().denyAll().build();
+				}
+			} catch (org.json.JSONException e) {
 				return new RuleBuilder().denyAll().build();
 			}
 

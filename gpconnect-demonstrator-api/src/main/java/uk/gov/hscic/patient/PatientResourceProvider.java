@@ -2,11 +2,13 @@ package uk.gov.hscic.patient;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import org.hl7.fhir.instance.model.api.IBaseExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
@@ -170,16 +172,27 @@ public class PatientResourceProvider implements IResourceProvider {
         OperationOutcome operationOutcome = new OperationOutcome();
         String nhsNumber = null;
         ArrayList<String> sectionsParamList = new ArrayList();
+        //ArrayList<List<CodingDt>> sectionsCodeableList = new ArrayList<>();
+        //ArrayList<CodingDt> coadingList = new ArrayList<CodingDt>();
 
         Date fromDate = null;
         Date toDate = null;
         // Extract the parameters
         for (Parameter param : params.getParameter()) {
+        	System.out.println("PARAM : " + param);
             IDatatype value = param.getValue();
+            System.out.println("Value  : " + value);
             if (value instanceof IdentifierDt) {
                 nhsNumber = ((IdentifierDt) value).getValue();
             } else if (value instanceof StringDt) {
                 sectionsParamList.add(((StringDt) value).getValue());
+            //} else if (value instanceof CodeableConceptDt) {
+            //	System.out.println("true");
+            	//sectionsCodeableList.add(((CodeableConceptDt) value).getCoding());
+            //	coadingList.add((CodingDt) sectionsCodeableList.get(0));
+            //	System.out.println("Heres the code element " + coadingList.get(0).getCodeElement());
+            	
+            	
             } else if (value instanceof PeriodDt) {
                 fromDate = ((PeriodDt) value).getStart();
                 Calendar toCalendar = Calendar.getInstance();
@@ -201,25 +214,51 @@ public class PatientResourceProvider implements IResourceProvider {
         // Build Bundle
         Bundle bundle = new Bundle();
         bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
+       
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if (nhsNumber == null || nhsNumber.isEmpty() || !NhsCodeValidator.nhsNumberValid(nhsNumber)) {
             CodingDt errorCoding = new CodingDt().setSystem("http://fhir.nhs.net/ValueSet/gpconnect-getrecord-response-code-1-0").setCode("GCR-0002");
             CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
             operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.INVALID_CONTENT).setDetails(errorCodableConcept).setDiagnostics("NHS Number Invalid");
         } else {
-            // Build the Patient Resource and add it to the bundle
+            
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	// Build the Patient Resource and add it to the bundle
             try {
-                String patientID;
-                Entry patientEntry = new Entry();
-                List<Patient> patients = getPatientByPatientId(new TokenParam("", nhsNumber));
-                if (patients != null && patients.size() > 0) {
-                    patientEntry.setResource(patients.get(0));
-                    patientEntry.setFullUrl("Patient/" + patients.get(0).getId().getIdPart());
-                    patientID = patients.get(0).getId().getIdPart();
-                } else {
-                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No patient details found for patient NHS Number: " + nhsNumber);
-                    throw new InternalErrorException("No patient details found for patient NHS Number: " + nhsNumber, operationOutcome);
-                }
-                bundle.addEntry(patientEntry);
+            	  String patientID;
+                  Entry patientEntry = new Entry();
+                  List<Patient> patients = getPatientByPatientId(new TokenParam("", nhsNumber));
+                  if (patients != null && patients.size() > 0) {
+                      patientEntry.setResource(patients.get(0));
+                      patientEntry.setFullUrl("Patient/" + patients.get(0).getId().getIdPart());
+                      patientID = patients.get(0).getId().getIdPart();
+                  } else {
+                      operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No patient details found for patient NHS Number: " + nhsNumber);
+                      throw new InternalErrorException("No patient details found for patient NHS Number: " + nhsNumber, operationOutcome);
+                  }
 
                 //Build the Care Record Composition
                 Entry careRecordEntry = new Entry();
@@ -238,28 +277,20 @@ public class PatientResourceProvider implements IResourceProvider {
                 careRecordComposition.setStatus(CompositionStatusEnum.FINAL);
                 careRecordComposition.setSubject(new ResourceReferenceDt("Patient/" + patientID));
 
-                List<ResourceReferenceDt> careProviderPractitionerList = ((Patient) patientEntry.getResource()).getCareProvider();
-                if (careProviderPractitionerList.size() > 0) {
-                    careRecordComposition.setAuthor(Collections.singletonList(new ResourceReferenceDt(careProviderPractitionerList.get(0).getReference().getValue())));
-                    try {
-                        Practitioner practitioner = practitionerResourceProvider.getPractitionerById(new IdDt(careProviderPractitionerList.get(0).getReference().getValue()));
-                        Entry practitionerEntry = new Entry().setResource(practitioner).setFullUrl(careProviderPractitionerList.get(0).getReference().getValue());
-                        bundle.addEntry(practitionerEntry);
-
-                        Entry organizationEntry = new Entry();
-                        organizationEntry.setResource(organizationResourceProvider.getOrganizationById(practitioner.getPractitionerRoleFirstRep().getManagingOrganization().getReference()));
-                        organizationEntry.setFullUrl(practitioner.getPractitionerRoleFirstRep().getManagingOrganization().getReference());
-                        bundle.addEntry(organizationEntry);
-                    } catch (InternalErrorException ex) {
-                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(ex.getLocalizedMessage());
-                    }
-                }
-
+            
+               // System.out.println("CODABLE CONCEPT  : " + sectionsCodeableList.);
+                //System.out.println("CODABLE CONCEPT  : " + sectionsCodeableList.get(0).get(0));
+                //System.out.println("CODABLE CONCEPT  : " + sectionsCodeableList.get(0).get(0).getCode());
+                
+               // if (sectionsCodeableList.size() > 0)
+                	
+            
                 // Build requested sections
                 if (sectionsParamList.size() > 0) {
                     ArrayList<Section> sectionsList = new ArrayList();
                     for (String sectionName : sectionsParamList) {
                         Section section = new Section();
+                        System.out.println("SECTION NAME : "+sectionName);
                         switch (sectionName) {
                             case "SUM":
                                 List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch.findAllPatientSummaryHTMLTables(nhsNumber);
@@ -522,6 +553,26 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 careRecordEntry.setResource(careRecordComposition);
                 bundle.addEntry(careRecordEntry);
+                List<ResourceReferenceDt> careProviderPractitionerList = ((Patient) patientEntry.getResource()).getCareProvider();
+                if (careProviderPractitionerList.size() > 0) {
+                    careRecordComposition.setAuthor(Collections.singletonList(new ResourceReferenceDt(careProviderPractitionerList.get(0).getReference().getValue())));
+                    try {
+                        Practitioner practitioner = practitionerResourceProvider.getPractitionerById(new IdDt(careProviderPractitionerList.get(0).getReference().getValue()));
+                        Entry practitionerEntry = new Entry().setResource(practitioner).setFullUrl(careProviderPractitionerList.get(0).getReference().getValue());
+                        bundle.addEntry(practitionerEntry);
+
+                        Entry organizationEntry = new Entry();
+                        organizationEntry.setResource(organizationResourceProvider.getOrganizationById(practitioner.getPractitionerRoleFirstRep().getManagingOrganization().getReference()));
+                        organizationEntry.setFullUrl(practitioner.getPractitionerRoleFirstRep().getManagingOrganization().getReference());
+                        bundle.addEntry(organizationEntry);
+                    } catch (InternalErrorException ex) {
+                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(ex.getLocalizedMessage());
+                    }
+                }
+                
+                
+              
+                bundle.addEntry(patientEntry);
 
             } catch (InternalErrorException ex) {
                 //If the patient details could not be found

@@ -11,7 +11,7 @@ angular.module('gpConnect')
                 return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord").then(function (response) {
                     var endpointLookupResult = response;
                     return $http.post(endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getcarerecord',
-                            '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "' + patientId + '" }},{"name" : "recordSection","valueString" : "SUM"},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}',
+                            '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "value" : "' + patientId + '" }},{"name" : "recordSection","valueCodeableConcept" :{"coding" : [{"system":"http://fhir.nhs.net/ValueSet/gpconnect-record-section-1","code":"SUM","display":"Summary"}]}},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}',
                             {
                                 headers: {
                                     'Ssp-From': endpointLookupResult.fromASID,

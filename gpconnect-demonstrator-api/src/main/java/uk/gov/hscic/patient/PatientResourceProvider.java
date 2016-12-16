@@ -195,32 +195,24 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	@Operation(name = "$gpc.getcarerecord")
 	public Bundle getPatientCareRecord(@ResourceParam Parameters params) {
-
+		
 		OperationOutcome operationOutcome = new OperationOutcome();
 		String nhsNumber = null;
 		ArrayList<String> sectionsParamList = new ArrayList();
-		// ArrayList<List<CodingDt>> sectionsCodeableList = new ArrayList<>();
-		// ArrayList<CodingDt> coadingList = new ArrayList<CodingDt>();
-
+		
 		Date fromDate = null;
 		Date toDate = null;
 		// Extract the parameters
+	
 		for (Parameter param : params.getParameter()) {
-			System.out.println("PARAM : " + param);
 			IDatatype value = param.getValue();
-			System.out.println("Value  : " + value);
 			if (value instanceof IdentifierDt) {
 				nhsNumber = ((IdentifierDt) value).getValue();
 			} else if (value instanceof StringDt) {
 				sectionsParamList.add(((StringDt) value).getValue());
-				// } else if (value instanceof CodeableConceptDt) {
-				// System.out.println("true");
-				// sectionsCodeableList.add(((CodeableConceptDt)
-				// value).getCoding());
-				// coadingList.add((CodingDt) sectionsCodeableList.get(0));
-				// System.out.println("Heres the code element " +
-				// coadingList.get(0).getCodeElement());
-
+			} else if (value instanceof CodeableConceptDt) {
+				List<CodingDt> coading = ((CodeableConceptDt) value).getCoding();
+				sectionsParamList.add(coading.get(0).getCode());
 			} else if (value instanceof PeriodDt) {
 				fromDate = ((PeriodDt) value).getStart();
 				Calendar toCalendar = Calendar.getInstance();
@@ -290,21 +282,11 @@ public class PatientResourceProvider implements IResourceProvider {
 				careRecordComposition.setStatus(CompositionStatusEnum.FINAL);
 				careRecordComposition.setSubject(new ResourceReferenceDt("Patient/" + patientID));
 
-				// System.out.println("CODABLE CONCEPT : " +
-				// sectionsCodeableList.);
-				// System.out.println("CODABLE CONCEPT : " +
-				// sectionsCodeableList.get(0).get(0));
-				// System.out.println("CODABLE CONCEPT : " +
-				// sectionsCodeableList.get(0).get(0).getCode());
-
-				// if (sectionsCodeableList.size() > 0)
-
 				// Build requested sections
 				if (sectionsParamList.size() > 0) {
 					ArrayList<Section> sectionsList = new ArrayList();
 					for (String sectionName : sectionsParamList) {
 						Section section = new Section();
-						System.out.println("SECTION NAME : " + sectionName);
 						switch (sectionName) {
 						case "SUM":
 							List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch

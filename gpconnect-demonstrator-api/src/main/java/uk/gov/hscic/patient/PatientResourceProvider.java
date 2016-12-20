@@ -548,6 +548,7 @@ public class PatientResourceProvider implements IResourceProvider {
 								narrative.setDivAsString(referralList.get(0).getHtml());
 								section.setTitle("Referrals").setCode(referralCodableConcept).setText(narrative);
 								sectionsList.add(section);
+								throw new InvalidRequestException("Date Ranges not allowed to be set");
 							} else {
 								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 										.setDetails("No data available for the requested section: Referrals");
@@ -594,6 +595,7 @@ public class PatientResourceProvider implements IResourceProvider {
 								section.setTitle("Investigations").setCode(investigationCodableConcept)
 										.setText(narrative);
 								sectionsList.add(section);
+								throw new InvalidRequestException("Date Ranges not allowed to be set");
 							} else {
 								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 										.setDetails("No data available for the requested section: Investigations");
@@ -650,8 +652,7 @@ public class PatientResourceProvider implements IResourceProvider {
 						default:
 							operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 									.setDetails("The requested section '" + sectionName + "' is not a valid section.");
-							break;
-
+							throw new InvalidRequestException("Section Invalid");
 						}
 					}
 

@@ -211,8 +211,6 @@ public class PatientResourceProvider implements IResourceProvider {
 			IDatatype value = param.getValue();
 			if (value instanceof IdentifierDt) {
 				nhsNumber = ((IdentifierDt) value).getValue();
-			} else if (value instanceof StringDt) {
-				sectionsParamList.add(((StringDt) value).getValue());
 			} else if (value instanceof CodeableConceptDt) {
 				List<CodingDt> coading = ((CodeableConceptDt) value).getCoding();
 				sectionsParamList.add(coading.get(0).getCode());

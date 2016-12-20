@@ -316,7 +316,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
 							if( toDate != null && fromDate != null)
 							{
-								throw new InvalidRequestException("NO YEEE DONT U DAFTY");
+								throw new InvalidRequestException("Date Ranges not allowed to be set");
 							}else{
 							List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber);
 							if (problemList != null && problemList.size() > 0) {
@@ -360,7 +360,7 @@ public class PatientResourceProvider implements IResourceProvider {
 					
 							if( toDate != null && fromDate != null)
 							{
-								throw new InvalidRequestException("NO YEEE DONT U DAFTY");
+								throw new InvalidRequestException("Date Ranges not allowed to be set");
 							}else{
 							List<AllergyListHTML> allergyList = allergySearch.findAllAllergyHTMLTables(nhsNumber);
 							if (allergyList != null && allergyList.size() > 0) {
@@ -560,7 +560,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
 							if( toDate != null && fromDate != null)
 							{
-								throw new InvalidRequestException("NO YEEE DONT U DAFTY");
+								throw new InvalidRequestException("Date Ranges not allowed to be set");
 							}else{
 							List<ObservationListHTML> observationList = observationSearch
 									.findAllObservationHTMLTables(nhsNumber);
@@ -606,7 +606,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
 							if( toDate != null && fromDate != null)
 							{
-								throw new InvalidRequestException("NO YEEE DONT U DAFTY");
+								throw new InvalidRequestException("Date Ranges not allowed to be set");
 							}else{
 							List<ImmunisationListHTML> immunisationList = immunisationSearch
 									.findAllImmunisationHTMLTables(nhsNumber);

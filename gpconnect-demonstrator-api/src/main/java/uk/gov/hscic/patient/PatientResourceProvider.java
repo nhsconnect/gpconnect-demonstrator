@@ -63,7 +63,10 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+
+
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.util.NhsCodeValidator;
@@ -194,7 +197,7 @@ public class PatientResourceProvider implements IResourceProvider {
 	}
 
 	@Operation(name = "$gpc.getcarerecord")
-	public Bundle getPatientCareRecord(@ResourceParam Parameters params) {
+	public Bundle getPatientCareRecord(@ResourceParam Parameters params){
 		
 		OperationOutcome operationOutcome = new OperationOutcome();
 		String nhsNumber = null;
@@ -218,6 +221,7 @@ public class PatientResourceProvider implements IResourceProvider {
 				Calendar toCalendar = Calendar.getInstance();
 				toDate = ((PeriodDt) value).getEnd();
 				if (toDate != null) {
+					System.out.println("HAS A DATE RANGE");
 					toCalendar.setTime(toDate);
 					if (((PeriodDt) value).getEndElement().getPrecision() == TemporalPrecisionEnum.YEAR) {
 						toCalendar.add(Calendar.YEAR, 1);
@@ -309,6 +313,11 @@ public class PatientResourceProvider implements IResourceProvider {
 							break;
 
 						case "PRB":
+
+							if( toDate != null && fromDate != null)
+							{
+								throw new InvalidRequestException("NO YEEE DONT U DAFTY");
+							}else{
 							List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber);
 							if (problemList != null && problemList.size() > 0) {
 								CodingDt problemCoding = new CodingDt()
@@ -324,7 +333,7 @@ public class PatientResourceProvider implements IResourceProvider {
 							} else {
 								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 										.setDetails("No data available for the requested section: Problems");
-							}
+							}}
 							break;
 
 						case "ENC":
@@ -348,6 +357,11 @@ public class PatientResourceProvider implements IResourceProvider {
 							break;
 
 						case "ALL":
+					
+							if( toDate != null && fromDate != null)
+							{
+								throw new InvalidRequestException("NO YEEE DONT U DAFTY");
+							}else{
 							List<AllergyListHTML> allergyList = allergySearch.findAllAllergyHTMLTables(nhsNumber);
 							if (allergyList != null && allergyList.size() > 0) {
 								CodingDt allergyCoding = new CodingDt()
@@ -364,7 +378,7 @@ public class PatientResourceProvider implements IResourceProvider {
 							} else {
 								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
 										"No data available for the requested section: Allergies and Sensitivities");
-							}
+							}}
 							break;
 
 						case "CLI":
@@ -543,6 +557,11 @@ public class PatientResourceProvider implements IResourceProvider {
 							break;
 
 						case "OBS":
+
+							if( toDate != null && fromDate != null)
+							{
+								throw new InvalidRequestException("NO YEEE DONT U DAFTY");
+							}else{
 							List<ObservationListHTML> observationList = observationSearch
 									.findAllObservationHTMLTables(nhsNumber);
 							if (observationList != null && observationList.size() > 0) {
@@ -559,7 +578,7 @@ public class PatientResourceProvider implements IResourceProvider {
 							} else {
 								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 										.setDetails("No data available for the requested section: Observations");
-							}
+							}}
 							break;
 
 						case "INV":
@@ -584,6 +603,11 @@ public class PatientResourceProvider implements IResourceProvider {
 							break;
 
 						case "IMM":
+
+							if( toDate != null && fromDate != null)
+							{
+								throw new InvalidRequestException("NO YEEE DONT U DAFTY");
+							}else{
 							List<ImmunisationListHTML> immunisationList = immunisationSearch
 									.findAllImmunisationHTMLTables(nhsNumber);
 							if (immunisationList != null && immunisationList.size() > 0) {
@@ -601,7 +625,7 @@ public class PatientResourceProvider implements IResourceProvider {
 							} else {
 								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 										.setDetails("No data available for the requested section: Immunisations");
-							}
+							}}
 							break;
 
 						case "ADM":

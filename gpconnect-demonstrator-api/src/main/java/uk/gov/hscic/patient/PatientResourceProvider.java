@@ -966,6 +966,8 @@ public class PatientResourceProvider implements IResourceProvider {
 					"http://fhir.nhs.net/ValueSet/registration-type-1", registrationTypeValue);
 			patient.addUndeclaredExtension(true, REGISTRATION_TYPE_EXTENSION_URL, registrationType);
 		}
+		
+
 
 		return patient;
 	}

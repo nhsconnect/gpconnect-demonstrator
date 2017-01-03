@@ -58,5 +58,6 @@ public class FhirRestfulServlet extends RestfulServer {
         
         registerInterceptor(applicationContext.getBean(FhirRequestAuthInterceptor.class));
         registerInterceptor(applicationContext.getBean(FhirRequestGenericIntercepter.class));
+      
     }
 }

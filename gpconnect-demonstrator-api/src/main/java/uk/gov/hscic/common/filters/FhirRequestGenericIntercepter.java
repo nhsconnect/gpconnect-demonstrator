@@ -1,5 +1,6 @@
 package uk.gov.hscic.common.filters;
 
+import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 
 import java.io.BufferedReader;
@@ -99,6 +100,17 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 	@Override
 	public boolean incomingRequestPreProcessed(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
 
+		
+
+		if (httpRequest.getAttribute("ERROR") != null) {
+			if (httpRequest.getAttribute("ERROR") == "Error") {
+				int theStatusCode = 415;
+				String theMessage = "Unsupported media type";
+				throw new UnclassifiedServerFailureException(theStatusCode, theMessage);
+			}
+		}
+		
+	
 		String failedMsg = "";
 		// Check there is a Ssp-TraceID header
 		String TraceID = httpRequest.getHeader("Ssp-TraceId");
@@ -160,8 +172,6 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 		validInteractionIds.add("urn:nhs:names:services:gpconnect:fhir:claim:patient/Procedures.read");
 		validInteractionIds.add("urn:nhs:names:services:gpconnect:fhir:claim:patient/Referral.read");
 		validInteractionIds.add("urn:nhs:names:services:gpconnect:fhir:claim:patient/Appointment.read");
-		
-		
 
 		Map<String, String> map = new HashMap<String, String>() {
 			{
@@ -232,7 +242,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 		if (interactionIdValidator == false) {
 			failedMsg = failedMsg + "InteractionId Incorrect";
 		}
-		
+
 		if (!failedMsg.isEmpty()) {
 			try {
 				httpResponse.sendError(400, failedMsg);
@@ -269,7 +279,6 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
 		return true;
 	}
-	
 
 	// This method finds the patient No which is different from the NHS number
 	private Integer getIdFromUrl(String URL) {

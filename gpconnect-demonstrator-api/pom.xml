@@ -16,7 +16,6 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -25,6 +24,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
+    <name>gpconnect-demonstrator-api</name>
     <artifactId>gpconnect-demonstrator-api</artifactId>
     <packaging>war</packaging>
 
@@ -43,6 +43,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -64,6 +65,7 @@
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-camel</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -85,11 +87,13 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -117,37 +121,41 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
+
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
             <artifactId>hapi-fhir-base</artifactId>
             <version>1.6</version>
-            <type>jar</type>
         </dependency>
+
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
             <artifactId>hapi-fhir-structures-dstu2</artifactId>
             <version>1.6</version>
-            <type>jar</type>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
             <version>1.7.13</version>
-            <type>jar</type>
         </dependency>
+
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20160212</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.directory.api</groupId>
             <artifactId>api-all</artifactId>
             <version>1.0.0-M25</version>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -161,12 +169,10 @@
 
             <build>
                 <defaultGoal>compile</defaultGoal>
-
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-
                         <configuration>
                             <skipTests>true</skipTests>
                         </configuration>
@@ -196,5 +202,4 @@
             </build>
         </profile>
     </profiles>
-    <name>gpconnect-demonstrator-api</name>
 </project>

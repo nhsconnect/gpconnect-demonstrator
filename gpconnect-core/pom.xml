@@ -25,6 +25,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
+    <name>gpconnect-core</name>
     <artifactId>gpconnect-core</artifactId>
 
     <dependencies>
@@ -99,5 +100,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <name>gpconnect-core</name>
 </project>

@@ -12,6 +12,8 @@ webapp/.idea/
 
 # NetBeans #
 nb-configuration.xml
+nbactions.xml
+/webapp/nbproject
 
 # Misc #
 target/

@@ -17,7 +17,6 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>uk.gov.hscic</groupId>
@@ -34,31 +33,21 @@
 
         <activemq.version>5.12.2</activemq.version>
         <camel.version>2.15.3</camel.version>
-        <cxf.version>3.0.2</cxf.version>
-        <jackson.version>2.4.4</jackson.version>
+        <jackson.version>2.8.5</jackson.version>
         <log4j.version>1.2.17</log4j.version>
         <slf4j.version>1.7.10</slf4j.version>
-        <spring.version>4.2.1.RELEASE</spring.version>
-        <swagger.version>2.2.2</swagger.version>
+        <spring.version>4.3.5.RELEASE</spring.version>
         <querydsl.version>3.6.8</querydsl.version>
     </properties>
 
     <modules>
-        <module>gpconnect-audit-example</module>
         <module>gpconnect-core</module>
         <module>gpconnect-database</module>
         <module>gpconnect-demonstrator-api</module>
-        <module>gpconnect-terminology-example</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>uk.gov.hscic</groupId>
-                <artifactId>gpconnect-audit-example</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>uk.gov.hscic</groupId>
                 <artifactId>gpconnect-core</artifactId>
@@ -68,12 +57,6 @@
             <dependency>
                 <groupId>uk.gov.hscic</groupId>
                 <artifactId>gpconnect-database</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>uk.gov.hscic</groupId>
-                <artifactId>gpconnect-terminology-example</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -123,18 +106,6 @@
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>1.9</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${swagger.version}</version>
             </dependency>
 
             <dependency>
@@ -243,12 +214,6 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.3.2</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-                <version>${cxf.version}</version>
             </dependency>
 
             <dependency>
@@ -443,7 +408,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.6.201602180812</version>
+                <version>0.7.8</version>
                 <executions>
                     <execution>
                         <goals>
@@ -454,7 +419,7 @@
                         <id>report</id>
                         <phase>prepare-package</phase>
                         <goals>
-                            <goal>report</goal>		
+                            <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -466,16 +431,11 @@
         <profile>
             <id>sonar</id>
             <properties>
-                <sonar.jdbc.url>
-                    jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8
-                </sonar.jdbc.url>
+                <sonar.jdbc.url>jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8</sonar.jdbc.url>
                 <sonar.jdbc.username>sonar</sonar.jdbc.username>
                 <sonar.jdbc.password>sonar</sonar.jdbc.password>
-                <sonar.host.url>
-                    http://localhost:10000
-                </sonar.host.url>
+                <sonar.host.url>http://localhost:10000</sonar.host.url>
             </properties>
         </profile>
     </profiles>
-
 </project>

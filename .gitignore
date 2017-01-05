@@ -12,6 +12,8 @@ webapp/.idea/
 
 # NetBeans #
 nb-configuration.xml
+nbactions.xml
+/webapp/nbproject
 
 # Misc #
 target/
@@ -20,6 +22,7 @@ target/
 node_modules/
 *.log
 **/log/
+/gpconnect-demonstrator-api/src/main/webapp
 
 # ActiveMQ #
 activemq-data/

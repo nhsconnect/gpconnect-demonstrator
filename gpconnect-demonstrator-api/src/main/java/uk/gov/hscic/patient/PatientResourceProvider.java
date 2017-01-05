@@ -196,6 +196,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		return patients;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Operation(name = "$gpc.getcarerecord")
 	public Bundle getPatientCareRecord(@ResourceParam Parameters params){
 		

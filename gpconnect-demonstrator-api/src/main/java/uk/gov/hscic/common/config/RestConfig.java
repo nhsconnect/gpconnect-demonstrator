@@ -15,6 +15,7 @@
  */
 package uk.gov.hscic.common.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,17 +24,25 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import uk.gov.hscic.auth.KeyStoreFactory;
+import uk.gov.hscic.auth.SignedHandler;
 
-/**
- */
 @Configuration
 @EnableWebMvc
 @ComponentScan("uk.gov.hscic")
 public class RestConfig extends WebMvcConfigurerAdapter {
 
+    @Value("${server.keystore.password}")
+    private String keystorePassword;
+
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public SignedHandler signedHandler() throws Exception {
+        return new SignedHandler(KeyStoreFactory.getKeyStore("src/main/resources/authentication/server", keystorePassword));
     }
 
     @Bean
@@ -46,8 +55,6 @@ public class RestConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 }

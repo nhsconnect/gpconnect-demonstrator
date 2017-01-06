@@ -35,7 +35,7 @@ public class HeaderRequestWrapper extends HttpServletRequestWrapper {
 			if (requestContentType.contains("application/json") || requestContentType.contains("application/xml")) {
 				// Do nothing
 			} else {
-				// Add error header which will be read in other inteceptor
+				// Add error header which will be read in other inteceptor to throw 415
 				request.setAttribute("ERROR", "Error");
 			}
 		}

@@ -36,7 +36,6 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 	@Override
 	public List<IAuthRule> buildRuleList(RequestDetails theRequestDetails) {
-		theRequestDetails.setCompartmentName("hello");
 		String authorizationStr = theRequestDetails.getHeader("Authorization");
 		String[] jwtHeaderComponents = authorizationStr.split(" ");
 	

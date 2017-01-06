@@ -17,8 +17,10 @@
     <Environment name="ldap.context.keystore.pwd" type="java.lang.String" override="false" value="password"/>
     <Environment name="ldap.context.keystore.type" type="java.lang.String" override="false" value="JKS"/>
 
-    <Environment name="gp.connect.spineproxyconf.path" type="java.lang.String" override="false" value="gpconnect-demonstrator-api/spineproxy.json"/>
-    <Environment name="gp.connect.interactionwhitelist.path" type="java.lang.String" override="false" value="gpconnect-demonstrator-api/interactionIdWhiteList.json"/>
-    <Environment name="gp.connect.provider.routing.file" type="java.lang.String" override="false" value="gpconnect-demonstrator-api/providerRouting.json"/>
-    <Environment name="gp.connect.ErrorSimulation.path" type="java.lang.String" override="false" value="gpconnect-demonstrator-api/errorSimulation-disabled.json"/>
+    <Environment name="server.keystore.password" type="java.lang.String" override="false" value="password"/>
+
+    <Environment name="gp.connect.spineproxyconf.path" type="java.lang.String" override="false" value="spineproxy.json"/>
+    <Environment name="gp.connect.interactionwhitelist.path" type="java.lang.String" override="false" value="interactionIdWhiteList.json"/>
+    <Environment name="gp.connect.provider.routing.file" type="java.lang.String" override="false" value="providerRouting.json"/>
+    <Environment name="gp.connect.ErrorSimulation.path" type="java.lang.String" override="false" value="errorSimulation-disabled.json"/>
 </Context>

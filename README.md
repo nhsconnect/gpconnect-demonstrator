@@ -265,4 +265,13 @@ Or...
 grunt build --tenant=gpconnect
 ```
 
+
+
+### Integration Testing
+
+Use the following command to run integration tests:
+```sh
+mvn failsafe:integration-test
+```
+
 ##### ENJOY!

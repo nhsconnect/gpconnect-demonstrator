@@ -66,7 +66,6 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 
-
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.util.NhsCodeValidator;
@@ -198,22 +197,24 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	@SuppressWarnings("deprecation")
 	@Operation(name = "$gpc.getcarerecord")
-	public Bundle getPatientCareRecord(@ResourceParam Parameters params){
-		
+	public Bundle getPatientCareRecord(@ResourceParam Parameters params) {
+
 		OperationOutcome operationOutcome = new OperationOutcome();
 		String nhsNumber = null;
 		ArrayList<String> sectionsParamList = new ArrayList();
-		
+
 		Date fromDate = null;
 		Date toDate = null;
 		// Extract the parameters
-	
+
 		for (Parameter param : params.getParameter()) {
+
 			IDatatype value = param.getValue();
 			if (value instanceof IdentifierDt) {
 				nhsNumber = ((IdentifierDt) value).getValue();
 			} else if (value instanceof CodeableConceptDt) {
 				List<CodingDt> coading = ((CodeableConceptDt) value).getCoding();
+				//sectionsParamList.add(coading.get(0).getCode());
 				sectionsParamList.add(coading.get(0).getCode());
 			} else if (value instanceof PeriodDt) {
 				fromDate = ((PeriodDt) value).getStart();
@@ -237,8 +238,25 @@ public class PatientResourceProvider implements IResourceProvider {
 		// Build Bundle
 		Bundle bundle = new Bundle();
 		bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
+		
+		for (int i = 0 ; i< sectionsParamList.size(); i++)
+		{
+			if(sectionsParamList.get(i) == null || sectionsParamList.get(i).length() != 3 )
+			{
+				CodingDt errorCoding = new CodingDt()
+						.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+						.setCode("INVALID_NHS_NUMBER");
+				CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+				operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.INVALID_CONTENT)
+						.setDetails(errorCodableConcept).setDiagnostics("NHS Number Invalid");
+				throw new ResourceNotFoundException("NHS number Invalid " + operationOutcome);
+			}
+		}
+		
+		
+		
 
-		if (nhsNumber == null || nhsNumber.isEmpty() || !NhsCodeValidator.nhsNumberValid(nhsNumber)) {
+		if (NhsValidation(nhsNumber)) {
 			CodingDt errorCoding = new CodingDt()
 					.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
 					.setCode("INVALID_NHS_NUMBER");
@@ -313,26 +331,26 @@ public class PatientResourceProvider implements IResourceProvider {
 
 						case "PRB":
 
-							if( toDate != null && fromDate != null)
-							{
+							if (toDate != null && fromDate != null) {
 								throw new InvalidRequestException("Date Ranges not allowed to be set");
-							}else{
-							List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber);
-							if (problemList != null && problemList.size() > 0) {
-								CodingDt problemCoding = new CodingDt()
-										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-										.setCode("PRB").setDisplay("Problems");
-								CodeableConceptDt problemCodableConcept = new CodeableConceptDt()
-										.addCoding(problemCoding).setText(problemList.get(0).getProvider());
-								NarrativeDt narrative = new NarrativeDt();
-								narrative.setStatus(NarrativeStatusEnum.GENERATED);
-								narrative.setDivAsString(problemList.get(0).getHtml());
-								section.setTitle("Problems").setCode(problemCodableConcept).setText(narrative);
-								sectionsList.add(section);
 							} else {
-								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-										.setDetails("No data available for the requested section: Problems");
-							}}
+								List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber);
+								if (problemList != null && problemList.size() > 0) {
+									CodingDt problemCoding = new CodingDt()
+											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+											.setCode("PRB").setDisplay("Problems");
+									CodeableConceptDt problemCodableConcept = new CodeableConceptDt()
+											.addCoding(problemCoding).setText(problemList.get(0).getProvider());
+									NarrativeDt narrative = new NarrativeDt();
+									narrative.setStatus(NarrativeStatusEnum.GENERATED);
+									narrative.setDivAsString(problemList.get(0).getHtml());
+									section.setTitle("Problems").setCode(problemCodableConcept).setText(narrative);
+									sectionsList.add(section);
+								} else {
+									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+											.setDetails("No data available for the requested section: Problems");
+								}
+							}
 							break;
 
 						case "ENC":
@@ -356,28 +374,28 @@ public class PatientResourceProvider implements IResourceProvider {
 							break;
 
 						case "ALL":
-					
-							if( toDate != null && fromDate != null)
-							{
+
+							if (toDate != null && fromDate != null) {
 								throw new InvalidRequestException("Date Ranges not allowed to be set");
-							}else{
-							List<AllergyListHTML> allergyList = allergySearch.findAllAllergyHTMLTables(nhsNumber);
-							if (allergyList != null && allergyList.size() > 0) {
-								CodingDt allergyCoding = new CodingDt()
-										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-										.setCode("ALL").setDisplay("Allergies and Sensitivities");
-								CodeableConceptDt allergyCodableConcept = new CodeableConceptDt()
-										.addCoding(allergyCoding).setText(allergyList.get(0).getProvider());
-								NarrativeDt narrative = new NarrativeDt();
-								narrative.setStatus(NarrativeStatusEnum.GENERATED);
-								narrative.setDivAsString(allergyList.get(0).getHtml());
-								section.setTitle("Allergies and Sensitivities").setCode(allergyCodableConcept)
-										.setText(narrative);
-								sectionsList.add(section);
 							} else {
-								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
-										"No data available for the requested section: Allergies and Sensitivities");
-							}}
+								List<AllergyListHTML> allergyList = allergySearch.findAllAllergyHTMLTables(nhsNumber);
+								if (allergyList != null && allergyList.size() > 0) {
+									CodingDt allergyCoding = new CodingDt()
+											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+											.setCode("ALL").setDisplay("Allergies and Sensitivities");
+									CodeableConceptDt allergyCodableConcept = new CodeableConceptDt()
+											.addCoding(allergyCoding).setText(allergyList.get(0).getProvider());
+									NarrativeDt narrative = new NarrativeDt();
+									narrative.setStatus(NarrativeStatusEnum.GENERATED);
+									narrative.setDivAsString(allergyList.get(0).getHtml());
+									section.setTitle("Allergies and Sensitivities").setCode(allergyCodableConcept)
+											.setText(narrative);
+									sectionsList.add(section);
+								} else {
+									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
+											"No data available for the requested section: Allergies and Sensitivities");
+								}
+							}
 							break;
 
 						case "CLI":
@@ -558,27 +576,28 @@ public class PatientResourceProvider implements IResourceProvider {
 
 						case "OBS":
 
-							if( toDate != null && fromDate != null)
-							{
+							if (toDate != null && fromDate != null) {
 								throw new InvalidRequestException("Date Ranges not allowed to be set");
-							}else{
-							List<ObservationListHTML> observationList = observationSearch
-									.findAllObservationHTMLTables(nhsNumber);
-							if (observationList != null && observationList.size() > 0) {
-								CodingDt observationCoding = new CodingDt()
-										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-										.setCode("OBS").setDisplay("Observations");
-								CodeableConceptDt observationCodableConcept = new CodeableConceptDt()
-										.addCoding(observationCoding).setText(observationList.get(0).getProvider());
-								NarrativeDt narrative = new NarrativeDt();
-								narrative.setStatus(NarrativeStatusEnum.GENERATED);
-								narrative.setDivAsString(observationList.get(0).getHtml());
-								section.setTitle("Observations").setCode(observationCodableConcept).setText(narrative);
-								sectionsList.add(section);
 							} else {
-								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-										.setDetails("No data available for the requested section: Observations");
-							}}
+								List<ObservationListHTML> observationList = observationSearch
+										.findAllObservationHTMLTables(nhsNumber);
+								if (observationList != null && observationList.size() > 0) {
+									CodingDt observationCoding = new CodingDt()
+											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+											.setCode("OBS").setDisplay("Observations");
+									CodeableConceptDt observationCodableConcept = new CodeableConceptDt()
+											.addCoding(observationCoding).setText(observationList.get(0).getProvider());
+									NarrativeDt narrative = new NarrativeDt();
+									narrative.setStatus(NarrativeStatusEnum.GENERATED);
+									narrative.setDivAsString(observationList.get(0).getHtml());
+									section.setTitle("Observations").setCode(observationCodableConcept)
+											.setText(narrative);
+									sectionsList.add(section);
+								} else {
+									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+											.setDetails("No data available for the requested section: Observations");
+								}
+							}
 							break;
 
 						case "INV":
@@ -605,28 +624,29 @@ public class PatientResourceProvider implements IResourceProvider {
 
 						case "IMM":
 
-							if( toDate != null && fromDate != null)
-							{
+							if (toDate != null && fromDate != null) {
 								throw new InvalidRequestException("Date Ranges not allowed to be set");
-							}else{
-							List<ImmunisationListHTML> immunisationList = immunisationSearch
-									.findAllImmunisationHTMLTables(nhsNumber);
-							if (immunisationList != null && immunisationList.size() > 0) {
-								CodingDt immunisationCoding = new CodingDt()
-										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-										.setCode("IMM").setDisplay("Immunisations");
-								CodeableConceptDt immunisationCodableConcept = new CodeableConceptDt()
-										.addCoding(immunisationCoding).setText(immunisationList.get(0).getProvider());
-								NarrativeDt narrative = new NarrativeDt();
-								narrative.setStatus(NarrativeStatusEnum.GENERATED);
-								narrative.setDivAsString(immunisationList.get(0).getHtml());
-								section.setTitle("Immunisations").setCode(immunisationCodableConcept)
-										.setText(narrative);
-								sectionsList.add(section);
 							} else {
-								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-										.setDetails("No data available for the requested section: Immunisations");
-							}}
+								List<ImmunisationListHTML> immunisationList = immunisationSearch
+										.findAllImmunisationHTMLTables(nhsNumber);
+								if (immunisationList != null && immunisationList.size() > 0) {
+									CodingDt immunisationCoding = new CodingDt()
+											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+											.setCode("IMM").setDisplay("Immunisations");
+									CodeableConceptDt immunisationCodableConcept = new CodeableConceptDt()
+											.addCoding(immunisationCoding)
+											.setText(immunisationList.get(0).getProvider());
+									NarrativeDt narrative = new NarrativeDt();
+									narrative.setStatus(NarrativeStatusEnum.GENERATED);
+									narrative.setDivAsString(immunisationList.get(0).getHtml());
+									section.setTitle("Immunisations").setCode(immunisationCodableConcept)
+											.setText(narrative);
+									sectionsList.add(section);
+								} else {
+									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+											.setDetails("No data available for the requested section: Immunisations");
+								}
+							}
 							break;
 
 						case "ADM":
@@ -688,12 +708,11 @@ public class PatientResourceProvider implements IResourceProvider {
 						Entry organizationEntry = new Entry();
 						organizationEntry.setResource(organizationResourceProvider.getOrganizationById(
 								practitioner.getPractitionerRoleFirstRep().getManagingOrganization().getReference()));
-						
+
 						organizationEntry.setFullUrl(
 								practitioner.getPractitionerRoleFirstRep().getManagingOrganization().getReference());
-						
-						if(organizationEntry.getResource() == null || organizationEntry.getFullUrl() == null)
-						{
+
+						if (organizationEntry.getResource() == null || organizationEntry.getFullUrl() == null) {
 							CodingDt errorCoding = new CodingDt()
 									.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
 									.setCode("REFERENCE_NOT_FOUND");
@@ -727,6 +746,15 @@ public class PatientResourceProvider implements IResourceProvider {
 		return bundle;
 	}
 
+	private boolean NhsValidation(String nhsNumber) {
+			
+		if (nhsNumber == null || !NhsCodeValidator.nhsNumberValid(nhsNumber) || nhsNumber.length() != 10 || nhsNumber.contains("[a-zA-Z]+") == true) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	@Search(compartmentName = "MedicationOrder")
 	public List<MedicationOrder> getPatientMedicationOrders(@IdParam IdDt patientLocalId) {
 		return medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientLocalId.getIdPart());
@@ -751,7 +779,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	@Operation(name = "$gpc.registerpatient")
 	public Bundle registerPatient(@ResourceParam Parameters params) {
-		
 
 		Patient unregisteredPatient = null;
 		Patient registeredPatient = null;
@@ -774,17 +801,15 @@ public class PatientResourceProvider implements IResourceProvider {
 				registeredPatient = patientDetailsToRegisterPatientResourceConverter(patientDetails);
 			}
 		} else {
-			
-			
-			
+
 			OperationOutcome operationOutcome = new OperationOutcome();
 			CodingDt errorCoding = new CodingDt()
 					.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
 					.setCode("PATIENT_NOT_FOUND");
 			CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
 			errorCodableConcept.setText("Invalid Reference");
-			operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-					.setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
+			operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
+					.setDetails(errorCodableConcept);
 			throw new ResourceNotFoundException("organizationResource returning null");
 		}
 
@@ -967,8 +992,6 @@ public class PatientResourceProvider implements IResourceProvider {
 					"http://fhir.nhs.net/ValueSet/registration-type-1", registrationTypeValue);
 			patient.addUndeclaredExtension(true, REGISTRATION_TYPE_EXTENSION_URL, registrationType);
 		}
-		
-
 
 		return patient;
 	}

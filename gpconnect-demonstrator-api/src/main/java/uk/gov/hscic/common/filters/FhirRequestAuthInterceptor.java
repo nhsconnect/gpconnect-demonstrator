@@ -7,7 +7,6 @@ import ca.uhn.fhir.rest.server.interceptor.auth.AuthorizationInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.auth.IAuthRule;
 import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
 
-
 import java.util.List;
 import java.util.Map;
 import java.util.logging.ConsoleHandler;
@@ -38,7 +37,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 	public List<IAuthRule> buildRuleList(RequestDetails theRequestDetails) {
 		String authorizationStr = theRequestDetails.getHeader("Authorization");
 		String[] jwtHeaderComponents = authorizationStr.split(" ");
-	
+
 		if (jwtHeaderComponents.length == 2 && "Bearer".equalsIgnoreCase(jwtHeaderComponents[0])) {
 			String[] tokenComponents = jwtHeaderComponents[1].split("\\.");
 			String claimsJsonString = new String(Base64.getDecoder().decode(tokenComponents[1]));
@@ -46,7 +45,6 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			authLog.info("JWTClaims - " + claimsJsonString);
 
 			JSONObject claimsJsonObject = new JSONObject(claimsJsonString);
-			
 
 			try {
 
@@ -54,21 +52,45 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 				JSONArray requestIdentifiersArray = claimsJsonObject.getJSONObject("requested_record")
 						.getJSONArray("identifier");
 
-				String requestOperation = theRequestDetails.getRequestPath();
+				String identifierValue = ((JSONObject) requestIdentifiersArray.get(0)).getString("value");
 
+				String requestOperation = theRequestDetails.getRequestPath();
+	
+				
+				
 				if (requestOperation.equals("Patient/$gpc.getcarerecord")) {
+
 					// "REQUEST_RECORD" = patient resource //DONE
+					
 					if (!requestScopeType.equals("Patient")) {
 						throw new InvalidRequestException("Bad Request Exception");
 					}
+					// Gets the NHS number in the request body to compare to
+					// requested_record
+				
+					Map<String, List<String>> map = theRequestDetails.getUnqualifiedToQualifiedNames();
+					
+					
+					
+		
+					for (String paramName : map.keySet()) {
+						List<String> paramValues = map.get(paramName);
+
+						// Get Values of Param Name
+						for (String valueOfParam : paramValues) {
+							// Output the Values
+							if (valueOfParam.contains(identifierValue) != true) {
+								throw new InvalidRequestException("Bad Request Exception");
+							}
+							;
+						}
+					}
 
 				}
-			
 
 				if (requestIdentifiersArray.length() > 0) {
 					String identifierSystem = ((JSONObject) requestIdentifiersArray.get(0)).getString("system");
 
-					String identifierValue = ((JSONObject) requestIdentifiersArray.get(0)).getString("value");
 					if ("Patient".equalsIgnoreCase(requestScopeType)) {
 						// If it is a patient orientated request
 						if (!"http://fhir.nhs.net/Id/nhs-number".equalsIgnoreCase(identifierSystem)
@@ -93,7 +115,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 				System.out.println("Getting default policy " + getDefaultPolicy());
 				if (!(practionerId.equals(sub))) {
 					throw new InvalidRequestException("Bad Request Exception");
-					
+
 				}
 
 				// Checking organization identifier is correct
@@ -104,12 +126,12 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 						String identifierSystem = ((JSONObject) organizationIdentifierArray.get(i)).getString("system");
 						if (!"http://fhir.nhs.net/Id/ods-organization-code".equalsIgnoreCase(identifierSystem)) {
 							throw new InvalidRequestException("Bad Request Exception");
-							
+
 						}
 					}
 				} else {
 					throw new InvalidRequestException("Bad Request Exception");
-					
+
 				}
 				// The method has been commented out to allow continuation of
 				// work.
@@ -124,9 +146,10 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 				 * identifierSystem = ((JSONObject)
 				 * practitionerIdentifierArray.get(i)).getString("system"); if
 				 * (!"http://fhir.nhs.net/sds-user-id".equalsIgnoreCase(
-				 * identifierSystem)) {	throw new InvalidRequestException("Bad Request Exception"); } } }
-				 *  else { return new
-				 * 	throw new InvalidRequestException("Bad Request Exception");}
+				 * identifierSystem)) { throw new
+				 * InvalidRequestException("Bad Request Exception"); } } } else
+				 * { return new throw new
+				 * InvalidRequestException("Bad Request Exception");}
 				 */
 
 				// Checking practitioner identifier is correct
@@ -136,11 +159,11 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 					String identifierSystem = ((JSONObject) practitionerIdentifierArray.get(0)).getString("system");
 					if (!"http://fhir.nhs.net/sds-user-id".equalsIgnoreCase(identifierSystem)) {
 						throw new InvalidRequestException("Bad Request Exception");
-						
+
 					}
 				} else {
 					throw new InvalidRequestException("Bad Request Exception");
-					
+
 				}
 
 				// Checking the creation date is not in the future
@@ -148,13 +171,13 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 				if (timeValidationIdentifierInt > (System.currentTimeMillis()) / 1000) {
 					throw new InvalidRequestException("Bad Request Exception");
-					
+
 				}
 				// Checking th reason for request is dircetcare
 				String reasonForRequestValid = claimsJsonObject.getString("reason_for_request");
 				if (!reasonForRequestValid.equals("directcare")) {
 					throw new InvalidRequestException("Bad Request Exception");
-					
+
 				}
 
 				// Checking the expiary time is 5 minutes after creation
@@ -163,7 +186,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 				if ((timeValidationExpiryTime) - (timeValidationIdentifierInt) != expiryTime) {
 					throw new InvalidRequestException("Bad Request Exception");
-					
+
 				}
 
 				// Checking the requested scope is valid
@@ -177,7 +200,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 						|| comparisonResultOW == true) {
 				} else {
 					throw new InvalidRequestException("Bad Request Exception");
-					
+
 				}
 
 				// Checks the aud is the correct link
@@ -194,12 +217,12 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 				JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestingPractitionerIsValidated(claimsJsonObject);
 
 				if (JWTHasCorrectJsonPropertys == false) {
-					
+
 					throw new InvalidRequestException("Bad Request Exception");
 				}
 			} catch (org.json.JSONException e) {
 				throw new InvalidRequestException("Bad Request Exception");
-			
+
 			}
 
 		}

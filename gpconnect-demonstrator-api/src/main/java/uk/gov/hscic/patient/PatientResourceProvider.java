@@ -214,7 +214,6 @@ public class PatientResourceProvider implements IResourceProvider {
 				nhsNumber = ((IdentifierDt) value).getValue();
 			} else if (value instanceof CodeableConceptDt) {
 				List<CodingDt> coading = ((CodeableConceptDt) value).getCoding();
-				//sectionsParamList.add(coading.get(0).getCode());
 				sectionsParamList.add(coading.get(0).getCode());
 			} else if (value instanceof PeriodDt) {
 				fromDate = ((PeriodDt) value).getStart();

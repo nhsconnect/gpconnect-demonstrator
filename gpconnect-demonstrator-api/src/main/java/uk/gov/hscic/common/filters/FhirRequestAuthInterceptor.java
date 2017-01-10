@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.sql.Time;
 import java.util.Base64;
 import org.json.*;
@@ -40,11 +41,28 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 		if (jwtHeaderComponents.length == 2 && "Bearer".equalsIgnoreCase(jwtHeaderComponents[0])) {
 			String[] tokenComponents = jwtHeaderComponents[1].split("\\.");
+			// System.out.println("ENCODED " + tokenComponents[1]);
+			// System.out.println("REACHED HEREEEREER");
 			String claimsJsonString = new String(Base64.getDecoder().decode(tokenComponents[1]));
 
-			authLog.info("JWTClaims - " + claimsJsonString);
-
 			JSONObject claimsJsonObject = new JSONObject(claimsJsonString);
+			System.out.println(claimsJsonObject);
+
+			// String base64encodedString = null;
+			// try {
+			// base64encodedString =
+			// Base64.getEncoder().encodeToString(claimsJsonString.getBytes("utf-8"));
+			// } catch (UnsupportedEncodingException e1) {
+			// // TODO Auto-generated catch block
+			// e1.printStackTrace();
+			// }
+			// System.out.println(base64encodedString.contains((tokenComponents[1])));
+			// if(!base64encodedString.equals((tokenComponents[1])))
+			// {
+			// throw new InvalidRequestException("Bad Request Exception");
+			// }
+			//
+			//
 
 			try {
 
@@ -53,26 +71,19 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 						.getJSONArray("identifier");
 
 				String identifierValue = ((JSONObject) requestIdentifiersArray.get(0)).getString("value");
-
 				String requestOperation = theRequestDetails.getRequestPath();
-	
-				
-				
+
 				if (requestOperation.equals("Patient/$gpc.getcarerecord")) {
 
 					// "REQUEST_RECORD" = patient resource //DONE
-					
+
 					if (!requestScopeType.equals("Patient")) {
 						throw new InvalidRequestException("Bad Request Exception");
 					}
 					// Gets the NHS number in the request body to compare to
 					// requested_record
-				
 					Map<String, List<String>> map = theRequestDetails.getUnqualifiedToQualifiedNames();
-					
-					
-					
-		
+
 					for (String paramName : map.keySet()) {
 						List<String> paramValues = map.get(paramName);
 
@@ -165,14 +176,11 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 					throw new InvalidRequestException("Bad Request Exception");
 
 				}
-				
-				
+
 				boolean hasRequestingDevice = claimsJsonObject.has("requesting_device");
-				if (hasRequestingDevice == false)
-				{
+				if (hasRequestingDevice == false) {
 					throw new InvalidRequestException("Bad Request Exception");
 				}
-			
 
 				// Checking the creation date is not in the future
 				int timeValidationIdentifierInt = claimsJsonObject.getInt("iat");
@@ -187,20 +195,32 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 					throw new InvalidRequestException("Bad Request Exception");
 
 				}
-				
-			
-				if(claimsJsonObject.getJSONObject("requesting_device").getString("resourceType").equals("InvalidResourceType")){
+
+				if (claimsJsonObject.getJSONObject("requesting_device").getString("resourceType")
+						.equals("InvalidResourceType")) {
 					throw new InvalidRequestException("Bad Request Exception");
-				};
-				if(claimsJsonObject.getJSONObject("requesting_organization").getString("resourceType").equals("InvalidResourceType")){
+				}
+				;
+				if (claimsJsonObject.getJSONObject("requesting_organization").getString("resourceType")
+						.equals("InvalidResourceType")) {
 					throw new InvalidRequestException("Bad Request Exception");
-				};
-				if(claimsJsonObject.getJSONObject("requesting_practitioner").getString("resourceType").equals("InvalidResourceType")){
+				}
+				;
+				if (claimsJsonObject.getJSONObject("requesting_practitioner").getString("resourceType")
+						.equals("InvalidResourceType")) {
 					throw new InvalidRequestException("Bad Request Exception");
-				};
-			
-			
-			
+				}
+				;
+
+				if (claimsJsonObject.getJSONObject("requested_record").getString("resourceType").equals("Patient")
+						&& claimsJsonObject.getString("requested_scope").equals("organization/*.write")) {
+					throw new InvalidRequestException("Bad Request Exception");
+				}
+				if (claimsJsonObject.getJSONObject("requested_record").getString("resourceType").equals("Organization")
+						&& claimsJsonObject.getString("requested_scope").equals("patient/*.read")) {
+					throw new InvalidRequestException("Bad Request Exception");
+				}
+
 				// Checking the expiary time is 5 minutes after creation
 				int timeValidationExpiryTime = claimsJsonObject.getInt("exp");
 				int expiryTime = 300;
@@ -209,11 +229,6 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 					throw new InvalidRequestException("Bad Request Exception");
 
 				}
-				
-				
-				
-				
-				
 
 				// Checking the requested scope is valid
 				String requestedScopeValue = claimsJsonObject.getString("requested_scope");
@@ -259,7 +274,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 		// Done
 		try {
 			claimsJsonObject.getJSONObject("requested_record").getString("resourceType");
-			JSONArray requestedRecordResults = claimsJsonObject.getJSONObject("requested_record").getJSONArray("identifier");
+			JSONArray requestedRecordResults = claimsJsonObject.getJSONObject("requested_record")
+					.getJSONArray("identifier");
 			if (requestedRecordResults.length() > 0) {
 				((JSONObject) requestedRecordResults.get(0)).getString("system");
 				((JSONObject) requestedRecordResults.get(0)).getString("value");
@@ -277,7 +293,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			claimsJsonObject.getJSONObject("requesting_device").getString("id");
 			claimsJsonObject.getJSONObject("requesting_device").getString("model");
 			claimsJsonObject.getJSONObject("requesting_device").getString("version");
-			JSONArray requestingDeviceResults = claimsJsonObject.getJSONObject("requesting_device").getJSONArray("identifier");
+			JSONArray requestingDeviceResults = claimsJsonObject.getJSONObject("requesting_device")
+					.getJSONArray("identifier");
 			if (requestingDeviceResults.length() > 0) {
 				((JSONObject) requestingDeviceResults.get(0)).getString("system");
 				((JSONObject) requestingDeviceResults.get(0)).getString("value");
@@ -294,7 +311,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			claimsJsonObject.getJSONObject("requesting_organization").getString("resourceType");
 			claimsJsonObject.getJSONObject("requesting_organization").getString("id");
 			claimsJsonObject.getJSONObject("requesting_organization").getString("name");
-			JSONArray requestingOrganizationResults = claimsJsonObject.getJSONObject("requesting_organization").getJSONArray("identifier");
+			JSONArray requestingOrganizationResults = claimsJsonObject.getJSONObject("requesting_organization")
+					.getJSONArray("identifier");
 			if (requestingOrganizationResults.length() > 0) {
 				((JSONObject) requestingOrganizationResults.get(0)).getString("system");
 				((JSONObject) requestingOrganizationResults.get(0)).getString("value");
@@ -309,13 +327,15 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 		try {
 			claimsJsonObject.getJSONObject("requesting_practitioner").getString("resourceType");
 			claimsJsonObject.getJSONObject("requesting_practitioner").getString("id");
-			JSONArray requestingPractitionerResults = claimsJsonObject.getJSONObject("requesting_practitioner").getJSONArray("identifier");
+			JSONArray requestingPractitionerResults = claimsJsonObject.getJSONObject("requesting_practitioner")
+					.getJSONArray("identifier");
 			if (requestingPractitionerResults.length() > 0) {
 				((JSONObject) requestingPractitionerResults.get(0)).getString("system");
 				((JSONObject) requestingPractitionerResults.get(0)).getString("value");
 			}
-			
-			JSONObject requestingPractitionerResultsName = claimsJsonObject.getJSONObject("requesting_practitioner").getJSONObject("name");
+
+			JSONObject requestingPractitionerResultsName = claimsJsonObject.getJSONObject("requesting_practitioner")
+					.getJSONObject("name");
 
 			if (requestingPractitionerResultsName.length() > 0) {
 				requestingPractitionerResultsName.get("family");

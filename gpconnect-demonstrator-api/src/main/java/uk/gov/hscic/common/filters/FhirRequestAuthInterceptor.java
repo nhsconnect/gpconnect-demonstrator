@@ -233,10 +233,10 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 		// Done
 		try {
 			claimsJsonObject.getJSONObject("requested_record").getString("resourceType");
-			JSONArray RESULTS = claimsJsonObject.getJSONObject("requested_record").getJSONArray("identifier");
-			if (RESULTS.length() > 0) {
-				((JSONObject) RESULTS.get(0)).getString("system");
-				((JSONObject) RESULTS.get(0)).getString("value");
+			JSONArray requestedRecordResults = claimsJsonObject.getJSONObject("requested_record").getJSONArray("identifier");
+			if (requestedRecordResults.length() > 0) {
+				((JSONObject) requestedRecordResults.get(0)).getString("system");
+				((JSONObject) requestedRecordResults.get(0)).getString("value");
 			}
 			return true;
 		} catch (Exception e) {
@@ -251,10 +251,10 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			claimsJsonObject.getJSONObject("requesting_device").getString("id");
 			claimsJsonObject.getJSONObject("requesting_device").getString("model");
 			claimsJsonObject.getJSONObject("requesting_device").getString("version");
-			JSONArray RESULTS = claimsJsonObject.getJSONObject("requesting_device").getJSONArray("identifier");
-			if (RESULTS.length() > 0) {
-				((JSONObject) RESULTS.get(0)).getString("system");
-				((JSONObject) RESULTS.get(0)).getString("value");
+			JSONArray requestingDeviceResults = claimsJsonObject.getJSONObject("requesting_device").getJSONArray("identifier");
+			if (requestingDeviceResults.length() > 0) {
+				((JSONObject) requestingDeviceResults.get(0)).getString("system");
+				((JSONObject) requestingDeviceResults.get(0)).getString("value");
 			}
 			return true;
 		} catch (Exception e) {
@@ -268,10 +268,10 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 			claimsJsonObject.getJSONObject("requesting_organization").getString("resourceType");
 			claimsJsonObject.getJSONObject("requesting_organization").getString("id");
 			claimsJsonObject.getJSONObject("requesting_organization").getString("name");
-			JSONArray RESULTS = claimsJsonObject.getJSONObject("requesting_organization").getJSONArray("identifier");
-			if (RESULTS.length() > 0) {
-				((JSONObject) RESULTS.get(0)).getString("system");
-				((JSONObject) RESULTS.get(0)).getString("value");
+			JSONArray requestingOrganizationResults = claimsJsonObject.getJSONObject("requesting_organization").getJSONArray("identifier");
+			if (requestingOrganizationResults.length() > 0) {
+				((JSONObject) requestingOrganizationResults.get(0)).getString("system");
+				((JSONObject) requestingOrganizationResults.get(0)).getString("value");
 			}
 			return true;
 		} catch (Exception e) {
@@ -283,20 +283,19 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 		try {
 			claimsJsonObject.getJSONObject("requesting_practitioner").getString("resourceType");
 			claimsJsonObject.getJSONObject("requesting_practitioner").getString("id");
-			JSONArray RESULTS = claimsJsonObject.getJSONObject("requesting_practitioner").getJSONArray("identifier");
-			if (RESULTS.length() > 0) {
-				((JSONObject) RESULTS.get(0)).getString("system");
-				((JSONObject) RESULTS.get(0)).getString("value");
+			JSONArray requestingPractitionerResults = claimsJsonObject.getJSONObject("requesting_practitioner").getJSONArray("identifier");
+			if (requestingPractitionerResults.length() > 0) {
+				((JSONObject) requestingPractitionerResults.get(0)).getString("system");
+				((JSONObject) requestingPractitionerResults.get(0)).getString("value");
 			}
-			JSONObject RESULTS1 = claimsJsonObject.getJSONObject("requesting_practitioner").getJSONObject("name");
+			
+			JSONObject requestingPractitionerResultsName = claimsJsonObject.getJSONObject("requesting_practitioner").getJSONObject("name");
 
-			if (RESULTS1.length() > 0) {
-				RESULTS1.get("family");
-				RESULTS1.get("given");
-				RESULTS1.get("prefix");
+			if (requestingPractitionerResultsName.length() > 0) {
+				requestingPractitionerResultsName.get("family");
+				requestingPractitionerResultsName.get("given");
+				requestingPractitionerResultsName.get("prefix");
 			}
-			// This is where practitionerRole should be tested, Issue accessing
-			// inner property
 			return true;
 		} catch (Exception e) {
 			return false;

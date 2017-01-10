@@ -192,6 +192,13 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 				if(claimsJsonObject.getJSONObject("requesting_device").getString("resourceType").equals("InvalidResourceType")){
 					throw new InvalidRequestException("Bad Request Exception");
 				};
+				if(claimsJsonObject.getJSONObject("requesting_organization").getString("resourceType").equals("InvalidResourceType")){
+					throw new InvalidRequestException("Bad Request Exception");
+				};
+				if(claimsJsonObject.getJSONObject("requesting_practitioner").getString("resourceType").equals("InvalidResourceType")){
+					throw new InvalidRequestException("Bad Request Exception");
+				};
+			
 			
 			
 				// Checking the expiary time is 5 minutes after creation

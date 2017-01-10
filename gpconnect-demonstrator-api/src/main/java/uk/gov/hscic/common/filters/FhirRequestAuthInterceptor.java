@@ -165,6 +165,14 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 					throw new InvalidRequestException("Bad Request Exception");
 
 				}
+				
+				
+				boolean hasRequestingDevice = claimsJsonObject.has("requesting_device");
+				if (hasRequestingDevice == false)
+				{
+					throw new InvalidRequestException("Bad Request Exception");
+				}
+			
 
 				// Checking the creation date is not in the future
 				int timeValidationIdentifierInt = claimsJsonObject.getInt("iat");
@@ -173,13 +181,19 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 					throw new InvalidRequestException("Bad Request Exception");
 
 				}
-				// Checking th reason for request is dircetcare
+				// Checking the reason for request is directcare
 				String reasonForRequestValid = claimsJsonObject.getString("reason_for_request");
 				if (!reasonForRequestValid.equals("directcare")) {
 					throw new InvalidRequestException("Bad Request Exception");
 
 				}
-
+				
+			
+				if(claimsJsonObject.getJSONObject("requesting_device").getString("resourceType").equals("InvalidResourceType")){
+					throw new InvalidRequestException("Bad Request Exception");
+				};
+			
+			
 				// Checking the expiary time is 5 minutes after creation
 				int timeValidationExpiryTime = claimsJsonObject.getInt("exp");
 				int expiryTime = 300;
@@ -188,6 +202,11 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 					throw new InvalidRequestException("Bad Request Exception");
 
 				}
+				
+				
+				
+				
+				
 
 				// Checking the requested scope is valid
 				String requestedScopeValue = claimsJsonObject.getString("requested_scope");

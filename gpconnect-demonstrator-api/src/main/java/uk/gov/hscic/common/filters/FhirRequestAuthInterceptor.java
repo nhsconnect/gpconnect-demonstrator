@@ -36,23 +36,21 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 	@Override
 	public List<IAuthRule> buildRuleList(RequestDetails theRequestDetails) {
-		
+
 		String authorizationStr = theRequestDetails.getHeader("Authorization");
 		String[] jwtHeaderComponents = authorizationStr.split(" ");
 		Base64.Decoder decoder = Base64.getDecoder();
 		String[] tokenComponents = jwtHeaderComponents[1].split("\\.");
 
-		try{
+		try {
 			decoder.decode(tokenComponents[1]);
-		} catch(IllegalArgumentException iae) {
+		} catch (IllegalArgumentException iae) {
 			throw new InvalidRequestException("Not Base 64");
 		}
-		
+
 		if (jwtHeaderComponents.length == 2 && "Bearer".equalsIgnoreCase(jwtHeaderComponents[0])) {
-		
+
 			String claimsJsonString = new String(Base64.getDecoder().decode(tokenComponents[1]));
-			
-			
 
 			JSONObject claimsJsonObject = new JSONObject(claimsJsonString);
 			System.out.println(claimsJsonObject);
@@ -221,6 +219,31 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 				if ((timeValidationExpiryTime) - (timeValidationIdentifierInt) != expiryTime) {
 					throw new InvalidRequestException("Bad Request Exception");
 
+				}
+				
+				int requestingOrganizationTypes = 4;
+				if (claimsJsonObject.getJSONObject("requesting_organization").length() != requestingOrganizationTypes) {
+					throw new InvalidRequestException("Invalid Resource Present");
+				}
+				
+				int requestingPractitionerTypes = 5;
+				if (claimsJsonObject.getJSONObject("requesting_practitioner").length() != requestingPractitionerTypes) {
+					throw new InvalidRequestException("Invalid Resource Present");
+				}
+				
+				int requestingDeviceTypes = 5;
+				if (claimsJsonObject.getJSONObject("requesting_device").length() != requestingDeviceTypes) {
+					throw new InvalidRequestException("Invalid Resource Present");
+				}
+
+				JSONArray prac = claimsJsonObject.getJSONObject("requesting_practitioner")
+						.getJSONArray("practitionerRole").getJSONObject(0).getJSONObject("role").getJSONArray("coding");
+				String pracCode = ((JSONObject) prac.get(0)).getString("code");
+
+				if (pracCode.equals("NonSDSJobRoleName")) {
+					System.out.println("Incorrect Code Name");
+
+					throw new InvalidRequestException("Bad Request Exception");
 				}
 
 				// Checking the requested scope is valid

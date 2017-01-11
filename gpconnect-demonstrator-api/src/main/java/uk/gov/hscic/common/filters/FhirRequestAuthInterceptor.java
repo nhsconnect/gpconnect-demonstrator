@@ -36,33 +36,26 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 	@Override
 	public List<IAuthRule> buildRuleList(RequestDetails theRequestDetails) {
+		
 		String authorizationStr = theRequestDetails.getHeader("Authorization");
 		String[] jwtHeaderComponents = authorizationStr.split(" ");
+		Base64.Decoder decoder = Base64.getDecoder();
+		String[] tokenComponents = jwtHeaderComponents[1].split("\\.");
 
+		try{
+			decoder.decode(tokenComponents[1]);
+		} catch(IllegalArgumentException iae) {
+			throw new InvalidRequestException("Not Base 64");
+		}
+		
 		if (jwtHeaderComponents.length == 2 && "Bearer".equalsIgnoreCase(jwtHeaderComponents[0])) {
-			String[] tokenComponents = jwtHeaderComponents[1].split("\\.");
-			// System.out.println("ENCODED " + tokenComponents[1]);
-			// System.out.println("REACHED HEREEEREER");
+		
 			String claimsJsonString = new String(Base64.getDecoder().decode(tokenComponents[1]));
+			
+			
 
 			JSONObject claimsJsonObject = new JSONObject(claimsJsonString);
 			System.out.println(claimsJsonObject);
-
-			// String base64encodedString = null;
-			// try {
-			// base64encodedString =
-			// Base64.getEncoder().encodeToString(claimsJsonString.getBytes("utf-8"));
-			// } catch (UnsupportedEncodingException e1) {
-			// // TODO Auto-generated catch block
-			// e1.printStackTrace();
-			// }
-			// System.out.println(base64encodedString.contains((tokenComponents[1])));
-			// if(!base64encodedString.equals((tokenComponents[1])))
-			// {
-			// throw new InvalidRequestException("Bad Request Exception");
-			// }
-			//
-			//
 
 			try {
 

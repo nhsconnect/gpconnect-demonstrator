@@ -1,5 +1,12 @@
 package uk.gov.hscic.common.filters;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.DataFormatException;
+import ca.uhn.fhir.parser.IParser;
+import ca.uhn.fhir.parser.IParserErrorHandler;
+import ca.uhn.fhir.parser.JsonParser;
+import ca.uhn.fhir.parser.LenientErrorHandler;
+import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.method.RequestDetails;
 import ca.uhn.fhir.rest.server.IRestfulResponse;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
@@ -18,12 +25,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpException;
 import org.apache.log4j.Logger;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
+
 import org.json.*;
 import org.springframework.expression.AccessException;
 import org.springframework.stereotype.Component;
@@ -51,7 +62,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 		if (jwtHeaderComponents.length == 2 && "Bearer".equalsIgnoreCase(jwtHeaderComponents[0])) {
 
 			String claimsJsonString = new String(Base64.getDecoder().decode(tokenComponents[1]));
-
+			
 			JSONObject claimsJsonObject = new JSONObject(claimsJsonString);
 			System.out.println(claimsJsonObject);
 
@@ -221,30 +232,35 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 				}
 				
-				int requestingOrganizationTypes = 4;
-				if (claimsJsonObject.getJSONObject("requesting_organization").length() != requestingOrganizationTypes) {
-					throw new InvalidRequestException("Invalid Resource Present");
-				}
+
+				FhirContext ctx = new FhirContext();
+				IParser parser = ctx.newJsonParser();
+				parser.setParserErrorHandler(new StrictErrorHandler());
+				JSONObject requestingPracticionerObject = claimsJsonObject.getJSONObject("requesting_practitioner");
+				JSONObject requestingDeviceObject = claimsJsonObject.getJSONObject("requesting_device");
+				JSONObject requestingOrganizationObject = claimsJsonObject.getJSONObject("requesting_organization");
 				
-				int requestingPractitionerTypes = 5;
-				if (claimsJsonObject.getJSONObject("requesting_practitioner").length() != requestingPractitionerTypes) {
-					throw new InvalidRequestException("Invalid Resource Present");
-				}
+			
+				try{
+				parser.parseResource(requestingPracticionerObject.toString()).getFormatCommentsPost();
+				parser.parseResource(requestingDeviceObject.toString()).getFormatCommentsPost();
+				parser.parseResource(requestingOrganizationObject.toString()).getFormatCommentsPost();
 				
-				int requestingDeviceTypes = 5;
-				if (claimsJsonObject.getJSONObject("requesting_device").length() != requestingDeviceTypes) {
-					throw new InvalidRequestException("Invalid Resource Present");
+				
+				}catch (DataFormatException e)
+				{
+					
+					throw new InvalidRequestException("Invalid Resource Present");		
 				}
 
-				JSONArray prac = claimsJsonObject.getJSONObject("requesting_practitioner")
-						.getJSONArray("practitionerRole").getJSONObject(0).getJSONObject("role").getJSONArray("coding");
-				String pracCode = ((JSONObject) prac.get(0)).getString("code");
 
-				if (pracCode.equals("NonSDSJobRoleName")) {
-					System.out.println("Incorrect Code Name");
-
-					throw new InvalidRequestException("Bad Request Exception");
-				}
+//				if (pracCode.equals("NonSDSJobRoleName")) {
+//					System.out.println("Incorrect Code Name");
+//
+//					throw new InvalidRequestException("Bad Request Exception");
+//				}
+				
+			
 
 				// Checking the requested scope is valid
 				String requestedScopeValue = claimsJsonObject.getString("requested_scope");

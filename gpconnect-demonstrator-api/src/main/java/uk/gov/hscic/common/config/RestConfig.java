@@ -34,6 +34,9 @@ public class RestConfig extends WebMvcConfigurerAdapter {
 
     @Value("${server.keystore.password}")
     private String keystorePassword;
+    
+    @Value("${server.keystore.path}")
+    private String keystorePath;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -42,7 +45,7 @@ public class RestConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public SignedHandler signedHandler() throws Exception {
-        return new SignedHandler(KeyStoreFactory.getKeyStore("src/main/resources/authentication/server", keystorePassword));
+        return new SignedHandler(KeyStoreFactory.getKeyStore(keystorePath, keystorePassword));
     }
 
     @Bean

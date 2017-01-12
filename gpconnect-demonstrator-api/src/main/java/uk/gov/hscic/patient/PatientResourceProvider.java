@@ -65,8 +65,10 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 
 import org.springframework.stereotype.Component;
+
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.util.NhsCodeValidator;
 import uk.gov.hscic.medication.model.PatientMedicationHTML;
@@ -200,7 +202,7 @@ public class PatientResourceProvider implements IResourceProvider {
 	public Bundle getPatientCareRecord(@ResourceParam Parameters params) {
 
 		OperationOutcome operationOutcome = new OperationOutcome();
-		String nhsNumber = null;
+		ArrayList<String> nhsNumber = new ArrayList<>();
 		ArrayList<String> sectionsParamList = new ArrayList();
 
 		Date fromDate = null;
@@ -209,16 +211,61 @@ public class PatientResourceProvider implements IResourceProvider {
 
 		for (Parameter param : params.getParameter()) {
 
+			
+			if (param.getName().equals("patientNHSNumber") == false && param.getName().equals("recordSection") == false
+					&& param.getName().equals("timePeriod") == false) {
+				throw new UnprocessableEntityException("Parameters are incorrect");
+			}
+			
 			IDatatype value = param.getValue();
+			
 			if (value instanceof IdentifierDt) {
-				nhsNumber = ((IdentifierDt) value).getValue();
+				
+
+				nhsNumber.add(((IdentifierDt) value).getValue());
+				
+				if (nhsNumber.size() > 1) {
+					CodingDt errorCoding = new CodingDt()
+							.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+							.setCode("INVALID_IDENTIFIER_SYSTEM");
+					CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+					operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+							.setCode(IssueTypeEnum.INVALID_CONTENT).setDetails(errorCodableConcept)
+							.setDiagnostics("NHS Number Invalid");
+					throw new InvalidRequestException("Bad Request Exception");
+				}
 			} else if (value instanceof CodeableConceptDt) {
+
+				
 				List<CodingDt> coading = ((CodeableConceptDt) value).getCoding();
+
+				
 				sectionsParamList.add(coading.get(0).getCode());
+
+				
+				if (sectionsParamList.size() > 1) {
+					CodingDt errorCoding = new CodingDt()
+							.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+							.setCode("INVALID_IDENTIFIER_SYSTEM");
+					CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+					operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+							.setCode(IssueTypeEnum.INVALID_CONTENT).setDetails(errorCodableConcept)
+							.setDiagnostics("Multiple Sections Added");
+					throw new InvalidRequestException("Bad Request Exception");
+				}
 			} else if (value instanceof PeriodDt) {
+			
 				fromDate = ((PeriodDt) value).getStart();
 				Calendar toCalendar = Calendar.getInstance();
 				toDate = ((PeriodDt) value).getEnd();
+
+			
+
+				if ((fromDate != null && toDate != null) && fromDate.after(toDate)) {
+				
+					throw new UnprocessableEntityException("Dates are invalid");
+				}
+
 				if (toDate != null) {
 					System.out.println("HAS A DATE RANGE");
 					toCalendar.setTime(toDate);
@@ -237,11 +284,9 @@ public class PatientResourceProvider implements IResourceProvider {
 		// Build Bundle
 		Bundle bundle = new Bundle();
 		bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
-		
-		for (int i = 0 ; i< sectionsParamList.size(); i++)
-		{
-			if(sectionsParamList.get(i) == null || sectionsParamList.get(i).length() != 3 )
-			{
+
+		for (int i = 0; i < sectionsParamList.size(); i++) {
+			if (sectionsParamList.get(i) == null || sectionsParamList.get(i).length() != 3) {
 				CodingDt errorCoding = new CodingDt()
 						.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
 						.setCode("INVALID_NHS_NUMBER");
@@ -251,488 +296,514 @@ public class PatientResourceProvider implements IResourceProvider {
 				throw new ResourceNotFoundException("NHS number Invalid " + operationOutcome);
 			}
 		}
-		
-		
-		
 
-		if (NhsValidation(nhsNumber)) {
-			CodingDt errorCoding = new CodingDt()
-					.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
-					.setCode("INVALID_NHS_NUMBER");
-			CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
-			operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.INVALID_CONTENT)
-					.setDetails(errorCodableConcept).setDiagnostics("NHS Number Invalid");
-			throw new ResourceNotFoundException("NHS number Invalid " + operationOutcome);
+		if (nhsNumber.isEmpty()) {
+			throw new InvalidRequestException("NHS number not supplied");
 		} else {
+			if (NhsValidation(nhsNumber.get(0))) {
+				CodingDt errorCoding = new CodingDt()
+						.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+						.setCode("INVALID_NHS_NUMBER");
+				CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+				operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.INVALID_CONTENT)
+						.setDetails(errorCodableConcept).setDiagnostics("NHS Number Invalid");
+				throw new ResourceNotFoundException("NHS number Invalid " + operationOutcome);
+			} else {
 
-			// Build the Patient Resource and add it to the bundle
-			try {
-				String patientID;
-				Entry patientEntry = new Entry();
-				List<Patient> patients = getPatientByPatientId(new TokenParam("", nhsNumber));
-				if (patients != null && patients.size() > 0) {
-					patientEntry.setResource(patients.get(0));
-					patientEntry.setFullUrl("Patient/" + patients.get(0).getId().getIdPart());
-					patientID = patients.get(0).getId().getIdPart();
-				} else {
-					operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-							.setDetails("No patient details found for patient NHS Number: " + nhsNumber);
-					throw new InternalErrorException("No patient details found for patient NHS Number: " + nhsNumber,
-							operationOutcome);
-				}
+				// Build the Patient Resource and add it to the bundle
+				try {
+					String patientID;
+					Entry patientEntry = new Entry();
+					List<Patient> patients = getPatientByPatientId(new TokenParam("", nhsNumber.get(0)));
+					if (patients != null && patients.size() > 0) {
+						patientEntry.setResource(patients.get(0));
+						patientEntry.setFullUrl("Patient/" + patients.get(0).getId().getIdPart());
+						patientID = patients.get(0).getId().getIdPart();
+					} else {
+						operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+								.setDetails("No patient details found for patient NHS Number: " + nhsNumber.get(0));
+						throw new InternalErrorException(
+								"No patient details found for patient NHS Number: " + nhsNumber.get(0),
+								operationOutcome);
+					}
 
-				// Build the Care Record Composition
-				Entry careRecordEntry = new Entry();
-				Composition careRecordComposition = new Composition();
-				careRecordComposition.setDate(new DateTimeDt(Calendar.getInstance().getTime()));
+					// Build the Care Record Composition
+					Entry careRecordEntry = new Entry();
+					Composition careRecordComposition = new Composition();
+					careRecordComposition.setDate(new DateTimeDt(Calendar.getInstance().getTime()));
 
-				CodingDt coding = new CodingDt().setSystem("http://snomed.info/sct").setCode("425173008")
-						.setDisplay("record extract (record artifact)");
-				CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding)
-						.setText("record extract (record artifact)");
-				careRecordComposition.setType(codableConcept);
+					CodingDt coding = new CodingDt().setSystem("http://snomed.info/sct").setCode("425173008")
+							.setDisplay("record extract (record artifact)");
+					CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding)
+							.setText("record extract (record artifact)");
+					careRecordComposition.setType(codableConcept);
 
-				CodingDt classCoding = new CodingDt().setSystem("http://snomed.info/sct").setCode("700232004")
-						.setDisplay("general medical service (qualifier value)");
-				CodeableConceptDt classCodableConcept = new CodeableConceptDt().addCoding(classCoding)
-						.setText("general medical service (qualifier value)");
-				careRecordComposition.setClassElement(classCodableConcept);
+					CodingDt classCoding = new CodingDt().setSystem("http://snomed.info/sct").setCode("700232004")
+							.setDisplay("general medical service (qualifier value)");
+					CodeableConceptDt classCodableConcept = new CodeableConceptDt().addCoding(classCoding)
+							.setText("general medical service (qualifier value)");
+					careRecordComposition.setClassElement(classCodableConcept);
 
-				careRecordComposition.setTitle("Patient Care Record");
-				careRecordComposition.setStatus(CompositionStatusEnum.FINAL);
-				careRecordComposition.setSubject(new ResourceReferenceDt("Patient/" + patientID));
+					careRecordComposition.setTitle("Patient Care Record");
+					careRecordComposition.setStatus(CompositionStatusEnum.FINAL);
+					careRecordComposition.setSubject(new ResourceReferenceDt("Patient/" + patientID));
 
-				// Build requested sections
-				if (sectionsParamList.size() > 0) {
-					ArrayList<Section> sectionsList = new ArrayList();
-					for (String sectionName : sectionsParamList) {
-						Section section = new Section();
-						switch (sectionName) {
-						case "SUM":
-							List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch
-									.findAllPatientSummaryHTMLTables(nhsNumber);
-							if (patientSummaryList != null && patientSummaryList.size() > 0) {
-								CodingDt summaryCoding = new CodingDt()
-										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-										.setCode("SUM").setDisplay("Summary");
-								CodeableConceptDt summaryCodableConcept = new CodeableConceptDt()
-										.addCoding(summaryCoding).setText(patientSummaryList.get(0).getProvider());
-								NarrativeDt narrative = new NarrativeDt();
-								narrative.setStatus(NarrativeStatusEnum.GENERATED);
-								narrative.setDivAsString(patientSummaryList.get(0).getHtml());
-								section.setTitle("Summary").setCode(summaryCodableConcept).setText(narrative);
-								sectionsList.add(section);
-							} else {
-								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-										.setDetails("No data available for the requested section: Summary");
+					// Build requested sections
+					if (sectionsParamList.size() > 0) {
+						ArrayList<Section> sectionsList = new ArrayList();
+
+						for (String sectionName : sectionsParamList) {
+							String testSectionName = sectionName;
+							if (sectionName != testSectionName.toUpperCase()) {
+								throw new UnprocessableEntityException("Section Case Invalid");
 							}
-							break;
 
-						case "PRB":
+							Section section = new Section();
+							switch (sectionName) {
+							case "SUM":
+								
 
-							if (toDate != null && fromDate != null) {
-								throw new InvalidRequestException("Date Ranges not allowed to be set");
-							} else {
-								List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber);
-								if (problemList != null && problemList.size() > 0) {
-									CodingDt problemCoding = new CodingDt()
+								if (nhsNumber.get(0).equals(null)) {
+									throw new AssertionError();
+								}
+								List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch
+										.findAllPatientSummaryHTMLTables(nhsNumber.get(0));
+
+								if (patientSummaryList != null && patientSummaryList.size() > 0) {
+									CodingDt summaryCoding = new CodingDt()
 											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-											.setCode("PRB").setDisplay("Problems");
-									CodeableConceptDt problemCodableConcept = new CodeableConceptDt()
-											.addCoding(problemCoding).setText(problemList.get(0).getProvider());
+											.setCode("SUM").setDisplay("Summary");
+									CodeableConceptDt summaryCodableConcept = new CodeableConceptDt()
+											.addCoding(summaryCoding).setText(patientSummaryList.get(0).getProvider());
 									NarrativeDt narrative = new NarrativeDt();
 									narrative.setStatus(NarrativeStatusEnum.GENERATED);
-									narrative.setDivAsString(problemList.get(0).getHtml());
-									section.setTitle("Problems").setCode(problemCodableConcept).setText(narrative);
+									narrative.setDivAsString(patientSummaryList.get(0).getHtml());
+									section.setTitle("Summary").setCode(summaryCodableConcept).setText(narrative);
 									sectionsList.add(section);
 								} else {
 									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-											.setDetails("No data available for the requested section: Problems");
+											.setDetails("No data available for the requested section: Summary");
+
 								}
-							}
-							break;
+								break;
 
-						case "ENC":
-							List<EncounterListHTML> encounterList = encounterSearch
-									.findAllEncounterHTMLTables(nhsNumber, fromDate, toDate);
-							if (encounterList != null && encounterList.size() > 0) {
-								CodingDt encounterCoding = new CodingDt()
-										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-										.setCode("ENC").setDisplay("Encounters");
-								CodeableConceptDt encounterCodableConcept = new CodeableConceptDt()
-										.addCoding(encounterCoding).setText(encounterList.get(0).getProvider());
-								NarrativeDt narrative = new NarrativeDt();
-								narrative.setStatus(NarrativeStatusEnum.GENERATED);
-								narrative.setDivAsString(encounterList.get(0).getHtml());
-								section.setTitle("Encounters").setCode(encounterCodableConcept).setText(narrative);
-								sectionsList.add(section);
-							} else {
-								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-										.setDetails("No data available for the requested section: Encounters");
-							}
-							break;
+							case "PRB":
 
-						case "ALL":
+								if (toDate != null && fromDate != null) {
+									throw new InvalidRequestException("Date Ranges not allowed to be set");
+								} else {
+									List<ProblemListHTML> problemList = problemSearch
+											.findAllProblemHTMLTables(nhsNumber.get(0));
+									if (problemList != null && problemList.size() > 0) {
+										CodingDt problemCoding = new CodingDt()
+												.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+												.setCode("PRB").setDisplay("Problems");
+										CodeableConceptDt problemCodableConcept = new CodeableConceptDt()
+												.addCoding(problemCoding).setText(problemList.get(0).getProvider());
+										NarrativeDt narrative = new NarrativeDt();
+										narrative.setStatus(NarrativeStatusEnum.GENERATED);
+										narrative.setDivAsString(problemList.get(0).getHtml());
+										section.setTitle("Problems").setCode(problemCodableConcept).setText(narrative);
+										sectionsList.add(section);
+									} else {
+										operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+												.setDetails("No data available for the requested section: Problems");
+									}
+								}
+								break;
 
-							if (toDate != null && fromDate != null) {
-								throw new InvalidRequestException("Date Ranges not allowed to be set");
-							} else {
-								List<AllergyListHTML> allergyList = allergySearch.findAllAllergyHTMLTables(nhsNumber);
-								if (allergyList != null && allergyList.size() > 0) {
-									CodingDt allergyCoding = new CodingDt()
+							case "ENC":
+								List<EncounterListHTML> encounterList = encounterSearch
+										.findAllEncounterHTMLTables(nhsNumber.get(0), fromDate, toDate);
+								if (encounterList != null && encounterList.size() > 0) {
+									CodingDt encounterCoding = new CodingDt()
 											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-											.setCode("ALL").setDisplay("Allergies and Sensitivities");
-									CodeableConceptDt allergyCodableConcept = new CodeableConceptDt()
-											.addCoding(allergyCoding).setText(allergyList.get(0).getProvider());
+											.setCode("ENC").setDisplay("Encounters");
+									CodeableConceptDt encounterCodableConcept = new CodeableConceptDt()
+											.addCoding(encounterCoding).setText(encounterList.get(0).getProvider());
 									NarrativeDt narrative = new NarrativeDt();
 									narrative.setStatus(NarrativeStatusEnum.GENERATED);
-									narrative.setDivAsString(allergyList.get(0).getHtml());
-									section.setTitle("Allergies and Sensitivities").setCode(allergyCodableConcept)
+									narrative.setDivAsString(encounterList.get(0).getHtml());
+									section.setTitle("Encounters").setCode(encounterCodableConcept).setText(narrative);
+									sectionsList.add(section);
+								} else {
+									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+											.setDetails("No data available for the requested section: Encounters");
+								}
+								break;
+
+							case "ALL":
+
+								if (toDate != null && fromDate != null) {
+									throw new InvalidRequestException("Date Ranges not allowed to be set");
+								} else {
+									List<AllergyListHTML> allergyList = allergySearch
+											.findAllAllergyHTMLTables(nhsNumber.get(0));
+									if (allergyList != null && allergyList.size() > 0) {
+										CodingDt allergyCoding = new CodingDt()
+												.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+												.setCode("ALL").setDisplay("Allergies and Sensitivities");
+										CodeableConceptDt allergyCodableConcept = new CodeableConceptDt()
+												.addCoding(allergyCoding).setText(allergyList.get(0).getProvider());
+										NarrativeDt narrative = new NarrativeDt();
+										narrative.setStatus(NarrativeStatusEnum.GENERATED);
+										narrative.setDivAsString(allergyList.get(0).getHtml());
+										section.setTitle("Allergies and Sensitivities").setCode(allergyCodableConcept)
+												.setText(narrative);
+										sectionsList.add(section);
+									} else {
+										operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
+												"No data available for the requested section: Allergies and Sensitivities");
+									}
+								}
+								break;
+
+							case "CLI":
+								List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch
+										.findAllClinicalItemHTMLTables(nhsNumber.get(0));
+								if (clinicalItemList != null && clinicalItemList.size() > 0) {
+									CodingDt clinicalItemCoding = new CodingDt()
+											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+											.setCode("CLI").setDisplay("Clinical Items");
+									CodeableConceptDt clinicalItemCodableConcept = new CodeableConceptDt()
+											.addCoding(clinicalItemCoding)
+											.setText(clinicalItemList.get(0).getProvider());
+									NarrativeDt narrative = new NarrativeDt();
+									narrative.setStatus(NarrativeStatusEnum.GENERATED);
+									narrative.setDivAsString(clinicalItemList.get(0).getHtml());
+									section.setTitle("Clinical Items").setCode(clinicalItemCodableConcept)
+											.setText(narrative);
+									sectionsList.add(section);
+								} else {
+									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+											.setDetails("No data available for the requested section: Clinical Items");
+								}
+								break;
+
+							case "MED":
+								section = null;
+								// HTML Section Search
+								List<PatientMedicationHTML> medicationList = medicationSearch
+										.findPatientMedicationHTML(nhsNumber.get(0));
+								if (medicationList != null && medicationList.size() > 0) {
+									section = new Section();
+									CodingDt medicationCoding = new CodingDt()
+											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+											.setCode("MED").setDisplay("Medications");
+									CodeableConceptDt medicationCodableConcept = new CodeableConceptDt()
+											.addCoding(medicationCoding).setText(medicationList.get(0).getProvider());
+									NarrativeDt narrative = new NarrativeDt();
+									narrative.setStatus(NarrativeStatusEnum.GENERATED);
+									narrative.setDivAsString(medicationList.get(0).getHtml());
+									section.setTitle("Medications").setCode(medicationCodableConcept)
+											.setText(narrative);
+								} else {
+									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+											.setDetails("No data available for the requested section: Medication");
+								}
+
+								// Sructured Data Search
+								List<MedicationOrder> medicationOrders = medicationOrderResourceProvider
+										.getMedicationOrdersForPatientId(patientID);
+								HashSet<String> medicationOrderMedicationsList = new HashSet();
+								HashSet<String> medicationOrderList = new HashSet();
+								for (MedicationOrder medicationOrder : medicationOrders) {
+									medicationOrderList.add(medicationOrder.getId().getIdPart());
+								}
+								List<MedicationDispense> medicationDispenses = medicationDispenseResourceProvider
+										.getMedicationDispensesForPatientId(patientID);
+								for (MedicationDispense medicationDispense : medicationDispenses) {
+									if (section == null) {
+										section = new Section();
+									}
+									// Add the medication Order to the bundle
+									Entry medicationDispenseEntry = new Entry();
+									medicationDispenseEntry
+											.setFullUrl("MedicationDispense/" + medicationDispense.getId().getIdPart());
+									medicationDispenseEntry.setResource(medicationDispense);
+									section.addEntry().setReference(medicationDispenseEntry.getFullUrl());
+									bundle.addEntry(medicationDispenseEntry);
+									// If we have any new medicationOrders which
+									// were not found in the search for
+									// MedicationOrders for a patient we need to
+									// add
+									// them.
+									if (!medicationOrderList.contains(medicationDispense.getAuthorizingPrescription()
+											.get(0).getReference().getIdPart())) {
+										try {
+											MedicationOrder medicationOrder = medicationOrderResourceProvider
+													.getMedicationOrderById(medicationDispense
+															.getAuthorizingPrescription().get(0).getReference());
+											medicationOrders.add(medicationOrder);
+											medicationOrderList.add(medicationOrder.getId().getIdPart());
+										} catch (Exception ex) {
+											operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+													.setDetails("MedicationOrder for MedicaitonDispense (id: "
+															+ medicationDispense.getId().getIdPart()
+															+ ") could not be found in database");
+										}
+									}
+								}
+								List<MedicationAdministration> medicationAdministrations = medicationAdministrationResourceProvider
+										.getMedicationAdministrationsForPatientId(patientID);
+								for (MedicationAdministration medicationAdministration : medicationAdministrations) {
+									if (section == null) {
+										section = new Section();
+									}
+									Entry medicationAdministrationEntry = new Entry();
+									medicationAdministrationEntry.setFullUrl(
+											"MedicationAdministration/" + medicationAdministration.getId().getIdPart());
+									medicationAdministrationEntry.setResource(medicationAdministration);
+									section.addEntry().setReference(medicationAdministrationEntry.getFullUrl());
+									bundle.addEntry(medicationAdministrationEntry);
+									// If we have any new medicationOrders which
+									// were not found in the search for
+									// MedicationOrders for a patient we need to
+									// add
+									// them.
+									if (!medicationOrderList.contains(
+											medicationAdministration.getPrescription().getReference().getIdPart())) {
+										try {
+											MedicationOrder medicationOrder = medicationOrderResourceProvider
+													.getMedicationOrderById(
+															medicationAdministration.getPrescription().getReference());
+											medicationOrders.add(medicationOrder);
+											medicationOrderList.add(medicationOrder.getId().getIdPart());
+										} catch (Exception ex) {
+											operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+													.setDetails("MedicationOrder for MedicaitonAdministration (id: "
+															+ medicationAdministration.getId().getIdPart()
+															+ ") could not be found in database");
+										}
+									}
+								}
+								for (MedicationOrder medicationOrder : medicationOrders) {
+									if (section == null) {
+										section = new Section();
+									}
+									// Add the medication Order to the bundle
+									Entry medicationOrderEntry = new Entry();
+									medicationOrderEntry
+											.setFullUrl("MedicationOrder/" + medicationOrder.getId().getIdPart());
+									medicationOrderEntry.setResource(medicationOrder);
+									section.addEntry().setReference(medicationOrderEntry.getFullUrl());
+									bundle.addEntry(medicationOrderEntry);
+									// Store the referenced medicaitons in a set
+									// so
+									// we can get all the medications once and
+									// we
+									// won't have duplicates
+									IdDt medicationId = ((ResourceReferenceDt) medicationOrder.getMedication())
+											.getReference();
+									medicationOrderMedicationsList.add(medicationId.getValue());
+									medicationId = ((ResourceReferenceDt) medicationOrder.getDispenseRequest()
+											.getMedication()).getReference();
+									medicationOrderMedicationsList.add(medicationId.getValue());
+								}
+								for (String medicationId : medicationOrderMedicationsList) {
+									try {
+										Entry medicationEntry = new Entry();
+										medicationEntry.setFullUrl(medicationId);
+										medicationEntry.setResource(
+												medicationResourceProvider.getMedicationById(new IdDt(medicationId)));
+										section.addEntry().setReference(medicationEntry.getFullUrl());
+										bundle.addEntry(medicationEntry);
+									} catch (Exception ex) {
+										operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+												.setDetails("Medication (ID: " + medicationId
+														+ ") for MedicaitonOrder could not be found in database");
+									}
+								}
+
+								if (section != null) {
+									sectionsList.add(section);
+								}
+								break;
+
+							case "REF":
+								List<ReferralListHTML> referralList = referralSearch
+										.findAllReferralHTMLTables(nhsNumber.get(0));
+								if (referralList != null && referralList.size() > 0) {
+									CodingDt referralCoding = new CodingDt()
+											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+											.setCode("REF").setDisplay("Referrals");
+									CodeableConceptDt referralCodableConcept = new CodeableConceptDt()
+											.addCoding(referralCoding).setText(referralList.get(0).getProvider());
+									NarrativeDt narrative = new NarrativeDt();
+									narrative.setStatus(NarrativeStatusEnum.GENERATED);
+									narrative.setDivAsString(referralList.get(0).getHtml());
+									section.setTitle("Referrals").setCode(referralCodableConcept).setText(narrative);
+									sectionsList.add(section);
+									throw new InvalidRequestException("Date Ranges not allowed to be set");
+								} else {
+									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+											.setDetails("No data available for the requested section: Referrals");
+								}
+								break;
+
+							case "OBS":
+
+								if (toDate != null && fromDate != null) {
+									throw new InvalidRequestException("Date Ranges not allowed to be set");
+								} else {
+									List<ObservationListHTML> observationList = observationSearch
+											.findAllObservationHTMLTables(nhsNumber.get(0));
+									if (observationList != null && observationList.size() > 0) {
+										CodingDt observationCoding = new CodingDt()
+												.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+												.setCode("OBS").setDisplay("Observations");
+										CodeableConceptDt observationCodableConcept = new CodeableConceptDt()
+												.addCoding(observationCoding)
+												.setText(observationList.get(0).getProvider());
+										NarrativeDt narrative = new NarrativeDt();
+										narrative.setStatus(NarrativeStatusEnum.GENERATED);
+										narrative.setDivAsString(observationList.get(0).getHtml());
+										section.setTitle("Observations").setCode(observationCodableConcept)
+												.setText(narrative);
+										sectionsList.add(section);
+									} else {
+										operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
+												"No data available for the requested section: Observations");
+									}
+								}
+								break;
+
+							case "INV":
+								List<InvestigationListHTML> investigationList = investigationSearch
+										.findAllInvestigationHTMLTables(nhsNumber.get(0));
+								if (investigationList != null && investigationList.size() > 0) {
+									CodingDt investigationCoding = new CodingDt()
+											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+											.setCode("INV").setDisplay("Investigations");
+									CodeableConceptDt investigationCodableConcept = new CodeableConceptDt()
+											.addCoding(investigationCoding)
+											.setText(investigationList.get(0).getProvider());
+									NarrativeDt narrative = new NarrativeDt();
+									narrative.setStatus(NarrativeStatusEnum.GENERATED);
+									narrative.setDivAsString(investigationList.get(0).getHtml());
+									section.setTitle("Investigations").setCode(investigationCodableConcept)
+											.setText(narrative);
+									sectionsList.add(section);
+									throw new InvalidRequestException("Date Ranges not allowed to be set");
+								} else {
+									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+											.setDetails("No data available for the requested section: Investigations");
+								}
+								break;
+
+							case "IMM":
+
+								if (toDate != null && fromDate != null) {
+									throw new InvalidRequestException("Date Ranges not allowed to be set");
+								} else {
+									List<ImmunisationListHTML> immunisationList = immunisationSearch
+											.findAllImmunisationHTMLTables(nhsNumber.get(0));
+									if (immunisationList != null && immunisationList.size() > 0) {
+										CodingDt immunisationCoding = new CodingDt()
+												.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+												.setCode("IMM").setDisplay("Immunisations");
+										CodeableConceptDt immunisationCodableConcept = new CodeableConceptDt()
+												.addCoding(immunisationCoding)
+												.setText(immunisationList.get(0).getProvider());
+										NarrativeDt narrative = new NarrativeDt();
+										narrative.setStatus(NarrativeStatusEnum.GENERATED);
+										narrative.setDivAsString(immunisationList.get(0).getHtml());
+										section.setTitle("Immunisations").setCode(immunisationCodableConcept)
+												.setText(narrative);
+										sectionsList.add(section);
+									} else {
+										operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
+												"No data available for the requested section: Immunisations");
+									}
+								}
+								break;
+
+							case "ADM":
+								List<AdminItemListHTML> adminItemList = adminItemSearch
+										.findAllAdminItemHTMLTables(nhsNumber.get(0));
+								if (adminItemList != null && adminItemList.size() > 0) {
+									CodingDt adminItemCoding = new CodingDt()
+											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
+											.setCode("ADM").setDisplay("Administrative Items");
+									CodeableConceptDt adminItemCodableConcept = new CodeableConceptDt()
+											.addCoding(adminItemCoding).setText(adminItemList.get(0).getProvider());
+									NarrativeDt narrative = new NarrativeDt();
+									narrative.setStatus(NarrativeStatusEnum.GENERATED);
+									narrative.setDivAsString(adminItemList.get(0).getHtml());
+									section.setTitle("Administrative Items").setCode(adminItemCodableConcept)
 											.setText(narrative);
 									sectionsList.add(section);
 								} else {
 									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
-											"No data available for the requested section: Allergies and Sensitivities");
+											"No data available for the requested section: AdministrativeItems");
 								}
-							}
-							break;
+								break;
 
-						case "CLI":
-							List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch
-									.findAllClinicalItemHTMLTables(nhsNumber);
-							if (clinicalItemList != null && clinicalItemList.size() > 0) {
-								CodingDt clinicalItemCoding = new CodingDt()
-										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-										.setCode("CLI").setDisplay("Clinical Items");
-								CodeableConceptDt clinicalItemCodableConcept = new CodeableConceptDt()
-										.addCoding(clinicalItemCoding).setText(clinicalItemList.get(0).getProvider());
-								NarrativeDt narrative = new NarrativeDt();
-								narrative.setStatus(NarrativeStatusEnum.GENERATED);
-								narrative.setDivAsString(clinicalItemList.get(0).getHtml());
-								section.setTitle("Clinical Items").setCode(clinicalItemCodableConcept)
-										.setText(narrative);
-								sectionsList.add(section);
-							} else {
+							default:
+								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
+										"The requested section '" + sectionName + "' is not a valid section.");
+								throw new InvalidRequestException("Section Invalid");
+							}
+						}
+
+						careRecordComposition.setSection(sectionsList);
+					}
+
+					careRecordEntry.setResource(careRecordComposition);
+					bundle.addEntry(careRecordEntry);
+					List<ResourceReferenceDt> careProviderPractitionerList = ((Patient) patientEntry.getResource())
+							.getCareProvider();
+					if (careProviderPractitionerList.size() > 0) {
+						careRecordComposition.setAuthor(Collections.singletonList(new ResourceReferenceDt(
+								careProviderPractitionerList.get(0).getReference().getValue())));
+						try {
+
+							Practitioner practitioner = practitionerResourceProvider.getPractitionerById(
+									new IdDt(careProviderPractitionerList.get(0).getReference().getValue()));
+							if (practitioner == null) {
+								CodingDt errorCoding = new CodingDt()
+										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+										.setCode("REFERENCE_NOT_FOUND");
+								CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+								errorCodableConcept.setText("Invalid Reference");
 								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-										.setDetails("No data available for the requested section: Clinical Items");
+										.setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
+								throw new ResourceNotFoundException("Practitioner Reference returning null");
 							}
-							break;
+							Entry practitionerEntry = new Entry().setResource(practitioner)
+									.setFullUrl(careProviderPractitionerList.get(0).getReference().getValue());
+							bundle.addEntry(practitionerEntry);
 
-						case "MED":
-							section = null;
-							// HTML Section Search
-							List<PatientMedicationHTML> medicationList = medicationSearch
-									.findPatientMedicationHTML(nhsNumber);
-							if (medicationList != null && medicationList.size() > 0) {
-								section = new Section();
-								CodingDt medicationCoding = new CodingDt()
-										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-										.setCode("MED").setDisplay("Medications");
-								CodeableConceptDt medicationCodableConcept = new CodeableConceptDt()
-										.addCoding(medicationCoding).setText(medicationList.get(0).getProvider());
-								NarrativeDt narrative = new NarrativeDt();
-								narrative.setStatus(NarrativeStatusEnum.GENERATED);
-								narrative.setDivAsString(medicationList.get(0).getHtml());
-								section.setTitle("Medications").setCode(medicationCodableConcept).setText(narrative);
-							} else {
+							Entry organizationEntry = new Entry();
+							organizationEntry.setResource(organizationResourceProvider.getOrganizationById(practitioner
+									.getPractitionerRoleFirstRep().getManagingOrganization().getReference()));
+
+							organizationEntry.setFullUrl(practitioner.getPractitionerRoleFirstRep()
+									.getManagingOrganization().getReference());
+
+							if (organizationEntry.getResource() == null || organizationEntry.getFullUrl() == null) {
+								CodingDt errorCoding = new CodingDt()
+										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+										.setCode("REFERENCE_NOT_FOUND");
+								CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+								errorCodableConcept.setText("Invalid Reference");
 								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-										.setDetails("No data available for the requested section: Medication");
+										.setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
+								throw new ResourceNotFoundException("organizationResource returning null");
 							}
-
-							// Sructured Data Search
-							List<MedicationOrder> medicationOrders = medicationOrderResourceProvider
-									.getMedicationOrdersForPatientId(patientID);
-							HashSet<String> medicationOrderMedicationsList = new HashSet();
-							HashSet<String> medicationOrderList = new HashSet();
-							for (MedicationOrder medicationOrder : medicationOrders) {
-								medicationOrderList.add(medicationOrder.getId().getIdPart());
-							}
-							List<MedicationDispense> medicationDispenses = medicationDispenseResourceProvider
-									.getMedicationDispensesForPatientId(patientID);
-							for (MedicationDispense medicationDispense : medicationDispenses) {
-								if (section == null) {
-									section = new Section();
-								}
-								// Add the medication Order to the bundle
-								Entry medicationDispenseEntry = new Entry();
-								medicationDispenseEntry
-										.setFullUrl("MedicationDispense/" + medicationDispense.getId().getIdPart());
-								medicationDispenseEntry.setResource(medicationDispense);
-								section.addEntry().setReference(medicationDispenseEntry.getFullUrl());
-								bundle.addEntry(medicationDispenseEntry);
-								// If we have any new medicationOrders which
-								// were not found in the search for
-								// MedicationOrders for a patient we need to add
-								// them.
-								if (!medicationOrderList.contains(medicationDispense.getAuthorizingPrescription().get(0)
-										.getReference().getIdPart())) {
-									try {
-										MedicationOrder medicationOrder = medicationOrderResourceProvider
-												.getMedicationOrderById(medicationDispense.getAuthorizingPrescription()
-														.get(0).getReference());
-										medicationOrders.add(medicationOrder);
-										medicationOrderList.add(medicationOrder.getId().getIdPart());
-									} catch (Exception ex) {
-										operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-												.setDetails("MedicationOrder for MedicaitonDispense (id: "
-														+ medicationDispense.getId().getIdPart()
-														+ ") could not be found in database");
-									}
-								}
-							}
-							List<MedicationAdministration> medicationAdministrations = medicationAdministrationResourceProvider
-									.getMedicationAdministrationsForPatientId(patientID);
-							for (MedicationAdministration medicationAdministration : medicationAdministrations) {
-								if (section == null) {
-									section = new Section();
-								}
-								Entry medicationAdministrationEntry = new Entry();
-								medicationAdministrationEntry.setFullUrl(
-										"MedicationAdministration/" + medicationAdministration.getId().getIdPart());
-								medicationAdministrationEntry.setResource(medicationAdministration);
-								section.addEntry().setReference(medicationAdministrationEntry.getFullUrl());
-								bundle.addEntry(medicationAdministrationEntry);
-								// If we have any new medicationOrders which
-								// were not found in the search for
-								// MedicationOrders for a patient we need to add
-								// them.
-								if (!medicationOrderList.contains(
-										medicationAdministration.getPrescription().getReference().getIdPart())) {
-									try {
-										MedicationOrder medicationOrder = medicationOrderResourceProvider
-												.getMedicationOrderById(
-														medicationAdministration.getPrescription().getReference());
-										medicationOrders.add(medicationOrder);
-										medicationOrderList.add(medicationOrder.getId().getIdPart());
-									} catch (Exception ex) {
-										operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-												.setDetails("MedicationOrder for MedicaitonAdministration (id: "
-														+ medicationAdministration.getId().getIdPart()
-														+ ") could not be found in database");
-									}
-								}
-							}
-							for (MedicationOrder medicationOrder : medicationOrders) {
-								if (section == null) {
-									section = new Section();
-								}
-								// Add the medication Order to the bundle
-								Entry medicationOrderEntry = new Entry();
-								medicationOrderEntry
-										.setFullUrl("MedicationOrder/" + medicationOrder.getId().getIdPart());
-								medicationOrderEntry.setResource(medicationOrder);
-								section.addEntry().setReference(medicationOrderEntry.getFullUrl());
-								bundle.addEntry(medicationOrderEntry);
-								// Store the referenced medicaitons in a set so
-								// we can get all the medications once and we
-								// won't have duplicates
-								IdDt medicationId = ((ResourceReferenceDt) medicationOrder.getMedication())
-										.getReference();
-								medicationOrderMedicationsList.add(medicationId.getValue());
-								medicationId = ((ResourceReferenceDt) medicationOrder.getDispenseRequest()
-										.getMedication()).getReference();
-								medicationOrderMedicationsList.add(medicationId.getValue());
-							}
-							for (String medicationId : medicationOrderMedicationsList) {
-								try {
-									Entry medicationEntry = new Entry();
-									medicationEntry.setFullUrl(medicationId);
-									medicationEntry.setResource(
-											medicationResourceProvider.getMedicationById(new IdDt(medicationId)));
-									section.addEntry().setReference(medicationEntry.getFullUrl());
-									bundle.addEntry(medicationEntry);
-								} catch (Exception ex) {
-									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-											.setDetails("Medication (ID: " + medicationId
-													+ ") for MedicaitonOrder could not be found in database");
-								}
-							}
-
-							if (section != null) {
-								sectionsList.add(section);
-							}
-							break;
-
-						case "REF":
-							List<ReferralListHTML> referralList = referralSearch.findAllReferralHTMLTables(nhsNumber);
-							if (referralList != null && referralList.size() > 0) {
-								CodingDt referralCoding = new CodingDt()
-										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-										.setCode("REF").setDisplay("Referrals");
-								CodeableConceptDt referralCodableConcept = new CodeableConceptDt()
-										.addCoding(referralCoding).setText(referralList.get(0).getProvider());
-								NarrativeDt narrative = new NarrativeDt();
-								narrative.setStatus(NarrativeStatusEnum.GENERATED);
-								narrative.setDivAsString(referralList.get(0).getHtml());
-								section.setTitle("Referrals").setCode(referralCodableConcept).setText(narrative);
-								sectionsList.add(section);
-								throw new InvalidRequestException("Date Ranges not allowed to be set");
-							} else {
-								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-										.setDetails("No data available for the requested section: Referrals");
-							}
-							break;
-
-						case "OBS":
-
-							if (toDate != null && fromDate != null) {
-								throw new InvalidRequestException("Date Ranges not allowed to be set");
-							} else {
-								List<ObservationListHTML> observationList = observationSearch
-										.findAllObservationHTMLTables(nhsNumber);
-								if (observationList != null && observationList.size() > 0) {
-									CodingDt observationCoding = new CodingDt()
-											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-											.setCode("OBS").setDisplay("Observations");
-									CodeableConceptDt observationCodableConcept = new CodeableConceptDt()
-											.addCoding(observationCoding).setText(observationList.get(0).getProvider());
-									NarrativeDt narrative = new NarrativeDt();
-									narrative.setStatus(NarrativeStatusEnum.GENERATED);
-									narrative.setDivAsString(observationList.get(0).getHtml());
-									section.setTitle("Observations").setCode(observationCodableConcept)
-											.setText(narrative);
-									sectionsList.add(section);
-								} else {
-									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-											.setDetails("No data available for the requested section: Observations");
-								}
-							}
-							break;
-
-						case "INV":
-							List<InvestigationListHTML> investigationList = investigationSearch
-									.findAllInvestigationHTMLTables(nhsNumber);
-							if (investigationList != null && investigationList.size() > 0) {
-								CodingDt investigationCoding = new CodingDt()
-										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-										.setCode("INV").setDisplay("Investigations");
-								CodeableConceptDt investigationCodableConcept = new CodeableConceptDt()
-										.addCoding(investigationCoding).setText(investigationList.get(0).getProvider());
-								NarrativeDt narrative = new NarrativeDt();
-								narrative.setStatus(NarrativeStatusEnum.GENERATED);
-								narrative.setDivAsString(investigationList.get(0).getHtml());
-								section.setTitle("Investigations").setCode(investigationCodableConcept)
-										.setText(narrative);
-								sectionsList.add(section);
-								throw new InvalidRequestException("Date Ranges not allowed to be set");
-							} else {
-								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-										.setDetails("No data available for the requested section: Investigations");
-							}
-							break;
-
-						case "IMM":
-
-							if (toDate != null && fromDate != null) {
-								throw new InvalidRequestException("Date Ranges not allowed to be set");
-							} else {
-								List<ImmunisationListHTML> immunisationList = immunisationSearch
-										.findAllImmunisationHTMLTables(nhsNumber);
-								if (immunisationList != null && immunisationList.size() > 0) {
-									CodingDt immunisationCoding = new CodingDt()
-											.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-											.setCode("IMM").setDisplay("Immunisations");
-									CodeableConceptDt immunisationCodableConcept = new CodeableConceptDt()
-											.addCoding(immunisationCoding)
-											.setText(immunisationList.get(0).getProvider());
-									NarrativeDt narrative = new NarrativeDt();
-									narrative.setStatus(NarrativeStatusEnum.GENERATED);
-									narrative.setDivAsString(immunisationList.get(0).getHtml());
-									section.setTitle("Immunisations").setCode(immunisationCodableConcept)
-											.setText(narrative);
-									sectionsList.add(section);
-								} else {
-									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-											.setDetails("No data available for the requested section: Immunisations");
-								}
-							}
-							break;
-
-						case "ADM":
-							List<AdminItemListHTML> adminItemList = adminItemSearch
-									.findAllAdminItemHTMLTables(nhsNumber);
-							if (adminItemList != null && adminItemList.size() > 0) {
-								CodingDt adminItemCoding = new CodingDt()
-										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1-0")
-										.setCode("ADM").setDisplay("Administrative Items");
-								CodeableConceptDt adminItemCodableConcept = new CodeableConceptDt()
-										.addCoding(adminItemCoding).setText(adminItemList.get(0).getProvider());
-								NarrativeDt narrative = new NarrativeDt();
-								narrative.setStatus(NarrativeStatusEnum.GENERATED);
-								narrative.setDivAsString(adminItemList.get(0).getHtml());
-								section.setTitle("Administrative Items").setCode(adminItemCodableConcept)
-										.setText(narrative);
-								sectionsList.add(section);
-							} else {
-								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-										.setDetails("No data available for the requested section: AdministrativeItems");
-							}
-							break;
-
-						default:
+							bundle.addEntry(organizationEntry);
+						} catch (InternalErrorException ex) {
 							operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-									.setDetails("The requested section '" + sectionName + "' is not a valid section.");
-							throw new InvalidRequestException("Section Invalid");
+									.setDetails(ex.getLocalizedMessage());
 						}
 					}
 
-					careRecordComposition.setSection(sectionsList);
+					bundle.addEntry(patientEntry);
+
+				} catch (InternalErrorException ex) {
+					// If the patient details could not be found
+					operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(ex.getMessage());
 				}
-
-				careRecordEntry.setResource(careRecordComposition);
-				bundle.addEntry(careRecordEntry);
-				List<ResourceReferenceDt> careProviderPractitionerList = ((Patient) patientEntry.getResource())
-						.getCareProvider();
-				if (careProviderPractitionerList.size() > 0) {
-					careRecordComposition.setAuthor(Collections.singletonList(
-							new ResourceReferenceDt(careProviderPractitionerList.get(0).getReference().getValue())));
-					try {
-
-						Practitioner practitioner = practitionerResourceProvider.getPractitionerById(
-								new IdDt(careProviderPractitionerList.get(0).getReference().getValue()));
-						if (practitioner == null) {
-							CodingDt errorCoding = new CodingDt()
-									.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
-									.setCode("REFERENCE_NOT_FOUND");
-							CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
-							errorCodableConcept.setText("Invalid Reference");
-							operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-									.setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
-							throw new ResourceNotFoundException("Practitioner Reference returning null");
-						}
-						Entry practitionerEntry = new Entry().setResource(practitioner)
-								.setFullUrl(careProviderPractitionerList.get(0).getReference().getValue());
-						bundle.addEntry(practitionerEntry);
-
-						Entry organizationEntry = new Entry();
-						organizationEntry.setResource(organizationResourceProvider.getOrganizationById(
-								practitioner.getPractitionerRoleFirstRep().getManagingOrganization().getReference()));
-
-						organizationEntry.setFullUrl(
-								practitioner.getPractitionerRoleFirstRep().getManagingOrganization().getReference());
-
-						if (organizationEntry.getResource() == null || organizationEntry.getFullUrl() == null) {
-							CodingDt errorCoding = new CodingDt()
-									.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
-									.setCode("REFERENCE_NOT_FOUND");
-							CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
-							errorCodableConcept.setText("Invalid Reference");
-							operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-									.setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
-							throw new ResourceNotFoundException("organizationResource returning null");
-						}
-						bundle.addEntry(organizationEntry);
-					} catch (InternalErrorException ex) {
-						operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-								.setDetails(ex.getLocalizedMessage());
-					}
-				}
-
-				bundle.addEntry(patientEntry);
-
-			} catch (InternalErrorException ex) {
-				// If the patient details could not be found
-				operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(ex.getMessage());
 			}
 		}
 
@@ -746,8 +817,9 @@ public class PatientResourceProvider implements IResourceProvider {
 	}
 
 	private boolean NhsValidation(String nhsNumber) {
-			
-		if (nhsNumber == null || !NhsCodeValidator.nhsNumberValid(nhsNumber) || nhsNumber.length() != 10 || nhsNumber.contains("[a-zA-Z]+") == true) {
+
+		if (nhsNumber == null || !NhsCodeValidator.nhsNumberValid(nhsNumber) || nhsNumber.length() != 10
+				|| nhsNumber.contains("[a-zA-Z]+") == true) {
 			return true;
 		} else {
 			return false;

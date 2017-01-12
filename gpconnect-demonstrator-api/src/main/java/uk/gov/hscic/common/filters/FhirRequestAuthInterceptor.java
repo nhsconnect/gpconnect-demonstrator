@@ -212,6 +212,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 						.equals("InvalidResourceType")) {
 					throw new InvalidRequestException("Bad Request Exception");
 				}
+				
+				
 				;
 
 				if (claimsJsonObject.getJSONObject("requested_record").getString("resourceType").equals("Patient")
@@ -232,6 +234,18 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 				}
 				
+//				try
+//				{
+//					claimsJsonObject.getJSONObject("requesting_practitioner").getJSONArray("practitionerRole");
+//				}catch(JSONException e)
+//				{
+//					throw new InvalidRequestException("PractitionerRole Not Found");
+//				}
+				
+				
+				
+				
+				
 
 				FhirContext ctx = new FhirContext();
 				IParser parser = ctx.newJsonParser();
@@ -239,13 +253,17 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 				JSONObject requestingPracticionerObject = claimsJsonObject.getJSONObject("requesting_practitioner");
 				JSONObject requestingDeviceObject = claimsJsonObject.getJSONObject("requesting_device");
 				JSONObject requestingOrganizationObject = claimsJsonObject.getJSONObject("requesting_organization");
+//				JSONArray requestingPracticionerObjectss = claimsJsonObject.getJSONObject("requesting_practitioner").getJSONArray("practitionerRole").getJSONObject(0).getJSONObject("role").getJSONArray("coding");
+//				String here = ((JSONObject) requestingPracticionerObjectss.get(0)).getString("code");
+//				System.out.println("here is the code " + here);
 				
-			
 				try{
 				parser.parseResource(requestingPracticionerObject.toString()).getFormatCommentsPost();
 				parser.parseResource(requestingDeviceObject.toString()).getFormatCommentsPost();
 				parser.parseResource(requestingOrganizationObject.toString()).getFormatCommentsPost();
+			
 				
+				System.out.println(parser.parseResource(requestingPracticionerObject.toString()));
 				
 				}catch (DataFormatException e)
 				{

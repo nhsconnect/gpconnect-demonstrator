@@ -1,6 +1,5 @@
 package uk.gov.hscic.common.filters;
 
-import javax.activation.UnsupportedDataTypeException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -10,14 +9,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.HttpException;
-import org.apache.http.client.HttpResponseException;
-import org.springframework.stereotype.Component;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
-
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
-import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 
 public class DefaultHeaderFilter  implements Filter {
 

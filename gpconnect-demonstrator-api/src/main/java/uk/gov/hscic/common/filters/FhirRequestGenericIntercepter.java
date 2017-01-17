@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,6 +20,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -99,16 +101,6 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
 	@Override
 	public boolean incomingRequestPreProcessed(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
-
-		
-
-		if (httpRequest.getAttribute("ERROR") != null) {
-			if (httpRequest.getAttribute("ERROR") == "Error") {
-				int theStatusCode = 415;
-				String theMessage = "Unsupported media type";
-				throw new UnclassifiedServerFailureException(theStatusCode, theMessage);
-			}
-		}
 		
 	
 		String failedMsg = "";
@@ -117,6 +109,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 		if (TraceID == null || TraceID.isEmpty()) {
 			failedMsg = failedMsg + "SSP-From header blank,";
 		}
+		
 		// Check there is a SSP-From header
 		String fromASIDHeader = httpRequest.getHeader("Ssp-From");
 		if (fromASIDHeader == null || fromASIDHeader.isEmpty()) {
@@ -135,10 +128,33 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
 		String URL = httpRequest.getRequestURI();
 		int id = getIdFromUrl(URL);
-
+		
 		// The paths should be added into a file. Currently due to administrator
 		// access
 		// file cannot be found on local
+		Properties prop = new Properties();
+		String propFileName = "hello.properties";
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+		
+		if (inputStream != null ){
+			try {
+				prop.load(inputStream);
+			
+				Enumeration<?> e = prop.propertyNames();
+				while (e.hasMoreElements()) {
+					String key = (String) e.nextElement();
+					String value = prop.getProperty(key);
+					
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			
+		}
+		
+		
 		List<String> validInteractionIds = new ArrayList<String>();
 		validInteractionIds.add("urn:nhs:names:services:gpconnect:fhir:rest:read:metadata");
 		validInteractionIds.add("urn:nhs:names:services:gpconnect:fhir:rest:read:patient");
@@ -228,7 +244,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 			// header does not exist in the list
 			failedMsg = failedMsg + "SSP-InteractionID in not a valid interaction ID for the system,";
 		}
-
+	
 		boolean interactionIdValidator = false;
 		for (int i = 0; i < validInteractionIds.size(); i++) {
 			if (interactionIdHeader.equals(validInteractionIds.get(i))
@@ -251,7 +267,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 			}
 			return false;
 		}
-
+	
 		// Mock Spine Error test component
 		if (errorSimulationCodes != null) {
 			if (simulationErrorIndex >= 0 && simulationErrorIndex < errorSimulationCodes.size()) {

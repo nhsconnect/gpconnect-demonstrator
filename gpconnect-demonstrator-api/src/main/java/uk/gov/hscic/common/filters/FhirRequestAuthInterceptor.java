@@ -1,6 +1,11 @@
 package uk.gov.hscic.common.filters;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
+import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.parser.DataFormatException;
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.parser.IParserErrorHandler;
@@ -10,6 +15,8 @@ import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.method.RequestDetails;
 import ca.uhn.fhir.rest.server.IRestfulResponse;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.auth.AuthorizationInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.auth.IAuthRule;
 import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
@@ -47,12 +54,14 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 	@Override
 	public List<IAuthRule> buildRuleList(RequestDetails theRequestDetails) {
+		
 
 		String authorizationStr = theRequestDetails.getHeader("Authorization");
 		String[] jwtHeaderComponents = authorizationStr.split(" ");
 		Base64.Decoder decoder = Base64.getDecoder();
 		String[] tokenComponents = jwtHeaderComponents[1].split("\\.");
-
+	
+	
 		try {
 			decoder.decode(tokenComponents[1]);
 		} catch (IllegalArgumentException iae) {
@@ -62,11 +71,13 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 		if (jwtHeaderComponents.length == 2 && "Bearer".equalsIgnoreCase(jwtHeaderComponents[0])) {
 
 			String claimsJsonString = new String(Base64.getDecoder().decode(tokenComponents[1]));
-			
+
 			JSONObject claimsJsonObject = new JSONObject(claimsJsonString);
+			
 			System.out.println(claimsJsonObject);
 
 			try {
+			
 
 				String requestScopeType = claimsJsonObject.getJSONObject("requested_record").getString("resourceType");
 				JSONArray requestIdentifiersArray = claimsJsonObject.getJSONObject("requested_record")
@@ -74,32 +85,50 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 				String identifierValue = ((JSONObject) requestIdentifiersArray.get(0)).getString("value");
 				String requestOperation = theRequestDetails.getRequestPath();
+							
 
-				if (requestOperation.equals("Patient/$gpc.getcarerecord")) {
-
-					// "REQUEST_RECORD" = patient resource //DONE
-
-					if (!requestScopeType.equals("Patient")) {
-						throw new InvalidRequestException("Bad Request Exception");
-					}
-					// Gets the NHS number in the request body to compare to
-					// requested_record
-					Map<String, List<String>> map = theRequestDetails.getUnqualifiedToQualifiedNames();
-
-					for (String paramName : map.keySet()) {
-						List<String> paramValues = map.get(paramName);
-
-						// Get Values of Param Name
-						for (String valueOfParam : paramValues) {
-							// Output the Values
-							if (valueOfParam.contains(identifierValue) != true) {
-								throw new InvalidRequestException("Bad Request Exception");
-							}
-							;
+					if (requestOperation.equals("Patient/$gpc.getcarerecord")) {
+						
+						String contentType = theRequestDetails.getHeader("Content-Type");
+						String acceptHeader = theRequestDetails.getHeader("Accept");
+						
+					
+						if(!contentType.equals(null) && (contentType.equals("applicaiton/json") || contentType.equals("application/xml")|| contentType.equals("text/xml")))
+						{
+							int theStatusCode = 415;
+							String theMessage = "Unsupported media type";
+							throw new UnclassifiedServerFailureException(theStatusCode, theMessage);
 						}
-					}
+						if(contentType.equals("application/json+fhir") && acceptHeader.equals("text/xml"))
+						{
+							int theStatusCode = 415;
+							String theMessage = "Unsupported media type";
+							throw new UnclassifiedServerFailureException(theStatusCode, theMessage);
+						}
 
-				}
+						
+
+						if (!requestScopeType.equals("Patient")) {
+							throw new InvalidRequestException("Bad Request Exception");
+						}
+						// Gets the NHS number in the request body to compare to
+						// requested_record
+						Map<String, List<String>> map = theRequestDetails.getUnqualifiedToQualifiedNames();
+
+						for (String paramName : map.keySet()) {
+							List<String> paramValues = map.get(paramName);
+
+							// Get Values of Param Name
+							for (String valueOfParam : paramValues) {
+								// Output the Values
+								if (valueOfParam.contains(identifierValue) != true) {
+									throw new InvalidRequestException("Bad Request Exception1");
+								}
+								;
+							}
+						}
+
+					}
 
 				if (requestIdentifiersArray.length() > 0) {
 					String identifierSystem = ((JSONObject) requestIdentifiersArray.get(0)).getString("system");
@@ -108,7 +137,17 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 						// If it is a patient orientated request
 						if (!"http://fhir.nhs.net/Id/nhs-number".equalsIgnoreCase(identifierSystem)
 								|| !NhsCodeValidator.nhsNumberValid(identifierValue)) {
-							throw new InvalidRequestException("Bad Request Exception");
+							
+							OperationOutcome operationOutcomes = new OperationOutcome();
+							CodingDt errorCoding = new CodingDt()
+									.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+									.setCode("INVALID_NHS_NUMBER");
+							CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+							errorCodableConcept.setText("Patient Record Not Found");
+							operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
+									.setDetails(errorCodableConcept);
+							throw new InvalidRequestException("Dates are invalid: ", operationOutcomes);
+								
 						}
 
 					} else {
@@ -125,7 +164,6 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 				JSONObject requestingPractitionerArray = claimsJsonObject.getJSONObject("requesting_practitioner");
 				String practionerId = requestingPractitionerArray.getString("id");
 				String sub = claimsJsonObject.getString("sub");
-				System.out.println("Getting default policy " + getDefaultPolicy());
 				if (!(practionerId.equals(sub))) {
 					throw new InvalidRequestException("Bad Request Exception");
 
@@ -212,8 +250,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 						.equals("InvalidResourceType")) {
 					throw new InvalidRequestException("Bad Request Exception");
 				}
-				
-				
+
 				;
 
 				if (claimsJsonObject.getJSONObject("requested_record").getString("resourceType").equals("Patient")
@@ -224,8 +261,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 						&& claimsJsonObject.getString("requested_scope").equals("patient/*.read")) {
 					throw new InvalidRequestException("Bad Request Exception");
 				}
-
 				// Checking the expiary time is 5 minutes after creation
+				
 				int timeValidationExpiryTime = claimsJsonObject.getInt("exp");
 				int expiryTime = 300;
 
@@ -233,19 +270,6 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 					throw new InvalidRequestException("Bad Request Exception");
 
 				}
-				
-//				try
-//				{
-//					claimsJsonObject.getJSONObject("requesting_practitioner").getJSONArray("practitionerRole");
-//				}catch(JSONException e)
-//				{
-//					throw new InvalidRequestException("PractitionerRole Not Found");
-//				}
-				
-				
-				
-				
-				
 
 				FhirContext ctx = new FhirContext();
 				IParser parser = ctx.newJsonParser();
@@ -253,34 +277,29 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 				JSONObject requestingPracticionerObject = claimsJsonObject.getJSONObject("requesting_practitioner");
 				JSONObject requestingDeviceObject = claimsJsonObject.getJSONObject("requesting_device");
 				JSONObject requestingOrganizationObject = claimsJsonObject.getJSONObject("requesting_organization");
-//				JSONArray requestingPracticionerObjectss = claimsJsonObject.getJSONObject("requesting_practitioner").getJSONArray("practitionerRole").getJSONObject(0).getJSONObject("role").getJSONArray("coding");
-//				String here = ((JSONObject) requestingPracticionerObjectss.get(0)).getString("code");
-//				System.out.println("here is the code " + here);
-				
-				try{
-				parser.parseResource(requestingPracticionerObject.toString()).getFormatCommentsPost();
-				parser.parseResource(requestingDeviceObject.toString()).getFormatCommentsPost();
-				parser.parseResource(requestingOrganizationObject.toString()).getFormatCommentsPost();
+				//
+				try {
+					parser.parseResource(requestingPracticionerObject.toString()).getFormatCommentsPost();
 			
-				
-				System.out.println(parser.parseResource(requestingPracticionerObject.toString()));
-				
-				}catch (DataFormatException e)
-				{
-					
-					throw new InvalidRequestException("Invalid Resource Present");		
+				} catch (DataFormatException e) {
+					throw new InvalidRequestException("Invalid Resource Present");
 				}
 
+				try {
 
-//				if (pracCode.equals("NonSDSJobRoleName")) {
-//					System.out.println("Incorrect Code Name");
-//
-//					throw new InvalidRequestException("Bad Request Exception");
-//				}
-				
-			
+					parser.parseResource(requestingDeviceObject.toString()).getFormatCommentsPost();
 
-				// Checking the requested scope is valid
+				} catch (DataFormatException e) {
+					throw new InvalidRequestException("Invalid Resource Present");
+				}
+				try {
+
+					parser.parseResource(requestingOrganizationObject.toString()).getFormatCommentsPost();
+
+				} catch (DataFormatException e) {
+					throw new InvalidRequestException("Invalid Resource Present");
+				}
+
 				String requestedScopeValue = claimsJsonObject.getString("requested_scope");
 				boolean comparisonResultPR = requestedScopeValue.equals("patient/*.read");
 				boolean comparisonResultPW = requestedScopeValue.equals("patient/*.write");

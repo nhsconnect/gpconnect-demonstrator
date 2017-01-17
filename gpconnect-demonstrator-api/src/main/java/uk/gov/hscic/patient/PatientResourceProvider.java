@@ -802,9 +802,16 @@ public class PatientResourceProvider implements IResourceProvider {
 								break;
 
 							default:
-								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
-										"The requested section '" + sectionName + "' is not a valid section.");
-								throw new InvalidRequestException("Section Invalid");
+								
+								CodingDt errorCoding = new CodingDt()
+										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+										.setCode("INVALID_PARAMETER");
+								CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+								errorCodableConcept.setText("Patient Record Not Found");
+								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
+										.setDetails(errorCodableConcept);
+								throw new UnprocessableEntityException("Dates are invalid: ", operationOutcome);
+					
 							}
 						}
 

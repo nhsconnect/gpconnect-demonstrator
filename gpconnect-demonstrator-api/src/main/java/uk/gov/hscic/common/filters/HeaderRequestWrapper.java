@@ -10,19 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.http.HttpException;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpResponseException;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.protocol.RequestContent;
-import java.util.InputMismatchException;
-import org.springframework.beans.MethodInvocationException;
 import org.springframework.web.HttpMediaTypeException;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
-
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 
 public class HeaderRequestWrapper extends HttpServletRequestWrapper {
 

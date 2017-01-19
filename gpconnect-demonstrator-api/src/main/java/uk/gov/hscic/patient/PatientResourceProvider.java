@@ -2,7 +2,6 @@ package uk.gov.hscic.patient;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -10,13 +9,12 @@ import java.util.List;
 
 import javax.activation.UnsupportedDataTypeException;
 
-import org.hl7.fhir.instance.model.api.IBaseExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.IDatatype;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
-import ca.uhn.fhir.model.base.resource.ResourceMetadataMap;
 import ca.uhn.fhir.model.dstu2.composite.AddressDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -53,7 +51,6 @@ import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
 import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
-import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
@@ -67,11 +64,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-
-import org.springframework.stereotype.Component;
-
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.util.NhsCodeValidator;
 import uk.gov.hscic.medication.model.PatientMedicationHTML;
@@ -203,29 +196,62 @@ public class PatientResourceProvider implements IResourceProvider {
 	@SuppressWarnings("deprecation")
 	@Operation(name = "$gpc.getcarerecord")
 	public Bundle getPatientCareRecord(@ResourceParam Parameters params) throws UnsupportedDataTypeException {
-
 		OperationOutcome operationOutcome = new OperationOutcome();
 		ArrayList<String> nhsNumber = new ArrayList<>();
 		ArrayList<String> sectionsParamList = new ArrayList();
+		ArrayList<Entry> medicationsToBundle = new ArrayList();
 
 		Date fromDate = null;
 		Date toDate = null;
 		// Extract the parameters
 		boolean recordSectionNotPresent = true;
+		
 
 		for (Parameter param : params.getParameter()) {
 
 			if (param.getName().equals("patientNHSNumber") == false && param.getName().equals("recordSection") == false
 					&& param.getName().equals("timePeriod") == false) {
+			
 				throw new UnprocessableEntityException("Parameters are incorrect");
 			}
 
 			IDatatype value = param.getValue();
-			System.out.println("value: : " + value);
+			
+			
 			if (value instanceof IdentifierDt) {
-
+				
 				nhsNumber.add(((IdentifierDt) value).getValue());
-				System.out.println("nhsNumber: " + nhsNumber);
+				String nhsNumberSystemCheck = ((IdentifierDt) value).getSystem();
+			
+				if (nhsNumber.get(0).isEmpty()== true ) {
+
+					OperationOutcome operationOutcomes = new OperationOutcome();
+					CodingDt errorCoding = new CodingDt()
+							.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+							.setCode("INVALID_NHS_NUMBER");
+					CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+					errorCodableConcept.setText("Patient Record Not Found");
+					operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
+							.setDetails(errorCodableConcept);
+			
+					throw new InvalidRequestException("System Invalid ", operationOutcomes);	
+
+				}
+				if (nhsNumberSystemCheck != null && nhsNumberSystemCheck.isEmpty() == true) {
+
+					OperationOutcome operationOutcomes = new OperationOutcome();
+					CodingDt errorCoding = new CodingDt()
+							.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+							.setCode("INVALID_IDENTIFIER_SYSTEM");
+					CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+					errorCodableConcept.setText("Patient Record Not Found");
+					operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
+							.setDetails(errorCodableConcept);
+				
+					throw new InvalidRequestException("System Invalid ", operationOutcomes);	
+
+				}
+			
 				if (nhsNumber.size() > 1) {
 					CodingDt errorCoding = new CodingDt()
 							.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
@@ -234,50 +260,38 @@ public class PatientResourceProvider implements IResourceProvider {
 					operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 							.setCode(IssueTypeEnum.INVALID_CONTENT).setDetails(errorCodableConcept)
 							.setDiagnostics("NHS Number Invalid");
+				
 					throw new InvalidRequestException("Bad Request Exception");
 				}
 			} else if (value instanceof CodeableConceptDt) {
 				recordSectionNotPresent = false;
 
 				List<CodingDt> coading = ((CodeableConceptDt) value).getCoding();
+				String systemCheck = coading.get(0).getSystem();
+				
+				
+				if (coading.get(0).getCode().isEmpty() == true || systemCheck.isEmpty() == true) {
 
-				if (coading.get(0).getCode().isEmpty() == true) {
-
-					System.out.println("HERE");
+					OperationOutcome operationOutcomes = new OperationOutcome();
 					CodingDt errorCoding = new CodingDt()
 							.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
 							.setCode("INVALID_PARAMETER");
 					CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
-					operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-							.setCode(IssueTypeEnum.INVALID_CONTENT).setDetails(errorCodableConcept)
-							.setDiagnostics("Multiple Sections Added");
-					throw new UnprocessableEntityException("System not set " + operationOutcome);
+					errorCodableConcept.setText("Patient Record Not Found");
+					operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
+							.setDetails(errorCodableConcept);
+					
+					throw new UnprocessableEntityException("System Invalid ", operationOutcomes);	
 
 				}
 				if (coading.get(0).getSystem()
 						.equals("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1") == false) {
-					throw new InvalidRequestException("Bad Request Exception");
-				}
-				coading.get(0).setSystem("hello");
-
-				String systemCheck = coading.get(0).getSystem();
-				if (systemCheck.isEmpty() == true) {
-					System.out.println("Reached here");
-					int theStatusCode = 422;
-					CodingDt errorCoding = new CodingDt()
-							.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
-							.setCode("INVALID_PARAMETER");
-					CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
-					operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-							.setCode(IssueTypeEnum.INVALID_CONTENT).setDetails(errorCodableConcept)
-							.setDiagnostics("NHS Number Invalid");
-					throw new UnclassifiedServerFailureException(theStatusCode,
-							"NHS number Invalid " + operationOutcome);
-				}
-
-				System.out.println("REACHED HERE");
+					throw new InvalidRequestException("System Invalid ");				
+					}
+				
+				
 				sectionsParamList.add(coading.get(0).getCode());
-				System.out.println("REACHED HERE");
+			
 
 				if (sectionsParamList.size() > 1) {
 					CodingDt errorCoding = new CodingDt()
@@ -287,6 +301,7 @@ public class PatientResourceProvider implements IResourceProvider {
 					operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 							.setCode(IssueTypeEnum.INVALID_CONTENT).setDetails(errorCodableConcept)
 							.setDiagnostics("Multiple Sections Added");
+					
 					throw new InvalidRequestException("Bad Request Exception");
 				}
 			} else if (value instanceof PeriodDt) {
@@ -304,6 +319,7 @@ public class PatientResourceProvider implements IResourceProvider {
 					errorCodableConcept.setText("Patient Record Not Found");
 					operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
 							.setDetails(errorCodableConcept);
+					
 					throw new UnprocessableEntityException("Dates are invalid: ", operationOutcomes);
 				}
 
@@ -323,6 +339,7 @@ public class PatientResourceProvider implements IResourceProvider {
 			}
 		}
 		if (recordSectionNotPresent == true) {
+			
 			throw new InvalidRequestException("No record section");
 		}
 
@@ -338,21 +355,25 @@ public class PatientResourceProvider implements IResourceProvider {
 				CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
 				operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.INVALID_CONTENT)
 						.setDetails(errorCodableConcept).setDiagnostics("NHS Number Invalid");
+			
 				throw new ResourceNotFoundException("NHS number Invalid " + operationOutcome);
 			}
 		}
-
-		if (nhsNumber.isEmpty()) {
+		
+		if (nhsNumber.isEmpty() == true) {
+			
 			throw new InvalidRequestException("NHS number not supplied");
 		} else {
 			if (NhsValidation(nhsNumber.get(0))) {
+				OperationOutcome operationOutcomes = new OperationOutcome();
 				CodingDt errorCoding = new CodingDt()
 						.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
-						.setCode("INVALID_IDENTIFIER_SYSTEM");
+						.setCode("INVALID_NHS_NUMBER");
 				CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
-				operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.INVALID_CONTENT)
+				operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.INVALID_CONTENT)
 						.setDetails(errorCodableConcept).setDiagnostics("NHS Number Invalid");
-				throw new ResourceNotFoundException("NHS number Invalid " + operationOutcome);
+				
+				throw new InvalidRequestException("NHS number Invalixasxasd " + operationOutcome);
 			} else {
 
 				// Build the Patient Resource and add it to the bundle
@@ -367,11 +388,11 @@ public class PatientResourceProvider implements IResourceProvider {
 					} else {
 						operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 								.setDetails("No patient details found for patient NHS Number: " + nhsNumber.get(0));
+						
 						throw new InternalErrorException(
 								"No patient details found for patient NHS Number: " + nhsNumber.get(0),
 								operationOutcome);
 					}
-
 					// Build the Care Record Composition
 
 					Entry careRecordEntry = new Entry();
@@ -410,6 +431,7 @@ public class PatientResourceProvider implements IResourceProvider {
 								errorCodableConcept.setText("Patient Record Not Found");
 								operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 										.setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
+							
 								throw new UnprocessableEntityException("Section Case Invalid: ", operationOutcomes);
 							}
 
@@ -419,6 +441,7 @@ public class PatientResourceProvider implements IResourceProvider {
 							case "SUM":
 
 								if (nhsNumber.get(0).equals(null)) {
+									
 									throw new AssertionError();
 								}
 								List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch
@@ -538,7 +561,7 @@ public class PatientResourceProvider implements IResourceProvider {
 							case "MED":
 								section = null;
 								// HTML Section Search
-
+								
 								if (toDate != null && fromDate != null) {
 									throw new InvalidRequestException("Date Ranges not allowed to be set");
 								}
@@ -557,6 +580,8 @@ public class PatientResourceProvider implements IResourceProvider {
 									narrative.setDivAsString(medicationList.get(0).getHtml());
 									section.setTitle("Medications").setCode(medicationCodableConcept)
 											.setText(narrative);
+									sectionsList.add(section);
+									
 								} else {
 									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 											.setDetails("No data available for the requested section: Medication");
@@ -581,13 +606,14 @@ public class PatientResourceProvider implements IResourceProvider {
 									medicationDispenseEntry
 											.setFullUrl("MedicationDispense/" + medicationDispense.getId().getIdPart());
 									medicationDispenseEntry.setResource(medicationDispense);
+						
+									medicationsToBundle.add(medicationDispenseEntry);
 									section.addEntry().setReference(medicationDispenseEntry.getFullUrl());
-									bundle.addEntry(medicationDispenseEntry);
-									// If we have any new medicationOrders which
-									// were not found in the search for
-									// MedicationOrders for a patient we need to
-									// add
-									// them.
+//									// If we have any new medicationOrders which
+//									// were not found in the search for
+//									// MedicationOrders for a patient we need to
+//									// add
+//									// them.
 									if (!medicationOrderList.contains(medicationDispense.getAuthorizingPrescription()
 											.get(0).getReference().getIdPart())) {
 										try {
@@ -615,7 +641,8 @@ public class PatientResourceProvider implements IResourceProvider {
 											"MedicationAdministration/" + medicationAdministration.getId().getIdPart());
 									medicationAdministrationEntry.setResource(medicationAdministration);
 									section.addEntry().setReference(medicationAdministrationEntry.getFullUrl());
-									bundle.addEntry(medicationAdministrationEntry);
+									medicationsToBundle.add(medicationAdministrationEntry);
+									
 									// If we have any new medicationOrders which
 									// were not found in the search for
 									// MedicationOrders for a patient we need to
@@ -647,7 +674,8 @@ public class PatientResourceProvider implements IResourceProvider {
 											.setFullUrl("MedicationOrder/" + medicationOrder.getId().getIdPart());
 									medicationOrderEntry.setResource(medicationOrder);
 									section.addEntry().setReference(medicationOrderEntry.getFullUrl());
-									bundle.addEntry(medicationOrderEntry);
+									medicationsToBundle.add(medicationOrderEntry);
+									
 									// Store the referenced medicaitons in a set
 									// so
 									// we can get all the medications once and
@@ -667,7 +695,8 @@ public class PatientResourceProvider implements IResourceProvider {
 										medicationEntry.setResource(
 												medicationResourceProvider.getMedicationById(new IdDt(medicationId)));
 										section.addEntry().setReference(medicationEntry.getFullUrl());
-										bundle.addEntry(medicationEntry);
+										medicationsToBundle.add(medicationEntry);
+							
 									} catch (Exception ex) {
 										operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 												.setDetails("Medication (ID: " + medicationId
@@ -676,13 +705,12 @@ public class PatientResourceProvider implements IResourceProvider {
 								}
 
 								if (section != null) {
-
+								
 									sectionsList.add(section);
 								}
 								break;
 
 							case "REF":
-
 								List<ReferralListHTML> referralList = referralSearch
 										.findAllReferralHTMLTables(nhsNumber.get(0));
 								if (referralList != null && referralList.size() > 0) {
@@ -696,10 +724,10 @@ public class PatientResourceProvider implements IResourceProvider {
 									narrative.setDivAsString(referralList.get(0).getHtml());
 									section.setTitle("Referrals").setCode(referralCodableConcept).setText(narrative);
 									sectionsList.add(section);
-									throw new InvalidRequestException("Date Ranges not allowed to be set");
+
 								} else {
 									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-											.setDetails("No data available for the requested section: Referrals");
+										.setDetails("No data available for the requested section: Referrals");
 								}
 								break;
 
@@ -746,7 +774,7 @@ public class PatientResourceProvider implements IResourceProvider {
 									section.setTitle("Investigations").setCode(investigationCodableConcept)
 											.setText(narrative);
 									sectionsList.add(section);
-									throw new InvalidRequestException("Date Ranges not allowed to be set");
+									throw new InvalidRequestException("Too many sets of investivations");
 								} else {
 									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 											.setDetails("No data available for the requested section: Investigations");
@@ -795,6 +823,7 @@ public class PatientResourceProvider implements IResourceProvider {
 									section.setTitle("Administrative Items").setCode(adminItemCodableConcept)
 											.setText(narrative);
 									sectionsList.add(section);
+									
 								} else {
 									operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
 											"No data available for the requested section: AdministrativeItems");
@@ -814,12 +843,18 @@ public class PatientResourceProvider implements IResourceProvider {
 					
 							}
 						}
-
+						
 						careRecordComposition.setSection(sectionsList);
+					
 					}
-
+					
 					careRecordEntry.setResource(careRecordComposition);
 					bundle.addEntry(careRecordEntry);
+					for (Entry e : medicationsToBundle)
+					{
+						bundle.addEntry(e);
+					}
+					
 					List<ResourceReferenceDt> careProviderPractitionerList = ((Patient) patientEntry.getResource())
 							.getCareProvider();
 					if (careProviderPractitionerList.size() > 0) {
@@ -837,6 +872,7 @@ public class PatientResourceProvider implements IResourceProvider {
 								errorCodableConcept.setText("Invalid Reference");
 								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 										.setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
+								
 								throw new ResourceNotFoundException("Practitioner Reference returning null");
 							}
 							Entry practitionerEntry = new Entry().setResource(practitioner)
@@ -858,6 +894,7 @@ public class PatientResourceProvider implements IResourceProvider {
 								errorCodableConcept.setText("Invalid Reference");
 								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
 										.setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
+								
 								throw new ResourceNotFoundException("organizationResource returning null");
 							}
 							bundle.addEntry(organizationEntry);
@@ -883,6 +920,11 @@ public class PatientResourceProvider implements IResourceProvider {
 		}
 
 		return bundle;
+	}
+
+	private Bundle addToBundle(Bundle bundle) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private boolean NhsValidation(String nhsNumber) {
@@ -962,12 +1004,14 @@ public class PatientResourceProvider implements IResourceProvider {
 			errorCodableConcept.setText("Patient Record Not Found");
 			operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
 					.setDetails(errorCodableConcept);
+			
 			throw new UnprocessableEntityException("Section Case Invalid: ", operationOutcomes);
 		}
 
 		Bundle bundle = new Bundle();
 		bundle.setType(BundleTypeEnum.TRANSACTION_RESPONSE);
 		bundle.addEntry().setResource(registeredPatient);
+		
 		return bundle;
 	}
 
@@ -990,6 +1034,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		if (registrationStart.compareTo(now) <= 1) {
 			patientDetails.setRegistrationStartDateTime(registrationStart);
 		} else {
+			
 			throw new IllegalArgumentException(String.format(
 					"The given registration start (%c) is not valid. The registration start cannot be in the future.",
 					registrationStart));
@@ -997,6 +1042,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
 		Date registrationEnd = registrationPeriod.getEnd();
 		if (registrationEnd != null) {
+			
 			throw new IllegalArgumentException(String.format(
 					"The given registration end (%c) is not valid. The registration end should be left blank to indicate an open-ended registration period.",
 					registrationStart));
@@ -1011,6 +1057,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		if (ACTIVE_REGISTRATION_STATUS.equals(registrationStatus)) {
 			patientDetails.setRegistrationStatus(registrationStatus);
 		} else {
+			
 			throw new IllegalArgumentException(String.format(
 					"The given registration status is not valid. Expected - A. Actual - %s", registrationStatus));
 		}
@@ -1024,6 +1071,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		if (TEMPORARY_RESIDENT_REGISTRATION_TYPE.equals(registrationType)) {
 			patientDetails.setRegistrationType(registrationType);
 		} else {
+			
 			throw new IllegalArgumentException(String
 					.format("The given registration type is not valid. Expected - T. Actual - %s", registrationType));
 		}
@@ -1106,6 +1154,7 @@ public class PatientResourceProvider implements IResourceProvider {
 			CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
 			operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
 					.setDetails(errorCodableConcept).setDiagnostics("PATIENT_NOT_FOUND");
+			
 			throw new ResourceNotFoundException("No GP record exists " + operationOutcome);
 		}
 

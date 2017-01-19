@@ -1,38 +1,31 @@
 package uk.gov.hscic.common.filters;
 
-import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
-import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 
 @Component
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
@@ -101,8 +94,6 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
 	@Override
 	public boolean incomingRequestPreProcessed(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
-		
-	
 		String failedMsg = "";
 		// Check there is a Ssp-TraceID header
 		String TraceID = httpRequest.getHeader("Ssp-TraceId");
@@ -258,7 +249,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 		if (interactionIdValidator == false) {
 			failedMsg = failedMsg + "InteractionId Incorrect";
 		}
-
+		
 		if (!failedMsg.isEmpty()) {
 			try {
 				httpResponse.sendError(400, failedMsg);
@@ -286,13 +277,14 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 					simulationErrorIndex++;
 					if (simulationErrorIndex == errorSimulationCodes.size())
 						simulationErrorIndex = 0;
+					
 					return false;
 				} catch (Exception e) {
 					log.error(e);
 				}
 			}
 		}
-
+	
 		return true;
 	}
 

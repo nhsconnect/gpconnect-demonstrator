@@ -2,7 +2,7 @@ INSERT INTO gpconnect.adminitems
   (id, html, provider, lastUpdated)
 VALUES (
   9476719931,
-  "<div><h2>Administrative Items</h2><table><tbody><tr><th>Date</th><th>Entry</th><th>Details</th></tr><tr><td>10 Jul 2008</td><td>British or mixed British - ethnic category 2001 census</td><td /></tr><tr><td>16 Jul 2008</td><td>Did not attend</td><td /></tr><tr><td>22 Jul 2008</td><td>Did not attend</td><td /></tr><tr><td>17 Sep 2008</td><td>Monitoring of patient</td><td /></tr><tr><td>25 Sep 2008</td><td>Monitoring of patient</td><td /></tr></tbody></table></div>",
+  "<div><h2>Administrative Items</h2><table><tbody><tr><th>Date</th><th>Entry</th><th>Details</th></tr><tr><td>10 Jul 2008</td><td>British or mixed British - ethnic category 2001 census</td><td /></tr><tr><td>16 Jul 2008</td><td>Did not attend</td><td /></tr><tr><td>22 Jul 2008</td><td>Did not attend</td><td /></tr><tr><td>17 Sep 2008</td><td>Monitoring of patient</td><td /></tr><tr><td>25 Sep 2008</td><td>Monitoring of patient</td><td /></tr></tbody><PageSectionIndex>1</PageSectionIndex></table></div>",
   "TPP",
   '2016-07-25 12:00:00'
 );
@@ -97,7 +97,7 @@ INSERT INTO gpconnect.referrals
   (id, html, provider, lastUpdated)
 VALUES (
   9476719931,
-  "<div><table><tbody><tr><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></tr><tr><td>03 Mar 2016</td><td>Airedale Hospital</td><td>Dr Johnson &amp; Partners</td><td>Routine</td><td>From Hospital out-patient for Diabetic Medicine<br />Receiving care<br /></td></tr><tr><td>09 Apr 2013</td><td>Dr Johnson &amp; Partners</td><td>Leeds District Nurses</td><td>Routine</td><td>Referral to local authority weight management programme<br />Waiting For Information</td></tr><tr><td>14 Jul 2012</td><td>Dr Johnson &amp; Partners</td><td>Leeds General Infirmary</td><td>Urgent</td><td>Back pain</td></tr></tbody></table></div>",
+  "<div><h2>Referrals</h2><table><tbody><tr><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></tr><tr><td>03 Mar 2016</td><td>Airedale Hospital</td><td>Dr Johnson &amp; Partners</td><td>Routine</td><td>From Hospital out-patient for Diabetic Medicine<br />Receiving care<br /></td></tr><tr><td>09 Apr 2013</td><td>Dr Johnson &amp; Partners</td><td>Leeds District Nurses</td><td>Routine</td><td>Referral to local authority weight management programme<br />Waiting For Information</td></tr><tr><td>14 Jul 2012</td><td>Dr Johnson &amp; Partners</td><td>Leeds General Infirmary</td><td>Urgent</td><td>Back pain</td></tr></tbody></table></div>",
   "TPP",
   '2016-07-25 12:00:00'
 );

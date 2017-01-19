@@ -126,7 +126,7 @@ VALUES (
 INSERT INTO gpconnect.referrals
   (id, html, provider, lastUpdated)
 VALUES (
- 9476719958, "<div><table><tbody><tr><th>Start date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></tr><tr><td>03 Oct 2016</td><td>EmisTest at SCI_Service at EMISWebCR1 50004</td><td>SCIGPService at EMISWebCR1</td><td>Routine</td><td>This is confidential<br /></td></tr></tbody></table></div>",
+ 9476719958, "<div><h2>Referrals</h2><table><tbody><tr><th>Start date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></tr><tr><td>03 Oct 2016</td><td>EmisTest at SCI_Service at EMISWebCR1 50004</td><td>SCIGPService at EMISWebCR1</td><td>Routine</td><td>This is confidential<br /></td></tr></tbody></table></div>",
   "EMIS",
   '2016-08-24 12:00:00'
 );

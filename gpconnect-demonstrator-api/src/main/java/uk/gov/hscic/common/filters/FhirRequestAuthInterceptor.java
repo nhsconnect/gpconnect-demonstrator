@@ -59,29 +59,31 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 				String requestScopeType = claimsJsonObject.getJSONObject("requested_record").getString("resourceType");
 				JSONArray requestIdentifiersArray = claimsJsonObject.getJSONObject("requested_record")
 						.getJSONArray("identifier");
-			
+
 				String identifierValue = ((JSONObject) requestIdentifiersArray.get(0)).getString("value");
-			
+
 				String requestOperation = theRequestDetails.getRequestPath();
 				String contentTypeAllCall = theRequestDetails.getHeader("Content-Type");
 				String acceptHeaderAllCall = theRequestDetails.getHeader("Accept");
-				//Different values are being passed, this section must be refactored 			
-				if(contentTypeAllCall !=null){
-				
-				if ((contentTypeAllCall.equals("application/json+fhir") || contentTypeAllCall.equals("application/xml+fhir")
-								|| contentTypeAllCall.equals("application/json+fhir;charset=utf-8")
-								|| contentTypeAllCall.equals("application/xml+fhir;charset=utf-8")
-						|| contentTypeAllCall.equals("application/json;charset=UTF-8"))
-						&& (acceptHeaderAllCall.equals("application/xml+fhir")
-								|| acceptHeaderAllCall.equals("application/json+fhir")
-								|| acceptHeaderAllCall.equals("application/json+fhir;charset=utf-8")
-								|| acceptHeaderAllCall.equals("application/xml+fhir;charset=utf-8") ||
-								acceptHeaderAllCall.equals("application/json, text/plain, */*"))){
-				} else {
-					int theStatusCode = 415;
-					String theMessage = "Unsupported media type";
-					throw new UnclassifiedServerFailureException(theStatusCode, theMessage);
-				}
+				// Different values are being passed, this section must be
+				// refactored
+				if (contentTypeAllCall != null) {
+
+					if ((contentTypeAllCall.equals("application/json+fhir")
+							|| contentTypeAllCall.equals("application/xml+fhir")
+							|| contentTypeAllCall.equals("application/json+fhir;charset=utf-8")
+							|| contentTypeAllCall.equals("application/xml+fhir;charset=utf-8")
+							|| contentTypeAllCall.equals("application/json;charset=UTF-8"))
+							&& (acceptHeaderAllCall.equals("application/xml+fhir")
+									|| acceptHeaderAllCall.equals("application/json+fhir")
+									|| acceptHeaderAllCall.equals("application/json+fhir;charset=utf-8")
+									|| acceptHeaderAllCall.equals("application/xml+fhir;charset=utf-8")
+									|| acceptHeaderAllCall.equals("application/json, text/plain, */*"))) {
+					} else {
+						int theStatusCode = 415;
+						String theMessage = "Unsupported media type";
+						throw new UnclassifiedServerFailureException(theStatusCode, theMessage);
+					}
 				}
 
 				if (requestOperation.equals("Patient/$gpc.getcarerecord")) {
@@ -89,12 +91,12 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 					String contentType = theRequestDetails.getHeader("Content-Type");
 					String acceptHeader = theRequestDetails.getHeader("Accept");
 
-					
-
 					if (contentType != null && (contentType.equals("application/json+fhir;charset=utf-8")
-							|| contentType.equals("application/xml+fhir;charset=utf-8") || contentType.equals("application/json;charset=UTF-8")
+							|| contentType.equals("application/xml+fhir;charset=utf-8")
+							|| contentType.equals("application/json;charset=UTF-8")
 									&& (acceptHeader.equals("application/xml+fhir;charset=utf-8")
-											|| acceptHeader.equals("application/json+fhir;charset=utf-8") || acceptHeader.equals("application/json, text/plain, */*")))) {
+											|| acceptHeader.equals("application/json+fhir;charset=utf-8")
+											|| acceptHeader.equals("application/json, text/plain, */*")))) {
 					} else {
 						int theStatusCode = 415;
 						String theMessage = "Unsupported media type";
@@ -210,109 +212,13 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 				}
 
-				boolean hasRequestingDevice = claimsJsonObject.has("requesting_device");
-				if (hasRequestingDevice == false) {
-					throw new InvalidRequestException("Bad Request Exception");
-				}
+				jwtTimeValidation(claimsJsonObject);
+				jwtRequestedResourcesValidation(claimsJsonObject);
+				jwtParseResourcesValidation(claimsJsonObject);
+				jwtRequestedScopeValidation(claimsJsonObject);
+				jwtAudValidation(claimsJsonObject);
 
-				// Checking the creation date is not in the future
-				int timeValidationIdentifierInt = claimsJsonObject.getInt("iat");
-
-				if (timeValidationIdentifierInt > (System.currentTimeMillis()) / 1000) {
-					throw new InvalidRequestException("Bad Request Exception");
-
-				}
-				// Checking the reason for request is directcare
-				String reasonForRequestValid = claimsJsonObject.getString("reason_for_request");
-				if (!reasonForRequestValid.equals("directcare")) {
-					throw new InvalidRequestException("Bad Request Exception");
-
-				}
-
-				if (claimsJsonObject.getJSONObject("requesting_device").getString("resourceType")
-						.equals("InvalidResourceType")) {
-					throw new InvalidRequestException("Bad Request Exception");
-				}
-				;
-				if (claimsJsonObject.getJSONObject("requesting_organization").getString("resourceType")
-						.equals("InvalidResourceType")) {
-					throw new InvalidRequestException("Bad Request Exception");
-				}
-				;
-				if (claimsJsonObject.getJSONObject("requesting_practitioner").getString("resourceType")
-						.equals("InvalidResourceType")) {
-					throw new InvalidRequestException("Bad Request Exception");
-				}
-
-				;
-
-				if (claimsJsonObject.getJSONObject("requested_record").getString("resourceType").equals("Patient")
-						&& claimsJsonObject.getString("requested_scope").equals("organization/*.write")) {
-					throw new InvalidRequestException("Bad Request Exception");
-				}
-				if (claimsJsonObject.getJSONObject("requested_record").getString("resourceType").equals("Organization")
-						&& claimsJsonObject.getString("requested_scope").equals("patient/*.read")) {
-					throw new InvalidRequestException("Bad Request Exception");
-				}
-				// Checking the expiary time is 5 minutes after creation
-
-				int timeValidationExpiryTime = claimsJsonObject.getInt("exp");
-				int expiryTime = 300;
-
-				if ((timeValidationExpiryTime) - (timeValidationIdentifierInt) != expiryTime) {
-					throw new InvalidRequestException("Bad Request Exception");
-
-				}
-
-				FhirContext ctx = new FhirContext();
-				IParser parser = ctx.newJsonParser();
-				parser.setParserErrorHandler(new StrictErrorHandler());
-				JSONObject requestingPracticionerObject = claimsJsonObject.getJSONObject("requesting_practitioner");
-				JSONObject requestingDeviceObject = claimsJsonObject.getJSONObject("requesting_device");
-				JSONObject requestingOrganizationObject = claimsJsonObject.getJSONObject("requesting_organization");
-				//
-				try {
-					parser.parseResource(requestingPracticionerObject.toString()).getFormatCommentsPost();
-
-				} catch (DataFormatException e) {
-					throw new UnprocessableEntityException("Invalid Resource Present");
-				}
-
-				try {
-
-					parser.parseResource(requestingDeviceObject.toString()).getFormatCommentsPost();
-
-				} catch (DataFormatException e) {
-					throw new UnprocessableEntityException("Invalid Resource Present");
-				}
-				try {
-
-					parser.parseResource(requestingOrganizationObject.toString()).getFormatCommentsPost();
-
-				} catch (DataFormatException e) {
-					throw new UnprocessableEntityException("Invalid Resource Present");
-				}
-
-				String requestedScopeValue = claimsJsonObject.getString("requested_scope");
-				boolean comparisonResultPR = requestedScopeValue.equals("patient/*.read");
-				boolean comparisonResultPW = requestedScopeValue.equals("patient/*.write");
-				boolean comparisonResultOR = requestedScopeValue.equals("organization/*.read");
-				boolean comparisonResultOW = requestedScopeValue.equals("organization/*.write");
-
-				if (comparisonResultPR == true || comparisonResultPW == true || comparisonResultOR == true
-						|| comparisonResultOW == true) {
-				} else {
-					throw new InvalidRequestException("Bad Request Exception");
-
-				}
-
-				// Checks the aud is the correct link
-				String aud = claimsJsonObject.getString("aud");
-				if (!(aud.equals("https://authorize.fhir.nhs.net/token"))) {
-					throw new InvalidRequestException("Bad Request Exception");
-				}
-
-				// Checks the JWT has the correct propertys
+				// Checks the JWT resources has the correct propertys
 				boolean JWTHasCorrectJsonPropertys = true;
 				JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestedRecordIsValidated(claimsJsonObject);
 				JWTHasCorrectJsonPropertys = checkJWTJSONResponseRequestingDeviceIsValidated(claimsJsonObject);
@@ -330,6 +236,126 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
 		}
 		return new RuleBuilder().allowAll().build();
+	}
+
+	private void jwtAudValidation(JSONObject claimsJsonObject) {
+
+		// Checks the aud is the correct link
+		String aud = claimsJsonObject.getString("aud");
+		if (!(aud.equals("https://authorize.fhir.nhs.net/token"))) {
+			throw new InvalidRequestException("Bad Request Exception");
+		}
+
+	}
+
+	private void jwtRequestedScopeValidation(JSONObject claimsJsonObject) {
+		String requestedScopeValue = claimsJsonObject.getString("requested_scope");
+		boolean comparisonResultPR = requestedScopeValue.equals("patient/*.read");
+		boolean comparisonResultPW = requestedScopeValue.equals("patient/*.write");
+		boolean comparisonResultOR = requestedScopeValue.equals("organization/*.read");
+		boolean comparisonResultOW = requestedScopeValue.equals("organization/*.write");
+
+		if (comparisonResultPR == true || comparisonResultPW == true || comparisonResultOR == true
+				|| comparisonResultOW == true) {
+		} else {
+			throw new InvalidRequestException("Bad Request Exception");
+
+		}
+
+	}
+
+	private void jwtParseResourcesValidation(JSONObject claimsJsonObject) {
+
+		FhirContext ctx = new FhirContext();
+		IParser parser = ctx.newJsonParser();
+		parser.setParserErrorHandler(new StrictErrorHandler());
+		JSONObject requestingPracticionerObject = claimsJsonObject.getJSONObject("requesting_practitioner");
+		JSONObject requestingDeviceObject = claimsJsonObject.getJSONObject("requesting_device");
+		JSONObject requestingOrganizationObject = claimsJsonObject.getJSONObject("requesting_organization");
+		//
+		try {
+			parser.parseResource(requestingPracticionerObject.toString()).getFormatCommentsPost();
+
+		} catch (DataFormatException e) {
+			throw new UnprocessableEntityException("Invalid Resource Present");
+		}
+
+		try {
+
+			parser.parseResource(requestingDeviceObject.toString()).getFormatCommentsPost();
+
+		} catch (DataFormatException e) {
+			throw new UnprocessableEntityException("Invalid Resource Present");
+		}
+		try {
+
+			parser.parseResource(requestingOrganizationObject.toString()).getFormatCommentsPost();
+
+		} catch (DataFormatException e) {
+			throw new UnprocessableEntityException("Invalid Resource Present");
+		}
+
+	}
+
+	private void jwtRequestedResourcesValidation(JSONObject claimsJsonObject) {
+		boolean hasRequestingDevice = claimsJsonObject.has("requesting_device");
+		if (hasRequestingDevice == false) {
+			throw new InvalidRequestException("Bad Request Exception");
+		}
+
+		// Checking the reason for request is directcare
+		String reasonForRequestValid = claimsJsonObject.getString("reason_for_request");
+		if (!reasonForRequestValid.equals("directcare")) {
+			throw new InvalidRequestException("Bad Request Exception");
+
+		}
+
+		if (claimsJsonObject.getJSONObject("requesting_device").getString("resourceType")
+				.equals("InvalidResourceType")) {
+			throw new InvalidRequestException("Bad Request Exception");
+		}
+		;
+		if (claimsJsonObject.getJSONObject("requesting_organization").getString("resourceType")
+				.equals("InvalidResourceType")) {
+			throw new InvalidRequestException("Bad Request Exception");
+		}
+		;
+		if (claimsJsonObject.getJSONObject("requesting_practitioner").getString("resourceType")
+				.equals("InvalidResourceType")) {
+			throw new InvalidRequestException("Bad Request Exception");
+		}
+
+		;
+
+		if (claimsJsonObject.getJSONObject("requested_record").getString("resourceType").equals("Patient")
+				&& claimsJsonObject.getString("requested_scope").equals("organization/*.write")) {
+			throw new InvalidRequestException("Bad Request Exception");
+		}
+		if (claimsJsonObject.getJSONObject("requested_record").getString("resourceType").equals("Organization")
+				&& claimsJsonObject.getString("requested_scope").equals("patient/*.read")) {
+			throw new InvalidRequestException("Bad Request Exception");
+		}
+
+	}
+
+	private void jwtTimeValidation(JSONObject claimsJsonObject) {
+		// Checking the creation date is not in the future
+		int timeValidationIdentifierInt = claimsJsonObject.getInt("iat");
+
+		if (timeValidationIdentifierInt > (System.currentTimeMillis()) / 1000) {
+			throw new InvalidRequestException("Bad Request Exception");
+
+		}
+		// Checking the expiry time is 5 minutes after creation
+
+		int timeValidationExpiryTime = claimsJsonObject.getInt("exp");
+		int expiryTime = 300;
+
+		if ((timeValidationExpiryTime) - (timeValidationIdentifierInt) != expiryTime) {
+			throw new InvalidRequestException("Bad Request Exception");
+
+		}
+
 	}
 
 	private boolean checkJWTJSONResponseRequestedRecordIsValidated(JSONObject claimsJsonObject) {
@@ -385,43 +411,40 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 		}
 	}
 
-	 private boolean
-	 checkJWTJSONResponseRequestingPractitionerIsValidated(JSONObject
-	 claimsJsonObject) {
-	 try {
-	
-	
-	 claimsJsonObject.getJSONObject("requesting_practitioner").getString("resourceType");
-	 claimsJsonObject.getJSONObject("requesting_practitioner").getString("id");
-	 JSONArray requestingPractitionerResults =
-	 claimsJsonObject.getJSONObject("requesting_practitioner")
-	 .getJSONArray("identifier");
-	 if (requestingPractitionerResults.length() > 0) {
-	 ((JSONObject) requestingPractitionerResults.get(0)).getString("system");
-	 ((JSONObject) requestingPractitionerResults.get(0)).getString("value");
-	 }
-	
-	 JSONObject requestingPractitionerResultsName =
-	 claimsJsonObject.getJSONObject("requesting_practitioner")
-	 .getJSONObject("name");
-	
-	 if (requestingPractitionerResultsName.length() > 0) {
-	 requestingPractitionerResultsName.get("family");
-	 requestingPractitionerResultsName.get("given");
-	 requestingPractitionerResultsName.get("prefix");
-	 }
-	// String requestingPractitionerPracRole = ((JSONObject)claimsJsonObject.getJSONObject("requesting_practitioner").getJSONArray("practitionerRole").getJSONObject(0).getJSONObject("role").getJSONArray("coding").get(0)).getString("code");
-	 //The roles are currently unknown, this name has been hardcoded until
-	/// they are found out
-	// if (!requestingPractitionerPracRole.equals("AssuranceJobRole"))
-	//  {
-	//  return false;
-	// }
-	
-	 return true;
-	 } catch (Exception e) {
-	 return false;
-	 }
-	 }
+	private boolean checkJWTJSONResponseRequestingPractitionerIsValidated(JSONObject claimsJsonObject) {
+		try {
+
+			claimsJsonObject.getJSONObject("requesting_practitioner").getString("resourceType");
+			claimsJsonObject.getJSONObject("requesting_practitioner").getString("id");
+			JSONArray requestingPractitionerResults = claimsJsonObject.getJSONObject("requesting_practitioner")
+					.getJSONArray("identifier");
+			if (requestingPractitionerResults.length() > 0) {
+				((JSONObject) requestingPractitionerResults.get(0)).getString("system");
+				((JSONObject) requestingPractitionerResults.get(0)).getString("value");
+			}
+
+			JSONObject requestingPractitionerResultsName = claimsJsonObject.getJSONObject("requesting_practitioner")
+					.getJSONObject("name");
+
+			if (requestingPractitionerResultsName.length() > 0) {
+				requestingPractitionerResultsName.get("family");
+				requestingPractitionerResultsName.get("given");
+				requestingPractitionerResultsName.get("prefix");
+			}
+			// String requestingPractitionerPracRole =
+			// ((JSONObject)claimsJsonObject.getJSONObject("requesting_practitioner").getJSONArray("practitionerRole").getJSONObject(0).getJSONObject("role").getJSONArray("coding").get(0)).getString("code");
+			// The roles are currently unknown, this name has been hardcoded
+			// until
+			/// they are found out
+			// if (!requestingPractitionerPracRole.equals("AssuranceJobRole"))
+			// {
+			// return false;
+			// }
+
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
 }

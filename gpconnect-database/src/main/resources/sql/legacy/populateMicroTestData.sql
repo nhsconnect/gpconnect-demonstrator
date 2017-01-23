@@ -56,7 +56,7 @@ INSERT INTO gpconnect.referrals
   (id, html, provider,lastUpdated)
 VALUES (
   9476719974,
-  "<div><h2>Referrals</h2><table border='\&quot;1\&quot;' class='\&quot;Referral\&quot;'><tbody><tr><th class='\&quot;Date\&quot;'>Date</th><th class='\&quot;From\&quot;'>From</th><th class='\&quot;To\&quot;'>To</th><th class='\&quot;Priority\&quot;'>Priority</th><th class='\&quot;Details\&quot;'>Details</th></tr></tbody></table></div>",
+  "<div><h2>Referrals</h2><table border='\&quot;1\&quot;' class='\&quot;Referral\&quot;'><tbody><tr><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></tr></tbody></table></div>",
   "Microtest",
   '2016-07-25 12:00:00'
 );

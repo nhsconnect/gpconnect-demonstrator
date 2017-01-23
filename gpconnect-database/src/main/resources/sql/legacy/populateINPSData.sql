@@ -92,7 +92,7 @@ INSERT INTO gpconnect.referrals
   (id, html, provider, lastUpdated)
 VALUES (
   9476719966,
-  "<div><h2>Referrals</h2><table id='referral'><thead><tr><th>Date</th><th>Who From</th><th>Who To</th><th>Priority</th><th>Details</th></tr></thead><tbody><tr><td>13-Jul-2009</td><td>Dr An Other (GP Registrar)</td><td>Ninewells - General medicine</td><td>Routine</td><td>Depressive disorder NEC</td></tr><tr><td>24-Dec-2004</td><td>Dr Patrick Slater (Partner)</td><td>Ninewells - Accident and Emergency</td><td>Immediately</td><td>Poisoning - self-inflicted</td></tr><tr><td>26-Mar-2001</td><td>Mr P. Slane (Other Health Care Professional)</td><td>Ninewells - Obstetrics (Hospital Bed or Delivery Facilities)</td><td>Routine</td><td>Patient pregnant</td></tr></tbody></table></div>",
+  "<div><h2>Referrals</h2><table id='referral'><thead><tr><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></tr></thead><tbody><tr><td>13-Jul-2009</td><td>Dr An Other (GP Registrar)</td><td>Ninewells - General medicine</td><td>Routine</td><td>Depressive disorder NEC</td></tr><tr><td>24-Dec-2004</td><td>Dr Patrick Slater (Partner)</td><td>Ninewells - Accident and Emergency</td><td>Immediately</td><td>Poisoning - self-inflicted</td></tr><tr><td>26-Mar-2001</td><td>Mr P. Slane (Other Health Care Professional)</td><td>Ninewells - Obstetrics (Hospital Bed or Delivery Facilities)</td><td>Routine</td><td>Patient pregnant</td></tr></tbody></table></div>",
   "INPS",
   '2016-07-25 12:00:00'
 );

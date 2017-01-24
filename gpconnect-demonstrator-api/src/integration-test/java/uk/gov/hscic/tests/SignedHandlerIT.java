@@ -26,7 +26,7 @@ public class SignedHandlerIT extends IntegrationTest {
     @Test
     public void validCertificateEndpointLookupTest() throws Exception {
         X509Certificate x = (X509Certificate) KeyStoreFactory
-                .getKeyStore(KEYSTORE_PATH + "client", PASSWORD)
+                .getKeyStore(KEYSTORE_PATH + "client.jks", PASSWORD)
                 .getCertificate("nhsdigitalclient");
 
         assertNotNull(x);
@@ -43,7 +43,7 @@ public class SignedHandlerIT extends IntegrationTest {
     @Test
     public void invalidCertificateEndpointLookupTest() throws Exception {
         X509Certificate x = (X509Certificate) KeyStoreFactory
-                .getKeyStore(KEYSTORE_PATH + "invalidClient", PASSWORD)
+                .getKeyStore(KEYSTORE_PATH + "invalidClient.jks", PASSWORD)
                 .getCertificate("nhsdigitalclientinvalid");
 
         assertNotNull(x);
@@ -60,7 +60,7 @@ public class SignedHandlerIT extends IntegrationTest {
     @Test
     public void expiredCertificateEndpointLookupTest() throws Exception {
         X509Certificate x = (X509Certificate) KeyStoreFactory
-                .getKeyStore(KEYSTORE_PATH + "expiredClient", PASSWORD)
+                .getKeyStore(KEYSTORE_PATH + "expiredClient.jks", PASSWORD)
                 .getCertificate("nhsdigitalclientexpired");
 
         assertNotNull(x);

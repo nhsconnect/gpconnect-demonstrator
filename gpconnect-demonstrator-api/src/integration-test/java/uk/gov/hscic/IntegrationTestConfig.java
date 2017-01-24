@@ -17,7 +17,7 @@ public class IntegrationTestConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public SignedHandler signedHandler() throws Exception {
-        return new SignedHandler(KeyStoreFactory.getKeyStore("src/integration-test/resources/authentication/server", "password"));
+        return new SignedHandler(KeyStoreFactory.getKeyStore("src/integration-test/resources/authentication/server.jks", "password"));
     }
 
     @Bean

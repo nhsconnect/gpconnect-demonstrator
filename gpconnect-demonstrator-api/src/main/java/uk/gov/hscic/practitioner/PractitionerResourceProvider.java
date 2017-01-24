@@ -29,66 +29,77 @@ import uk.gov.hscic.practitioner.search.PractitionerSearch;
 
 @Component
 public class PractitionerResourceProvider  implements IResourceProvider {
-    
+
     @Autowired
-    PractitionerSearch practitionerSearch;
-    
+    private PractitionerSearch practitionerSearch;
+
     @Override
     public Class<Practitioner> getResourceType() {
         return Practitioner.class;
     }
-    
+
     @Read()
     public Practitioner getPractitionerById(@IdParam IdDt practitionerId) {
         PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerDetails(practitionerId.getIdPart());
-        if(practitionerDetails == null){
+
+        if (practitionerDetails == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No practitioner details found for practitioner ID: "+practitionerId.getIdPart());
             throw new InternalErrorException("No practitioner details found for practitioner ID: "+practitionerId.getIdPart(), operationalOutcome);
         }
+
         return practitionerDetailsToPractitionerResourceConverter(practitionerDetails);
     }
-    
+
     @Search
     public List<Practitioner> getPractitionerByPractitionerUserId(@RequiredParam(name=Practitioner.SP_IDENTIFIER) TokenParam practitionerId) {
-        ArrayList<Practitioner> practitioners = new ArrayList();
+        ArrayList<Practitioner> practitioners = new ArrayList<>();
         List<PractitionerDetails> practitionerDetailsList = Collections.singletonList(practitionerSearch.findPractitionerByUserId(practitionerId.getValue()));
+
         if (practitionerDetailsList != null && practitionerDetailsList.size() > 0) {
-            for(PractitionerDetails practitionerDetails : practitionerDetailsList){
+            for (PractitionerDetails practitionerDetails : practitionerDetailsList) {
                 Practitioner practitioner = practitionerDetailsToPractitionerResourceConverter(practitionerDetails);
                 practitioner.setId(String.valueOf(practitionerDetails.getId()));
                 practitioners.add(practitioner);
-                
             }
         }
+
         return practitioners;
     }
-    
-    public Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails){
 
+    public Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails){
         Practitioner practitioner = new Practitioner();
-        
         practitioner.setId(new IdDt(practitionerDetails.getId()));
         practitioner.getMeta().setLastUpdated(practitionerDetails.getLastUpdated());
         practitioner.getMeta().setVersionId(String.valueOf(practitionerDetails.getLastUpdated().getTime()));
-        
         practitioner.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/sds-user-id", practitionerDetails.getUserId()));
         practitioner.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/sds-role-profile-id", practitionerDetails.getRoleId()));
-        
+
         HumanNameDt name = new HumanNameDt();
         name.addFamily(practitionerDetails.getNameFamily());
         name.addGiven(practitionerDetails.getNameGiven());
         name.addPrefix(practitionerDetails.getNamePrefix());
         name.setUse(NameUseEnum.USUAL);
         practitioner.setName(name);
-        
-        switch(practitionerDetails.getGender().toLowerCase()){
-            case "male" : practitioner.setGender(AdministrativeGenderEnum.MALE); break;
-            case "female" : practitioner.setGender(AdministrativeGenderEnum.FEMALE); break;
-            case "other" : practitioner.setGender(AdministrativeGenderEnum.OTHER); break;
-            default : practitioner.setGender(AdministrativeGenderEnum.UNKNOWN); break;
+
+        switch (practitionerDetails.getGender().toLowerCase()) {
+            case "male":
+                practitioner.setGender(AdministrativeGenderEnum.MALE);
+                break;
+
+            case "female":
+                practitioner.setGender(AdministrativeGenderEnum.FEMALE);
+                break;
+
+            case "other":
+                practitioner.setGender(AdministrativeGenderEnum.OTHER);
+                break;
+
+            default:
+                practitioner.setGender(AdministrativeGenderEnum.UNKNOWN);
+                break;
         }
-        
+
         CodingDt roleCoding = new CodingDt();
         roleCoding.setSystem("http://fhir.nhs.net/ValueSet/sds-job-role-name-1-0");
         roleCoding.setCode(practitionerDetails.getRoleCode());
@@ -97,16 +108,15 @@ public class PractitionerResourceProvider  implements IResourceProvider {
         roleCodableConcept.addCoding(roleCoding);
         PractitionerRole practitionerRole = practitioner.addPractitionerRole();
         practitionerRole.setRole(roleCodableConcept);
-        
+
         practitionerRole.setManagingOrganization(new ResourceReferenceDt("Organization/"+practitionerDetails.getOrganizationId())); // Associated Organisation
-        
+
         CodingDt comCoding = new CodingDt();
         comCoding.setSystem("http://fhir.nhs.net/ValueSet/human-language-1-0");
         comCoding.setCode(practitionerDetails.getComCode());
         comCoding.setDisplay(practitionerDetails.getComDisplay());
         practitioner.addCommunication().addCoding(comCoding);
-        
+
         return practitioner;
     }
-    
 }

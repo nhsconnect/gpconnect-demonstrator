@@ -15,9 +15,9 @@ public class LegacyScheduleSearch extends AbstractLegacyService implements Sched
 
     @Autowired
     private ScheduleRepository scheduleRepository;
-    
+
     private final ScheduleEntityToScheduleDetailTransformer transformer = new ScheduleEntityToScheduleDetailTransformer();
-    
+
     @Override
     public ScheduleDetail findScheduleByID(Long id) {
         final ScheduleEntity item = scheduleRepository.findOne(id);
@@ -31,11 +31,11 @@ public class LegacyScheduleSearch extends AbstractLegacyService implements Sched
     @Override
     public List<ScheduleDetail> findScheduleForLocationId(Long locationId, Date startDate, Date endDate) {
         List<ScheduleEntity> items = scheduleRepository.findByLocationIdAndEndDateTimeAfterAndStartDateTimeBefore(locationId, startDate, endDate);
-        ArrayList<ScheduleDetail> scheduleDetails = new ArrayList();
+        ArrayList<ScheduleDetail> scheduleDetails = new ArrayList<>();
         for(ScheduleEntity entity : items){
             scheduleDetails.add(transformer.transform(entity));
         }
         return scheduleDetails;
     }
-    
+
 }

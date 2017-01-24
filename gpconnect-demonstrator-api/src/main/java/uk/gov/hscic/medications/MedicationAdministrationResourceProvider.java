@@ -17,8 +17,8 @@ import uk.gov.hscic.medication.administration.search.MedicationAdministrationSea
 public class MedicationAdministrationResourceProvider  implements IResourceProvider {
 
     @Autowired
-    MedicationAdministrationSearch medicationAdministrationSearch;
-    
+    private MedicationAdministrationSearch medicationAdministrationSearch;
+
     @Override
     public Class<MedicationAdministration> getResourceType() {
         return MedicationAdministration.class;
@@ -26,13 +26,12 @@ public class MedicationAdministrationResourceProvider  implements IResourceProvi
 
     @Search
     public List<MedicationAdministration> getMedicationAdministrationsForPatientId(@RequiredParam(name = "patient") String patientId) {
-        
-        ArrayList<MedicationAdministration> medicationAdministrations = new ArrayList();
-        
+        ArrayList<MedicationAdministration> medicationAdministrations = new ArrayList<>();
+
         List<MedicationAdministrationDetail> medicationAdministrationDetailList = medicationAdministrationSearch.findMedicationAdministrationForPatient(Long.parseLong(patientId));
-        
+
         if (medicationAdministrationDetailList != null && medicationAdministrationDetailList.size() > 0) {
-            for(MedicationAdministrationDetail medicationAdministrationDetail : medicationAdministrationDetailList){
+            for(MedicationAdministrationDetail medicationAdministrationDetail : medicationAdministrationDetailList) {
                 MedicationAdministration medicationAdministration = new MedicationAdministration();
                 medicationAdministration.setId(String.valueOf(medicationAdministrationDetail.getId()));
                 medicationAdministration.getMeta().setLastUpdated(medicationAdministrationDetail.getLastUpdated());
@@ -45,7 +44,7 @@ public class MedicationAdministrationResourceProvider  implements IResourceProvi
                 medicationAdministrations.add(medicationAdministration);
             }
         }
-        
+
         return medicationAdministrations;
     }
 }

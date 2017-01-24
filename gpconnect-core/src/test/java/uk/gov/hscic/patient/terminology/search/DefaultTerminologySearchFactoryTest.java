@@ -20,8 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DefaultTerminologySearchFactoryTest
-    extends AbstractRepositoryFactoryTest<TerminologySearchFactory, TerminologySearch> {
+public class DefaultTerminologySearchFactoryTest extends AbstractRepositoryFactoryTest<TerminologySearchFactory, TerminologySearch> {
 
     @Override
     protected TerminologySearchFactory createRepositoryFactory() {

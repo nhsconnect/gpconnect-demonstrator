@@ -15,8 +15,6 @@
  */
 package uk.gov.hscic.common.types;
 
-/**
- */
 public enum TestSourceType implements RepoSource {
     SOURCE1("Source 1"),
     SOURCE2("Source 2");

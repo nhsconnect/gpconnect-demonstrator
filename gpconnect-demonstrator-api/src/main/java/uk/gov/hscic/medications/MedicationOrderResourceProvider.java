@@ -26,8 +26,8 @@ import uk.gov.hscic.medication.order.search.MedicationOrderSearch;
 public class MedicationOrderResourceProvider implements IResourceProvider {
 
     @Autowired
-    MedicationOrderSearch medicationOrderSearch;
-    
+    private MedicationOrderSearch medicationOrderSearch;
+
     @Override
     public Class<MedicationOrder> getResourceType() {
         return MedicationOrder.class;
@@ -35,30 +35,33 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
 
     @Search
     public List<MedicationOrder> getMedicationOrdersForPatientId(@RequiredParam(name = "patient") String patientId) {
-        ArrayList<MedicationOrder> medicationOrders = new ArrayList();
+        ArrayList<MedicationOrder> medicationOrders = new ArrayList<>();
         List<MedicationOrderDetails> medicationOrderDetailsList = medicationOrderSearch.findMedicationOrdersForPatient(Long.parseLong(patientId));
+
         if (medicationOrderDetailsList != null && medicationOrderDetailsList.size() > 0) {
-            for(MedicationOrderDetails medicationOrderDetails : medicationOrderDetailsList){
+            for (MedicationOrderDetails medicationOrderDetails : medicationOrderDetailsList) {
                 medicationOrders.add(medicationOrderDetailsToMedicationOrderResourceConverter(medicationOrderDetails));
             }
         }
+
         return medicationOrders;
     }
-    
+
     @Read()
     public MedicationOrder getMedicationOrderById(@IdParam IdDt medicationOrderId) {
         MedicationOrderDetails medicationOrderDetails = medicationOrderSearch.findMedicationOrderByID(medicationOrderId.getIdPartAsLong());
+
         if (medicationOrderDetails == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No medicationOrder details found for ID: " + medicationOrderId.getIdPart());
             throw new InternalErrorException("No medicationOrder details found for ID: " + medicationOrderId.getIdPart(), operationalOutcome);
         }
+
         return medicationOrderDetailsToMedicationOrderResourceConverter(medicationOrderDetails);
     }
-    
-    
-    public MedicationOrder medicationOrderDetailsToMedicationOrderResourceConverter(MedicationOrderDetails medicationOrderDetails){
-        
+
+
+    public MedicationOrder medicationOrderDetailsToMedicationOrderResourceConverter(MedicationOrderDetails medicationOrderDetails) {
         MedicationOrder medicationOrder = new MedicationOrder();
         medicationOrder.setId(String.valueOf(medicationOrderDetails.getId()));
         medicationOrder.getMeta().setLastUpdated(medicationOrderDetails.getLastUpdated());
@@ -66,19 +69,32 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
         medicationOrder.setDateWritten(new DateTimeDt(medicationOrderDetails.getDateWritten()));
 
         switch(medicationOrderDetails.getOrderStatus().toLowerCase()){
-            case "active" : medicationOrder.setStatus(MedicationOrderStatusEnum.ACTIVE); break;
-            case "completed" : medicationOrder.setStatus(MedicationOrderStatusEnum.COMPLETED); break;
-            case "draft" : medicationOrder.setStatus(MedicationOrderStatusEnum.DRAFT); break;
-            case "entered_in_error" : medicationOrder.setStatus(MedicationOrderStatusEnum.ENTERED_IN_ERROR); break;
-            case "on_hold" : medicationOrder.setStatus(MedicationOrderStatusEnum.ON_HOLD); break;
-            case "stopped" : medicationOrder.setStatus(MedicationOrderStatusEnum.STOPPED); break;
+            case "active":
+                medicationOrder.setStatus(MedicationOrderStatusEnum.ACTIVE);
+                break;
+            case "completed":
+                medicationOrder.setStatus(MedicationOrderStatusEnum.COMPLETED);
+                break;
+            case "draft":
+                medicationOrder.setStatus(MedicationOrderStatusEnum.DRAFT);
+                break;
+            case "entered_in_error":
+                medicationOrder.setStatus(MedicationOrderStatusEnum.ENTERED_IN_ERROR);
+                break;
+            case "on_hold":
+                medicationOrder.setStatus(MedicationOrderStatusEnum.ON_HOLD);
+                break;
+            case "stopped":
+                medicationOrder.setStatus(MedicationOrderStatusEnum.STOPPED);
+                break;
         }
 
-        if(medicationOrderDetails.getPatientId() != null){
+        if (medicationOrderDetails.getPatientId() != null) {
             medicationOrder.setPatient(new ResourceReferenceDt("Patient/"+medicationOrderDetails.getPatientId()));
-        }else{
+        } else {
             medicationOrder.setPatient(new ResourceReferenceDt());
         }
+        
         medicationOrder.setPrescriber(new ResourceReferenceDt("Practitioner/"+medicationOrderDetails.getAutherId()));
         medicationOrder.setMedication(new ResourceReferenceDt("Medication/"+medicationOrderDetails.getMedicationId()));
         medicationOrder.addDosageInstruction().setText(medicationOrderDetails.getDosageText());
@@ -89,7 +105,7 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
         dispenseRequest.setMedication(new ResourceReferenceDt("Medication/"+medicationOrderDetails.getDispenseMedicationId()));
         dispenseRequest.setNumberOfRepeatsAllowed(medicationOrderDetails.getDispenseRepeatsAllowed());
         medicationOrder.setDispenseRequest(dispenseRequest);
-                
+
         return medicationOrder;
     }
 }

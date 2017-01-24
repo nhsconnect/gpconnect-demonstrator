@@ -1,11 +1,11 @@
 package uk.gov.hscic.medication.administration.search;
 
-import uk.gov.hscic.medication.administration.model.MedicationAdministrationDetail;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.common.service.AbstractLegacyService;
+import uk.gov.hscic.medication.administration.model.MedicationAdministrationDetail;
 import uk.gov.hscic.medication.administration.model.MedicationAdministrationEntity;
 import uk.gov.hscic.medication.administration.repo.MedicationAdministrationRepository;
 
@@ -14,7 +14,7 @@ public class LegacyMedicationAdministrationSearch  extends AbstractLegacyService
 
     @Autowired
     private MedicationAdministrationRepository medicationAdministrationRepository;
-    
+
     private final MedicationAdministrationEntityToMedicationAdministrationDetailTransformer transformer = new MedicationAdministrationEntityToMedicationAdministrationDetailTransformer();
 
     @Override
@@ -30,7 +30,7 @@ public class LegacyMedicationAdministrationSearch  extends AbstractLegacyService
     @Override
     public List<MedicationAdministrationDetail> findMedicationAdministrationForPatient(Long patientId) {
         List<MedicationAdministrationEntity> items = medicationAdministrationRepository.findByPatientId(patientId);
-        ArrayList<MedicationAdministrationDetail> medicationAdministration = new ArrayList();
+        ArrayList<MedicationAdministrationDetail> medicationAdministration = new ArrayList<>();
         for(MedicationAdministrationEntity entity : items){
             medicationAdministration.add(transformer.transform(entity));
         }

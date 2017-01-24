@@ -19,8 +19,8 @@ import uk.gov.hscic.medication.search.MedicationSearch;
 public class MedicationResourceProvider implements IResourceProvider {
 
     @Autowired
-    MedicationSearch medicationSearch;
-    
+    private MedicationSearch medicationSearch;
+
     @Override
     public Class<Medication> getResourceType() {
         return Medication.class;
@@ -28,15 +28,14 @@ public class MedicationResourceProvider implements IResourceProvider {
 
     @Read()
     public Medication getMedicationById(@IdParam IdDt medicationId) {
-        
         MedicationDetails medicationDetails = medicationSearch.findMedicationByID(medicationId.getIdPartAsLong());
-        
+
         if (medicationDetails == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No medication details found for ID: " + medicationId.getIdPart());
             throw new InternalErrorException("No medication details found for ID: " + medicationId.getIdPart(), operationalOutcome);
         }
-        
+
         Medication medication = new Medication();
         CodingDt coding = new CodingDt();
         coding.setSystem("http://snomed.info/sct");
@@ -48,6 +47,7 @@ public class MedicationResourceProvider implements IResourceProvider {
         medication.setId(medicationDetails.getId());
         medication.getMeta().setLastUpdated(medicationDetails.getLastUpdated());
         medication.getMeta().setVersionId(String.valueOf(medicationDetails.getLastUpdated().getTime()));
+        
         return medication;
     }
 }

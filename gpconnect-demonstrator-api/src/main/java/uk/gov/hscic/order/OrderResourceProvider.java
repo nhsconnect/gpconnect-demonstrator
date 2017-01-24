@@ -24,8 +24,8 @@ import uk.gov.hscic.order.store.OrderStore;
 public class OrderResourceProvider implements IResourceProvider {
 
     @Autowired
-    OrderStore orderStore;
-    
+    private OrderStore orderStore;
+
     @Override
     public Class<Order> getResourceType() {
         return Order.class;
@@ -58,23 +58,23 @@ public class OrderResourceProvider implements IResourceProvider {
         orderDetail.setRecieved(true);
         return orderDetail;
     }
-    
+
     public Order orderDetailToOrderResourceConverter(OrderDetail orderDetail){
         Order order = new Order();
         order.setId(new IdDt(orderDetail.getId()));
         order.setIdentifier(Collections.singletonList(new IdentifierDt("",orderDetail.getIdentifier())));
-        
+
         Basic basic = new Basic();
         basic.setCode(new CodeableConceptDt("http://hl7.org/fhir/basic-resource-type", "OrderDetails"));
         basic.getText().setDiv(new XhtmlDt(orderDetail.getDetail()));
         order.setDetail(Collections.singletonList(new ResourceReferenceDt(basic)));
-        
+
         order.setDate(new DateTimeDt(orderDetail.getOrderDate()));
         CodingDt coding = new CodingDt("http://fhir.nhs.net/ValueSet/gpconnect-reason-type-1-0",orderDetail.getReasonCode());
         coding.setDisplay(orderDetail.getReasonDescription());
         CodeableConceptDt codeConcept = new CodeableConceptDt().setCoding(Collections.singletonList(coding)).setText(orderDetail.getReasonText());
         order.setReason(codeConcept);
-        
+
         order.setSource(new ResourceReferenceDt("Organization/"+orderDetail.getSourceOrgId()));
         order.setSubject(new ResourceReferenceDt("Patient/"+orderDetail.getSubjectPatientId()));
         order.setTarget(new ResourceReferenceDt("Organization/"+orderDetail.getTargetOrgId()));

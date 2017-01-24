@@ -15,15 +15,13 @@
  */
 package uk.gov.hscic.patient.medication.search;
 
-import uk.gov.hscic.medication.search.MedicationSearch;
-import uk.gov.hscic.medication.search.MedicationSearchFactory;
-import uk.gov.hscic.medication.search.DefaultMedicationSearchFactory;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;
+import uk.gov.hscic.medication.search.DefaultMedicationSearchFactory;
+import uk.gov.hscic.medication.search.MedicationSearch;
+import uk.gov.hscic.medication.search.MedicationSearchFactory;
 
-/**
- */
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultMedicationSearchFactoryTest extends AbstractRepositoryFactoryTest<MedicationSearchFactory, MedicationSearch> {
 

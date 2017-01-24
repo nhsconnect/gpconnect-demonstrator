@@ -15,9 +15,9 @@ public class LegacySlotSearch extends AbstractLegacyService implements SlotSearc
 
     @Autowired
     private SlotRepository slotRepository;
-    
+
     private final SlotEntityToSlotDetailTransformer transformer = new SlotEntityToSlotDetailTransformer();
-    
+
     @Override
     public SlotDetail findSlotByID(Long id) {
         final SlotEntity item = slotRepository.findOne(id);
@@ -31,11 +31,11 @@ public class LegacySlotSearch extends AbstractLegacyService implements SlotSearc
     @Override
     public List<SlotDetail> findSlotsForScheduleId(Long scheduleId, Date startDate, Date endDate) {
         List<SlotEntity> items = slotRepository.findByScheduleReferenceAndEndDateTimeAfterAndStartDateTimeBefore(scheduleId, startDate, endDate);
-        ArrayList<SlotDetail> slotDetails = new ArrayList();
+        ArrayList<SlotDetail> slotDetails = new ArrayList<>();
         for(SlotEntity entity : items){
             slotDetails.add(transformer.transform(entity));
         }
         return slotDetails;
     }
-    
+
 }

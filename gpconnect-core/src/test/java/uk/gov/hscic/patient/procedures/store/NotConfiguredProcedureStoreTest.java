@@ -15,18 +15,13 @@
  */
 package uk.gov.hscic.patient.procedures.store;
 
-import uk.gov.hscic.patient.procedures.store.NotConfiguredProcedureStore;
 import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSourceType;
 
-/**
- */
 public class NotConfiguredProcedureStoreTest {
-
     private NotConfiguredProcedureStore procedureStore;
 
     @Before

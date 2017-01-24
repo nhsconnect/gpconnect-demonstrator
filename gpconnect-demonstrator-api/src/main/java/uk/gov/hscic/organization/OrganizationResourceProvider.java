@@ -1,15 +1,12 @@
 package uk.gov.hscic.organization;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
+import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Organization;
 import ca.uhn.fhir.model.dstu2.resource.Parameters;
-import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
 import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
@@ -24,6 +21,9 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.organization.model.OrganizationDetails;
 import uk.gov.hscic.organization.search.OrganizationSearch;
@@ -32,10 +32,10 @@ import uk.gov.hscic.organization.search.OrganizationSearch;
 public class OrganizationResourceProvider implements IResourceProvider {
 
     @Autowired
-    GetScheduleOperation getScheduleOperation;
-    
+    private GetScheduleOperation getScheduleOperation;
+
     @Autowired
-    OrganizationSearch organizationSearch;
+    private OrganizationSearch organizationSearch;
 
     @Override
     public Class<Organization> getResourceType() {
@@ -45,20 +45,21 @@ public class OrganizationResourceProvider implements IResourceProvider {
     @Read()
     public Organization getOrganizationById(@IdParam IdDt organizationId) {
         OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId.getIdPart());
+
         if (organizationDetails == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No organization details found for organization ID: " + organizationId.getIdPart());
             throw new InternalErrorException("No organization details found for organization ID: " + organizationId.getIdPart(), operationalOutcome);
         }
+
         return organizaitonDetailsToOrganizationResourceConverter(organizationDetails);
     }
 
     @Search
     public List<Organization> getOrganizationsByODSCode(@RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam organizationId) {
-        
-        ArrayList<Organization> organizations = new ArrayList();
+        ArrayList<Organization> organizations = new ArrayList<>();
         List<OrganizationDetails> organizationDetailsList = null;
-        
+
         if (organizationId.getValue() != null) {
             organizationDetailsList = organizationSearch.findOrganizationDetailsByOrgODSCode(organizationId.getValue());
         }
@@ -119,5 +120,4 @@ public class OrganizationResourceProvider implements IResourceProvider {
         organization.getMeta().setVersionId(String.valueOf(organizationDetails.getLastUpdated().getTime()));
         return organization;
     }
-
 }

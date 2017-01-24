@@ -19,10 +19,8 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;
 
-/**
- */
 @RunWith(MockitoJUnitRunner.class)
-public class DefaultProcedureSearchFactoryTest extends AbstractRepositoryFactoryTest<ProcedureSearchFactory,ProcedureSearch> {
+public class DefaultProcedureSearchFactoryTest extends AbstractRepositoryFactoryTest<ProcedureSearchFactory, ProcedureSearch> {
 
     @Override
     protected ProcedureSearchFactory createRepositoryFactory() {

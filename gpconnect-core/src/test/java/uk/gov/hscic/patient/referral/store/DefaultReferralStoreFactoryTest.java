@@ -15,15 +15,10 @@
  */
 package uk.gov.hscic.patient.referral.store;
 
-import uk.gov.hscic.patient.referral.store.DefaultReferralStoreFactory;
-import uk.gov.hscic.patient.referral.store.ReferralStoreFactory;
-import uk.gov.hscic.patient.referral.store.ReferralStore;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;
 
-/**
- */
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultReferralStoreFactoryTest extends AbstractRepositoryFactoryTest<ReferralStoreFactory, ReferralStore> {
 

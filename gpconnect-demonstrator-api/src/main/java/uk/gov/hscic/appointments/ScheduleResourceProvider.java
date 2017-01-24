@@ -1,9 +1,5 @@
 package uk.gov.hscic.appointments;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -18,7 +14,10 @@ import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointment.schedule.model.ScheduleDetail;
@@ -26,11 +25,10 @@ import uk.gov.hscic.appointment.schedule.search.ScheduleSearch;
 
 @Component
 public class ScheduleResourceProvider implements IResourceProvider {
+    private static final String EXTENSION_GPCONNECT_PRACTITIONER_1_0 = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1-0";
 
     @Autowired
-    ScheduleSearch scheduleSearch;
-    
-    private static final String EXTENSION_GPCONNECT_PRACTITIONER_1_0 = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1-0";
+    private ScheduleSearch scheduleSearch;
 
     @Override
     public Class<Schedule> getResourceType() {
@@ -40,26 +38,29 @@ public class ScheduleResourceProvider implements IResourceProvider {
     @Read()
     public Schedule getScheduleById(@IdParam IdDt scheduleId) {
         ScheduleDetail scheduleDetail = scheduleSearch.findScheduleByID(scheduleId.getIdPartAsLong());
+
         if (scheduleDetail == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No schedule details found for ID: " + scheduleId.getIdPart());
             throw new InternalErrorException("No schedule details found for ID: " + scheduleId.getIdPart(), operationalOutcome);
         }
+
         return scheduleDetailToScheduleResourceConverter(scheduleDetail);
     }
-    
+
     public List<Schedule> getSchedulesForLocationId(String locationId, String startDateTime, String endDateTime) {
-        ArrayList<Schedule> schedules = new ArrayList();
-        List<ScheduleDetail> scheduleDetails = null;
-        scheduleDetails = scheduleSearch.findScheduleForLocationId(Long.valueOf(locationId), new Date(startDateTime), new Date(endDateTime));
+        ArrayList<Schedule> schedules = new ArrayList<>();
+        List<ScheduleDetail> scheduleDetails = scheduleSearch.findScheduleForLocationId(Long.valueOf(locationId), new Date(startDateTime), new Date(endDateTime));
+
         if (scheduleDetails != null && scheduleDetails.size() > 0) {
             for(ScheduleDetail scheduleDetail : scheduleDetails){
                 schedules.add(scheduleDetailToScheduleResourceConverter(scheduleDetail));
             }
         }
+
         return schedules;
     }
-     
+
     public Schedule scheduleDetailToScheduleResourceConverter(ScheduleDetail scheduleDetail){
         Schedule schedule = new Schedule();
         schedule.setId(String.valueOf(scheduleDetail.getId()));
@@ -79,8 +80,8 @@ public class ScheduleResourceProvider implements IResourceProvider {
         schedule.setComment(scheduleDetail.getComment());
         return schedule;
     }
-    
+
     public List<ExtensionDt> getPractitionerReferences(Schedule schedule) {
-    	return schedule.getUndeclaredExtensionsByUrl(EXTENSION_GPCONNECT_PRACTITIONER_1_0);
+        return schedule.getUndeclaredExtensionsByUrl(EXTENSION_GPCONNECT_PRACTITIONER_1_0);
     }
 }

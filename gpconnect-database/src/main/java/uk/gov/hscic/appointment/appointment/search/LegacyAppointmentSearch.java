@@ -17,7 +17,7 @@ public class LegacyAppointmentSearch extends AbstractLegacyService implements Ap
     private AppointmentRepository appointmentRepository;
 
     private final AppointmentEntityToAppointmentDetailTransformer transformer = new AppointmentEntityToAppointmentDetailTransformer();
-    
+
     @Override
     public AppointmentDetail findAppointmentByID(Long id) {
         final AppointmentEntity item = appointmentRepository.findOne(id);
@@ -31,17 +31,17 @@ public class LegacyAppointmentSearch extends AbstractLegacyService implements Ap
     @Override
     public List<AppointmentDetail> findAppointmentForPatientId(Long patinetId) {
         List<AppointmentEntity> items = appointmentRepository.findByPatientId(patinetId);
-        ArrayList<AppointmentDetail> appointmentDetails = new ArrayList();
+        ArrayList<AppointmentDetail> appointmentDetails = new ArrayList<>();
         for(AppointmentEntity entity : items){
             appointmentDetails.add(transformer.transform(entity));
         }
         return appointmentDetails;
     }
-    
+
     @Override
     public List<AppointmentDetail> findAppointmentForPatientId(Long patinetId, Date startDate) {
         List<AppointmentEntity> items = appointmentRepository.findByPatientIdAndEndDateTimeAfter(patinetId, startDate);
-        ArrayList<AppointmentDetail> appointmentDetails = new ArrayList();
+        ArrayList<AppointmentDetail> appointmentDetails = new ArrayList<>();
         for(AppointmentEntity entity : items){
             appointmentDetails.add(transformer.transform(entity));
         }
@@ -51,7 +51,7 @@ public class LegacyAppointmentSearch extends AbstractLegacyService implements Ap
     @Override
     public List<AppointmentDetail> findAppointmentForPatientId(Long patinetId, Date startDate, Date endDate) {
         List<AppointmentEntity> items = appointmentRepository.findByPatientIdAndEndDateTimeAfterAndStartDateTimeBefore(patinetId, startDate, endDate);
-        ArrayList<AppointmentDetail> appointmentDetails = new ArrayList();
+        ArrayList<AppointmentDetail> appointmentDetails = new ArrayList<>();
         for(AppointmentEntity entity : items){
             appointmentDetails.add(transformer.transform(entity));
         }
@@ -62,7 +62,7 @@ public class LegacyAppointmentSearch extends AbstractLegacyService implements Ap
     public List<AppointmentDetail> searchAppointments(Long patientId, Date startLowerDate, Date startUpperDate){
         String queryParameter = "";
         List<AppointmentEntity> items = appointmentRepository.findByPatientId(patientId);
-        ArrayList<AppointmentDetail> appointmentDetails = new ArrayList();
+        ArrayList<AppointmentDetail> appointmentDetails = new ArrayList<>();
         for(AppointmentEntity entity : items){
             boolean addAppointment = true;
             if(startLowerDate != null && entity.getStartDateTime().before(startLowerDate)){ addAppointment = false; }
@@ -73,5 +73,5 @@ public class LegacyAppointmentSearch extends AbstractLegacyService implements Ap
         }
         return appointmentDetails;
     }
-    
+
 }

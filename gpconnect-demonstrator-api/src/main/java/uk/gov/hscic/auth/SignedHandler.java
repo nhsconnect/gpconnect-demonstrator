@@ -41,7 +41,7 @@ public final class SignedHandler extends AbstractHandlerMethodAdapter {
     @Override
     public ModelAndView handleInternal(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
         try {
-        	 if (request.isSecure() && !HttpMethod.OPTIONS.name().equals(request.getMethod())) {
+            if (request.isSecure() && !HttpMethod.OPTIONS.name().equals(request.getMethod())) {
                 X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
 
                 if (null == certs) {

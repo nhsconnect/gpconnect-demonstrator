@@ -51,14 +51,27 @@ import uk.gov.hscic.practitioner.search.PractitionerSearch;
 @Component
 public class AppointmentResourceProvider implements IResourceProvider {
 
-    @Autowired AppointmentSearch appointmentSearch;
-    @Autowired AppointmentStore appointmentStore;
-    @Autowired SlotSearch slotSearch;
-    @Autowired SlotStore slotStore;
-    @Autowired PatientSearch patientSearch;
-    @Autowired PractitionerSearch practitionerSearch;
-    @Autowired LocationSearch locationSearch;
-    
+    @Autowired
+    private AppointmentSearch appointmentSearch;
+
+    @Autowired
+    private AppointmentStore appointmentStore;
+
+    @Autowired
+    private SlotSearch slotSearch;
+
+    @Autowired
+    private SlotStore slotStore;
+
+    @Autowired
+    private PatientSearch patientSearch;
+
+    @Autowired
+    private PractitionerSearch practitionerSearch;
+
+    @Autowired
+    private LocationSearch locationSearch;
+
     @Override
     public Class<Appointment> getResourceType() {
         return Appointment.class;
@@ -66,7 +79,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     @Read()
     public Appointment getAppointmentById(@IdParam IdDt appointmentId) {
-
         AppointmentDetail appointmentDetail = appointmentSearch.findAppointmentByID(appointmentId.getIdPartAsLong());
 
         if (appointmentDetail == null) {
@@ -80,7 +92,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     @Search
     public List<Appointment> getAppointmentsForPatientIdAndDates(@RequiredParam(name = "patient") IdDt patientLocalId, @OptionalParam(name = "start") DateRangeParam startDate) {
-
         Date startLowerDate = null;
         Date startUppderDate = null;
 
@@ -96,6 +107,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     }
                 }
             }
+
             if (startDate.getUpperBound() != null) {
                 if (startDate.getUpperBound().getPrefix() == ParamPrefixEnum.LESSTHAN) {
                     startUppderDate = startDate.getUpperBound().getValue();
@@ -111,7 +123,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         List<AppointmentDetail> appointmentDetails = appointmentSearch.searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUppderDate);
 
-        ArrayList<Appointment> appointments = new ArrayList();
+        ArrayList<Appointment> appointments = new ArrayList<>();
+
         if (appointmentDetails != null && appointmentDetails.size() > 0) {
             for (AppointmentDetail appointmentDetail : appointmentDetails) {
                 appointments.add(appointmentDetailToAppointmentResourceConverter(appointmentDetail));
@@ -123,22 +136,26 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     @Create
     public MethodOutcome createAppointment(@ResourceParam Appointment appointment) {
-
         if (appointment.getStatus().isEmpty()) {
             throw new UnprocessableEntityException("No status supplied");
         }
+
         if (appointment.getReason() == null) {
             throw new UnprocessableEntityException("No reason supplied");
         }
+
         if (appointment.getStart() == null || appointment.getEnd() == null) {
             throw new UnprocessableEntityException("Both start and end date are required");
         }
+
         if (appointment.getParticipant().size() <= 0) {
             throw new UnprocessableEntityException("Atleast one participant is required");
         }
+
         for (Participant participant : appointment.getParticipant()) {
             String resourcePart = participant.getActor().getReference().getResourceType();
             String idPart = participant.getActor().getReference().getIdPart();
+
             switch (resourcePart) {
                 case "Patient":
                     PatientDetails patient = patientSearch.findPatientByInternalID(idPart);
@@ -164,14 +181,17 @@ public class AppointmentResourceProvider implements IResourceProvider {
         // Store New Appointment
         AppointmentDetail appointmentDetail = appointmentResourceConverterToAppointmentDetail(appointment);
         List<SlotDetail> slots = new ArrayList<>();
+
         for (Long slotId : appointmentDetail.getSlotIds()) {
             SlotDetail slotDetail = slotSearch.findSlotByID(slotId);
+
             if (slotDetail == null) {
                 throw new UnprocessableEntityException("Slot resource reference is not a valid resource");
             }
+
             slots.add(slotDetail);
         }
-        
+
         appointmentDetail = appointmentStore.saveAppointment(appointmentDetail, slots);
 
         for (SlotDetail slot : slots) {
@@ -192,7 +212,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     @Update
     public MethodOutcome updateAppointment(@IdParam IdDt appointmentId, @ResourceParam Appointment appointment) {
-
         MethodOutcome methodOutcome = new MethodOutcome();
         OperationOutcome operationalOutcome = new OperationOutcome();
 
@@ -221,12 +240,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         //Determin if it is a cancel or an amend
         if (appointmentDetail.getCancellationReason() != null) {
-
             if (appointmentDetail.getCancellationReason().isEmpty()) {
                 operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("The cancellation reason can not be blank");
                 methodOutcome.setOperationOutcome(operationalOutcome);
                 return methodOutcome;
             }
+
             // This is a Cancellation - so copy across fields which can be altered
             oldAppointmentDetail.setCancellationReason(appointmentDetail.getCancellationReason());
             String oldStatus = oldAppointmentDetail.getStatus();
@@ -255,22 +274,24 @@ public class AppointmentResourceProvider implements IResourceProvider {
         List<SlotDetail> slots = new ArrayList<>();
         for (Long slotId : appointmentDetail.getSlotIds()) {
             SlotDetail slotDetail = slotSearch.findSlotByID(slotId);
+
             if (slotDetail == null) {
                 throw new UnprocessableEntityException("Slot resource reference is not a valid resource");
             }
+
             slots.add(slotDetail);
         }
-        
+
         appointmentDetail.setLastUpdated(new Date()); // Update version and lastUpdated timestamp
         appointmentDetail = appointmentStore.saveAppointment(appointmentDetail, slots);
 
         methodOutcome.setId(new IdDt("Appointment", appointmentDetail.getId()));
         methodOutcome.setResource(appointmentDetailToAppointmentResourceConverter(appointmentDetail));
+
         return methodOutcome;
     }
 
     public Appointment appointmentDetailToAppointmentResourceConverter(AppointmentDetail appointmentDetail) {
-
         Appointment appointment = new Appointment();
         appointment.setId(String.valueOf(appointmentDetail.getId()));
         appointment.getMeta().setLastUpdated(appointmentDetail.getLastUpdated());
@@ -316,9 +337,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointment.setEndWithMillisPrecision(appointmentDetail.getEndDateTime());
 
         List<ResourceReferenceDt> slotResources = new ArrayList<>();
+
         for (Long slotId : appointmentDetail.getSlotIds()) {
             slotResources.add(new ResourceReferenceDt("Slot/" + slotId));
         }
+
         appointment.setSlot(slotResources);
 
         appointment.setComment(appointmentDetail.getComment());
@@ -339,9 +362,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
     }
 
     public AppointmentDetail appointmentResourceConverterToAppointmentDetail(Appointment appointment) {
-
         AppointmentDetail appointmentDetail = new AppointmentDetail();
         appointmentDetail.setId(appointment.getId().getIdPartAsLong());
+
         if (appointment.getMeta().getLastUpdated() == null) {
             appointmentDetail.setLastUpdated(new Date());
         } else {
@@ -349,6 +372,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
 
         List<ExtensionDt> extension = appointment.getUndeclaredExtensionsByUrl("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0");
+
         if (extension != null && extension.size() > 0) {
             String cancellationReason = extension.get(0).getValue().toString();
             appointmentDetail.setCancellationReason(cancellationReason);
@@ -363,9 +387,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentDetail.setEndDateTime(appointment.getEnd());
 
         List<Long> slotIds = new ArrayList<>();
+
         for (ResourceReferenceDt slotReference : appointment.getSlot()) {
             slotIds.add(slotReference.getReference().getIdPartAsLong());
         }
+
         appointmentDetail.setSlotIds(slotIds);
 
         appointmentDetail.setComment(appointment.getComment());

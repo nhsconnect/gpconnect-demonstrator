@@ -16,7 +16,7 @@ public class LegacyOrderSearch extends AbstractLegacyService implements OrderSea
     private OrderRepository orderRepository;
 
     private final OrderEntityToOrderDetailTransformer transformer = new OrderEntityToOrderDetailTransformer();
-    
+
     @Override
     public OrderDetail findOrderByID(Long id) {
         final OrderEntity item = orderRepository.findOne(id);
@@ -30,11 +30,11 @@ public class LegacyOrderSearch extends AbstractLegacyService implements OrderSea
     @Override
     public List<OrderDetail> findOrdersForPatientId(Long patinetId) {
         List<OrderEntity> items = orderRepository.findBySubjectPatientId(patinetId);
-        ArrayList<OrderDetail> orderDetails = new ArrayList();
+        ArrayList<OrderDetail> orderDetails = new ArrayList<>();
         for(OrderEntity entity : items){
             orderDetails.add(transformer.transform(entity));
         }
         return orderDetails;
-    }    
+    }
 
 }

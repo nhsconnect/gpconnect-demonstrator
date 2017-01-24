@@ -15,17 +15,15 @@
  */
 package uk.gov.hscic.common.config;
 
-import uk.gov.hscic.common.exception.ConfigurationException;
-import uk.gov.hscic.common.exception.DataNotFoundException;
-import uk.gov.hscic.common.exception.InvalidDataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import uk.gov.hscic.common.exception.ConfigurationException;
+import uk.gov.hscic.common.exception.DataNotFoundException;
+import uk.gov.hscic.common.exception.InvalidDataException;
 
-/**
- */
 @ControllerAdvice
 @ResponseBody
 public class DefaultControllerExceptionHandler {

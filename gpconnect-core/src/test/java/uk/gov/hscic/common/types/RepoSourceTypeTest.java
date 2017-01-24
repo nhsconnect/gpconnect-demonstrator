@@ -15,16 +15,12 @@
  */
 package uk.gov.hscic.common.types;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import org.junit.Test;
 
-/**
- */
 public class RepoSourceTypeTest {
 
-    //
     @Test
     public void validateTSESize() {
         assertEquals(6, RepoSourceType.values().length);
@@ -32,73 +28,57 @@ public class RepoSourceTypeTest {
 
     @Test
     public void verifyNONESourceName() {
-        final String repoSourceName = RepoSourceType.NONE.getSourceName();
-        assertEquals("Not Configured", repoSourceName);
+        assertEquals("Not Configured", RepoSourceType.NONE.getSourceName());
     }
 
     @Test
     public void verifyACTIVEMQSourceName() {
-        final String repoSourceName = RepoSourceType.ACTIVEMQ.getSourceName();
-        assertEquals("ActiveMQ", repoSourceName);
+        assertEquals("ActiveMQ", RepoSourceType.ACTIVEMQ.getSourceName());
     }
 
     @Test
     public void verifyLEGACYSourceName() {
-        final String repoSourceName = RepoSourceType.LEGACY.getSourceName();
-        assertEquals("Legacy", repoSourceName);
+        assertEquals("Legacy", RepoSourceType.LEGACY.getSourceName());
     }
 
     @Test
     public void verifyMARANDSourceName() {
-        final String repoSourceName = RepoSourceType.MARAND.getSourceName();
-        assertEquals("Marand", repoSourceName);
+        assertEquals("Marand", RepoSourceType.MARAND.getSourceName());
     }
 
     @Test
     public void verifyAUDITSourceName() {
-        final String repoSourceName = RepoSourceType.AUDIT.getSourceName();
-        assertEquals("Audit", repoSourceName);
+        assertEquals("Audit", RepoSourceType.AUDIT.getSourceName());
     }
 
     @Test
     public void verifyTERMINOLOGYSourceName() {
-        final String repoSourceName = RepoSourceType.TERMINOLOGY.getSourceName();
-        assertEquals("Terminology", repoSourceName);
+        assertEquals("Terminology", RepoSourceType.TERMINOLOGY.getSourceName());
     }
 
     // Reverse Lookup Tests
     @Test
     public void reverseLookupOfTSEFromEmptyString() {
-        final String tseAsString = "";
-        RepoSource sourceType = RepoSourceType.fromString(tseAsString);
-        assertNull(sourceType);
+        assertNull(RepoSourceType.fromString(""));
     }
 
     @Test
     public void reverseLookupOfTSEFromNull() {
-        RepoSource sourceType = RepoSourceType.fromString(null);
-        assertNull(sourceType);
+        assertNull(RepoSourceType.fromString(null));
     }
 
     @Test
     public void reverseLookupOfTSEFromCaseSensitivePopulatedString() {
-        final String tseAsString = "Legacy";
-        RepoSource sourceType = RepoSourceType.fromString(tseAsString);
-        assertEquals(RepoSourceType.LEGACY, sourceType);
+        assertEquals(RepoSourceType.LEGACY, RepoSourceType.fromString("Legacy"));
     }
 
     @Test
     public void reverseLookupOfTSEFromLowercasePopulatedString() {
-        final String tseAsString = "legacy";
-        RepoSource sourceType = RepoSourceType.fromString(tseAsString);
-        assertEquals(RepoSourceType.LEGACY, sourceType);
+        assertEquals(RepoSourceType.LEGACY, RepoSourceType.fromString("legacy"));
     }
 
     @Test
     public void reverseLookupOfNONE() {
-        final String tseAsString = "Not Configured";
-        RepoSource sourceType = RepoSourceType.fromString(tseAsString);
-        assertEquals(RepoSourceType.NONE, sourceType);
+        assertEquals(RepoSourceType.NONE, RepoSourceType.fromString("Not Configured"));
     }
-
 }

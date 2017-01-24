@@ -26,8 +26,8 @@ import uk.gov.hscic.appointment.slot.search.SlotSearch;
 public class SlotResourceProvider  implements IResourceProvider {
 
     @Autowired
-    SlotSearch slotSearch;
-    
+    private SlotSearch slotSearch;
+
     @Override
     public Class<Slot> getResourceType() {
         return Slot.class;
@@ -36,32 +36,37 @@ public class SlotResourceProvider  implements IResourceProvider {
     @Read()
     public Slot getSlotById(@IdParam IdDt slotId) {
         SlotDetail slotDetail = slotSearch.findSlotByID(slotId.getIdPartAsLong());
+
         if (slotDetail == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No slot details found for ID: " + slotId.getIdPart());
             throw new InternalErrorException("No slot details found for ID: " + slotId.getIdPart(), operationalOutcome);
         }
+
         return slotDetailToSlotResourceConverter(slotDetail);
     }
-    
+
     public List<Slot> getSlotsForScheduleId(String scheduleId, String startDateTime, String endDateTime) {
-        ArrayList<Slot> slots = new ArrayList();
-        List<SlotDetail> slotDetails = null;
-        slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), new Date(startDateTime), new Date(endDateTime));
+        ArrayList<Slot> slots = new ArrayList<>();
+        List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), new Date(startDateTime), new Date(endDateTime));
+
         if (slotDetails != null && slotDetails.size() > 0) {
-            for(SlotDetail slotDetail : slotDetails){
+            for (SlotDetail slotDetail : slotDetails) {
                 slots.add(slotDetailToSlotResourceConverter(slotDetail));
             }
         }
+
         return slots;
     }
-    
+
     public Slot slotDetailToSlotResourceConverter(SlotDetail slotDetail){
         Slot slot = new Slot();
         slot.setId(String.valueOf(slotDetail.getId()));
-        if(slotDetail.getLastUpdated() == null){
+
+        if (slotDetail.getLastUpdated() == null) {
             slotDetail.setLastUpdated(new Date());
         }
+
         slot.getMeta().setLastUpdated(slotDetail.getLastUpdated());
         slot.getMeta().setVersionId(String.valueOf(slotDetail.getLastUpdated().getTime()));
         slot.setIdentifier(Collections.singletonList(new IdentifierDt("http://fhir.nhs.net/Id/gpconnect-schedule-identifier", String.valueOf(slotDetail.getId()))));
@@ -72,10 +77,16 @@ public class SlotResourceProvider  implements IResourceProvider {
         slot.setSchedule(new ResourceReferenceDt("Schedule/"+slotDetail.getScheduleReference()));
         slot.setStartWithMillisPrecision(slotDetail.getStartDateTime());
         slot.setEndWithMillisPrecision(slotDetail.getEndDateTime());
-        switch(slotDetail.getFreeBusyType().toLowerCase()){
-            case "free" : slot.setFreeBusyType(SlotStatusEnum.FREE); break;
-            default : slot.setFreeBusyType(SlotStatusEnum.BUSY); break;
+
+        switch (slotDetail.getFreeBusyType().toLowerCase()) {
+            case "free":
+                slot.setFreeBusyType(SlotStatusEnum.FREE);
+                break;
+            default:
+                slot.setFreeBusyType(SlotStatusEnum.BUSY);
+                break;
         }
+
         return slot;
     }
 }

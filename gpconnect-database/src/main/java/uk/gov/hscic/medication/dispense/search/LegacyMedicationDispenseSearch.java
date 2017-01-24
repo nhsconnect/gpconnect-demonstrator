@@ -14,7 +14,7 @@ public class LegacyMedicationDispenseSearch  extends AbstractLegacyService imple
 
     @Autowired
     private MedicationDispenseRepository medicationDispenseRepository;
-    
+
     private final MedicationDispenseEntityToMedicationDispenseDetailTransformer transformer = new MedicationDispenseEntityToMedicationDispenseDetailTransformer();
 
     @Override
@@ -30,7 +30,7 @@ public class LegacyMedicationDispenseSearch  extends AbstractLegacyService imple
     @Override
     public List<MedicationDispenseDetail> findMedicationDispenseForPatient(Long patientId) {
         List<MedicationDispenseEntity> items = medicationDispenseRepository.findByPatientId(patientId);
-        ArrayList<MedicationDispenseDetail> medicationDispense = new ArrayList();
+        ArrayList<MedicationDispenseDetail> medicationDispense = new ArrayList<>();
         for(MedicationDispenseEntity entity : items){
             medicationDispense.add(transformer.transform(entity));
         }

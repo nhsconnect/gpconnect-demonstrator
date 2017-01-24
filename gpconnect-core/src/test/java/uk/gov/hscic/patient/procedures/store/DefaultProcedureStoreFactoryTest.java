@@ -15,15 +15,10 @@
  */
 package uk.gov.hscic.patient.procedures.store;
 
-import uk.gov.hscic.patient.procedures.store.ProcedureStore;
-import uk.gov.hscic.patient.procedures.store.ProcedureStoreFactory;
-import uk.gov.hscic.patient.procedures.store.DefaultProcedureStoreFactory;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;
 
-/**
- */
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultProcedureStoreFactoryTest extends AbstractRepositoryFactoryTest<ProcedureStoreFactory, ProcedureStore> {
 

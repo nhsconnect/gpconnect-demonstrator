@@ -15,18 +15,13 @@
  */
 package uk.gov.hscic.patient.referral.store;
 
-import uk.gov.hscic.patient.referral.store.NotConfiguredReferralStore;
 import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSourceType;
 
-/**
- */
 public class NotConfiguredReferralStoreTest {
-
     private NotConfiguredReferralStore referralStore;
 
     @Before

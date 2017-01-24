@@ -2,27 +2,13 @@ package uk.gov.hscic.patient.details.search;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import uk.gov.hscic.common.exception.DataNotFoundException;
 import uk.gov.hscic.medical.practicitioners.doctor.model.GPEntity;
 import uk.gov.hscic.patient.details.model.PatientEntity;
-import uk.gov.hscic.medication.search.MedicationSearch;
-import uk.gov.hscic.medication.search.MedicationSearchFactory;
-import uk.gov.hscic.patient.problems.search.ProblemSearchFactory;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
-import org.springframework.test.util.ReflectionTestUtils;
 
-/**
- */
-@RunWith(MockitoJUnitRunner.class)
 public class PatientEntityToDetailsTransformerTest {
-
     private static final String PATIENT_ID = "PATIENT";
 
     private PatientEntityToDetailsTransformer transformer;
@@ -51,11 +37,7 @@ public class PatientEntityToDetailsTransformerTest {
 
     @Test
     public void shouldReturnEmptyMedicationListWhenMedicationSearchThrowsException() {
-        final PatientEntity patientEntity = dummyPatientEntity();
-
-        final PatientDetails patientDetails = transformer.transform(patientEntity);
-
-        assertNotNull(patientDetails);
+        assertNotNull(transformer.transform(dummyPatientEntity()));
     }
 
     private PatientEntity dummyPatientEntity() {

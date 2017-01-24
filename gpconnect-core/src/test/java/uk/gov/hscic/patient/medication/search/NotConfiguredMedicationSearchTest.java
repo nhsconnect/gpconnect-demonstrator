@@ -15,18 +15,14 @@
  */
 package uk.gov.hscic.patient.medication.search;
 
-import uk.gov.hscic.medication.search.NotConfiguredMedicationSearch;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSourceType;
+import uk.gov.hscic.medication.search.NotConfiguredMedicationSearch;
 
-import static org.junit.Assert.assertEquals;
-
-/**
- */
 public class NotConfiguredMedicationSearchTest {
-
     private NotConfiguredMedicationSearch medicationSearch;
 
     @Before

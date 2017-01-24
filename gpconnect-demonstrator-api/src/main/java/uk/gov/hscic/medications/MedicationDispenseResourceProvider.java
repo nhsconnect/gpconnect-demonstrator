@@ -21,8 +21,8 @@ import uk.gov.hscic.medication.dispense.search.MedicationDispenseSearch;
 public class MedicationDispenseResourceProvider implements IResourceProvider {
 
     @Autowired
-    MedicationDispenseSearch medicationDispenseSearch;
-    
+    private MedicationDispenseSearch medicationDispenseSearch;
+
     @Override
     public Class<MedicationDispense> getResourceType() {
         return MedicationDispense.class;
@@ -30,30 +30,38 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
 
     @Search
     public List<MedicationDispense> getMedicationDispensesForPatientId(@RequiredParam(name = "patient") String patientId) {
-        
-        ArrayList<MedicationDispense> medicationDispenses = new ArrayList();
+        ArrayList<MedicationDispense> medicationDispenses = new ArrayList<>();
 
         List<MedicationDispenseDetail> medicationDispenseDetailList = medicationDispenseSearch.findMedicationDispenseForPatient(Long.parseLong(patientId));
-        
+
         if (medicationDispenseDetailList != null && medicationDispenseDetailList.size() > 0) {
-            
-            for(MedicationDispenseDetail medicationDispenseDetail : medicationDispenseDetailList){
+            for (MedicationDispenseDetail medicationDispenseDetail : medicationDispenseDetailList) {
                 MedicationDispense medicationDispense = new MedicationDispense();
                 medicationDispense.setId(String.valueOf(medicationDispenseDetail.getId()));
                 medicationDispense.getMeta().setLastUpdated(medicationDispenseDetail.getLastUpdated());
                 medicationDispense.getMeta().setVersionId(String.valueOf(medicationDispenseDetail.getLastUpdated().getTime()));
-                
-                switch(medicationDispenseDetail.getStatus().toLowerCase()){
-                    case "completed" : medicationDispense.setStatus(MedicationDispenseStatusEnum.COMPLETED); break;
-                    case "entered_in_error" : medicationDispense.setStatus(MedicationDispenseStatusEnum.ENTERED_IN_ERROR); break;
-                    case "in_progress" : medicationDispense.setStatus(MedicationDispenseStatusEnum.IN_PROGRESS); break;
-                    case "on_hold" : medicationDispense.setStatus(MedicationDispenseStatusEnum.ON_HOLD); break;
-                    case "stopped" : medicationDispense.setStatus(MedicationDispenseStatusEnum.STOPPED); break;
+
+                switch (medicationDispenseDetail.getStatus().toLowerCase()) {
+                    case "completed":
+                        medicationDispense.setStatus(MedicationDispenseStatusEnum.COMPLETED);
+                        break;
+                    case "entered_in_error":
+                        medicationDispense.setStatus(MedicationDispenseStatusEnum.ENTERED_IN_ERROR);
+                        break;
+                    case "in_progress":
+                        medicationDispense.setStatus(MedicationDispenseStatusEnum.IN_PROGRESS);
+                        break;
+                    case "on_hold":
+                        medicationDispense.setStatus(MedicationDispenseStatusEnum.ON_HOLD);
+                        break;
+                    case "stopped":
+                        medicationDispense.setStatus(MedicationDispenseStatusEnum.STOPPED);
+                        break;
                 }
-                
+
                 medicationDispense.setPatient(new ResourceReferenceDt("Patient/"+patientId));
                 medicationDispense.setAuthorizingPrescription(Collections.singletonList(new ResourceReferenceDt("MedicationOrder/"+medicationDispenseDetail.getMedicationOrderId())));
-                
+
                 Medication medication = new Medication();
                 CodingDt coding = new CodingDt();
                 coding.setSystem("http://snomed.info/sct");
@@ -62,12 +70,12 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
                 CodeableConceptDt codeableConcept = new CodeableConceptDt();
                 codeableConcept.setCoding(Collections.singletonList(coding));
                 medication.setCode(codeableConcept);
-                
+
                 medicationDispense.addDosageInstruction().setText(medicationDispenseDetail.getDosageText());
                 medicationDispenses.add(medicationDispense);
             }
         }
-        
+
         return medicationDispenses;
     }
 }

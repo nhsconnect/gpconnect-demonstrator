@@ -15,9 +15,9 @@ public class LegacyMedicationOrderSearch extends AbstractLegacyService implement
 
     @Autowired
     private MedicationOrderRepository medicationOrderRepository;
-    
+
     private final MedicationOrderEntityToMedicationOrderDetailsTransformer transformer = new MedicationOrderEntityToMedicationOrderDetailsTransformer();
-    
+
     @Override
     public MedicationOrderDetails findMedicationOrderByID(Long id) {
         final MedicationOrderEntity item = medicationOrderRepository.findOne(id);
@@ -27,15 +27,15 @@ public class LegacyMedicationOrderSearch extends AbstractLegacyService implement
             return transformer.transform(item);
         }
     }
-    
+
     @Override
     public List<MedicationOrderDetails> findMedicationOrdersForPatient(Long patientId){
         List<MedicationOrderEntity> items = medicationOrderRepository.findByPatientId(patientId);
-        ArrayList<MedicationOrderDetails> medicationOrders = new ArrayList();
+        ArrayList<MedicationOrderDetails> medicationOrders = new ArrayList<>();
         for(MedicationOrderEntity entity : items){
             medicationOrders.add(transformer.transform(entity));
         }
         return medicationOrders;
     }
-    
+
 }

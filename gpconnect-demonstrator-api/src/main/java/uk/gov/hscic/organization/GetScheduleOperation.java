@@ -1,10 +1,5 @@
 package uk.gov.hscic.organization;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -23,6 +18,9 @@ import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.appointments.SlotResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
@@ -36,33 +34,39 @@ import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 public class GetScheduleOperation {
 
 	@Autowired
-	LocationResourceProvider locationResourceProvider;
+	private LocationResourceProvider locationResourceProvider;
 
 	@Autowired
-	PractitionerResourceProvider practitionerResourceProvider;
+	private PractitionerResourceProvider practitionerResourceProvider;
 
 	@Autowired
-	SlotResourceProvider slotResourceProvider;
+	private SlotResourceProvider slotResourceProvider;
 
 	@Autowired
-	OrganizationResourceProvider organizationResourceProvider;
+	private OrganizationResourceProvider organizationResourceProvider;
 
 	@Autowired
-	ScheduleResourceProvider scheduleResourceProvider;
+	private ScheduleResourceProvider scheduleResourceProvider;
 
 	@SuppressWarnings("deprecation")
-	void populateBundle(Bundle bundle, OperationOutcome operationOutcome, IdDt orgId, String planningHorizonStart,
-			String planningHorizonEnd) {
+	void populateBundle(Bundle bundle, OperationOutcome operationOutcome, IdDt orgId, String planningHorizonStart, String planningHorizonEnd) {
 		// organisation
 		Organization organization = organizationResourceProvider.getOrganizationById(orgId);
+
 		if (organization == null) {
 			CodingDt errorCoding = new CodingDt()
 					.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
 					.setCode("REFERENCE_NOT_FOUND");
+
 			CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
 			errorCodableConcept.setText("Invalid Reference");
-			operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
+
+			operationOutcome
+                    .addIssue()
+                    .setSeverity(IssueSeverityEnum.ERROR)
+                    .setCode(IssueTypeEnum.NOT_FOUND)
 					.setDetails(errorCodableConcept);
+
 			throw new ResourceNotFoundException("organizationResource returning null");
 		}
 
@@ -73,12 +77,14 @@ public class GetScheduleOperation {
 
 		// location
 		String organizationSiteOdsCode = null;
+
 		for (IdentifierDt identifier : organization.getIdentifier()) {
 			if ("http://fhir.nhs.net/Id/ods-site-code".equalsIgnoreCase(identifier.getSystem())) {
 				organizationSiteOdsCode = identifier.getValue();
 				break;
 			}
 		}
+
 		if (organizationSiteOdsCode != null) {
 			List<Location> locations = locationResourceProvider.getByIdentifierCode(
 					new TokenParam("http://fhir.nhs.net/Id/ods-site-code", organizationSiteOdsCode));
@@ -90,6 +96,7 @@ public class GetScheduleOperation {
 			// schedules
 			List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(
 					locations.get(0).getId().getIdPart(), planningHorizonStart, planningHorizonEnd);
+
 			if (schedules.isEmpty() == false) {
 				for (Schedule schedule : schedules) {
 					Entry scheduleEntry = new Entry();
@@ -100,11 +107,12 @@ public class GetScheduleOperation {
 					// practitioners
 					List<ExtensionDt> practitionerExtensions = scheduleResourceProvider
 							.getPractitionerReferences(schedule);
+
 					if (practitionerExtensions.isEmpty() == false) {
 						for (ExtensionDt practionerExtension : practitionerExtensions) {
 							ResourceReferenceDt practitionerRef = (ResourceReferenceDt) practionerExtension.getValue();
-							Practitioner practitioner = practitionerResourceProvider
-									.getPractitionerById(practitionerRef.getReferenceElement());
+							Practitioner practitioner = practitionerResourceProvider.getPractitionerById(practitionerRef.getReferenceElement());
+
 							if (practitioner == null) {
 								CodingDt errorCoding = new CodingDt()
 										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
@@ -115,6 +123,7 @@ public class GetScheduleOperation {
 										.setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
 								throw new ResourceNotFoundException("Practitioner Reference returning null");
 							}
+
 							Entry practionerEntry = new Entry();
 							practionerEntry.setResource(practitioner);
 							practionerEntry.setFullUrl("Practitioner/" + practitioner.getId().getIdPart());
@@ -133,6 +142,7 @@ public class GetScheduleOperation {
 					// slots
 					List<Slot> slots = slotResourceProvider.getSlotsForScheduleId(schedule.getId().getIdPart(),
 							planningHorizonStart, planningHorizonEnd);
+
 					if (slots.isEmpty() == false) {
 						for (Slot slot : slots) {
 							if ("FREE".equalsIgnoreCase(slot.getFreeBusyType())) {
@@ -152,7 +162,6 @@ public class GetScheduleOperation {
 						operationOutcomeEntry.setResource(operationOutcome);
 						bundle.addEntry(operationOutcomeEntry);
 					}
-
 				}
 			} else {
 				String msg = String.format(
@@ -171,7 +180,5 @@ public class GetScheduleOperation {
 			operationOutcomeEntry.setResource(operationOutcome);
 			bundle.addEntry(operationOutcomeEntry);
 		}
-
 	}
-
 }

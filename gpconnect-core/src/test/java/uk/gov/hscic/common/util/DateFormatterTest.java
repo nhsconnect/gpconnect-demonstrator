@@ -1,66 +1,56 @@
 /*
- * Copyright 2015 Ripple OSI
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
+* Copyright 2015 Ripple OSI
+*
+*    Licensed under the Apache License, Version 2.0 (the "License");
+*    you may not use this file except in compliance with the License.
+*    You may obtain a copy of the License at
+*
+*        http://www.apache.org/licenses/LICENSE-2.0
+*
+*    Unless required by applicable law or agreed to in writing, software
+*    distributed under the License is distributed on an "AS IS" BASIS,
+*    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*    See the License for the specific language governing permissions and
+*    limitations under the License.
+*/
 package uk.gov.hscic.common.util;
 
 import java.util.Date;
-
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import org.junit.Test;
 
-/**
- */
 public class DateFormatterTest {
 
     @Test
     public void shouldReturnNullForNull() {
-        final Date date = DateFormatter.toDate(null);
-        assertNull(date);
+        assertNull(DateFormatter.toDate(null));
     }
 
     @Test
     public void shouldReturnNullForBogusDate() {
-        final Date date = DateFormatter.toDate("Bogus");
-        assertNull(date);
+        assertNull(DateFormatter.toDate("Bogus"));
     }
 
     @Test
     public void shouldParseISO8601DateWithNoTimeZone() {
-        final Date date = DateFormatter.toDate("2015-08-24T13:06:38.012");
-        assertNotNull(date);
+        assertNotNull(DateFormatter.toDate("2015-08-24T13:06:38.012"));
     }
 
     @Test
     public void shouldParseISO8601DateWithTwoDigitTimeZone() {
-        final Date date = DateFormatter.toDate("2015-08-24T13:06:38.012+02");
-        assertNotNull(date);
+        assertNotNull(DateFormatter.toDate("2015-08-24T13:06:38.012+02"));
     }
 
     @Test
     public void shouldParseISO8601DateWithFourDigitTimeZone() {
-        final Date date = DateFormatter.toDate("2015-08-24T13:06:38.012+0200");
-        assertNotNull(date);
+        assertNotNull(DateFormatter.toDate("2015-08-24T13:06:38.012+0200"));
     }
 
     @Test
     public void shouldParseISO8601DateWithColonSeparatedFourDigitTimeZone() {
-        final Date date = DateFormatter.toDate("2015-08-24T13:06:38.012+02:00");
-        assertNotNull(date);
+        assertNotNull(DateFormatter.toDate("2015-08-24T13:06:38.012+02:00"));
     }
 
     @Test
@@ -72,8 +62,7 @@ public class DateFormatterTest {
 
     @Test
     public void shouldReturnNullForNullWhenParsingDateOnly() {
-        final Date date = DateFormatter.toDateOnly(null);
-        assertNull(date);
+        assertNull(DateFormatter.toDateOnly(null));
     }
 
     @Test
@@ -85,8 +74,7 @@ public class DateFormatterTest {
 
     @Test
     public void shouldReturnNullForNullWhenParsingTimeOnly() {
-        final Date date = DateFormatter.toTimeOnly(null);
-        assertNull(date);
+        assertNull(DateFormatter.toTimeOnly(null));
     }
 
     @Test
@@ -100,8 +88,7 @@ public class DateFormatterTest {
 
     @Test
     public void shouldReturnNullForNullWhenConvertingDateToString() {
-        final String parsedDate = DateFormatter.toString(null);
-        assertNull(parsedDate);
+        assertNull(DateFormatter.toString(null));
     }
 
     @Test
@@ -115,14 +102,13 @@ public class DateFormatterTest {
 
     @Test
     public void shouldReturnNullForNullWhenConvertingDateToJSONDateString() {
-        final String parsedDate = DateFormatter.toJSONDateString(null);
-        assertNull(parsedDate);
+        assertNull(DateFormatter.toJSONDateString(null));
     }
 
     @Test
     public void shouldReturnCombinedDateAndTimeString() {
         final Date sourceDate = DateFormatter.toDateOnly("2015-08-24T13:06:38.012");
-        final Date sourceTime= DateFormatter.toTimeOnly("2015-08-23T15:15:30.015");
+        final Date sourceTime = DateFormatter.toTimeOnly("2015-08-23T15:15:30.015");
         final String parsedDate = DateFormatter.combineDateTime(sourceDate, sourceTime);
 
         assertNotNull(parsedDate);
@@ -131,7 +117,6 @@ public class DateFormatterTest {
 
     @Test
     public void shouldReturnNullForNullWhenCombiningDateAndTimeString() {
-        final String parsedDate = DateFormatter.combineDateTime(null, null);
-        assertNull(parsedDate);
+        assertNull(DateFormatter.combineDateTime(null, null));
     }
 }

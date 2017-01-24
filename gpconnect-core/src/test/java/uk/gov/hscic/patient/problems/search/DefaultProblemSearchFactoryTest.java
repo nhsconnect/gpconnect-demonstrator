@@ -19,8 +19,6 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;
 
-/**
- */
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultProblemSearchFactoryTest extends AbstractRepositoryFactoryTest<ProblemSearchFactory, ProblemSearch> {
 

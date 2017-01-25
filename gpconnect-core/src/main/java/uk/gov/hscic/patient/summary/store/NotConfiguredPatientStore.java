@@ -15,14 +15,10 @@
  */
 package uk.gov.hscic.patient.summary.store;
 
-import org.apache.camel.Body;
-
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
 
-/**
- */
 public class NotConfiguredPatientStore implements PatientStore {
 
     @Override
@@ -36,7 +32,7 @@ public class NotConfiguredPatientStore implements PatientStore {
     }
 
     @Override
-    public void create(@Body PatientDetails patientDetails) {
+    public void create(PatientDetails patientDetails) {
         throw ConfigurationException.unimplementedTransaction(PatientStore.class);
     }
 }

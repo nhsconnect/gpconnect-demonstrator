@@ -42,6 +42,12 @@ public final class SignedHandler extends AbstractHandlerMethodAdapter {
     public ModelAndView handleInternal(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
         try {
             if (request.isSecure() && !HttpMethod.OPTIONS.name().equals(request.getMethod())) {
+                String cipherSuite = (String) request.getAttribute("javax.servlet.request.cipher_suite");
+
+                System.out.println("RRRRRRRRRRRRRRRRRRRR");
+                System.out.println(cipherSuite);
+                System.out.println("RRRRRRRRRRRRRRRRRRRR");
+
                 X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
 
                 if (null == certs) {

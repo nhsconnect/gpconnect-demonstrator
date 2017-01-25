@@ -19,9 +19,12 @@ import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.common.util.NhsCodeValidator;
 
@@ -55,8 +58,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                 String identifierValue = ((JSONObject) requestIdentifiersArray.get(0)).getString("value");
 
                 String requestOperation = theRequestDetails.getRequestPath();
-                String contentTypeAllCall = theRequestDetails.getHeader("Content-Type");
-                String acceptHeaderAllCall = theRequestDetails.getHeader("Accept");
+                String contentTypeAllCall = theRequestDetails.getHeader(HttpHeaders.CONTENT_TYPE);
+                String acceptHeaderAllCall = theRequestDetails.getHeader(HttpHeaders.ACCEPT);
 
                 // Different values are being passed, this section must be
                 // refactored
@@ -65,7 +68,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                             || contentTypeAllCall.equals("application/xml+fhir")
                             || contentTypeAllCall.equals("application/json+fhir;charset=utf-8")
                             || contentTypeAllCall.equals("application/xml+fhir;charset=utf-8")
-                            || contentTypeAllCall.equals("application/json;charset=UTF-8"))
+                            || contentTypeAllCall.equalsIgnoreCase(MediaType.APPLICATION_JSON_UTF8_VALUE))
                             && (acceptHeaderAllCall.equals("application/xml+fhir")
                             || acceptHeaderAllCall.equals("application/json+fhir")
                             || acceptHeaderAllCall.equals("application/json+fhir;charset=utf-8")
@@ -84,14 +87,12 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
                     if (contentType != null && (contentType.equals("application/json+fhir;charset=utf-8")
                             || contentType.equals("application/xml+fhir;charset=utf-8")
-                            || contentType.equals("application/json;charset=UTF-8")
+                            || contentType.equalsIgnoreCase(MediaType.APPLICATION_JSON_UTF8_VALUE)
                             && (acceptHeader.equals("application/xml+fhir;charset=utf-8")
                             || acceptHeader.equals("application/json+fhir;charset=utf-8")
                             || acceptHeader.equals("application/json, text/plain, */*")))) {
                     } else {
-                        int theStatusCode = 415;
-                        String theMessage = "Unsupported media type";
-                        throw new UnclassifiedServerFailureException(theStatusCode, theMessage);
+                        throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported media type");
                     }
 
                     if (!requestScopeType.equals("Patient")) {

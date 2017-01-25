@@ -15,16 +15,9 @@
  */
 package uk.gov.hscic.patient.summary.store;
 
-import org.apache.camel.Body;
-import org.apache.camel.InOnly;
-
 import uk.gov.hscic.common.repo.Repository;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
 
-/**
- */
-@InOnly
 public interface PatientStore extends Repository {
-
-    void create(@Body PatientDetails patientDetails);
+    void create(PatientDetails patientDetails);
 }

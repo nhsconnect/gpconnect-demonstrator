@@ -184,7 +184,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             put("urn:nhs:names:services:gpconnect:fhir:rest:read:location", "/fhir/Location/" + id);
             put("urn:nhs:names:services:gpconnect:fhir:rest:search:location", "/fhir/Location");
             put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord", "/fhir/Patient/$gpc.getcarerecord");
-            put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule", "/fhir/Organization/$gpc.getschdule");
+            put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule", "/fhir/Organization/1/$gpc.getschedule");
             put("urn:nhs:names:services:gpconnect:fhir:rest:read:appointment", "/fhir/Appointment/" + id);
             put("urn:nhs:names:services:gpconnect:fhir:rest:create:appointment", "/fhir/Appointment");
             put("urn:nhs:names:services:gpconnect:fhir:rest:update:appointment", "/fhir/Appointment/" + id);

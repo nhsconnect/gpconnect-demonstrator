@@ -202,6 +202,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                 jwtParseResourcesValidation(claimsJsonObject);
                 jwtRequestedScopeValidation(claimsJsonObject);
                 jwtAudValidation(claimsJsonObject);
+                jwtISSValidation(claimsJsonObject);
 
                 // Checks the JWT resources has the correct propertys
                 boolean JWTHasCorrectJsonPropertys = true;
@@ -219,6 +220,15 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         }
 
         return new RuleBuilder().allowAll().build();
+    }
+
+    private void jwtISSValidation(JSONObject claimsJsonObject) {
+       try{
+           claimsJsonObject.getString("iss");
+       }catch (Exception e) {
+           throw new InvalidRequestException("Bad Request Exception");
+    }
+        
     }
 
     private void jwtAudValidation(JSONObject claimsJsonObject) {

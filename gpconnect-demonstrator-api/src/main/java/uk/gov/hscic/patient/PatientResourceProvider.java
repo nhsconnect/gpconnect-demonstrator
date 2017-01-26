@@ -256,7 +256,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     throw new InvalidRequestException("System Invalid ", operationOutcomes);
                 }
 
-                if (nhsNumberSystemCheck != null && nhsNumberSystemCheck.isEmpty() == true) {
+                if ((nhsNumberSystemCheck != null && nhsNumberSystemCheck.isEmpty() == true)) {
                     OperationOutcome operationOutcomes = new OperationOutcome();
                     CodingDt errorCoding = new CodingDt()
                             .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
@@ -265,6 +265,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     errorCodableConcept.setText("Patient Record Not Found");
                     operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
                             .setDetails(errorCodableConcept);
+                    operationOutcomes.getMeta()
+                            .addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1");
 
                     throw new InvalidRequestException("System Invalid ", operationOutcomes);
                 }

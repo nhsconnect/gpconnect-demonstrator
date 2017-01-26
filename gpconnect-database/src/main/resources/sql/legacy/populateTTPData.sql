@@ -29,22 +29,22 @@ INSERT INTO gpconnect.encounters
   (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (
   9476719931, '2014-12-10 12:17:00',
-  "<table><h2>Encounters</h2><thead><tr><th>10 Dec 2014 - 12:17</th><th>Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)</th>				</tr></thead><tbody><tr><td></td><td>History: Family history of diabetes mellitus type II.<br />Came to nurse last week with Polyuria Very worried that he is diabetic - confirmed on blood tests. Very amenable to change of lifestyle; no other symptoms at present.<br />Examination: O/E - Diastolic BP reading 98 mmHg. , O/E - Systolic BP reading 152 mmHg.<br />Diagnosis: Type II diabetes mellitus.<br />Procedure: Wants to avoid tabs for the moment - watch TChol as well as HbA1c. Review 1/12.<br />Metformin 500mg tablets - 168 tablets - take one three times a day - Patient has read up on metformin and is keen to start.</td></tr></tbody></table>",
+  "<table><h2>Encounters</h2><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>10 Dec 2014 - 12:17</th><th>Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)</th></tr><tr><td></td><td>History: Family history of diabetes mellitus type II.<br />Came to nurse last week with Polyuria Very worried that he is diabetic - confirmed on blood tests. Very amenable to change of lifestyle; no other symptoms at present.<br />Examination: O/E - Diastolic BP reading 98 mmHg. , O/E - Systolic BP reading 152 mmHg.<br />Diagnosis: Type II diabetes mellitus.<br />Procedure: Wants to avoid tabs for the moment - watch TChol as well as HbA1c. Review 1/12.<br />Metformin 500mg tablets - 168 tablets - take one three times a day - Patient has read up on metformin and is keen to start.</td></tr></tbody></table>",
   "TPP", '2016-07-25 12:00:00'
 ),
 (
   9476719931, '2015-01-01 15:47:00',
-  "<table><thead><tr><th>01 Jan 2015 - 15:47</th><th>Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)</th>				</tr></thead><tbody><tr><td></td><td>Type II diabetic dietary review.<br />Haemoglobin A1c level - IFCC standardised 20.5 mmol/mol.<br />Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 10ml vials - 5 vials - use as directed.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>01 Jan 2015 - 15:47</th><th>Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)</th>				</tr><tr><td></td><td>Type II diabetic dietary review.<br />Haemoglobin A1c level - IFCC standardised 20.5 mmol/mol.<br />Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 10ml vials - 5 vials - use as directed.</td></tr></tbody></table>",
   "TPP", '2016-07-25 12:00:00'
 ),
 (
   9476719931, '2015-07-04 12:10:00',
-  "<table><thead><tr><th>04 Jul 2015 - 12:10</th><th>Miss Tanya Turnpike (Practice Nurse) - Dr Johnson and Partners (J12345)</th></tr></thead><tbody><tr><td></td><td>Contact method: Telephone<br />Care plan created: Diabetes management plan.<br />Haemoglobin A1c level - IFCC standardised 23.5 mmol/mol.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>04 Jul 2015 - 12:10</th><th>Miss Tanya Turnpike (Practice Nurse) - Dr Johnson and Partners (J12345)</th></tr><tr><td></td><td>Contact method: Telephone<br />Care plan created: Diabetes management plan.<br />Haemoglobin A1c level - IFCC standardised 23.5 mmol/mol.</td></tr></tbody></table>",
   "TPP", '2016-07-25 12:00:00'
 ),
 (
   9476719931, '2016-01-08 09:22:00',
-  "<table><thead><tr><th>08 Jan 2016 - 09:22</th><th>Cynthia Carlson (Practice Nurse) - Dandelion Medical Practice (D12345)</th> </tr></thead><tbody><tr><td></td><td>Peanut allergy<br />Sensitivity: Penicillin<br />Haemoglobin A1c level - IFCC standardised 25.5 mmol/mol.<br />Here is some free text that applies to the whole encounter.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>08 Jan 2016 - 09:22</th><th>Cynthia Carlson (Practice Nurse) - Dandelion Medical Practice (D12345)</th> </tr><tr><td></td><td>Peanut allergy<br />Sensitivity: Penicillin<br />Haemoglobin A1c level - IFCC standardised 25.5 mmol/mol.<br />Here is some free text that applies to the whole encounter.</td></tr></tbody></table>",
   "TPP", '2016-07-25 12:00:00'
 );
 
@@ -87,7 +87,7 @@ INSERT INTO gpconnect.problems
   (id, html, provider, lastUpdated)
 VALUES (
   9476719931,
-  "<div><h2>Active Problems and Issues</h2><table><thead><th>Start Date</th><th>Entry</th><th>Significance</th><th>Details</th></thead><tbody><tr><td>23 Feb 2005</td><td>Type II diabetes mellitus</td><td>Major</td><td /></tr><tr><td>10 Apr 2000</td><td>Low back pain</td><td>Minor</td><td /></tr><tr><td>13 Jan 1999</td><td>Asthma</td><td>Major</td><td /></tr></tbody></table><h2>Inactive Problems and Issues</h2><table><tbody><tr><th>Start Date</th><th>End Date</th><th>Entry</th><th>Significance</th><th>Details</th></tr><tr><td>09 Apr 2008</td><td>15 Jun 2012</td><td>Disorder of heart</td><td>Major</td><td /></tr><tr><td>10 Apr 2000</td><td>15 Jun 2005</td><td>Low back pain</td><td>Minor</td><td /></tr></tbody></table></div>",
+  "<div><h2>Active Problems and Issues</h2><table><thead><th>Start Date</th><th>Entry</th><th>Significance</th><th>Details</th></thead><tbody><tr><td>23 Feb 2005</td><td>Type II diabetes mellitus</td><td>Major</td><td /></tr><tr><td>10 Apr 2000</td><td>Low back pain</td><td>Minor</td><td /></tr><tr><td>13 Jan 1999</td><td>Asthma</td><td>Major</td><td /></tr></tbody></table><h2>Inactive Problems and Issues</h2><table><thead><tr><th>Start Date</th><th>End Date</th><th>Entry</th><th>Significance</th><th>Details</th></tr></thead><tbody><tr><td>09 Apr 2008</td><td>15 Jun 2012</td><td>Disorder of heart</td><td>Major</td><td /></tr><tr><td>10 Apr 2000</td><td>15 Jun 2005</td><td>Low back pain</td><td>Minor</td><td /></tr></tbody></table></div>",
   "TPP",
   '2016-07-25 12:00:00'
 );

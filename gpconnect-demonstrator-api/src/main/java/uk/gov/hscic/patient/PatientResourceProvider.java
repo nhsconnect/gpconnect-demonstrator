@@ -3,6 +3,7 @@ package uk.gov.hscic.patient;
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.IDatatype;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
+import ca.uhn.fhir.model.base.resource.ResourceMetadataMap;
 import ca.uhn.fhir.model.dstu2.composite.AddressDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -222,7 +223,18 @@ public class PatientResourceProvider implements IResourceProvider {
         for (Parameter param : params.getParameter()) {
             if (param.getName().equals("patientNHSNumber") == false && param.getName().equals("recordSection") == false
                     && param.getName().equals("timePeriod") == false) {
-                throw new UnprocessableEntityException("Parameters are incorrect");
+                OperationOutcome operationOutcomes = new OperationOutcome();
+                CodingDt errorCoding = new CodingDt()
+                        .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+                        .setCode("INVALID_NHS_NUMBER");
+                CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+                errorCodableConcept.setText("Patient Record Not Found");
+                operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
+                        .setDetails(errorCodableConcept);
+                operationOutcomes.getMeta()
+                        .addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1");
+
+                throw new UnprocessableEntityException("Parameters are incorrect", operationOutcomes);
             }
 
             IDatatype value = param.getValue();
@@ -274,6 +286,26 @@ public class PatientResourceProvider implements IResourceProvider {
                 List<CodingDt> coading = ((CodeableConceptDt) value).getCoding();
                 String systemCheck = coading.get(0).getSystem();
 
+                String sectionName = coading.get(0).getCode();
+                String testSectionName = sectionName;
+
+                if (sectionName != testSectionName.toUpperCase()) {
+
+                    OperationOutcome operationOutcomes = new OperationOutcome();
+                    CodingDt errorCoding = new CodingDt()
+                            .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+                            .setCode("INVALID_PARAMETER");
+                    CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+                    errorCodableConcept.setText("Invalid Section Code");
+                    operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
+                            .setDetails(errorCodableConcept);
+                    operationOutcomes.getMeta()
+                            .addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1");
+
+                    throw new UnprocessableEntityException("Section Case Invalid: ", operationOutcomes);
+
+                }
+
                 if (coading.get(0).getCode().isEmpty() == true || systemCheck.isEmpty() == true) {
                     OperationOutcome operationOutcomes = new OperationOutcome();
                     CodingDt errorCoding = new CodingDt()
@@ -306,9 +338,19 @@ public class PatientResourceProvider implements IResourceProvider {
                     throw new InvalidRequestException("Bad Request Exception");
                 }
             } else if (value instanceof PeriodDt) {
+
+                String sectionCheckValidTimeNotSet = sectionsParamList.get(0);
+
                 fromDate = ((PeriodDt) value).getStart();
                 Calendar toCalendar = Calendar.getInstance();
                 toDate = ((PeriodDt) value).getEnd();
+
+                if ((fromDate != null && toDate != null) && (sectionCheckValidTimeNotSet.equals("ALL")
+                        || sectionCheckValidTimeNotSet.equals("IMM") || sectionCheckValidTimeNotSet.equals("MED")
+                        || sectionCheckValidTimeNotSet.equals("OBS") || sectionCheckValidTimeNotSet.equals("PRB"))) {
+                    throw new InvalidRequestException(
+                            "Bad Request Exception, Time not allowed to be set for the sections");
+                }
 
                 if ((fromDate != null && toDate != null) && fromDate.after(toDate)) {
                     OperationOutcome operationOutcomes = new OperationOutcome();
@@ -319,12 +361,13 @@ public class PatientResourceProvider implements IResourceProvider {
                     errorCodableConcept.setText("Patient Record Not Found");
                     operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
                             .setDetails(errorCodableConcept);
+                    operationOutcomes.getMeta()
+                            .addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1");
 
                     throw new UnprocessableEntityException("Dates are invalid: ", operationOutcomes);
                 }
 
                 if (toDate != null) {
-                    System.out.println("HAS A DATE RANGE");
                     toCalendar.setTime(toDate);
                     if (((PeriodDt) value).getEndElement().getPrecision() == TemporalPrecisionEnum.YEAR) {
                         toCalendar.add(Calendar.YEAR, 1);
@@ -344,7 +387,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         // Build Bundle
         Bundle bundle = new Bundle();
-        bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
+        bundle.setType(BundleTypeEnum.DOCUMENT);
 
         for (int i = 0; i < sectionsParamList.size(); i++) {
             if (sectionsParamList.get(i) == null || sectionsParamList.get(i).length() != 3) {
@@ -391,8 +434,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                 operationOutcome);
                     }
                     // Build the Care Record Composition
-
                     Entry careRecordEntry = new Entry();
+
                     Composition careRecordComposition = new Composition();
                     careRecordComposition.setDate(new DateTimeDt(Calendar.getInstance().getTime()));
 
@@ -415,7 +458,6 @@ public class PatientResourceProvider implements IResourceProvider {
                     // Build requested sections
                     if (sectionsParamList.size() > 0) {
                         ArrayList<Section> sectionsList = new ArrayList<>();
-
                         for (String sectionName : sectionsParamList) {
                             String testSectionName = sectionName;
                             if (sectionName != testSectionName.toUpperCase()) {
@@ -433,9 +475,9 @@ public class PatientResourceProvider implements IResourceProvider {
                             }
 
                             Section section = new Section();
-
                             switch (sectionName) {
                             case "SUM":
+
                                 if (nhsNumber.get(0).equals(null)) {
                                     throw new AssertionError();
                                 }
@@ -454,7 +496,9 @@ public class PatientResourceProvider implements IResourceProvider {
                                     narrative.setDivAsString(patientSummaryList.get(0).getHtml());
                                     section.setTitle("Summary").setCode(summaryCodableConcept).setText(narrative);
                                     sectionsList.add(section);
+
                                 } else {
+
                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
                                             .setDetails("No data available for the requested section: Summary");
                                 }
@@ -524,6 +568,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         NarrativeDt narrative = new NarrativeDt();
                                         narrative.setStatus(NarrativeStatusEnum.GENERATED);
                                         narrative.setDivAsString(allergyList.get(0).getHtml());
+
                                         section.setTitle("Allergies and Sensitivities").setCode(allergyCodableConcept)
                                                 .setText(narrative);
                                         sectionsList.add(section);
@@ -819,6 +864,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "ADM":
+
                                 List<AdminItemListHTML> adminItemList = adminItemSearch
                                         .findAllAdminItemHTMLTables(nhsNumber.get(0));
 
@@ -858,6 +904,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     }
 
                     careRecordEntry.setResource(careRecordComposition);
+
                     bundle.addEntry(careRecordEntry);
 
                     for (Entry e : medicationsToBundle) {
@@ -888,6 +935,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                             Entry practitionerEntry = new Entry().setResource(practitioner)
                                     .setFullUrl(careProviderPractitionerList.get(0).getReference().getValue());
+
                             bundle.addEntry(practitionerEntry);
 
                             Entry organizationEntry = new Entry();
@@ -927,6 +975,8 @@ public class PatientResourceProvider implements IResourceProvider {
         if (operationOutcome.getIssue().size() > 0) {
             Entry operationOutcomeEntry = new Entry();
             operationOutcomeEntry.setResource(operationOutcome);
+            Entry hi = new Entry();
+            bundle.addEntry(hi);
             bundle.addEntry(operationOutcomeEntry);
         }
 
@@ -1010,7 +1060,6 @@ public class PatientResourceProvider implements IResourceProvider {
         Bundle bundle = new Bundle();
         bundle.setType(BundleTypeEnum.TRANSACTION_RESPONSE);
         bundle.addEntry().setResource(registeredPatient);
-
         return bundle;
     }
 

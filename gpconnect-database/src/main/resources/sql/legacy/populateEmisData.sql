@@ -19,72 +19,72 @@ INSERT INTO gpconnect.encounters
   (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (
  9476719958, '2016-10-03 12:17:00',
-  "<table><h2>Encounters</h2><thead><tr><th>03 Oct 2016</th><th>Emis Test - EMISWebCR1 50002</th></tr></thead><tbody><tr><td/><td>Comment note : - This is confidential.</td></tr></tbody></table>",
+  "<table><h2>Encounters</h2><thead></thead><tbody><tr><th>03 Oct 2016</th><th>Emis Test - EMISWebCR1 50002</th></tr><tr><td/><td>Comment note : - This is confidential.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2016-10-03 15:47:00',
-  "<table><thead><tr><th>03 Oct 2016</th><th>Emis Test - EMISWebCR1 50002</th></tr></thead><tbody><tr><td/><td>Referral : .</td></tr></tbody></table>",
+  "<table><thead><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>03 Oct 2016</th><th>Emis Test - EMISWebCR1 50002</th></tr><tr><td/><td>Referral : .</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2016-10-03 12:10:00',
-  "<table><thead><tr><th>03 Oct 2016</th><th>Emis Test - EMISWebCR1 50002</th></tr></thead><tbody><tr><td/><td>Clinical document : This is confidential - test.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>03 Oct 2016</th><th>Emis Test - EMISWebCR1 50002</th></tr><tr><td/><td>Clinical document : This is confidential - test.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2003-05-26 09:22:00',
-  "<table><thead><tr><th>26 May 2003</th><th>Brian Harding - EMIS PCS Test Practice 1</th></tr></thead><tbody><tr><td/><td>Result : Full blood count - FBC - Normal - No Action.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>26 May 2003</th><th>Brian Harding - EMIS PCS Test Practice 1</th></tr><tr><td/><td>Result : Full blood count - FBC - Normal - No Action.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2003-05-26 09:22:00',
-  "<table><thead><tr><th>26 May 2003</th><th>Brian Harding - EMIS PCS Test Practice 1</th></tr></thead><tbody><tr><td/><td>Result : Blood glucose level - glucose 6.3 ? fasting, repeat fasting blood glucose. Tumour marker levels - Normal - No Action. Thyroid function test - Normal - No Action. GFR calculated abbreviated MDRD - Normal - No Action. (Non Coded Event - Lipid Profile ) - chol 6.6. Liver function test - Normal - No Action. Renal profile - Normal - No Action.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>26 May 2003</th><th>Brian Harding - EMIS PCS Test Practice 1</th></tr><tr><td/><td>Result : Blood glucose level - glucose 6.3 ? fasting, repeat fasting blood glucose. Tumour marker levels - Normal - No Action. Thyroid function test - Normal - No Action. GFR calculated abbreviated MDRD - Normal - No Action. (Non Coded Event - Lipid Profile ) - chol 6.6. Liver function test - Normal - No Action. Renal profile - Normal - No Action.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2003-05-26 09:22:00',
-  "<table><thead><tr><th>26 May 2003</th><th>Brian Harding - EMIS PCS Test Practice 1</th></tr></thead><tbody><tr><td/><td>Result : (Non Coded Event - anti - HBs ) - Normal - No Action.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>26 May 2003</th><th>Brian Harding - EMIS PCS Test Practice 1</th></tr><tr><td/><td>Result : (Non Coded Event - anti - HBs ) - Normal - No Action.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2002-06-12 09:22:00',
-  "<table><thead><tr><th>12 Jun 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr></thead><tbody><tr><td/><td>Result : Microbiology - Seen and dealt with.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>12 Jun 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr><tr><td/><td>Result : Microbiology - Seen and dealt with.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2002-06-11 09:22:00',
-  "<table><thead><tr><th>11 Jun 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr></thead><tbody><tr><td/><td>Result : Plasma glucose level - Normal - No Action. Biochemical test - Normal - No Action. Thyroid function test - Normal - No Action. Cardiac enzymes - Normal - No Action. GFR calculated abbreviated MDRD - Normal - No Action. (Non Coded Event - Lipid Profile ) - Just out of normal range - Ok. Liver function test - Normal - No Action. (Non Coded Event - Renal Profile ) - Normal - No Action.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>11 Jun 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr><tr><td/><td>Result : Plasma glucose level - Normal - No Action. Biochemical test - Normal - No Action. Thyroid function test - Normal - No Action. Cardiac enzymes - Normal - No Action. GFR calculated abbreviated MDRD - Normal - No Action. (Non Coded Event - Lipid Profile ) - Just out of normal range - Ok. Liver function test - Normal - No Action. (Non Coded Event - Renal Profile ) - Normal - No Action.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2002-06-11 09:22:00',
-  "<table><thead><tr><th>11 Jun 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr></thead><tbody><tr><td/><td>Result : Full blood count - FBC - Normal - No Action.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>11 Jun 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr><tr><td/><td>Result : Full blood count - FBC - Normal - No Action.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2002-06-27 09:22:00',
-  "<table><thead><tr><th>27 May 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr></thead><tbody><tr><td/><td>Result : Microbiology - Normal - No Action.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>27 May 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr><tr><td/><td>Result : Microbiology - Normal - No Action.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2002-06-25 09:22:00',
-  "<table><thead><tr><th>25 May 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr></thead><tbody><tr><td/><td>Result : (Non Coded Event - REJECTED BIOCHEMISTRY ) - Normal - No Action.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>25 May 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr><tr><td/><td>Result : (Non Coded Event - REJECTED BIOCHEMISTRY ) - Normal - No Action.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2002-05-14 09:22:00',
-  "<table><thead><tr><th>14 May 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr></thead><tbody><tr><td/><td>Result : Full blood count - FBC - Just out of normal range - Ok.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>14 May 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr><tr><td/><td>Result : Full blood count - FBC - Just out of normal range - Ok.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2002-05-14 09:22:00',
-  "<table><thead><tr><th>14 May 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr></thead><tbody><tr><td/><td>Result : (Non Coded Event - REJECTED BIOCHEMISTRY) - Normal - No Action.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>14 May 2002</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr><tr><td/><td>Result : (Non Coded Event - REJECTED BIOCHEMISTRY) - Normal - No Action.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (
  9476719958, '2000-06-13 09:22:00',
-  "<table><thead><tr><th>13 Jun 2000</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr></thead><tbody><tr><td/><td>Problems : - Generalised non-specific abdominal tenderness.<br/>Examination (heading) : O/E Blood Pressure Reading.<br/>Social history : Never smoked tobacco.</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>13 Jun 2000</th><th>Neil Burgess - EMIS PCS Test Practice 1</th></tr><tr><td/><td>Problems : - Generalised non-specific abdominal tenderness.<br/>Examination (heading) : O/E Blood Pressure Reading.<br/>Social history : Never smoked tobacco.</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 );
 

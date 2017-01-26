@@ -76,7 +76,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
     @Operation(name = "$gpc.getschedule")
     public Bundle getSchedule(@IdParam IdDt organizationId, @ResourceParam Parameters params) {
         Bundle bundle = new Bundle();
-        bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
+        bundle.setType(BundleTypeEnum.DOCUMENT);
         OperationOutcome operationOutcome = new OperationOutcome();
 
         // params

@@ -16,15 +16,11 @@
 package uk.gov.hscic.patient.summary.search;
 
 import java.util.List;
-
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
-import uk.gov.hscic.patient.summary.model.PatientQueryParams;
 import uk.gov.hscic.patient.summary.model.PatientSummary;
 
-/**
- */
 public class NotConfiguredPatientSearch implements PatientSearch {
 
     @Override
@@ -49,11 +45,6 @@ public class NotConfiguredPatientSearch implements PatientSearch {
 
     @Override
     public PatientSummary findPatientSummary(final String patientId) {
-        throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
-    }
-
-    @Override
-    public List<PatientSummary> findPatientsByQueryObject(final PatientQueryParams patientQueryParams) {
         throw ConfigurationException.unimplementedTransaction(PatientSearch.class);
     }
 

@@ -16,7 +16,7 @@
 package uk.gov.hscic.patient.procedures.search;
 
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hscic.common.repo.AbstractRepositoryFactoryTest;
 
 @RunWith(MockitoJUnitRunner.class)

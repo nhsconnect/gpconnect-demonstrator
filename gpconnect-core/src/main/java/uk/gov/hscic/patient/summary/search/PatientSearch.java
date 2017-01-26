@@ -19,20 +19,11 @@ import java.util.List;
 
 import uk.gov.hscic.common.repo.Repository;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
-import uk.gov.hscic.patient.summary.model.PatientQueryParams;
 import uk.gov.hscic.patient.summary.model.PatientSummary;
 
-/**
- */
 public interface PatientSearch extends Repository {
-
     List<PatientSummary> findAllPatients();
-
     PatientDetails findPatient(String patientId);
-    
     PatientDetails findPatientByInternalID(String patientId);
-
     PatientSummary findPatientSummary(String patientId);
-
-    List<PatientSummary> findPatientsByQueryObject(PatientQueryParams patientQueryParams);
 }

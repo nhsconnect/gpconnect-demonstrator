@@ -48,9 +48,4 @@ public class NotConfiguredPatientSearchTest {
     public void shouldThrowExceptionWhenTryingToFindAPatientSummary() {
         patientSearch.findPatientSummary(null);
     }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldThrowExceptionWhenTryingToFindPatientsByQueryObject() {
-        patientSearch.findPatientsByQueryObject(null);
-    }
 }

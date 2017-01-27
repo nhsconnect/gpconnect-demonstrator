@@ -55,6 +55,7 @@ public class WebTokenValidator {
         assertNotNull(webToken.getRequestingPractitioner());
         assertNotNull(webToken.getRequestingPractitioner().getId());
         assertNotNull(webToken.getRequestingPractitioner().getResourceType());
+        assertNotNull(webToken.getRequestingPractitioner().getName());
         assertNotNull(webToken.getRequestingPractitioner().getName().get("family"));
         assertNotNull(webToken.getRequestingPractitioner().getName().get("given"));
         assertNotNull(webToken.getRequestingPractitioner().getName().get("prefix"));

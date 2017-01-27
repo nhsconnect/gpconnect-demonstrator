@@ -172,9 +172,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Read()
     public Patient getPatientById(@IdParam IdDt internalId) {
-        PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
+       PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
        
         if (patientDetails == null) {
+            
             OperationOutcome operationOutcome = new OperationOutcome();
             CodingDt errorCoding = new CodingDt()
                     .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
@@ -194,9 +195,11 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Search
     public List<Patient> getPatientByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam patientId) {
+       
         ArrayList<Patient> patients = new ArrayList<>();
         PatientDetails patientDetailsReturned = patientSearch.findPatient(patientId.getValue());
         if (patientDetailsReturned != null) {
+            
             List<PatientDetails> patientDetailsList = Collections.singletonList(patientDetailsReturned);
             for (PatientDetails patientDetails : patientDetailsList) {
                 Patient patient = patientDetailsToPatientResourceConverter(patientDetails);
@@ -211,6 +214,7 @@ public class PatientResourceProvider implements IResourceProvider {
     @SuppressWarnings("deprecation")
     @Operation(name = "$gpc.getcarerecord")
     public Bundle getPatientCareRecord(@ResourceParam Parameters params) throws UnsupportedDataTypeException {
+      
         OperationOutcome operationOutcome = new OperationOutcome();
         ArrayList<String> nhsNumber = new ArrayList<>();
         ArrayList<String> sectionsParamList = new ArrayList<>();
@@ -239,6 +243,7 @@ public class PatientResourceProvider implements IResourceProvider {
             }
 
             IDatatype value = param.getValue();
+
            
             if (value instanceof IdentifierDt) {
                 nhsNumber.add(((IdentifierDt) value).getValue());
@@ -290,8 +295,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
                     throw new InvalidRequestException("System Invalid ", operationOutcomes);
                 }
-
-                if ((nhsNumberSystemCheck != null && nhsNumberSystemCheck.isEmpty() == true)) {
+            
+                if ((nhsNumberSystemCheck != null && nhsNumberSystemCheck.isEmpty() == true) || !nhsNumberSystemCheck.equals("http://fhir.nhs.net/Id/nhs-number") ) {
                     OperationOutcome operationOutcomes = new OperationOutcome();
                     CodingDt errorCoding = new CodingDt()
                             .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
@@ -951,6 +956,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 errorCodableConcept.setText("Patient Record Not Found");
                                 operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
                                         .setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
+                                operationOutcome.getMeta().addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1");
 
                                 throw new UnprocessableEntityException("Dates are invalid: ", operationOutcome);
                             }

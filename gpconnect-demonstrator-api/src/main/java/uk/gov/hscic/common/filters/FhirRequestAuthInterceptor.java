@@ -131,6 +131,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                             errorCodableConcept.setText("Patient Record Not Found");
                             operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR)
                                     .setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
+                            operationOutcomes.getMeta().addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1");
                             throw new InvalidRequestException("Dates are invalid: ", operationOutcomes);
                         }
                     } else {

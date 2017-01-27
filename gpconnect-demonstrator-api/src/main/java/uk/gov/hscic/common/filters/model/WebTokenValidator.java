@@ -37,7 +37,6 @@ public class WebTokenValidator {
 
         assertNotNull(webToken.getRequestedRecord());
         assertNotNull(webToken.getRequestedRecord().getResourceType());
-        assertNotNull(webToken.getRequestedRecord().getIdentifierValue("http://fhir.nhs.net/Id/nhs-number"));
 
         assertNotNull(webToken.getRequestedScope());
 

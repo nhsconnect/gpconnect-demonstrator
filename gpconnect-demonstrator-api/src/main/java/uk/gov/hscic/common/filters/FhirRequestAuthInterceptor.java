@@ -262,20 +262,11 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
         try {
             parser.parseResource(requestingPracticionerObject.toString()).getFormatCommentsPost();
-        } catch (DataFormatException e) {
-            throw new UnprocessableEntityException("Invalid Resource Present");
-        }
-
-        try {
             parser.parseResource(requestingDeviceObject.toString()).getFormatCommentsPost();
-        } catch (DataFormatException e) {
-            throw new UnprocessableEntityException("Invalid Resource Present");
-        }
-
-        try {
             parser.parseResource(requestingOrganizationObject.toString()).getFormatCommentsPost();
         } catch (DataFormatException e) {
             throw new UnprocessableEntityException("Invalid Resource Present");
+
         }
     }
 

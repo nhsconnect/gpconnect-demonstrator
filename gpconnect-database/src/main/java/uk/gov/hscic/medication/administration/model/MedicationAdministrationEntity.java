@@ -28,7 +28,7 @@ public class MedicationAdministrationEntity {
     @Column(name = "prescriptionId")
     private Long prescriptionId;
     
-    @Column(name = "administraionDate")
+    @Column(name = "administrationDate")
     private Date administrationDate;
     
     @Column(name = "medicationId")

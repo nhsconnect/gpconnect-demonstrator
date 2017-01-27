@@ -367,22 +367,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 }
 
-                if ((coading.get(0).getCode().equals(null) || systemCheck.equals(null))
-                        || (coading.get(0).getCode().isEmpty() == true || systemCheck.isEmpty() == true)) {
-                    OperationOutcome operationOutcomes = new OperationOutcome();
-                    CodingDt errorCoding = new CodingDt()
-                            .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
-                            .setCode("INVALID_PARAMETER");
-                    CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
-                    errorCodableConcept.setText("Patient Record Not Found");
-                    operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
-                            .setDetails(errorCodableConcept);
-                    operationOutcomes.getMeta()
-                    .addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1");
-
-                    throw new UnprocessableEntityException("System Invalid ", operationOutcomes);
-                }
-
                 if (coading.get(0).getSystem()
                         .equals("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1") == false) {
                     throw new InvalidRequestException("System Invalid ");

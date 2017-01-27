@@ -36,6 +36,7 @@
         <slf4j.version>1.7.22</slf4j.version>
         <spring.version>4.3.5.RELEASE</spring.version>
         <querydsl.version>4.1.4</querydsl.version>
+        <fhir.version>2.2</fhir.version>
     </properties>
 
     <modules>
@@ -110,6 +111,13 @@
             </dependency>
 
             <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.6.2</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
@@ -161,7 +169,7 @@
 
             <dependency>
                 <groupId>org.slf4j</groupId>
-                <artifactId>log4j-over-slf4j</artifactId>
+                <artifactId>slf4j-log4j12</artifactId>
                 <version>${slf4j.version}</version>
                 <scope>runtime</scope>
             </dependency>
@@ -255,13 +263,13 @@
             <dependency>
                 <groupId>ca.uhn.hapi.fhir</groupId>
                 <artifactId>hapi-fhir-base</artifactId>
-                <version>2.2</version>
+                <version>${fhir.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>ca.uhn.hapi.fhir</groupId>
                 <artifactId>hapi-fhir-structures-dstu2</artifactId>
-                <version>2.2</version>
+                <version>${fhir.version}</version>
             </dependency>
 
             <dependency>
@@ -277,6 +285,18 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <pluginManagement>

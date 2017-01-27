@@ -1,9 +1,20 @@
 package uk.gov.hscic.patient;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+
+import javax.activation.UnsupportedDataTypeException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.IDatatype;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
-import ca.uhn.fhir.model.base.resource.ResourceMetadataMap;
 import ca.uhn.fhir.model.dstu2.composite.AddressDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -54,15 +65,6 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import javax.activation.UnsupportedDataTypeException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.util.NhsCodeValidator;
 import uk.gov.hscic.medication.model.PatientMedicationHTML;
@@ -207,7 +209,22 @@ public class PatientResourceProvider implements IResourceProvider {
                 patients.add(patient);
             }
         }
-
+        if(patients.isEmpty())
+        {
+            
+            OperationOutcome operationOutcome = new OperationOutcome();
+            CodingDt errorCoding = new CodingDt()
+                    .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
+                    .setCode("PATIENT_NOT_FOUND");
+            CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+            errorCodableConcept.setText("Patient Record Not Found");
+            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(IssueTypeEnum.NOT_FOUND)
+                    .setDetails(errorCodableConcept);
+            operationOutcome.getMeta()
+            .addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1");
+            throw new ResourceNotFoundException("No patient details found for patient ID: ",
+                    operationOutcome);
+        }
         return patients;
     }
 

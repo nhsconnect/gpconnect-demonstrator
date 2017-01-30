@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WebTokenValidator {
-    private static final List<String> PERMITTED_REQUESTED_SCOPES = Arrays.asList(
-            "patient/*.read", "patient/*.write", "organization/*.read", "organization/*.write");
+    private static final List<String> PERMITTED_REQUESTED_SCOPES = Arrays.asList("patient/*.read", "patient/*.write",
+            "organization/*.read", "organization/*.write");
 
     public static void validateWebToken(WebToken webToken) {
         verifyNoNullValues(webToken);
@@ -28,38 +28,44 @@ public class WebTokenValidator {
     }
 
     private static void verifyNoNullValues(WebToken webToken) {
-        assertNotNull(webToken.getAud());
-        assertNotNull(webToken.getExp());
-        assertNotNull(webToken.getIat());
-        assertNotNull(webToken.getIss());
-        assertNotNull(webToken.getSub());
-        assertNotNull(webToken.getReasonForRequest());
 
-        assertNotNull(webToken.getRequestedRecord());
-        assertNotNull(webToken.getRequestedRecord().getResourceType());
+        try {
+            assertNotNull(webToken.getAud());
+            assertNotNull(webToken.getExp());
+            assertNotNull(webToken.getIat());
+            assertNotNull(webToken.getIss());
+            assertNotNull(webToken.getSub());
+            assertNotNull(webToken.getReasonForRequest());
 
-        assertNotNull(webToken.getRequestedScope());
+            assertNotNull(webToken.getRequestedRecord());
+            assertNotNull(webToken.getRequestedRecord().getResourceType());
 
-        assertNotNull(webToken.getRequestingDevice());
-        assertNotNull(webToken.getRequestingDevice().getId());
-        assertNotNull(webToken.getRequestingDevice().getModel());
-        assertNotNull(webToken.getRequestingDevice().getResourceType());
-        assertNotNull(webToken.getRequestingDevice().getVersion());
+            assertNotNull(webToken.getRequestedScope());
 
-        assertNotNull(webToken.getRequestingOrganization());
-        assertNotNull(webToken.getRequestingOrganization().getId());
-        assertNotNull(webToken.getRequestingOrganization().getName());
-        assertNotNull(webToken.getRequestingOrganization().getResourceType());
-        assertNotNull(webToken.getRequestingOrganization().getIdentifierValue("http://fhir.nhs.net/Id/ods-organization-code"));
+            assertNotNull(webToken.getRequestingDevice());
+            assertNotNull(webToken.getRequestingDevice().getId());
+            assertNotNull(webToken.getRequestingDevice().getModel());
+            assertNotNull(webToken.getRequestingDevice().getResourceType());
+            assertNotNull(webToken.getRequestingDevice().getVersion());
 
-        assertNotNull(webToken.getRequestingPractitioner());
-        assertNotNull(webToken.getRequestingPractitioner().getId());
-        assertNotNull(webToken.getRequestingPractitioner().getResourceType());
-        assertNotNull(webToken.getRequestingPractitioner().getName());
-        assertNotNull(webToken.getRequestingPractitioner().getName().get("family"));
-        assertNotNull(webToken.getRequestingPractitioner().getName().get("given"));
-        assertNotNull(webToken.getRequestingPractitioner().getName().get("prefix"));
-        assertNotNull(webToken.getRequestingPractitioner().getIdentifierValue("http://fhir.nhs.net/sds-user-id"));
+            assertNotNull(webToken.getRequestingOrganization());
+            assertNotNull(webToken.getRequestingOrganization().getId());
+            assertNotNull(webToken.getRequestingOrganization().getName());
+            assertNotNull(webToken.getRequestingOrganization().getResourceType());
+
+            assertNotNull(webToken.getRequestingOrganization()
+                    .getIdentifierValue("http://fhir.nhs.net/Id/ods-organization-code"));
+            assertNotNull(webToken.getRequestingPractitioner());
+            assertNotNull(webToken.getRequestingPractitioner().getId());
+            assertNotNull(webToken.getRequestingPractitioner().getResourceType());
+            assertNotNull(webToken.getRequestingPractitioner().getName());
+            assertNotNull(webToken.getRequestingPractitioner().getName().get("family"));
+            assertNotNull(webToken.getRequestingPractitioner().getName().get("given"));
+            assertNotNull(webToken.getRequestingPractitioner().getName().get("prefix"));
+            assertNotNull(webToken.getRequestingPractitioner().getIdentifierValue("http://fhir.nhs.net/sds-user-id"));
+        } catch (NullPointerException e) {
+            assertNotNull(null);
+        }
     }
 
     private static void assertNotNull(Object object) {
@@ -71,8 +77,9 @@ public class WebTokenValidator {
     private static void verifyTimeValues(WebToken webToken) {
         // Checking the creation date is not in the future
         int timeValidationIdentifierInt = webToken.getIat();
-        //Checking creation time is not in the future
-        if (timeValidationIdentifierInt > (System.currentTimeMillis()/1000)) {
+
+        // Checking creation time is not in the future
+        if (timeValidationIdentifierInt > (System.currentTimeMillis() / 1000)) {
             throw new InvalidRequestException("Bad Request Exception");
         }
         // Checking the expiry time is 5 minutes after creation
@@ -105,11 +112,13 @@ public class WebTokenValidator {
             throw new InvalidRequestException("Bad Request Exception");
         }
 
-        if ("Patient".equals(webToken.getRequestedRecord().getResourceType()) && "organization/*.write".equals(webToken.getRequestedScope())) {
+        if ("Patient".equals(webToken.getRequestedRecord().getResourceType())
+                && "organization/*.write".equals(webToken.getRequestedScope())) {
             throw new InvalidRequestException("Bad Request Exception");
         }
 
-        if ("Organization".equals(webToken.getRequestedRecord().getResourceType()) && "patient/*.read".equals(webToken.getRequestedScope())) {
+        if ("Organization".equals(webToken.getRequestedRecord().getResourceType())
+                && "patient/*.read".equals(webToken.getRequestedScope())) {
             throw new InvalidRequestException("Bad Request Exception");
         }
     }

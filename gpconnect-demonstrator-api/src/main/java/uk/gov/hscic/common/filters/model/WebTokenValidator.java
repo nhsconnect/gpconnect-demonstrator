@@ -71,11 +71,10 @@ public class WebTokenValidator {
     private static void verifyTimeValues(WebToken webToken) {
         // Checking the creation date is not in the future
         int timeValidationIdentifierInt = webToken.getIat();
-
-        if (timeValidationIdentifierInt * 1000 > System.currentTimeMillis()) {
+        //Checking creation time is not in the future
+        if (timeValidationIdentifierInt > (System.currentTimeMillis()/1000)) {
             throw new InvalidRequestException("Bad Request Exception");
         }
-
         // Checking the expiry time is 5 minutes after creation
         if (webToken.getExp() - timeValidationIdentifierInt != 300) {
             throw new InvalidRequestException("Bad Request Exception");

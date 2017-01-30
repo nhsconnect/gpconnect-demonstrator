@@ -97,7 +97,7 @@ public class GetScheduleOperation {
 			List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(
 					locations.get(0).getId().getIdPart(), planningHorizonStart, planningHorizonEnd);
 
-			if (schedules.isEmpty() == false) {
+			if (!schedules.isEmpty()) {
 				for (Schedule schedule : schedules) {
 					Entry scheduleEntry = new Entry();
 					scheduleEntry.setResource(schedule);
@@ -108,7 +108,7 @@ public class GetScheduleOperation {
 					List<ExtensionDt> practitionerExtensions = scheduleResourceProvider
 							.getPractitionerReferences(schedule);
 
-					if (practitionerExtensions.isEmpty() == false) {
+					if (!practitionerExtensions.isEmpty()) {
 						for (ExtensionDt practionerExtension : practitionerExtensions) {
 							ResourceReferenceDt practitionerRef = (ResourceReferenceDt) practionerExtension.getValue();
 							Practitioner practitioner = practitionerResourceProvider.getPractitionerById(practitionerRef.getReferenceElement());
@@ -143,7 +143,7 @@ public class GetScheduleOperation {
 					List<Slot> slots = slotResourceProvider.getSlotsForScheduleId(schedule.getId().getIdPart(),
 							planningHorizonStart, planningHorizonEnd);
 
-					if (slots.isEmpty() == false) {
+					if (!slots.isEmpty()) {
 						for (Slot slot : slots) {
 							if ("FREE".equalsIgnoreCase(slot.getFreeBusyType())) {
 								Entry slotEntry = new Entry();

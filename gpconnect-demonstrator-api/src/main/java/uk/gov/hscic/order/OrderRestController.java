@@ -1,7 +1,7 @@
 package uk.gov.hscic.order;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,15 +29,10 @@ public class OrderRestController {
             @PathVariable("patientId") Long patientId,
             @RequestParam(value = "recieved", required = false, defaultValue = "true") boolean p_recieved,
             @RequestParam(value = "sent", required = false, defaultValue = "false") boolean p_sent) {
-        List<OrderDetail> returnOrders = new ArrayList<>();
-
-        for (OrderDetail order : orderSearch.findOrdersForPatientId(patientId)) {
-            if ((order.getRecieved() && p_recieved) || (!order.getRecieved() && p_sent)) {
-                returnOrders.add(order);
-            }
-        }
-
-        return returnOrders;
+        return orderSearch.findOrdersForPatientId(patientId)
+                .stream()
+                .filter(order -> (order.getRecieved() && p_recieved) || (!order.getRecieved() && p_sent))
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/order")

@@ -56,6 +56,9 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
         String contentType = requestDetails.getHeader(HttpHeaders.CONTENT_TYPE);
         String acceptHeader = requestDetails.getHeader(HttpHeaders.ACCEPT);
+        String completeUrl = requestDetails.getCompleteUrl();
+   
+                
 
         if (contentType != null
                 && !"application/json+fhir".equalsIgnoreCase(contentType)
@@ -74,6 +77,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                 && !"application/json, text/plain, */*".equalsIgnoreCase(acceptHeader)) {
             throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported media type");
         }
+        
+        validateContentFormatAndAccept(contentType,acceptHeader,completeUrl);
 
         WebToken webToken;
 
@@ -159,6 +164,15 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         jwtParseResourcesValidation(claimsJsonObject);
 
         return new RuleBuilder().allowAll().build();
+    }
+
+    private void validateContentFormatAndAccept(String contentType, String acceptHeader, String completeUrl) {
+        
+        if(completeUrl.contains("_format=text%2Fxml")&&  "application/xml+fhir".equals(acceptHeader) && "application/xml+fhir".equals(contentType))
+        {
+            throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported media type"); 
+        }
+        
     }
 
     private void jwtParseResourcesValidation(JSONObject claimsJsonObject) {

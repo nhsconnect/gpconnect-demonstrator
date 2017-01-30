@@ -2,7 +2,7 @@ INSERT INTO gpconnect.adminitems
   (id, html, provider, lastUpdated)
 VALUES (
   9476719966,
-  "<div><h2>Administrative Items</h2><table><thead><tr><th>Date</th><th>Entry</th><th>Details</th></tr></thead><tbody><tr><td /><td>Cervical Smear Defaulter</td><td></td></tr><tr><td /><td>No summary care record consent specified</td><td></td></tr></tbody><PageSectionIndex>1</PageSectionIndex></table></div><PageSectionIndex>1<PageSectionIndex>",
+  "<div><h2>Administrative Items</h2><table><thead><tr><th>Date</th><th>Entry</th><th>Details</th></tr></thead><tbody><tr><td>Cervical Smear Defaulter</td><td></td></tr><tr><td /><td>No summary care record consent specified</td><td></td></tr></tbody><PageSectionIndex>1</PageSectionIndex></table></div><PageSectionIndex>1<PageSectionIndex>",
   "INPS",
   '2016-07-25 12:00:00'
 );
@@ -56,7 +56,7 @@ INSERT INTO gpconnect.investigations
   (id, html, provider, lastUpdated)
 VALUES (
   9476719966,
-  "<div><table><thead><tr><th>Date</th><th>Report</th></tr></thead><tbody><tr><td>21-May-2015</td><td>Score:   12   Negative Method:  3RT  for:  Asthma</td></tr><tr><td>19-Nov-2014</td><td>ECG normal Dr Janet Outside Practice</td></tr><tr><td>19-Nov-2014</td><td>Thyroid hormone tests = 0</td></tr><tr><td>19-Nov-2014</td><td>Prostate specific antigen = 0.6</td></tr><tr><td>10-Oct-2014</td><td>Hb estimation = 14.9 </td></tr>					<tr><td>10-Oct-2014</td><td>Serum cholesterol = 4.9 </td></tr>				<tr><td>10-Oct-2014</td><td>Serum triglycerides normal = 0.74</td></tr>					<tr><td>10-Oct-2014</td><td>Blood Glucose  = 5.4</td></tr>				<tr><td>10-Oct-2014</td><td>Serum creatinine NOS = 93</td></tr>				<tr><td>10-Oct-2014</td><td>Serum urea level = 5.1</td></tr>				<tr><td>10-Oct-2014</td><td>Serum potassium = 3.8</td></tr>				<tr><td>10-Oct-2014</td><td>Serum sodium = 141</td></tr></tbody></table></div>",
+  "<div><table><thead><tr><th>Date</th><th>Report</th></tr></thead><tbody><tr><td>21-May-2015</td><td>Score:   12   Negative Method:  3RT  for:  Asthma</td></tr><tr><td>19-Nov-2014</td><td>ECG normal Dr Janet Outside Practice</td></tr><tr><td>19-Nov-2014</td><td>Thyroid hormone tests = 0</td></tr><tr><td>19-Nov-2014</td><td>Prostate specific antigen = 0.6</td></tr><tr><td>10-Oct-2014</td><td>Hb estimation = 14.9 </td></tr><tr><td>10-Oct-2014</td><td>Serum cholesterol = 4.9 </td></tr></tbody></table></div>",				<tr><td>10-Oct-2014</td><td>Serum triglycerides normal = 0.74</td></tr>					<tr><td>10-Oct-2014</td><td>Blood Glucose  = 5.4</td></tr>				<tr><td>10-Oct-2014</td><td>Serum creatinine NOS = 93</td></tr>				<tr><td>10-Oct-2014</td><td>Serum urea level = 5.1</td></tr>				<tr><td>10-Oct-2014</td><td>Serum potassium = 3.8</td></tr>				<tr><td>10-Oct-2014</td><td>Serum sodium = 141</td></tr></tbody></table></div>",
   "INPS",
   '2016-07-25 12:00:00'
 );
@@ -83,7 +83,7 @@ INSERT INTO gpconnect.problems
   (id, html, provider, lastUpdated)
 VALUES (
   9476719966,
-  "<div><h2>Active Problems and Issues</h2><table><thead><th>Start Date</th><th>Entry</th><th>Significance</th><th>Details</th></thead><tbody><tr><td>13-Apr-2016</td><td>Drug induced rash</td><td>Active</td><td /></tr><tr><td>13-Apr-2016</td><td>Anger reaction</td><td>Active</td><td /></tr><tr><td>13-Dec-2015</td><td>Hyperlipidaemia</td><td>Active</td><td /></tr><tr><td>09-Sep-2014</td><td>Type 2 diabetes mellitus</td><td>Flagged as significant</td><td /></tr></tbody></table><table><thead><th>Start Date</th><th>End Date</th><th>Entry</th><th>Significance</th><th>Details</th></thead><tbody><tr><td>13-Apr-2016</td><td>Drug induced rash</td><td>Active</td><td /></tr><tr><td>13-Apr-2016</td><td>Anger reaction</td><td>Active</td><td /></tr><tr><td>13-Dec-2015</td><td>Hyperlipidaemia</td><td>Active</td><td /></tr><tr><td>09-Sep-2014</td><td>Type 2 diabetes mellitus</td><td>Flagged as significant</td><td /></tr></tbody></table></div>",
+  "<div><h2>Active Problems and Issues</h2><table><thead><th>Start Date</th><th>Entry</th><th>Significance</th><th>Details</th></thead><tbody><tr><td>13-Apr-2016</td><td>Drug induced rash</td><td>Active</td></tr><tr><td>13-Apr-2016</td><td>Anger reaction</td><td>Active</td></tr><tr><td>13-Dec-2015</td><td>Hyperlipidaemia</td><td>Active</td></tr><tr><td>09-Sep-2014</td><td>Type 2 diabetes mellitus</td><td>Flagged as significant</td></tr></tbody></table><table><thead><th>Start Date</th><th>End Date</th><th>Entry</th><th>Significance</th><th>Details</th></thead><tbody><tr><td>13-Apr-2016</td><td>Drug induced rash</td><td>Active</td></tr><tr><td>13-Apr-2016</td><td>Anger reaction</td><td>Active</td></tr><tr><td>13-Dec-2015</td><td>Hyperlipidaemia</td><td>Active</td></tr><tr><td>09-Sep-2014</td><td>Type 2 diabetes mellitus</td><td>Flagged as significant</td><td /></tr></tbody></table></div>",
   "INPS",
   '2016-07-25 12:00:00'
 );

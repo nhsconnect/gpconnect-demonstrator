@@ -15,6 +15,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,25 +34,21 @@ public class LocationResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public List<Location> getByIdentifierCode(@RequiredParam(name=Location.SP_IDENTIFIER) TokenParam identifierCode) {
+    public List<Location> getByIdentifierCode(@RequiredParam(name = Location.SP_IDENTIFIER) TokenParam identifierCode) {
         List<LocationDetails> locationDetails = "http://fhir.nhs.net/Id/ods-organization-code".equalsIgnoreCase(identifierCode.getSystem())
                 ? locationSearch.findLocationDetailsByOrgOdsCode(identifierCode.getValue())
                 : locationSearch.findLocationDetailsBySiteOdsCode(identifierCode.getValue());
 
-        if (locationDetails.size() <= 0) {
+        if (locationDetails.isEmpty()) {
             String msg = String.format("No location details found for code: %s", identifierCode.getValue());
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(msg);
             throw new InternalErrorException(msg, operationalOutcome);
         }
 
-        ArrayList<Location> locations = new ArrayList<>();
-
-        for (LocationDetails locationDetail : locationDetails) {
-            locations.add(locationDetailsToLocation(locationDetail));
-        }
-
-        return locations;
+        return locationDetails.stream()
+                .map(locationDetail -> locationDetailsToLocation(locationDetail))
+                .collect(Collectors.toList());
     }
 
     @Read()

@@ -1,10 +1,6 @@
 package uk.gov.hscic.common.ldap;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,6 +9,7 @@ import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.net.ssl.KeyManagerFactory;
@@ -26,6 +23,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.hscic.common.ldap.model.Practice;
+import uk.gov.hscic.common.ldap.model.ProviderRouting;
 
 @RestController
 public class EndpointResolver {
@@ -79,46 +78,31 @@ public class EndpointResolver {
     }
 
     private String fileLookup(String odsCode, String interactionId) throws Exception {
-        String result = null;
+        String result = loadPractices()
+                .stream()
+                .filter(practice -> odsCode.equals(practice.getOdsCode()))
+                .filter(practice -> practice.getInteractionIds().contains("*") || practice.getInteractionIds().contains(interactionId))
+                .map(practice -> format(practice.getEndpointURL(), practice.getASID()))
+                .findFirst()
+                .orElse(null);
 
-        ArrayNode practicesNode = loadPractices();
-
-        if (practicesNode != null) {
-            for (int m = 0; m < practicesNode.size() && result == null; m++) {
-                JsonNode practiceNode = practicesNode.get(m);
-
-                if (odsCode.equals(practiceNode.get("odsCode").asText())) {
-                    ArrayNode interactionIdsNode = (ArrayNode) practiceNode.get("interactionIds");
-
-                    if (interactionIdsNode.size() > 0) {
-                        for (int i = 0; i < interactionIdsNode.size() && result == null; i++) {
-                            String interactionIdText = interactionIdsNode.get(i).asText();
-
-                            if (interactionId.equals(interactionIdText) || "*".equals(interactionIdText)) {
-                                result = format(practiceNode.get("endpointURL").asText(), practiceNode.get("ASID").asText());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (result == null) {
+        if (null == result) {
             LOG.warn(String.format("Unable to match one or both of the given odsCode (%s) and interactionId (%s)", odsCode, interactionId));
         }
 
         return result;
     }
 
-    private ArrayNode loadPractices() throws JsonParseException, JsonMappingException, IOException {
+    private List<Practice> loadPractices() throws IOException {
         if (Files.exists(providerRoutingFilePath)) {
-            JsonNode rootNode = new ObjectMapper().readValue(Files.readAllBytes(providerRoutingFilePath), JsonNode.class);
-            return (ArrayNode) rootNode.get("practices");
+            return new ObjectMapper()
+                    .readValue(Files.readAllBytes(providerRoutingFilePath), ProviderRouting.class)
+                    .getPractices();
         }
 
         LOG.warn(String.format("The file %s does not exist", providerRoutingFilePath.toUri()));
 
-        return null;
+        return Collections.emptyList();
     }
 
     private String ldapLookup(String odsCode, String interactionId) throws Exception {

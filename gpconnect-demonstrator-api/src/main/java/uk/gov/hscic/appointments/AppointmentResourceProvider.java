@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointment.appointment.model.AppointmentDetail;
@@ -121,17 +123,10 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
         }
 
-        List<AppointmentDetail> appointmentDetails = appointmentSearch.searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUppderDate);
-
-        ArrayList<Appointment> appointments = new ArrayList<>();
-
-        if (appointmentDetails != null && appointmentDetails.size() > 0) {
-            for (AppointmentDetail appointmentDetail : appointmentDetails) {
-                appointments.add(appointmentDetailToAppointmentResourceConverter(appointmentDetail));
-            }
-        }
-
-        return appointments;
+        return appointmentSearch.searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUppderDate)
+                .stream()
+                .map(appointmentDetail -> appointmentDetailToAppointmentResourceConverter(appointmentDetail))
+                .collect(Collectors.toList());
     }
 
     @Create
@@ -148,7 +143,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             throw new UnprocessableEntityException("Both start and end date are required");
         }
 
-        if (appointment.getParticipant().size() <= 0) {
+        if (appointment.getParticipant().isEmpty()) {
             throw new UnprocessableEntityException("Atleast one participant is required");
         }
 
@@ -218,7 +213,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         AppointmentDetail appointmentDetail = appointmentResourceConverterToAppointmentDetail(appointment);
 
         // URL ID and Resource ID must be the same
-        if (appointmentId.getIdPartAsLong() != appointmentDetail.getId()) {
+        if (!Objects.equals(appointmentId.getIdPartAsLong(), appointmentDetail.getId())) {
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Id in URL (" + appointmentId.getIdPart() + ") should match Id in Resource (" + appointmentDetail.getId() + ")");
             methodOutcome.setOperationOutcome(operationalOutcome);
             return methodOutcome;
@@ -258,7 +253,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     slotDetail.setAppointmentId(null);
                     slotDetail.setFreeBusyType("FREE");
                     slotDetail.setLastUpdated(new Date());
-                    slotDetail = slotStore.saveSlot(slotDetail);
+                    slotStore.saveSlot(slotDetail);
                 }
             }
         } else {

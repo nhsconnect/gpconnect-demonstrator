@@ -50,7 +50,7 @@ public class SlotResourceProvider  implements IResourceProvider {
         ArrayList<Slot> slots = new ArrayList<>();
         List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), new Date(startDateTime), new Date(endDateTime));
 
-        if (slotDetails != null && slotDetails.size() > 0) {
+        if (slotDetails != null && !slotDetails.isEmpty()) {
             for (SlotDetail slotDetail : slotDetails) {
                 slots.add(slotDetailToSlotResourceConverter(slotDetail));
             }

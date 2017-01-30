@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
-    private static final Logger log = Logger.getLogger(FhirRequestGenericIntercepter.class);
+    private static final Logger LOG = Logger.getLogger(FhirRequestGenericIntercepter.class);
 
     @Value("${gp.connect.spineproxyconf.path}")
     private String spineroxyConfigPath;
@@ -50,7 +50,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             JSONObject configJSonObj = new JSONObject(configJson);
             systemSspToHeader = configJSonObj.getString("toASID");
         } catch (Exception e) {
-            log.error("Error loading SSP header values from file: " + e.getMessage());
+            LOG.error("Error loading SSP header values from file: " + e.getMessage());
         }
 
         // Load interactionId white list
@@ -67,7 +67,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                 }
             }
         } catch (Exception e) {
-            log.error("Error loading interactionID White List from file: " + e.getMessage());
+            LOG.error("Error loading interactionID White List from file: " + e.getMessage());
         }
 
         // Load Error File if exists
@@ -84,7 +84,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                 }
             }
         } catch (Exception e) {
-            log.error("Error loading error simulation file: " + e.getMessage());
+            LOG.error("Error loading error simulation file: " + e.getMessage());
         }
     }
 
@@ -233,7 +233,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             try {
                 httpResponse.sendError(400, failedMsg);
             } catch (Exception e) {
-                log.error("Error adding response message for Failed validation: (" + failedMsg + ") " + e.getMessage());
+                LOG.error("Error adding response message for Failed validation: (" + failedMsg + ") " + e.getMessage());
             }
 
             return false;
@@ -263,7 +263,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
                     return false;
                 } catch (Exception e) {
-                    log.error(e);
+                    LOG.error(e);
                 }
             }
         }

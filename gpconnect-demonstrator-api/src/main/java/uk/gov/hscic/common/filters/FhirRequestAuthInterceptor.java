@@ -15,13 +15,13 @@ import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.auth.AuthorizationInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.auth.IAuthRule;
 import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -46,19 +46,13 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
         try {
             claimsJsonString = new String(Base64.getDecoder().decode(authorizationHeaderComponents[1].split("\\.")[1]));
+            jwtParseResourcesValidation(claimsJsonString);
         } catch (IllegalArgumentException iae) {
             throw new InvalidRequestException("Not Base 64");
         }
 
-        JSONObject claimsJsonObject = new JSONObject(claimsJsonString);
-
-        LOG.info("Incoming FHIR request: " + claimsJsonObject);
-
         String contentType = requestDetails.getHeader(HttpHeaders.CONTENT_TYPE);
         String acceptHeader = requestDetails.getHeader(HttpHeaders.ACCEPT);
-        String completeUrl = requestDetails.getCompleteUrl();
-   
-                
 
         if (contentType != null
                 && !"application/json+fhir".equalsIgnoreCase(contentType)
@@ -77,8 +71,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                 && !"application/json, text/plain, */*".equalsIgnoreCase(acceptHeader)) {
             throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported media type");
         }
-        
-        validateContentFormatAndAccept(contentType,acceptHeader,completeUrl);
+
+        validateContentFormatAndAccept(contentType, acceptHeader, requestDetails.getCompleteUrl());
 
         WebToken webToken;
 
@@ -144,47 +138,33 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             }
         }
 
-        // The method has been commented out to allow continuation of work.
-        // The method  fails the response due to the wrong identifier being in place
-        /*
-        * JSONArray practitionerIdentifierArray =
-        * claimsJsonObject.getJSONObject("requesting_practitioner")
-        * .getJSONArray("identifier"); if
-        * (practitionerIdentifierArray.length() > 0) { for (int i = 0;
-        * i < practitionerIdentifierArray.length(); i++) { String
-        * identifierSystem = ((JSONObject)
-        * practitionerIdentifierArray.get(i)).getString("system"); if
-        * (!"http://fhir.nhs.net/sds-user-id".equalsIgnoreCase(
-        * identifierSystem)) { throw new
-        * InvalidRequestException("Bad Request Exception"); } } } else
-        * { return new throw new
-        * InvalidRequestException("Bad Request Exception");}
-        */
-
-        jwtParseResourcesValidation(claimsJsonObject);
-
         return new RuleBuilder().allowAll().build();
     }
 
     private void validateContentFormatAndAccept(String contentType, String acceptHeader, String completeUrl) {
-        
-        if(completeUrl.contains("_format=text%2Fxml")&&  "application/xml+fhir".equals(acceptHeader) && "application/xml+fhir".equals(contentType))
-        {
-            throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported media type"); 
+        if (completeUrl.contains("_format=text%2Fxml") && "application/xml+fhir".equals(acceptHeader) && "application/xml+fhir".equals(contentType)) {
+            throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported media type");
         }
-        
     }
 
-    private void jwtParseResourcesValidation(JSONObject claimsJsonObject) {
-        IParser parser = new FhirContext().newJsonParser();
-        parser.setParserErrorHandler(new StrictErrorHandler());
+    private void jwtParseResourcesValidation(String claimsJsonString) {
+        IParser parser = FhirContext
+                .forDstu2()
+                .newJsonParser()
+                .setParserErrorHandler(new StrictErrorHandler());
 
         try {
-            parser.parseResource(claimsJsonObject.getJSONObject("requesting_practitioner").toString()).getFormatCommentsPost();
-            parser.parseResource(claimsJsonObject.getJSONObject("requesting_device").toString()).getFormatCommentsPost();
-            parser.parseResource(claimsJsonObject.getJSONObject("requesting_organization").toString()).getFormatCommentsPost();
+            JsonNode jsonNode = new ObjectMapper().readTree(claimsJsonString);
+
+            LOG.info("Incoming FHIR request: " + jsonNode);
+
+            parser.parseResource(jsonNode.get("requesting_practitioner").toString());
+            parser.parseResource(jsonNode.get("requesting_device").toString());
+            parser.parseResource(jsonNode.get("requesting_organization").toString());
         } catch (DataFormatException e) {
             throw new UnprocessableEntityException("Invalid Resource Present");
+        } catch (IOException ex) {
+            throw new InvalidRequestException("Unparsable JSON");
         }
     }
 }

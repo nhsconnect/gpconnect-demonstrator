@@ -8,8 +8,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.http.HttpException;
+import org.apache.log4j.Logger;
 
-public class DefaultHeaderFilter  implements Filter {
+public class DefaultHeaderFilter implements Filter {
+    private static final Logger LOG = Logger.getLogger(DefaultHeaderFilter.class);
 
     @Override
     public void init(FilterConfig config) throws ServletException { }
@@ -19,7 +21,7 @@ public class DefaultHeaderFilter  implements Filter {
         try {
             chain.doFilter(new HeaderRequestWrapper((HttpServletRequest) request), response);
         } catch (HttpException e) {
-            System.out.println("Error passed back to Default Header Filter");
+            LOG.error("Error passed back to Default Header Filter");
         }
     }
 

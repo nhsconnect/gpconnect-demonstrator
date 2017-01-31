@@ -251,7 +251,6 @@ public class PatientResourceProvider implements IResourceProvider {
             }
 
             IDatatype value = param.getValue();
-            System.out.println(value instanceof IdentifierDt);
             if (value instanceof IdentifierDt) {
                 nhsNumber.add(((IdentifierDt) value).getValue());
                 String nhsNumberSystemCheck = ((IdentifierDt) value).getSystem();

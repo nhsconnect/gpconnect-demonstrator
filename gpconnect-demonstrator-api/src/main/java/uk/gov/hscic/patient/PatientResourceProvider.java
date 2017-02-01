@@ -60,6 +60,8 @@ import java.util.List;
 import javax.activation.UnsupportedDataTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.util.NhsCodeValidator;
@@ -154,10 +156,10 @@ public class PatientResourceProvider implements IResourceProvider {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
 
         if (patientDetails == null) {
-            String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-            String code = "PATIENT_NOT_FOUND";
-            String codableConceptText = "Patient Record Not Found";
-            String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-patient-1";
+            String system = OperationConstants.SYSTEM_WARNING_CODE;
+            String code = OperationConstants.CODE_PATIENT_NOT_FOUND;
+            String codableConceptText = OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
+            String metaProfile = OperationConstants.META_GP_CONNECT_PATIENT;
 
             OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                     codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
@@ -183,10 +185,10 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         if (patients.isEmpty()) {
-            String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-            String code = "PATIENT_NOT_FOUND";
-            String codableConceptText = "Patient Record Not Found";
-            String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+            String system = OperationConstants.SYSTEM_WARNING_CODE;
+            String code =  OperationConstants.CODE_PATIENT_NOT_FOUND;
+            String codableConceptText = OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
+            String metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
 
             OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                     codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
@@ -214,10 +216,10 @@ public class PatientResourceProvider implements IResourceProvider {
         for (Parameter param : params.getParameter()) {
             if (!param.getName().equals("patientNHSNumber") && !param.getName().equals("recordSection")
                     && !param.getName().equals("timePeriod")) {
-                system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                code = "INVALID_NHS_NUMBER";
-                codableConceptText = "Patient Record Not Found";
-                metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                system = OperationConstants.SYSTEM_WARNING_CODE;
+                code = OperationConstants.CODE_INVALID_NHS_NUMBER;
+                codableConceptText = OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
+                metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
 
                 operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                         codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
@@ -231,11 +233,11 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 // if (nhsNumberSystemCheck == null) {
                 // system =
-                // "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                // code = "INVALID_IDENTIFIER_SYSTEM";
-                // codableConceptText = "Patient Record Not Found";
+                // OperationConstants.SYSTEM_WARNING_CODE;
+                // code = OperationConstants.CODE_INVALID_IDENTIFIER_SYSTEM;
+                // codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
                 // String metaProfile =
-                // "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                // OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
                 //
                 // operationOutcome =
                 // OperationOutcomeFactory.buildOperationOutcome(system,
@@ -245,10 +247,10 @@ public class PatientResourceProvider implements IResourceProvider {
                 // }
 
                 if (((IdentifierDt) value).getValue() == null) {
-                    system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                    code = "INVALID_NHS_NUMBER";
-                    codableConceptText = "Patient Record Not Found";
-                    metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                    system = OperationConstants.SYSTEM_WARNING_CODE;
+                    code = OperationConstants.CODE_INVALID_NHS_NUMBER;
+                    codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
+                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
                     operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                             codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                     throw new InvalidRequestException("System Invalid ", operationOutcome);
@@ -256,10 +258,10 @@ public class PatientResourceProvider implements IResourceProvider {
                 }
 
                 if (nhsNumber.get(0).isEmpty()) {
-                    system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                    code = "INVALID_NHS_NUMBER";
-                    codableConceptText = "Patient Record Not Found";
-                    metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                    system = OperationConstants.SYSTEM_WARNING_CODE;
+                    code = OperationConstants.CODE_INVALID_NHS_NUMBER;
+                    codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
+                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
                     operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                             codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                     throw new InvalidRequestException("System Invalid ", operationOutcome);
@@ -272,11 +274,11 @@ public class PatientResourceProvider implements IResourceProvider {
                 // {
                 //
                 // system =
-                // "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                // code = "INVALID_IDENTIFIER_SYSTEM";
-                // codableConceptText = "Patient Record Not Found";
+                // OperationConstants.SYSTEM_WARNING_CODE;
+                // code = OperationConstants.CODE_INVALID_IDENTIFIER_SYSTEM;
+                // codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
                 // metaProfile =
-                // "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                // OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
                 // operationOutcome =
                 // OperationOutcomeFactory.buildOperationOutcome(system,
                 // code, codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
@@ -285,10 +287,10 @@ public class PatientResourceProvider implements IResourceProvider {
                 // }
 
                 if (nhsNumber.size() > 1) {
-                    system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                    code = "INVALID_IDENTIFIER_SYSTEM";
-                    codableConceptText = "NHS Number Invalid";
-                    metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                    system = OperationConstants.SYSTEM_WARNING_CODE;
+                    code = OperationConstants.CODE_INVALID_IDENTIFIER_SYSTEM;
+                    codableConceptText = OperationConstants.COD_CONCEPT_RECORD_NHS_NUMBER_INVALID;
+                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
                     operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                             codableConceptText, metaProfile, IssueTypeEnum.INVALID_CONTENT);
                     throw new InvalidRequestException("Bad Request Exception", operationOutcome);
@@ -302,10 +304,10 @@ public class PatientResourceProvider implements IResourceProvider {
                 String sectionName = coading.get(0).getCode();
 
                 if (sectionName == null || systemCheck == null) {
-                    system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                    code = "INVALID_PARAMETER";
-                    codableConceptText = "Patient Record Not Found";
-                    metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                    system = OperationConstants.SYSTEM_WARNING_CODE;
+                    code = OperationConstants.CODE_INVALID_PARAMETER;
+                    codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
+                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
                     operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                             codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                     throw new UnprocessableEntityException("System Invalid ", operationOutcome);
@@ -315,10 +317,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 if (!sectionName.equals(testSectionName.toUpperCase())) {
 
-                    system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                    code = "INVALID_PARAMETER";
-                    codableConceptText = "Invalid Section Code";
-                    metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                    system = OperationConstants.SYSTEM_WARNING_CODE;
+                    code = OperationConstants.CODE_INVALID_PARAMETER;
+                    codableConceptText =OperationConstants.COD_CONCEPT_RECORD_INVALID_SECTION_CODE;
+                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
                     operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                             codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                     throw new UnprocessableEntityException("Section Case Invalid: ", operationOutcome);
@@ -332,10 +334,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 if (sectionsParamList.size() > 1) {
 
-                    system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                    code = "INVALID_IDENTIFIER_SYSTEM";
-                    codableConceptText = "Multiple Sections Added";
-                    metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                    system = OperationConstants.SYSTEM_WARNING_CODE;
+                    code = OperationConstants.CODE_INVALID_IDENTIFIER_SYSTEM;
+                    codableConceptText = OperationConstants.COD_CONCEPT_RECORD_MULTIPLE_SECTIONS_ADDED;
+                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
                     operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                             codableConceptText, metaProfile, IssueTypeEnum.INVALID_CONTENT);
                     throw new InvalidRequestException("Bad Request Exception", operationOutcome);
@@ -362,10 +364,10 @@ public class PatientResourceProvider implements IResourceProvider {
                 // }
 
                 if ((fromDate != null && toDate != null) && fromDate.after(toDate)) {
-                    system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                    code = "INVALID_PARAMETER";
-                    codableConceptText = "Patient Record Not Found";
-                    metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                    system = OperationConstants.SYSTEM_WARNING_CODE;
+                    code = OperationConstants.CODE_INVALID_PARAMETER;
+                    codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
+                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
                     operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                             codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                     throw new UnprocessableEntityException("Dates are invalid: ", operationOutcome);
@@ -404,10 +406,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
         for (int i = 0; i < sectionsParamList.size(); i++) {
             if (sectionsParamList.get(i) == null || sectionsParamList.get(i).length() != 3) {
-                system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                code = "INVALID_NHS_NUMBER";
-                codableConceptText = "NHS Number Invalid";
-                metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                system = OperationConstants.SYSTEM_WARNING_CODE;
+                code = OperationConstants.CODE_INVALID_NHS_NUMBER;
+                codableConceptText = OperationConstants.COD_CONCEPT_RECORD_NHS_NUMBER_INVALID;
+                metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
                 operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                         codableConceptText, metaProfile, IssueTypeEnum.INVALID_CONTENT);
                 throw new ResourceNotFoundException("NHS number Invalid " + operationOutcome);
@@ -418,10 +420,10 @@ public class PatientResourceProvider implements IResourceProvider {
             throw new InvalidRequestException("NHS number not supplied");
         } else {
             if (NhsValidation(nhsNumber.get(0))) {
-                system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                code = "INVALID_NHS_NUMBER";
-                codableConceptText = "NHS Number Invalid";
-                metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                system = OperationConstants.SYSTEM_WARNING_CODE;
+                code = OperationConstants.CODE_INVALID_NHS_NUMBER;
+                codableConceptText = OperationConstants.COD_CONCEPT_RECORD_NHS_NUMBER_INVALID;
+                metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
                 operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                         codableConceptText, metaProfile, IssueTypeEnum.INVALID_CONTENT);
                 throw new InvalidRequestException("NHS number Invalid " + operationOutcome);
@@ -439,7 +441,7 @@ public class PatientResourceProvider implements IResourceProvider {
                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
                                 .setDetails("No patient details found for patient NHS Number: " + nhsNumber.get(0));
                         operationOutcome.getMeta()
-                                .addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1");
+                                .addProfile(OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME);
                         throw new InternalErrorException(
                                 "No patient details found for patient NHS Number: " + nhsNumber.get(0),
                                 operationOutcome);
@@ -466,7 +468,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     careRecordComposition.setStatus(CompositionStatusEnum.FINAL);
                     careRecordComposition.setSubject(new ResourceReferenceDt("Patient/" + patientID));
                     careRecordComposition.getMeta()
-                            .addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-carerecord-composition-1");
+                            .addProfile(OperationConstants.META_GP_CONNECT_CARERECORD_COMPOSITION);
 
                     // Build requested sections
                     if (sectionsParamList.size() > 0) {
@@ -476,10 +478,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
                             if (!sectionName.equals(testSectionName.toUpperCase())) {
 
-                                system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                                code = "INVALID_PARAMETER";
-                                codableConceptText = "Patient Record Not Found";
-                                metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                                system = OperationConstants.SYSTEM_WARNING_CODE;
+                                code = OperationConstants.CODE_INVALID_PARAMETER;
+                                codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
+                                metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
 
                                 operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                                         codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
@@ -501,17 +503,17 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                     if (patientSummaryList.get(0).getHtml().contains("This is confidential")) {
 
-                                        system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                                        code = "NO_PATIENT_CONSENT";
-                                        codableConceptText = "Patient Data Confidential";
-                                        metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                                        system = OperationConstants.SYSTEM_WARNING_CODE;
+                                        code = OperationConstants.CODE_NO_PATIENT_CONSENT;
+                                        codableConceptText = OperationConstants.COD_CONCEPT_RECORD_PATIENT_DATA_CONFIDENTIAL;
+                                        metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
 
                                         operationOutcome = OperationOutcomeFactory.buildOperationOutcome(
                                                 system, code, codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                                         throw new ForbiddenOperationException("This Data Is Confidential",
                                                 operationOutcome);
                                     } else {
-                                        system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                        system = OperationConstants.SYSTEM_RECORD_SECTION;
                                         code = "SUM";
                                         display = "Summary";
                                         investigationListText = patientSummaryList.get(0).getProvider();
@@ -541,7 +543,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                     if (problemList != null && problemList.size() > 0) {
 
-                                        system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                        system = OperationConstants.SYSTEM_RECORD_SECTION;
                                         code = "PRB";
                                         display = "Problems";
                                         investigationListText = problemList.get(0).getProvider();
@@ -566,7 +568,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                 if (encounterList != null && encounterList.size() > 0) {
 
-                                    system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
                                     code = "ENC";
                                     display = "Encounters";
                                     investigationListText = encounterList.get(0).getProvider();
@@ -592,7 +594,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                             .findAllAllergyHTMLTables(nhsNumber.get(0));
                                     if (allergyList != null && allergyList.size() > 0) {
 
-                                        system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                        system = OperationConstants.SYSTEM_RECORD_SECTION;
                                         code = "ALL";
                                         display = "Allergies and Sensitivities";
                                         investigationListText = allergyList.get(0).getProvider();
@@ -616,7 +618,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                 if (clinicalItemList != null && clinicalItemList.size() > 0) {
 
-                                    system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
                                     code = "CLI";
                                     display = "Clinical Items";
                                     investigationListText = clinicalItemList.get(0).getProvider();
@@ -648,7 +650,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (medicationList != null && medicationList.size() > 0) {
                                     section = new Section();
 
-                                    system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
                                     code = "MED";
                                     display = "Medications";
                                     investigationListText = medicationList.get(0).getProvider();
@@ -798,7 +800,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                 if (referralList != null && referralList.size() > 0) {
 
-                                    system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
                                     code = "REF";
                                     display = "Referrals";
                                     investigationListText = referralList.get(0).getProvider();
@@ -825,7 +827,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                     if (observationList != null && observationList.size() > 0) {
 
-                                        system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                        system = OperationConstants.SYSTEM_RECORD_SECTION;
                                         code = "OBS";
                                         display = "Observations";
                                         investigationListText = observationList.get(0).getProvider();
@@ -849,7 +851,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         .findAllInvestigationHTMLTables(nhsNumber.get(0));
 
                                 if (investigationList != null && investigationList.size() > 0) {
-                                    system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
                                     code = "INV";
                                     display = "Investigations";
                                     investigationListText = investigationList.get(0).getProvider();
@@ -876,7 +878,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                             .findAllImmunisationHTMLTables(nhsNumber.get(0));
                                     if (immunisationList != null && immunisationList.size() > 0) {
 
-                                        system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                        system = OperationConstants.SYSTEM_RECORD_SECTION;
                                         code = "IMM";
                                         display = "Immunisations";
                                         investigationListText = immunisationList.get(0).getProvider();
@@ -901,7 +903,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                 if (adminItemList != null && adminItemList.size() > 0) {
 
-                                    system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
                                     code = "ADM";
                                     display = "Administrative Items";
                                     investigationListText = adminItemList.get(0).getProvider();
@@ -920,10 +922,10 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             default:
-                                system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                                code = "INVALID_PARAMETER";
-                                codableConceptText = "Patient Record Not Found";
-                                metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+                                system = OperationConstants.SYSTEM_WARNING_CODE;
+                                code = OperationConstants.CODE_INVALID_PARAMETER;
+                                codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
+                                metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
 
                                 operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                                         codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
@@ -953,17 +955,17 @@ public class PatientResourceProvider implements IResourceProvider {
                                     new IdDt(careProviderPractitionerList.get(0).getReference().getValue()));
 
                             if (practitioner == null) {
-                                system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                                code = "REFERENCE_NOT_FOUND";
-                                codableConceptText = "Invalid Reference";
-                                metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1";
+                                system = OperationConstants.SYSTEM_WARNING_CODE;
+                                code = OperationConstants.CODE_REFERENCE_NOT_FOUND;
+                                codableConceptText = OperationConstants.COD_CONCEPT_RECORD_INVALID_REFERENCE;
+                                metaProfile = OperationConstants.META_GP_CONNECT_PRACTITIONER;
 
                                 operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                                         codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                                 throw new ResourceNotFoundException("Practitioner Reference returning null");
                             }
                             practitioner.getMeta()
-                                    .addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1");
+                                    .addProfile(OperationConstants.META_GP_CONNECT_PRACTITIONER);
 
                             Entry practitionerEntry = new Entry().setResource(practitioner)
                                     .setFullUrl(careProviderPractitionerList.get(0).getReference().getValue());
@@ -979,10 +981,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
                             if (organizationEntry.getResource() == null || organizationEntry.getFullUrl() == null) {
 
-                                system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                                code = "REFERENCE_NOT_FOUND";
-                                codableConceptText = "Invalid Reference";
-                                metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1";
+                                system = OperationConstants.SYSTEM_WARNING_CODE;
+                                code = OperationConstants.CODE_REFERENCE_NOT_FOUND;
+                                codableConceptText = OperationConstants.COD_CONCEPT_RECORD_INVALID_REFERENCE;
+                                metaProfile = OperationConstants.META_GP_CONNECT_PRACTITIONER;
 
                                 operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                                         codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
@@ -1068,10 +1070,10 @@ public class PatientResourceProvider implements IResourceProvider {
             }
         } else {
 
-            String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-            String code = "INVALID_PARAMETER";
-            String codableConceptText = "Patient Record Not Found";
-            String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1";
+            String system = OperationConstants.SYSTEM_WARNING_CODE;
+            String code = OperationConstants.CODE_INVALID_PARAMETER;
+            String codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
+            String metaProfile = OperationConstants.META_GP_CONNECT_PRACTITIONER;
 
             OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                     codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
@@ -1219,10 +1221,10 @@ public class PatientResourceProvider implements IResourceProvider {
                     + practitioner.getName().getGivenFirstRep() + " " + practitioner.getName().getFamilyFirstRep());
             patient.getCareProvider().add(practitionerReference);
         } else {
-            String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
+            String system = OperationConstants.SYSTEM_WARNING_CODE;
             String code = "PATIENT_NOT_FOUND";
-            String codableConceptText = "Patient Record Not Found";
-            String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1";
+            String codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
+            String metaProfile = OperationConstants.META_GP_CONNECT_PRACTITIONER;
 
             OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
                     codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);

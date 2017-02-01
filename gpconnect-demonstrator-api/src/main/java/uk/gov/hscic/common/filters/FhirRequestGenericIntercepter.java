@@ -325,6 +325,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             Throwable theException, HttpServletRequest theServletRequest) throws ServletException {
         // This string match is really crude and it's not great, but I can't see
         // how else to pick up on just the relevant exceptions!
+       
         if (theException instanceof InvalidRequestException
                 && theException.getMessage().contains("Invalid attribute value")) {
             String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
@@ -332,6 +333,16 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
             OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system,
                     "INVALID_PARAMETER", theException.getMessage(), metaProfile, IssueTypeEnum.INVALID_CONTENT);
+
+            return new UnprocessableEntityException(theException.getMessage(), operationOutcome);
+        }
+        if (theException instanceof InvalidRequestException
+                && theException.getMessage().contains("InvalidResourceType")) {
+            String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
+            String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+
+            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system,
+                    "INVALID_RESOURCE", theException.getMessage(), metaProfile, IssueTypeEnum.INVALID_CONTENT);
 
             return new UnprocessableEntityException(theException.getMessage(), operationOutcome);
         }

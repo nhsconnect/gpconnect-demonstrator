@@ -106,66 +106,47 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
-
     @Autowired
     private OrganizationResourceProvider organizationResourceProvider;
-
     @Autowired
     private MedicationResourceProvider medicationResourceProvider;
-
     @Autowired
     private MedicationOrderResourceProvider medicationOrderResourceProvider;
-
     @Autowired
     private MedicationDispenseResourceProvider medicationDispenseResourceProvider;
-
     @Autowired
     private MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
-
     @Autowired
     private AppointmentResourceProvider appointmentResourceProvider;
-
     @Autowired
     private PatientStore patientStore;
-
     @Autowired
     private PatientSearch patientSearch;
-
     @Autowired
     private PatientSummarySearch patientSummarySearch;
-
     @Autowired
     private ProblemSearch problemSearch;
-
     @Autowired
     private EncounterSearch encounterSearch;
-
     @Autowired
     private AllergySearch allergySearch;
-
     @Autowired
     private ClinicalItemSearch clinicalItemsSearch;
-
     @Autowired
     private MedicationSearch medicationSearch;
-
     @Autowired
     private ReferralSearch referralSearch;
-
     @Autowired
     private ObservationSearch observationSearch;
-
     @Autowired
     private InvestigationSearch investigationSearch;
-
     @Autowired
     private ImmunisationSearch immunisationSearch;
-
     @Autowired
     private AdminItemSearch adminItemSearch;
-
     @Autowired
     private OperationOutcomeCreation operationOutcomeCreation;
+   
 
     @Override
     public Class<Patient> getResourceType() {
@@ -194,7 +175,7 @@ public class PatientResourceProvider implements IResourceProvider {
     public List<Patient> getPatientByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam patientId) {
         List<Patient> patients = new ArrayList<>();
         PatientDetails patientDetailsReturned = patientSearch.findPatient(patientId.getValue());
-
+  
         if (patientDetailsReturned != null) {
             List<PatientDetails> patientDetailsList = Collections.singletonList(patientDetailsReturned);
 
@@ -224,22 +205,19 @@ public class PatientResourceProvider implements IResourceProvider {
     public Bundle getPatientCareRecord(@ResourceParam Parameters params) throws UnsupportedDataTypeException {
         OperationOutcome operationOutcome = new OperationOutcome();
         ArrayList<String> nhsNumber = new ArrayList<>();
+        SectionsCreationClass sectionsCreationClass;
         ArrayList<String> sectionsParamList = new ArrayList<>();
         ArrayList<Entry> medicationsToBundle = new ArrayList<>();
-        String system = null;
-        String code = null;
-        String codableConceptText = null;
-        String metaProfile = null;
+        String system, code, codableConceptText, metaProfile, display, investigationListText, investigationListHTML,
+                sectionTitle;
+        Date fromDate = null, toDate = null;
 
-        Date fromDate = null;
-        Date toDate = null;
         // Extract the parameters
         boolean recordSectionNotPresent = true;
 
         for (Parameter param : params.getParameter()) {
             if (!param.getName().equals("patientNHSNumber") && !param.getName().equals("recordSection")
                     && !param.getName().equals("timePeriod")) {
-
                 system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
                 code = "INVALID_NHS_NUMBER";
                 codableConceptText = "Patient Record Not Found";
@@ -526,13 +504,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                         .findAllPatientSummaryHTMLTables(nhsNumber.get(0));
 
                                 if (patientSummaryList != null && patientSummaryList.size() > 0) {
-                                    CodingDt summaryCoding = new CodingDt()
-                                            .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1")
-                                            .setCode("SUM").setDisplay("Summary");
-                                    CodeableConceptDt summaryCodableConcept = new CodeableConceptDt()
-                                            .addCoding(summaryCoding).setText(patientSummaryList.get(0).getProvider());
-                                    NarrativeDt narrative = new NarrativeDt();
-                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
 
                                     if (patientSummaryList.get(0).getHtml().contains("This is confidential")) {
 
@@ -547,8 +518,16 @@ public class PatientResourceProvider implements IResourceProvider {
                                                 operationOutcome);
 
                                     } else {
-                                        narrative.setDivAsString(patientSummaryList.get(0).getHtml());
-                                        section.setTitle("Summary").setCode(summaryCodableConcept).setText(narrative);
+                                        system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                        code = "SUM";
+                                        display = "Summary";
+                                        investigationListText = patientSummaryList.get(0).getProvider();
+                                        investigationListHTML = patientSummaryList.get(0).getHtml();
+                                        sectionTitle = "Summary";
+
+                                        section = SectionsCreationClass.buildSection(system, code, display,
+                                                investigationListText, investigationListHTML, sectionTitle, section);
+
                                         sectionsList.add(section);
                                     }
 
@@ -568,15 +547,17 @@ public class PatientResourceProvider implements IResourceProvider {
                                             .findAllProblemHTMLTables(nhsNumber.get(0));
 
                                     if (problemList != null && problemList.size() > 0) {
-                                        CodingDt problemCoding = new CodingDt()
-                                                .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1")
-                                                .setCode("PRB").setDisplay("Problems");
-                                        CodeableConceptDt problemCodableConcept = new CodeableConceptDt()
-                                                .addCoding(problemCoding).setText(problemList.get(0).getProvider());
-                                        NarrativeDt narrative = new NarrativeDt();
-                                        narrative.setStatus(NarrativeStatusEnum.GENERATED);
-                                        narrative.setDivAsString(problemList.get(0).getHtml());
-                                        section.setTitle("Problems").setCode(problemCodableConcept).setText(narrative);
+
+                                        system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                        code = "PRB";
+                                        display = "Problems";
+                                        investigationListText = problemList.get(0).getProvider();
+                                        investigationListHTML = problemList.get(0).getHtml();
+                                        sectionTitle = "Problems";
+
+                                        section = SectionsCreationClass.buildSection(system, code, display,
+                                                investigationListText, investigationListHTML, sectionTitle, section);
+
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
@@ -591,15 +572,17 @@ public class PatientResourceProvider implements IResourceProvider {
                                         .findAllEncounterHTMLTables(nhsNumber.get(0), fromDate, toDate);
 
                                 if (encounterList != null && encounterList.size() > 0) {
-                                    CodingDt encounterCoding = new CodingDt()
-                                            .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1")
-                                            .setCode("ENC").setDisplay("Encounters");
-                                    CodeableConceptDt encounterCodableConcept = new CodeableConceptDt()
-                                            .addCoding(encounterCoding).setText(encounterList.get(0).getProvider());
-                                    NarrativeDt narrative = new NarrativeDt();
-                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
-                                    narrative.setDivAsString(encounterList.get(0).getHtml());
-                                    section.setTitle("Encounters").setCode(encounterCodableConcept).setText(narrative);
+
+                                    system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                    code = "ENC";
+                                    display = "Encounters";
+                                    investigationListText = encounterList.get(0).getProvider();
+                                    investigationListHTML = encounterList.get(0).getHtml();
+                                    sectionTitle = "Encounters";
+
+                                    section = SectionsCreationClass.buildSection(system, code, display,
+                                            investigationListText, investigationListHTML, sectionTitle, section);
+
                                     sectionsList.add(section);
                                 } else {
                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
@@ -615,17 +598,16 @@ public class PatientResourceProvider implements IResourceProvider {
                                     List<AllergyListHTML> allergyList = allergySearch
                                             .findAllAllergyHTMLTables(nhsNumber.get(0));
                                     if (allergyList != null && allergyList.size() > 0) {
-                                        CodingDt allergyCoding = new CodingDt()
-                                                .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1")
-                                                .setCode("ALL").setDisplay("Allergies and Sensitivities");
-                                        CodeableConceptDt allergyCodableConcept = new CodeableConceptDt()
-                                                .addCoding(allergyCoding).setText(allergyList.get(0).getProvider());
-                                        NarrativeDt narrative = new NarrativeDt();
-                                        narrative.setStatus(NarrativeStatusEnum.GENERATED);
-                                        narrative.setDivAsString(allergyList.get(0).getHtml());
 
-                                        section.setTitle("Allergies and Sensitivities").setCode(allergyCodableConcept)
-                                                .setText(narrative);
+                                        system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                        code = "ALL";
+                                        display = "Allergies and Sensitivities";
+                                        investigationListText = allergyList.get(0).getProvider();
+                                        investigationListHTML = allergyList.get(0).getHtml();
+                                        sectionTitle = "Allergies and Sensitivities";
+
+                                        section = SectionsCreationClass.buildSection(system, code, display,
+                                                investigationListText, investigationListHTML, sectionTitle, section);
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
@@ -640,17 +622,17 @@ public class PatientResourceProvider implements IResourceProvider {
                                         .findAllClinicalItemHTMLTables(nhsNumber.get(0));
 
                                 if (clinicalItemList != null && clinicalItemList.size() > 0) {
-                                    CodingDt clinicalItemCoding = new CodingDt()
-                                            .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1")
-                                            .setCode("CLI").setDisplay("Clinical Items");
-                                    CodeableConceptDt clinicalItemCodableConcept = new CodeableConceptDt()
-                                            .addCoding(clinicalItemCoding)
-                                            .setText(clinicalItemList.get(0).getProvider());
-                                    NarrativeDt narrative = new NarrativeDt();
-                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
-                                    narrative.setDivAsString(clinicalItemList.get(0).getHtml());
-                                    section.setTitle("Clinical Items").setCode(clinicalItemCodableConcept)
-                                            .setText(narrative);
+
+                                    system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                    code = "CLI";
+                                    display = "Clinical Items";
+                                    investigationListText = clinicalItemList.get(0).getProvider();
+                                    investigationListHTML = clinicalItemList.get(0).getHtml();
+                                    sectionTitle = "Clinical Items";
+
+                                    section = SectionsCreationClass.buildSection(system, code, display,
+                                            investigationListText, investigationListHTML, sectionTitle, section);
+
                                     sectionsList.add(section);
                                 } else {
                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
@@ -672,16 +654,17 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                 if (medicationList != null && medicationList.size() > 0) {
                                     section = new Section();
-                                    CodingDt medicationCoding = new CodingDt()
-                                            .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1")
-                                            .setCode("MED").setDisplay("Medications");
-                                    CodeableConceptDt medicationCodableConcept = new CodeableConceptDt()
-                                            .addCoding(medicationCoding).setText(medicationList.get(0).getProvider());
-                                    NarrativeDt narrative = new NarrativeDt();
-                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
-                                    narrative.setDivAsString(medicationList.get(0).getHtml());
-                                    section.setTitle("Medications").setCode(medicationCodableConcept)
-                                            .setText(narrative);
+
+                                    system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                    code = "MED";
+                                    display = "Medications";
+                                    investigationListText = medicationList.get(0).getProvider();
+                                    investigationListHTML = medicationList.get(0).getHtml();
+                                    sectionTitle = "Medications";
+
+                                    section = SectionsCreationClass.buildSection(system, code, display,
+                                            investigationListText, investigationListHTML, sectionTitle, section);
+
                                     sectionsList.add(section);
                                 } else {
                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
@@ -821,15 +804,17 @@ public class PatientResourceProvider implements IResourceProvider {
                                         .findAllReferralHTMLTables(nhsNumber.get(0));
 
                                 if (referralList != null && referralList.size() > 0) {
-                                    CodingDt referralCoding = new CodingDt()
-                                            .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1")
-                                            .setCode("REF").setDisplay("Referrals");
-                                    CodeableConceptDt referralCodableConcept = new CodeableConceptDt()
-                                            .addCoding(referralCoding).setText(referralList.get(0).getProvider());
-                                    NarrativeDt narrative = new NarrativeDt();
-                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
-                                    narrative.setDivAsString(referralList.get(0).getHtml());
-                                    section.setTitle("Referrals").setCode(referralCodableConcept).setText(narrative);
+
+                                    system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                    code = "REF";
+                                    display = "Referrals";
+                                    investigationListText = referralList.get(0).getProvider();
+                                    investigationListHTML = referralList.get(0).getHtml();
+                                    sectionTitle = "Referrals";
+
+                                    section = SectionsCreationClass.buildSection(system, code, display,
+                                            investigationListText, investigationListHTML, sectionTitle, section);
+
                                     sectionsList.add(section);
                                 } else {
                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
@@ -846,17 +831,17 @@ public class PatientResourceProvider implements IResourceProvider {
                                             .findAllObservationHTMLTables(nhsNumber.get(0));
 
                                     if (observationList != null && observationList.size() > 0) {
-                                        CodingDt observationCoding = new CodingDt()
-                                                .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1")
-                                                .setCode("OBS").setDisplay("Observations");
-                                        CodeableConceptDt observationCodableConcept = new CodeableConceptDt()
-                                                .addCoding(observationCoding)
-                                                .setText(observationList.get(0).getProvider());
-                                        NarrativeDt narrative = new NarrativeDt();
-                                        narrative.setStatus(NarrativeStatusEnum.GENERATED);
-                                        narrative.setDivAsString(observationList.get(0).getHtml());
-                                        section.setTitle("Observations").setCode(observationCodableConcept)
-                                                .setText(narrative);
+
+                                        system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                        code = "OBS";
+                                        display = "Observations";
+                                        investigationListText = observationList.get(0).getProvider();
+                                        investigationListHTML = observationList.get(0).getHtml();
+                                        sectionTitle = "Observations";
+
+                                        section = SectionsCreationClass.buildSection(system, code, display,
+                                                investigationListText, investigationListHTML, sectionTitle, section);
+
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
@@ -871,17 +856,15 @@ public class PatientResourceProvider implements IResourceProvider {
                                         .findAllInvestigationHTMLTables(nhsNumber.get(0));
 
                                 if (investigationList != null && investigationList.size() > 0) {
-                                    CodingDt investigationCoding = new CodingDt()
-                                            .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1")
-                                            .setCode("INV").setDisplay("Investigations");
-                                    CodeableConceptDt investigationCodableConcept = new CodeableConceptDt()
-                                            .addCoding(investigationCoding)
-                                            .setText(investigationList.get(0).getProvider());
-                                    NarrativeDt narrative = new NarrativeDt();
-                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
-                                    narrative.setDivAsString(investigationList.get(0).getHtml());
-                                    section.setTitle("Investigations").setCode(investigationCodableConcept)
-                                            .setText(narrative);
+                                    system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                    code = "INV";
+                                    display = "Investigations";
+                                    investigationListText = investigationList.get(0).getProvider();
+                                    investigationListHTML = investigationList.get(0).getHtml();
+                                    sectionTitle = "Investigations";
+
+                                    section = SectionsCreationClass.buildSection(system, code, display,
+                                            investigationListText, investigationListHTML, sectionTitle, section);
                                     sectionsList.add(section);
                                     throw new InvalidRequestException("Too many sets of investivations");
                                 } else {
@@ -895,20 +878,21 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (toDate != null && fromDate != null) {
                                     throw new InvalidRequestException("Date Ranges not allowed to be set");
                                 } else {
+
                                     List<ImmunisationListHTML> immunisationList = immunisationSearch
                                             .findAllImmunisationHTMLTables(nhsNumber.get(0));
                                     if (immunisationList != null && immunisationList.size() > 0) {
-                                        CodingDt immunisationCoding = new CodingDt()
-                                                .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1")
-                                                .setCode("IMM").setDisplay("Immunisations");
-                                        CodeableConceptDt immunisationCodableConcept = new CodeableConceptDt()
-                                                .addCoding(immunisationCoding)
-                                                .setText(immunisationList.get(0).getProvider());
-                                        NarrativeDt narrative = new NarrativeDt();
-                                        narrative.setStatus(NarrativeStatusEnum.GENERATED);
-                                        narrative.setDivAsString(immunisationList.get(0).getHtml());
-                                        section.setTitle("Immunisations").setCode(immunisationCodableConcept)
-                                                .setText(narrative);
+
+                                        system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                        code = "IMM";
+                                        display = "Immunisations";
+                                        investigationListText = immunisationList.get(0).getProvider();
+                                        investigationListHTML = immunisationList.get(0).getHtml();
+                                        sectionTitle = "Immunisations";
+
+                                        section = SectionsCreationClass.buildSection(system, code, display,
+                                                investigationListText, investigationListHTML, sectionTitle, section);
+
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
@@ -923,16 +907,17 @@ public class PatientResourceProvider implements IResourceProvider {
                                         .findAllAdminItemHTMLTables(nhsNumber.get(0));
 
                                 if (adminItemList != null && adminItemList.size() > 0) {
-                                    CodingDt adminItemCoding = new CodingDt()
-                                            .setSystem("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1")
-                                            .setCode("ADM").setDisplay("Administrative Items");
-                                    CodeableConceptDt adminItemCodableConcept = new CodeableConceptDt()
-                                            .addCoding(adminItemCoding).setText(adminItemList.get(0).getProvider());
-                                    NarrativeDt narrative = new NarrativeDt();
-                                    narrative.setStatus(NarrativeStatusEnum.GENERATED);
-                                    narrative.setDivAsString(adminItemList.get(0).getHtml());
-                                    section.setTitle("Administrative Items").setCode(adminItemCodableConcept)
-                                            .setText(narrative);
+
+                                    system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+                                    code = "ADM";
+                                    display = "Administrative Items";
+                                    investigationListText = adminItemList.get(0).getProvider();
+                                    investigationListHTML = adminItemList.get(0).getHtml();
+                                    sectionTitle = "Administrative Items";
+
+                                    section = SectionsCreationClass.buildSection(system, code, display,
+                                            investigationListText, investigationListHTML, sectionTitle, section);
+
                                     sectionsList.add(section);
                                 } else {
                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(

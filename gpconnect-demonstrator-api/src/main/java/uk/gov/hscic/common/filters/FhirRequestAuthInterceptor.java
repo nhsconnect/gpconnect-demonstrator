@@ -46,7 +46,6 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
         try {
             claimsJsonString = new String(Base64.getDecoder().decode(authorizationHeaderComponents[1].split("\\.")[1]));
-            jwtParseResourcesValidation(claimsJsonString);
         } catch (IllegalArgumentException iae) {
             throw new InvalidRequestException("Not Base 64");
         }
@@ -79,6 +78,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         try {
             webToken = new ObjectMapper().readValue(claimsJsonString, WebToken.class);
             WebTokenValidator.validateWebToken(webToken);
+            jwtParseResourcesValidation(claimsJsonString);
         } catch (IOException ex) {
             throw new InvalidRequestException("Invalid WebToken");
         }

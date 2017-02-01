@@ -25,6 +25,8 @@ import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.OperationOutcomeFactory;
+import uk.gov.hscic.common.filters.model.RequestBody;
 import uk.gov.hscic.common.filters.model.RequestedRecord;
 import uk.gov.hscic.common.filters.model.WebToken;
 import uk.gov.hscic.common.filters.model.WebTokenValidator;
@@ -105,17 +107,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                 throw new InvalidRequestException("Bad Request Exception");
             }
 
-            // Gets the NHS number in the request body to compare to requested_record
-            boolean isMatchingNhsNumber = requestDetails
-                    .getUnqualifiedToQualifiedNames()
-                    .values()
-                    .stream()
-                    .flatMap(List::stream)
-                    .allMatch(value -> value.contains(requestedNhsNumber));
-
-            if (!isMatchingNhsNumber) {
-                throw new InvalidRequestException("Bad Request Exception");
-            }
+            validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents());
         }
 
         if ("Patient".equals(requestedRecord.getResourceType())) {
@@ -165,6 +157,37 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             throw new UnprocessableEntityException("Invalid Resource Present");
         } catch (IOException ex) {
             throw new InvalidRequestException("Unparsable JSON");
+        }
+    }
+
+    private void validateNhsNumberInBodyIsSameAsHeader(String nhsNumberFromHeader, byte[] requestDetailsBody) {
+        try {
+            // Get the NHS number in the request body to compare to requested_record
+            String nhsNumberFromBody = new ObjectMapper()
+                    .readValue(requestDetailsBody, RequestBody.class)
+                    .getIdentifierParameterValue("http://fhir.nhs.net/Id/nhs-number");
+
+            if (null == nhsNumberFromBody) {
+                String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
+                String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+
+                throw new InvalidRequestException("NHS number in body doesn't match the header",
+                        OperationOutcomeFactory.buildOperationOutcome(system, "INVALID_IDENTIFIER_SYSTEM", "NHS number in body doesn't match the header", metaProfile, IssueTypeEnum.INVALID_CONTENT));
+            }
+
+            if (!NhsCodeValidator.nhsNumberValid(nhsNumberFromHeader) || !NhsCodeValidator.nhsNumberValid(nhsNumberFromBody)) {
+                String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
+                String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+
+                throw new InvalidRequestException("NHS number invalid",
+                        OperationOutcomeFactory.buildOperationOutcome(system, "INVALID_NHS_NUMBER", "NHS number invalid", metaProfile, IssueTypeEnum.INVALID_CONTENT));
+            }
+
+            if (!nhsNumberFromHeader.equals(nhsNumberFromBody)) {
+                throw new InvalidRequestException("NHS number in body doesn't match the header");
+            }
+        } catch (IOException ex) {
+            throw new InvalidRequestException("Cannot parse request body");
         }
     }
 }

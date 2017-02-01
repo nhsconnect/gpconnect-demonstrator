@@ -1,5 +1,11 @@
 package uk.gov.hscic.common.filters;
 
+import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
+import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+import ca.uhn.fhir.rest.method.RequestDetails;
+import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +22,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
@@ -23,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.OperationOutcomeFactory;
 
 @Component
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
@@ -271,14 +279,38 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         return true;
     }
 
+ 	/**
+ 	 * Listens for any exceptions thrown. In the case of invalid parameters, we
+     * need to catch this and throw it as a UnprocessableEntityException.
+     *
+     * @param theRequestDetails
+     * @param theException
+     * @param theServletRequest
+     * @return UnprocessableEntityException if a InvalidRequestException was thrown.
+     * @throws javax.servlet.ServletException
+ 	 */
+    @Override
+    public BaseServerResponseException preProcessOutgoingException(RequestDetails theRequestDetails, Throwable theException, HttpServletRequest theServletRequest) throws ServletException {
+        // This string match is really crude and it's not great, but I can't see
+        // how else to pick up on just the relevant exceptions!
+        if (theException instanceof InvalidRequestException && theException.getMessage().contains("Invalid attribute value")) {
+            String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
+            String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
+
+            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, "INVALID_PARAMETER", theException.getMessage(), metaProfile, IssueTypeEnum.INVALID_CONTENT);
+
+            return new UnprocessableEntityException(theException.getMessage(), operationOutcome);
+        }
+
+        return super.preProcessOutgoingException(theRequestDetails, theException, theServletRequest);
+    }
+
     // This method finds the patient No which is different from the NHS number
     private Integer getIdFromUrl(String URL) {
         Matcher m = Pattern.compile("-?\\d+").matcher(URL);
 
-        if (m.find()) {
-            return Integer.parseInt(m.group());
-        }
-
-        return 0;
+        return m.find()
+                ? Integer.parseInt(m.group())
+                : 0;
     }
 }

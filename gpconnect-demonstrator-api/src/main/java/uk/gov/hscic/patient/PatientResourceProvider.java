@@ -8,7 +8,6 @@ import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.ContactPointDt;
 import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
-import ca.uhn.fhir.model.dstu2.composite.NarrativeDt;
 import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.Appointment;
@@ -34,7 +33,6 @@ import ca.uhn.fhir.model.dstu2.valueset.ContactPointUseEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
-import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
 import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -62,6 +60,7 @@ import java.util.List;
 import javax.activation.UnsupportedDataTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.util.NhsCodeValidator;
 import uk.gov.hscic.medication.model.PatientMedicationHTML;
@@ -144,9 +143,6 @@ public class PatientResourceProvider implements IResourceProvider {
     private ImmunisationSearch immunisationSearch;
     @Autowired
     private AdminItemSearch adminItemSearch;
-    @Autowired
-    private OperationOutcomeCreation operationOutcomeCreation;
-   
 
     @Override
     public Class<Patient> getResourceType() {
@@ -163,8 +159,8 @@ public class PatientResourceProvider implements IResourceProvider {
             String codableConceptText = "Patient Record Not Found";
             String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-patient-1";
 
-            OperationOutcome operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                    codableConceptText, metaProfile);
+            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                    codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
             throw new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart(),
                     operationOutcome);
         }
@@ -175,7 +171,7 @@ public class PatientResourceProvider implements IResourceProvider {
     public List<Patient> getPatientByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam patientId) {
         List<Patient> patients = new ArrayList<>();
         PatientDetails patientDetailsReturned = patientSearch.findPatient(patientId.getValue());
-  
+
         if (patientDetailsReturned != null) {
             List<PatientDetails> patientDetailsList = Collections.singletonList(patientDetailsReturned);
 
@@ -192,8 +188,8 @@ public class PatientResourceProvider implements IResourceProvider {
             String codableConceptText = "Patient Record Not Found";
             String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
 
-            OperationOutcome operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                    codableConceptText, metaProfile);
+            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                    codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
             throw new ResourceNotFoundException("No patient details found for patient ID: ", operationOutcome);
         }
 
@@ -223,8 +219,8 @@ public class PatientResourceProvider implements IResourceProvider {
                 codableConceptText = "Patient Record Not Found";
                 metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
 
-                operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                        codableConceptText, metaProfile);
+                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                        codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                 throw new UnprocessableEntityException("Parameters are incorrect", operationOutcome);
             }
 
@@ -242,9 +238,8 @@ public class PatientResourceProvider implements IResourceProvider {
                 // "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
                 //
                 // operationOutcome =
-                // operationOutcomeCreation.buildOperationOutcomeNotFound(system,
-                // code,
-                // codableConceptText, metaProfile);
+                // OperationOutcomeFactory.buildOperationOutcome(system,
+                // code, codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                 // throw new InvalidRequestException("System Invalid ",
                 // operationOutcome);
                 // }
@@ -254,8 +249,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     code = "INVALID_NHS_NUMBER";
                     codableConceptText = "Patient Record Not Found";
                     metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-                    operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                            codableConceptText, metaProfile);
+                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                            codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                     throw new InvalidRequestException("System Invalid ", operationOutcome);
 
                 }
@@ -265,8 +260,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     code = "INVALID_NHS_NUMBER";
                     codableConceptText = "Patient Record Not Found";
                     metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-                    operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                            codableConceptText, metaProfile);
+                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                            codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                     throw new InvalidRequestException("System Invalid ", operationOutcome);
                 }
 
@@ -283,9 +278,8 @@ public class PatientResourceProvider implements IResourceProvider {
                 // metaProfile =
                 // "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
                 // operationOutcome =
-                // operationOutcomeCreation.buildOperationOutcomeNotFound(system,
-                // code,
-                // codableConceptText, metaProfile);
+                // OperationOutcomeFactory.buildOperationOutcome(system,
+                // code, codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                 // throw new InvalidRequestException("System Invalid ",
                 // operationOutcome);
                 // }
@@ -295,8 +289,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     code = "INVALID_IDENTIFIER_SYSTEM";
                     codableConceptText = "NHS Number Invalid";
                     metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-                    operationOutcome = operationOutcomeCreation.buildOperationOutcomeInvalidContent(system, code,
-                            codableConceptText, metaProfile);
+                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                            codableConceptText, metaProfile, IssueTypeEnum.INVALID_CONTENT);
                     throw new InvalidRequestException("Bad Request Exception", operationOutcome);
                 }
             } else if (value instanceof CodeableConceptDt) {
@@ -312,8 +306,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     code = "INVALID_PARAMETER";
                     codableConceptText = "Patient Record Not Found";
                     metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-                    operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                            codableConceptText, metaProfile);
+                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                            codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                     throw new UnprocessableEntityException("System Invalid ", operationOutcome);
                 }
 
@@ -325,8 +319,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     code = "INVALID_PARAMETER";
                     codableConceptText = "Invalid Section Code";
                     metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-                    operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                            codableConceptText, metaProfile);
+                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                            codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                     throw new UnprocessableEntityException("Section Case Invalid: ", operationOutcome);
                 }
 
@@ -342,8 +336,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     code = "INVALID_IDENTIFIER_SYSTEM";
                     codableConceptText = "Multiple Sections Added";
                     metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-                    operationOutcome = operationOutcomeCreation.buildOperationOutcomeInvalidContent(system, code,
-                            codableConceptText, metaProfile);
+                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                            codableConceptText, metaProfile, IssueTypeEnum.INVALID_CONTENT);
                     throw new InvalidRequestException("Bad Request Exception", operationOutcome);
 
                 }
@@ -372,8 +366,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     code = "INVALID_PARAMETER";
                     codableConceptText = "Patient Record Not Found";
                     metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-                    operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                            codableConceptText, metaProfile);
+                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                            codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                     throw new UnprocessableEntityException("Dates are invalid: ", operationOutcome);
                 }
 
@@ -414,8 +408,8 @@ public class PatientResourceProvider implements IResourceProvider {
                 code = "INVALID_NHS_NUMBER";
                 codableConceptText = "NHS Number Invalid";
                 metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-                operationOutcome = operationOutcomeCreation.buildOperationOutcomeInvalidContent(system, code,
-                        codableConceptText, metaProfile);
+                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                        codableConceptText, metaProfile, IssueTypeEnum.INVALID_CONTENT);
                 throw new ResourceNotFoundException("NHS number Invalid " + operationOutcome);
             }
         }
@@ -428,8 +422,8 @@ public class PatientResourceProvider implements IResourceProvider {
                 code = "INVALID_NHS_NUMBER";
                 codableConceptText = "NHS Number Invalid";
                 metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-                operationOutcome = operationOutcomeCreation.buildOperationOutcomeInvalidContent(system, code,
-                        codableConceptText, metaProfile);
+                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                        codableConceptText, metaProfile, IssueTypeEnum.INVALID_CONTENT);
                 throw new InvalidRequestException("NHS number Invalid " + operationOutcome);
             } else {
                 // Build the Patient Resource and add it to the bundle
@@ -487,8 +481,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                 codableConceptText = "Patient Record Not Found";
                                 metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
 
-                                operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                                        codableConceptText, metaProfile);
+                                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                                        codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                                 throw new UnprocessableEntityException("Section Case Invalid: ", operationOutcome);
                             }
 
@@ -512,11 +506,10 @@ public class PatientResourceProvider implements IResourceProvider {
                                         codableConceptText = "Patient Data Confidential";
                                         metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
 
-                                        operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(
-                                                system, code, codableConceptText, metaProfile);
+                                        operationOutcome = OperationOutcomeFactory.buildOperationOutcome(
+                                                system, code, codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                                         throw new ForbiddenOperationException("This Data Is Confidential",
                                                 operationOutcome);
-
                                     } else {
                                         system = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
                                         code = "SUM";
@@ -932,8 +925,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                 codableConceptText = "Patient Record Not Found";
                                 metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
 
-                                operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                                        codableConceptText, metaProfile);
+                                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                                        codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                                 throw new UnprocessableEntityException("Dates are invalid: ", operationOutcome);
                             }
                         }
@@ -965,8 +958,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                 codableConceptText = "Invalid Reference";
                                 metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1";
 
-                                operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                                        codableConceptText, metaProfile);
+                                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                                        codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                                 throw new ResourceNotFoundException("Practitioner Reference returning null");
                             }
                             practitioner.getMeta()
@@ -991,8 +984,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                 codableConceptText = "Invalid Reference";
                                 metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1";
 
-                                operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                                        codableConceptText, metaProfile);
+                                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                                        codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
                                 throw new ResourceNotFoundException("organizationResource returning null",
                                         operationOutcome);
                             }
@@ -1080,8 +1073,8 @@ public class PatientResourceProvider implements IResourceProvider {
             String codableConceptText = "Patient Record Not Found";
             String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1";
 
-            OperationOutcome operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                    codableConceptText, metaProfile);
+            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                    codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
 
             throw new UnprocessableEntityException("Section Case Invalid: ", operationOutcome);
         }
@@ -1226,14 +1219,13 @@ public class PatientResourceProvider implements IResourceProvider {
                     + practitioner.getName().getGivenFirstRep() + " " + practitioner.getName().getFamilyFirstRep());
             patient.getCareProvider().add(practitionerReference);
         } else {
-
             String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
             String code = "PATIENT_NOT_FOUND";
             String codableConceptText = "Patient Record Not Found";
             String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1";
 
-            OperationOutcome operationOutcome = operationOutcomeCreation.buildOperationOutcomeNotFound(system, code,
-                    codableConceptText, metaProfile);
+            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
+                    codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
             throw new ResourceNotFoundException("No GP record exists " + operationOutcome);
         }
 
@@ -1275,5 +1267,4 @@ public class PatientResourceProvider implements IResourceProvider {
 
         return patient;
     }
-
 }

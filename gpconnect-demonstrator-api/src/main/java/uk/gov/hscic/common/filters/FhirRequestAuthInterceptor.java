@@ -2,7 +2,9 @@ package uk.gov.hscic.common.filters;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
+import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.parser.DataFormatException;
@@ -107,7 +109,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                 throw new InvalidRequestException("Bad Request Exception");
             }
 
-            validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents());
+//            validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents(), contentType.contains("xml"));
         }
 
         if ("Patient".equals(requestedRecord.getResourceType())) {
@@ -160,12 +162,32 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         }
     }
 
-    private void validateNhsNumberInBodyIsSameAsHeader(String nhsNumberFromHeader, byte[] requestDetailsBody) {
+    private void validateNhsNumberInBodyIsSameAsHeader(String nhsNumberFromHeader, byte[] requestDetailsBody, boolean xmlContent) {
+        String nhsNumberFromBody;
+
         try {
             // Get the NHS number in the request body to compare to requested_record
-            String nhsNumberFromBody = new ObjectMapper()
-                    .readValue(requestDetailsBody, RequestBody.class)
-                    .getIdentifierParameterValue("http://fhir.nhs.net/Id/nhs-number");
+            if (xmlContent) { // If XML, you can't use the JSON parser.
+                nhsNumberFromBody = FhirContext
+                        .forDstu2()
+                        .newXmlParser()
+                        .setParserErrorHandler(new StrictErrorHandler())
+                        .parseResource(Parameters.class, new String(requestDetailsBody))
+                        .getParameter()
+                        .stream()
+                        .filter(parameter -> "patientNHSNumber".equals(parameter.getName()))
+                        .map(Parameters.Parameter::getValue)
+                        .filter(IdentifierDt.class::isInstance)
+                        .map(IdentifierDt.class::cast)
+                        .filter(identifierDt -> "http://fhir.nhs.net/Id/nhs-number".equals(identifierDt.getSystem())) // Make sure they match.
+                        .map(IdentifierDt::getValue)
+                        .findFirst()
+                        .orElse(null);
+            } else {
+                nhsNumberFromBody = new ObjectMapper()
+                        .readValue(new String(requestDetailsBody), RequestBody.class)
+                        .getIdentifierParameterValue("http://fhir.nhs.net/Id/nhs-number");
+            }
 
             if (null == nhsNumberFromBody) {
                 String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";

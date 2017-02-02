@@ -63,7 +63,7 @@ public class WebTokenValidator {
             assertNotNull(webToken.getRequestingPractitioner().getName().get("given"));
             assertNotNull(webToken.getRequestingPractitioner().getName().get("prefix"));
             assertNotNull(webToken.getRequestingPractitioner().getIdentifierValue("http://fhir.nhs.net/sds-user-id"));
-            assertNotNull(webToken.getRequestingPractitioner().getPractitionerRoleCode("http://fhir.nhs.net/ValueSet/sds-job-role-name-1"));
+//            assertNotNull(webToken.getRequestingPractitioner().getPractitionerRoleCode("http://fhir.nhs.net/ValueSet/sds-job-role-name-1"));
         } catch (NullPointerException e) {
             assertNotNull(null);
         }

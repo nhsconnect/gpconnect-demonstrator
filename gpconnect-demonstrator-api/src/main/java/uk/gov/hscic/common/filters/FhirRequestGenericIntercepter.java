@@ -1,5 +1,27 @@
 package uk.gov.hscic.common.filters;
 
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.method.RequestDetails;
@@ -7,31 +29,7 @@ import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
-import uk.gov.hscic.ValidInteractionIds;
 
 @Component
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
@@ -108,21 +106,18 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         // Check there is a SSP-From header
         String fromASIDHeader = httpRequest.getHeader("Ssp-From");
-        if (fromASIDHeader == null || fromASIDHeader.isEmpty()) 
-        {
+        if (fromASIDHeader == null || fromASIDHeader.isEmpty()) {
             throwInvalidRequestException("SSP-From header blank");
         }
 
         // Check the SSP-To header is present and directed to our system
         String toASIDHeader = httpRequest.getHeader("Ssp-To");
-        if (toASIDHeader == null || toASIDHeader.isEmpty()) 
-        {
+        if (toASIDHeader == null || toASIDHeader.isEmpty()) {
             throwInvalidRequestException("SSP-To header blank");
         }
-        
+
         String interactionIdHeader = httpRequest.getHeader("Ssp-InteractionID");
-        if (interactionIdHeader == null || interactionIdHeader.isEmpty()) 
-        {
+        if (interactionIdHeader == null || interactionIdHeader.isEmpty()) {
             throwInvalidRequestException("Ssp-InteractionID header blank");
         }
         if (systemSspToHeader != null && !toASIDHeader.equalsIgnoreCase(systemSspToHeader)) {
@@ -133,10 +128,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         String URL = httpRequest.getRequestURI();
         int id = getIdFromUrl(URL);
 
-       
-        List<String> validInteractionIds =ValidInteractionIds.interactionIdlist;
         Map<String, String> map = createMapUsingid(id);
-       
 
         if (interactionIdWhiteList != null && !interactionIdWhiteList.contains(interactionIdHeader)) {
             // We managed to load our whilte list but the interaction Id in the
@@ -146,15 +138,9 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         boolean interactionIdValidator = false;
 
-        for (int i = 0; i < validInteractionIds.size(); i++) {
-            System.out.println(interactionIdHeader);
-            System.out.println(validInteractionIds.get(i));
-            
-            if (interactionIdHeader.equals(validInteractionIds.get(i))
-                    && URL.equals(map.get(validInteractionIds.get(i)))) {
-                interactionIdValidator = true;
-                break;
-            }
+        if (map.containsKey(interactionIdHeader) && URL.equals(map.get(interactionIdHeader))) {
+            interactionIdValidator = true;
+
         }
 
         if (interactionIdValidator == false) {
@@ -252,7 +238,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             }
         };
         return map;
-        
+
     }
 
     private void throwInvalidRequestException(String exceptionMessage) {
@@ -281,7 +267,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             Throwable theException, HttpServletRequest theServletRequest) throws ServletException {
         // This string match is really crude and it's not great, but I can't see
         // how else to pick up on just the relevant exceptions!
-       
+
         if (theException instanceof InvalidRequestException
                 && theException.getMessage().contains("Invalid attribute value")) {
             String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";

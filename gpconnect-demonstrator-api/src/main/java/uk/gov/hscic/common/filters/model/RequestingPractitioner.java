@@ -47,6 +47,10 @@ public class RequestingPractitioner {
     }
 
     public String getIdentifierValue(String system) {
+        if (null == identifiers) {
+            return null;
+        }
+        
         return identifiers
                 .stream()
                 .filter(identifier -> identifier.getSystem().equals(system))
@@ -56,7 +60,7 @@ public class RequestingPractitioner {
     }
 
     public String getPractitionerRoleCode(String system) {
-        if (practitionerRoles.isEmpty()) {
+        if (null == practitionerRoles || practitionerRoles.isEmpty()) {
             return null;
         }
 

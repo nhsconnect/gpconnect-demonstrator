@@ -42,6 +42,10 @@ public class RequestingOrganization {
     }
 
     public String getIdentifierValue(String system) {
+        if (null == identifiers) {
+            return null;
+        }
+        
         return identifiers
                 .stream()
                 .filter(identifier -> identifier.getSystem().equals(system))

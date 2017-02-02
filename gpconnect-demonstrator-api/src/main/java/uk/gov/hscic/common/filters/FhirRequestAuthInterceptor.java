@@ -109,7 +109,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                 throw new InvalidRequestException("Bad Request Exception");
             }
 
-//            validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents(), contentType.contains("xml"));
+            validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents(), contentType.contains("xml"));
         }
 
         if ("Patient".equals(requestedRecord.getResourceType())) {

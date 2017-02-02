@@ -28,45 +28,39 @@ public class WebTokenValidator {
     }
 
     private static void verifyNoNullValues(WebToken webToken) {
+        assertNotNull(webToken.getAud());
+        assertNotNull(webToken.getExp());
+        assertNotNull(webToken.getIat());
+        assertNotNull(webToken.getIss());
+        assertNotNull(webToken.getSub());
+        assertNotNull(webToken.getReasonForRequest());
 
-        try {
-            assertNotNull(webToken.getAud());
-            assertNotNull(webToken.getExp());
-            assertNotNull(webToken.getIat());
-            assertNotNull(webToken.getIss());
-            assertNotNull(webToken.getSub());
-            assertNotNull(webToken.getReasonForRequest());
+        assertNotNull(webToken.getRequestedRecord());
+        assertNotNull(webToken.getRequestedRecord().getResourceType());
 
-            assertNotNull(webToken.getRequestedRecord());
-            assertNotNull(webToken.getRequestedRecord().getResourceType());
+        assertNotNull(webToken.getRequestedScope());
 
-            assertNotNull(webToken.getRequestedScope());
+        assertNotNull(webToken.getRequestingDevice());
+        assertNotNull(webToken.getRequestingDevice().getId());
+        assertNotNull(webToken.getRequestingDevice().getModel());
+        assertNotNull(webToken.getRequestingDevice().getResourceType());
+        assertNotNull(webToken.getRequestingDevice().getVersion());
 
-            assertNotNull(webToken.getRequestingDevice());
-            assertNotNull(webToken.getRequestingDevice().getId());
-            assertNotNull(webToken.getRequestingDevice().getModel());
-            assertNotNull(webToken.getRequestingDevice().getResourceType());
-            assertNotNull(webToken.getRequestingDevice().getVersion());
+        assertNotNull(webToken.getRequestingOrganization());
+        assertNotNull(webToken.getRequestingOrganization().getId());
+        assertNotNull(webToken.getRequestingOrganization().getName());
+        assertNotNull(webToken.getRequestingOrganization().getResourceType());
+        assertNotNull(webToken.getRequestingOrganization().getIdentifierValue("http://fhir.nhs.net/Id/ods-organization-code"));
 
-            assertNotNull(webToken.getRequestingOrganization());
-            assertNotNull(webToken.getRequestingOrganization().getId());
-            assertNotNull(webToken.getRequestingOrganization().getName());
-            assertNotNull(webToken.getRequestingOrganization().getResourceType());
-
-            assertNotNull(webToken.getRequestingOrganization()
-                    .getIdentifierValue("http://fhir.nhs.net/Id/ods-organization-code"));
-            assertNotNull(webToken.getRequestingPractitioner());
-            assertNotNull(webToken.getRequestingPractitioner().getId());
-            assertNotNull(webToken.getRequestingPractitioner().getResourceType());
-            assertNotNull(webToken.getRequestingPractitioner().getName());
-            assertNotNull(webToken.getRequestingPractitioner().getName().get("family"));
-            assertNotNull(webToken.getRequestingPractitioner().getName().get("given"));
-            assertNotNull(webToken.getRequestingPractitioner().getName().get("prefix"));
-            assertNotNull(webToken.getRequestingPractitioner().getIdentifierValue("http://fhir.nhs.net/sds-user-id"));
-//            assertNotNull(webToken.getRequestingPractitioner().getPractitionerRoleCode("http://fhir.nhs.net/ValueSet/sds-job-role-name-1"));
-        } catch (NullPointerException e) {
-            assertNotNull(null);
-        }
+        assertNotNull(webToken.getRequestingPractitioner());
+        assertNotNull(webToken.getRequestingPractitioner().getId());
+        assertNotNull(webToken.getRequestingPractitioner().getResourceType());
+        assertNotNull(webToken.getRequestingPractitioner().getName());
+        assertNotNull(webToken.getRequestingPractitioner().getName().get("family"));
+        assertNotNull(webToken.getRequestingPractitioner().getName().get("given"));
+        assertNotNull(webToken.getRequestingPractitioner().getName().get("prefix"));
+        assertNotNull(webToken.getRequestingPractitioner().getIdentifierValue("http://fhir.nhs.net/sds-user-id"));
+        assertNotNull(webToken.getRequestingPractitioner().getPractitionerRoleCode("http://fhir.nhs.net/ValueSet/sds-job-role-name-1"));
     }
 
     private static void assertNotNull(Object object) {

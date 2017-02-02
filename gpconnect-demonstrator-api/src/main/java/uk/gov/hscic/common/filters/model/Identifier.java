@@ -1,5 +1,8 @@
 package uk.gov.hscic.common.filters.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Identifier {
     private String system;
     private String value;

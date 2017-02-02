@@ -96,14 +96,28 @@ angular.module('gpConnect')
                     oPayload.requesting_practitioner = {
                         "resourceType": "Practitioner",
                         "id": "1",
-                        "identifier": [{
+                        "practitionerRole": [
+                            {
+                                "role": {
+                                    "coding": [
+                                        {
+                                            "system": "http://fhir.nhs.net/ValueSet/sds-job-role-name-1",
+                                            "code": "AssuranceJobRole"
+                                        }
+                                    ]
+                                }
+                            }
+                        ],
+                        "identifier": [
+                            {
                                 "system": "http://fhir.nhs.net/sds-user-id",
                                 "value": "G13579135"
                             },
                             {
                                 "system": "localSystem",
                                 "value": "1"
-                            }],
+                            }
+                        ],
                         "name": {
                             "family": ["Demonstrator"],
                             "given": ["GPConnect"],

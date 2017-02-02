@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Coding {
     private String system;
     private String code;
+    private String display;
 
     public String getSystem() {
         return system;
@@ -21,5 +22,13 @@ public class Coding {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(String display) {
+        this.display = display;
     }
 }

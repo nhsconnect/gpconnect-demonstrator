@@ -20,7 +20,11 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+
+
 
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
@@ -136,20 +140,13 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             failedMsg = failedMsg + "SSP-InteractionID in not a valid interaction ID for the system,";
         }
 
-        boolean interactionIdValidator = false;
-
-        if (map.containsKey(interactionIdHeader) && URL.equals(map.get(interactionIdHeader))) {
-            interactionIdValidator = true;
-
-        }
-
-        if (interactionIdValidator == false) {
+        if (!URL.equals(map.get(interactionIdHeader))) {
             throwInvalidRequestException("InteractionId Incorrect");
         }
 
         if (!failedMsg.isEmpty()) {
             try {
-                httpResponse.sendError(400, failedMsg);
+                httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, failedMsg);
             } catch (Exception e) {
                 LOG.error("Error adding response message for Failed validation: (" + failedMsg + ") " + e.getMessage());
             }
@@ -162,7 +159,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             if (simulationErrorIndex >= 0 && simulationErrorIndex < errorSimulationCodes.size()) {
                 try {
                     httpResponse.setStatus(errorSimulationCodes.get(simulationErrorIndex).getInt("httpError"));
-                    httpResponse.setHeader("Content-Type", "application/json+fhir");
+                    httpResponse.setHeader(HttpHeaders.CONTENT_TYPE, "application/json+fhir");
                     try (PrintWriter writer = httpResponse.getWriter()) {
                         writer.write(
                                 "{ \"resourceType\": \"OperationOutcome\", \"issue\": [ { \"severity\": \"error\", \"code\": \"forbidden\", \"details\": { \"coding\": [ { \"system\": \"http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1\", \"code\": \""

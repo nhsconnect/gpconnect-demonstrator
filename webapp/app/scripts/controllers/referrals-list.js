@@ -4,6 +4,8 @@ angular.module('gpConnect')
   .controller('ReferralsListCtrl', function ($scope, $location, $stateParams, $sce, $modal, $state, usSpinnerService, PatientService, Referral) {
 
     $scope.currentPage = 1;
+    $scope.toDateValue = moment().format('YYYY-MM-DD');
+    $scope.fromDateValue = moment().subtract(3, 'years').format('YYYY-MM-DD');
 
     $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
@@ -12,6 +14,22 @@ angular.module('gpConnect')
     if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
+
+     $scope.openDatePicker = function ($event, name) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.toDate = false;
+                $scope.fromDate = false;
+                $scope[name] = true;
+            };
+
+            $scope.dateChanged = function() {
+                var newDate = new Date($scope.toDateValue);
+                $scope.toDateValue = moment(newDate).format('YYYY-MM-DD');
+                newDate = new Date($scope.fromDateValue);
+                $scope.fromDateValue = moment(newDate).format('YYYY-MM-DD');
+                loadHTML();
+            };
 
     $scope.search = function (row) {
       return (
@@ -25,8 +43,8 @@ angular.module('gpConnect')
     if ($stateParams.filter) {
       $scope.query = $stateParams.filter;
     }
-
-    Referral.findAllHTMLTables($stateParams.patientId).then(function (result) {
+    var loadHTML = function () {
+    Referral.findAllHTMLTables($stateParams.patientId, $scope.fromDateValue, $scope.toDateValue).then(function (result) {
 
       // Default Page Content
       var text = '{"provider":"No Data","html":"No referrals data available for this patient."}';
@@ -53,6 +71,7 @@ angular.module('gpConnect')
       
       usSpinnerService.stop('patientSummary-spinner');
     });
+    };
 
     $scope.go = function (id) {
       $state.go('referrals-detail', {
@@ -114,5 +133,5 @@ angular.module('gpConnect')
         });
       });
     };
-
+ loadHTML();
   });

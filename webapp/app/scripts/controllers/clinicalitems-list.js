@@ -4,6 +4,9 @@ angular.module('gpConnect')
   .controller('ClinicalItemsListCtrl', function ($scope, $location, $stateParams, $modal, $state, $sce, PatientService, usSpinnerService, ClinicalItem) {
 
     $scope.currentPage = 1;
+    $scope.toDateValue = moment().format('YYYY-MM-DD');
+    $scope.fromDateValue = moment().subtract(3, 'years').format('YYYY-MM-DD');
+
 
     $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
@@ -13,7 +16,24 @@ angular.module('gpConnect')
       $scope.currentPage = $stateParams.page;
     }
 
-    ClinicalItem.findAllHTMLTables($stateParams.patientId).then(function (result) {
+     $scope.openDatePicker = function ($event, name) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.toDate = false;
+                $scope.fromDate = false;
+                $scope[name] = true;
+            };
+
+            $scope.dateChanged = function() {
+                var newDate = new Date($scope.toDateValue);
+                $scope.toDateValue = moment(newDate).format('YYYY-MM-DD');
+                newDate = new Date($scope.fromDateValue);
+                $scope.fromDateValue = moment(newDate).format('YYYY-MM-DD');
+                loadHTML();
+            };
+    
+    var loadHTML = function () {
+    ClinicalItem.findAllHTMLTables($stateParams.patientId,$scope.fromDateValue, $scope.toDateValue).then(function (result) {
         
       // Default Page Content
       var text = '{"provider":"No Data","html":"No clinical item data available for this patient."}';
@@ -38,6 +58,9 @@ angular.module('gpConnect')
         }
       });
       
-      usSpinnerService.stop('patientSummary-spinner');
+      usSpinnerService.stop('clinicalSummary-spinner');
     });
-  });
+  };
+    loadHTML();
+        });
+

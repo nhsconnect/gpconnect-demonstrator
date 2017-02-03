@@ -4,6 +4,23 @@
     <div class="glyphicon glyphicon-info-sign" tooltip="Source: {{ referralTable.provider }}" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
   </h3>
 
+      <div class="form-inline dateRangePanel">
+        <div class="form-group">
+            From :
+            <button type="button" class="btn btn-default btn-sm" ng-click="openDatePicker($event, 'fromDate')">
+                <i class="fa fa-calendar"></i>
+            </button>
+            <input type="text" class="datepicker form-control input-sm popupinputs" ui-date id="fromDate" name="fromDate" ng-model="fromDateValue" ng-click="openDatePicker($event, 'fromDate')" ng-change='dateChanged()' datepicker-popup="dd-MMM-y" is-open="fromDate" required/>
+        </div>
+        <div class="form-group">
+            To : 
+            <button type="button" class="btn btn-default btn-sm" ng-click="openDatePicker($event, 'toDate')">
+                <i class="fa fa-calendar"></i>
+            </button>
+            <input type="text" class="datepicker form-control input-sm popupinputs" ui-date id="toDate" name="toDate" ng-model="toDateValue" ng-click="openDatePicker($event, 'toDate')" ng-change='dateChanged()' datepicker-popup="dd-MMM-y" is-open="toDate" required/>
+        </div>
+    </div>
+
   <div class="providerHTMLTables" >
     <div ng-bind-html="referralTable.html"></div>
   </div>
@@ -11,6 +28,6 @@
 
 <div class="row">
   <div class="col-md-12">
-    <span class="patientSummary-spinner" us-spinner="{radius:20, width:8, length: 16}" spinner-key="patientSummary-spinner" spinner-start-active="true"></span>
+    <span class="patientSummary-spinner" us-spinner="{radius:20, width:8, length: 16}" spinner-key="referralsSummary-spinner" spinner-start-active="true"></span>
   </div>
 </div>

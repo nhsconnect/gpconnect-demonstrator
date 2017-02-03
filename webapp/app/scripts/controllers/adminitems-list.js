@@ -4,6 +4,8 @@ angular.module('gpConnect')
   .controller('AdminItemsListCtrl', function ($scope, $location, $stateParams, $modal, $state, $sce, PatientService, usSpinnerService, AdminItem) {
 
     $scope.currentPage = 1;
+    $scope.toDateValue = moment().format('YYYY-MM-DD');
+    $scope.fromDateValue = moment().subtract(3, 'years').format('YYYY-MM-DD');
 
     $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
@@ -12,8 +14,33 @@ angular.module('gpConnect')
     if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
+     $scope.openDatePicker = function ($event, name) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.toDate = false;
+                $scope.fromDate = false;
+                $scope[name] = true;
+            };
 
-    AdminItem.findAllHTMLTables($stateParams.patientId).then(function (result) {
+            $scope.dateChanged = function() {
+                var newDate = new Date($scope.toDateValue);
+                $scope.toDateValue = moment(newDate).format('YYYY-MM-DD');
+                newDate = new Date($scope.fromDateValue);
+                $scope.fromDateValue = moment(newDate).format('YYYY-MM-DD');
+                loadHTML();
+            };
+
+
+
+
+
+             var loadHTML = function () {
+
+
+
+
+
+    AdminItem.findAllHTMLTables($stateParams.patientId,$scope.fromDateValue, $scope.toDateValue).then(function (result) {
 
       // Default Page Content
       var text = '{"provider":"No Data","html":"No administrative items data available for this patient."}';
@@ -37,7 +64,9 @@ angular.module('gpConnect')
             }
         }
       });
-
+      //POTENTIALLY CHANGE THIS
       usSpinnerService.stop('patientSummary-spinner');
     });
+  };
+  loadHTML();
   });

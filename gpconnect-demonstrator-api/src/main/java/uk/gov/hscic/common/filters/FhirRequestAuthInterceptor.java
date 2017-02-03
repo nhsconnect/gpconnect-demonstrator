@@ -1,15 +1,13 @@
 package uk.gov.hscic.common.filters;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
-import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Parameters;
-import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.parser.DataFormatException;
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.parser.StrictErrorHandler;
+import ca.uhn.fhir.rest.api.RequestTypeEnum;
 import ca.uhn.fhir.rest.method.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
@@ -20,13 +18,16 @@ import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.Locale;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import static uk.gov.hscic.OperationConstants.*;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.common.filters.model.RequestBody;
 import uk.gov.hscic.common.filters.model.RequestedRecord;
@@ -37,6 +38,7 @@ import uk.gov.hscic.common.util.NhsCodeValidator;
 @Component
 public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     private static final Logger LOG = Logger.getLogger("AuthLog");
+    private static final String PERMITTED_MEDIA_TYPE_HEADER_REGEX = "application/(xml|json)\\+fhir(;charset=utf-8)?";
 
     @Override
     public List<IAuthRule> buildRuleList(RequestDetails requestDetails) {
@@ -46,43 +48,40 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             throw new InvalidRequestException(HttpHeaders.AUTHORIZATION + " header invalid.");
         }
 
-        String claimsJsonString;
-
-        try {
-            claimsJsonString = new String(Base64.getDecoder().decode(authorizationHeaderComponents[1].split("\\.")[1]));
-        } catch (IllegalArgumentException iae) {
-            throw new InvalidRequestException("Not Base 64");
-        }
-
         String contentType = requestDetails.getHeader(HttpHeaders.CONTENT_TYPE);
-        String acceptHeader = requestDetails.getHeader(HttpHeaders.ACCEPT);
 
-        if (contentType != null
-                && !"application/json+fhir".equalsIgnoreCase(contentType)
-                && !"application/xml+fhir".equalsIgnoreCase(contentType)
-                && !"application/json+fhir;charset=utf-8".equalsIgnoreCase(contentType)
-                && !"application/xml+fhir;charset=utf-8".equalsIgnoreCase(contentType)
-                && !MediaType.APPLICATION_JSON_UTF8_VALUE.equalsIgnoreCase(contentType)) {
-            throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported media type");
+        if (contentType == null) {
+            if (Arrays.asList(RequestTypeEnum.POST, RequestTypeEnum.PUT).contains(requestDetails.getRequestType())) {
+                throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "No content media type set");
+            }
+        } else if (!contentType.toLowerCase(Locale.UK).matches(PERMITTED_MEDIA_TYPE_HEADER_REGEX)) {
+            throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported content media type");
         }
 
-        if (acceptHeader != null
-                && !"application/xml+fhir".equalsIgnoreCase(acceptHeader)
-                && !"application/json+fhir".equalsIgnoreCase(acceptHeader)
-                && !"application/json+fhir;charset=utf-8".equalsIgnoreCase(acceptHeader)
-                && !"application/xml+fhir;charset=utf-8".equalsIgnoreCase(acceptHeader)
-                && !"application/json, text/plain, */*".equalsIgnoreCase(acceptHeader)) {
-            throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported media type");
+        String[] formatParam = requestDetails.getParameters().get("_format");
+
+        String acceptHeader = null == formatParam
+                ? requestDetails.getHeader(HttpHeaders.ACCEPT)
+                : formatParam[0];
+
+        // If it's still null, use the Content-Type header value
+        if (null == acceptHeader) {
+            acceptHeader = contentType;
         }
 
-        validateContentFormatAndAccept(contentType, acceptHeader, requestDetails.getCompleteUrl());
+        if (acceptHeader == null || !acceptHeader.toLowerCase(Locale.UK).matches(PERMITTED_MEDIA_TYPE_HEADER_REGEX)) {
+            throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported accept media type");
+        }
 
         WebToken webToken;
 
         try {
+            String claimsJsonString = new String(Base64.getDecoder().decode(authorizationHeaderComponents[1].split("\\.")[1]));
             webToken = new ObjectMapper().readValue(claimsJsonString, WebToken.class);
             WebTokenValidator.validateWebToken(webToken);
             jwtParseResourcesValidation(claimsJsonString);
+        } catch (IllegalArgumentException iae) {
+            throw new InvalidRequestException("Not Base 64");
         } catch (IOException ex) {
             throw new InvalidRequestException("Invalid WebToken");
         }
@@ -91,39 +90,18 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         String requestedNhsNumber = webToken.getRequestedRecord().getIdentifierValue("http://fhir.nhs.net/Id/nhs-number");
 
         if ("Patient/$gpc.getcarerecord".equals(requestDetails.getRequestPath())) {
-            if (contentType != null
-                    && !"application/json+fhir;charset=utf-8".equalsIgnoreCase(contentType)
-                    && !"application/xml+fhir;charset=utf-8".equalsIgnoreCase(contentType)
-                    && !MediaType.APPLICATION_JSON_UTF8_VALUE.equalsIgnoreCase(contentType)) {
-                throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported media type");
-            }
-
-            if (acceptHeader != null
-                    && !"application/xml+fhir;charset=utf-8".equalsIgnoreCase(acceptHeader)
-                    && !"application/json+fhir;charset=utf-8".equalsIgnoreCase(acceptHeader)
-                    && !"application/json, text/plain, */*".equalsIgnoreCase(acceptHeader)) {
-                throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported media type");
-            }
-
             if (!"Patient".equals(requestedRecord.getResourceType())) {
                 throw new InvalidRequestException("Bad Request Exception");
             }
 
-            validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents(), contentType.contains("xml"));
+            validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents(), StringUtils.contains(contentType, "xml"));
         }
 
         if ("Patient".equals(requestedRecord.getResourceType())) {
             // If it is a patient orientated request
             if (!NhsCodeValidator.nhsNumberValid(requestedNhsNumber)) {
-                CodeableConceptDt errorCodableConcept = new CodeableConceptDt("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1", "INVALID_NHS_NUMBER");
-                errorCodableConcept.setText("Patient Record Not Found");
-
-                OperationOutcome operationOutcomes = new OperationOutcome();
-                operationOutcomes.getMeta().addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1");
-                operationOutcomes.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                        .setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
-
-                throw new InvalidRequestException("Dates are invalid: ", operationOutcomes);
+                throw new InvalidRequestException("Dates are invalid: ", OperationOutcomeFactory.buildOperationOutcome(
+                        SYSTEM_WARNING_CODE, CODE_INVALID_NHS_NUMBER, "Patient Record Not Found", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
             }
         } else {
             // If it is an organization oriantated request
@@ -133,12 +111,6 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         }
 
         return new RuleBuilder().allowAll().build();
-    }
-
-    private void validateContentFormatAndAccept(String contentType, String acceptHeader, String completeUrl) {
-        if (completeUrl.contains("_format=text%2Fxml") && "application/xml+fhir".equals(acceptHeader) && "application/xml+fhir".equals(contentType)) {
-            throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported media type");
-        }
     }
 
     private void jwtParseResourcesValidation(String claimsJsonString) {
@@ -190,19 +162,13 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             }
 
             if (null == nhsNumberFromBody) {
-                String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-
-                throw new InvalidRequestException("NHS number in body doesn't match the header",
-                        OperationOutcomeFactory.buildOperationOutcome(system, "INVALID_IDENTIFIER_SYSTEM", "NHS number in body doesn't match the header", metaProfile, IssueTypeEnum.INVALID_CONTENT));
+                throw new InvalidRequestException("NHS number in body doesn't match the header", OperationOutcomeFactory.buildOperationOutcome(
+                        SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "NHS number in body doesn't match the header", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             }
 
             if (!NhsCodeValidator.nhsNumberValid(nhsNumberFromHeader) || !NhsCodeValidator.nhsNumberValid(nhsNumberFromBody)) {
-                String system = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
-                String metaProfile = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-
-                throw new InvalidRequestException("NHS number invalid",
-                        OperationOutcomeFactory.buildOperationOutcome(system, "INVALID_NHS_NUMBER", "NHS number invalid", metaProfile, IssueTypeEnum.INVALID_CONTENT));
+                throw new InvalidRequestException("NHS number invalid", OperationOutcomeFactory.buildOperationOutcome(
+                        SYSTEM_WARNING_CODE, CODE_INVALID_NHS_NUMBER, "NHS number invalid", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             }
 
             if (!nhsNumberFromHeader.equals(nhsNumberFromBody)) {

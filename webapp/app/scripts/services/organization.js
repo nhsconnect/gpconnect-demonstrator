@@ -13,7 +13,8 @@ angular.module('gpConnect')
                                     'Ssp-To': endpointLookupResult.toASID,
                                     'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:organization",
                                     'Ssp-TraceID': fhirJWTFactory.guid(),
-                                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
+                                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
+                                    'Accept': "application/json+fhir"
                                 }
                             });
                 });
@@ -29,7 +30,8 @@ angular.module('gpConnect')
                                     'Ssp-To': endpointLookupResult.toASID,
                                     'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:organization",
                                     'Ssp-TraceID': fhirJWTFactory.guid(),
-                                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId)
+                                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
+                                    'Accept': "application/json+fhir"
                                 }
                             });
                 });

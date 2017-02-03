@@ -8,6 +8,7 @@ import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemListHTML;
 import uk.gov.hscic.patient.clinicalitems.repo.ClinicalItemRepository;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -16,17 +17,29 @@ public class LegacyClinicalItemSearch extends AbstractLegacyService implements C
     @Autowired
     private ClinicalItemRepository clinicalItemRepository;
 
-    private final ClinicalItemEntityToListTransformer transformer = new ClinicalItemEntityToListTransformer();
+    private final ClinicalItemEntityToHTMLTransformer transformer = new ClinicalItemEntityToHTMLTransformer();
 
     @Override
-    public List<ClinicalItemListHTML> findAllClinicalItemHTMLTables(final String patientId) {
+    public List<ClinicalItemListHTML> findAllClinicalItemHTMLTables(final String patientId, Date fromDate,
+            Date toDate) {
 
-        final ClinicalItemEntity item = clinicalItemRepository.findOne(Long.parseLong(patientId));
-
-        if(item == null){
+        List<ClinicalItemEntity> items = null;
+        if (fromDate != null && toDate != null) {
+            items = clinicalItemRepository.findBynhsNumberAndSectionDateAfterAndSectionDateBeforeOrderBySectionDateDesc(
+                    Long.valueOf(patientId), fromDate, toDate);
+        } else if (fromDate != null) {
+            items = clinicalItemRepository
+                    .findBynhsNumberAndSectionDateAfterOrderBySectionDateDesc(Long.valueOf(patientId), fromDate);
+        } else if (toDate != null) {
+            items = clinicalItemRepository
+                    .findBynhsNumberAndSectionDateBeforeOrderBySectionDateDesc(Long.valueOf(patientId), toDate);
+        } else {
+            items = clinicalItemRepository.findBynhsNumberOrderBySectionDateDesc(Long.valueOf(patientId));
+        }
+        if (items  == null || items.size() <= 0) {
             return null;
         } else {
-            return Collections.singletonList(transformer.transform(item));
+            return Collections.singletonList(transformer.transform(items));
         }
     }
 }

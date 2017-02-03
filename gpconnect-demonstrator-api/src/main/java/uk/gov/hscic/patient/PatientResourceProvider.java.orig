@@ -464,8 +464,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     break;
 
                                 case "CLI":
-                                    List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch.findAllClinicalItemHTMLTables(nhsNumber.get(0), fromDate, toDate);
-                                     
+                                    List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch.findAllClinicalItemHTMLTables(nhsNumber.get(0));
 
                                     if (clinicalItemList != null && clinicalItemList.size() > 0) {
                                         section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "CLI", "Clinical Items",
@@ -476,6 +475,25 @@ public class PatientResourceProvider implements IResourceProvider {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
                                                 .setDetails("No data available for the requested section: Clinical Items");
                                     }
+<<<<<<< Updated upstream
+=======
+                                }
+
+                                break;
+
+                            case "CLI":
+                                List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch
+                                        .findAllClinicalItemHTMLTables(nhsNumber.get(0), fromDate, toDate);
+
+                                if (clinicalItemList != null && clinicalItemList.size() > 0) {
+
+                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
+                                    code = "CLI";
+                                    display = "Clinical Items";
+                                    investigationListText = clinicalItemList.get(0).getProvider();
+                                    investigationListHTML = clinicalItemList.get(0).getHtml();
+                                    sectionTitle = "Clinical Items";
+>>>>>>> Stashed changes
 
                                     break;
 

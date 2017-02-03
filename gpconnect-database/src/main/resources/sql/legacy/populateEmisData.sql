@@ -8,9 +8,10 @@ VALUES (
 );
 
 INSERT INTO gpconnect.clinicalitems
-  (id, html, provider, lastUpdated)
+  (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (
- 9476719958, "<div><h2>Clinical Items</h2><table><thead><th>Date</th><th>Entry</th><th>Details</th></thead><tbody><tr><td>03 Oct 2016</td><td /><td>This is confidential</td></tr><tr><td>29 Sep 2016</td><td>This is confidential</td><td /></tr><tr><td>30 Oct 2000</td><td>Notes summary on computer</td><td> Pale - prob mildly anaemic. Pale and unwell</td></tr><tr><td>13 Jun 2000</td><td /><td> Generalised non-specific abdominal tenderness</td></tr><tr><td>13 Jun 2000</td><td>Never smoked tobacco</td><td /></tr><tr><td>02 Oct 1988</td><td>Trigger finger - acquired</td><td> Still coughing up some thick globules phlegm - leading again to choking</td></tr><tr><td>17 Jul 1988</td><td>Cardiological referral</td><td> Try 10 days oral steroids and see friday week</td></tr><tr><td>17 Jul 1988</td><td>Right bundle branch block</td><td /></tr><tr><td>17 Jul 1988</td><td>This is confidential</td><td /></tr><tr><td>04 Jul 1988</td><td>Meibomian cyst infected</td><td /></tr><tr><td>31 Jan 1982</td><td>Motor vehicle traffic accidents (MVTA)</td><td /></tr></tbody></table></div>",
+ 9476719958, '2015-12-10 12:17:00',
+ "<div><h2>Clinical Items</h2><table><thead><th>Date</th><th>Entry</th><th>Details</th></thead><tbody><tr><td>03 Oct 2016</td><td /><td>This is confidential</td></tr><tr><td>29 Sep 2016</td><td>This is confidential</td><td /></tr><tr><td>30 Oct 2000</td><td>Notes summary on computer</td><td> Pale - prob mildly anaemic. Pale and unwell</td></tr><tr><td>13 Jun 2000</td><td /><td> Generalised non-specific abdominal tenderness</td></tr><tr><td>13 Jun 2000</td><td>Never smoked tobacco</td><td /></tr><tr><td>02 Oct 1988</td><td>Trigger finger - acquired</td><td> Still coughing up some thick globules phlegm - leading again to choking</td></tr><tr><td>17 Jul 1988</td><td>Cardiological referral</td><td> Try 10 days oral steroids and see friday week</td></tr><tr><td>17 Jul 1988</td><td>Right bundle branch block</td><td /></tr><tr><td>17 Jul 1988</td><td>This is confidential</td><td /></tr><tr><td>04 Jul 1988</td><td>Meibomian cyst infected</td><td /></tr><tr><td>31 Jan 1982</td><td>Motor vehicle traffic accidents (MVTA)</td><td /></tr></tbody></table></div>",
   "EMIS",
   '2016-08-24 12:00:00'
 );

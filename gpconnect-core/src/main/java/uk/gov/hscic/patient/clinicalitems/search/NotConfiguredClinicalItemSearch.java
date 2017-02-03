@@ -5,6 +5,7 @@ import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemListHTML;
 
+import java.util.Date;
 import java.util.List;
 
 public class NotConfiguredClinicalItemSearch implements ClinicalItemSearch {
@@ -20,7 +21,7 @@ public class NotConfiguredClinicalItemSearch implements ClinicalItemSearch {
     }
 
     @Override
-    public List<ClinicalItemListHTML> findAllClinicalItemHTMLTables(final String patientId) {
+    public List<ClinicalItemListHTML> findAllClinicalItemHTMLTables(final String patientId,Date fromDate, Date toDate) {
         throw ConfigurationException.unimplementedTransaction(ClinicalItemSearch.class);
     }
 }

@@ -861,7 +861,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     section = SectionsCreationClass.buildSection(system, code, display,
                                             investigationListText, investigationListHTML, sectionTitle, section);
                                     sectionsList.add(section);
-                                    throw new InvalidRequestException("Too many sets of investivations");
+                                   
                                 } else {
                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
                                             .setDetails("No data available for the requested section: Investigations");

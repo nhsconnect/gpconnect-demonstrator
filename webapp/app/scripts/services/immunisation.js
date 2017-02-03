@@ -7,7 +7,7 @@ angular.module('gpConnect')
       return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode,"urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord").then(function (response) {
         var endpointLookupResult = response;
         return $http.post(endpointLookupResult.restUrlPrefix+'/Patient/$gpc.getcarerecord',
-          '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "http://fhir.nhs.net/Id/nhs-number", "value" : "'+patientId+'" }},{"name" : "recordSection","valueString" : "IMM"},{"name" : "timePeriod","valuePeriod" : { "start" : null, "end" : null }}]}',
+          '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "http://fhir.nhs.net/Id/nhs-number", "value" : "'+patientId+'" }},{"name" : "recordSection","valueCodeableConcept" :{"coding" :[{"system":"http://fhir.nhs.net/ValueSet/gpconnect-record-section-1","code":"IMM","display":"Immunisation"}]}},{"name" : "timePeriod","valuePeriod" : { "start" : null, "end" : null }}]}',
           {
               headers: {
                   'Ssp-From': endpointLookupResult.fromASID,

@@ -60,7 +60,6 @@ import java.util.List;
 import javax.activation.UnsupportedDataTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
@@ -156,15 +155,10 @@ public class PatientResourceProvider implements IResourceProvider {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
 
         if (patientDetails == null) {
-            String system = OperationConstants.SYSTEM_WARNING_CODE;
-            String code = OperationConstants.CODE_PATIENT_NOT_FOUND;
-            String codableConceptText = OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-            String metaProfile = OperationConstants.META_GP_CONNECT_PATIENT;
-
-            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                    codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-            throw new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart(),
-                    operationOutcome);
+            throw new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart(), OperationOutcomeFactory.buildOperationOutcome(
+                    OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_PATIENT_NOT_FOUND,
+                    OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND, OperationConstants.META_GP_CONNECT_PATIENT,
+                    IssueTypeEnum.NOT_FOUND));
         }
         return patientDetailsToPatientResourceConverter(patientDetails);
     }
@@ -185,14 +179,10 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         if (patients.isEmpty()) {
-            String system = OperationConstants.SYSTEM_WARNING_CODE;
-            String code =  OperationConstants.CODE_PATIENT_NOT_FOUND;
-            String codableConceptText = OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-            String metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-
-            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                    codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-            throw new ResourceNotFoundException("No patient details found for patient ID: ", operationOutcome);
+            throw new ResourceNotFoundException("No patient details found for patient ID: ", OperationOutcomeFactory.buildOperationOutcome(
+                    OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_PATIENT_NOT_FOUND,
+                    OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                    IssueTypeEnum.NOT_FOUND));
         }
 
         return patients;
@@ -203,97 +193,44 @@ public class PatientResourceProvider implements IResourceProvider {
     public Bundle getPatientCareRecord(@ResourceParam Parameters params) throws UnsupportedDataTypeException {
         OperationOutcome operationOutcome = new OperationOutcome();
         ArrayList<String> nhsNumber = new ArrayList<>();
-        SectionsCreationClass sectionsCreationClass;
         ArrayList<String> sectionsParamList = new ArrayList<>();
         ArrayList<Entry> medicationsToBundle = new ArrayList<>();
-        String system, code, codableConceptText, metaProfile, display, investigationListText, investigationListHTML,
-                sectionTitle;
         Date fromDate = null, toDate = null;
 
         // Extract the parameters
         boolean recordSectionNotPresent = true;
 
         for (Parameter param : params.getParameter()) {
-            if (!param.getName().equals("patientNHSNumber") && !param.getName().equals("recordSection")
-                    && !param.getName().equals("timePeriod")) {
-                system = OperationConstants.SYSTEM_WARNING_CODE;
-                code = OperationConstants.CODE_INVALID_NHS_NUMBER;
-                codableConceptText = OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-                metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-
-                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                        codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                throw new UnprocessableEntityException("Parameters are incorrect", operationOutcome);
+            if (!param.getName().equals("patientNHSNumber") && !param.getName().equals("recordSection") && !param.getName().equals("timePeriod")) {
+                throw new UnprocessableEntityException("Parameters are incorrect", OperationOutcomeFactory.buildOperationOutcome(
+                        OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_NHS_NUMBER,
+                        OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                        IssueTypeEnum.NOT_FOUND));
             }
 
             IDatatype value = param.getValue();
             if (value instanceof IdentifierDt) {
                 nhsNumber.add(((IdentifierDt) value).getValue());
-                String nhsNumberSystemCheck = ((IdentifierDt) value).getSystem();
-
-                // if (nhsNumberSystemCheck == null) {
-                // system =
-                // OperationConstants.SYSTEM_WARNING_CODE;
-                // code = OperationConstants.CODE_INVALID_IDENTIFIER_SYSTEM;
-                // codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-                // String metaProfile =
-                // OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-                //
-                // operationOutcome =
-                // OperationOutcomeFactory.buildOperationOutcome(system,
-                // code, codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                // throw new InvalidRequestException("System Invalid ",
-                // operationOutcome);
-                // }
 
                 if (((IdentifierDt) value).getValue() == null) {
-                    system = OperationConstants.SYSTEM_WARNING_CODE;
-                    code = OperationConstants.CODE_INVALID_NHS_NUMBER;
-                    codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                            codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                    throw new InvalidRequestException("System Invalid ", operationOutcome);
-
+                    throw new InvalidRequestException("System Invalid", OperationOutcomeFactory.buildOperationOutcome(
+                            OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_NHS_NUMBER,
+                            OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                            IssueTypeEnum.NOT_FOUND));
                 }
 
                 if (nhsNumber.get(0).isEmpty()) {
-                    system = OperationConstants.SYSTEM_WARNING_CODE;
-                    code = OperationConstants.CODE_INVALID_NHS_NUMBER;
-                    codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                            codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                    throw new InvalidRequestException("System Invalid ", operationOutcome);
+                    throw new InvalidRequestException("System Invalid", OperationOutcomeFactory.buildOperationOutcome(
+                            OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_NHS_NUMBER,
+                            OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                            IssueTypeEnum.NOT_FOUND));
                 }
 
-                // if ((nhsNumberSystemCheck != null &&
-                // nhsNumberSystemCheck.isEmpty() == true)
-                // ||
-                // !"http://fhir.nhs.net/Id/nhs-number".equals(nhsNumberSystemCheck))
-                // {
-                //
-                // system =
-                // OperationConstants.SYSTEM_WARNING_CODE;
-                // code = OperationConstants.CODE_INVALID_IDENTIFIER_SYSTEM;
-                // codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-                // metaProfile =
-                // OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-                // operationOutcome =
-                // OperationOutcomeFactory.buildOperationOutcome(system,
-                // code, codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                // throw new InvalidRequestException("System Invalid ",
-                // operationOutcome);
-                // }
-
                 if (nhsNumber.size() > 1) {
-                    system = OperationConstants.SYSTEM_WARNING_CODE;
-                    code = OperationConstants.CODE_INVALID_IDENTIFIER_SYSTEM;
-                    codableConceptText = OperationConstants.COD_CONCEPT_RECORD_NHS_NUMBER_INVALID;
-                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                            codableConceptText, metaProfile, IssueTypeEnum.INVALID_CONTENT);
-                    throw new InvalidRequestException("Bad Request Exception", operationOutcome);
+                    throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
+                            OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_IDENTIFIER_SYSTEM,
+                            OperationConstants.COD_CONCEPT_RECORD_NHS_NUMBER_INVALID, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                            IssueTypeEnum.INVALID_CONTENT));
                 }
             } else if (value instanceof CodeableConceptDt) {
                 recordSectionNotPresent = false;
@@ -304,73 +241,41 @@ public class PatientResourceProvider implements IResourceProvider {
                 String sectionName = coading.get(0).getCode();
 
                 if (sectionName == null || systemCheck == null) {
-                    system = OperationConstants.SYSTEM_WARNING_CODE;
-                    code = OperationConstants.CODE_INVALID_PARAMETER;
-                    codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                            codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                    throw new UnprocessableEntityException("System Invalid ", operationOutcome);
+                    throw new UnprocessableEntityException("System Invalid ", OperationOutcomeFactory.buildOperationOutcome(
+                            OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
+                            OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                            IssueTypeEnum.NOT_FOUND));
                 }
 
-                String testSectionName = sectionName;
-
-                if (!sectionName.equals(testSectionName.toUpperCase())) {
-
-                    system = OperationConstants.SYSTEM_WARNING_CODE;
-                    code = OperationConstants.CODE_INVALID_PARAMETER;
-                    codableConceptText =OperationConstants.COD_CONCEPT_RECORD_INVALID_SECTION_CODE;
-                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                            codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                    throw new UnprocessableEntityException("Section Case Invalid: ", operationOutcome);
+                if (!sectionName.equals(sectionName.toUpperCase())) {
+                    throw new UnprocessableEntityException("Section Case Invalid: ", OperationOutcomeFactory.buildOperationOutcome(
+                            OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
+                            OperationConstants.COD_CONCEPT_RECORD_INVALID_SECTION_CODE, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                            IssueTypeEnum.NOT_FOUND));
                 }
 
-                if (!coading.get(0).getSystem().equals("http://fhir.nhs.net/ValueSet/gpconnect-record-section-1")) {
-                    throw new InvalidRequestException("System Invalid ");
+                if (!coading.get(0).getSystem().equals(OperationConstants.SYSTEM_RECORD_SECTION)) {
+                    throw new InvalidRequestException("System Invalid");
                 }
 
                 sectionsParamList.add(coading.get(0).getCode());
 
                 if (sectionsParamList.size() > 1) {
-
-                    system = OperationConstants.SYSTEM_WARNING_CODE;
-                    code = OperationConstants.CODE_INVALID_IDENTIFIER_SYSTEM;
-                    codableConceptText = OperationConstants.COD_CONCEPT_RECORD_MULTIPLE_SECTIONS_ADDED;
-                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                            codableConceptText, metaProfile, IssueTypeEnum.INVALID_CONTENT);
-                    throw new InvalidRequestException("Bad Request Exception", operationOutcome);
-
+                    throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
+                            OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_IDENTIFIER_SYSTEM,
+                            OperationConstants.COD_CONCEPT_RECORD_MULTIPLE_SECTIONS_ADDED, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                            IssueTypeEnum.INVALID_CONTENT));
                 }
             } else if (value instanceof PeriodDt) {
-
-                // String sectionCheckValidTimeNotSet =
-                // sectionsParamList.get(0);
-
                 fromDate = ((PeriodDt) value).getStart();
                 Calendar toCalendar = Calendar.getInstance();
                 toDate = ((PeriodDt) value).getEnd();
 
-                // if ((fromDate != null && toDate != null) &&
-                // (sectionCheckValidTimeNotSet.equals("ALL")
-                // || sectionCheckValidTimeNotSet.equals("IMM") ||
-                // sectionCheckValidTimeNotSet.equals("MED")
-                // || sectionCheckValidTimeNotSet.equals("OBS") ||
-                // sectionCheckValidTimeNotSet.equals("PRB"))) {
-                // throw new InvalidRequestException(
-                // "Bad Request Exception, Time not allowed to be set for the
-                // sections");
-                // }
-
-                if ((fromDate != null && toDate != null) && fromDate.after(toDate)) {
-                    system = OperationConstants.SYSTEM_WARNING_CODE;
-                    code = OperationConstants.CODE_INVALID_PARAMETER;
-                    codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-                    metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-                    operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                            codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                    throw new UnprocessableEntityException("Dates are invalid: ", operationOutcome);
+                if (fromDate != null && toDate != null && fromDate.after(toDate)) {
+                    throw new UnprocessableEntityException("Dates are invalid: ", OperationOutcomeFactory.buildOperationOutcome(
+                            OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
+                            OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                            IssueTypeEnum.NOT_FOUND));
                 }
 
                 if (toDate != null) {
@@ -378,19 +283,20 @@ public class PatientResourceProvider implements IResourceProvider {
 
                     if (null != ((PeriodDt) value).getEndElement().getPrecision()) {
                         switch (((PeriodDt) value).getEndElement().getPrecision()) {
-                        case YEAR:
-                            toCalendar.add(Calendar.YEAR, 1);
-                            break;
-                        case MONTH:
-                            toCalendar.add(Calendar.MONTH, 1);
-                            break;
-                        case DAY:
-                            toCalendar.add(Calendar.DATE, 1);
-                            break;
-                        default:
-                            break;
+                            case YEAR:
+                                toCalendar.add(Calendar.YEAR, 1);
+                                break;
+                            case MONTH:
+                                toCalendar.add(Calendar.MONTH, 1);
+                                break;
+                            case DAY:
+                                toCalendar.add(Calendar.DATE, 1);
+                                break;
+                            default:
+                                break;
                         }
                     }
+
                     toDate = toCalendar.getTime();
                 }
             }
@@ -406,33 +312,28 @@ public class PatientResourceProvider implements IResourceProvider {
 
         for (int i = 0; i < sectionsParamList.size(); i++) {
             if (sectionsParamList.get(i) == null || sectionsParamList.get(i).length() != 3) {
-                system = OperationConstants.SYSTEM_WARNING_CODE;
-                code = OperationConstants.CODE_INVALID_NHS_NUMBER;
-                codableConceptText = OperationConstants.COD_CONCEPT_RECORD_NHS_NUMBER_INVALID;
-                metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                        codableConceptText, metaProfile, IssueTypeEnum.INVALID_CONTENT);
-                throw new ResourceNotFoundException("NHS number Invalid " + operationOutcome);
+                throw new ResourceNotFoundException("NHS number Invalid " + OperationOutcomeFactory.buildOperationOutcome(
+                        OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_NHS_NUMBER,
+                        OperationConstants.COD_CONCEPT_RECORD_NHS_NUMBER_INVALID, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                        IssueTypeEnum.INVALID_CONTENT));
             }
         }
 
         if (nhsNumber.isEmpty()) {
             throw new InvalidRequestException("NHS number not supplied");
         } else {
-            if (NhsValidation(nhsNumber.get(0))) {
-                system = OperationConstants.SYSTEM_WARNING_CODE;
-                code = OperationConstants.CODE_INVALID_NHS_NUMBER;
-                codableConceptText = OperationConstants.COD_CONCEPT_RECORD_NHS_NUMBER_INVALID;
-                metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                        codableConceptText, metaProfile, IssueTypeEnum.INVALID_CONTENT);
-                throw new InvalidRequestException("NHS number Invalid " + operationOutcome);
+            if (!NhsCodeValidator.nhsNumberValid(nhsNumber.get(0))) {
+                throw new InvalidRequestException("NHS number Invalid " + OperationOutcomeFactory.buildOperationOutcome(
+                        OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_NHS_NUMBER,
+                        OperationConstants.COD_CONCEPT_RECORD_NHS_NUMBER_INVALID, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                        IssueTypeEnum.INVALID_CONTENT));
             } else {
                 // Build the Patient Resource and add it to the bundle
                 try {
                     String patientID;
                     Entry patientEntry = new Entry();
                     List<Patient> patients = getPatientByPatientId(new TokenParam("", nhsNumber.get(0)));
+
                     if (patients != null && patients.size() > 0) {
                         patientEntry.setResource(patients.get(0));
                         patientEntry.setFullUrl("Patient/" + patients.get(0).getId().getIdPart());
@@ -446,8 +347,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 "No patient details found for patient NHS Number: " + nhsNumber.get(0),
                                 operationOutcome);
                     }
-                    // Build the Care Record Composition
-                    Entry careRecordEntry = new Entry();
 
                     Composition careRecordComposition = new Composition();
                     careRecordComposition.setDate(new DateTimeDt(Calendar.getInstance().getTime()));
@@ -473,469 +372,343 @@ public class PatientResourceProvider implements IResourceProvider {
                     // Build requested sections
                     if (sectionsParamList.size() > 0) {
                         ArrayList<Section> sectionsList = new ArrayList<>();
+
                         for (String sectionName : sectionsParamList) {
-                            String testSectionName = sectionName;
-
-                            if (!sectionName.equals(testSectionName.toUpperCase())) {
-
-                                system = OperationConstants.SYSTEM_WARNING_CODE;
-                                code = OperationConstants.CODE_INVALID_PARAMETER;
-                                codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-                                metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-
-                                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                                        codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                                throw new UnprocessableEntityException("Section Case Invalid: ", operationOutcome);
+                            if (!sectionName.equals(sectionName.toUpperCase())) {
+                                throw new UnprocessableEntityException("Section Case Invalid: ", OperationOutcomeFactory.buildOperationOutcome(
+                                        OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
+                                        OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                                        IssueTypeEnum.NOT_FOUND));
                             }
 
                             Section section = new Section();
 
                             switch (sectionName) {
-                            case "SUM":
-                                if (nhsNumber.get(0) == null) {
-                                    throw new AssertionError();
-                                }
-
-                                List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch
-                                        .findAllPatientSummaryHTMLTables(nhsNumber.get(0));
-
-                                if (patientSummaryList != null && patientSummaryList.size() > 0) {
-
-                                    if (patientSummaryList.get(0).getHtml().contains("This is confidential")) {
-
-                                        system = OperationConstants.SYSTEM_WARNING_CODE;
-                                        code = OperationConstants.CODE_NO_PATIENT_CONSENT;
-                                        codableConceptText = OperationConstants.COD_CONCEPT_RECORD_PATIENT_DATA_CONFIDENTIAL;
-                                        metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-
-                                        operationOutcome = OperationOutcomeFactory.buildOperationOutcome(
-                                                system, code, codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                                        throw new ForbiddenOperationException("This Data Is Confidential",
-                                                operationOutcome);
-                                    } else {
-                                        system = OperationConstants.SYSTEM_RECORD_SECTION;
-                                        code = "SUM";
-                                        display = "Summary";
-                                        investigationListText = patientSummaryList.get(0).getProvider();
-                                        investigationListHTML = patientSummaryList.get(0).getHtml();
-                                        sectionTitle = "Summary";
-
-                                        section = SectionsCreationClass.buildSection(system, code, display,
-                                                investigationListText, investigationListHTML, sectionTitle, section);
-
-                                        sectionsList.add(section);
+                                case "SUM":
+                                    if (nhsNumber.get(0) == null) {
+                                        throw new AssertionError();
                                     }
 
-                                } else {
+                                    List<PatientSummaryListHTML> patientSummaryList = patientSummarySearch
+                                            .findAllPatientSummaryHTMLTables(nhsNumber.get(0));
 
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                            .setDetails("No data available for the requested section: Summary");
-                                }
+                                    if (patientSummaryList != null && patientSummaryList.size() > 0) {
+                                        if (patientSummaryList.get(0).getHtml().contains("This is confidential")) {
+                                            throw new ForbiddenOperationException("This Data Is Confidential", OperationOutcomeFactory.buildOperationOutcome(
+                                                    OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_NO_PATIENT_CONSENT,
+                                                    OperationConstants.COD_CONCEPT_RECORD_PATIENT_DATA_CONFIDENTIAL, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                                                    IssueTypeEnum.NOT_FOUND));
+                                        } else {
+                                            section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "SUM", "Summary",
+                                                    patientSummaryList.get(0).getProvider(), patientSummaryList.get(0).getHtml(), "Summary", section);
 
-                                break;
+                                            sectionsList.add(section);
+                                        }
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+                                                .setDetails("No data available for the requested section: Summary");
+                                    }
 
-                            case "PRB":
-                                if (toDate != null && fromDate != null) {
-                                    throw new InvalidRequestException("Date Ranges not allowed to be set");
-                                } else {
-                                    List<ProblemListHTML> problemList = problemSearch
-                                            .findAllProblemHTMLTables(nhsNumber.get(0));
+                                    break;
 
-                                    if (problemList != null && problemList.size() > 0) {
+                                case "PRB":
+                                    if (toDate != null && fromDate != null) {
+                                        throw new InvalidRequestException("Date Ranges not allowed to be set");
+                                    } else {
+                                        List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber.get(0));
 
-                                        system = OperationConstants.SYSTEM_RECORD_SECTION;
-                                        code = "PRB";
-                                        display = "Problems";
-                                        investigationListText = problemList.get(0).getProvider();
-                                        investigationListHTML = problemList.get(0).getHtml();
-                                        sectionTitle = "Problems";
+                                        if (problemList != null && problemList.size() > 0) {
+                                            section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "PRB", "Problems",
+                                                    problemList.get(0).getProvider(), problemList.get(0).getHtml(), "Problems", section);
 
-                                        section = SectionsCreationClass.buildSection(system, code, display,
-                                                investigationListText, investigationListHTML, sectionTitle, section);
+                                            sectionsList.add(section);
+                                        } else {
+                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+                                                    .setDetails("No data available for the requested section: Problems");
+                                        }
+                                    }
+
+                                    break;
+
+                                case "ENC":
+                                    List<EncounterListHTML> encounterList = encounterSearch.findAllEncounterHTMLTables(nhsNumber.get(0), fromDate, toDate);
+
+                                    if (encounterList != null && encounterList.size() > 0) {
+                                        section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "ENC", "Encounters",
+                                                encounterList.get(0).getProvider(), encounterList.get(0).getHtml(), "Encounters", section);
 
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                                .setDetails("No data available for the requested section: Problems");
+                                                .setDetails("No data available for the requested section: Encounters");
                                     }
-                                }
 
-                                break;
+                                    break;
 
-                            case "ENC":
-                                List<EncounterListHTML> encounterList = encounterSearch
-                                        .findAllEncounterHTMLTables(nhsNumber.get(0), fromDate, toDate);
+                                case "ALL":
+                                    if (toDate != null && fromDate != null) {
+                                        throw new InvalidRequestException("Date Ranges not allowed to be set");
+                                    } else {
+                                        List<AllergyListHTML> allergyList = allergySearch.findAllAllergyHTMLTables(nhsNumber.get(0));
 
-                                if (encounterList != null && encounterList.size() > 0) {
+                                        if (allergyList != null && allergyList.size() > 0) {
+                                            section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "ALL", "Allergies and Sensitivities",
+                                                    allergyList.get(0).getProvider(), allergyList.get(0).getHtml(), "Allergies and Sensitivities", section);
+                                            sectionsList.add(section);
+                                        } else {
+                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
+                                                    "No data available for the requested section: Allergies and Sensitivities");
+                                        }
+                                    }
 
-                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
-                                    code = "ENC";
-                                    display = "Encounters";
-                                    investigationListText = encounterList.get(0).getProvider();
-                                    investigationListHTML = encounterList.get(0).getHtml();
-                                    sectionTitle = "Encounters";
+                                    break;
 
-                                    section = SectionsCreationClass.buildSection(system, code, display,
-                                            investigationListText, investigationListHTML, sectionTitle, section);
+                                case "CLI":
+                                    List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch.findAllClinicalItemHTMLTables(nhsNumber.get(0));
 
-                                    sectionsList.add(section);
-                                } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                            .setDetails("No data available for the requested section: Encounters");
-                                }
+                                    if (clinicalItemList != null && clinicalItemList.size() > 0) {
+                                        section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "CLI", "Clinical Items",
+                                                clinicalItemList.get(0).getProvider(), clinicalItemList.get(0).getHtml(), "Clinical Items", section);
 
-                                break;
-
-                            case "ALL":
-                                if (toDate != null && fromDate != null) {
-                                    throw new InvalidRequestException("Date Ranges not allowed to be set");
-                                } else {
-                                    List<AllergyListHTML> allergyList = allergySearch
-                                            .findAllAllergyHTMLTables(nhsNumber.get(0));
-                                    if (allergyList != null && allergyList.size() > 0) {
-
-                                        system = OperationConstants.SYSTEM_RECORD_SECTION;
-                                        code = "ALL";
-                                        display = "Allergies and Sensitivities";
-                                        investigationListText = allergyList.get(0).getProvider();
-                                        investigationListHTML = allergyList.get(0).getHtml();
-                                        sectionTitle = "Allergies and Sensitivities";
-
-                                        section = SectionsCreationClass.buildSection(system, code, display,
-                                                investigationListText, investigationListHTML, sectionTitle, section);
                                         sectionsList.add(section);
                                     } else {
-                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
-                                                "No data available for the requested section: Allergies and Sensitivities");
-                                    }
-                                }
-
-                                break;
-
-                            case "CLI":
-                                List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch
-                                        .findAllClinicalItemHTMLTables(nhsNumber.get(0));
-
-                                if (clinicalItemList != null && clinicalItemList.size() > 0) {
-
-                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
-                                    code = "CLI";
-                                    display = "Clinical Items";
-                                    investigationListText = clinicalItemList.get(0).getProvider();
-                                    investigationListHTML = clinicalItemList.get(0).getHtml();
-                                    sectionTitle = "Clinical Items";
-
-                                    section = SectionsCreationClass.buildSection(system, code, display,
-                                            investigationListText, investigationListHTML, sectionTitle, section);
-
-                                    sectionsList.add(section);
-                                } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                            .setDetails("No data available for the requested section: Clinical Items");
-                                }
-
-                                break;
-
-                            case "MED":
-                                section = null;
-                                // HTML Section Search
-
-                                if (toDate != null && fromDate != null) {
-                                    throw new InvalidRequestException("Date Ranges not allowed to be set");
-                                }
-
-                                List<PatientMedicationHTML> medicationList = medicationSearch
-                                        .findPatientMedicationHTML(nhsNumber.get(0));
-
-                                if (medicationList != null && medicationList.size() > 0) {
-                                    section = new Section();
-
-                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
-                                    code = "MED";
-                                    display = "Medications";
-                                    investigationListText = medicationList.get(0).getProvider();
-                                    investigationListHTML = medicationList.get(0).getHtml();
-                                    sectionTitle = "Medications";
-
-                                    section = SectionsCreationClass.buildSection(system, code, display,
-                                            investigationListText, investigationListHTML, sectionTitle, section);
-
-                                    sectionsList.add(section);
-                                } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                            .setDetails("No data available for the requested section: Medication");
-                                }
-
-                                // Sructured Data Search
-                                List<MedicationOrder> medicationOrders = medicationOrderResourceProvider
-                                        .getMedicationOrdersForPatientId(patientID);
-                                HashSet<String> medicationOrderMedicationsList = new HashSet();
-                                HashSet<String> medicationOrderList = new HashSet();
-
-                                for (MedicationOrder medicationOrder : medicationOrders) {
-                                    medicationOrderList.add(medicationOrder.getId().getIdPart());
-                                }
-
-                                List<MedicationDispense> medicationDispenses = medicationDispenseResourceProvider
-                                        .getMedicationDispensesForPatientId(patientID);
-
-                                for (MedicationDispense medicationDispense : medicationDispenses) {
-                                    if (section == null) {
-                                        section = new Section();
-                                    }
-                                    // Add the medication Order to the bundle
-                                    Entry medicationDispenseEntry = new Entry();
-                                    medicationDispenseEntry
-                                            .setFullUrl("MedicationDispense/" + medicationDispense.getId().getIdPart());
-                                    medicationDispenseEntry.setResource(medicationDispense);
-
-                                    medicationsToBundle.add(medicationDispenseEntry);
-                                    section.addEntry().setReference(medicationDispenseEntry.getFullUrl());
-                                    // If we have any new medicationOrders which
-                                    // were not found in the
-                                    // search for MedicationOrders for a patient
-                                    // we need to add them.
-                                    if (!medicationOrderList.contains(medicationDispense.getAuthorizingPrescription()
-                                            .get(0).getReference().getIdPart())) {
-                                        try {
-                                            MedicationOrder medicationOrder = medicationOrderResourceProvider
-                                                    .getMedicationOrderById(medicationDispense
-                                                            .getAuthorizingPrescription().get(0).getReference());
-                                            medicationOrders.add(medicationOrder);
-                                            medicationOrderList.add(medicationOrder.getId().getIdPart());
-                                        } catch (Exception ex) {
-                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                                    .setDetails("MedicationOrder for MedicaitonDispense (id: "
-                                                            + medicationDispense.getId().getIdPart()
-                                                            + ") could not be found in database");
-                                        }
-                                    }
-                                }
-
-                                List<MedicationAdministration> medicationAdministrations = medicationAdministrationResourceProvider
-                                        .getMedicationAdministrationsForPatientId(patientID);
-
-                                for (MedicationAdministration medicationAdministration : medicationAdministrations) {
-                                    if (section == null) {
-                                        section = new Section();
-                                    }
-
-                                    Entry medicationAdministrationEntry = new Entry();
-                                    medicationAdministrationEntry.setFullUrl(
-                                            "MedicationAdministration/" + medicationAdministration.getId().getIdPart());
-                                    medicationAdministrationEntry.setResource(medicationAdministration);
-                                    section.addEntry().setReference(medicationAdministrationEntry.getFullUrl());
-                                    medicationsToBundle.add(medicationAdministrationEntry);
-
-                                    // If we have any new medicationOrders which
-                                    // were not found in the
-                                    // search for MedicationOrders for a patient
-                                    // we need to add them.
-                                    if (!medicationOrderList.contains(
-                                            medicationAdministration.getPrescription().getReference().getIdPart())) {
-                                        try {
-                                            MedicationOrder medicationOrder = medicationOrderResourceProvider
-                                                    .getMedicationOrderById(
-                                                            medicationAdministration.getPrescription().getReference());
-                                            medicationOrders.add(medicationOrder);
-                                            medicationOrderList.add(medicationOrder.getId().getIdPart());
-                                        } catch (Exception ex) {
-                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                                    .setDetails("MedicationOrder for MedicaitonAdministration (id: "
-                                                            + medicationAdministration.getId().getIdPart()
-                                                            + ") could not be found in database");
-                                        }
-                                    }
-                                }
-
-                                for (MedicationOrder medicationOrder : medicationOrders) {
-                                    if (section == null) {
-                                        section = new Section();
-                                    }
-                                    // Add the medication Order to the bundle
-                                    Entry medicationOrderEntry = new Entry();
-                                    medicationOrderEntry
-                                            .setFullUrl("MedicationOrder/" + medicationOrder.getId().getIdPart());
-                                    medicationOrderEntry.setResource(medicationOrder);
-                                    section.addEntry().setReference(medicationOrderEntry.getFullUrl());
-                                    medicationsToBundle.add(medicationOrderEntry);
-
-                                    // Store the referenced medicaitons in a set
-                                    // so we can get
-                                    // all the medications once and we won't
-                                    // have duplicates
-                                    IdDt medicationId = ((ResourceReferenceDt) medicationOrder.getMedication())
-                                            .getReference();
-                                    medicationOrderMedicationsList.add(medicationId.getValue());
-                                    medicationId = ((ResourceReferenceDt) medicationOrder.getDispenseRequest()
-                                            .getMedication()).getReference();
-                                    medicationOrderMedicationsList.add(medicationId.getValue());
-                                }
-
-                                for (String medicationId : medicationOrderMedicationsList) {
-                                    try {
-                                        Entry medicationEntry = new Entry();
-                                        medicationEntry.setFullUrl(medicationId);
-                                        medicationEntry.setResource(
-                                                medicationResourceProvider.getMedicationById(new IdDt(medicationId)));
-                                        section.addEntry().setReference(medicationEntry.getFullUrl());
-                                        medicationsToBundle.add(medicationEntry);
-
-                                    } catch (Exception ex) {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                                .setDetails("Medication (ID: " + medicationId
-                                                        + ") for MedicaitonOrder could not be found in database");
+                                                .setDetails("No data available for the requested section: Clinical Items");
                                     }
-                                }
 
-                                if (section != null) {
-                                    sectionsList.add(section);
-                                }
+                                    break;
 
-                                break;
+                                case "MED":
+                                    if (toDate != null && fromDate != null) {
+                                        throw new InvalidRequestException("Date Ranges not allowed to be set");
+                                    }
 
-                            case "REF":
-                                List<ReferralListHTML> referralList = referralSearch
-                                        .findAllReferralHTMLTables(nhsNumber.get(0));
+                                    List<PatientMedicationHTML> medicationList = medicationSearch
+                                            .findPatientMedicationHTML(nhsNumber.get(0));
 
-                                if (referralList != null && referralList.size() > 0) {
+                                    if (medicationList != null && medicationList.size() > 0) {
+                                        section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "MED", "Medications",
+                                                medicationList.get(0).getProvider(), medicationList.get(0).getHtml(), "Medications", section);
 
-                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
-                                    code = "REF";
-                                    display = "Referrals";
-                                    investigationListText = referralList.get(0).getProvider();
-                                    investigationListHTML = referralList.get(0).getHtml();
-                                    sectionTitle = "Referrals";
+                                        sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+                                                .setDetails("No data available for the requested section: Medication");
+                                    }
 
-                                    section = SectionsCreationClass.buildSection(system, code, display,
-                                            investigationListText, investigationListHTML, sectionTitle, section);
+                                    // Sructured Data Search
+                                    List<MedicationOrder> medicationOrders = medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientID);
+                                    HashSet<String> medicationOrderMedicationsList = new HashSet<>();
+                                    HashSet<String> medicationOrderList = new HashSet<>();
 
-                                    sectionsList.add(section);
-                                } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                            .setDetails("No data available for the requested section: Referrals");
-                                }
+                                    for (MedicationOrder medicationOrder : medicationOrders) {
+                                        medicationOrderList.add(medicationOrder.getId().getIdPart());
+                                    }
 
-                                break;
+                                    List<MedicationDispense> medicationDispenses = medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientID);
 
-                            case "OBS":
-                                if (toDate != null && fromDate != null) {
-                                    throw new InvalidRequestException("Date Ranges not allowed to be set");
-                                } else {
-                                    List<ObservationListHTML> observationList = observationSearch
-                                            .findAllObservationHTMLTables(nhsNumber.get(0));
+                                    for (MedicationDispense medicationDispense : medicationDispenses) {
+                                        if (section == null) {
+                                            section = new Section();
+                                        }
+                                        // Add the medication Order to the bundle
+                                        Entry medicationDispenseEntry = new Entry();
+                                        medicationDispenseEntry.setFullUrl("MedicationDispense/" + medicationDispense.getId().getIdPart());
+                                        medicationDispenseEntry.setResource(medicationDispense);
 
-                                    if (observationList != null && observationList.size() > 0) {
+                                        medicationsToBundle.add(medicationDispenseEntry);
+                                        section.addEntry().setReference(medicationDispenseEntry.getFullUrl());
+                                        // If we have any new medicationOrders which were not found in the
+                                        // search for MedicationOrders for a patient we need to add them.
+                                        if (!medicationOrderList.contains(medicationDispense.getAuthorizingPrescription().get(0).getReference().getIdPart())) {
+                                            try {
+                                                MedicationOrder medicationOrder = medicationOrderResourceProvider
+                                                        .getMedicationOrderById(medicationDispense.getAuthorizingPrescription().get(0).getReference());
+                                                medicationOrders.add(medicationOrder);
+                                                medicationOrderList.add(medicationOrder.getId().getIdPart());
+                                            } catch (Exception ex) {
+                                                operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+                                                        .setDetails("MedicationOrder for MedicaitonDispense (id: "
+                                                                + medicationDispense.getId().getIdPart()
+                                                                + ") could not be found in database");
+                                            }
+                                        }
+                                    }
 
-                                        system = OperationConstants.SYSTEM_RECORD_SECTION;
-                                        code = "OBS";
-                                        display = "Observations";
-                                        investigationListText = observationList.get(0).getProvider();
-                                        investigationListHTML = observationList.get(0).getHtml();
-                                        sectionTitle = "Observations";
+                                    List<MedicationAdministration> medicationAdministrations = medicationAdministrationResourceProvider
+                                            .getMedicationAdministrationsForPatientId(patientID);
 
-                                        section = SectionsCreationClass.buildSection(system, code, display,
-                                                investigationListText, investigationListHTML, sectionTitle, section);
+                                    for (MedicationAdministration medicationAdministration : medicationAdministrations) {
+                                        if (section == null) {
+                                            section = new Section();
+                                        }
+
+                                        Entry medicationAdministrationEntry = new Entry();
+                                        medicationAdministrationEntry.setFullUrl(
+                                                "MedicationAdministration/" + medicationAdministration.getId().getIdPart());
+                                        medicationAdministrationEntry.setResource(medicationAdministration);
+                                        section.addEntry().setReference(medicationAdministrationEntry.getFullUrl());
+                                        medicationsToBundle.add(medicationAdministrationEntry);
+
+                                        // If we have any new medicationOrders which
+                                        // were not found in the
+                                        // search for MedicationOrders for a patient
+                                        // we need to add them.
+                                        if (!medicationOrderList.contains(
+                                                medicationAdministration.getPrescription().getReference().getIdPart())) {
+                                            try {
+                                                MedicationOrder medicationOrder = medicationOrderResourceProvider
+                                                        .getMedicationOrderById(medicationAdministration.getPrescription().getReference());
+                                                medicationOrders.add(medicationOrder);
+                                                medicationOrderList.add(medicationOrder.getId().getIdPart());
+                                            } catch (Exception ex) {
+                                                operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+                                                        .setDetails("MedicationOrder for MedicaitonAdministration (id: "
+                                                                + medicationAdministration.getId().getIdPart()
+                                                                + ") could not be found in database");
+                                            }
+                                        }
+                                    }
+
+                                    for (MedicationOrder medicationOrder : medicationOrders) {
+                                        if (section == null) {
+                                            section = new Section();
+                                        }
+                                        // Add the medication Order to the bundle
+                                        Entry medicationOrderEntry = new Entry();
+                                        medicationOrderEntry.setFullUrl("MedicationOrder/" + medicationOrder.getId().getIdPart());
+                                        medicationOrderEntry.setResource(medicationOrder);
+                                        section.addEntry().setReference(medicationOrderEntry.getFullUrl());
+                                        medicationsToBundle.add(medicationOrderEntry);
+
+                                        // Store the referenced medicaitons in a set
+                                        // so we can get
+                                        // all the medications once and we won't
+                                        // have duplicates
+                                        IdDt medicationId = ((ResourceReferenceDt) medicationOrder.getMedication()).getReference();
+                                        medicationOrderMedicationsList.add(medicationId.getValue());
+                                        medicationId = ((ResourceReferenceDt) medicationOrder.getDispenseRequest().getMedication()).getReference();
+                                        medicationOrderMedicationsList.add(medicationId.getValue());
+                                    }
+
+                                    for (String medicationId : medicationOrderMedicationsList) {
+                                        try {
+                                            Entry medicationEntry = new Entry();
+                                            medicationEntry.setFullUrl(medicationId);
+                                            medicationEntry.setResource(medicationResourceProvider.getMedicationById(new IdDt(medicationId)));
+                                            section.addEntry().setReference(medicationEntry.getFullUrl());
+                                            medicationsToBundle.add(medicationEntry);
+                                        } catch (Exception ex) {
+                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+                                                    .setDetails("Medication (ID: " + medicationId
+                                                            + ") for MedicaitonOrder could not be found in database");
+                                        }
+                                    }
+
+                                    if (section != null) {
+                                        sectionsList.add(section);
+                                    }
+
+                                    break;
+
+                                case "REF":
+                                    List<ReferralListHTML> referralList = referralSearch.findAllReferralHTMLTables(nhsNumber.get(0));
+
+                                    if (referralList != null && referralList.size() > 0) {
+                                        section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "REF", "Referrals",
+                                                referralList.get(0).getProvider(), referralList.get(0).getHtml(), "Referrals", section);
+
+                                        sectionsList.add(section);
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+                                                .setDetails("No data available for the requested section: Referrals");
+                                    }
+
+                                    break;
+
+                                case "OBS":
+                                    if (toDate != null && fromDate != null) {
+                                        throw new InvalidRequestException("Date Ranges not allowed to be set");
+                                    } else {
+                                        List<ObservationListHTML> observationList = observationSearch
+                                                .findAllObservationHTMLTables(nhsNumber.get(0));
+
+                                        if (observationList != null && observationList.size() > 0) {
+                                            section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "OBS", "Observations",
+                                                    observationList.get(0).getProvider(), observationList.get(0).getHtml(), "Observations", section);
+
+                                            sectionsList.add(section);
+                                        } else {
+                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
+                                                    "No data available for the requested section: Observations");
+                                        }
+                                    }
+
+                                    break;
+
+                                case "INV":
+                                    List<InvestigationListHTML> investigationList = investigationSearch
+                                            .findAllInvestigationHTMLTables(nhsNumber.get(0));
+
+                                    if (investigationList != null && investigationList.size() > 0) {
+                                        section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "INV", "Investigations",
+                                                investigationList.get(0).getProvider(), investigationList.get(0).getHtml(), "Investigations", section);
+                                        sectionsList.add(section);
+
+                                    } else {
+                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+                                                .setDetails("No data available for the requested section: Investigations");
+                                    }
+
+                                    break;
+
+                                case "IMM":
+                                    if (toDate != null && fromDate != null) {
+                                        throw new InvalidRequestException("Date Ranges not allowed to be set");
+                                    } else {
+                                        List<ImmunisationListHTML> immunisationList = immunisationSearch.findAllImmunisationHTMLTables(nhsNumber.get(0));
+
+                                        if (immunisationList != null && immunisationList.size() > 0) {
+                                            section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "IMM", "Immunisations",
+                                                    immunisationList.get(0).getProvider(), immunisationList.get(0).getHtml(), "Immunisations", section);
+
+                                            sectionsList.add(section);
+                                        } else {
+                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
+                                                    "No data available for the requested section: Immunisations");
+                                        }
+                                    }
+
+                                    break;
+
+                                case "ADM":
+                                    List<AdminItemListHTML> adminItemList = adminItemSearch.findAllAdminItemHTMLTables(nhsNumber.get(0));
+
+                                    if (adminItemList != null && adminItemList.size() > 0) {
+                                        section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "ADM", "Administrative Items",
+                                                adminItemList.get(0).getProvider(), adminItemList.get(0).getHtml(), "Administrative Items", section);
 
                                         sectionsList.add(section);
                                     } else {
                                         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
-                                                "No data available for the requested section: Observations");
+                                                "No data available for the requested section: AdministrativeItems");
                                     }
-                                }
 
-                                break;
+                                    break;
 
-                            case "INV":
-                                List<InvestigationListHTML> investigationList = investigationSearch
-                                        .findAllInvestigationHTMLTables(nhsNumber.get(0));
-
-                                if (investigationList != null && investigationList.size() > 0) {
-                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
-                                    code = "INV";
-                                    display = "Investigations";
-                                    investigationListText = investigationList.get(0).getProvider();
-                                    investigationListHTML = investigationList.get(0).getHtml();
-                                    sectionTitle = "Investigations";
-
-                                    section = SectionsCreationClass.buildSection(system, code, display,
-                                            investigationListText, investigationListHTML, sectionTitle, section);
-                                    sectionsList.add(section);
-                                   
-                                } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                            .setDetails("No data available for the requested section: Investigations");
-                                }
-
-                                break;
-
-                            case "IMM":
-                                if (toDate != null && fromDate != null) {
-                                    throw new InvalidRequestException("Date Ranges not allowed to be set");
-                                } else {
-
-                                    List<ImmunisationListHTML> immunisationList = immunisationSearch
-                                            .findAllImmunisationHTMLTables(nhsNumber.get(0));
-                                    if (immunisationList != null && immunisationList.size() > 0) {
-
-                                        system = OperationConstants.SYSTEM_RECORD_SECTION;
-                                        code = "IMM";
-                                        display = "Immunisations";
-                                        investigationListText = immunisationList.get(0).getProvider();
-                                        investigationListHTML = immunisationList.get(0).getHtml();
-                                        sectionTitle = "Immunisations";
-
-                                        section = SectionsCreationClass.buildSection(system, code, display,
-                                                investigationListText, investigationListHTML, sectionTitle, section);
-
-                                        sectionsList.add(section);
-                                    } else {
-                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
-                                                "No data available for the requested section: Immunisations");
-                                    }
-                                }
-
-                                break;
-
-                            case "ADM":
-                                List<AdminItemListHTML> adminItemList = adminItemSearch
-                                        .findAllAdminItemHTMLTables(nhsNumber.get(0));
-
-                                if (adminItemList != null && adminItemList.size() > 0) {
-
-                                    system = OperationConstants.SYSTEM_RECORD_SECTION;
-                                    code = "ADM";
-                                    display = "Administrative Items";
-                                    investigationListText = adminItemList.get(0).getProvider();
-                                    investigationListHTML = adminItemList.get(0).getHtml();
-                                    sectionTitle = "Administrative Items";
-
-                                    section = SectionsCreationClass.buildSection(system, code, display,
-                                            investigationListText, investigationListHTML, sectionTitle, section);
-
-                                    sectionsList.add(section);
-                                } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
-                                            "No data available for the requested section: AdministrativeItems");
-                                }
-
-                                break;
-
-                            default:
-                                system = OperationConstants.SYSTEM_WARNING_CODE;
-                                code = OperationConstants.CODE_INVALID_PARAMETER;
-                                codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-                                metaProfile = OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-
-                                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                                        codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                                throw new UnprocessableEntityException("Dates are invalid: ", operationOutcome);
+                                default:
+                                    throw new UnprocessableEntityException("Dates are invalid: ", OperationOutcomeFactory.buildOperationOutcome(
+                                            OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
+                                            OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                                            IssueTypeEnum.NOT_FOUND));
                             }
                         }
 
                         careRecordComposition.setSection(sectionsList);
                     }
 
+                    // Build the Care Record Composition
+                    Entry careRecordEntry = new Entry();
                     careRecordEntry.setResource(careRecordComposition);
 
                     bundle.addEntry(careRecordEntry);
@@ -944,8 +717,7 @@ public class PatientResourceProvider implements IResourceProvider {
                         bundle.addEntry(e);
                     }
 
-                    List<ResourceReferenceDt> careProviderPractitionerList = ((Patient) patientEntry.getResource())
-                            .getCareProvider();
+                    List<ResourceReferenceDt> careProviderPractitionerList = ((Patient) patientEntry.getResource()).getCareProvider();
 
                     if (careProviderPractitionerList.size() > 0) {
                         careRecordComposition.setAuthor(Collections.singletonList(new ResourceReferenceDt(
@@ -955,17 +727,13 @@ public class PatientResourceProvider implements IResourceProvider {
                                     new IdDt(careProviderPractitionerList.get(0).getReference().getValue()));
 
                             if (practitioner == null) {
-                                system = OperationConstants.SYSTEM_WARNING_CODE;
-                                code = OperationConstants.CODE_REFERENCE_NOT_FOUND;
-                                codableConceptText = OperationConstants.COD_CONCEPT_RECORD_INVALID_REFERENCE;
-                                metaProfile = OperationConstants.META_GP_CONNECT_PRACTITIONER;
-
-                                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                                        codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                                throw new ResourceNotFoundException("Practitioner Reference returning null");
+                                throw new ResourceNotFoundException("Practitioner Reference returning null", OperationOutcomeFactory.buildOperationOutcome(
+                                        OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_REFERENCE_NOT_FOUND,
+                                        OperationConstants.COD_CONCEPT_RECORD_INVALID_REFERENCE, OperationConstants.META_GP_CONNECT_PRACTITIONER,
+                                        IssueTypeEnum.NOT_FOUND));
                             }
-                            practitioner.getMeta()
-                                    .addProfile(OperationConstants.META_GP_CONNECT_PRACTITIONER);
+
+                            practitioner.getMeta().addProfile(OperationConstants.META_GP_CONNECT_PRACTITIONER);
 
                             Entry practitionerEntry = new Entry().setResource(practitioner)
                                     .setFullUrl(careProviderPractitionerList.get(0).getReference().getValue());
@@ -980,22 +748,15 @@ public class PatientResourceProvider implements IResourceProvider {
                                     .getManagingOrganization().getReference());
 
                             if (organizationEntry.getResource() == null || organizationEntry.getFullUrl() == null) {
-
-                                system = OperationConstants.SYSTEM_WARNING_CODE;
-                                code = OperationConstants.CODE_REFERENCE_NOT_FOUND;
-                                codableConceptText = OperationConstants.COD_CONCEPT_RECORD_INVALID_REFERENCE;
-                                metaProfile = OperationConstants.META_GP_CONNECT_PRACTITIONER;
-
-                                operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                                        codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-                                throw new ResourceNotFoundException("organizationResource returning null",
-                                        operationOutcome);
+                                throw new ResourceNotFoundException("organizationResource returning null", OperationOutcomeFactory.buildOperationOutcome(
+                                        OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_REFERENCE_NOT_FOUND,
+                                        OperationConstants.COD_CONCEPT_RECORD_INVALID_REFERENCE, OperationConstants.META_GP_CONNECT_PRACTITIONER,
+                                        IssueTypeEnum.NOT_FOUND));
                             }
 
                             bundle.addEntry(organizationEntry);
                         } catch (InternalErrorException ex) {
-                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                    .setDetails(ex.getLocalizedMessage());
+                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(ex.getLocalizedMessage());
                         }
                     }
 
@@ -1010,17 +771,11 @@ public class PatientResourceProvider implements IResourceProvider {
         if (operationOutcome.getIssue().size() > 0) {
             Entry operationOutcomeEntry = new Entry();
             operationOutcomeEntry.setResource(operationOutcome);
-            Entry hi = new Entry();
-            bundle.addEntry(hi);
+            bundle.addEntry(new Entry());
             bundle.addEntry(operationOutcomeEntry);
         }
 
         return bundle;
-    }
-
-    private boolean NhsValidation(String nhsNumber) {
-        return nhsNumber == null || !NhsCodeValidator.nhsNumberValid(nhsNumber) || nhsNumber.length() != 10
-                || nhsNumber.contains("[a-zA-Z]+");
     }
 
     @Search(compartmentName = "MedicationOrder")
@@ -1069,16 +824,10 @@ public class PatientResourceProvider implements IResourceProvider {
                 registeredPatient = patientDetailsToRegisterPatientResourceConverter(patientDetails);
             }
         } else {
-
-            String system = OperationConstants.SYSTEM_WARNING_CODE;
-            String code = OperationConstants.CODE_INVALID_PARAMETER;
-            String codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-            String metaProfile = OperationConstants.META_GP_CONNECT_PRACTITIONER;
-
-            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                    codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-
-            throw new UnprocessableEntityException("Section Case Invalid: ", operationOutcome);
+            throw new UnprocessableEntityException("Section Case Invalid: ", OperationOutcomeFactory.buildOperationOutcome(
+                    OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
+                    OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND, OperationConstants.META_GP_CONNECT_PRACTITIONER,
+                    IssueTypeEnum.NOT_FOUND));
         }
 
         Bundle bundle = new Bundle();
@@ -1097,7 +846,6 @@ public class PatientResourceProvider implements IResourceProvider {
         patientDetails.setGender(patientResource.getGender());
         patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
 
-        Date now = new Date();
         List<ExtensionDt> registrationPeriodExtensions = patientResource
                 .getUndeclaredExtensionsByUrl(REGISTRATION_PERIOD_EXTENSION_URL);
         ExtensionDt registrationPeriodExtension = registrationPeriodExtensions.get(0);
@@ -1105,7 +853,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         Date registrationStart = registrationPeriod.getStart();
 
-        if (registrationStart.compareTo(now) <= 1) {
+        if (registrationStart.compareTo(new Date()) <= 1) {
             patientDetails.setRegistrationStartDateTime(registrationStart);
         } else {
             throw new IllegalArgumentException(String.format(
@@ -1201,7 +949,7 @@ public class PatientResourceProvider implements IResourceProvider {
         name.setUse(NameUseEnum.USUAL);
 
         patient.setBirthDate(new DateDt(patientDetails.getDateOfBirth()));
-        patient.getMeta().addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-patient-1");
+        patient.getMeta().addProfile(OperationConstants.META_GP_CONNECT_PATIENT);
 
         String addressLines = patientDetails.getAddress();
 
@@ -1221,14 +969,10 @@ public class PatientResourceProvider implements IResourceProvider {
                     + practitioner.getName().getGivenFirstRep() + " " + practitioner.getName().getFamilyFirstRep());
             patient.getCareProvider().add(practitionerReference);
         } else {
-            String system = OperationConstants.SYSTEM_WARNING_CODE;
-            String code = "PATIENT_NOT_FOUND";
-            String codableConceptText =OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND;
-            String metaProfile = OperationConstants.META_GP_CONNECT_PRACTITIONER;
-
-            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(system, code,
-                    codableConceptText, metaProfile, IssueTypeEnum.NOT_FOUND);
-            throw new ResourceNotFoundException("No GP record exists " + operationOutcome);
+            throw new ResourceNotFoundException("No GP record exists " + OperationOutcomeFactory.buildOperationOutcome(
+                    OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_PATIENT_NOT_FOUND,
+                    OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND, OperationConstants.META_GP_CONNECT_PRACTITIONER,
+                    IssueTypeEnum.NOT_FOUND));
         }
 
         String gender = patientDetails.getGender();

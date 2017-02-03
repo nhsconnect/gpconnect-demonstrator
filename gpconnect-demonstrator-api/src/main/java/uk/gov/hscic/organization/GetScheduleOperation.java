@@ -21,6 +21,7 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.appointments.SlotResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
@@ -55,8 +56,8 @@ public class GetScheduleOperation {
 
 		if (organization == null) {
 			CodingDt errorCoding = new CodingDt()
-					.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
-					.setCode("REFERENCE_NOT_FOUND");
+					.setSystem(OperationConstants.SYSTEM_WARNING_CODE)
+					.setCode(OperationConstants.CODE_REFERENCE_NOT_FOUND);
 
 			CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
 			errorCodableConcept.setText("Invalid Reference");
@@ -115,8 +116,8 @@ public class GetScheduleOperation {
 
 							if (practitioner == null) {
 								CodingDt errorCoding = new CodingDt()
-										.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1")
-										.setCode("REFERENCE_NOT_FOUND");
+										.setSystem(OperationConstants.SYSTEM_WARNING_CODE)
+										.setCode(OperationConstants.CODE_REFERENCE_NOT_FOUND);
 								CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
 								errorCodableConcept.setText("Invalid Reference");
 								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)

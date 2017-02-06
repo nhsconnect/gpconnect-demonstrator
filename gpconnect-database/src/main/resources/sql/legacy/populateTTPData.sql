@@ -1,8 +1,8 @@
 INSERT INTO gpconnect.adminitems
   (nhsNumber,sectionDate, htmlPart,provider, lastUpdated)
 VALUES (
-  9476719931,'2008-04-09 12:17:00',
-  "<div><h2>Administrative Items</h2><table><thead><th>Date</th><th>Entry</th><th>Details</th></thead><tbody><tr><td>10 Jul 2008</td><td>British or mixed British - ethnic category 2001 census</td><td /></tr><tr><td>16 Jul 2008</td><td>Did not attend</td><td /></tr><tr><td>22 Jul 2008</td><td>Did not attend</td><td /></tr><tr><td>17 Sep 2008</td><td>Monitoring of patient</td><td /></tr><tr><td>25 Sep 2008</td><td>Monitoring of patient</td><td /></tr></tbody><PageSectionIndex>1</PageSectionIndex></table></div>",
+  9476719931,'2012-12-10 12:17:00',
+  "<div><h2>Administrative Items</h2><table><thead><tr><th>Date</th><th>Entry</th><th>Details</th></tr></thead><tbody><tr><td>Cervical Smear Defaulter</td><td></td></tr><tr><td /><td>No summary care record consent specified</td><td></td></tr></tbody><PageSectionIndex>1</PageSectionIndex></table></div><PageSectionIndex>1<PageSectionIndex>",
   "TPP",
   '2016-07-25 12:00:00'
 );
@@ -267,10 +267,35 @@ VALUES (
 );
 
 INSERT INTO gpconnect.referrals
-  (nhsNumber,sectionDate, htmlPart,provider, lastUpdated)
+  (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (
-  9476719931,'2016-01-08 09:22:00',
-  "<div><h2>Referrals</h2><table><thead><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></thead><tbody><tr><td>03 Mar 2016</td><td>Airedale Hospital</td><td>Dr Johnson &amp; Partners</td><td>Routine</td><td>From Hospital out-patient for Diabetic Medicine<br />Receiving care<br /></td></tr><tr><td>09 Apr 2013</td><td>Dr Johnson &amp; Partners</td><td>Leeds District Nurses</td><td>Routine</td><td>Referral to local authority weight management programme<br />Waiting For Information</td></tr><tr><td>14 Jul 2012</td><td>Dr Johnson &amp; Partners</td><td>Leeds General Infirmary</td><td>Urgent</td><td>Back pain</td></tr></tbody></table></div>",
+   9476719931,'2016-03-03 00:00:01',
+  " <td>03 Mar 2016</td>
+            <td>Airedale Hospital</td>
+            <td>Dr Johnson &amp; Partners</td>
+            <td>Routine</td>
+            <td>From Hospital out-patient for Diabetic Medicine<br />Receiving care<br /></td>""
+</tbody></table></div>",
+  "TPP",
+  '2016-07-25 12:00:00'
+),(
+ 9476719931,'2013-04-09 00:00:01',
+ "<td>09 Apr 2013</td>
+            <td>Dr Johnson &amp; Partners</td>
+            <td>Leeds District Nurses</td>
+            <td>Routine</td>
+            <td>Referral to local authority weight management programme<br />Waiting For Information</td>
+</tbody></table></div>",
+  "TPP",
+  '2016-07-25 12:00:00'
+),(
+ 9476719931,'2012-07-14 00:00:01',
+  "<td>14 Jul 2012</td>
+            <td>Dr Johnson &amp; Partners</td>
+            <td>Leeds General Infirmary</td>
+            <td>Urgent</td>
+            <td>Back pain</td>
+</tbody></table></div>",
   "TPP",
   '2016-07-25 12:00:00'
 );

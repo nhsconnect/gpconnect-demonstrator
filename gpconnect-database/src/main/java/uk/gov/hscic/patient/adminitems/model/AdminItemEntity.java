@@ -11,29 +11,51 @@ public class AdminItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "html")
-    private String html;
+    @Column(name = "nhsNumber")
+    private Long nhsNumber;
+
+    @Column(name = "sectionDate")
+    private Date sectionDate;
+
+    @Column(name = "htmlPart")
+    private String htmlPart;
 
     @Column(name = "provider")
     private String provider;
 
     @Column(name = "lastUpdated")
     private Date lastUpdated;
-    
+
+    public Long getNhsNumber() {
+        return nhsNumber;
+    }
+
+    public void setNhsNumber(Long nhsNumber) {
+        this.nhsNumber = nhsNumber;
+    }
+
+    public Date getSectionDate() {
+        return sectionDate;
+    }
+
+    public void setSectionDate(Date sectionDate) {
+        this.sectionDate = sectionDate;
+    }
+
+    public String getHtmlPart() {
+        return htmlPart;
+    }
+
+    public void setHtmlPart(String htmlPart) {
+        this.htmlPart = htmlPart;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getHtml() {
-        return html;
-    }
-
-    public void setHtml(String html) {
-        this.html = html;
     }
 
     public String getProvider() {

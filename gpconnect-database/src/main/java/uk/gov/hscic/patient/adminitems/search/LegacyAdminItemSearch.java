@@ -8,6 +8,7 @@ import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
 import uk.gov.hscic.patient.adminitems.repo.AdminItemRepository;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -16,17 +17,29 @@ public class LegacyAdminItemSearch extends AbstractLegacyService implements Admi
     @Autowired
     private AdminItemRepository adminItemRepository;
 
-    private final AdminItemEntityToListTransformer transformer = new AdminItemEntityToListTransformer();;
+    private final AdminItemEntityToHTMLTransformer transformer = new AdminItemEntityToHTMLTransformer();
 
     @Override
-    public List<AdminItemListHTML> findAllAdminItemHTMLTables(final String patientId) {
-
-        final AdminItemEntity item = adminItemRepository.findOne(Long.parseLong(patientId));
-
-        if(item == null){
+    public List<AdminItemListHTML> findAllAdminItemHTMLTables(final String patientId,Date fromDate,
+            Date toDate) {
+        
+        List<AdminItemEntity> items = null;
+        if (fromDate != null && toDate != null) {
+            items = adminItemRepository.findBynhsNumberAndSectionDateAfterAndSectionDateBeforeOrderBySectionDateDesc(
+                    Long.valueOf(patientId), fromDate, toDate);
+        } else if (fromDate != null) {
+            items = adminItemRepository
+                    .findBynhsNumberAndSectionDateAfterOrderBySectionDateDesc(Long.valueOf(patientId), fromDate);
+        } else if (toDate != null) {
+            items = adminItemRepository
+                    .findBynhsNumberAndSectionDateBeforeOrderBySectionDateDesc(Long.valueOf(patientId), toDate);
+        } else {
+            items = adminItemRepository.findBynhsNumberOrderBySectionDateDesc(Long.valueOf(patientId));
+        }
+        if (items  == null || items.size() <= 0) {
             return null;
         } else {
-            return Collections.singletonList(transformer.transform(item));
+            return Collections.singletonList(transformer.transform(items));
         }
     }
 }

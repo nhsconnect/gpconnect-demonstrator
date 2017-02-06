@@ -5,6 +5,7 @@ import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
 
+import java.util.Date;
 import java.util.List;
 
 public class NotConfiguredAdminItemSearch implements AdminItemSearch {
@@ -20,7 +21,7 @@ public class NotConfiguredAdminItemSearch implements AdminItemSearch {
     }
 
     @Override
-    public List<AdminItemListHTML> findAllAdminItemHTMLTables(final String patientId) {
+    public List<AdminItemListHTML> findAllAdminItemHTMLTables(final String patientId,Date fromDate, Date toDate) {
         throw ConfigurationException.unimplementedTransaction(AdminItemSearch.class);
     }
 }

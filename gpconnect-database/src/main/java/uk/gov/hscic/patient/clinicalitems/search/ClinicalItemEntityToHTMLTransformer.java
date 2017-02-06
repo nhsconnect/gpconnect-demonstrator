@@ -7,8 +7,7 @@ import org.apache.commons.collections4.Transformer;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemEntity;
 import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemListHTML;
-import uk.gov.hscic.patient.encounters.model.EncounterEntity;
-import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
+
 
 public class ClinicalItemEntityToHTMLTransformer implements Transformer<List<ClinicalItemEntity>, ClinicalItemListHTML>  {
 

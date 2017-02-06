@@ -683,7 +683,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     break;
 
                                 case "ADM":
-                                    List<AdminItemListHTML> adminItemList = adminItemSearch.findAllAdminItemHTMLTables(nhsNumber.get(0));
+                                    List<AdminItemListHTML> adminItemList = adminItemSearch.findAllAdminItemHTMLTables(nhsNumber.get(0), fromDate,toDate);
 
                                     if (adminItemList != null && adminItemList.size() > 0) {
                                         section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "ADM", "Administrative Items",

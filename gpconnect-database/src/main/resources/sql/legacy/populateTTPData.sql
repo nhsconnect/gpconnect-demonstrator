@@ -1,7 +1,7 @@
 INSERT INTO gpconnect.adminitems
-  (id, html, provider, lastUpdated)
+  (nhsNumber,sectionDate, htmlPart,provider, lastUpdated)
 VALUES (
-  9476719931,
+  9476719931,'2008-04-09 12:17:00',
   "<div><h2>Administrative Items</h2><table><thead><th>Date</th><th>Entry</th><th>Details</th></thead><tbody><tr><td>10 Jul 2008</td><td>British or mixed British - ethnic category 2001 census</td><td /></tr><tr><td>16 Jul 2008</td><td>Did not attend</td><td /></tr><tr><td>22 Jul 2008</td><td>Did not attend</td><td /></tr><tr><td>17 Sep 2008</td><td>Monitoring of patient</td><td /></tr><tr><td>25 Sep 2008</td><td>Monitoring of patient</td><td /></tr></tbody><PageSectionIndex>1</PageSectionIndex></table></div>",
   "TPP",
   '2016-07-25 12:00:00'

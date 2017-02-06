@@ -16,8 +16,38 @@ public class ReferralEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "html")
-    private String html;
+    @Column(name = "nhsNumber")
+    private Long nhsNumber;
+    
+    @Column(name = "sectionDate")
+    private Date sectionDate;
+
+    @Column(name = "htmlPart")
+    private String htmlPart;
+
+    public Long getNhsNumber() {
+        return nhsNumber;
+    }
+
+    public void setNhsNumber(Long nhsNumber) {
+        this.nhsNumber = nhsNumber;
+    }
+
+    public Date getSectionDate() {
+        return sectionDate;
+    }
+
+    public void setSectionDate(Date sectionDate) {
+        this.sectionDate = sectionDate;
+    }
+
+    public String getHtmlPart() {
+        return htmlPart;
+    }
+
+    public void setHtmlPart(String htmlPart) {
+        this.htmlPart = htmlPart;
+    }
 
     @Column(name = "provider")
     private String provider;
@@ -33,14 +63,7 @@ public class ReferralEntity {
         this.id = id;
     }
 
-    public String getHtml() {
-        return html;
-    }
-
-    public void setHtml(String html) {
-        this.html = html;
-    }
-
+   
     public String getProvider() {
         return provider;
     }

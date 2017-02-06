@@ -45,7 +45,8 @@ angular.module('gpConnect')
     }
     var loadHTML = function () {
     Referral.findAllHTMLTables($stateParams.patientId, $scope.fromDateValue, $scope.toDateValue).then(function (result) {
-
+      console.log($scope.fromDateValue);
+      console.log($scope.toDateValue);
       // Default Page Content
       var text = '{"provider":"No Data","html":"No referrals data available for this patient."}';
       $scope.referralTable = JSON.parse(text);
@@ -69,9 +70,13 @@ angular.module('gpConnect')
         }
       });
       
-      usSpinnerService.stop('patientSummary-spinner');
+      usSpinnerService.stop('referralsSummary-spinner');
     });
+
+
     };
+
+     loadHTML();
 
     $scope.go = function (id) {
       $state.go('referrals-detail', {
@@ -133,5 +138,5 @@ angular.module('gpConnect')
         });
       });
     };
- loadHTML();
+
   });

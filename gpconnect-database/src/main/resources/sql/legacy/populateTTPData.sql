@@ -267,9 +267,9 @@ VALUES (
 );
 
 INSERT INTO gpconnect.referrals
-  (id, html, provider, lastUpdated)
+  (nhsNumber,sectionDate, htmlPart,provider, lastUpdated)
 VALUES (
-  9476719931,
+  9476719931,'2016-01-08 09:22:00',
   "<div><h2>Referrals</h2><table><thead><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></thead><tbody><tr><td>03 Mar 2016</td><td>Airedale Hospital</td><td>Dr Johnson &amp; Partners</td><td>Routine</td><td>From Hospital out-patient for Diabetic Medicine<br />Receiving care<br /></td></tr><tr><td>09 Apr 2013</td><td>Dr Johnson &amp; Partners</td><td>Leeds District Nurses</td><td>Routine</td><td>Referral to local authority weight management programme<br />Waiting For Information</td></tr><tr><td>14 Jul 2012</td><td>Dr Johnson &amp; Partners</td><td>Leeds General Infirmary</td><td>Urgent</td><td>Back pain</td></tr></tbody></table></div>",
   "TPP",
   '2016-07-25 12:00:00'

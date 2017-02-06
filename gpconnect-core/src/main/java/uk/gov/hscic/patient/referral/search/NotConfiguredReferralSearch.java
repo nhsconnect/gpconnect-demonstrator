@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient.referral.search;
 
+import java.util.Date;
 import java.util.List;
 
 import uk.gov.hscic.common.exception.ConfigurationException;
@@ -20,7 +21,7 @@ public class NotConfiguredReferralSearch implements ReferralSearch {
     }
 
     @Override
-    public List<ReferralListHTML> findAllReferralHTMLTables(final String patientId) {
+    public List<ReferralListHTML> findAllReferralHTMLTables(final String patientId,Date fromDate, Date toDate) {
         throw ConfigurationException.unimplementedTransaction(ReferralSearch.class);
     }
 }

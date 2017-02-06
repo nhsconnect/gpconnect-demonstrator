@@ -226,10 +226,12 @@ CREATE TABLE gpconnect.problems (
 );
 
 CREATE TABLE gpconnect.referrals (
- id                  BIGINT        NOT NULL    AUTO_INCREMENT,
- html                VARCHAR(4096) NULL,
- provider            VARCHAR(10)   NULL,
- lastUpdated			 DATETIME 	   NULL,
+ id                  BIGINT     	NOT NULL    AUTO_INCREMENT,
+ nhsNumber			 BIGINT 		NULL,
+ sectionDate		 DATETIME		NULL,
+ htmlPart			 VARCHAR(4096) 	NULL,
+ provider            VARCHAR(10)   	NULL,
+ lastUpdated		 DATETIME 	   	NULL,
  PRIMARY KEY         (id)
 );
 

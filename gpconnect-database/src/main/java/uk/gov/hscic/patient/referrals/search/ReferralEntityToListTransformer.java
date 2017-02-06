@@ -15,7 +15,7 @@ public class ReferralEntityToListTransformer implements Transformer<ReferralEnti
         referralList.setSource(RepoSourceType.LEGACY.getSourceName());
 
         referralList.setProvider(referralEntity.getProvider());
-        referralList.setHtml(referralEntity.getHtml());
+       // referralList.setHtml(referralEntity.getHtml());
 
         referralList.setLastUpdated(referralEntity.getLastUpdated());
         return referralList;

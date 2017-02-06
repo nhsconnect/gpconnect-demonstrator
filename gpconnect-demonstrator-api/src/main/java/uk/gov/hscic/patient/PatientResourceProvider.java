@@ -270,7 +270,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 fromDate = ((PeriodDt) value).getStart();
                 Calendar toCalendar = Calendar.getInstance();
                 toDate = ((PeriodDt) value).getEnd();
-
+            
                 if (fromDate != null && toDate != null && fromDate.after(toDate)) {
                     throw new UnprocessableEntityException("Dates are invalid: ", OperationOutcomeFactory.buildOperationOutcome(
                             OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
@@ -613,7 +613,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     break;
 
                                 case "REF":
-                                    List<ReferralListHTML> referralList = referralSearch.findAllReferralHTMLTables(nhsNumber.get(0));
+                                    List<ReferralListHTML> referralList = referralSearch.findAllReferralHTMLTables(nhsNumber.get(0), fromDate, toDate);
 
                                     if (referralList != null && referralList.size() > 0) {
                                         section = SectionsCreationClass.buildSection(OperationConstants.SYSTEM_RECORD_SECTION, "REF", "Referrals",

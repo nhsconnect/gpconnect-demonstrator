@@ -1,6 +1,7 @@
 package uk.gov.hscic.patient.referrals.search;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import uk.gov.hscic.common.service.AbstractLegacyService;
@@ -17,17 +18,29 @@ public class LegacyReferralSearch extends AbstractLegacyService implements Refer
     @Autowired
     private ReferralRepository referralRepository;
 
-    private final ReferralEntityToListTransformer transformer = new ReferralEntityToListTransformer();
+    private final ReferralEntityToHTMLTransformer transformer = new ReferralEntityToHTMLTransformer();
 
     @Override
-    public List<ReferralListHTML> findAllReferralHTMLTables(final String patientId) {
+    public List<ReferralListHTML> findAllReferralHTMLTables(final String patientId,Date fromDate,
+            Date toDate) {
 
-        final ReferralEntity item = referralRepository.findOne(Long.parseLong(patientId));
-
-        if(item == null){
-            return null;
-        } else {
-            return Collections.singletonList(transformer.transform(item));
-        }
-    }
+       List<ReferralEntity> items = null;
+       if (fromDate != null && toDate != null) {
+           items = referralRepository.findBynhsNumberAndSectionDateAfterAndSectionDateBeforeOrderBySectionDateDesc(
+                   Long.valueOf(patientId), fromDate, toDate);
+       } else if (fromDate != null) {
+           items = referralRepository
+                   .findBynhsNumberAndSectionDateAfterOrderBySectionDateDesc(Long.valueOf(patientId), fromDate);
+       } else if (toDate != null) {
+           items = referralRepository
+                   .findBynhsNumberAndSectionDateBeforeOrderBySectionDateDesc(Long.valueOf(patientId), toDate);
+       } else {
+           items = referralRepository.findBynhsNumberOrderBySectionDateDesc(Long.valueOf(patientId));
+       }
+       if (items  == null || items.size() <= 0) {
+           return null;
+       } else {
+           return Collections.singletonList(transformer.transform(items));
+       }
+   }
 }

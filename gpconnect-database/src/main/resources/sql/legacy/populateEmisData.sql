@@ -10,141 +10,12 @@ VALUES (
 INSERT INTO gpconnect.clinicalitems
   (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (
- 9476719958,'2016-10-03 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
- <td>03 Oct 2016</td>
-            <td />
-            <td>This is confidential</td>
-</tr></tbody></table></div>",
-  "EMIS",'2016-07-25 12:00:00'
-  ),
-  (
-   9476719958,'2016-09-29 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
-            <td>29 Sep 2016</td>
-            <td>This is confidential</td>
-            <td />
-         </tr></tbody></table></div>",
-  "EMIS",'2016-07-25 12:00:00'
-  ),
-  (
-   9476719958,'2000-10-30 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
- <td>30 Oct 2000</td>
-            <td>Notes summary on computer</td>
-            <td> Pale - prob mildly anaemic. Pale and unwell</td>
-</tr></tbody></table></div>",
-  "EMIS",'2016-07-25 12:00:00'
-  ),
-  (
-  9476719958,'2000-06-13 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
- <td>13 Jun 2000</td>
-            <td></td>
-            <td> Generalised non-specific abdominal tenderness</td>
-</tr></tbody></table></div>",
-  "EMIS",'2016-07-25 12:00:00'
-  ),
-  (
-   9476719958,'2000-06-13 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
-            <td>13 Jun 2000</td>
-            <td>Never smoked tobacco</td>
-            <td />
-         </tr></tbody></table></div>",
-  "EMIS",'2016-07-25 12:00:00'
-  ),
-  (
-   9476719958,'1988-10-02 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
- <td>02 Oct 1988</td>
-            <td>Trigger finger - acquired</td>
-            <td> Still coughing up some thick globules phlegm - leading again to choking</td>
-</tr></tbody></table></div>",
-  "EMIS",'2016-07-25 12:00:00'
-  ),
-  (
-   9476719958,'1988-06-17 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
-  <td>17 Jul 1988</td>
-            <td>Cardiological referral</td>
-            <td> Try 10 days oral steroids and see friday week</td>
-</tr></tbody></table></div>",
-  "EMIS",'2016-07-25 12:00:00'
-  ),
-  (
-   9476719958,'1988-07-17 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
-<td>17 Jul 1988</td>
-            <td>Right bundle branch block</td>
-            <td></td>
-</tr></tbody></table></div>",
-  "EMIS",'2016-07-25 12:00:00'
-  ),
-  (
-   9476719958,'1988-07-17 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
-  <td>17 Jul 1988</td>
-            <td>This is confidential</td>
-            <td></td>
-</tr></tbody></table></div>",
-  "EMIS",'2016-07-25 12:00:00'
-  ),
-  (
-   9476719958,'1988-07-04 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
-  <td>04 Jul 1988</td>
-            <td>Meibomian cyst infected</td>
-            <td></td>
-</tr></tbody></table></div>",
-  "EMIS",'2016-07-25 12:00:00'
-  ),
-  (
-   9476719958,'1982-07-31 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
-  <td>31 Jan 1982</td>
-            <td>Motor vehicle traffic accidents (MVTA)</td>
-            <td></td>
-</tr></tbody></table></div>",
-  "EMIS",'2016-07-25 12:00:00'
-  );
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+ 9476719958, '2015-12-10 12:17:00',
+ "<div><h2>Clinical Items</h2><table><thead><th>Date</th><th>Entry</th><th>Details</th></thead><tbody><tr><td>03 Oct 2016</td><td /><td>This is confidential</td></tr><tr><td>29 Sep 2016</td><td>This is confidential</td><td /></tr><tr><td>30 Oct 2000</td><td>Notes summary on computer</td><td> Pale - prob mildly anaemic. Pale and unwell</td></tr><tr><td>13 Jun 2000</td><td /><td> Generalised non-specific abdominal tenderness</td></tr><tr><td>13 Jun 2000</td><td>Never smoked tobacco</td><td /></tr><tr><td>02 Oct 1988</td><td>Trigger finger - acquired</td><td> Still coughing up some thick globules phlegm - leading again to choking</td></tr><tr><td>17 Jul 1988</td><td>Cardiological referral</td><td> Try 10 days oral steroids and see friday week</td></tr><tr><td>17 Jul 1988</td><td>Right bundle branch block</td><td /></tr><tr><td>17 Jul 1988</td><td>This is confidential</td><td /></tr><tr><td>04 Jul 1988</td><td>Meibomian cyst infected</td><td /></tr><tr><td>31 Jan 1982</td><td>Motor vehicle traffic accidents (MVTA)</td><td /></tr></tbody></table></div>",
+  "EMIS",
+  '2016-08-24 12:00:00'
+);
+
 INSERT INTO gpconnect.encounters
   (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (
@@ -256,7 +127,7 @@ VALUES (
 INSERT INTO gpconnect.referrals
   (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (
- 9476719958, '2016-08-03 09:22:00',
+ 9476719958, '2013-12-10 12:17:00',
  "<div><h2>Referrals</h2><table><thead><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></thead><tbody><tr><td>03 Oct 2016</td><td>EmisTest at SCI_Service at EMISWebCR1 50004</td><td>SCIGPService at EMISWebCR1</td><td>Routine</td><td>This is confidential<br /></td></tr></tbody></table></div>",
   "EMIS",
   '2016-08-24 12:00:00'

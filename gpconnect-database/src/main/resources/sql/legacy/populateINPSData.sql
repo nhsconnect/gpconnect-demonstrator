@@ -1,8 +1,8 @@
 INSERT INTO gpconnect.adminitems
   (nhsNumber,sectionDate, htmlPart,provider, lastUpdated)
 VALUES (
-  9476719966,'2012-12-10 12:17:00',
-  "<div><h2>Administrative Items</h2><table><thead><tr><th>Date</th><th>Entry</th><th>Details</th></tr></thead><tbody><tr><td>Cervical Smear Defaulter</td><td></td></tr><tr><td /><td>No summary care record consent specified</td><td></td></tr></tbody><PageSectionIndex>1</PageSectionIndex></table></div><PageSectionIndex>1<PageSectionIndex>",
+  9476719966,'2013-12-10 12:17:00',
+  "<div><h2>Administrative Items</h2><table><thead><tr><th>Date</th><th>Entry</th><th>Details</th></tr></thead><tbody><tr><td>Cervical Smear Defaulter</td><td></td></tr><tr><td /><td>No summary care record consent specified</td><td></td></tr></tbody><PageSectionIndex>1</PageSectionIndex></table></div>",
   "INPS",
   '2016-07-25 12:00:00'
 );
@@ -19,82 +19,11 @@ VALUES (
 INSERT INTO gpconnect.clinicalitems
   (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (
-   9476719966,'2014-08-13 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
- <td>13-Aug-2014</td>
-            <td>Shoulder pain</td>
-            <td>In right shoulder</td>
-</tr></tbody></table></div>",
-  "INPS",'2016-07-25 12:00:00'
-  ),
-  (
-  9476719966,'2013-09-16 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
- <td>16-Sep-2013</td>
-            <td>Oesophageal cancer</td>
-            <td></td>
-</tr></tbody></table></div>",
-  "INPS",'2016-07-25 12:00:00'
-  ),
-  (
-  9476719966,'2011-01-14 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
-   <td>14-Jan-2011</td>
-            <td>Perennial rhinitis</td>
-            <td></td>
-</tr></tbody></table></div>",
-  "INPS",'2016-07-25 12:00:00'
-  ),
-  (
-  9476719966,'2010-08-12 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
- <td>12-Aug-2010</td>
-            <td>Fragility # unsp osteoporosis</td>
-            <td></td>
-</tr></tbody></table></div>",
-  "INPS",'2016-07-25 12:00:00'
-  ),
-  (
-  9476719966,'2010-09-12 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
-  <td>12-Aug-2010</td>
-            <td>Osteoporosis</td>
-            <td></td>
-</tr></tbody></table></div>",
-  "INPS",'2016-07-25 12:00:00'
-  ),
-  (
-  9476719966,'2009-09-04 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
- <td>04-Sep-2009</td>
-            <td>Varicose eczema</td>
-            <td />
-</tr></tbody></table></div>",
-  "INPS",'2016-07-25 12:00:00'
-  ),
-  (
-  9476719966,'2009-05-18 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead>
- <th>Date</th><th>Entry</th><th>Details</th>
-</thead><tbody><tr>
- <td>18-May-2009</td>
-            <td>Fungal nail infection</td>
-            <td>On left hand</td>
-</tr></tbody></table></div>",
-  "INPS",'2016-07-25 12:00:00'
-  );
+  9476719966,'2012-12-10 12:17:00',
+  "<div><h2>Clinical Items</h2><table><thead><th>Date</th><th>Entry</th><th>Details</th></thead><tbody><tr><td>13-Aug-2014</td><td>Shoulder pain</td><td>In right shoulder</td></tr><tr><td>16-Sep-2013</td><td>Oesophageal cancer</td><td /></tr><tr><td>14-Jan-2011</td><td>Perennial rhinitis</td><td /></tr><tr><td>12-Aug-2010</td><td>Fragility # unsp osteoporosis</td><td /></tr><tr><td>12-Aug-2010</td><td>Osteoporosis</td><td /></tr><tr><td>04-Sep-2009</td><td>Varicose eczema</td><td /></tr><tr><td>18-May-2009</td><td>Fungal nail infection</td><td>On left hand</td></tr></tbody></table></div>",
+  "INPS",
+  '2016-07-25 12:00:00'
+);
 
 INSERT INTO gpconnect.encounters
   (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
@@ -162,40 +91,11 @@ VALUES (
 INSERT INTO gpconnect.referrals
   (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (
-   9476719966,'2009-07-13 00:00:01',
-  "<div><h2>Referrals</h2><table><thead><tr><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></tr></thead><tbody>
-	<td>13-Jul-2009</td>
-            <td>Dr An Other (GP Registrar)</td>
-            <td>Ninewells - General medicine</td>
-            <td>Routine</td>
-            <td>Depressive disorder NEC</td>
-</tbody></table></div>",
+  9476719966,'2013-12-10 12:17:00',
+  "<div><h2>Referrals</h2><table><thead><tr><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></tr></thead><tbody><tr><td>13-Jul-2009</td><td>Dr An Other (GP Registrar)</td><td>Ninewells - General medicine</td><td>Routine</td><td>Depressive disorder NEC</td></tr><tr><td>24-Dec-2004</td><td>Dr Patrick Slater (Partner)</td><td>Ninewells - Accident and Emergency</td><td>Immediately</td><td>Poisoning - self-inflicted</td></tr><tr><td>26-Mar-2001</td><td>Mr P. Slane (Other Health Care Professional)</td><td>Ninewells - Obstetrics (Hospital Bed or Delivery Facilities)</td><td>Routine</td><td>Patient pregnant</td></tr></tbody></table></div>",
   "INPS",
   '2016-07-25 12:00:00'
-),(
- 9476719966,'2004-12-24 00:00:01',
-  "<div><h2>Referrals</h2><table><thead><tr><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></tr></thead><tbody>
-             <td>24-Dec-2004</td>
-            <td>Dr Patrick Slater (Partner)</td>
-            <td>Ninewells - Accident and Emergency</td>
-            <td>Immediately</td>
-            <td>Poisoning - self-inflicted</td>
-</tbody></table></div>",
-  "INPS",
-  '2016-07-25 12:00:00'
-  ),(
- 9476719966,'2001-03-26 00:00:01',
-  "<div><h2>Referrals</h2><table><thead><tr><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></tr></thead><tbody>
-            <td>26-Mar-2001</td>
-            <td>Mr P. Slane (Other Health Care Professional)</td>
-            <td>Ninewells - Obstetrics (Hospital Bed or Delivery Facilities)</td>
-            <td>Routine</td>
-            <td>Patient pregnant</td>
-</tbody></table></div>",
-  "INPS",
-  '2016-07-25 12:00:00'
-  );
-
+);
 
 INSERT INTO gpconnect.patientsummary
   (id, html, provider, lastUpdated)

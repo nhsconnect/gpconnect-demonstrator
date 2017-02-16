@@ -15,7 +15,6 @@ public class AdminItemEntityToListTransformer implements Transformer<AdminItemEn
         adminItemList.setSource(RepoSourceType.LEGACY.getSourceName());
 
         adminItemList.setProvider(adminItemEntity.getProvider());
-       // adminItemList.setHtml(adminItemEntity.getHtml());
 
         adminItemList.setLastUpdated(adminItemEntity.getLastUpdated());
         return adminItemList;

@@ -40,4 +40,26 @@ public class buildHTMLTABLE {
         // String htmlTable = buf.toString();
         return buf;
     }
+    
+    
+    public String tableCreationAllergies(ArrayList<Object> currentAllergyTableHeaders,ArrayList<Object> currentAllergyTableData,ArrayList<Object> historicalAllergyTableHeaders,ArrayList<Object> historicalAllergyTableData) {
+        
+        StringBuilder layout = new StringBuilder();
+        layout.append("<div>");
+        
+        
+        StringBuilder currentAllergyTable = tableBuilder(1, 2, currentAllergyTableHeaders,
+                currentAllergyTableData, "Current Allergies and Sensitivities");
+        
+        
+        StringBuilder historicalAllergyTable = tableBuilder(1, 3, historicalAllergyTableHeaders, historicalAllergyTableData,
+                "Historical Allergies and Sensitivities");
+        currentAllergyTable.append(historicalAllergyTable);
+        layout.append(currentAllergyTable);
+        layout.append("</div>");
+
+        String htmlTable = layout.toString();
+        
+        return htmlTable;
+    }
 }

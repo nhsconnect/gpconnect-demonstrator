@@ -8,14 +8,49 @@ VALUES (
 );
 
 INSERT INTO gpconnect.allergies
-  (id, html, provider, lastUpdated)
+    (nhsNumber,currentOrHistoric, startDate, endDate, details, provider, lastUpdated)
 VALUES (
   9476719966,
-  "<div><h2>Non-Drug</h2><table><thead><tr><th>Start Date</th><th>Details</th></tr></thead><tbody><tr><td>28-Nov-2015</td><td>Shellfish allergy - intolerance</td><td>Dr Tim Torbay</td></tr></tbody></table><h2>Drug</h2><table><thead><tr><th>Start Date</th><th>End Date</th><th>Details</th></tr></thead><tbody><tr><td>15-Dec-2015</td><td>Paracetamol 500mg tablets</td><td>Intolerance</td><td>Mild</td><td>Possible</td><td>Dr Tim Torbay</td></tr><tr><td>13-Aug-2014</td><td>H/O: drug allergy Diclofenac potassium 50mg tablets</td><td>Adverse</td><td>Severe</td><td>Likely</td><td>Dr Tim Torbay</td></tr><tr><td>13-Aug-2014</td><td>H/O: drug allergy Quinine sulfate 300mg tablets</td><td>Adverse</td><td>Severe</td><td>Likely</td><td>Dr Tim Torbay</td></tr></tbody></table></div>",
+ "Current",
+  '2014-12-10 12:17:00',
+  '2015-12-11 12:17:00',
+  "Paracetamol allergy",
   "INPS",
-  '2016-07-25 12:00:00'
-);
-
+  '2016-08-24 12:00:00'
+),(
+ 9476719966,
+"Current",
+  '2013-12-10 12:17:00',
+  '2016-12-11 12:17:00',
+  "Shellfish allergy - intolerance",
+  "INPS",
+  '2016-08-24 12:00:00'
+  ),(
+ 9476719966,
+  "Historical",
+  '2011-12-10 12:17:00',
+  '2016-12-11 12:17:00',
+  "H/O: drug allergy Diclofenac potassium 50mg tabletsH/O: drug allergy Diclofenac potassium 50mg tablets",
+  "INPS",
+  '2016-08-24 12:00:00'
+  ),(
+   9476719966,
+  "Historical",
+  '2010-12-10 12:17:00',
+  '2016-12-11 12:17:00',
+  "Skin allergy",
+  "INPS",
+  '2016-08-24 12:00:00'
+  ),(
+   9476719966,
+ "Historical",
+  '2010-12-10 12:17:00',
+  '2016-12-11 12:17:00',
+  "H/O: drug allergy Quinine sulfate 300mg tablets",
+  "INPS",
+  '2016-08-24 12:00:00'
+  );
+  
 INSERT INTO gpconnect.clinicalitems
   (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
 VALUES (

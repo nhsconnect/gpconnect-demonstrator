@@ -8,14 +8,40 @@ VALUES (
 );
 
 INSERT INTO gpconnect.allergies
-  (id, html, provider, lastUpdated)
+  (nhsNumber,currentOrHistoric, startDate, endDate, details, provider, lastUpdated)
 VALUES (
   9476719931,
-  "<div><h2>Current Allergies and Adverse Reactions</h2><table><thead><th>Start Date</th><th>Details</th></thead><tbody><tr><td>10 Mar 2016</td><td>PENICILLIN VK</td></tr><tr><td>29 Mar 2016</td><td>Nurofen Express 256mg caplets (Reckitt Benckiser Healthcare (UK) Ltd)</td></tr><tr><td>29 Mar 2016</td><td>Nut allergy</td></tr></tbody></table><h2>Historical Allergies and Adverse Reactions</h2><table><thead><th>Start Date</th><th>End Date</th><th>Details</th></thead><tbody><tr><td>03 Oct 2010</td><td>15 Jul 2015</td><td>Cat allergy</td></tr></tbody></table></div>",
+ "Historical",
+  '2014-12-10 12:17:00',
+  '2016-12-11 12:17:00',
+  "Dog allergy",
   "TPP",
-  '2016-07-25 12:00:00'
-);
-
+  '2016-08-24 12:00:00'
+  ),(
+ 9476719931,
+  "Historical",
+  '2009-03-10 12:17:00',
+  '2016-12-11 12:17:00',
+  "Grass allergy",
+  "TPP",
+  '2016-08-24 12:00:00'
+  ),(
+   9476719931,
+  "Historical",
+  '2014-11-10 12:17:00',
+  '2016-12-11 12:17:00',
+  "Skin allergy",
+  "TPP",
+  '2016-08-24 12:00:00'
+  ),(
+   9476719931,
+ "Historical",
+  '2014-11-10 12:17:00',
+  '2016-12-11 12:17:00',
+  "Beer allergy",
+  "TPP",
+  '2016-08-24 12:00:00'
+  );
 INSERT INTO gpconnect.clinicalitems
   (nhsNumber,sectionDate, htmlPart,provider, lastUpdated)
 VALUES (

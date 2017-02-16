@@ -485,7 +485,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                         currentAllergyTableHeaders.add("Start Date");
                                         currentAllergyTableHeaders.add("Details");
                                         
-                                        
                                         ArrayList<Object> historicalAllergyTableData = new ArrayList<>();
                                         ArrayList<Object> historicalAllergyTableHeaders = new ArrayList<>();
                                       
@@ -512,36 +511,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                         }
                                         buildHTMLTABLE buildTable = new buildHTMLTABLE();
-                                        StringBuilder layout = new StringBuilder();
-                                        layout.append("<div>");
-                                        StringBuilder currentAllergyTable = buildTable.tableBuilder(1, 2, currentAllergyTableHeaders,
-                                                currentAllergyTableData, "Current Allergies and Sensitivities");
-                                        StringBuilder historicalAllergyTable = buildTable.tableBuilder(1, 3, historicalAllergyTableHeaders, historicalAllergyTableData,
-                                                "Historical Allergies and Sensitivities");
-                                        currentAllergyTable.append(historicalAllergyTable);
-                                        layout.append(currentAllergyTable);
-                                        layout.append("</div>");
-
-                                        String htmlTable = layout.toString();
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-
-                                        section = SectionsCreationClass.buildSection(
+                                        String htmlTable = buildTable.tableCreationAllergies(currentAllergyTableHeaders,currentAllergyTableData,historicalAllergyTableHeaders,historicalAllergyTableData);
+                                       section = SectionsCreationClass.buildSection(
                                                 OperationConstants.SYSTEM_RECORD_SECTION, "ALL",
                                                 "Allergies and Sensitivities", allergyList.get(0).getProvider(),
                                                 htmlTable, "Allergies and Sensitivities", section);
@@ -912,6 +883,7 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
   
+
 
     @Search(compartmentName = "MedicationOrder")
     public List<MedicationOrder> getPatientMedicationOrders(@IdParam IdDt patientLocalId) {

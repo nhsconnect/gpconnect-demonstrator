@@ -173,9 +173,16 @@
                         </executions>
 
                         <configuration>
+                       
                             <path>/</path>
                             <port>19191</port>
+                            <httpsPort>19192</httpsPort>
                             <contextFile>${project.basedir}/../context-gpconnect.xml</contextFile>
+                            <keystoreFile>../../src/main/resources/authentication/server.jks</keystoreFile>
+                            <truststoreFile>../../src/main/resources/authentication/server.jks</truststoreFile>
+                            <truststorePass>password</truststorePass>
+                            <keystorePass>password</keystorePass>
+                            <clientAuth>want</clientAuth>
                         </configuration>
                     </plugin>
                 </plugins>

@@ -12,5 +12,5 @@ import uk.gov.hscic.patient.allergies.model.AllergySummary;
  */
 public interface AllergySearch extends Repository {
 
-    List<AllergyListHTML> findAllAllergyHTMLTables(String patientId);
+   List<AllergyListHTML> findAllAllergyHTMLTables(String patientId);
 }

@@ -18,6 +18,21 @@ public class AllergyEntity {
 
     @Column(name = "html")
     private String html;
+    
+    @Column(name = "nhsNumber")
+    private String nhsNumber;
+ 
+    @Column(name = "currentOrHistoric")
+    private String currentOrHistoric;
+    
+    @Column(name = "startDate")
+    private String startDate;
+    
+    @Column(name = "endDate")
+    private String endDate;
+    
+    @Column(name = "details")
+    private String details;
 
     @Column(name = "provider")
     private String provider;
@@ -56,4 +71,46 @@ public class AllergyEntity {
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+    
+    public String getCurrentOrHistoric() {
+        return currentOrHistoric;
+    }
+
+    public void setCurrentOrHistoric(String currentOrHistoric) {
+        this.currentOrHistoric = currentOrHistoric;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+
+    public String getNhsNumber() {
+        return nhsNumber;
+    }
+
+    public void setNhsNumber(String nhsNumber) {
+        this.nhsNumber = nhsNumber;
+    }
+
 }

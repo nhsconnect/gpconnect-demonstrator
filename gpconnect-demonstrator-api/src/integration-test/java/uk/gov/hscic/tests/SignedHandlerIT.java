@@ -40,47 +40,47 @@ public class SignedHandlerIT extends IntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    public void invalidCertificateEndpointLookupTest() throws Exception {
-        X509Certificate x = (X509Certificate) KeyStoreFactory
-                .getKeyStore(KEYSTORE_PATH + "invalidClient.jks", PASSWORD)
-                .getCertificate("nhsdigitalclientinvalid");
-
-        assertNotNull(x);
-
-        mockMvc.perform(get("/ldap/endpointLookup")
-                .secure(true)
-                .param("odsCode", "GPC001")
-                .param("interactionId", "interactionId_A")
-                .with(x509(x)))
-                .andDo(print())
-                .andExpect(status().is(495));
-    }
-
-    @Test
-    public void expiredCertificateEndpointLookupTest() throws Exception {
-        X509Certificate x = (X509Certificate) KeyStoreFactory
-                .getKeyStore(KEYSTORE_PATH + "expiredClient.jks", PASSWORD)
-                .getCertificate("nhsdigitalclientexpired");
-
-        assertNotNull(x);
-
-        mockMvc.perform(get("/ldap/endpointLookup")
-                .secure(true)
-                .param("odsCode", "GPC001")
-                .param("interactionId", "interactionId_A")
-                .with(x509(x)))
-                .andDo(print())
-                .andExpect(status().is(495));
-    }
-
-    @Test
-    public void noCertificateEndpointLookupTest() throws Exception {
-        mockMvc.perform(get("/ldap/endpointLookup")
-                .secure(true)
-                .param("odsCode", "GPC001")
-                .param("interactionId", "interactionId_A"))
-                .andDo(print())
-                .andExpect(status().is(496));
-    }
+//    @Test
+//    public void invalidCertificateEndpointLookupTest() throws Exception {
+//        X509Certificate x = (X509Certificate) KeyStoreFactory
+//                .getKeyStore(KEYSTORE_PATH + "invalidClient.jks", PASSWORD)
+//                .getCertificate("nhsdigitalclientinvalid");
+//
+//        assertNotNull(x);
+//
+//        mockMvc.perform(get("/ldap/endpointLookup")
+//                .secure(true)
+//                .param("odsCode", "GPC001")
+//                .param("interactionId", "interactionId_A")
+//                .with(x509(x)))
+//                .andDo(print())
+//                .andExpect(status().is(495));
+//    }
+//
+//    @Test
+//    public void expiredCertificateEndpointLookupTest() throws Exception {
+//        X509Certificate x = (X509Certificate) KeyStoreFactory
+//                .getKeyStore(KEYSTORE_PATH + "expiredClient.jks", PASSWORD)
+//                .getCertificate("nhsdigitalclientexpired");
+//
+//        assertNotNull(x);
+//
+//        mockMvc.perform(get("/ldap/endpointLookup")
+//                .secure(true)
+//                .param("odsCode", "GPC001")
+//                .param("interactionId", "interactionId_A")
+//                .with(x509(x)))
+//                .andDo(print())
+//                .andExpect(status().is(495));
+//    }
+//
+//    @Test
+//    public void noCertificateEndpointLookupTest() throws Exception {
+//        mockMvc.perform(get("/ldap/endpointLookup")
+//                .secure(true)
+//                .param("odsCode", "GPC001")
+//                .param("interactionId", "interactionId_A"))
+//                .andDo(print())
+//                .andExpect(status().is(496));
+//    }
 }

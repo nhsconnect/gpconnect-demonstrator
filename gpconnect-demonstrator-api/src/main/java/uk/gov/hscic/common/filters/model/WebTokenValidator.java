@@ -1,6 +1,13 @@
 package uk.gov.hscic.common.filters.model;
 
+import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import uk.gov.hscic.OperationOutcomeFactory;
+
+import static uk.gov.hscic.OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
+import static uk.gov.hscic.OperationConstants.SYSTEM_WARNING_CODE;
+import  static uk.gov.hscic.OperationConstants.CODE_BAD_REQUEST;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,15 +22,18 @@ public class WebTokenValidator {
 
         // Checking the practionerId and the sub are equal in value
         if (!(webToken.getRequestingPractitioner().getId().equals(webToken.getSub()))) {
-            throw new InvalidRequestException("Practitioner ids do not match!");
+            throw new InvalidRequestException("Practitioner ids do not match!",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Practitioner ids do not match!", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if (!PERMITTED_REQUESTED_SCOPES.contains(webToken.getRequestedScope())) {
-            throw new InvalidRequestException("Bad Request Exception");
+            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Bad Request Exception", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if (!"https://authorize.fhir.nhs.net/token".equals(webToken.getAud())) {
-            throw new InvalidRequestException("Bad Request Exception");
+            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Bad Request", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
     }
 
@@ -65,7 +75,8 @@ public class WebTokenValidator {
 
     private static void assertNotNull(Object object) {
         if (null == object) {
-            throw new InvalidRequestException("JSON entry imcomplete.");
+            throw new InvalidRequestException("JSON entry incomplete.",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "JSON Incomplete", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
     }
 
@@ -75,46 +86,55 @@ public class WebTokenValidator {
 
         // Checking creation time is not in the future
         if (timeValidationIdentifierInt > (System.currentTimeMillis() / 1000)) {
-            throw new InvalidRequestException("Bad Request Exception");
+            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Creation time is in the future", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
         // Checking the expiry time is 5 minutes after creation
         if (webToken.getExp() - timeValidationIdentifierInt != 300) {
-            throw new InvalidRequestException("Bad Request Exception");
+            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Creation time is in the future", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
     }
 
     private static void verifyRequestedResourceValues(WebToken webToken) {
         // Checking the reason for request is directcare
         if (!"directcare".equals(webToken.getReasonForRequest())) {
-            throw new InvalidRequestException("Bad Request Exception");
+            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Reason for request is not directcare", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         RequestingDevice requestingDevice = webToken.getRequestingDevice();
 
         if (null == requestingDevice) {
-            throw new InvalidRequestException("No requesting_device");
+            throw new InvalidRequestException("No requesting_device",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Requesting device is null", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if ("InvalidResourceType".equals(requestingDevice.getResourceType())) {
-            throw new InvalidRequestException("Bad Request Exception");
+            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if ("InvalidResourceType".equals(webToken.getRequestingOrganization().getResourceType())) {
-            throw new InvalidRequestException("Bad Request Exception");
+            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if ("InvalidResourceType".equals(webToken.getRequestingPractitioner().getResourceType())) {
-            throw new InvalidRequestException("Bad Request Exception");
+            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if ("Patient".equals(webToken.getRequestedRecord().getResourceType())
                 && "organization/*.write".equals(webToken.getRequestedScope())) {
-            throw new InvalidRequestException("Bad Request Exception");
+            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if ("Organization".equals(webToken.getRequestedRecord().getResourceType())
                 && "patient/*.read".equals(webToken.getRequestedScope())) {
-            throw new InvalidRequestException("Bad Request Exception");
+            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
     }
 }

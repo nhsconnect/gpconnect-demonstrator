@@ -7,7 +7,7 @@ import org.apache.commons.collections4.Transformer;
 import uk.gov.hscic.common.types.RepoSourceType;
 import uk.gov.hscic.patient.adminitems.model.AdminItemEntity;
 import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
-import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemEntity;
+
 
 public class AdminItemEntityToHTMLTransformer implements Transformer<List<AdminItemEntity>,AdminItemListHTML > {
 

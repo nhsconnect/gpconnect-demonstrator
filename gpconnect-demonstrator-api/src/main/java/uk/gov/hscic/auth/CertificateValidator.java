@@ -1,36 +1,28 @@
 package uk.gov.hscic.auth;
 
+import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 /**
- * <p>This class authenticates requests by ensuring the certificate provided is in the trusted jks.</p>
+ * <p>This class authenticates requests by ensuring the certificate provided is
+ * in the trusted jks.</p>
  */
-public final class SignedHandler extends AbstractHandlerMethodAdapter {
-    private static final Logger LOG = Logger.getLogger(SignedHandler.class);
-
-    @Autowired
-    private RequestMappingHandlerAdapter baseHandlerAdapter;
+public final class CertificateValidator {
+    private static final Logger LOG = Logger.getLogger(CertificateValidator.class);
 
     private final List<X509Certificate> knownCerts = new ArrayList<>();
 
-    public SignedHandler(KeyStore keyStore) throws KeyStoreException {
-        setOrder(-1);
-
+    public CertificateValidator(KeyStore keyStore) throws KeyStoreException {
         for (String alias : Collections.list(keyStore.aliases())) {
             if (keyStore.isCertificateEntry(alias)) {
                 knownCerts.add((X509Certificate) keyStore.getCertificate(alias));
@@ -38,13 +30,12 @@ public final class SignedHandler extends AbstractHandlerMethodAdapter {
         }
     }
 
-    @Override
-    public ModelAndView handleInternal(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
+    public void validateRequest(HttpServletRequest request) {
         try {
             if (request.isSecure() && !HttpMethod.OPTIONS.name().equals(request.getMethod())) {
                 String cipherSuite = (String) request.getAttribute("javax.servlet.request.cipher_suite");
-
                 X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
+      
 
                 if (null == certs) {
                     throw new CertificateException("No certificate found!", 496);
@@ -63,8 +54,6 @@ public final class SignedHandler extends AbstractHandlerMethodAdapter {
                             .orElseThrow(() -> new CertificateException("Provided certificate has expired!", 495));
                 }
             }
-
-            return this.baseHandlerAdapter.handle(request, response, handlerMethod);
         } catch (CertificateException certificateException) {
             StringBuilder requestURL = new StringBuilder(request.getRequestURL());
             String queryString = request.getQueryString();
@@ -73,19 +62,8 @@ public final class SignedHandler extends AbstractHandlerMethodAdapter {
                 requestURL.append('?').append(queryString);
             }
 
-            LOG.error("Bad signature detected for " + request.getMethod() + " to " + requestURL, certificateException);
-            response.setStatus(certificateException.getStatusCode());
-            return null;
+            throw new UnclassifiedServerFailureException(certificateException.getStatusCode(),
+                    "Bad signature detected for " + request.getMethod() + " to " + requestURL + ": " + certificateException.getMessage());
         }
-    }
-
-    @Override
-    protected boolean supportsInternal(HandlerMethod handlerMethod) {
-        return baseHandlerAdapter.supports(handlerMethod);
-    }
-
-    @Override
-    protected long getLastModifiedInternal(HttpServletRequest request, HandlerMethod handlerMethod) {
-        return baseHandlerAdapter.getLastModified(request, handlerMethod);
     }
 }

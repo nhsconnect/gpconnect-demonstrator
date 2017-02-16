@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient.allergies.search;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,17 +17,39 @@ public class LegacyAllergySearch extends AbstractLegacyService implements Allerg
     @Autowired
     private AllergyRepository allergyRepository;
 
-    private final AllergyEntityToListTransformer transformer = new AllergyEntityToListTransformer();
+    // private final AllergyEntityToListTransformer transformer = new
+    // AllergyEntityToListTransformer();
 
     @Override
     public List<AllergyListHTML> findAllAllergyHTMLTables(final String patientId) {
+        System.out.println("patientId" + patientId);
+        // final AllergyEntity item =
+        // allergyRepository.findOne(Long.parseLong(patientId));
+        List<AllergyEntity> items = allergyRepository.findAll();
+        System.out.println("items " + items);
 
-        final AllergyEntity item = allergyRepository.findOne(Long.parseLong(patientId));
+        items.get(0).getCurrentOrHistoric();
 
-        if(item == null){
-            return null;
-        } else {
-            return Collections.singletonList(transformer.transform(item));
+        List<AllergyListHTML> allergyList = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            AllergyListHTML allergyData = new AllergyListHTML();
+            allergyData.setProvider(items.get(i).getProvider());
+            allergyData.setHtml(items.get(i).getHtml());
+            allergyData.setCurrentOrHistoric(items.get(i).getCurrentOrHistoric());
+            allergyData.setStartDate(items.get(i).getStartDate());
+            allergyData.setEndDate(items.get(i).getEndDate());
+            allergyData.setDetails(items.get(i).getDetails());
+            
+            
+            allergyList.add(allergyData);
         }
+
+        return allergyList;
+
+        // if(items == null){
+        // return null;
+        // } else {
+        // return Collections.singletonList(transformer.transform(items));
+        // }
     }
 }

@@ -91,7 +91,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
         if ("Patient/$gpc.getcarerecord".equals(requestDetails.getRequestPath())) {
             if (!"Patient".equals(requestedRecord.getResourceType())) {
-                throw new InvalidRequestException("Bad Request Exception");
+                throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+                        SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Bad Request", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             }
 
             validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents(), StringUtils.contains(contentType, "xml"));
@@ -106,7 +107,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         } else {
             // If it is an organization oriantated request
             if (null == webToken.getRequestedRecord().getIdentifierValue("http://fhir.nhs.net/Id/ods-organization-code")) {
-                throw new InvalidRequestException("Bad Request Exception");
+                throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+                        SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Bad Request", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             }
         }
 
@@ -172,10 +174,12 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             }
 
             if (!nhsNumberFromHeader.equals(nhsNumberFromBody)) {
-                throw new InvalidRequestException("NHS number in body doesn't match the header");
+                throw new InvalidRequestException("NHS number in body doesn't match the header",OperationOutcomeFactory.buildOperationOutcome(
+                        SYSTEM_WARNING_CODE, CODE_INVALID_NHS_NUMBER, "NHS number invalid", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             }
         } catch (IOException ex) {
-            throw new InvalidRequestException("Cannot parse request body");
+            throw new InvalidRequestException("Cannot parse request body",OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_INVALID_NHS_NUMBER, "Cannot parse request body", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
     }
 }

@@ -24,8 +24,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import uk.gov.hscic.auth.CertificateValidator;
 import uk.gov.hscic.auth.KeyStoreFactory;
-import uk.gov.hscic.auth.SignedHandler;
 
 @Configuration
 @EnableWebMvc
@@ -34,7 +34,7 @@ public class RestConfig extends WebMvcConfigurerAdapter {
 
     @Value("${server.keystore.password}")
     private String keystorePassword;
-    
+
     @Value("${server.keystore.path}")
     private String keystorePath;
 
@@ -44,8 +44,8 @@ public class RestConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public SignedHandler signedHandler() throws Exception {
-        return new SignedHandler(KeyStoreFactory.getKeyStore(keystorePath, keystorePassword));
+    public CertificateValidator certificateValidator() throws Exception {
+        return new CertificateValidator(KeyStoreFactory.getKeyStore(keystorePath, keystorePassword));
     }
 
     @Bean

@@ -13,6 +13,7 @@ public final class OperationConstants {
     public static final String CODE_INVALID_PARAMETER = "INVALID_PARAMETER";
     public static final String CODE_NO_PATIENT_CONSENT = "NO_PATIENT_CONSENT";
     public static final String CODE_REFERENCE_NOT_FOUND = "REFERENCE_NOT_FOUND";
+    public static final String CODE_BAD_REQUEST = "BAD_REQUEST";
 
     // Codable Concept Constants
     public static final String COD_CONCEPT_RECORD_NOT_FOUND = "Patient Record Not Found";
@@ -21,6 +22,7 @@ public final class OperationConstants {
     public static final String COD_CONCEPT_RECORD_MULTIPLE_SECTIONS_ADDED = "Multiple Sections Added";
     public static final String COD_CONCEPT_RECORD_PATIENT_DATA_CONFIDENTIAL = "Patient Data Confidential";
     public static final String COD_CONCEPT_RECORD_INVALID_REFERENCE = "Invalid Reference";
+    public static final String COD_CONCEPT_RECORD_INVALID_PARAMETER = "Invalid Parameter";
 
     // MetaProfile Constants
     public static final String META_GP_CONNECT_PATIENT = "http://fhir.nhs.net/StructureDefinition/gpconnect-patient-1";

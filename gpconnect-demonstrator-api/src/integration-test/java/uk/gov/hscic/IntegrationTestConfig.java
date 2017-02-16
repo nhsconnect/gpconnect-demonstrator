@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import uk.gov.hscic.auth.CertificateValidator;
 import uk.gov.hscic.auth.KeyStoreFactory;
-import uk.gov.hscic.auth.SignedHandler;
 import uk.gov.hscic.common.ldap.EndpointResolver;
 
 @EnableWebMvc
@@ -16,8 +16,8 @@ import uk.gov.hscic.common.ldap.EndpointResolver;
 public class IntegrationTestConfig extends WebMvcConfigurerAdapter {
 
     @Bean
-    public SignedHandler signedHandler() throws Exception {
-        return new SignedHandler(KeyStoreFactory.getKeyStore("src/integration-test/resources/authentication/server.jks", "password"));
+    public CertificateValidator certificateValidator() throws Exception {
+        return new CertificateValidator(KeyStoreFactory.getKeyStore("src/integration-test/resources/authentication/server.jks", "password"));
     }
 
     @Bean

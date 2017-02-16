@@ -156,7 +156,12 @@ CREATE TABLE gpconnect.patients (
 
 CREATE TABLE gpconnect.allergies (
   id                  BIGINT        NOT NULL    AUTO_INCREMENT,
+  nhsNumber			 BIGINT 		NULL,
   html                VARCHAR(4096) NULL,
+  currentOrHistoric   VARCHAR(4096) NULL,
+  startDate			  DATETIME 		NULL,		
+  endDate			  DATETIME 		NULL,
+  details			  VARCHAR(4096) NULL,
   provider            VARCHAR(10)   NULL,
   lastUpdated		  DATETIME 		NULL,
   PRIMARY KEY         (id)

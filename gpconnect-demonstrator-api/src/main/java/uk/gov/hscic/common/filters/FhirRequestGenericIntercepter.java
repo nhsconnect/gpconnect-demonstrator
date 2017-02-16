@@ -27,11 +27,13 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
+import uk.gov.hscic.auth.CertificateValidator;
 
 @Component
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
@@ -45,6 +47,9 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     @Value("${gp.connect.ErrorSimulation.path}")
     private String errorSimulationPath;
+
+    @Autowired
+    private CertificateValidator certificateValidator;
 
     private String systemSspToHeader = null;
     private HashSet interactionIdWhiteList = null;
@@ -93,6 +98,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     @Override
     public boolean incomingRequestPreProcessed(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+        certificateValidator.validateRequest(httpRequest); // Validate certificate first!
+
         String failedMsg = "";
 
         // Check there is a Ssp-TraceID header

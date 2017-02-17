@@ -1,45 +1,35 @@
 INSERT INTO gpconnect.allergies
-  (nhsNumber,currentOrHistoric, startDate, endDate, details, provider, lastUpdated)
+  (nhsNumber,currentOrHistoric, startDate, endDate, details)
 VALUES (
  9476719958,
   "Current",
   '2015-12-10 12:17:00',
   '2015-12-11 12:17:00',
-  "Paracetamol allergy",
-  "EMIS",
-  '2016-08-24 12:00:00'
+  "Paracetamol allergy"
 ),(
  9476719958,
 "Current",
   '2014-12-10 12:17:00',
   '2016-12-11 12:17:00',
-  "Cheese allergy",
-  "EMIS",
-  '2016-08-24 12:00:00'
+  "Cheese allergy"
   ),(
  9476719958,
   "Historical",
   '2014-12-10 12:17:00',
   '2016-12-11 12:17:00',
-  "Grass allergy",
-  "EMIS",
-  '2016-08-24 12:00:00'
+  "Grass allergy"
   ),(
    9476719958,
   "Historical",
   '2014-12-10 12:17:00',
   '2016-12-11 12:17:00',
-  "Skin allergy",
-  "EMIS",
-  '2016-08-24 12:00:00'
+  "Skin allergy"
   ),(
    9476719958,
  "Historical",
   '2014-12-10 12:17:00',
   '2016-12-11 12:17:00',
-  "Beer allergy",
-  "EMIS",
-  '2016-08-24 12:00:00'
+  "Beer allergy"
   );
 
 INSERT INTO gpconnect.clinicalitems

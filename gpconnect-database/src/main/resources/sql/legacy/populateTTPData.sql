@@ -8,39 +8,31 @@ VALUES (
 );
 
 INSERT INTO gpconnect.allergies
-  (nhsNumber,currentOrHistoric, startDate, endDate, details, provider, lastUpdated)
+  (nhsNumber,currentOrHistoric, startDate, endDate, details)
 VALUES (
   9476719931,
  "Historical",
   '2014-12-10 12:17:00',
   '2016-12-11 12:17:00',
-  "Dog allergy",
-  "TPP",
-  '2016-08-24 12:00:00'
+  "Dog allergy"
   ),(
  9476719931,
   "Historical",
   '2009-03-10 12:17:00',
   '2016-12-11 12:17:00',
-  "Grass allergy",
-  "TPP",
-  '2016-08-24 12:00:00'
+  "Grass allergy"
   ),(
    9476719931,
   "Historical",
   '2014-11-10 12:17:00',
   '2016-12-11 12:17:00',
-  "Skin allergy",
-  "TPP",
-  '2016-08-24 12:00:00'
+  "Skin allergy"
   ),(
    9476719931,
  "Historical",
   '2014-11-10 12:17:00',
   '2016-12-11 12:17:00',
-  "Beer allergy",
-  "TPP",
-  '2016-08-24 12:00:00'
+  "Beer allergy"
   );
 INSERT INTO gpconnect.clinicalitems
   (nhsNumber,sectionDate, htmlPart,provider, lastUpdated)
@@ -101,13 +93,107 @@ VALUES (
 );
 
 INSERT INTO gpconnect.immunisations
-  (id, html, provider, lastUpdated)
+  (nhsNumber, dateOfVac, vaccination, part, contents, details)
 VALUES (
   9476719931,
-  "<div><h2>Immunisations</h2><table><thead><tr><th>Date</th><th>Vaccination</th><th>Part</th><th>Contents</th><th>Details</th></tr></thead><tbody><tr></tr><tr><td>19 Aug 2009</td><td>Pediacel</td><td>1</td><td>DIPTHERIA, HIB, PERTUSSIS, POLIO, TETANUS</td><td /></tr><tr><td>22 Dec 2009</td><td>DTaP/IPV/Hib</td><td>2</td><td>DIPTHERIA, HIB, PERTUSSIS, POLIO, TETANUS</td><td /></tr><tr><td>12 Mar 2009</td><td>DTaP/IPV/Hib</td><td>3</td><td>DIPTHERIA, HIB, PERTUSSIS, POLIO, TETANUS</td><td /></tr><tr><td>03 Jun 2009</td><td>DTaP/IPV</td><td>Booster</td><td>DIPTHERIA, PERTUSSIS, POLIO, TETANUS</td><td /></tr><tr><td>10 Aug 2009</td><td>Meningitis C</td><td>Single</td><td>MENINGOCOCCAL C</td><td /></tr><tr><td>08 Feb 2010</td><td>MMR II</td><td>1</td><td>MEASLES, MUMPS, RUBELLA</td><td /></tr><tr><td>18 Sep 2010</td><td>MMR II</td><td>2</td><td>MEASLES, MUMPS, RUBELLA</td><td /></tr><tr><td>25 Aug 2013</td><td>Human Papillomavirus</td><td>1</td><td>HUMAN PAPILLOMAVIRUS</td><td /></tr><tr><td>10 May 2014</td><td>Arilvax</td><td>1</td><td>YELLOW FEVER</td><td /></tr><tr><td>10 May 2014</td><td>Fluenz (AstraZeneca UK Ltd)</td><td>1</td><td>INFLUENZA</td><td /></tr></tbody></table></div>",
-  "TPP",
-  '2016-07-25 12:00:00'
-);
+  '2009-06-13 09:22:00',
+ "PediaceExpiry Date: 04-Oct-2016",
+ "Dont know",
+ "DIPTHERIA, HIB, PERTUSSIS, POLIO, TETANUS",
+"DIPTHERIA, HIB, PERTUSSIS, POLIO, TETANUS"
+ ),(
+ 9476719931,
+ '2002-06-13 09:22:00',
+ "HIV Injection",
+ "Manufacturer : fred
+Batch: 1
+Injection Location:Left leg
+Expiry Date: 04-Oct-2016",
+ "Dont know",
+ "Dont Know"
+ ),(
+ 9476719931,
+ '2003-06-13 09:22:00',
+ "HIV Injection",
+ "Manufacturer : fred
+Batch: 1
+Injection Location:Left leg
+Expiry Date: 04-Oct-2016",
+ "Dont know",
+ "Dont Know"
+ ),(
+ 9476719931,
+ '2004-06-13 09:22:00',
+ "HIV Injection",
+ "Manufacturer : fred
+Batch: 1
+Injection Location:Left leg
+Expiry Date: 04-Oct-2016",
+ "Dont know",
+ "Dont Know"
+ ),(
+ 9476719931,
+ '2005-06-13 09:22:00',
+ "HIV Injection",
+ "Manufacturer : fred
+Batch: 1
+Injection Location:Left leg
+Expiry Date: 04-Oct-2016",
+ "Dont know",
+ "Dont Know"
+ ),(
+ 9476719931,
+ '2006-06-13 09:22:00',
+ "MMR III",
+ "Manufacturer : fred
+Batch: 1
+Injection Location:Left leg
+Expiry Date: 04-Oct-2016",
+ "Dont know",
+ "Dont Know"
+ ),(
+ 9476719931,
+ '2007-06-13 09:22:00',
+ "MMR I",
+ "Manufacturer : fred
+Batch: 1
+Injection Location:Left leg
+Expiry Date: 04-Oct-2016",
+ "Dont know",
+ "Dont Know"
+ ),(
+ 9476719931,
+ '2008-06-13 09:22:00',
+ "MMR II",
+ "Manufacturer : fred
+Batch: 1
+Injection Location:Left leg
+Expiry Date: 04-Oct-2016",
+ "Dont know",
+ "Dont Know"
+ ),(
+ 9476719931,
+ '2009-06-13 09:22:00',
+ "Arilvax",
+ "Manufacturer : fred
+Batch: 1
+Injection Location:Left leg
+Expiry Date: 04-Oct-2016",
+ "Dont know",
+ "Dont Know"
+ ),(
+ 9476719931,
+ '2012-06-13 09:22:00',
+ "Fluenz (AstraZeneca UK Ltd)",
+ "Manufacturer : fred
+Batch: 1
+Injection Location:Left leg
+Expiry Date: 04-Oct-2016",
+ "Dont know",
+ "Dont Know"
+ );
+ 
+
 
 INSERT INTO gpconnect.investigations
   (id, html, provider, lastUpdated)

@@ -73,7 +73,7 @@ import uk.gov.hscic.medications.MedicationResourceProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
 import uk.gov.hscic.patient.adminitems.search.AdminItemSearch;
-import uk.gov.hscic.patient.allergies.model.AllergyListHTML;
+import uk.gov.hscic.patient.allergies.model.AllergyData;
 import uk.gov.hscic.patient.allergies.search.AllergySearch;
 import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemListHTML;
 import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearch;
@@ -485,7 +485,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     throw new InvalidRequestException("Date Ranges not allowed to be set");
                                 } else {
 
-                                    List<AllergyListHTML> allergyList = allergySearch
+                                    List<AllergyData> allergyList = allergySearch
                                             .findAllAllergyHTMLTables(nhsNumber.get(0));
                                     if (allergyList != null && allergyList.size() > 0) {
 

@@ -8,39 +8,31 @@ VALUES (
 );
 
 INSERT INTO gpconnect.allergies
-  (nhsNumber,currentOrHistoric, startDate, endDate, details, provider, lastUpdated)
+  (nhsNumber,currentOrHistoric, startDate, endDate, details)
 VALUES (
   9476719974,
 "Current",
   '2014-12-10 12:17:00',
   '2016-12-11 12:17:00',
-  "PENICILLIN VK",
-  "Microtest",
-  '2016-08-24 12:00:00'
+  "PENICILLIN VK"
   ),(
  9476719974,
   "Current",
   '2015-12-10 12:17:00',
   '2016-12-11 12:17:00',
-  "Nurofen Express 256mg caplets (Reckitt Benckiser Healthcare (UK) Ltd)",
-  "Microtest",
-  '2016-08-24 12:00:00'
+  "Nurofen Express 256mg caplets (Reckitt Benckiser Healthcare (UK) Ltd)"
   ),(
    9476719974,
   "Current",
   '2011-12-10 12:17:00',
   '2016-12-11 12:17:00',
-  "Nut allergy",
-  "Microtest",
-  '2016-08-24 12:00:00'
+  "Nut allergy"
   ),(
    9476719974,
  "Current",
   '2011-12-10 12:17:00',
   '2014-12-11 12:17:00',
-  "Cat allergy",
-  "Microtest",
-  '2016-08-24 12:00:00'
+  "Cat allergy"
   );
 
 INSERT INTO gpconnect.clinicalitems

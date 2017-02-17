@@ -15,9 +15,6 @@ public class AllergyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "html")
-    private String html;
     
     @Column(name = "nhsNumber")
     private String nhsNumber;
@@ -37,8 +34,6 @@ public class AllergyEntity {
     @Column(name = "provider")
     private String provider;
 
-    @Column(name = "lastUpdated")
-    private Date lastUpdated;
     
     public Long getId() {
         return id;
@@ -48,13 +43,6 @@ public class AllergyEntity {
         this.id = id;
     }
 
-    public String getHtml() {
-        return html;
-    }
-
-    public void setHtml(String html) {
-        this.html = html;
-    }
 
     public String getProvider() {
         return provider;
@@ -64,13 +52,6 @@ public class AllergyEntity {
         this.provider = provider;
     }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
     
     public String getCurrentOrHistoric() {
         return currentOrHistoric;

@@ -8,47 +8,37 @@ VALUES (
 );
 
 INSERT INTO gpconnect.allergies
-    (nhsNumber,currentOrHistoric, startDate, endDate, details, provider, lastUpdated)
+    (nhsNumber,currentOrHistoric, startDate, endDate, details)
 VALUES (
   9476719966,
  "Current",
   '2014-12-10 12:17:00',
   '2015-12-11 12:17:00',
-  "Paracetamol allergy",
-  "INPS",
-  '2016-08-24 12:00:00'
+  "Paracetamol allergy"
 ),(
  9476719966,
 "Current",
   '2013-12-10 12:17:00',
   '2016-12-11 12:17:00',
-  "Shellfish allergy - intolerance",
-  "INPS",
-  '2016-08-24 12:00:00'
+  "Shellfish allergy - intolerance"
   ),(
  9476719966,
   "Historical",
   '2011-12-10 12:17:00',
   '2016-12-11 12:17:00',
-  "H/O: drug allergy Diclofenac potassium 50mg tabletsH/O: drug allergy Diclofenac potassium 50mg tablets",
-  "INPS",
-  '2016-08-24 12:00:00'
+  "H/O: drug allergy Diclofenac potassium 50mg tabletsH/O: drug allergy Diclofenac potassium 50mg tablets"
   ),(
    9476719966,
   "Historical",
   '2010-12-10 12:17:00',
   '2016-12-11 12:17:00',
-  "Skin allergy",
-  "INPS",
-  '2016-08-24 12:00:00'
+  "Skin allergy"
   ),(
    9476719966,
  "Historical",
   '2010-12-10 12:17:00',
   '2016-12-11 12:17:00',
-  "H/O: drug allergy Quinine sulfate 300mg tablets",
-  "INPS",
-  '2016-08-24 12:00:00'
+  "H/O: drug allergy Quinine sulfate 300mg tablets"
   );
   
 INSERT INTO gpconnect.clinicalitems
@@ -79,13 +69,16 @@ VALUES (
 );
 
 INSERT INTO gpconnect.immunisations
-  (id, html, provider, lastUpdated)
+  (nhsNumber, dateOfVac, vaccination, part, contents, details)
 VALUES (
   9476719966,
-  "<div><table><thead><tr><th>Date</th><th>Vaccination</th><th>Part</th><th>Contents</th><th>Details</th></tr></thead><tbody><tr><td>25-Mar-1999</td><td>Diphtheria/Tet/Pert/Polio/Haemophil</td><td>1</td><td>DIPHTHERIA, TETANUS, PERTUSSIS, POLIO, HIB</td><td>Given</td></tr><tr><td>25-Mar-1999</td><td>Tetanus</td><td>B</td><td /><td>Given, Due 11/06/2003</td></tr><tr><td>25-Jul-1997</td><td>MMR (Measles/Mumps/Rubella)</td><td /><td /><td>Refused</td></tr><tr><td>13-Apr-1994</td><td>Tetanus</td><td>B</td><td /><td>Given, Due 23/05/1999</td></tr><tr><td>25-Jul-1992</td><td>BCG</td><td>0</td><td /><td>Given</td></tr><tr><td>18-Apr-1991</td><td>Rubella</td><td>0</td><td /><td>Given</td></tr></tbody></table></div>",
-  "INPS",
-  '2016-07-25 12:00:00'
+  '2016-07-25 12:00:00',
+ "FDiphtheria/Tet/Pert/Polio/Haemophil",
+ "DIPHTHERIA, TETANUS, PERTUSSIS, POLIO, HIB",
+ "Dont know",
+ "Dont Know"
 );
+
 
 INSERT INTO gpconnect.investigations
   (id, html, provider, lastUpdated)

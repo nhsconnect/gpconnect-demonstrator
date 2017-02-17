@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import uk.gov.hscic.common.service.AbstractLegacyService;
 import uk.gov.hscic.patient.allergies.model.AllergyEntity;
-import uk.gov.hscic.patient.allergies.model.AllergyListHTML;
+import uk.gov.hscic.patient.allergies.model.AllergyData;
 import uk.gov.hscic.patient.allergies.repo.AllergyRepository;
 
 @Service
@@ -18,15 +18,13 @@ public class LegacyAllergySearch extends AbstractLegacyService implements Allerg
     private AllergyRepository allergyRepository;
 
     @Override
-    public List<AllergyListHTML> findAllAllergyHTMLTables(final String patientId) {
+    public List<AllergyData> findAllAllergyHTMLTables(final String patientId) {
 
         List<AllergyEntity> items = allergyRepository.findBynhsNumber(patientId);
 
-        List<AllergyListHTML> allergyList = new ArrayList<>();
+        List<AllergyData> allergyList = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
-            AllergyListHTML allergyData = new AllergyListHTML();
-            allergyData.setProvider(items.get(i).getProvider());
-            allergyData.setHtml(items.get(i).getHtml());
+            AllergyData allergyData = new AllergyData();
             allergyData.setCurrentOrHistoric(items.get(i).getCurrentOrHistoric());
             allergyData.setStartDate(items.get(i).getStartDate());
             allergyData.setEndDate(items.get(i).getEndDate());

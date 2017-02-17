@@ -196,6 +196,7 @@ public class PatientResourceProvider implements IResourceProvider {
         ArrayList<String> sectionsParamList = new ArrayList<>();
         ArrayList<Entry> medicationsToBundle = new ArrayList<>();
         Date fromDate = null, toDate = null;
+        BuildHtmlTable buildTable = new BuildHtmlTable();
 
         // Extract the parameters
         boolean recordSectionNotPresent = true;
@@ -417,15 +418,19 @@ public class PatientResourceProvider implements IResourceProvider {
                                                         IssueTypeEnum.NOT_FOUND));
                                     } else {
                                         section = SectionsCreationClass.buildSection(
-                                                OperationConstants.SYSTEM_RECORD_SECTION, "SUM", "Summary",
-
+                                                OperationConstants.SYSTEM_RECORD_SECTION, "SUM",
                                                 patientSummaryList.get(0).getHtml(), "Summary", section);
 
                                         sectionsList.add(section);
                                     }
                                 } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                            .setDetails("No data available for the requested section: Summary");
+                                    String htmlTable = buildTable.buildEmptyHtml("Summary");
+                                    section = SectionsCreationClass.buildSection(
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "SUM",
+
+                                            htmlTable, "Summary", section);
+
+                                    sectionsList.add(section);
                                 }
 
                                 break;
@@ -439,13 +444,16 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                     if (problemList != null && problemList.size() > 0) {
                                         section = SectionsCreationClass.buildSection(
-                                                OperationConstants.SYSTEM_RECORD_SECTION, "PRB", "Problems",
+                                                OperationConstants.SYSTEM_RECORD_SECTION, "PRB",
                                                 problemList.get(0).getHtml(), "Problems", section);
 
                                         sectionsList.add(section);
                                     } else {
-                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                                .setDetails("No data available for the requested section: Problems");
+                                        String htmlTable = buildTable.buildEmptyHtml("Problems");
+                                        section = SectionsCreationClass.buildSection(
+                                                OperationConstants.SYSTEM_RECORD_SECTION, "PRB", htmlTable, "Problems",
+                                                section);
+                                        sectionsList.add(section);
                                     }
                                 }
 
@@ -457,13 +465,17 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                 if (encounterList != null && encounterList.size() > 0) {
                                     section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "ENC", "Encounters",
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "ENC",
                                             encounterList.get(0).getHtml(), "Encounters", section);
 
                                     sectionsList.add(section);
                                 } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                            .setDetails("No data available for the requested section: Encounters");
+                                    String htmlTable = buildTable.buildEmptyHtml("Encounters");
+                                    section = SectionsCreationClass.buildSection(
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "ENC", htmlTable, "Encounters",
+                                            section);
+                                    sectionsList.add(section);
+
                                 }
 
                                 break;
@@ -519,17 +531,20 @@ public class PatientResourceProvider implements IResourceProvider {
                                             tableData.add(historicalAllergyTableData);
 
                                         }
-                                        BuildHtmlTable buildTable = new BuildHtmlTable();
+                                        System.out.println("REACHED HERE");
                                         String htmlTable = buildTable.tableCreation(headerData, tableData, tableTitles);
+                                        System.out.println("REACHED HERE" + htmlTable);
                                         section = SectionsCreationClass.buildSection(
                                                 OperationConstants.SYSTEM_RECORD_SECTION, "ALL",
-                                                "Allergies and Sensitivities", htmlTable, "Allergies and Sensitivities",
-                                                section);
+                                                htmlTable,"Allergies and Sensitivities", section);
 
                                         sectionsList.add(section);
                                     } else {
-                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
-                                                "No data available for the requested section: Allergies and Sensitivities");
+                                        String htmlTable = buildTable.buildEmptyHtml("Allergies and Sensitivities");
+                                        section = SectionsCreationClass.buildSection(
+                                                OperationConstants.SYSTEM_RECORD_SECTION, "ALL", htmlTable, 
+                                                "Allergies and Sensitivities",section);
+                                        sectionsList.add(section);
                                     }
                                 }
 
@@ -541,13 +556,17 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                 if (clinicalItemList != null && clinicalItemList.size() > 0) {
                                     section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "CLI", "Clinical Items",
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "CLI",
                                             clinicalItemList.get(0).getHtml(), "Clinical Items", section);
 
                                     sectionsList.add(section);
                                 } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                            .setDetails("No data available for the requested section: Clinical Items");
+                                    String htmlTable = buildTable.buildEmptyHtml("Clinical Items");
+                                    section = SectionsCreationClass.buildSection(
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "CLI", htmlTable,
+                                            "Clinical Items", section);
+
+                                    sectionsList.add(section);
                                 }
 
                                 break;
@@ -562,13 +581,16 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                 if (medicationList != null && medicationList.size() > 0) {
                                     section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "MED", "Medications",
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "MED",
                                             medicationList.get(0).getHtml(), "Medications", section);
 
                                     sectionsList.add(section);
                                 } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                            .setDetails("No data available for the requested section: Medication");
+                                    String htmlTable = buildTable.buildEmptyHtml("Medications");
+                                    section = SectionsCreationClass.buildSection(
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "MED", htmlTable, "Medications",
+                                            section);
+                                    sectionsList.add(section);
                                 }
 
                                 // Sructured Data Search
@@ -704,13 +726,17 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                 if (referralList != null && referralList.size() > 0) {
                                     section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "REF", "Referrals",
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "REF",
                                             referralList.get(0).getHtml(), "Referrals", section);
 
                                     sectionsList.add(section);
                                 } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                            .setDetails("No data available for the requested section: Referrals");
+                                    String htmlTable = buildTable.buildEmptyHtml("Referrals");
+                                    section = SectionsCreationClass.buildSection(
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "REF", htmlTable, "Referrals",
+                                            section);
+                                    sectionsList.add(section);
+
                                 }
 
                                 break;
@@ -724,13 +750,16 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                     if (observationList != null && observationList.size() > 0) {
                                         section = SectionsCreationClass.buildSection(
-                                                OperationConstants.SYSTEM_RECORD_SECTION, "OBS", "Observations",
+                                                OperationConstants.SYSTEM_RECORD_SECTION, "OBS",
                                                 observationList.get(0).getHtml(), "Observations", section);
 
                                         sectionsList.add(section);
                                     } else {
-                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
-                                                "No data available for the requested section: Observations");
+                                        String htmlTable = buildTable.buildEmptyHtml("Observations");
+                                        section = SectionsCreationClass.buildSection(
+                                                OperationConstants.SYSTEM_RECORD_SECTION, "OBS", htmlTable,
+                                                "Observations", section);
+                                        sectionsList.add(section);
                                     }
                                 }
 
@@ -743,13 +772,16 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (investigationList != null && investigationList.size() > 0) {
 
                                     section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "INV", "Investigations",
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "INV",
                                             investigationList.get(0).getHtml(), "Investigations", section);
                                     sectionsList.add(section);
 
                                 } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                            .setDetails("No data available for the requested section: Investigations");
+                                    String htmlTable = buildTable.buildEmptyHtml("Investigations");
+                                    section = SectionsCreationClass.buildSection(
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "INV", htmlTable,
+                                            "Investigations", section);
+                                    sectionsList.add(section);
                                 }
 
                                 break;
@@ -790,17 +822,20 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                         tableData.add(immunisationTableData);
 
-                                        BuildHtmlTable buildTable = new BuildHtmlTable();
                                         String htmlTable = buildTable.tableCreation(headerData, tableData, tableTitles);
 
                                         section = SectionsCreationClass.buildSection(
-                                                OperationConstants.SYSTEM_RECORD_SECTION, "IMM", "Immunisations",
-                                                htmlTable, "Immunisations", section);
+                                                OperationConstants.SYSTEM_RECORD_SECTION, "IMM", htmlTable,
+                                                "Immunisations", section);
 
                                         sectionsList.add(section);
                                     } else {
-                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
-                                                "No data available for the requested section: Immunisations");
+                                        String htmlTable = buildTable.buildEmptyHtml("Immunisation");
+                                        section = SectionsCreationClass.buildSection(
+                                                OperationConstants.SYSTEM_RECORD_SECTION, "IMM", htmlTable,
+                                                "Immunisations", section);
+
+                                        sectionsList.add(section);
                                     }
                                 }
 
@@ -812,13 +847,18 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                 if (adminItemList != null && adminItemList.size() > 0) {
                                     section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "ADM", "Administrative Items",
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "ADM",
                                             adminItemList.get(0).getHtml(), "Administrative Items", section);
 
                                     sectionsList.add(section);
                                 } else {
-                                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(
-                                            "No data available for the requested section: AdministrativeItems");
+                                    String htmlTable = buildTable.buildEmptyHtml("Administrative Items");
+                                    section = SectionsCreationClass.buildSection(
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "ADM", htmlTable,
+                                            "Administrative Items", section);
+
+                                    sectionsList.add(section);
+
                                 }
 
                                 break;

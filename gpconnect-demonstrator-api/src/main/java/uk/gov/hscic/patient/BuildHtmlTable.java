@@ -60,4 +60,9 @@ public class BuildHtmlTable {
         return htmlTable;
     }
 
+    public String buildEmptyHtml(String sectionName) {
+        // TODO Auto-generated method stub
+        return  "<div><p>No "+sectionName+" data is recorded for this patient.</p></div>";
+    }
+
 }

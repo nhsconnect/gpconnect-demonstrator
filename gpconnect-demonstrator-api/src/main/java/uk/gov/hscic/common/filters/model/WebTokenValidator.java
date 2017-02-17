@@ -2,14 +2,12 @@ package uk.gov.hscic.common.filters.model;
 
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import uk.gov.hscic.OperationOutcomeFactory;
-
-import static uk.gov.hscic.OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
-import static uk.gov.hscic.OperationConstants.SYSTEM_WARNING_CODE;
-import  static uk.gov.hscic.OperationConstants.CODE_BAD_REQUEST;
-
 import java.util.Arrays;
 import java.util.List;
+import static uk.gov.hscic.OperationConstants.CODE_BAD_REQUEST;
+import  static uk.gov.hscic.OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
+import static uk.gov.hscic.OperationConstants.SYSTEM_WARNING_CODE;
+import uk.gov.hscic.OperationOutcomeFactory;
 
 public class WebTokenValidator {
     private static final List<String> PERMITTED_REQUESTED_SCOPES = Arrays.asList("patient/*.read", "patient/*.write",
@@ -126,13 +124,13 @@ public class WebTokenValidator {
         }
 
         if ("Patient".equals(webToken.getRequestedRecord().getResourceType())
-                && "organization/*.write".equals(webToken.getRequestedScope())) {
+                && !webToken.getRequestedScope().matches("patient/\\*\\.(read|write)")) {
             throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if ("Organization".equals(webToken.getRequestedRecord().getResourceType())
-                && "patient/*.read".equals(webToken.getRequestedScope())) {
+                && !webToken.getRequestedScope().matches("organization/\\*\\.(read|write)")) {
             throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }

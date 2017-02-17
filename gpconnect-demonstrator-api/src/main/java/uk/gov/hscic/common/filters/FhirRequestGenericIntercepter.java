@@ -5,6 +5,7 @@ import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.method.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.MethodNotAllowedException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 import java.io.IOException;
@@ -60,14 +61,16 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     public void postConstruct() {
         // Load config file
         try {
-            systemSspToHeader = new JSONObject(new String(Files.readAllBytes(Paths.get(spineroxyConfigPath)))).getString("toASID");
+            systemSspToHeader = new JSONObject(new String(Files.readAllBytes(Paths.get(spineroxyConfigPath))))
+                    .getString("toASID");
         } catch (IOException | JSONException e) {
             LOG.error("Error loading SSP header values from file: " + e.getMessage());
         }
 
         // Load interactionId white list
         try {
-            JSONArray whiteListJSONArray = (JSONArray) new JSONObject(new String(Files.readAllBytes(Paths.get(interactionWhiteListPath)))).get("interactionIds");
+            JSONArray whiteListJSONArray = (JSONArray) new JSONObject(
+                    new String(Files.readAllBytes(Paths.get(interactionWhiteListPath)))).get("interactionIds");
 
             if (whiteListJSONArray.length() > 0) {
                 interactionIdWhiteList = new HashSet();
@@ -82,7 +85,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         // Load Error File if exists
         try {
-            JSONArray errorsJSONArray = (JSONArray) new JSONObject(new String(Files.readAllBytes(Paths.get(errorSimulationPath)))).get("errors");
+            JSONArray errorsJSONArray = (JSONArray) new JSONObject(
+                    new String(Files.readAllBytes(Paths.get(errorSimulationPath)))).get("errors");
 
             if (errorsJSONArray.length() > 0) {
                 errorSimulationCodes = new ArrayList<>();
@@ -98,7 +102,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     @Override
     public boolean incomingRequestPreProcessed(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
-        certificateValidator.validateRequest(httpRequest); // Validate certificate first!
+        certificateValidator.validateRequest(httpRequest); // Validate
+                                                           // certificate first!
 
         String failedMsg = "";
 
@@ -127,7 +132,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         if (interactionIdWhiteList != null && !interactionIdWhiteList.contains(interactionIdHeader)) {
-            // We managed to load our whilte list but the interaction Id in the header does not exist in the list
+            // We managed to load our whilte list but the interaction Id in the
+            // header does not exist in the list
             failedMsg += "SSP-InteractionID in not a valid interaction ID for the system,";
         }
 
@@ -181,56 +187,58 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     }
 
     private Map<String, String> createMapUsingid(int id) {
-        return new HashMap<String, String>() {{
-            put("urn:nhs:names:services:gpconnect:fhir:rest:read:metadata", "/fhir/metadata");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:read:patient", "/fhir/Patient/" + id);
-            put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient", "/fhir/Patient");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner", "/fhir/Practitioner/" + id);
-            put("urn:nhs:names:services:gpconnect:fhir:rest:search:practitioner", "/fhir/Practitioner");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:read:organization", "/fhir/Organization/" + id);
-            put("urn:nhs:names:services:gpconnect:fhir:rest:search:organization", "/fhir/Organization");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:read:location", "/fhir/Location/" + id);
-            put("urn:nhs:names:services:gpconnect:fhir:rest:search:location", "/fhir/Location");
-            put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord",
-                    "/fhir/Patient/$gpc.getcarerecord");
-            put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule",
-                    "/fhir/Organization/1/$gpc.getschedule");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:read:appointment", "/fhir/Appointment/" + id);
-            put("urn:nhs:names:services:gpconnect:fhir:rest:create:appointment", "/fhir/Appointment");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:update:appointment", "/fhir/Appointment/" + id);
-            put("urn:nhs:names:services:gpconnect:fhir:rest:create:order", "/fhir/Order");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments",
-                    "/fhir/Patient/" + id + "/Appointment");
-            put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient",
-                    "/fhir/Patient/$gpc.registerpatient");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/AllergyIntolerance.read",
-                    "/fhir/AllergyIntolerance");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Condition.read", "/fhir/Condition");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticOrder.read",
-                    "/fhir/DiagnosticOrder");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticReport.read",
-                    "/fhir/DiagnosticReport");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Encounter.read", "/fhir/Encounter");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Flag.read", "/fhir/Flag");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Immunization.read", "/fhir/Immunization");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationOrder.read",
-                    "/fhir/MedicationOrder");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationDispense.read",
-                    "/fhir/MedicationDispense");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationAdministration.read",
-                    "/fhir/MedicationAdministration");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Observation.read", "/fhir/Observation");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Problem.read", "/fhir/Problem");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Procedures.read", "/fhir/Procedure");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Referral.read", "/fhir/Referral");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Appointment.read", "/fhir/Appointment");
-        }};
+        return new HashMap<String, String>() {
+            {
+                put("urn:nhs:names:services:gpconnect:fhir:rest:read:metadata", "/fhir/metadata");
+                put("urn:nhs:names:services:gpconnect:fhir:rest:read:patient", "/fhir/Patient/" + id);
+                put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient", "/fhir/Patient");
+                put("urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner", "/fhir/Practitioner/" + id);
+                put("urn:nhs:names:services:gpconnect:fhir:rest:search:practitioner", "/fhir/Practitioner");
+                put("urn:nhs:names:services:gpconnect:fhir:rest:read:organization", "/fhir/Organization/" + id);
+                put("urn:nhs:names:services:gpconnect:fhir:rest:search:organization", "/fhir/Organization");
+                put("urn:nhs:names:services:gpconnect:fhir:rest:read:location", "/fhir/Location/" + id);
+                put("urn:nhs:names:services:gpconnect:fhir:rest:search:location", "/fhir/Location");
+                put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord",
+                        "/fhir/Patient/$gpc.getcarerecord");
+                put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule",
+                        "/fhir/Organization/1/$gpc.getschedule");
+                put("urn:nhs:names:services:gpconnect:fhir:rest:read:appointment", "/fhir/Appointment/" + id);
+                put("urn:nhs:names:services:gpconnect:fhir:rest:create:appointment", "/fhir/Appointment");
+                put("urn:nhs:names:services:gpconnect:fhir:rest:update:appointment", "/fhir/Appointment/" + id);
+                put("urn:nhs:names:services:gpconnect:fhir:rest:create:order", "/fhir/Order");
+                put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments",
+                        "/fhir/Patient/" + id + "/Appointment");
+                put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient",
+                        "/fhir/Patient/$gpc.registerpatient");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/AllergyIntolerance.read",
+                        "/fhir/AllergyIntolerance");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Condition.read", "/fhir/Condition");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticOrder.read",
+                        "/fhir/DiagnosticOrder");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticReport.read",
+                        "/fhir/DiagnosticReport");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Encounter.read", "/fhir/Encounter");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Flag.read", "/fhir/Flag");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Immunization.read", "/fhir/Immunization");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationOrder.read",
+                        "/fhir/MedicationOrder");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationDispense.read",
+                        "/fhir/MedicationDispense");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationAdministration.read",
+                        "/fhir/MedicationAdministration");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Observation.read", "/fhir/Observation");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Problem.read", "/fhir/Problem");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Procedures.read", "/fhir/Procedure");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Referral.read", "/fhir/Referral");
+                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Appointment.read", "/fhir/Appointment");
+            }
+        };
     }
 
     private void throwInvalidRequestException(String exceptionMessage) {
         OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(
-                OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
-                exceptionMessage, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT);
+                OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER, exceptionMessage,
+                OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT);
 
         throw new InvalidRequestException(exceptionMessage, operationOutcome);
     }
@@ -251,18 +259,30 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             Throwable theException, HttpServletRequest theServletRequest) throws ServletException {
         // This string match is really crude and it's not great, but I can't see
         // how else to pick up on just the relevant exceptions!
-        if (theException instanceof InvalidRequestException && theException.getMessage().contains("Invalid attribute value")) {
+        if (theException instanceof InvalidRequestException
+                && theException.getMessage().contains("Invalid attribute value")) {
             OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(
                     OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
-                    theException.getMessage(), OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT);
+                    theException.getMessage(), OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                    IssueTypeEnum.INVALID_CONTENT);
+
+            return new UnprocessableEntityException(theException.getMessage(), operationOutcome);
+        }
+        if (theException instanceof MethodNotAllowedException
+                && theException.getMessage().contains("request must use HTTP GET")) {
+            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(
+                    OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_BAD_REQUEST,
+                    theException.getMessage(), OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                    IssueTypeEnum.INVALID_CONTENT);
 
             return new UnprocessableEntityException(theException.getMessage(), operationOutcome);
         }
 
-        if (theException instanceof InvalidRequestException && theException.getMessage().contains("InvalidResourceType")) {
-            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
-                    "INVALID_RESOURCE", theException.getMessage(), OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT);
-
+        if (theException instanceof InvalidRequestException
+                && theException.getMessage().contains("InvalidResourceType")) {
+            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(
+                    OperationConstants.SYSTEM_WARNING_CODE, "INVALID_RESOURCE", theException.getMessage(),
+                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT);
             return new UnprocessableEntityException(theException.getMessage(), operationOutcome);
         }
 

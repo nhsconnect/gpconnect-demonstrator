@@ -276,9 +276,12 @@ CREATE TABLE gpconnect.observations (
 
 CREATE TABLE gpconnect.immunisations (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
- html                TEXT(25000) NULL,
- provider            VARCHAR(10)   NULL,
- lastUpdated			 DATETIME 	   NULL,
+ nhsNumber			 BIGINT 		NULL,
+ dateOfVac					DATETIME NULL,
+ vaccination		 VARCHAR(100)   NULL,
+ part				VARCHAR(200)   NULL,
+ contents				VARCHAR(200)   NULL,
+ details				VARCHAR(200)   NULL,
  PRIMARY KEY         (id)
 );
 

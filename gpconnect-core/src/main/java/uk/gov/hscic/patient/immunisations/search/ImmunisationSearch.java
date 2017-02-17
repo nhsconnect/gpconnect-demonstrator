@@ -3,9 +3,9 @@ package uk.gov.hscic.patient.immunisations.search;
 import java.util.List;
 
 import uk.gov.hscic.common.repo.Repository;
-import uk.gov.hscic.patient.immunisations.model.ImmunisationListHTML;
+import uk.gov.hscic.patient.immunisations.model.ImmunisationData;
 
 public interface ImmunisationSearch extends Repository {
 
-    List<ImmunisationListHTML> findAllImmunisationHTMLTables(String patientId);
+    List<ImmunisationData> findAllImmunisationHTMLTables(String patientId);
 }

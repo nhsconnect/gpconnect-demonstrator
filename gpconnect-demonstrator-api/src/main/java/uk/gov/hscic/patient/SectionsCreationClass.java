@@ -13,9 +13,9 @@ import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
 
 
 public class SectionsCreationClass {
-    public static Section buildSection(String system, String code, String display, String investigationListText,String investigationListHTML, String sectionTitle,
+    public static Section buildSection(String system, String code, String investigationListText,String investigationListHTML, String sectionTitle,
             Section section) {
-        CodingDt investigationCoding = new CodingDt().setSystem(system).setCode(code).setDisplay(display);
+        CodingDt investigationCoding = new CodingDt().setSystem(system).setCode(code);
         CodeableConceptDt investigationCodableConcept = new CodeableConceptDt().addCoding(investigationCoding)
                 .setText(investigationListText);
         NarrativeDt narrative = new NarrativeDt();

@@ -125,12 +125,27 @@ VALUES (
 );
 
 INSERT INTO gpconnect.immunisations
-  (id, html, provider, lastUpdated)
+  (nhsNumber, dateOfVac, vaccination, part, contents, details)
 VALUES (
  9476719958,
-  "<div><table><thead><tr><th>Date</th><th>Vaccination</th><th>Part</th><th>Contents</th><th>Details</th></tr></thead><tbody><tr><td>04 Oct 2016</td><td>First DTP (triple)+polio vacc.</td><td>Manufacturer : fred<br />Batch: 1<br />Injection Location: Right arm<br />Expiry Date: 04-Oct-2016</td></tr></tbody></table><h2>Refusals</h2>There are no immunisations in the patient's record</div>",
-  "EMIS",
-  '2016-08-24 12:00:00'
+ '2000-06-13 09:22:00',
+ "First DTP (triple)+polio vacc.",
+ "Manufacturer : fred
+Batch: 1
+Injection Location: Right arm
+Expiry Date: 04-Oct-2016",
+ "Dont know",
+ "Dont Know"
+),(
+ 9476719958,
+ '2002-06-13 09:22:00',
+ "HIV Injection",
+ "Manufacturer : fred
+Batch: 1
+Injection Location:Left leg
+Expiry Date: 04-Oct-2016",
+ "Dont know",
+ "Dont Know"
 );
 
 

@@ -1,51 +1,28 @@
 package uk.gov.hscic.patient.immunisations.model;
 
 import java.util.Date;
-import javax.persistence.*;
 
-@Entity
-@Table(name = "immunisations")
-public class ImmunisationEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @Column(name = "dateOfVac")
-    private Date dateOfVac;
-    
-    @Column(name = "nhsNumber")
+public class ImmunisationData {
+
+    private String sourceId;
     private String nhsNumber;
-    
-    @Column(name = "vaccination")
+    private Date dateOfVac;
     private String vaccination;
-    
-    @Column(name = "part")
     private String part;
-    
-    @Column(name = "contents")
     private String contents;
-    
-    @Column(name = "details")
     private String details;
 
-
-    public Long getId() {
-        return id;
+    public String getSourceId() {
+        return sourceId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
-    public String getNhsNumber() {
-        return nhsNumber;
-    }
-
-    public void setNhsNumber(String nhsNumber) {
-        this.nhsNumber = nhsNumber;
-    }
-
+   
     public Date getDateOfVac() {
         return dateOfVac;
     }
@@ -85,5 +62,14 @@ public class ImmunisationEntity {
     public void setDetails(String details) {
         this.details = details;
     }
+
+    public String getNhsNumber() {
+        return nhsNumber;
+    }
+
+    public void setNhsNumber(String nhsNumber) {
+        this.nhsNumber = nhsNumber;
+    }
+    
     
 }

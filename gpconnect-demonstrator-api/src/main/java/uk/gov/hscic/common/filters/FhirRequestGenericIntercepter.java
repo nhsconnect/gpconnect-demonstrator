@@ -104,7 +104,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         // Check there is a Ssp-TraceID header
         if (StringUtils.isBlank(httpRequest.getHeader("Ssp-TraceId"))) {
-            throwInvalidRequestException("SSP-From header blank");
+            throwInvalidRequestException("SSP-TraceId header blank");
         }
 
         // Check there is a SSP-From header

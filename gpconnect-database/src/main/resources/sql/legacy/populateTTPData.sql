@@ -222,13 +222,24 @@ VALUES (
 );
 
 INSERT INTO gpconnect.problems
-  (id, html, provider, lastUpdated)
+  (nhsNumber,activeOrInactive, startDate,endDate,entry,significance,details)
 VALUES (
   9476719931,
-  "<div><h2>Active Problems and Issues</h2><table><thead><th>Start Date</th><th>Entry</th><th>Significance</th><th>Details</th></thead><tbody><tr><td>23 Feb 2005</td><td>Type II diabetes mellitus</td><td>Major</td><td /></tr><tr><td>10 Apr 2000</td><td>Low back pain</td><td>Minor</td><td /></tr><tr><td>13 Jan 1999</td><td>Asthma</td><td>Major</td><td /></tr></tbody></table><h2>Inactive Problems and Issues</h2><table><thead><tr><th>Start Date</th><th>End Date</th><th>Entry</th><th>Significance</th><th>Details</th></tr></thead><tbody><tr><td>09 Apr 2008</td><td>15 Jun 2012</td><td>Disorder of heart</td><td>Major</td><td /></tr><tr><td>10 Apr 2000</td><td>15 Jun 2005</td><td>Low back pain</td><td>Minor</td><td /></tr></tbody></table></div>",
-  "TPP",
-  '2016-07-25 12:00:00'
-);
+  "Active",
+  '2016-07-25 12:00:00',
+ '2016-07-25 12:00:00',
+  "Type II diabetes mellitus",
+  "Major",
+  "Treated daily"
+  ),(
+   9476719931,
+  "Inactive",
+  '2016-07-25 12:00:00',
+ '2016-07-25 12:00:00',
+  "Type II diabetes mellitus",
+  "Major",
+  "Treated daily"
+  );
 
 INSERT INTO gpconnect.referrals
   (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)

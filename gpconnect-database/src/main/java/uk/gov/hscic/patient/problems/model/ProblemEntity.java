@@ -16,15 +16,28 @@ public class ProblemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "html")
-    private String html;
 
-    @Column(name = "provider")
-    private String provider;
+    @Column(name = "nhsNumber")
+    private String nhsNumber;
     
-    @Column(name = "lastUpdated")
-    private Date lastUpdated;
+    @Column(name = "activeOrInactive")
+    private String activeOrInactive;
+    
+    @Column(name = "startDate")
+    private Date startDate;
+    
+    @Column(name = "endDate")
+    private Date endDate;
 
+    @Column(name = "entry")
+    private String entry;
+    
+    @Column(name = "significance")
+    private String significance;
+    
+    @Column(name = "details")
+    private String details;
+   
     public Long getId() {
         return id;
     }
@@ -33,27 +46,61 @@ public class ProblemEntity {
         this.id = id;
     }
 
-    public String getHtml() {
-        return html;
+    public String getNhsNumber() {
+        return nhsNumber;
     }
 
-    public void setHtml(String html) {
-        this.html = html;
+    public void setNhsNumber(String nhsNumber) {
+        this.nhsNumber = nhsNumber;
     }
 
-    public String getProvider() {
-        return provider;
+    public String getActiveOrInactive() {
+        return activeOrInactive;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
+    public void setActiveOrInactive(String activeOrInactive) {
+        this.activeOrInactive = activeOrInactive;
     }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getEntry() {
+        return entry;
+    }
+
+    public void setEntry(String entry) {
+        this.entry = entry;
+    }
+
+    public String getSignificance() {
+        return significance;
+    }
+
+    public void setSignificance(String significance) {
+        this.significance = significance;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+  
 }

@@ -5,10 +5,15 @@ import java.util.Date;
 public class ProblemListHTML {
 
     private String sourceId;
-    private String source;
-    private String provider;
-    private String html;
-    private Date lastUpdated;
+    private String nhsNumber;
+    private String activeOrInactive;
+    private Date startDate;
+    private Date endDate;
+    private String entry;
+    private String significance;
+    private String details;
+    
+
 
     public String getSourceId() {
         return sourceId;
@@ -18,35 +23,61 @@ public class ProblemListHTML {
         this.sourceId = sourceId;
     }
 
-    public String getSource() {
-        return source;
+    public String getNhsNumber() {
+        return nhsNumber;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setNhsNumber(String nhsNumber) {
+        this.nhsNumber = nhsNumber;
     }
 
-    public String getProvider() {
-        return provider;
+    public String getActiveOrInactive() {
+        return activeOrInactive;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
+    public void setActiveOrInactive(String activeOrInactive) {
+        this.activeOrInactive = activeOrInactive;
     }
 
-    public String getHtml() {
-        return html;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setHtml(String html) {
-        this.html = html;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
+
+    public String getEntry() {
+        return entry;
+    }
+
+    public void setEntry(String entry) {
+        this.entry = entry;
+    }
+
+    public String getSignificance() {
+        return significance;
+    }
+
+    public void setSignificance(String significance) {
+        this.significance = significance;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+  
 }

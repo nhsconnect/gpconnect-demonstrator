@@ -428,7 +428,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     section = SectionsCreationClass.buildSection(
                                             OperationConstants.SYSTEM_RECORD_SECTION, "SUM",
 
-                                            htmlTable, "Summary", section,"Summary");
+                                            htmlTable, "Summary", section, "Summary");
 
                                     sectionsList.add(section);
                                 }
@@ -443,9 +443,67 @@ public class PatientResourceProvider implements IResourceProvider {
                                             .findAllProblemHTMLTables(nhsNumber.get(0));
 
                                     if (problemList != null && problemList.size() > 0) {
+
+                                        ArrayList<Object> activeProblemTableHeaders = new ArrayList<>();
+                                        ArrayList<Object> activeProblemTableData = new ArrayList<>();
+
+                                        activeProblemTableHeaders.add("Start Date");
+                                        activeProblemTableHeaders.add("Entry");
+                                        activeProblemTableHeaders.add("Significance");
+                                        activeProblemTableHeaders.add("Details");
+
+                                        ArrayList<Object> inactiveProblemTableHeaders = new ArrayList<>();
+                                        ArrayList<Object> inactiveProblemTableData = new ArrayList<>();
+
+                                        inactiveProblemTableHeaders.add("Start Date");
+                                        inactiveProblemTableHeaders.add("End Date");
+                                        inactiveProblemTableHeaders.add("Entry");
+                                        inactiveProblemTableHeaders.add("Significance");
+                                        inactiveProblemTableHeaders.add("Details");
+
+                                        List<ArrayList<Object>> headerData = new ArrayList<ArrayList<Object>>();
+                                        List<ArrayList<Object>> tableData = new ArrayList<ArrayList<Object>>();
+
+                                        headerData.add(activeProblemTableHeaders);
+                                        headerData.add(inactiveProblemTableHeaders);
+
+                                        ArrayList<Object> tableTitles = new ArrayList<>();
+                                        tableTitles.add("Active Problems and Issues");
+                                        tableTitles.add("Inactive Problems and Issues");
+
+                                        for (int i = 0; i < problemList.size(); i++) {
+
+                                            String activeOrInactive = problemList.get(i).getActiveOrInactive();
+                                            Date startDate = problemList.get(i).getStartDate();
+                                            Date endDate = problemList.get(i).getEndDate();
+                                            String entry = problemList.get(i).getEntry();
+                                            String significance = problemList.get(i).getSignificance();
+                                            String details = problemList.get(i).getDetails();
+
+                                            if (activeOrInactive.equals("Active")) {
+                                                activeProblemTableData.add(startDate);
+                                                activeProblemTableData.add(entry);
+                                                activeProblemTableData.add(significance);
+                                                activeProblemTableData.add(details);
+                                            } else {
+                                                inactiveProblemTableData.add(startDate);
+                                                inactiveProblemTableData.add(endDate);
+                                                inactiveProblemTableData.add(entry);
+                                                inactiveProblemTableData.add(significance);
+                                                inactiveProblemTableData.add(details);
+
+                                            }
+
+                                            tableData.add(activeProblemTableData);
+                                            tableData.add(inactiveProblemTableData);
+
+                                        }
+                                        ;
+                                        String htmlTable = buildTable.tableCreation(headerData, tableData, tableTitles);
+
                                         section = SectionsCreationClass.buildSection(
-                                                OperationConstants.SYSTEM_RECORD_SECTION, "PRB",
-                                                problemList.get(0).getHtml(), "Problems", section,"Problems");
+                                                OperationConstants.SYSTEM_RECORD_SECTION, "PRB", htmlTable, "Problems",
+                                                section, "Problems");
 
                                         sectionsList.add(section);
                                     } else {
@@ -531,19 +589,19 @@ public class PatientResourceProvider implements IResourceProvider {
                                             tableData.add(historicalAllergyTableData);
 
                                         }
-                                        System.out.println("REACHED HERE");
+                                        ;
                                         String htmlTable = buildTable.tableCreation(headerData, tableData, tableTitles);
-                                        System.out.println("REACHED HERE" + htmlTable);
+
                                         section = SectionsCreationClass.buildSection(
-                                                OperationConstants.SYSTEM_RECORD_SECTION, "ALL",
-                                                htmlTable,"Allergies and Sensitivities", section,"Allergies and Sensitivities");
+                                                OperationConstants.SYSTEM_RECORD_SECTION, "ALL", htmlTable,
+                                                "Allergies and Sensitivities", section, "Allergies and Sensitivities");
 
                                         sectionsList.add(section);
                                     } else {
                                         String htmlTable = buildTable.buildEmptyHtml("Allergies and Sensitivities");
                                         section = SectionsCreationClass.buildSection(
-                                                OperationConstants.SYSTEM_RECORD_SECTION, "ALL", htmlTable, 
-                                                "Allergies and Sensitivities",section,"Allergies and Sensitivities");
+                                                OperationConstants.SYSTEM_RECORD_SECTION, "ALL", htmlTable,
+                                                "Allergies and Sensitivities", section, "Allergies and Sensitivities");
                                         sectionsList.add(section);
                                     }
                                 }
@@ -557,7 +615,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (clinicalItemList != null && clinicalItemList.size() > 0) {
                                     section = SectionsCreationClass.buildSection(
                                             OperationConstants.SYSTEM_RECORD_SECTION, "CLI",
-                                            clinicalItemList.get(0).getHtml(), "Clinical Items", section, "Clinical Items");
+                                            clinicalItemList.get(0).getHtml(), "Clinical Items", section,
+                                            "Clinical Items");
 
                                     sectionsList.add(section);
                                 } else {
@@ -751,14 +810,15 @@ public class PatientResourceProvider implements IResourceProvider {
                                     if (observationList != null && observationList.size() > 0) {
                                         section = SectionsCreationClass.buildSection(
                                                 OperationConstants.SYSTEM_RECORD_SECTION, "OBS",
-                                                observationList.get(0).getHtml(), "Observations", section,"Observations");
+                                                observationList.get(0).getHtml(), "Observations", section,
+                                                "Observations");
 
                                         sectionsList.add(section);
                                     } else {
                                         String htmlTable = buildTable.buildEmptyHtml("Observations");
                                         section = SectionsCreationClass.buildSection(
                                                 OperationConstants.SYSTEM_RECORD_SECTION, "OBS", htmlTable,
-                                                "Observations", section,"Observations");
+                                                "Observations", section, "Observations");
                                         sectionsList.add(section);
                                     }
                                 }
@@ -773,7 +833,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                     section = SectionsCreationClass.buildSection(
                                             OperationConstants.SYSTEM_RECORD_SECTION, "INV",
-                                            investigationList.get(0).getHtml(), "Investigations", section, "Investigations");
+                                            investigationList.get(0).getHtml(), "Investigations", section,
+                                            "Investigations");
                                     sectionsList.add(section);
 
                                 } else {
@@ -792,7 +853,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 } else {
                                     List<ImmunisationData> immunisationList = immunisationSearch
                                             .findAllImmunisationHTMLTables(nhsNumber.get(0));
-                                    System.out.println("imm list " + immunisationList);
 
                                     if (immunisationList != null && immunisationList.size() > 0) {
 
@@ -826,16 +886,14 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                         section = SectionsCreationClass.buildSection(
                                                 OperationConstants.SYSTEM_RECORD_SECTION, "IMM", htmlTable,
-                                                "Immunisations", section,
-                                                "Immunisations");
+                                                "Immunisations", section, "Immunisations");
 
                                         sectionsList.add(section);
                                     } else {
                                         String htmlTable = buildTable.buildEmptyHtml("Immunisation");
                                         section = SectionsCreationClass.buildSection(
                                                 OperationConstants.SYSTEM_RECORD_SECTION, "IMM", htmlTable,
-                                                "Immunisations", section,
-                                                "Immunisations");
+                                                "Immunisations", section, "Immunisations");
 
                                         sectionsList.add(section);
                                     }
@@ -850,7 +908,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (adminItemList != null && adminItemList.size() > 0) {
                                     section = SectionsCreationClass.buildSection(
                                             OperationConstants.SYSTEM_RECORD_SECTION, "ADM",
-                                            adminItemList.get(0).getHtml(), "Administrative Items", section, "Administrative Items");
+                                            adminItemList.get(0).getHtml(), "Administrative Items", section,
+                                            "Administrative Items");
 
                                     sectionsList.add(section);
                                 } else {

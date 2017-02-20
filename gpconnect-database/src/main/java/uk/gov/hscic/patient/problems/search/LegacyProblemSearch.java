@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient.problems.search;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,17 +17,24 @@ public class LegacyProblemSearch extends AbstractLegacyService implements Proble
     @Autowired
     private ProblemRepository problemRepository;
 
-    private final ProblemEntityToListTransformer transformer = new ProblemEntityToListTransformer();
-
     @Override
     public List<ProblemListHTML> findAllProblemHTMLTables(final String patientId) {
 
-        final ProblemEntity item = problemRepository.findOne(Long.parseLong(patientId));
-
-        if(item == null){
-            return null;
-        } else {
-            return Collections.singletonList(transformer.transform(item));
-        }
+       List<ProblemEntity> items = problemRepository.findBynhsNumber(patientId);
+       List<ProblemListHTML> problemsList = new ArrayList<>();
+       
+       for(int i = 0 ; i < items.size(); i++ ){
+           ProblemListHTML problemData = new ProblemListHTML();
+           problemData.setActiveOrInactive(items.get(i).getActiveOrInactive());
+           problemData.setStartDate(items.get(i).getStartDate());
+           problemData.setEndDate(items.get(i).getEndDate());
+           problemData.setEntry(items.get(i).getEntry());
+           problemData.setSignificance(items.get(i).getSignificance());
+           problemData.setDetails(items.get(i).getDetails());
+           
+           problemsList.add(problemData);
+       }
+       
+       return problemsList;
     }
 }

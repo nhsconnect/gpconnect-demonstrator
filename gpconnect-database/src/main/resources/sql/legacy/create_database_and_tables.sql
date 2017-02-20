@@ -221,9 +221,13 @@ CREATE TABLE gpconnect.medication_administrations (
 
 CREATE TABLE gpconnect.problems (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
- html                TEXT(25000) NULL,
- provider            VARCHAR(10)   NULL,
- lastUpdated			 DATETIME 	   NULL,
+ nhsNumber			 BIGINT 		NULL,
+ activeOrInactive	VARCHAR(100)	NULL,
+ startDate		DATETIME 	NULL,
+ endDate		DATETIME 	NULL,
+ entry			 VARCHAR(200)   NULL,
+ significance	 VARCHAR(200)   NULL,
+ details			 VARCHAR(200)   NULL,
  PRIMARY KEY         (id)
 );
 

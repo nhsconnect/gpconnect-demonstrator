@@ -9,7 +9,7 @@
             "interactionIds": ["*"],
             "endpointURL": "/fhir",
             "apiEndpointURL": "/api",
-            "ASID": "200000000360"
+            "ASID": "200000000359"
         },
         {
             "id": "2",

@@ -8,7 +8,7 @@
             "name": "GP Connect Demonstrator",
             "interactionIds": ["*"],
             "endpointURL": "http://endpointUrl/A",
-            "ASID": "200000000360"
+            "ASID": "200000000359"
         },
         {
             "id": "2",

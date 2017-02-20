@@ -21,7 +21,7 @@ public class EndpointResolverTest {
     @Test
     public void testFindEndpointFromODSCode() throws Exception {
         // 1) known + wildcard interaction
-        assertEquals("Make sure that the result is as expected", "{ \"endpointURL\" : \"http://endpointUrl/A\", \"recievingSysASID\" : \"200000000360\"}", endpointResolver.findEndpointFromODSCode("GPC001", "interactionId_A"));
+        assertEquals("Make sure that the result is as expected", "{ \"endpointURL\" : \"http://endpointUrl/A\", \"recievingSysASID\" : \"200000000359\"}", endpointResolver.findEndpointFromODSCode("GPC001", "interactionId_A"));
 
         // 2) multiple interaction IDs registered for same provider
 

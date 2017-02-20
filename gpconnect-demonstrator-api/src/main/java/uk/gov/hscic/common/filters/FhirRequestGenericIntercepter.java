@@ -1,6 +1,5 @@
 package uk.gov.hscic.common.filters;
 
-import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.method.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
@@ -8,14 +7,12 @@ import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.MethodNotAllowedException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,121 +22,80 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.auth.CertificateValidator;
+import uk.gov.hscic.common.ldap.model.ProviderRouting;
 
 @Component
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private static final Logger LOG = Logger.getLogger(FhirRequestGenericIntercepter.class);
 
-    @Value("${gp.connect.spineproxyconf.path}")
-    private String spineroxyConfigPath;
-
-    @Value("${gp.connect.interactionwhitelist.path}")
-    private String interactionWhiteListPath;
-
-    @Value("${gp.connect.ErrorSimulation.path}")
-    private String errorSimulationPath;
+    private static final String SSP_FROM = "Ssp-From";
+    private static final String SSP_INTERACTIONID = "Ssp-InteractionID";
+    private static final String SSP_TO = "Ssp-To";
+    private static final String SSP_TRACEID = "Ssp-TraceId";
 
     @Autowired
     private CertificateValidator certificateValidator;
 
-    private String systemSspToHeader = null;
-    private HashSet interactionIdWhiteList = null;
-    private List<JSONObject> errorSimulationCodes = null;
-    private int simulationErrorIndex = 0;
+    @Value("${gp.connect.provider.routing.file:#{null}}")
+    protected String providerRoutingFile;
+
+    private String systemSspToHeader;
 
     @PostConstruct
     public void postConstruct() {
-        // Load config file
-        try {
-            systemSspToHeader = new JSONObject(new String(Files.readAllBytes(Paths.get(spineroxyConfigPath))))
-                    .getString("toASID");
-        } catch (IOException | JSONException e) {
-            LOG.error("Error loading SSP header values from file: " + e.getMessage());
-        }
+        if (providerRoutingFile != null) {
+            Path providerRoutingFilePath = Paths.get(providerRoutingFile);
 
-        // Load interactionId white list
-        try {
-            JSONArray whiteListJSONArray = (JSONArray) new JSONObject(
-                    new String(Files.readAllBytes(Paths.get(interactionWhiteListPath)))).get("interactionIds");
-
-            if (whiteListJSONArray.length() > 0) {
-                interactionIdWhiteList = new HashSet();
-
-                for (int index = 0; index < whiteListJSONArray.length(); index++) {
-                    interactionIdWhiteList.add(whiteListJSONArray.getJSONObject(index).getString("interactionId"));
+            if (Files.exists(providerRoutingFilePath)) {
+                try {
+                    systemSspToHeader = new ObjectMapper()
+                            .readValue(Files.readAllBytes(providerRoutingFilePath), ProviderRouting.class)
+                            .getAsid();
+                } catch (IOException ex) {
+                    LOG.error("Error reading providerRoutingFile.");
                 }
             }
-        } catch (IOException | JSONException e) {
-            LOG.error("Error loading interactionID White List from file: " + e.getMessage());
-        }
-
-        // Load Error File if exists
-        try {
-            JSONArray errorsJSONArray = (JSONArray) new JSONObject(
-                    new String(Files.readAllBytes(Paths.get(errorSimulationPath)))).get("errors");
-
-            if (errorsJSONArray.length() > 0) {
-                errorSimulationCodes = new ArrayList<>();
-
-                for (int index = 0; index < errorsJSONArray.length(); index++) {
-                    errorSimulationCodes.add(errorsJSONArray.getJSONObject(index));
-                }
-            }
-        } catch (IOException | JSONException e) {
-            LOG.error("Error loading error simulation file: " + e.getMessage());
         }
     }
 
     @Override
     public boolean incomingRequestPreProcessed(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
-        certificateValidator.validateRequest(httpRequest); // Validate
-                                                           // certificate first!
+        certificateValidator.validateRequest(httpRequest); // Validate certificate first!
 
         String failedMsg = "";
 
         // Check there is a Ssp-TraceID header
-        if (StringUtils.isBlank(httpRequest.getHeader("Ssp-TraceId"))) {
-            throwInvalidRequestException("SSP-TraceId header blank");
+        if (StringUtils.isBlank(httpRequest.getHeader(SSP_TRACEID))) {
+            throwInvalidRequestException(SSP_TRACEID + "header blank");
         }
 
         // Check there is a SSP-From header
-        if (StringUtils.isBlank(httpRequest.getHeader("Ssp-From"))) {
-            throwInvalidRequestException("SSP-From header blank");
+        if (StringUtils.isBlank(httpRequest.getHeader(SSP_FROM))) {
+            throwInvalidRequestException(SSP_FROM + " header blank");
         }
 
         // Check the SSP-To header is present and directed to our system
-        String toASIDHeader = httpRequest.getHeader("Ssp-To");
+        String toASIDHeader = httpRequest.getHeader(SSP_TO);
         if (StringUtils.isBlank(toASIDHeader)) {
-            throwInvalidRequestException("SSP-To header blank");
+            throwInvalidRequestException(SSP_TO + " header blank");
         } else if (systemSspToHeader != null && !toASIDHeader.equalsIgnoreCase(systemSspToHeader)) {
             // We loaded our ASID but the SSP-To header does not match the value
-            failedMsg += "SSP-To header does not match ASID of system,";
+            failedMsg += SSP_TO + " header does not match ASID of system,";
         }
 
-        String interactionIdHeader = httpRequest.getHeader("Ssp-InteractionID");
-        if (interactionIdHeader == null || interactionIdHeader.isEmpty()) {
-            throwInvalidRequestException("Ssp-InteractionID header blank");
-        }
-
-        if (interactionIdWhiteList != null && !interactionIdWhiteList.contains(interactionIdHeader)) {
-            // We managed to load our whilte list but the interaction Id in the
-            // header does not exist in the list
-            failedMsg += "SSP-InteractionID in not a valid interaction ID for the system,";
+        String interactionIdHeader = httpRequest.getHeader(SSP_INTERACTIONID);
+        if (StringUtils.isBlank(interactionIdHeader)) {
+            throwInvalidRequestException(SSP_INTERACTIONID + " header blank");
         }
 
         String URL = httpRequest.getRequestURI();
-        int id = getIdFromUrl(URL);
-        if (!URL.equals(createMapUsingid(id).get(interactionIdHeader))) {
+        if (!URL.equals(createMapUsingid(getIdFromUrl(URL)).get(interactionIdHeader))) {
             throwInvalidRequestException("InteractionId Incorrect");
         }
 
@@ -153,94 +109,60 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             return false;
         }
 
-        // Mock Spine Error test component
-        if (errorSimulationCodes != null) {
-            if (simulationErrorIndex >= 0 && simulationErrorIndex < errorSimulationCodes.size()) {
-                try {
-                    httpResponse.setStatus(errorSimulationCodes.get(simulationErrorIndex).getInt("httpError"));
-                    httpResponse.setHeader(HttpHeaders.CONTENT_TYPE, "application/json+fhir");
-
-                    try (PrintWriter writer = httpResponse.getWriter()) {
-                        writer.write(
-                                "{ \"resourceType\": \"OperationOutcome\", \"issue\": [ { \"severity\": \"error\", \"code\": \"forbidden\", \"details\": { \"coding\": [ { \"system\": \"http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1\", \"code\": \""
-                                        + errorSimulationCodes.get(simulationErrorIndex).getString("errorCode")
-                                        + "\" } ], \"text\": \""
-                                        + errorSimulationCodes.get(simulationErrorIndex).getString("errorDescription")
-                                        + "\" }}]}");
-                        writer.flush();
-                    }
-
-                    simulationErrorIndex++;
-
-                    if (simulationErrorIndex == errorSimulationCodes.size()) {
-                        simulationErrorIndex = 0;
-                    }
-
-                    return false;
-                } catch (Exception e) {
-                    LOG.error(e);
-                }
-            }
-        }
-
         return true;
     }
 
     private Map<String, String> createMapUsingid(int id) {
-        return new HashMap<String, String>() {
-            {
-                put("urn:nhs:names:services:gpconnect:fhir:rest:read:metadata", "/fhir/metadata");
-                put("urn:nhs:names:services:gpconnect:fhir:rest:read:patient", "/fhir/Patient/" + id);
-                put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient", "/fhir/Patient");
-                put("urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner", "/fhir/Practitioner/" + id);
-                put("urn:nhs:names:services:gpconnect:fhir:rest:search:practitioner", "/fhir/Practitioner");
-                put("urn:nhs:names:services:gpconnect:fhir:rest:read:organization", "/fhir/Organization/" + id);
-                put("urn:nhs:names:services:gpconnect:fhir:rest:search:organization", "/fhir/Organization");
-                put("urn:nhs:names:services:gpconnect:fhir:rest:read:location", "/fhir/Location/" + id);
-                put("urn:nhs:names:services:gpconnect:fhir:rest:search:location", "/fhir/Location");
-                put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord",
-                        "/fhir/Patient/$gpc.getcarerecord");
-                put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule",
-                        "/fhir/Organization/1/$gpc.getschedule");
-                put("urn:nhs:names:services:gpconnect:fhir:rest:read:appointment", "/fhir/Appointment/" + id);
-                put("urn:nhs:names:services:gpconnect:fhir:rest:create:appointment", "/fhir/Appointment");
-                put("urn:nhs:names:services:gpconnect:fhir:rest:update:appointment", "/fhir/Appointment/" + id);
-                put("urn:nhs:names:services:gpconnect:fhir:rest:create:order", "/fhir/Order");
-                put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments",
-                        "/fhir/Patient/" + id + "/Appointment");
-                put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient",
-                        "/fhir/Patient/$gpc.registerpatient");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/AllergyIntolerance.read",
-                        "/fhir/AllergyIntolerance");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Condition.read", "/fhir/Condition");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticOrder.read",
-                        "/fhir/DiagnosticOrder");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticReport.read",
-                        "/fhir/DiagnosticReport");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Encounter.read", "/fhir/Encounter");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Flag.read", "/fhir/Flag");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Immunization.read", "/fhir/Immunization");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationOrder.read",
-                        "/fhir/MedicationOrder");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationDispense.read",
-                        "/fhir/MedicationDispense");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationAdministration.read",
-                        "/fhir/MedicationAdministration");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Observation.read", "/fhir/Observation");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Problem.read", "/fhir/Problem");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Procedures.read", "/fhir/Procedure");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Referral.read", "/fhir/Referral");
-                put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Appointment.read", "/fhir/Appointment");
-            }
-        };
+        return new HashMap<String, String>() {{
+            put("urn:nhs:names:services:gpconnect:fhir:rest:read:metadata", "/fhir/metadata");
+            put("urn:nhs:names:services:gpconnect:fhir:rest:read:patient", "/fhir/Patient/" + id);
+            put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient", "/fhir/Patient");
+            put("urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner", "/fhir/Practitioner/" + id);
+            put("urn:nhs:names:services:gpconnect:fhir:rest:search:practitioner", "/fhir/Practitioner");
+            put("urn:nhs:names:services:gpconnect:fhir:rest:read:organization", "/fhir/Organization/" + id);
+            put("urn:nhs:names:services:gpconnect:fhir:rest:search:organization", "/fhir/Organization");
+            put("urn:nhs:names:services:gpconnect:fhir:rest:read:location", "/fhir/Location/" + id);
+            put("urn:nhs:names:services:gpconnect:fhir:rest:search:location", "/fhir/Location");
+            put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord",
+                    "/fhir/Patient/$gpc.getcarerecord");
+            put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule",
+                    "/fhir/Organization/1/$gpc.getschedule");
+            put("urn:nhs:names:services:gpconnect:fhir:rest:read:appointment", "/fhir/Appointment/" + id);
+            put("urn:nhs:names:services:gpconnect:fhir:rest:create:appointment", "/fhir/Appointment");
+            put("urn:nhs:names:services:gpconnect:fhir:rest:update:appointment", "/fhir/Appointment/" + id);
+            put("urn:nhs:names:services:gpconnect:fhir:rest:create:order", "/fhir/Order");
+            put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments",
+                    "/fhir/Patient/" + id + "/Appointment");
+            put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient",
+                    "/fhir/Patient/$gpc.registerpatient");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/AllergyIntolerance.read",
+                    "/fhir/AllergyIntolerance");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Condition.read", "/fhir/Condition");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticOrder.read",
+                    "/fhir/DiagnosticOrder");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticReport.read",
+                    "/fhir/DiagnosticReport");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Encounter.read", "/fhir/Encounter");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Flag.read", "/fhir/Flag");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Immunization.read", "/fhir/Immunization");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationOrder.read",
+                    "/fhir/MedicationOrder");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationDispense.read",
+                    "/fhir/MedicationDispense");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationAdministration.read",
+                    "/fhir/MedicationAdministration");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Observation.read", "/fhir/Observation");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Problem.read", "/fhir/Problem");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Procedures.read", "/fhir/Procedure");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Referral.read", "/fhir/Referral");
+            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Appointment.read", "/fhir/Appointment");
+        }};
     }
 
     private void throwInvalidRequestException(String exceptionMessage) {
-        OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(
+        throw new InvalidRequestException(exceptionMessage, OperationOutcomeFactory.buildOperationOutcome(
                 OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER, exceptionMessage,
-                OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT);
-
-        throw new InvalidRequestException(exceptionMessage, operationOutcome);
+                OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
     }
 
     /**
@@ -250,8 +172,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
      * @param theRequestDetails
      * @param theException
      * @param theServletRequest
-     * @return UnprocessableEntityException if a InvalidRequestException was
-     *         thrown.
+     * @return UnprocessableEntityException if a InvalidRequestException was thrown.
      * @throws javax.servlet.ServletException
      */
     @Override
@@ -259,31 +180,22 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             Throwable theException, HttpServletRequest theServletRequest) throws ServletException {
         // This string match is really crude and it's not great, but I can't see
         // how else to pick up on just the relevant exceptions!
-        if (theException instanceof InvalidRequestException
-                && theException.getMessage().contains("Invalid attribute value")) {
-            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(
-                    OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
-                    theException.getMessage(), OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
-                    IssueTypeEnum.INVALID_CONTENT);
-
-            return new UnprocessableEntityException(theException.getMessage(), operationOutcome);
-        }
-        if (theException instanceof MethodNotAllowedException
-                && theException.getMessage().contains("request must use HTTP GET")) {
-            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(
-                    OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_BAD_REQUEST,
-                    theException.getMessage(), OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
-                    IssueTypeEnum.INVALID_CONTENT);
-
-            return new UnprocessableEntityException(theException.getMessage(), operationOutcome);
+        if (theException instanceof InvalidRequestException && theException.getMessage().contains("Invalid attribute value")) {
+            return new UnprocessableEntityException(theException.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
+                    OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER, theException.getMessage(),
+                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
-        if (theException instanceof InvalidRequestException
-                && theException.getMessage().contains("InvalidResourceType")) {
-            OperationOutcome operationOutcome = OperationOutcomeFactory.buildOperationOutcome(
+        if (theException instanceof MethodNotAllowedException && theException.getMessage().contains("request must use HTTP GET")) {
+            return new UnprocessableEntityException(theException.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
+                    OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_BAD_REQUEST, theException.getMessage(),
+                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+        }
+
+        if (theException instanceof InvalidRequestException && theException.getMessage().contains("InvalidResourceType")) {
+            return new UnprocessableEntityException(theException.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
                     OperationConstants.SYSTEM_WARNING_CODE, "INVALID_RESOURCE", theException.getMessage(),
-                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT);
-            return new UnprocessableEntityException(theException.getMessage(), operationOutcome);
+                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         return super.preProcessOutgoingException(theRequestDetails, theException, theServletRequest);

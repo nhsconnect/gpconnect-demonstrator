@@ -20,8 +20,5 @@
     <Environment name="server.keystore.password" type="java.lang.String" override="false" value="password" />
     <Environment name="server.keystore.path" type="java.lang.String" override="false" value="gpconnect-demonstrator-api/src/main/resources/authentication/server.jks" />
 
-    <Environment name="gp.connect.spineproxyconf.path" type="java.lang.String" override="false" value="spineproxy.json" />
-    <Environment name="gp.connect.interactionwhitelist.path" type="java.lang.String" override="false" value="interactionIdWhiteList.json" />
     <Environment name="gp.connect.provider.routing.file" type="java.lang.String" override="false" value="gpconnect-demonstrator-api/providerRouting.json" />
-    <Environment name="gp.connect.ErrorSimulation.path" type="java.lang.String" override="false" value="errorSimulation-disabled.json" />
 </Context>

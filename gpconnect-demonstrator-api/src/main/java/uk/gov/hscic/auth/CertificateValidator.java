@@ -7,7 +7,6 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
@@ -35,7 +34,6 @@ public final class CertificateValidator {
             if (request.isSecure() && !HttpMethod.OPTIONS.name().equals(request.getMethod())) {
                 String cipherSuite = (String) request.getAttribute("javax.servlet.request.cipher_suite");
                 X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
-      
 
                 if (null == certs) {
                     throw new CertificateException("No certificate found!", 496);

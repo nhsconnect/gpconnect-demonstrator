@@ -115,7 +115,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         return new RuleBuilder().allowAll().build();
     }
 
-    private void jwtParseResourcesValidation(String claimsJsonString) {
+    private static void jwtParseResourcesValidation(String claimsJsonString) {
         IParser parser = FhirContext
                 .forDstu2()
                 .newJsonParser()
@@ -136,7 +136,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         }
     }
 
-    private void validateNhsNumberInBodyIsSameAsHeader(String nhsNumberFromHeader, byte[] requestDetailsBody, boolean xmlContent) {
+    private static void validateNhsNumberInBodyIsSameAsHeader(String nhsNumberFromHeader, byte[] requestDetailsBody, boolean xmlContent) {
         String nhsNumberFromBody;
 
         try {

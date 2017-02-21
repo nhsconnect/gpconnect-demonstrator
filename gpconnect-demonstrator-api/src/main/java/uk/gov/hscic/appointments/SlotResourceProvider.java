@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.appointment.slot.model.SlotDetail;
@@ -78,7 +79,7 @@ public class SlotResourceProvider  implements IResourceProvider {
         slot.setStartWithMillisPrecision(slotDetail.getStartDateTime());
         slot.setEndWithMillisPrecision(slotDetail.getEndDateTime());
 
-        switch (slotDetail.getFreeBusyType().toLowerCase()) {
+        switch (slotDetail.getFreeBusyType().toLowerCase(Locale.UK)) {
             case "free":
                 slot.setFreeBusyType(SlotStatusEnum.FREE);
                 break;

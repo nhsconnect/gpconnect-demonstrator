@@ -2,6 +2,7 @@ package uk.gov.hscic.common.filters.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import java.util.Objects;
 
 public class RequestBody {
     private String resourceType;
@@ -21,7 +22,7 @@ public class RequestBody {
         return parameters
                 .stream()
                 .map(Parameter::getValueIdentifier)
-                .filter(identifier -> null != identifier)
+                .filter(Objects::nonNull)
                 .filter(identifier -> system.equals(identifier.getSystem()))
                 .map(Identifier::getValue)
                 .findFirst()

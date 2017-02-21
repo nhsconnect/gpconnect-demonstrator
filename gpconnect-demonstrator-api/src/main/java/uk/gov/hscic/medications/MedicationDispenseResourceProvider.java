@@ -12,6 +12,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.medication.dispense.model.MedicationDispenseDetail;
@@ -34,14 +35,14 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
 
         List<MedicationDispenseDetail> medicationDispenseDetailList = medicationDispenseSearch.findMedicationDispenseForPatient(Long.parseLong(patientId));
 
-        if (medicationDispenseDetailList != null && medicationDispenseDetailList.size() > 0) {
+        if (medicationDispenseDetailList != null && !medicationDispenseDetailList.isEmpty()) {
             for (MedicationDispenseDetail medicationDispenseDetail : medicationDispenseDetailList) {
                 MedicationDispense medicationDispense = new MedicationDispense();
                 medicationDispense.setId(String.valueOf(medicationDispenseDetail.getId()));
                 medicationDispense.getMeta().setLastUpdated(medicationDispenseDetail.getLastUpdated());
                 medicationDispense.getMeta().setVersionId(String.valueOf(medicationDispenseDetail.getLastUpdated().getTime()));
 
-                switch (medicationDispenseDetail.getStatus().toLowerCase()) {
+                switch (medicationDispenseDetail.getStatus().toLowerCase(Locale.UK)) {
                     case "completed":
                         medicationDispense.setStatus(MedicationDispenseStatusEnum.COMPLETED);
                         break;

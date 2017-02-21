@@ -17,6 +17,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.medication.order.model.MedicationOrderDetails;
@@ -38,7 +39,7 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
         ArrayList<MedicationOrder> medicationOrders = new ArrayList<>();
         List<MedicationOrderDetails> medicationOrderDetailsList = medicationOrderSearch.findMedicationOrdersForPatient(Long.parseLong(patientId));
 
-        if (medicationOrderDetailsList != null && medicationOrderDetailsList.size() > 0) {
+        if (medicationOrderDetailsList != null && !medicationOrderDetailsList.isEmpty()) {
             for (MedicationOrderDetails medicationOrderDetails : medicationOrderDetailsList) {
                 medicationOrders.add(medicationOrderDetailsToMedicationOrderResourceConverter(medicationOrderDetails));
             }
@@ -68,7 +69,7 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
         medicationOrder.getMeta().setVersionId(String.valueOf(medicationOrderDetails.getLastUpdated().getTime()));
         medicationOrder.setDateWritten(new DateTimeDt(medicationOrderDetails.getDateWritten()));
 
-        switch(medicationOrderDetails.getOrderStatus().toLowerCase()){
+        switch (medicationOrderDetails.getOrderStatus().toLowerCase(Locale.UK)) {
             case "active":
                 medicationOrder.setStatus(MedicationOrderStatusEnum.ACTIVE);
                 break;
@@ -94,7 +95,7 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
         } else {
             medicationOrder.setPatient(new ResourceReferenceDt());
         }
-        
+
         medicationOrder.setPrescriber(new ResourceReferenceDt("Practitioner/"+medicationOrderDetails.getAutherId()));
         medicationOrder.setMedication(new ResourceReferenceDt("Medication/"+medicationOrderDetails.getMedicationId()));
         medicationOrder.addDosageInstruction().setText(medicationOrderDetails.getDosageText());

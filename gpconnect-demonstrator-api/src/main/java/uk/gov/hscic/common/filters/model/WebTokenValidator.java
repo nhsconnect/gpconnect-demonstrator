@@ -5,7 +5,7 @@ import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import java.util.Arrays;
 import java.util.List;
 import static uk.gov.hscic.OperationConstants.CODE_BAD_REQUEST;
-import  static uk.gov.hscic.OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
+import static uk.gov.hscic.OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME;
 import static uk.gov.hscic.OperationConstants.SYSTEM_WARNING_CODE;
 import uk.gov.hscic.OperationOutcomeFactory;
 

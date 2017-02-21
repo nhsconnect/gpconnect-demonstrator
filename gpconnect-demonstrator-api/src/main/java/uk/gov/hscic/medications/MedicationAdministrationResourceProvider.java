@@ -30,7 +30,7 @@ public class MedicationAdministrationResourceProvider  implements IResourceProvi
 
         List<MedicationAdministrationDetail> medicationAdministrationDetailList = medicationAdministrationSearch.findMedicationAdministrationForPatient(Long.parseLong(patientId));
 
-        if (medicationAdministrationDetailList != null && medicationAdministrationDetailList.size() > 0) {
+        if (medicationAdministrationDetailList != null && !medicationAdministrationDetailList.isEmpty()) {
             for(MedicationAdministrationDetail medicationAdministrationDetail : medicationAdministrationDetailList) {
                 MedicationAdministration medicationAdministration = new MedicationAdministration();
                 medicationAdministration.setId(String.valueOf(medicationAdministrationDetail.getId()));

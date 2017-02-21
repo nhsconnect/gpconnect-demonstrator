@@ -52,7 +52,7 @@ public class ScheduleResourceProvider implements IResourceProvider {
         ArrayList<Schedule> schedules = new ArrayList<>();
         List<ScheduleDetail> scheduleDetails = scheduleSearch.findScheduleForLocationId(Long.valueOf(locationId), new Date(startDateTime), new Date(endDateTime));
 
-        if (scheduleDetails != null && scheduleDetails.size() > 0) {
+        if (scheduleDetails != null && !scheduleDetails.isEmpty()) {
             for (ScheduleDetail scheduleDetail : scheduleDetails) {
                 schedules.add(scheduleDetailToScheduleResourceConverter(scheduleDetail));
             }

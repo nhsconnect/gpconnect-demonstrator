@@ -13,7 +13,7 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -47,7 +47,7 @@ public class LocationResourceProvider implements IResourceProvider {
         }
 
         return locationDetails.stream()
-                .map(locationDetail -> locationDetailsToLocation(locationDetail))
+                .map(LocationResourceProvider::locationDetailsToLocation)
                 .collect(Collectors.toList());
     }
 
@@ -64,15 +64,13 @@ public class LocationResourceProvider implements IResourceProvider {
         return locationDetailsToLocation(locationDetails);
     }
 
-    private Location locationDetailsToLocation(LocationDetails locationDetails) {
+    private static Location locationDetailsToLocation(LocationDetails locationDetails) {
         Location location = new Location();
-        List<IdentifierDt> identifier = new ArrayList<>();
-        identifier.add(new IdentifierDt(locationDetails.getSiteOdsCode(), locationDetails.getSiteOdsCodeName()));
         location.setId(new IdDt(locationDetails.getId()));
         location.getMeta().setLastUpdated(locationDetails.getLastUpdated());
         location.getMeta().setVersionId(String.valueOf(locationDetails.getLastUpdated().getTime()));
         location.setName(new StringDt(locationDetails.getName()));
-        location.setIdentifier(identifier);
+        location.setIdentifier(Collections.singletonList(new IdentifierDt(locationDetails.getSiteOdsCode(), locationDetails.getSiteOdsCodeName())));
         return location;
     }
 }

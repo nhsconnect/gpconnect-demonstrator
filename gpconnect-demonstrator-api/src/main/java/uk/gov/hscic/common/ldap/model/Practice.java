@@ -12,7 +12,7 @@ public class Practice {
     private String apiEndpointURL;
 
     @JsonProperty("ASID")
-    private String ASID;
+    private String asid;
 
     public String getId() {
         return id;
@@ -62,11 +62,11 @@ public class Practice {
         this.apiEndpointURL = apiEndpointURL;
     }
 
-    public String getASID() {
-        return ASID;
+    public String getAsid() {
+        return asid;
     }
 
-    public void setASID(String ASID) {
-        this.ASID = ASID;
+    public void setAsid(String asid) {
+        this.asid = asid;
     }
 }

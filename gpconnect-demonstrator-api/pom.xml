@@ -24,9 +24,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <name>gpconnect-demonstrator-api</name>
     <artifactId>gpconnect-demonstrator-api</artifactId>
     <packaging>war</packaging>
+    <name>gpconnect-demonstrator-api</name>
 
     <dependencies>
         <dependency>
@@ -173,7 +173,6 @@
                         </executions>
 
                         <configuration>
-                       
                             <path>/</path>
                             <port>19191</port>
                             <httpsPort>19192</httpsPort>

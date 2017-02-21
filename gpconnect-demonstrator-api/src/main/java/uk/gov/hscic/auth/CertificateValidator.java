@@ -45,7 +45,7 @@ public final class CertificateValidator {
                     throw new CertificateException("Provided certificate is not in trusted list!", 495);
                 } else { // Otherwise, check the expiry
                     knownCerts.stream()
-                            .filter(cert -> x509Certificate.equals(cert))
+                            .filter(x509Certificate::equals)
                             .peek(cert -> LOG.info("Certificate valid until: " + cert.getNotAfter()))
                             .filter(cert -> new Date().before(cert.getNotAfter()))
                             .findAny()

@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +126,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         return appointmentSearch.searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUppderDate)
                 .stream()
-                .map(appointmentDetail -> appointmentDetailToAppointmentResourceConverter(appointmentDetail))
+                .map(this::appointmentDetailToAppointmentResourceConverter)
                 .collect(Collectors.toList());
     }
 
@@ -193,7 +194,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             slot.setAppointmentId(appointmentDetail.getId());
             slot.setFreeBusyType("BUSY");
             slot.setLastUpdated(new Date());
-            slot = slotStore.saveSlot(slot);
+            slotStore.saveSlot(slot);
         }
 
         // Build response containing the new resource id
@@ -294,7 +295,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointment.addUndeclaredExtension(true, "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0", new StringDt(appointmentDetail.getCancellationReason()));
         appointment.setIdentifier(Collections.singletonList(new IdentifierDt("http://fhir.nhs.net/Id/gpconnect-appointment-identifier", String.valueOf(appointmentDetail.getId()))));
 
-        switch (appointmentDetail.getStatus().toLowerCase()) {
+        switch (appointmentDetail.getStatus().toLowerCase(Locale.UK)) {
             case "pending":
                 appointment.setStatus(AppointmentStatusEnum.PENDING);
                 break;
@@ -368,12 +369,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         List<ExtensionDt> extension = appointment.getUndeclaredExtensionsByUrl("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0");
 
-        if (extension != null && extension.size() > 0) {
+        if (extension != null && !extension.isEmpty()) {
             String cancellationReason = extension.get(0).getValue().toString();
             appointmentDetail.setCancellationReason(cancellationReason);
         }
 
-        appointmentDetail.setStatus(appointment.getStatus().toLowerCase());
+        appointmentDetail.setStatus(appointment.getStatus().toLowerCase(Locale.UK));
         appointmentDetail.setTypeCode(Long.valueOf(appointment.getType().getCodingFirstRep().getCode()));
         appointmentDetail.setTypeDisplay(appointment.getType().getCodingFirstRep().getDisplay());
         appointmentDetail.setReasonCode(appointment.getReason().getCodingFirstRep().getCode());

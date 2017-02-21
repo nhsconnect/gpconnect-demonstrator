@@ -82,7 +82,7 @@ public class EndpointResolver {
                 .stream()
                 .filter(practice -> odsCode.equals(practice.getOdsCode()))
                 .filter(practice -> practice.getInteractionIds().contains("*") || practice.getInteractionIds().contains(interactionId))
-                .map(practice -> format(practice.getEndpointURL(), practice.getASID()))
+                .map(practice -> format(practice.getEndpointURL(), practice.getAsid()))
                 .findFirst()
                 .orElse(null);
 
@@ -94,7 +94,7 @@ public class EndpointResolver {
     }
 
     private List<Practice> loadPractices() throws IOException {
-        if (Files.exists(providerRoutingFilePath)) {
+        if (providerRoutingFilePath.toFile().exists()) {
             return new ObjectMapper()
                     .readValue(Files.readAllBytes(providerRoutingFilePath), ProviderRouting.class)
                     .getPractices();
@@ -164,16 +164,20 @@ public class EndpointResolver {
 
             if (serverKeyManager == null && trustManager == null) {
                 // Create Key Manager
-                KeyStore serverKeys = KeyStore.getInstance(keystoreType);
-                serverKeys.load(new FileInputStream(keystore), keystorePassword.toCharArray());
-                serverKeyManager = KeyManagerFactory.getInstance("SunX509");
-                serverKeyManager.init(serverKeys, keystorePassword.toCharArray());
+                try (FileInputStream keystoreInputStream = new FileInputStream(keystore)) {
+                    KeyStore serverKeys = KeyStore.getInstance(keystoreType);
+                    serverKeys.load(keystoreInputStream, keystorePassword.toCharArray());
+                    serverKeyManager = KeyManagerFactory.getInstance("SunX509");
+                    serverKeyManager.init(serverKeys, keystorePassword.toCharArray());
+                }
 
                 // Create New Trust Store
-                KeyStore serverTrustStore = KeyStore.getInstance(keystoreType);
-                serverTrustStore.load(new FileInputStream(keystore), keystorePassword.toCharArray());
-                trustManager = TrustManagerFactory.getInstance("SunX509");
-                trustManager.init(serverTrustStore);
+                try (FileInputStream keystoreInputStream = new FileInputStream(keystore)) {
+                    KeyStore serverTrustStore = KeyStore.getInstance(keystoreType);
+                    serverTrustStore.load(keystoreInputStream, keystorePassword.toCharArray());
+                    trustManager = TrustManagerFactory.getInstance("SunX509");
+                    trustManager.init(serverTrustStore);
+                }
             }
 
             // Set SSL Trust and Key stores in the config
@@ -195,6 +199,7 @@ public class EndpointResolver {
             connection.unBind();
         } catch (Exception e) {
             LOG.error(uuid + " Error - " + e.getMessage());
+        } finally {
             if (connection != null) {
                 connection.close();
             }
@@ -203,7 +208,7 @@ public class EndpointResolver {
         return returnList;
     }
 
-    private String format(String endpointURL, String asid) {
+    private static String format(String endpointURL, String asid) {
         return "{ \"endpointURL\" : \"" + endpointURL + "\", \"recievingSysASID\" : \"" + asid + "\"}";
     }
 }

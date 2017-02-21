@@ -52,7 +52,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         if (providerRoutingFile != null) {
             Path providerRoutingFilePath = Paths.get(providerRoutingFile);
 
-            if (Files.exists(providerRoutingFilePath)) {
+            if (providerRoutingFilePath.toFile().exists()) {
                 try {
                     systemSspToHeader = new ObjectMapper()
                             .readValue(Files.readAllBytes(providerRoutingFilePath), ProviderRouting.class)
@@ -94,8 +94,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             throwInvalidRequestException(SSP_INTERACTIONID + " header blank");
         }
 
-        String URL = httpRequest.getRequestURI();
-        if (!URL.equals(createMapUsingid(getIdFromUrl(URL)).get(interactionIdHeader))) {
+        String url = httpRequest.getRequestURI();
+        if (!url.equals(createMapUsingId(getIdFromUrl(url)).get(interactionIdHeader))) {
             throwInvalidRequestException("InteractionId Incorrect");
         }
 
@@ -112,7 +112,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         return true;
     }
 
-    private Map<String, String> createMapUsingid(int id) {
+    private static Map<String, String> createMapUsingId(int id) {
         return new HashMap<String, String>() {{
             put("urn:nhs:names:services:gpconnect:fhir:rest:read:metadata", "/fhir/metadata");
             put("urn:nhs:names:services:gpconnect:fhir:rest:read:patient", "/fhir/Patient/" + id);
@@ -159,7 +159,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }};
     }
 
-    private void throwInvalidRequestException(String exceptionMessage) {
+    private static void throwInvalidRequestException(String exceptionMessage) {
         throw new InvalidRequestException(exceptionMessage, OperationOutcomeFactory.buildOperationOutcome(
                 OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER, exceptionMessage,
                 OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
@@ -202,9 +202,11 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     }
 
     // This method finds the patient No which is different from the NHS number
-    private Integer getIdFromUrl(String URL) {
-        Matcher m = Pattern.compile("-?\\d+").matcher(URL);
+    private static Integer getIdFromUrl(String url) {
+        Matcher m = Pattern.compile("-?\\d+").matcher(url);
 
-        return m.find() ? Integer.parseInt(m.group()) : 0;
+        return m.find()
+                ? Integer.parseInt(m.group())
+                : 0;
     }
 }

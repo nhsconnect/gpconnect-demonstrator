@@ -22,6 +22,7 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.practitioner.model.PractitionerDetails;
@@ -56,7 +57,7 @@ public class PractitionerResourceProvider  implements IResourceProvider {
         ArrayList<Practitioner> practitioners = new ArrayList<>();
         List<PractitionerDetails> practitionerDetailsList = Collections.singletonList(practitionerSearch.findPractitionerByUserId(practitionerId.getValue()));
 
-        if (practitionerDetailsList != null && practitionerDetailsList.size() > 0) {
+        if (practitionerDetailsList != null && !practitionerDetailsList.isEmpty()) {
             for (PractitionerDetails practitionerDetails : practitionerDetailsList) {
                 Practitioner practitioner = practitionerDetailsToPractitionerResourceConverter(practitionerDetails);
                 practitioner.setId(String.valueOf(practitionerDetails.getId()));
@@ -82,7 +83,7 @@ public class PractitionerResourceProvider  implements IResourceProvider {
         name.setUse(NameUseEnum.USUAL);
         practitioner.setName(name);
 
-        switch (practitionerDetails.getGender().toLowerCase()) {
+        switch (practitionerDetails.getGender().toLowerCase(Locale.UK)) {
             case "male":
                 practitioner.setGender(AdministrativeGenderEnum.MALE);
                 break;

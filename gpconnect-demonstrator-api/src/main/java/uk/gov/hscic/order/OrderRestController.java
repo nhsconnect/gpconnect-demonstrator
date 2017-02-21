@@ -27,11 +27,11 @@ public class OrderRestController {
     @GetMapping("/patient/{patientId}")
     public List<OrderDetail> findOrdersByPatientId(
             @PathVariable("patientId") Long patientId,
-            @RequestParam(value = "recieved", required = false, defaultValue = "true") boolean p_recieved,
-            @RequestParam(value = "sent", required = false, defaultValue = "false") boolean p_sent) {
+            @RequestParam(value = "recieved", required = false, defaultValue = "true") boolean recieved,
+            @RequestParam(value = "sent", required = false, defaultValue = "false") boolean sent) {
         return orderSearch.findOrdersForPatientId(patientId)
                 .stream()
-                .filter(order -> (order.getRecieved() && p_recieved) || (!order.getRecieved() && p_sent))
+                .filter(order -> (order.getRecieved() && recieved) || (!order.getRecieved() && sent))
                 .collect(Collectors.toList());
     }
 

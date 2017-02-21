@@ -39,6 +39,41 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private static final String SSP_TO = "Ssp-To";
     private static final String SSP_TRACEID = "Ssp-TraceId";
 
+    private static final Map<String, String> INTERACTION_MAP = new HashMap<String, String>() {{
+        put("urn:nhs:names:services:gpconnect:fhir:rest:read:metadata", "/fhir/metadata");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:read:patient", "/fhir/Patient/%ID%");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient", "/fhir/Patient");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner", "/fhir/Practitioner/%ID%");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:search:practitioner", "/fhir/Practitioner");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:read:organization", "/fhir/Organization/%ID%");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:search:organization", "/fhir/Organization");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:read:location", "/fhir/Location/%ID%");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:search:location", "/fhir/Location");
+        put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord", "/fhir/Patient/$gpc.getcarerecord");
+        put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule", "/fhir/Organization/1/$gpc.getschedule");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:read:appointment", "/fhir/Appointment/%ID%");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:create:appointment", "/fhir/Appointment");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:update:appointment", "/fhir/Appointment/%ID%");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:create:order", "/fhir/Order");
+        put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments", "/fhir/Patient/%ID%/Appointment");
+        put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient", "/fhir/Patient/$gpc.registerpatient");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/AllergyIntolerance.read", "/fhir/AllergyIntolerance");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Condition.read", "/fhir/Condition");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticOrder.read", "/fhir/DiagnosticOrder");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticReport.read", "/fhir/DiagnosticReport");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Encounter.read", "/fhir/Encounter");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Flag.read", "/fhir/Flag");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Immunization.read", "/fhir/Immunization");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationOrder.read", "/fhir/MedicationOrder");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationDispense.read", "/fhir/MedicationDispense");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationAdministration.read", "/fhir/MedicationAdministration");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Observation.read", "/fhir/Observation");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Problem.read", "/fhir/Problem");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Procedures.read", "/fhir/Procedure");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Referral.read", "/fhir/Referral");
+        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Appointment.read", "/fhir/Appointment");
+    }};
+
     @Autowired
     private CertificateValidator certificateValidator;
 
@@ -68,8 +103,6 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     public boolean incomingRequestPreProcessed(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         certificateValidator.validateRequest(httpRequest); // Validate certificate first!
 
-        String failedMsg = "";
-
         // Check there is a Ssp-TraceID header
         if (StringUtils.isBlank(httpRequest.getHeader(SSP_TRACEID))) {
             throwInvalidRequestException(SSP_TRACEID + "header blank");
@@ -86,7 +119,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             throwInvalidRequestException(SSP_TO + " header blank");
         } else if (systemSspToHeader != null && !toASIDHeader.equalsIgnoreCase(systemSspToHeader)) {
             // We loaded our ASID but the SSP-To header does not match the value
-            failedMsg += SSP_TO + " header does not match ASID of system,";
+            throwBadRequestException(SSP_TO + " header does not match ASID of system");
         }
 
         String interactionIdHeader = httpRequest.getHeader(SSP_INTERACTIONID);
@@ -95,68 +128,17 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         String url = httpRequest.getRequestURI();
-        if (!url.equals(createMapUsingId(getIdFromUrl(url)).get(interactionIdHeader))) {
+        if (!url.equals(INTERACTION_MAP.get(interactionIdHeader).replace("%ID%", String.valueOf(getIdFromUrl(url))))) {
             throwInvalidRequestException("InteractionId Incorrect");
-        }
-
-        if (!failedMsg.isEmpty()) {
-            try {
-                httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, StringUtils.chop(failedMsg));
-            } catch (IOException e) {
-                LOG.error("Error adding response message for Failed validation: (" + failedMsg + ") " + e.getMessage());
-            }
-
-            return false;
         }
 
         return true;
     }
 
-    private static Map<String, String> createMapUsingId(int id) {
-        return new HashMap<String, String>() {{
-            put("urn:nhs:names:services:gpconnect:fhir:rest:read:metadata", "/fhir/metadata");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:read:patient", "/fhir/Patient/" + id);
-            put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient", "/fhir/Patient");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner", "/fhir/Practitioner/" + id);
-            put("urn:nhs:names:services:gpconnect:fhir:rest:search:practitioner", "/fhir/Practitioner");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:read:organization", "/fhir/Organization/" + id);
-            put("urn:nhs:names:services:gpconnect:fhir:rest:search:organization", "/fhir/Organization");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:read:location", "/fhir/Location/" + id);
-            put("urn:nhs:names:services:gpconnect:fhir:rest:search:location", "/fhir/Location");
-            put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord",
-                    "/fhir/Patient/$gpc.getcarerecord");
-            put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule",
-                    "/fhir/Organization/1/$gpc.getschedule");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:read:appointment", "/fhir/Appointment/" + id);
-            put("urn:nhs:names:services:gpconnect:fhir:rest:create:appointment", "/fhir/Appointment");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:update:appointment", "/fhir/Appointment/" + id);
-            put("urn:nhs:names:services:gpconnect:fhir:rest:create:order", "/fhir/Order");
-            put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments",
-                    "/fhir/Patient/" + id + "/Appointment");
-            put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient",
-                    "/fhir/Patient/$gpc.registerpatient");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/AllergyIntolerance.read",
-                    "/fhir/AllergyIntolerance");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Condition.read", "/fhir/Condition");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticOrder.read",
-                    "/fhir/DiagnosticOrder");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticReport.read",
-                    "/fhir/DiagnosticReport");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Encounter.read", "/fhir/Encounter");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Flag.read", "/fhir/Flag");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Immunization.read", "/fhir/Immunization");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationOrder.read",
-                    "/fhir/MedicationOrder");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationDispense.read",
-                    "/fhir/MedicationDispense");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationAdministration.read",
-                    "/fhir/MedicationAdministration");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Observation.read", "/fhir/Observation");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Problem.read", "/fhir/Problem");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Procedures.read", "/fhir/Procedure");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Referral.read", "/fhir/Referral");
-            put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Appointment.read", "/fhir/Appointment");
-        }};
+    private static void throwBadRequestException(String exceptionMessage) {
+        throw new InvalidRequestException(exceptionMessage, OperationOutcomeFactory.buildOperationOutcome(
+                OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_BAD_REQUEST, exceptionMessage,
+                OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
     }
 
     private static void throwInvalidRequestException(String exceptionMessage) {

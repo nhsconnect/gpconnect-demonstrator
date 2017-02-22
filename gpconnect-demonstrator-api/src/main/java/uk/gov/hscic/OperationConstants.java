@@ -29,5 +29,8 @@ public final class OperationConstants {
     public static final String META_GP_CONNECT_OPERATIONOUTCOME = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
     public static final String META_GP_CONNECT_PRACTITIONER = "http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1";
     public static final String META_GP_CONNECT_CARERECORD_COMPOSITION = "http://fhir.nhs.net/StructureDefinition/gpconnect-carerecord-composition-1";
+    
+    
+    public static final String SYSTEM_INVALID = "System Invalid";
 
 }

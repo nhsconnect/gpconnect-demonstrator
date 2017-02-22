@@ -239,6 +239,38 @@ VALUES (
   "Type II diabetes mellitus",
   "Major",
   "Treated daily"
+  ),(
+   9476719931,
+  "Active",
+  '2000-07-25 12:00:00',
+ '2016-07-25 12:00:00',
+  "Low Back Pain",
+  "Minor",
+  "Treated daily"
+  ),(
+   9476719931,
+  "Inactive",
+  '2003-07-25 12:00:00',
+ '2016-07-25 12:00:00',
+  "Asthma",
+  "Major",
+  "Treated daily"
+  ),(
+   9476719931,
+  "Inactive",
+  '2008-07-25 12:00:00',
+ '2012-07-25 12:00:00',
+  "Disorder of hear",
+  "Major",
+  "Treated daily"
+  ),(
+   9476719931,
+  "Inactive",
+  '2000-07-25 12:00:00',
+ '2005-07-25 12:00:00',
+  "Low back pain",
+  "Minor",
+  "Treated daily"
   );
 
 INSERT INTO gpconnect.referrals

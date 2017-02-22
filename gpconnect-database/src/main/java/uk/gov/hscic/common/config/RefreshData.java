@@ -41,6 +41,7 @@ public class RefreshData {
         store.clearOrders();
     }
 
+    @SuppressWarnings("deprecation")
     public void resetAppointments() {
 
         RepoSource sourceType = RepoSourceType.fromString(null);
@@ -78,6 +79,7 @@ public class RefreshData {
             try {
                 if (reader != null) { reader.close(); }
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

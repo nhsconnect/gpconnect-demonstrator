@@ -205,11 +205,23 @@ VALUES (
 );
 
 INSERT INTO gpconnect.medications_html
-  (id, html, provider, lastUpdated)
+  (nhsNumber, currentRepeatPast, startDate, medicationItem, scheduledEnd, daysDuration, details, lastIssued, reviewDate, numberIssued, maxIssued, typeMed)
 VALUES (
-  9476719931,
-  "<div><h2>Summary</h2><table><thead><th>Start Date</th><th>Medication Item</th><th>Type</th><th>Scheduled End Date</th><th>Days Duration</th><th>Details</th></thead><tbody><tr><td>Lansoprazole 15mg gastro-resistant capsules</td><td>2</td><td></td><td>Yes</td><td>02-Apr-2016</td></tr><tr><td>Amoxicillin 500mg capsules Supply ( 42 ) capsule(s)</td><td>24</td><td>Yes</td><td>Yes</td><td>02-Oct-2015</td></tr><tr><td>Colofac 135mg tablets (BGP Products Ltd)</td><td>1</td><td></td><td></td><td>18-Jul-2014</td></tr><tr><td>Metformin 500mg tablets</td><td>6</td><td>Yes</td><td></td><td>12-Feb-2012</td></tr></tbody></table><h2>Current Medication Issues</h2><table><thead><th>Last Issued</th><th>Medication Item</th><th>Start Date</th><th>Review Date</th><th>Number Issued</th><th>Max Issues</th><th>Details</th></thead><tbody><tr><td>02-Apr-2016</td><td>Lansoprazole 15mg gastro-resistant capsules maximum 6 allowed Supply ( 56 ) capsule(s) TAKE ONE ONCE DAILY</td><td>28-May-2016</td><td>56</td><td>Repeat issue</td></tr></tbody></table><h2>Current Repeat Medications</h2><table><thead><tr><th>Start Date</th><th>Medication Item</th><th>Type</th><th>Last Issued</th><th>Review Date</th><th>Number Issued</th><th>Max Issued</th><th>Details</th></tr></thead><tbody><tr><td>02-Apr-2016</td><td>Lansoprazole 15mg gastro-resistant capsules maximum 6 allowed Supply ( 56 ) capsule(s) TAKE ONE ONCE DAILY</td><td>Current</td><td>Repeat</td><td>02-Apr-2016</td><td>28-May-2016</td><td>1</td><td>5</td><td></td></tr></tbody></table><h2>Past Medications</h2><table><thead><th>Start Date</th><th>Medication Item</th><th>Type</th><th>Last Issued</th><th>Review Date</th><th>Number Issued</th><th>Max Issued</th><th>Details</th></thead><tbody><tr><td>02-Oct-2015</td><td>Amoxicillin 500mg capsules Supply ( 42 ) capsule(s) 1 THREE TIMES A DAY</td><td>Repeat</td><td>20-Feb-2016</td><td>28-Feb-2016</td><td>12</td><td>12</td><td></td></tr><tr><td>02-Oct-2015</td><td>Amoxicillin 500mg capsules Supply ( 42 ) capsule(s) 1 THREE TIMES A DAY</td><td>Acute</td><td>20-Feb-2016</td><td>28-Feb-2016</td><td>12</td><td></td><td></td></tr><tr><td>18-Jul-2014</td><td>Colofac 135mg tablets (BGP Products Ltd) - 24 tablet - take two a day</td><td>Acute</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>12-Feb-2012</td><td>Metformin 500mg tablets maximum 6 allowed Supply ( 112 ) tablet(s) TAKE ONE TWICE DAILY</td><td>Repeat</td><td>11-Oct-2012</td><td></td><td>6</td><td>6</td><td></td></tr></tbody></table></div>","TPP",
-  '2016-07-25 12:00:00'
+  9476719931,"Current","14-09-2005", "Lansoprazole 15mg gastro-resistant capsules","19-11-2019","Day Duration 2","3", NULL,NULL, NULL, NULL,"4"
+),(
+  9476719931,"Current","14-09-2011", "Amoxicillin 500mg capsules Supply ( 42 ) capsule(s)","19-11-2019","Day Duration 4","3", NULL,NULL, NULL, NULL,"2"
+),(
+  9476719931,"Current","14-09-2012", "Colofac 135mg tablets (BGP Products Ltd)","19-11-2019","Day Duration 4","3", NULL,NULL, NULL, NULL,"32"
+),(
+  9476719931,"Current","14-09-2014", "Metformin 500mg tablets","19-11-2019","Day Duration 4","3", "Issue more","Issue more", "Issue more", "Issue more","4"
+),(
+  9476719931,"Repeat","14-09-2014", "Metformin 500mg tablets","19-11-2019","Day Duration 4","3","Issue more","Issue more", "Issue more", "Issue more","4"
+),(
+  9476719931,"Past","14-09-2014", "Metformin 500mg tablets","19-11-2019","Day Duration 4","3", "Issue more","Issue more", "Issue more", "Issue more","4"
+),(
+  9476719931,"Past","14-09-2014", "Metformin 500mg tablets","19-11-2019","Day Duration 4","3", "Issue more","Issue more", "Issue more", "Issue more","4"
+),(
+  9476719931,"Past","14-09-2014", "Metformin 500mg tablets","19-11-2019","Day Duration 4","3","Issue more","Issue more", "Issue more", "Issue more","4"
 );
 
 INSERT INTO gpconnect.observations

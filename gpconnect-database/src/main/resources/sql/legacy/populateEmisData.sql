@@ -140,12 +140,13 @@ Expiry Date: 04-Oct-2016",
 
 
 INSERT INTO gpconnect.medications_html
-  (id, html, provider, lastUpdated)
+  (nhsNumber, currentRepeatPast, startDate, medicationItem, scheduledEnd, daysDuration, details, lastIssued, reviewDate, numberIssued, maxIssued, typeMed)
 VALUES (
- 9476719958, 
-"<div><table><thead><tr><th>Date</th><th>Vaccination</th><th>Part</th><th>Contents</th><th>Details</th></tr></thead><tbody><tr><td>04 Oct 2016</td><td>First DTP (triple)+polio vacc.</td><td>Manufacturer : fred<br />Batch: 1<br />Injection Location: Right arm<br />Expiry Date: 04-Oct-2016</td></tr></tbody></table><h2>Refusals</h2>There are no immunisations in the patient's record<table><thead><tr><th>Start Date</th><th>Medication Item</th><th>Type</th><th>Last Issued</th><th>Review Date</th><th>Number Issued</th><th>Max Issued</th><th>Details</th></tr></thead><tbody></div>",
-  "EMIS",
-  '2016-08-24 12:00:00'
+  9476719966,"Current","02-Apr-2016", "Lansoprazole 15mg gastro-resistant capsules","19-11-2019","Day Duration 2","3", NULL,NULL, NULL, NULL,"4"
+),(
+  9476719966,"Repeat","14-09-2014", "Colofac 135mg tablets (BGP Products Ltd)","19-11-2019","Day Duration 4","3","Acute","Issue more", "Issue more", "Issue more","4"
+),(
+  9476719966,"Past","14-09-2014", "Amoxicillin 500mg capsules Supply ( 42 ) capsule(s) 1 THREE TIMES A DAY","19-11-2019","Day Duration 4","3", "Issue more","Issue more", "Issue more", "Issue more","4"
 );
 
 INSERT INTO gpconnect.observations
@@ -158,11 +159,16 @@ VALUES (
 
 
 INSERT INTO gpconnect.problems
-  (id, html, provider, lastUpdated)
+  (nhsNumber,activeOrInactive, startDate,endDate,entry,significance,details)
 VALUES (
- 9476719958, "<div><h2>Active Problems and Issues</h2><table><thead><th>Start Date</th><th>Entry</th><th>Significance</th><th>Details</th></thead><tbody><tr><td>03 Oct 2016</td><td>This is confidential</td></tr><tr><td>29 Sep 2016</td><td>This is confidential</td><td /><td /></tr></tbody></table><h2>Inactive Problems and Issues </h2><table><thead><th>Start Date</th><th>End Date</th><th>Entry</th><th>Significance</th><th>Details</th></thead><tbody><tr><td>02 Oct 1988</td><td>02 Oct 1988</td><td>Trigger finger - acquired -  Still coughing up some thick globules phlegm - leading again to choking</td><td> Major</td><td><br />Episodicity : FIRST</td></tr><tr><td>17 Jul 1988</td><td>17 Jul 1988</td><td>Cardiological referral -  Try 10 days oral steroids and see friday week</td><td> Major</td><td><br />Episodicity : FIRST</td></tr><tr><td>17 Jul 1988</td><td>17 Jul 1988</td><td>Right bundle branch block</td><td> Major</td><td><br />Episodicity : FIRST</td></tr><tr><td>17 Jul 1988</td><td>17 Jul 1988</td><td>This is confidential</td></tr><tr><td>04 Jul 1988</td><td>04 Jul 1988</td><td>Meibomian cyst infected</td><td> Major</td><td><br />Episodicity : FIRST</td></tr><tr><td>31 Jan 1982</td><td>31 Jan 1982</td><td>Motor vehicle traffic accidents (MVTA)</td><td> Major</td><td><br />Episodicity : FIRST</td></tr></tbody></table></div>", "EMIS",
-  '2016-08-24 12:00:00'
-);
+  9476719958,
+  "Active",
+  '2016-07-25 12:00:00',
+ '2016-07-25 12:00:00',
+  "Type II diabetes mellitus",
+  "Major",
+  "Treated daily"
+  );
 
 INSERT INTO gpconnect.referrals
   (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)

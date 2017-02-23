@@ -1,10 +1,11 @@
 package uk.gov.hscic.medications.search;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import uk.gov.hscic.common.service.AbstractLegacyService;
 import uk.gov.hscic.medication.model.MedicationDetails;
 import uk.gov.hscic.medication.model.PatientMedicationHTML;
@@ -22,28 +23,41 @@ public class LegacyMedicationSearch extends AbstractLegacyService implements Med
 
     @Autowired
     private MedicationRepository medicationRepository;
-    
-    private final MedicationEntityToHtmlObjectTransformer transformer = new MedicationEntityToHtmlObjectTransformer();
+
     private final MedicationEntityToMedicationTransformer medicationTransformer = new MedicationEntityToMedicationTransformer();
 
     @Override
     public List<PatientMedicationHTML> findPatientMedicationHTML(final String patientId) {
-        final PatientMedicationHtmlEntity item = medicationHtmlRepository.findOne(Long.parseLong(patientId));
-        if(item == null){
-            return null;
-        } else {
-            return Collections.singletonList(transformer.transform(item));
+        List<PatientMedicationHtmlEntity> items = medicationHtmlRepository.findBynhsNumber(patientId);
+        List<PatientMedicationHTML> medicationList = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            PatientMedicationHTML medicationData = new PatientMedicationHTML();
+            medicationData.setCurrentRepeatPast(items.get(i).getCurrentRepeatPast());
+            medicationData.setStartDate(items.get(i).getStartDate());
+            medicationData.setMedicationItem(items.get(i).getMedicationItem());
+            medicationData.setScheduledEnd(items.get(i).getScheduledEnd());
+            medicationData.setDaysDuration(items.get(i).getDaysDuration());
+            medicationData.setDetails(items.get(i).getDetails());
+            medicationData.setLastIssued(items.get(i).getLastIssued());
+            medicationData.setReviewDate(items.get(i).getReviewDate());
+            medicationData.setNumberIssued(items.get(i).getNumberIssued());
+            medicationData.setMaxIssued(items.get(i).getMaxIssued());
+            medicationData.setTypeMed(items.get(i).getTypeMed());
+            medicationList.add(medicationData);
         }
+
+        return medicationList;
+
     }
 
     @Override
     public MedicationDetails findMedicationByID(Long id) {
         final MedicationEntity item = medicationRepository.findOne(id);
-        if(item == null){
+        if (item == null) {
             return null;
         } else {
             return medicationTransformer.transform(item);
         }
     }
-    
+
 }

@@ -166,9 +166,18 @@ CREATE TABLE gpconnect.allergies (
 
 CREATE TABLE gpconnect.medications_html (
   id                  BIGINT        NOT NULL    AUTO_INCREMENT,
-  html                TEXT(25000) 	NULL,
-  provider            VARCHAR(10)   NULL,
-  lastUpdated		  DATETIME 		NULL,
+  nhsNumber         VARCHAR(100) NULL,
+  currentRepeatPast	VARCHAR(100) NOT NULL,
+  startDate			VARCHAR(100) NULL,
+  medicationItem	VARCHAR(100) NULL,
+  scheduledEnd		VARCHAR(100) NULL,
+  daysDuration		VARCHAR(100) NULL,
+  details			VARCHAR(100) NULL,
+  lastIssued		VARCHAR(100) NULL,
+	reviewDate		VARCHAR(100) NULL,
+   numberIssued		VARCHAR(100) NULL,
+   maxIssued		VARCHAR(100) NULL,
+   typeMed			VARCHAR(100) NULL,
   PRIMARY KEY         (id)
 );
 

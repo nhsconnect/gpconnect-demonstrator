@@ -60,7 +60,6 @@ public class LegacyAppointmentSearch extends AbstractLegacyService implements Ap
 
     @Override
     public List<AppointmentDetail> searchAppointments(Long patientId, Date startLowerDate, Date startUpperDate){
-        String queryParameter = "";
         List<AppointmentEntity> items = appointmentRepository.findByPatientId(patientId);
         ArrayList<AppointmentDetail> appointmentDetails = new ArrayList<>();
         for(AppointmentEntity entity : items){

@@ -1,6 +1,5 @@
 package uk.gov.hscic.medications.model;
 
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,14 +15,41 @@ public class PatientMedicationHtmlEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "html")
-    private String html;
-
-    @Column(name = "provider")
-    private String provider;
+    @Column(name = "nhsNumber")
+    private String nhsNumber;
     
-    @Column(name = "lastUpdated")
-    private Date lastUpdated;
+    @Column(name = "currentRepeatPast")
+    private String currentRepeatPast;
+    
+    @Column(name = "startDate")
+    private String startDate;
+    
+    @Column(name = "medicationItem")
+    private String medicationItem;
+    
+    @Column(name = "scheduledEnd")
+    private String scheduledEnd;
+    
+    @Column(name = "daysDuration")
+    private String daysDuration;
+    
+    @Column(name = "details")
+    private String details;
+    
+    @Column(name = "lastIssued")
+    private String lastIssued;
+    
+    @Column(name = "reviewDate")
+    private String reviewDate;
+    
+    @Column(name = "numberIssued")
+    private String numberIssued;
+    
+    @Column(name = "maxIssued")
+    private String maxIssued;
+    
+    @Column(name = "typeMed")
+    private String typeMed;
 
     public Long getId() {
         return id;
@@ -33,27 +59,101 @@ public class PatientMedicationHtmlEntity {
         this.id = id;
     }
 
-    public String getHtml() {
-        return html;
+    public String getNhsNumber() {
+        return nhsNumber;
     }
 
-    public void setHtml(String html) {
-        this.html = html;
+    public void setNhsNumber(String nhsNumber) {
+        this.nhsNumber = nhsNumber;
     }
 
-    public String getProvider() {
-        return provider;
+    public String getCurrentRepeatPast() {
+        return currentRepeatPast;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
+    public void setCurrentRepeatPast(String currentRepeatPast) {
+        this.currentRepeatPast = currentRepeatPast;
     }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
+
+    public String getMedicationItem() {
+        return medicationItem;
+    }
+
+    public void setMedicationItem(String medicationItem) {
+        this.medicationItem = medicationItem;
+    }
+
+    public String getScheduledEnd() {
+        return scheduledEnd;
+    }
+
+    public void setScheduledEnd(String scheduledEnd) {
+        this.scheduledEnd = scheduledEnd;
+    }
+
+    public String getDaysDuration() {
+        return daysDuration;
+    }
+
+    public void setDaysDuration(String daysDuration) {
+        this.daysDuration = daysDuration;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public String getLastIssued() {
+        return lastIssued;
+    }
+
+    public void setLastIssued(String lastIssued) {
+        this.lastIssued = lastIssued;
+    }
+
+    public String getReviewDate() {
+        return reviewDate;
+    }
+
+    public void setReviewDate(String reviewDate) {
+        this.reviewDate = reviewDate;
+    }
+
+    public String getNumberIssued() {
+        return numberIssued;
+    }
+
+    public void setNumberIssued(String numberIssued) {
+        this.numberIssued = numberIssued;
+    }
+
+    public String getMaxIssued() {
+        return maxIssued;
+    }
+
+    public void setMaxIssued(String maxIssued) {
+        this.maxIssued = maxIssued;
+    }
+
+    public String getTypeMed() {
+        return typeMed;
+    }
+
+    public void setTypeMed(String typeMed) {
+        this.typeMed = typeMed;
+    }
+
+   
 }

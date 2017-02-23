@@ -29,24 +29,20 @@ public class BuildHtmlTable {
 
 
     public String buildEmptyHtml(String sectionName) {
-        return "<div><p>No " + sectionName + " data is recorded for this patient.</p></div>";
+        return "<div><p>No "+ sectionName + " data is recorded for this patient.</p></div>";
     }
 
     public String tableCreationFromObject(TableObject table) {
-
-        table.getTitle();
-
-        StringBuilder layout = new StringBuilder();
-        String tables = tableBuilder(table.getHeaders(), table.getRows(), table.getTitle());
-        layout.append(tables);
-    
-        return layout.toString();
+        return tableBuilder(table.getHeaders(), table.getRows(), table.getTitle());
     }
 
-
     public String addDiv(String htmlTable) {
-        // TODO Auto-generated method stub
-        StringBuilder sb = new StringBuilder("<div>").append(htmlTable).append("</div>");
-        return sb.toString();
+        //Adds the required <div> tags to the start and end of the list of tables.
+        return "<div>" + htmlTable + "</div>";
+    }
+    
+    public String appendTables(String htmlTableMaster, String htmlTableToAppend) {
+        //Adds a new table onto the master table
+        return htmlTableMaster + htmlTableToAppend;
     }
 }

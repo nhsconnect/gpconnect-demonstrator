@@ -1,5 +1,18 @@
 package uk.gov.hscic.patient;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+
+import javax.activation.UnsupportedDataTypeException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.IDatatype;
 import ca.uhn.fhir.model.dstu2.composite.AddressDt;
@@ -51,16 +64,6 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import javax.activation.UnsupportedDataTypeException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
@@ -426,12 +429,14 @@ public class PatientResourceProvider implements IResourceProvider {
 
                             case "PRB":
                                 if (toDate != null && fromDate != null) {
-                                    throw new InvalidRequestException("Date Ranges not allowed to be set");
+                                    throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
                                     List<ProblemListHTML> problemList = problemSearch
                                             .findAllProblemHTMLTables(nhsNumber.get(0));
 
                                     String htmlTable;
+                                    String htmlActiveTable;
+                                    String htmlInactiveTable;
                                     if (problemList != null && !problemList.isEmpty()) {
                                         List<List<Object>> problemActiveRows = new ArrayList<>();
                                         List<List<Object>> problemInactiveRows = new ArrayList<>();
@@ -454,16 +459,15 @@ public class PatientResourceProvider implements IResourceProvider {
                                                 Arrays.asList("Start Date", "Entry", "Significance", "Details"),
                                                 problemActiveRows, "Active Problems and Issues");
 
-                                        htmlTable = buildTable.tableCreationFromObject(problemActiveTable);
+                                        htmlActiveTable = buildTable.tableCreationFromObject(problemActiveTable);
 
                                         TableObject problemInactiveTable = new TableObject(
                                                 Arrays.asList("Start Date", "End Date", "Entry", "Significance",
                                                         "Details"),
                                                 problemInactiveRows, "Inactive Problems and Issues");
 
-                                        htmlTable = htmlTable
-                                                + buildTable.tableCreationFromObject(problemInactiveTable);
-
+                                        htmlInactiveTable = buildTable.tableCreationFromObject(problemInactiveTable);
+                                        htmlTable = buildTable.appendTables(htmlActiveTable, htmlInactiveTable);
                                         htmlTable = buildTable.addDiv(htmlTable);
 
                                     } else {
@@ -501,11 +505,13 @@ public class PatientResourceProvider implements IResourceProvider {
 
                             case "ALL":
                                 if (toDate != null && fromDate != null) {
-                                    throw new InvalidRequestException("Date Ranges not allowed to be set");
+                                    throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
                                     List<AllergyData> allergyList = allergySearch
                                             .findAllAllergyHTMLTables(nhsNumber.get(0));
                                     String htmlTable;
+                                    String htmlCurrent;
+                                    String htmlHistoric;
                                     // change on all
                                     if (allergyList != null && !allergyList.isEmpty()) {
                                         // Change to Lists
@@ -527,15 +533,14 @@ public class PatientResourceProvider implements IResourceProvider {
                                                 Arrays.asList("Start Date", "Details"), currentAllergyRows,
                                                 "Current Allergies and Sensitivities");
 
-                                        htmlTable = buildTable.tableCreationFromObject(currentAllergyTable);
+                                        htmlCurrent = buildTable.tableCreationFromObject(currentAllergyTable);
 
                                         TableObject historicalAllergyTable = new TableObject(
                                                 Arrays.asList("Start Date", "End Date", "Details"),
                                                 historicalAllergyRows, "Inactive Problems and Issues");
 
-                                        htmlTable = htmlTable
-                                                + buildTable.tableCreationFromObject(historicalAllergyTable);
-
+                                        htmlHistoric = buildTable.tableCreationFromObject(historicalAllergyTable);
+                                        htmlTable = buildTable.appendTables(htmlCurrent, htmlHistoric);
                                         htmlTable = buildTable.addDiv(htmlTable);
 
                                     } else {
@@ -574,150 +579,250 @@ public class PatientResourceProvider implements IResourceProvider {
 
                             case "MED":
                                 if (toDate != null && fromDate != null) {
-                                    throw new InvalidRequestException("Date Ranges not allowed to be set");
-                                }
-
-                                List<PatientMedicationHTML> medicationList = medicationSearch
-                                        .findPatientMedicationHTML(nhsNumber.get(0));
-
-                                if (medicationList != null && !medicationList.isEmpty()) {
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "MED",
-                                            medicationList.get(0).getHtml(), "Medications", section, "Medications");
-
-                                    sectionsList.add(section);
+                                    throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
-                                    String htmlTable = buildTable.buildEmptyHtml("Medications");
+                                    String htmlTable;
+                                    String htmlTableCurrent;
+                                    String htmlTableRepeat;
+                                    String htmlTablePast;
+                                    List<PatientMedicationHTML> medicationList = medicationSearch
+                                            .findPatientMedicationHTML(nhsNumber.get(0));
+
+                                    if (medicationList != null && !medicationList.isEmpty()) {
+                                        List<List<Object>> currentMedicationRows = new ArrayList<>();
+                                        List<List<Object>> currentRepeatRows = new ArrayList<>();
+                                        List<List<Object>> historicRepeatRows = new ArrayList<>();
+
+                                        for (PatientMedicationHTML patientMedicationHTML : medicationList) {
+                                            String currentRepeatPast = patientMedicationHTML.getCurrentRepeatPast();
+                                            if ("Current".equals(currentRepeatPast)) {
+                                                currentMedicationRows
+                                                        .add(Arrays.asList(patientMedicationHTML.getStartDate(),
+                                                                patientMedicationHTML.getMedicationItem(),
+                                                                patientMedicationHTML.getTypeMed(),
+                                                                patientMedicationHTML.getScheduledEnd(),
+                                                                patientMedicationHTML.getDaysDuration(),
+                                                                patientMedicationHTML.getDetails()));
+                                            }
+
+                                            if ("Repeat".equals(currentRepeatPast)) {
+                                                currentRepeatRows
+                                                        .add(Arrays.asList(patientMedicationHTML.getLastIssued(),
+                                                                patientMedicationHTML.getMedicationItem(),
+                                                                patientMedicationHTML.getStartDate(),
+                                                                patientMedicationHTML.getReviewDate(),
+                                                                patientMedicationHTML.getNumberIssued(),
+                                                                patientMedicationHTML.getMaxIssued(),
+                                                                patientMedicationHTML.getDetails()));
+                                            }
+
+                                            if ("Past".equals(currentRepeatPast)) {
+                                                historicRepeatRows
+                                                        .add(Arrays.asList(patientMedicationHTML.getStartDate(),
+                                                                patientMedicationHTML.getMedicationItem(),
+                                                                patientMedicationHTML.getTypeMed(),
+                                                                patientMedicationHTML.getLastIssued(),
+                                                                patientMedicationHTML.getReviewDate(),
+                                                                patientMedicationHTML.getNumberIssued(),
+                                                                patientMedicationHTML.getMaxIssued(),
+                                                                patientMedicationHTML.getDetails()));
+                                            }
+                                        }
+
+                                        TableObject currentMedicationTable = new TableObject(
+                                                Arrays.asList("StartDate", "Medication Item", "Type", "Scheduled End",
+                                                        "Days Duration", "Details"),
+                                                currentMedicationRows, "Current Medication Issues");
+
+                                        htmlTableCurrent = buildTable.tableCreationFromObject(currentMedicationTable);
+                                        
+                                        TableObject repeatMedicationTable = new TableObject(
+                                                Arrays.asList("Last Issued", "Medication Item", "Start Date", "Review Date",
+                                                        "Number Issued", "Max Issues", "Details"),
+                                                currentRepeatRows, "Current Repeat Medications");
+                                        
+                                        htmlTableRepeat =  buildTable.tableCreationFromObject(repeatMedicationTable);
+                                        
+                                        TableObject historicMedicationTable = new TableObject(
+                                                Arrays.asList("StartDate", "Medication Item","Type" ,"Last Issued", "Review Date",
+                                                        "Number Issued", "Max Issues", "Details"),
+                                                historicRepeatRows, "Current Repeat Medications");
+                                        
+                                        htmlTablePast =  buildTable.tableCreationFromObject(historicMedicationTable);
+                                        htmlTable = buildTable.appendTables(htmlTableCurrent,htmlTableRepeat);
+                                        htmlTable = buildTable.appendTables(htmlTable,htmlTablePast);
+                                        htmlTable = buildTable.addDiv(htmlTable);
+
+                                    } else {
+                                        htmlTable = buildTable.buildEmptyHtml("Problems");
+
+                                    }
+
                                     section = SectionsCreationClass.buildSection(
                                             OperationConstants.SYSTEM_RECORD_SECTION, "MED", htmlTable, "Medications",
                                             section, "Medications");
                                     sectionsList.add(section);
-                                }
 
-                                // Sructured Data Search
-                                List<MedicationOrder> medicationOrders = medicationOrderResourceProvider
-                                        .getMedicationOrdersForPatientId(patientID);
-                                HashSet<String> medicationOrderMedicationsList = new HashSet<>();
-                                HashSet<String> medicationOrderList = new HashSet<>();
-
-                                for (MedicationOrder medicationOrder : medicationOrders) {
-                                    medicationOrderList.add(medicationOrder.getId().getIdPart());
-                                }
-
-                                List<MedicationDispense> medicationDispenses = medicationDispenseResourceProvider
-                                        .getMedicationDispensesForPatientId(patientID);
-
-                                for (MedicationDispense medicationDispense : medicationDispenses) {
-                                    if (section == null) {
-                                        section = new Section();
-                                    }
-                                    // Add the medication Order to the bundle
-                                    Entry medicationDispenseEntry = new Entry();
-                                    medicationDispenseEntry
-                                            .setFullUrl("MedicationDispense/" + medicationDispense.getId().getIdPart());
-                                    medicationDispenseEntry.setResource(medicationDispense);
-
-                                    medicationsToBundle.add(medicationDispenseEntry);
-                                    section.addEntry().setReference(medicationDispenseEntry.getFullUrl());
-                                    // If we have any new medicationOrders which
-                                    // were not found in the
-                                    // search for MedicationOrders for a patient
-                                    // we need to add them.
-                                    if (!medicationOrderList.contains(medicationDispense.getAuthorizingPrescription()
-                                            .get(0).getReference().getIdPart())) {
-                                        try {
-                                            MedicationOrder medicationOrder = medicationOrderResourceProvider
-                                                    .getMedicationOrderById(medicationDispense
-                                                            .getAuthorizingPrescription().get(0).getReference());
-                                            medicationOrders.add(medicationOrder);
-                                            medicationOrderList.add(medicationOrder.getId().getIdPart());
-                                        } catch (Exception ex) {
-                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                                    .setDetails("MedicationOrder for MedicaitonDispense (id: "
-                                                            + medicationDispense.getId().getIdPart()
-                                                            + ") could not be found in database");
-                                        }
-                                    }
-                                }
-
-                                List<MedicationAdministration> medicationAdministrations = medicationAdministrationResourceProvider
-                                        .getMedicationAdministrationsForPatientId(patientID);
-
-                                for (MedicationAdministration medicationAdministration : medicationAdministrations) {
-                                    if (section == null) {
-                                        section = new Section();
-                                    }
-
-                                    Entry medicationAdministrationEntry = new Entry();
-                                    medicationAdministrationEntry.setFullUrl(
-                                            "MedicationAdministration/" + medicationAdministration.getId().getIdPart());
-                                    medicationAdministrationEntry.setResource(medicationAdministration);
-                                    section.addEntry().setReference(medicationAdministrationEntry.getFullUrl());
-                                    medicationsToBundle.add(medicationAdministrationEntry);
-
-                                    // If we have any new medicationOrders which
-                                    // were not found in the
-                                    // search for MedicationOrders for a patient
-                                    // we need to add them.
-                                    if (!medicationOrderList.contains(
-                                            medicationAdministration.getPrescription().getReference().getIdPart())) {
-                                        try {
-                                            MedicationOrder medicationOrder = medicationOrderResourceProvider
-                                                    .getMedicationOrderById(
-                                                            medicationAdministration.getPrescription().getReference());
-                                            medicationOrders.add(medicationOrder);
-                                            medicationOrderList.add(medicationOrder.getId().getIdPart());
-                                        } catch (Exception ex) {
-                                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                                    .setDetails("MedicationOrder for MedicaitonAdministration (id: "
-                                                            + medicationAdministration.getId().getIdPart()
-                                                            + ") could not be found in database");
-                                        }
-                                    }
-                                }
-
-                                for (MedicationOrder medicationOrder : medicationOrders) {
-                                    if (section == null) {
-                                        section = new Section();
-                                    }
-                                    // Add the medication Order to the bundle
-                                    Entry medicationOrderEntry = new Entry();
-                                    medicationOrderEntry
-                                            .setFullUrl("MedicationOrder/" + medicationOrder.getId().getIdPart());
-                                    medicationOrderEntry.setResource(medicationOrder);
-                                    section.addEntry().setReference(medicationOrderEntry.getFullUrl());
-                                    medicationsToBundle.add(medicationOrderEntry);
-
-                                    // Store the referenced medicaitons in a set
-                                    // so we can get
-                                    // all the medications once and we won't
-                                    // have duplicates
-                                    IdDt medicationId = ((ResourceReferenceDt) medicationOrder.getMedication())
-                                            .getReference();
-                                    medicationOrderMedicationsList.add(medicationId.getValue());
-                                    medicationId = ((ResourceReferenceDt) medicationOrder.getDispenseRequest()
-                                            .getMedication()).getReference();
-                                    medicationOrderMedicationsList.add(medicationId.getValue());
-                                }
-
-                                for (String medicationId : medicationOrderMedicationsList) {
-                                    try {
-                                        Entry medicationEntry = new Entry();
-                                        medicationEntry.setFullUrl(medicationId);
-                                        medicationEntry.setResource(
-                                                medicationResourceProvider.getMedicationById(new IdDt(medicationId)));
-                                        section.addEntry().setReference(medicationEntry.getFullUrl());
-                                        medicationsToBundle.add(medicationEntry);
-                                    } catch (Exception ex) {
-                                        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                                .setDetails("Medication (ID: " + medicationId
-                                                        + ") for MedicaitonOrder could not be found in database");
-                                    }
-                                }
-
-                                if (section != null) {
-                                    sectionsList.add(section);
-                                }
+                                    // // Sructured Data Search
+//                                    List<MedicationOrder> medicationOrders = medicationOrderResourceProvider
+//                                     .getMedicationOrdersForPatientId(patientID);
+//                                     HashSet<String>
+//                                     medicationOrderMedicationsList = new
+//                                     HashSet<>();
+//                                     HashSet<String> medicationOrderList = new
+//                                     HashSet<>();
+//                                    
+//                                     for (MedicationOrder medicationOrder :
+//                                     medicationOrders) {
+//                                     medicationOrderList.add(medicationOrder.getId().getIdPart());
+//                                     }
+//                                    
+//                                     List<MedicationDispense>
+//                                     medicationDispenses =
+//                                     medicationDispenseResourceProvider
+//                                     .getMedicationDispensesForPatientId(patientID);
+//                                    
+//                                     for (MedicationDispense
+//                                     medicationDispense : medicationDispenses)
+//                                     {
+//                                     if (section == null) {
+//                                     section = new Section();
+//                                     }
+//                                     // Add the medication Order to the bundle
+//                                     Entry medicationDispenseEntry = new
+//                                     Entry();
+//                                     medicationDispenseEntry
+//                                     .setFullUrl("MedicationDispense/" +
+//                                     medicationDispense.getId().getIdPart());
+//                                     medicationDispenseEntry.setResource(medicationDispense);
+//                                    
+//                                     medicationsToBundle.add(medicationDispenseEntry);
+//                                     section.addEntry().setReference(medicationDispenseEntry.getFullUrl());
+//                                     // If we have any new medicationOrders
+//                                     //which
+//                                     // were not found in the
+//                                     // search for MedicationOrders for a
+//                                    // patient
+//                                     // we need to add them.
+//                                     if
+//                                     (!medicationOrderList.contains(medicationDispense.getAuthorizingPrescription()
+//                                     .get(0).getReference().getIdPart())) {
+//                                     try {
+//                                     MedicationOrder medicationOrder =
+//                                     medicationOrderResourceProvider
+//                                     .getMedicationOrderById(medicationDispense
+//                                     .getAuthorizingPrescription().get(0).getReference());
+//                                     medicationOrders.add(medicationOrder);
+//                                     medicationOrderList.add(medicationOrder.getId().getIdPart());
+//                                     } catch (Exception ex) {
+//                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+//                                     .setDetails("MedicationOrder for
+//                                     MedicaitonDispense (id: "
+//                                     + medicationDispense.getId().getIdPart()
+//                                     + ") could not be found in database");
+//                                     }
+//                                     }
+//                                     }
+//                                    
+//                                     List<MedicationAdministration>
+//                                     medicationAdministrations =
+//                                     medicationAdministrationResourceProvider
+//                                     .getMedicationAdministrationsForPatientId(patientID);
+//                                    
+//                                     for (MedicationAdministration
+//                                     medicationAdministration :
+//                                     medicationAdministrations) {
+//                                     if (section == null) {
+//                                     section = new Section();
+//                                     }
+//                                    
+//                                     Entry medicationAdministrationEntry = new
+//                                     Entry();
+//                                     medicationAdministrationEntry.setFullUrl(
+//                                     "MedicationAdministration/" +
+//                                     medicationAdministration.getId().getIdPart());
+//                                     medicationAdministrationEntry.setResource(medicationAdministration);
+//                                     section.addEntry().setReference(medicationAdministrationEntry.getFullUrl());
+//                                     medicationsToBundle.add(medicationAdministrationEntry);
+//                                    
+//                                     // If we have any new medicationOrders
+//                                     which
+//                                     // were not found in the
+//                                     // search for MedicationOrders for a
+//                                     patient
+//                                     // we need to add them.
+//                                     if (!medicationOrderList.contains(
+//                                     medicationAdministration.getPrescription().getReference().getIdPart()))
+//                                     {
+//                                     try {
+//                                     MedicationOrder medicationOrder =
+//                                     medicationOrderResourceProvider
+//                                     .getMedicationOrderById(
+//                                     medicationAdministration.getPrescription().getReference());
+//                                     medicationOrders.add(medicationOrder);
+//                                     medicationOrderList.add(medicationOrder.getId().getIdPart());
+//                                     } catch (Exception ex) {
+//                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+//                                     .setDetails("MedicationOrder for
+//                                     MedicaitonAdministration (id: "
+//                                     +
+//                                     medicationAdministration.getId().getIdPart()
+//                                     + ") could not be found in database");
+//                                     }
+//                                     }
+//                                     }
+//                                    
+//                                     for (MedicationOrder medicationOrder :
+//                                     medicationOrders) {
+//                                     if (section == null) {
+//                                     section = new Section();
+//                                     }
+//                                     // Add the medication Order to the bundle
+//                                     Entry medicationOrderEntry = new Entry();
+//                                     medicationOrderEntry
+//                                     .setFullUrl("MedicationOrder/" +
+//                                     medicationOrder.getId().getIdPart());
+//                                     medicationOrderEntry.setResource(medicationOrder);
+//                                     section.addEntry().setReference(medicationOrderEntry.getFullUrl());
+//                                     medicationsToBundle.add(medicationOrderEntry);
+//                                    
+//                                     // Store the referenced medicaitons in a
+//                                     set
+//                                     // so we can get
+//                                     // all the medications once and we won't
+//                                     // have duplicates
+//                                     IdDt medicationId =
+//                                     ((ResourceReferenceDt)
+//                                     medicationOrder.getMedication())
+//                                     .getReference();
+//                                     medicationOrderMedicationsList.add(medicationId.getValue());
+//                                     medicationId = ((ResourceReferenceDt)
+//                                     medicationOrder.getDispenseRequest()
+//                                     .getMedication()).getReference();
+//                                     medicationOrderMedicationsList.add(medicationId.getValue());
+//                                     }
+//                                    
+//                                     for (String medicationId :
+//                                     medicationOrderMedicationsList) {
+//                                     try {
+//                                     Entry medicationEntry = new Entry();
+//                                     medicationEntry.setFullUrl(medicationId);
+//                                     medicationEntry.setResource(
+//                                     medicationResourceProvider.getMedicationById(new
+//                                     IdDt(medicationId)));
+//                                     section.addEntry().setReference(medicationEntry.getFullUrl());
+//                                     medicationsToBundle.add(medicationEntry);
+//                                     } catch (Exception ex) {
+//                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+//                                     .setDetails("Medication (ID: " +
+//                                    medicationId
+//                                     + ") for MedicaitonOrder could not be found in database");
+//                                     }
+//                                     
+//                                    
+//                                     if (section != null) {
+//                                     sectionsList.add(section);
+                               }
 
                                 break;
 
@@ -744,7 +849,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                             case "OBS":
                                 if (toDate != null && fromDate != null) {
-                                    throw new InvalidRequestException("Date Ranges not allowed to be set");
+                                    throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
                                     List<ObservationListHTML> observationList = observationSearch
                                             .findAllObservationHTMLTables(nhsNumber.get(0));
@@ -791,7 +896,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                             case "IMM":
                                 if (toDate != null && fromDate != null) {
-                                    throw new InvalidRequestException("Date Ranges not allowed to be set");
+                                    throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
 
                                     String htmlTable;

@@ -32,5 +32,6 @@ public final class OperationConstants {
     
     
     public static final String SYSTEM_INVALID = "System Invalid";
+    public static final String DATE_RANGES_NOT_ALLOWED = "Date Ranges not allowed to be set";
 
 }

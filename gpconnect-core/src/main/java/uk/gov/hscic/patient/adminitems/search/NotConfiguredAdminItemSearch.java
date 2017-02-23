@@ -3,7 +3,7 @@ package uk.gov.hscic.patient.adminitems.search;
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
+import uk.gov.hscic.patient.adminitems.model.AdminItemData;
 
 import java.util.Date;
 import java.util.List;
@@ -21,7 +21,7 @@ public class NotConfiguredAdminItemSearch implements AdminItemSearch {
     }
 
     @Override
-    public List<AdminItemListHTML> findAllAdminItemHTMLTables(final String patientId,Date fromDate, Date toDate) {
+    public List<AdminItemData> findAllAdminItemHTMLTables(final String patientId,Date fromDate, Date toDate) {
         throw ConfigurationException.unimplementedTransaction(AdminItemSearch.class);
     }
 }

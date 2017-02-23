@@ -12,25 +12,27 @@ public class AdminItemEntity {
     private Long id;
 
     @Column(name = "nhsNumber")
-    private Long nhsNumber;
+    private String nhsNumber;
 
     @Column(name = "sectionDate")
     private Date sectionDate;
 
-    @Column(name = "htmlPart")
-    private String htmlPart;
+    @Column(name = "adminDate")
+    private String adminDate;
 
-    @Column(name = "provider")
-    private String provider;
+    @Column(name = "entry")
+    private String entry;
 
-    @Column(name = "lastUpdated")
-    private Date lastUpdated;
+    @Column(name = "details")
+    private String details;
 
-    public Long getNhsNumber() {
+   
+
+    public String getNhsNumber() {
         return nhsNumber;
     }
 
-    public void setNhsNumber(Long nhsNumber) {
+    public void setNhsNumber(String nhsNumber) {
         this.nhsNumber = nhsNumber;
     }
 
@@ -42,12 +44,31 @@ public class AdminItemEntity {
         this.sectionDate = sectionDate;
     }
 
-    public String getHtmlPart() {
-        return htmlPart;
+  
+
+
+    public String getAdminDate() {
+        return adminDate;
     }
 
-    public void setHtmlPart(String htmlPart) {
-        this.htmlPart = htmlPart;
+    public void setAdminDate(String adminDate) {
+        this.adminDate = adminDate;
+    }
+
+    public String getEntry() {
+        return entry;
+    }
+
+    public void setEntry(String entry) {
+        this.entry = entry;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public Long getId() {
@@ -57,20 +78,5 @@ public class AdminItemEntity {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
-
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 }
+   

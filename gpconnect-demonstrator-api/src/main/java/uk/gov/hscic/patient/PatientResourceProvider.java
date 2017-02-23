@@ -75,7 +75,7 @@ import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.medications.MedicationResourceProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
-import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
+import uk.gov.hscic.patient.adminitems.model.AdminItemData;
 import uk.gov.hscic.patient.adminitems.search.AdminItemSearch;
 import uk.gov.hscic.patient.allergies.model.AllergyData;
 import uk.gov.hscic.patient.allergies.search.AllergySearch;
@@ -947,13 +947,25 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "ADM":
-                                List<AdminItemListHTML> adminItemList = adminItemSearch
+                                List<AdminItemData> adminItemList = adminItemSearch
                                         .findAllAdminItemHTMLTables(nhsNumber.get(0), fromDate, toDate);
 
                                 if (adminItemList != null && !adminItemList.isEmpty()) {
+                                    List<List<Object>> adminItemsRows = new ArrayList<>();
+                                    for (AdminItemData adminItemData : adminItemList) {
+                                        adminItemsRows.add(Arrays.asList(adminItemData.getAdminDate(),
+                                                adminItemData.getEntry(), adminItemData.getDetails()));
+                                    }
+                                    TableObject adminItemTable = new TableObject(
+                                            Arrays.asList("Date", "Entry", "Details"), adminItemsRows,
+                                            "Administrative Items");
+                                    
+                                    String htmlTable = buildTable.tableCreationFromObject(adminItemTable);
+                                    htmlTable = buildTable.addDiv(htmlTable);
+                                   
                                     section = SectionsCreationClass.buildSection(
                                             OperationConstants.SYSTEM_RECORD_SECTION, "ADM",
-                                            adminItemList.get(0).getHtml(), "Administrative Items", section,
+                                            htmlTable, "Administrative Items", section,
                                             "Administrative Items");
 
                                     sectionsList.add(section);

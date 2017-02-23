@@ -1,10 +1,9 @@
 INSERT INTO gpconnect.adminitems
-  (nhsNumber,sectionDate, htmlPart,provider, lastUpdated)
+  (nhsNumber,sectionDate,adminDate,Entry,Details)
 VALUES (
-  9476719931,'2012-12-10 12:17:00',
-  "<div><h2>Administrative Items</h2><table><thead><tr><th>Date</th><th>Entry</th><th>Details</th></tr></thead><tbody><tr><td>Cervical Smear Defaulter</td><td></td></tr><tr><td /><td>No summary care record consent specified</td><td></td></tr></tbody><PageSectionIndex>1</PageSectionIndex></table></div>",
-  "TPP",
-  '2016-07-25 12:00:00'
+  9476719931,'2012-12-10 12:17:00','2012-12-10 12:17:00',"Cervical Smear Defaulter",""
+  ),(
+  9476719931,'2012-12-10 12:17:00','2012-12-10 12:17:00',"No summary care record consent specified","No record"
 );
 
 INSERT INTO gpconnect.allergies

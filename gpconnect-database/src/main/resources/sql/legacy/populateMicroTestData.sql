@@ -1,10 +1,8 @@
 INSERT INTO gpconnect.adminitems
-  (nhsNumber,sectionDate, htmlPart,provider, lastUpdated)
+  (nhsNumber,sectionDate,adminDate,Entry,Details)
 VALUES (
-  9476719974,'2013-12-10 12:17:00',
-  "<div><h2>Administrative Items</h2><table><thead><th>Date</th><th>Entry</th><th>Details</th></thead><tbody><tr><td>30 Dec 2014</td><td class='\&quot;Entry\&quot;'>Clinical letter</td></tr></tbody><PageSectionIndex>1</PageSectionIndex></table></div>",
-  "Microtest",
-  '2016-07-25 12:00:00'
+  9476719974,'2014-12-30 12:17:00','2014-12-30 12:17:00',"Clinical letter",""
+
 );
 
 INSERT INTO gpconnect.allergies

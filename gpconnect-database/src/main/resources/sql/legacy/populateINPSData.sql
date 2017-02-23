@@ -42,12 +42,20 @@ VALUES (
   );
   
 INSERT INTO gpconnect.clinicalitems
-  (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
+  (nhsNumber,sectionDate,dateOfItem,Entry,Details)
 VALUES (
-  9476719966,'2012-12-10 12:17:00',
-  "<div><h2>Clinical Items</h2><table><thead><th>Date</th><th>Entry</th><th>Details</th></thead><tbody><tr><td>13-Aug-2014</td><td>Shoulder pain</td><td>In right shoulder</td></tr><tr><td>16-Sep-2013</td><td>Oesophageal cancer</td><td /></tr><tr><td>14-Jan-2011</td><td>Perennial rhinitis</td><td /></tr><tr><td>12-Aug-2010</td><td>Fragility # unsp osteoporosis</td><td /></tr><tr><td>12-Aug-2010</td><td>Osteoporosis</td><td /></tr><tr><td>04-Sep-2009</td><td>Varicose eczema</td><td /></tr><tr><td>18-May-2009</td><td>Fungal nail infection</td><td>On left hand</td></tr></tbody></table></div>",
-  "INPS",
-  '2016-07-25 12:00:00'
+  9476719966,'2014-12-12 12:17:00','2014-12-12 12:17:00',"Shoulder pain","In right shoulder"
+  ),(
+  9476719966,'2013-12-12 12:17:00','2013-12-12 12:17:00',"Oesophageal cancer",""
+  ),(
+  9476719966,'2011-12-12 12:17:00','2011-12-12 12:17:00',"Perennial rhinitis",""
+  ),(
+  9476719966,'2010-12-12 12:17:00','2010-12-12 12:17:00',"Fragility # unsp osteoporosis","A lot of pain"
+  ),(
+  9476719966,'2010-12-12 12:17:00','2010-12-12 12:17:00',"Osteoporosis","Osteoporosis"
+  ),(
+  9476719966,'2009-12-12 12:17:00','2009-12-12 12:17:00',"Varicose eczema","Varicose eczema"
+  
 );
 
 INSERT INTO gpconnect.encounters

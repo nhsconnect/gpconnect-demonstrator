@@ -79,7 +79,7 @@ import uk.gov.hscic.patient.adminitems.model.AdminItemListHTML;
 import uk.gov.hscic.patient.adminitems.search.AdminItemSearch;
 import uk.gov.hscic.patient.allergies.model.AllergyData;
 import uk.gov.hscic.patient.allergies.search.AllergySearch;
-import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemListHTML;
+import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemData;
 import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearch;
 import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
 import uk.gov.hscic.patient.encounters.search.EncounterSearch;
@@ -556,24 +556,35 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "CLI":
-                                List<ClinicalItemListHTML> clinicalItemList = clinicalItemsSearch
+                                List<ClinicalItemData> clinicalItemList = clinicalItemsSearch
                                         .findAllClinicalItemHTMLTables(nhsNumber.get(0), fromDate, toDate);
 
                                 if (clinicalItemList != null && !clinicalItemList.isEmpty()) {
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "CLI",
-                                            clinicalItemList.get(0).getHtml(), "Clinical Items", section,
+                                    List<List<Object>> clinicalItemsRows = new ArrayList<>();
+                                    for (ClinicalItemData clinicalItemData : clinicalItemList) {
+                                        clinicalItemsRows.add(Arrays.asList(clinicalItemData.getDate(),
+                                                clinicalItemData.getEntry(), clinicalItemData.getDetails()));
+                                    }
+
+                                    TableObject currentMedicationTable = new TableObject(
+                                            Arrays.asList("Date", "Entry", "Details"), clinicalItemsRows,
                                             "Clinical Items");
 
-                                    sectionsList.add(section);
+                                    String htmlTable = buildTable.tableCreationFromObject(currentMedicationTable);
+
+                                    htmlTable = buildTable.addDiv(htmlTable);
+                                    section = SectionsCreationClass.buildSection(
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "CLI", htmlTable,
+                                            "Clinical Items", section, "Clinical Items");
+
                                 } else {
                                     String htmlTable = buildTable.buildEmptyHtml("Clinical Items");
                                     section = SectionsCreationClass.buildSection(
                                             OperationConstants.SYSTEM_RECORD_SECTION, "CLI", htmlTable,
                                             "Clinical Items", section, "Clinical Items");
-
-                                    sectionsList.add(section);
                                 }
+
+                                sectionsList.add(section);
 
                                 break;
 
@@ -635,22 +646,22 @@ public class PatientResourceProvider implements IResourceProvider {
                                                 currentMedicationRows, "Current Medication Issues");
 
                                         htmlTableCurrent = buildTable.tableCreationFromObject(currentMedicationTable);
-                                        
+
                                         TableObject repeatMedicationTable = new TableObject(
-                                                Arrays.asList("Last Issued", "Medication Item", "Start Date", "Review Date",
-                                                        "Number Issued", "Max Issues", "Details"),
+                                                Arrays.asList("Last Issued", "Medication Item", "Start Date",
+                                                        "Review Date", "Number Issued", "Max Issues", "Details"),
                                                 currentRepeatRows, "Current Repeat Medications");
-                                        
-                                        htmlTableRepeat =  buildTable.tableCreationFromObject(repeatMedicationTable);
-                                        
+
+                                        htmlTableRepeat = buildTable.tableCreationFromObject(repeatMedicationTable);
+
                                         TableObject historicMedicationTable = new TableObject(
-                                                Arrays.asList("StartDate", "Medication Item","Type" ,"Last Issued", "Review Date",
-                                                        "Number Issued", "Max Issues", "Details"),
+                                                Arrays.asList("StartDate", "Medication Item", "Type", "Last Issued",
+                                                        "Review Date", "Number Issued", "Max Issues", "Details"),
                                                 historicRepeatRows, "Current Repeat Medications");
-                                        
-                                        htmlTablePast =  buildTable.tableCreationFromObject(historicMedicationTable);
-                                        htmlTable = buildTable.appendTables(htmlTableCurrent,htmlTableRepeat);
-                                        htmlTable = buildTable.appendTables(htmlTable,htmlTablePast);
+
+                                        htmlTablePast = buildTable.tableCreationFromObject(historicMedicationTable);
+                                        htmlTable = buildTable.appendTables(htmlTableCurrent, htmlTableRepeat);
+                                        htmlTable = buildTable.appendTables(htmlTable, htmlTablePast);
                                         htmlTable = buildTable.addDiv(htmlTable);
 
                                     } else {
@@ -664,165 +675,167 @@ public class PatientResourceProvider implements IResourceProvider {
                                     sectionsList.add(section);
 
                                     // // Sructured Data Search
-//                                    List<MedicationOrder> medicationOrders = medicationOrderResourceProvider
-//                                     .getMedicationOrdersForPatientId(patientID);
-//                                     HashSet<String>
-//                                     medicationOrderMedicationsList = new
-//                                     HashSet<>();
-//                                     HashSet<String> medicationOrderList = new
-//                                     HashSet<>();
-//                                    
-//                                     for (MedicationOrder medicationOrder :
-//                                     medicationOrders) {
-//                                     medicationOrderList.add(medicationOrder.getId().getIdPart());
-//                                     }
-//                                    
-//                                     List<MedicationDispense>
-//                                     medicationDispenses =
-//                                     medicationDispenseResourceProvider
-//                                     .getMedicationDispensesForPatientId(patientID);
-//                                    
-//                                     for (MedicationDispense
-//                                     medicationDispense : medicationDispenses)
-//                                     {
-//                                     if (section == null) {
-//                                     section = new Section();
-//                                     }
-//                                     // Add the medication Order to the bundle
-//                                     Entry medicationDispenseEntry = new
-//                                     Entry();
-//                                     medicationDispenseEntry
-//                                     .setFullUrl("MedicationDispense/" +
-//                                     medicationDispense.getId().getIdPart());
-//                                     medicationDispenseEntry.setResource(medicationDispense);
-//                                    
-//                                     medicationsToBundle.add(medicationDispenseEntry);
-//                                     section.addEntry().setReference(medicationDispenseEntry.getFullUrl());
-//                                     // If we have any new medicationOrders
-//                                     //which
-//                                     // were not found in the
-//                                     // search for MedicationOrders for a
-//                                    // patient
-//                                     // we need to add them.
-//                                     if
-//                                     (!medicationOrderList.contains(medicationDispense.getAuthorizingPrescription()
-//                                     .get(0).getReference().getIdPart())) {
-//                                     try {
-//                                     MedicationOrder medicationOrder =
-//                                     medicationOrderResourceProvider
-//                                     .getMedicationOrderById(medicationDispense
-//                                     .getAuthorizingPrescription().get(0).getReference());
-//                                     medicationOrders.add(medicationOrder);
-//                                     medicationOrderList.add(medicationOrder.getId().getIdPart());
-//                                     } catch (Exception ex) {
-//                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-//                                     .setDetails("MedicationOrder for
-//                                     MedicaitonDispense (id: "
-//                                     + medicationDispense.getId().getIdPart()
-//                                     + ") could not be found in database");
-//                                     }
-//                                     }
-//                                     }
-//                                    
-//                                     List<MedicationAdministration>
-//                                     medicationAdministrations =
-//                                     medicationAdministrationResourceProvider
-//                                     .getMedicationAdministrationsForPatientId(patientID);
-//                                    
-//                                     for (MedicationAdministration
-//                                     medicationAdministration :
-//                                     medicationAdministrations) {
-//                                     if (section == null) {
-//                                     section = new Section();
-//                                     }
-//                                    
-//                                     Entry medicationAdministrationEntry = new
-//                                     Entry();
-//                                     medicationAdministrationEntry.setFullUrl(
-//                                     "MedicationAdministration/" +
-//                                     medicationAdministration.getId().getIdPart());
-//                                     medicationAdministrationEntry.setResource(medicationAdministration);
-//                                     section.addEntry().setReference(medicationAdministrationEntry.getFullUrl());
-//                                     medicationsToBundle.add(medicationAdministrationEntry);
-//                                    
-//                                     // If we have any new medicationOrders
-//                                     which
-//                                     // were not found in the
-//                                     // search for MedicationOrders for a
-//                                     patient
-//                                     // we need to add them.
-//                                     if (!medicationOrderList.contains(
-//                                     medicationAdministration.getPrescription().getReference().getIdPart()))
-//                                     {
-//                                     try {
-//                                     MedicationOrder medicationOrder =
-//                                     medicationOrderResourceProvider
-//                                     .getMedicationOrderById(
-//                                     medicationAdministration.getPrescription().getReference());
-//                                     medicationOrders.add(medicationOrder);
-//                                     medicationOrderList.add(medicationOrder.getId().getIdPart());
-//                                     } catch (Exception ex) {
-//                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-//                                     .setDetails("MedicationOrder for
-//                                     MedicaitonAdministration (id: "
-//                                     +
-//                                     medicationAdministration.getId().getIdPart()
-//                                     + ") could not be found in database");
-//                                     }
-//                                     }
-//                                     }
-//                                    
-//                                     for (MedicationOrder medicationOrder :
-//                                     medicationOrders) {
-//                                     if (section == null) {
-//                                     section = new Section();
-//                                     }
-//                                     // Add the medication Order to the bundle
-//                                     Entry medicationOrderEntry = new Entry();
-//                                     medicationOrderEntry
-//                                     .setFullUrl("MedicationOrder/" +
-//                                     medicationOrder.getId().getIdPart());
-//                                     medicationOrderEntry.setResource(medicationOrder);
-//                                     section.addEntry().setReference(medicationOrderEntry.getFullUrl());
-//                                     medicationsToBundle.add(medicationOrderEntry);
-//                                    
-//                                     // Store the referenced medicaitons in a
-//                                     set
-//                                     // so we can get
-//                                     // all the medications once and we won't
-//                                     // have duplicates
-//                                     IdDt medicationId =
-//                                     ((ResourceReferenceDt)
-//                                     medicationOrder.getMedication())
-//                                     .getReference();
-//                                     medicationOrderMedicationsList.add(medicationId.getValue());
-//                                     medicationId = ((ResourceReferenceDt)
-//                                     medicationOrder.getDispenseRequest()
-//                                     .getMedication()).getReference();
-//                                     medicationOrderMedicationsList.add(medicationId.getValue());
-//                                     }
-//                                    
-//                                     for (String medicationId :
-//                                     medicationOrderMedicationsList) {
-//                                     try {
-//                                     Entry medicationEntry = new Entry();
-//                                     medicationEntry.setFullUrl(medicationId);
-//                                     medicationEntry.setResource(
-//                                     medicationResourceProvider.getMedicationById(new
-//                                     IdDt(medicationId)));
-//                                     section.addEntry().setReference(medicationEntry.getFullUrl());
-//                                     medicationsToBundle.add(medicationEntry);
-//                                     } catch (Exception ex) {
-//                                     operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-//                                     .setDetails("Medication (ID: " +
-//                                    medicationId
-//                                     + ") for MedicaitonOrder could not be found in database");
-//                                     }
-//                                     
-//                                    
-//                                     if (section != null) {
-//                                     sectionsList.add(section);
-                               }
+                                    // List<MedicationOrder> medicationOrders =
+                                    // medicationOrderResourceProvider
+                                    // .getMedicationOrdersForPatientId(patientID);
+                                    // HashSet<String>
+                                    // medicationOrderMedicationsList = new
+                                    // HashSet<>();
+                                    // HashSet<String> medicationOrderList = new
+                                    // HashSet<>();
+                                    //
+                                    // for (MedicationOrder medicationOrder :
+                                    // medicationOrders) {
+                                    // medicationOrderList.add(medicationOrder.getId().getIdPart());
+                                    // }
+                                    //
+                                    // List<MedicationDispense>
+                                    // medicationDispenses =
+                                    // medicationDispenseResourceProvider
+                                    // .getMedicationDispensesForPatientId(patientID);
+                                    //
+                                    // for (MedicationDispense
+                                    // medicationDispense : medicationDispenses)
+                                    // {
+                                    // if (section == null) {
+                                    // section = new Section();
+                                    // }
+                                    // // Add the medication Order to the bundle
+                                    // Entry medicationDispenseEntry = new
+                                    // Entry();
+                                    // medicationDispenseEntry
+                                    // .setFullUrl("MedicationDispense/" +
+                                    // medicationDispense.getId().getIdPart());
+                                    // medicationDispenseEntry.setResource(medicationDispense);
+                                    //
+                                    // medicationsToBundle.add(medicationDispenseEntry);
+                                    // section.addEntry().setReference(medicationDispenseEntry.getFullUrl());
+                                    // // If we have any new medicationOrders
+                                    // //which
+                                    // // were not found in the
+                                    // // search for MedicationOrders for a
+                                    // // patient
+                                    // // we need to add them.
+                                    // if
+                                    // (!medicationOrderList.contains(medicationDispense.getAuthorizingPrescription()
+                                    // .get(0).getReference().getIdPart())) {
+                                    // try {
+                                    // MedicationOrder medicationOrder =
+                                    // medicationOrderResourceProvider
+                                    // .getMedicationOrderById(medicationDispense
+                                    // .getAuthorizingPrescription().get(0).getReference());
+                                    // medicationOrders.add(medicationOrder);
+                                    // medicationOrderList.add(medicationOrder.getId().getIdPart());
+                                    // } catch (Exception ex) {
+                                    // operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+                                    // .setDetails("MedicationOrder for
+                                    // MedicaitonDispense (id: "
+                                    // + medicationDispense.getId().getIdPart()
+                                    // + ") could not be found in database");
+                                    // }
+                                    // }
+                                    // }
+                                    //
+                                    // List<MedicationAdministration>
+                                    // medicationAdministrations =
+                                    // medicationAdministrationResourceProvider
+                                    // .getMedicationAdministrationsForPatientId(patientID);
+                                    //
+                                    // for (MedicationAdministration
+                                    // medicationAdministration :
+                                    // medicationAdministrations) {
+                                    // if (section == null) {
+                                    // section = new Section();
+                                    // }
+                                    //
+                                    // Entry medicationAdministrationEntry = new
+                                    // Entry();
+                                    // medicationAdministrationEntry.setFullUrl(
+                                    // "MedicationAdministration/" +
+                                    // medicationAdministration.getId().getIdPart());
+                                    // medicationAdministrationEntry.setResource(medicationAdministration);
+                                    // section.addEntry().setReference(medicationAdministrationEntry.getFullUrl());
+                                    // medicationsToBundle.add(medicationAdministrationEntry);
+                                    //
+                                    // // If we have any new medicationOrders
+                                    // which
+                                    // // were not found in the
+                                    // // search for MedicationOrders for a
+                                    // patient
+                                    // // we need to add them.
+                                    // if (!medicationOrderList.contains(
+                                    // medicationAdministration.getPrescription().getReference().getIdPart()))
+                                    // {
+                                    // try {
+                                    // MedicationOrder medicationOrder =
+                                    // medicationOrderResourceProvider
+                                    // .getMedicationOrderById(
+                                    // medicationAdministration.getPrescription().getReference());
+                                    // medicationOrders.add(medicationOrder);
+                                    // medicationOrderList.add(medicationOrder.getId().getIdPart());
+                                    // } catch (Exception ex) {
+                                    // operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+                                    // .setDetails("MedicationOrder for
+                                    // MedicaitonAdministration (id: "
+                                    // +
+                                    // medicationAdministration.getId().getIdPart()
+                                    // + ") could not be found in database");
+                                    // }
+                                    // }
+                                    // }
+                                    //
+                                    // for (MedicationOrder medicationOrder :
+                                    // medicationOrders) {
+                                    // if (section == null) {
+                                    // section = new Section();
+                                    // }
+                                    // // Add the medication Order to the bundle
+                                    // Entry medicationOrderEntry = new Entry();
+                                    // medicationOrderEntry
+                                    // .setFullUrl("MedicationOrder/" +
+                                    // medicationOrder.getId().getIdPart());
+                                    // medicationOrderEntry.setResource(medicationOrder);
+                                    // section.addEntry().setReference(medicationOrderEntry.getFullUrl());
+                                    // medicationsToBundle.add(medicationOrderEntry);
+                                    //
+                                    // // Store the referenced medicaitons in a
+                                    // set
+                                    // // so we can get
+                                    // // all the medications once and we won't
+                                    // // have duplicates
+                                    // IdDt medicationId =
+                                    // ((ResourceReferenceDt)
+                                    // medicationOrder.getMedication())
+                                    // .getReference();
+                                    // medicationOrderMedicationsList.add(medicationId.getValue());
+                                    // medicationId = ((ResourceReferenceDt)
+                                    // medicationOrder.getDispenseRequest()
+                                    // .getMedication()).getReference();
+                                    // medicationOrderMedicationsList.add(medicationId.getValue());
+                                    // }
+                                    //
+                                    // for (String medicationId :
+                                    // medicationOrderMedicationsList) {
+                                    // try {
+                                    // Entry medicationEntry = new Entry();
+                                    // medicationEntry.setFullUrl(medicationId);
+                                    // medicationEntry.setResource(
+                                    // medicationResourceProvider.getMedicationById(new
+                                    // IdDt(medicationId)));
+                                    // section.addEntry().setReference(medicationEntry.getFullUrl());
+                                    // medicationsToBundle.add(medicationEntry);
+                                    // } catch (Exception ex) {
+                                    // operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
+                                    // .setDetails("Medication (ID: " +
+                                    // medicationId
+                                    // + ") for MedicaitonOrder could not be
+                                    // found in database");
+                                    // }
+                                    //
+                                    //
+                                    // if (section != null) {
+                                    // sectionsList.add(section);
+                                }
 
                                 break;
 

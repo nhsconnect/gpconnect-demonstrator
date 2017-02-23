@@ -36,14 +36,11 @@ VALUES (
   );
 
 INSERT INTO gpconnect.clinicalitems
-  (nhsNumber,sectionDate, htmlPart, provider, lastUpdated)
+  (nhsNumber,sectionDate,dateOfItem,Entry,Details)
 VALUES (
-  9476719974,'2013-12-10 12:17:00',
-  "<div><h2>Clinical Items<h2><table></table></div>",
-  "Microtest",
-  '2016-07-25 12:00:00'
-);
-
+  9476719974,'2014-12-12 12:17:00','2014-12-12 12:17:00',"Shoulder pain","In right shoulder"
+  );
+  
 INSERT INTO gpconnect.medications_html
  (nhsNumber, currentRepeatPast, startDate, medicationItem, scheduledEnd, daysDuration, details, lastIssued, reviewDate, numberIssued, maxIssued, typeMed)
 VALUES (

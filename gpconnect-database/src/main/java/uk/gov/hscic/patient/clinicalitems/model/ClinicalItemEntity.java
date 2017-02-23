@@ -12,19 +12,19 @@ public class ClinicalItemEntity {
     private Long id;
 
     @Column(name = "nhsNumber")
-    private Long nhsNumber;
-    
+    private String nhsNumber;
+
     @Column(name = "sectionDate")
     private Date sectionDate;
 
-    @Column(name = "htmlPart")
-    private String htmlPart;
+    @Column(name = "dateOfItem")
+    private String dateOfItem;
 
-    @Column(name = "provider")
-    private String provider;
-    
-    @Column(name = "lastUpdated")
-    private Date lastUpdated;
+    @Column(name = "entry")
+    private String entry;
+
+    @Column(name = "details")
+    private String details;
 
     public Long getId() {
         return id;
@@ -34,13 +34,13 @@ public class ClinicalItemEntity {
         this.id = id;
     }
 
- 
+   
 
-    public Long getNhsNumber() {
+    public String getNhsNumber() {
         return nhsNumber;
     }
 
-    public void setNhsNumber(Long nhsNumber) {
+    public void setNhsNumber(String nhsNumber) {
         this.nhsNumber = nhsNumber;
     }
 
@@ -52,27 +52,30 @@ public class ClinicalItemEntity {
         this.sectionDate = sectionDate;
     }
 
-    public String getHtmlPart() {
-        return htmlPart;
+    public String getDate() {
+        return dateOfItem;
     }
 
-    public void setHtmlPart(String htmlPart) {
-        this.htmlPart = htmlPart;
+    public String getEntry() {
+        return entry;
     }
 
-    public String getProvider() {
-        return provider;
+    public void setEntry(String entry) {
+        this.entry = entry;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
+    public String getDetails() {
+        return details;
     }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public void setDetails(String details) {
+        this.details = details;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setDate(String date) {
+        this.dateOfItem = date;
     }
+
+
+
 }

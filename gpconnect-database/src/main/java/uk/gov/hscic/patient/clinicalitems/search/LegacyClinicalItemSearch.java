@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.common.service.AbstractLegacyService;
 import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemEntity;
-import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemListHTML;
+import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemData;
 import uk.gov.hscic.patient.clinicalitems.repo.ClinicalItemRepository;
+import uk.gov.hscic.patient.immunisations.model.ImmunisationData;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -17,29 +19,49 @@ public class LegacyClinicalItemSearch extends AbstractLegacyService implements C
     @Autowired
     private ClinicalItemRepository clinicalItemRepository;
 
-    private final ClinicalItemEntityToHTMLTransformer transformer = new ClinicalItemEntityToHTMLTransformer();
+
 
     @Override
-    public List<ClinicalItemListHTML> findAllClinicalItemHTMLTables(final String patientId, Date fromDate,
+    public List<ClinicalItemData> findAllClinicalItemHTMLTables(final String patientId, Date fromDate,
             Date toDate) {
 
         List<ClinicalItemEntity> items = null;
+        List<ClinicalItemData> clinicalItemList = new ArrayList<>();
         if (fromDate != null && toDate != null) {
             items = clinicalItemRepository.findBynhsNumberAndSectionDateAfterAndSectionDateBeforeOrderBySectionDateDesc(
-                    Long.valueOf(patientId), fromDate, toDate);
+                   patientId, fromDate, toDate);
+            clinicalItemList = sortItems(items);
         } else if (fromDate != null) {
             items = clinicalItemRepository
-                    .findBynhsNumberAndSectionDateAfterOrderBySectionDateDesc(Long.valueOf(patientId), fromDate);
+                    .findBynhsNumberAndSectionDateAfterOrderBySectionDateDesc(patientId, fromDate);
+            clinicalItemList = sortItems(items);
         } else if (toDate != null) {
             items = clinicalItemRepository
-                    .findBynhsNumberAndSectionDateBeforeOrderBySectionDateDesc(Long.valueOf(patientId), toDate);
+                    .findBynhsNumberAndSectionDateBeforeOrderBySectionDateDesc(patientId, toDate);
+            clinicalItemList = sortItems(items);
         } else {
-            items = clinicalItemRepository.findBynhsNumberOrderBySectionDateDesc(Long.valueOf(patientId));
+            items = clinicalItemRepository.findBynhsNumberOrderBySectionDateDesc(patientId);
+            clinicalItemList = sortItems(items);
         }
-        if (items  == null || items.size() <= 0) {
-            return null;
-        } else {
-            return Collections.singletonList(transformer.transform(items));
-        }
+      return clinicalItemList;
     }
+
+
+private List<ClinicalItemData> sortItems(List<ClinicalItemEntity> items) {
+    List<ClinicalItemData> clinicalItemList = new ArrayList<>();
+    for (int i = 0; i < items.size(); i++) {
+        ClinicalItemData clinicalItemData = new ClinicalItemData();
+        clinicalItemData.setDate(items.get(i).getDate());
+        clinicalItemData.setDetails(items.get(i).getDetails());
+        clinicalItemData.setEntry(items.get(i).getEntry());
+
+        clinicalItemList.add(clinicalItemData);
+    }
+
+        return clinicalItemList;
+    }
+
+
+
+
 }

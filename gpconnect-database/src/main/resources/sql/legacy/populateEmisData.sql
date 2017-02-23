@@ -65,7 +65,7 @@ VALUES (
 ),
 (
  9476719958, '2016-10-03 15:47:00',
-  "<table><thead><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>03 Oct 2016</th><th>Emis Test - EMISWebCR1 50002</th></tr><tr><td/><td>Referral : .</td></tr></tbody></table>",
+  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>03 Oct 2016</th><th>Emis Test - EMISWebCR1 50002</th></tr><tr><td/><td>Referral : .</td></tr></tbody></table>",
   "EMIS", '2016-07-25 12:00:00'
 ),
 (

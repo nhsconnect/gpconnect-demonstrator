@@ -4,7 +4,7 @@ import java.util.List;
 
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.observations.model.ObservationListHTML;
+import uk.gov.hscic.patient.observations.model.ObservationData;
 
 /**
  */
@@ -21,7 +21,7 @@ public class NotConfiguredObservationSearch implements ObservationSearch {
     }
 
     @Override
-    public List<ObservationListHTML> findAllObservationHTMLTables(final String patientId) {
+    public List<ObservationData> findAllObservationHTMLTables(final String patientId) {
         throw ConfigurationException.unimplementedTransaction(ObservationSearch.class);
     }
 }

@@ -26,8 +26,6 @@ public class AdminItemEntity {
     @Column(name = "details")
     private String details;
 
-   
-
     public String getNhsNumber() {
         return nhsNumber;
     }
@@ -43,9 +41,6 @@ public class AdminItemEntity {
     public void setSectionDate(Date sectionDate) {
         this.sectionDate = sectionDate;
     }
-
-  
-
 
     public String getAdminDate() {
         return adminDate;
@@ -79,4 +74,3 @@ public class AdminItemEntity {
         this.id = id;
     }
 }
-   

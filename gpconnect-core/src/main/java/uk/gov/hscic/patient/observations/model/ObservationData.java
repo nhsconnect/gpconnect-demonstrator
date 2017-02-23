@@ -1,48 +1,30 @@
 package uk.gov.hscic.patient.observations.model;
 
 import java.util.Date;
-import javax.persistence.*;
 
-@Entity
-@Table(name = "observations")
-public class ObservationEntity {
+public class ObservationData {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @Column(name = "nhsNumber")
-    private String nhsNumber;
-
-
-    @Column(name = "observationDate")
+    private String sourceId;
+    private String source;
     private String observationDate;
-
-    @Column(name = "entry")
     private String entry;
-
-    @Column(name = "value")
     private String value;
-
-    @Column(name = "details")
     private String details;
-    
-    
 
-    public String getNhsNumber() {
-        return nhsNumber;
+    public String getSourceId() {
+        return sourceId;
     }
 
-    public void setNhsNumber(String nhsNumber) {
-        this.nhsNumber = nhsNumber;
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
-    public Long getId() {
-        return id;
+    public String getSource() {
+        return source;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getObservationDate() {
@@ -76,6 +58,5 @@ public class ObservationEntity {
     public void setDetails(String details) {
         this.details = details;
     }
-
 
 }

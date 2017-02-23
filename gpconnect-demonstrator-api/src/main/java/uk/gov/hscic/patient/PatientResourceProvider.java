@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.activation.UnsupportedDataTypeException;
@@ -87,7 +86,7 @@ import uk.gov.hscic.patient.immunisations.model.ImmunisationData;
 import uk.gov.hscic.patient.immunisations.search.ImmunisationSearch;
 import uk.gov.hscic.patient.investigations.model.InvestigationListHTML;
 import uk.gov.hscic.patient.investigations.search.InvestigationSearch;
-import uk.gov.hscic.patient.observations.model.ObservationListHTML;
+import uk.gov.hscic.patient.observations.model.ObservationData;
 import uk.gov.hscic.patient.observations.search.ObservationSearch;
 import uk.gov.hscic.patient.patientsummary.model.PatientSummaryListHTML;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
@@ -864,23 +863,37 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (toDate != null && fromDate != null) {
                                     throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
-                                    List<ObservationListHTML> observationList = observationSearch
+                                    String htmlTable;
+                                    List<ObservationData> observationList = observationSearch
                                             .findAllObservationHTMLTables(nhsNumber.get(0));
 
                                     if (observationList != null && !observationList.isEmpty()) {
-                                        section = SectionsCreationClass.buildSection(
-                                                OperationConstants.SYSTEM_RECORD_SECTION, "OBS",
-                                                observationList.get(0).getHtml(), "Observations", section,
+                                        List<List<Object>> observationRows = new ArrayList<>();
+                                        
+                                        for (ObservationData observationItemData : observationList) {
+                                            observationRows.add(Arrays.asList(observationItemData.getObservationDate(),
+                                                    observationItemData.getEntry(), observationItemData.getValue()
+                                                    , observationItemData.getValue()));
+                                        }
+                                        
+                                        TableObject observationsTable = new TableObject(
+                                                Arrays.asList("Date", "Entry","Value", "Details"), observationRows,
                                                 "Observations");
-
-                                        sectionsList.add(section);
+                                        htmlTable = buildTable.tableCreationFromObject(observationsTable);
+                                        
+                                        htmlTable = buildTable.addDiv(htmlTable);
+                                        
+                                        
+                                     
+                                      
                                     } else {
-                                        String htmlTable = buildTable.buildEmptyHtml("Observations");
-                                        section = SectionsCreationClass.buildSection(
-                                                OperationConstants.SYSTEM_RECORD_SECTION, "OBS", htmlTable,
-                                                "Observations", section, "Observations");
-                                        sectionsList.add(section);
+                                       htmlTable = buildTable.buildEmptyHtml("Observations");
+                                        
                                     }
+                                    section = SectionsCreationClass.buildSection(
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "OBS", htmlTable,
+                                            "Observations", section, "Observations");
+                                    sectionsList.add(section);
                                 }
 
                                 break;
@@ -959,14 +972,13 @@ public class PatientResourceProvider implements IResourceProvider {
                                     TableObject adminItemTable = new TableObject(
                                             Arrays.asList("Date", "Entry", "Details"), adminItemsRows,
                                             "Administrative Items");
-                                    
+
                                     String htmlTable = buildTable.tableCreationFromObject(adminItemTable);
                                     htmlTable = buildTable.addDiv(htmlTable);
-                                   
+
                                     section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "ADM",
-                                            htmlTable, "Administrative Items", section,
-                                            "Administrative Items");
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "ADM", htmlTable,
+                                            "Administrative Items", section, "Administrative Items");
 
                                     sectionsList.add(section);
                                 } else {

@@ -9,7 +9,13 @@ import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemEntity;
 
 public interface AdminItemRepository extends JpaRepository<AdminItemEntity, Long> {
     List<AdminItemEntity> findBynhsNumberOrderBySectionDateDesc(String patientNHSNumber);
-    List<AdminItemEntity> findBynhsNumberAndSectionDateAfterOrderBySectionDateDesc(String patientNHSNumber, Date startDate);
-    List<AdminItemEntity> findBynhsNumberAndSectionDateBeforeOrderBySectionDateDesc(String patientNHSNumber, Date endDate);
-    List<AdminItemEntity> findBynhsNumberAndSectionDateAfterAndSectionDateBeforeOrderBySectionDateDesc(String patientNHSNumber, Date startDate, Date endDate);
+
+    List<AdminItemEntity> findBynhsNumberAndSectionDateAfterOrderBySectionDateDesc(String patientNHSNumber,
+            Date startDate);
+
+    List<AdminItemEntity> findBynhsNumberAndSectionDateBeforeOrderBySectionDateDesc(String patientNHSNumber,
+            Date endDate);
+
+    List<AdminItemEntity> findBynhsNumberAndSectionDateAfterAndSectionDateBeforeOrderBySectionDateDesc(
+            String patientNHSNumber, Date startDate, Date endDate);
 }

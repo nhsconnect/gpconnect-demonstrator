@@ -278,9 +278,11 @@ CREATE TABLE gpconnect.procedures (
 
 CREATE TABLE gpconnect.observations (
  id                  BIGINT        NOT NULL    AUTO_INCREMENT,
- html                TEXT(25000) NULL,
- provider            VARCHAR(10)   NULL,
- lastUpdated			 DATETIME 	   NULL,
+  nhsNumber			 BIGINT 		NULL,
+observationDate			 VARCHAR(100)   NULL,
+ entry	    		 VARCHAR(100)   	NULL,
+ value	    		 VARCHAR(100)   	NULL,
+ details    		 VARCHAR(100)   	NULL,
  PRIMARY KEY         (id)
 );
 

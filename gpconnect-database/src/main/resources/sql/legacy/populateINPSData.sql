@@ -4,9 +4,7 @@ VALUES (
   9476719966,'2013-12-10 12:17:00','2013-12-10 12:17:00',"Cervical Smear Defaulter",""
   ),(
   9476719966,'2013-12-10 12:17:00','2013-12-10 12:17:00',"No summary care record consent specified",""
-  )
- 
-);
+  );
 
 INSERT INTO gpconnect.allergies
     (nhsNumber,currentOrHistoric, startDate, endDate, details)
@@ -109,12 +107,19 @@ VALUES (
 );
 
 INSERT INTO gpconnect.observations
-  (id, html, provider, lastUpdated)
+    (nhsNumber, observationDate, entry, value, details)
 VALUES (
-  9476719966,
-  "<div><h2>Observations</h2><table><thead><tr><th>Date</th><th>Entry</th><th>Value</th><th>Details</th></tr></thead><tbody><tr><td>16-Dec-2015</td><td>Peak exp. flow rate: PEFR/PFR Updated peakflow</td><td>150 L/min</td><td /></tr><tr><td>13-Aug-2014</td><td>O/E - blood pressure reading</td><td>115 / 68 mmHg</td><td /></tr><tr><td>13-Aug-2014</td><td>O/E - weight</td><td>79.4 kgs</td><td /></tr><tr><td>21-Oct-2013</td><td>O/E - blood pressure reading</td><td>112 / 66 mmHg</td><td /></tr><tr><td>22-Oct-2012</td><td>O/E - BP reading normal</td><td>105 / 70 mmHg</td><td /></tr><tr><td>22-Oct-2012</td><td>O/E - weight</td><td>72.5 kgs</td><td /></tr><tr><td>22-Oct-2012</td><td>O/E - weight</td><td>72.5 kgs</td><td /></tr><tr><td>23-Aug-2012</td><td>O/E - Left retina normal</td><td /><td /></tr><tr><td>23-Aug-2012</td><td>O/E - Right retina normal</td><td /><td /></tr><tr><td>07-Sep-2011</td><td>O/E - no L diabet retinopathy</td><td /><td /></tr><tr><td>07-Sep-2011</td><td>O/E - no R diabet retinopathy</td><td /><td /></tr><tr><td>03-Apr-2011</td><td>O/E - weight</td><td>70 kgs</td><td /></tr><tr><td>03-Apr-2011</td><td>O/E - weight</td><td>70 kgs</td><td /></tr><tr><td>03-Apr-2011</td><td>O/E - weight</td><td>70 kgs</td><td /></tr><tr><td>03-Apr-2011</td><td>O/E - BP reading normal</td><td>113 / 76 mmHg</td><td /></tr><tr><td>03-Apr-2011</td><td>O/E - blood pressure reading</td><td>113 / 76 mmHg</td><td /></tr><tr><td>02-Jan-2011</td><td>O/E - weight</td><td>74.5 kgs</td><td /></tr><tr><td>12-Sep-2010</td><td>O/E - weight</td><td>80.5 kgs</td><td /></tr><tr><td>12-Sep-2010</td><td>O/E - BP reading normal</td><td>105 / 74 mmHg</td><td /></tr><tr><td>24-Nov-2009</td><td>O/E - Left retina normal</td><td /><td /></tr><tr><td>24-Nov-2009</td><td>O/E - Right retina normal</td><td /><td /></tr><tr><td>12-Oct-2009</td><td>O/E - weight</td><td>73 kgs</td><td /></tr><tr><td>12-Oct-2009</td><td>O/E - BP reading normal</td><td>110 / 72 mmHg</td><td /></tr><tr><td>12-Oct-2009</td><td>O/E - weight</td><td>73.5 kgs</td><td /></tr></tbody></table></div>",
-  "INPS",
-  '2016-07-25 12:00:00'
+ 9476719966,'2003-05-26 12:00:00',"Percentage basophils","0.000 and 2.000","(Added from Questionnaire)"
+ ),(
+ 9476719966,'2013-06-05 12:00:00',"Basophil count","0.000 and 2.000","(Added from Questionnaire)"
+),(
+ 9476719966,'2011-07-03 12:00:00',"Percentage eosinophils","0.000 and 2.000","(Added from Questionnaire)"
+),(
+ 9476719966,'2012-01-01 12:00:00',"Eosinophil count","0.000 and 2.000","(Added from Questionnaire)"
+),(
+ 9476719966,'2015-03-22 12:00:00',"Percentage monocytes","0.000 and 2.000","(Added from Questionnaire)"
+),(
+ 9476719966,'2001-02-20 12:00:00',"Percentage lymphocytes","0.000 and 2.000","(Added from Questionnaire)"
 );
 
 INSERT INTO gpconnect.problems

@@ -34,8 +34,6 @@ public class ClinicalItemEntity {
         this.id = id;
     }
 
-   
-
     public String getNhsNumber() {
         return nhsNumber;
     }
@@ -75,7 +73,5 @@ public class ClinicalItemEntity {
     public void setDate(String date) {
         this.dateOfItem = date;
     }
-
-
 
 }

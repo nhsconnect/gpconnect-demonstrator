@@ -37,12 +37,9 @@ public class LegacyAdminItemSearch extends AbstractLegacyService implements Admi
             items = adminItemRepository.findBynhsNumberOrderBySectionDateDesc(patientId);
             adminDataList = sortItems(items);
         }
-       return adminDataList;
-        }
-    
-    
-    
-    
+        return adminDataList;
+    }
+
     private List<AdminItemData> sortItems(List<AdminItemEntity> items) {
         List<AdminItemData> adminItemList = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
@@ -54,14 +51,7 @@ public class LegacyAdminItemSearch extends AbstractLegacyService implements Admi
             adminItemList.add(adminItemData);
         }
 
-            return adminItemList;
-        }
-    
-    
-    
-    
-    
-    
-    
-    
+        return adminItemList;
+    }
+
 }

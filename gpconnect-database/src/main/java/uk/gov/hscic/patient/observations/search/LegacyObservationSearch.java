@@ -1,34 +1,40 @@
 package uk.gov.hscic.patient.observations.search;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import uk.gov.hscic.common.service.AbstractLegacyService;
-import uk.gov.hscic.patient.observations.model.ObservationEntity;
-import uk.gov.hscic.patient.observations.repo.ObservationRepository;
-import uk.gov.hscic.patient.observations.model.ObservationListHTML;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import uk.gov.hscic.common.service.AbstractLegacyService;
+import uk.gov.hscic.patient.observations.model.ObservationData;
+import uk.gov.hscic.patient.observations.model.ObservationEntity;
+import uk.gov.hscic.patient.observations.repo.ObservationRepository;
+
 @Service
-public class LegacyObservationSearch extends AbstractLegacyService implements uk.gov.hscic.patient.observations.search.ObservationSearch {
+public class LegacyObservationSearch extends AbstractLegacyService
+        implements uk.gov.hscic.patient.observations.search.ObservationSearch {
 
     @Autowired
     private ObservationRepository observationRepository;
 
-    private final ObservationEntityToListTransformer transformer = new ObservationEntityToListTransformer();
-
     @Override
-    public List<ObservationListHTML> findAllObservationHTMLTables(final String patientId) {
+    public List<ObservationData> findAllObservationHTMLTables(final String patientId) {
 
-        final ObservationEntity item = observationRepository.findOne(Long.parseLong(patientId));
-
-        if(item == null){
-            return null;
-        } else {
-            return Collections.singletonList(transformer.transform(item));
+        List<ObservationEntity> items = observationRepository.findBynhsNumber(patientId);
+        List<ObservationData> observationList = new ArrayList<>();
+        
+        for(int i = 0 ; i < items.size(); i++ )
+        {
+            ObservationData observationData = new ObservationData();
+            observationData.setObservationDate(items.get(i).getObservationDate());
+            observationData.setEntry(items.get(i).getEntry());
+            observationData.setValue(items.get(i).getValue());
+            observationData.setDetails(items.get(i).getDetails());
+            observationList.add(observationData);
         }
+        
+        return observationList;
+        
     }
 }

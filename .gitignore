@@ -1,33 +1,35 @@
 # IntelliJ IDEA #
-.idea
 *.iml
-webapp/.idea/
+.idea
 
 # Eclipse #
-.project
 .classpath
-.settings/
-.metadata/
+.metadata
+.project
 .recommenders
+.settings
+.springBeans
 
 # NetBeans #
 nb-configuration.xml
 nbactions.xml
-/webapp/nbproject
+nbproject
 
 # Misc #
-target/
-.springBeans
 .tern-project
-node_modules/
-*.log
-**/log/
-/gpconnect-demonstrator-api/src/main/webapp
+gpconnect-demonstrator-api/src/main/webapp
+log
+target
 
-# ActiveMQ #
-activemq-data/
-*/activemq-data/
+# UI #
+**/styles/main.*
+**/tenant/*.js
+**/themes/theme.scss
+.sass-cache
+.tmp
+bower_components
+dist
+node_modules
 
 # Config #
 context-gpconnect.xml
-/log/

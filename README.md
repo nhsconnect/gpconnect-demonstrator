@@ -19,7 +19,7 @@ To develop and run the application locally you must have the following installed
 
 ***
 
-### Getting Started
+### Getting started
 
 First, download the code from GitHub. This can be done using the desktop git tool, an IDE which supports git or by downloading the code as a zip file which you can then extract.
 
@@ -79,10 +79,12 @@ PATH should contain the bin directory of both M2_HOME and JAVA_HOME, e.g.
 ...;%JAVA_HOME%\bin;%M2_HOME%\bin;%RUBY_HOME%\bin;%RUBYGEMS_HOME%\bin;...
 ```
 
-### Installation of the MySQL Database
+### Installation of the MySQL database
 
-Install MySQL:
-http://dev.mysql.com/downloads/installer/
+Use the MySQL Installer (http://dev.mysql.com/downloads/installer) to install:
+* MySQL Server
+* MySQL Workbench
+* MySQL Notifier
 
 When using the Windows installer above, the PATH variables are automatically set.
 
@@ -162,10 +164,12 @@ cd {projectRoot}
 mvn clean package
 ```
 
-Now spin up an instance of the application (\<path_to_config\> is the path to the Environment configuration discussed earlier, and must end with a slash):
+Now spin up an instance of the application:
 ```sh
-java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19191 --config.path=<path_to_config>\
+java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19191 --config.path=config\
 ```
+
+Note: *The config.path parameter is the path to the Environment configuration discussed earlier, and must end with a slash.*
 
 This will run the UI on http://localhost:19191
 
@@ -196,11 +200,40 @@ This will run the UI on http://localhost:9000
 
 Any changes to the front end code will be watched and re-served immediately for quick development.
 
-### Data Clear Down
-For Appointments and Tasks there is a clear down process which is scheduled using a Spring Scheduled event configured with a "cron" string. When the clear down task runs it will delete all GP Connect Demonstrator Tasks previously added. It will also delete all Appointments and remove the currently available slots, after which it will try and build a new set of slots using a slots sample data file.
+### Slots
 
-The "cron" string which controls the scheduled event can be found in the environmental properties files with the name "legacy.datasource.cleardown.cron".
+The "config/slots.txt" file determins the default appointment slots available when using the appointment booking functionality.
 
-The file which it uses to build slots should be pointed to by the environmental properties with the name "legacy.datasource.refresh.slots.filename".
+The row format of “slots.txt” is:
+* Number of days from current date.
+* Start Hour (0-23)
+* Start Minute (0-59)
+* Start Seconds (0-59)
+* End Hour (0-23)
+* End Minute (0-59)
+* End Seconds (0-59)
+* Slot Type Code
+* Slot Type Description
+* Practitioner internal ID
+* Slot status (FREE/BUSY)
+
+e.g.:
+```
+0,9,0,0,9,30,0,408443003,General medical practice,2,FREE
+0,9,30,0,10,0,0,408443003,General medical practice,2,FREE
+0,10,0,0,10,30,0,408443003,General medical practice,2,FREE
+```
+
+### Data clear down
+
+For Appointments and Tasks there is a clear down process which is scheduled using the "legacy.datasource.cleardown.cron" property. When the task runs it will delete all GP Connect Demonstrator Tasks previously added. It will also delete all Appointments and remove the currently available slots. It will then refresh the available slots using the "slots.txt" sample data file.
+
+This clear down process will also run each time the application starts.
+
+### Local endpoint lookup configuration
+
+There is the concept of federated practices within the GP Connect Demonstrator, controlled by the “config/providerRouting.json” file. This file contains configuration for the local system ASID, the path the demonstrator will use to call the spine proxy service as well as information for the federated practices if you wish to override the response from the LDAP server or run the demonstrator without connection to an LDAP server.
+
+In the WAR file there is a “defaultPracticeOdsCode.html” which contains the default practice ODS code for the instance of the GP Connect Demonstrator. This ODS code will be used to lookup the practice details within the “providerRouting.json” file.
 
 ##### ENJOY!

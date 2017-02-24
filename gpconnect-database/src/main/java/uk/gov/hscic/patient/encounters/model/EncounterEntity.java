@@ -17,19 +17,22 @@ public class EncounterEntity {
     private Long id;
 
     @Column(name = "nhsNumber")
-    private Long nhsNumber;
+    private String nhsNumber;
     
     @Column(name = "sectionDate")
     private Date sectionDate;
-
-    @Column(name = "htmlPart")
-    private String htmlPart;
-
-    @Column(name = "provider")
-    private String provider;
     
-    @Column(name = "lastUpdated")
-    private Date lastUpdated;
+    @Column(name = "encounterDate")
+    private String encounterDate;
+    
+    @Column(name = "title")
+    private String title;
+    
+    @Column(name = "details")
+    private String details;
+    
+
+    
 
     public Long getId() {
         return id;
@@ -39,11 +42,11 @@ public class EncounterEntity {
         this.id = id;
     }
 
-    public Long getNhsNumber() {
+    public String getNhsNumber() {
         return nhsNumber;
     }
 
-    public void setNhsNumber(Long nhsNumber) {
+    public void setNhsNumber(String nhsNumber) {
         this.nhsNumber = nhsNumber;
     }
 
@@ -55,27 +58,29 @@ public class EncounterEntity {
         this.sectionDate = sectionDate;
     }
 
-    public String getHtmlPart() {
-        return htmlPart;
+    public String getEncounterDate() {
+        return encounterDate;
     }
 
-    public void setHtmlPart(String htmlPart) {
-        this.htmlPart = htmlPart;
+    public void setEncounterDate(String encounterDate) {
+        this.encounterDate = encounterDate;
     }
 
-    public String getProvider() {
-        return provider;
+    public String getTitle() {
+        return title;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public String getDetails() {
+        return details;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setDetails(String details) {
+        this.details = details;
     }
+
+    
 }

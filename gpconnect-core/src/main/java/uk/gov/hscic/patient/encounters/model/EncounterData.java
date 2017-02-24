@@ -16,15 +16,14 @@
 
 package uk.gov.hscic.patient.encounters.model;
 
-import java.util.Date;
-
-public class EncounterListHTML {
+public class EncounterData {
 
     private String sourceId;
     private String source;
-    private String provider;
-    private String html;
-    private Date lastUpdated;
+    private String encounterDate;
+    private String title;
+    private String details;
+
 
     public String getSourceId() {
         return sourceId;
@@ -42,27 +41,29 @@ public class EncounterListHTML {
         this.source = source;
     }
 
-    public String getProvider() {
-        return provider;
+    public String getEncounterDate() {
+        return encounterDate;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
+    public void setEncounterDate(String encounterDate) {
+        this.encounterDate = encounterDate;
     }
 
-    public String getHtml() {
-        return html;
+    public String getTitle() {
+        return title;
     }
 
-    public void setHtml(String html) {
-        this.html = html;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public String getDetails() {
+        return details;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setDetails(String details) {
+        this.details = details;
     }
+    
+
 }

@@ -22,7 +22,7 @@ import java.util.List;
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
+import uk.gov.hscic.patient.encounters.model.EncounterData;
 
 public class NotConfiguredEncounterSearch implements EncounterSearch {
 
@@ -37,7 +37,7 @@ public class NotConfiguredEncounterSearch implements EncounterSearch {
     }
 
     @Override
-    public List<EncounterListHTML> findAllEncounterHTMLTables(final String patientId, Date fromDate, Date toDate) {
+    public List<EncounterData> findAllEncounterHTMLTables(final String patientId, Date fromDate, Date toDate) {
         throw ConfigurationException.unimplementedTransaction(EncounterSearch.class);
     }
 }

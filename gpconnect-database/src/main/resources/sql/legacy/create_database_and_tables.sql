@@ -252,11 +252,11 @@ CREATE TABLE gpconnect.referrals (
 
 CREATE TABLE gpconnect.encounters (
  id                  BIGINT     	NOT NULL    AUTO_INCREMENT,
- nhsNumber			 BIGINT 		NULL,
+ nhsNumber			  VARCHAR(100) NULL,
  sectionDate		 DATETIME		NULL,
- htmlPart			 VARCHAR(4096) 	NULL,
- provider            VARCHAR(10)   	NULL,
- lastUpdated		 DATETIME 	   	NULL,
+ encounterDate		VARCHAR(200)   NULL,
+ title				VARCHAR(200)   NULL,
+ details 			VARCHAR(400)   NULL,
  PRIMARY KEY         (id)
 );
 

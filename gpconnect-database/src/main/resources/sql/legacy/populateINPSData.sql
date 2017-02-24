@@ -58,22 +58,14 @@ VALUES (
 );
 
 INSERT INTO gpconnect.encounters
-  (nhsNumber, sectionDate, htmlPart, provider, lastUpdated)
+  (nhsNumber, sectionDate,encounterDate,title,details)
 VALUES (
-  9476719966, '2016-04-20 00:00:01',
-  "<table><h2>Encounters</h2><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>20-Apr-2016</th><th>Clinic - Dr Bob Ash</th></tr><tr><td></td><td><div>BP 120 / 80 at 15:20:00 taken Sitting Cuff: Standard O/E - blood pressure reading</div><div>Repeat Cetirizine 10mg tablets Last issued: 01-Mar-2016 maximum 4 allowed Supply ( 7 ) tablet TAKE 1 A DAY FOR UP TO 7 DAYS</div><div>Issue 1 Cetirizine 10mg tablets Supply ( 7 ) tablet TAKE 1 A DAY FOR UP TO 7 DAYS</div></td></tr></tbody></table>",
-  "INPS", '2016-07-25 12:00:00'
-),
-(
-  9476719966, '2013-06-02 00:00:01',
-  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>02-Jun-2013</th><th>Surgery Consultation - Dr Bob Ash</th></tr><tr><td/><td><div>BP 120 / 72 at: 02-Jun-2013 09:56:00 taken Sitting from Left Cuff: Standard O/E - blood pressure reading</div><div>O/E - pulse rate 79 beats/min</div></td></tr></tbody></table>",
-  "INPS", '2016-07-25 12:00:00'
-),
-(
-  9476719966, '2010-09-02 00:00:01',
-  "<table><thead><th>Date</th><th>Title</th><th>Details</th></thead><tbody><tr><th>02-Sep-2010</th><th>Surgery Consultation - Dr Bob Ash</th></tr><tr><td/><td><div>Mechanical low back pain</div></td></tr></tbody></table>",
-  "INPS", '2016-07-25 12:00:00'
-);
+  9476719966, '2016-04-20 00:00:01', '2016-04-20 00:00:01',"Clinic - Dr Bob Ash","HBP"),
+ ( 9476719966, '2016-04-20 00:00:01', '2016-04-20 00:00:01',"Clinic - Dr Bob Ash","LBP"),
+ ( 9476719966, '2015-04-20 00:00:01', '2015-04-20 00:00:01',"Surgery Consultation - Dr Bob Ash","Mechanical low back pain"
+ );
+
+
 
 INSERT INTO gpconnect.immunisations
   (nhsNumber, dateOfVac, vaccination, part, contents, details)

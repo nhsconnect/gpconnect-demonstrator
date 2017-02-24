@@ -80,7 +80,7 @@ import uk.gov.hscic.patient.allergies.model.AllergyData;
 import uk.gov.hscic.patient.allergies.search.AllergySearch;
 import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemData;
 import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearch;
-import uk.gov.hscic.patient.encounters.model.EncounterListHTML;
+import uk.gov.hscic.patient.encounters.model.EncounterData;
 import uk.gov.hscic.patient.encounters.search.EncounterSearch;
 import uk.gov.hscic.patient.immunisations.model.ImmunisationData;
 import uk.gov.hscic.patient.immunisations.search.ImmunisationSearch;
@@ -482,13 +482,39 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "ENC":
-                                List<EncounterListHTML> encounterList = encounterSearch
+                                List<EncounterData> encounterList = encounterSearch
                                         .findAllEncounterHTMLTables(nhsNumber.get(0), fromDate, toDate);
 
                                 if (encounterList != null && !encounterList.isEmpty()) {
+
+                                    List<List<Object>> encounterRows = new ArrayList<>();
+                                    String htmlTable = "";
+                                    String ecounterTemp = "";
+                                    List<String> htmlTableCollection = new ArrayList<>();
+                                    for (EncounterData encounterData : encounterList)
+
+                                    {
+                                        encounterRows.clear();
+                                        encounterRows.add(Arrays.asList(encounterData.getEncounterDate(),
+                                                encounterData.getDetails()));
+                                        System.out.println(encounterRows.size());
+
+                                        TableObject encountersTable = new TableObject(Arrays.asList("Date", "Title"),
+                                                encounterRows, "Encounters");
+
+                                        htmlTable = buildTable.tableCreationFromObject(encountersTable);
+                                        htmlTableCollection.add(htmlTable);
+
+                                    }
+                                    System.out.println(htmlTableCollection.size());
+                                    for (String table : htmlTableCollection) {
+                                        ecounterTemp = ecounterTemp + table;
+                                    }
+
+                                    ecounterTemp = buildTable.addDiv(ecounterTemp);
                                     section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "ENC",
-                                            encounterList.get(0).getHtml(), "Encounters", section, "Encounters");
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "ENC", ecounterTemp, "Encounters",
+                                            section, "Encounters");
 
                                     sectionsList.add(section);
                                 } else {
@@ -869,30 +895,27 @@ public class PatientResourceProvider implements IResourceProvider {
 
                                     if (observationList != null && !observationList.isEmpty()) {
                                         List<List<Object>> observationRows = new ArrayList<>();
-                                        
+
                                         for (ObservationData observationItemData : observationList) {
                                             observationRows.add(Arrays.asList(observationItemData.getObservationDate(),
-                                                    observationItemData.getEntry(), observationItemData.getValue()
-                                                    , observationItemData.getValue()));
+                                                    observationItemData.getEntry(), observationItemData.getValue(),
+                                                    observationItemData.getValue()));
                                         }
-                                        
+
                                         TableObject observationsTable = new TableObject(
-                                                Arrays.asList("Date", "Entry","Value", "Details"), observationRows,
+                                                Arrays.asList("Date", "Entry", "Value", "Details"), observationRows,
                                                 "Observations");
                                         htmlTable = buildTable.tableCreationFromObject(observationsTable);
-                                        
+
                                         htmlTable = buildTable.addDiv(htmlTable);
-                                        
-                                        
-                                     
-                                      
+
                                     } else {
-                                       htmlTable = buildTable.buildEmptyHtml("Observations");
-                                        
+                                        htmlTable = buildTable.buildEmptyHtml("Observations");
+
                                     }
                                     section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "OBS", htmlTable,
-                                            "Observations", section, "Observations");
+                                            OperationConstants.SYSTEM_RECORD_SECTION, "OBS", htmlTable, "Observations",
+                                            section, "Observations");
                                     sectionsList.add(section);
                                 }
 

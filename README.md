@@ -1,7 +1,7 @@
 GPConnect Demonstrator
 =========
 
-The following README contains information related to developing and running the GP Connect Demonstrator locally, including how to peroform a build. If you wish to setup a basic deployed instance of the demonstrator on a tomcat server there is a setup guide within the "Documents" folder at the root of this project. This will give you a simple guide to getting a basic instance of the GP Connect Demonstrator up and running and some basic configuration information. There is a second document within the "Documents" folder which goes into more detail about configuration options for the GP Connect Demonstrator.
+This README contains information related to developing, building and running the GP Connect Demonstrator.
 
 ### Requirements
 
@@ -10,32 +10,32 @@ To develop and run the application locally you must have the following installed
 | Component | Description |
 |---|---|
 | Git | A revision control system. |
-| Java JDK 8 | is a development support environment for Java. It includes a Java Runtime Environment (JRE), an interpreter (java), a compiler (javac) and many other tools needed in Java development. |
-| Maven 3  | A tool for building and managing java projects |
-| MySQL  | An open source relational database management system |
+| Java JDK 8 | The Java Development Kit, which includes the Java Runtime Environment (JRE). |
+| Maven 3  | A popular Java build tool. |
+| MySQL  | An open source RDBMS. |
 | NodeJS | An open source, cross-platform runtime environment for developing networking applications in JavaScript. |
-| Ruby | An open source programming language |
-| Ruby Gems | A package manager for the Ruby programming language, providing a standard format for distributing Ruby programs and libraries. |
+| Ruby | An open source programming language. |
+| Ruby Gems | A Ruby package manager. |
 
 ***
 
 ### Getting Started
 
-The first task will be to download the code from github. This can be done using the desktop git tool, an IDE which supports git or by downloading the code as a zip file which you can extract onto your development computer.
+First, download the code from GitHub. This can be done using the desktop git tool, an IDE which supports git or by downloading the code as a zip file which you can then extract.
 
-Once you have downloaded the code the next action will be to install the development tools and dependancies required to build the project.
+Next, install the dev tools and dependencies....
 
-### Installation of Development Tools and Programming Languages
+### Installation of Development Tools and Dependencies
 
-#### Install Git for windows:
+#### Install Git for Windows:
 
-Install official git release from:
+Install official git release:
 https://git-scm.com/download/win
 
-Or install github which includes a git release as well as a GUI interface for git management:
+Or install GitHub Desktop which also includes a GUI interface for git management:
 https://desktop.github.com/
 
-#### Install the JavaScript package manager NodeJS:
+#### Install NodeJS:
 https://nodejs.org/download/
 
 #### Install Java Development Kit 8:
@@ -56,30 +56,28 @@ Ensure that the system environment variables for Java, Maven, Ruby, and Ruby Gem
 
 M2_HOME should point to the install directory of your local Maven install folder, e.g.
 ```
-M2_HOME C:\Maven\apache-maven-3.3.3
+M2_HOME C:\Maven\apache-maven-3.3.9
 ```
 
 JAVA_HOME should point to the install directory of your local Java JDK install folder, e.g.
 ```
-JAVA_HOME C:\Program Files\Java\jdk1.8.0_65
+JAVA_HOME C:\Program Files\Java\jdk1.8.0_121
 ```
 
 RUBY_HOME should point to the install directory of your local Ruby lang install folder, e.g.
 ```
-RUBY_HOME C:\Ruby22-x64
+RUBY_HOME C:\Ruby233-x64
 ```
 
 RUBYGEMS_HOME should point to the install directory of your local Ruby Gems install folder, e.g.
 ```
-RUBYGEMS_HOME C:\Javascript\rubygems-2.5.1
+RUBYGEMS_HOME C:\Javascript\rubygems-2.6.10
 ```
 
 PATH should contain the bin directory of both M2_HOME and JAVA_HOME, e.g.
 ```
 ...;%JAVA_HOME%\bin;%M2_HOME%\bin;%RUBY_HOME%\bin;%RUBYGEMS_HOME%\bin;...
 ```
-
-
 
 ### Installation of the MySQL Database
 
@@ -89,36 +87,29 @@ http://dev.mysql.com/downloads/installer/
 When using the Windows installer above, the PATH variables are automatically set.
 
 Create the database locally by executing the scripts found in the following directory:
-*gpconnect-database/src/main/resources/sql/legacy*
+```
+{projectRoot}/gpconnect-database/src/main/resources/sql/legacy*
+```
 
-These scripts are to be run in the order specified in the following file (located in the directory described above):
-*sql_script_run_order.info*
+These scripts are to be run in the order specified in (located in the directory described above):
+```
+sql_script_run_order.info
+```
 
+### Environment configuration
 
+Some settings are specific to the environment the application is running on e.g. database username/password/location.
 
-### Initialising the Tomcat Context File (XML Descriptor):
+The environment specific files can be found in:
+```
+{projectRoot}/config
+```
 
-Throughout the Java side of the application, environment properties are used. These are properties which correspond to
-certain settings, such as:
-* Addresses of data sources
-* Usernames and passwords for data sources
-* Specific endpoints to be used for queries
-
-To find an example of this file, you can copy the a fully working example of one, which is located in the following
-directory:
-*gpconnect-demonstrator-api\src\main\resources\config\tomcat-context-example.xml*
-
-Copy the file to the *root directory* of the project. It is imperative that this context file is located here when on a
-development environment.
-
-Rename the context file to:
-*context-gpconnect.xml*
-
-
+You are welcome to use these configuration files in situ, however we ask that any changes made are *not* committed back to GitHub, unless you're adding a new property. Instead you may wish to copy this entire directory to another location on your machine and point your application to the copied files (how to do this is covered later).
 
 ### Installing front end packages
 
-Install Grunt, the JavaScript task runner. You may need to be root user:
+Install Grunt, the JavaScript task runner (you may need to be root user):
 ```sh
 npm install -g grunt-cli bower
 ```
@@ -130,7 +121,7 @@ gem install sass
 
 Navigate to the webapp folder of the GPConnect project:
 ```sh
-cd {projectRoot}\webapp
+cd {projectRoot}/webapp
 ```
 
 Install all packages used in the GPConnect project. If you are prompted to select a version of AngularJS, select v1.3.12:
@@ -148,33 +139,28 @@ Update NodeJS:
 npm update
 ```
 
-
 ### Running the Application
 
-Open up a shell and navigate to the *root directory* of the project.
+Open up a shell and navigate to the *root directory* of the project:
 ```sh
 cd {projectRoot}
 ```
 
-Use the following command to spin up an instance of a development server (the Java API code):
+Build the project:
 ```sh
-mvn clean package -Pwebapp:run
+mvn clean package
+```
+
+Now spin up an instance of the application (\<path_to_config\> is the path to the Environment configuration discussed earlier, and must end with a slash):
+```sh
+java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19191 --config.path=<path_to_config>/
 ```
 
 If you're experiencing build errors, execute the following commands:
 ```sh
 java -version
-```
-
-```sh
 mvn --version
-```
-
-```sh
 ruby --version
-```
-
-```sh
 gem --version
 ```
 
@@ -183,15 +169,15 @@ to the correct install directory, and that the *\bin* directories within them ar
 
 ### Running the front end
 
-Now that the server is running you can start up the front end of the GP Connect demonstrator. You will need to open up a second command shell and use grunt to serve the web assets as follows:
+Now the server is running you can start up the front end of the GP Connect demonstrator. You will need to open up a second command shell and use grunt to serve the web assets as follows:
 
 Firstly, change the current directory to the webapp package within the root directory of the project.
 ```sh
 cd {projectRoot}\webapp
 ```
 
-Serving the web assets will also watch for changes to the front end code, and re-serve those assets (used to facilitate
-speedy development of the UI).
+Serving the web assets will also watch for changes to the front end code, and re-serve those assets (to facilitate
+speedy UI development).
 
 These assets, and the features and themes enabled, are centred around the idea of a specific tenant. There is currently only the default
 GPConnect tenant but others can be added when required.
@@ -201,44 +187,31 @@ In order to run the application using the standard GPConnect tenant:
 grunt serve
 ```
 
-
 ### Deployment and Server Configuration
+
+In a production environment, the GPConnect project will not be running the back end and UI separately. The following method inserts the UI into the main application so it can be run at the same time.
 
 Following the same logic shown above for serving the web assets, but use the *build* task instead of the *serve* task:
 ```sh
 grunt build
 ```
 
-
-The build task minifies and uglifies the front end code in the webapp directory of the project, and packages it up
+The *build* task minifies and uglifies the front end code in the webapp directory of the project, and packages it up
 in the gpconnect-demonstrator-api module under the following directory:
-*gpconnect-demonstrator-api\src\main\webapp*
-
-Once you have run the grunt build you can compile and package the project using maven which will create the WAR file you can deploy to a application server and it will contain all the latest frontend and backend code.
-```sh
-mvn clean package
+```
+{projectRoot}/gpconnect-demonstrator-api/src/main/webapp
 ```
 
-It is important to run the "grunt build" before the "mvn clean package" as this means that the packaged *gpconnect-demonstrator-api* module will contain the built front end along with the back end code.
+Once you've run the build task, rebuild and run the main application (stop any other processes first) using the same command as before. When it starts, you'll now see the UI.
 
-The built project will appear as a WAR file in the following directory, with the name "gpconnect-demonstrator-api.war":
-```sh
-{projectRoot}\gpconnect-demonstrator-api\target
-```
-The WAR file can be deployed to an application server, such as tomcat. For information on creating a simple tomcat deployment for testing purposes take a look at the "1 - Basic Server Deployment & Configuration.docx" in the following directory:
-```sh
-{projectRoot}\Documents
-```
+This combined war file can now be run on any environment.
 
 ### Data Clear Down
-For Appointments and Tasks there is a clear down process which is scheduled using a Spring Scheduled event configured with a "cron" string. When the clear down task runs it will delete all GP Connect Demonstrator Tasks previously added. It will also delete all Appointments and remove the currently available Slots, after which it will try and build a new set of slots using a slots sample data file.
+For Appointments and Tasks there is a clear down process which is scheduled using a Spring Scheduled event configured with a "cron" string. When the clear down task runs it will delete all GP Connect Demonstrator Tasks previously added. It will also delete all Appointments and remove the currently available slots, after which it will try and build a new set of slots using a slots sample data file.
 
-The "cron" string which controls the scheduled event can be found in the environmental properties files with the name "legacy.datasource.cleardown.cron"
-The file which it uses to build slots should be pointed to by the environmental properties with the name "legacy.datasource.refresh.slots.file"
+The "cron" string which controls the scheduled event can be found in the environmental properties files with the name "legacy.datasource.cleardown.cron".
 
-The properties can be found in the tomcat-context-example.xml file and the example slots data file can be found in the root of the project folder, named "slots.txt"
-
-
+The file which it uses to build slots should be pointed to by the environmental properties with the name "legacy.datasource.refresh.slots.filename".
 
 ### A Bit More on Tenants
 
@@ -263,15 +236,6 @@ grunt serve --tenant=gpconnect
 Or...
 ```sh
 grunt build --tenant=gpconnect
-```
-
-
-
-### Integration Testing
-
-Use the following command to run integration tests:
-```sh
-mvn failsafe:integration-test
 ```
 
 ##### ENJOY!

@@ -154,6 +154,8 @@ The *build* task minifies and uglifies the front end code in the webapp director
 
 ### Running the application
 
+Note: *If you have not performed the 'Building the front end' task, there will be no UI in the project!*
+
 Open up a shell and navigate to the *root directory* of the project and use maven to build:
 ```sh
 cd {projectRoot}

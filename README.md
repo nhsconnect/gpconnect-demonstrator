@@ -139,21 +139,37 @@ Update NodeJS:
 npm update
 ```
 
-### Running the Application
+### Building the front end
 
-Open up a shell and navigate to the *root directory* of the project:
+Run the *build* task within the webapp directory of the project.
 ```sh
-cd {projectRoot}
+cd {projectRoot}\webapp
+grunt build
 ```
 
-Build the project:
+The *build* task minifies and uglifies the front end code in the webapp directory of the project, and packages it up in the gpconnect-demonstrator-api module under the following directory:
+```
+{projectRoot}/gpconnect-demonstrator-api/src/main/webapp
+```
+
+### Running the application
+
+Open up a shell and navigate to the *root directory* of the project and use maven to build:
 ```sh
+cd {projectRoot}
 mvn clean package
 ```
 
 Now spin up an instance of the application (\<path_to_config\> is the path to the Environment configuration discussed earlier, and must end with a slash):
 ```sh
-java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19191 --config.path=<path_to_config>/
+java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19191 --config.path=<path_to_config>\
+```
+
+This will run the UI on http://localhost:19191
+
+Alternatively, if working in an IDE you could run the following mvn task
+```
+spring-boot:run -Dserver.port=19191 -Dconfig.path=<path_to_config>\
 ```
 
 If you're experiencing build errors, execute the following commands:
@@ -164,47 +180,19 @@ ruby --version
 gem --version
 ```
 
-If they do not return a suitable response, ensure that the system environment variables described above are pointing
-to the correct install directory, and that the *\bin* directories within them are on your PATH system environment variable.
+If they do not return a suitable response, ensure that the system environment variables described above are pointing to the correct install directory, and that the *\bin* directories within them are on your PATH system environment variable.
 
-### Running the front end
+### Developing the front end 
 
-Now the server is running you can start up the front end of the GP Connect demonstrator. You will need to open up a second command shell and use grunt to serve the web assets as follows:
-
-Firstly, change the current directory to the webapp package within the root directory of the project.
+When developing the UI, it's best to run it separately to the back end. To do this, open up a second command shell and use the following commands:
 ```sh
 cd {projectRoot}\webapp
-```
-
-Serving the web assets will also watch for changes to the front end code, and re-serve those assets (to facilitate
-speedy UI development).
-
-These assets, and the features and themes enabled, are centred around the idea of a specific tenant. There is currently only the default
-GPConnect tenant but others can be added when required.
-
-In order to run the application using the standard GPConnect tenant:
-```sh
 grunt serve
 ```
 
-### Deployment and Server Configuration
+This will run the UI on http://localhost:9000
 
-In a production environment, the GPConnect project will not be running the back end and UI separately. The following method inserts the UI into the main application so it can be run at the same time.
-
-Following the same logic shown above for serving the web assets, but use the *build* task instead of the *serve* task:
-```sh
-grunt build
-```
-
-The *build* task minifies and uglifies the front end code in the webapp directory of the project, and packages it up
-in the gpconnect-demonstrator-api module under the following directory:
-```
-{projectRoot}/gpconnect-demonstrator-api/src/main/webapp
-```
-
-Once you've run the build task, rebuild and run the main application (stop any other processes first) using the same command as before. When it starts, you'll now see the UI.
-
-This combined war file can now be run on any environment.
+Any changes to the front end code will be watched and re-served immediately for quick development.
 
 ### Data Clear Down
 For Appointments and Tasks there is a clear down process which is scheduled using a Spring Scheduled event configured with a "cron" string. When the clear down task runs it will delete all GP Connect Demonstrator Tasks previously added. It will also delete all Appointments and remove the currently available slots, after which it will try and build a new set of slots using a slots sample data file.
@@ -212,30 +200,5 @@ For Appointments and Tasks there is a clear down process which is scheduled usin
 The "cron" string which controls the scheduled event can be found in the environmental properties files with the name "legacy.datasource.cleardown.cron".
 
 The file which it uses to build slots should be pointed to by the environmental properties with the name "legacy.datasource.refresh.slots.filename".
-
-### A Bit More on Tenants
-
-As mentioned previously, the application is centred around the concept of a tenant. This idea can be thought of as a
-specific instance of the system, and the associated themes and behaviour of that instance.
-
-Using the system under the precept of a tenant will alter the look and feel of the site, and will also activate or deactivate
-functionality.
-
-The current tenants programmed into GPConnect are:
-* gpconnect
-
-Currently the default and only tenant is *gpconnect*, meaning that there is no need to specify the *--tenant* flag on a
-serve or build. However, the mechanism is there so that different tenants, and their associated profile, can be developed.
-
-In order to make use of a tenant's version of the site, you may either serve or build the site with the *--tenant* argument
-appended to the grunt command, e.g.
-```sh
-grunt serve --tenant=gpconnect
-```
-
-Or...
-```sh
-grunt build --tenant=gpconnect
-```
 
 ##### ENJOY!

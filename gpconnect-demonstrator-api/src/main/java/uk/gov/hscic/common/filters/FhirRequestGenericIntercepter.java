@@ -8,10 +8,10 @@ import ca.uhn.fhir.rest.server.exceptions.MethodNotAllowedException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -77,15 +77,18 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     @Autowired
     private CertificateValidator certificateValidator;
 
-    @Value("${gp.connect.provider.routing.file:#{null}}")
-    protected String providerRoutingFile;
+    @Value("${config.path}")
+    private String configPath;
+
+    @Value("${gp.connect.provider.routing.filename:#{null}}")
+    protected String providerRoutingFilename;
 
     private String systemSspToHeader;
 
     @PostConstruct
     public void postConstruct() {
-        if (providerRoutingFile != null) {
-            Path providerRoutingFilePath = Paths.get(providerRoutingFile);
+        if (providerRoutingFilename != null) {
+            Path providerRoutingFilePath = new File(configPath + providerRoutingFilename).toPath();
 
             if (providerRoutingFilePath.toFile().exists()) {
                 try {

@@ -6,8 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
-import java.util.logging.Logger;
-
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,9 +23,12 @@ import uk.gov.hscic.order.store.OrderStoreFactory;
 @Service
 public class RefreshData {
 
-    @Value("${legacy.datasource.refresh.slots.file}")
-    private String slotsFile;
-    
+    @Value("${config.path}")
+    private String configPath;
+
+    @Value("${legacy.datasource.refresh.slots.filename}")
+    private String slotsFilename;
+
     @Autowired
     OrderStoreFactory orderStoreFactory;
 
@@ -45,16 +46,15 @@ public class RefreshData {
 
     @SuppressWarnings("deprecation")
     public void resetAppointments() {
-
         RepoSource sourceType = RepoSourceType.fromString(null);
-        
+
         LegacySlotStore slotStore = (LegacySlotStore) slotStoreFactory.select(sourceType);
         slotStore.clearSlots();
-        
+
         LegacyAppointmentStore appointmentStore = (LegacyAppointmentStore) appointmentStoreFactory.select(sourceType);
         appointmentStore.clearAppointments();
 
-        File file = new File(slotsFile);
+        File file = new File(configPath + slotsFilename);
         BufferedReader reader = null;
 
         try {
@@ -79,10 +79,11 @@ public class RefreshData {
             e.printStackTrace();
         } finally {
             try {
-                if (reader != null) { reader.close(); }
+                if (reader != null) {
+                    reader.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
-            
             }
         }
     }
@@ -98,5 +99,4 @@ public class RefreshData {
         slot.setLastUpdated(lastUpdated);
         return slot;
     }
-
 }

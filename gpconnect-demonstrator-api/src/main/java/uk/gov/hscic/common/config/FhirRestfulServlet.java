@@ -1,14 +1,12 @@
 package uk.gov.hscic.common.config;
 
-import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.appointments.SlotResourceProvider;
@@ -25,30 +23,29 @@ import uk.gov.hscic.patient.PatientResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 @Configuration
-@WebServlet(urlPatterns={"/fhir/*"}, displayName="FHIR Server")
+@WebServlet(urlPatterns = {"/fhir/*"}, displayName = "FHIR Server")
 public class FhirRestfulServlet extends RestfulServer {
     private static final long serialVersionUID = 1L;
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     @Override
     protected void initialize() throws ServletException {
-        List<IResourceProvider> resourceProviders = new ArrayList<>();
-
-        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-
-        resourceProviders.add(applicationContext.getBean(PatientResourceProvider.class));
-        resourceProviders.add(applicationContext.getBean(OrganizationResourceProvider.class));
-        resourceProviders.add(applicationContext.getBean(PractitionerResourceProvider.class));
-        resourceProviders.add(applicationContext.getBean(MedicationResourceProvider.class));
-        resourceProviders.add(applicationContext.getBean(MedicationOrderResourceProvider.class));
-        resourceProviders.add(applicationContext.getBean(MedicationDispenseResourceProvider.class));
-        resourceProviders.add(applicationContext.getBean(MedicationAdministrationResourceProvider.class));
-        resourceProviders.add(applicationContext.getBean(LocationResourceProvider.class));
-        resourceProviders.add(applicationContext.getBean(AppointmentResourceProvider.class));
-        resourceProviders.add(applicationContext.getBean(ScheduleResourceProvider.class));
-        resourceProviders.add(applicationContext.getBean(SlotResourceProvider.class));
-        resourceProviders.add(applicationContext.getBean(OrderResourceProvider.class));
-
-        setResourceProviders(resourceProviders);
+        setResourceProviders(Arrays.asList(
+                applicationContext.getBean(PatientResourceProvider.class),
+                applicationContext.getBean(OrganizationResourceProvider.class),
+                applicationContext.getBean(PractitionerResourceProvider.class),
+                applicationContext.getBean(MedicationResourceProvider.class),
+                applicationContext.getBean(MedicationOrderResourceProvider.class),
+                applicationContext.getBean(MedicationDispenseResourceProvider.class),
+                applicationContext.getBean(MedicationAdministrationResourceProvider.class),
+                applicationContext.getBean(LocationResourceProvider.class),
+                applicationContext.getBean(AppointmentResourceProvider.class),
+                applicationContext.getBean(ScheduleResourceProvider.class),
+                applicationContext.getBean(SlotResourceProvider.class),
+                applicationContext.getBean(OrderResourceProvider.class)
+        ));
 
         registerInterceptor(applicationContext.getBean(FhirRequestAuthInterceptor.class));
         registerInterceptor(applicationContext.getBean(FhirRequestGenericIntercepter.class));

@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class EndpointResolverTest {
     private EndpointResolver endpointResolver;
@@ -13,8 +14,10 @@ public class EndpointResolverTest {
     public void setUp() throws Exception {
         endpointResolver = new EndpointResolver();
 
+        ReflectionTestUtils.setField(endpointResolver, "configPath", "");
+
         URI externalSystemsUri = EndpointResolver.class.getResource("provider.routing.json").toURI();
-        endpointResolver.providerRoutingFile = Paths.get(externalSystemsUri).toString();
+        endpointResolver.providerRoutingFilename = Paths.get(externalSystemsUri).toString();
         endpointResolver.postConstruct();
     }
 

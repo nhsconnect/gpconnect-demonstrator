@@ -15,7 +15,7 @@ import uk.gov.hscic.order.search.OrderSearch;
 import uk.gov.hscic.order.store.OrderStore;
 
 @RestController
-@RequestMapping("/notfhir/orders")
+@RequestMapping("api/notfhir/orders")
 public class OrderRestController {
 
     @Autowired

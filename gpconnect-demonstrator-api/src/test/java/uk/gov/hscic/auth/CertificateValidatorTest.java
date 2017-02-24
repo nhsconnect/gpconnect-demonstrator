@@ -1,27 +1,37 @@
-package uk.gov.hscic.tests;
+package uk.gov.hscic.auth;
 
 import java.security.cert.X509Certificate;
 import static org.junit.Assert.assertNotNull;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.x509;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.hscic.IntegrationTest;
-import uk.gov.hscic.auth.KeyStoreFactory;
+import uk.gov.hscic.common.ldap.EndpointResolver;
 
-public class SignedHandlerIT extends IntegrationTest {
+@RunWith(SpringRunner.class)
+@TestPropertySource(properties = {
+    "gp.connect.provider.routing.filename = providerRouting.json",
+    "ldap.context.keystore = ldapKeystore.jks",
+    "ldap.context.keystore.pwd = password",
+    "ldap.context.keystore.type = JKS",
+    "ldap.context.port = 10636",
+    "ldap.context.url = localhost",
+    "ldap.context.useSSL = false"
+})
+@WebMvcTest(EndpointResolver.class)
+public class CertificateValidatorTest {
+    protected static final String KEYSTORE_PATH = "src/test/resources/Authentication/";
+    protected static final String PASSWORD = "password";
+
+    @Autowired
     private MockMvc mockMvc;
-
-    @Before
-    public void setUp() throws Exception {
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(webApplicationContext)
-                .build();
-    }
 
     @Test
     public void validCertificateEndpointLookupTest() throws Exception {
@@ -31,7 +41,7 @@ public class SignedHandlerIT extends IntegrationTest {
 
         assertNotNull(x);
 
-        mockMvc.perform(get("/ldap/endpointLookup")
+        mockMvc.perform(get("/api/ldap/endpointLookup")
                 .secure(true)
                 .param("odsCode", "GPC001")
                 .param("interactionId", "interactionId_A")

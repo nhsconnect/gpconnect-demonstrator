@@ -23,7 +23,7 @@ angular.module('gpConnect')
             var searchForOrganisation = function (practiceOdsCode, patientId, searchOrgOdsCode) {
                 return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:organization").then(function (response) {
                     var endpointLookupResult = response;
-                    return $http.get(endpointLookupResult.restUrlPrefix + '/Organization?identifier=http://fhir.nhs.net/Id/ods-organization-code|' + searchOrgOdsCode,
+                    return $http.get(endpointLookupResult.restUrlPrefix + '/Organization?identifier=http://fhir.nhs.net/Id/ods-organization-code%7C' + searchOrgOdsCode,
                             {
                                 headers: {
                                     'Ssp-From': endpointLookupResult.fromASID,

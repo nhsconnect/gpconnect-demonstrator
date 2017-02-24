@@ -34,7 +34,7 @@ angular.module('gpConnect').factory('PatientService', function ($rootScope, $htt
             var endpointLookupResult = endpointResponse;
             
             var partientLookupResponse = $http.get(
-                    endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|' + patientId,
+                    endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number%7C' + patientId,
                     {
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
@@ -64,7 +64,7 @@ angular.module('gpConnect').factory('PatientService', function ($rootScope, $htt
         return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function(response) {
             var endpointLookupResult = response;
             var response = $http.get(
-                    endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number|' + patientId,
+                    endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number%7C' + patientId,
                     {
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,

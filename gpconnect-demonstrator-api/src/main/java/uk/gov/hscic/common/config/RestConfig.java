@@ -16,27 +16,34 @@
 package uk.gov.hscic.common.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import uk.gov.hscic.auth.CertificateValidator;
 import uk.gov.hscic.auth.KeyStoreFactory;
 
-@Configuration
-@EnableWebMvc
-@ComponentScan("uk.gov.hscic")
-public class RestConfig extends WebMvcConfigurerAdapter {
+@ServletComponentScan
+@SpringBootApplication
+@ComponentScan(basePackages = "uk.gov.hscic")
+@PropertySource("file:${config.path}/gpconnect-demonstrator-api.properties")
+public class RestConfig {
+
+    @Value("${config.path}")
+    private String configPath;
 
     @Value("${server.keystore.password}")
     private String keystorePassword;
 
-    @Value("${server.keystore.path}")
-    private String keystorePath;
+    @Value("${server.keystore.name}")
+    private String keystoreName;
+
+    public static void main(String[] args) {
+        SpringApplication.run(RestConfig.class, args);
+    }
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -45,19 +52,6 @@ public class RestConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public CertificateValidator certificateValidator() throws Exception {
-        return new CertificateValidator(KeyStoreFactory.getKeyStore(keystorePath, keystorePassword));
-    }
-
-    @Bean
-    public RequestMappingHandlerMapping requestMappingHandlerMapping() {
-        final RequestMappingHandlerMapping handlerMapping = new RequestMappingHandlerMapping();
-        handlerMapping.setUseSuffixPatternMatch(false);
-
-        return handlerMapping;
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        return new CertificateValidator(KeyStoreFactory.getKeyStore(configPath + keystoreName, keystorePassword));
     }
 }

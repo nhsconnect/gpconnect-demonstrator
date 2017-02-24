@@ -1,11 +1,11 @@
 package uk.gov.hscic.common.ldap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,14 +21,19 @@ import org.apache.directory.ldap.client.api.LdapNetworkConnection;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hscic.common.ldap.model.Practice;
 import uk.gov.hscic.common.ldap.model.ProviderRouting;
 
 @RestController
+@RequestMapping("api/")
 public class EndpointResolver {
     private static final Logger LOG = Logger.getLogger("LDAPLog");
+
+    @Value("${config.path}")
+    private String configPath;
 
     @Value("${ldap.context.url}")
     private String ldapUrl;
@@ -39,8 +44,8 @@ public class EndpointResolver {
     @Value("${ldap.context.useSSL}")
     private boolean ldapUseSSL;
 
-    @Value("${ldap.context.keystore}")
-    private String keystore;
+    @Value("${ldap.context.keystore.filename}")
+    private String keystoreFilename;
 
     @Value("${ldap.context.keystore.pwd}")
     private String keystorePassword;
@@ -48,8 +53,8 @@ public class EndpointResolver {
     @Value("${ldap.context.keystore.type}")
     private String keystoreType;
 
-    @Value("${gp.connect.provider.routing.file:#{null}}")
-    protected String providerRoutingFile;
+    @Value("${gp.connect.provider.routing.filename:#{null}}")
+    protected String providerRoutingFilename;
 
     private Path providerRoutingFilePath;
 
@@ -58,8 +63,8 @@ public class EndpointResolver {
 
     @PostConstruct
     public void postConstruct() {
-        if (providerRoutingFile != null) {
-            providerRoutingFilePath = Paths.get(providerRoutingFile);
+        if (providerRoutingFilename != null) {
+            providerRoutingFilePath = new File(configPath + providerRoutingFilename).toPath();
         }
     }
 
@@ -164,7 +169,7 @@ public class EndpointResolver {
 
             if (serverKeyManager == null && trustManager == null) {
                 // Create Key Manager
-                try (FileInputStream keystoreInputStream = new FileInputStream(keystore)) {
+                try (FileInputStream keystoreInputStream = new FileInputStream(configPath + keystoreFilename)) {
                     KeyStore serverKeys = KeyStore.getInstance(keystoreType);
                     serverKeys.load(keystoreInputStream, keystorePassword.toCharArray());
                     serverKeyManager = KeyManagerFactory.getInstance("SunX509");
@@ -172,7 +177,7 @@ public class EndpointResolver {
                 }
 
                 // Create New Trust Store
-                try (FileInputStream keystoreInputStream = new FileInputStream(keystore)) {
+                try (FileInputStream keystoreInputStream = new FileInputStream(configPath + keystoreFilename)) {
                     KeyStore serverTrustStore = KeyStore.getInstance(keystoreType);
                     serverTrustStore.load(keystoreInputStream, keystorePassword.toCharArray());
                     trustManager = TrustManagerFactory.getInstance("SunX509");

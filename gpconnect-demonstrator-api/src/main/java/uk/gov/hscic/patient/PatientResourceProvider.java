@@ -195,13 +195,10 @@ public class PatientResourceProvider implements IResourceProvider {
     @SuppressWarnings("deprecation")
     @Operation(name = "$gpc.getcarerecord")
     public Bundle getPatientCareRecord(@ResourceParam Parameters params) throws UnsupportedDataTypeException {
-        OperationOutcome operationOutcome = new OperationOutcome();
         ArrayList<String> nhsNumber = new ArrayList<>();
         ArrayList<String> sectionsParamList = new ArrayList<>();
-        ArrayList<Entry> medicationsToBundle = new ArrayList<>();
         Date fromDate = null;
         Date toDate = null;
-        BuildHtmlTable buildTable = new BuildHtmlTable();
 
         // Extract the parameters
         boolean recordSectionNotPresent = true;
@@ -278,7 +275,6 @@ public class PatientResourceProvider implements IResourceProvider {
                 }
             } else if (value instanceof PeriodDt) {
                 fromDate = ((PeriodDt) value).getStart();
-                Calendar toCalendar = Calendar.getInstance();
                 toDate = ((PeriodDt) value).getEnd();
 
                 if (fromDate != null && toDate != null && fromDate.after(toDate)) {
@@ -288,7 +284,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
                 }
-
+                Calendar toCalendar = Calendar.getInstance();
                 if (toDate != null) {
                     toCalendar.setTime(toDate);
 
@@ -320,6 +316,7 @@ public class PatientResourceProvider implements IResourceProvider {
         // Build Bundle
         Bundle bundle = new Bundle();
         bundle.setType(BundleTypeEnum.DOCUMENT);
+        OperationOutcome operationOutcome = new OperationOutcome();
 
         for (int i = 0; i < sectionsParamList.size(); i++) {
             if (sectionsParamList.get(i) == null || sectionsParamList.get(i).length() != 3) {
@@ -383,6 +380,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     // Build requested sections
                     if (!sectionsParamList.isEmpty()) {
                         ArrayList<Section> sectionsList = new ArrayList<>();
+                        BuildHtmlTable buildTable = new BuildHtmlTable();
 
                         for (String sectionName : sectionsParamList) {
                             checkSectionCase(sectionName);
@@ -410,16 +408,17 @@ public class PatientResourceProvider implements IResourceProvider {
                                     } else {
                                         section = SectionsCreationClass.buildSection(
                                                 OperationConstants.SYSTEM_RECORD_SECTION, "SUM",
-                                                patientSummaryList.get(0).getHtml(), "Summary", section, "Summary");
+                                                patientSummaryList.get(0).getHtml(), OperationConstants.SUMMARY,
+                                                section, OperationConstants.SUMMARY);
 
                                         sectionsList.add(section);
                                     }
                                 } else {
-                                    String htmlTable = buildTable.buildEmptyHtml("Summary");
+                                    String htmlTable = buildTable.buildEmptyHtml(OperationConstants.SUMMARY);
                                     section = SectionsCreationClass.buildSection(
                                             OperationConstants.SYSTEM_RECORD_SECTION, "SUM",
 
-                                            htmlTable, "Summary", section, "Summary");
+                                            htmlTable, OperationConstants.SUMMARY, section, OperationConstants.SUMMARY);
 
                                     sectionsList.add(section);
                                 }
@@ -497,7 +496,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                         encounterRows.clear();
                                         encounterRows.add(Arrays.asList(encounterData.getEncounterDate(),
                                                 encounterData.getDetails()));
-                                        System.out.println(encounterRows.size());
 
                                         TableObject encountersTable = new TableObject(Arrays.asList("Date", "Title"),
                                                 encounterRows, "Encounters");
@@ -506,7 +504,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         htmlTableCollection.add(htmlTable);
 
                                     }
-                                    System.out.println(htmlTableCollection.size());
+                                    ;
                                     for (String table : htmlTableCollection) {
                                         ecounterTemp = ecounterTemp + table;
                                     }
@@ -1033,6 +1031,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     // Build the Care Record Composition
                     Entry careRecordEntry = new Entry();
                     careRecordEntry.setResource(careRecordComposition);
+                    ArrayList<Entry> medicationsToBundle = new ArrayList<>();
 
                     bundle.addEntry(careRecordEntry);
 

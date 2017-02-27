@@ -169,6 +169,11 @@ Now spin up an instance of the application:
 java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19191 --config.path=config\
 ```
 
+(...or, to start with SSL...)
+```sh
+java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19191 --config.path=config\ --server.ssl.key-store=config\server.jks --server.ssl.key-store-password=password --server.ssl.trust-store=config\server.jks --server.ssl.trust-store-password=password --server.ssl.client-auth=want
+```
+
 Note: *The config.path parameter is the path to the Environment configuration discussed earlier, and must end with a slash.*
 
 This will run the UI on http://localhost:19191

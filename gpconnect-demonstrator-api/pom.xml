@@ -66,13 +66,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <!--
-        <httpsPort>19192</httpsPort>
-        <keystoreFile>../../src/main/resources/authentication/server.jks</keystoreFile>
-        <truststoreFile>../../src/main/resources/authentication/server.jks</truststoreFile>
-        <truststorePass>password</truststorePass>
-        <keystorePass>password</keystorePass>
-        <clientAuth>want</clientAuth>
-    -->
 </project>

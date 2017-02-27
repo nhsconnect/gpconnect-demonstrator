@@ -15,9 +15,12 @@
  */
 package uk.gov.hscic.common.config;
 
+import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,6 +37,9 @@ public class RestConfig {
 
     @Value("${config.path}")
     private String configPath;
+
+    @Value("${server.port.http:-1}")
+    private int httpPort;
 
     @Value("${server.keystore.password}")
     private String keystorePassword;
@@ -53,5 +59,16 @@ public class RestConfig {
     @Bean
     public CertificateValidator certificateValidator() throws Exception {
         return new CertificateValidator(KeyStoreFactory.getKeyStore(configPath + keystoreName, keystorePassword));
+    }
+
+    @Bean
+    public EmbeddedServletContainerCustomizer containerCustomizer() {
+        return container -> {
+            if (container instanceof TomcatEmbeddedServletContainerFactory && httpPort > 0) {
+                Connector connector = new Connector(TomcatEmbeddedServletContainerFactory.DEFAULT_PROTOCOL);
+                connector.setPort(httpPort);
+                ((TomcatEmbeddedServletContainerFactory) container).addAdditionalTomcatConnectors(connector);
+            }
+        };
     }
 }

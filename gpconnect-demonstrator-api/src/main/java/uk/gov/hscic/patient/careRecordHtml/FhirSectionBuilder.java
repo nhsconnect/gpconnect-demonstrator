@@ -56,7 +56,7 @@ public final class FhirSectionBuilder {
             
             // Table
             PageSectionHtmlTable table = pageSection.getTable();
-            if(table == null || table.getRows().size() <= 0){
+            if(table == null){
                 stringBuilder.append("<div><p>No '").append(pageSection.getHeader()).append("' data is recorded for this patient.</p></div>");
             } else {
                 stringBuilder.append("<div><table><thead><tr>");

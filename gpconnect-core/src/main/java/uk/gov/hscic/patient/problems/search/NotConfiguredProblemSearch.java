@@ -4,7 +4,7 @@ import java.util.List;
 
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.problems.model.HTMLProblemObject;
+import uk.gov.hscic.patient.problems.model.ProblemListHTML;
 
 /**
  */
@@ -21,7 +21,7 @@ public class NotConfiguredProblemSearch implements ProblemSearch {
     }
 
     @Override
-    public List<HTMLProblemObject> findAllProblemHTMLTables(final String patientId) {
+    public List<ProblemListHTML> findAllProblemHTMLTables(final String patientId) {
         throw ConfigurationException.unimplementedTransaction(ProblemSearch.class);
     }
 

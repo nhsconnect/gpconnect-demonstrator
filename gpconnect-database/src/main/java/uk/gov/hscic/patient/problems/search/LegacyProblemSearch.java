@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.common.service.AbstractLegacyService;
 import uk.gov.hscic.patient.problems.model.ProblemEntity;
-import uk.gov.hscic.patient.problems.model.ProblemListHTML;
+import uk.gov.hscic.patient.problems.model.HTMLProblemObject;
 import uk.gov.hscic.patient.problems.repo.ProblemRepository;
 
 @Service
@@ -18,13 +18,13 @@ public class LegacyProblemSearch extends AbstractLegacyService implements Proble
     private ProblemRepository problemRepository;
 
     @Override
-    public List<ProblemListHTML> findAllProblemHTMLTables(final String patientId) {
+    public List<HTMLProblemObject> findAllProblemHTMLTables(final String patientId) {
 
        List<ProblemEntity> items = problemRepository.findBynhsNumber(patientId);
-       List<ProblemListHTML> problemsList = new ArrayList<>();
+       List<HTMLProblemObject> problemsList = new ArrayList<>();
        
        for(int i = 0 ; i < items.size(); i++ ){
-           ProblemListHTML problemData = new ProblemListHTML();
+           HTMLProblemObject problemData = new HTMLProblemObject();
            problemData.setActiveOrInactive(items.get(i).getActiveOrInactive());
            problemData.setStartDate(items.get(i).getStartDate());
            problemData.setEndDate(items.get(i).getEndDate());

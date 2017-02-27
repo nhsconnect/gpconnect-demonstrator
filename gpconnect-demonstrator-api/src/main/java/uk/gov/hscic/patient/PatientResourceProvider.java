@@ -91,7 +91,7 @@ import uk.gov.hscic.patient.observations.model.ObservationData;
 import uk.gov.hscic.patient.observations.search.ObservationSearch;
 import uk.gov.hscic.patient.patientsummary.model.PatientSummaryListHTML;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
-import uk.gov.hscic.patient.problems.model.ProblemListHTML;
+import uk.gov.hscic.patient.problems.model.HTMLProblemObject;
 import uk.gov.hscic.patient.problems.search.ProblemSearch;
 import uk.gov.hscic.patient.referral.model.ReferralListHTML;
 import uk.gov.hscic.patient.referral.search.ReferralSearch;
@@ -436,11 +436,11 @@ public class PatientResourceProvider implements IResourceProvider {
                                     PageSection inactiveProblems = new PageSection("Inactive Problems and Issues");
 
                                     // Get and process data
-                                    List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber.get(0));
+                                    List<HTMLProblemObject> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber.get(0));
                                     List<List<Object>> problemActiveRows = new ArrayList<>();
                                     List<List<Object>> problemInactiveRows = new ArrayList<>();
                                     if (problemList != null && !problemList.isEmpty()) {
-                                        for (ProblemListHTML problemListHTML : problemList) {
+                                        for (HTMLProblemObject problemListHTML : problemList) {
                                             if ("Active".equals(problemListHTML.getActiveOrInactive())) {
                                                 problemActiveRows.add(Arrays.asList(problemListHTML.getStartDate(), problemListHTML.getEntry(), problemListHTML.getSignificance(), problemListHTML.getDetails()));
                                             } else {
@@ -842,9 +842,11 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "REF":
-                                List<ReferralListHTML> referralList = referralSearch
-                                        .findAllReferralHTMLTables(nhsNumber.get(0), fromDate, toDate);
-
+                                HtmlPage htmlPage = new HtmlPage("Referrals", "Referrals" ,"REF");
+                                PageSection referralsSection = new PageSection("Referrals");
+                                
+                                List<ReferralListHTML> referralList = referralSearch.findAllReferralHTMLTables(nhsNumber.get(0), fromDate, toDate);
+                                
                                 if (referralList != null && !referralList.isEmpty()) {
                                     section = SectionsCreationClass.buildSection(
                                             OperationConstants.SYSTEM_RECORD_SECTION, "REF",
@@ -857,9 +859,38 @@ public class PatientResourceProvider implements IResourceProvider {
                                             OperationConstants.SYSTEM_RECORD_SECTION, "REF", htmlTable, "Referrals",
                                             section, "Referrals");
                                     sectionsList.add(section);
-
                                 }
+                                List<List<Object>> referralRows = new ArrayList<>();
+                                referralsSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Entry", "Significance", "Details"), referralList));
+                                /*
+                                //////////////////////////////////////////
+                                    HtmlPage htmlPage = new HtmlPage("Problems and Issues", "Problems" ,"PRB");
+                                    PageSection activeProblems = new PageSection("Active Problems and Issues");
+                                    PageSection inactiveProblems = new PageSection("Inactive Problems and Issues");
 
+                                    // Get and process data
+                                    List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber.get(0));
+                                    List<List<Object>> problemActiveRows = new ArrayList<>();
+                                    List<List<Object>> problemInactiveRows = new ArrayList<>();
+                                    if (problemList != null && !problemList.isEmpty()) {
+                                        for (ProblemListHTML problemListHTML : problemList) {
+                                            if ("Active".equals(problemListHTML.getActiveOrInactive())) {
+                                                problemActiveRows.add(Arrays.asList(problemListHTML.getStartDate(), problemListHTML.getEntry(), problemListHTML.getSignificance(), problemListHTML.getDetails()));
+                                            } else {
+                                                problemInactiveRows.add(Arrays.asList(problemListHTML.getStartDate(), problemListHTML.getEndDate(), problemListHTML.getEntry(), problemListHTML.getSignificance(), problemListHTML.getDetails()));
+                                            }
+                                        }
+                                    }
+
+                                    //Build Sections and add to html page
+                                    activeProblems.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Entry", "Significance", "Details"), problemActiveRows));
+                                    inactiveProblems.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "End Date", "Entry", "Significance", "Details"), problemInactiveRows));
+                                    
+                                    htmlPage.addPageSection(activeProblems);
+                                    htmlPage.addPageSection(inactiveProblems);
+                                    sectionsList.add(FhirSectionBuilder.build(htmlPage));
+                                /////////////////////////////////////////////
+                                */
                                 break;
 
                             case "OBS":

@@ -460,49 +460,19 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "ENC":
-                                List<EncounterData> encounterList = encounterSearch
-                                        .findAllEncounterHTMLTables(nhsNumber.get(0), fromDate, toDate);
-
+                                HtmlPage htmlPage = new HtmlPage("Encounters", "Encounters" ,"ENC");
+                                PageSection encountersSection = new PageSection("Encounters");
+                                encountersSection.serDateRange(fromDate, toDate);
+                                List<EncounterData> encounterList = encounterSearch.findAllEncounterHTMLTables(nhsNumber.get(0), fromDate, toDate);
+                                List<List<Object>> encounterRows = new ArrayList<>();
                                 if (encounterList != null && !encounterList.isEmpty()) {
-
-                                    List<List<Object>> encounterRows = new ArrayList<>();
-                                    String htmlTable = "";
-                                    String ecounterTemp = "";
-                                    List<String> htmlTableCollection = new ArrayList<>();
-                                    for (EncounterData encounterData : encounterList)
-
-                                    {
-                                        encounterRows.clear();
-                                        encounterRows.add(Arrays.asList(encounterData.getEncounterDate(),
-                                                encounterData.getDetails()));
-
-                                        TableObject encountersTable = new TableObject(Arrays.asList("Date", "Title"),
-                                                encounterRows, "Encounters");
-
-                                        htmlTable = buildTable.tableCreationFromObject(encountersTable);
-                                        htmlTableCollection.add(htmlTable);
-
+                                    for (EncounterData encounter : encounterList) {
+                                        encounterRows.add(Arrays.asList(encounter.getEncounterDate(), encounter.getTitle(), encounter.getDetails()));
                                     }
-                                    ;
-                                    for (String table : htmlTableCollection) {
-                                        ecounterTemp = ecounterTemp + table;
-                                    }
-
-                                    ecounterTemp = buildTable.addDiv(ecounterTemp);
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "ENC", ecounterTemp, "Encounters",
-                                            section, "Encounters");
-
-                                    sectionsList.add(section);
-                                } else {
-                                    String htmlTable = buildTable.buildEmptyHtml("Encounters");
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "ENC", htmlTable, "Encounters",
-                                            section, "Encounters");
-                                    sectionsList.add(section);
-
                                 }
-
+                                encountersSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Title", "Details"), encounterRows));
+                                htmlPage.addPageSection(encountersSection);
+                                sectionsList.add(FhirSectionBuilder.build(htmlPage));
                                 break;
 
                             case "ALL":

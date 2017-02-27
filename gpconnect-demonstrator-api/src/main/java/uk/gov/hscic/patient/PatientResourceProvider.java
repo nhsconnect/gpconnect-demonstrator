@@ -78,6 +78,7 @@ import uk.gov.hscic.patient.adminitems.model.AdminItemData;
 import uk.gov.hscic.patient.adminitems.search.AdminItemSearch;
 import uk.gov.hscic.patient.allergies.model.AllergyData;
 import uk.gov.hscic.patient.allergies.search.AllergySearch;
+import uk.gov.hscic.patient.careRecordHtml.*;
 import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemData;
 import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearch;
 import uk.gov.hscic.patient.encounters.model.EncounterData;
@@ -429,55 +430,33 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (toDate != null && fromDate != null) {
                                     throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
-                                    List<ProblemListHTML> problemList = problemSearch
-                                            .findAllProblemHTMLTables(nhsNumber.get(0));
 
-                                    String htmlTable;
-                                    String htmlActiveTable;
-                                    String htmlInactiveTable;
+                                    HtmlPage htmlPage = new HtmlPage("Problems and Issues", "Problems" ,"PRB");
+                                    PageSection activeProblems = new PageSection("Active Problems and Issues");
+                                    PageSection inactiveProblems = new PageSection("Inactive Problems and Issues");
+
+                                    // Get and process data
+                                    List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber.get(0));
+                                    List<List<Object>> problemActiveRows = new ArrayList<>();
+                                    List<List<Object>> problemInactiveRows = new ArrayList<>();
                                     if (problemList != null && !problemList.isEmpty()) {
-                                        List<List<Object>> problemActiveRows = new ArrayList<>();
-                                        List<List<Object>> problemInactiveRows = new ArrayList<>();
-
                                         for (ProblemListHTML problemListHTML : problemList) {
-                                            String activeOrInactive = problemListHTML.getActiveOrInactive();
-                                            if (activeOrInactive.equals("Active")) {
-                                                problemActiveRows.add(Arrays.asList(problemListHTML.getStartDate(),
-                                                        problemListHTML.getEntry(), problemListHTML.getSignificance(),
-                                                        problemListHTML.getDetails()));
+                                            if ("Active".equals(problemListHTML.getActiveOrInactive())) {
+                                                problemActiveRows.add(Arrays.asList(problemListHTML.getStartDate(), problemListHTML.getEntry(), problemListHTML.getSignificance(), problemListHTML.getDetails()));
                                             } else {
-                                                problemInactiveRows.add(Arrays.asList(problemListHTML.getStartDate(),
-                                                        problemListHTML.getEndDate(), problemListHTML.getEntry(),
-                                                        problemListHTML.getSignificance(),
-                                                        problemListHTML.getDetails()));
+                                                problemInactiveRows.add(Arrays.asList(problemListHTML.getStartDate(), problemListHTML.getEndDate(), problemListHTML.getEntry(), problemListHTML.getSignificance(), problemListHTML.getDetails()));
                                             }
                                         }
-
-                                        TableObject problemActiveTable = new TableObject(
-                                                Arrays.asList("Start Date", "Entry", "Significance", "Details"),
-                                                problemActiveRows, "Active Problems and Issues");
-
-                                        htmlActiveTable = buildTable.tableCreationFromObject(problemActiveTable);
-
-                                        TableObject problemInactiveTable = new TableObject(
-                                                Arrays.asList("Start Date", "End Date", "Entry", "Significance",
-                                                        "Details"),
-                                                problemInactiveRows, "Inactive Problems and Issues");
-
-                                        htmlInactiveTable = buildTable.tableCreationFromObject(problemInactiveTable);
-                                        htmlTable = buildTable.appendTables(htmlActiveTable, htmlInactiveTable);
-                                        htmlTable = buildTable.addDiv(htmlTable);
-
-                                    } else {
-                                        htmlTable = buildTable.buildEmptyHtml("Problems");
-
                                     }
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "PRB", htmlTable, "Problems",
-                                            section, "Problems");
-                                    sectionsList.add(section);
-                                }
 
+                                    //Build Sections and add to html page
+                                    activeProblems.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Entry", "Significance", "Details"), problemActiveRows));
+                                    inactiveProblems.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "End Date", "Entry", "Significance", "Details"), problemInactiveRows));
+                                    
+                                    htmlPage.addPageSection(activeProblems);
+                                    htmlPage.addPageSection(inactiveProblems);
+                                    sectionsList.add(FhirSectionBuilder.build(htmlPage));
+                                }
                                 break;
 
                             case "ENC":

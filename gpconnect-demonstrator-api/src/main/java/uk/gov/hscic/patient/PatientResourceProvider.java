@@ -842,7 +842,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "REF":
-                                /*
                                 HtmlPage htmlPage = new HtmlPage("Referrals", "Referrals" ,"REF");
                                 PageSection referralsSection = new PageSection("Referrals");
                                 
@@ -863,7 +862,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                 }
                                 List<List<Object>> referralRows = new ArrayList<>();
                                 referralsSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Entry", "Significance", "Details"), referralList));
-                                */
                                 /*
                                 //////////////////////////////////////////
                                     HtmlPage htmlPage = new HtmlPage("Problems and Issues", "Problems" ,"PRB");

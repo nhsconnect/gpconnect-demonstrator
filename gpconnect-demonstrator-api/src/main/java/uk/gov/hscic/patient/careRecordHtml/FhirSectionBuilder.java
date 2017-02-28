@@ -5,6 +5,7 @@ import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.NarrativeDt;
 import ca.uhn.fhir.model.dstu2.resource.Composition;
 import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import uk.gov.hscic.OperationConstants;
 
@@ -40,7 +41,8 @@ public final class FhirSectionBuilder {
             
             // Date Range Banner
             if(pageSection.getFromDate() != null && pageSection.getToDate() != null){
-                stringBuilder.append("<div><p>For the period '").append(pageSection.getFromDate()).append("' to '").append(pageSection.getToDate()).append("'</p></div>");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                stringBuilder.append("<div><p>For the period '").append(dateFormat.format(pageSection.getFromDate())).append("' to '").append(dateFormat.format(pageSection.getToDate())).append("'</p></div>");
             } else {
                 stringBuilder.append("<div><p>All relevant items subject to Patient preferences and/or legal exclusions</p></div>");
             }

@@ -384,6 +384,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                     // Build requested sections
                     if (!sectionsParamList.isEmpty()) {
+                        HtmlPage htmlPage;
                         ArrayList<Section> sectionsList = new ArrayList<>();
                         BuildHtmlTable buildTable = new BuildHtmlTable();
 
@@ -435,7 +436,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
 
-                                    HtmlPage htmlPage = new HtmlPage("Problems and Issues", "Problems" ,"PRB");
+                                    htmlPage = new HtmlPage("Problems", "Problems" ,"PRB");
                                     PageSection activeProblems = new PageSection("Active Problems and Issues");
                                     PageSection inactiveProblems = new PageSection("Inactive Problems and Issues");
 
@@ -464,7 +465,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 break;
 
                             case "ENC":
-                                HtmlPage htmlPage = new HtmlPage("Encounters", "Encounters" ,"ENC");
+                                htmlPage = new HtmlPage("Encounters", "Encounters" ,"ENC");
                                 PageSection encountersSection = new PageSection("Encounters");
                                 encountersSection.serDateRange(requestedFromDate, requestedToDate);
                                 List<EncounterData> encounterList = encounterSearch.findAllEncounterHTMLTables(nhsNumber.get(0), fromDate, toDate);
@@ -483,85 +484,43 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (toDate != null && fromDate != null) {
                                     throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
-                                    List<AllergyData> allergyList = allergySearch
-                                            .findAllAllergyHTMLTables(nhsNumber.get(0));
-                                    String htmlTable;
-                                    String htmlCurrent;
-                                    String htmlHistoric;
-                                    // change on all
+                                    htmlPage = new HtmlPage("Allergies", "Allergies", "ALL");
+                                    PageSection currentAllergiesSection = new PageSection("Current Allergies and Adverse Reactions");
+                                    PageSection historicalAllergiesSection = new PageSection("Historical Allergies and Adverse Reactions");
+                                    List<List<Object>> currentAllergyRows = new ArrayList<>();
+                                    List<List<Object>> historicalAllergyRows = new ArrayList<>();
+                                    List<AllergyData> allergyList = allergySearch.findAllAllergyHTMLTables(nhsNumber.get(0));
                                     if (allergyList != null && !allergyList.isEmpty()) {
-                                        // Change to Lists
-                                        List<List<Object>> currentAllergyRows = new ArrayList<>();
-                                        List<List<Object>> historicalAllergyRows = new ArrayList<>();
-
                                         for (AllergyData allergyData : allergyList) {
-                                            String currentOrHistoric = allergyData.getCurrentOrHistoric();
-                                            if (currentOrHistoric.equals("Current")) {
-                                                currentAllergyRows.add(Arrays.asList(allergyData.getStartDate(),
-                                                        allergyData.getDetails()));
+                                            if ("Current".equals(allergyData.getCurrentOrHistoric())) {
+                                                currentAllergyRows.add(Arrays.asList(allergyData.getStartDate(), allergyData.getDetails()));
                                             } else {
-                                                historicalAllergyRows.add(Arrays.asList(allergyData.getStartDate(),
-                                                        allergyData.getEndDate(), allergyData.getDetails()));
+                                                historicalAllergyRows.add(Arrays.asList(allergyData.getStartDate(), allergyData.getEndDate(), allergyData.getDetails()));
                                             }
                                         }
-
-                                        TableObject currentAllergyTable = new TableObject(
-                                                Arrays.asList("Start Date", "Details"), currentAllergyRows,
-                                                "Current Allergies and Sensitivities");
-
-                                        htmlCurrent = buildTable.tableCreationFromObject(currentAllergyTable);
-
-                                        TableObject historicalAllergyTable = new TableObject(
-                                                Arrays.asList("Start Date", "End Date", "Details"),
-                                                historicalAllergyRows, "Inactive Problems and Issues");
-
-                                        htmlHistoric = buildTable.tableCreationFromObject(historicalAllergyTable);
-                                        htmlTable = buildTable.appendTables(htmlCurrent, htmlHistoric);
-                                        htmlTable = buildTable.addDiv(htmlTable);
-
-                                    } else {
-                                        htmlTable = buildTable.buildEmptyHtml("Allergies and Sensitivities");
-
                                     }
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "ALL", htmlTable,
-                                            "Allergies and Sensitivities", section, "Allergies and Sensitivities");
-                                    sectionsList.add(section);
+                                    currentAllergiesSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Details"), currentAllergyRows));
+                                    historicalAllergiesSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "End Date", "Details"), historicalAllergyRows));
+                                    htmlPage.addPageSection(currentAllergiesSection);
+                                    htmlPage.addPageSection(historicalAllergiesSection);
+                                    sectionsList.add(FhirSectionBuilder.build(htmlPage));
                                 }
-
                                 break;
 
                             case "CLI":
-                                List<ClinicalItemData> clinicalItemList = clinicalItemsSearch
-                                        .findAllClinicalItemHTMLTables(nhsNumber.get(0), fromDate, toDate);
-
+                                htmlPage = new HtmlPage("Clinical Items", "Clinical Items" ,"CLI");
+                                PageSection clinicalItemsSection = new PageSection("Clinical Items");
+                                clinicalItemsSection.serDateRange(requestedFromDate, requestedToDate);
+                                List<ClinicalItemData> clinicalItemList = clinicalItemsSearch.findAllClinicalItemHTMLTables(nhsNumber.get(0), fromDate, toDate);
+                                List<List<Object>> clinicalItemsRows = new ArrayList<>();
                                 if (clinicalItemList != null && !clinicalItemList.isEmpty()) {
-                                    List<List<Object>> clinicalItemsRows = new ArrayList<>();
                                     for (ClinicalItemData clinicalItemData : clinicalItemList) {
-                                        clinicalItemsRows.add(Arrays.asList(clinicalItemData.getDate(),
-                                                clinicalItemData.getEntry(), clinicalItemData.getDetails()));
+                                        clinicalItemsRows.add(Arrays.asList(clinicalItemData.getDate(), clinicalItemData.getEntry(), clinicalItemData.getDetails()));
                                     }
-
-                                    TableObject currentMedicationTable = new TableObject(
-                                            Arrays.asList("Date", "Entry", "Details"), clinicalItemsRows,
-                                            "Clinical Items");
-
-                                    String htmlTable = buildTable.tableCreationFromObject(currentMedicationTable);
-
-                                    htmlTable = buildTable.addDiv(htmlTable);
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "CLI", htmlTable,
-                                            "Clinical Items", section, "Clinical Items");
-
-                                } else {
-                                    String htmlTable = buildTable.buildEmptyHtml("Clinical Items");
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "CLI", htmlTable,
-                                            "Clinical Items", section, "Clinical Items");
                                 }
-
-                                sectionsList.add(section);
-
+                                clinicalItemsSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Entry", "Details"), clinicalItemsRows));
+                                htmlPage.addPageSection(clinicalItemsSection);
+                                sectionsList.add(FhirSectionBuilder.build(htmlPage));
                                 break;
 
                             case "MED":

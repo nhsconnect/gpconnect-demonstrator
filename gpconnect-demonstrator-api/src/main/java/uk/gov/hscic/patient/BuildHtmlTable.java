@@ -32,10 +32,6 @@ public class BuildHtmlTable {
         return "<div><p>No "+ sectionName + " data is recorded for this patient.</p></div>";
     }
 
-    public String tableCreationFromObject(TableObject table) {
-        return tableBuilder(table.getHeaders(), table.getRows(), table.getTitle());
-    }
-
     public String addDiv(String htmlTable) {
         //Adds the required <div> tags to the start and end of the list of tables.
         return "<div>" + htmlTable + "</div>";

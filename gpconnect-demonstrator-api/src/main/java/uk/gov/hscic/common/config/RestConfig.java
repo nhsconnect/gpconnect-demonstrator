@@ -32,7 +32,10 @@ import uk.gov.hscic.auth.KeyStoreFactory;
 @ServletComponentScan
 @SpringBootApplication
 @ComponentScan(basePackages = "uk.gov.hscic")
-@PropertySource("file:${config.path}/gpconnect-demonstrator-api.properties")
+@PropertySource(ignoreResourceNotFound = true, value = {
+    "file:${config.path}/gpconnect-demonstrator-api.properties",
+    "file:${config.path}/gpconnect-demonstrator-api.environment.properties"
+})
 public class RestConfig {
 
     @Value("${config.path}")

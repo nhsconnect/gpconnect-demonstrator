@@ -13,9 +13,9 @@ public class WebTokenValidator {
     private static final List<String> PERMITTED_REQUESTED_SCOPES = Arrays.asList("patient/*.read", "patient/*.write",
             "organization/*.read", "organization/*.write");
 
-    public static void validateWebToken(WebToken webToken) {
+    public static void validateWebToken(WebToken webToken, int futureRequestLeeway) {
         verifyNoNullValues(webToken);
-        verifyTimeValues(webToken);
+        verifyTimeValues(webToken, futureRequestLeeway);
         verifyRequestedResourceValues(webToken);
 
         // Checking the practionerId and the sub are equal in value
@@ -73,65 +73,66 @@ public class WebTokenValidator {
 
     private static void assertNotNull(Object object) {
         if (null == object) {
-            throw new InvalidRequestException("JSON entry incomplete.",OperationOutcomeFactory.buildOperationOutcome(
+            throw new InvalidRequestException("JSON entry incomplete.", OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "JSON Incomplete", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
     }
 
-    private static void verifyTimeValues(WebToken webToken) {
+    private static void verifyTimeValues(WebToken webToken, int futureRequestLeeway) {
         // Checking the creation date is not in the future
         int timeValidationIdentifierInt = webToken.getIat();
 
-        // Checking creation time is not in the future
-        if (timeValidationIdentifierInt > (System.currentTimeMillis() / 1000)) {
-            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+        // Checking creation time is not in the future (with a 5 second leeway
+        if (timeValidationIdentifierInt > (System.currentTimeMillis() / 1000) + futureRequestLeeway) {
+            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Creation time is in the future", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
+
         // Checking the expiry time is 5 minutes after creation
         if (webToken.getExp() - timeValidationIdentifierInt != 300) {
-            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
-                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Creation time is in the future", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Request time expired", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
     }
 
     private static void verifyRequestedResourceValues(WebToken webToken) {
         // Checking the reason for request is directcare
         if (!"directcare".equals(webToken.getReasonForRequest())) {
-            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Reason for request is not directcare", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         RequestingDevice requestingDevice = webToken.getRequestingDevice();
 
         if (null == requestingDevice) {
-            throw new InvalidRequestException("No requesting_device",OperationOutcomeFactory.buildOperationOutcome(
+            throw new InvalidRequestException("No requesting_device", OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Requesting device is null", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if ("InvalidResourceType".equals(requestingDevice.getResourceType())) {
-            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if ("InvalidResourceType".equals(webToken.getRequestingOrganization().getResourceType())) {
-            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if ("InvalidResourceType".equals(webToken.getRequestingPractitioner().getResourceType())) {
-            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if ("Patient".equals(webToken.getRequestedRecord().getResourceType())
                 && !webToken.getRequestedScope().matches("patient/\\*\\.(read|write)")) {
-            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if ("Organization".equals(webToken.getRequestedRecord().getResourceType())
                 && !webToken.getRequestedScope().matches("organization/\\*\\.(read|write)")) {
-            throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
+            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
     }

@@ -200,6 +200,8 @@ public class PatientResourceProvider implements IResourceProvider {
         ArrayList<String> sectionsParamList = new ArrayList<>();
         Date fromDate = null;
         Date toDate = null;
+        Date requestedFromDate = null;
+        Date requestedToDate = null;
 
         // Extract the parameters
         boolean recordSectionNotPresent = true;
@@ -277,7 +279,9 @@ public class PatientResourceProvider implements IResourceProvider {
             } else if (value instanceof PeriodDt) {
                 fromDate = ((PeriodDt) value).getStart();
                 toDate = ((PeriodDt) value).getEnd();
-
+                requestedFromDate = ((PeriodDt) value).getStart();
+                requestedToDate = ((PeriodDt) value).getEnd();
+                
                 if (fromDate != null && toDate != null && fromDate.after(toDate)) {
                     throw new UnprocessableEntityException("Dates are invalid: ",
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
@@ -462,7 +466,7 @@ public class PatientResourceProvider implements IResourceProvider {
                             case "ENC":
                                 HtmlPage htmlPage = new HtmlPage("Encounters", "Encounters" ,"ENC");
                                 PageSection encountersSection = new PageSection("Encounters");
-                                encountersSection.serDateRange(fromDate, toDate);
+                                encountersSection.serDateRange(requestedFromDate, requestedToDate);
                                 List<EncounterData> encounterList = encounterSearch.findAllEncounterHTMLTables(nhsNumber.get(0), fromDate, toDate);
                                 List<List<Object>> encounterRows = new ArrayList<>();
                                 if (encounterList != null && !encounterList.isEmpty()) {

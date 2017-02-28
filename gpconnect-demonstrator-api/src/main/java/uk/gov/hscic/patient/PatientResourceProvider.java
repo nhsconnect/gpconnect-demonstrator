@@ -435,15 +435,12 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (toDate != null && fromDate != null) {
                                     throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
-
                                     htmlPage = new HtmlPage("Problems", "Problems" ,"PRB");
                                     PageSection activeProblems = new PageSection("Active Problems and Issues");
                                     PageSection inactiveProblems = new PageSection("Inactive Problems and Issues");
-
-                                    // Get and process data
-                                    List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber.get(0));
                                     List<List<Object>> problemActiveRows = new ArrayList<>();
                                     List<List<Object>> problemInactiveRows = new ArrayList<>();
+                                    List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber.get(0));
                                     if (problemList != null && !problemList.isEmpty()) {
                                         for (ProblemListHTML problemListHTML : problemList) {
                                             if ("Active".equals(problemListHTML.getActiveOrInactive())) {
@@ -453,11 +450,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                             }
                                         }
                                     }
-
-                                    //Build Sections and add to html page
                                     activeProblems.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Entry", "Significance", "Details"), problemActiveRows));
                                     inactiveProblems.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "End Date", "Entry", "Significance", "Details"), problemInactiveRows));
-                                    
                                     htmlPage.addPageSection(activeProblems);
                                     htmlPage.addPageSection(inactiveProblems);
                                     sectionsList.add(FhirSectionBuilder.build(htmlPage));
@@ -527,32 +521,28 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (toDate != null && fromDate != null) {
                                     throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
-                                    String htmlTable;
-                                    String htmlTableCurrent;
-                                    String htmlTableRepeat;
-                                    String htmlTablePast;
-                                    List<PatientMedicationHTML> medicationList = medicationSearch
-                                            .findPatientMedicationHTML(nhsNumber.get(0));
-
+                                    htmlPage = new HtmlPage("Medications", "Medications", "MED");
+                                    PageSection currentMedSection = new PageSection("Current Medication Issues");
+                                    PageSection repeatMedSection = new PageSection("Current Repeat Medications");
+                                    PageSection pastMedSection = new PageSection("Past Medications");
+                                    List<List<Object>> currentMedRows = new ArrayList<>();
+                                    List<List<Object>> repeatMedRows = new ArrayList<>();
+                                    List<List<Object>> pastMedRows = new ArrayList<>();
+                                    List<PatientMedicationHTML> medicationList = medicationSearch.findPatientMedicationHTML(nhsNumber.get(0));
                                     if (medicationList != null && !medicationList.isEmpty()) {
-                                        List<List<Object>> currentMedicationRows = new ArrayList<>();
-                                        List<List<Object>> currentRepeatRows = new ArrayList<>();
-                                        List<List<Object>> historicRepeatRows = new ArrayList<>();
-
                                         for (PatientMedicationHTML patientMedicationHTML : medicationList) {
-                                            String currentRepeatPast = patientMedicationHTML.getCurrentRepeatPast();
-                                            if ("Current".equals(currentRepeatPast)) {
-                                                currentMedicationRows
+                                            switch(patientMedicationHTML.getCurrentRepeatPast()){
+                                                case "Current" :
+                                                    currentMedRows
                                                         .add(Arrays.asList(patientMedicationHTML.getStartDate(),
                                                                 patientMedicationHTML.getMedicationItem(),
                                                                 patientMedicationHTML.getTypeMed(),
                                                                 patientMedicationHTML.getScheduledEnd(),
                                                                 patientMedicationHTML.getDaysDuration(),
                                                                 patientMedicationHTML.getDetails()));
-                                            }
-
-                                            if ("Repeat".equals(currentRepeatPast)) {
-                                                currentRepeatRows
+                                                    break;
+                                                case "Repeat" :
+                                                    repeatMedRows
                                                         .add(Arrays.asList(patientMedicationHTML.getLastIssued(),
                                                                 patientMedicationHTML.getMedicationItem(),
                                                                 patientMedicationHTML.getStartDate(),
@@ -560,10 +550,9 @@ public class PatientResourceProvider implements IResourceProvider {
                                                                 patientMedicationHTML.getNumberIssued(),
                                                                 patientMedicationHTML.getMaxIssued(),
                                                                 patientMedicationHTML.getDetails()));
-                                            }
-
-                                            if ("Past".equals(currentRepeatPast)) {
-                                                historicRepeatRows
+                                                    break;
+                                                case "Past" :
+                                                    pastMedRows
                                                         .add(Arrays.asList(patientMedicationHTML.getStartDate(),
                                                                 patientMedicationHTML.getMedicationItem(),
                                                                 patientMedicationHTML.getTypeMed(),
@@ -572,42 +561,17 @@ public class PatientResourceProvider implements IResourceProvider {
                                                                 patientMedicationHTML.getNumberIssued(),
                                                                 patientMedicationHTML.getMaxIssued(),
                                                                 patientMedicationHTML.getDetails()));
+                                                    break;
                                             }
                                         }
-
-                                        TableObject currentMedicationTable = new TableObject(
-                                                Arrays.asList("StartDate", "Medication Item", "Type", "Scheduled End",
-                                                        "Days Duration", "Details"),
-                                                currentMedicationRows, "Current Medication Issues");
-
-                                        htmlTableCurrent = buildTable.tableCreationFromObject(currentMedicationTable);
-
-                                        TableObject repeatMedicationTable = new TableObject(
-                                                Arrays.asList("Last Issued", "Medication Item", "Start Date",
-                                                        "Review Date", "Number Issued", "Max Issues", "Details"),
-                                                currentRepeatRows, "Current Repeat Medications");
-
-                                        htmlTableRepeat = buildTable.tableCreationFromObject(repeatMedicationTable);
-
-                                        TableObject historicMedicationTable = new TableObject(
-                                                Arrays.asList("StartDate", "Medication Item", "Type", "Last Issued",
-                                                        "Review Date", "Number Issued", "Max Issues", "Details"),
-                                                historicRepeatRows, "Current Repeat Medications");
-
-                                        htmlTablePast = buildTable.tableCreationFromObject(historicMedicationTable);
-                                        htmlTable = buildTable.appendTables(htmlTableCurrent, htmlTableRepeat);
-                                        htmlTable = buildTable.appendTables(htmlTable, htmlTablePast);
-                                        htmlTable = buildTable.addDiv(htmlTable);
-
-                                    } else {
-                                        htmlTable = buildTable.buildEmptyHtml("Problems");
-
                                     }
-
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "MED", htmlTable, "Medications",
-                                            section, "Medications");
-                                    sectionsList.add(section);
+                                    currentMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("StartDate", "Medication Item", "Type", "Scheduled End","Days Duration", "Details"), currentMedRows));
+                                    repeatMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("Last Issued", "Medication Item", "Start Date","Review Date", "Number Issued", "Max Issues", "Details"),repeatMedRows));
+                                    pastMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("StartDate", "Medication Item", "Type", "Last Issued","Review Date", "Number Issued", "Max Issues", "Details"),pastMedRows));
+                                    htmlPage.addPageSection(currentMedSection);
+                                    htmlPage.addPageSection(repeatMedSection);
+                                    htmlPage.addPageSection(pastMedSection);
+                                    sectionsList.add(FhirSectionBuilder.build(htmlPage));
 
                                     // // Sructured Data Search
                                     // List<MedicationOrder> medicationOrders =
@@ -771,7 +735,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                     // if (section != null) {
                                     // sectionsList.add(section);
                                 }
-
                                 break;
 
                             case "REF":
@@ -799,36 +762,19 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (toDate != null && fromDate != null) {
                                     throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
-                                    String htmlTable;
-                                    List<ObservationData> observationList = observationSearch
-                                            .findAllObservationHTMLTables(nhsNumber.get(0));
-
+                                    htmlPage = new HtmlPage("Observations", "Observations" ,"OBS");
+                                    PageSection observationSection = new PageSection("Observations");
+                                    List<List<Object>> observationRows = new ArrayList<>();
+                                    List<ObservationData> observationList = observationSearch.findAllObservationHTMLTables(nhsNumber.get(0));
                                     if (observationList != null && !observationList.isEmpty()) {
-                                        List<List<Object>> observationRows = new ArrayList<>();
-
                                         for (ObservationData observationItemData : observationList) {
-                                            observationRows.add(Arrays.asList(observationItemData.getObservationDate(),
-                                                    observationItemData.getEntry(), observationItemData.getValue(),
-                                                    observationItemData.getValue()));
+                                            observationRows.add(Arrays.asList(observationItemData.getObservationDate(),observationItemData.getEntry(), observationItemData.getValue(),observationItemData.getValue()));
                                         }
-
-                                        TableObject observationsTable = new TableObject(
-                                                Arrays.asList("Date", "Entry", "Value", "Details"), observationRows,
-                                                "Observations");
-                                        htmlTable = buildTable.tableCreationFromObject(observationsTable);
-
-                                        htmlTable = buildTable.addDiv(htmlTable);
-
-                                    } else {
-                                        htmlTable = buildTable.buildEmptyHtml("Observations");
-
                                     }
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "OBS", htmlTable, "Observations",
-                                            section, "Observations");
-                                    sectionsList.add(section);
+                                    observationSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Entry", "Value", "Details"), observationRows));
+                                    htmlPage.addPageSection(observationSection);
+                                    sectionsList.add(FhirSectionBuilder.build(htmlPage));
                                 }
-
                                 break;
 
                             case "INV":
@@ -857,73 +803,35 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (toDate != null && fromDate != null) {
                                     throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
-
-                                    String htmlTable;
-
-                                    List<ImmunisationData> immunisationDataList = immunisationSearch
-                                            .findAllImmunisationHTMLTables(nhsNumber.get(0));
-
+                                    htmlPage = new HtmlPage("Immunisations", "Immunisations" ,"IMM");
+                                    PageSection immunisationSection = new PageSection("Immunisations");
+                                    List<List<Object>> immunisationRows = new ArrayList<>();
+                                    List<ImmunisationData> immunisationDataList = immunisationSearch.findAllImmunisationHTMLTables(nhsNumber.get(0));
                                     if (immunisationDataList != null && !immunisationDataList.isEmpty()) {
-                                        List<List<Object>> immunisationRows = new ArrayList<>();
-
                                         for (ImmunisationData immunisationData : immunisationDataList) {
-                                            immunisationRows.add(Arrays.asList(immunisationData.getDateOfVac(),
-                                                    immunisationData.getVaccination(), immunisationData.getPart(),
-                                                    immunisationData.getContents(), immunisationData.getDetails()));
+                                            immunisationRows.add(Arrays.asList(immunisationData.getDateOfVac(),immunisationData.getVaccination(), immunisationData.getPart(),immunisationData.getContents(), immunisationData.getDetails()));
                                         }
-
-                                        TableObject table = new TableObject(
-                                                Arrays.asList("Date", "Vaccination", "Part", "Contents", "Details"),
-                                                immunisationRows, "Immunisation");
-
-                                        htmlTable = buildTable.tableCreationFromObject(table);
-                                        htmlTable = buildTable.addDiv(htmlTable);
-
-                                    } else {
-                                        htmlTable = buildTable.buildEmptyHtml("Immunisation");
                                     }
-
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "IMM", htmlTable, "Immunisations",
-                                            section, "Immunisations");
-
-                                    sectionsList.add(section);
+                                    immunisationSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Vaccination", "Part", "Contents", "Details"),immunisationRows));
+                                    htmlPage.addPageSection(immunisationSection);
+                                    sectionsList.add(FhirSectionBuilder.build(htmlPage));
                                 }
-
                                 break;
 
                             case "ADM":
-                                List<AdminItemData> adminItemList = adminItemSearch
-                                        .findAllAdminItemHTMLTables(nhsNumber.get(0), fromDate, toDate);
-
+                                htmlPage = new HtmlPage("Administrative Items", "Administrative Items" ,"ADM");
+                                PageSection administativeItemsSection = new PageSection("Administrative Items");
+                                administativeItemsSection.serDateRange(requestedFromDate, requestedToDate);
+                                List<List<Object>> adminItemsRows = new ArrayList<>();
+                                List<AdminItemData> adminItemList = adminItemSearch.findAllAdminItemHTMLTables(nhsNumber.get(0), fromDate, toDate);
                                 if (adminItemList != null && !adminItemList.isEmpty()) {
-                                    List<List<Object>> adminItemsRows = new ArrayList<>();
                                     for (AdminItemData adminItemData : adminItemList) {
-                                        adminItemsRows.add(Arrays.asList(adminItemData.getAdminDate(),
-                                                adminItemData.getEntry(), adminItemData.getDetails()));
+                                        adminItemsRows.add(Arrays.asList(adminItemData.getAdminDate(),adminItemData.getEntry(), adminItemData.getDetails()));
                                     }
-                                    TableObject adminItemTable = new TableObject(
-                                            Arrays.asList("Date", "Entry", "Details"), adminItemsRows,
-                                            "Administrative Items");
-
-                                    String htmlTable = buildTable.tableCreationFromObject(adminItemTable);
-                                    htmlTable = buildTable.addDiv(htmlTable);
-
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "ADM", htmlTable,
-                                            "Administrative Items", section, "Administrative Items");
-
-                                    sectionsList.add(section);
-                                } else {
-                                    String htmlTable = buildTable.buildEmptyHtml("Administrative Items");
-                                    section = SectionsCreationClass.buildSection(
-                                            OperationConstants.SYSTEM_RECORD_SECTION, "ADM", htmlTable,
-                                            "Administrative Items", section, "Administrative Items");
-
-                                    sectionsList.add(section);
-
                                 }
-
+                                administativeItemsSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Entry", "Details"), adminItemsRows));
+                                htmlPage.addPageSection(administativeItemsSection);
+                                sectionsList.add(FhirSectionBuilder.build(htmlPage));
                                 break;
 
                             default:

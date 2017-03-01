@@ -478,7 +478,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (toDate != null && fromDate != null) {
                                     throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
                                 } else {
-                                    htmlPage = new HtmlPage("Allergies", "Allergies", "ALL");
+                                    htmlPage = new HtmlPage("Allergies and Adverse Reactions", "Allergies and Adverse Reactions", "ALL");
                                     PageSection currentAllergiesSection = new PageSection("Current Allergies and Adverse Reactions");
                                     PageSection historicalAllergiesSection = new PageSection("Historical Allergies and Adverse Reactions");
                                     List<List<Object>> currentAllergyRows = new ArrayList<>();
@@ -565,9 +565,9 @@ public class PatientResourceProvider implements IResourceProvider {
                                             }
                                         }
                                     }
-                                    currentMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("StartDate", "Medication Item", "Type", "Scheduled End","Days Duration", "Details"), currentMedRows));
+                                    currentMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End","Days Duration", "Details"), currentMedRows));
                                     repeatMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("Last Issued", "Medication Item", "Start Date","Review Date", "Number Issued", "Max Issues", "Details"),repeatMedRows));
-                                    pastMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("StartDate", "Medication Item", "Type", "Last Issued","Review Date", "Number Issued", "Max Issues", "Details"),pastMedRows));
+                                    pastMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Medication Item", "Type", "Last Issued","Review Date", "Number Issued", "Max Issues", "Details"),pastMedRows));
                                     htmlPage.addPageSection(currentMedSection);
                                     htmlPage.addPageSection(repeatMedSection);
                                     htmlPage.addPageSection(pastMedSection);

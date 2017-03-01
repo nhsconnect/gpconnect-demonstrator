@@ -102,7 +102,7 @@ public class PractitionerResourceProvider  implements IResourceProvider {
         }
 
         CodingDt roleCoding = new CodingDt();
-        roleCoding.setSystem("http://fhir.nhs.net/ValueSet/sds-job-role-name-1-0");
+        roleCoding.setSystem("http://fhir.nhs.net/ValueSet/sds-job-role-name-1");
         roleCoding.setCode(practitionerDetails.getRoleCode());
         roleCoding.setDisplay(practitionerDetails.getRoleDisplay());
         CodeableConceptDt roleCodableConcept = new CodeableConceptDt();

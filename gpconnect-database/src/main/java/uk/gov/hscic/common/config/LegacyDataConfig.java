@@ -1,8 +1,7 @@
 package uk.gov.hscic.common.config;
 
-import javax.sql.DataSource;
-
 import com.mysql.jdbc.Driver;
+import javax.sql.DataSource;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,9 +30,7 @@ public class LegacyDataConfig {
 
     @Value("${legacy.datasource.password:password}")
     private String password;
-    
-    private boolean clearedDownOnStartup = false;
-    
+
     @Bean(destroyMethod = "close")
     public DataSource legacyDataSource() {
         final BasicDataSource dataSource = new BasicDataSource();
@@ -48,26 +45,17 @@ public class LegacyDataConfig {
 
         return dataSource;
     }
-    
+
     @Bean
-    public RefreshData getRefreshData(){
+    public RefreshData getRefreshData() {
         return new RefreshData();
     }
-    
+
     // Overnight cleardown of test data
-    @Scheduled(cron="${legacy.datasource.cleardown.cron}")
+    @Scheduled(cron = "${legacy.datasource.cleardown.cron}")
     public void scheduledResetOfData() {
         RefreshData refreshData = getRefreshData();
         refreshData.clearTasks();
         refreshData.resetAppointments();
-    }
-    
-    // Cleardown all test data on start up as well as overnight so deployment of sql does not stop testing
-    @Scheduled(initialDelay=1000, fixedRate=3600000)
-    public void startupRefreshOfData(){
-        if(!clearedDownOnStartup){
-            clearedDownOnStartup = true;
-            scheduledResetOfData();
-        }
     }
 }

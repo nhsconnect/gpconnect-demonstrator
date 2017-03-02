@@ -1,16 +1,10 @@
-/* Create a new poc_legacy database and begin configuration */
-DROP DATABASE IF EXISTS gpconnect;
-CREATE DATABASE         gpconnect DEFAULT CHARACTER SET utf8;
-USE                     gpconnect;
+USE gpconnect;
 
 /* Destroy all existing data */
-DROP TABLE IF EXISTS gpconnect.appointment_appointments;
 DROP TABLE IF EXISTS gpconnect.appointment_schedules;
 DROP TABLE IF EXISTS gpconnect.appointment_slots;
-DROP TABLE IF EXISTS gpconnect.general_practitioners;
 DROP TABLE IF EXISTS gpconnect.practitioners;
 DROP TABLE IF EXISTS gpconnect.organizations;
-DROP TABLE IF EXISTS gpconnect.medical_departments;
 DROP TABLE IF EXISTS gpconnect.patients;
 DROP TABLE IF EXISTS gpconnect.allergies;
 DROP TABLE IF EXISTS gpconnect.medications_html;
@@ -30,6 +24,10 @@ DROP TABLE IF EXISTS gpconnect.clinicalitems;
 DROP TABLE IF EXISTS gpconnect.investigations;
 DROP TABLE IF EXISTS gpconnect.locations;
 DROP TABLE IF EXISTS gpconnect.orders;
+
+DROP TABLE IF EXISTS gpconnect.appointment_appointments;
+DROP TABLE IF EXISTS gpconnect.general_practitioners;
+DROP TABLE IF EXISTS gpconnect.medical_departments;
 
 /* Create new table schemas */
 
@@ -158,7 +156,7 @@ CREATE TABLE gpconnect.allergies (
   id                  BIGINT        NOT NULL    AUTO_INCREMENT,
   nhsNumber			 BIGINT 		NULL,
   currentOrHistoric   VARCHAR(4096) NULL,
-  startDate			  DATETIME 		NULL,		
+  startDate			  DATETIME 		NULL,
   endDate			  DATETIME 		NULL,
   details			  VARCHAR(4096) NULL,
   PRIMARY KEY         (id)
@@ -351,14 +349,3 @@ CREATE TABLE gpconnect.orders (
  recieved			BOOLEAN			NULL,
  PRIMARY KEY         (id)
 );
-
-/* Delete the answer user (grant all to workaround MySQL not supporting 'IF EXISTS' for users) */
-GRANT ALL ON gpconnect.* TO 'answer' IDENTIFIED BY 'answer99q';
-DROP USER 'answer';
-FLUSH PRIVILEGES;
-
-/* Create a new answer user with full privileges */
-CREATE USER 'answer'                              IDENTIFIED BY 'answer99q';
-GRANT ALL ON gpconnect.* TO 'answer'@'%'          IDENTIFIED BY 'answer99q';
-GRANT ALL ON gpconnect.* TO 'answer'@'localhost'  IDENTIFIED BY 'answer99q';
-FLUSH PRIVILEGES;

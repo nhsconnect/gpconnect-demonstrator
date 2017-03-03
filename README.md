@@ -1,6 +1,5 @@
 GPConnect Demonstrator
 =========
-
 This README contains information related to developing, building and running the GP Connect Demonstrator.
 
 ### Requirements
@@ -9,10 +8,10 @@ To develop and run the application locally you must have the following installed
 | Component | Description |
 |---|---|
 | Git | A revision control system. |
+| NodeJS | An open source, cross-platform runtime environment for developing JavaScript applications. |
 | Java JDK 8 | The Java Development Kit, which includes the Java Runtime Environment (JRE). |
-| Maven 3  | A popular Java build tool. |
-| MySQL  | An open source RDBMS. |
-| NodeJS | An open source, cross-platform runtime environment for developing networking applications in JavaScript. |
+| Maven 3 | A popular Java build tool. |
+| MySQL | An open source RDBMS. |
 
 ***
 
@@ -64,15 +63,12 @@ Use the MySQL Installer (http://dev.mysql.com/downloads/installer) to install:
 
 When using the Windows installer above, the PATH variables are automatically set.
 
-Create the database locally by executing the scripts found in the following directory:
+Create the database schema and user locally by executing the following script:
 ```
-{projectRoot}/gpconnect-database/src/main/resources/sql/legacy*
+{projectRoot}/gpconnect-database/src/main/resources/sql/legacy/create_database.sql
 ```
 
-These scripts are to be run in the order specified in (located in the directory described above):
-```
-sql_script_run_order.info
-```
+Note: *All other scripts in this directory will be run (order defined in sql_script_run_order.info) each time the application starts. This means you'll get a fresh instance with default content each time. If you want the database state to persist between boots, change the 'database.reset' property to false (described later) however be aware that if the database schema is modified you may run into problems, so only do this if you know what you're doing!*
 
 ### Environment configuration
 Some settings are specific to the environment the application is running on e.g. database username/password/location.
@@ -84,29 +80,19 @@ The environment specific files can be found in:
 
 You are welcome to use these configuration files in situ, however we ask that any changes made are *not* committed back to GitHub, unless you're adding a new property. Instead you may wish to copy this entire directory to another location on your machine and point your application to the copied files (how to do this is covered later).
 
+Environment properties are defined in 'gpconnect-demonstrator-api.properties'. If you need to modify any of these properties for your environment, it is recommended you create a new file called 'gpconnect-demonstrator-api.environment.properties' and set the overriding properties in here, as the contents of this file will take precedence over 'gpconnect-demonstrator-api.properties'.
+
 ### Installing front end packages
 Install Grunt, the JavaScript task runner (you may need to be root user):
 ```sh
 npm install -g grunt-cli bower
 ```
 
-Navigate to the webapp folder of the GPConnect project:
+Navigate to the webapp folder of the GPConnect project and install dependencies:
 ```sh
 cd {projectRoot}/webapp
-```
-
-Install all packages used in the GPConnect project. If you are prompted to select a version of AngularJS, select v1.3.12:
-```sh
 bower install
-```
-
-Update Bower:
-```sh
 bower update
-```
-
-Update NodeJS:
-```sh
 npm update
 ```
 
@@ -125,7 +111,7 @@ The *build* task minifies and uglifies the front end code in the webapp director
 ### Running the application
 Note: *If you have not performed the 'Building the front end' task, there will be no UI in the project!*
 
-Open up a shell and navigate to the *root directory* of the project and use maven to build:
+Use maven to build the project:
 ```sh
 cd {projectRoot}
 mvn clean package
@@ -164,7 +150,7 @@ mvn --version
 If they do not return a suitable response, ensure that the system environment variables described above are pointing to the correct install directory, and that the *\bin* directories within them are on your PATH system environment variable.
 
 ### Developing the front end
-When developing the UI, it's best to run it separately to the back end. To do this, open up a second command shell and use the following commands:
+When developing the UI, it's best to run it separately to the back end. To do this, use the following commands:
 ```sh
 cd {projectRoot}\webapp
 grunt serve

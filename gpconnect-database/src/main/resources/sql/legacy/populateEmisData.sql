@@ -39,7 +39,7 @@ INSERT INTO gpconnect.immunisations
   (nhsNumber,dateOfVac,vaccination,part,contents,details)
 VALUES
   (9476719958,'2000-06-13 09:22:00',"First DTP (triple)+polio vacc.","Manufacturer : fred\r\nBatch: 1\r\nInjection Location: Right arm\r\nExpiry Date: 04-Oct-2016","Dont know","Dont Know"),
-  (9476719958,'2002-06-13 09:22:00',"HIV Injection","Manufacturer : fred\r\nBatch: 1\r\nInjection Location:Left leg\r\nExpiry Date: 04-Oct-2016","Dont know","Dont Know");
+  (9476719958,'2002-06-13 09:22:00',"HIV Injection","Manufacturer : fred\r\nBatch: 1\r\nInjection Location: Left leg\r\nExpiry Date: 04-Oct-2016","Dont know","Dont Know");
 
 INSERT INTO gpconnect.medications_html
   (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssued,typeMed)

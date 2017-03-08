@@ -474,7 +474,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 }
 
                 PageSection currentMedSection = new PageSection("Current Medication Issues");
-                currentMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End", "Days Duration", "Details"), currentMedRows));
+                currentMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End Date", "Days Duration", "Details"), currentMedRows));
 
                 PageSection repeatMedSection = new PageSection("Current Repeat Medications");
                 repeatMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("Last Issued", "Medication Item", "Start Date", "Review Date", "Number Issued", "Max Issues", "Details"), repeatMedRows));

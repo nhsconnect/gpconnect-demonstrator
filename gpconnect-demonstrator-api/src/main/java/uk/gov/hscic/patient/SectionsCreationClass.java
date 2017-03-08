@@ -8,14 +8,15 @@ import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
 
 
 public class SectionsCreationClass {
-    public static Section buildSection(String system, String code, String tableHTML, String sectionTitle,Section section, String display) {
-        CodingDt investigationCoding = new CodingDt().setSystem(system).setCode(code).setDisplay(display);
-        CodeableConceptDt investigationCodableConcept = new CodeableConceptDt().addCoding(investigationCoding);
-        investigationCodableConcept.setText(display);
+    public static Section buildSection(String system, String code, String tableHTML, String sectionTitle, String display) {
+        CodingDt investigationCoding = new CodingDt(system, code).setDisplay(display);
+
+        CodeableConceptDt investigationCodableConcept = new CodeableConceptDt().addCoding(investigationCoding).setText(display);
+
         NarrativeDt narrative = new NarrativeDt();
         narrative.setStatus(NarrativeStatusEnum.GENERATED);
         narrative.setDivAsString(tableHTML);
-        section.setTitle(sectionTitle).setCode(investigationCodableConcept).setText(narrative);
-        return section;
+
+        return new Section().setTitle(sectionTitle).setCode(investigationCodableConcept).setText(narrative);
     }
 }

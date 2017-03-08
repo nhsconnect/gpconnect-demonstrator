@@ -1,13 +1,10 @@
 package uk.gov.hscic.patient.referral.search;
 
 import java.util.Date;
-import java.util.List;
-
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.referral.model.ReferralListHTML;
-/**
- */
+import uk.gov.hscic.patient.referral.model.ReferralListHtml;
+
 public class NotConfiguredReferralSearch implements ReferralSearch {
 
     @Override
@@ -21,7 +18,7 @@ public class NotConfiguredReferralSearch implements ReferralSearch {
     }
 
     @Override
-    public List<ReferralListHTML> findAllReferralHTMLTables(final String patientId,Date fromDate, Date toDate) {
+    public ReferralListHtml findReferralListHtml(final String patientId, Date fromDate, Date toDate) {
         throw ConfigurationException.unimplementedTransaction(ReferralSearch.class);
     }
 }

@@ -1,6 +1,5 @@
 package uk.gov.hscic.patient.allergies.model;
 
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,26 +14,22 @@ public class AllergyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "nhsNumber")
     private String nhsNumber;
- 
+
     @Column(name = "currentOrHistoric")
     private String currentOrHistoric;
-    
+
     @Column(name = "startDate")
     private String startDate;
-    
+
     @Column(name = "endDate")
     private String endDate;
-    
+
     @Column(name = "details")
     private String details;
 
-    @Column(name = "provider")
-    private String provider;
-
-    
     public Long getId() {
         return id;
     }
@@ -43,16 +38,6 @@ public class AllergyEntity {
         this.id = id;
     }
 
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
-
-    
     public String getCurrentOrHistoric() {
         return currentOrHistoric;
     }
@@ -85,7 +70,6 @@ public class AllergyEntity {
         this.details = details;
     }
 
-
     public String getNhsNumber() {
         return nhsNumber;
     }
@@ -93,5 +77,4 @@ public class AllergyEntity {
     public void setNhsNumber(String nhsNumber) {
         this.nhsNumber = nhsNumber;
     }
-
 }

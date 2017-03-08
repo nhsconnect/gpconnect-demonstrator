@@ -1,9 +1,8 @@
-package uk.gov.hscic.patient.investigations.model;
+package uk.gov.hscic.patient.patientsummary.model;
 
 import java.util.Date;
 
-public class InvestigationListHTML {
-
+public class PatientSummaryListHtml {
     private String sourceId;
     private String source;
     private String provider;

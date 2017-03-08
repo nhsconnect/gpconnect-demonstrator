@@ -1,11 +1,8 @@
 package uk.gov.hscic.patient.investigations.search;
 
 import uk.gov.hscic.common.repo.Repository;
-import uk.gov.hscic.patient.investigations.model.InvestigationListHTML;
-
-import java.util.List;
+import uk.gov.hscic.patient.investigations.model.InvestigationListHtml;
 
 public interface InvestigationSearch extends Repository {
-
-    List<InvestigationListHTML> findAllInvestigationHTMLTables(String patientId);
+    InvestigationListHtml findInvestigationListHtml(String patientId);
 }

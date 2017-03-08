@@ -11,75 +11,82 @@ import uk.gov.hscic.OperationConstants;
 
 public final class FhirSectionBuilder {
 
-    private FhirSectionBuilder(){
-    }
-    
+    private FhirSectionBuilder() { }
+
     public static Composition.Section build(HtmlPage htmlPage) {
         CodingDt coding = new CodingDt().setSystem(OperationConstants.SYSTEM_RECORD_SECTION).setCode(htmlPage.getCode()).setDisplay(htmlPage.getHeader());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);
         codableConcept.setText(htmlPage.getHeader());
+
         NarrativeDt narrative = new NarrativeDt();
         narrative.setStatus(NarrativeStatusEnum.GENERATED);
         narrative.setDivAsString(createHtmlContent(htmlPage));
-        Composition.Section section = new Composition.Section();
-        section.setTitle(htmlPage.getName()).setCode(codableConcept).setText(narrative);
-        return section;
+
+        return new Composition.Section()
+                .setTitle(htmlPage.getName())
+                .setCode(codableConcept)
+                .setText(narrative);
     }
-    
-    public static String createHtmlContent(HtmlPage htmlPage){
-        
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<div>");
-        
+
+    private static String createHtmlContent(HtmlPage htmlPage) {
+        StringBuilder stringBuilder = new StringBuilder("<div>");
+
         // Add sections
-        for(PageSection pageSection : htmlPage.getPageSections()){
-            
+        for (PageSection pageSection : htmlPage.getPageSections()) {
             stringBuilder.append("<div>");
-            
+
             // Header
             stringBuilder.append("<h2>").append(pageSection.getHeader()).append("</h2>");
-            
+
             // Date Range Banner
-            if(pageSection.getFromDate() != null && pageSection.getToDate() != null){
+            if (pageSection.getFromDate() != null && pageSection.getToDate() != null) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                 stringBuilder.append("<div><p>For the period '").append(dateFormat.format(pageSection.getFromDate())).append("' to '").append(dateFormat.format(pageSection.getToDate())).append("'</p></div>");
             } else {
                 stringBuilder.append("<div><p>All relevant items subject to Patient preferences and/or legal exclusions</p></div>");
             }
-            
+
             // Additional Banners
-            if(pageSection.getBanners().size() > 0){
+            if (!pageSection.getBanners().isEmpty()) {
                 stringBuilder.append("<div>");
+
                 for (String banner : pageSection.getBanners()) {
                     stringBuilder.append("<p>").append(banner).append("</p>");
                 }
+
                 stringBuilder.append("</div>");
             }
-            
+
             // Table
             PageSectionHtmlTable table = pageSection.getTable();
-            if(table == null || table.getRows().size() <= 0){
+
+            if (table == null || table.getRows().isEmpty()) {
                 stringBuilder.append("<div><p>No '").append(pageSection.getHeader()).append("' data is recorded for this patient.</p></div>");
             } else {
                 stringBuilder.append("<div><table><thead><tr>");
-                for(String header : table.getHeaders()){
+
+                for (String header : table.getHeaders()) {
                     stringBuilder.append("<th>").append(header).append("</th>");
                 }
+
                 stringBuilder.append("</tr></thead><tbody>");
-                for(List<Object> row : table.getRows()){
+
+                for (List<Object> row : table.getRows()) {
                     stringBuilder.append("<tr>");
-                    for(Object object : row){
+
+                    for (Object object : row) {
                         stringBuilder.append("<td>").append(object).append("</td>");
                     }
+
                     stringBuilder.append("</tr>");
                 }
+
                 stringBuilder.append("</tbody></table></div>");
             }
-            
+
             stringBuilder.append("</div>");
         }
-        
-        stringBuilder.append("</div>");
-        return stringBuilder.toString();
+
+        return stringBuilder.append("</div>").toString();
     }
 }

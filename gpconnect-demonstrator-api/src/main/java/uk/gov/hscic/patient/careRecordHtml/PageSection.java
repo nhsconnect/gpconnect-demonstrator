@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 public class PageSection {
-    
     private final String header;
     private Date fromDate;
     private Date toDate;
@@ -16,12 +15,12 @@ public class PageSection {
         header = sectionHeader;
         banners = new ArrayList<>();
     }
-    
-    public void setTable(PageSectionHtmlTable sectionTable){
+
+    public void setTable(PageSectionHtmlTable sectionTable) {
         table = sectionTable;
     }
-    
-    public void adddBanner(String bannerString){
+
+    public void adddBanner(String bannerString) {
         banners.add(bannerString);
     }
 
@@ -36,8 +35,8 @@ public class PageSection {
     public PageSectionHtmlTable getTable() {
         return table;
     }
-    
-    public void serDateRange(Date from, Date to){
+
+    public void setDateRange(Date from, Date to) {
         fromDate = from;
         toDate = to;
     }

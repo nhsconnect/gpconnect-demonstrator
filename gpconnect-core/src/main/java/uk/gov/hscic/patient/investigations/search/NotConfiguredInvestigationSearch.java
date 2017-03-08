@@ -3,9 +3,7 @@ package uk.gov.hscic.patient.investigations.search;
 import uk.gov.hscic.common.exception.ConfigurationException;
 import uk.gov.hscic.common.types.RepoSource;
 import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.investigations.model.InvestigationListHTML;
-
-import java.util.List;
+import uk.gov.hscic.patient.investigations.model.InvestigationListHtml;
 
 public class NotConfiguredInvestigationSearch implements InvestigationSearch {
 
@@ -20,7 +18,7 @@ public class NotConfiguredInvestigationSearch implements InvestigationSearch {
     }
 
     @Override
-    public List<InvestigationListHTML> findAllInvestigationHTMLTables(final String patientId) {
+    public InvestigationListHtml findInvestigationListHtml(final String patientId) {
         throw ConfigurationException.unimplementedTransaction(InvestigationSearch.class);
     }
 }

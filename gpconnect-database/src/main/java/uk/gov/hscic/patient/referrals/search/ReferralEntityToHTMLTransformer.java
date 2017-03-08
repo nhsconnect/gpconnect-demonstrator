@@ -5,14 +5,14 @@ import java.util.List;
 import org.apache.commons.collections4.Transformer;
 
 import uk.gov.hscic.common.types.RepoSourceType;
-import uk.gov.hscic.patient.referral.model.ReferralListHTML;
+import uk.gov.hscic.patient.referral.model.ReferralListHtml;
 import uk.gov.hscic.patient.referrals.model.ReferralEntity;
 
-public class ReferralEntityToHTMLTransformer implements Transformer<List<ReferralEntity>, ReferralListHTML> {
+public class ReferralEntityToHTMLTransformer implements Transformer<List<ReferralEntity>, ReferralListHtml> {
 
     @Override
-    public ReferralListHTML transform(final List<ReferralEntity> referralEntity) {
-        final ReferralListHTML referralList = new ReferralListHTML();
+    public ReferralListHtml transform(final List<ReferralEntity> referralEntity) {
+        final ReferralListHtml referralList = new ReferralListHtml();
         referralList.setSource(String.valueOf(referralEntity.get(0).getId()));
         referralList.setSource(RepoSourceType.LEGACY.getSourceName());
         

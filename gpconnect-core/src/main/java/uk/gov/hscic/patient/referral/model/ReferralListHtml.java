@@ -2,8 +2,7 @@ package uk.gov.hscic.patient.referral.model;
 
 import java.util.Date;
 
-public class ReferralListHTML {
-
+public class ReferralListHtml {
     private String sourceId;
     private String source;
     private String provider;

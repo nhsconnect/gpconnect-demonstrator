@@ -179,10 +179,7 @@ public class PatientResourceProvider implements IResourceProvider {
                             OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
         }
 
-        Patient patient = patientDetailsToPatientResourceConverter(patientDetails);
-        patient.setId(patientDetails.getId());
-
-        return patient;
+        return patientDetailsToPatientResourceConverter(patientDetails);
     }
 
     @SuppressWarnings("deprecation")
@@ -656,9 +653,11 @@ public class PatientResourceProvider implements IResourceProvider {
 
             bundle.addEntry(new Bundle.Entry().setResource(practitioner).setFullUrl(id));
 
+            IdDt organizationId = practitioner.getPractitionerRoleFirstRep().getManagingOrganization().getReference();
+
             Bundle.Entry organizationEntry = new Bundle.Entry()
-                    .setResource(organizationResourceProvider.getOrganizationById(practitioner.getPractitionerRoleFirstRep().getManagingOrganization().getReference()))
-                    .setFullUrl(practitioner.getPractitionerRoleFirstRep().getManagingOrganization().getReference());
+                    .setResource(organizationResourceProvider.getOrganizationById(organizationId))
+                    .setFullUrl(organizationId);
 
             if (organizationEntry.getResource() == null || organizationEntry.getFullUrl() == null) {
                 throw new ResourceNotFoundException("organizationResource returning null",

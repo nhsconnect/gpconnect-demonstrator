@@ -13,7 +13,7 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.medication.model.MedicationDetails;
-import uk.gov.hscic.medication.search.MedicationSearch;
+import uk.gov.hscic.medications.search.MedicationSearch;
 
 @Component
 public class MedicationResourceProvider implements IResourceProvider {
@@ -47,7 +47,7 @@ public class MedicationResourceProvider implements IResourceProvider {
         medication.setId(medicationDetails.getId());
         medication.getMeta().setLastUpdated(medicationDetails.getLastUpdated());
         medication.getMeta().setVersionId(String.valueOf(medicationDetails.getLastUpdated().getTime()));
-        
+
         return medication;
     }
 }

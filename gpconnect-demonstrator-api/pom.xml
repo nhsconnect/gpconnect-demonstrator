@@ -37,7 +37,6 @@
         <dependency>
             <groupId>uk.gov.hscic</groupId>
             <artifactId>gpconnect-database</artifactId>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>

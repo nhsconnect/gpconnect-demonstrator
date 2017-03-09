@@ -46,8 +46,8 @@ import uk.gov.hscic.appointment.slot.search.SlotSearch;
 import uk.gov.hscic.appointment.slot.store.SlotStore;
 import uk.gov.hscic.location.model.LocationDetails;
 import uk.gov.hscic.location.search.LocationSearch;
+import uk.gov.hscic.patient.details.search.PatientSearch;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
-import uk.gov.hscic.patient.summary.search.PatientSearch;
 import uk.gov.hscic.practitioner.model.PractitionerDetails;
 import uk.gov.hscic.practitioner.search.PractitionerSearch;
 

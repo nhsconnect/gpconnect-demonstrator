@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 @Configuration
 @EnableScheduling
@@ -49,13 +48,5 @@ public class LegacyDataConfig {
     @Bean
     public RefreshData getRefreshData() {
         return new RefreshData();
-    }
-
-    // Overnight cleardown of test data
-    @Scheduled(cron = "${legacy.datasource.cleardown.cron}")
-    public void scheduledResetOfData() {
-        RefreshData refreshData = getRefreshData();
-        refreshData.clearTasks();
-        refreshData.resetAppointments();
     }
 }

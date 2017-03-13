@@ -281,6 +281,12 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 if (toDate != null) {
                     toDate = period.getEndElement().getPrecision().add(toDate, 1);
+                    
+                    requestedToDate = period.getEndElement().getPrecision().add(requestedToDate, 1);
+                    Calendar toDateCalendar = Calendar.getInstance();
+                    toDateCalendar.setTime(requestedToDate);
+                    toDateCalendar.add(Calendar.DATE, -1);
+                    requestedToDate = toDateCalendar.getTime();
                 }
             }
         }

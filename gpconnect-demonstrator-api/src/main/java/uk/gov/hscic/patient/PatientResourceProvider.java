@@ -80,7 +80,8 @@ import uk.gov.hscic.patient.encounters.model.EncounterData;
 import uk.gov.hscic.patient.encounters.search.EncounterSearch;
 import uk.gov.hscic.patient.immunisations.model.ImmunisationEntity;
 import uk.gov.hscic.patient.immunisations.repo.ImmunisationRepository;
-import uk.gov.hscic.patient.investigations.search.InvestigationSearch;
+import uk.gov.hscic.patient.investigations.model.InvestigationEntity;
+import uk.gov.hscic.patient.investigations.repo.InvestigationRepository;
 import uk.gov.hscic.patient.observations.model.ObservationEntity;
 import uk.gov.hscic.patient.observations.repo.ObservationRepository;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
@@ -136,7 +137,7 @@ public class PatientResourceProvider implements IResourceProvider {
     @Autowired
     private ObservationRepository observationRepository;
     @Autowired
-    private InvestigationSearch investigationSearch;
+    private InvestigationRepository investigationRepository;
     @Autowired
     private ImmunisationRepository immunisationRepository;
     @Autowired
@@ -278,7 +279,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 if (toDate != null) {
                     toDate = period.getEndElement().getPrecision().add(toDate, 1);
-                    
+
                     requestedToDate = period.getEndElement().getPrecision().add(requestedToDate, 1);
                     Calendar toDateCalendar = Calendar.getInstance();
                     toDateCalendar.setTime(requestedToDate);
@@ -341,7 +342,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 PageSection inactiveProblems = new PageSection("Inactive Problems and Issues");
                 inactiveProblems.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "End Date", "Entry", "Significance", "Details"), problemInactiveRows));
 
-                htmlPage = new HtmlPage("Problems", "Problems", sectionName);
+                htmlPage = new HtmlPage("Problems", sectionName);
                 htmlPage.addPageSection(activeProblems);
                 htmlPage.addPageSection(inactiveProblems);
                 sectionsList.add(FhirSectionBuilder.build(htmlPage));
@@ -362,7 +363,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 encountersSection.setDateRange(requestedFromDate, requestedToDate);
                 encountersSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Title", "Details"), encounterRows));
 
-                htmlPage = new HtmlPage("Encounters", "Encounters", sectionName);
+                htmlPage = new HtmlPage("Encounters", sectionName);
                 htmlPage.addPageSection(encountersSection);
                 sectionsList.add(FhirSectionBuilder.build(htmlPage));
 
@@ -393,7 +394,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 PageSection historicalAllergiesSection = new PageSection("Historical Allergies and Adverse Reactions");
                 historicalAllergiesSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "End Date", "Details"), historicalAllergyRows));
 
-                htmlPage = new HtmlPage("Allergies and Adverse Reactions", "Allergies and Adverse Reactions", sectionName);
+                htmlPage = new HtmlPage("Allergies and Adverse Reactions", sectionName);
                 htmlPage.addPageSection(currentAllergiesSection);
                 htmlPage.addPageSection(historicalAllergiesSection);
                 sectionsList.add(FhirSectionBuilder.build(htmlPage));
@@ -414,7 +415,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 clinicalItemsSection.setDateRange(requestedFromDate, requestedToDate);
                 clinicalItemsSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Entry", "Details"), clinicalItemsRows));
 
-                htmlPage = new HtmlPage("Clinical Items", "Clinical Items", sectionName);
+                htmlPage = new HtmlPage("Clinical Items", sectionName);
                 htmlPage.addPageSection(clinicalItemsSection);
                 sectionsList.add(FhirSectionBuilder.build(htmlPage));
 
@@ -475,7 +476,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 PageSection pastMedSection = new PageSection("Past Medications");
                 pastMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Medication Item", "Type", "Last Issued", "Review Date", "Number Issued", "Max Issues", "Details"), pastMedRows));
 
-                htmlPage = new HtmlPage("Medications", "Medications", sectionName);
+                htmlPage = new HtmlPage("Medications", sectionName);
                 htmlPage.addPageSection(currentMedSection);
                 htmlPage.addPageSection(repeatMedSection);
                 htmlPage.addPageSection(pastMedSection);
@@ -514,22 +515,28 @@ public class PatientResourceProvider implements IResourceProvider {
                 PageSection observationSection = new PageSection("Observations");
                 observationSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Entry", "Value", "Details"), observationRows));
 
-                htmlPage = new HtmlPage("Observations", "Observations", sectionName);
+                htmlPage = new HtmlPage("Observations", sectionName);
                 htmlPage.addPageSection(observationSection);
                 sectionsList.add(FhirSectionBuilder.build(htmlPage));
 
                 break;
 
             case "INV":
-                String investigationHtml = investigationSearch.findInvestigationHtml(nhsNumber);
+                List<List<Object>> investigationRows = new ArrayList<>();
 
-                html = investigationHtml != null
-                        ? investigationHtml
-                        : BuildHtmlTable.buildEmptyHtml("Investigations");
+                for (InvestigationEntity investigationEntity : investigationRepository.findByNhsNumber(nhsNumber)) {
+                    investigationRows.add(Arrays.asList(
+                            investigationEntity.getDate(),
+                            investigationEntity.getTitle(),
+                            investigationEntity.getDetails()));
+                }
 
-                sectionsList.add(SectionsCreationClass.buildSection(
-                        OperationConstants.SYSTEM_RECORD_SECTION, sectionName,
-                        html, "Investigations", "Investigations"));
+                PageSection investigationSection = new PageSection("Investigations");
+                investigationSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Title", "Details"), investigationRows));
+
+                htmlPage = new HtmlPage("Investigations", sectionName);
+                htmlPage.addPageSection(investigationSection);
+                sectionsList.add(FhirSectionBuilder.build(htmlPage));
 
                 break;
 
@@ -540,7 +547,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 List<List<Object>> immunisationRows = new ArrayList<>();
 
-                for (ImmunisationEntity immunisationEntity : immunisationRepository.findBynhsNumber(nhsNumber)) {
+                for (ImmunisationEntity immunisationEntity : immunisationRepository.findByNhsNumber(nhsNumber)) {
                     immunisationRows.add(Arrays.asList(
                             immunisationEntity.getDateOfVac(),
                             immunisationEntity.getVaccination(),
@@ -552,7 +559,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 PageSection immunisationSection = new PageSection("Immunisations");
                 immunisationSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Vaccination", "Part", "Contents", "Details"), immunisationRows));
 
-                htmlPage = new HtmlPage("Immunisations", "Immunisations", sectionName);
+                htmlPage = new HtmlPage("Immunisations", sectionName);
                 htmlPage.addPageSection(immunisationSection);
                 sectionsList.add(FhirSectionBuilder.build(htmlPage));
 
@@ -572,7 +579,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 administativeItemsSection.setDateRange(requestedFromDate, requestedToDate);
                 administativeItemsSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Entry", "Details"), adminItemsRows));
 
-                htmlPage = new HtmlPage("Administrative Items", "Administrative Items", sectionName);
+                htmlPage = new HtmlPage("Administrative Items", sectionName);
                 htmlPage.addPageSection(administativeItemsSection);
                 sectionsList.add(FhirSectionBuilder.build(htmlPage));
 

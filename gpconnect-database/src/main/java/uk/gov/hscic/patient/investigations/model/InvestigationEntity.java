@@ -11,13 +11,21 @@ public class InvestigationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "html")
-    private String html;
+    @Column(name = "nhsNumber")
+    private String nhsNumber;
 
-    @Column(name = "provider")
-    private String provider;
-    
+    @Column(name = "sectionDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "details")
+    private String details;
+
     @Column(name = "lastUpdated")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdated;
 
     public Long getId() {
@@ -28,20 +36,36 @@ public class InvestigationEntity {
         this.id = id;
     }
 
-    public String getHtml() {
-        return html;
+    public String getNhsNumber() {
+        return nhsNumber;
     }
 
-    public void setHtml(String html) {
-        this.html = html;
+    public void setNhsNumber(String nhsNumber) {
+        this.nhsNumber = nhsNumber;
     }
 
-    public String getProvider() {
-        return provider;
+    public Date getDate() {
+        return date;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public Date getLastUpdated() {

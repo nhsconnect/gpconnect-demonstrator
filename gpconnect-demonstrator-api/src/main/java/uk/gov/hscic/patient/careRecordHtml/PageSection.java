@@ -20,7 +20,7 @@ public class PageSection {
         table = sectionTable;
     }
 
-    public void adddBanner(String bannerString) {
+    public void addBanner(String bannerString) {
         banners.add(bannerString);
     }
 

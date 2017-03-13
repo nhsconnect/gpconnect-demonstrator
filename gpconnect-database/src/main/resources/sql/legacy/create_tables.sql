@@ -317,8 +317,10 @@ CREATE TABLE gpconnect.clinicalitems (
 
 CREATE TABLE gpconnect.investigations (
   id          BIGINT         NOT NULL AUTO_INCREMENT,
-  html        VARCHAR(21000) NULL,
-  provider    VARCHAR(10)    NULL,
+  nhsNumber   BIGINT         NULL,
+  sectionDate DATETIME       NULL,
+  title       VARCHAR(100)   NULL,
+  details     VARCHAR(1000)  NULL,
   lastUpdated DATETIME       NULL,
   PRIMARY KEY (id)
 );

@@ -14,9 +14,9 @@ public final class FhirSectionBuilder {
     private FhirSectionBuilder() { }
 
     public static Composition.Section build(HtmlPage htmlPage) {
-        CodingDt coding = new CodingDt().setSystem(OperationConstants.SYSTEM_RECORD_SECTION).setCode(htmlPage.getCode()).setDisplay(htmlPage.getHeader());
+        CodingDt coding = new CodingDt().setSystem(OperationConstants.SYSTEM_RECORD_SECTION).setCode(htmlPage.getCode()).setDisplay(htmlPage.getName());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);
-        codableConcept.setText(htmlPage.getHeader());
+        codableConcept.setText(htmlPage.getName());
 
         NarrativeDt narrative = new NarrativeDt();
         narrative.setStatus(NarrativeStatusEnum.GENERATED);

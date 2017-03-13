@@ -36,9 +36,9 @@ VALUES
   (9476719966,'2016-07-25 12:00:00',"FDiphtheria/Tet/Pert/Polio/Haemophil","DIPHTHERIA, TETANUS, PERTUSSIS, POLIO, HIB","Dont know","Dont Know");
 
 INSERT INTO gpconnect.investigations
-  (id,html,provider,lastUpdated)
+  (nhsNumber,sectionDate,title,details,lastUpdated)
 VALUES
-  (9476719966,"<div><table><thead><tr><th>Date</th><th>Report</th></tr></thead><tbody><tr><td>21-May-2015</td><td>Score:   12   Negative Method:  3RT  for:  Asthma</td></tr><tr><td>19-Nov-2014</td><td>ECG normal Dr Janet Outside Practice</td></tr><tr><td>19-Nov-2014</td><td>Thyroid hormone tests = 0</td></tr><tr><td>19-Nov-2014</td><td>Prostate specific antigen = 0.6</td></tr><tr><td>10-Oct-2014</td><td>Hb estimation = 14.9 </td></tr><tr><td>10-Oct-2014</td><td>Serum cholesterol = 4.9 </td></tr></tbody></table><table><tbody><tr><td>10-Oct-2014</td><td>Serum triglycerides normal = 0.74</td></tr><tr><td>10-Oct-2014</td><td>Blood Glucose  = 5.4</td></tr><tr><td>10-Oct-2014</td><td>Serum creatinine NOS = 93</td></tr><tr><td>10-Oct-2014</td><td>Serum urea level = 5.1</td></tr><tr><td>10-Oct-2014</td><td>Serum potassium = 3.8</td></tr><tr><td>10-Oct-2014</td><td>Serum sodium = 141</td></tr></tbody></table></div>","INPS",'2016-07-25 12:00:00');
+  (9476719966,'2016-07-25 12:00:00','Long investigation','Something was found!','2016-07-25 12:00:00');
 
 INSERT INTO gpconnect.medications_html
   (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)

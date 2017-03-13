@@ -17,37 +17,37 @@ public class PatientMedicationHtmlEntity {
 
     @Column(name = "nhsNumber")
     private String nhsNumber;
-    
+
     @Column(name = "currentRepeatPast")
     private String currentRepeatPast;
-    
+
     @Column(name = "startDate")
     private String startDate;
-    
+
     @Column(name = "medicationItem")
     private String medicationItem;
-    
+
     @Column(name = "scheduledEnd")
     private String scheduledEnd;
-    
+
     @Column(name = "daysDuration")
     private String daysDuration;
-    
+
     @Column(name = "details")
     private String details;
-    
+
     @Column(name = "lastIssued")
     private String lastIssued;
-    
+
     @Column(name = "reviewDate")
     private String reviewDate;
-    
+
     @Column(name = "numberIssued")
     private String numberIssued;
-    
-    @Column(name = "maxIssued")
-    private String maxIssued;
-    
+
+    @Column(name = "maxIssues")
+    private String maxIssues;
+
     @Column(name = "typeMed")
     private String typeMed;
 
@@ -139,12 +139,12 @@ public class PatientMedicationHtmlEntity {
         this.numberIssued = numberIssued;
     }
 
-    public String getMaxIssued() {
-        return maxIssued;
+    public String getMaxIssues() {
+        return maxIssues;
     }
 
-    public void setMaxIssued(String maxIssued) {
-        this.maxIssued = maxIssued;
+    public void setMaxIssues(String maxIssues) {
+        this.maxIssues = maxIssues;
     }
 
     public String getTypeMed() {
@@ -155,5 +155,5 @@ public class PatientMedicationHtmlEntity {
         this.typeMed = typeMed;
     }
 
-   
+
 }

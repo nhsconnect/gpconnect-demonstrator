@@ -41,7 +41,7 @@ VALUES
   (9476719966,"<div><table><thead><tr><th>Date</th><th>Report</th></tr></thead><tbody><tr><td>21-May-2015</td><td>Score:   12   Negative Method:  3RT  for:  Asthma</td></tr><tr><td>19-Nov-2014</td><td>ECG normal Dr Janet Outside Practice</td></tr><tr><td>19-Nov-2014</td><td>Thyroid hormone tests = 0</td></tr><tr><td>19-Nov-2014</td><td>Prostate specific antigen = 0.6</td></tr><tr><td>10-Oct-2014</td><td>Hb estimation = 14.9 </td></tr><tr><td>10-Oct-2014</td><td>Serum cholesterol = 4.9 </td></tr></tbody></table><table><tbody><tr><td>10-Oct-2014</td><td>Serum triglycerides normal = 0.74</td></tr><tr><td>10-Oct-2014</td><td>Blood Glucose  = 5.4</td></tr><tr><td>10-Oct-2014</td><td>Serum creatinine NOS = 93</td></tr><tr><td>10-Oct-2014</td><td>Serum urea level = 5.1</td></tr><tr><td>10-Oct-2014</td><td>Serum potassium = 3.8</td></tr><tr><td>10-Oct-2014</td><td>Serum sodium = 141</td></tr></tbody></table></div>","INPS",'2016-07-25 12:00:00');
 
 INSERT INTO gpconnect.medications_html
-  (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssued,typeMed)
+  (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
 VALUES
   (9476719966,"Current","02-Apr-2016","Lansoprazole 15mg gastro-resistant capsules","19-11-2019","Day Duration 2","3",NULL,NULL,NULL,NULL,"4"),
   (9476719966,"Repeat","14-09-2014","Colofac 135mg tablets (BGP Products Ltd)","19-11-2019","Day Duration 4","3","Acute","Issue more","Issue more","Issue more","4"),

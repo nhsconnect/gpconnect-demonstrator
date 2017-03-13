@@ -174,7 +174,7 @@ CREATE TABLE gpconnect.medications_html (
   lastIssued        VARCHAR(100) NULL,
   reviewDate        VARCHAR(100) NULL,
   numberIssued      VARCHAR(100) NULL,
-  maxIssued         VARCHAR(100) NULL,
+  maxIssues         VARCHAR(100) NULL,
   typeMed           VARCHAR(100) NULL,
   PRIMARY KEY (id)
 );

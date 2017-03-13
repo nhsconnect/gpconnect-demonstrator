@@ -61,11 +61,11 @@ import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.util.NhsCodeValidator;
-import uk.gov.hscic.medication.model.PatientMedicationHTML;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
-import uk.gov.hscic.medications.search.MedicationSearch;
+import uk.gov.hscic.medications.model.PatientMedicationHtmlEntity;
+import uk.gov.hscic.medications.repo.MedicationHtmlRepository;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.adminitems.model.AdminItemData;
 import uk.gov.hscic.patient.adminitems.search.AdminItemSearch;
@@ -78,17 +78,14 @@ import uk.gov.hscic.patient.details.search.PatientSearch;
 import uk.gov.hscic.patient.details.store.PatientStore;
 import uk.gov.hscic.patient.encounters.model.EncounterData;
 import uk.gov.hscic.patient.encounters.search.EncounterSearch;
-import uk.gov.hscic.patient.immunisations.model.ImmunisationData;
-import uk.gov.hscic.patient.immunisations.search.ImmunisationSearch;
-import uk.gov.hscic.patient.investigations.model.InvestigationListHtml;
+import uk.gov.hscic.patient.immunisations.model.ImmunisationEntity;
+import uk.gov.hscic.patient.immunisations.repo.ImmunisationRepository;
 import uk.gov.hscic.patient.investigations.search.InvestigationSearch;
-import uk.gov.hscic.patient.observations.model.ObservationData;
-import uk.gov.hscic.patient.observations.search.ObservationSearch;
-import uk.gov.hscic.patient.patientsummary.model.PatientSummaryListHtml;
+import uk.gov.hscic.patient.observations.model.ObservationEntity;
+import uk.gov.hscic.patient.observations.repo.ObservationRepository;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
-import uk.gov.hscic.patient.problems.model.ProblemListHTML;
-import uk.gov.hscic.patient.problems.search.ProblemSearch;
-import uk.gov.hscic.patient.referral.model.ReferralListHtml;
+import uk.gov.hscic.patient.problems.model.ProblemEntity;
+import uk.gov.hscic.patient.problems.repo.ProblemRepository;
 import uk.gov.hscic.patient.referrals.search.ReferralSearch;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
@@ -125,7 +122,7 @@ public class PatientResourceProvider implements IResourceProvider {
     @Autowired
     private PatientSummarySearch patientSummarySearch;
     @Autowired
-    private ProblemSearch problemSearch;
+    private ProblemRepository problemRepository;
     @Autowired
     private EncounterSearch encounterSearch;
     @Autowired
@@ -133,15 +130,15 @@ public class PatientResourceProvider implements IResourceProvider {
     @Autowired
     private ClinicalItemSearch clinicalItemsSearch;
     @Autowired
-    private MedicationSearch medicationSearch;
+    private MedicationHtmlRepository medicationHtmlRepository;
     @Autowired
     private ReferralSearch referralSearch;
     @Autowired
-    private ObservationSearch observationSearch;
+    private ObservationRepository observationRepository;
     @Autowired
     private InvestigationSearch investigationSearch;
     @Autowired
-    private ImmunisationSearch immunisationSearch;
+    private ImmunisationRepository immunisationRepository;
     @Autowired
     private AdminItemSearch adminItemSearch;
 
@@ -298,10 +295,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
         switch (sectionName) {
             case "SUM":
-                PatientSummaryListHtml patientSummaryListHtml = patientSummarySearch.findPatientSummaryListHtml(nhsNumber);
+                String patientSummaryHtml = patientSummarySearch.findPatientSummaryHtml(nhsNumber);
 
-                if (patientSummaryListHtml != null) {
-                    if (patientSummaryListHtml.getHtml().contains("This is confidential")) {
+                if (patientSummaryHtml != null) {
+                    if (patientSummaryHtml.contains("This is confidential")) {
                         throw new ForbiddenOperationException("This Data Is Confidential",
                                 OperationOutcomeFactory.buildOperationOutcome(
                                         OperationConstants.SYSTEM_WARNING_CODE,
@@ -310,7 +307,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
                                         IssueTypeEnum.NOT_FOUND));
                     } else {
-                        html = patientSummaryListHtml.getHtml();
+                        html = patientSummaryHtml;
                     }
                 } else {
                     html = BuildHtmlTable.buildEmptyHtml(OperationConstants.SUMMARY);
@@ -329,15 +326,12 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 List<List<Object>> problemActiveRows = new ArrayList<>();
                 List<List<Object>> problemInactiveRows = new ArrayList<>();
-                List<ProblemListHTML> problemList = problemSearch.findAllProblemHTMLTables(nhsNumber);
 
-                if (problemList != null) {
-                    for (ProblemListHTML problemListHTML : problemList) {
-                        if ("Active".equals(problemListHTML.getActiveOrInactive())) {
-                            problemActiveRows.add(Arrays.asList(problemListHTML.getStartDate(), problemListHTML.getEntry(), problemListHTML.getSignificance(), problemListHTML.getDetails()));
-                        } else {
-                            problemInactiveRows.add(Arrays.asList(problemListHTML.getStartDate(), problemListHTML.getEndDate(), problemListHTML.getEntry(), problemListHTML.getSignificance(), problemListHTML.getDetails()));
-                        }
+                for (ProblemEntity problem : problemRepository.findBynhsNumber(nhsNumber)) {
+                    if ("Active".equals(problem.getActiveOrInactive())) {
+                        problemActiveRows.add(Arrays.asList(problem.getStartDate(), problem.getEntry(), problem.getSignificance(), problem.getDetails()));
+                    } else {
+                        problemInactiveRows.add(Arrays.asList(problem.getStartDate(), problem.getEndDate(), problem.getEntry(), problem.getSignificance(), problem.getDetails()));
                     }
                 }
 
@@ -435,44 +429,40 @@ public class PatientResourceProvider implements IResourceProvider {
                 List<List<Object>> repeatMedRows = new ArrayList<>();
                 List<List<Object>> pastMedRows = new ArrayList<>();
 
-                List<PatientMedicationHTML> medicationList = medicationSearch.findPatientMedicationHTML(nhsNumber);
+                for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationHtmlRepository.findBynhsNumber(nhsNumber)) {
+                    switch (patientMedicationHtmlEntity.getCurrentRepeatPast()) {
+                        case "Current":
+                            currentMedRows
+                                    .add(Arrays.asList(patientMedicationHtmlEntity.getStartDate(),
+                                            patientMedicationHtmlEntity.getMedicationItem(),
+                                            patientMedicationHtmlEntity.getTypeMed(),
+                                            patientMedicationHtmlEntity.getScheduledEnd(),
+                                            patientMedicationHtmlEntity.getDaysDuration(),
+                                            patientMedicationHtmlEntity.getDetails()));
+                            break;
 
-                if (medicationList != null) {
-                    for (PatientMedicationHTML patientMedicationHTML : medicationList) {
-                        switch (patientMedicationHTML.getCurrentRepeatPast()) {
-                            case "Current":
-                                currentMedRows
-                                        .add(Arrays.asList(patientMedicationHTML.getStartDate(),
-                                                patientMedicationHTML.getMedicationItem(),
-                                                patientMedicationHTML.getTypeMed(),
-                                                patientMedicationHTML.getScheduledEnd(),
-                                                patientMedicationHTML.getDaysDuration(),
-                                                patientMedicationHTML.getDetails()));
-                                break;
+                        case "Repeat":
+                            repeatMedRows
+                                    .add(Arrays.asList(patientMedicationHtmlEntity.getLastIssued(),
+                                            patientMedicationHtmlEntity.getMedicationItem(),
+                                            patientMedicationHtmlEntity.getStartDate(),
+                                            patientMedicationHtmlEntity.getReviewDate(),
+                                            patientMedicationHtmlEntity.getNumberIssued(),
+                                            patientMedicationHtmlEntity.getMaxIssues(),
+                                            patientMedicationHtmlEntity.getDetails()));
+                            break;
 
-                            case "Repeat":
-                                repeatMedRows
-                                        .add(Arrays.asList(patientMedicationHTML.getLastIssued(),
-                                                patientMedicationHTML.getMedicationItem(),
-                                                patientMedicationHTML.getStartDate(),
-                                                patientMedicationHTML.getReviewDate(),
-                                                patientMedicationHTML.getNumberIssued(),
-                                                patientMedicationHTML.getMaxIssued(),
-                                                patientMedicationHTML.getDetails()));
-                                break;
-
-                            case "Past":
-                                pastMedRows
-                                        .add(Arrays.asList(patientMedicationHTML.getStartDate(),
-                                                patientMedicationHTML.getMedicationItem(),
-                                                patientMedicationHTML.getTypeMed(),
-                                                patientMedicationHTML.getLastIssued(),
-                                                patientMedicationHTML.getReviewDate(),
-                                                patientMedicationHTML.getNumberIssued(),
-                                                patientMedicationHTML.getMaxIssued(),
-                                                patientMedicationHTML.getDetails()));
-                                break;
-                        }
+                        case "Past":
+                            pastMedRows
+                                    .add(Arrays.asList(patientMedicationHtmlEntity.getStartDate(),
+                                            patientMedicationHtmlEntity.getMedicationItem(),
+                                            patientMedicationHtmlEntity.getTypeMed(),
+                                            patientMedicationHtmlEntity.getLastIssued(),
+                                            patientMedicationHtmlEntity.getReviewDate(),
+                                            patientMedicationHtmlEntity.getNumberIssued(),
+                                            patientMedicationHtmlEntity.getMaxIssues(),
+                                            patientMedicationHtmlEntity.getDetails()));
+                            break;
                     }
                 }
 
@@ -494,10 +484,10 @@ public class PatientResourceProvider implements IResourceProvider {
                 break;
 
             case "REF":
-                ReferralListHtml referralList = referralSearch.findReferralListHtml(nhsNumber, fromDate, toDate);
+                String referralHtml = referralSearch.findReferralHtml(nhsNumber, fromDate, toDate);
 
-                html = referralList != null
-                        ? referralList.getHtml()
+                html = referralHtml != null
+                        ? referralHtml
                         : BuildHtmlTable.buildEmptyHtml("Referrals");
 
                 sectionsList.add(SectionsCreationClass.buildSection(
@@ -512,12 +502,13 @@ public class PatientResourceProvider implements IResourceProvider {
                 }
 
                 List<List<Object>> observationRows = new ArrayList<>();
-                List<ObservationData> observationList = observationSearch.findAllObservationHTMLTables(nhsNumber);
 
-                if (observationList != null) {
-                    for (ObservationData observationItemData : observationList) {
-                        observationRows.add(Arrays.asList(observationItemData.getObservationDate(), observationItemData.getEntry(), observationItemData.getValue(), observationItemData.getValue()));
-                    }
+                for (ObservationEntity observationEntity : observationRepository.findBynhsNumber(nhsNumber)) {
+                    observationRows.add(Arrays.asList(
+                            observationEntity.getObservationDate(),
+                            observationEntity.getEntry(),
+                            observationEntity.getValue(),
+                            observationEntity.getValue()));
                 }
 
                 PageSection observationSection = new PageSection("Observations");
@@ -530,10 +521,10 @@ public class PatientResourceProvider implements IResourceProvider {
                 break;
 
             case "INV":
-                InvestigationListHtml investigationList = investigationSearch.findInvestigationListHtml(nhsNumber);
+                String investigationHtml = investigationSearch.findInvestigationHtml(nhsNumber);
 
-                html = investigationList != null
-                        ? investigationList.getHtml()
+                html = investigationHtml != null
+                        ? investigationHtml
                         : BuildHtmlTable.buildEmptyHtml("Investigations");
 
                 sectionsList.add(SectionsCreationClass.buildSection(
@@ -548,12 +539,14 @@ public class PatientResourceProvider implements IResourceProvider {
                 }
 
                 List<List<Object>> immunisationRows = new ArrayList<>();
-                List<ImmunisationData> immunisationDataList = immunisationSearch.findAllImmunisationHTMLTables(nhsNumber);
 
-                if (immunisationDataList != null) {
-                    for (ImmunisationData immunisationData : immunisationDataList) {
-                        immunisationRows.add(Arrays.asList(immunisationData.getDateOfVac(), immunisationData.getVaccination(), immunisationData.getPart(), immunisationData.getContents(), immunisationData.getDetails()));
-                    }
+                for (ImmunisationEntity immunisationEntity : immunisationRepository.findBynhsNumber(nhsNumber)) {
+                    immunisationRows.add(Arrays.asList(
+                            immunisationEntity.getDateOfVac(),
+                            immunisationEntity.getVaccination(),
+                            immunisationEntity.getPart(),
+                            immunisationEntity.getContents(),
+                            immunisationEntity.getDetails()));
                 }
 
                 PageSection immunisationSection = new PageSection("Immunisations");

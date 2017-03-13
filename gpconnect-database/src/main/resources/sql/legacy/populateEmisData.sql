@@ -42,7 +42,7 @@ VALUES
   (9476719958,'2002-06-13 09:22:00',"HIV Injection","Manufacturer : fred\r\nBatch: 1\r\nInjection Location: Left leg\r\nExpiry Date: 04-Oct-2016","Dont know","Dont Know");
 
 INSERT INTO gpconnect.medications_html
-  (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssued,typeMed)
+  (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
 VALUES
   (9476719966,"Current","02-Apr-2016","Lansoprazole 15mg gastro-resistant capsules","19-11-2019","Day Duration 2","3",NULL,NULL,NULL,NULL,"4"),
   (9476719966,"Repeat","14-09-2014","Colofac 135mg tablets (BGP Products Ltd)","19-11-2019","Day Duration 4","3","Acute","Issue more","Issue more","Issue more","4"),

@@ -1,6 +1,5 @@
 package uk.gov.hscic.patient.observations.model;
 
-import java.util.Date;
 import javax.persistence.*;
 
 @Entity
@@ -10,10 +9,9 @@ public class ObservationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "nhsNumber")
     private String nhsNumber;
-
 
     @Column(name = "observationDate")
     private String observationDate;
@@ -26,8 +24,6 @@ public class ObservationEntity {
 
     @Column(name = "details")
     private String details;
-    
-    
 
     public String getNhsNumber() {
         return nhsNumber;
@@ -76,6 +72,4 @@ public class ObservationEntity {
     public void setDetails(String details) {
         this.details = details;
     }
-
-
 }

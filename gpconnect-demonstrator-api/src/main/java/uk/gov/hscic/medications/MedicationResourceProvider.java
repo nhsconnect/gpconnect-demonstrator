@@ -12,14 +12,14 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.medication.model.MedicationDetails;
-import uk.gov.hscic.medications.search.MedicationSearch;
+import uk.gov.hscic.medications.model.MedicationEntity;
+import uk.gov.hscic.medications.repo.MedicationRepository;
 
 @Component
 public class MedicationResourceProvider implements IResourceProvider {
 
     @Autowired
-    private MedicationSearch medicationSearch;
+    private MedicationRepository medicationRepository;
 
     @Override
     public Class<Medication> getResourceType() {
@@ -28,25 +28,22 @@ public class MedicationResourceProvider implements IResourceProvider {
 
     @Read()
     public Medication getMedicationById(@IdParam IdDt medicationId) {
-        MedicationDetails medicationDetails = medicationSearch.findMedicationByID(medicationId.getIdPartAsLong());
+        MedicationEntity medicationEntity = medicationRepository.findOne(medicationId.getIdPartAsLong());
 
-        if (medicationDetails == null) {
+        if (medicationEntity == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No medication details found for ID: " + medicationId.getIdPart());
             throw new InternalErrorException("No medication details found for ID: " + medicationId.getIdPart(), operationalOutcome);
         }
 
-        Medication medication = new Medication();
-        CodingDt coding = new CodingDt();
-        coding.setSystem("http://snomed.info/sct");
-        coding.setCode(medicationDetails.getId());
-        coding.setDisplay(medicationDetails.getName());
+        CodingDt coding = new CodingDt("http://snomed.info/sct", String.valueOf(medicationEntity.getId())).setDisplay(medicationEntity.getName());
         CodeableConceptDt codableConcept = new CodeableConceptDt();
         codableConcept.addCoding(coding);
-        medication.setCode(codableConcept);
-        medication.setId(medicationDetails.getId());
-        medication.getMeta().setLastUpdated(medicationDetails.getLastUpdated());
-        medication.getMeta().setVersionId(String.valueOf(medicationDetails.getLastUpdated().getTime()));
+
+        Medication medication = new Medication().setCode(codableConcept);
+        medication.setId(String.valueOf(medicationEntity.getId()));
+        medication.getMeta().setLastUpdated(medicationEntity.getLastUpdated());
+        medication.getMeta().setVersionId(String.valueOf(medicationEntity.getLastUpdated().getTime()));
 
         return medication;
     }

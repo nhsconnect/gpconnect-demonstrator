@@ -17,7 +17,7 @@ VALUES
   (9476719974,'2014-12-12 12:17:00','2014-12-12 12:17:00',"Shoulder pain","In right shoulder");
 
 INSERT INTO gpconnect.medications_html
-  (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssued,typeMed)
+  (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
 VALUES
   (9476719974,"Current","14-09-2005","Lansoprazole 15mg gastro-resistant capsules","19-11-2019","Day Duration 2","3",NULL,NULL,NULL,NULL,"4"),
   (9476719974,"Repeat","14-09-2014","Paracetamol 240mg suppositories","19-11-2019","Day Duration 4","3","Acute","Issue more","Issue more","Issue more","4"),

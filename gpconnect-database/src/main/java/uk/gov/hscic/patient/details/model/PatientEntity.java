@@ -24,7 +24,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import uk.gov.hscic.medical.department.model.DepartmentEntity;
 import uk.gov.hscic.medical.practicitioners.doctor.model.GPEntity;
 
@@ -66,6 +67,7 @@ public class PatientEntity {
     @Column(name = "phone")
     private String phone;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
@@ -85,21 +87,27 @@ public class PatientEntity {
     @ManyToOne
     @JoinColumn(name = "gp_id")
     private GPEntity gp;
-    
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "lastUpdated")
     private Date lastUpdated;
-    
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "registration_start")
     private Date registrationStartDateTime;
-    
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "registration_end")
     private Date registrationEndDateTime;
-    
+
     @Column(name = "registration_status")
     private String registrationStatus;
-    
+
     @Column(name = "registration_type")
     private String registrationType;
+
+    @Column(name = "sensitive_flag")
+    private boolean sensitive;
 
     public Long getId() {
         return id;
@@ -276,4 +284,12 @@ public class PatientEntity {
 	public void setRegistrationType(String registrationType) {
 		this.registrationType = registrationType;
 	}
+
+    public boolean isSensitive() {
+        return sensitive;
+    }
+
+    public void setSensitive(boolean sensitive) {
+        this.sensitive = sensitive;
+    }
 }

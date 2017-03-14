@@ -64,9 +64,9 @@ VALUES
   (9476719958,"Active",'2016-07-25 12:00:00','2016-07-25 12:00:00',"Type II diabetes mellitus","Major","Treated daily");
 
 INSERT INTO gpconnect.referrals
-  (nhsNumber,sectionDate,htmlPart,provider,lastUpdated)
+  (nhsNumber,sectionDate,referral_from,referral_to,priority,details,lastUpdated)
 VALUES
-  (9476719958,'2013-12-10 12:17:00',"<div><h2>Referrals</h2><table><thead><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></thead><tbody><tr><td>03 Oct 2016</td><td>EmisTest at SCI_Service at EMISWebCR1 50004</td><td>SCIGPService at EMISWebCR1</td><td>Routine</td><td>This is confidential<br /></td></tr></tbody></table></div>","EMIS",'2016-08-24 12:00:00');
+  (9476719958,'2013-12-10 12:17:00','EmisTest at SCI_Service at EMISWebCR1 50004','SCIGPService at EMISWebCR1','Routine','This is confidential','2016-08-24 12:00:00');
 
 INSERT INTO gpconnect.patientsummary
   (id,html,provider,lastUpdated)

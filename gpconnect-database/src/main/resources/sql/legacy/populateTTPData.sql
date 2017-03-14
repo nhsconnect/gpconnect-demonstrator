@@ -82,11 +82,11 @@ VALUES
   (9476719931,"Inactive",'2000-07-25 12:00:00','2005-07-25 12:00:00',"Low back pain","Minor","Treated daily");
 
 INSERT INTO gpconnect.referrals
-  (nhsNumber,sectionDate,htmlPart,provider,lastUpdated)
+  (nhsNumber,sectionDate,referral_from,referral_to,priority,details,lastUpdated)
 VALUES
-  (9476719931,'2016-03-03 00:00:01',"<div><h2>Referrals</h2><table><thead><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></thead><tbody><td>03 Mar 2016</td><td>Airedale Hospital</td><td>Dr Johnson &amp; Partners</td><td>Routine</td><td>From Hospital out-patient for Diabetic Medicine<br />Receiving care<br /></td></tbody></table></div>","TPP",'2016-07-25 12:00:00'),
-  (9476719931,'2013-04-09 00:00:01',"<div><h2>Referrals</h2><table><thead><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></thead><tbody><td>09 Apr 2013</td><td>Dr Johnson &amp; Partners</td><td>Leeds District Nurses</td><td>Routine</td><td>Referral to local authority weight management programme<br />Waiting For Information</td></tbody></table></div>","TPP",'2016-07-25 12:00:00'),
-  (9476719931,'2012-07-14 00:00:01',"<div><h2>Referrals</h2><table><thead><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></thead><tbody><td>14 Jul 2012</td><td>Dr Johnson &amp; Partners</td><td>Leeds General Infirmary</td><td>Urgent</td><td>Back pain</td></tbody></table></div>","TPP",'2016-07-25 12:00:00');
+  (9476719931,'2016-03-03 00:00:01','Airedale Hospital','Dr Johnson &amp; Partners','Routine','From Hospital out-patient for Diabetic Medicine<br />Receiving care','2016-07-25 12:00:00'),
+  (9476719931,'2013-04-09 00:00:01','Dr Johnson &amp; Partners','Leeds District Nurses','Routine','Referral to local authority weight management programme<br />Waiting For Information','2016-07-25 12:00:00'),
+  (9476719931,'2012-07-14 00:00:01','Dr Johnson &amp; Partners','Leeds General Infirmary','Urgent','Back pain','2016-07-25 12:00:00');
 
 INSERT INTO gpconnect.patientsummary
   (id,html,provider,lastUpdated)

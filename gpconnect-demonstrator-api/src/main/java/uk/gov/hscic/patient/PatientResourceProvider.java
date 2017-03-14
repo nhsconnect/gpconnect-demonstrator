@@ -87,6 +87,7 @@ import uk.gov.hscic.patient.observations.repo.ObservationRepository;
 import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
 import uk.gov.hscic.patient.problems.model.ProblemEntity;
 import uk.gov.hscic.patient.problems.repo.ProblemRepository;
+import uk.gov.hscic.patient.referrals.model.ReferralEntity;
 import uk.gov.hscic.patient.referrals.search.ReferralSearch;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
@@ -485,15 +486,23 @@ public class PatientResourceProvider implements IResourceProvider {
                 break;
 
             case "REF":
-                String referralHtml = referralSearch.findReferralHtml(nhsNumber, fromDate, toDate);
+                List<List<Object>> referralRows = new ArrayList<>();
 
-                html = referralHtml != null
-                        ? referralHtml
-                        : BuildHtmlTable.buildEmptyHtml("Referrals");
+                for (ReferralEntity referralEntity : referralSearch.findReferrals(nhsNumber, fromDate, toDate)) {
+                    referralRows.add(Arrays.asList(
+                            referralEntity.getSectionDate(),
+                            referralEntity.getFrom(),
+                            referralEntity.getTo(),
+                            referralEntity.getPriority(),
+                            referralEntity.getDetails()));
+                }
 
-                sectionsList.add(SectionsCreationClass.buildSection(
-                            OperationConstants.SYSTEM_RECORD_SECTION, sectionName,
-                            html, "Referrals", "Referrals"));
+                PageSection referralSection = new PageSection("Referrals");
+                referralSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "From", "To", "Priority", "Details"), referralRows));
+
+                htmlPage = new HtmlPage("Referrals", sectionName);
+                htmlPage.addPageSection(referralSection);
+                sectionsList.add(FhirSectionBuilder.build(htmlPage));
 
                 break;
 

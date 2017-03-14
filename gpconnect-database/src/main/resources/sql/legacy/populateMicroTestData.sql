@@ -44,8 +44,3 @@ INSERT INTO gpconnect.problems
   (nhsNumber,activeOrInactive,startDate,endDate,entry,significance,details)
 VALUES
   (9476719974,"Active",'2016-07-25 12:00:00','2016-07-25 12:00:00',"Type II diabetes mellitus","Major","Treated daily");
-
-INSERT INTO gpconnect.referrals
-  (nhsNumber,sectionDate,htmlPart,provider,lastUpdated)
-VALUES
-  (9476719974,'2013-12-10 12:17:00',"<div><h2>Referrals</h2><table><thead><th>Date</th><th>From</th><th>To</th><th>Priority</th><th>Details</th></thead><tbody><tr></tr></tbody></table></div>","Microtest",'2016-07-25 12:00:00');

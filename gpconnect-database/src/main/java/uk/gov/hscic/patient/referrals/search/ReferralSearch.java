@@ -13,29 +13,15 @@ public class ReferralSearch {
     @Autowired
     private ReferralRepository referralRepository;
 
-    public String findReferralHtml(final String patientId, Date fromDate, Date toDate) {
-        List<ReferralEntity> referralEntities;
-
+    public List<ReferralEntity> findReferrals(final String patientId, Date fromDate, Date toDate) {
         if (fromDate != null && toDate != null) {
-            referralEntities = referralRepository.findBynhsNumberAndSectionDateAfterAndSectionDateBeforeOrderBySectionDateDesc(Long.valueOf(patientId), fromDate, toDate);
+            return referralRepository.findBynhsNumberAndSectionDateAfterAndSectionDateBeforeOrderBySectionDateDesc(Long.valueOf(patientId), fromDate, toDate);
         } else if (fromDate != null) {
-            referralEntities = referralRepository.findBynhsNumberAndSectionDateAfterOrderBySectionDateDesc(Long.valueOf(patientId), fromDate);
+            return referralRepository.findBynhsNumberAndSectionDateAfterOrderBySectionDateDesc(Long.valueOf(patientId), fromDate);
         } else if (toDate != null) {
-            referralEntities = referralRepository.findBynhsNumberAndSectionDateBeforeOrderBySectionDateDesc(Long.valueOf(patientId), toDate);
-        } else {
-            referralEntities = referralRepository.findBynhsNumberOrderBySectionDateDesc(Long.valueOf(patientId));
+            return referralRepository.findBynhsNumberAndSectionDateBeforeOrderBySectionDateDesc(Long.valueOf(patientId), toDate);
         }
 
-        if (referralEntities.isEmpty()) {
-            return null;
-        }
-
-        String html = "<div>"; // Opening tag
-
-        for (ReferralEntity referral : referralEntities) {
-            html += referral.getHtmlPart(); // Add content
-        }
-
-        return html + "</div>"; // Closing tag
+        return referralRepository.findBynhsNumberOrderBySectionDateDesc(Long.valueOf(patientId));
     }
 }

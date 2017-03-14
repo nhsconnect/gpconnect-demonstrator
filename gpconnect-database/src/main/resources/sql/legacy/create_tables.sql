@@ -260,14 +260,6 @@ CREATE TABLE gpconnect.encounters (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect.patientsummary (
-  id          BIGINT         NOT NULL AUTO_INCREMENT,
-  html        VARCHAR(21000) NULL,
-  provider    VARCHAR(10)    NULL,
-  lastUpdated DATETIME       NULL,
-  PRIMARY KEY (id)
-);
-
 CREATE TABLE gpconnect.procedures (
   id          BIGINT        NOT NULL AUTO_INCREMENT,
   html        VARCHAR(4096) NULL,

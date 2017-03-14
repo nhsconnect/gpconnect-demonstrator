@@ -12,7 +12,6 @@ import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.Appointment;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import ca.uhn.fhir.model.dstu2.resource.Composition;
-import ca.uhn.fhir.model.dstu2.resource.Composition.Section;
 import ca.uhn.fhir.model.dstu2.resource.MedicationAdministration;
 import ca.uhn.fhir.model.dstu2.resource.MedicationDispense;
 import ca.uhn.fhir.model.dstu2.resource.MedicationOrder;
@@ -42,7 +41,6 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
@@ -64,31 +62,11 @@ import uk.gov.hscic.common.util.NhsCodeValidator;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
-import uk.gov.hscic.medications.model.PatientMedicationHtmlEntity;
-import uk.gov.hscic.medications.repo.MedicationHtmlRepository;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
-import uk.gov.hscic.patient.adminitems.model.AdminItemData;
-import uk.gov.hscic.patient.adminitems.search.AdminItemSearch;
-import uk.gov.hscic.patient.allergies.model.AllergyData;
-import uk.gov.hscic.patient.allergies.search.AllergySearch;
-import uk.gov.hscic.patient.careRecordHtml.*;
-import uk.gov.hscic.patient.clinicalitems.model.ClinicalItemData;
-import uk.gov.hscic.patient.clinicalitems.search.ClinicalItemSearch;
 import uk.gov.hscic.patient.details.search.PatientSearch;
 import uk.gov.hscic.patient.details.store.PatientStore;
-import uk.gov.hscic.patient.encounters.model.EncounterData;
-import uk.gov.hscic.patient.encounters.search.EncounterSearch;
-import uk.gov.hscic.patient.immunisations.model.ImmunisationEntity;
-import uk.gov.hscic.patient.immunisations.repo.ImmunisationRepository;
-import uk.gov.hscic.patient.investigations.model.InvestigationEntity;
-import uk.gov.hscic.patient.investigations.repo.InvestigationRepository;
-import uk.gov.hscic.patient.observations.model.ObservationEntity;
-import uk.gov.hscic.patient.observations.repo.ObservationRepository;
-import uk.gov.hscic.patient.patientsummary.search.PatientSummarySearch;
-import uk.gov.hscic.patient.problems.model.ProblemEntity;
-import uk.gov.hscic.patient.problems.repo.ProblemRepository;
-import uk.gov.hscic.patient.referrals.model.ReferralEntity;
-import uk.gov.hscic.patient.referrals.search.ReferralSearch;
+import uk.gov.hscic.patient.html.FhirSectionBuilder;
+import uk.gov.hscic.patient.html.Page;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
@@ -107,42 +85,30 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
+
     @Autowired
     private OrganizationResourceProvider organizationResourceProvider;
+
     @Autowired
     private MedicationOrderResourceProvider medicationOrderResourceProvider;
+
     @Autowired
     private MedicationDispenseResourceProvider medicationDispenseResourceProvider;
+
     @Autowired
     private MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
+
     @Autowired
     private AppointmentResourceProvider appointmentResourceProvider;
+
     @Autowired
     private PatientStore patientStore;
+
     @Autowired
     private PatientSearch patientSearch;
+
     @Autowired
-    private PatientSummarySearch patientSummarySearch;
-    @Autowired
-    private ProblemRepository problemRepository;
-    @Autowired
-    private EncounterSearch encounterSearch;
-    @Autowired
-    private AllergySearch allergySearch;
-    @Autowired
-    private ClinicalItemSearch clinicalItemsSearch;
-    @Autowired
-    private MedicationHtmlRepository medicationHtmlRepository;
-    @Autowired
-    private ReferralSearch referralSearch;
-    @Autowired
-    private ObservationRepository observationRepository;
-    @Autowired
-    private InvestigationRepository investigationRepository;
-    @Autowired
-    private ImmunisationRepository immunisationRepository;
-    @Autowired
-    private AdminItemSearch adminItemSearch;
+    private PageSectionFactory pageSectionFactory;
 
     @Override
     public Class<Patient> getResourceType() {
@@ -291,315 +257,89 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         // Build requested section
-        String html;
-        HtmlPage htmlPage;
-        List<Section> sectionsList = new ArrayList<>();
+        Page page;
 
         switch (sectionName) {
             case "SUM":
-                String patientSummaryHtml = patientSummarySearch.findPatientSummaryHtml(nhsNumber);
-
-                if (patientSummaryHtml != null) {
-                    if (patientSummaryHtml.contains("This is confidential")) {
-                        throw new ForbiddenOperationException("This Data Is Confidential",
-                                OperationOutcomeFactory.buildOperationOutcome(
-                                        OperationConstants.SYSTEM_WARNING_CODE,
-                                        OperationConstants.CODE_NO_PATIENT_CONSENT,
-                                        OperationConstants.COD_CONCEPT_RECORD_PATIENT_DATA_CONFIDENTIAL,
-                                        OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
-                                        IssueTypeEnum.NOT_FOUND));
-                    } else {
-                        html = patientSummaryHtml;
-                    }
-                } else {
-                    html = BuildHtmlTable.buildEmptyHtml(OperationConstants.SUMMARY);
-                }
-
-                sectionsList.add(SectionsCreationClass.buildSection(
-                        OperationConstants.SYSTEM_RECORD_SECTION, sectionName, html,
-                        OperationConstants.SUMMARY, OperationConstants.SUMMARY));
+                page = new Page("Summary", sectionName);
+                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, fromDate, toDate));
+                page.addPageSection(pageSectionFactory.getMEDCurrentPageSection(nhsNumber, fromDate, toDate));
+                page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, fromDate, toDate));
+                page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, fromDate, toDate));
+                page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
 
             case "PRB":
-                if (toDate != null && fromDate != null) {
-                    throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
-                }
-
-                List<List<Object>> problemActiveRows = new ArrayList<>();
-                List<List<Object>> problemInactiveRows = new ArrayList<>();
-
-                for (ProblemEntity problem : problemRepository.findBynhsNumber(nhsNumber)) {
-                    if ("Active".equals(problem.getActiveOrInactive())) {
-                        problemActiveRows.add(Arrays.asList(problem.getStartDate(), problem.getEntry(), problem.getSignificance(), problem.getDetails()));
-                    } else {
-                        problemInactiveRows.add(Arrays.asList(problem.getStartDate(), problem.getEndDate(), problem.getEntry(), problem.getSignificance(), problem.getDetails()));
-                    }
-                }
-
-                PageSection activeProblems = new PageSection("Active Problems and Issues");
-                activeProblems.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Entry", "Significance", "Details"), problemActiveRows));
-
-                PageSection inactiveProblems = new PageSection("Inactive Problems and Issues");
-                inactiveProblems.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "End Date", "Entry", "Significance", "Details"), problemInactiveRows));
-
-                htmlPage = new HtmlPage("Problems", sectionName);
-                htmlPage.addPageSection(activeProblems);
-                htmlPage.addPageSection(inactiveProblems);
-                sectionsList.add(FhirSectionBuilder.build(htmlPage));
+                page = new Page("Problems", sectionName);
+                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, fromDate, toDate));
+                page.addPageSection(pageSectionFactory.getPRBInctivePageSection(nhsNumber, fromDate, toDate));
 
                 break;
 
             case "ENC":
-                List<EncounterData> encounterList = encounterSearch.findAllEncounterHTMLTables(nhsNumber, fromDate, toDate);
-                List<List<Object>> encounterRows = new ArrayList<>();
-
-                if (encounterList != null) {
-                    for (EncounterData encounter : encounterList) {
-                        encounterRows.add(Arrays.asList(encounter.getEncounterDate(), encounter.getTitle(), encounter.getDetails()));
-                    }
-                }
-
-                PageSection encountersSection = new PageSection("Encounters");
-                encountersSection.setDateRange(requestedFromDate, requestedToDate);
-                encountersSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Title", "Details"), encounterRows));
-
-                htmlPage = new HtmlPage("Encounters", sectionName);
-                htmlPage.addPageSection(encountersSection);
-                sectionsList.add(FhirSectionBuilder.build(htmlPage));
+                page = new Page("Encounters", sectionName);
+                page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
 
             case "ALL":
-                if (toDate != null && fromDate != null) {
-                    throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
-                }
-
-                List<List<Object>> currentAllergyRows = new ArrayList<>();
-                List<List<Object>> historicalAllergyRows = new ArrayList<>();
-                List<AllergyData> allergyList = allergySearch.findAllAllergyHTMLTables(nhsNumber);
-
-                if (allergyList != null) {
-                    for (AllergyData allergyData : allergyList) {
-                        if ("Current".equals(allergyData.getCurrentOrHistoric())) {
-                            currentAllergyRows.add(Arrays.asList(allergyData.getStartDate(), allergyData.getDetails()));
-                        } else {
-                            historicalAllergyRows.add(Arrays.asList(allergyData.getStartDate(), allergyData.getEndDate(), allergyData.getDetails()));
-                        }
-                    }
-                }
-
-                PageSection currentAllergiesSection = new PageSection("Current Allergies and Adverse Reactions");
-                currentAllergiesSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Details"), currentAllergyRows));
-
-                PageSection historicalAllergiesSection = new PageSection("Historical Allergies and Adverse Reactions");
-                historicalAllergiesSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "End Date", "Details"), historicalAllergyRows));
-
-                htmlPage = new HtmlPage("Allergies and Adverse Reactions", sectionName);
-                htmlPage.addPageSection(currentAllergiesSection);
-                htmlPage.addPageSection(historicalAllergiesSection);
-                sectionsList.add(FhirSectionBuilder.build(htmlPage));
+                page = new Page("Allergies and Adverse Reactions", sectionName);
+                page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, fromDate, toDate));
+                page.addPageSection(pageSectionFactory.getALLHistoricalPageSection(nhsNumber, fromDate, toDate));
 
                 break;
 
             case "CLI":
-                List<ClinicalItemData> clinicalItemList = clinicalItemsSearch.findAllClinicalItemHTMLTables(nhsNumber, fromDate, toDate);
-                List<List<Object>> clinicalItemsRows = new ArrayList<>();
-
-                if (clinicalItemList != null) {
-                    for (ClinicalItemData clinicalItemData : clinicalItemList) {
-                        clinicalItemsRows.add(Arrays.asList(clinicalItemData.getDate(), clinicalItemData.getEntry(), clinicalItemData.getDetails()));
-                    }
-                }
-
-                PageSection clinicalItemsSection = new PageSection("Clinical Items");
-                clinicalItemsSection.setDateRange(requestedFromDate, requestedToDate);
-                clinicalItemsSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Entry", "Details"), clinicalItemsRows));
-
-                htmlPage = new HtmlPage("Clinical Items", sectionName);
-                htmlPage.addPageSection(clinicalItemsSection);
-                sectionsList.add(FhirSectionBuilder.build(htmlPage));
+                page = new Page("Clinical Items", sectionName);
+                page.addPageSection(pageSectionFactory.getCLIPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
 
             case "MED":
-                if (toDate != null && fromDate != null) {
-                    throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
-                }
-
-                List<List<Object>> currentMedRows = new ArrayList<>();
-                List<List<Object>> repeatMedRows = new ArrayList<>();
-                List<List<Object>> pastMedRows = new ArrayList<>();
-
-                for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationHtmlRepository.findBynhsNumber(nhsNumber)) {
-                    switch (patientMedicationHtmlEntity.getCurrentRepeatPast()) {
-                        case "Current":
-                            currentMedRows
-                                    .add(Arrays.asList(patientMedicationHtmlEntity.getStartDate(),
-                                            patientMedicationHtmlEntity.getMedicationItem(),
-                                            patientMedicationHtmlEntity.getTypeMed(),
-                                            patientMedicationHtmlEntity.getScheduledEnd(),
-                                            patientMedicationHtmlEntity.getDaysDuration(),
-                                            patientMedicationHtmlEntity.getDetails()));
-                            break;
-
-                        case "Repeat":
-                            repeatMedRows
-                                    .add(Arrays.asList(patientMedicationHtmlEntity.getLastIssued(),
-                                            patientMedicationHtmlEntity.getMedicationItem(),
-                                            patientMedicationHtmlEntity.getStartDate(),
-                                            patientMedicationHtmlEntity.getReviewDate(),
-                                            patientMedicationHtmlEntity.getNumberIssued(),
-                                            patientMedicationHtmlEntity.getMaxIssues(),
-                                            patientMedicationHtmlEntity.getDetails()));
-                            break;
-
-                        case "Past":
-                            pastMedRows
-                                    .add(Arrays.asList(patientMedicationHtmlEntity.getStartDate(),
-                                            patientMedicationHtmlEntity.getMedicationItem(),
-                                            patientMedicationHtmlEntity.getTypeMed(),
-                                            patientMedicationHtmlEntity.getLastIssued(),
-                                            patientMedicationHtmlEntity.getReviewDate(),
-                                            patientMedicationHtmlEntity.getNumberIssued(),
-                                            patientMedicationHtmlEntity.getMaxIssues(),
-                                            patientMedicationHtmlEntity.getDetails()));
-                            break;
-                    }
-                }
-
-                PageSection currentMedSection = new PageSection("Current Medication Issues");
-                currentMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End Date", "Days Duration", "Details"), currentMedRows));
-
-                PageSection repeatMedSection = new PageSection("Current Repeat Medications");
-                repeatMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("Last Issued", "Medication Item", "Start Date", "Review Date", "Number Issued", "Max Issues", "Details"), repeatMedRows));
-
-                PageSection pastMedSection = new PageSection("Past Medications");
-                pastMedSection.setTable(new PageSectionHtmlTable(Arrays.asList("Start Date", "Medication Item", "Type", "Last Issued", "Review Date", "Number Issued", "Max Issues", "Details"), pastMedRows));
-
-                htmlPage = new HtmlPage("Medications", sectionName);
-                htmlPage.addPageSection(currentMedSection);
-                htmlPage.addPageSection(repeatMedSection);
-                htmlPage.addPageSection(pastMedSection);
-                sectionsList.add(FhirSectionBuilder.build(htmlPage));
+                page = new Page("Medications", sectionName);
+                page.addPageSection(pageSectionFactory.getMEDCurrentPageSection(nhsNumber, fromDate, toDate));
+                page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, fromDate, toDate));
+                page.addPageSection(pageSectionFactory.getMEDPastPageSection(nhsNumber, fromDate, toDate));
 
                 break;
 
             case "REF":
-                List<List<Object>> referralRows = new ArrayList<>();
-
-                for (ReferralEntity referralEntity : referralSearch.findReferrals(nhsNumber, fromDate, toDate)) {
-                    referralRows.add(Arrays.asList(
-                            referralEntity.getSectionDate(),
-                            referralEntity.getFrom(),
-                            referralEntity.getTo(),
-                            referralEntity.getPriority(),
-                            referralEntity.getDetails()));
-                }
-
-                PageSection referralSection = new PageSection("Referrals");
-                referralSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "From", "To", "Priority", "Details"), referralRows));
-
-                htmlPage = new HtmlPage("Referrals", sectionName);
-                htmlPage.addPageSection(referralSection);
-                sectionsList.add(FhirSectionBuilder.build(htmlPage));
+                page = new Page("Referrals", sectionName);
+                page.addPageSection(pageSectionFactory.getREFPageSection(nhsNumber, fromDate, toDate));
 
                 break;
 
             case "OBS":
-                if (toDate != null && fromDate != null) {
-                    throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
-                }
-
-                List<List<Object>> observationRows = new ArrayList<>();
-
-                for (ObservationEntity observationEntity : observationRepository.findBynhsNumber(nhsNumber)) {
-                    observationRows.add(Arrays.asList(
-                            observationEntity.getObservationDate(),
-                            observationEntity.getEntry(),
-                            observationEntity.getValue(),
-                            observationEntity.getValue()));
-                }
-
-                PageSection observationSection = new PageSection("Observations");
-                observationSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Entry", "Value", "Details"), observationRows));
-
-                htmlPage = new HtmlPage("Observations", sectionName);
-                htmlPage.addPageSection(observationSection);
-                sectionsList.add(FhirSectionBuilder.build(htmlPage));
+                page = new Page("Observations", sectionName);
+                page.addPageSection(pageSectionFactory.getOBSPageSection(nhsNumber, fromDate, toDate));
 
                 break;
 
             case "INV":
-                List<List<Object>> investigationRows = new ArrayList<>();
-
-                for (InvestigationEntity investigationEntity : investigationRepository.findByNhsNumber(nhsNumber)) {
-                    investigationRows.add(Arrays.asList(
-                            investigationEntity.getDate(),
-                            investigationEntity.getTitle(),
-                            investigationEntity.getDetails()));
-                }
-
-                PageSection investigationSection = new PageSection("Investigations");
-                investigationSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Title", "Details"), investigationRows));
-
-                htmlPage = new HtmlPage("Investigations", sectionName);
-                htmlPage.addPageSection(investigationSection);
-                sectionsList.add(FhirSectionBuilder.build(htmlPage));
+                page = new Page("Investigations", sectionName);
+                page.addPageSection(pageSectionFactory.getINVPageSection(nhsNumber));
 
                 break;
 
             case "IMM":
-                if (toDate != null && fromDate != null) {
-                    throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
-                }
-
-                List<List<Object>> immunisationRows = new ArrayList<>();
-
-                for (ImmunisationEntity immunisationEntity : immunisationRepository.findByNhsNumber(nhsNumber)) {
-                    immunisationRows.add(Arrays.asList(
-                            immunisationEntity.getDateOfVac(),
-                            immunisationEntity.getVaccination(),
-                            immunisationEntity.getPart(),
-                            immunisationEntity.getContents(),
-                            immunisationEntity.getDetails()));
-                }
-
-                PageSection immunisationSection = new PageSection("Immunisations");
-                immunisationSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Vaccination", "Part", "Contents", "Details"), immunisationRows));
-
-                htmlPage = new HtmlPage("Immunisations", sectionName);
-                htmlPage.addPageSection(immunisationSection);
-                sectionsList.add(FhirSectionBuilder.build(htmlPage));
+                page = new Page("Immunisations", sectionName);
+                page.addPageSection(pageSectionFactory.getIMMPageSection(nhsNumber, fromDate, toDate));
 
                 break;
 
             case "ADM":
-                List<List<Object>> adminItemsRows = new ArrayList<>();
-                List<AdminItemData> adminItemList = adminItemSearch.findAllAdminItemHTMLTables(nhsNumber, fromDate, toDate);
-
-                if (adminItemList != null) {
-                    for (AdminItemData adminItemData : adminItemList) {
-                        adminItemsRows.add(Arrays.asList(adminItemData.getAdminDate(), adminItemData.getEntry(), adminItemData.getDetails()));
-                    }
-                }
-
-                PageSection administativeItemsSection = new PageSection("Administrative Items");
-                administativeItemsSection.setDateRange(requestedFromDate, requestedToDate);
-                administativeItemsSection.setTable(new PageSectionHtmlTable(Arrays.asList("Date", "Entry", "Details"), adminItemsRows));
-
-                htmlPage = new HtmlPage("Administrative Items", sectionName);
-                htmlPage.addPageSection(administativeItemsSection);
-                sectionsList.add(FhirSectionBuilder.build(htmlPage));
+                page = new Page("Administrative Items", sectionName);
+                page.addPageSection(pageSectionFactory.getADMPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
 
             default:
-                throw new UnprocessableEntityException("Dates are invalid: ",
+                throw new UnprocessableEntityException("Invalid section code: " + sectionName,
                         OperationOutcomeFactory.buildOperationOutcome(
                                 OperationConstants.SYSTEM_WARNING_CODE,
                                 OperationConstants.CODE_INVALID_PARAMETER,
-                                OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
+                                OperationConstants.COD_CONCEPT_RECORD_INVALID_SECTION_CODE,
                                 OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
                                 IssueTypeEnum.NOT_FOUND));
         }
@@ -639,12 +379,12 @@ public class PatientResourceProvider implements IResourceProvider {
 
         careRecordComposition.getMeta().addProfile(OperationConstants.META_GP_CONNECT_CARERECORD_COMPOSITION);
 
-        careRecordComposition.setSection(sectionsList);
+        careRecordComposition.setSection(Collections.singletonList(FhirSectionBuilder.buildFhirSection(page)));
 
         // Build the Care Record Composition
-        Bundle bundle = new Bundle().setType(BundleTypeEnum.DOCUMENT);
-
-        bundle.addEntry(new Bundle.Entry().setResource(careRecordComposition));
+        Bundle bundle = new Bundle()
+                .setType(BundleTypeEnum.DOCUMENT)
+                .addEntry(new Bundle.Entry().setResource(careRecordComposition));
 
         List<ResourceReferenceDt> careProviderPractitionerList = ((Patient) patientEntry.getResource()).getCareProvider();
 

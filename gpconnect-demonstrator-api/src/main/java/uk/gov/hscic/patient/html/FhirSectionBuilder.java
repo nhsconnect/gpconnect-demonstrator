@@ -1,4 +1,4 @@
-package uk.gov.hscic.patient.careRecordHtml;
+package uk.gov.hscic.patient.html;
 
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -13,26 +13,26 @@ public final class FhirSectionBuilder {
 
     private FhirSectionBuilder() { }
 
-    public static Composition.Section build(HtmlPage htmlPage) {
-        CodingDt coding = new CodingDt().setSystem(OperationConstants.SYSTEM_RECORD_SECTION).setCode(htmlPage.getCode()).setDisplay(htmlPage.getName());
+    public static Composition.Section buildFhirSection(Page page) {
+        CodingDt coding = new CodingDt().setSystem(OperationConstants.SYSTEM_RECORD_SECTION).setCode(page.getCode()).setDisplay(page.getName());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);
-        codableConcept.setText(htmlPage.getName());
+        codableConcept.setText(page.getName());
 
         NarrativeDt narrative = new NarrativeDt();
         narrative.setStatus(NarrativeStatusEnum.GENERATED);
-        narrative.setDivAsString(createHtmlContent(htmlPage));
+        narrative.setDivAsString(createHtmlContent(page));
 
         return new Composition.Section()
-                .setTitle(htmlPage.getName())
+                .setTitle(page.getName())
                 .setCode(codableConcept)
                 .setText(narrative);
     }
 
-    private static String createHtmlContent(HtmlPage htmlPage) {
+    private static String createHtmlContent(Page page) {
         StringBuilder stringBuilder = new StringBuilder("<div>");
 
         // Add sections
-        for (PageSection pageSection : htmlPage.getPageSections()) {
+        for (PageSection pageSection : page.getPageSections()) {
             stringBuilder.append("<div>");
 
             // Header
@@ -58,7 +58,7 @@ public final class FhirSectionBuilder {
             }
 
             // Table
-            PageSectionHtmlTable table = pageSection.getTable();
+            Table table = pageSection.getTable();
 
             if (table == null || table.getRows().isEmpty()) {
                 stringBuilder.append("<div><p>No '").append(pageSection.getHeader()).append("' data is recorded for this patient.</p></div>");

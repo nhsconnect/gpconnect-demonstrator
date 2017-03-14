@@ -1,4 +1,4 @@
-package uk.gov.hscic.patient.careRecordHtml;
+package uk.gov.hscic.patient.html;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,15 +9,18 @@ public class PageSection {
     private Date fromDate;
     private Date toDate;
     private final List<String> banners;
-    private PageSectionHtmlTable table;
+    private Table table;
 
-    public PageSection(String sectionHeader) {
-        header = sectionHeader;
+    public PageSection(String header, Table table) {
+        this.header = header;
+        this.table = table;
         banners = new ArrayList<>();
     }
 
-    public void setTable(PageSectionHtmlTable sectionTable) {
-        table = sectionTable;
+    public PageSection(String header, Table table, Date fromDate, Date toDate) {
+        this(header, table);
+        this.fromDate = fromDate;
+        this.toDate = toDate;
     }
 
     public void addBanner(String bannerString) {
@@ -32,13 +35,8 @@ public class PageSection {
         return banners;
     }
 
-    public PageSectionHtmlTable getTable() {
+    public Table getTable() {
         return table;
-    }
-
-    public void setDateRange(Date from, Date to) {
-        fromDate = from;
-        toDate = to;
     }
 
     public Date getFromDate() {

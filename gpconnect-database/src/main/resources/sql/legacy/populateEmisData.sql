@@ -38,8 +38,8 @@ VALUES
 INSERT INTO gpconnect.immunisations
   (nhsNumber,dateOfVac,vaccination,part,contents,details)
 VALUES
-  (9476719958,'2000-06-13 09:22:00',"First DTP (triple)+polio vacc.","Manufacturer : fred\r\nBatch: 1\r\nInjection Location: Right arm\r\nExpiry Date: 04-Oct-2016","Dont know","Dont Know"),
-  (9476719958,'2002-06-13 09:22:00',"HIV Injection","Manufacturer : fred\r\nBatch: 1\r\nInjection Location: Left leg\r\nExpiry Date: 04-Oct-2016","Dont know","Dont Know");
+  (9476719958,'2000-06-13 09:22:00',"First DTP (triple)+polio vacc.","Manufacturer : fred<br />Batch: 1<br />Injection Location: Right arm<br />Expiry Date: 04-Oct-2016","Dont know","Dont Know"),
+  (9476719958,'2002-06-13 09:22:00',"HIV Injection","Manufacturer : fred<br />Batch: 1<br />Injection Location: Left leg<br />Expiry Date: 04-Oct-2016","Dont know","Dont Know");
 
 INSERT INTO gpconnect.medications_html
   (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
@@ -67,8 +67,3 @@ INSERT INTO gpconnect.referrals
   (nhsNumber,sectionDate,referral_from,referral_to,priority,details,lastUpdated)
 VALUES
   (9476719958,'2013-12-10 12:17:00','EmisTest at SCI_Service at EMISWebCR1 50004','SCIGPService at EMISWebCR1','Routine','This is confidential','2016-08-24 12:00:00');
-
-INSERT INTO gpconnect.patientsummary
-  (id,html,provider,lastUpdated)
-VALUES
-  (9476719958,"<div><h2>Active Problems and Issues</h2><table><thead><tr><th>Start Date</th><th>Entry</th><th>Significance</th><th>Details</th></tr></thead><tbody><tr><td>03 Oct 2016</td><td>This is confidential</td><td>Major</td><td><br/>Episodicity :  FIRST</td></tr><tr><td>29 Sep 2016</td><td>This is confidential</td><td>Major</td><td><br/>Episodicity :  FIRST</td></tr></tbody></table><h2>Current Medication Issues</h2><table><thead><tr><th>Start Date</th><th>Medication Item</th><th>Type</th><th>Scheduled End Date</th><th>Days Duration</th><th>Details</th></tr></thead><tbody></tr><tr><td>03 Oct 2016</td><td>This is confidential - 100 tablet - Two At On set Of Attack Then One Every 4 Hours When Necessary, Max 6 In 24 Hours</td><td>20 Oct 2016</td><td>17</td><td/></tr></tbody></table><h2>Current Repeat Medications</h2><table><thead><tr><th>Last Issued</th><th>Medication Item</th><th>Start Date</th><th>Review Date</th><th>Number Issued</th><th>Max Issues</th><th>Details</th></tr></thead><tbody><tr><td>03 Oct 2016</td><td>This is confidential - 50 gram - Apply Up To Three Times A Day</td><td>03 Oct 2016</td><td>31 Oct 2016</td><td>1</td><td/><td/></tr></tbody></table><h2>Current Allergies and Adverse Reactions</h2><table><thead><tr><th>Start Date</th><th>Details</th></tr></thead><tbody><tr><td>03 Oct 2016</td><td>This is confidential</td></tr></tbody></table><h2>Current Allergies and Adverse Reactions</h2><table><thead><tr><th>Date</th><th>Title</th><th>Details</th></tr></thead><tbody><tr><td>03 Oct 2016</td><td>This is confidential</td></tr></tbody></table><h2>Encounters</h2><table><tbody><tr><td>03 Oct 2016</td><td>Emis Test - EMISWebCR1 50002</td></tr><tr><td/><td>Comment note :  This is confidential - This is confidential.</td></tr><tr><td>03 Oct 2016</td><td>Emis Test - EMISWebCR1 50002</td></tr><tr><td/><td>Referral : This is confidential.</td></tr><tr><td>03 Oct 2016</td><td>Emis Test - EMISWebCR1 50002</td></tr><tr><td/><td>Clinical document :  This is confidential - test.</td></tr></tbody></table><h2>Current Recalls</h2>There are no current recalls in the patient's record</div>","EMIS",'2016-08-24 12:00:00');

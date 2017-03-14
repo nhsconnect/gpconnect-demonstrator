@@ -8,10 +8,10 @@ angular.module('gpConnect').factory('PatientService', function ($rootScope, $htt
     var getSummary = function(patientId) {
         return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord").then(function(response) {
             var endpointLookupResult = response;
-            
+
             return $http.post(
                     endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getcarerecord',
-                    '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "http://fhir.nhs.net/Id/nhs-number", "value" : "' + patientId + '" }},{"name" : "recordSection","valueCodeableConcept" :{"coding" : [{"system":"http://fhir.nhs.net/ValueSet/gpconnect-record-section-1","code":"SUM","display":"Summary"}]}},{"name" : "timePeriod","valuePeriod" : { "start" : "2015", "end" : "2016" }}]}',
+                    '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "http://fhir.nhs.net/Id/nhs-number", "value" : "' + patientId + '" }},{"name" : "recordSection","valueCodeableConcept" :{"coding" : [{"system":"http://fhir.nhs.net/ValueSet/gpconnect-record-section-1","code":"SUM","display":"Summary"}]}},{"name" : "timePeriod","valuePeriod" : { "start" : null, "end" : null }}]}',
                     {
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
@@ -32,7 +32,7 @@ angular.module('gpConnect').factory('PatientService', function ($rootScope, $htt
 
         return FhirEndpointLookup.getEndpoint(odsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function(endpointResponse) {
             var endpointLookupResult = endpointResponse;
-            
+
             var partientLookupResponse = $http.get(
                     endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number%7C' + patientId,
                     {
@@ -86,7 +86,7 @@ angular.module('gpConnect').factory('PatientService', function ($rootScope, $htt
             return response;
         });
     };
-            
+
     var registerPatient = function(practiceOdsCode, requestParameters, patientId) {
         return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient").then(function(endpointLookupResult) {
             return $http.post(

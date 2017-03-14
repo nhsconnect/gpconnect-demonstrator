@@ -1,21 +1,21 @@
-package uk.gov.hscic.patient.careRecordHtml;
+package uk.gov.hscic.patient.html;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HtmlPage {
+public class Page {
     private final String name;
     private final String code;
     private final List<PageSection> pageSections;
 
-    public HtmlPage(String name, String pageCode) {
+    public Page(String name, String pageCode) {
         this.name = name;
         code = pageCode;
         pageSections = new ArrayList<>();
     }
 
-    public void addPageSection(PageSection section) {
-        pageSections.add(section);
+    public void addPageSection(PageSection pageSection) {
+        pageSections.add(pageSection);
     }
 
     public String getName() {

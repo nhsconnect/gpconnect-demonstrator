@@ -1,12 +1,12 @@
-package uk.gov.hscic.patient.careRecordHtml;
+package uk.gov.hscic.patient.html;
 
 import java.util.List;
 
-public class PageSectionHtmlTable {
+public class Table {
     private final List<String> headers;
     private final List<List<Object>> rows;
 
-    public PageSectionHtmlTable(List<String> headers, List<List<Object>> rows) {
+    public Table(List<String> headers, List<List<Object>> rows) {
         this.headers = headers;
         this.rows = rows;
     }

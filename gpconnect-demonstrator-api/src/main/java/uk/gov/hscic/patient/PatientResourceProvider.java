@@ -164,8 +164,15 @@ public class PatientResourceProvider implements IResourceProvider {
                 .map(Parameter::getName)
                 .collect(Collectors.toList());
 
-        if (!PERMITTED_PARAM_NAMES.containsAll(parameters) || !parameters.containsAll(MANDATORY_PARAM_NAMES)) {
-            throw new UnprocessableEntityException("Parameters are incorrect",
+        if (!PERMITTED_PARAM_NAMES.containsAll(parameters)) {
+            throw new UnprocessableEntityException("Invalid parameters",
+                    OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
+                            OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                            IssueTypeEnum.INVALID_CONTENT));
+        }
+
+        if (!parameters.containsAll(MANDATORY_PARAM_NAMES)) {
+            throw new InvalidRequestException("Missing parameters",
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
                             OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
                             IssueTypeEnum.INVALID_CONTENT));
@@ -238,7 +245,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 }
 
                 if (!sectionName.equals(sectionName.toUpperCase())) {
-                    throw new UnprocessableEntityException("Section Case Invalid: ",
+                    throw new UnprocessableEntityException("Section Case Invalid: " + sectionName,
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
                                     OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
@@ -256,7 +263,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 requestedToDate = period.getEnd();
 
                 if (fromDate != null && toDate != null && fromDate.after(toDate)) {
-                    throw new UnprocessableEntityException("Dates are invalid: ",
+                    throw new UnprocessableEntityException("Dates are invalid: " + fromDate + ", " + toDate,
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
                                     OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
@@ -271,6 +278,11 @@ public class PatientResourceProvider implements IResourceProvider {
                     toDateCalendar.add(Calendar.DATE, -1);
                     requestedToDate = toDateCalendar.getTime();
                 }
+            } else {
+                throw new InvalidRequestException("Invalid datatype",
+                        OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
+                                OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                                IssueTypeEnum.INVALID_CONTENT));
             }
         }
 

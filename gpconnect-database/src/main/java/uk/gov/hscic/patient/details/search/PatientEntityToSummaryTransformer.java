@@ -16,9 +16,9 @@
 package uk.gov.hscic.patient.details.search;
 
 import org.apache.commons.collections4.Transformer;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.patient.details.model.PatientEntity;
 import uk.gov.hscic.patient.summary.model.PatientSummary;
-import org.springframework.stereotype.Component;
 
 @Component
 public class PatientEntityToSummaryTransformer implements Transformer<PatientEntity, PatientSummary> {
@@ -43,6 +43,7 @@ public class PatientEntityToSummaryTransformer implements Transformer<PatientEnt
         patientSummary.setGender(patientEntity.getGender());
         patientSummary.setNhsNumber(patientEntity.getNhsNumber());
         patientSummary.setDepartment(patientEntity.getDepartment().getDepartment());
+        patientSummary.setSensitive(patientEntity.isSensitive());
         patientSummary.setLastUpdated(patientEntity.getLastUpdated());
 
         return patientSummary;

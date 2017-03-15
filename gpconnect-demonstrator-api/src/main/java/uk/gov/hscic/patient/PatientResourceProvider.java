@@ -41,6 +41,7 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
@@ -68,6 +69,7 @@ import uk.gov.hscic.patient.details.store.PatientStore;
 import uk.gov.hscic.patient.html.FhirSectionBuilder;
 import uk.gov.hscic.patient.html.Page;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
+import uk.gov.hscic.patient.summary.model.PatientSummary;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 @Component
@@ -138,7 +140,7 @@ public class PatientResourceProvider implements IResourceProvider {
         PatientDetails patientDetails = patientSearch.findPatient(patientId.getValue());
 
         if (null == patientDetails) {
-            throw new ResourceNotFoundException("No patient details found for patient ID: ",
+            throw new ResourceNotFoundException("No patient details found for patient ID: " + patientId,
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
                             OperationConstants.CODE_PATIENT_NOT_FOUND, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                             OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
@@ -192,10 +194,26 @@ public class PatientResourceProvider implements IResourceProvider {
                 }
 
                 if (!NhsCodeValidator.nhsNumberValid(nhsNumber)) {
-                    throw new InvalidRequestException("NHS number Invalid " + OperationOutcomeFactory.buildOperationOutcome(
+                    throw new InvalidRequestException("NHS number Invalid", OperationOutcomeFactory.buildOperationOutcome(
                             OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_NHS_NUMBER,
                             OperationConstants.COD_CONCEPT_RECORD_NHS_NUMBER_INVALID,
                             OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                }
+
+                PatientSummary patientSummary = patientSearch.findPatientSummary(nhsNumber);
+
+                if (null == patientSummary) {
+                    throw new ResourceNotFoundException("No patient details found for patient ID: " + nhsNumber,
+                            OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
+                                    OperationConstants.CODE_PATIENT_NOT_FOUND, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
+                                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
+                }
+
+                if (patientSummary.isSensitive()) {
+                    throw new ForbiddenOperationException("No patient consent", OperationOutcomeFactory.buildOperationOutcome(
+                            OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_NO_PATIENT_CONSENT,
+                            OperationConstants.COD_CONCEPT_RECORD_PATIENT_DATA_CONFIDENTIAL,
+                            OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.FORBIDDEN));
                 }
             } else if (value instanceof CodeableConceptDt) {
                 if (null != sectionName) {
@@ -572,7 +590,7 @@ public class PatientResourceProvider implements IResourceProvider {
         return patient;
     }
 
-    public Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) {
+    private Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) {
         Patient patient = new Patient();
         patient.setId(patientDetails.getId());
         patient.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", patientDetails.getNhsNumber()));
@@ -614,8 +632,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
             patient.getCareProvider().add(practitionerReference);
         } else {
-            throw new ResourceNotFoundException("No GP record exists "
-                    + OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
+            throw new ResourceNotFoundException("No GP record exists",
+                    OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
                             OperationConstants.CODE_PATIENT_NOT_FOUND, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                             OperationConstants.META_GP_CONNECT_PRACTITIONER, IssueTypeEnum.NOT_FOUND));
         }

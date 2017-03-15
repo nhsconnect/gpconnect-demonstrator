@@ -65,6 +65,8 @@ public class PatientSearch {
     public PatientSummary findPatientSummary(final String patientId) {
         final PatientEntity patient = patientRepository.findByNhsNumber(patientId);
 
-        return patientEntityToSummaryTransformer.transform(patient);
+        return patient == null
+                ? null
+                : patientEntityToSummaryTransformer.transform(patient);
     }
 }

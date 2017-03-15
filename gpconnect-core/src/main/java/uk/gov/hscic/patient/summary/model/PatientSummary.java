@@ -17,10 +17,7 @@ package uk.gov.hscic.patient.summary.model;
 
 import java.util.Date;
 
-/**
- */
 public class PatientSummary {
-
     private String id;
     private String name;
     private String title;
@@ -31,6 +28,7 @@ public class PatientSummary {
     private String gender;
     private String nhsNumber;
     private String department;
+    private boolean sensitive;
     private Date lastUpdated;
 
     public String getId() {
@@ -72,7 +70,7 @@ public class PatientSummary {
     public void setSurname(String surname) {
         this.surname = surname;
     }
-    
+
     public String getAddress() {
         return address;
     }
@@ -111,6 +109,14 @@ public class PatientSummary {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public boolean isSensitive() {
+        return sensitive;
+    }
+
+    public void setSensitive(boolean sensitive) {
+        this.sensitive = sensitive;
     }
 
     public Date getLastUpdated() {

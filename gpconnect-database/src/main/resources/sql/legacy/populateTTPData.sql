@@ -10,7 +10,8 @@ VALUES
   (9476719931,"Historical",'2014-12-10 12:17:00','2016-12-11 12:17:00',"Dog allergy"),
   (9476719931,"Historical",'2009-03-10 12:17:00','2016-12-11 12:17:00',"Grass allergy"),
   (9476719931,"Historical",'2014-11-10 12:17:00','2016-12-11 12:17:00',"Skin allergy"),
-  (9476719931,"Historical",'2014-11-10 12:17:00','2016-12-11 12:17:00',"Beer allergy");
+  (9476719931,"Historical",'2014-11-10 12:17:00','2016-12-11 12:17:00',"Beer allergy"),
+  (9476719931,"Current",'2014-12-10 12:17:00','2016-12-11 12:17:00',"Work allergy");
 
 INSERT INTO gpconnect.clinicalitems
   (nhsNumber,sectionDate,dateOfItem,Entry,Details)
@@ -18,7 +19,7 @@ VALUES
   (9476719931,'2008-04-09 12:17:00','2008-04-09 12:17:00',"Abdominal X-ray","No evidence of osteomyelitis."),
   (9476719931,'2008-05-16 12:17:00','2008-05-16 12:17:00',"Curvature of spine",""),
   (9476719931,'2012-05-16 12:17:00','2012-05-16 12:17:00',"Private referral (&amp; to doctor)",""),
-  (9476719931,'20-05-16 12:17:00','2008-05-16 12:17:00',"Referral to postnatal clinic",""),
+  (9476719931,'2007-05-16 12:17:00','2008-05-16 12:17:00',"Referral to postnatal clinic",""),
   (9476719931,'2015-05-16 12:17:00','2015-05-16 12:17:00',"Family history of substance misuse",""),
   (9476719931,'2000-05-16 12:17:00','2000-05-16 12:17:00',"Suprapubic pain","Ongoing episode");
 

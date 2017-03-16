@@ -174,7 +174,7 @@ public class PageSectionFactory {
         }
 
         return new PageSection("Current Medication Issues",
-                new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End Date", "Days Duration", "Details"), currentMedRows),
+                new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End", "Days Duration", "Details"), currentMedRows),
                 requestedFromDate, requestedToDate);
     }
 

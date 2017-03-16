@@ -1,8 +1,8 @@
 INSERT INTO gpconnect.adminitems
   (nhsNumber,sectionDate,adminDate,Entry,Details)
 VALUES
-  (9476719931,'2012-12-10 12:17:00','2012-12-10 12:17:00',"Cervical Smear Defaulter",""),
-  (9476719931,'2012-12-10 12:17:00','2012-12-10 12:17:00',"No summary care record consent specified","No record");
+  (9476719931,'2016-01-10 12:17:00','2016-01-10 12:17:00',"Cervical Smear Defaulter",""),
+  (9476719931,'2016-01-10 12:17:00','2016-01-10 12:17:00',"No summary care record consent specified","No record");
 
 INSERT INTO gpconnect.allergies
   (nhsNumber,currentOrHistoric,startDate,endDate,details)
@@ -29,7 +29,7 @@ VALUES
   (9476719931,'2016-11-03 12:17:00','2016-11-03 12:17:00',"Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)","Haemoglobin A1c level - IFCC standardised 20.5 mmol/mol.<br />Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 10ml vials"),
   (9476719931,'2015-11-03 12:17:00','2016-11-03 12:17:00',"Miss Tanya Turnpike (Practice Nurse) - Dr Johnson and Partners (J12345)","Result : Full blood count - FBC - Normal - No Action."),
   (9476719931,'2016-11-03 12:17:00','2016-11-03 12:17:00',"Cynthia Carlson (Practice Nurse) - Dandelion Medical Practice (D12345)","Result : Full blood count - FBC - Normal - No Action."),
-  (9476719931,'2012-11-03 12:17:00','2016-11-03 12:17:00',"Brian Harding - EMIS PCS Test Practice 1","Result : Full blood count - FBC - Normal - No Action.");
+  (9476719931,'2015-11-03 12:17:00','2016-11-03 12:17:00',"Brian Harding - EMIS PCS Test Practice 1","Result : Full blood count - FBC - Normal - No Action.");
 
 INSERT INTO gpconnect.immunisations
   (nhsNumber,dateOfVac,vaccination,part,contents,details)

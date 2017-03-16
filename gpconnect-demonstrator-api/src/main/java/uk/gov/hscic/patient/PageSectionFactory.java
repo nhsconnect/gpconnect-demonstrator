@@ -64,7 +64,7 @@ public class PageSectionFactory {
     @Autowired
     private AdminItemSearch adminItemSearch;
 
-    public PageSection getPRBActivePageSection(String nhsNumber, Date fromDate, Date toDate) {
+    public PageSection getPRBActivePageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
             throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
         }
@@ -78,10 +78,11 @@ public class PageSectionFactory {
         }
 
         return new PageSection("Active Problems and Issues",
-                new Table(Arrays.asList("Start Date", "Entry", "Significance", "Details"), problemActiveRows));
+                new Table(Arrays.asList("Start Date", "Entry", "Significance", "Details"), problemActiveRows),
+                requestedFromDate, requestedToDate);
     }
 
-    public PageSection getPRBInctivePageSection(String nhsNumber, Date fromDate, Date toDate) {
+    public PageSection getPRBInctivePageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
             throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
         }
@@ -95,7 +96,8 @@ public class PageSectionFactory {
         }
 
         return new PageSection("Inactive Problems and Issues",
-                new Table(Arrays.asList("Start Date", "End Date", "Entry", "Significance", "Details"), problemInactiveRows));
+                new Table(Arrays.asList("Start Date", "End Date", "Entry", "Significance", "Details"), problemInactiveRows),
+                requestedFromDate, requestedToDate);
     }
 
     public PageSection getENCPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
@@ -113,7 +115,7 @@ public class PageSectionFactory {
                 requestedFromDate, requestedToDate);
     }
 
-    public PageSection getALLCurrentPageSection(String nhsNumber, Date fromDate, Date toDate) {
+    public PageSection getALLCurrentPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
             throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
         }
@@ -127,10 +129,11 @@ public class PageSectionFactory {
         }
 
         return new PageSection("Current Allergies and Adverse Reactions",
-                new Table(Arrays.asList("Start Date", "Details"), currentAllergyRows));
+                new Table(Arrays.asList("Start Date", "Details"), currentAllergyRows),
+                requestedFromDate, requestedToDate);
     }
 
-    public PageSection getALLHistoricalPageSection(String nhsNumber, Date fromDate, Date toDate) {
+    public PageSection getALLHistoricalPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
             throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
         }
@@ -144,7 +147,8 @@ public class PageSectionFactory {
         }
 
         return new PageSection("Historical Allergies and Adverse Reactions",
-                new Table(Arrays.asList("Start Date", "End Date", "Details"), historicalAllergyRows));
+                new Table(Arrays.asList("Start Date", "End Date", "Details"), historicalAllergyRows),
+                requestedFromDate, requestedToDate);
     }
 
     public PageSection getCLIPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
@@ -162,7 +166,7 @@ public class PageSectionFactory {
                 requestedFromDate, requestedToDate);
     }
 
-    public PageSection getMEDCurrentPageSection(String nhsNumber, Date fromDate, Date toDate) {
+    public PageSection getMEDCurrentPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
             throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
         }
@@ -182,10 +186,11 @@ public class PageSectionFactory {
         }
 
         return new PageSection("Current Medication Issues",
-                new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End Date", "Days Duration", "Details"), currentMedRows));
+                new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End Date", "Days Duration", "Details"), currentMedRows),
+                requestedFromDate, requestedToDate);
     }
 
-    public PageSection getMEDRepeatPageSection(String nhsNumber, Date fromDate, Date toDate) {
+    public PageSection getMEDRepeatPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
             throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
         }
@@ -206,10 +211,11 @@ public class PageSectionFactory {
         }
 
         return new PageSection("Current Repeat Medications",
-                new Table(Arrays.asList("Last Issued", "Medication Item", "Start Date", "Review Date", "Number Issued", "Max Issues", "Details"), repeatMedRows));
+                new Table(Arrays.asList("Last Issued", "Medication Item", "Start Date", "Review Date", "Number Issued", "Max Issues", "Details"), repeatMedRows),
+                requestedFromDate, requestedToDate);
     }
 
-    public PageSection getMEDPastPageSection(String nhsNumber, Date fromDate, Date toDate) {
+    public PageSection getMEDPastPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
             throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
         }
@@ -231,10 +237,11 @@ public class PageSectionFactory {
         }
 
         return new PageSection("Past Medications",
-                new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Last Issued", "Review Date", "Number Issued", "Max Issues", "Details"), pastMedRows));
+                new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Last Issued", "Review Date", "Number Issued", "Max Issues", "Details"), pastMedRows),
+                requestedFromDate, requestedToDate);
     }
 
-    public PageSection getREFPageSection(String nhsNumber, Date fromDate, Date toDate) {
+    public PageSection getREFPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         List<List<Object>> referralRows = new ArrayList<>();
 
         for (ReferralEntity referralEntity : referralSearch.findReferrals(nhsNumber, fromDate, toDate)) {
@@ -246,10 +253,12 @@ public class PageSectionFactory {
                     referralEntity.getDetails()));
         }
 
-        return new PageSection("Referrals", new Table(Arrays.asList("Date", "From", "To", "Priority", "Details"), referralRows));
+        return new PageSection("Referrals",
+                new Table(Arrays.asList("Date", "From", "To", "Priority", "Details"), referralRows),
+                requestedFromDate, requestedToDate);
     }
 
-    public PageSection getOBSPageSection(String nhsNumber, Date fromDate, Date toDate) {
+    public PageSection getOBSPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
             throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
         }
@@ -264,10 +273,12 @@ public class PageSectionFactory {
                     observationEntity.getValue()));
         }
 
-        return new PageSection("Observations", new Table(Arrays.asList("Date", "Entry", "Value", "Details"), observationRows));
+        return new PageSection("Observations",
+                new Table(Arrays.asList("Date", "Entry", "Value", "Details"), observationRows),
+                requestedFromDate, requestedToDate);
     }
 
-    public PageSection getINVPageSection(String nhsNumber) {
+    public PageSection getINVPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
         List<List<Object>> investigationRows = new ArrayList<>();
 
         for (InvestigationEntity investigationEntity : investigationRepository.findByNhsNumber(nhsNumber)) {
@@ -277,10 +288,12 @@ public class PageSectionFactory {
                     investigationEntity.getDetails()));
         }
 
-        return new PageSection("Investigations", new Table(Arrays.asList("Date", "Title", "Details"), investigationRows));
+        return new PageSection("Investigations",
+                new Table(Arrays.asList("Date", "Title", "Details"), investigationRows),
+                requestedFromDate, requestedToDate);
     }
 
-    public PageSection getIMMPageSection(String nhsNumber, Date fromDate, Date toDate) {
+    public PageSection getIMMPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
             throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
         }
@@ -296,7 +309,9 @@ public class PageSectionFactory {
                     immunisationEntity.getDetails()));
         }
 
-        return new PageSection("Immunisations", new Table(Arrays.asList("Date", "Vaccination", "Part", "Contents", "Details"), immunisationRows));
+        return new PageSection("Immunisations",
+                new Table(Arrays.asList("Date", "Vaccination", "Part", "Contents", "Details"), immunisationRows),
+                requestedFromDate, requestedToDate);
     }
 
     public PageSection getADMPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {

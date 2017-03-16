@@ -43,7 +43,7 @@ public final class FhirSectionBuilder {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                 stringBuilder.append("<div><p>For the period '").append(dateFormat.format(pageSection.getFromDate())).append("' to '").append(dateFormat.format(pageSection.getToDate())).append("'</p></div>");
             } else {
-                stringBuilder.append("<div><p>All relevant items subject to Patient preferences and/or legal exclusions</p></div>");
+                stringBuilder.append("<div><p>All relevant items subject to patient preferences and/or RCGP exclusions</p></div>");
             }
 
             // Additional Banners

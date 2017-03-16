@@ -292,9 +292,9 @@ public class PatientResourceProvider implements IResourceProvider {
         switch (sectionName) {
             case "SUM":
                 page = new Page("Summary", sectionName);
-                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getMEDCurrentPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
@@ -302,8 +302,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
             case "PRB":
                 page = new Page("Problems", sectionName);
-                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getPRBInctivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getPRBInctivePageSection(nhsNumber, requestedFromDate, requestedToDate));
 
                 break;
 
@@ -328,9 +328,9 @@ public class PatientResourceProvider implements IResourceProvider {
 
             case "MED":
                 page = new Page("Medications", sectionName);
-                page.addPageSection(pageSectionFactory.getMEDCurrentPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getMEDPastPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDPastPageSection(nhsNumber, requestedFromDate, requestedToDate));
 
                 break;
 
@@ -342,7 +342,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
             case "OBS":
                 page = new Page("Observations", sectionName);
-                page.addPageSection(pageSectionFactory.getOBSPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getOBSPageSection(nhsNumber, requestedFromDate, requestedToDate));
 
                 break;
 

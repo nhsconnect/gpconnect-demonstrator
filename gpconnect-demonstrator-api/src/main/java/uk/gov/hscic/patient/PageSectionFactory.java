@@ -64,11 +64,7 @@ public class PageSectionFactory {
     @Autowired
     private AdminItemSearch adminItemSearch;
 
-    public PageSection getPRBActivePageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
-        if (toDate != null && fromDate != null) {
-            throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
-        }
-
+    public PageSection getPRBActivePageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
         List<List<Object>> problemActiveRows = new ArrayList<>();
 
         for (ProblemEntity problem : problemRepository.findBynhsNumber(nhsNumber)) {
@@ -82,11 +78,7 @@ public class PageSectionFactory {
                 requestedFromDate, requestedToDate);
     }
 
-    public PageSection getPRBInctivePageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
-        if (toDate != null && fromDate != null) {
-            throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
-        }
-
+    public PageSection getPRBInctivePageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
         List<List<Object>> problemInactiveRows = new ArrayList<>();
 
         for (ProblemEntity problem : problemRepository.findBynhsNumber(nhsNumber)) {
@@ -166,11 +158,7 @@ public class PageSectionFactory {
                 requestedFromDate, requestedToDate);
     }
 
-    public PageSection getMEDCurrentPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
-        if (toDate != null && fromDate != null) {
-            throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
-        }
-
+    public PageSection getMEDCurrentPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
         List<List<Object>> currentMedRows = new ArrayList<>();
 
         for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationHtmlRepository.findBynhsNumber(nhsNumber)) {
@@ -190,11 +178,7 @@ public class PageSectionFactory {
                 requestedFromDate, requestedToDate);
     }
 
-    public PageSection getMEDRepeatPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
-        if (toDate != null && fromDate != null) {
-            throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
-        }
-
+    public PageSection getMEDRepeatPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
         List<List<Object>> repeatMedRows = new ArrayList<>();
 
         for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationHtmlRepository.findBynhsNumber(nhsNumber)) {
@@ -215,11 +199,7 @@ public class PageSectionFactory {
                 requestedFromDate, requestedToDate);
     }
 
-    public PageSection getMEDPastPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
-        if (toDate != null && fromDate != null) {
-            throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
-        }
-
+    public PageSection getMEDPastPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
         List<List<Object>> pastMedRows = new ArrayList<>();
 
         for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationHtmlRepository.findBynhsNumber(nhsNumber)) {
@@ -258,11 +238,7 @@ public class PageSectionFactory {
                 requestedFromDate, requestedToDate);
     }
 
-    public PageSection getOBSPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
-        if (toDate != null && fromDate != null) {
-            throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
-        }
-
+    public PageSection getOBSPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
         List<List<Object>> observationRows = new ArrayList<>();
 
         for (ObservationEntity observationEntity : observationRepository.findBynhsNumber(nhsNumber)) {

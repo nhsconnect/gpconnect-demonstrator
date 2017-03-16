@@ -65,7 +65,7 @@ When using the Windows installer above, the PATH variables are automatically set
 
 Create the database schema and user locally by executing the following script:
 ```
-{projectRoot}/gpconnect-database/src/main/resources/sql/legacy/create_database.sql
+{projectRoot}/config/sql/create_database.sql
 ```
 
 Note: *All other scripts in this directory will be run (order defined in sql_script_run_order.info) each time the application starts. This means you'll get a fresh instance with default content each time. If you want the database state to persist between boots, change the 'database.reset' property to false (described later) however be aware that if the database schema is modified you may run into problems, so only do this if you know what you're doing!*
@@ -99,7 +99,7 @@ npm update
 ### Building the front end
 Run the *build* task within the webapp directory of the project.
 ```sh
-cd {projectRoot}\webapp
+cd {projectRoot}/webapp
 grunt build
 ```
 
@@ -152,7 +152,7 @@ If they do not return a suitable response, ensure that the system environment va
 ### Developing the front end
 When developing the UI, it's best to run it separately to the back end. To do this, use the following commands:
 ```sh
-cd {projectRoot}\webapp
+cd {projectRoot}/webapp
 grunt serve
 ```
 

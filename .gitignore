@@ -16,7 +16,6 @@ nbactions.xml
 nbproject
 
 # Misc #
-.tern-project
 gpconnect-demonstrator-api/src/main/webapp
 log
 target

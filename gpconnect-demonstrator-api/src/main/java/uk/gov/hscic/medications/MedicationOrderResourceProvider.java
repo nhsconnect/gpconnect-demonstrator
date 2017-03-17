@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.medication.order.model.MedicationOrderDetails;
 import uk.gov.hscic.medication.orders.search.MedicationOrderSearch;
 
@@ -101,8 +102,8 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
         medicationOrder.addDosageInstruction().setText(medicationOrderDetails.getDosageText());
 
         MedicationOrder.DispenseRequest dispenseRequest = new MedicationOrder.DispenseRequest();
-        dispenseRequest.addUndeclaredExtension(new ExtensionDt(true, "http://fhir.nhs.net/StructureDefinition/extension-medication-quantity-text-1-0", new StringDt(medicationOrderDetails.getDispenseQuantityText())));
-        dispenseRequest.addUndeclaredExtension(new ExtensionDt(true, "http://fhir.nhs.net/StructureDefinition/extension-prescription-repeat-review-date-1-0", new DateTimeDt(medicationOrderDetails.getDispenseReviewDate())));
+        dispenseRequest.addUndeclaredExtension(new ExtensionDt(true, SystemURL.SD_EXTENSION_MEDICATION_QUANTITY_TEXT, new StringDt(medicationOrderDetails.getDispenseQuantityText())));
+        dispenseRequest.addUndeclaredExtension(new ExtensionDt(true, SystemURL.SD_EXTENSION_PERSCRIPTION_REPEAT_REVIEW_DATE, new DateTimeDt(medicationOrderDetails.getDispenseReviewDate())));
         dispenseRequest.setMedication(new ResourceReferenceDt("Medication/"+medicationOrderDetails.getDispenseMedicationId()));
         dispenseRequest.setNumberOfRepeatsAllowed(medicationOrderDetails.getDispenseRepeatsAllowed());
         medicationOrder.setDispenseRequest(dispenseRequest);

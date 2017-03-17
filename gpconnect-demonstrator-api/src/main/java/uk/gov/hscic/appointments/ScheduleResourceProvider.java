@@ -20,12 +20,12 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointment.schedule.model.ScheduleDetail;
 import uk.gov.hscic.appointment.schedule.search.ScheduleSearch;
 
 @Component
 public class ScheduleResourceProvider implements IResourceProvider {
-    private static final String EXTENSION_GPCONNECT_PRACTITIONER_1_0 = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1-0";
 
     @Autowired
     private ScheduleSearch scheduleSearch;
@@ -66,9 +66,9 @@ public class ScheduleResourceProvider implements IResourceProvider {
         schedule.setId(String.valueOf(scheduleDetail.getId()));
         schedule.getMeta().setLastUpdated(scheduleDetail.getLastUpdated());
         schedule.getMeta().setVersionId(String.valueOf(scheduleDetail.getLastUpdated().getTime()));
-        schedule.addUndeclaredExtension(true, EXTENSION_GPCONNECT_PRACTITIONER_1_0, new ResourceReferenceDt("Practitioner/"+scheduleDetail.getPractitionerId()));
-        schedule.setIdentifier(Collections.singletonList(new IdentifierDt("http://fhir.nhs.net/Id/gpconnect-schedule-identifier", scheduleDetail.getIdentifier())));
-        CodingDt coding = new CodingDt().setSystem("http://hl7.org/fhir/ValueSet/c80-practice-codes").setCode(scheduleDetail.getTypeCode()).setDisplay(scheduleDetail.getTypeDescription());
+        schedule.addUndeclaredExtension(true, SystemURL.SD_EXTENSION_GPC_PRACTITIONER, new ResourceReferenceDt("Practitioner/"+scheduleDetail.getPractitionerId()));
+        schedule.setIdentifier(Collections.singletonList(new IdentifierDt(SystemURL.ID_GPC_SCHEDULE_IDENTIFIER, scheduleDetail.getIdentifier())));
+        CodingDt coding = new CodingDt().setSystem(SystemURL.HL7_VS_C80_PRACTICE_CODES).setCode(scheduleDetail.getTypeCode()).setDisplay(scheduleDetail.getTypeDescription());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);
         codableConcept.setText(scheduleDetail.getTypeDescription());
         schedule.setType(Collections.singletonList(codableConcept));
@@ -82,6 +82,6 @@ public class ScheduleResourceProvider implements IResourceProvider {
     }
 
     public List<ExtensionDt> getPractitionerReferences(Schedule schedule) {
-        return schedule.getUndeclaredExtensionsByUrl(EXTENSION_GPCONNECT_PRACTITIONER_1_0);
+        return schedule.getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_PRACTITIONER);
     }
 }

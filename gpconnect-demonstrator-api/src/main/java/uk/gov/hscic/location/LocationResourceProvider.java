@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.location.model.LocationDetails;
 import uk.gov.hscic.location.search.LocationSearch;
 
@@ -35,7 +36,7 @@ public class LocationResourceProvider implements IResourceProvider {
 
     @Search
     public List<Location> getByIdentifierCode(@RequiredParam(name = Location.SP_IDENTIFIER) TokenParam identifierCode) {
-        List<LocationDetails> locationDetails = "http://fhir.nhs.net/Id/ods-organization-code".equalsIgnoreCase(identifierCode.getSystem())
+        List<LocationDetails> locationDetails = SystemURL.ID_ODS_ORGANIZATION_CODE.equalsIgnoreCase(identifierCode.getSystem())
                 ? locationSearch.findLocationDetailsByOrgOdsCode(identifierCode.getValue())
                 : locationSearch.findLocationDetailsBySiteOdsCode(identifierCode.getValue());
 

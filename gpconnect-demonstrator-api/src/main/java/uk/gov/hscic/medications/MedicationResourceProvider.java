@@ -12,6 +12,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.medications.model.MedicationEntity;
 import uk.gov.hscic.medications.repo.MedicationRepository;
 
@@ -36,7 +37,7 @@ public class MedicationResourceProvider implements IResourceProvider {
             throw new InternalErrorException("No medication details found for ID: " + medicationId.getIdPart(), operationalOutcome);
         }
 
-        CodingDt coding = new CodingDt("http://snomed.info/sct", String.valueOf(medicationEntity.getId())).setDisplay(medicationEntity.getName());
+        CodingDt coding = new CodingDt(SystemURL.SNOMED, String.valueOf(medicationEntity.getId())).setDisplay(medicationEntity.getName());
         CodeableConceptDt codableConcept = new CodeableConceptDt();
         codableConcept.addCoding(coding);
 

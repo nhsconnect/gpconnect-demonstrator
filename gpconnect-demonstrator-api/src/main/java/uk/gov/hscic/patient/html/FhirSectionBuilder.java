@@ -7,14 +7,14 @@ import ca.uhn.fhir.model.dstu2.resource.Composition;
 import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import uk.gov.hscic.OperationConstants;
+import uk.gov.hscic.SystemURL;
 
 public final class FhirSectionBuilder {
 
     private FhirSectionBuilder() { }
 
     public static Composition.Section buildFhirSection(Page page) {
-        CodingDt coding = new CodingDt().setSystem(OperationConstants.SYSTEM_RECORD_SECTION).setCode(page.getCode()).setDisplay(page.getName());
+        CodingDt coding = new CodingDt().setSystem(SystemURL.VS_GPC_RECORD_SECTION).setCode(page.getCode()).setDisplay(page.getName());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);
         codableConcept.setText(page.getName());
 

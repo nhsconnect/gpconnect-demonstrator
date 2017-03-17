@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.medication.dispense.model.MedicationDispenseDetail;
 import uk.gov.hscic.medication.dispense.search.MedicationDispenseSearch;
 
@@ -65,7 +66,7 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
 
                 Medication medication = new Medication();
                 CodingDt coding = new CodingDt();
-                coding.setSystem("http://snomed.info/sct");
+                coding.setSystem(SystemURL.SNOMED);
                 coding.setCode(String.valueOf(medicationDispenseDetail.getMedicationId()));
                 coding.setDisplay(medicationDispenseDetail.getMedicationName());
                 CodeableConceptDt codeableConcept = new CodeableConceptDt();

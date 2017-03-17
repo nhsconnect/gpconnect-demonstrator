@@ -21,7 +21,8 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.OperationConstants;
+import uk.gov.hscic.SystemCode;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.appointments.SlotResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
@@ -55,9 +56,7 @@ public class GetScheduleOperation {
 		Organization organization = organizationResourceProvider.getOrganizationById(orgId);
 
 		if (organization == null) {
-			CodingDt errorCoding = new CodingDt()
-					.setSystem(OperationConstants.SYSTEM_WARNING_CODE)
-					.setCode(OperationConstants.CODE_REFERENCE_NOT_FOUND);
+			CodingDt errorCoding = new CodingDt(SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.REFERENCE_NOT_FOUND);
 
 			CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
 			errorCodableConcept.setText("Invalid Reference");
@@ -80,15 +79,14 @@ public class GetScheduleOperation {
 		String organizationSiteOdsCode = null;
 
 		for (IdentifierDt identifier : organization.getIdentifier()) {
-			if ("http://fhir.nhs.net/Id/ods-site-code".equalsIgnoreCase(identifier.getSystem())) {
+			if (SystemURL.ID_ODS_SITE_CODE.equalsIgnoreCase(identifier.getSystem())) {
 				organizationSiteOdsCode = identifier.getValue();
 				break;
 			}
 		}
 
 		if (organizationSiteOdsCode != null) {
-			List<Location> locations = locationResourceProvider.getByIdentifierCode(
-					new TokenParam("http://fhir.nhs.net/Id/ods-site-code", organizationSiteOdsCode));
+			List<Location> locations = locationResourceProvider.getByIdentifierCode(new TokenParam(SystemURL.ID_ODS_SITE_CODE, organizationSiteOdsCode));
 			Entry locationEntry = new Entry();
 			locationEntry.setResource(locations.get(0));
 			locationEntry.setFullUrl("Location/" + locations.get(0).getId().getIdPart());
@@ -116,8 +114,8 @@ public class GetScheduleOperation {
 
 							if (practitioner == null) {
 								CodingDt errorCoding = new CodingDt()
-										.setSystem(OperationConstants.SYSTEM_WARNING_CODE)
-										.setCode(OperationConstants.CODE_REFERENCE_NOT_FOUND);
+										.setSystem(SystemURL.VS_GPC_ERROR_WARNING_CODE)
+										.setCode(SystemCode.REFERENCE_NOT_FOUND);
 								CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
 								errorCodableConcept.setText("Invalid Reference");
 								operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)

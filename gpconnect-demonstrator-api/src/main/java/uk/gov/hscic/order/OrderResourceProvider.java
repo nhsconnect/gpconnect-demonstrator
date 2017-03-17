@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.order.model.OrderDetail;
 import uk.gov.hscic.order.store.OrderStore;
 
@@ -65,12 +66,12 @@ public class OrderResourceProvider implements IResourceProvider {
         order.setIdentifier(Collections.singletonList(new IdentifierDt("",orderDetail.getIdentifier())));
 
         Basic basic = new Basic();
-        basic.setCode(new CodeableConceptDt("http://hl7.org/fhir/basic-resource-type", "OrderDetails"));
+        basic.setCode(new CodeableConceptDt(SystemURL.HL7_BASIC_RESOURCE_TYPE, "OrderDetails"));
         basic.getText().setDiv(new XhtmlDt(orderDetail.getDetail()));
         order.setDetail(Collections.singletonList(new ResourceReferenceDt(basic)));
 
         order.setDate(new DateTimeDt(orderDetail.getOrderDate()));
-        CodingDt coding = new CodingDt("http://fhir.nhs.net/ValueSet/gpconnect-reason-type-1-0",orderDetail.getReasonCode());
+        CodingDt coding = new CodingDt(SystemURL.VS_GPC_REASON_TYPE,orderDetail.getReasonCode());
         coding.setDisplay(orderDetail.getReasonDescription());
         CodeableConceptDt codeConcept = new CodeableConceptDt().setCoding(Collections.singletonList(coding)).setText(orderDetail.getReasonText());
         order.setReason(codeConcept);

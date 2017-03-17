@@ -28,8 +28,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import static uk.gov.hscic.OperationConstants.*;
+import uk.gov.hscic.CodableConceptText;
 import uk.gov.hscic.OperationOutcomeFactory;
+import uk.gov.hscic.SystemCode;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.common.filters.model.RequestBody;
 import uk.gov.hscic.common.filters.model.RequestedRecord;
 import uk.gov.hscic.common.filters.model.WebToken;
@@ -91,12 +93,13 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         }
 
         RequestedRecord requestedRecord = webToken.getRequestedRecord();
-        String requestedNhsNumber = webToken.getRequestedRecord().getIdentifierValue("http://fhir.nhs.net/Id/nhs-number");
+        String requestedNhsNumber = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);
 
         if ("Patient/$gpc.getcarerecord".equals(requestDetails.getRequestPath())) {
             if (!"Patient".equals(requestedRecord.getResourceType())) {
-                throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
-                        SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Bad Request", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
+                        SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
+                        CodableConceptText.BAD_REQUEST, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             }
 
             validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents(), StringUtils.contains(contentType, "xml"));
@@ -106,13 +109,15 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             // If it is a patient orientated request
             if (!NhsCodeValidator.nhsNumberValid(requestedNhsNumber)) {
                 throw new InvalidRequestException("Dates are invalid: ", OperationOutcomeFactory.buildOperationOutcome(
-                        SYSTEM_WARNING_CODE, CODE_INVALID_NHS_NUMBER, "Patient Record Not Found", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
+                        SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_NHS_NUMBER,
+                        CodableConceptText.PATIENT_RECORD_NOT_FOUND, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
             }
         } else {
             // If it is an organization oriantated request
-            if (null == webToken.getRequestedRecord().getIdentifierValue("http://fhir.nhs.net/Id/ods-organization-code")) {
-                throw new InvalidRequestException("Bad Request Exception",OperationOutcomeFactory.buildOperationOutcome(
-                        SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Bad Request", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            if (null == webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_ODS_ORGANIZATION_CODE)) {
+                throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
+                        SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
+                        CodableConceptText.BAD_REQUEST, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             }
         }
 
@@ -157,33 +162,37 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                         .map(Parameters.Parameter::getValue)
                         .filter(IdentifierDt.class::isInstance)
                         .map(IdentifierDt.class::cast)
-                        .filter(identifierDt -> "http://fhir.nhs.net/Id/nhs-number".equals(identifierDt.getSystem())) // Make sure they match.
+                        .filter(identifierDt -> SystemURL.ID_NHS_NUMBER.equals(identifierDt.getSystem())) // Make sure they match.
                         .map(IdentifierDt::getValue)
                         .findFirst()
                         .orElse(null);
             } else {
                 nhsNumberFromBody = new ObjectMapper()
                         .readValue(new String(requestDetailsBody), RequestBody.class)
-                        .getIdentifierParameterValue("http://fhir.nhs.net/Id/nhs-number");
+                        .getIdentifierParameterValue(SystemURL.ID_NHS_NUMBER);
             }
 
             if (null == nhsNumberFromBody) {
                 throw new InvalidRequestException("NHS number in body doesn't match the header", OperationOutcomeFactory.buildOperationOutcome(
-                        SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "NHS number in body doesn't match the header", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                        SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_IDENTIFIER_SYSTEM,
+                        "NHS number in body doesn't match the header", SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             }
 
             if (!NhsCodeValidator.nhsNumberValid(nhsNumberFromHeader) || !NhsCodeValidator.nhsNumberValid(nhsNumberFromBody)) {
                 throw new InvalidRequestException("NHS number invalid", OperationOutcomeFactory.buildOperationOutcome(
-                        SYSTEM_WARNING_CODE, CODE_INVALID_NHS_NUMBER, "NHS number invalid", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                        SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_NHS_NUMBER,
+                        CodableConceptText.NHS_NUMBER_INVALID, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             }
 
             if (!nhsNumberFromHeader.equals(nhsNumberFromBody)) {
-                throw new InvalidRequestException("NHS number in body doesn't match the header",OperationOutcomeFactory.buildOperationOutcome(
-                        SYSTEM_WARNING_CODE, CODE_INVALID_NHS_NUMBER, "NHS number invalid", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                throw new InvalidRequestException("NHS number in body doesn't match the header", OperationOutcomeFactory.buildOperationOutcome(
+                        SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_NHS_NUMBER,
+                        CodableConceptText.NHS_NUMBER_INVALID, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             }
         } catch (IOException ex) {
-            throw new InvalidRequestException("Cannot parse request body",OperationOutcomeFactory.buildOperationOutcome(
-                    SYSTEM_WARNING_CODE, CODE_INVALID_NHS_NUMBER, "Cannot parse request body", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw new InvalidRequestException("Cannot parse request body", OperationOutcomeFactory.buildOperationOutcome(
+                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_NHS_NUMBER,
+                    "Cannot parse request body", SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
     }
 }

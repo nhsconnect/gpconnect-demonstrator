@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.OperationConstants;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.organization.model.OrganizationDetails;
 import uk.gov.hscic.organization.search.OrganizationSearch;
 
@@ -114,13 +114,13 @@ public class OrganizationResourceProvider implements IResourceProvider {
     public Organization organizaitonDetailsToOrganizationResourceConverter(OrganizationDetails organizationDetails) {
         Organization organization = new Organization()
                 .setName(organizationDetails.getOrgName())
-                .addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/ods-organization-code", organizationDetails.getOrgCode()))
-                .addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/ods-site-code", organizationDetails.getSiteCode()));
+                .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_ORGANIZATION_CODE, organizationDetails.getOrgCode()))
+                .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_SITE_CODE, organizationDetails.getSiteCode()));
 
         organization.setId(String.valueOf(organizationDetails.getId()));
-        
+
         organization.getMeta()
-                .addProfile(OperationConstants.META_GP_CONNECT_ORGANIZATION)
+                .addProfile(SystemURL.SD_GPC_ORGANIZATION)
                 .setLastUpdated(organizationDetails.getLastUpdated())
                 .setVersionId(String.valueOf(organizationDetails.getLastUpdated().getTime()));
 

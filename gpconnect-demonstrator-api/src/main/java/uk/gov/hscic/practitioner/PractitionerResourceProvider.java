@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.practitioner.model.PractitionerDetails;
 import uk.gov.hscic.practitioner.search.PractitionerSearch;
 
@@ -68,8 +69,8 @@ public class PractitionerResourceProvider  implements IResourceProvider {
         practitioner.setId(new IdDt(practitionerDetails.getId()));
         practitioner.getMeta().setLastUpdated(practitionerDetails.getLastUpdated());
         practitioner.getMeta().setVersionId(String.valueOf(practitionerDetails.getLastUpdated().getTime()));
-        practitioner.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/sds-user-id", practitionerDetails.getUserId()));
-        practitioner.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/sds-role-profile-id", practitionerDetails.getRoleId()));
+        practitioner.addIdentifier(new IdentifierDt(SystemURL.ID_SDS_USER_ID, practitionerDetails.getUserId()));
+        practitioner.addIdentifier(new IdentifierDt(SystemURL.ID_SDS_ROLE_PROFILE_ID, practitionerDetails.getRoleId()));
 
         HumanNameDt name = new HumanNameDt()
                 .addFamily(practitionerDetails.getNameFamily())
@@ -97,14 +98,14 @@ public class PractitionerResourceProvider  implements IResourceProvider {
                 break;
         }
 
-        CodingDt roleCoding = new CodingDt("http://fhir.nhs.net/ValueSet/sds-job-role-name-1", practitionerDetails.getRoleCode())
+        CodingDt roleCoding = new CodingDt(SystemURL.VS_SDS_JOB_ROLE_NAME, practitionerDetails.getRoleCode())
                 .setDisplay(practitionerDetails.getRoleDisplay());
 
         practitioner.addPractitionerRole()
                 .setRole(new CodeableConceptDt().addCoding(roleCoding))
                 .setManagingOrganization(new ResourceReferenceDt("Organization/"+practitionerDetails.getOrganizationId())); // Associated Organisation
 
-        CodingDt comCoding = new CodingDt("http://fhir.nhs.net/ValueSet/human-language-1", practitionerDetails.getComCode())
+        CodingDt comCoding = new CodingDt(SystemURL.VS_HUMAN_LANGUAGE, practitionerDetails.getComCode())
                 .setDisplay(practitionerDetails.getComDisplay());
 
         practitioner.addCommunication().addCoding(comCoding);

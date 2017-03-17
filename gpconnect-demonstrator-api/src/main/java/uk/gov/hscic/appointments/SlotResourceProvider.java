@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointment.slot.model.SlotDetail;
 import uk.gov.hscic.appointment.slot.search.SlotSearch;
 
@@ -70,8 +71,8 @@ public class SlotResourceProvider  implements IResourceProvider {
 
         slot.getMeta().setLastUpdated(slotDetail.getLastUpdated());
         slot.getMeta().setVersionId(String.valueOf(slotDetail.getLastUpdated().getTime()));
-        slot.setIdentifier(Collections.singletonList(new IdentifierDt("http://fhir.nhs.net/Id/gpconnect-schedule-identifier", String.valueOf(slotDetail.getId()))));
-        CodingDt coding = new CodingDt().setSystem("http://hl7.org/fhir/ValueSet/c80-practice-codes").setCode(String.valueOf(slotDetail.getTypeCode())).setDisplay(slotDetail.getTypeDisply());
+        slot.setIdentifier(Collections.singletonList(new IdentifierDt(SystemURL.ID_GPC_SCHEDULE_IDENTIFIER, String.valueOf(slotDetail.getId()))));
+        CodingDt coding = new CodingDt().setSystem(SystemURL.HL7_VS_C80_PRACTICE_CODES).setCode(String.valueOf(slotDetail.getTypeCode())).setDisplay(slotDetail.getTypeDisply());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);
         codableConcept.setText(slotDetail.getTypeDisply());
         slot.setType(codableConcept);

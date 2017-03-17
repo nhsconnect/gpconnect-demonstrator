@@ -25,8 +25,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
+import uk.gov.hscic.SystemCode;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.auth.CertificateValidator;
 import uk.gov.hscic.common.ldap.model.ProviderRouting;
 
@@ -140,14 +141,14 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private static void throwBadRequestException(String exceptionMessage) {
         throw new InvalidRequestException(exceptionMessage, OperationOutcomeFactory.buildOperationOutcome(
-                OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_BAD_REQUEST, exceptionMessage,
-                OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST, exceptionMessage,
+                SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
     }
 
     private static void throwInvalidRequestException(String exceptionMessage) {
         throw new InvalidRequestException(exceptionMessage, OperationOutcomeFactory.buildOperationOutcome(
-                OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER, exceptionMessage,
-                OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_PARAMETER, exceptionMessage,
+                SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
     }
 
     /**
@@ -167,20 +168,20 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         // how else to pick up on just the relevant exceptions!
         if (theException instanceof InvalidRequestException && theException.getMessage().contains("Invalid attribute value")) {
             return new UnprocessableEntityException(theException.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
-                    OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER, theException.getMessage(),
-                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_PARAMETER, theException.getMessage(),
+                    SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if (theException instanceof MethodNotAllowedException && theException.getMessage().contains("request must use HTTP GET")) {
             return new UnprocessableEntityException(theException.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
-                    OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_BAD_REQUEST, theException.getMessage(),
-                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST, theException.getMessage(),
+                    SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         if (theException instanceof InvalidRequestException && theException.getMessage().contains("InvalidResourceType")) {
             return new UnprocessableEntityException(theException.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
-                    OperationConstants.SYSTEM_WARNING_CODE, "INVALID_RESOURCE", theException.getMessage(),
-                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_RESOURCE, theException.getMessage(),
+                    SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         return super.preProcessOutgoingException(theRequestDetails, theException, theServletRequest);

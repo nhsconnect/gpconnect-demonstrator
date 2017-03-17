@@ -7,6 +7,8 @@ import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 
 public class OperationOutcomeFactory {
 
+    private OperationOutcomeFactory() { }
+
     public static OperationOutcome buildOperationOutcome(String system, String code, String codableConceptText, String metaProfile, IssueTypeEnum issueTypeEnum) {
         CodeableConceptDt errorCodableConcept = new CodeableConceptDt(system, code).setText(codableConceptText);
 

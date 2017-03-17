@@ -38,6 +38,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointment.appointment.model.AppointmentDetail;
 import uk.gov.hscic.appointment.appointment.search.AppointmentSearch;
 import uk.gov.hscic.appointment.appointment.store.AppointmentStore;
@@ -292,8 +293,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointment.setId(String.valueOf(appointmentDetail.getId()));
         appointment.getMeta().setLastUpdated(appointmentDetail.getLastUpdated());
         appointment.getMeta().setVersionId(String.valueOf(appointmentDetail.getLastUpdated().getTime()));
-        appointment.addUndeclaredExtension(true, "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0", new StringDt(appointmentDetail.getCancellationReason()));
-        appointment.setIdentifier(Collections.singletonList(new IdentifierDt("http://fhir.nhs.net/Id/gpconnect-appointment-identifier", String.valueOf(appointmentDetail.getId()))));
+        appointment.addUndeclaredExtension(true, SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON, new StringDt(appointmentDetail.getCancellationReason()));
+        appointment.setIdentifier(Collections.singletonList(new IdentifierDt(SystemURL.ID_GPC_APPOINTMENT_IDENTIFIER, String.valueOf(appointmentDetail.getId()))));
 
         switch (appointmentDetail.getStatus().toLowerCase(Locale.UK)) {
             case "pending":
@@ -319,12 +320,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 break;
         }
 
-        CodingDt coding = new CodingDt().setSystem("http://hl7.org/fhir/ValueSet/c80-practice-codes").setCode(String.valueOf(appointmentDetail.getTypeCode())).setDisplay(appointmentDetail.getTypeDisplay());
+        CodingDt coding = new CodingDt().setSystem(SystemURL.HL7_VS_C80_PRACTICE_CODES).setCode(String.valueOf(appointmentDetail.getTypeCode())).setDisplay(appointmentDetail.getTypeDisplay());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);
         codableConcept.setText(appointmentDetail.getTypeDisplay());
         appointment.setType(codableConcept);
 
-        CodingDt codingReason = new CodingDt().setSystem("http://snomed.info/sct").setCode(String.valueOf(appointmentDetail.getReasonCode())).setDisplay(appointmentDetail.getReasonDisplay());
+        CodingDt codingReason = new CodingDt().setSystem(SystemURL.SNOMED).setCode(String.valueOf(appointmentDetail.getReasonCode())).setDisplay(appointmentDetail.getReasonDisplay());
         CodeableConceptDt codableConceptReason = new CodeableConceptDt().addCoding(codingReason);
         codableConceptReason.setText(appointmentDetail.getReasonDisplay());
         appointment.setReason(codableConceptReason);
@@ -367,7 +368,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             appointmentDetail.setLastUpdated(appointment.getMeta().getLastUpdated());
         }
 
-        List<ExtensionDt> extension = appointment.getUndeclaredExtensionsByUrl("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0");
+        List<ExtensionDt> extension = appointment.getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON);
 
         if (extension != null && !extension.isEmpty()) {
             String cancellationReason = extension.get(0).getValue().toString();

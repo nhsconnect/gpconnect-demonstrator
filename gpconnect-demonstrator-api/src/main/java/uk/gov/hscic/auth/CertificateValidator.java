@@ -32,7 +32,6 @@ public final class CertificateValidator {
     public void validateRequest(HttpServletRequest request) {
         try {
             if (request.isSecure() && !HttpMethod.OPTIONS.name().equals(request.getMethod())) {
-                String cipherSuite = (String) request.getAttribute("javax.servlet.request.cipher_suite");
                 X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
 
                 if (null == certs) {

@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
+import uk.gov.hscic.SystemHeader;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.auth.CertificateValidator;
 import uk.gov.hscic.common.ldap.model.ProviderRouting;
@@ -34,11 +35,6 @@ import uk.gov.hscic.common.ldap.model.ProviderRouting;
 @Component
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private static final Logger LOG = Logger.getLogger(FhirRequestGenericIntercepter.class);
-
-    private static final String SSP_FROM = "Ssp-From";
-    private static final String SSP_INTERACTIONID = "Ssp-InteractionID";
-    private static final String SSP_TO = "Ssp-To";
-    private static final String SSP_TRACEID = "Ssp-TraceId";
 
     private static final Map<String, String> INTERACTION_MAP = new HashMap<String, String>() {{
         put("urn:nhs:names:services:gpconnect:fhir:rest:read:metadata", "/fhir/metadata");
@@ -108,27 +104,27 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         certificateValidator.validateRequest(httpRequest); // Validate certificate first!
 
         // Check there is a Ssp-TraceID header
-        if (StringUtils.isBlank(httpRequest.getHeader(SSP_TRACEID))) {
-            throwInvalidRequestException(SSP_TRACEID + "header blank");
+        if (StringUtils.isBlank(httpRequest.getHeader(SystemHeader.SSP_TRACEID))) {
+            throwInvalidRequestException(SystemHeader.SSP_TRACEID + "header blank");
         }
 
         // Check there is a SSP-From header
-        if (StringUtils.isBlank(httpRequest.getHeader(SSP_FROM))) {
-            throwInvalidRequestException(SSP_FROM + " header blank");
+        if (StringUtils.isBlank(httpRequest.getHeader(SystemHeader.SSP_FROM))) {
+            throwInvalidRequestException(SystemHeader.SSP_FROM + " header blank");
         }
 
         // Check the SSP-To header is present and directed to our system
-        String toASIDHeader = httpRequest.getHeader(SSP_TO);
+        String toASIDHeader = httpRequest.getHeader(SystemHeader.SSP_TO);
         if (StringUtils.isBlank(toASIDHeader)) {
-            throwInvalidRequestException(SSP_TO + " header blank");
+            throwInvalidRequestException(SystemHeader.SSP_TO + " header blank");
         } else if (systemSspToHeader != null && !toASIDHeader.equalsIgnoreCase(systemSspToHeader)) {
             // We loaded our ASID but the SSP-To header does not match the value
-            throwBadRequestException(SSP_TO + " header does not match ASID of system");
+            throwBadRequestException(SystemHeader.SSP_TO + " header does not match ASID of system");
         }
 
-        String interactionIdHeader = httpRequest.getHeader(SSP_INTERACTIONID);
+        String interactionIdHeader = httpRequest.getHeader(SystemHeader.SSP_INTERACTIONID);
         if (StringUtils.isBlank(interactionIdHeader)) {
-            throwInvalidRequestException(SSP_INTERACTIONID + " header blank");
+            throwInvalidRequestException(SystemHeader.SSP_INTERACTIONID + " header blank");
         }
 
         String url = httpRequest.getRequestURI();

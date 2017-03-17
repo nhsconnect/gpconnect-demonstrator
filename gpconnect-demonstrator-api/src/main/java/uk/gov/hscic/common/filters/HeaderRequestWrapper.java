@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import org.apache.http.HttpException;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.web.HttpMediaTypeException;
+import uk.gov.hscic.SystemHeader;
 
 public class HeaderRequestWrapper extends HttpServletRequestWrapper {
 
@@ -23,7 +24,7 @@ public class HeaderRequestWrapper extends HttpServletRequestWrapper {
         String header = super.getHeader(name);
 
         // This is mandatory
-        if ("Prefer".equalsIgnoreCase(name) && (header == null || header.isEmpty())) {
+        if (SystemHeader.PREFER.equalsIgnoreCase(name) && (header == null || header.isEmpty())) {
             header = "return=representation";
         }
 
@@ -34,8 +35,8 @@ public class HeaderRequestWrapper extends HttpServletRequestWrapper {
     public Enumeration getHeaderNames() {
         List<String> names = Collections.list(super.getHeaderNames());
 
-        if (!names.contains("Prefer")) {
-            names.add("Prefer");
+        if (!names.contains(SystemHeader.PREFER)) {
+            names.add(SystemHeader.PREFER);
         }
 
         return Collections.enumeration(names);

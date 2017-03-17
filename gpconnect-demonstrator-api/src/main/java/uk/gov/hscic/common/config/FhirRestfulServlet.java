@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
+import uk.gov.hscic.SystemHeader;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.appointments.SlotResourceProvider;
@@ -67,19 +68,19 @@ public class FhirRestfulServlet extends RestfulServer {
                 HttpHeaders.CACHE_CONTROL,
                 HttpHeaders.CONNECTION,
                 HttpHeaders.CONTENT_LENGTH,
-                "Prefer",
+                SystemHeader.PREFER,
                 HttpHeaders.CONTENT_TYPE,
                 HttpHeaders.COOKIE,
                 HttpHeaders.HOST,
                 HttpHeaders.ORIGIN,
                 HttpHeaders.PRAGMA,
                 HttpHeaders.REFERER,
-                "Ssp-From",
-                "Ssp-InteractionID",
-                "Ssp-To",
-                "Ssp-TraceID",
+                SystemHeader.SSP_FROM,
+                SystemHeader.SSP_INTERACTIONID,
+                SystemHeader.SSP_TO,
+                SystemHeader.SSP_TRACEID,
                 HttpHeaders.USER_AGENT,
-                "X-Requested-With"));
+                SystemHeader.X_REQUESTED_WITH));
 
         registerInterceptor(new CorsInterceptor(config));
         registerInterceptor(applicationContext.getBean(FhirRequestAuthInterceptor.class));

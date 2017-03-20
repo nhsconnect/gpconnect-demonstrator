@@ -53,13 +53,6 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>io.ddavison</groupId>
-            <artifactId>conductor</artifactId>
-            <version>2.3.0</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>

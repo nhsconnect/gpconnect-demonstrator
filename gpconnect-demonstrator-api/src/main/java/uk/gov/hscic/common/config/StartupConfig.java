@@ -17,6 +17,9 @@ public class StartupConfig implements ApplicationListener<ContextRefreshedEvent>
 
     @Autowired
     private DatabaseRefresher databaseRefresher;
+    
+    @Autowired
+    private RefreshData refreshData;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -24,6 +27,8 @@ public class StartupConfig implements ApplicationListener<ContextRefreshedEvent>
             if (databaseReset) {
                 databaseRefresher.resetDatabase();
             }
+            
+            refreshData.scheduledResetOfData();
         } catch (IOException ex) {
             LOG.error("Cannot refresh db!");
         }

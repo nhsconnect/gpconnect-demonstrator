@@ -43,11 +43,11 @@ public class RefreshData {
         resetAppointments();
     }
 
-    public void clearTasks() {
+    private void clearTasks() {
         orderStore.clearOrders();
     }
 
-    public void resetAppointments() {
+    private void resetAppointments() {
         slotStore.clearSlots();
         appointmentStore.clearAppointments();
 

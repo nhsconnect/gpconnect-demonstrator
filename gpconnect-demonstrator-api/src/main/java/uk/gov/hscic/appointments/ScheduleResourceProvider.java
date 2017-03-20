@@ -21,8 +21,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.appointment.schedule.model.ScheduleDetail;
-import uk.gov.hscic.appointment.schedule.search.ScheduleSearch;
+import uk.gov.hscic.model.appointment.ScheduleDetail;
+import uk.gov.hscic.appointment.schedule.ScheduleSearch;
 
 @Component
 public class ScheduleResourceProvider implements IResourceProvider {

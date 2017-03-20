@@ -39,18 +39,18 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.appointment.appointment.model.AppointmentDetail;
-import uk.gov.hscic.appointment.appointment.search.AppointmentSearch;
-import uk.gov.hscic.appointment.appointment.store.AppointmentStore;
-import uk.gov.hscic.appointment.slot.model.SlotDetail;
-import uk.gov.hscic.appointment.slot.search.SlotSearch;
-import uk.gov.hscic.appointment.slot.store.SlotStore;
-import uk.gov.hscic.location.model.LocationDetails;
-import uk.gov.hscic.location.search.LocationSearch;
-import uk.gov.hscic.patient.details.search.PatientSearch;
-import uk.gov.hscic.patient.summary.model.PatientDetails;
-import uk.gov.hscic.practitioner.model.PractitionerDetails;
-import uk.gov.hscic.practitioner.search.PractitionerSearch;
+import uk.gov.hscic.model.appointment.AppointmentDetail;
+import uk.gov.hscic.appointment.appointment.AppointmentSearch;
+import uk.gov.hscic.appointment.appointment.AppointmentStore;
+import uk.gov.hscic.model.appointment.SlotDetail;
+import uk.gov.hscic.appointment.slot.SlotSearch;
+import uk.gov.hscic.appointment.slot.SlotStore;
+import uk.gov.hscic.model.location.LocationDetails;
+import uk.gov.hscic.location.LocationSearch;
+import uk.gov.hscic.patient.details.PatientSearch;
+import uk.gov.hscic.model.patient.PatientDetails;
+import uk.gov.hscic.model.practitioner.PractitionerDetails;
+import uk.gov.hscic.practitioner.PractitionerSearch;
 
 @Component
 public class AppointmentResourceProvider implements IResourceProvider {

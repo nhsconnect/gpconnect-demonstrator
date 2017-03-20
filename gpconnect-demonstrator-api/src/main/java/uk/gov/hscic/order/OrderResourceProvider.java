@@ -18,8 +18,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.order.model.OrderDetail;
-import uk.gov.hscic.order.store.OrderStore;
+import uk.gov.hscic.model.order.OrderDetail;
 
 @Component
 public class OrderResourceProvider implements IResourceProvider {

@@ -24,8 +24,7 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.practitioner.model.PractitionerDetails;
-import uk.gov.hscic.practitioner.search.PractitionerSearch;
+import uk.gov.hscic.model.practitioner.PractitionerDetails;
 
 @Component
 public class PractitionerResourceProvider  implements IResourceProvider {

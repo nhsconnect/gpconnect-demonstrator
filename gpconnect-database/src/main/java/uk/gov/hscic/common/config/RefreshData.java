@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import uk.gov.hscic.appointment.appointment.store.AppointmentStore;
-import uk.gov.hscic.appointment.slot.model.SlotDetail;
-import uk.gov.hscic.appointment.slot.store.SlotStore;
-import uk.gov.hscic.order.store.OrderStore;
+import uk.gov.hscic.appointment.appointment.AppointmentStore;
+import uk.gov.hscic.model.appointment.SlotDetail;
+import uk.gov.hscic.appointment.slot.SlotStore;
+import uk.gov.hscic.order.OrderStore;
 
 @Service
 public class RefreshData {

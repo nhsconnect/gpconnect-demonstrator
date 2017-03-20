@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hscic.order.model.OrderDetail;
-import uk.gov.hscic.order.search.OrderSearch;
-import uk.gov.hscic.order.store.OrderStore;
+import uk.gov.hscic.model.order.OrderDetail;
 
 @RestController
 @RequestMapping("api/notfhir/orders")

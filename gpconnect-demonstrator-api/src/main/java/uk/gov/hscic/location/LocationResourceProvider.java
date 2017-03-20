@@ -20,8 +20,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.location.model.LocationDetails;
-import uk.gov.hscic.location.search.LocationSearch;
+import uk.gov.hscic.model.location.LocationDetails;
 
 @Component
 public class LocationResourceProvider implements IResourceProvider {

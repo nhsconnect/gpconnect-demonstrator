@@ -36,7 +36,7 @@ import uk.gov.hscic.common.filters.model.RequestBody;
 import uk.gov.hscic.common.filters.model.RequestedRecord;
 import uk.gov.hscic.common.filters.model.WebToken;
 import uk.gov.hscic.common.filters.model.WebTokenValidator;
-import uk.gov.hscic.common.util.NhsCodeValidator;
+import uk.gov.hscic.util.NhsCodeValidator;
 
 @Component
 public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {

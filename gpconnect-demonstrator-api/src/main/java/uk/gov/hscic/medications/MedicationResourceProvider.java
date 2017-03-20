@@ -13,8 +13,6 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.medications.model.MedicationEntity;
-import uk.gov.hscic.medications.repo.MedicationRepository;
 
 @Component
 public class MedicationResourceProvider implements IResourceProvider {

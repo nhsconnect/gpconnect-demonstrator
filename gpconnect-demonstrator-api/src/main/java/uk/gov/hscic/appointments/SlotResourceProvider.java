@@ -21,8 +21,8 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.appointment.slot.model.SlotDetail;
-import uk.gov.hscic.appointment.slot.search.SlotSearch;
+import uk.gov.hscic.model.appointment.SlotDetail;
+import uk.gov.hscic.appointment.slot.SlotSearch;
 
 @Component
 public class SlotResourceProvider  implements IResourceProvider {

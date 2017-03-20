@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.medication.administration.model.MedicationAdministrationDetail;
-import uk.gov.hscic.medication.administration.search.MedicationAdministrationSearch;
+import uk.gov.hscic.model.medication.MedicationAdministrationDetail;
+import uk.gov.hscic.medication.administration.MedicationAdministrationSearch;
 
 @Component
 public class MedicationAdministrationResourceProvider  implements IResourceProvider {

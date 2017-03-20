@@ -16,8 +16,8 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.medication.dispense.model.MedicationDispenseDetail;
-import uk.gov.hscic.medication.dispense.search.MedicationDispenseSearch;
+import uk.gov.hscic.model.medication.MedicationDispenseDetail;
+import uk.gov.hscic.medication.dispense.MedicationDispenseSearch;
 
 @Component
 public class MedicationDispenseResourceProvider implements IResourceProvider {

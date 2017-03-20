@@ -26,8 +26,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.organization.model.OrganizationDetails;
-import uk.gov.hscic.organization.search.OrganizationSearch;
+import uk.gov.hscic.model.organization.OrganizationDetails;
 
 @Component
 public class OrganizationResourceProvider implements IResourceProvider {

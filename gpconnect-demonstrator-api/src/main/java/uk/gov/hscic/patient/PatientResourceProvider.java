@@ -62,17 +62,17 @@ import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
-import uk.gov.hscic.common.util.NhsCodeValidator;
+import uk.gov.hscic.util.NhsCodeValidator;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
-import uk.gov.hscic.patient.details.search.PatientSearch;
-import uk.gov.hscic.patient.details.store.PatientStore;
+import uk.gov.hscic.patient.details.PatientSearch;
+import uk.gov.hscic.patient.details.PatientStore;
 import uk.gov.hscic.patient.html.FhirSectionBuilder;
 import uk.gov.hscic.patient.html.Page;
-import uk.gov.hscic.patient.summary.model.PatientDetails;
-import uk.gov.hscic.patient.summary.model.PatientSummary;
+import uk.gov.hscic.model.patient.PatientDetails;
+import uk.gov.hscic.model.patient.PatientSummary;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 @Component

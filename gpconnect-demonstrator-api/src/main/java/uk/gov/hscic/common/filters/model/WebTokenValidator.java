@@ -2,6 +2,7 @@ package uk.gov.hscic.common.filters.model;
 
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import java.util.Arrays;
 import java.util.List;
 import uk.gov.hscic.CodableConceptText;
@@ -119,20 +120,10 @@ public class WebTokenValidator {
                     "Requesting device is null", SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
-        if ("InvalidResourceType".equals(requestingDevice.getResourceType())) {
-            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    CodableConceptText.INVALID_RESOURCE_TYPE, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
-        }
-
-        if ("InvalidResourceType".equals(webToken.getRequestingOrganization().getResourceType())) {
-            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    CodableConceptText.INVALID_RESOURCE_TYPE, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
-        }
-
-        if ("InvalidResourceType".equals(webToken.getRequestingPractitioner().getResourceType())) {
-            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
+        if ("InvalidResourceType".equals(requestingDevice.getResourceType()) ||
+                "InvalidResourceType".equals(webToken.getRequestingOrganization().getResourceType()) ||
+                "InvalidResourceType".equals(webToken.getRequestingPractitioner().getResourceType())) {
+            throw new UnprocessableEntityException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                     SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
                     CodableConceptText.INVALID_RESOURCE_TYPE, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }

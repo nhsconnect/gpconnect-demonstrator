@@ -29,7 +29,7 @@ Or install GitHub Desktop which also includes a GUI interface for git management
 https://desktop.github.com/
 
 #### Install NodeJS:
-https://nodejs.org/download/
+https://nodejs.org
 
 #### Install Java Development Kit 8:
 http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html

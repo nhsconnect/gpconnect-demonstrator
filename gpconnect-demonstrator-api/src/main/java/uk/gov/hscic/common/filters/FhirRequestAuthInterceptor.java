@@ -28,7 +28,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.CodableConceptText;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -48,20 +47,34 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
     @Override
     public List<IAuthRule> buildRuleList(RequestDetails requestDetails) {
-        String[] authorizationHeaderComponents = requestDetails.getHeader(HttpHeaders.AUTHORIZATION).split(" ");
+        String authorizationHeader = requestDetails.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (null == authorizationHeader) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(HttpHeaders.AUTHORIZATION + " header missing"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
+
+        String[] authorizationHeaderComponents = authorizationHeader.split(" ");
 
         if (authorizationHeaderComponents.length != 2 || !"Bearer".equalsIgnoreCase(authorizationHeaderComponents[0])) {
-            throw new InvalidRequestException(HttpHeaders.AUTHORIZATION + " header invalid.");
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(HttpHeaders.AUTHORIZATION + " header invalid"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
         String contentType = requestDetails.getHeader(HttpHeaders.CONTENT_TYPE);
 
         if (contentType == null) {
             if (Arrays.asList(RequestTypeEnum.POST, RequestTypeEnum.PUT).contains(requestDetails.getRequestType())) {
-                throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "No content media type set");
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "No content media type set"),
+                        SystemCode.BAD_REQUEST, IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
             }
         } else if (!contentType.replaceAll("; +", ";").toLowerCase(Locale.UK).matches(PERMITTED_MEDIA_TYPE_HEADER_REGEX)) {
-            throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported content media type");
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported content media type"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
         String[] formatParam = requestDetails.getParameters().get("_format");
@@ -76,7 +89,9 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         }
 
         if (acceptHeader == null || !acceptHeader.replaceAll("; +", ";").toLowerCase(Locale.UK).matches(PERMITTED_MEDIA_TYPE_HEADER_REGEX)) {
-            throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported accept media type");
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported accept media type"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
         WebToken webToken;
@@ -87,9 +102,13 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             WebTokenValidator.validateWebToken(webToken, futureRequestLeeway);
             jwtParseResourcesValidation(claimsJsonString);
         } catch (IllegalArgumentException iae) {
-            throw new InvalidRequestException("Not Base 64");
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Not Base 64"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         } catch (IOException ex) {
-            throw new InvalidRequestException("Invalid WebToken");
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Invalid WebToken"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
         RequestedRecord requestedRecord = webToken.getRequestedRecord();
@@ -97,9 +116,9 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
         if ("Patient/$gpc.getcarerecord".equals(requestDetails.getRequestPath())) {
             if (!"Patient".equals(requestedRecord.getResourceType())) {
-                throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                        SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                        CodableConceptText.BAD_REQUEST, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("Bad Request Exception"),
+                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
             }
 
             validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents(), StringUtils.contains(contentType, "xml"));
@@ -108,16 +127,16 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         if ("Patient".equals(requestedRecord.getResourceType())) {
             // If it is a patient orientated request
             if (!NhsCodeValidator.nhsNumberValid(requestedNhsNumber)) {
-                throw new InvalidRequestException("Dates are invalid: ", OperationOutcomeFactory.buildOperationOutcome(
-                        SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_NHS_NUMBER,
-                        CodableConceptText.PATIENT_RECORD_NOT_FOUND, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("Invalid NHS number: " + requestedNhsNumber),
+                        SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.NOT_FOUND);
             }
         } else {
             // If it is an organization oriantated request
             if (null == webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_ODS_ORGANIZATION_CODE)) {
-                throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                        SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                        CodableConceptText.BAD_REQUEST, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("Bad Request Exception"),
+                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
             }
         }
 
@@ -139,9 +158,13 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             parser.parseResource(jsonNode.get("requesting_device").toString());
             parser.parseResource(jsonNode.get("requesting_organization").toString());
         } catch (DataFormatException e) {
-            throw new UnprocessableEntityException("Invalid Resource Present");
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Invalid Resource Present"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         } catch (IOException ex) {
-            throw new InvalidRequestException("Unparsable JSON");
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Unparsable JSON"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
     }
 
@@ -173,26 +196,26 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             }
 
             if (null == nhsNumberFromBody) {
-                throw new InvalidRequestException("NHS number in body doesn't match the header", OperationOutcomeFactory.buildOperationOutcome(
-                        SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_IDENTIFIER_SYSTEM,
-                        "NHS number in body doesn't match the header", SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("NHS number in body doesn't match the header"),
+                        SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueTypeEnum.INVALID_CONTENT);
             }
 
             if (!NhsCodeValidator.nhsNumberValid(nhsNumberFromHeader) || !NhsCodeValidator.nhsNumberValid(nhsNumberFromBody)) {
-                throw new InvalidRequestException("NHS number invalid", OperationOutcomeFactory.buildOperationOutcome(
-                        SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_NHS_NUMBER,
-                        CodableConceptText.NHS_NUMBER_INVALID, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("NHS number invalid"),
+                        SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
             }
 
             if (!nhsNumberFromHeader.equals(nhsNumberFromBody)) {
-                throw new InvalidRequestException("NHS number in body doesn't match the header", OperationOutcomeFactory.buildOperationOutcome(
-                        SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_NHS_NUMBER,
-                        CodableConceptText.NHS_NUMBER_INVALID, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("NHS number in body doesn't match the header"),
+                        SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
             }
         } catch (IOException ex) {
-            throw new InvalidRequestException("Cannot parse request body", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_NHS_NUMBER,
-                    "Cannot parse request body", SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Cannot parse request body"),
+                    SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
         }
     }
 }

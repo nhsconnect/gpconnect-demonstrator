@@ -1,5 +1,6 @@
 package uk.gov.hscic.auth;
 
+import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -11,6 +12,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpMethod;
+import uk.gov.hscic.OperationOutcomeFactory;
+import uk.gov.hscic.SystemCode;
 
 /**
  * <p>This class authenticates requests by ensuring the certificate provided is
@@ -59,8 +62,11 @@ public final class CertificateValidator {
                 requestURL.append('?').append(queryString);
             }
 
-            throw new UnclassifiedServerFailureException(certificateException.getStatusCode(),
-                    "Bad signature detected for " + request.getMethod() + " to " + requestURL + ": " + certificateException.getMessage());
+            String warningMsg = "Bad signature detected for " + request.getMethod() + " to " + requestURL + ": " + certificateException.getMessage();
+
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnclassifiedServerFailureException(certificateException.getStatusCode(), warningMsg),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.FORBIDDEN);
         }
     }
 }

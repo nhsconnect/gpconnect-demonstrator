@@ -5,7 +5,6 @@ import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import java.util.Arrays;
 import java.util.List;
-import uk.gov.hscic.CodableConceptText;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -23,21 +22,21 @@ public class WebTokenValidator {
 
         // Checking the practionerId and the sub are equal in value
         if (!(webToken.getRequestingPractitioner().getId().equals(webToken.getSub()))) {
-            throw new InvalidRequestException("Practitioner ids do not match!", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    "Practitioner ids do not match!", SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Practitioner ids do not match!"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
         if (!PERMITTED_REQUESTED_SCOPES.contains(webToken.getRequestedScope())) {
-            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    CodableConceptText.BAD_REQUEST, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Bad Request Exception"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
         if (!SystemURL.AUTHORIZATION_TOKEN.equals(webToken.getAud())) {
-            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    CodableConceptText.BAD_REQUEST, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Bad Request Exception"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
     }
 
@@ -79,9 +78,9 @@ public class WebTokenValidator {
 
     private static void assertNotNull(Object object) {
         if (null == object) {
-            throw new InvalidRequestException("JSON entry incomplete.", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    "JSON Incomplete", SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("JSON entry incomplete."),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
     }
 
@@ -91,55 +90,55 @@ public class WebTokenValidator {
 
         // Checking creation time is not in the future (with a 5 second leeway
         if (timeValidationIdentifierInt > (System.currentTimeMillis() / 1000) + futureRequestLeeway) {
-            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    "Creation time is in the future", SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Creation time is in the future"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
         // Checking the expiry time is 5 minutes after creation
         if (webToken.getExp() - timeValidationIdentifierInt != 300) {
-            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    "Request time expired", SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Request time expired"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
     }
 
     private static void verifyRequestedResourceValues(WebToken webToken) {
         // Checking the reason for request is directcare
         if (!"directcare".equals(webToken.getReasonForRequest())) {
-            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    "Reason for request is not directcare", SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Reason for request is not directcare"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
         RequestingDevice requestingDevice = webToken.getRequestingDevice();
 
         if (null == requestingDevice) {
-            throw new InvalidRequestException("No requesting_device", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    "Requesting device is null", SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("No requesting_device"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
         if ("InvalidResourceType".equals(requestingDevice.getResourceType()) ||
                 "InvalidResourceType".equals(webToken.getRequestingOrganization().getResourceType()) ||
                 "InvalidResourceType".equals(webToken.getRequestingPractitioner().getResourceType())) {
-            throw new UnprocessableEntityException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    CodableConceptText.INVALID_RESOURCE_TYPE, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Invalid resource type"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
         if ("Patient".equals(webToken.getRequestedRecord().getResourceType())
                 && !webToken.getRequestedScope().matches("patient/\\*\\.(read|write)")) {
-            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    CodableConceptText.INVALID_RESOURCE_TYPE, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Invalid Patient requested scope"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
         if ("Organization".equals(webToken.getRequestedRecord().getResourceType())
                 && !webToken.getRequestedScope().matches("organization/\\*\\.(read|write)")) {
-            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST,
-                    CodableConceptText.INVALID_RESOURCE_TYPE, SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Invalid Organization requested scope"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
     }
 }

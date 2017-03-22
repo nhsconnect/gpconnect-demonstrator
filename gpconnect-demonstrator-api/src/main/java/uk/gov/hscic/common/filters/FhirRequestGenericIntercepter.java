@@ -28,7 +28,6 @@ import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemHeader;
-import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.auth.CertificateValidator;
 import uk.gov.hscic.common.ldap.model.ProviderRouting;
 
@@ -128,7 +127,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         String url = httpRequest.getRequestURI();
-        if (!url.equals(INTERACTION_MAP.get(interactionIdHeader).replace("%ID%", String.valueOf(getIdFromUrl(url))))) {
+        if (!url.equals(INTERACTION_MAP.getOrDefault(interactionIdHeader, "INVALID").replace("%ID%", String.valueOf(getIdFromUrl(url))))) {
             throwInvalidRequestException("InteractionId Incorrect");
         }
 
@@ -136,15 +135,15 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     }
 
     private static void throwBadRequestException(String exceptionMessage) {
-        throw new InvalidRequestException(exceptionMessage, OperationOutcomeFactory.buildOperationOutcome(
-                SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST, exceptionMessage,
-                SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                new InvalidRequestException(exceptionMessage),
+                SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
     }
 
     private static void throwInvalidRequestException(String exceptionMessage) {
-        throw new InvalidRequestException(exceptionMessage, OperationOutcomeFactory.buildOperationOutcome(
-                SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_PARAMETER, exceptionMessage,
-                SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                new InvalidRequestException(exceptionMessage),
+                SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
     }
 
     /**
@@ -163,21 +162,28 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         // This string match is really crude and it's not great, but I can't see
         // how else to pick up on just the relevant exceptions!
         if (theException instanceof InvalidRequestException && theException.getMessage().contains("Invalid attribute value")) {
-            return new UnprocessableEntityException(theException.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_PARAMETER, theException.getMessage(),
-                    SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            return OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(theException.getMessage()),
+                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
 
         if (theException instanceof MethodNotAllowedException && theException.getMessage().contains("request must use HTTP GET")) {
-            return new UnprocessableEntityException(theException.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.BAD_REQUEST, theException.getMessage(),
-                    SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            return OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(theException.getMessage()),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
+
+        if (theException instanceof InvalidRequestException &&
+                theException.getMessage().equals("Failed to parse request body as JSON resource. Error was: Failed to parse JSON content, error was: Did not find any content to parse")) {
+            return OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(theException.getMessage()),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
         if (theException instanceof InvalidRequestException && theException.getMessage().contains("InvalidResourceType")) {
-            return new UnprocessableEntityException(theException.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
-                    SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_RESOURCE, theException.getMessage(),
-                    SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            return OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(theException.getMessage()),
+                    SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
         }
 
         return super.preProcessOutgoingException(theRequestDetails, theException, theServletRequest);

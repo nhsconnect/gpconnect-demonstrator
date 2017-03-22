@@ -57,23 +57,22 @@ import javax.activation.UnsupportedDataTypeException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.CodableConceptText;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
-import uk.gov.hscic.util.NhsCodeValidator;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
+import uk.gov.hscic.model.patient.PatientDetails;
+import uk.gov.hscic.model.patient.PatientSummary;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.details.PatientSearch;
 import uk.gov.hscic.patient.details.PatientStore;
 import uk.gov.hscic.patient.html.FhirSectionBuilder;
 import uk.gov.hscic.patient.html.Page;
-import uk.gov.hscic.model.patient.PatientDetails;
-import uk.gov.hscic.model.patient.PatientSummary;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
+import uk.gov.hscic.util.NhsCodeValidator;
 
 @Component
 public class PatientResourceProvider implements IResourceProvider {
@@ -122,10 +121,9 @@ public class PatientResourceProvider implements IResourceProvider {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
 
         if (patientDetails == null) {
-            throw new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart(),
-                    OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                            SystemCode.PATIENT_NOT_FOUND, CodableConceptText.PATIENT_RECORD_NOT_FOUND,
-                            SystemURL.SD_GPC_PATIENT, IssueTypeEnum.NOT_FOUND));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart()),
+                    SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.NOT_FOUND);
         }
 
         return patientDetailsToPatientResourceConverter(patientDetails);
@@ -140,10 +138,9 @@ public class PatientResourceProvider implements IResourceProvider {
         PatientDetails patientDetails = patientSearch.findPatient(patientId.getValue());
 
         if (null == patientDetails) {
-            throw new ResourceNotFoundException("No patient details found for patient ID: " + patientId,
-                    OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                            SystemCode.PATIENT_NOT_FOUND, CodableConceptText.PATIENT_RECORD_NOT_FOUND,
-                            SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new ResourceNotFoundException("No patient details found for patient ID: " + patientId),
+                    SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.NOT_FOUND);
         }
 
         return patientDetailsToPatientResourceConverter(patientDetails);
@@ -158,17 +155,15 @@ public class PatientResourceProvider implements IResourceProvider {
                 .collect(Collectors.toList());
 
         if (!PERMITTED_PARAM_NAMES.containsAll(parameters)) {
-            throw new UnprocessableEntityException("Invalid parameters",
-                    OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_PARAMETER,
-                            CodableConceptText.INVALID_PARAMETER, SystemURL.SD_GPC_OPERATIONOUTCOME,
-                            IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Invalid parameters"),
+                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
 
         if (!parameters.containsAll(MANDATORY_PARAM_NAMES)) {
-            throw new InvalidRequestException("Missing parameters",
-                    OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_PARAMETER,
-                            CodableConceptText.INVALID_PARAMETER, SystemURL.SD_GPC_OPERATIONOUTCOME,
-                            IssueTypeEnum.INVALID_CONTENT));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Missing parameters"),
+                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
 
         String nhsNumber = null;
@@ -183,53 +178,37 @@ public class PatientResourceProvider implements IResourceProvider {
 
             if (value instanceof IdentifierDt) {
                 if (null != nhsNumber) {
-                    throw new InvalidRequestException("Bad Request Exception",
-                            OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                                    SystemCode.INVALID_IDENTIFIER_SYSTEM,
-                                    CodableConceptText.NHS_NUMBER_INVALID,
-                                    SystemURL.SD_GPC_OPERATIONOUTCOME,
-                                    IssueTypeEnum.INVALID_CONTENT));
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("NHS number set twice!"),
+                            SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueTypeEnum.INVALID_CONTENT);
                 }
 
                 nhsNumber = ((IdentifierDt) value).getValue();
 
-                if (StringUtils.isBlank(nhsNumber)) {
-                    throw new InvalidRequestException("System Invalid",
-                            OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                                    SystemCode.INVALID_NHS_NUMBER, CodableConceptText.PATIENT_RECORD_NOT_FOUND,
-                                    SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
-                }
-
-                if (!NhsCodeValidator.nhsNumberValid(nhsNumber)) {
-                    throw new InvalidRequestException("NHS number Invalid", OperationOutcomeFactory.buildOperationOutcome(
-                            SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_NHS_NUMBER,
-                            CodableConceptText.NHS_NUMBER_INVALID,
-                            SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                if (StringUtils.isBlank(nhsNumber) || !NhsCodeValidator.nhsNumberValid(nhsNumber)) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("NHS number Invalid"),
+                            SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
                 }
 
                 PatientSummary patientSummary = patientSearch.findPatientSummary(nhsNumber);
 
                 if (null == patientSummary) {
-                    throw new ResourceNotFoundException("No patient details found for patient ID: " + nhsNumber,
-                            OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                                    SystemCode.PATIENT_NOT_FOUND, CodableConceptText.PATIENT_RECORD_NOT_FOUND,
-                                    SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new ResourceNotFoundException("No patient details found for patient ID: " + nhsNumber),
+                            SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.NOT_FOUND);
                 }
 
                 if (patientSummary.isSensitive()) {
-                    throw new ForbiddenOperationException("No patient consent", OperationOutcomeFactory.buildOperationOutcome(
-                            SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.NO_PATIENT_CONSENT,
-                            CodableConceptText.PATIENT_DATA_CONFIDENTIAL,
-                            SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.FORBIDDEN));
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new ForbiddenOperationException("No patient consent"),
+                            SystemCode.NO_PATIENT_CONSENT, IssueTypeEnum.FORBIDDEN);
                 }
             } else if (value instanceof CodeableConceptDt) {
                 if (null != sectionName) {
-                    throw new InvalidRequestException("Bad Request Exception",
-                            OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                                    SystemCode.INVALID_IDENTIFIER_SYSTEM,
-                                    CodableConceptText.MULTIPLE_SECTIONS_ADDED,
-                                    SystemURL.SD_GPC_OPERATIONOUTCOME,
-                                    IssueTypeEnum.INVALID_CONTENT));
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("Section name set twice!"),
+                            SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueTypeEnum.INVALID_CONTENT);
                 }
 
                 CodingDt coding = ((CodeableConceptDt) value).getCodingFirstRep();
@@ -238,21 +217,21 @@ public class PatientResourceProvider implements IResourceProvider {
                 sectionName = coding.getCode();
 
                 if (system == null || sectionName == null) {
-                    throw new UnprocessableEntityException("System Invalid",
-                            OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                                    SystemCode.INVALID_PARAMETER, CodableConceptText.PATIENT_RECORD_NOT_FOUND,
-                                    SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new UnprocessableEntityException("System is null"),
+                            SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
                 }
 
                 if (!sectionName.equals(sectionName.toUpperCase(Locale.UK))) {
-                    throw new UnprocessableEntityException("Section Case Invalid: " + sectionName,
-                            OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                                    SystemCode.INVALID_PARAMETER, CodableConceptText.PATIENT_RECORD_NOT_FOUND,
-                                    SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new UnprocessableEntityException("Section Case Invalid: " + sectionName),
+                            SystemCode.INVALID_PARAMETER, IssueTypeEnum.NOT_FOUND);
                 }
 
                 if (!system.equals(SystemURL.VS_GPC_RECORD_SECTION)) {
-                    throw new InvalidRequestException("System Invalid");
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("Provided system, " + system + " is not the expected " + SystemURL.VS_GPC_RECORD_SECTION),
+                            SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
                 }
             } else if (value instanceof PeriodDt) {
                 PeriodDt period = (PeriodDt) value;
@@ -263,10 +242,9 @@ public class PatientResourceProvider implements IResourceProvider {
                 requestedToDate = period.getEnd();
 
                 if (fromDate != null && toDate != null && fromDate.after(toDate)) {
-                    throw new UnprocessableEntityException("Dates are invalid: " + fromDate + ", " + toDate,
-                            OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                                    SystemCode.INVALID_PARAMETER, CodableConceptText.PATIENT_RECORD_NOT_FOUND,
-                                    SystemURL.SD_GPC_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new UnprocessableEntityException("Dates are invalid: " + fromDate + ", " + toDate),
+                            SystemCode.INVALID_PARAMETER, IssueTypeEnum.NOT_FOUND);
                 }
 
                 if (toDate != null) {
@@ -279,10 +257,9 @@ public class PatientResourceProvider implements IResourceProvider {
                     requestedToDate = toDateCalendar.getTime();
                 }
             } else {
-                throw new InvalidRequestException("Invalid datatype",
-                        OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE, SystemCode.INVALID_PARAMETER,
-                                CodableConceptText.INVALID_PARAMETER, SystemURL.SD_GPC_OPERATIONOUTCOME,
-                                IssueTypeEnum.INVALID_CONTENT));
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("Invalid datatype"),
+                        SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
             }
         }
 
@@ -365,12 +342,9 @@ public class PatientResourceProvider implements IResourceProvider {
                 break;
 
             default:
-                throw new UnprocessableEntityException("Invalid section code: " + sectionName,
-                        OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                                SystemCode.INVALID_PARAMETER,
-                                CodableConceptText.INVALID_SECTION_CODE,
-                                SystemURL.SD_GPC_OPERATIONOUTCOME,
-                                IssueTypeEnum.NOT_FOUND));
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("Invalid section code: " + sectionName),
+                        SystemCode.INVALID_PARAMETER, IssueTypeEnum.NOT_FOUND);
         }
 
         // Build the Patient Resource and add it to the bundle
@@ -424,12 +398,8 @@ public class PatientResourceProvider implements IResourceProvider {
             Practitioner practitioner = practitionerResourceProvider.getPractitionerById(new IdDt(id));
 
             if (practitioner == null) {
-                throw new ResourceNotFoundException("Practitioner Reference returning null",
-                        OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                                SystemCode.REFERENCE_NOT_FOUND,
-                                CodableConceptText.INVALID_REFERENCE,
-                                SystemURL.SD_GPC_PRACTITIONER,
-                                IssueTypeEnum.NOT_FOUND));
+                throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException("Practitioner Reference returning null"),
+                        SystemCode.REFERENCE_NOT_FOUND, IssueTypeEnum.NOT_FOUND);
             }
 
             practitioner.getMeta().addProfile(SystemURL.SD_GPC_PRACTITIONER);
@@ -443,12 +413,9 @@ public class PatientResourceProvider implements IResourceProvider {
                     .setFullUrl(organizationId);
 
             if (organizationEntry.getResource() == null || organizationEntry.getFullUrl() == null) {
-                throw new ResourceNotFoundException("organizationResource returning null",
-                        OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                                SystemCode.REFERENCE_NOT_FOUND,
-                                CodableConceptText.INVALID_REFERENCE,
-                                SystemURL.SD_GPC_PRACTITIONER,
-                                IssueTypeEnum.NOT_FOUND));
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new ResourceNotFoundException("organizationResource returning null"),
+                        SystemCode.REFERENCE_NOT_FOUND, IssueTypeEnum.NOT_FOUND);
             }
 
             bundle.addEntry(organizationEntry);
@@ -503,10 +470,9 @@ public class PatientResourceProvider implements IResourceProvider {
                 registeredPatient = patientDetailsToRegisterPatientResourceConverter(patientDetails);
             }
         } else {
-            throw new UnprocessableEntityException("Section Case Invalid: ",
-                    OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                            SystemCode.INVALID_PARAMETER, CodableConceptText.PATIENT_RECORD_NOT_FOUND,
-                            SystemURL.SD_GPC_PRACTITIONER, IssueTypeEnum.NOT_FOUND));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Patient record not found"),
+                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.NOT_FOUND);
         }
 
         Bundle bundle = new Bundle().setType(BundleTypeEnum.TRANSACTION_RESPONSE);
@@ -533,9 +499,9 @@ public class PatientResourceProvider implements IResourceProvider {
         if (registrationStart.compareTo(new Date()) <= 1) {
             patientDetails.setRegistrationStartDateTime(registrationStart);
         } else {
-            throw new IllegalArgumentException(String.format(
-                    "The given registration start (%c) is not valid. The registration start cannot be in the future.",
-                    registrationStart));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Patient record not found"),
+                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.NOT_FOUND);
         }
 
         Date registrationEnd = registrationPeriod.getEnd();
@@ -641,10 +607,9 @@ public class PatientResourceProvider implements IResourceProvider {
 
             patient.getCareProvider().add(practitionerReference);
         } else {
-            throw new ResourceNotFoundException("No GP record exists",
-                    OperationOutcomeFactory.buildOperationOutcome(SystemURL.VS_GPC_ERROR_WARNING_CODE,
-                            SystemCode.PATIENT_NOT_FOUND, CodableConceptText.PATIENT_RECORD_NOT_FOUND,
-                            SystemURL.SD_GPC_PRACTITIONER, IssueTypeEnum.NOT_FOUND));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new ResourceNotFoundException("No GP record exists"),
+                    SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.NOT_FOUND);
         }
 
         String gender = patientDetails.getGender();

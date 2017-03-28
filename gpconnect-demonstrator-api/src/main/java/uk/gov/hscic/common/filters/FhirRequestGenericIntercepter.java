@@ -29,6 +29,8 @@ import uk.gov.hscic.InteractionId;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemHeader;
+import uk.gov.hscic.SystemParameter;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.auth.CertificateValidator;
 import uk.gov.hscic.common.ldap.model.ProviderRouting;
 
@@ -132,8 +134,37 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             throwInvalidRequestException("InteractionId Incorrect");
         }
 
-        if (interactionIdHeader.equals(InteractionId.REST_SEARCH_ORGANIZATION) && null == httpRequest.getParameter("identifier")) {
-            throwInvalidRequestException("No identifier parameter found!");
+        if (InteractionId.SEARCH_INTERACTIONS.contains(interactionIdHeader)) {
+            String identifier = httpRequest.getParameter(SystemParameter.IDENTIFIER);
+
+            if (null == identifier) {
+                throwBadRequestException("No identifier parameter found!");
+            }
+
+            String[] identifierParts = identifier.split("\\|");
+
+            if (identifierParts.length != 2 || StringUtils.isBlank(identifierParts[0]) || StringUtils.isBlank(identifierParts[1])) {
+                throwUnprocessableEntityException("Missing identifier value: " + identifier);
+            }
+
+            switch (interactionIdHeader) {
+                case InteractionId.REST_SEARCH_PATIENT:
+                    if (!SystemURL.ID_NHS_NUMBER.equals(identifierParts[0])) {
+                        throwInvalidRequestException("Bad system code: " + identifierParts[0]);
+                    }
+
+                    break;
+
+                case InteractionId.REST_SEARCH_ORGANIZATION:
+                    if (!SystemURL.ID_ODS_ORGANIZATION_CODE.equals(identifierParts[0]) && !SystemURL.ID_ODS_SITE_CODE.equals(identifierParts[0])) {
+                        throwInvalidRequestException("Bad system code: " + identifierParts[0]);
+                    }
+
+                    break;
+
+                default:
+                    // Fine for now, but this eventually needs implementing for all options.
+            }
         }
 
         return true;
@@ -148,6 +179,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private static void throwInvalidRequestException(String exceptionMessage) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(
                 new InvalidRequestException(exceptionMessage),
+                SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+    }
+
+    private static void throwUnprocessableEntityException(String exceptionMessage) {
+        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                new UnprocessableEntityException(exceptionMessage),
                 SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
     }
 

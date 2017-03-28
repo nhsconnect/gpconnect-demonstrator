@@ -130,20 +130,26 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public List<Patient> getPatientsByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam patientId) {
-        return Collections.singletonList(getPatientByPatientId(patientId));
-    }
-
-    private Patient getPatientByPatientId(TokenParam patientId) {
-        PatientDetails patientDetails = patientSearch.findPatient(patientId.getValue());
-
-        if (null == patientDetails) {
+    public List<Patient> getPatientsByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam tokenParam) {
+        if (!SystemURL.ID_NHS_NUMBER.equals(tokenParam.getSystem())) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No patient details found for patient ID: " + patientId),
-                    SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.NOT_FOUND);
+                new InvalidRequestException("Invalid system code"),
+                SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
 
-        return patientDetailsToPatientResourceConverter(patientDetails);
+        Patient patient = getPatientByPatientId(tokenParam.getValue());
+
+        return null == patient
+                ? Collections.emptyList()
+                : Collections.singletonList(patient);
+    }
+
+    private Patient getPatientByPatientId(String patientId) {
+        PatientDetails patientDetails = patientSearch.findPatient(patientId);
+
+        return null == patientDetails
+                ? null
+                : patientDetailsToPatientResourceConverter(patientDetails);
     }
 
     @SuppressWarnings("deprecation")
@@ -348,7 +354,14 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         // Build the Patient Resource and add it to the bundle
-        Patient patient = getPatientByPatientId(new TokenParam("", nhsNumber));
+        Patient patient = getPatientByPatientId(nhsNumber);
+
+        if (null == patient) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new ResourceNotFoundException("No patient details found for patient ID: " + nhsNumber),
+                    SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.NOT_FOUND);
+        }
+
         String patientId = patient.getId().getIdPart();
 
         Bundle.Entry patientEntry = new Bundle.Entry()

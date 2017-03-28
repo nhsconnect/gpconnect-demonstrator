@@ -30,6 +30,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
+import uk.gov.hscic.SystemParameter;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.common.filters.model.RequestBody;
 import uk.gov.hscic.common.filters.model.RequestedRecord;
@@ -130,7 +131,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             case "Organization":
                 String identifierSystem = requestDetails
                         .getParameters()
-                        .getOrDefault("identifier", new String[] {""})[0]
+                        .getOrDefault(SystemParameter.IDENTIFIER, new String[] {""})[0]
                         .split("\\|")[0];
 
                 if (!PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS.contains(identifierSystem)) {

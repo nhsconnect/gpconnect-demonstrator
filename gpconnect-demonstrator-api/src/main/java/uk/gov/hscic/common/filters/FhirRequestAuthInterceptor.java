@@ -41,6 +41,7 @@ import uk.gov.hscic.util.NhsCodeValidator;
 public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     private static final Logger LOG = Logger.getLogger("AuthLog");
     private static final String PERMITTED_MEDIA_TYPE_HEADER_REGEX = "application/(xml|json)\\+fhir(;charset=utf-8)?";
+    private static final List<String> PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS = Arrays.asList(SystemURL.ID_ODS_ORGANIZATION_CODE, SystemURL.ID_ODS_SITE_CODE);
 
     @Value("${request.leeway:5}")
     private int futureRequestLeeway;
@@ -114,14 +115,33 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         RequestedRecord requestedRecord = webToken.getRequestedRecord();
         String requestedNhsNumber = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);
 
-        if ("Patient/$gpc.getcarerecord".equals(requestDetails.getRequestPath())) {
-            if (!"Patient".equals(requestedRecord.getResourceType())) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException("Bad Request Exception"),
-                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-            }
+        switch (requestDetails.getRequestPath()) {
+            case "Patient/$gpc.getcarerecord":
+                if (!"Patient".equals(requestedRecord.getResourceType())) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("Invalid resource type, should be Patient but was " + requestedRecord.getResourceType()),
+                            SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                }
 
-            validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents(), StringUtils.contains(contentType, "xml"));
+                validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents(), StringUtils.contains(contentType, "xml"));
+
+                break;
+
+            case "Organization":
+                String identifierSystem = requestDetails
+                        .getParameters()
+                        .getOrDefault("identifier", new String[] {""})[0]
+                        .split("\\|")[0];
+
+                if (!PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS.contains(identifierSystem)) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("Invalid organization identifier system: " + identifierSystem),
+                            SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                }
+
+                break;
+
+            default:
         }
 
         if ("Patient".equals(requestedRecord.getResourceType())) {
@@ -132,7 +152,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                         SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.NOT_FOUND);
             }
         } else {
-            // If it is an organization oriantated request
+            // If it is an organization orientated request
             if (null == webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_ODS_ORGANIZATION_CODE)) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("Bad Request Exception"),

@@ -28,8 +28,8 @@ public class OrganizationSearch {
                 .collect(Collectors.toList());
     }
 
-    public List<OrganizationDetails> findOrganizationDetailsByOrgODSCodeAndSiteODSCode(String organizationODSCode, String siteODSCode) {
-        return organizationRepository.findByOrgCodeAndSiteCode(organizationODSCode, siteODSCode)
+    public List<OrganizationDetails> findOrganizationDetailsBySiteODSCode(String siteODSCode) {
+        return organizationRepository.findBySiteCode(siteODSCode)
                 .stream()
                 .map(transformer::transform)
                 .collect(Collectors.toList());

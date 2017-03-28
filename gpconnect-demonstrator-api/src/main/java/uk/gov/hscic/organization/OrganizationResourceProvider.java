@@ -10,6 +10,7 @@ import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
@@ -20,11 +21,15 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.OperationOutcomeFactory;
+import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.model.organization.OrganizationDetails;
 
@@ -56,21 +61,31 @@ public class OrganizationResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public List<Organization> getOrganizationsByODSCode(@RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam organizationId) {
-        ArrayList<Organization> organizations = new ArrayList<>();
-        List<OrganizationDetails> organizationDetailsList = null;
-
-        if (organizationId.getValue() != null) {
-            organizationDetailsList = organizationSearch.findOrganizationDetailsByOrgODSCode(organizationId.getValue());
+    public List<Organization> getOrganizationsByODSCode(@RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam tokenParam) {
+        if (StringUtils.isBlank(tokenParam.getSystem()) || StringUtils.isBlank(tokenParam.getValue())) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Missing identifier token"),
+                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
 
-        if (organizationDetailsList != null) {
-            for (OrganizationDetails organizationDetails : organizationDetailsList) {
-                organizations.add(organizaitonDetailsToOrganizationResourceConverter(organizationDetails));
-            }
-        }
+        switch (tokenParam.getSystem()) {
+            case SystemURL.ID_ODS_ORGANIZATION_CODE:
+                return organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue())
+                        .stream()
+                        .map(this::organizaitonDetailsToOrganizationResourceConverter)
+                        .collect(Collectors.toList());
 
-        return organizations;
+            case SystemURL.ID_ODS_SITE_CODE:
+                return organizationSearch.findOrganizationDetailsBySiteODSCode(tokenParam.getValue())
+                        .stream()
+                        .map(this::organizaitonDetailsToOrganizationResourceConverter)
+                        .collect(Collectors.toList());
+
+            default:
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Invalid system code"),
+                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+        }
     }
 
     @Operation(name = "$gpc.getschedule")
@@ -110,7 +125,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
         return bundle;
     }
 
-    public Organization organizaitonDetailsToOrganizationResourceConverter(OrganizationDetails organizationDetails) {
+    private Organization organizaitonDetailsToOrganizationResourceConverter(OrganizationDetails organizationDetails) {
         Organization organization = new Organization()
                 .setName(organizationDetails.getOrgName())
                 .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_ORGANIZATION_CODE, organizationDetails.getOrgCode()))

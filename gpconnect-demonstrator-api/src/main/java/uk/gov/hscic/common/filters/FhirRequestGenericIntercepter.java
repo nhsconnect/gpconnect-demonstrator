@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.InteractionId;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemHeader;
@@ -36,38 +37,38 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private static final Logger LOG = Logger.getLogger(FhirRequestGenericIntercepter.class);
 
     private static final Map<String, String> INTERACTION_MAP = new HashMap<String, String>() {{
-        put("urn:nhs:names:services:gpconnect:fhir:rest:read:metadata", "/fhir/metadata");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:read:patient", "/fhir/Patient/%ID%");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient", "/fhir/Patient");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner", "/fhir/Practitioner/%ID%");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:search:practitioner", "/fhir/Practitioner");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:read:organization", "/fhir/Organization/%ID%");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:search:organization", "/fhir/Organization");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:read:location", "/fhir/Location/%ID%");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:search:location", "/fhir/Location");
-        put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord", "/fhir/Patient/$gpc.getcarerecord");
-        put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule", "/fhir/Organization/1/$gpc.getschedule");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:read:appointment", "/fhir/Appointment/%ID%");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:create:appointment", "/fhir/Appointment");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:update:appointment", "/fhir/Appointment/%ID%");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:create:order", "/fhir/Order");
-        put("urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments", "/fhir/Patient/%ID%/Appointment");
-        put("urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient", "/fhir/Patient/$gpc.registerpatient");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/AllergyIntolerance.read", "/fhir/AllergyIntolerance");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Condition.read", "/fhir/Condition");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticOrder.read", "/fhir/DiagnosticOrder");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/DiagnosticReport.read", "/fhir/DiagnosticReport");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Encounter.read", "/fhir/Encounter");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Flag.read", "/fhir/Flag");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Immunization.read", "/fhir/Immunization");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationOrder.read", "/fhir/MedicationOrder");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationDispense.read", "/fhir/MedicationDispense");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/MedicationAdministration.read", "/fhir/MedicationAdministration");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Observation.read", "/fhir/Observation");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Problem.read", "/fhir/Problem");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Procedures.read", "/fhir/Procedure");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Referral.read", "/fhir/Referral");
-        put("urn:nhs:names:services:gpconnect:fhir:claim:patient/Appointment.read", "/fhir/Appointment");
+        put(InteractionId.CLAIM_PATIENT_ALLERGY_INTOLERANCE, "/fhir/AllergyIntolerance");
+        put(InteractionId.CLAIM_PATIENT_APPOINTMENT, "/fhir/Appointment");
+        put(InteractionId.CLAIM_PATIENT_CONDITION, "/fhir/Condition");
+        put(InteractionId.CLAIM_PATIENT_DIAGNOSTIC_ORDER, "/fhir/DiagnosticOrder");
+        put(InteractionId.CLAIM_PATIENT_DIAGNOSTIC_REPORT, "/fhir/DiagnosticReport");
+        put(InteractionId.CLAIM_PATIENT_ENCOUNTER, "/fhir/Encounter");
+        put(InteractionId.CLAIM_PATIENT_FLAG, "/fhir/Flag");
+        put(InteractionId.CLAIM_PATIENT_IMMUNIZATION, "/fhir/Immunization");
+        put(InteractionId.CLAIM_PATIENT_MEDICATION_ADMINISTRATION, "/fhir/MedicationAdministration");
+        put(InteractionId.CLAIM_PATIENT_MEDICATION_DISPENSE, "/fhir/MedicationDispense");
+        put(InteractionId.CLAIM_PATIENT_MEDICATION_ORDER, "/fhir/MedicationOrder");
+        put(InteractionId.CLAIM_PATIENT_OBSERVATION, "/fhir/Observation");
+        put(InteractionId.CLAIM_PATIENT_PROBLEM, "/fhir/Problem");
+        put(InteractionId.CLAIM_PATIENT_PROCEDURES, "/fhir/Procedure");
+        put(InteractionId.CLAIM_PATIENT_REFERRAL, "/fhir/Referral");
+        put(InteractionId.OPERATION_GPC_GET_CARE_RECORD, "/fhir/Patient/$gpc.getcarerecord");
+        put(InteractionId.OPERATION_GPC_GET_SCHEDULE, "/fhir/Organization/1/$gpc.getschedule");
+        put(InteractionId.OPERATION_GPC_REGISTER_PATIENT, "/fhir/Patient/$gpc.registerpatient");
+        put(InteractionId.REST_CREATE_APPOINTMENT, "/fhir/Appointment");
+        put(InteractionId.REST_CREATE_ORDER, "/fhir/Order");
+        put(InteractionId.REST_READ_APPOINTMENT, "/fhir/Appointment/%ID%");
+        put(InteractionId.REST_READ_LOCATION, "/fhir/Location/%ID%");
+        put(InteractionId.REST_READ_METADATA, "/fhir/metadata");
+        put(InteractionId.REST_READ_ORGANIZATION, "/fhir/Organization/%ID%");
+        put(InteractionId.REST_READ_PATIENT, "/fhir/Patient/%ID%");
+        put(InteractionId.REST_READ_PRACTITIONER, "/fhir/Practitioner/%ID%");
+        put(InteractionId.REST_SEARCH_LOCATION, "/fhir/Location");
+        put(InteractionId.REST_SEARCH_ORGANIZATION, "/fhir/Organization");
+        put(InteractionId.REST_SEARCH_PATIENT, "/fhir/Patient");
+        put(InteractionId.REST_SEARCH_PATIENT_APPOINTMENTS, "/fhir/Patient/%ID%/Appointment");
+        put(InteractionId.REST_SEARCH_PRACTITIONER, "/fhir/Practitioner");
+        put(InteractionId.REST_UPDATE_APPOINTMENT, "/fhir/Appointment/%ID%");
     }};
 
     @Autowired
@@ -129,6 +130,10 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         String url = httpRequest.getRequestURI();
         if (!url.equals(INTERACTION_MAP.getOrDefault(interactionIdHeader, "INVALID").replace("%ID%", String.valueOf(getIdFromUrl(url))))) {
             throwInvalidRequestException("InteractionId Incorrect");
+        }
+
+        if (interactionIdHeader.equals(InteractionId.REST_SEARCH_ORGANIZATION) && null == httpRequest.getParameter("identifier")) {
+            throwInvalidRequestException("No identifier parameter found!");
         }
 
         return true;

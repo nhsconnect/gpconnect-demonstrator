@@ -78,6 +78,7 @@ import uk.gov.hscic.util.NhsCodeValidator;
 public class PatientResourceProvider implements IResourceProvider {
     private static final String TEMPORARY_RESIDENT_REGISTRATION_TYPE = "T";
     private static final String ACTIVE_REGISTRATION_STATUS = "A";
+    private static final int ENCOUNTERS_SUMMARY_LIMIT = 3;
 
     private static final List<String> MANDATORY_PARAM_NAMES = Arrays.asList("patientNHSNumber", "recordSection");
     private static final List<String> PERMITTED_PARAM_NAMES = new ArrayList<String>(MANDATORY_PARAM_NAMES) {{
@@ -279,7 +280,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 page.addPageSection(pageSectionFactory.getMEDCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, ENCOUNTERS_SUMMARY_LIMIT));
 
                 break;
 
@@ -292,7 +293,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
             case "ENC":
                 page = new Page("Encounters", sectionName);
-                page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, Integer.MAX_VALUE));
 
                 break;
 

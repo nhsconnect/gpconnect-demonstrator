@@ -22,7 +22,9 @@ INSERT INTO gpconnect.encounters
   (nhsNumber,sectionDate,encounterDate,title,details)
 VALUES
   (9476719931,'2015-05-01 12:17:00','2015-05-01 12:17:00',"Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)","Haemoglobin A1c level - IFCC standardised 20.5 mmol/mol.<br />Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 10ml vials"),
-  (9476719931,'2016-07-01 12:17:00','2016-07-01 12:17:00',"Miss Tanya Turnpike (Practice Nurse) - Dr Johnson and Partners (J12345)","Result : Full blood count - FBC - Normal - No Action.");
+  (9476719931,'2016-07-01 12:17:00','2016-07-01 12:17:00',"Miss Tanya Turnpike (Practice Nurse) - Dr Johnson and Partners (J12345)","Result : Full blood count - FBC - Normal - No Action."),
+  (9476719931,'2016-07-01 12:17:00','2016-07-01 12:17:00',"Miss Messenger","Result : All good - No Action."),
+  (9476719931,'2016-07-01 12:17:00','2016-07-01 12:17:00',"Mr Pickles","Result : Hmm, something maybe wrong - Possible Action required.");
 
 INSERT INTO gpconnect.immunisations
   (nhsNumber,dateOfVac,vaccination,part,contents,details)

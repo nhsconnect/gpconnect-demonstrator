@@ -94,14 +94,11 @@ public class PageSectionFactory {
                 requestedFromDate, requestedToDate);
     }
 
-    public PageSection getENCPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
-        List<EncounterData> encounterList = encounterSearch.findAllEncounterHTMLTables(nhsNumber, fromDate, toDate);
+    public PageSection getENCPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate, int limit) {
         List<List<Object>> encounterRows = new ArrayList<>();
 
-        if (encounterList != null) {
-            for (EncounterData encounter : encounterList) {
-                encounterRows.add(Arrays.asList(encounter.getEncounterDate(), encounter.getTitle(), encounter.getDetails()));
-            }
+        for (EncounterData encounter : encounterSearch.findEncounterData(nhsNumber, fromDate, toDate, limit)) {
+            encounterRows.add(Arrays.asList(encounter.getEncounterDate(), encounter.getTitle(), encounter.getDetails()));
         }
 
         return new PageSection("Encounters",

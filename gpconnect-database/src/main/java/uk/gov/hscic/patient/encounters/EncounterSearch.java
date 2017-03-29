@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.model.patient.EncounterData;
 
@@ -13,16 +15,18 @@ public class EncounterSearch {
     @Autowired
     private EncounterRepository encounterRepository;
 
-    public List<EncounterData> findAllEncounterHTMLTables(final String patientId, Date fromDate, Date toDate) {
+    public List<EncounterData> findEncounterData(final String patientId, Date fromDate, Date toDate, int limit) {
+        Pageable pageable = new PageRequest(0, limit);
+
         if (fromDate != null && toDate != null) {
-            return sortItems(encounterRepository.findBynhsNumberAndSectionDateAfterAndSectionDateBeforeOrderBySectionDateDesc(patientId, fromDate, toDate));
+            return sortItems(encounterRepository.findByNhsNumberAndSectionDateAfterAndSectionDateBeforeOrderBySectionDateDesc(patientId, fromDate, toDate, pageable));
         } else if (fromDate != null) {
-            return sortItems(encounterRepository.findBynhsNumberAndSectionDateAfterOrderBySectionDateDesc(patientId, fromDate));
+            return sortItems(encounterRepository.findByNhsNumberAndSectionDateAfterOrderBySectionDateDesc(patientId, fromDate, pageable));
         } else if (toDate != null) {
-            return sortItems(encounterRepository.findBynhsNumberAndSectionDateBeforeOrderBySectionDateDesc(patientId, toDate));
+            return sortItems(encounterRepository.findByNhsNumberAndSectionDateBeforeOrderBySectionDateDesc(patientId, toDate, pageable));
         }
 
-        return sortItems(encounterRepository.findBynhsNumberOrderBySectionDateDesc(patientId));
+        return sortItems(encounterRepository.findByNhsNumberOrderBySectionDateDesc(patientId, pageable));
     }
 
     private List<EncounterData> sortItems(List<EncounterEntity> encounterEntities) {

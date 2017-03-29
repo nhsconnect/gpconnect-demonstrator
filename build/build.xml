@@ -7,36 +7,32 @@
 <target name="build-run" depends="build, run">
 </target>
 
-<property name="username" value="${legacy.datasource.username}" />
-<property name="password" value="${legacy.datasource.password}" />
-<property name="database" value="${legacy.datasource.schema}" />
-
 <target name="sql">
 	<exec executable="mysql" dir="./config/sql">
-		<arg value="-u${username}" />
-		<arg value="-p${password}" />
-		<arg value="-D${database}" />
+		<arg value="-u${legacy.datasource.username}" />
+		<arg value="-p${legacy.datasource.password}" />
+		<arg value="-D${legacy.datasource.schema}" />
 		<arg value="-e source create_database.sql" />
 	</exec>
         <exec executable="mysql" dir="./config/sql">
-                <arg value="-u${username}" />
-                <arg value="-p${password}" />
-                <arg value="-D${database}" />
+                <arg value="-u${legacy.datasource.username}" />
+                <arg value="-p${legacy.datasource.password}" />
+                <arg value="-D${legacy.datasource.schema}" />
                 <arg value="-e source create_tables.sql" />
         </exec>
-        
-  	<apply executable="mysql" parallel="false">
-    		<fileset dir="./config/sql" casesensitive="yes">
-      			<include name="**/*.sql"/>
-      			<exclude name="**/*create*"/>
-    		</fileset>
-		<arg value="-u${username}" />
-                <arg value="-p${password}" />
-                <arg value="-D${database}" />
-                <arg value="-e source" />
-		<targetfile />
-		<mapper type="identity" />
-  	</apply>
+
+	<sql
+        driver="com.mysql.jdbc.Driver"
+    	url="jdbc:mysql://${legacy.datasource.host}/${legacy.datasource.schema}"
+    	userid="${legacy.datasource.username}"
+    	password="${legacy.datasource.password}">
+		<path>
+                <fileset dir="./config/sql" casesensitive="yes">
+                        <include name="**/*.sql"/>
+                        <exclude name="**/*create*"/>
+                </fileset>
+		</path>
+	</sql>
 </target>
 
 <target name="install-grunt">

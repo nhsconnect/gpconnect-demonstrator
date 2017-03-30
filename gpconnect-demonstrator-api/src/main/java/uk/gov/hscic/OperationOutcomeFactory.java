@@ -13,6 +13,7 @@ public class OperationOutcomeFactory {
     public static BaseServerResponseException buildOperationOutcomeException(BaseServerResponseException exception, String code, IssueTypeEnum issueTypeEnum) {
         CodeableConceptDt codeableConceptDt = new CodeableConceptDt(SystemURL.VS_GPC_ERROR_WARNING_CODE, code)
                 .setText(exception.getMessage());
+        codeableConceptDt.getCodingFirstRep().setDisplay(code);
 
         OperationOutcome operationOutcome = new OperationOutcome();
 

@@ -1,5 +1,6 @@
 package uk.gov.hscic.order;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class OrderRestController {
     @PostMapping("/order")
     public void saveSentOrders(@RequestBody OrderDetail orderDetail) {
         orderDetail.setRecieved(false);
-
+        orderDetail.setOrderDate(new Date());
         orderStore.saveOrder(orderDetail);
     }
 }

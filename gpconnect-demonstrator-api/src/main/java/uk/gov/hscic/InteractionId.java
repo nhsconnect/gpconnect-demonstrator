@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class InteractionId {
-    
+
     private InteractionId() { }
 
     private static final String BASE = "urn:nhs:names:services:gpconnect:fhir:";
@@ -42,10 +42,9 @@ public final class InteractionId {
     public static final String REST_SEARCH_PRACTITIONER                = BASE + "rest:search:practitioner";
     public static final String REST_UPDATE_APPOINTMENT                 = BASE + "rest:update:appointment";
 
-    public static final List<String> SEARCH_INTERACTIONS = Arrays.asList(
+    public static final List<String> IDENTIFIER_INTERACTIONS = Arrays.asList(
             REST_SEARCH_LOCATION,
             REST_SEARCH_ORGANIZATION,
             REST_SEARCH_PATIENT,
-            REST_SEARCH_PATIENT_APPOINTMENTS,
             REST_SEARCH_PRACTITIONER);
 }

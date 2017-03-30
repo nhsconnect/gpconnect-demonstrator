@@ -134,7 +134,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             throwInvalidRequestException("InteractionId Incorrect");
         }
 
-        if (InteractionId.SEARCH_INTERACTIONS.contains(interactionIdHeader)) {
+        if (InteractionId.IDENTIFIER_INTERACTIONS.contains(interactionIdHeader)) {
             String identifier = httpRequest.getParameter(SystemParameter.IDENTIFIER);
 
             if (null == identifier) {

@@ -280,7 +280,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 page.addPageSection(pageSectionFactory.getMEDCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, ENCOUNTERS_SUMMARY_LIMIT));
+                page.addPageSection(pageSectionFactory.getENCPageSection("Last 3 Encounters", nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, ENCOUNTERS_SUMMARY_LIMIT));
 
                 break;
 
@@ -293,7 +293,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
             case "ENC":
                 page = new Page("Encounters", sectionName);
-                page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, Integer.MAX_VALUE));
+                page.addPageSection(pageSectionFactory.getENCPageSection("Encounters", nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, Integer.MAX_VALUE));
 
                 break;
 

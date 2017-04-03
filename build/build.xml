@@ -7,11 +7,16 @@
 <target name="build-run" depends="build, run">
 </target>
 
+<path id="classpath">
+<fileset dir="/usr/share/java">
+    <include name="*.jar" />
+</fileset>
+</path>
+
 <target name="sql">
 	<exec executable="mysql" dir="./config/sql">
 		<arg value="-u${legacy.datasource.username}" />
 		<arg value="-p${legacy.datasource.password}" />
-		<arg value="-D${legacy.datasource.schema}" />
 		<arg value="-e source create_database.sql" />
 	</exec>
         <exec executable="mysql" dir="./config/sql">
@@ -20,12 +25,12 @@
                 <arg value="-D${legacy.datasource.schema}" />
                 <arg value="-e source create_tables.sql" />
         </exec>
-
 	<sql
         driver="com.mysql.jdbc.Driver"
     	url="jdbc:mysql://${legacy.datasource.host}/${legacy.datasource.schema}"
     	userid="${legacy.datasource.username}"
-    	password="${legacy.datasource.password}">
+    	password="${legacy.datasource.password}"
+        classpathref="classpath">
 		<path>
                 <fileset dir="./config/sql" casesensitive="yes">
                         <include name="**/*.sql"/>

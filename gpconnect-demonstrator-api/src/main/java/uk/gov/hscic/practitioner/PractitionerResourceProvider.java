@@ -54,22 +54,22 @@ public class PractitionerResourceProvider  implements IResourceProvider {
     public List<Practitioner> getPractitionerByPractitionerUserId(@RequiredParam(name = Practitioner.SP_IDENTIFIER) TokenParam practitionerId) {
         PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerByUserId(practitionerId.getValue());
 
-        if (practitionerDetails != null) {
-            Practitioner practitioner = practitionerDetailsToPractitionerResourceConverter(practitionerDetails);
-            practitioner.setId(String.valueOf(practitionerDetails.getId()));
-            return Collections.singletonList(practitioner);
-        }
-
-        return Collections.emptyList();
+        return practitionerDetails == null
+                ? Collections.emptyList()
+                : Collections.singletonList(practitionerDetailsToPractitionerResourceConverter(practitionerDetails));
     }
 
     private Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails) {
-        Practitioner practitioner = new Practitioner();
+        Practitioner practitioner = new Practitioner()
+                .addIdentifier(new IdentifierDt(SystemURL.ID_SDS_USER_ID, practitionerDetails.getUserId()))
+                .addIdentifier(new IdentifierDt(SystemURL.ID_SDS_ROLE_PROFILE_ID, practitionerDetails.getRoleId()));
+
         practitioner.setId(new IdDt(practitionerDetails.getId()));
-        practitioner.getMeta().setLastUpdated(practitionerDetails.getLastUpdated());
-        practitioner.getMeta().setVersionId(String.valueOf(practitionerDetails.getLastUpdated().getTime()));
-        practitioner.addIdentifier(new IdentifierDt(SystemURL.ID_SDS_USER_ID, practitionerDetails.getUserId()));
-        practitioner.addIdentifier(new IdentifierDt(SystemURL.ID_SDS_ROLE_PROFILE_ID, practitionerDetails.getRoleId()));
+
+        practitioner.getMeta()
+                .setLastUpdated(practitionerDetails.getLastUpdated())
+                .setVersionId(String.valueOf(practitionerDetails.getLastUpdated().getTime()))
+                .addProfile(SystemURL.SD_GPC_PRACTITIONER);
 
         HumanNameDt name = new HumanNameDt()
                 .addFamily(practitionerDetails.getNameFamily())

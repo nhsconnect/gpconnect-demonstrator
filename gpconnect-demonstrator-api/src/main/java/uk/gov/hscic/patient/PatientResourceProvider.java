@@ -416,8 +416,6 @@ public class PatientResourceProvider implements IResourceProvider {
                         SystemCode.REFERENCE_NOT_FOUND, IssueTypeEnum.NOT_FOUND);
             }
 
-            practitioner.getMeta().addProfile(SystemURL.SD_GPC_PRACTITIONER);
-
             bundle.addEntry(new Bundle.Entry().setResource(practitioner).setFullUrl(id));
 
             IdDt organizationId = practitioner.getPractitionerRoleFirstRep().getManagingOrganization().getReference();

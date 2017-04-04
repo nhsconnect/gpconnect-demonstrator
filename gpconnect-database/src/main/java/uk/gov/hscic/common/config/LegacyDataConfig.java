@@ -1,8 +1,7 @@
 package uk.gov.hscic.common.config;
 
 import com.mysql.jdbc.Driver;
-import javax.sql.DataSource;
-import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +31,7 @@ public class LegacyDataConfig {
 
     @Bean(destroyMethod = "close")
     public DataSource legacyDataSource() {
-        final BasicDataSource dataSource = new BasicDataSource();
+        final DataSource dataSource = new DataSource();
 
         dataSource.setDriverClassName(Driver.class.getName());
         dataSource.setUrl("jdbc:" + vendor + "://" + host + ":" + port + "/" + schema);

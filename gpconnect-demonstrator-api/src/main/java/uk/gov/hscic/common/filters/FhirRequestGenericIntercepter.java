@@ -162,6 +162,13 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
                     break;
 
+                case InteractionId.REST_SEARCH_PRACTITIONER:
+                    if (!SystemURL.ID_SDS_USER_ID.equals(identifierParts[0])) {
+                        throwInvalidRequestException("Bad system code: " + identifierParts[0]);
+                    }
+
+                    break;
+
                 default:
                     // Fine for now, but this eventually needs implementing for all options.
             }

@@ -23,8 +23,11 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -57,7 +60,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
             throw new InternalErrorException("No organization details found for organization ID: " + organizationId.getIdPart(), operationalOutcome);
         }
 
-        return organizaitonDetailsToOrganizationResourceConverter(organizationDetails);
+        return convertOrganizaitonDetailsListToOrganizationList(Collections.singletonList(organizationDetails)).get(0);
     }
 
     @Search
@@ -70,16 +73,10 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
         switch (tokenParam.getSystem()) {
             case SystemURL.ID_ODS_ORGANIZATION_CODE:
-                return organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue())
-                        .stream()
-                        .map(this::organizaitonDetailsToOrganizationResourceConverter)
-                        .collect(Collectors.toList());
+                return convertOrganizaitonDetailsListToOrganizationList(organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue()));
 
             case SystemURL.ID_ODS_SITE_CODE:
-                return organizationSearch.findOrganizationDetailsBySiteODSCode(tokenParam.getValue())
-                        .stream()
-                        .map(this::organizaitonDetailsToOrganizationResourceConverter)
-                        .collect(Collectors.toList());
+                return convertOrganizaitonDetailsListToOrganizationList(organizationSearch.findOrganizationDetailsBySiteODSCode(tokenParam.getValue()));
 
             default:
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -125,19 +122,29 @@ public class OrganizationResourceProvider implements IResourceProvider {
         return bundle;
     }
 
-    private Organization organizaitonDetailsToOrganizationResourceConverter(OrganizationDetails organizationDetails) {
-        Organization organization = new Organization()
-                .setName(organizationDetails.getOrgName())
-                .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_ORGANIZATION_CODE, organizationDetails.getOrgCode()))
-                .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_SITE_CODE, organizationDetails.getSiteCode()));
+    private List<Organization> convertOrganizaitonDetailsListToOrganizationList(List<OrganizationDetails> organizationDetails) {
+        Map<String, Organization> map = new HashMap<>();
 
-        organization.setId(String.valueOf(organizationDetails.getId()));
+        for (OrganizationDetails organizationDetail : organizationDetails) {
+            if (map.containsKey(organizationDetail.getOrgCode())) {
+                map.get(organizationDetail.getOrgCode()).addIdentifier(new IdentifierDt(SystemURL.ID_ODS_SITE_CODE, organizationDetail.getSiteCode()));
+            } else {
+                Organization organization = new Organization()
+                        .setName(organizationDetail.getOrgName())
+                        .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_ORGANIZATION_CODE, organizationDetail.getOrgCode()))
+                        .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_SITE_CODE, organizationDetail.getSiteCode()));
 
-        organization.getMeta()
-                .addProfile(SystemURL.SD_GPC_ORGANIZATION)
-                .setLastUpdated(organizationDetails.getLastUpdated())
-                .setVersionId(String.valueOf(organizationDetails.getLastUpdated().getTime()));
+                organization.setId(String.valueOf(organizationDetail.getId()));
 
-        return organization;
+                organization.getMeta()
+                        .addProfile(SystemURL.SD_GPC_ORGANIZATION)
+                        .setLastUpdated(organizationDetail.getLastUpdated())
+                        .setVersionId(String.valueOf(organizationDetail.getLastUpdated().getTime()));
+
+                map.put(organizationDetail.getOrgCode(), organization);
+            }
+        }
+
+        return new ArrayList<>(map.values());
     }
 }

@@ -235,6 +235,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
+        if (theException instanceof InvalidRequestException && theException.getMessage().contains("non-repeatable parameter")) {
+            return OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(theException.getMessage()),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
+
         if (theException instanceof InvalidRequestException && theException.getMessage().contains("InvalidResourceType")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()),

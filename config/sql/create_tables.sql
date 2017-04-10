@@ -93,7 +93,7 @@ CREATE TABLE gpconnect.general_practitioners (
 CREATE TABLE gpconnect.practitioners (
   id                BIGINT       NOT NULL AUTO_INCREMENT,
   userid            VARCHAR(30)  NULL,
-  p_role_id         VARCHAR(30)  NULL,
+  p_role_ids        VARCHAR(30)  NOT NULL,
   p_name_family     VARCHAR(100) NULL,
   p_name_given      VARCHAR(100) NULL,
   p_name_prefix     VARCHAR(20)  NULL,

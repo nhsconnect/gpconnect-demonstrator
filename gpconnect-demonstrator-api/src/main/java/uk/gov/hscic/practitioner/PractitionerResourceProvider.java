@@ -18,9 +18,9 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
@@ -52,17 +52,21 @@ public class PractitionerResourceProvider  implements IResourceProvider {
 
     @Search
     public List<Practitioner> getPractitionerByPractitionerUserId(@RequiredParam(name = Practitioner.SP_IDENTIFIER) TokenParam practitionerId) {
-        PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerByUserId(practitionerId.getValue());
-
-        return practitionerDetails == null
-                ? Collections.emptyList()
-                : Collections.singletonList(practitionerDetailsToPractitionerResourceConverter(practitionerDetails));
+        return practitionerSearch.findPractitionerByUserId(practitionerId.getValue())
+                .stream()
+                .map(this::practitionerDetailsToPractitionerResourceConverter)
+                .collect(Collectors.toList());
     }
 
     private Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails) {
         Practitioner practitioner = new Practitioner()
-                .addIdentifier(new IdentifierDt(SystemURL.ID_SDS_USER_ID, practitionerDetails.getUserId()))
-                .addIdentifier(new IdentifierDt(SystemURL.ID_SDS_ROLE_PROFILE_ID, practitionerDetails.getRoleId()));
+                .addIdentifier(new IdentifierDt(SystemURL.ID_SDS_USER_ID, practitionerDetails.getUserId()));
+
+        practitionerDetails.getRoleIds()
+                .stream()
+                .distinct()
+                .map(roleId -> new IdentifierDt(SystemURL.ID_SDS_ROLE_PROFILE_ID, roleId))
+                .forEach(practitioner::addIdentifier);
 
         practitioner.setId(new IdDt(practitionerDetails.getId()));
 

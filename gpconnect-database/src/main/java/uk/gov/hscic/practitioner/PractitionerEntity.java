@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "practitioners")
@@ -17,41 +19,42 @@ public class PractitionerEntity {
     private Long id;
 
     @Column(name = "userid")
-    private String userid;
-    
-    @Column(name = "p_role_id")
-    private String p_role_id;
-    
+    private String userId;
+
+    @Column(name = "p_role_ids")
+    private String roleIds;
+
     @Column(name = "p_name_family")
-    private String p_name_family;
-    
+    private String nameFamily;
+
     @Column(name = "p_name_given")
-    private String p_name_given;
-    
+    private String nameGiven;
+
     @Column(name = "p_name_prefix")
-    private String p_name_prefix;
-    
+    private String namePrefix;
+
     @Column(name = "p_gender")
-    private String p_gender;
-    
+    private String gender;
+
     @Column(name = "p_organization_id")
-    private Long p_organization_id;
-    
+    private Long organizationId;
+
     @Column(name = "p_role_code")
-    private String p_role_code;
-    
+    private String roleCode;
+
     @Column(name = "p_role_display")
-    private String p_role_display;
-    
+    private String roleDisplay;
+
     @Column(name = "p_com_code")
-    private String p_com_code;
-    
+    private String comCode;
+
     @Column(name = "p_com_display")
-    private String p_com_display;
+    private String comDisplay;
 
     @Column(name = "lastUpdated")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdated;
-    
+
     public Long getId() {
         return id;
     }
@@ -60,92 +63,92 @@ public class PractitionerEntity {
         this.id = id;
     }
 
-    public String getUserid() {
-        return userid;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getP_role_id() {
-        return p_role_id;
+    public String getRoleIds() {
+        return roleIds;
     }
 
-    public void setP_role_id(String p_role_id) {
-        this.p_role_id = p_role_id;
+    public void setRoleIds(String roleIds) {
+        this.roleIds = roleIds;
     }
 
-    public String getP_name_family() {
-        return p_name_family;
+    public String getNameFamily() {
+        return nameFamily;
     }
 
-    public void setP_name_family(String p_name_family) {
-        this.p_name_family = p_name_family;
+    public void setNameFamily(String nameFamily) {
+        this.nameFamily = nameFamily;
     }
 
-    public String getP_name_given() {
-        return p_name_given;
+    public String getNameGiven() {
+        return nameGiven;
     }
 
-    public void setP_name_given(String p_name_given) {
-        this.p_name_given = p_name_given;
+    public void setNameGiven(String nameGiven) {
+        this.nameGiven = nameGiven;
     }
 
-    public String getP_name_prefix() {
-        return p_name_prefix;
+    public String getNamePrefix() {
+        return namePrefix;
     }
 
-    public void setP_name_prefix(String p_name_prefix) {
-        this.p_name_prefix = p_name_prefix;
+    public void setNamePrefix(String namePrefix) {
+        this.namePrefix = namePrefix;
     }
 
-    public String getP_gender() {
-        return p_gender;
+    public String getGender() {
+        return gender;
     }
 
-    public void setP_gender(String p_gender) {
-        this.p_gender = p_gender;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public Long getP_organization_id() {
-        return p_organization_id;
+    public Long getOrganizationId() {
+        return organizationId;
     }
 
-    public void setP_organization_id(Long p_organization_id) {
-        this.p_organization_id = p_organization_id;
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
     }
 
-    public String getP_role_code() {
-        return p_role_code;
+    public String getRoleCode() {
+        return roleCode;
     }
 
-    public void setP_role_code(String p_role_code) {
-        this.p_role_code = p_role_code;
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
     }
 
-    public String getP_role_display() {
-        return p_role_display;
+    public String getRoleDisplay() {
+        return roleDisplay;
     }
 
-    public void setP_role_display(String p_role_display) {
-        this.p_role_display = p_role_display;
+    public void setRoleDisplay(String roleDisplay) {
+        this.roleDisplay = roleDisplay;
     }
 
-    public String getP_com_code() {
-        return p_com_code;
+    public String getComCode() {
+        return comCode;
     }
 
-    public void setP_com_code(String p_com_code) {
-        this.p_com_code = p_com_code;
+    public void setComCode(String comCode) {
+        this.comCode = comCode;
     }
 
-    public String getP_com_display() {
-        return p_com_display;
+    public String getComDisplay() {
+        return comDisplay;
     }
 
-    public void setP_com_display(String p_com_display) {
-        this.p_com_display = p_com_display;
+    public void setComDisplay(String comDisplay) {
+        this.comDisplay = comDisplay;
     }
 
     public Date getLastUpdated() {

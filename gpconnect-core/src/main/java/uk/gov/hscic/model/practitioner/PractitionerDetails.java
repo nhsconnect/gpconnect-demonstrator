@@ -2,11 +2,12 @@ package uk.gov.hscic.model.practitioner;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class PractitionerDetails implements Serializable {
     private Long id;
     private String userId;
-    private String roleId;
+    private List<String> roleIds;
     private String nameFamily;
     private String nameGiven;
     private String namePrefix;
@@ -34,12 +35,12 @@ public class PractitionerDetails implements Serializable {
         this.userId = userId;
     }
 
-    public String getRoleId() {
-        return roleId;
+    public List<String> getRoleIds() {
+        return roleIds;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
+    public void setRoleIds(List<String> roleIds) {
+        this.roleIds = roleIds;
     }
 
     public String getNameFamily() {

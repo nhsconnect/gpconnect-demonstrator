@@ -1,5 +1,7 @@
 package uk.gov.hscic.practitioner;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.model.practitioner.PractitionerDetails;
@@ -19,11 +21,10 @@ public class PractitionerSearch {
                 : transformer.transform(item);
     }
 
-    public PractitionerDetails findPractitionerByUserId(final String practitionerUserId) {
-        final PractitionerEntity practitioner = practitionerRepository.findByuserid(practitionerUserId);
-
-        return practitioner == null
-                ? null
-                : transformer.transform(practitioner);
+    public List<PractitionerDetails> findPractitionerByUserId(final String practitionerUserId) {
+        return practitionerRepository.findByUserId(practitionerUserId)
+                .stream()
+                .map(transformer::transform)
+                .collect(Collectors.toList());
     }
 }

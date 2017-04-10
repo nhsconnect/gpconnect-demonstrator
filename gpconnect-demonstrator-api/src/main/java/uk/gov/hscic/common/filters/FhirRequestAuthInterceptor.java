@@ -114,9 +114,29 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         }
 
         RequestedRecord requestedRecord = webToken.getRequestedRecord();
-        String requestedNhsNumber = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);
+        String jwtNhsNumber = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);
 
         switch (requestDetails.getRequestPath()) {
+            case "Patient":
+                if (!"Patient".equals(requestedRecord.getResourceType())) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("Invalid resource type, should be Patient but was " + requestedRecord.getResourceType()),
+                            SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                }
+
+                String identifierValue = requestDetails
+                        .getParameters()
+                        .get(SystemParameter.IDENTIFIER)[0]
+                        .split("\\|")[1];
+
+                if (!StringUtils.equals(jwtNhsNumber, identifierValue)) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("NHS number in identifier header doesn't match the header"),
+                            SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                }
+
+                break;
+
             case "Patient/$gpc.getcarerecord":
                 if (!"Patient".equals(requestedRecord.getResourceType())) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -124,14 +144,14 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                             SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
                 }
 
-                validateNhsNumberInBodyIsSameAsHeader(requestedNhsNumber, requestDetails.loadRequestContents(), StringUtils.contains(contentType, "xml"));
+                validateNhsNumberInBodyIsSameAsJWT(jwtNhsNumber, requestDetails.loadRequestContents(), StringUtils.contains(contentType, "xml"));
 
                 break;
 
             case "Organization":
                 String identifierSystem = requestDetails
                         .getParameters()
-                        .getOrDefault(SystemParameter.IDENTIFIER, new String[] {""})[0]
+                        .get(SystemParameter.IDENTIFIER)[0]
                         .split("\\|")[0];
 
                 if (!PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS.contains(identifierSystem)) {
@@ -147,10 +167,10 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
         if ("Patient".equals(requestedRecord.getResourceType())) {
             // If it is a patient orientated request
-            if (!NhsCodeValidator.nhsNumberValid(requestedNhsNumber)) {
+            if (!NhsCodeValidator.nhsNumberValid(jwtNhsNumber)) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException("Invalid NHS number: " + requestedNhsNumber),
-                        SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.NOT_FOUND);
+                        new InvalidRequestException("Invalid NHS number: " + jwtNhsNumber),
+                        SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
             }
         } else {
             // If it is an organization orientated request
@@ -189,7 +209,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         }
     }
 
-    private static void validateNhsNumberInBodyIsSameAsHeader(String nhsNumberFromHeader, byte[] requestDetailsBody, boolean xmlContent) {
+    private static void validateNhsNumberInBodyIsSameAsJWT(String nhsNumberFromHeader, byte[] requestDetailsBody, boolean xmlContent) {
         String nhsNumberFromBody;
 
         try {

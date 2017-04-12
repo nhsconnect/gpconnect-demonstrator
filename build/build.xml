@@ -57,7 +57,7 @@
 		<arg line="update" />
 	</exec>
 	<exec executable="grunt" dir="./webapp">
-                <arg line="build --force" />
+                <arg line="build" />
         </exec>
 </target>
 

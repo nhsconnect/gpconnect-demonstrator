@@ -150,21 +150,21 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             switch (interactionIdHeader) {
                 case InteractionId.REST_SEARCH_PATIENT:
                     if (!SystemURL.ID_NHS_NUMBER.equals(identifierParts[0])) {
-                        throwInvalidRequestException("Bad system code: " + identifierParts[0]);
+                        throwInvalidIdentifierSystemException("Bad system code: " + identifierParts[0]);
                     }
 
                     break;
 
                 case InteractionId.REST_SEARCH_ORGANIZATION:
                     if (!SystemURL.ID_ODS_ORGANIZATION_CODE.equals(identifierParts[0]) && !SystemURL.ID_ODS_SITE_CODE.equals(identifierParts[0])) {
-                        throwInvalidRequestException("Bad system code: " + identifierParts[0]);
+                        throwInvalidIdentifierSystemException("Bad system code: " + identifierParts[0]);
                     }
 
                     break;
 
                 case InteractionId.REST_SEARCH_PRACTITIONER:
                     if (!SystemURL.ID_SDS_USER_ID.equals(identifierParts[0])) {
-                        throwInvalidRequestException("Bad system code: " + identifierParts[0]);
+                        throwInvalidIdentifierSystemException("Bad system code: " + identifierParts[0]);
                     }
 
                     break;
@@ -181,6 +181,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         throw OperationOutcomeFactory.buildOperationOutcomeException(
                 new InvalidRequestException(exceptionMessage),
                 SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+    }
+
+    private static void throwInvalidIdentifierSystemException(String exceptionMessage) {
+        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                new InvalidRequestException(exceptionMessage),
+                SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueTypeEnum.INVALID_CONTENT);
     }
 
     private static void throwInvalidRequestException(String exceptionMessage) {

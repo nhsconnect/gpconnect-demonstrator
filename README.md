@@ -184,7 +184,7 @@ e.g.:
 ```
 
 ### Data clear down
-For Appointments and Tasks there is a clear down process which is scheduled using the "legacy.datasource.cleardown.cron" property. When the task runs it will delete all GP Connect Demonstrator Tasks previously added. It will also delete all Appointments and remove the currently available slots. It will then refresh the available slots using the "slots.txt" sample data file.
+For Appointments and Tasks there is a clear down process which is scheduled using the "datasource.cleardown.cron" property. When the task runs it will delete all GP Connect Demonstrator Tasks previously added. It will also delete all Appointments and remove the currently available slots. It will then refresh the available slots using the "slots.txt" sample data file.
 
 This clear down process will also run each time the application starts.
 

@@ -1,4 +1,3 @@
-/* Create a new poc_legacy database and begin configuration */
 DROP DATABASE IF EXISTS gpconnect;
 CREATE DATABASE gpconnect DEFAULT CHARACTER SET utf8;
 

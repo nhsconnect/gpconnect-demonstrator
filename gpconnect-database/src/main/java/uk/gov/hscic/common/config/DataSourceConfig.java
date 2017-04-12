@@ -1,24 +1,8 @@
-/*
- * Copyright 2015 Ripple OSI
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package uk.gov.hscic.common.config;
 
+import com.mysql.jdbc.Driver;
 import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,24 +12,53 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@EnableScheduling
 @EnableTransactionManagement
-@EnableJpaRepositories(entityManagerFactoryRef = "legacyEntityManagerFactory",
+@EnableJpaRepositories(entityManagerFactoryRef = "entityManagerFactory",
                        transactionManagerRef = "transactionManager",
                        basePackages = "uk.gov.hscic")
-public class LegacyJPATransactionalConfig {
+public class DataSourceConfig {
 
-    @Autowired
-    private DataSource legacyDataSource;
-
-    @Value("${legacy.datasource.vendor:mysql}")
+    @Value("${datasource.vendor:mysql}")
     private String vendor;
 
-    @Value("${legacy.datasource.showSql:false}")
+    @Value("${datasource.host:127.0.0.1}")
+    private String host;
+
+    @Value("${datasource.port:3306}")
+    private String port;
+
+    @Value("${datasource.schema:gpconnect}")
+    private String schema;
+
+    @Value("${datasource.username:answer}")
+    private String username;
+
+    @Value("${datasource.password:answer99q}")
+    private String password;
+
+    @Value("${datasource.showSql:false}")
     private boolean showSql;
+
+    @Bean(destroyMethod = "close")
+    public DataSource dataSource() {
+        final DataSource dataSource = new DataSource();
+
+        dataSource.setDriverClassName(Driver.class.getName());
+        dataSource.setUrl("jdbc:" + vendor + "://" + host + ":" + port + "/" + schema);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+
+        dataSource.setValidationQuery("select 1 as dbcp_connection_test");
+        dataSource.setTestOnBorrow(true);
+
+        return dataSource;
+    }
 
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
@@ -53,7 +66,7 @@ public class LegacyJPATransactionalConfig {
     }
 
     @Bean
-    public EntityManagerFactory legacyEntityManagerFactory() {
+    public EntityManagerFactory entityManagerFactory(DataSource dataSource) {
         final Database database = Database.valueOf(vendor.toUpperCase());
 
         final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
@@ -64,17 +77,19 @@ public class LegacyJPATransactionalConfig {
         final LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("uk.gov.hscic");
-        factory.setDataSource(legacyDataSource);
+        factory.setDataSource(dataSource);
         factory.afterPropertiesSet();
 
         return factory.getObject();
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager() {
-        final JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(legacyEntityManagerFactory());
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+        return new JpaTransactionManager(entityManagerFactory);
+    }
 
-        return transactionManager;
+    @Bean
+    public RefreshData getRefreshData() {
+        return new RefreshData();
     }
 }

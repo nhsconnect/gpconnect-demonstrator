@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.appointment.appointment.AppointmentStore;
-import uk.gov.hscic.model.appointment.SlotDetail;
 import uk.gov.hscic.appointment.slot.SlotStore;
+import uk.gov.hscic.model.appointment.SlotDetail;
 import uk.gov.hscic.order.OrderStore;
 
 @Service
@@ -24,7 +24,7 @@ public class RefreshData {
     @Value("${config.path}")
     private String configPath;
 
-    @Value("${legacy.datasource.refresh.slots.filename}")
+    @Value("${datasource.refresh.slots.filename}")
     private String slotsFilename;
 
     @Autowired
@@ -37,7 +37,7 @@ public class RefreshData {
     private SlotStore slotStore;
 
     // Overnight cleardown of test data
-    @Scheduled(cron = "${legacy.datasource.cleardown.cron}")
+    @Scheduled(cron = "${datasource.cleardown.cron}")
     public void scheduledResetOfData() {
         clearTasks();
         resetAppointments();

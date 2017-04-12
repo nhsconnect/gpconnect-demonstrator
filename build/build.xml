@@ -1,0 +1,75 @@
+<project name="gpconnect" default="dist" basedir="../">
+<property file="config/gpconnect-demonstrator-api.properties"/>
+
+<target name="build" depends="sql, install-grunt, install-js-dependencies, build-java">
+</target>
+
+<target name="build-run" depends="build, run">
+</target>
+
+<path id="classpath">
+<fileset dir="/usr/share/java">
+    <include name="*.jar" />
+</fileset>
+</path>
+
+<target name="sql">
+	<exec executable="mysql" dir="./config/sql">
+		<arg value="-u${legacy.datasource.username}" />
+		<arg value="-p${legacy.datasource.password}" />
+		<arg value="-e source create_database.sql" />
+	</exec>
+        <exec executable="mysql" dir="./config/sql">
+                <arg value="-u${legacy.datasource.username}" />
+                <arg value="-p${legacy.datasource.password}" />
+                <arg value="-D${legacy.datasource.schema}" />
+                <arg value="-e source create_tables.sql" />
+        </exec>
+	<sql
+        driver="com.mysql.jdbc.Driver"
+    	url="jdbc:mysql://${legacy.datasource.host}/${legacy.datasource.schema}"
+    	userid="${legacy.datasource.username}"
+    	password="${legacy.datasource.password}"
+        classpathref="classpath">
+		<path>
+                <fileset dir="./config/sql" casesensitive="yes">
+                        <include name="**/*.sql"/>
+                        <exclude name="**/*create*"/>
+                </fileset>
+		</path>
+	</sql>
+</target>
+
+<target name="install-grunt">
+	<exec executable="sudo">
+		<arg line="npm install -g grunt-cli bower" />
+	</exec>
+</target>
+
+<target name="install-js-dependencies">
+	<exec executable="bower" dir="./webapp">
+		<arg line="install" />
+	</exec>
+	<exec executable="bower" dir="./webapp">
+		<arg line="update" />
+	</exec>
+	<exec executable="npm" dir="./webapp">
+		<arg line="update" />
+	</exec>
+	<exec executable="grunt" dir="./webapp">
+                <arg line="build --force" />
+        </exec>
+</target>
+
+<target name="build-java">
+        <exec executable="mvn">
+                <arg line="clean package" />
+        </exec>
+</target>
+
+<target name="run">
+        <exec executable="java">
+                <arg line="-jar gpconnect-demonstrator-api/target/gpconnect-demonstrator-api.war --server.port=19191 --config.path=config/" />
+        </exec>
+</target>
+</project>

@@ -135,16 +135,20 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         if (InteractionId.IDENTIFIER_INTERACTIONS.contains(interactionIdHeader)) {
-            String identifier = httpRequest.getParameter(SystemParameter.IDENTIFIER);
+            String[] identifiers = httpRequest.getParameterMap().get(SystemParameter.IDENTIFIER);
 
-            if (null == identifier) {
+            if (null == identifiers) {
                 throwBadRequestException("No identifier parameter found!");
             }
 
-            String[] identifierParts = identifier.split("\\|");
+            if (1 != identifiers.length) {
+                throwBadRequestException("Invalid quantity of identifier parameter found: " + identifiers.length);
+            }
+
+            String[] identifierParts = identifiers[0].split("\\|");
 
             if (identifierParts.length != 2 || StringUtils.isBlank(identifierParts[0]) || StringUtils.isBlank(identifierParts[1])) {
-                throwUnprocessableEntityException("Missing identifier value: " + identifier);
+                throwUnprocessableEntityException("Missing identifier value: " + identifiers[0]);
             }
 
             switch (interactionIdHeader) {

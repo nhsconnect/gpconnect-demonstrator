@@ -55,7 +55,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         put(InteractionId.CLAIM_PATIENT_PROCEDURES, "/fhir/Procedure");
         put(InteractionId.CLAIM_PATIENT_REFERRAL, "/fhir/Referral");
         put(InteractionId.OPERATION_GPC_GET_CARE_RECORD, "/fhir/Patient/$gpc.getcarerecord");
-        put(InteractionId.OPERATION_GPC_GET_SCHEDULE, "/fhir/Organization/1/$gpc.getschedule");
+        put(InteractionId.OPERATION_GPC_GET_SCHEDULE, "/fhir/Organization/%ID%/$gpc.getschedule");
         put(InteractionId.OPERATION_GPC_REGISTER_PATIENT, "/fhir/Patient/$gpc.registerpatient");
         put(InteractionId.REST_CREATE_APPOINTMENT, "/fhir/Appointment");
         put(InteractionId.REST_CREATE_ORDER, "/fhir/Order");

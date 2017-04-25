@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -91,24 +92,23 @@ public class OrganizationResourceProvider implements IResourceProvider {
         bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
         OperationOutcome operationOutcome = new OperationOutcome();
 
-        // params
-        List<Parameter> parameters = params.getParameter();
-        String planningHorizonStart = null;
-        String planningHorizonEnd = null;
+        List<PeriodDt> timePeriods = params.getParameter()
+                .stream()
+                .filter(parameter -> "timePeriod".equals(parameter.getName()))
+                .map(Parameter::getValue)
+                .map(PeriodDt.class::cast)
+                .collect(Collectors.toList());
 
-        for (int p = 0; p < parameters.size(); p++) {
-            Parameter parameter = parameters.get(p);
-            switch (parameter.getName()) {
-                case "timePeriod":
-                    PeriodDt timePeriod = (PeriodDt) parameter.getValue();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                    planningHorizonStart = dateFormat.format(timePeriod.getStart());
-                    planningHorizonEnd = dateFormat.format(timePeriod.getEnd());
-                    break;
-            }
+        if (1 != timePeriods.size()) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Invalid timePeriod parameter"),
+                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
 
-        if (organizationId != null && planningHorizonStart != null && planningHorizonEnd != null) {
+        String planningHorizonStart = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(timePeriods.get(0).getStart());
+        String planningHorizonEnd = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(timePeriods.get(0).getEnd());
+
+        if (organizationId != null) {
             getScheduleOperation.populateBundle(bundle, operationOutcome, organizationId, planningHorizonStart, planningHorizonEnd);
         } else {
             String msg = String.format("Not all of the mandatory parameters were provided - orgId - %s planningHorizonStart - %s planningHorizonEnd - %s", organizationId, planningHorizonStart, planningHorizonEnd);

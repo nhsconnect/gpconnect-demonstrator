@@ -131,7 +131,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         String url = httpRequest.getRequestURI();
         if (!url.equals(INTERACTION_MAP.getOrDefault(interactionIdHeader, "INVALID").replace("%ID%", String.valueOf(getIdFromUrl(url))))) {
-            throwInvalidRequestException("InteractionId Incorrect");
+            throwBadRequestException("InteractionId Incorrect");
         }
 
         if (InteractionId.IDENTIFIER_INTERACTIONS.contains(interactionIdHeader)) {
@@ -246,6 +246,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         if (theException instanceof InvalidRequestException && theException.getMessage().contains("non-repeatable parameter")) {
+            return OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(theException.getMessage()),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
+
+        if (theException instanceof InvalidRequestException && theException.getMessage().contains("header blank")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(theException.getMessage()),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);

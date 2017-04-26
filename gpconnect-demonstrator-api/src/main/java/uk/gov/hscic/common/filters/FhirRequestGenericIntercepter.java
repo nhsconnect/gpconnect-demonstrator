@@ -1,10 +1,12 @@
 package uk.gov.hscic.common.filters;
 
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+import ca.uhn.fhir.parser.DataFormatException;
 import ca.uhn.fhir.rest.method.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.MethodNotAllowedException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,8 +16,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -130,7 +130,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         String url = httpRequest.getRequestURI();
-        if (!url.equals(INTERACTION_MAP.getOrDefault(interactionIdHeader, "INVALID").replace("%ID%", String.valueOf(getIdFromUrl(url))))) {
+        if (!url.equals(getInteractionAndAddId(interactionIdHeader, url))) {
             throwBadRequestException("InteractionId Incorrect");
         }
 
@@ -226,6 +226,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
 
+        if (theException instanceof DataFormatException) {
+            return OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(theException.getMessage()),
+                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+        }
+
         if (theException instanceof MethodNotAllowedException && theException.getMessage().contains("request must use HTTP GET")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()),
@@ -266,12 +272,51 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         return super.preProcessOutgoingException(theRequestDetails, theException, theServletRequest);
     }
 
-    // This method finds the patient No which is different from the NHS number
-    private static Integer getIdFromUrl(String url) {
-        Matcher m = Pattern.compile("-?\\d+").matcher(url);
+    // This method finds the ID and inserts it
+    private static String getInteractionAndAddId(String interactionIdHeader, String url) {
+        String interaction = INTERACTION_MAP.getOrDefault(interactionIdHeader, "INVALID");
 
-        return m.find()
-                ? Integer.parseInt(m.group())
-                : 0;
+        if (interaction.contains("%ID%")) {
+            String[] strings = url.split("/");
+
+            if (strings.length > 3) {
+                if (!strings[3].matches("\\d+")) { // id must be a number
+                    String systemCode;
+
+                    switch (strings[2]) {
+                        case "Appointment":
+                            systemCode = SystemCode.APPOINTMENT_NOT_FOUND;
+                            break;
+
+                        case "Location":
+                            systemCode = SystemCode.LOCATION_NOT_FOUND;
+                            break;
+
+                        case "Organization":
+                            systemCode = SystemCode.ORGANISATION_NOT_FOUND;
+                            break;
+
+                        case "Patient":
+                            systemCode = SystemCode.PATIENT_NOT_FOUND;
+                            break;
+
+                        case "Practitioner":
+                            systemCode = SystemCode.PRACTITIONER_NOT_FOUND;
+                            break;
+
+                        default:
+                            systemCode = SystemCode.REFERENCE_NOT_FOUND;
+                    }
+
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new ResourceNotFoundException(strings[2] + "Id is not a number: " + strings[3]),
+                            systemCode, IssueTypeEnum.INVALID_CONTENT);
+                }
+
+                return interaction.replace("%ID%", strings[3]);
+            }
+        }
+
+        return interaction;
     }
 }

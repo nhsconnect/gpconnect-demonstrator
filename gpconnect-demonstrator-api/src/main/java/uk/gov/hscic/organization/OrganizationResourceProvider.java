@@ -3,13 +3,11 @@ package uk.gov.hscic.organization;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
-import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Organization;
 import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
@@ -20,9 +18,13 @@ import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -53,12 +55,14 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
     @Read()
     public Organization getOrganizationById(@IdParam IdDt organizationId) {
-        OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId.getIdPart());
+        String organizationIdString = organizationId.getIdPart();
+
+        OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(Long.parseLong(organizationIdString));
 
         if (organizationDetails == null) {
-            OperationOutcome operationalOutcome = new OperationOutcome();
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No organization details found for organization ID: " + organizationId.getIdPart());
-            throw new InternalErrorException("No organization details found for organization ID: " + organizationId.getIdPart(), operationalOutcome);
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new ResourceNotFoundException("No organization details found for organization ID: " + organizationIdString),
+                    SystemCode.ORGANISATION_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
         }
 
         return convertOrganizaitonDetailsListToOrganizationList(Collections.singletonList(organizationDetails)).get(0);
@@ -81,17 +85,13 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
             default:
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Invalid system code"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                        new InvalidRequestException("Invalid system code"),
+                        SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
     }
 
     @Operation(name = "$gpc.getschedule")
     public Bundle getSchedule(@IdParam IdDt organizationId, @ResourceParam Parameters params) {
-        Bundle bundle = new Bundle();
-        bundle.setType(BundleTypeEnum.SEARCH_RESULTS);
-        OperationOutcome operationOutcome = new OperationOutcome();
-
         List<PeriodDt> timePeriods = params.getParameter()
                 .stream()
                 .filter(parameter -> "timePeriod".equals(parameter.getName()))
@@ -102,24 +102,41 @@ public class OrganizationResourceProvider implements IResourceProvider {
         if (1 != timePeriods.size()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Invalid timePeriod parameter"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
-        String planningHorizonStart = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(timePeriods.get(0).getStart());
-        String planningHorizonEnd = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(timePeriods.get(0).getEnd());
-
-        if (organizationId != null) {
-            getScheduleOperation.populateBundle(bundle, operationOutcome, organizationId, planningHorizonStart, planningHorizonEnd);
-        } else {
-            String msg = String.format("Not all of the mandatory parameters were provided - orgId - %s planningHorizonStart - %s planningHorizonEnd - %s", organizationId, planningHorizonStart, planningHorizonEnd);
-            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(msg);
-
-            Entry operationOutcomeEntry = new Entry();
-            operationOutcomeEntry.setResource(operationOutcome);
-            bundle.addEntry(operationOutcomeEntry);
+        if (1 != params.getParameter().size()) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Invalid parameter quantity"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
-        return bundle;
+        try {
+            Bundle bundle = new Bundle().setType(BundleTypeEnum.SEARCH_RESULTS);
+
+            String planningHorizonStart = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(timePeriods.get(0).getStart());
+            String planningHorizonEnd = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(timePeriods.get(0).getEnd());
+
+            long daysBetween = ChronoUnit.DAYS.between(
+                    timePeriods.get(0).getStart().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                    timePeriods.get(0).getEnd().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+            if (daysBetween < 0L || daysBetween > 14L) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("Invalid timePeriods, was " + daysBetween + " days between (max is 14)"),
+                        SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+            }
+
+            getScheduleOperation.populateBundle(bundle, new OperationOutcome(), organizationId, planningHorizonStart, planningHorizonEnd);
+
+            return bundle;
+        } catch (BaseServerResponseException baseServerResponseException) {
+            throw baseServerResponseException; // Just rethrow it!
+        } catch (Exception e) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Invalid timePeriod parameter"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
     }
 
     private List<Organization> convertOrganizaitonDetailsListToOrganizationList(List<OrganizationDetails> organizationDetails) {

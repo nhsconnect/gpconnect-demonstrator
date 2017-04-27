@@ -55,13 +55,12 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
     @Read()
     public Organization getOrganizationById(@IdParam IdDt organizationId) {
-        String organizationIdString = organizationId.getIdPart();
 
-        OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(Long.parseLong(organizationIdString));
+        OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId.getIdPart());
 
         if (organizationDetails == null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No organization details found for organization ID: " + organizationIdString),
+                    new ResourceNotFoundException("No organization details found for organization ID: " + organizationId.getIdPart()),
                     SystemCode.ORGANISATION_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
         }
 

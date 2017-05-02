@@ -1,6 +1,8 @@
 package uk.gov.hscic.organization;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
+import ca.uhn.fhir.model.api.IValueSetEnumBinder;
+import ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
@@ -87,6 +89,7 @@ public class GetScheduleOperation {
 
 		if (organizationSiteOdsCode != null) {
 			List<Location> locations = locationResourceProvider.getByIdentifierCode(new TokenParam(SystemURL.ID_ODS_SITE_CODE, organizationSiteOdsCode));
+                        
 			Entry locationEntry = new Entry();
 			locationEntry.setResource(locations.get(0));
 			locationEntry.setFullUrl("Location/" + locations.get(0).getId().getIdPart());
@@ -98,6 +101,16 @@ public class GetScheduleOperation {
 
 			if (!schedules.isEmpty()) {
 				for (Schedule schedule : schedules) {
+                                    
+                                    /*
+                                        ExtensionDt exten = new ExtensionDt();
+                                        exten.setUrl("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1");
+                                        ResourceReferenceDt refe = new ResourceReferenceDt("Practitioner/2");
+                                        exten.setValue(refe);
+                                        schedule.addUndeclaredExtension(exten);
+                                      */  
+                                        schedule.getMeta().addProfile("http://fhir.nhs.net/StructureDefinition/gpconnect-schedule-1");
+                                        
 					Entry scheduleEntry = new Entry();
 					scheduleEntry.setResource(schedule);
 					scheduleEntry.setFullUrl("Schedule/" + schedule.getId().getIdPart());

@@ -66,7 +66,7 @@ public class ScheduleResourceProvider implements IResourceProvider {
         schedule.setId(String.valueOf(scheduleDetail.getId()));
         schedule.getMeta().setLastUpdated(scheduleDetail.getLastUpdated());
         schedule.getMeta().setVersionId(String.valueOf(scheduleDetail.getLastUpdated().getTime()));
-        schedule.addUndeclaredExtension(true, SystemURL.SD_EXTENSION_GPC_PRACTITIONER, new ResourceReferenceDt("Practitioner/"+scheduleDetail.getPractitionerId()));
+        schedule.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_GPC_PRACTITIONER, new ResourceReferenceDt("Practitioner/"+scheduleDetail.getPractitionerId()));
         schedule.setIdentifier(Collections.singletonList(new IdentifierDt(SystemURL.ID_GPC_SCHEDULE_IDENTIFIER, scheduleDetail.getIdentifier())));
         CodingDt coding = new CodingDt().setSystem(SystemURL.HL7_VS_C80_PRACTICE_CODES).setCode(scheduleDetail.getTypeCode()).setDisplay(scheduleDetail.getTypeDescription());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);

@@ -21,6 +21,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,6 +29,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import uk.gov.hscic.auth.CertificateValidator;
 import uk.gov.hscic.auth.KeyStoreFactory;
+import uk.gov.hscic.common.filters.DefaultHeaderFilter;
 
 @ServletComponentScan
 @SpringBootApplication
@@ -73,5 +75,15 @@ public class RestConfig {
                 ((TomcatEmbeddedServletContainerFactory) container).addAdditionalTomcatConnectors(connector);
             }
         };
+    }
+    @Bean
+    public FilterRegistrationBean myFilterBean() {
+      final FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
+      filterRegBean.setFilter(new DefaultHeaderFilter());
+      filterRegBean.addUrlPatterns("/*");
+      filterRegBean.setEnabled(Boolean.TRUE);
+      filterRegBean.setName("Meu Filter");
+      filterRegBean.setAsyncSupported(Boolean.TRUE);
+      return filterRegBean;
     }
 }

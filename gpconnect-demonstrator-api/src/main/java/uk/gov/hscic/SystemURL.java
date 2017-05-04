@@ -23,7 +23,7 @@ public final class SystemURL {
     public static final String ID_SDS_USER_ID = "http://fhir.nhs.net/Id/sds-user-id";
 
     // FHIR StructureDefinition Constants
-    public static final String SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0";
+    public static final String SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1";
     public static final String SD_EXTENSION_GPC_PRACTITIONER = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1-0";
     public static final String SD_EXTENSION_MEDICATION_QUANTITY_TEXT = "http://fhir.nhs.net/StructureDefinition/extension-medication-quantity-text-1-0";
     public static final String SD_EXTENSION_PERSCRIPTION_REPEAT_REVIEW_DATE = "http://fhir.nhs.net/StructureDefinition/extension-prescription-repeat-review-date-1-0";

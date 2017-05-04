@@ -12,7 +12,7 @@ angular.module('gpConnect')
             $scope.cancelReasonIndex = -1;
             if ($scope.appointmentCancel.appointmentResource.resource.modifierExtension != undefined) {
                 for (var i = 0; i < $scope.appointmentCancel.appointmentResource.resource.modifierExtension.length; i++) {
-                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0" == $scope.appointmentCancel.appointmentResource.resource.modifierExtension[i].url) {
+                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1" == $scope.appointmentCancel.appointmentResource.resource.modifierExtension[i].url) {
                         $scope.cancelReasonIndex = i;
                         i = $scope.appointmentCancel.appointmentResource.resource.modifierExtension.length;
                     }
@@ -20,7 +20,7 @@ angular.module('gpConnect')
             }
             if ($scope.cancelReasonIndex == -1) {
                 $scope.appointmentCancel.appointmentResource.resource.modifierExtension = [{
-                        "url": "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0",
+                        "url": "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1",
                         "valueString": ""
                     }];
                 $scope.cancelReasonIndex = 0;

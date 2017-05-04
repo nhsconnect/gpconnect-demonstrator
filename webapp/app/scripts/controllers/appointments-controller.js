@@ -83,7 +83,7 @@ angular.module('gpConnect')
                         $.each($scope.appointments, function (key, appointment) {
                             if (appointment.resource.modifierExtension != undefined) {
                                 for (var i = 0; i < appointment.resource.modifierExtension.length; i++) {
-                                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1-0" == appointment.resource.modifierExtension[i].url) {
+                                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1" == appointment.resource.modifierExtension[i].url) {
                                         appointment.cancellationReason = appointment.resource.modifierExtension[i].valueString;
                                         i = appointment.resource.modifierExtension.length;
                                     }

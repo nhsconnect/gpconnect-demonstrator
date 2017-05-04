@@ -378,7 +378,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentDetail.setStatus(appointment.getStatus().toLowerCase(Locale.UK));
         //appointmentDetail.setTypeCode(Long.valueOf(appointment.getType().getCodingFirstRep().getCode()));
         appointmentDetail.setTypeDisplay(appointment.getType().getCodingFirstRep().getDisplay());
+        if(appointment.getReason().getCodingFirstRep().getCode() == null){
+            appointmentDetail.setReasonCode("1");
+        } else {
         appointmentDetail.setReasonCode(appointment.getReason().getCodingFirstRep().getCode());
+        }
         appointmentDetail.setReasonDisplay(appointment.getReason().getCodingFirstRep().getDisplay());
         appointmentDetail.setStartDateTime(appointment.getStart());
         appointmentDetail.setEndDateTime(appointment.getEnd());

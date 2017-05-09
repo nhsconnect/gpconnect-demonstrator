@@ -56,7 +56,7 @@ angular.module('gpConnect')
                             responseSlots.push(slot);
                         }
                         if (value.resource.resourceType == "Schedule") {
-                            responseSchedules[value.fullUrl] = {"locationRef": value.resource.actor.reference, "practitionerRef": value.resource.modifierExtension[0].valueReference.reference};
+                            responseSchedules[value.fullUrl] = {"locationRef": value.resource.actor.reference, "practitionerRef": value.resource.extension[0].valueReference.reference};
                         }
                         if (value.resource.resourceType == "Practitioner") {
                             var prefix = "";

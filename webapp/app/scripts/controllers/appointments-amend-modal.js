@@ -10,11 +10,11 @@ angular.module('gpConnect')
             $scope.appointmentAmend = appointment;
             $scope.validationError = "";
             $scope.cancelReasonIndex = -1;
-            if ($scope.appointmentAmend.appointmentResource.resource.modifierExtension != undefined) {
-                for (var i = 0; i < $scope.appointmentAmend.appointmentResource.resource.modifierExtension.length; i++) {
-                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1" == $scope.appointmentAmend.appointmentResource.resource.modifierExtension[i].url) {
+            if ($scope.appointmentAmend.appointmentResource.resource.extension != undefined) {
+                for (var i = 0; i < $scope.appointmentAmend.appointmentResource.resource.extension.length; i++) {
+                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1" == $scope.appointmentAmend.appointmentResource.resource.extension[i].url) {
                         $scope.cancelReasonIndex = i;
-                        i = $scope.appointmentAmend.appointmentResource.resource.modifierExtension.length;
+                        i = $scope.appointmentAmend.appointmentResource.resource.extension.length;
                     }
                 }
             }
@@ -24,7 +24,7 @@ angular.module('gpConnect')
                 $scope.formSubmitted = true;
                 if($scope.cancelReasonIndex != -1){
                     // Amend cancelled appointment
-                    if ($scope.appointmentAmend.appointmentResource.resource.modifierExtension[$scope.cancelReasonIndex].valueString.length > 0) {
+                    if ($scope.appointmentAmend.appointmentResource.resource.extension[$scope.cancelReasonIndex].valueString.length > 0) {
                         usSpinnerService.spin('appointmentAmend-spinner');
                         Appointment.save($scope.appointmentAmend.appointmentResource.appointmentPracticeOdsCode, $stateParams.patientId, $scope.appointmentAmend.appointmentResource.resource.id, $scope.appointmentAmend.appointmentResource.resource).then(function (response) {
                             if (response.status != "200") {

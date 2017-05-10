@@ -10,16 +10,16 @@ angular.module('gpConnect')
             $scope.appointmentCancel = appointment;
             $scope.validationError = "";
             $scope.cancelReasonIndex = -1;
-            if ($scope.appointmentCancel.appointmentResource.resource.modifierExtension != undefined) {
-                for (var i = 0; i < $scope.appointmentCancel.appointmentResource.resource.modifierExtension.length; i++) {
-                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1" == $scope.appointmentCancel.appointmentResource.resource.modifierExtension[i].url) {
+            if ($scope.appointmentCancel.appointmentResource.resource.extension != undefined) {
+                for (var i = 0; i < $scope.appointmentCancel.appointmentResource.resource.extension.length; i++) {
+                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1" == $scope.appointmentCancel.appointmentResource.resource.extension[i].url) {
                         $scope.cancelReasonIndex = i;
-                        i = $scope.appointmentCancel.appointmentResource.resource.modifierExtension.length;
+                        i = $scope.appointmentCancel.appointmentResource.resource.extension.length;
                     }
                 }
             }
             if ($scope.cancelReasonIndex == -1) {
-                $scope.appointmentCancel.appointmentResource.resource.modifierExtension = [{
+                $scope.appointmentCancel.appointmentResource.resource.extension = [{
                         "url": "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1",
                         "valueString": ""
                     }];
@@ -28,7 +28,7 @@ angular.module('gpConnect')
 
             $scope.cancelAppointment = function (appointmentCancelForm) {
                 $scope.formSubmitted = true;
-                if ($scope.appointmentCancel.appointmentResource.resource.modifierExtension[$scope.cancelReasonIndex].valueString.length > 0) {
+                if ($scope.appointmentCancel.appointmentResource.resource.extension[$scope.cancelReasonIndex].valueString.length > 0) {
                     usSpinnerService.spin('appointmentCancel-spinner');
                     Appointment.save($scope.appointmentCancel.appointmentResource.appointmentPracticeOdsCode, $stateParams.patientId, $scope.appointmentCancel.appointmentResource.resource.id, $scope.appointmentCancel.appointmentResource.resource).then(function (response) {
                         if (response.status != "200") {

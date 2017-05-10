@@ -566,12 +566,12 @@ public class PatientResourceProvider implements IResourceProvider {
         PeriodDt registrationPeriod = new PeriodDt()
                 .setStartWithSecondsPrecision(patientDetails.getRegistrationStartDateTime())
                 .setEndWithSecondsPrecision(patientDetails.getRegistrationEndDateTime());
-        patient.addUndeclaredExtension(true, SystemURL.SD_EXTENSION_REGISTRATION_PERIOD, registrationPeriod);
+        patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_PERIOD, registrationPeriod);
 
-        patient.addUndeclaredExtension(true, SystemURL.SD_EXTENSION_REGISTRATION_STATUS, new CodeableConceptDt(
+        patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_STATUS, new CodeableConceptDt(
                 SystemURL.VS_REGISTRATION_STATUS, patientDetails.getRegistrationStatus()));
 
-        patient.addUndeclaredExtension(true, SystemURL.SD_EXTENSION_REGISTRATION_TYPE, new CodeableConceptDt(
+        patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_TYPE, new CodeableConceptDt(
                 SystemURL.VS_REGISTRATION_TYPE, patientDetails.getRegistrationType()));
 
         return patient;
@@ -641,18 +641,18 @@ public class PatientResourceProvider implements IResourceProvider {
                     .setStartWithSecondsPrecision(registrationStartDateTime)
                     .setEndWithSecondsPrecision(patientDetails.getRegistrationEndDateTime());
 
-            patient.addUndeclaredExtension(true, SystemURL.SD_EXTENSION_REGISTRATION_PERIOD, registrationPeriod);
+            patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_PERIOD, registrationPeriod);
         }
 
         String registrationStatusValue = patientDetails.getRegistrationStatus();
         if (registrationStatusValue != null) {
-            patient.addUndeclaredExtension(true, SystemURL.SD_EXTENSION_REGISTRATION_STATUS, new CodeableConceptDt(
+            patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_STATUS, new CodeableConceptDt(
                     SystemURL.VS_REGISTRATION_STATUS, registrationStatusValue));
         }
 
         String registrationTypeValue = patientDetails.getRegistrationType();
         if (registrationTypeValue != null) {
-            patient.addUndeclaredExtension(true, SystemURL.SD_EXTENSION_REGISTRATION_TYPE, new CodeableConceptDt(
+            patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_TYPE, new CodeableConceptDt(
                     SystemURL.VS_REGISTRATION_TYPE, registrationTypeValue));
         }
 

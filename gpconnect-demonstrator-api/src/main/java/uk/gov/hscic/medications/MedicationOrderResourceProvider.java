@@ -102,7 +102,7 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
         medicationOrder.addDosageInstruction().setText(medicationOrderDetails.getDosageText());
 
         MedicationOrder.DispenseRequest dispenseRequest = new MedicationOrder.DispenseRequest();
-        dispenseRequest.addUndeclaredExtension(new ExtensionDt(true, SystemURL.SD_EXTENSION_MEDICATION_QUANTITY_TEXT, new StringDt(medicationOrderDetails.getDispenseQuantityText())));
+        dispenseRequest.addUndeclaredExtension(new ExtensionDt(false, SystemURL.SD_EXTENSION_MEDICATION_QUANTITY_TEXT, new StringDt(medicationOrderDetails.getDispenseQuantityText())));
         dispenseRequest.addUndeclaredExtension(new ExtensionDt(true, SystemURL.SD_EXTENSION_PERSCRIPTION_REPEAT_REVIEW_DATE, new DateTimeDt(medicationOrderDetails.getDispenseReviewDate())));
         dispenseRequest.setMedication(new ResourceReferenceDt("Medication/"+medicationOrderDetails.getDispenseMedicationId()));
         dispenseRequest.setNumberOfRepeatsAllowed(medicationOrderDetails.getDispenseRepeatsAllowed());

@@ -14,7 +14,7 @@ angular.module('gpConnect')
                 // Build patient fhir model
                 var newPatient = {};
                 newPatient.resourceType = "Patient";
-                newPatient.modifierExtension = [
+                newPatient.extension = [
                     {
                         "url": "http://fhir.nhs.net/StructureDefinition/extension-registration-period-1",
                         "valuePeriod": {"start": DateFormatter.clean(new Date())}

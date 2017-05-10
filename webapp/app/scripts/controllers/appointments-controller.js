@@ -81,11 +81,11 @@ angular.module('gpConnect')
                             return a.resource.start.localeCompare(b.resource.start);
                         });
                         $.each($scope.appointments, function (key, appointment) {
-                            if (appointment.resource.modifierExtension != undefined) {
-                                for (var i = 0; i < appointment.resource.modifierExtension.length; i++) {
-                                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1" == appointment.resource.modifierExtension[i].url) {
-                                        appointment.cancellationReason = appointment.resource.modifierExtension[i].valueString;
-                                        i = appointment.resource.modifierExtension.length;
+                            if (appointment.resource.extension != undefined) {
+                                for (var i = 0; i < appointment.resource.extension.length; i++) {
+                                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1" == appointment.resource.extension[i].url) {
+                                        appointment.cancellationReason = appointment.resource.extension[i].valueString;
+                                        i = appointment.resource.extension.length;
                                     }
                                 }
                             }

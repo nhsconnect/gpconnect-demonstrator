@@ -293,7 +293,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointment.setId(String.valueOf(appointmentDetail.getId()));
         appointment.getMeta().setLastUpdated(appointmentDetail.getLastUpdated());
         appointment.getMeta().setVersionId(String.valueOf(appointmentDetail.getLastUpdated().getTime()));
-        appointment.addUndeclaredExtension(true, SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON, new StringDt(appointmentDetail.getCancellationReason()));
+        appointment.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON, new StringDt(appointmentDetail.getCancellationReason()));
         appointment.setIdentifier(Collections.singletonList(new IdentifierDt(SystemURL.ID_GPC_APPOINTMENT_IDENTIFIER, String.valueOf(appointmentDetail.getId()))));
 
         switch (appointmentDetail.getStatus().toLowerCase(Locale.UK)) {

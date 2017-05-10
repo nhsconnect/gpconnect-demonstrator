@@ -618,11 +618,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     .setDisplay(practitionerName.getPrefixFirstRep() + " " + practitionerName.getGivenFirstRep() + " " + practitionerName.getFamilyFirstRep());
 
             patient.getCareProvider().add(practitionerReference);
-        } else {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No GP record exists"),
-                    SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.NOT_FOUND);
-        }
+        } 
 
         String gender = patientDetails.getGender();
         if (gender != null) {

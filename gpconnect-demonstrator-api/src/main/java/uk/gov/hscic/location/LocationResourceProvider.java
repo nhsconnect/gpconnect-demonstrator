@@ -69,6 +69,7 @@ public class LocationResourceProvider implements IResourceProvider {
         location.setId(new IdDt(locationDetails.getId()));
         location.getMeta().setLastUpdated(locationDetails.getLastUpdated());
         location.getMeta().setVersionId(String.valueOf(locationDetails.getLastUpdated().getTime()));
+        location.getMeta().addProfile(SystemURL.SD_GPC_LOCATION);
         location.setName(new StringDt(locationDetails.getName()));
         location.setIdentifier(Collections.singletonList(new IdentifierDt(locationDetails.getSiteOdsCode(), locationDetails.getSiteOdsCodeName())));
         return location;

@@ -71,6 +71,7 @@ public class SlotResourceProvider  implements IResourceProvider {
 
         slot.getMeta().setLastUpdated(slotDetail.getLastUpdated());
         slot.getMeta().setVersionId(String.valueOf(slotDetail.getLastUpdated().getTime()));
+        slot.getMeta().addProfile(SystemURL.SD_GPC_SLOT);
         slot.setIdentifier(Collections.singletonList(new IdentifierDt(SystemURL.ID_GPC_SCHEDULE_IDENTIFIER, String.valueOf(slotDetail.getId()))));
         CodingDt coding = new CodingDt().setSystem(SystemURL.HL7_VS_C80_PRACTICE_CODES).setCode(String.valueOf(slotDetail.getTypeCode())).setDisplay(slotDetail.getTypeDisply());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);

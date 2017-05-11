@@ -174,7 +174,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
         	Date start = timePeriod.getStart();
         	Date end = timePeriod.getEnd();
         	
-        	// we need a start date and an end date in order to enforce
+        	// we need a start date and an end date in order to enforce 14 day business rule
         	if(start != null && end != null) {
         		long period = ChronoUnit.DAYS.between(start.toInstant(), end.toInstant());
         		if(period < 0l || period > 14l) {
@@ -185,8 +185,8 @@ public class OrganizationResourceProvider implements IResourceProvider {
         	}
         	else {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException("Invalid timePeriod one or both of start and end date were missing"),
-                        SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                        new InvalidRequestException("Invalid timePeriod one or both of start and end date were missing"),
+                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         	}    	
         }
         else {

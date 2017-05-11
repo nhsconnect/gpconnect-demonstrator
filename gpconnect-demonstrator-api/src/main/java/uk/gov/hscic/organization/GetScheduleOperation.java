@@ -55,6 +55,8 @@ public class GetScheduleOperation {
 
 	@SuppressWarnings("deprecation")
 	void populateBundle(Bundle bundle, OperationOutcome operationOutcome, IdDt orgId, Date planningHorizonStart, Date planningHorizonEnd) {
+		bundle.getMeta().addProfile(SystemURL.SD_GPC_GET_SCHEDULE_BUNDLE);
+		
 		// organisation
 		Organization organization = organizationResourceProvider.getOrganizationById(orgId);
 

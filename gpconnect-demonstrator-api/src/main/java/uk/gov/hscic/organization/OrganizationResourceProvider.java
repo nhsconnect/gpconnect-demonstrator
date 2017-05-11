@@ -1,5 +1,20 @@
 package uk.gov.hscic.organization;
 
+import java.text.ParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
@@ -9,6 +24,7 @@ import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
@@ -18,22 +34,9 @@ import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -91,49 +94,104 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
     @Operation(name = "$gpc.getschedule")
     public Bundle getSchedule(@IdParam IdDt organizationId, @ResourceParam Parameters params) {
-        List<PeriodDt> timePeriods = params.getParameter()
-                .stream()
-                .filter(parameter -> "timePeriod".equals(parameter.getName()))
-                .map(Parameter::getValue)
-                .map(PeriodDt.class::cast)
-                .collect(Collectors.toList());
-
-        if (1 != timePeriods.size()) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Invalid timePeriod parameter"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-        }
-
-        if (1 != params.getParameter().size()) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Invalid parameter quantity"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-        }
+        Bundle bundle = null;
+    	
+        // need some logic to get the start of the next day 
+        
+    	PeriodDt timePeriod = getTimePeriod(params.getParameter());
+        validateTimePeriod(timePeriod);
+        
+        bundle = new Bundle().setType(BundleTypeEnum.SEARCH_RESULTS);
 
         try {
-            Bundle bundle = new Bundle().setType(BundleTypeEnum.SEARCH_RESULTS);
+			getScheduleOperation.populateBundle(bundle, 
+												new OperationOutcome(), 
+												organizationId, 
+												timePeriod.getStart(),
+												getAfter(timePeriod.getEndElement()));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-            String planningHorizonStart = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(timePeriods.get(0).getStart());
-            String planningHorizonEnd = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(timePeriods.get(0).getEnd());
+        return bundle;
+    }
 
-            long daysBetween = ChronoUnit.DAYS.between(
-                    timePeriods.get(0).getStart().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-                    timePeriods.get(0).getEnd().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+    private Date getAfter(DateTimeDt target) throws ParseException {
+    	Date after = null;
+    	
+    	Calendar calendar = null;
+    	
+    	TimeZone timeZone = target.getTimeZone();
+    	if(timeZone != null) {
+    		calendar = Calendar.getInstance(timeZone);
+    	}
+    	else {
+    		calendar = Calendar.getInstance();
+    	}
+    	
+    	calendar.setTime(target.getValue());
+    	
+    	switch(target.getPrecision()) {
+	    	case MINUTE : calendar.add(Calendar.MINUTE, 1);
+	    	break;
+	    	case DAY : calendar.add(Calendar.DAY_OF_MONTH, 1);
+	    	break;
+	    	case MONTH : calendar.add(Calendar.MONTH, 1);
+	    	break;	    	
+	    	case YEAR : calendar.add(Calendar.YEAR, 1);
+	    	break;
+	    	default : ; // do nothing
+	    	break;    		
+    	}
+    	
+    	after = calendar.getTime();
+    	
+    	return after;
+    }
+    
+    private PeriodDt getTimePeriod(List<Parameter> parameters) {
+    	PeriodDt timePeriod = null;
+    	
+    	// first we need a param called timePeriod. If we don't have one then we cannot proceed   
+    	// similarly if there's more than one then we cannot proceed.
+        timePeriod = parameters.stream()
+		        	    .filter(parameter -> "timePeriod".equals(parameter.getName()))
+		                .map(Parameter::getValue)
+		                .map(PeriodDt.class::cast)
+		        	    .reduce((a, b) -> {
+		        	    	throw OperationOutcomeFactory.buildOperationOutcomeException(
+		                            new InvalidRequestException("Multiple timePeriod parameters. Only one is permitted"),
+		                            SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+		                })
+		                .get();   
 
-            if (daysBetween < 0L || daysBetween > 14L) {
+        return timePeriod;   	
+    }
+    
+    private void validateTimePeriod(PeriodDt timePeriod) {
+        if(timePeriod != null) {
+        	Date start = timePeriod.getStart();
+        	Date end = timePeriod.getEnd();
+        	
+        	// we need a start date and an end date in order to enforce
+        	if(start != null && end != null) {
+        		long period = ChronoUnit.DAYS.between(start.toInstant(), end.toInstant());
+        		if(period < 0l && period > 14l) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new UnprocessableEntityException("Invalid timePeriods, was " + period + " days between (max is 14)"),
+                            SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);	
+        		}
+        	}
+        	else {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException("Invalid timePeriods, was " + daysBetween + " days between (max is 14)"),
+                        new UnprocessableEntityException("Invalid timePeriod one or both of start and end date were missing"),
                         SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
-            }
-
-            getScheduleOperation.populateBundle(bundle, new OperationOutcome(), organizationId, planningHorizonStart, planningHorizonEnd);
-
-            return bundle;
-        } catch (BaseServerResponseException baseServerResponseException) {
-            throw baseServerResponseException; // Just rethrow it!
-        } catch (Exception e) {
+        	}    	
+        }
+        else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Invalid timePeriod parameter"),
+                    new InvalidRequestException("Missing timePeriod parameter"),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
     }

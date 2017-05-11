@@ -48,9 +48,9 @@ public class SlotResourceProvider  implements IResourceProvider {
         return slotDetailToSlotResourceConverter(slotDetail);
     }
 
-    public List<Slot> getSlotsForScheduleId(String scheduleId, String startDateTime, String endDateTime) {
+    public List<Slot> getSlotsForScheduleId(String scheduleId, Date startDateTime, Date endDateTime) {
         ArrayList<Slot> slots = new ArrayList<>();
-        List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), new Date(startDateTime), new Date(endDateTime));
+        List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), startDateTime, endDateTime);
 
         if (slotDetails != null && !slotDetails.isEmpty()) {
             for (SlotDetail slotDetail : slotDetails) {

@@ -1,8 +1,12 @@
 package uk.gov.hscic.organization;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.api.ExtensionDt;
-import ca.uhn.fhir.model.api.IValueSetEnumBinder;
-import ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
@@ -20,9 +24,6 @@ import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
@@ -53,7 +54,7 @@ public class GetScheduleOperation {
 	private ScheduleResourceProvider scheduleResourceProvider;
 
 	@SuppressWarnings("deprecation")
-	void populateBundle(Bundle bundle, OperationOutcome operationOutcome, IdDt orgId, String planningHorizonStart, String planningHorizonEnd) {
+	void populateBundle(Bundle bundle, OperationOutcome operationOutcome, IdDt orgId, Date planningHorizonStart, Date planningHorizonEnd) {
 		// organisation
 		Organization organization = organizationResourceProvider.getOrganizationById(orgId);
 

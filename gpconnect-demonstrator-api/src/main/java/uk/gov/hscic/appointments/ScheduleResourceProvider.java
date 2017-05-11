@@ -48,9 +48,9 @@ public class ScheduleResourceProvider implements IResourceProvider {
         return scheduleDetailToScheduleResourceConverter(scheduleDetail);
     }
 
-    public List<Schedule> getSchedulesForLocationId(String locationId, String startDateTime, String endDateTime) {
+    public List<Schedule> getSchedulesForLocationId(String locationId, Date startDateTime, Date endDateTime) {
         ArrayList<Schedule> schedules = new ArrayList<>();
-        List<ScheduleDetail> scheduleDetails = scheduleSearch.findScheduleForLocationId(Long.valueOf(locationId), new Date(startDateTime), new Date(endDateTime));
+        List<ScheduleDetail> scheduleDetails = scheduleSearch.findScheduleForLocationId(Long.valueOf(locationId), startDateTime, endDateTime);
 
         if (scheduleDetails != null && !scheduleDetails.isEmpty()) {
             for (ScheduleDetail scheduleDetail : scheduleDetails) {

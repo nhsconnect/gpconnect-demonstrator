@@ -177,7 +177,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
         	// we need a start date and an end date in order to enforce
         	if(start != null && end != null) {
         		long period = ChronoUnit.DAYS.between(start.toInstant(), end.toInstant());
-        		if(period < 0l && period > 14l) {
+        		if(period < 0l || period > 14l) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
                             new UnprocessableEntityException("Invalid timePeriods, was " + period + " days between (max is 14)"),
                             SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);	

@@ -1,5 +1,25 @@
 package uk.gov.hscic.common.filters;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.parser.DataFormatException;
 import ca.uhn.fhir.rest.method.RequestDetails;
@@ -9,22 +29,6 @@ import ca.uhn.fhir.rest.server.exceptions.MethodNotAllowedException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import uk.gov.hscic.InteractionId;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
@@ -273,50 +277,207 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     }
 
     // This method finds the ID and inserts it
+    // doesn't always insert the ID - as sometimes there isn't one to insert
     private static String getInteractionAndAddId(String interactionIdHeader, String url) {
-        String interaction = INTERACTION_MAP.getOrDefault(interactionIdHeader, "INVALID");
-
-        if (interaction.contains("%ID%")) {
-            String[] strings = url.split("/");
-
-            if (strings.length > 3) {
-                if (!strings[3].matches("\\d+")) { // id must be a number
-                    String systemCode;
-
-                    switch (strings[2]) {
-                        case "Appointment":
-                            systemCode = SystemCode.APPOINTMENT_NOT_FOUND;
-                            break;
-
-                        case "Location":
-                            systemCode = SystemCode.LOCATION_NOT_FOUND;
-                            break;
-
-                        case "Organization":
-                            systemCode = SystemCode.ORGANISATION_NOT_FOUND;
-                            break;
-
-                        case "Patient":
-                            systemCode = SystemCode.PATIENT_NOT_FOUND;
-                            break;
-
-                        case "Practitioner":
-                            systemCode = SystemCode.PRACTITIONER_NOT_FOUND;
-                            break;
-
-                        default:
-                            systemCode = SystemCode.REFERENCE_NOT_FOUND;
-                    }
-
+    	String interactionAndId = null;
+    	
+    	Interaction interaction = Interaction.getInteraction(interactionIdHeader);
+    	if(interaction != null) {
+    		try {
+        		ResourcePath resourcePath = interaction.getResourcePath(url);
+        		
+        		if(resourcePath != null) {
+        			interactionAndId = interaction.merge(resourcePath);
+        		}
+        		else {
+        			// 400
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new ResourceNotFoundException(strings[2] + "Id is not a number: " + strings[3]),
-                            systemCode, IssueTypeEnum.INVALID_CONTENT);
-                }
+                            new InvalidRequestException(String.format("The given URL %s does not match the interaction scheme %s (interaction Id - %s)", url, interaction.toString(), interactionIdHeader)),
+                            SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);  
+        		}
+        	}
+        	catch(NumberFormatException nfe) {
+        		String systemCode = null;	
 
-                return interaction.replace("%ID%", strings[3]);
-            }
-        }
+        		switch(interaction.resourceType) {
+    	            case "Appointment":
+    	                systemCode = SystemCode.APPOINTMENT_NOT_FOUND;
+    	                break;
+    	
+    	            case "Location":
+    	                systemCode = SystemCode.LOCATION_NOT_FOUND;
+    	                break;
+    	
+    	            case "Organization":
+    	                systemCode = SystemCode.ORGANISATION_NOT_FOUND;
+    	                break;
+    	
+    	            case "Patient":
+    	                systemCode = SystemCode.PATIENT_NOT_FOUND;
+    	                break;
+    	                
+                    case "Practitioner":
+                        systemCode = SystemCode.PRACTITIONER_NOT_FOUND;
+                        break;	
+                        
+                    default:
+                        systemCode = SystemCode.REFERENCE_NOT_FOUND;                    
+        		}
+        		// 404
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new ResourceNotFoundException("The resource identifier in " + url + " is not a number"),
+                        systemCode, IssueTypeEnum.INVALID_CONTENT);    		
+        	}
+    	}
+    	else {
+			// 400
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(String.format("The given URL %s does not match the interaction scheme matching the given ID (%s)", url, interactionIdHeader)),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);  
+    	}
 
-        return interaction;
+    	return interactionAndId;
+    }
+    
+    private static class Interaction {
+    	private String path = null;
+    	
+    	private String base = null;
+    	private String resourceType = null;
+    	private String resourceIdPlaceHolder = null;
+    	private String operation = null;
+    	
+		@Override
+    	public String toString() {
+    		return path;
+    	}
+    	
+    	private Interaction(String path) {
+    		this.path = path;
+    		
+    		String[] elements = getElements(path);
+    		
+    		// the path needs to have a minimum of 2 elements
+    		int nameCount = elements.length;
+			if(nameCount >= 3) {
+				base = getBase(elements);
+				resourceType = getResourceType(elements);
+    		
+	    		if(nameCount >= 4) {
+	    			resourceIdPlaceHolder = getResourceId(elements);
+	    			
+	    			if("%ID%".equals(resourceIdPlaceHolder) == false) {
+	    				throw new IllegalArgumentException("blah");
+	    			}
+	    			
+	    			if(nameCount >= 5) {
+	    				operation = getOperation(elements);
+	    			}    			
+	    		}
+    		}
+			else {
+				throw new IllegalArgumentException("blah");
+			}
+    	}
+    	
+    	private String getBase(String[] elements) {
+    		return getName(elements, 1);
+    	}
+    	
+    	private String getResourceType(String[] elements) {
+    		return getName(elements, 2);
+    	}
+    	
+    	private String getResourceId(String[] elements) {
+    		return getName(elements, 3);
+    	}
+    	
+    	private String getOperation(String[] elements) {
+    		return getName(elements, 4);
+    	}
+    	
+    	private String getName(String[] elements, int index) {
+    		String name = null;
+    		
+    		if((elements.length - 1) >= index) {
+    			name = elements[index];
+    		}
+    		
+    		return name;
+    	}
+    	
+    	private String merge(ResourcePath resourcePath) {
+    		String mergeResult = path;
+    		
+    		if(resourceIdPlaceHolder != null) {
+    			mergeResult = path.replace("%ID%", resourcePath.resourceId.toString());  			
+    		}
+
+    		return mergeResult; 
+    	}
+    	
+    	private ResourcePath getResourcePath(String path) {
+    		ResourcePath resourcePath = null;
+    		
+    		// check it matches this interaction
+    		String[] elements = getElements(path);
+
+    		boolean valid = false;
+    		if(base.equals(getBase(elements))) {
+        		if(resourceType.equals(getResourceType(elements))) {
+               		if(operation != null) {
+	        			if(operation.equals(getOperation(elements))) {
+	            			valid = true;
+	            		}
+        			}
+               		else {
+               			valid = true;
+               		}
+        		}
+    		}
+    		
+    		if(valid) {
+    			resourcePath = new ResourcePath(getBase(elements), getResourceType(elements), getResourceId(elements), getOperation(elements));
+    		}
+    		
+    		return resourcePath;
+    	}
+    	
+    	private String[] getElements(String path) {
+    		return path.split("/");
+    	}
+
+    	private static Interaction getInteraction(String interactionId) {
+    		Interaction interaction = null;
+    		
+    		String interactionString = INTERACTION_MAP.getOrDefault(interactionId, "INVALID");
+    		if("INVALID".equals(interactionString) == false) {
+    			try {
+    				interaction = new Interaction(interactionString);
+    			}
+    			catch(IllegalArgumentException iae) {
+    				interaction = null;
+    			}
+    		}
+    		
+    		return interaction;
+    	}
+    }
+    
+    private static class ResourcePath {
+ 	
+    	private String base = null;
+    	private String resourceType = null;
+    	private Integer resourceId = null;
+    	private String operation = null;
+
+    	private ResourcePath(String base, String resourceType, String resourceId, String operation) {
+			this.base = base;
+			this.resourceType = resourceType;
+			if(resourceId != null) {
+				this.resourceId = Integer.parseInt(resourceId);
+			}
+			this.operation = operation;
+		}
     }
 }

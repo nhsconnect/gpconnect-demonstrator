@@ -96,27 +96,36 @@ public class OrganizationResourceProvider implements IResourceProvider {
     public Bundle getSchedule(@IdParam IdDt organizationId, @ResourceParam Parameters params) {
         Bundle bundle = null;
     	
-        // need some logic to get the start of the next day 
-        
-    	PeriodDt timePeriod = getTimePeriod(params.getParameter());
-        validateTimePeriod(timePeriod);
-        
-        bundle = new Bundle().setType(BundleTypeEnum.SEARCH_RESULTS);
+        List<Parameter> parameter = params.getParameter();
 
-        try {
-			getScheduleOperation.populateBundle(bundle, 
-												new OperationOutcome(), 
-												organizationId, 
-												timePeriod.getStart(),
-												getAfter(timePeriod.getEndElement()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        // there should only be 1 parameter
+		if(parameter.size() == 1) {        	
+        	PeriodDt timePeriod = getTimePeriod(parameter);
+        	validateTimePeriod(timePeriod);
+        	
+        	bundle = new Bundle().setType(BundleTypeEnum.SEARCH_RESULTS);
+        	
+        	try {
+        		getScheduleOperation.populateBundle(bundle, 
+        				new OperationOutcome(), 
+        				organizationId, 
+        				timePeriod.getStart(),
+        				getAfter(timePeriod.getEndElement()));
+        	} catch (ParseException e) {
+        		// TODO Auto-generated catch block
+        		e.printStackTrace();
+        	}
+        }
+        else {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Invalid number of parameters. Only one parameter named timePeriod is permitted."),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
+        
 
         return bundle;
     }
-
+    
     private Date getAfter(DateTimeDt target) throws ParseException {
     	Date after = null;
     	
@@ -171,23 +180,35 @@ public class OrganizationResourceProvider implements IResourceProvider {
     
     private void validateTimePeriod(PeriodDt timePeriod) {
         if(timePeriod != null) {
-        	Date start = timePeriod.getStart();
-        	Date end = timePeriod.getEnd();
+        	DateTimeDt startElement = timePeriod.getStartElement();
+        	DateTimeDt endElement = timePeriod.getEndElement();
         	
-        	// we need a start date and an end date in order to enforce 14 day business rule
-        	if(start != null && end != null) {
-        		long period = ChronoUnit.DAYS.between(start.toInstant(), end.toInstant());
-        		if(period < 0l || period > 14l) {
-                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new UnprocessableEntityException("Invalid timePeriods, was " + period + " days between (max is 14)"),
-                            SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);	
+        	String startString = startElement.getValueAsString();
+        	String endString = endElement.getValueAsString();
+        	
+        	if(startString != null && endString != null) {
+        		Date start = timePeriod.getStart();
+        		Date end = timePeriod.getEnd();
+        		
+        		if(start != null && end != null) {
+        			long period = ChronoUnit.DAYS.between(start.toInstant(), end.toInstant());
+        			if(period < 0l || period > 14l) {
+        				throw OperationOutcomeFactory.buildOperationOutcomeException(
+        						new UnprocessableEntityException("Invalid timePeriods, was " + period + " days between (max is 14)"),
+        						SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);	
+        			}
         		}
+        		else {
+        			throw OperationOutcomeFactory.buildOperationOutcomeException(
+        					new UnprocessableEntityException("Invalid timePeriod one or both of start and end date are not valid dates"),
+        					SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        		}    	
         	}
         	else {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException("Invalid timePeriod one or both of start and end date were missing"),
-                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-        	}    	
+    			throw OperationOutcomeFactory.buildOperationOutcomeException(
+    					new InvalidRequestException("Invalid timePeriod one or both of start and end date were missing"),
+    					SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        	}
         }
         else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(

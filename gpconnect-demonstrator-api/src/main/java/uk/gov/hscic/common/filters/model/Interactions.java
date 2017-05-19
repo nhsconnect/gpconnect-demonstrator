@@ -54,7 +54,9 @@ public class Interactions {
 		}
 		
 		private Interaction identifier() {
-			this.identifierPattern = buildPattern("\\d+");
+			// from http://hl7.org/fhir/resource.html#id -
+			// Ids can be up to 64 characters long, and contain any combination of upper and lowercase ASCII letters, numerals, "-" and "."
+			this.identifierPattern = buildPattern("[A-Za-z0-9\\-\\.]{1,64}");
 			
 			return this;
 		}

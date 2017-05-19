@@ -1,6 +1,18 @@
 package uk.gov.hscic.appointments;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.api.ExtensionDt;
+import ca.uhn.fhir.model.api.ResourceMetadataKeyEnum;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -11,6 +23,7 @@ import ca.uhn.fhir.model.dstu2.resource.Appointment.Participant;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.valueset.AppointmentStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ParticipationStatusEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
@@ -26,30 +39,23 @@ import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ParamPrefixEnum;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import uk.gov.hscic.OperationOutcomeFactory;
+import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.model.appointment.AppointmentDetail;
 import uk.gov.hscic.appointment.appointment.AppointmentSearch;
 import uk.gov.hscic.appointment.appointment.AppointmentStore;
-import uk.gov.hscic.model.appointment.SlotDetail;
 import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.appointment.slot.SlotStore;
-import uk.gov.hscic.model.location.LocationDetails;
 import uk.gov.hscic.location.LocationSearch;
-import uk.gov.hscic.patient.details.PatientSearch;
+import uk.gov.hscic.model.appointment.AppointmentDetail;
+import uk.gov.hscic.model.appointment.SlotDetail;
+import uk.gov.hscic.model.location.LocationDetails;
 import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.model.practitioner.PractitionerDetails;
+import uk.gov.hscic.patient.details.PatientSearch;
 import uk.gov.hscic.practitioner.PractitionerSearch;
 
 @Component
@@ -83,15 +89,29 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     @Read()
     public Appointment getAppointmentById(@IdParam IdDt appointmentId) {
-        AppointmentDetail appointmentDetail = appointmentSearch.findAppointmentByID(appointmentId.getIdPartAsLong());
-
-        if (appointmentDetail == null) {
-            OperationOutcome operationalOutcome = new OperationOutcome();
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No appointment details found for ID: " + appointmentId.getIdPart());
-            throw new InternalErrorException("No appointment details found for ID: " + appointmentId.getIdPart(), operationalOutcome);
+    	Appointment appointment = null;
+    	
+    	try {
+        	AppointmentDetail appointmentDetail = appointmentSearch.findAppointmentByID(appointmentId.getIdPartAsLong());
+        	
+        	if(appointmentDetail != null) {
+        		appointment = appointmentDetailToAppointmentResourceConverter(appointmentDetail);
+        	}
+        	else {
+        		// 404 resource not found
+        		throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException("No appointment details found for ID: " + appointmentId.getIdPart()), 
+        															   		 SystemCode.REFERENCE_NOT_FOUND, 
+        															   		 IssueTypeEnum.NOT_FOUND);        		
+        	}
+        }
+        catch(NumberFormatException nfe) {
+        	// 422 invalid identifier
+    		throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException("The identifier is invalid " + appointmentId.getIdPart()), 
+			   		 													 SystemCode.REFERENCE_NOT_FOUND, 
+			   		 													 IssueTypeEnum.STRUCTURAL_ISSUE);               	
         }
 
-        return appointmentDetailToAppointmentResourceConverter(appointmentDetail);
+        return appointment;
     }
 
     @Search

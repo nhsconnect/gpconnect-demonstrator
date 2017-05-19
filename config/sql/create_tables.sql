@@ -1,6 +1,7 @@
 USE gpconnect;
 
 /* Destroy all existing data */
+DROP TABLE IF EXISTS gpconnect.appointment_appointments_slots;
 DROP TABLE IF EXISTS gpconnect.appointment_schedules;
 DROP TABLE IF EXISTS gpconnect.appointment_slots;
 DROP TABLE IF EXISTS gpconnect.practitioners;
@@ -24,7 +25,6 @@ DROP TABLE IF EXISTS gpconnect.clinicalitems;
 DROP TABLE IF EXISTS gpconnect.investigations;
 DROP TABLE IF EXISTS gpconnect.locations;
 DROP TABLE IF EXISTS gpconnect.orders;
-
 DROP TABLE IF EXISTS gpconnect.appointment_appointments;
 DROP TABLE IF EXISTS gpconnect.general_practitioners;
 DROP TABLE IF EXISTS gpconnect.medical_departments;
@@ -65,7 +65,6 @@ CREATE TABLE gpconnect.appointment_schedules (
 
 CREATE TABLE gpconnect.appointment_slots (
   id                BIGINT    NOT NULL AUTO_INCREMENT,
-  appointmentId     BIGINT    NULL,
   typeCode          BIGINT    NULL,
   typeDisplay       TEXT(300) NULL,
   scheduleReference BIGINT    NULL,
@@ -73,8 +72,14 @@ CREATE TABLE gpconnect.appointment_slots (
   startDateTime     DATETIME  NULL,
   endDateTime       DATETIME  NULL,
   lastUpdated       DATETIME  NULL,
-  PRIMARY KEY (id),
-  FOREIGN KEY (appointmentId) REFERENCES gpconnect.appointment_appointments(id)
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE appointment_appointments_slots (
+	appointmentId	BIGINT    NOT NULL,
+	slotId			BIGINT    NOT NULL,
+	FOREIGN KEY (appointmentId) REFERENCES gpconnect.appointment_appointments(id),
+	FOREIGN KEY (slotId) 		REFERENCES gpconnect.appointment_slots(id)
 );
 
 CREATE TABLE gpconnect.general_practitioners (

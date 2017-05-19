@@ -11,11 +11,11 @@ public class SlotDetailToSlotEntityTransformer implements Transformer<SlotDetail
         SlotEntity slotEntity = new SlotEntity();
         slotEntity.setId(item.getId());
 
-        if (item.getAppointmentId() != null) {
-            AppointmentEntity appointment = new AppointmentEntity();
-            appointment.setId(item.getAppointmentId());
-            slotEntity.setAppointmentId(appointment);
-        }
+//        if (item.getAppointmentId() != null) {
+//            AppointmentEntity appointment = new AppointmentEntity();
+//            appointment.setId(item.getAppointmentId());
+//            slotEntity.setAppointmentId(appointment);
+//        }
 
         slotEntity.setTypeCode(item.getTypeCode());
         slotEntity.setTypeDisply(item.getTypeDisply());

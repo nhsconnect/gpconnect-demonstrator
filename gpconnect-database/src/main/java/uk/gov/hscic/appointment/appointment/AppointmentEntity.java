@@ -2,6 +2,7 @@ package uk.gov.hscic.appointment.appointment;
 
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +10,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 import uk.gov.hscic.appointment.slot.SlotEntity;
 
 @Entity
@@ -46,7 +50,13 @@ public class AppointmentEntity {
     @Column(name = "endDateTime")
     private Date endDateTime;
     
-    @OneToMany(mappedBy="appointmentId", targetEntity=SlotEntity.class, fetch=FetchType.EAGER)
+    @OneToMany(fetch=FetchType.EAGER)
+    @JoinTable
+    (
+        name="appointment_appointments_slots",
+        joinColumns={ @JoinColumn(name="appointmentId", referencedColumnName="id") },
+        inverseJoinColumns={ @JoinColumn(name="slotId", referencedColumnName="id") }
+    )
     private List<SlotEntity> slots;
     
     @Column(name = "commentText")

@@ -21,9 +21,9 @@ public class SlotEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional=true)
-    @JoinColumn(name="appointmentId", referencedColumnName="id")
-    private AppointmentEntity appointmentId;
+//    @ManyToOne(optional=true)
+//    @JoinColumn(name="appointmentId", referencedColumnName="id")
+//    private AppointmentEntity appointmentId;
     
     @Column(name = "typeCode")
     private Long typeCode;
@@ -110,11 +110,11 @@ public class SlotEntity {
         this.lastUpdated = lastUpdated;
     }
 
-    public AppointmentEntity getAppointmentId() {
-        return appointmentId;
-    }
-
-    public void setAppointmentId(AppointmentEntity appointmentId) {
-        this.appointmentId = appointmentId;
-    }
+//    public AppointmentEntity getAppointmentId() {
+//        return appointmentId;
+//    }
+//
+//    public void setAppointmentId(AppointmentEntity appointmentId) {
+//        this.appointmentId = appointmentId;
+//    }
 }

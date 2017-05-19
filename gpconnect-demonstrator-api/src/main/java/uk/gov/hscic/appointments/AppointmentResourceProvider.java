@@ -192,7 +192,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentDetail = appointmentStore.saveAppointment(appointmentDetail, slots);
 
         for (SlotDetail slot : slots) {
-            slot.setAppointmentId(appointmentDetail.getId());
+            //slot.setAppointmentId(appointmentDetail.getId());
             slot.setFreeBusyType("BUSY");
             slot.setLastUpdated(new Date());
             slotStore.saveSlot(slot);
@@ -252,7 +252,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             if (!"cancelled".equalsIgnoreCase(oldStatus)) {
                 for (Long slotId : appointmentDetail.getSlotIds()) {
                     SlotDetail slotDetail = slotSearch.findSlotByID(slotId);
-                    slotDetail.setAppointmentId(null);
+                    //slotDetail.setAppointmentId(null);
                     slotDetail.setFreeBusyType("FREE");
                     slotDetail.setLastUpdated(new Date());
                     slotStore.saveSlot(slotDetail);
@@ -379,10 +379,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentDetail.setStatus(appointment.getStatus().toLowerCase(Locale.UK));
         //appointmentDetail.setTypeCode(Long.valueOf(appointment.getType().getCodingFirstRep().getCode()));
         appointmentDetail.setTypeDisplay(appointment.getType().getCodingFirstRep().getDisplay());
+       
+        // if we don't have a reason - why are we adding a default. According to the spec we don't need to
+        
         if(appointment.getReason().getCodingFirstRep().getCode() == null){
             appointmentDetail.setReasonCode("1");
         } else {
-        appointmentDetail.setReasonCode(appointment.getReason().getCodingFirstRep().getCode());
+        appointmentDetail.setReasonCode(appointment.getReason().getCodingFirstRep().getCode()); // if this is not null the the display should not be either
         }
         appointmentDetail.setReasonDisplay(appointment.getReason().getCodingFirstRep().getDisplay());
         appointmentDetail.setStartDateTime(appointment.getStart());

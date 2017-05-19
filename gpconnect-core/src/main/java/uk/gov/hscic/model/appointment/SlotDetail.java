@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class SlotDetail {
     private Long id;
-    private Long appointmentId;
+   // private Long appointmentId;
     private Long typeCode;
     private String typeDisply;
     private Long scheduleReference;
@@ -21,13 +21,13 @@ public class SlotDetail {
         this.id = id;
     }
 
-    public Long getAppointmentId() {
-        return appointmentId;
-    }
-
-    public void setAppointmentId(Long appointmentId) {
-        this.appointmentId = appointmentId;
-    }
+//    public Long getAppointmentId() {
+//        return appointmentId;
+//    }
+//
+//    public void setAppointmentId(Long appointmentId) {
+//        this.appointmentId = appointmentId;
+//    }
 
     public Long getTypeCode() {
         return typeCode;

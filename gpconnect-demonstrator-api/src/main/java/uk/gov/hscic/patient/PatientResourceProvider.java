@@ -579,12 +579,14 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) {
         Patient patient = new Patient();
-        patient.setId(patientDetails.getId());
         patient.addIdentifier(new IdentifierDt(SystemURL.ID_NHS_NUMBER, patientDetails.getNhsNumber()));
 
         Date lastUpdated = patientDetails.getLastUpdated();
 
-        if (lastUpdated != null) {
+        if (lastUpdated == null) {
+            patient.setId(patientDetails.getId());
+        } else {
+            patient.setId(new IdDt(patient.getResourceName(), patientDetails.getId(), String.valueOf(lastUpdated.getTime())));
             patient.getMeta()
                     .setLastUpdated(lastUpdated)
                     .setVersionId(String.valueOf(lastUpdated.getTime()));
@@ -618,7 +620,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     .setDisplay(practitionerName.getPrefixFirstRep() + " " + practitionerName.getGivenFirstRep() + " " + practitionerName.getFamilyFirstRep());
 
             patient.getCareProvider().add(practitionerReference);
-        } 
+        }
 
         String gender = patientDetails.getGender();
         if (gender != null) {

@@ -23,6 +23,14 @@ public class AppointmentSearch {
                 ? null
                 : transformer.transform(item);
     }
+    
+    public AppointmentDetail findAppointmentByIDAndLastUpdated(Long id, Date lastUpdated) {
+        final AppointmentEntity item = appointmentRepository.findOneByIdAndLastUpdated(id, lastUpdated);;
+
+        return item == null
+                ? null
+                : transformer.transform(item);
+    }    
 
     public List<AppointmentDetail> findAppointmentForPatientId(Long patinetId) {
         return appointmentRepository.findByPatientId(patinetId)

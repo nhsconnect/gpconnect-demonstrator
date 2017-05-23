@@ -21,6 +21,8 @@ public class PatientDetails {
     private Date registrationEndDateTime;
     private String registrationStatus;
     private String registrationType;
+    private boolean multipleBirth;
+    private Date deceased;  
 
     public String getId() {
         return id;
@@ -164,5 +166,25 @@ public class PatientDetails {
 
 	public void setRegistrationType(String registrationType) {
 		this.registrationType = registrationType;
+	}
+
+	public boolean isMultipleBirth() {
+		return multipleBirth;
+	}
+
+	public void setMultipleBirth(boolean multipleBirth) {
+		this.multipleBirth = multipleBirth;
+	}
+
+	public Date getDeceased() {
+		return deceased;
+	}
+
+	public void setDeceased(Date deceased) {
+		this.deceased = deceased;
+	}
+	
+	public boolean isDeceased() {
+		return this.deceased != null;
 	}
 }

@@ -1,5 +1,20 @@
 package uk.gov.hscic.patient;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
+import javax.activation.UnsupportedDataTypeException;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.IDatatype;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
@@ -28,6 +43,7 @@ import ca.uhn.fhir.model.dstu2.valueset.ContactPointSystemEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ContactPointUseEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
+import ca.uhn.fhir.model.primitive.BooleanDt;
 import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -45,18 +61,6 @@ import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
-import javax.activation.UnsupportedDataTypeException;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -500,7 +504,27 @@ public class PatientResourceProvider implements IResourceProvider {
         patientDetails.setDateOfBirth(patientResource.getBirthDate());
         patientDetails.setGender(patientResource.getGender());
         patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
-
+        
+        try {
+        	BooleanDt multipleBirth = (BooleanDt) patientResource.getMultipleBirth();
+        	patientDetails.setMultipleBirth(multipleBirth.getValue());
+        }
+        catch(ClassCastException cce) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
+                    SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);        	
+        }
+        
+        try {
+        	DateTimeDt decseased = (DateTimeDt) patientResource.getDeceased();
+        	patientDetails.setDeceased(decseased.getValue());
+        }
+        catch(ClassCastException cce) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("The multiple deceased property is expected to be a datetime"),
+                    SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);        	
+        }     
+        
         List<ExtensionDt> registrationPeriodExtensions = patientResource
                 .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_REGISTRATION_PERIOD);
         ExtensionDt registrationPeriodExtension = registrationPeriodExtensions.get(0);
@@ -656,6 +680,13 @@ public class PatientResourceProvider implements IResourceProvider {
         if (registrationTypeValue != null) {
             patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_TYPE, new CodeableConceptDt(
                     SystemURL.VS_REGISTRATION_TYPE, registrationTypeValue));
+        }
+        
+        boolean multipleBirth = patientDetails.isMultipleBirth();
+        patient.setMultipleBirth(new BooleanDt(multipleBirth));
+        
+        if(patientDetails.isDeceased()) {
+        	patient.setDeceased(new DateTimeDt(patientDetails.getDeceased()));
         }
 
         return patient;

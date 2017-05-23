@@ -108,6 +108,13 @@ public class PatientEntity {
 
     @Column(name = "sensitive_flag")
     private boolean sensitive;
+    
+    @Column(name = "multiple_birth")
+    private boolean multipleBirth;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "deceased")
+    private Date deceasedDateTime;    
 
     public Long getId() {
         return id;
@@ -292,4 +299,20 @@ public class PatientEntity {
     public void setSensitive(boolean sensitive) {
         this.sensitive = sensitive;
     }
+
+	public boolean isMultipleBirth() {
+		return multipleBirth;
+	}
+
+	public void setMultipleBirth(boolean multipleBirth) {
+		this.multipleBirth = multipleBirth;
+	}
+
+	public Date getDeceasedDateTime() {
+		return deceasedDateTime;
+	}
+
+	public void setDeceasedDateTime(Date deceasedDateTime) {
+		this.deceasedDateTime = deceasedDateTime;
+	}
 }

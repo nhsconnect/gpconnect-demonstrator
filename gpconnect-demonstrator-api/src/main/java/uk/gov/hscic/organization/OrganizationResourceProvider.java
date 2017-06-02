@@ -59,14 +59,27 @@ public class OrganizationResourceProvider implements IResourceProvider {
     @Read()
     public Organization getOrganizationById(@IdParam IdDt organizationId) {
 
-        OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId.getIdPart());
+    	OrganizationDetails organizationDetails = null;
+    	
+    	String idPart = organizationId.getIdPart();
+		
+    	try {
+    		Long id = Long.parseLong(idPart);
+    		organizationDetails = organizationSearch.findOrganizationDetails(id);
+    		if (organizationDetails == null) {
+    			throw OperationOutcomeFactory.buildOperationOutcomeException(
+    					new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
+    					SystemCode.ORGANISATION_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
+    		}
+    	}
+    	catch(NumberFormatException nfe) {
 
-        if (organizationDetails == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No organization details found for organization ID: " + organizationId.getIdPart()),
-                    SystemCode.ORGANISATION_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
-        }
-
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
+					SystemCode.ORGANISATION_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
+    		
+    	}
+    	
         return convertOrganizaitonDetailsListToOrganizationList(Collections.singletonList(organizationDetails)).get(0);
     }
 

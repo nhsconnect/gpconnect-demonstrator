@@ -16,8 +16,8 @@ public class OrganizationSearch {
     @Autowired
     private OrganizationRepository organizationRepository;
 
-    public OrganizationDetails findOrganizationDetails(final String organizationId) {
-        final OrganizationEntity item = organizationRepository.findOne(Long.parseLong(organizationId));
+    public OrganizationDetails findOrganizationDetails(final Long organizationId) {
+        final OrganizationEntity item = organizationRepository.findOne(organizationId);
 
         return item == null
                 ? null

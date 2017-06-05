@@ -5,8 +5,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.activation.UnsupportedDataTypeException;
@@ -475,6 +477,8 @@ public class PatientResourceProvider implements IResourceProvider {
                 .orElse(null);
 
         if (unregisteredPatient != null) {
+            validateConstrainedOutProperties(unregisteredPatient);
+            
             // check if the patient already exists
             PatientDetails patientDetails = patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue());
 
@@ -495,6 +499,31 @@ public class PatientResourceProvider implements IResourceProvider {
         bundle.addEntry().setResource(registeredPatient);
         return bundle;
     }
+    
+    private void validateConstrainedOutProperties(Patient patient) {
+        Set<String> invalidFields = new HashSet<String>();
+        
+        if (patient.getActive() != null) invalidFields.add("active");
+        if (patient.getTelecom().isEmpty() == false) invalidFields.add("telecom");
+        if (patient.getDeceased() != null && patient.getDeceased().isEmpty() == false) invalidFields.add("deceased");
+        if (patient.getAddress().isEmpty() == false) invalidFields.add("address");
+        if (patient.getMaritalStatus().isEmpty() == false) invalidFields.add("marital status");
+        if (patient.getMultipleBirth() != null && patient.getMultipleBirth().isEmpty() == false) invalidFields.add("multiple birth");
+        if (patient.getPhoto().isEmpty() == false) invalidFields.add("photo");
+        if (patient.getContact().isEmpty() == false) invalidFields.add("contact");
+        if (patient.getAnimal().isEmpty() == false) invalidFields.add("animal");
+        if (patient.getCommunication().isEmpty() == false) invalidFields.add("communication");
+        if (patient.getCareProvider().isEmpty() == false) invalidFields.add("care provider");
+        if (patient.getManagingOrganization().isEmpty() == false) invalidFields.add("managing organisation");
+        if (patient.getLink().isEmpty() == false) invalidFields.add("link");
+
+        if(invalidFields.isEmpty() == false) {
+            String message = String.format("The following properties have been contrained out on the Patient resource - %s", String.join(", ", invalidFields));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(message),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.CONTENT_NOT_SUPPORTED);
+        }
+    }
 
     private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
         PatientDetails patientDetails = new PatientDetails();
@@ -505,25 +534,28 @@ public class PatientResourceProvider implements IResourceProvider {
         patientDetails.setGender(patientResource.getGender());
         patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
         
-        try {
-        	BooleanDt multipleBirth = (BooleanDt) patientResource.getMultipleBirth();
-        	patientDetails.setMultipleBirth(multipleBirth.getValue());
-        }
-        catch(ClassCastException cce) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
-                    SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);        	
-        }
-        
-        try {
-        	DateTimeDt decseased = (DateTimeDt) patientResource.getDeceased();
-        	patientDetails.setDeceased(decseased.getValue());
-        }
-        catch(ClassCastException cce) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("The multiple deceased property is expected to be a datetime"),
-                    SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);        	
-        }     
+        BooleanDt multipleBirth = (BooleanDt) patientResource.getMultipleBirth();
+		if (multipleBirth != null) {
+			try {
+				patientDetails.setMultipleBirth(multipleBirth.getValue());
+			} catch (ClassCastException cce) {
+				throw OperationOutcomeFactory.buildOperationOutcomeException(
+						new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
+						SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
+			}
+		}
+ 
+		DateTimeDt deceased = (DateTimeDt) patientResource.getDeceased();
+		if(deceased != null) {
+			try {
+	        	patientDetails.setDeceased(deceased.getValue());
+	        }
+	        catch(ClassCastException cce) {
+	            throw OperationOutcomeFactory.buildOperationOutcomeException(
+	                    new UnprocessableEntityException("The multiple deceased property is expected to be a datetime"),
+	                    SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);        	
+	        }  
+		}
         
         List<ExtensionDt> registrationPeriodExtensions = patientResource
                 .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_REGISTRATION_PERIOD);
@@ -538,14 +570,6 @@ public class PatientResourceProvider implements IResourceProvider {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException("Patient record not found"),
                     SystemCode.INVALID_PARAMETER, IssueTypeEnum.NOT_FOUND);
-        }
-
-        Date registrationEnd = registrationPeriod.getEnd();
-
-        if (registrationEnd != null) {
-            throw new IllegalArgumentException(String.format(
-                    "The given registration end (%c) is not valid. The registration end should be left blank to indicate an open-ended registration period.",
-                    registrationStart));
         }
 
         List<ExtensionDt> registrationStatusExtensions = patientResource

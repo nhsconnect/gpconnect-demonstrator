@@ -503,6 +503,7 @@ public class PatientResourceProvider implements IResourceProvider {
     
     private void validatePatient(Patient patient) {
         validateIdentifiers(patient);
+        validateRegistration(patient);
         validateConstrainedOutProperties(patient);
     }
     
@@ -516,6 +517,26 @@ public class PatientResourceProvider implements IResourceProvider {
                     new InvalidRequestException("One or both of the system and/or value on some of the provided identifiers is null"),
                                                 SystemCode.BAD_REQUEST, 
                                                 IssueTypeEnum.INVALID_CONTENT);
+        }
+    }
+    
+    private void validateRegistration(Patient patient) {
+        String registrationStatus = getRegistrationStatus(patient);
+        if (ACTIVE_REGISTRATION_STATUS.equals(registrationStatus) == false) {
+            String message = String.format("The given registration status is not valid. Expected - %s. Actual - %s", ACTIVE_REGISTRATION_STATUS, registrationStatus);
+            
+            throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
+                                                                         SystemCode.BAD_REQUEST, 
+                                                                         IssueTypeEnum.INVALID_CONTENT);
+        }
+        
+        String registrationType = getRegistrationType(patient);
+        if (TEMPORARY_RESIDENT_REGISTRATION_TYPE.equals(registrationType) == false) {
+            String message = String.format("The given registration type is not valid. Expected - %s. Actual - %s", TEMPORARY_RESIDENT_REGISTRATION_TYPE, registrationType);
+            
+            throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
+                                                                         SystemCode.BAD_REQUEST, 
+                                                                         IssueTypeEnum.INVALID_CONTENT);
         }
     }
     
@@ -592,33 +613,26 @@ public class PatientResourceProvider implements IResourceProvider {
                     SystemCode.INVALID_PARAMETER, IssueTypeEnum.NOT_FOUND);
         }
 
-        List<ExtensionDt> registrationStatusExtensions = patientResource
-                .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_REGISTRATION_STATUS);
-        ExtensionDt registrationStatusExtension = registrationStatusExtensions.get(0);
-        CodeableConceptDt registrationStatusCode = (CodeableConceptDt) registrationStatusExtension.getValue();
-        String registrationStatus = registrationStatusCode.getCodingFirstRep().getCode();
-
-        if (ACTIVE_REGISTRATION_STATUS.equals(registrationStatus)) {
-            patientDetails.setRegistrationStatus(registrationStatus);
-        } else {
-            throw new IllegalArgumentException(String.format(
-                    "The given registration status is not valid. Expected - A. Actual - %s", registrationStatus));
-        }
-
-        List<ExtensionDt> registrationTypeExtensions = patientResource
-                .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_REGISTRATION_TYPE);
-        ExtensionDt registrationTypeExtension = registrationTypeExtensions.get(0);
-        CodeableConceptDt registrationTypeCode = (CodeableConceptDt) registrationTypeExtension.getValue();
-        String registrationType = registrationTypeCode.getCodingFirstRep().getCode();
-
-        if (TEMPORARY_RESIDENT_REGISTRATION_TYPE.equals(registrationType)) {
-            patientDetails.setRegistrationType(registrationType);
-        } else {
-            throw new IllegalArgumentException(String
-                    .format("The given registration type is not valid. Expected - T. Actual - %s", registrationType));
-        }
+        patientDetails.setRegistrationStatus(getRegistrationStatus(patientResource));
+        patientDetails.setRegistrationType(getRegistrationType(patientResource));
 
         return patientDetails;
+    }
+    
+    private String getRegistrationType(Patient patient) {
+        return getFirstExtensionCode(SystemURL.SD_EXTENSION_REGISTRATION_TYPE, patient);
+    }
+
+    private String getRegistrationStatus(Patient patient) {
+        return getFirstExtensionCode(SystemURL.SD_EXTENSION_REGISTRATION_STATUS, patient);
+    }
+    
+    private String getFirstExtensionCode(String extensionUrl, Patient patient) {
+        List<ExtensionDt> extensions = patient.getUndeclaredExtensionsByUrl(extensionUrl);
+        ExtensionDt extension = extensions.get(0);
+        CodeableConceptDt statusCode = (CodeableConceptDt) extension.getValue();
+        String status = statusCode.getCodingFirstRep().getCode();
+        return status;      
     }
 
     // a cut-down Patient

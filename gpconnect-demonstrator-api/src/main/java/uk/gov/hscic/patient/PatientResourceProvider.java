@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -477,7 +478,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 .orElse(null);
 
         if (unregisteredPatient != null) {
-            validateConstrainedOutProperties(unregisteredPatient);
+            validatePatient(unregisteredPatient);
             
             // check if the patient already exists
             PatientDetails patientDetails = patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue());
@@ -500,7 +501,26 @@ public class PatientResourceProvider implements IResourceProvider {
         return bundle;
     }
     
+    private void validatePatient(Patient patient) {
+        validateIdentifiers(patient);
+        validateConstrainedOutProperties(patient);
+    }
+    
+    private void validateIdentifiers(Patient patient) {
+        boolean identifiersValid = patient.getIdentifier()
+                .stream()
+                .allMatch(identifier -> identifier.getSystem() != null && identifier.getValue() != null);
+       
+        if(identifiersValid == false) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("One or both of the system and/or value on some of the provided identifiers is null"),
+                                                SystemCode.BAD_REQUEST, 
+                                                IssueTypeEnum.INVALID_CONTENT);
+        }
+    }
+    
     private void validateConstrainedOutProperties(Patient patient) {
+        
         Set<String> invalidFields = new HashSet<String>();
         
         if (patient.getActive() != null) invalidFields.add("active");
@@ -518,7 +538,7 @@ public class PatientResourceProvider implements IResourceProvider {
         if (patient.getLink().isEmpty() == false) invalidFields.add("link");
 
         if(invalidFields.isEmpty() == false) {
-            String message = String.format("The following properties have been contrained out on the Patient resource - %s", String.join(", ", invalidFields));
+            String message = String.format("The following properties have been constrained out on the Patient resource - %s", String.join(", ", invalidFields));
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(message),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.CONTENT_NOT_SUPPORTED);

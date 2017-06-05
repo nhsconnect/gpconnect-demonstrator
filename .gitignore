@@ -32,3 +32,4 @@ node_modules
 
 # Config #
 context-gpconnect.xml
+config/gpconnect-demonstrator-api.environment.properties

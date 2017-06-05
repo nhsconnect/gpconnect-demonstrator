@@ -1,0 +1,35 @@
+version: '2'
+services:
+  gpconnect:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    links:
+      - mysql
+    ports:
+      - "19191:19191"
+    command: java -jar gpconnect-demonstrator-api/target/gpconnect-demonstrator-api.war --server.port=19191 --config.path=config/
+  webapp:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    links:
+      - gpconnect
+    environment:
+      - GP_CONNECT_WEBAPP_HOSTNAME=0.0.0.0
+      - GP_CONNECT_API_HOSTNAME=gpconnect
+    ports:
+      - "9000:9000"
+    working_dir: /usr/src/app/webapp
+    command: grunt serve
+  mysql:
+    image: mysql/mysql-server
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=answer
+      - MYSQL_PASSWORD=answer99q
+      - MYSQL_DATABASE=gpconnect
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"

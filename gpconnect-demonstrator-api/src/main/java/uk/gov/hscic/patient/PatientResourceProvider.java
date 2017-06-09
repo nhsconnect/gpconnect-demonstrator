@@ -8,11 +8,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.activation.UnsupportedDataTypeException;
+import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,10 +119,17 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PageSectionFactory pageSectionFactory;
+    
+    private NhsNumber nhsNumber;
 
     @Override
     public Class<Patient> getResourceType() {
         return Patient.class;
+    }
+    
+    @PostConstruct
+    public void postConstruct() {
+        nhsNumber = new NhsNumber();
     }
 
     @Read
@@ -139,13 +147,13 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Search
     public List<Patient> getPatientsByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam tokenParam) {
-        if (!SystemURL.ID_NHS_NUMBER.equals(tokenParam.getSystem())) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                new InvalidRequestException("Invalid system code"),
-                SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
-        }
+//        if (!SystemURL.ID_NHS_NUMBER.equals(tokenParam.getSystem())) {
+//            throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                new InvalidRequestException("Invalid system code"),
+//                SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+//        }
 
-        Patient patient = getPatientByPatientId(tokenParam.getValue());
+        Patient patient = getPatientByPatientId(nhsNumber.fromToken(tokenParam));
 
         return null == patient
                 ? Collections.emptyList()
@@ -501,6 +509,10 @@ public class PatientResourceProvider implements IResourceProvider {
         return bundle;
     }
     
+    public String getNhsNumber(Object source) {
+        return nhsNumber.getNhsNumber(source);
+    }
+    
     private void validatePatient(Patient patient) {
         validateIdentifiers(patient);
         validateRegistration(patient);
@@ -748,5 +760,115 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         return patient;
+    }
+    
+    private class NhsNumber {
+        
+        private NhsNumber() {
+            super();
+        }
+        
+        private String getNhsNumber(Object source) {
+            String nhsNumber = fromIdDt(source);
+            if(nhsNumber == null) {
+                nhsNumber = fromToken(source);
+                
+                if(nhsNumber == null) {
+                    nhsNumber = fromParameters(source);        
+                }
+            }
+            
+            return nhsNumber;
+        }
+        
+        private String fromIdDt(Object source) {
+            String nhsNumber = null;
+            
+            if(source instanceof IdDt) {
+                IdDt idDt = (IdDt) source;
+                
+                PatientDetails patientDetails = patientSearch.findPatientByInternalID(idDt.getIdPart());
+                nhsNumber = patientDetails.getNhsNumber();
+            }
+            
+            return nhsNumber;
+        }
+        
+        private String fromToken(Object source) {
+            String nhsNumber = null;
+            
+            if(source instanceof TokenParam) {
+                TokenParam tokenParam = (TokenParam) source;
+                
+                if (!SystemURL.ID_NHS_NUMBER.equals(tokenParam.getSystem())) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("Invalid system code"),
+                        SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                }
+                
+                nhsNumber = tokenParam.getValue();
+            }
+            
+            return nhsNumber;
+        }
+        
+        private String fromParameters(Object source) {
+            String nhsNumber = null;
+            
+            if(source instanceof Parameters) {
+                Parameters parameters = (Parameters) source;
+                
+                Parameter parameter = getParameterByName(parameters.getParameter(), "patientNHSNumber");
+                if(parameter != null) {
+                    nhsNumber = fromIdentifierDt(parameter.getValue());
+                }
+                else {
+                    parameter = getParameterByName(parameters.getParameter(), "registerPatient");
+                    if(parameter != null) {
+                        nhsNumber = fromPatientResource(parameter.getResource());
+                    } 
+                }
+            }
+            
+            return nhsNumber;
+        } 
+        
+        private String fromIdentifierDt(Object source) {
+            String nhsNumber = null;
+            
+            if(source instanceof IdentifierDt) {
+                IdentifierDt identifierDt = (IdentifierDt) source;
+                
+                nhsNumber = identifierDt.getValue();
+            }
+            
+            return nhsNumber;
+        }
+        
+        private String fromPatientResource(Object source) {
+            String nhsNumber = null;
+            
+            if(source instanceof Patient) {
+                Patient patient = (Patient) source;
+                
+                nhsNumber = patient.getIdentifierFirstRep().getValue();
+            }
+            
+            return nhsNumber;
+        }
+        
+        private Parameter getParameterByName(List<Parameter> parameters, String parameterName) {
+            Parameter parameter = null;
+            
+            Optional<Parameter> optional = parameters.stream()
+                                                     .filter(currentParameter -> parameterName.equals(currentParameter.getName()))
+                                                     .collect(Collectors.reducing((a, b) -> null));
+            
+            if(optional.isPresent()) {
+                parameter = optional.get();
+            }
+            
+            return parameter;
+        }
     }
 }

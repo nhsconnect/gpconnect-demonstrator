@@ -116,4 +116,12 @@ public class WebToken {
     public void setRequestingPractitioner(RequestingPractitioner requestingPractitioner) {
         this.requestingPractitioner = requestingPractitioner;
     }
+    
+    public boolean isReadRequestedScope() {
+        return getRequestedScope().endsWith("read");
+    }
+    
+    public boolean isWriteRequestedScope() {
+        return getRequestedScope().endsWith("write");
+    }    
 }

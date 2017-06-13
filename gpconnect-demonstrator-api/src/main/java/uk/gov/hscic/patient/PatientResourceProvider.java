@@ -504,7 +504,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     SystemCode.INVALID_PARAMETER, IssueTypeEnum.NOT_FOUND);
         }
 
-        Bundle bundle = new Bundle().setType(BundleTypeEnum.TRANSACTION_RESPONSE);
+        Bundle bundle = new Bundle().setType(BundleTypeEnum.SEARCH_RESULTS);
         bundle.addEntry().setResource(registeredPatient);
         return bundle;
     }
@@ -668,88 +668,43 @@ public class PatientResourceProvider implements IResourceProvider {
 
     // a cut-down Patient
     private Patient patientDetailsToRegisterPatientResourceConverter(PatientDetails patientDetails) {
-        Patient patient = new Patient()
-                .addIdentifier(new IdentifierDt(SystemURL.ID_NHS_NUMBER, patientDetails.getNhsNumber()))
-                .setBirthDate(new DateDt(patientDetails.getDateOfBirth()))
-                .setGender(AdministrativeGenderEnum.forCode(patientDetails.getGender().toLowerCase(Locale.UK)));
-
-        patient.setId(patientDetails.getId());
-        patient.addName().addFamily(patientDetails.getSurname()).addGiven(patientDetails.getForename()).setUse(NameUseEnum.USUAL);
-
-        PeriodDt registrationPeriod = new PeriodDt()
-                .setStartWithSecondsPrecision(patientDetails.getRegistrationStartDateTime())
-                .setEndWithSecondsPrecision(patientDetails.getRegistrationEndDateTime());
-        patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_PERIOD, registrationPeriod);
-
-        patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_STATUS, new CodeableConceptDt(
-                SystemURL.VS_REGISTRATION_STATUS, patientDetails.getRegistrationStatus()));
-
-        patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_TYPE, new CodeableConceptDt(
-                SystemURL.VS_REGISTRATION_TYPE, patientDetails.getRegistrationType()));
+        Patient patient = patientDetailsToMinimalPatient(patientDetails);
+        
+        patient.addName()
+                    .addFamily(patientDetails.getSurname())
+                    .addGiven(patientDetails.getForename())
+                    .setUse(NameUseEnum.USUAL);
 
         return patient;
     }
-
-    private Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) {
+    
+    private Patient patientDetailsToMinimalPatient(PatientDetails patientDetails) {
         Patient patient = new Patient();
-        patient.addIdentifier(new IdentifierDt(SystemURL.ID_NHS_NUMBER, patientDetails.getNhsNumber()));
-
-        Date lastUpdated = patientDetails.getLastUpdated();
-
+        
+        String versionId;
+        Date lastUpdated = patientDetails.getLastUpdated();     
         if (lastUpdated == null) {
+            versionId = String.valueOf(new Date().getTime());
+
             patient.setId(patientDetails.getId());
         } else {
-            patient.setId(new IdDt(patient.getResourceName(), patientDetails.getId(), String.valueOf(lastUpdated.getTime())));
-            patient.getMeta()
-                    .setLastUpdated(lastUpdated)
-                    .setVersionId(String.valueOf(lastUpdated.getTime()));
-        }
-
-        patient.addName()
-                .setText(patientDetails.getName())
-                .addFamily(patientDetails.getSurname())
-                .addGiven(patientDetails.getForename())
-                .addPrefix(patientDetails.getTitle())
-                .setUse(NameUseEnum.USUAL);
-
+            versionId = String.valueOf(lastUpdated.getTime());
+           
+            patient.setId(new IdDt(patient.getResourceName(), patientDetails.getId(), versionId));
+            patient.getMeta().setLastUpdated(lastUpdated);
+        }   
+        
+        patient.getMeta().addProfile(SystemURL.SD_GPC_PATIENT); 
+        patient.getMeta().setVersionId(versionId);
+        
+        patient.addIdentifier(new IdentifierDt(SystemURL.ID_NHS_NUMBER, patientDetails.getNhsNumber()));
         patient.setBirthDate(new DateDt(patientDetails.getDateOfBirth()));
-        patient.getMeta().addProfile(SystemURL.SD_GPC_PATIENT);
-
-        String addressLines = patientDetails.getAddress();
-
-        if (addressLines != null) {
-            patient.addAddress()
-                    .setUse(AddressUseEnum.HOME)
-                    .setType(AddressTypeEnum.PHYSICAL)
-                    .setText(addressLines);
-        }
-
-        Long gpId = patientDetails.getGpId();
-
-        if (gpId != null) {
-            HumanNameDt practitionerName = practitionerResourceProvider.getPractitionerById(new IdDt(gpId)).getName();
-
-            ResourceReferenceDt practitionerReference = new ResourceReferenceDt("Practitioner/" + gpId)
-                    .setDisplay(practitionerName.getPrefixFirstRep() + " " + practitionerName.getGivenFirstRep() + " " + practitionerName.getFamilyFirstRep());
-
-            patient.getCareProvider().add(practitionerReference);
-        }
-
+        
         String gender = patientDetails.getGender();
         if (gender != null) {
             patient.setGender(AdministrativeGenderEnum.forCode(gender.toLowerCase(Locale.UK)));
         }
-
-        String telephoneNumber = patientDetails.getTelephone();
-        if (telephoneNumber != null) {
-            ContactPointDt telephone = new ContactPointDt()
-                    .setSystem(ContactPointSystemEnum.PHONE)
-                    .setValue(telephoneNumber)
-                    .setUse(ContactPointUseEnum.HOME);
-
-            patient.setTelecom(Collections.singletonList(telephone));
-        }
-
+               
         Date registrationStartDateTime = patientDetails.getRegistrationStartDateTime();
         if (registrationStartDateTime != null) {
             PeriodDt registrationPeriod = new PeriodDt()
@@ -769,10 +724,50 @@ public class PatientResourceProvider implements IResourceProvider {
         if (registrationTypeValue != null) {
             patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_TYPE, new CodeableConceptDt(
                     SystemURL.VS_REGISTRATION_TYPE, registrationTypeValue));
+        }        
+
+        return patient;   
+    }
+
+    private Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) {
+        Patient patient = patientDetailsToMinimalPatient(patientDetails);
+
+        patient.addName()
+                .setText(patientDetails.getName())
+                .addFamily(patientDetails.getSurname())
+                .addGiven(patientDetails.getForename())
+                .addPrefix(patientDetails.getTitle())
+                .setUse(NameUseEnum.USUAL);
+        
+        String addressLines = patientDetails.getAddress();
+        if (addressLines != null) {
+            patient.addAddress()
+                    .setUse(AddressUseEnum.HOME)
+                    .setType(AddressTypeEnum.PHYSICAL)
+                    .setText(addressLines);
+        }
+
+        Long gpId = patientDetails.getGpId();
+        if (gpId != null) {
+            HumanNameDt practitionerName = practitionerResourceProvider.getPractitionerById(new IdDt(gpId)).getName();
+
+            ResourceReferenceDt practitionerReference = new ResourceReferenceDt("Practitioner/" + gpId)
+                    .setDisplay(practitionerName.getPrefixFirstRep() + " " + practitionerName.getGivenFirstRep() + " " + practitionerName.getFamilyFirstRep());
+
+            patient.getCareProvider().add(practitionerReference);
+        }
+
+        String telephoneNumber = patientDetails.getTelephone();
+        if (telephoneNumber != null) {
+            ContactPointDt telephone = new ContactPointDt()
+                    .setSystem(ContactPointSystemEnum.PHONE)
+                    .setValue(telephoneNumber)
+                    .setUse(ContactPointUseEnum.HOME);
+
+            patient.setTelecom(Collections.singletonList(telephone));
         }
         
-        boolean multipleBirth = patientDetails.isMultipleBirth();
-        patient.setMultipleBirth(new BooleanDt(multipleBirth));
+        patient.setMultipleBirth(new BooleanDt(patientDetails.isMultipleBirth()));
         
         if(patientDetails.isDeceased()) {
         	patient.setDeceased(new DateTimeDt(patientDetails.getDeceased()));

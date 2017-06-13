@@ -3,6 +3,7 @@ package uk.gov.hscic.common.filters;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -55,15 +56,17 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     }
     
     private void validateOrganisationIdentifier(WebToken webToken, RequestDetails requestDetails) {
-        String identifierSystem = requestDetails.getParameters()
-                                                .get(SystemParameter.IDENTIFIER)[0]
-                                                .split("\\|")[0];
+        Map<String, String[]> parameters = requestDetails.getParameters();
         
-        if (!PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS.contains(identifierSystem)) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Invalid organization identifier system: " + identifierSystem),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-        } 
+        if(parameters != null && parameters.isEmpty() == false) {
+            String identifierSystem = parameters.get(SystemParameter.IDENTIFIER)[0].split("\\|")[0];
+            
+            if (!PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS.contains(identifierSystem)) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("Invalid organization identifier system: " + identifierSystem),
+                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+            } 
+        }
         
         if (null == webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_ODS_ORGANIZATION_CODE)) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -74,16 +77,18 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     }
     
     private void validatePatientIdentifier(WebToken webToken, RequestDetails requestDetails) {
-        String requestIdentifierValue = requestDetails.getParameters()
-                                                      .get(SystemParameter.IDENTIFIER)[0]
-                                                      .split("\\|")[1];
+        Map<String, String[]> parameters = requestDetails.getParameters();
         
-        String jwtIdentifierValue = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);;        
-        
-        if(jwtIdentifierValue.equals(requestIdentifierValue) == false) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Invalid NHS number: " + jwtIdentifierValue),
-                    SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
+        if(parameters != null && parameters.isEmpty() == false) {
+            String requestIdentifierValue = parameters.get(SystemParameter.IDENTIFIER)[0].split("\\|")[1];
+            
+            String jwtIdentifierValue = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);;        
+            
+            if(jwtIdentifierValue.equals(requestIdentifierValue) == false) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("Invalid NHS number: " + jwtIdentifierValue),
+                        SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
+            }
         }
     }    
     

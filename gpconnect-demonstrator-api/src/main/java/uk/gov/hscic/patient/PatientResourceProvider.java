@@ -517,6 +517,7 @@ public class PatientResourceProvider implements IResourceProvider {
         validateIdentifiers(patient);
         validateRegistration(patient);
         validateConstrainedOutProperties(patient);
+        valiateNames(patient);
     }
     
     private void validateIdentifiers(Patient patient) {
@@ -575,6 +576,24 @@ public class PatientResourceProvider implements IResourceProvider {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(message),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.CONTENT_NOT_SUPPORTED);
+        }
+    }
+    
+    private void valiateNames(Patient patient) {
+        List<HumanNameDt> names = patient.getName();
+        validateNameCount(names, "name");
+
+        HumanNameDt name = names.iterator().next();
+        validateNameCount(name.getFamily(), "family");
+        validateNameCount(name.getGiven(), "given");
+    }
+    
+    private void validateNameCount(List<?> names, String nameType) {
+        if(names.size() != 1) {
+            String message = String.format("The patient can only have one %s name property. Found %s", nameType, names.size());
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(message),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
     }
 

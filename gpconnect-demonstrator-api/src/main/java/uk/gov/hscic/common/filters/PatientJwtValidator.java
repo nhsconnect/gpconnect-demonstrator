@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
-import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import ca.uhn.fhir.rest.method.BaseMethodBinding;
 import ca.uhn.fhir.rest.method.IParameter;
 import ca.uhn.fhir.rest.method.RequestDetails;
@@ -28,8 +27,6 @@ import uk.gov.hscic.util.NhsCodeValidator;
 
 @Component
 public class PatientJwtValidator extends AuthorizationInterceptor {
-    //ResourceBinding patientResourceBinding;
-    
     @Autowired
     PatientResourceProvider patientResourceProvider;
     
@@ -76,8 +73,6 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
         
         if(patientResourceBinding != null) {
             BaseMethodBinding<?> methodBinding = patientResourceBinding.getMethod(requestDetails); 
-            
-            RestOperationTypeEnum restOperationType = methodBinding.getRestOperationType();
             
             List<IParameter> parameters = methodBinding.getParameters();
             for(IParameter parameter : parameters) {

@@ -79,15 +79,19 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     private void validatePatientIdentifier(WebToken webToken, RequestDetails requestDetails) {
         Map<String, String[]> parameters = requestDetails.getParameters();
         
-        if(parameters != null && parameters.isEmpty() == false) {
-            String requestIdentifierValue = parameters.get(SystemParameter.IDENTIFIER)[0].split("\\|")[1];
-            
-            String jwtIdentifierValue = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);;        
-            
-            if(jwtIdentifierValue.equals(requestIdentifierValue) == false) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException("Invalid NHS number: " + jwtIdentifierValue),
-                        SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
+        if(parameters != null && parameters.isEmpty() == false) {         
+            String[] requestIdentifiers = parameters.get(SystemParameter.IDENTIFIER);
+           
+            if(requestIdentifiers != null && requestIdentifiers.length > 0) {
+                String requestIdentifierValue = requestIdentifiers[0].split("\\|")[1];
+                
+                String jwtIdentifierValue = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);;        
+                
+                if(jwtIdentifierValue.equals(requestIdentifierValue) == false) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("Invalid NHS number: " + jwtIdentifierValue),
+                            SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
+                }
             }
         }
     }    

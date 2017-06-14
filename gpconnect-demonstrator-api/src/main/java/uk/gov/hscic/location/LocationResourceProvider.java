@@ -51,7 +51,7 @@ public class LocationResourceProvider implements IResourceProvider {
                 .collect(Collectors.toList());
     }
 
-    @Read()
+    @Read(version = true)
     public Location getLocationById(@IdParam IdDt locationId) {
         LocationDetails locationDetails = locationSearch.findLocationById(locationId.getIdPart());
 

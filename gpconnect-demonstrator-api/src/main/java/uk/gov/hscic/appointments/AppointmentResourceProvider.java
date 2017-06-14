@@ -1,18 +1,5 @@
 package uk.gov.hscic.appointments;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
@@ -40,9 +27,22 @@ import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ParamPrefixEnum;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import org.hl7.fhir.instance.model.api.IBaseDatatype;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -94,44 +94,44 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     	try {
     		Long id = appointmentId.getIdPartAsLong();
-    		
+
     		AppointmentDetail appointmentDetail = null;
-    		
+
     		// are we dealing with a request for a specific version of the appointment
         	if(appointmentId.hasVersionIdPart()) {
-        		
+
         		try {
 	        		Long versionId = appointmentId.getVersionIdPartAsLong();
-	
+
 	        		appointmentDetail = appointmentSearch.findAppointmentByIDAndLastUpdated(id, new Date(versionId));
-	        				
+
 	        		if(appointmentDetail == null) {
 	            		// 404 version of resource not found
 	        			String msg = String.format("No appointment details found for ID: %s with versionId %s", appointmentId.getIdPart(), versionId);
-	            		throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(msg), 
-	            															   		 SystemCode.REFERENCE_NOT_FOUND, 
-	            															   		 IssueTypeEnum.NOT_FOUND);          			
+	            		throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(msg),
+	            															   		 SystemCode.REFERENCE_NOT_FOUND,
+	            															   		 IssueTypeEnum.NOT_FOUND);
 	        		}
         		}
                 catch(NumberFormatException nfe) {
                 	// 404 resource not found - the versionId is valid according to FHIR
                 	// however we have no entities matching that versionId
                 	String msg = String.format("The version ID %s of the Appointment (ID - %s) is not valid", appointmentId.getVersionIdPart(), id);
-            		throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(msg), 
-        			   		 													 SystemCode.REFERENCE_NOT_FOUND, 
-        			   		 													 IssueTypeEnum.NOT_FOUND);        		
-                }        		
+            		throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(msg),
+        			   		 													 SystemCode.REFERENCE_NOT_FOUND,
+        			   		 													 IssueTypeEnum.NOT_FOUND);
+                }
         	}
         	else {
-        		appointmentDetail = appointmentSearch.findAppointmentByID(id);  
-        		
+        		appointmentDetail = appointmentSearch.findAppointmentByID(id);
+
         		if(appointmentDetail == null) {
             		// 404 resource not found
         			String msg = String.format("No appointment details found for ID: %s", appointmentId.getIdPart());
-            		throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(msg), 
-            															   		 SystemCode.REFERENCE_NOT_FOUND, 
-            															   		 IssueTypeEnum.NOT_FOUND);          			
-        		}        		
+            		throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(msg),
+            															   		 SystemCode.REFERENCE_NOT_FOUND,
+            															   		 IssueTypeEnum.NOT_FOUND);
+        		}
         	}
 
         	appointment = appointmentDetailToAppointmentResourceConverter(appointmentDetail);
@@ -139,9 +139,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
         catch(NumberFormatException nfe) {
         	// 404 resource not found - the identifier is valid according to FHIR
         	// however we have no entities matching that identifier
-    		throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException("No appointment details found for ID: " + appointmentId.getIdPart()), 
-			   		 													 SystemCode.REFERENCE_NOT_FOUND, 
-			   		 													 IssueTypeEnum.NOT_FOUND);        		
+    		throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException("No appointment details found for ID: " + appointmentId.getIdPart()),
+			   		 													 SystemCode.REFERENCE_NOT_FOUND,
+			   		 													 IssueTypeEnum.NOT_FOUND);
         }
 
     	return appointment;
@@ -383,7 +383,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 			codableConceptReason.setText(reasonDisplay);
 			appointment.setReason(codableConceptReason);
 		}
-		
+
         appointment.setStartWithMillisPrecision(appointmentDetail.getStartDateTime());
         appointment.setEndWithMillisPrecision(appointmentDetail.getEndDateTime());
 
@@ -408,7 +408,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
         Participant locationParticipant = appointment.addParticipant();
         locationParticipant.setActor(new ResourceReferenceDt("Location/" + appointmentDetail.getLocationId()));
         locationParticipant.setStatus(ParticipationStatusEnum.ACCEPTED);
-
         return appointment;
     }
 
@@ -416,17 +415,17 @@ public class AppointmentResourceProvider implements IResourceProvider {
     	if(lastUpdated == null) {
     		lastUpdated = new Date();
     	}
-    	
+
     	// trim off milliseconds as we do not store
     	// to this level of granularity
     	Instant instant = lastUpdated.toInstant();
         instant = instant.truncatedTo(ChronoUnit.SECONDS);
-        
+
         lastUpdated = Date.from(instant);
-        
+
         return lastUpdated;
     }
-    
+
     public AppointmentDetail appointmentResourceConverterToAppointmentDetail(Appointment appointment) {
         AppointmentDetail appointmentDetail = new AppointmentDetail();
         appointmentDetail.setId(appointment.getId().getIdPartAsLong());
@@ -435,41 +434,47 @@ public class AppointmentResourceProvider implements IResourceProvider {
         List<ExtensionDt> extension = appointment.getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON);
 
         if (extension != null && !extension.isEmpty()) {
-            String cancellationReason = extension.get(0).getValue().toString();
-            appointmentDetail.setCancellationReason(cancellationReason);
+            IBaseDatatype value = extension.get(0).getValue();
+
+            if (null == value) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("Cancellation reason missing."), SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+            }
+
+            appointmentDetail.setCancellationReason(value.toString());
         }
 
         appointmentDetail.setStatus(appointment.getStatus().toLowerCase(Locale.UK));
         appointmentDetail.setTypeDisplay(appointment.getType().getCodingFirstRep().getDisplay());
-       
+
         CodingDt codingFirstRep = appointment.getReason().getCodingFirstRep();
-        
+
         // we only support the SNOMED coding system
-        if(SystemURL.SNOMED.equals(codingFirstRep.getSystem())) {     
+        if(SystemURL.SNOMED.equals(codingFirstRep.getSystem())) {
 	        String reasonCode = codingFirstRep.getCode();
 			String reasonDisplay = codingFirstRep.getDisplay();
 			if(reasonCode != null) {
 	        	if(reasonDisplay != null) {
-	        		appointmentDetail.setReasonCode(reasonCode); 
+	        		appointmentDetail.setReasonCode(reasonCode);
 	                appointmentDetail.setReasonDisplay(reasonDisplay);
 	        	}
 	        	else {
 	        		// 422 missing data
 	        		String msg = String.format("Problem with reason property of the appointment. If the reason is provided then both the code (%s) and display (%s) properties must be set.", reasonCode, reasonDisplay);
-	        		throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(msg), 
-	    			   		 													 SystemCode.INVALID_RESOURCE, 
-	    			   		 													 IssueTypeEnum.REQUIRED_ELEMENT_MISSING);  
+	        		throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(msg),
+	    			   		 													 SystemCode.INVALID_RESOURCE,
+	    			   		 													 IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
 	        	}
 	        }
 	        else if(reasonDisplay != null) {
         		// 422 missing data
         		String msg = String.format("Problem with reason property of the appointment. If the reason is provided then both the code (%s) and display (%s) properties must be set.", reasonCode, reasonDisplay);
-        		throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(msg), 
-    			   		 													 SystemCode.INVALID_RESOURCE, 
-    			   		 													 IssueTypeEnum.REQUIRED_ELEMENT_MISSING); 
+        		throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(msg),
+    			   		 													 SystemCode.INVALID_RESOURCE,
+    			   		 													 IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
 	        }
         }
-        
+
         appointmentDetail.setStartDateTime(appointment.getStart());
         appointmentDetail.setEndDateTime(appointment.getEnd());
 

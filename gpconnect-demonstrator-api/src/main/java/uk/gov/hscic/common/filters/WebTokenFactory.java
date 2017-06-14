@@ -34,6 +34,7 @@ public class WebTokenFactory {
     
     private static final Logger LOG = Logger.getLogger("AuthLog");
     private static final String PERMITTED_MEDIA_TYPE_HEADER_REGEX = "application/(xml|json)\\+fhir(;charset=utf-8)?";
+    private IParser parser = null;
     
     WebToken getWebToken(RequestDetails requestDetails, int futureRequestLeeway) {
         WebToken webToken = null;
@@ -108,15 +109,17 @@ public class WebTokenFactory {
     }
     
     private void jwtParseResourcesValidation(String claimsJsonString) {
-        IParser parser = FhirContext
+        if(parser == null){
+            parser = FhirContext
                 .forDstu2()
                 .newJsonParser()
                 .setParserErrorHandler(new StrictErrorHandler());
+        }
 
         try {
             JsonNode jsonNode = new ObjectMapper().readTree(claimsJsonString);
 
-            LOG.info("Incoming FHIR request: " + jsonNode);
+            //LOG.info("Incoming FHIR request: " + jsonNode);
 
             parser.parseResource(jsonNode.get("requesting_practitioner").toString());
             parser.parseResource(jsonNode.get("requesting_device").toString());

@@ -1,5 +1,6 @@
 package uk.gov.hscic.common.filters;
 
+import java.util.Enumeration;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -9,9 +10,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.http.HttpException;
 import org.apache.log4j.Logger;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 @Component
@@ -25,6 +23,15 @@ public class DefaultHeaderFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws java.io.IOException, ServletException {
         try {
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            
+            String headerOutput = "Headers ( ";
+            Enumeration<String> headerNames = httpRequest.getHeaderNames();
+            while(headerNames.hasMoreElements()){
+                String headerName = headerNames.nextElement();
+                headerOutput += "'" + headerName + "' : '" + httpRequest.getHeader(headerName) + "'";
+            }
+            LOG.info(headerOutput + " )");
             
             chain.doFilter(new HeaderRequestWrapper((HttpServletRequest) request), response);
         } catch (HttpException e) {

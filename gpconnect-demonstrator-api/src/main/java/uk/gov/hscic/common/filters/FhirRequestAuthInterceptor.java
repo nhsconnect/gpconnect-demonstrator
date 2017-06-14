@@ -193,7 +193,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         try {
             JsonNode jsonNode = new ObjectMapper().readTree(claimsJsonString);
 
-            LOG.info("Incoming FHIR request: " + jsonNode);
+            // LOG.info("Incoming FHIR request: " + jsonNode);
 
             parser.parseResource(jsonNode.get("requesting_practitioner").toString());
             parser.parseResource(jsonNode.get("requesting_device").toString());

@@ -1,9 +1,8 @@
 package uk.gov.hscic.appointment.appointment;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import uk.gov.hscic.appointment.slot.SlotDetailToSlotEntityTransformer;
-import uk.gov.hscic.appointment.slot.SlotEntity;
 import uk.gov.hscic.model.appointment.AppointmentDetail;
 import uk.gov.hscic.model.appointment.SlotDetail;
 
@@ -14,18 +13,13 @@ public class AppointmentDetailToAppointmentEntityTransformer {
         appointmentEntity.setId(item.getId());
 
         SlotDetailToSlotEntityTransformer slotTransformer = new SlotDetailToSlotEntityTransformer();
-        List<SlotEntity> slotsEntities = new ArrayList<>();
 
-        for (SlotDetail slot : slots) {
-            slotsEntities.add(slotTransformer.transform(slot));
-        }
-
-        appointmentEntity.setSlots(slotsEntities);
-
+        appointmentEntity.setSlots(slots.stream().map(slotTransformer::transform).collect(Collectors.toList()));
         appointmentEntity.setCancellationReason(item.getCancellationReason());
         appointmentEntity.setStatus(item.getStatus());
         appointmentEntity.setTypeCode(item.getTypeCode());
         appointmentEntity.setTypeDisplay(item.getTypeDisplay());
+        appointmentEntity.setDescription(item.getDescription());
         appointmentEntity.setReasonCode(item.getReasonCode());
         appointmentEntity.setReasonDisplay(item.getReasonDisplay());
         appointmentEntity.setStartDateTime(item.getStartDateTime());

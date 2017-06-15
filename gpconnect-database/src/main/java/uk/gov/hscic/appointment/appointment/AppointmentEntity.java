@@ -2,7 +2,6 @@ package uk.gov.hscic.appointment.appointment;
 
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,63 +13,64 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import uk.gov.hscic.appointment.slot.SlotEntity;
 
 @Entity
 @Table(name = "appointment_appointments")
 @Cacheable(false)
 public class AppointmentEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "cancellationReason")
     private String cancellationReason;
-    
+
     @Column(name = "status")
     private String status;
-    
+
     @Column(name = "typeCode")
     private Long typeCode;
-    
+
     @Column(name = "typeDisplay")
     private String typeDisplay;
-    
+
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "reasonCode")
     private String reasonCode;
-    
+
     @Column(name = "reasonDisplay")
     private String reasonDisplay;
-    
+
     @Column(name = "startDateTime")
     private Date startDateTime;
-    
+
     @Column(name = "endDateTime")
     private Date endDateTime;
-    
+
     @OneToMany(fetch=FetchType.EAGER)
-    @JoinTable
-    (
+    @JoinTable(
         name="appointment_appointments_slots",
         joinColumns={ @JoinColumn(name="appointmentId", referencedColumnName="id") },
         inverseJoinColumns={ @JoinColumn(name="slotId", referencedColumnName="id") }
     )
     private List<SlotEntity> slots;
-    
+
     @Column(name = "commentText")
     private String comment;
-    
+
     @Column(name = "patientId")
     private Long patientId;
-    
+
     @Column(name = "practitionerId")
     private Long practitionerId;
-    
+
     @Column(name = "locationId")
     private Long locationId;
-    
+
     @Column(name = "lastUpdated")
     private Date lastUpdated;
 
@@ -112,6 +112,14 @@ public class AppointmentEntity {
 
     public void setTypeDisplay(String typeDisplay) {
         this.typeDisplay = typeDisplay;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getReasonCode() {

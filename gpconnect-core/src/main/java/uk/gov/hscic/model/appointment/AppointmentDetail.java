@@ -11,6 +11,7 @@ public class AppointmentDetail {
     private Long typeCode;
     private String typeDisplay;
     private String reasonCode;
+    private String description;
     private String reasonDisplay;
     private Date startDateTime;
     private Date endDateTime;
@@ -74,6 +75,14 @@ public class AppointmentDetail {
 
     public void setReasonCode(String reasonCode) {
         this.reasonCode = reasonCode;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getReasonDisplay() {

@@ -311,6 +311,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             // This is an Amend
             oldAppointmentDetail.setComment(appointmentDetail.getComment());
             oldAppointmentDetail.setReasonCode(appointmentDetail.getReasonCode());
+            oldAppointmentDetail.setDescription(appointmentDetail.getDescription());
             oldAppointmentDetail.setReasonDisplay(appointmentDetail.getReasonDisplay());
             oldAppointmentDetail.setTypeCode(appointmentDetail.getTypeCode());
             oldAppointmentDetail.setTypeDisplay(appointmentDetail.getTypeDisplay());
@@ -396,6 +397,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointment.setSlot(slotResources);
 
         appointment.setComment(appointmentDetail.getComment());
+        appointment.setDescription(appointmentDetail.getDescription());
 
         Participant patientParticipant = appointment.addParticipant();
         patientParticipant.setActor(new ResourceReferenceDt("Patient/" + appointmentDetail.getPatientId()));
@@ -487,6 +489,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentDetail.setSlotIds(slotIds);
 
         appointmentDetail.setComment(appointment.getComment());
+        appointmentDetail.setDescription(appointment.getDescription());
 
         for (Appointment.Participant participant : appointment.getParticipant()) {
             if (participant.getActor() != null) {

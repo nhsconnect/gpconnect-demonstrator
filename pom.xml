@@ -29,7 +29,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.3.RELEASE</version>
+        <version>1.5.4.RELEASE</version>
     </parent>
 
     <properties>
@@ -37,7 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <fhir.version>2.4</fhir.version>
+        <fhir.version>2.5</fhir.version>
     </properties>
 
     <modules>
@@ -93,7 +93,7 @@
             <dependency>
                 <groupId>org.apache.directory.api</groupId>
                 <artifactId>api-all</artifactId>
-                <version>1.0.0-RC2</version>
+                <version>1.0.0</version>
             </dependency>
 
             <dependency>

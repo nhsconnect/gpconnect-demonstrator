@@ -1,14 +1,14 @@
 package uk.gov.hscic.patient;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -84,15 +84,16 @@ import uk.gov.hscic.util.NhsCodeValidator;
 
 @Component
 public class PatientResourceProvider implements IResourceProvider {
+    private static final String REGISTER_PATIENT_OPERATION_NAME = "$gpc.registerpatient";
+    private static final String GET_CARE_RECORD_OPERATION_NAME = "$gpc.getcarerecord";
+    
     private static final String TEMPORARY_RESIDENT_REGISTRATION_TYPE = "T";
     private static final String ACTIVE_REGISTRATION_STATUS = "A";
     private static final int ENCOUNTERS_SUMMARY_LIMIT = 3;
 
-    private static final List<String> MANDATORY_PARAM_NAMES = Arrays.asList("patientNHSNumber", "recordSection");
-    private static final List<String> PERMITTED_PARAM_NAMES = new ArrayList<String>(MANDATORY_PARAM_NAMES) {{
-        add("timePeriod");
-    }};
-
+    //private static final List<String> MANDATORY_PARAM_NAMES = Arrays.asList("patientNHSNumber", "recordSection");
+    //private static final List<String> OPTIONAL_PARAM_NAMES = Arrays.asList("timePeriod");
+       
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
 
@@ -121,7 +122,23 @@ public class PatientResourceProvider implements IResourceProvider {
     private PageSectionFactory pageSectionFactory;
     
     private NhsNumber nhsNumber;
+    
+    private Map<String, Boolean> getCareRecordParams;
+    
+    public static Set<String> getCustomReadOperations() {
+        Set<String> customReadOperations = new HashSet<String>();
+        customReadOperations.add(GET_CARE_RECORD_OPERATION_NAME);
+        
+        return customReadOperations;
+    }
 
+    public static Set<String> getCustomWriteOperations() {
+        Set<String> customWriteOperations = new HashSet<String>();
+        customWriteOperations.add(REGISTER_PATIENT_OPERATION_NAME);
+        
+        return customWriteOperations;
+    }
+    
     @Override
     public Class<Patient> getResourceType() {
         return Patient.class;
@@ -130,6 +147,14 @@ public class PatientResourceProvider implements IResourceProvider {
     @PostConstruct
     public void postConstruct() {
         nhsNumber = new NhsNumber();
+        
+        boolean mandatory = true;
+        boolean optional = false;
+        
+        getCareRecordParams = new HashMap<String, Boolean>();
+        getCareRecordParams.put("patientNHSNumber", mandatory);
+        getCareRecordParams.put("recordSection", mandatory);
+        getCareRecordParams.put("timePeriod", optional);
     }
 
     @Read
@@ -167,26 +192,38 @@ public class PatientResourceProvider implements IResourceProvider {
                 ? null
                 : patientDetailsToPatientResourceConverter(patientDetails);
     }
+    
+    private void validateParameterNames(Parameters parameters, Map<String, Boolean> parameterDefinitions) {
+       List<String> parameterNames = parameters.getParameter()
+                                                    .stream()
+                                                    .map(Parameter::getName)
+                                                    .collect(Collectors.toList());
+        
+       Set<String> parameterDefinitionNames = parameterDefinitions.keySet();
+       
+       for(String parameterDefinition : parameterDefinitionNames) {
+           boolean mandatory = parameterDefinitions.get(parameterDefinition);
+           
+           if(mandatory) {
+               if(parameterNames.contains(parameterDefinition) == false) {
+                   throw OperationOutcomeFactory.buildOperationOutcomeException(
+                           new InvalidRequestException("Not all mandatory parameters have been provided"),
+                           SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);                   
+               }
+           }
+       }
+       
+       if(parameterDefinitionNames.containsAll(parameterNames) == false) {
+           parameterNames.removeAll(parameterDefinitionNames);
+           throw OperationOutcomeFactory.buildOperationOutcomeException(
+                   new InvalidRequestException("Unrecognised parameters have been provided - " + parameterNames.toString()),
+                   SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);            
+       }
+    }
 
-    @SuppressWarnings("deprecation")
-    @Operation(name = "$gpc.getcarerecord")
+    @Operation(name = GET_CARE_RECORD_OPERATION_NAME)
     public Bundle getPatientCareRecord(@ResourceParam Parameters params) throws UnsupportedDataTypeException {
-        List<String> parameters = params.getParameter()
-                .stream()
-                .map(Parameter::getName)
-                .collect(Collectors.toList());
-
-        if (!PERMITTED_PARAM_NAMES.containsAll(parameters)) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("Invalid parameters"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
-        }
-
-        if (!parameters.containsAll(MANDATORY_PARAM_NAMES)) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Missing parameters"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
-        }
+        validateParameterNames(params, getCareRecordParams);
 
         String nhsNumber = null;
         String sectionName = null;
@@ -198,14 +235,8 @@ public class PatientResourceProvider implements IResourceProvider {
         for (Parameter param : params.getParameter()) {
             IDatatype value = param.getValue();
 
-            if (value instanceof IdentifierDt) {
-                if (null != nhsNumber) {
-                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new InvalidRequestException("NHS number set twice!"),
-                            SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueTypeEnum.INVALID_CONTENT);
-                }
-
-                nhsNumber = ((IdentifierDt) value).getValue();
+            if (value instanceof IdentifierDt) {                                
+                nhsNumber = getNhsNumber(value);
 
                 if (StringUtils.isBlank(nhsNumber) || !NhsCodeValidator.nhsNumberValid(nhsNumber)) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -473,7 +504,7 @@ public class PatientResourceProvider implements IResourceProvider {
         return appointmentResourceProvider.getAppointmentsForPatientIdAndDates(patientLocalId, startDate);
     }
 
-    @Operation(name = "$gpc.registerpatient")
+    @Operation(name = REGISTER_PATIENT_OPERATION_NAME)
     public Bundle registerPatient(@ResourceParam Parameters params) {
         Patient registeredPatient = null;
 
@@ -788,7 +819,33 @@ public class PatientResourceProvider implements IResourceProvider {
                 nhsNumber = fromToken(source);
                 
                 if(nhsNumber == null) {
-                    nhsNumber = fromParameters(source);        
+                    nhsNumber = fromParameters(source);  
+                    
+                    if(nhsNumber == null) {
+                        nhsNumber = fromIdentifierDt(source);
+                    }
+                }
+            }
+            
+            return nhsNumber;
+        }
+        
+        private String fromIdentifierDt(Object source) {
+            String nhsNumber = null;
+            
+            if(source instanceof IdentifierDt) {
+                IdentifierDt identifierDt = (IdentifierDt) source;
+               
+                String identifierSystem = identifierDt.getSystem();
+                if(identifierSystem != null && SystemURL.ID_NHS_NUMBER.equals(identifierSystem)) {
+                    nhsNumber = identifierDt.getValue();
+                }
+                else {
+                    String message = String.format("The given identifier system code (%s) does not match the expected code - %s", identifierSystem, SystemURL.ID_NHS_NUMBER);
+                    
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException(message),
+                            SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueTypeEnum.INVALID_CONTENT);    
                 }
             }
             
@@ -840,25 +897,18 @@ public class PatientResourceProvider implements IResourceProvider {
                     parameter = getParameterByName(parameters.getParameter(), "registerPatient");
                     if(parameter != null) {
                         nhsNumber = fromPatientResource(parameter.getResource());
-                    } 
+                    }
+                    else {
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                new InvalidRequestException("Unable to read parameters. Expecting one of patientNHSNumber or registerPatient both of which are case-sensitive"),
+                                SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                    }
                 }
             }
             
             return nhsNumber;
         } 
-        
-        private String fromIdentifierDt(Object source) {
-            String nhsNumber = null;
-            
-            if(source instanceof IdentifierDt) {
-                IdentifierDt identifierDt = (IdentifierDt) source;
                 
-                nhsNumber = identifierDt.getValue();
-            }
-            
-            return nhsNumber;
-        }
-        
         private String fromPatientResource(Object source) {
             String nhsNumber = null;
             
@@ -874,12 +924,19 @@ public class PatientResourceProvider implements IResourceProvider {
         private Parameter getParameterByName(List<Parameter> parameters, String parameterName) {
             Parameter parameter = null;
             
-            Optional<Parameter> optional = parameters.stream()
+            List<Parameter> filteredParameters = parameters.stream()
                                                      .filter(currentParameter -> parameterName.equals(currentParameter.getName()))
-                                                     .collect(Collectors.reducing((a, b) -> null));
+                                                     .collect(Collectors.toList());
             
-            if(optional.isPresent()) {
-                parameter = optional.get();
+            if(filteredParameters != null) {
+                if(filteredParameters.size() == 1) {
+                    parameter = filteredParameters.iterator().next();
+                }
+                else if(filteredParameters.size() > 1) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("The parameter " + parameterName + " cannot be set more than once"),
+                            SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueTypeEnum.INVALID_CONTENT);
+                }
             }
             
             return parameter;

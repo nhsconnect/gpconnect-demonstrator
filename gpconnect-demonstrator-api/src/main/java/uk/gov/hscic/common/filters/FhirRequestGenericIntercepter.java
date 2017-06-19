@@ -32,7 +32,6 @@ import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemHeader;
 import uk.gov.hscic.SystemParameter;
-import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.auth.CertificateValidator;
 import uk.gov.hscic.common.filters.model.Interactions;
 import uk.gov.hscic.common.filters.model.Interactions.Interaction;
@@ -101,53 +100,14 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             throwInvalidRequestException(SystemHeader.SSP_INTERACTIONID + " header blank");
         }
 
-        String requestURI = httpRequest.getRequestURI();
-        validateURIAgainstInteraction(interactionIdHeader, requestURI);
+        Interaction interaction = interactions.getInteraction(interactionIdHeader);
+        
+        validateURIAgainstInteraction(interaction, httpRequest.getRequestURI());
         
         if (InteractionId.IDENTIFIER_INTERACTIONS.contains(interactionIdHeader)) {
-            String[] identifiers = httpRequest.getParameterMap().get(SystemParameter.IDENTIFIER);
-
-            if (null == identifiers) {
-                throwBadRequestException("No identifier parameter found!");
-            }
-
-            if (1 != identifiers.length) {
-                throwBadRequestException("Invalid quantity of identifier parameter found: " + identifiers.length);
-            }
-
-            String[] identifierParts = identifiers[0].split("\\|");
-
-            if (identifierParts.length != 2 || StringUtils.isBlank(identifierParts[0]) || StringUtils.isBlank(identifierParts[1])) {
-                throwUnprocessableEntityException("Missing identifier value: " + identifiers[0]);
-            }
-
-            switch (interactionIdHeader) {
-                case InteractionId.REST_SEARCH_PATIENT:
-                    if (!SystemURL.ID_NHS_NUMBER.equals(identifierParts[0])) {
-                        throwInvalidIdentifierSystemException("Bad system code: " + identifierParts[0]);
-                    }
-
-                    break;
-
-                case InteractionId.REST_SEARCH_ORGANIZATION:
-                    if (!SystemURL.ID_ODS_ORGANIZATION_CODE.equals(identifierParts[0]) && !SystemURL.ID_ODS_SITE_CODE.equals(identifierParts[0])) {
-                        throwInvalidIdentifierSystemException("Bad system code: " + identifierParts[0]);
-                    }
-
-                    break;
-
-                case InteractionId.REST_SEARCH_PRACTITIONER:
-                    if (!SystemURL.ID_SDS_USER_ID.equals(identifierParts[0])) {
-                        throwInvalidIdentifierSystemException("Bad system code: " + identifierParts[0]);
-                    }
-
-                    break;
-
-                default:
-                    // Fine for now, but this eventually needs implementing for all options.
-            }
+            validateIdentifierSystemAgainstInteraction(interaction, httpRequest.getParameterMap().get(SystemParameter.IDENTIFIER));
         }
-
+        
         return true;
     }
 
@@ -263,12 +223,20 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     new UnprocessableEntityException(theException.getMessage()),
                     SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
         }
+        
+        if(theException instanceof BaseServerResponseException) {
+            return (BaseServerResponseException) theException;
+        }
+        else {
+            return OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(theException.getMessage()),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
 
-        return super.preProcessOutgoingException(theRequestDetails, theException, theServletRequest);
+        //return super.preProcessOutgoingException(theRequestDetails, theException, theServletRequest);
     }
     
-    private void validateURIAgainstInteraction(String interactionId, String requestURI) {
-    	Interaction interaction = interactions.getInteraction(interactionId);
+    private void validateURIAgainstInteraction(Interaction interaction, String requestURI) {
     	
     	if(interaction != null) { 	
 	    	if(interaction.validateResource(requestURI) == false) {
@@ -290,5 +258,35 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     	else {
             throwBadRequestException(String.format("Unable to locate interaction corresponding to the given URI (%s)", requestURI));
     	}
+    }   
+    
+    private void validateIdentifierSystemAgainstInteraction(Interaction interaction, String[] identifiers) {
+
+        if (null == identifiers) {
+            throwBadRequestException("No identifier parameter found!");
+        }
+
+        if (1 != identifiers.length) {
+            throwBadRequestException("Invalid quantity of identifier parameter found: " + identifiers.length);
+        }
+
+        String[] identifierParts = identifiers[0].split("\\|");
+
+        if (identifierParts.length == 2) {
+            String identifierSystem = identifierParts[0];
+            String identifierValue = identifierParts[1];
+            
+            if(StringUtils.isNotBlank(identifierSystem) && StringUtils.isNotBlank(identifierValue)) {
+                if(interaction.validateIdentifierSystem(identifierSystem) == false) {
+                    throwInvalidIdentifierSystemException(String.format("The given identifier system code (%s) does not match the expected code - %s", identifierSystem, interaction.getIdentifierSystem()));
+                }
+            }
+            else {
+                throwUnprocessableEntityException(String.format("The identifier is invalid. System - %s Value - %s", identifierSystem, identifierValue));
+            }
+        }
+        else {
+            throwUnprocessableEntityException("One or both of the identifier system and value are missing from given identifier : " + identifiers[0]);
+        }
     }    
 }

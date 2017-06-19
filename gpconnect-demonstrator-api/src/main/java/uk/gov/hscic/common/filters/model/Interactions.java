@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import uk.gov.hscic.InteractionId;
+import uk.gov.hscic.SystemURL;
 
 @Component
 public class Interactions {
@@ -21,6 +22,7 @@ public class Interactions {
 		private Pattern containedResourcePattern = null;
 		private Pattern identifierPattern = null;
 		private Pattern operationPattern = null;
+		private String identifierSystem = null;
 		
 		private String currentRegex = null;
 		
@@ -61,6 +63,12 @@ public class Interactions {
 			return this;
 		}
 		
+		private Interaction identifierSystem(String identifierSystem) {
+		    this.identifierSystem = identifierSystem;
+		    
+		    return this;
+		}
+		
 		private Pattern buildPattern(String end) {
 			currentRegex = currentRegex + "/" + end;
 			
@@ -69,6 +77,10 @@ public class Interactions {
 
 		public String getResource() {
 			return resource;
+		}
+		
+		public String getIdentifierSystem() {
+		    return this.identifierSystem;
 		}
 			
 		public boolean validateResource(String uri) {
@@ -85,6 +97,16 @@ public class Interactions {
 		
 		public boolean validateOperation(String uri) {
 			return operationPattern.matcher(uri).matches();
+		}
+		
+		public boolean validateIdentifierSystem(String identifierSystem) {
+		    boolean valid = true;
+		    
+		    if(this.identifierSystem != null) {
+		        valid = this.identifierSystem.equals(identifierSystem);
+		    }
+		    
+		    return valid;
 		}
 	}
 	
@@ -121,10 +143,10 @@ public class Interactions {
         interactions.put(InteractionId.REST_READ_PATIENT, new Interaction().resource("Patient").identifier());
         interactions.put(InteractionId.REST_READ_PRACTITIONER, new Interaction().resource("Practitioner").identifier());
         interactions.put(InteractionId.REST_SEARCH_LOCATION, new Interaction().resource("Location"));
-        interactions.put(InteractionId.REST_SEARCH_ORGANIZATION, new Interaction().resource("Organization"));
-        interactions.put(InteractionId.REST_SEARCH_PATIENT, new Interaction().resource("Patient"));
+        interactions.put(InteractionId.REST_SEARCH_ORGANIZATION, new Interaction().resource("Organization").identifierSystem(SystemURL.ID_ODS_ORGANIZATION_CODE));
+        interactions.put(InteractionId.REST_SEARCH_PATIENT, new Interaction().resource("Patient").identifierSystem(SystemURL.ID_NHS_NUMBER));
         interactions.put(InteractionId.REST_SEARCH_PATIENT_APPOINTMENTS, new Interaction().resource("Patient").identifier().containedResource("Appointment"));
-        interactions.put(InteractionId.REST_SEARCH_PRACTITIONER, new Interaction().resource("Practitioner"));
+        interactions.put(InteractionId.REST_SEARCH_PRACTITIONER, new Interaction().resource("Practitioner").identifierSystem(SystemURL.ID_SDS_USER_ID));
         interactions.put(InteractionId.REST_UPDATE_APPOINTMENT, new Interaction().resource("Appointment").identifier());
 	}
 	

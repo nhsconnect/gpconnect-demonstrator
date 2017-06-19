@@ -7,8 +7,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.lang3.StringUtils;
@@ -45,12 +47,21 @@ import uk.gov.hscic.model.organization.OrganizationDetails;
 @Component
 public class OrganizationResourceProvider implements IResourceProvider {
 
+    private static final String GET_SCHEDULE_OPERATION_NAME = "$gpc.getschedule";
+
     @Autowired
     private GetScheduleOperation getScheduleOperation;
 
     @Autowired
     private OrganizationSearch organizationSearch;
 
+    public static Set<String> getCustomReadOperations() {
+        Set<String> customReadOperations = new HashSet<String>();
+        customReadOperations.add(GET_SCHEDULE_OPERATION_NAME);
+        
+        return customReadOperations;
+    }
+    
     @Override
     public Class<Organization> getResourceType() {
         return Organization.class;
@@ -105,7 +116,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
         }
     }
 
-    @Operation(name = "$gpc.getschedule")
+    @Operation(name = GET_SCHEDULE_OPERATION_NAME)
     public Bundle getSchedule(@IdParam IdDt organizationId, @ResourceParam Parameters params) {
         Bundle bundle = null;
     	

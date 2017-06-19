@@ -1,6 +1,7 @@
 package uk.gov.hscic.common.filters;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
-import ca.uhn.fhir.rest.api.RequestTypeEnum;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import ca.uhn.fhir.rest.method.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
@@ -25,9 +25,19 @@ import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemParameter;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.common.filters.model.WebToken;
+import uk.gov.hscic.organization.OrganizationResourceProvider;
+import uk.gov.hscic.patient.PatientResourceProvider;
+import uk.gov.hscic.util.NhsCodeValidator;
 
 @Component
 public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
+
+    private static final String LOCATION_RESOURCE_NAME = "Location";
+    private static final String PRACTITIONER_RESOURCE_NAME = "Practitioner";
+    private static final String ORGANIZATION_RESOURCE_NAME = "Organization";
+    private static final String PATIENT_RESOURCE_NAME = "Patient";
+    private static final String APPOINTMENT_RESOURCE_NAME = "Appointment";
+    private static final String ORDER_RESOURCE_NAME = "Order";
 
     private static final List<String> PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS = Arrays.asList(SystemURL.ID_ODS_ORGANIZATION_CODE, SystemURL.ID_ODS_SITE_CODE);
 
@@ -39,9 +49,17 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     
     private RequestOperation requestOperation;
     
+    private Map<String, Set<String>> validResourceCombinations;
+    
     @PostConstruct
     private void postConstruct() {
         requestOperation = new RequestOperation();
+        
+        // only certain combinations of JWT resource type and request resource type are allowed
+        // in this map the key is the JWT resource type and the value is a set of permitted request resources
+        validResourceCombinations = new HashMap<String, Set<String>>();
+        validResourceCombinations.put(PATIENT_RESOURCE_NAME, new HashSet<String>(Arrays.asList(new String[]{PATIENT_RESOURCE_NAME, APPOINTMENT_RESOURCE_NAME})));
+        validResourceCombinations.put(ORGANIZATION_RESOURCE_NAME, new HashSet<String>(Arrays.asList(new String[]{ORGANIZATION_RESOURCE_NAME, PRACTITIONER_RESOURCE_NAME, LOCATION_RESOURCE_NAME, ORDER_RESOURCE_NAME})));
     }
 
     @Override
@@ -55,7 +73,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         return new RuleBuilder().allowAll().build();
     }
     
-    private void validateOrganisationIdentifier(WebToken webToken, RequestDetails requestDetails) {
+    private void validateOrganizationIdentifier(WebToken webToken, RequestDetails requestDetails) {
         Map<String, String[]> parameters = requestDetails.getParameters();
         
         if(parameters != null && parameters.isEmpty() == false) {
@@ -84,34 +102,58 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
            
             if(requestIdentifiers != null && requestIdentifiers.length > 0) {
                 String requestIdentifierValue = requestIdentifiers[0].split("\\|")[1];
+                if(NhsCodeValidator.nhsNumberValid(requestIdentifierValue)) {
                 
-                String jwtIdentifierValue = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);;        
-                
-                if(jwtIdentifierValue.equals(requestIdentifierValue) == false) {
+                    String jwtIdentifierValue = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);      
+                    if(NhsCodeValidator.nhsNumberValid(jwtIdentifierValue)) {
+                    
+                        if(jwtIdentifierValue.equals(requestIdentifierValue) == false) {
+                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new InvalidRequestException("Invalid NHS number: " + jwtIdentifierValue),
+                                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                        }
+                    }
+                    else {
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                new InvalidRequestException("Invalid NHS number in JWT: " + jwtIdentifierValue),
+                                SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);                        
+                    }
+                }
+                else {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new InvalidRequestException("Invalid NHS number: " + jwtIdentifierValue),
-                            SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
+                            new InvalidRequestException("Invalid NHS number in request: " + requestIdentifierValue),
+                            SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);   
                 }
             }
         }
     }    
     
     private void validateIdentifier(WebToken webToken, RequestDetails requestDetails) {
-        if("Patient".equals(requestDetails.getResourceName())) {
+        if(PATIENT_RESOURCE_NAME.equals(requestDetails.getResourceName())) {
             validatePatientIdentifier(webToken, requestDetails);
         }
-        else if("Organisation".equals(requestDetails.getResourceName())) {
-            validateOrganisationIdentifier(webToken, requestDetails);
+        else if(ORGANIZATION_RESOURCE_NAME.equals(requestDetails.getResourceName())) {
+            validateOrganizationIdentifier(webToken, requestDetails);
         }
     }
 
     private void validateResource(WebToken webToken, RequestDetails requestDetails) {
         String jwtResource = webToken.getRequestedRecord().getResourceType();
-        String requestResource = requestDetails.getResourceName();
         
-        if(jwtResource.equals(requestResource) == false) {
+        Set<String> validRequestResources = validResourceCombinations.get(jwtResource);
+        if(validRequestResources != null) {
+            String requestResource = requestDetails.getResourceName();
+            
+            // sometimes there is no resource eg on a GET "metadata" operation
+            if(requestResource != null && validRequestResources.contains(requestResource) == false) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException(String.format("Invalid request resource type from JWT (%s) does not match resource type from request (%s)", jwtResource, requestResource)),
+                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+            }
+        }
+        else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(String.format("Invalid request resource type from JWT (%s) does not match resource type from request (%s)", jwtResource, requestResource)),
+                    new InvalidRequestException(String.format("Invalid request resource type from JWT (%s) does not match one of the expected resource types - Patient or Organisation", jwtResource)),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }   
     }
@@ -133,15 +175,18 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     
     private class RequestOperation {
         
-        Set<RestOperationTypeEnum> customOperations;
+        Set<String> customReadOperations;
+        Set<String> customWriteOperations;
         Set<RestOperationTypeEnum> readOperations;
         Set<RestOperationTypeEnum> writeOperations;
            
         private RequestOperation() {
-            customOperations = new HashSet<RestOperationTypeEnum>();
-            customOperations.add(RestOperationTypeEnum.EXTENDED_OPERATION_INSTANCE);
-            customOperations.add(RestOperationTypeEnum.EXTENDED_OPERATION_SERVER);
-            customOperations.add(RestOperationTypeEnum.EXTENDED_OPERATION_TYPE);
+            customReadOperations = new HashSet<String>();
+            customReadOperations.addAll(PatientResourceProvider.getCustomReadOperations());
+            customReadOperations.addAll(OrganizationResourceProvider.getCustomReadOperations());
+            
+            customWriteOperations = new HashSet<String>();
+            customWriteOperations.addAll(PatientResourceProvider.getCustomWriteOperations());
             
             readOperations = new HashSet<RestOperationTypeEnum>();
             readOperations.add(RestOperationTypeEnum.READ);
@@ -163,10 +208,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             
             isRead = readOperations.contains(restOperationType);
             if(isRead == false) {
-                if(customOperations.contains(restOperationType)) {
-                    // check the HTTP verb is a read; GET
-                    isRead = RequestTypeEnum.GET == requestDetails.getRequestType();
-                }    
+                  String operation = requestDetails.getOperation();
+                  isRead = customReadOperations.contains(operation);
             }
             
             return isRead;
@@ -179,12 +222,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             
             isWrite = writeOperations.contains(restOperationType);
             if(isWrite == false) {
-                if(customOperations.contains(restOperationType)) {
-                    // check the HTTP verb is a write; PATCH, POST or PUT
-                    isWrite = RequestTypeEnum.PATCH == requestDetails.getRequestType() ||
-                              RequestTypeEnum.POST == requestDetails.getRequestType() ||
-                              RequestTypeEnum.PUT == requestDetails.getRequestType();
-                }    
+                String operation = requestDetails.getOperation();
+                isWrite = customWriteOperations.contains(operation);
             }
             
             return isWrite;

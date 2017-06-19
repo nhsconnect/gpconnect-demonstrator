@@ -20,6 +20,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.model.location.LocationDetails;
 
 @Component
@@ -27,7 +28,7 @@ public class LocationResourceProvider implements IResourceProvider {
 
     @Autowired
     private LocationSearch locationSearch;
-
+    
     @Override
     public Class<? extends IBaseResource> getResourceType() {
         return Location.class;
@@ -54,14 +55,14 @@ public class LocationResourceProvider implements IResourceProvider {
     @Read(version = true)
     public Location getLocationById(@IdParam IdDt locationId) {
         LocationDetails locationDetails = locationSearch.findLocationById(locationId.getIdPart());
-
+       
         if (locationDetails == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No location details found for location ID: "+locationId.getIdPart());
             throw new InternalErrorException("No location details found for location ID: "+locationId.getIdPart(), operationalOutcome);
         }
 
-        return locationDetailsToLocation(locationDetails);
+        return IdentifierValidator.versionComparison(locationId, locationDetailsToLocation(locationDetails));
     }
 
     private static Location locationDetailsToLocation(LocationDetails locationDetails) {

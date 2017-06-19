@@ -860,7 +860,9 @@ public class PatientResourceProvider implements IResourceProvider {
                 IdDt idDt = (IdDt) source;
                 
                 PatientDetails patientDetails = patientSearch.findPatientByInternalID(idDt.getIdPart());
-                nhsNumber = patientDetails.getNhsNumber();
+                if(patientDetails != null) {
+                    nhsNumber = patientDetails.getNhsNumber();
+                }
             }
             
             return nhsNumber;

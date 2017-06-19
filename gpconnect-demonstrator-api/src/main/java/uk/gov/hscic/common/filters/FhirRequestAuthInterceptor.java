@@ -100,7 +100,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         if("Patient".equals(requestDetails.getResourceName())) {
             validatePatientIdentifier(webToken, requestDetails);
         }
-        else if("Organization".equals(requestDetails.getResourceName())) {
+        else if("Organisation".equals(requestDetails.getResourceName())) {
             validateOrganisationIdentifier(webToken, requestDetails);
         }
     }

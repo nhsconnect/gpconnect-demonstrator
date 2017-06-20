@@ -10,6 +10,7 @@ import ca.uhn.fhir.rest.server.IRestfulServerDefaults;
 import ca.uhn.fhir.rest.server.ResourceBinding;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.interceptor.auth.AuthorizationInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.auth.IAuthRule;
 import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
@@ -99,8 +100,8 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
 
             if (nhsNumber == null && parameterValue != null) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException("Invalid NHS number submitted: " + parameterValue),
-                        SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
+                        new ResourceNotFoundException("No patient details found for patient ID: " + parameterValue),
+                        SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
             }
         }
         else {

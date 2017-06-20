@@ -1,9 +1,12 @@
 package uk.gov.hscic.location;
 
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
@@ -13,12 +16,18 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import uk.gov.hscic.OperationOutcomeFactory;
+import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.model.location.LocationDetails;
 
@@ -35,15 +44,23 @@ public class LocationResourceProvider implements IResourceProvider {
 
     @Search
     public List<Location> getByIdentifierCode(@RequiredParam(name = Location.SP_IDENTIFIER) TokenParam identifierCode) {
+        
+        if (!identifierCode.getSystem().equals("http://fhir.nhs.net/Id/ods-site-code") && !identifierCode.getSystem().equals("ttp://fhir.nhs.net/Id/sds-role-profile-id"))
+        {
+         
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Identifier System is invalid"),
+                    SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueTypeEnum.INVALID_CONTENT);
+          
+        }
+        
         List<LocationDetails> locationDetails = SystemURL.ID_ODS_ORGANIZATION_CODE.equalsIgnoreCase(identifierCode.getSystem())
                 ? locationSearch.findLocationDetailsByOrgOdsCode(identifierCode.getValue())
                 : locationSearch.findLocationDetailsBySiteOdsCode(identifierCode.getValue());
 
         if (locationDetails.isEmpty()) {
-            String msg = String.format("No location details found for code: %s", identifierCode.getValue());
-            OperationOutcome operationalOutcome = new OperationOutcome();
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails(msg);
-            throw new InternalErrorException(msg, operationalOutcome);
+           
+            return null;
         }
 
         return locationDetails.stream()

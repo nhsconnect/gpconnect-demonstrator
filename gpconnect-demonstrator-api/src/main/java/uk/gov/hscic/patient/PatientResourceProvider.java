@@ -69,6 +69,7 @@ import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
+import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
@@ -157,7 +158,7 @@ public class PatientResourceProvider implements IResourceProvider {
         getCareRecordParams.put("timePeriod", optional);
     }
 
-    @Read
+    @Read(version = true)
     public Patient getPatientById(@IdParam IdDt internalId) {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
 
@@ -167,7 +168,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.NOT_FOUND);
         }
 
-        return patientDetailsToPatientResourceConverter(patientDetails);
+        return IdentifierValidator.versionComparison(internalId, patientDetailsToPatientResourceConverter(patientDetails));
     }
 
     @Search
@@ -859,7 +860,9 @@ public class PatientResourceProvider implements IResourceProvider {
                 IdDt idDt = (IdDt) source;
                 
                 PatientDetails patientDetails = patientSearch.findPatientByInternalID(idDt.getIdPart());
-                nhsNumber = patientDetails.getNhsNumber();
+                if(patientDetails != null) {
+                    nhsNumber = patientDetails.getNhsNumber();
+                }
             }
             
             return nhsNumber;

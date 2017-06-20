@@ -17,6 +17,7 @@ import ca.uhn.fhir.rest.server.IRestfulServerDefaults;
 import ca.uhn.fhir.rest.server.ResourceBinding;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.interceptor.auth.AuthorizationInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.auth.IAuthRule;
 import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
@@ -88,10 +89,11 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
             
             // the request may not be for the patient resource in which case
             // we would not expect a method binding
+            Object parameterValue = null;
             if(methodBinding != null) {
                 List<IParameter> parameters = methodBinding.getParameters();
                 for(IParameter parameter : parameters) {
-                    Object parameterValue = parameter.translateQueryParametersIntoServerArgument(requestDetails, methodBinding);
+                    parameterValue = parameter.translateQueryParametersIntoServerArgument(requestDetails, methodBinding);
                     
                     // the identifier may have been passed in the URL
                     if(parameterValue == null) {
@@ -102,6 +104,11 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
                         nhsNumber = patientResourceProvider.getNhsNumber(parameterValue);
                     }
                 }
+            }
+            if(nhsNumber == null && parameterValue != null) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new ResourceNotFoundException("No patient details found for patient ID: " + parameterValue),
+                        SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
             }
         }
         else {

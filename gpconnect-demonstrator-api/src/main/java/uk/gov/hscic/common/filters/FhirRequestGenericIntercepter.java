@@ -1,23 +1,5 @@
 package uk.gov.hscic.common.filters;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.parser.DataFormatException;
 import ca.uhn.fhir.rest.method.RequestDetails;
@@ -27,6 +9,20 @@ import ca.uhn.fhir.rest.server.exceptions.MethodNotAllowedException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.InteractionId;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
@@ -40,7 +36,7 @@ import uk.gov.hscic.common.ldap.model.ProviderRouting;
 @Component
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private static final Logger LOG = Logger.getLogger(FhirRequestGenericIntercepter.class);
-    
+
     @Autowired
     private Interactions interactions;
 
@@ -101,13 +97,13 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         Interaction interaction = interactions.getInteraction(interactionIdHeader);
-        
+
         validateURIAgainstInteraction(interaction, httpRequest.getRequestURI());
-        
+
         if (InteractionId.IDENTIFIER_INTERACTIONS.contains(interactionIdHeader)) {
             validateIdentifierSystemAgainstInteraction(interaction, httpRequest.getParameterMap().get(SystemParameter.IDENTIFIER));
         }
-        
+
         return true;
     }
 
@@ -134,10 +130,10 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                 new UnprocessableEntityException(exceptionMessage),
                 SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
     }
-    
+
     private static void throwResourceNotFoundException(String exceptionMessage, String resource) {
 		String systemCode = null;
-		
+
 		switch(resource) {
             case "Organization":
                 systemCode = SystemCode.ORGANISATION_NOT_FOUND;
@@ -152,12 +148,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                 break;
 
             default:
-                systemCode = SystemCode.REFERENCE_NOT_FOUND;                
+                systemCode = SystemCode.REFERENCE_NOT_FOUND;
 		}
-    	
+
 		throw OperationOutcomeFactory.buildOperationOutcomeException(
 		new ResourceNotFoundException(exceptionMessage),
-		systemCode, IssueTypeEnum.INVALID_CONTENT);   	
+		systemCode, IssueTypeEnum.INVALID_CONTENT);
     }
 
     /**
@@ -223,7 +219,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     new UnprocessableEntityException(theException.getMessage()),
                     SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
         }
-        
+
         if(theException instanceof BaseServerResponseException) {
             return (BaseServerResponseException) theException;
         }
@@ -235,31 +231,31 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         //return super.preProcessOutgoingException(theRequestDetails, theException, theServletRequest);
     }
-    
+
     private void validateURIAgainstInteraction(Interaction interaction, String requestURI) {
-    	
-    	if(interaction != null) { 	
+
+    	if(interaction != null) {
 	    	if(interaction.validateResource(requestURI) == false) {
-				throwBadRequestException(String.format("Unknown resource in URI - %s", requestURI));  		
+				throwBadRequestException(String.format("Unknown resource in URI - %s", requestURI));
 	    	}
-	    	
+
 	    	if(interaction.validateIdentifier(requestURI) == false) {
-	    		throwResourceNotFoundException(String.format("Unknown resource identifier in URI - %s", requestURI), interaction.getResource());	
+	    		throwResourceNotFoundException(String.format("Unknown resource identifier in URI - %s", requestURI), interaction.getResource());
 	    	}
-	    	
+
 	    	if(interaction.validateContainedResource(requestURI) == false) {
-	    		throwBadRequestException(String.format("Unknown contained resource in URI - %s", requestURI));  			   		
+	    		throwBadRequestException(String.format("Unknown contained resource in URI - %s", requestURI));
 	    	}
-	    	
+
 	    	if(interaction.validateOperation(requestURI) == false) {
-	    		throwBadRequestException(String.format("Unknown resource operation in URI - %s", requestURI));    		
+	    		throwBadRequestException(String.format("Unknown resource operation in URI - %s", requestURI));
 	    	}
     	}
     	else {
             throwBadRequestException(String.format("Unable to locate interaction corresponding to the given URI (%s)", requestURI));
     	}
-    }   
-    
+    }
+
     private void validateIdentifierSystemAgainstInteraction(Interaction interaction, String[] identifiers) {
 
         if (null == identifiers) {
@@ -275,10 +271,10 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         if (identifierParts.length == 2) {
             String identifierSystem = identifierParts[0];
             String identifierValue = identifierParts[1];
-            
+
             if(StringUtils.isNotBlank(identifierSystem) && StringUtils.isNotBlank(identifierValue)) {
                 if(interaction.validateIdentifierSystem(identifierSystem) == false) {
-                    throwInvalidIdentifierSystemException(String.format("The given identifier system code (%s) does not match the expected code - %s", identifierSystem, interaction.getIdentifierSystem()));
+                    throwInvalidIdentifierSystemException(String.format("The given identifier system code (%s) is not an expected code - %s", identifierSystem, interaction.getIdentifierSystems().toString()));
                 }
             }
             else {
@@ -288,5 +284,5 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         else {
             throwUnprocessableEntityException("One or both of the identifier system and value are missing from given identifier : " + identifiers[0]);
         }
-    }    
+    }
 }

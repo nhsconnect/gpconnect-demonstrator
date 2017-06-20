@@ -42,6 +42,7 @@ import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.model.organization.OrganizationDetails;
 
 @Component
@@ -67,7 +68,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
         return Organization.class;
     }
 
-    @Read()
+    @Read(version = true)
     public Organization getOrganizationById(@IdParam IdDt organizationId) {
 
     	OrganizationDetails organizationDetails = null;
@@ -91,7 +92,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
     		
     	}
     	
-        return convertOrganizaitonDetailsListToOrganizationList(Collections.singletonList(organizationDetails)).get(0);
+        return IdentifierValidator.versionComparison(organizationId, convertOrganizaitonDetailsListToOrganizationList(Collections.singletonList(organizationDetails)).get(0));
     }
 
     @Search

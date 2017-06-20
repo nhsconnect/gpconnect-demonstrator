@@ -18,6 +18,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 
 import java.util.Collections;
 import java.util.List;
@@ -76,7 +77,7 @@ public class LocationResourceProvider implements IResourceProvider {
         if (locationDetails == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No location details found for location ID: "+locationId.getIdPart());
-            throw new InternalErrorException("No location details found for location ID: "+locationId.getIdPart(), operationalOutcome);
+            throw new ResourceNotFoundException("No location details found for location ID: "+locationId.getIdPart(), operationalOutcome);
         }
 
         return IdentifierValidator.versionComparison(locationId, locationDetailsToLocation(locationDetails));

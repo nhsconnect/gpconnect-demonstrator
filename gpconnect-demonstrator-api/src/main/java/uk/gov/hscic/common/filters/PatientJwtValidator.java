@@ -2,6 +2,7 @@ package uk.gov.hscic.common.filters;
 
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.rest.api.RequestTypeEnum;
 import ca.uhn.fhir.rest.method.BaseMethodBinding;
 import ca.uhn.fhir.rest.method.IParameter;
 import ca.uhn.fhir.rest.method.MethodUtil;
@@ -99,13 +100,17 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
             }
 
             if (nhsNumber == null && parameterValue != null) {
+                if (RequestTypeEnum.GET == requestDetails.getRequestType()) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new ResourceNotFoundException("No patient details found for patient ID: " + parameterValue),
+                            SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
+                }
+
+                // Otherwise, there should have been an identifier header
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new ResourceNotFoundException("No patient details found for patient ID: " + parameterValue),
-                        SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
+                        new InvalidRequestException("No NHS number submitted: " + parameterValue),
+                        SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
             }
-        }
-        else {
-            // error
         }
 
         return nhsNumber;

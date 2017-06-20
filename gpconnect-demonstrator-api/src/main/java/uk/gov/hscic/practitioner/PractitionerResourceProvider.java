@@ -5,10 +5,9 @@ import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Practitioner;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
-import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
@@ -17,13 +16,16 @@ import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hscic.OperationOutcomeFactory;
+import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.model.practitioner.PractitionerDetails;
 
 @Component
@@ -37,17 +39,17 @@ public class PractitionerResourceProvider  implements IResourceProvider {
         return Practitioner.class;
     }
 
-    @Read()
+    @Read(version = true)
     public Practitioner getPractitionerById(@IdParam IdDt practitionerId) {
         PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerDetails(practitionerId.getIdPart());
 
         if (practitionerDetails == null) {
-            OperationOutcome operationalOutcome = new OperationOutcome();
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No practitioner details found for practitioner ID: " + practitionerId.getIdPart());
-            throw new InternalErrorException("No practitioner details found for practitioner ID: " + practitionerId.getIdPart(), operationalOutcome);
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new ResourceNotFoundException("No practitioner details found for practitioner ID: " + practitionerId.getIdPart()),
+                    SystemCode.PRACTITIONER_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
         }
 
-        return practitionerDetailsToPractitionerResourceConverter(practitionerDetails);
+        return IdentifierValidator.versionComparison(practitionerId, practitionerDetailsToPractitionerResourceConverter(practitionerDetails));
     }
 
     @Search

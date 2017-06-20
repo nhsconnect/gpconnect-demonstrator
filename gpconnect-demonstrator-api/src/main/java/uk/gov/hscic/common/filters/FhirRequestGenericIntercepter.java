@@ -220,16 +220,19 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
         }
 
-        if(theException instanceof BaseServerResponseException) {
-            return (BaseServerResponseException) theException;
-        }
-        else {
+        if (theException instanceof ResourceNotFoundException && theException.getMessage().contains("Unknown resource type")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(theException.getMessage()),
+                    (ResourceNotFoundException) theException,
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
-        //return super.preProcessOutgoingException(theRequestDetails, theException, theServletRequest);
+        if (theException instanceof BaseServerResponseException) {
+            return (BaseServerResponseException) theException;
+        }
+
+        return OperationOutcomeFactory.buildOperationOutcomeException(
+                new InvalidRequestException(theException.getMessage()),
+                SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
     }
 
     private void validateURIAgainstInteraction(Interaction interaction, String requestURI) {

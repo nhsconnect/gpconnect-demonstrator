@@ -1,18 +1,5 @@
 package uk.gov.hscic.common.filters;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import ca.uhn.fhir.rest.method.RequestDetails;
@@ -20,6 +7,16 @@ import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.interceptor.auth.AuthorizationInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.auth.IAuthRule;
 import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemParameter;
@@ -43,18 +40,18 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
     @Value("${request.leeway:5}")
     private int futureRequestLeeway;
-    
+
     @Autowired
     WebTokenFactory webTokenFactory;
-    
+
     private RequestOperation requestOperation;
-    
+
     private Map<String, Set<String>> validResourceCombinations;
-    
+
     @PostConstruct
     private void postConstruct() {
         requestOperation = new RequestOperation();
-        
+
         // only certain combinations of JWT resource type and request resource type are allowed
         // in this map the key is the JWT resource type and the value is a set of permitted request resources
         validResourceCombinations = new HashMap<String, Set<String>>();
@@ -72,41 +69,40 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
         return new RuleBuilder().allowAll().build();
     }
-    
+
     private void validateOrganizationIdentifier(WebToken webToken, RequestDetails requestDetails) {
         Map<String, String[]> parameters = requestDetails.getParameters();
-        
-        if(parameters != null && parameters.isEmpty() == false) {
+
+        if (parameters != null && parameters.containsKey(SystemParameter.IDENTIFIER)) {
             String identifierSystem = parameters.get(SystemParameter.IDENTIFIER)[0].split("\\|")[0];
-            
+
             if (!PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS.contains(identifierSystem)) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("Invalid organization identifier system: " + identifierSystem),
                         SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-            } 
+            }
         }
-        
+
         if (null == webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_ODS_ORGANIZATION_CODE)) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Bad Request Exception"),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
-        
     }
-    
+
     private void validatePatientIdentifier(WebToken webToken, RequestDetails requestDetails) {
         Map<String, String[]> parameters = requestDetails.getParameters();
-        
-        if(parameters != null && parameters.isEmpty() == false) {         
+
+        if(parameters != null && parameters.isEmpty() == false) {
             String[] requestIdentifiers = parameters.get(SystemParameter.IDENTIFIER);
-           
+
             if(requestIdentifiers != null && requestIdentifiers.length > 0) {
                 String requestIdentifierValue = requestIdentifiers[0].split("\\|")[1];
                 if(NhsCodeValidator.nhsNumberValid(requestIdentifierValue)) {
-                
-                    String jwtIdentifierValue = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);      
+
+                    String jwtIdentifierValue = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);
                     if(NhsCodeValidator.nhsNumberValid(jwtIdentifierValue)) {
-                    
+
                         if(jwtIdentifierValue.equals(requestIdentifierValue) == false) {
                             throw OperationOutcomeFactory.buildOperationOutcomeException(
                                     new InvalidRequestException("Invalid NHS number: " + jwtIdentifierValue),
@@ -116,18 +112,18 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                     else {
                         throw OperationOutcomeFactory.buildOperationOutcomeException(
                                 new InvalidRequestException("Invalid NHS number in JWT: " + jwtIdentifierValue),
-                                SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);                        
+                                SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
                     }
                 }
                 else {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
                             new InvalidRequestException("Invalid NHS number in request: " + requestIdentifierValue),
-                            SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);   
+                            SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
                 }
             }
         }
-    }    
-    
+    }
+
     private void validateIdentifier(WebToken webToken, RequestDetails requestDetails) {
         if(PATIENT_RESOURCE_NAME.equals(requestDetails.getResourceName())) {
             validatePatientIdentifier(webToken, requestDetails);
@@ -139,11 +135,11 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
     private void validateResource(WebToken webToken, RequestDetails requestDetails) {
         String jwtResource = webToken.getRequestedRecord().getResourceType();
-        
+
         Set<String> validRequestResources = validResourceCombinations.get(jwtResource);
         if(validRequestResources != null) {
             String requestResource = requestDetails.getResourceName();
-            
+
             // sometimes there is no resource eg on a GET "metadata" operation
             if(requestResource != null && validRequestResources.contains(requestResource) == false) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -155,77 +151,77 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(String.format("Invalid request resource type from JWT (%s) does not match one of the expected resource types - Patient or Organisation", jwtResource)),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-        }   
+        }
     }
 
     private void validateClaim(WebToken webToken, RequestDetails requestDetails) {
-        
+
         if (requestOperation.isRead(requestDetails) && webToken.isReadRequestedScope() == false) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("The claim requested scope does not match the reqested operation (read)"),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
-        
+
         if (requestOperation.isWrite(requestDetails) && webToken.isWriteRequestedScope() == false) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("The claim requested scope does not match the reqested operation (write)"),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
     }
-    
+
     private class RequestOperation {
-        
+
         Set<String> customReadOperations;
         Set<String> customWriteOperations;
         Set<RestOperationTypeEnum> readOperations;
         Set<RestOperationTypeEnum> writeOperations;
-           
+
         private RequestOperation() {
             customReadOperations = new HashSet<String>();
             customReadOperations.addAll(PatientResourceProvider.getCustomReadOperations());
             customReadOperations.addAll(OrganizationResourceProvider.getCustomReadOperations());
-            
+
             customWriteOperations = new HashSet<String>();
             customWriteOperations.addAll(PatientResourceProvider.getCustomWriteOperations());
-            
+
             readOperations = new HashSet<RestOperationTypeEnum>();
             readOperations.add(RestOperationTypeEnum.READ);
             readOperations.add(RestOperationTypeEnum.SEARCH_SYSTEM);
             readOperations.add(RestOperationTypeEnum.SEARCH_TYPE);
             readOperations.add(RestOperationTypeEnum.VREAD);
-            
+
             writeOperations = new HashSet<RestOperationTypeEnum>();
             writeOperations.add(RestOperationTypeEnum.CREATE);
             writeOperations.add(RestOperationTypeEnum.DELETE);
             writeOperations.add(RestOperationTypeEnum.PATCH);
             writeOperations.add(RestOperationTypeEnum.UPDATE);
         }
-        
+
         private boolean isRead(RequestDetails requestDetails) {
             boolean isRead = false;
-            
+
             RestOperationTypeEnum restOperationType = requestDetails.getRestOperationType();
-            
+
             isRead = readOperations.contains(restOperationType);
             if(isRead == false) {
                   String operation = requestDetails.getOperation();
                   isRead = customReadOperations.contains(operation);
             }
-            
+
             return isRead;
         }
 
         private boolean isWrite(RequestDetails requestDetails) {
             boolean isWrite = false;
-            
+
             RestOperationTypeEnum restOperationType = requestDetails.getRestOperationType();
-            
+
             isWrite = writeOperations.contains(restOperationType);
             if(isWrite == false) {
                 String operation = requestDetails.getOperation();
                 isWrite = customWriteOperations.contains(operation);
             }
-            
+
             return isWrite;
         }
     }

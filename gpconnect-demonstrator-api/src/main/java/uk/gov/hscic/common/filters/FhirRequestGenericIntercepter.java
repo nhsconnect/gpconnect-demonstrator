@@ -175,8 +175,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()),
                     SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
-        }
-
+        }      
+   
         if (theException instanceof DataFormatException) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()),
@@ -196,6 +196,13 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
+        if (theException instanceof InvalidRequestException && 
+                theException.getMessage().contains("Failed to parse request body as JSON resource. Error was: Incorrect resource type found, expected")) {
+            return OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(theException.getMessage()),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
+             
         if (theException instanceof InvalidRequestException && theException.getMessage().startsWith("Invalid request: ")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(theException.getMessage()),

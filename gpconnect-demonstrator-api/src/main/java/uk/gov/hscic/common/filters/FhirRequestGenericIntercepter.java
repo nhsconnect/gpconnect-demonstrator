@@ -177,6 +177,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
 
+        if (theException instanceof InvalidRequestException && theException.getMessage().contains("Can not have multiple date range parameters for the same param ")) {
+            return OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(theException.getMessage()),
+                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+        }
+
         if (theException instanceof DataFormatException) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()),
@@ -227,10 +233,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         if (theException instanceof BaseServerResponseException) {
-            
-            OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(theException.getMessage()),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+            return (BaseServerResponseException) theException;
         }
 
         return OperationOutcomeFactory.buildOperationOutcomeException(

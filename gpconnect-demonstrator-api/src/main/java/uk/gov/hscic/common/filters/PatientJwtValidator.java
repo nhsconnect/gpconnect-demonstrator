@@ -73,33 +73,35 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
     }
 
     private String getNhsNumber(RequestDetails requestDetails) {
-        String nhsNumber = null;
-
         ResourceBinding patientResourceBinding = getPatientResourceBinding(requestDetails.getServer());
 
-        if(patientResourceBinding != null) {
+        if (patientResourceBinding != null) {
             BaseMethodBinding<?> methodBinding = patientResourceBinding.getMethod(requestDetails);
 
             // the request may not be for the patient resource in which case
             // we would not expect a method binding
             Object parameterValue = null;
-            if(methodBinding != null) {
-                List<IParameter> parameters = methodBinding.getParameters();
-                for(IParameter parameter : parameters) {
+
+            if (methodBinding != null) {
+                for (IParameter parameter : methodBinding.getParameters()) {
                     parameterValue = parameter.translateQueryParametersIntoServerArgument(requestDetails, methodBinding);
 
                     // the identifier may have been passed in the URL
-                    if(parameterValue == null) {
+                    if (parameterValue == null) {
                         parameterValue = MethodUtil.convertIdToType(requestDetails.getId(), IdDt.class);
                     }
 
-                    if(parameterValue != null) {
-                        nhsNumber = patientResourceProvider.getNhsNumber(parameterValue);
+                    if (parameterValue != null) {
+                        String nhsNumber = patientResourceProvider.getNhsNumber(parameterValue);
+
+                        if (null != nhsNumber) {
+                            return nhsNumber;
+                        }
                     }
                 }
             }
 
-            if (nhsNumber == null && parameterValue != null) {
+            if (parameterValue != null) {
                 if (RequestTypeEnum.GET == requestDetails.getRequestType()) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
                             new ResourceNotFoundException("No patient details found for patient ID: " + parameterValue),
@@ -113,7 +115,7 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
             }
         }
 
-        return nhsNumber;
+        return null;
     }
 
     private ResourceBinding getPatientResourceBinding(IRestfulServerDefaults defaultServer) {

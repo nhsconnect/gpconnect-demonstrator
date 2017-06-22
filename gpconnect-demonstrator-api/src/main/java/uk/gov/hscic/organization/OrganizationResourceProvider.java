@@ -1,22 +1,5 @@
 package uk.gov.hscic.organization;
 
-import java.text.ParseException;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
@@ -39,6 +22,21 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import java.text.ParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -59,10 +57,10 @@ public class OrganizationResourceProvider implements IResourceProvider {
     public static Set<String> getCustomReadOperations() {
         Set<String> customReadOperations = new HashSet<String>();
         customReadOperations.add(GET_SCHEDULE_OPERATION_NAME);
-        
+
         return customReadOperations;
     }
-    
+
     @Override
     public Class<Organization> getResourceType() {
         return Organization.class;
@@ -72,9 +70,9 @@ public class OrganizationResourceProvider implements IResourceProvider {
     public Organization getOrganizationById(@IdParam IdDt organizationId) {
 
     	OrganizationDetails organizationDetails = null;
-    	
+
     	String idPart = organizationId.getIdPart();
-		
+
     	try {
     		Long id = Long.parseLong(idPart);
     		organizationDetails = organizationSearch.findOrganizationDetails(id);
@@ -89,9 +87,9 @@ public class OrganizationResourceProvider implements IResourceProvider {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
 					new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
 					SystemCode.ORGANISATION_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
-    		
+
     	}
-    	
+
         return IdentifierValidator.versionComparison(organizationId, convertOrganizaitonDetailsListToOrganizationList(Collections.singletonList(organizationDetails)).get(0));
     }
 
@@ -120,20 +118,20 @@ public class OrganizationResourceProvider implements IResourceProvider {
     @Operation(name = GET_SCHEDULE_OPERATION_NAME)
     public Bundle getSchedule(@IdParam IdDt organizationId, @ResourceParam Parameters params) {
         Bundle bundle = null;
-    	
+
         List<Parameter> parameter = params.getParameter();
 
         // there should only be 1 parameter
-		if(parameter.size() == 1) {        	
+		if(parameter.size() == 1) {
         	PeriodDt timePeriod = getTimePeriod(parameter);
         	validateTimePeriod(timePeriod);
-        	
+
         	bundle = new Bundle().setType(BundleTypeEnum.SEARCH_RESULTS);
-        	
+
         	try {
-        		getScheduleOperation.populateBundle(bundle, 
-        				new OperationOutcome(), 
-        				organizationId, 
+        		getScheduleOperation.populateBundle(bundle,
+        				new OperationOutcome(),
+        				organizationId,
         				timePeriod.getStart(),
         				getAfter(timePeriod.getEndElement()));
         	} catch (ParseException e) {
@@ -146,16 +144,16 @@ public class OrganizationResourceProvider implements IResourceProvider {
                     new InvalidRequestException("Invalid number of parameters. Only one parameter named timePeriod is permitted."),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
-        
+
 
         return bundle;
     }
-    
+
     private Date getAfter(DateTimeDt target) throws ParseException {
     	Date after = null;
-    	
+
     	Calendar calendar = null;
-    	
+
     	TimeZone timeZone = target.getTimeZone();
     	if(timeZone != null) {
     		calendar = Calendar.getInstance(timeZone);
@@ -163,31 +161,31 @@ public class OrganizationResourceProvider implements IResourceProvider {
     	else {
     		calendar = Calendar.getInstance();
     	}
-    	
+
     	calendar.setTime(target.getValue());
-    	
+
     	switch(target.getPrecision()) {
 	    	case MINUTE : calendar.add(Calendar.MINUTE, 1);
 	    	break;
 	    	case DAY : calendar.add(Calendar.DAY_OF_MONTH, 1);
 	    	break;
 	    	case MONTH : calendar.add(Calendar.MONTH, 1);
-	    	break;	    	
+	    	break;
 	    	case YEAR : calendar.add(Calendar.YEAR, 1);
 	    	break;
 	    	default : ; // do nothing
-	    	break;    		
+	    	break;
     	}
-    	
+
     	after = calendar.getTime();
-    	
+
     	return after;
     }
-    
+
     private PeriodDt getTimePeriod(List<Parameter> parameters) {
     	PeriodDt timePeriod = null;
-    	
-    	// first we need a param called timePeriod. If we don't have one then we cannot proceed   
+
+    	// first we need a param called timePeriod. If we don't have one then we cannot proceed
     	// similarly if there's more than one then we cannot proceed.
         timePeriod = parameters.stream()
 		        	    .filter(parameter -> "timePeriod".equals(parameter.getName()))
@@ -198,41 +196,41 @@ public class OrganizationResourceProvider implements IResourceProvider {
 		                            new InvalidRequestException("Multiple timePeriod parameters. Only one is permitted"),
 		                            SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
 		                })
-		                .get();   
+		                .get();
 
-        return timePeriod;   	
+        return timePeriod;
     }
-    
+
     private void validateTimePeriod(PeriodDt timePeriod) {
         if(timePeriod != null) {
         	DateTimeDt startElement = timePeriod.getStartElement();
         	DateTimeDt endElement = timePeriod.getEndElement();
-        	
+
         	String startString = startElement.getValueAsString();
         	String endString = endElement.getValueAsString();
-        	
+
         	if(startString != null && endString != null) {
         		Date start = timePeriod.getStart();
         		Date end = timePeriod.getEnd();
-        		
+
         		if(start != null && end != null) {
         			long period = ChronoUnit.DAYS.between(start.toInstant(), end.toInstant());
         			if(period < 0l || period > 14l) {
         				throw OperationOutcomeFactory.buildOperationOutcomeException(
         						new UnprocessableEntityException("Invalid timePeriods, was " + period + " days between (max is 14)"),
-        						SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);	
+        						SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         			}
         		}
         		else {
         			throw OperationOutcomeFactory.buildOperationOutcomeException(
         					new UnprocessableEntityException("Invalid timePeriod one or both of start and end date are not valid dates"),
         					SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-        		}    	
+        		}
         	}
         	else {
     			throw OperationOutcomeFactory.buildOperationOutcomeException(
-    					new InvalidRequestException("Invalid timePeriod one or both of start and end date were missing"),
-    					SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+    					new UnprocessableEntityException("Invalid timePeriod one or both of start and end date were missing"),
+    					SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         	}
         }
         else {

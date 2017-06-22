@@ -183,8 +183,6 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
 
-        }      
-   
         if (theException instanceof DataFormatException) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()),
@@ -198,19 +196,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         if (theException instanceof InvalidRequestException &&
-                theException.getMessage().equals("Failed to parse request body as JSON resource. Error was: Failed to parse JSON content, error was: Did not find any content to parse")) {
+                theException.getMessage().equals("Failed to parse request body as JSON resource. Error was: ")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(theException.getMessage()),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
-        if (theException instanceof InvalidRequestException && 
-                theException.getMessage().contains("Failed to parse request body as JSON resource. Error was: Incorrect resource type found, expected")) {
-            return OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(theException.getMessage()),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-        }
-             
         if (theException instanceof InvalidRequestException && theException.getMessage().startsWith("Invalid request: ")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(theException.getMessage()),
@@ -240,7 +231,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     new UnprocessableEntityException(theException.getMessage()),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
-        
+
         if (theException instanceof ResourceNotFoundException && theException.getMessage().contains("Unknown resource type")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     (ResourceNotFoundException) theException,

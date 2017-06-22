@@ -23,7 +23,10 @@ public final class SystemURL {
     public static final String ID_SDS_USER_ID = "http://fhir.nhs.net/Id/sds-user-id";
 
     // FHIR StructureDefinition Constants
+    public static final String SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-booking-method-1";
     public static final String SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1";
+    public static final String SD_EXTENSION_GPC_APPOINTMENT_CATEGORY = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-category-1";
+    public static final String SD_EXTENSION_GPC_APPOINTMENT_CONTACT_METHOD = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-contact-method-1";
     public static final String SD_EXTENSION_GPC_PRACTITIONER = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1";
     public static final String SD_EXTENSION_MEDICATION_QUANTITY_TEXT = "http://fhir.nhs.net/StructureDefinition/extension-medication-quantity-text-1-0";
     public static final String SD_EXTENSION_PERSCRIPTION_REPEAT_REVIEW_DATE = "http://fhir.nhs.net/StructureDefinition/extension-prescription-repeat-review-date-1-0";
@@ -39,7 +42,7 @@ public final class SystemURL {
     public static final String SD_GPC_GET_SCHEDULE_BUNDLE = "http://fhir.nhs.net/StructureDefinition/gpconnect-getschedule-bundle-1";
     public static final String SD_GPC_LOCATION = "http://fhir.nhs.net/StructureDefinition/gpconnect-location-1";
     public static final String SD_GPC_SLOT = "http://fhir.nhs.net/StructureDefinition/gpconnect-slot-1";
-    
+
     // FHIR ValueSet Constants
     public static final String VS_GPC_ERROR_WARNING_CODE = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
     public static final String VS_GPC_REASON_TYPE = "http://fhir.nhs.net/ValueSet/gpconnect-reason-type-1-0";

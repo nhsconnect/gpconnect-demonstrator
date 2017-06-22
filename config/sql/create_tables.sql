@@ -43,8 +43,8 @@ CREATE TABLE gpconnect.appointment_appointments (
   startDateTime      DATETIME  NULL,
   endDateTime        DATETIME  NULL,
   commentText        TEXT(300) NULL,
-  patientId          BIGINT    NULL,
-  practitionerId     BIGINT    NULL,
+  patientId          BIGINT    NULL NOT NULL,
+  practitionerId     BIGINT    NULL NOT NULL,
   locationId         BIGINT    NULL,
   lastUpdated        DATETIME  NULL,
   PRIMARY KEY (id)

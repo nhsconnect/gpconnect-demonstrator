@@ -399,17 +399,20 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointment.setComment(appointmentDetail.getComment());
         appointment.setDescription(appointmentDetail.getDescription());
 
-        Participant patientParticipant = appointment.addParticipant();
-        patientParticipant.setActor(new ResourceReferenceDt("Patient/" + appointmentDetail.getPatientId()));
-        patientParticipant.setStatus(ParticipationStatusEnum.ACCEPTED);
+        appointment.addParticipant()
+                .setActor(new ResourceReferenceDt("Patient/" + appointmentDetail.getPatientId()))
+                .setStatus(ParticipationStatusEnum.ACCEPTED);
 
-        Participant practitionerParticipant = appointment.addParticipant();
-        practitionerParticipant.setActor(new ResourceReferenceDt("Practitioner/" + appointmentDetail.getPractitionerId()));
-        practitionerParticipant.setStatus(ParticipationStatusEnum.ACCEPTED);
+        appointment.addParticipant()
+                .setActor(new ResourceReferenceDt("Practitioner/" + appointmentDetail.getPractitionerId()))
+                .setStatus(ParticipationStatusEnum.ACCEPTED);
 
-        Participant locationParticipant = appointment.addParticipant();
-        locationParticipant.setActor(new ResourceReferenceDt("Location/" + appointmentDetail.getLocationId()));
-        locationParticipant.setStatus(ParticipationStatusEnum.ACCEPTED);
+        if (null != appointmentDetail.getLocationId()) {
+            appointment.addParticipant()
+                    .setActor(new ResourceReferenceDt("Location/" + appointmentDetail.getLocationId()))
+                    .setStatus(ParticipationStatusEnum.ACCEPTED);
+        }
+
         return appointment;
     }
 

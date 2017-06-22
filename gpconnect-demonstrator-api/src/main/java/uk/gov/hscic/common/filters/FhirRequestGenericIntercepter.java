@@ -233,9 +233,15 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         if (theException instanceof BaseServerResponseException) {
-            return (BaseServerResponseException) theException;
+            BaseServerResponseException baseServerResponseException = (BaseServerResponseException) theException;
+
+            // If the OperationalOutcome is already set, just return it.
+            return null == baseServerResponseException.getOperationOutcome()
+                    ? OperationOutcomeFactory.buildOperationOutcomeException(baseServerResponseException, SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT)
+                    : baseServerResponseException;
         }
 
+        // Default catch all.
         return OperationOutcomeFactory.buildOperationOutcomeException(
                 new InvalidRequestException(theException.getMessage()),
                 SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);

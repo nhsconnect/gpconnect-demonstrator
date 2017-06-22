@@ -227,6 +227,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
         }
 
+        if (theException instanceof InvalidRequestException && theException.getMessage().contains("Can not create resource with ID")) {
+            return OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(theException.getMessage()),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
+        
         if (theException instanceof ResourceNotFoundException && theException.getMessage().contains("Unknown resource type")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     (ResourceNotFoundException) theException,

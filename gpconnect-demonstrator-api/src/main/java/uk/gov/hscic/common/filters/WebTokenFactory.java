@@ -1,19 +1,5 @@
 package uk.gov.hscic.common.filters;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.parser.DataFormatException;
@@ -24,6 +10,16 @@ import ca.uhn.fhir.rest.method.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Locale;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.common.filters.model.WebToken;
@@ -31,14 +27,15 @@ import uk.gov.hscic.common.filters.model.WebTokenValidator;
 
 @Component
 public class WebTokenFactory {
-    
     private static final Logger LOG = Logger.getLogger("AuthLog");
+
     private static final String PERMITTED_MEDIA_TYPE_HEADER_REGEX = "application/(xml|json)\\+fhir(;charset=utf-8)?";
+
     private IParser parser = null;
-    
+
     WebToken getWebToken(RequestDetails requestDetails, int futureRequestLeeway) {
         WebToken webToken = null;
-        
+
         String authorizationHeader = requestDetails.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (null == authorizationHeader) {
@@ -86,8 +83,6 @@ public class WebTokenFactory {
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
-
-
         try {
             String claimsJsonString = new String(Base64.getDecoder().decode(authorizationHeaderComponents[1].split("\\.")[1]));
             webToken = new ObjectMapper().readValue(claimsJsonString, WebToken.class);
@@ -101,15 +96,14 @@ public class WebTokenFactory {
                     new InvalidRequestException("Invalid WebToken"),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
-        
-        WebTokenValidator.validateWebToken(webToken, futureRequestLeeway);
-        
-        return webToken;
 
+        WebTokenValidator.validateWebToken(webToken, futureRequestLeeway);
+
+        return webToken;
     }
-    
+
     private void jwtParseResourcesValidation(String claimsJsonString) {
-        if(parser == null){
+        if (parser == null) {
             parser = FhirContext
                 .forDstu2()
                 .newJsonParser()
@@ -128,7 +122,7 @@ public class WebTokenFactory {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException("Invalid Resource Present"),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-        } catch (IOException ex) {
+        } catch (IOException | NullPointerException ex) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Unparsable JSON"),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);

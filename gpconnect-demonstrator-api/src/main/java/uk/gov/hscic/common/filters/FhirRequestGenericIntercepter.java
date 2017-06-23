@@ -177,6 +177,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
 
+        if (theException instanceof InvalidRequestException && theException.getMessage().contains("Unknown resource in URI")) {
+            return OperationOutcomeFactory.buildOperationOutcomeException(
+                    new ResourceNotFoundException(theException.getMessage()),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
+
         if (theException instanceof InvalidRequestException && theException.getMessage().contains("Can not have multiple date range parameters for the same param ")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()),

@@ -1,5 +1,26 @@
 package uk.gov.hscic.common.filters;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.parser.DataFormatException;
 import ca.uhn.fhir.rest.method.RequestDetails;
@@ -9,20 +30,6 @@ import ca.uhn.fhir.rest.server.exceptions.MethodNotAllowedException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import uk.gov.hscic.InteractionId;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
@@ -50,6 +57,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     protected String providerRoutingFilename;
 
     private String systemSspToHeader;
+    
+    private OutgoingExceptions outgoingExceptions;
 
     @PostConstruct
     public void postConstruct() {
@@ -66,6 +75,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                 }
             }
         }
+        
+        outgoingExceptions = new OutgoingExceptions();
     }
 
     @Override
@@ -91,6 +102,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             throwBadRequestException(SystemHeader.SSP_TO + " header does not match ASID of system");
         }
 
+        validateInteraction(httpRequest);
+
+        return true;
+    }
+    
+    private void validateInteraction(HttpServletRequest httpRequest) {
         String interactionIdHeader = httpRequest.getHeader(SystemHeader.SSP_INTERACTIONID);
         if (StringUtils.isBlank(interactionIdHeader)) {
             throwInvalidRequestException(SystemHeader.SSP_INTERACTIONID + " header blank");
@@ -98,13 +115,22 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         Interaction interaction = interactions.getInteraction(interactionIdHeader);
 
-        validateURIAgainstInteraction(interaction, httpRequest.getRequestURI());
-
-        if (InteractionId.IDENTIFIER_INTERACTIONS.contains(interactionIdHeader)) {
-            validateIdentifierSystemAgainstInteraction(interaction, httpRequest.getParameterMap().get(SystemParameter.IDENTIFIER));
+        if(interaction != null) {
+            String httpVerb = httpRequest.getMethod();
+            if(interaction.validateHttpVerb(httpVerb)) {
+                validateURIAgainstInteraction(interaction, httpRequest.getRequestURI());
+                
+                if (InteractionId.IDENTIFIER_INTERACTIONS.contains(interactionIdHeader)) {
+                    validateIdentifierSystemAgainstInteraction(interaction, httpRequest.getParameterMap().get(SystemParameter.IDENTIFIER));
+                }
+            }
+            else {
+                throwBadRequestException(String.format("The interaction ID does not match the HTTP request verb (interaction ID - %s HTTP verb - %s)", interactionIdHeader, httpVerb));            
+            }
         }
-
-        return true;
+        else {
+            throwBadRequestException(String.format("Unable to locate interaction corresponding to the given interaction ID (%s)", interactionIdHeader));
+        }
     }
 
     private static void throwBadRequestException(String exceptionMessage) {
@@ -169,6 +195,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     @Override
     public BaseServerResponseException preProcessOutgoingException(RequestDetails theRequestDetails,
             Throwable theException, HttpServletRequest theServletRequest) throws ServletException {
+        
+        BaseServerResponseException outgoingException = outgoingExceptions.toOutgoingException(theException, theRequestDetails);
+        if(outgoingException != null) {
+            return outgoingException;
+        }
+        
         // This string match is really crude and it's not great, but I can't see
         // how else to pick up on just the relevant exceptions!
         if (theException instanceof InvalidRequestException && theException.getMessage().contains("Invalid attribute value")) {
@@ -261,21 +293,40 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private void validateURIAgainstInteraction(Interaction interaction, String requestURI) {
 
+        // do we need some logic to check that the resource in the request is a valid one?
+        //ServletRequestDetails requestDetails = new ServletRequestDetails();
+        
+        // nulll pointer in here becuasue there's no fhir context. Looks like we might have to roll our own. RUBBISH
+        //restfulServer.populateRequestDetailsFromRequestPath(requestDetails, requestURI);
+        Resource requestResource = Resource.resolveFromRequestUri(requestURI);
+        Resource interactionResource = Resource.resolveFromName(interaction.getResource());
+        
+        if(interactionResource == null) {
+                throwBadRequestException(String.format("Interaction containts invalid resource (%s)", interaction.getResource()));
+        }
+        if(requestResource == null) {
+         // error bad request
+            throwResourceNotFoundException(String.format("Request containts invalid resource (%s)", requestURI), requestURI);       
+        }
+        if(interactionResource != requestResource) {
+            throwBadRequestException(String.format("Resource in request does not match resource in interaction (request - %s interaction - %s)", requestResource, interactionResource));
+        }
+        
+        // can we retireve a resource based in this - if it's null we say it's an unknown resource
+        // otherwise we pass it in?
+        
     	if(interaction != null) {
-	    	if(interaction.validateResource(requestURI) == false) {
-				throwBadRequestException(String.format("Unknown resource in URI - %s", requestURI));
-	    	}
 
 	    	if(interaction.validateIdentifier(requestURI) == false) {
-	    		throwResourceNotFoundException(String.format("Unknown resource identifier in URI - %s", requestURI), interaction.getResource());
+	    		throwResourceNotFoundException(String.format("Unexpected resource identifier in URI - %s", requestURI), interaction.getResource());
 	    	}
 
 	    	if(interaction.validateContainedResource(requestURI) == false) {
-	    		throwBadRequestException(String.format("Unknown contained resource in URI - %s", requestURI));
+	    		throwBadRequestException(String.format("Unexpected contained resource in URI - %s", requestURI));
 	    	}
 
 	    	if(interaction.validateOperation(requestURI) == false) {
-	    		throwBadRequestException(String.format("Unknown resource operation in URI - %s", requestURI));
+	    		throwBadRequestException(String.format("Unexpected resource operation in URI - %s", requestURI));
 	    	}
     	}
     	else {
@@ -312,4 +363,55 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             throwUnprocessableEntityException("One or both of the identifier system and value are missing from given identifier : " + identifiers[0]);
         }
     }
+    
+    private enum Resource {
+        
+        AllergyIntolerance, Appointment, Condition, DiagnosticOrder, DiagnosticReport, 
+        Encounter, Flag, Immunization, MedicationAdministration, MedicationDispense, 
+        MedicationOrder, Observation, Problem, Procedure, Referral, Patient, 
+        Organization, Order, Location, metadata, Practitioner;
+        
+        private static final Map<String, Resource> mappings = new HashMap<>();
+
+        static {
+            for (Resource resource : values()) {
+                mappings.put(resource.name(), resource);
+            }
+        }
+
+        public static Resource resolveFromRequestUri(String requestUri) {
+            Resource resource = null;
+            
+            if(requestUri != null) {
+                String resourceName = getResourceFromUri(requestUri);
+                resource = resolveFromName(resourceName);
+            }
+            
+            return resource;
+        }
+        
+        public static Resource resolveFromName(String resourceName) {
+            Resource resource = null;
+            
+            if(resourceName != null) {
+                resource = mappings.get(resourceName);
+            }
+            
+            return resource;
+        }
+        
+        private static String getResourceFromUri(String requestUri) {
+            String resource = null;
+            
+            StringTokenizer tok = new StringTokenizer(requestUri, "/");
+            if(tok.countTokens() > 1) {
+                tok.nextToken();
+                resource = tok.nextToken();
+            }
+          
+            return resource;
+        }
+    }
+    
+    
 }

@@ -517,14 +517,17 @@ public class PatientResourceProvider implements IResourceProvider {
             validatePatient(unregisteredPatient);
 
             // check if the patient already exists
-            PatientDetails patientDetails = patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue());
+           
+            PatientDetails patientDetails = patientSearch.findPatient(nhsNumber.fromPatientResource(unregisteredPatient));
 
             if (patientDetails == null) {
                 patientStore.create(registerPatientResourceConverterToPatientDetail(unregisteredPatient));
                 registeredPatient = patientDetailsToRegisterPatientResourceConverter(
                         patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
             } else {
-                registeredPatient = patientDetailsToRegisterPatientResourceConverter(patientDetails);
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException(String.format("Patient (NHS number - %s) already exists", nhsNumber.fromPatientResource(unregisteredPatient))),
+                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
             }
         } else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -687,10 +690,24 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     private String getFirstExtensionCode(String extensionUrl, Patient patient) {
+        String status = null;
+        
         List<ExtensionDt> extensions = patient.getUndeclaredExtensionsByUrl(extensionUrl);
-        ExtensionDt extension = extensions.get(0);
-        CodeableConceptDt statusCode = (CodeableConceptDt) extension.getValue();
-        String status = statusCode.getCodingFirstRep().getCode();
+        if(extensions.isEmpty() == false) {
+        
+            if(extensions.size() == 1) {
+                ExtensionDt extension = extensions.get(0);
+                CodeableConceptDt statusCode = (CodeableConceptDt) extension.getValue();
+                status = statusCode.getCodingFirstRep().getCode();
+            }
+            else {
+                // we do not allow duplicates
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException(String.format("Duplicate undeclared extensions (url scheme - %) found on patient resource", extensionUrl)),
+                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+            }
+        }
+        
         return status;
     }
 

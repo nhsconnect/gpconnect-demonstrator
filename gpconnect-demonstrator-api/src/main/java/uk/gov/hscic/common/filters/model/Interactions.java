@@ -63,7 +63,7 @@ public class Interactions {
         put(InteractionId.REST_SEARCH_PATIENT, new Interaction("Patient").addIdentifierSystems(SystemURL.ID_NHS_NUMBER).httpVerb(RequestMethod.GET));
         put(InteractionId.REST_SEARCH_PATIENT_APPOINTMENTS, new Interaction("Patient").identifier().containedResource("Appointment").httpVerb(RequestMethod.GET));
         put(InteractionId.REST_SEARCH_PRACTITIONER, new Interaction("Practitioner").addIdentifierSystems(SystemURL.ID_SDS_USER_ID).httpVerb(RequestMethod.GET));
-        put(InteractionId.REST_UPDATE_APPOINTMENT, new Interaction("Appointment").identifier().httpVerb(RequestMethod.POST));
+        put(InteractionId.REST_UPDATE_APPOINTMENT, new Interaction("Appointment").identifier().httpVerb(RequestMethod.PUT));
     }};
 
 	public Interaction getInteraction(String interactionId) {
@@ -74,6 +74,8 @@ public class Interactions {
 		private static final Pattern WILDCARD = Pattern.compile(".+");
 
 		private String resource = null;
+		private String operation = null;
+		
 		private Pattern resourcePattern = null;
 		private Pattern containedResourcePattern = null;
 		private Pattern identifierPattern = null;
@@ -105,7 +107,8 @@ public class Interactions {
 		}
 
 		private Interaction operation(String operation) {
-			this.operationPattern = buildPattern("\\" + operation);
+			this.operation = operation;
+		    this.operationPattern = buildPattern("\\" + operation);
 
 			return this;
 		}
@@ -132,6 +135,10 @@ public class Interactions {
 
 		public String getResource() {
 			return resource;
+		}
+		
+		public String getOperation() {
+		    return operation;
 		}
 
 		public Set<String> getIdentifierSystems() {

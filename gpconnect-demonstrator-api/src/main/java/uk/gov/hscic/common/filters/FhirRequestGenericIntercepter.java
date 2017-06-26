@@ -57,9 +57,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     protected String providerRoutingFilename;
 
     private String systemSspToHeader;
-    
-    private OutgoingExceptions outgoingExceptions;
-
+  
     @PostConstruct
     public void postConstruct() {
         if (providerRoutingFilename != null) {
@@ -75,8 +73,6 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                 }
             }
         }
-        
-        outgoingExceptions = new OutgoingExceptions();
     }
 
     @Override
@@ -195,12 +191,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     @Override
     public BaseServerResponseException preProcessOutgoingException(RequestDetails theRequestDetails,
             Throwable theException, HttpServletRequest theServletRequest) throws ServletException {
-        
-        BaseServerResponseException outgoingException = outgoingExceptions.toOutgoingException(theException, theRequestDetails);
-        if(outgoingException != null) {
-            return outgoingException;
-        }
-        
+                
         // This string match is really crude and it's not great, but I can't see
         // how else to pick up on just the relevant exceptions!
         if (theException instanceof InvalidRequestException && theException.getMessage().contains("Invalid attribute value")) {
@@ -275,6 +266,11 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     (ResourceNotFoundException) theException,
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
+        
+//        BaseServerResponseException outgoingException = outgoingExceptions.toOutgoingException(theException, theRequestDetails);
+//        if(outgoingException != null) {
+//            return outgoingException;
+//        }
 
         if (theException instanceof BaseServerResponseException) {
             BaseServerResponseException baseServerResponseException = (BaseServerResponseException) theException;
@@ -293,14 +289,9 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private void validateURIAgainstInteraction(Interaction interaction, String requestURI) {
 
-        // do we need some logic to check that the resource in the request is a valid one?
-        //ServletRequestDetails requestDetails = new ServletRequestDetails();
-        
-        // nulll pointer in here becuasue there's no fhir context. Looks like we might have to roll our own. RUBBISH
-        //restfulServer.populateRequestDetailsFromRequestPath(requestDetails, requestURI);
         Resource requestResource = Resource.resolveFromRequestUri(requestURI);
         Resource interactionResource = Resource.resolveFromName(interaction.getResource());
-        
+   
         if(interactionResource == null) {
                 throwBadRequestException(String.format("Interaction containts invalid resource (%s)", interaction.getResource()));
         }
@@ -312,10 +303,26 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             throwBadRequestException(String.format("Resource in request does not match resource in interaction (request - %s interaction - %s)", requestResource, interactionResource));
         }
         
+        Operation requestOperation = Operation.resolveFromRequestUri(requestURI);
+        Operation interactionOperation = Operation.resolveFromName(interaction.getOperation());
+        if(requestOperation != null) {
+            if(interactionOperation != null) {
+                if(requestOperation != interactionOperation) {
+                    throwBadRequestException(String.format("Operation in request does not match operation in interaction (request - %s interaction - %s)", requestOperation, interactionOperation));
+                }
+            }
+            else {
+                throwBadRequestException(String.format("Request defines an operation but the interaction does not (request - %s)", requestOperation)); 
+            }
+        }
+        else if(interactionOperation != null) {
+            throwBadRequestException(String.format("Interaction defines an operation but the request does not (interaction - %s)", interactionOperation));
+        }
+        
         // can we retireve a resource based in this - if it's null we say it's an unknown resource
         // otherwise we pass it in?
         
-    	if(interaction != null) {
+    	//if(interaction != null) {
 
 	    	if(interaction.validateIdentifier(requestURI) == false) {
 	    		throwResourceNotFoundException(String.format("Unexpected resource identifier in URI - %s", requestURI), interaction.getResource());
@@ -325,13 +332,13 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 	    		throwBadRequestException(String.format("Unexpected contained resource in URI - %s", requestURI));
 	    	}
 
-	    	if(interaction.validateOperation(requestURI) == false) {
-	    		throwBadRequestException(String.format("Unexpected resource operation in URI - %s", requestURI));
-	    	}
-    	}
-    	else {
-            throwBadRequestException(String.format("Unable to locate interaction corresponding to the given URI (%s)", requestURI));
-    	}
+//	    	if(interaction.validateOperation(requestURI) == false) {
+//	    		throwBadRequestException(String.format("Unexpected resource operation in URI - %s", requestURI));
+//	    	}
+//    	}
+//    	else {
+//            throwBadRequestException(String.format("Unable to locate interaction corresponding to the given URI (%s)", requestURI));
+//    	}
     }
 
     private void validateIdentifierSystemAgainstInteraction(Interaction interaction, String[] identifiers) {
@@ -361,6 +368,68 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
         else {
             throwUnprocessableEntityException("One or both of the identifier system and value are missing from given identifier : " + identifiers[0]);
+        }
+    }
+    
+    private enum Operation {
+        
+        GetCareRecord("$gpc.getcarerecord"), GetSchedule("$gpc.getschedule"), RegisterPatient("$gpc.registerpatient");
+        
+        private Operation(String operationName) {
+            this.operationName = operationName;
+        }
+        
+        private String operationName;
+        
+        private static final Map<String, Operation> mappings = new HashMap<>();
+
+        static {
+            for (Operation operation : values()) {
+                mappings.put(operation.operationName, operation);
+            }
+        }
+
+        public static Operation resolveFromRequestUri(String requestUri) {
+            Operation operation = null;
+            
+            if(requestUri != null) {
+                String operationName = getOperationFromUri(requestUri);
+                if(operationName != null) {
+                    operation = resolveFromName(operationName);
+                    if(operation == null) {
+                        throwResourceNotFoundException("Unknown operation type", operationName);
+                    }
+                }
+            }
+            
+            return operation;
+        }
+                
+        public static Operation resolveFromName(String operationName) {
+            Operation operation = null;
+            
+            if(operationName != null) {
+                operation = mappings.get(operationName);
+            }
+            
+            return operation;
+        }
+
+        private static String getOperationFromUri(String requestUri) {
+            String operation = null;
+            
+            StringTokenizer tok = new StringTokenizer(requestUri, "/");
+            while(tok.hasMoreTokens() && operation == null) {
+                String nextToken = tok.nextToken();
+                if(nextToken.length() > 0) {
+                    char firstChar = nextToken.charAt(0);
+                    if('$' == firstChar) {
+                        operation = nextToken;
+                    }
+                }
+            }
+          
+            return operation;
         }
     }
     

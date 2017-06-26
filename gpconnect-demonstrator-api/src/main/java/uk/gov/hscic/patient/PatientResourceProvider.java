@@ -703,7 +703,7 @@ public class PatientResourceProvider implements IResourceProvider {
             else {
                 // we do not allow duplicates
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(String.format("Duplicate undeclared extensions (url scheme - %) found on patient resource", extensionUrl)),
+                        new InvalidRequestException(String.format("Duplicate undeclared extensions (url scheme - %s) found on patient resource", extensionUrl)),
                         SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
             }
         }
@@ -958,7 +958,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 else if(filteredParameters.size() > 1) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
                             new InvalidRequestException("The parameter " + parameterName + " cannot be set more than once"),
-                            SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueTypeEnum.INVALID_CONTENT);
+                            SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
                 }
             }
 

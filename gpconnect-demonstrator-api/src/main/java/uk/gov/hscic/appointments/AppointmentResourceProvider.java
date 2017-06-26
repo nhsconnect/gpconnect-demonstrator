@@ -577,7 +577,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         if (!extensionURLs.isEmpty()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException("Invalid/multiple appointment extensions found: " + extensionURLs.stream().collect(Collectors.joining(", "))),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
         }
     }
 }

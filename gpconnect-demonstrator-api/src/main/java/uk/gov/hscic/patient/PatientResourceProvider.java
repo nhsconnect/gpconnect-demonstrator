@@ -614,15 +614,24 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     private void validateIdentifiers(Patient patient) {
-        boolean identifiersValid = patient.getIdentifier()
-                .stream()
-                .allMatch(identifier -> identifier.getSystem() != null && identifier.getValue() != null);
-
-        if(identifiersValid == false) {
+        List<IdentifierDt> identifiers = patient.getIdentifier();
+        if(identifiers.isEmpty() == false) {
+            boolean identifiersValid = identifiers
+                    .stream()
+                    .allMatch(identifier -> identifier.getSystem() != null && identifier.getValue() != null);
+    
+            if(identifiersValid == false) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("One or both of the system and/or value on some of the provided identifiers is null"),
+                                                    SystemCode.BAD_REQUEST,
+                                                    IssueTypeEnum.INVALID_CONTENT);
+            }
+        }
+        else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("One or both of the system and/or value on some of the provided identifiers is null"),
+                    new InvalidRequestException("At least one identifier must be supplied on a Patient resource"),
                                                 SystemCode.BAD_REQUEST,
-                                                IssueTypeEnum.INVALID_CONTENT);
+                                                IssueTypeEnum.INVALID_CONTENT);    
         }
     }
 
@@ -838,15 +847,15 @@ public class PatientResourceProvider implements IResourceProvider {
             patient.setGender(AdministrativeGenderEnum.forCode(gender.toLowerCase(Locale.UK)));
         }
 
+        Date registrationEndDateTime = patientDetails.getRegistrationEndDateTime();
         Date registrationStartDateTime = patientDetails.getRegistrationStartDateTime();
-        if (registrationStartDateTime != null) {
-            PeriodDt registrationPeriod = new PeriodDt()
-                    .setStartWithSecondsPrecision(registrationStartDateTime)
-                    .setEndWithSecondsPrecision(patientDetails.getRegistrationEndDateTime());
+                
+        PeriodDt registrationPeriod = new PeriodDt()
+                                            .setStartWithSecondsPrecision(registrationStartDateTime)
+                                            .setEndWithSecondsPrecision(registrationEndDateTime);
 
-            patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_PERIOD, registrationPeriod);
-        }
-
+        patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_PERIOD, registrationPeriod);
+        
         String registrationStatusValue = patientDetails.getRegistrationStatus();
         if (registrationStatusValue != null) {
             patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_STATUS, new CodeableConceptDt(

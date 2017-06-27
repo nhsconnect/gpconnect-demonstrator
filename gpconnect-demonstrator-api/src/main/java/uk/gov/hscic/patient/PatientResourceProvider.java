@@ -546,9 +546,71 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private void validatePatient(Patient patient) {
         validateIdentifiers(patient);
-        validateRegistration(patient);
+        validateRegistrationStatusAndType(patient);
         validateConstrainedOutProperties(patient);
         valiateNames(patient);
+        validateDateOfBirth(patient);
+        valiateGender(patient);
+        validateRegistrationPeriod(patient);
+    }
+
+    private void validateRegistrationPeriod(Patient patient) {
+        List<ExtensionDt> registrationPeriodExtensions = patient
+                .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_REGISTRATION_PERIOD);
+        
+        if(registrationPeriodExtensions.size() == 1) {
+            // we need a non null period
+            ExtensionDt registrationPeriodExtension = registrationPeriodExtensions.get(0);
+            PeriodDt registrationPeriod = (PeriodDt) registrationPeriodExtension.getValue();
+            
+            if(registrationPeriod == null) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("A registration period must be supplied"),
+                                                    SystemCode.BAD_REQUEST,
+                                                    IssueTypeEnum.INVALID_CONTENT); 
+            }
+            
+            // note that the spec says nothing about the content of the start or end dates
+            // therefore we do not carry out any further validation
+            
+        }
+        else if(registrationPeriodExtensions.size() > 1) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(String.format("Duplicate undeclared extensions (url scheme - %s) found on patient resource", SystemURL.SD_EXTENSION_REGISTRATION_PERIOD)),
+                                                SystemCode.BAD_REQUEST,
+                                                IssueTypeEnum.INVALID_CONTENT); 
+            
+        }
+        else if(registrationPeriodExtensions.size() < 1) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Registration period is mandatory"),
+                                                SystemCode.BAD_REQUEST,
+                                                IssueTypeEnum.INVALID_CONTENT); 
+            
+        }
+        
+    }
+
+    private void valiateGender(Patient patient) {
+        String gender = patient.getGender();
+        
+        if(gender == null) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("A Patient's gender must be supplied"),
+                                                SystemCode.BAD_REQUEST,
+                                                IssueTypeEnum.INVALID_CONTENT); 
+        }
+    }
+
+    private void validateDateOfBirth(Patient patient) {
+        Date birthDate = patient.getBirthDate();
+
+        if(birthDate == null) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("A Patient's date of birth must be supplied"),
+                                                SystemCode.BAD_REQUEST,
+                                                IssueTypeEnum.INVALID_CONTENT); 
+        }
     }
 
     private void validateIdentifiers(Patient patient) {
@@ -564,7 +626,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
     }
 
-    private void validateRegistration(Patient patient) {
+    private void validateRegistrationStatusAndType(Patient patient) {
         String registrationStatus = getRegistrationStatus(patient);
         if (ACTIVE_REGISTRATION_STATUS.equals(registrationStatus) == false) {
             String message = String.format("The given registration status is not valid. Expected - %s. Actual - %s", ACTIVE_REGISTRATION_STATUS, registrationStatus);
@@ -660,45 +722,71 @@ public class PatientResourceProvider implements IResourceProvider {
 	        }
 		}
 
-        List<ExtensionDt> registrationPeriodExtensions = patientResource
-                .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_REGISTRATION_PERIOD);
-        ExtensionDt registrationPeriodExtension = registrationPeriodExtensions.get(0);
-        PeriodDt registrationPeriod = (PeriodDt) registrationPeriodExtension.getValue();
-
-        Date registrationStart = registrationPeriod.getStart();
-
-        if (registrationStart.compareTo(new Date()) <= 1) {
-            patientDetails.setRegistrationStartDateTime(registrationStart);
-        } else {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("Patient record not found"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.NOT_FOUND);
-        }
-
+        patientDetails.setRegistrationStartDateTime(getRegistrationStartDate(patientResource));
+        patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
         patientDetails.setRegistrationStatus(getRegistrationStatus(patientResource));
         patientDetails.setRegistrationType(getRegistrationType(patientResource));
 
         return patientDetails;
     }
 
+    private Date getRegistrationEndDate(Patient patient) {
+        Date endDate = null;
+        
+        PeriodDt registrationPeriod = getFirstExtensionCode(SystemURL.SD_EXTENSION_REGISTRATION_PERIOD, patient);
+       
+        if(registrationPeriod != null) {
+            endDate = registrationPeriod.getEnd();
+        }
+        
+        return endDate;
+    }
+    
+    private Date getRegistrationStartDate(Patient patient) {
+        Date startDate = null;
+        
+        PeriodDt registrationPeriod = getFirstExtensionCode(SystemURL.SD_EXTENSION_REGISTRATION_PERIOD, patient);
+       
+        if(registrationPeriod != null) {
+            startDate = registrationPeriod.getStart();
+        }
+        
+        return startDate;
+    }
+
     private String getRegistrationType(Patient patient) {
-        return getFirstExtensionCode(SystemURL.SD_EXTENSION_REGISTRATION_TYPE, patient);
+        String registrationType = null;
+        
+        CodeableConceptDt typeCode =  getFirstExtensionCode(SystemURL.SD_EXTENSION_REGISTRATION_TYPE, patient);
+        
+        if(typeCode != null) {
+            registrationType = typeCode.getCodingFirstRep().getCode();
+         }
+        
+        return registrationType;
     }
 
     private String getRegistrationStatus(Patient patient) {
-        return getFirstExtensionCode(SystemURL.SD_EXTENSION_REGISTRATION_STATUS, patient);
+        String registrationStatus = null;
+        
+        CodeableConceptDt statusCode = getFirstExtensionCode(SystemURL.SD_EXTENSION_REGISTRATION_STATUS, patient);
+        if(statusCode != null) {
+           registrationStatus = statusCode.getCodingFirstRep().getCode();
+        }
+        
+        return registrationStatus;
     }
 
-    private String getFirstExtensionCode(String extensionUrl, Patient patient) {
-        String status = null;
+    @SuppressWarnings("unchecked")
+    private <V> V getFirstExtensionCode(String extensionUrl, Patient patient) {
+        V value = null;
         
         List<ExtensionDt> extensions = patient.getUndeclaredExtensionsByUrl(extensionUrl);
         if(extensions.isEmpty() == false) {
         
             if(extensions.size() == 1) {
                 ExtensionDt extension = extensions.get(0);
-                CodeableConceptDt statusCode = (CodeableConceptDt) extension.getValue();
-                status = statusCode.getCodingFirstRep().getCode();
+                value = (V) extension.getValue();
             }
             else {
                 // we do not allow duplicates
@@ -708,7 +796,7 @@ public class PatientResourceProvider implements IResourceProvider {
             }
         }
         
-        return status;
+        return value;
     }
 
     // a cut-down Patient

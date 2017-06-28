@@ -371,6 +371,15 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             // This is a Cancellation - so copy across fields which can be
             // altered
+            
+            boolean cancelComparisonResult = compareAppointmentsForInvalidPropertyCancel(oldAppointmentDetail,appointmentDetail);
+            
+            if (cancelComparisonResult) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnclassifiedServerFailureException(403, "Invalid Appointment property has been amended"),
+                        SystemCode.BAD_REQUEST, IssueTypeEnum.FORBIDDEN);
+            }
+
             oldAppointmentDetail.setCancellationReason(appointmentDetail.getCancellationReason());
             String oldStatus = oldAppointmentDetail.getStatus();
             appointmentDetail = oldAppointmentDetail;
@@ -438,7 +447,18 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getPatientId(), appointmentDetail.getPatientId()));
         results.add(Objects.equals(oldAppointmentDetail.getPractitionerId(), appointmentDetail.getPractitionerId()));
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
-        results.contains(false);
+        return results.contains(false);
+    }
+    
+    private boolean compareAppointmentsForInvalidPropertyCancel(AppointmentDetail oldAppointmentDetail, AppointmentDetail appointmentDetail) {
+        List<Boolean> results = new ArrayList<>();
+        results.add(Objects.equals(oldAppointmentDetail.getDescription(), appointmentDetail.getDescription()));
+        results.add(Objects.equals(oldAppointmentDetail.getId(), appointmentDetail.getId()));
+        results.add(Objects.equals(oldAppointmentDetail.getTypeCode(), appointmentDetail.getTypeCode()));
+        results.add(Objects.equals(oldAppointmentDetail.getTypeDisplay(), appointmentDetail.getTypeDisplay()));
+        results.add(Objects.equals(oldAppointmentDetail.getPatientId(), appointmentDetail.getPatientId()));
+        results.add(Objects.equals(oldAppointmentDetail.getPractitionerId(), appointmentDetail.getPractitionerId()));
+        results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         return results.contains(false);
     }
 

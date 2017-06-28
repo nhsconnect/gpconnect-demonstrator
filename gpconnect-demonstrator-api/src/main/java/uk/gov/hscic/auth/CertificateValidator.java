@@ -34,25 +34,36 @@ public final class CertificateValidator {
 
     public void validateRequest(HttpServletRequest request) {
         try {
+            
             if (request.isSecure() && !HttpMethod.OPTIONS.name().equals(request.getMethod())) {
+                
                 X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
-
-                if (null == certs) {
-                    throw new CertificateException("No certificate found!", 496);
+                
+                for(X509Certificate cert : knownCerts){
+                    System.out.println("Cert in certificate store: " + cert.toString());
+                }
+                if (null != certs){
+                    for(X509Certificate cert : certs){
+                        System.out.println("Client certificate: " + cert.toString());
+                    }
                 }
 
-                X509Certificate x509Certificate = certs[0];
-
-                if (!knownCerts.contains(x509Certificate)) {
-                    throw new CertificateException("Provided certificate is not in trusted list!", 495);
-                } else { // Otherwise, check the expiry
-                    knownCerts.stream()
-                            .filter(x509Certificate::equals)
-                            .peek(cert -> LOG.info("Certificate valid until: " + cert.getNotAfter()))
-                            .filter(cert -> new Date().before(cert.getNotAfter()))
-                            .findAny()
-                            .orElseThrow(() -> new CertificateException("Provided certificate has expired!", 495));
-                }
+//                if (null == certs) {
+//                    throw new CertificateException("No certificate found!", 496);
+//                }
+//
+//                X509Certificate x509Certificate = certs[0];
+//
+//                if (!knownCerts.contains(x509Certificate)) {
+//                    throw new CertificateException("Provided certificate is not in trusted list!", 495);
+//                } else { // Otherwise, check the expiry
+//                    knownCerts.stream()
+//                            .filter(x509Certificate::equals)
+//                            .peek(cert -> LOG.info("Certificate valid until: " + cert.getNotAfter()))
+//                            .filter(cert -> new Date().before(cert.getNotAfter()))
+//                            .findAny()
+//                            .orElseThrow(() -> new CertificateException("Provided certificate has expired!", 495));
+//                }
             }
         } catch (CertificateException certificateException) {
             StringBuilder requestURL = new StringBuilder(request.getRequestURL());

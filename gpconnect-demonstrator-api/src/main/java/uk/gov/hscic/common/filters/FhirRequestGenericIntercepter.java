@@ -75,7 +75,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     @Override
     public boolean incomingRequestPreProcessed(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
-        certificateValidator.validateRequest(httpRequest); // Validate certificate first!
+        //certificateValidator.validateRequest(httpRequest); // Validate certificate first!
 
         // Check there is a Ssp-TraceID header
         if (StringUtils.isBlank(httpRequest.getHeader(SystemHeader.SSP_TRACEID))) {

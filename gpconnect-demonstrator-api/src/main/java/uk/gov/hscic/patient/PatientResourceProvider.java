@@ -121,6 +121,7 @@ public class PatientResourceProvider implements IResourceProvider {
     private NhsNumber nhsNumber;
 
     private Map<String, Boolean> getCareRecordParams;
+    private Map<String, Boolean> registerPatientParams;
 
     public static Set<String> getCustomReadOperations() {
         Set<String> customReadOperations = new HashSet<String>();
@@ -148,10 +149,13 @@ public class PatientResourceProvider implements IResourceProvider {
         boolean mandatory = true;
         boolean optional = false;
 
-        getCareRecordParams = new HashMap<String, Boolean>();
+        getCareRecordParams = new HashMap<>();
         getCareRecordParams.put("patientNHSNumber", mandatory);
         getCareRecordParams.put("recordSection", mandatory);
         getCareRecordParams.put("timePeriod", optional);
+        
+        registerPatientParams = new HashMap<>();
+        registerPatientParams.put("registerPatient", true);
     }
 
     @Read(version = true)
@@ -198,23 +202,30 @@ public class PatientResourceProvider implements IResourceProvider {
 
        Set<String> parameterDefinitionNames = parameterDefinitions.keySet();
 
-       for(String parameterDefinition : parameterDefinitionNames) {
-           boolean mandatory = parameterDefinitions.get(parameterDefinition);
-
-           if(mandatory) {
-               if(parameterNames.contains(parameterDefinition) == false) {
-                   throw OperationOutcomeFactory.buildOperationOutcomeException(
-                           new InvalidRequestException("Not all mandatory parameters have been provided"),
-                           SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+       if(parameterNames.isEmpty() == false) {
+           for(String parameterDefinition : parameterDefinitionNames) {
+               boolean mandatory = parameterDefinitions.get(parameterDefinition);
+    
+               if(mandatory) {
+                   if(parameterNames.contains(parameterDefinition) == false) {
+                       throw OperationOutcomeFactory.buildOperationOutcomeException(
+                               new InvalidRequestException("Not all mandatory parameters have been provided"),
+                               SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                   }
                }
            }
+    
+           if(parameterDefinitionNames.containsAll(parameterNames) == false) {
+               parameterNames.removeAll(parameterDefinitionNames);
+               throw OperationOutcomeFactory.buildOperationOutcomeException(
+                       new InvalidRequestException("Unrecognised parameters have been provided - " + parameterNames.toString()),
+                       SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+           }
        }
-
-       if(parameterDefinitionNames.containsAll(parameterNames) == false) {
-           parameterNames.removeAll(parameterDefinitionNames);
+       else {
            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                   new InvalidRequestException("Unrecognised parameters have been provided - " + parameterNames.toString()),
-                   SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                   new InvalidRequestException("Not all mandatory parameters have been provided"),
+                   SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT); 
        }
     }
 
@@ -504,6 +515,8 @@ public class PatientResourceProvider implements IResourceProvider {
     @Operation(name = REGISTER_PATIENT_OPERATION_NAME)
     public Bundle registerPatient(@ResourceParam Parameters params) {
         Patient registeredPatient = null;
+        
+        validateParameterNames(params, registerPatientParams);
 
         Patient unregisteredPatient = params.getParameter()
                 .stream()

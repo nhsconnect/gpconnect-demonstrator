@@ -54,26 +54,26 @@ public class WebTokenValidator {
         assertNotNull(webToken.getRequestedScope());
 
         assertNotNull(webToken.getRequestingDevice());
-        assertNotNull(webToken.getRequestingDevice().getId());
-        assertNotNull(webToken.getRequestingDevice().getModel());
+        //assertNotNull(webToken.getRequestingDevice().getId()); // Is not mandatory
+        //assertNotNull(webToken.getRequestingDevice().getModel());
         assertNotNull(webToken.getRequestingDevice().getResourceType());
-        assertNotNull(webToken.getRequestingDevice().getVersion());
+        //assertNotNull(webToken.getRequestingDevice().getVersion());
 
         assertNotNull(webToken.getRequestingOrganization());
-        assertNotNull(webToken.getRequestingOrganization().getId());
-        assertNotNull(webToken.getRequestingOrganization().getName());
+        //assertNotNull(webToken.getRequestingOrganization().getId()); // Is not mandatory
+        //assertNotNull(webToken.getRequestingOrganization().getName());
         assertNotNull(webToken.getRequestingOrganization().getResourceType());
-        assertNotNull(webToken.getRequestingOrganization().getIdentifierValue(SystemURL.ID_ODS_ORGANIZATION_CODE));
+        //assertNotNull(webToken.getRequestingOrganization().getIdentifierValue(SystemURL.ID_ODS_ORGANIZATION_CODE));
 
         assertNotNull(webToken.getRequestingPractitioner());
-        assertNotNull(webToken.getRequestingPractitioner().getId());
+        //assertNotNull(webToken.getRequestingPractitioner().getId());
         assertNotNull(webToken.getRequestingPractitioner().getResourceType());
-        assertNotNull(webToken.getRequestingPractitioner().getName());
-        assertNotNull(webToken.getRequestingPractitioner().getName().get("family"));
-        assertNotNull(webToken.getRequestingPractitioner().getName().get("given"));
-        assertNotNull(webToken.getRequestingPractitioner().getName().get("prefix"));
-        assertNotNull(webToken.getRequestingPractitioner().getIdentifierValue(SystemURL.SDS_USER_ID));
-        assertNotNull(webToken.getRequestingPractitioner().getPractitionerRoleCode(SystemURL.VS_SDS_JOB_ROLE_NAME));
+        //assertNotNull(webToken.getRequestingPractitioner().getName());
+        //assertNotNull(webToken.getRequestingPractitioner().getName().get("family"));
+        //assertNotNull(webToken.getRequestingPractitioner().getName().get("given"));
+        //assertNotNull(webToken.getRequestingPractitioner().getName().get("prefix"));
+        //assertNotNull(webToken.getRequestingPractitioner().getIdentifierValue(SystemURL.SDS_USER_ID));
+        //assertNotNull(webToken.getRequestingPractitioner().getPractitionerRoleCode(SystemURL.VS_SDS_JOB_ROLE_NAME));
     }
 
     private static void assertNotNull(Object object) {

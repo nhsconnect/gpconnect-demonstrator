@@ -40,11 +40,11 @@ public final class CertificateValidator {
                 X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
                 
                 for(X509Certificate cert : knownCerts){
-                    System.out.println("Cert in certificate store: " + cert.toString());
+                    LOG.info("Cert in certificate store: " + cert.toString());
                 }
                 if (null != certs){
                     for(X509Certificate cert : certs){
-                        System.out.println("Client certificate: " + cert.toString());
+                        LOG.info("Client certificate: " + cert.toString());
                     }
                 }
 

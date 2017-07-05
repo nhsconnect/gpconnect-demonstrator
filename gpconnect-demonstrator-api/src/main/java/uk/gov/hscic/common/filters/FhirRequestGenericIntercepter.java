@@ -191,7 +191,11 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     @Override
     public BaseServerResponseException preProcessOutgoingException(RequestDetails theRequestDetails,
             Throwable theException, HttpServletRequest theServletRequest) throws ServletException {
-                
+        
+        LOG.info("Response Exception");
+        LOG.info(theException.getMessage());
+        LOG.info("stackTrace: ", theException);
+        
         // This string match is really crude and it's not great, but I can't see
         // how else to pick up on just the relevant exceptions!
         if (theException instanceof InvalidRequestException && theException.getMessage().contains("Invalid attribute value")) {

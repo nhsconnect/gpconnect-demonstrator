@@ -13,7 +13,7 @@ angular.module('gpConnect')
                                     'Ssp-To': endpointLookupResult.toASID,
                                     'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:organization",
                                     'Ssp-TraceID': fhirJWTFactory.guid(),
-                                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
+                                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", $rootScope.patientOdsCode),
                                     'Accept': "application/json+fhir"
                                 }
                             });

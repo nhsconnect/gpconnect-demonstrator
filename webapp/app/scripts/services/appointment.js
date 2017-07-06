@@ -65,7 +65,7 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
                                 'Ssp-To': endpointLookupResult.toASID,
                                 'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:location",
                                 'Ssp-TraceID': fhirJWTFactory.guid(),
-                                'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
+                                'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", practiceOdsCode),
                                 'Accept': "application/json+fhir"
                             }
                         }
@@ -83,7 +83,7 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
                                 'Ssp-To': endpointLookupResult.toASID,
                                 'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner",
                                 'Ssp-TraceID': fhirJWTFactory.guid(),
-                                'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
+                                'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", practiceOdsCode),
                                 'Accept': "application/json+fhir"
                             }
                         }

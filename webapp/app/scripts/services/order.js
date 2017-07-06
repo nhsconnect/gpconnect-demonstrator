@@ -22,7 +22,7 @@ angular.module('gpConnect').factory('OrderService', function($rootScope, $http, 
                             'Ssp-To': endpointLookupResult.toASID,
                             'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:create:order",
                             'Ssp-TraceID': fhirJWTFactory.guid(),
-                            'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "write", patientId),
+                            'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "write", practiceOdsCode),
                             'Accept': "application/json+fhir",
                             'Content-Type': "application/json+fhir"
                         }

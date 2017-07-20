@@ -3,161 +3,187 @@ package uk.gov.hscic.model.patient;
 import java.util.Date;
 
 public class PatientDetails {
-    private String id;
-    private String name;
-    private String title;
-    private String forename;
-    private String surname;
-    private String gender;
-    private Date dateOfBirth;
-    private String nhsNumber;
     private String address;
-    private String telephone;
+    private Date dateOfBirth;
+    private Date deceased;
+    private String forename;
+    private String gender;
     private String gpDetails;
-    private String pasNumber;
     private Long gpId;
+    private String id;
     private Date lastUpdated;
-    private Date registrationStartDateTime;
+    private String managingOrganization;
+    private String maritalStatus;
+    private boolean multipleBirth;
+    private String name;
+    private String nhsNumber;
+    private String pasNumber;
     private Date registrationEndDateTime;
+    private Date registrationStartDateTime;
     private String registrationStatus;
     private String registrationType;
-    private boolean multipleBirth;
-    private Date deceased;  
+    private String surname;  
+    private String telephone;
+    private String title;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getForename() {
-        return forename;
-    }
-
-    public void setForename(String forename) {
-        this.forename = forename;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
+    public String getAddress() {
+        return address;
     }
 
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public Date getDeceased() {
+		return deceased;
+	}
+
+    public String getForename() {
+        return forename;
     }
 
-    public String getNhsNumber() {
-        return nhsNumber;
-    }
-
-    public void setNhsNumber(String nhsNumber) {
-        this.nhsNumber = nhsNumber;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public String getGender() {
+        return gender;
     }
 
     public String getGpDetails() {
         return gpDetails;
     }
 
-    public void setGpDetails(String gpDetails) {
-        this.gpDetails = gpDetails;
-    }
-
-    public String getPasNumber() {
-        return pasNumber;
-    }
-
-    public void setPasNumber(String pasNumber) {
-        this.pasNumber = pasNumber;
-    }
-
     public Long getGpId() {
         return gpId;
     }
 
-    public void setGpId(Long gpId) {
-        this.gpId = gpId;
+    public String getId() {
+        return id;
     }
 
     public Date getLastUpdated() {
         return lastUpdated;
     }
 
+    public String getManagingOrganization() {
+        return managingOrganization;
+    }
+
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getNhsNumber() {
+        return nhsNumber;
+    }
+
+    public String getPasNumber() {
+        return pasNumber;
+    }
+
+    public Date getRegistrationEndDateTime() {
+		return registrationEndDateTime;
+	}
+
+    public Date getRegistrationStartDateTime() {
+		return registrationStartDateTime;
+	}
+
+    public String getRegistrationStatus() {
+		return registrationStatus;
+	}
+
+    public String getRegistrationType() {
+		return registrationType;
+	}
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public boolean isDeceased() {
+		return this.deceased != null;
+	}
+
+    public boolean isMultipleBirth() {
+		return multipleBirth;
+	}
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setDeceased(Date deceased) {
+		this.deceased = deceased;
+	}
+
+    public void setForename(String forename) {
+        this.forename = forename;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setGpDetails(String gpDetails) {
+        this.gpDetails = gpDetails;
+    }
+
+    public void setGpId(Long gpId) {
+        this.gpId = gpId;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
-	public Date getRegistrationStartDateTime() {
-		return registrationStartDateTime;
+	public void setManagingOrganization(String managingOrganization) {
+        this.managingOrganization = managingOrganization;
+    }
+
+	public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+	public void setMultipleBirth(boolean multipleBirth) {
+		this.multipleBirth = multipleBirth;
 	}
 
-	public Date getRegistrationEndDateTime() {
-		return registrationEndDateTime;
-	}
+	public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setRegistrationStartDateTime(Date registrationStartDateTime) {
-		this.registrationStartDateTime = registrationStartDateTime;
-	}
+	public void setNhsNumber(String nhsNumber) {
+        this.nhsNumber = nhsNumber;
+    }
+
+	public void setPasNumber(String pasNumber) {
+        this.pasNumber = pasNumber;
+    }
 
 	public void setRegistrationEndDateTime(Date registrationEndDateTime) {
 		this.registrationEndDateTime = registrationEndDateTime;
 	}
 
-	public String getRegistrationStatus() {
-		return registrationStatus;
-	}
-
-	public String getRegistrationType() {
-		return registrationType;
+	public void setRegistrationStartDateTime(Date registrationStartDateTime) {
+		this.registrationStartDateTime = registrationStartDateTime;
 	}
 
 	public void setRegistrationStatus(String registrationStatus) {
@@ -168,23 +194,15 @@ public class PatientDetails {
 		this.registrationType = registrationType;
 	}
 
-	public boolean isMultipleBirth() {
-		return multipleBirth;
-	}
+	public void setSurname(String surname) {
+        this.surname = surname;
+    }
 
-	public void setMultipleBirth(boolean multipleBirth) {
-		this.multipleBirth = multipleBirth;
-	}
-
-	public Date getDeceased() {
-		return deceased;
-	}
-
-	public void setDeceased(Date deceased) {
-		this.deceased = deceased;
-	}
+	public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
 	
-	public boolean isDeceased() {
-		return this.deceased != null;
-	}
+	public void setTitle(String title) {
+        this.title = title;
+    }
 }

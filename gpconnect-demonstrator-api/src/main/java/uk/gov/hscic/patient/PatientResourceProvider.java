@@ -2,6 +2,7 @@ package uk.gov.hscic.patient;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.IDatatype;
+import ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.ContactPointDt;
@@ -27,6 +28,7 @@ import ca.uhn.fhir.model.dstu2.valueset.CompositionStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ContactPointSystemEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ContactPointUseEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+import ca.uhn.fhir.model.dstu2.valueset.MaritalStatusCodesEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.primitive.BooleanDt;
 import ca.uhn.fhir.model.primitive.DateDt;
@@ -921,7 +923,22 @@ public class PatientResourceProvider implements IResourceProvider {
 
             patient.setTelecom(Collections.singletonList(telephone));
         }
-
+        
+        String maritalStatus = patientDetails.getMaritalStatus();
+        if (maritalStatus != null) {
+            BoundCodeableConceptDt<MaritalStatusCodesEnum> marital = new BoundCodeableConceptDt();
+            marital.setText(patientDetails.getMaritalStatus());
+            patient.setMaritalStatus(marital);
+        }
+        
+       String managingOrganization = patientDetails.getManagingOrganization();
+       
+        if (managingOrganization != null)
+        {
+            patient.setManagingOrganization(new ResourceReferenceDt("Organization/"+managingOrganization));
+            
+        }
+        
         patient.setMultipleBirth(new BooleanDt(patientDetails.isMultipleBirth()));
 
         if(patientDetails.isDeceased()) {

@@ -155,6 +155,8 @@ CREATE TABLE gpconnect.patients (
   sensitive_flag      BOOLEAN      NULL,
   multiple_birth      BOOLEAN      NULL,
   deceased			  DATETIME	   NULL,
+  marital_status      VARCHAR(10)  NULL,
+  managing_organization BIGINT     NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (department_id) REFERENCES gpconnect.medical_departments(id),
   FOREIGN KEY (gp_id) REFERENCES gpconnect.general_practitioners(id)

@@ -49,6 +49,8 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         patient.setRegistrationStatus(patientEntity.getRegistrationStatus());
         patient.setRegistrationType(patientEntity.getRegistrationType());
         patient.setMultipleBirth(patientEntity.isMultipleBirth());
+        patient.setMaritalStatus(patientEntity.getMaritalStatus());
+        patient.setManagingOrganization(patientEntity.getManagingOrganization());
 
         GPEntity gp = patientEntity.getGp();
         

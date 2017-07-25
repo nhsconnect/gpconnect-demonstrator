@@ -29,7 +29,7 @@ import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.model.practitioner.PractitionerDetails;
 
 @Component
-public class PractitionerResourceProvider  implements IResourceProvider {
+public class PractitionerResourceProvider implements IResourceProvider {
 
     @Autowired
     private PractitionerSearch practitionerSearch;
@@ -41,79 +41,80 @@ public class PractitionerResourceProvider  implements IResourceProvider {
 
     @Read(version = true)
     public Practitioner getPractitionerById(@IdParam IdDt practitionerId) {
-        PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerDetails(practitionerId.getIdPart());
+        PractitionerDetails practitionerDetails = practitionerSearch
+                .findPractitionerDetails(practitionerId.getIdPart());
 
         if (practitionerDetails == null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No practitioner details found for practitioner ID: " + practitionerId.getIdPart()),
+                    new ResourceNotFoundException(
+                            "No practitioner details found for practitioner ID: " + practitionerId.getIdPart()),
                     SystemCode.PRACTITIONER_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
         }
 
-        return IdentifierValidator.versionComparison(practitionerId, practitionerDetailsToPractitionerResourceConverter(practitionerDetails));
+        return IdentifierValidator.versionComparison(practitionerId,
+                practitionerDetailsToPractitionerResourceConverter(practitionerDetails));
     }
 
     @Search
-    public List<Practitioner> getPractitionerByPractitionerUserId(@RequiredParam(name = Practitioner.SP_IDENTIFIER) TokenParam practitionerId) {
-        return practitionerSearch.findPractitionerByUserId(practitionerId.getValue())
-                .stream()
-                .map(this::practitionerDetailsToPractitionerResourceConverter)
-                .collect(Collectors.toList());
+    public List<Practitioner> getPractitionerByPractitionerUserId(
+            @RequiredParam(name = Practitioner.SP_IDENTIFIER) TokenParam practitionerId) {
+        return practitionerSearch.findPractitionerByUserId(practitionerId.getValue()).stream()
+                .map(this::practitionerDetailsToPractitionerResourceConverter).collect(Collectors.toList());
     }
 
     private Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails) {
         Practitioner practitioner = new Practitioner()
                 .addIdentifier(new IdentifierDt(SystemURL.ID_SDS_USER_ID, practitionerDetails.getUserId()));
 
-        practitionerDetails.getRoleIds()
-                .stream()
-                .distinct()
+        practitionerDetails.getRoleIds().stream().distinct()
                 .map(roleId -> new IdentifierDt(SystemURL.ID_SDS_ROLE_PROFILE_ID, roleId))
                 .forEach(practitioner::addIdentifier);
 
         practitioner.setId(new IdDt(practitionerDetails.getId()));
 
-        practitioner.getMeta()
-                .setLastUpdated(practitionerDetails.getLastUpdated())
+        practitioner.getMeta().setLastUpdated(practitionerDetails.getLastUpdated())
                 .setVersionId(String.valueOf(practitionerDetails.getLastUpdated().getTime()))
                 .addProfile(SystemURL.SD_GPC_PRACTITIONER);
 
-        HumanNameDt name = new HumanNameDt()
-                .addFamily(practitionerDetails.getNameFamily())
-                .addGiven(practitionerDetails.getNameGiven())
-                .addPrefix(practitionerDetails.getNamePrefix())
+        HumanNameDt name = new HumanNameDt().addFamily(practitionerDetails.getNameFamily())
+                .addGiven(practitionerDetails.getNameGiven()).addPrefix(practitionerDetails.getNamePrefix())
                 .setUse(NameUseEnum.USUAL);
 
         practitioner.setName(name);
 
         switch (practitionerDetails.getGender().toLowerCase(Locale.UK)) {
-            case "male":
-                practitioner.setGender(AdministrativeGenderEnum.MALE);
-                break;
+        case "male":
+            practitioner.setGender(AdministrativeGenderEnum.MALE);
+            break;
 
-            case "female":
-                practitioner.setGender(AdministrativeGenderEnum.FEMALE);
-                break;
+        case "female":
+            practitioner.setGender(AdministrativeGenderEnum.FEMALE);
+            break;
 
-            case "other":
-                practitioner.setGender(AdministrativeGenderEnum.OTHER);
-                break;
+        case "other":
+            practitioner.setGender(AdministrativeGenderEnum.OTHER);
+            break;
 
-            default:
-                practitioner.setGender(AdministrativeGenderEnum.UNKNOWN);
-                break;
+        default:
+            practitioner.setGender(AdministrativeGenderEnum.UNKNOWN);
+            break;
         }
 
         CodingDt roleCoding = new CodingDt(SystemURL.VS_SDS_JOB_ROLE_NAME, practitionerDetails.getRoleCode())
                 .setDisplay(practitionerDetails.getRoleDisplay());
 
-        practitioner.addPractitionerRole()
-                .setRole(new CodeableConceptDt().addCoding(roleCoding))
-                .setManagingOrganization(new ResourceReferenceDt("Organization/"+practitionerDetails.getOrganizationId())); // Associated Organisation
+        practitioner.addPractitionerRole().setRole(new CodeableConceptDt().addCoding(roleCoding))
+                .setManagingOrganization(
+                        new ResourceReferenceDt("Organization/" + practitionerDetails.getOrganizationId())); // Associated
+                                                                                                             // Organisation
 
-        CodingDt comCoding = new CodingDt(SystemURL.VS_HUMAN_LANGUAGE, practitionerDetails.getComCode())
-                .setDisplay(practitionerDetails.getComDisplay());
+        for (int i = 0; i < practitionerDetails.getComCode().size(); i++) {
 
-        practitioner.addCommunication().addCoding(comCoding);
+            CodingDt comCoding = new CodingDt(SystemURL.VS_HUMAN_LANGUAGE, practitionerDetails.getComCode().get(i))
+                    .setDisplay(practitionerDetails.getComDisplay().get(i));
+
+            practitioner.addCommunication().addCoding(comCoding);
+        }
 
         return practitioner;
     }

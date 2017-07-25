@@ -16,6 +16,16 @@ public class PractitionerEntityToObjectTransformer implements Transformer<Practi
                 .stream()
                 .filter(roleId -> !roleId.isEmpty())
                 .collect(Collectors.toList());
+        
+        List<String> comCodes = Arrays.asList(practitionerEntity.getComCode().split("\\|"))
+                .stream()
+                .filter(comCode -> !comCode.isEmpty())
+                .collect(Collectors.toList());
+        
+        List<String> comDisplays = Arrays.asList(practitionerEntity.getComDisplay().split("\\|"))
+                .stream()
+                .filter(comDisplay -> !comDisplay.isEmpty())
+                .collect(Collectors.toList());
 
         practitioner.setId(practitionerEntity.getId());
         practitioner.setUserId(practitionerEntity.getUserId());
@@ -27,8 +37,8 @@ public class PractitionerEntityToObjectTransformer implements Transformer<Practi
         practitioner.setOrganizationId(practitionerEntity.getOrganizationId());
         practitioner.setRoleCode(practitionerEntity.getRoleCode());
         practitioner.setRoleDisplay(practitionerEntity.getRoleDisplay());
-        practitioner.setComCode(practitionerEntity.getComCode());
-        practitioner.setComDisplay(practitionerEntity.getComDisplay());
+        practitioner.setComCode(comCodes);
+        practitioner.setComDisplay(comDisplays);
         practitioner.setLastUpdated(practitionerEntity.getLastUpdated());
 
         return practitioner;

@@ -15,8 +15,8 @@ public class PractitionerDetails implements Serializable {
     private Long organizationId;
     private String roleCode;
     private String roleDisplay;
-    private String comCode;
-    private String comDisplay;
+    private List<String> comCode;
+    private List<String> comDisplay;
     private Date lastUpdated;
 
     public Long getId() {
@@ -99,19 +99,19 @@ public class PractitionerDetails implements Serializable {
         this.roleDisplay = roleDisplay;
     }
 
-    public String getComCode() {
+    public List<String> getComCode() {
         return comCode;
     }
 
-    public void setComCode(String comCode) {
+    public void setComCode(List<String> comCode) {
         this.comCode = comCode;
     }
 
-    public String getComDisplay() {
+    public List<String> getComDisplay() {
         return comDisplay;
     }
 
-    public void setComDisplay(String comDisplay) {
+    public void setComDisplay(List<String> comDisplay) {
         this.comDisplay = comDisplay;
     }
 

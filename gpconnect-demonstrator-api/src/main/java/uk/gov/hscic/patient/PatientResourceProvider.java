@@ -561,12 +561,13 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private void validatePatient(Patient patient) {
         validateIdentifiers(patient);
+        validateRegistrationPeriod(patient);
         validateRegistrationStatusAndType(patient);
         validateConstrainedOutProperties(patient);
         valiateNames(patient);
         validateDateOfBirth(patient);
         valiateGender(patient);
-        validateRegistrationPeriod(patient);
+      
     }
 
     private void validateRegistrationPeriod(Patient patient) {

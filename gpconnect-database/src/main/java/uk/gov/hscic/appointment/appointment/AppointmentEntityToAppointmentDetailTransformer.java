@@ -15,6 +15,7 @@ public class AppointmentEntityToAppointmentDetailTransformer implements Transfor
         appointmentDetail.setStatus(item.getStatus());
         appointmentDetail.setTypeCode(item.getTypeCode());
         appointmentDetail.setTypeDisplay(item.getTypeDisplay());
+        appointmentDetail.setTypeText(item.getTypeText());
         appointmentDetail.setDescription(item.getDescription());
         appointmentDetail.setReasonCode(item.getReasonCode());
         appointmentDetail.setReasonDisplay(item.getReasonDisplay());
@@ -26,6 +27,17 @@ public class AppointmentEntityToAppointmentDetailTransformer implements Transfor
         appointmentDetail.setPractitionerId(item.getPractitionerId());
         appointmentDetail.setLocationId(item.getLocationId());
         appointmentDetail.setLastUpdated(item.getLastUpdated());
+        appointmentDetail.setMinutesDuration(item.getMinutesDuration());
+        appointmentDetail.setPriority(item.getPriority());
+        appointmentDetail.setExtensionBookURL(item.getExtensionBookURL());
+        appointmentDetail.setExtensionBookDisplay(item.getExtensionBookDisplay());
+        appointmentDetail.setExtensionBookCode(item.getExtensionBookCode());
+        appointmentDetail.setExtensionCatURL(item.getExtensionCatURL());
+        appointmentDetail.setExtensionCatDisplay(item.getExtensionCatDisplay());
+        appointmentDetail.setExtensionCatCode(item.getExtensionCatCode());
+        appointmentDetail.setExtensionConURL(item.getExtensionConURL());
+        appointmentDetail.setExtensionConDisplay(item.getExtensionConDisplay());
+        appointmentDetail.setExtensionConCode(item.getExtensionConCode());
         
         return appointmentDetail;
     }

@@ -634,36 +634,26 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             if (bookingExtension != null && !bookingExtension.isEmpty()) {
                 CodeableConceptDt values = (CodeableConceptDt) bookingExtension.get(0).getValue();
-                String bookingExtensionDisplay = values.getCoding().get(0).getDisplay();
-                String bookingExtensionCode = values.getCoding().get(0).getCode();
-
+                appointmentDetail =  addExtensionDetails(values, appointmentDetail);
                 appointmentDetail.setExtensionBookURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD);
-                appointmentDetail.setExtensionBookDisplay(bookingExtensionDisplay);
-                appointmentDetail.setExtensionBookCode(bookingExtensionCode);
+              
             }
 
             if (contactExtension != null && !contactExtension.isEmpty()) {
                 CodeableConceptDt values = (CodeableConceptDt) contactExtension.get(0).getValue();
-                String contactExtensionDisplay = values.getCoding().get(0).getDisplay();
-                String contactExtensionCode = values.getCoding().get(0).getCode();
-
+                appointmentDetail =  addExtensionDetails(values, appointmentDetail);
                 appointmentDetail.setExtensionBookURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CONTACT_METHOD);
-                appointmentDetail.setExtensionBookDisplay(contactExtensionDisplay);
-                appointmentDetail.setExtensionBookCode(contactExtensionCode);
+             
 
             }
             if (categoryExtension != null && !categoryExtension.isEmpty()) {
                 CodeableConceptDt values = (CodeableConceptDt) categoryExtension.get(0).getValue();
-                String categoryExtensionDisplay = values.getCoding().get(0).getDisplay();
-                String categoryExtensionCode = values.getCoding().get(0).getCode();
-
+                appointmentDetail =  addExtensionDetails(values, appointmentDetail);
                 appointmentDetail.setExtensionBookURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CATEGORY);
-                appointmentDetail.setExtensionBookDisplay(categoryExtensionDisplay);
-                appointmentDetail.setExtensionBookCode(categoryExtensionCode);
+          
             }
 
         }
-
         appointmentDetail.setStatus(appointment.getStatus().toLowerCase(Locale.UK));
         appointmentDetail.setTypeDisplay(appointment.getType().getCodingFirstRep().getDisplay());
         appointmentDetail.setMinutesDuration(appointment.getMinutesDuration());
@@ -721,7 +711,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
 
         appointmentDetail.setSlotIds(slotIds);
-
         appointmentDetail.setComment(appointment.getComment());
         appointmentDetail.setDescription(appointment.getDescription());
 
@@ -739,6 +728,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
         }
 
+        return appointmentDetail;
+    }
+
+    private AppointmentDetail addExtensionDetails(CodeableConceptDt values, AppointmentDetail appointmentDetail) {
+        String extensionDisplay = values.getCoding().get(0).getDisplay();
+        String extensionCode = values.getCoding().get(0).getCode();
+        appointmentDetail.setExtensionBookDisplay(extensionDisplay);
+        appointmentDetail.setExtensionBookCode(extensionCode);
         return appointmentDetail;
     }
 

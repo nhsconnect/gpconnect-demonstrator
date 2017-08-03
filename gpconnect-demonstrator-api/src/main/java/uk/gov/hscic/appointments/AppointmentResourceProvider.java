@@ -668,7 +668,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         if (!codingFirstRep.isEmpty()) {
             if (!SystemURL.SNOMED.equals(codingFirstRep.getSystem())) {
                 String message = String.format(
-                        "Problem with reason property of the appointment. If the reason is provided then the system property must be $s",
+                        "Problem with reason property of the appointment. If the reason is provided then the system property must be %s",
                         SystemURL.SNOMED);
                 throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
                         SystemCode.INVALID_RESOURCE, IssueTypeEnum.REQUIRED_ELEMENT_MISSING);

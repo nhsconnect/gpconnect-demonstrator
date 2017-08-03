@@ -304,7 +304,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             if (slotDetail == null) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException("Slot resource reference is not a valid resource"),
+                        new UnprocessableEntityException(String.format("Slot resource reference value %s is not a valid resource.",
+                                slotId)),
                         SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
             }
 
@@ -704,7 +705,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 slotIds.add(slotReference.getReference().getIdPartAsLong());
             } catch (NumberFormatException ex) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException(String.format("The slot reference value %s is not valid.",
+                        new UnprocessableEntityException(String.format("The slot reference value data type for %s is not valid.",
                                 slotReference.getReference().getIdPart())),
                         SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
             }

@@ -371,9 +371,10 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             // This is a Cancellation - so copy across fields which can be
             // altered
-            
-            boolean cancelComparisonResult = compareAppointmentsForInvalidPropertyCancel(oldAppointmentDetail,appointmentDetail);
-            
+
+            boolean cancelComparisonResult = compareAppointmentsForInvalidPropertyCancel(oldAppointmentDetail,
+                    appointmentDetail);
+
             if (cancelComparisonResult) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new UnclassifiedServerFailureException(403, "Invalid Appointment property has been amended"),
@@ -396,7 +397,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
         } else {
 
-            boolean amendComparisonResult = compareAppointmentsForInvalidPropertyAmend(appointmentDetail, oldAppointmentDetail);
+            boolean amendComparisonResult = compareAppointmentsForInvalidPropertyAmend(appointmentDetail,
+                    oldAppointmentDetail);
 
             if (amendComparisonResult) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -411,6 +413,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             oldAppointmentDetail.setReasonDisplay(appointmentDetail.getReasonDisplay());
             oldAppointmentDetail.setTypeCode(appointmentDetail.getTypeCode());
             oldAppointmentDetail.setTypeDisplay(appointmentDetail.getTypeDisplay());
+
             appointmentDetail = oldAppointmentDetail;
         }
 
@@ -435,30 +438,70 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return methodOutcome;
     }
 
-    private boolean compareAppointmentsForInvalidPropertyAmend(AppointmentDetail oldAppointmentDetail, AppointmentDetail appointmentDetail) {
+    private boolean compareAppointmentsForInvalidPropertyAmend(AppointmentDetail oldAppointmentDetail,
+            AppointmentDetail appointmentDetail) {
         List<Boolean> results = new ArrayList<>();
         results.add(Objects.equals(oldAppointmentDetail.getDescription(), appointmentDetail.getDescription()));
         results.add(Objects.equals(oldAppointmentDetail.getId(), appointmentDetail.getId()));
         results.add(Objects.equals(oldAppointmentDetail.getStatus(), appointmentDetail.getStatus()));
         results.add(Objects.equals(oldAppointmentDetail.getTypeCode(), appointmentDetail.getTypeCode()));
         results.add(Objects.equals(oldAppointmentDetail.getTypeDisplay(), appointmentDetail.getTypeDisplay()));
+        results.add(Objects.equals(oldAppointmentDetail.getTypeText(), appointmentDetail.getTypeText()));
         results.add(Objects.equals(oldAppointmentDetail.getStartDateTime(), appointmentDetail.getStartDateTime()));
         results.add(Objects.equals(oldAppointmentDetail.getEndDateTime(), appointmentDetail.getEndDateTime()));
         results.add(Objects.equals(oldAppointmentDetail.getPatientId(), appointmentDetail.getPatientId()));
         results.add(Objects.equals(oldAppointmentDetail.getPractitionerId(), appointmentDetail.getPractitionerId()));
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
+        results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
+        results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
+        results.add(Objects.equals(oldAppointmentDetail.getComment(), appointmentDetail.getComment()));
+        results.add(
+                Objects.equals(oldAppointmentDetail.getExtensionBookURL(), appointmentDetail.getExtensionBookURL()));
+        results.add(
+                Objects.equals(oldAppointmentDetail.getExtensionBookCode(), appointmentDetail.getExtensionBookCode()));
+        results.add(Objects.equals(oldAppointmentDetail.getExtensionBookDisplay(),
+                appointmentDetail.getExtensionBookDisplay()));
+        results.add(Objects.equals(oldAppointmentDetail.getExtensionCatURL(), appointmentDetail.getExtensionCatURL()));
+        results.add(
+                Objects.equals(oldAppointmentDetail.getExtensionCatCode(), appointmentDetail.getExtensionCatCode()));
+        results.add(Objects.equals(oldAppointmentDetail.getExtensionCatDisplay(),
+                appointmentDetail.getExtensionCatDisplay()));
+        results.add(Objects.equals(oldAppointmentDetail.getExtensionConURL(), appointmentDetail.getExtensionConURL()));
+        results.add(Objects.equals(oldAppointmentDetail.getExtensionConURL(), appointmentDetail.getExtensionConURL()));
+        results.add(Objects.equals(oldAppointmentDetail.getExtensionConDisplay(),
+                appointmentDetail.getExtensionConDisplay()));
         return results.contains(false);
     }
-    
-    private boolean compareAppointmentsForInvalidPropertyCancel(AppointmentDetail oldAppointmentDetail, AppointmentDetail appointmentDetail) {
+
+    private boolean compareAppointmentsForInvalidPropertyCancel(AppointmentDetail oldAppointmentDetail,
+            AppointmentDetail appointmentDetail) {
         List<Boolean> results = new ArrayList<>();
         results.add(Objects.equals(oldAppointmentDetail.getDescription(), appointmentDetail.getDescription()));
         results.add(Objects.equals(oldAppointmentDetail.getId(), appointmentDetail.getId()));
         results.add(Objects.equals(oldAppointmentDetail.getTypeCode(), appointmentDetail.getTypeCode()));
         results.add(Objects.equals(oldAppointmentDetail.getTypeDisplay(), appointmentDetail.getTypeDisplay()));
+        results.add(Objects.equals(oldAppointmentDetail.getTypeText(), appointmentDetail.getTypeText()));
         results.add(Objects.equals(oldAppointmentDetail.getPatientId(), appointmentDetail.getPatientId()));
         results.add(Objects.equals(oldAppointmentDetail.getPractitionerId(), appointmentDetail.getPractitionerId()));
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
+        results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
+        results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
+        results.add(Objects.equals(oldAppointmentDetail.getComment(), appointmentDetail.getComment()));
+        results.add(
+                Objects.equals(oldAppointmentDetail.getExtensionBookURL(), appointmentDetail.getExtensionBookURL()));
+        results.add(
+                Objects.equals(oldAppointmentDetail.getExtensionBookCode(), appointmentDetail.getExtensionBookCode()));
+        results.add(Objects.equals(oldAppointmentDetail.getExtensionBookDisplay(),
+                appointmentDetail.getExtensionBookDisplay()));
+        results.add(Objects.equals(oldAppointmentDetail.getExtensionCatURL(), appointmentDetail.getExtensionCatURL()));
+        results.add(
+                Objects.equals(oldAppointmentDetail.getExtensionCatCode(), appointmentDetail.getExtensionCatCode()));
+        results.add(Objects.equals(oldAppointmentDetail.getExtensionCatDisplay(),
+                appointmentDetail.getExtensionCatDisplay()));
+        results.add(Objects.equals(oldAppointmentDetail.getExtensionConURL(), appointmentDetail.getExtensionConURL()));
+        results.add(Objects.equals(oldAppointmentDetail.getExtensionConURL(), appointmentDetail.getExtensionConURL()));
+        results.add(Objects.equals(oldAppointmentDetail.getExtensionConDisplay(),
+                appointmentDetail.getExtensionConDisplay()));
         return results.contains(false);
     }
 
@@ -503,6 +546,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);
         codableConcept.setText(appointmentDetail.getTypeDisplay());
         appointment.setType(codableConcept);
+        appointment.getType().setText(appointmentDetail.getTypeText());
 
         String reasonCode = appointmentDetail.getReasonCode();
         String reasonDisplay = appointmentDetail.getReasonDisplay();
@@ -569,6 +613,15 @@ public class AppointmentResourceProvider implements IResourceProvider {
         List<ExtensionDt> extension = appointment
                 .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON);
 
+        List<ExtensionDt> bookingExtension = appointment
+                .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD);
+
+        List<ExtensionDt> contactExtension = appointment
+                .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CONTACT_METHOD);
+
+        List<ExtensionDt> categoryExtension = appointment
+                .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CATEGORY);
+
         if (extension != null && !extension.isEmpty()) {
             IBaseDatatype value = extension.get(0).getValue();
 
@@ -577,12 +630,35 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         new InvalidRequestException("Cancellation reason missing."), SystemCode.BAD_REQUEST,
                         IssueTypeEnum.INVALID_CONTENT);
             }
-
             appointmentDetail.setCancellationReason(value.toString());
-        }
 
+            if (bookingExtension != null && !bookingExtension.isEmpty()) {
+                CodeableConceptDt values = (CodeableConceptDt) bookingExtension.get(0).getValue();
+                appointmentDetail =  addExtensionDetails(values, appointmentDetail);
+                appointmentDetail.setExtensionBookURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD);
+              
+            }
+
+            if (contactExtension != null && !contactExtension.isEmpty()) {
+                CodeableConceptDt values = (CodeableConceptDt) contactExtension.get(0).getValue();
+                appointmentDetail =  addExtensionDetails(values, appointmentDetail);
+                appointmentDetail.setExtensionBookURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CONTACT_METHOD);
+             
+
+            }
+            if (categoryExtension != null && !categoryExtension.isEmpty()) {
+                CodeableConceptDt values = (CodeableConceptDt) categoryExtension.get(0).getValue();
+                appointmentDetail =  addExtensionDetails(values, appointmentDetail);
+                appointmentDetail.setExtensionBookURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CATEGORY);
+          
+            }
+
+        }
         appointmentDetail.setStatus(appointment.getStatus().toLowerCase(Locale.UK));
         appointmentDetail.setTypeDisplay(appointment.getType().getCodingFirstRep().getDisplay());
+        appointmentDetail.setMinutesDuration(appointment.getMinutesDuration());
+        appointmentDetail.setPriority(appointment.getPriority());
+        appointmentDetail.setTypeText(appointment.getType().getText());
 
         CodingDt codingFirstRep = appointment.getReason().getCodingFirstRep();
 
@@ -635,7 +711,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
 
         appointmentDetail.setSlotIds(slotIds);
-
         appointmentDetail.setComment(appointment.getComment());
         appointmentDetail.setDescription(appointment.getDescription());
 
@@ -653,6 +728,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
         }
 
+        return appointmentDetail;
+    }
+
+    private AppointmentDetail addExtensionDetails(CodeableConceptDt values, AppointmentDetail appointmentDetail) {
+        String extensionDisplay = values.getCoding().get(0).getDisplay();
+        String extensionCode = values.getCoding().get(0).getCode();
+        appointmentDetail.setExtensionBookDisplay(extensionDisplay);
+        appointmentDetail.setExtensionBookCode(extensionCode);
         return appointmentDetail;
     }
 

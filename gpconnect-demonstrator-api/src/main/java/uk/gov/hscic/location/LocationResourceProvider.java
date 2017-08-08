@@ -75,9 +75,10 @@ public class LocationResourceProvider implements IResourceProvider {
         LocationDetails locationDetails = locationSearch.findLocationById(locationId.getIdPart());
        
         if (locationDetails == null) {
-            OperationOutcome operationalOutcome = new OperationOutcome();
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No location details found for location ID: "+locationId.getIdPart());
-            throw new ResourceNotFoundException("No location details found for location ID: "+locationId.getIdPart(), operationalOutcome);
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new ResourceNotFoundException("No location details found for location ID: "+locationId.getIdPart())
+                    ,SystemCode.REFERENCE_NOT_FOUND,IssueTypeEnum.EXCEPTION);
+            
         }
 
         return IdentifierValidator.versionComparison(locationId, locationDetailsToLocation(locationDetails));
@@ -90,7 +91,7 @@ public class LocationResourceProvider implements IResourceProvider {
         location.getMeta().setVersionId(String.valueOf(locationDetails.getLastUpdated().getTime()));
         location.getMeta().addProfile(SystemURL.SD_GPC_LOCATION);
         location.setName(new StringDt(locationDetails.getName()));
-        location.setIdentifier(Collections.singletonList(new IdentifierDt(locationDetails.getSiteOdsCode(), locationDetails.getSiteOdsCodeName())));
+        location.setIdentifier(Collections.singletonList(new IdentifierDt(SystemURL.ID_ODS_SITE_CODE,locationDetails.getSiteOdsCode())));
         return location;
     }
 }

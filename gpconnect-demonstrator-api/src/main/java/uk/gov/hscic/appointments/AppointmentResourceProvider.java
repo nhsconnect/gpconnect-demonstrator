@@ -738,10 +738,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     private AppointmentDetail addExtensionDetails(CodeableConceptDt values, AppointmentDetail appointmentDetail) {
         String extensionDisplay = values.getCoding().get(0).getDisplay();
-        String extensionCode = values.getCoding().get(0).getCode();
-        
-        //String url = 
-                    
+        String extensionCode = values.getCoding().get(0).getCode();               
         
         appointmentDetail.setExtensionBookDisplay(extensionDisplay);
         appointmentDetail.setExtensionBookCode(extensionCode);

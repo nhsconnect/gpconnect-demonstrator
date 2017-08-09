@@ -456,7 +456,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         // Build the Care Record Composition
         Bundle bundle = new Bundle()
-                .setType(BundleTypeEnum.DOCUMENT)
+                .setType(BundleTypeEnum.SEARCH_RESULTS)
                 .addEntry(new Bundle.Entry().setResource(careRecordComposition));
 
         List<ResourceReferenceDt> careProviderPractitionerList = ((Patient) patientEntry.getResource()).getCareProvider();

@@ -217,7 +217,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
         			long period = ChronoUnit.DAYS.between(start.toInstant(), end.toInstant());
         			if(period < 0l || period > 14l) {
         				throw OperationOutcomeFactory.buildOperationOutcomeException(
-        						new UnprocessableEntityException("Invalid timePeriods, was " + period + " days between (max is 14)"),
+        						new UnprocessableEntityException("Invalid time period, was " + period + " days between (max is 14)"),
         						SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         			}
         		}

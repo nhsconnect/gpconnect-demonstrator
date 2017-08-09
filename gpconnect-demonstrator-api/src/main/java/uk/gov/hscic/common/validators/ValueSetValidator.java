@@ -82,8 +82,8 @@ public class ValueSetValidator {
         
         if(valSet == null){
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("Could not find a Value Set for: " + systemUrl),
-                    SystemCode.INVALID_RESOURCE, IssueTypeEnum.NOT_FOUND); 
+                    new UnprocessableEntityException(MessageFormat.format("Could not find Value Set [SystemUrl: {0}] at: {1}", systemUrl, valueSetFilename)),
+                    SystemCode.REFERENCE_NOT_FOUND, IssueTypeEnum.NOT_FOUND); 
         }
         
         return valSet;

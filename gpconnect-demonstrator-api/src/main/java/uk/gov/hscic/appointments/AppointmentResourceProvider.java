@@ -2,6 +2,7 @@ package uk.gov.hscic.appointments;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
+import ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
@@ -12,7 +13,9 @@ import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.valueset.AppointmentStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+import ca.uhn.fhir.model.dstu2.valueset.ParticipantTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ParticipationStatusEnum;
+import ca.uhn.fhir.model.primitive.CodeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.rest.annotation.Create;
@@ -52,6 +55,7 @@ import uk.gov.hscic.appointment.appointment.AppointmentSearch;
 import uk.gov.hscic.appointment.appointment.AppointmentStore;
 import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.appointment.slot.SlotStore;
+import uk.gov.hscic.common.filters.model.Coding;
 import uk.gov.hscic.location.LocationSearch;
 import uk.gov.hscic.model.appointment.AppointmentDetail;
 import uk.gov.hscic.model.appointment.SlotDetail;
@@ -632,26 +636,19 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
             appointmentDetail.setCancellationReason(value.toString());
 
-            if (bookingExtension != null && !bookingExtension.isEmpty()) {
-                CodeableConceptDt values = (CodeableConceptDt) bookingExtension.get(0).getValue();
-                appointmentDetail =  addExtensionDetails(values, appointmentDetail);
-                appointmentDetail.setExtensionBookURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD);
-              
-            }
+        }
+        if (bookingExtension != null && !bookingExtension.isEmpty()) {
+            CodeableConceptDt values = (CodeableConceptDt) bookingExtension.get(0).getValue();
+            appointmentDetail = addBookExtensionDetails(values, appointmentDetail);
+        }
 
-            if (contactExtension != null && !contactExtension.isEmpty()) {
-                CodeableConceptDt values = (CodeableConceptDt) contactExtension.get(0).getValue();
-                appointmentDetail =  addExtensionDetails(values, appointmentDetail);
-                appointmentDetail.setExtensionBookURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CONTACT_METHOD);
-             
-
-            }
-            if (categoryExtension != null && !categoryExtension.isEmpty()) {
-                CodeableConceptDt values = (CodeableConceptDt) categoryExtension.get(0).getValue();
-                appointmentDetail =  addExtensionDetails(values, appointmentDetail);
-                appointmentDetail.setExtensionBookURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CATEGORY);
-          
-            }
+        if (contactExtension != null && !contactExtension.isEmpty()) {
+            CodeableConceptDt values = (CodeableConceptDt) contactExtension.get(0).getValue();
+            appointmentDetail = addContactExtensionDetails(values, appointmentDetail);
+        }
+        if (categoryExtension != null && !categoryExtension.isEmpty()) {
+            CodeableConceptDt values = (CodeableConceptDt) categoryExtension.get(0).getValue();
+            appointmentDetail = addCategoryExtensionDetails(values, appointmentDetail);
 
         }
         appointmentDetail.setStatus(appointment.getStatus().toLowerCase(Locale.UK));
@@ -731,11 +728,32 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return appointmentDetail;
     }
 
-    private AppointmentDetail addExtensionDetails(CodeableConceptDt values, AppointmentDetail appointmentDetail) {
+    private AppointmentDetail addBookExtensionDetails(CodeableConceptDt values, AppointmentDetail appointmentDetail) {
         String extensionDisplay = values.getCoding().get(0).getDisplay();
         String extensionCode = values.getCoding().get(0).getCode();
+        appointmentDetail.setExtensionBookURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD);
         appointmentDetail.setExtensionBookDisplay(extensionDisplay);
         appointmentDetail.setExtensionBookCode(extensionCode);
+        return appointmentDetail;
+    }
+
+    private AppointmentDetail addCategoryExtensionDetails(CodeableConceptDt values,
+            AppointmentDetail appointmentDetail) {
+        String extensionDisplay = values.getCoding().get(0).getDisplay();
+        String extensionCode = values.getCoding().get(0).getCode();
+        appointmentDetail.setExtensionCatURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CATEGORY);
+        appointmentDetail.setExtensionCatDisplay(extensionDisplay);
+        appointmentDetail.setExtensionCatCode(extensionCode);
+        return appointmentDetail;
+    }
+
+    private AppointmentDetail addContactExtensionDetails(CodeableConceptDt values,
+            AppointmentDetail appointmentDetail) {
+        String extensionDisplay = values.getCoding().get(0).getDisplay();
+        String extensionCode = values.getCoding().get(0).getCode();
+        appointmentDetail.setExtensionConURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CONTACT_METHOD);
+        appointmentDetail.setExtensionConDisplay(extensionDisplay);
+        appointmentDetail.setExtensionConCode(extensionCode);
         return appointmentDetail;
     }
 

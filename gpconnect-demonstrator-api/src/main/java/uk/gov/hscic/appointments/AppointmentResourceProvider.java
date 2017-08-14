@@ -2,7 +2,6 @@ package uk.gov.hscic.appointments;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
-import ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
@@ -13,9 +12,7 @@ import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.valueset.AppointmentStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.ParticipantTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ParticipationStatusEnum;
-import ca.uhn.fhir.model.primitive.CodeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.rest.annotation.Create;
@@ -35,6 +32,7 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import java.text.MessageFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -55,7 +53,7 @@ import uk.gov.hscic.appointment.appointment.AppointmentSearch;
 import uk.gov.hscic.appointment.appointment.AppointmentStore;
 import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.appointment.slot.SlotStore;
-import uk.gov.hscic.common.filters.model.Coding;
+import uk.gov.hscic.common.validators.ValueSetValidator;
 import uk.gov.hscic.location.LocationSearch;
 import uk.gov.hscic.model.appointment.AppointmentDetail;
 import uk.gov.hscic.model.appointment.SlotDetail;
@@ -67,7 +65,7 @@ import uk.gov.hscic.practitioner.PractitionerSearch;
 
 @Component
 public class AppointmentResourceProvider implements IResourceProvider {
-
+                
     @Autowired
     private AppointmentSearch appointmentSearch;
 
@@ -88,6 +86,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     @Autowired
     private LocationSearch locationSearch;
+       
+    @Autowired
+    private ValueSetValidator valueSetValidator;
 
     @Override
     public Class<Appointment> getResourceType() {
@@ -308,7 +309,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             if (slotDetail == null) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException("Slot resource reference is not a valid resource"),
+                        new UnprocessableEntityException(String.format("Slot resource reference value %s is not a valid resource.",
+                                slotId)),
                         SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
             }
 
@@ -608,6 +610,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
     }
 
     public AppointmentDetail appointmentResourceConverterToAppointmentDetail(Appointment appointment) {
+           
         validateAppointmentExtensions(appointment.getUndeclaredExtensions());
 
         AppointmentDetail appointmentDetail = new AppointmentDetail();
@@ -635,8 +638,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         IssueTypeEnum.INVALID_CONTENT);
             }
             appointmentDetail.setCancellationReason(value.toString());
-
         }
+
         if (bookingExtension != null && !bookingExtension.isEmpty()) {
             CodeableConceptDt values = (CodeableConceptDt) bookingExtension.get(0).getValue();
             appointmentDetail = addBookExtensionDetails(values, appointmentDetail);
@@ -646,11 +649,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
             CodeableConceptDt values = (CodeableConceptDt) contactExtension.get(0).getValue();
             appointmentDetail = addContactExtensionDetails(values, appointmentDetail);
         }
+
         if (categoryExtension != null && !categoryExtension.isEmpty()) {
             CodeableConceptDt values = (CodeableConceptDt) categoryExtension.get(0).getValue();
             appointmentDetail = addCategoryExtensionDetails(values, appointmentDetail);
-
         }
+        
         appointmentDetail.setStatus(appointment.getStatus().toLowerCase(Locale.UK));
         appointmentDetail.setTypeDisplay(appointment.getType().getCodingFirstRep().getDisplay());
         appointmentDetail.setMinutesDuration(appointment.getMinutesDuration());
@@ -664,7 +668,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         if (!codingFirstRep.isEmpty()) {
             if (!SystemURL.SNOMED.equals(codingFirstRep.getSystem())) {
                 String message = String.format(
-                        "Problem with reason property of the appointment. If the reason is provided then the system property must be $s",
+                        "Problem with reason property of the appointment. If the reason is provided then the system property must be %s",
                         SystemURL.SNOMED);
                 throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
                         SystemCode.INVALID_RESOURCE, IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
@@ -701,7 +705,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 slotIds.add(slotReference.getReference().getIdPartAsLong());
             } catch (NumberFormatException ex) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException(String.format("The slot reference value %s is not valid.",
+                        new UnprocessableEntityException(String.format("The slot reference value data type for %s is not valid.",
                                 slotReference.getReference().getIdPart())),
                         SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
             }
@@ -760,7 +764,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
     private void validateAppointmentExtensions(List<ExtensionDt> undeclaredExtensions) {
         List<String> extensionURLs = undeclaredExtensions.stream().map(ExtensionDt::getUrlAsString)
                 .collect(Collectors.toList());
-
+        
         extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD);
         extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON);
         extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CATEGORY);
@@ -768,9 +772,29 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         if (!extensionURLs.isEmpty()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("Invalid/multiple appointment extensions found: "
+                    new UnprocessableEntityException("Invalid/multiple appointment extensions found. The following are in excess or invalid: "
                             + extensionURLs.stream().collect(Collectors.joining(", "))),
                     SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
         }
+        
+        List<String> invalidCodes = new ArrayList<>();
+        for (ExtensionDt ue : undeclaredExtensions) {
+            CodeableConceptDt codeConc = (CodeableConceptDt) ue.getValue();
+            CodingDt code = codeConc.getCodingFirstRep();
+                      
+            Boolean isValid = valueSetValidator.validateCode(code);
+            
+            if(isValid == false) {
+                invalidCodes.add(MessageFormat.format("Code: {0} [Display: {1}, System: {2}]", code.getCode(), code.getDisplay(), code.getSystem()));
+            }
+        }
+        
+        if(!invalidCodes.isEmpty()){
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Invalid appointment extension codes: "
+                            + invalidCodes.stream().collect(Collectors.joining(", "))),
+                    SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT); 
+        }
     }
+         
 }

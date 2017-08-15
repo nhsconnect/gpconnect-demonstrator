@@ -1,6 +1,7 @@
 package uk.gov.hscic.appointments;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
+import ca.uhn.fhir.model.api.IPrimitiveDatatype;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -261,12 +262,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         boolean hasRequiredResources = appointment.getParticipant().stream()
                 .map(participant -> participant.getActor().getReference().getResourceType())
-                .collect(Collectors.toList()).containsAll(Arrays.asList("Patient", "Practitioner"));
+                .collect(Collectors.toList()).containsAll(Arrays.asList("Patient", "Location"));
 
         if (!hasRequiredResources) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(
-                            "Appointment resource is not a valid resource required valid Patient and Practitioner"),
+                            "Appointment resource is not a valid resource required valid Patient and Location"),
                     SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
         }
 
@@ -575,12 +576,16 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointment.addParticipant()
                 .setActor(new ResourceReferenceDt("Practitioner/" + appointmentDetail.getPractitionerId()))
                 .setStatus(ParticipationStatusEnum.ACCEPTED);
+        
+        appointment.addParticipant()
+        .setActor(new ResourceReferenceDt("Location/" + appointmentDetail.getLocationId()))
+        .setStatus(ParticipationStatusEnum.ACCEPTED);
 
-        if (null != appointmentDetail.getLocationId()) {
+        if (null != appointmentDetail.getPractitionerId()) {
             appointment.addParticipant()
-                    .setActor(new ResourceReferenceDt("Location/" + appointmentDetail.getLocationId()))
-                    .setStatus(ParticipationStatusEnum.ACCEPTED);
-        }
+            .setActor(new ResourceReferenceDt("Practitioner/" + appointmentDetail.getPractitionerId()))
+            .setStatus(ParticipationStatusEnum.ACCEPTED);
+         }
 
         return appointment;
     }
@@ -840,9 +845,19 @@ public class AppointmentResourceProvider implements IResourceProvider {
         
         List<String> invalidCodes = new ArrayList<>();
         for (ExtensionDt ue : undeclaredExtensions) {
+            
+            if(ue.getUrlAsString().equals(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON)){
+                
+                IBaseDatatype cancellationReason = ue.getValue();
+                if(cancellationReason.isEmpty()){
+                    invalidCodes.add("Cancellation Reason is missing.");
+                }
+                continue;
+            }
+            
             CodeableConceptDt codeConc = (CodeableConceptDt) ue.getValue();
             CodingDt code = codeConc.getCodingFirstRep();
-                      
+
             Boolean isValid = valueSetValidator.validateCode(code);
             
             if(isValid == false) {

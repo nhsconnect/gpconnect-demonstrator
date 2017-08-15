@@ -1,6 +1,7 @@
 package uk.gov.hscic.appointments;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
+import ca.uhn.fhir.model.api.IPrimitiveDatatype;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -779,9 +780,19 @@ public class AppointmentResourceProvider implements IResourceProvider {
         
         List<String> invalidCodes = new ArrayList<>();
         for (ExtensionDt ue : undeclaredExtensions) {
+            
+            if(ue.getUrlAsString().equals(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON)){
+                
+                IBaseDatatype cancellationReason = ue.getValue();
+                if(cancellationReason.isEmpty()){
+                    invalidCodes.add("Cancellation Reason is missing.");
+                }
+                continue;
+            }
+            
             CodeableConceptDt codeConc = (CodeableConceptDt) ue.getValue();
             CodingDt code = codeConc.getCodingFirstRep();
-                      
+
             Boolean isValid = valueSetValidator.validateCode(code);
             
             if(isValid == false) {

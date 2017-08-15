@@ -76,8 +76,8 @@ public class PageSectionFactory {
         }
 
         return new PageSection("Active Problems and Issues",
-                new Table(Arrays.asList("Start Date", "Entry", "Significance", "Details"), problemActiveRows),
-                requestedFromDate, requestedToDate);
+                new Table(Arrays.asList("Start Date", "Entry", "Significance", "Details"), problemActiveRows));
+                
     }
 
     public PageSection getPRBInctivePageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {

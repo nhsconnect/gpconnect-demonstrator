@@ -13,6 +13,7 @@ import ca.uhn.fhir.model.dstu2.valueset.AppointmentStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ParticipationStatusEnum;
+import ca.uhn.fhir.model.primitive.BoundCodeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.rest.annotation.Create;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -269,7 +271,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
 
         for (Participant participant : appointment.getParticipant()) {
-            
+                    
             ResourceReferenceDt participantActor = participant.getActor();
             Boolean searchParticipant = (participantActor != null);
             
@@ -285,6 +287,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         new UnprocessableEntityException("Supplied Participant is not valid. Must have an Actor or Type."),
                         SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT); 
             }
+            
+            validateParticipantStatus(participant.getStatus(), participant.getStatusElement(), participantActor.getReference().getResourceType());
         }
 
         // Store New Appointment
@@ -781,10 +785,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
     
     private Boolean validateParticipantType(CodeableConceptDt participantType){
         
+        Boolean hasCode = !participantType.isEmpty();
         CodingDt code = participantType.getCodingFirstRep();
-        Boolean isValid = false;
+        Boolean isValid = !hasCode;
         
-        if(code != null){
+        if(hasCode){
             
             isValid = valueSetValidator.validateCode(code);
             
@@ -796,6 +801,25 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
         
         return isValid;
+    }
+    
+    private void validateParticipantStatus(String strStatus, BoundCodeDt<ParticipationStatusEnum> enumStatus, String participant){
+        
+        Boolean validStatus = false;
+        String participantStatusErr = "is a requirement but is missing.";
+        
+        if(strStatus != null){
+            participantStatusErr = String.format("%s is not a valid ParticipationStatus code", strStatus);
+            EnumSet<ParticipationStatusEnum> statusList = EnumSet.allOf(ParticipationStatusEnum.class);
+            validStatus = statusList.contains(enumStatus.getValueAsEnum());
+        }
+
+        if(!validStatus){
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                new UnprocessableEntityException(String.format(
+                        "Appointment Participant %s Status %s", participant, participantStatusErr)),
+                SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
     }
 
     private void validateAppointmentExtensions(List<ExtensionDt> undeclaredExtensions) {

@@ -653,12 +653,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentDetail.setTypeText(appointment.getType().getText());
 
         CodingDt codingFirstRep = appointment.getReason().getCodingFirstRep();
+        
+        List<String> allowReasonSystems = Arrays.asList(SystemURL.SNOMED, SystemURL.READV2, SystemURL.READCTV3);
 
         if (!codingFirstRep.isEmpty()) {
-            if (!SystemURL.SNOMED.equals(codingFirstRep.getSystem())) {
+            if (!allowReasonSystems.contains(codingFirstRep.getSystem())) {
                 String message = String.format(
-                        "Problem with reason property of the appointment. If the reason is provided then the system property must be, in order, one of the following: %s, %s, %s",
-                        SystemURL.SNOMED, SystemURL.READV2, SystemURL.READCTV3);
+                        "Problem with reason property of the appointment. If the reason is provided then the system property must be, in order, one of the following: %s",
+                        String.join(", ", allowReasonSystems));
                 throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
                         SystemCode.INVALID_RESOURCE, IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
             } else {

@@ -33,6 +33,8 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+
+
 import java.text.MessageFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -504,12 +506,61 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     public Appointment appointmentDetailToAppointmentResourceConverter(AppointmentDetail appointmentDetail) {
         Appointment appointment = new Appointment();
+        ExtensionDt modelExtension;
+        CodeableConceptDt  extensionCodableConcept;
+        CodingDt extensionCoding;
+        
+        
         appointment.setId(String.valueOf(appointmentDetail.getId()));
         appointment.getMeta().setLastUpdated(appointmentDetail.getLastUpdated());
         appointment.getMeta().setVersionId(String.valueOf(appointmentDetail.getLastUpdated().getTime()));
         appointment.getMeta().addProfile(SystemURL.SD_GPC_APPOINTMENT);
         appointment.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON,
                 new StringDt(appointmentDetail.getCancellationReason()));
+        
+        
+        if(appointmentDetail.getExtensionCatURL() != null )
+        {
+            extensionCoding= new CodingDt();
+            modelExtension = new ExtensionDt();
+            extensionCodableConcept= new CodeableConceptDt();
+            extensionCoding.setCode(appointmentDetail.getExtensionCatCode());
+            extensionCoding.setDisplay(appointmentDetail.getExtensionCatDisplay());
+            extensionCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-appointment-category-1");
+            modelExtension.setUrl(appointmentDetail.getExtensionCatURL());
+            extensionCodableConcept.addCoding(extensionCoding);
+            modelExtension.setValue(extensionCodableConcept);
+            appointment.addUndeclaredExtension(modelExtension);   
+        }
+        
+        if(appointmentDetail.getExtensionConURL() != null )
+        {
+            extensionCoding= new CodingDt();
+            modelExtension = new ExtensionDt();
+            extensionCodableConcept= new CodeableConceptDt();
+            extensionCoding.setCode(appointmentDetail.getExtensionConCode());
+            extensionCoding.setDisplay(appointmentDetail.getExtensionConDisplay());
+            modelExtension.setUrl(appointmentDetail.getExtensionConURL());
+            extensionCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-appointment-contact-method-1");
+            extensionCodableConcept.addCoding(extensionCoding);
+            modelExtension.setValue(extensionCodableConcept);
+            appointment.addUndeclaredExtension(modelExtension);   
+        }
+        
+        if(appointmentDetail.getExtensionBookURL() != null )
+        {
+            extensionCoding= new CodingDt();
+            modelExtension = new ExtensionDt();
+            extensionCodableConcept= new CodeableConceptDt();
+            extensionCoding.setCode(appointmentDetail.getExtensionBookCode());
+            extensionCoding.setDisplay(appointmentDetail.getExtensionBookDisplay());
+            modelExtension.setUrl(appointmentDetail.getExtensionBookURL());
+            extensionCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-appointment-booking-method-1");
+            extensionCodableConcept.addCoding(extensionCoding);
+            modelExtension.setValue(extensionCodableConcept);
+            appointment.addUndeclaredExtension(modelExtension);   
+        }
+        
         appointment.setIdentifier(Collections.singletonList(
                 new IdentifierDt(SystemURL.ID_GPC_APPOINTMENT_IDENTIFIER, String.valueOf(appointmentDetail.getId()))));
 
@@ -565,16 +616,19 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
 
         appointment.setSlot(slotResources);
+       
+        if (appointmentDetail.getPriority() != null){
         appointment.setPriority(appointmentDetail.getPriority());
+        }
         appointment.setComment(appointmentDetail.getComment());
         appointment.setDescription(appointmentDetail.getDescription());
 
         appointment.addParticipant().setActor(new ResourceReferenceDt("Patient/" + appointmentDetail.getPatientId()))
                 .setStatus(ParticipationStatusEnum.ACCEPTED);
      
-        appointment.addParticipant()
-        .setActor(new ResourceReferenceDt("Location/" + appointmentDetail.getLocationId()))
-        .setStatus(ParticipationStatusEnum.ACCEPTED);
+//        appointment.addParticipant()
+//        .setActor(new ResourceReferenceDt("Location/" + appointmentDetail.getLocationId()))
+//        .setStatus(ParticipationStatusEnum.ACCEPTED);
 
         if (null != appointmentDetail.getPractitionerId()) {
             appointment.addParticipant()

@@ -1,7 +1,6 @@
 package uk.gov.hscic.appointments;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
-import ca.uhn.fhir.model.api.IPrimitiveDatatype;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -572,11 +571,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         appointment.addParticipant().setActor(new ResourceReferenceDt("Patient/" + appointmentDetail.getPatientId()))
                 .setStatus(ParticipationStatusEnum.ACCEPTED);
-
-        appointment.addParticipant()
-                .setActor(new ResourceReferenceDt("Practitioner/" + appointmentDetail.getPractitionerId()))
-                .setStatus(ParticipationStatusEnum.ACCEPTED);
-        
+     
         appointment.addParticipant()
         .setActor(new ResourceReferenceDt("Location/" + appointmentDetail.getLocationId()))
         .setStatus(ParticipationStatusEnum.ACCEPTED);

@@ -575,7 +575,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
 
         appointment.setSlot(slotResources);
-
+        appointment.setPriority(appointmentDetail.getPriority());
         appointment.setComment(appointmentDetail.getComment());
         appointment.setDescription(appointmentDetail.getDescription());
 

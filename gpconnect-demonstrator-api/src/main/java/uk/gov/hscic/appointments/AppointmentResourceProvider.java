@@ -654,13 +654,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         CodingDt codingFirstRep = appointment.getReason().getCodingFirstRep();
 
-        // we only support the SNOMED coding system
-
         if (!codingFirstRep.isEmpty()) {
             if (!SystemURL.SNOMED.equals(codingFirstRep.getSystem())) {
                 String message = String.format(
-                        "Problem with reason property of the appointment. If the reason is provided then the system property must be %s",
-                        SystemURL.SNOMED);
+                        "Problem with reason property of the appointment. If the reason is provided then the system property must be, in order, one of the following: %s, %s, %s",
+                        SystemURL.SNOMED, SystemURL.READV2, SystemURL.READCTV3);
                 throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
                         SystemCode.INVALID_RESOURCE, IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
             } else {

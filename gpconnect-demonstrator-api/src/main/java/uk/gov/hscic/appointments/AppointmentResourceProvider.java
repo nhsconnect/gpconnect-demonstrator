@@ -1,7 +1,6 @@
 package uk.gov.hscic.appointments;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
-import ca.uhn.fhir.model.api.IPrimitiveDatatype;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -14,6 +13,7 @@ import ca.uhn.fhir.model.dstu2.valueset.AppointmentStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ParticipationStatusEnum;
+import ca.uhn.fhir.model.primitive.BoundCodeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.rest.annotation.Create;
@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -270,35 +271,24 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
 
         for (Participant participant : appointment.getParticipant()) {
-            String resourcePart = participant.getActor().getReference().getResourceType();
-            String idPart = participant.getActor().getReference().getIdPart();
-
-            switch (resourcePart) {
-            case "Patient":
-                PatientDetails patient = patientSearch.findPatientByInternalID(idPart);
-                if (patient == null) {
-                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new UnprocessableEntityException("Patient resource reference is not a valid resource"),
-                            SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
-                }
-                break;
-            case "Practitioner":
-                PractitionerDetails practitioner = practitionerSearch.findPractitionerDetails(idPart);
-                if (practitioner == null) {
-                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new UnprocessableEntityException("Practitioner resource reference is not a valid resource"),
-                            SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
-                }
-                break;
-            case "Location":
-                LocationDetails location = locationSearch.findLocationById(idPart);
-                if (location == null) {
-                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new UnprocessableEntityException("Location resource reference is not a valid resource"),
-                            SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
-                }
-                break;
+                    
+            ResourceReferenceDt participantActor = participant.getActor();
+            Boolean searchParticipant = (participantActor != null);
+            
+            if(searchParticipant){
+                validateParticipantActor(participantActor);
             }
+
+            CodeableConceptDt participantType = participant.getTypeFirstRep();
+            Boolean validParticipantType = validateParticipantType(participantType);
+
+            if(!searchParticipant && !validParticipantType){
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("Supplied Participant is not valid. Must have an Actor or Type."),
+                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT); 
+            }
+            
+            validateParticipantStatus(participant.getStatus(), participant.getStatusElement(), participantActor.getReference().getResourceType());
         }
 
         // Store New Appointment
@@ -581,11 +571,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         appointment.addParticipant().setActor(new ResourceReferenceDt("Patient/" + appointmentDetail.getPatientId()))
                 .setStatus(ParticipationStatusEnum.ACCEPTED);
-
-        appointment.addParticipant()
-                .setActor(new ResourceReferenceDt("Practitioner/" + appointmentDetail.getPractitionerId()))
-                .setStatus(ParticipationStatusEnum.ACCEPTED);
-        
+     
         appointment.addParticipant()
         .setActor(new ResourceReferenceDt("Location/" + appointmentDetail.getLocationId()))
         .setStatus(ParticipationStatusEnum.ACCEPTED);
@@ -667,14 +653,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentDetail.setTypeText(appointment.getType().getText());
 
         CodingDt codingFirstRep = appointment.getReason().getCodingFirstRep();
-
-        // we only support the SNOMED coding system
+        
+        List<String> allowReasonSystems = Arrays.asList(SystemURL.SNOMED, SystemURL.READV2, SystemURL.READCTV3);
 
         if (!codingFirstRep.isEmpty()) {
-            if (!SystemURL.SNOMED.equals(codingFirstRep.getSystem())) {
+            if (!allowReasonSystems.contains(codingFirstRep.getSystem())) {
                 String message = String.format(
-                        "Problem with reason property of the appointment. If the reason is provided then the system property must be %s",
-                        SystemURL.SNOMED);
+                        "Problem with reason property of the appointment. If the reason is provided then the system property must be, in order, one of the following: %s",
+                        String.join(", ", allowReasonSystems));
                 throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
                         SystemCode.INVALID_RESOURCE, IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
             } else {
@@ -764,6 +750,76 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentDetail.setExtensionConDisplay(extensionDisplay);
         appointmentDetail.setExtensionConCode(extensionCode);
         return appointmentDetail;
+    }
+    
+    private void validateParticipantActor(ResourceReferenceDt participantActor){
+        
+        IdDt actorRef = participantActor.getReference();
+        String resourcePart = actorRef.getResourceType();
+        String idPart = actorRef.getIdPart();
+
+        Boolean participantFailedSearch = false;
+
+        switch (resourcePart) {
+            case "Patient":
+                PatientDetails patient = patientSearch.findPatientByInternalID(idPart);
+                participantFailedSearch = (patient == null);
+                break;
+            case "Practitioner":
+                PractitionerDetails practitioner = practitionerSearch.findPractitionerDetails(idPart);
+                participantFailedSearch = (practitioner == null);
+                break;
+            case "Location":
+                LocationDetails location = locationSearch.findLocationById(idPart);
+                participantFailedSearch = (location == null);
+                break;
+        }
+
+        if (participantFailedSearch) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(String.format("%s resource reference is not a valid resource", resourcePart)),
+                    SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
+        }
+        
+    }
+    
+    private Boolean validateParticipantType(CodeableConceptDt participantType){
+        
+        Boolean hasCode = !participantType.isEmpty();
+        CodingDt code = participantType.getCodingFirstRep();
+        Boolean isValid = !hasCode;
+        
+        if(hasCode){
+            
+            isValid = valueSetValidator.validateCode(code);
+            
+            if(!isValid){
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException(MessageFormat.format("Invalid Participant Type Code. Code: {0} [Display: {1}, System: {2}]", code.getCode(), code.getDisplay(), code.getSystem())),
+                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT); 
+            }
+        }
+        
+        return isValid;
+    }
+    
+    private void validateParticipantStatus(String strStatus, BoundCodeDt<ParticipationStatusEnum> enumStatus, String participant){
+        
+        Boolean validStatus = false;
+        String participantStatusErr = "is a requirement but is missing.";
+        
+        if(strStatus != null){
+            participantStatusErr = String.format("%s is not a valid ParticipationStatus code", strStatus);
+            EnumSet<ParticipationStatusEnum> statusList = EnumSet.allOf(ParticipationStatusEnum.class);
+            validStatus = statusList.contains(enumStatus.getValueAsEnum());
+        }
+
+        if(!validStatus){
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                new UnprocessableEntityException(String.format(
+                        "Appointment Participant %s Status %s", participant, participantStatusErr)),
+                SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
     }
 
     private void validateAppointmentExtensions(List<ExtensionDt> undeclaredExtensions) {

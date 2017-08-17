@@ -626,9 +626,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointment.addParticipant().setActor(new ResourceReferenceDt("Patient/" + appointmentDetail.getPatientId()))
                 .setStatus(ParticipationStatusEnum.ACCEPTED);
      
-//        appointment.addParticipant()
-//        .setActor(new ResourceReferenceDt("Location/" + appointmentDetail.getLocationId()))
-//        .setStatus(ParticipationStatusEnum.ACCEPTED);
+        appointment.addParticipant()
+        .setActor(new ResourceReferenceDt("Location/" + appointmentDetail.getLocationId()))
+        .setStatus(ParticipationStatusEnum.ACCEPTED);
 
         if (null != appointmentDetail.getPractitionerId()) {
             appointment.addParticipant()

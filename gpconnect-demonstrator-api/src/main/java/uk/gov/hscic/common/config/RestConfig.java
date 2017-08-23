@@ -15,21 +15,26 @@
  */
 package uk.gov.hscic.common.config;
 
-import org.apache.catalina.connector.Connector;
+import org.apache.catalina.filters.HttpHeaderSecurityFilter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import uk.gov.hscic.auth.CertificateValidator;
 import uk.gov.hscic.auth.KeyStoreFactory;
 import uk.gov.hscic.common.filters.DefaultHeaderFilter;
+import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.annotation.Bean;
 
 @ServletComponentScan
 @SpringBootApplication
@@ -44,8 +49,11 @@ public class RestConfig {
     private String configPath;
 
     @Value("${server.port.http:-1}")
-    private int httpPort;
-
+    private Integer httpPort;
+    
+    @Value("${server.port:-1}")
+    private Integer httpsPort;
+    
     @Value("${server.keystore.password}")
     private String keystorePassword;
 
@@ -55,6 +63,39 @@ public class RestConfig {
     public static void main(String[] args) {
         SpringApplication.run(RestConfig.class, args);
     }
+    
+    
+  @Bean
+  public EmbeddedServletContainerFactory servletContainer() {
+      TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {
+          @Override
+          protected void postProcessContext(Context context) {
+              SecurityConstraint securityConstraint = new SecurityConstraint();
+              securityConstraint.setUserConstraint("CONFIDENTIAL");
+              SecurityCollection collection = new SecurityCollection();
+              collection.addPattern("/*");
+              securityConstraint.addCollection(collection);
+              context.addConstraint(securityConstraint);
+          }
+      };
+      
+      if (httpPort != null && httpPort > 0){
+          tomcat.addAdditionalTomcatConnectors(createHttpConnector());   
+      }
+      
+      return tomcat;
+  }
+  
+  private Connector createHttpConnector() {
+    Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+    
+    connector.setScheme("http");
+    connector.setSecure(false);
+    connector.setPort(httpPort);
+    connector.setRedirectPort(httpsPort);
+    
+    return connector;
+  }
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -67,16 +108,6 @@ public class RestConfig {
     }
 
     @Bean
-    public EmbeddedServletContainerCustomizer containerCustomizer() {
-        return container -> {
-            if (container instanceof TomcatEmbeddedServletContainerFactory && httpPort > 0) {
-                Connector connector = new Connector(TomcatEmbeddedServletContainerFactory.DEFAULT_PROTOCOL);
-                connector.setPort(httpPort);
-                ((TomcatEmbeddedServletContainerFactory) container).addAdditionalTomcatConnectors(connector);
-            }
-        };
-    }
-    @Bean
     public FilterRegistrationBean myFilterBean() {
       final FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
       filterRegBean.setFilter(new DefaultHeaderFilter());
@@ -85,5 +116,23 @@ public class RestConfig {
       filterRegBean.setName("Meu Filter");
       filterRegBean.setAsyncSupported(Boolean.TRUE);
       return filterRegBean;
+    }
+    
+    @Bean
+    public FilterRegistrationBean getHttpHeaderSecurityFilterBean() {        
+        HttpHeaderSecurityFilter filter = new HttpHeaderSecurityFilter();
+
+        filter.setHstsEnabled(true);
+        filter.setHstsIncludeSubDomains(true);
+        filter.setHstsMaxAgeSeconds(31536000); 
+        
+        final FilterRegistrationBean bean = new FilterRegistrationBean();   
+        
+        bean.setFilter(filter);      
+        bean.addUrlPatterns("/*");
+        bean.setEnabled(Boolean.TRUE);
+        bean.setAsyncSupported(Boolean.TRUE);
+        
+        return bean;
     }
 }

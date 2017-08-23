@@ -1,14 +1,25 @@
 package uk.gov.hscic.organization;
 
+import ca.uhn.fhir.model.dstu2.composite.AddressDt;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.composite.ContactPointDt;
+import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Organization;
+import ca.uhn.fhir.model.dstu2.resource.Organization.Contact;
 import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
+import ca.uhn.fhir.model.dstu2.valueset.AddressTypeEnum;
+import ca.uhn.fhir.model.dstu2.valueset.AddressUseEnum;
 import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
+import ca.uhn.fhir.model.dstu2.valueset.ContactPointSystemEnum;
+import ca.uhn.fhir.model.dstu2.valueset.ContactPointUseEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
@@ -244,25 +255,116 @@ public class OrganizationResourceProvider implements IResourceProvider {
         Map<String, Organization> map = new HashMap<>();
 
         for (OrganizationDetails organizationDetail : organizationDetails) {
-            if (map.containsKey(organizationDetail.getOrgCode())) {
-                map.get(organizationDetail.getOrgCode()).addIdentifier(new IdentifierDt(SystemURL.ID_ODS_SITE_CODE, organizationDetail.getSiteCode()));
-            } else {
-                Organization organization = new Organization()
-                        .setName(organizationDetail.getOrgName())
-                        .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_ORGANIZATION_CODE, organizationDetail.getOrgCode()))
-                        .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_SITE_CODE, organizationDetail.getSiteCode()));
+            
+            String mapKey = String.format("%s_%s", organizationDetail.getOrgCode(), organizationDetail.getSiteCode());
+            if (map.containsKey(mapKey)) {
+                continue;
+            } 
+            
+            Organization organization = new Organization()
+                    .setName(organizationDetail.getOrgName())
+                    .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_ORGANIZATION_CODE, organizationDetail.getOrgCode()))
+                    .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_SITE_CODE, organizationDetail.getSiteCode()));
 
-                organization.setId(String.valueOf(organizationDetail.getId()));
+            organization.setId(String.valueOf(organizationDetail.getId()));
 
-                organization.getMeta()
-                        .addProfile(SystemURL.SD_GPC_ORGANIZATION)
-                        .setLastUpdated(organizationDetail.getLastUpdated())
-                        .setVersionId(String.valueOf(organizationDetail.getLastUpdated().getTime()));
+            organization.getMeta()
+                    .addProfile(SystemURL.SD_GPC_ORGANIZATION)
+                    .setLastUpdated(organizationDetail.getLastUpdated())
+                    .setVersionId(String.valueOf(organizationDetail.getLastUpdated().getTime()));
+            
+            organization = addAdditionalProperties(organization);
 
-                map.put(organizationDetail.getOrgCode(), organization);
-            }
+            map.put(mapKey, organization);
+            
         }
 
         return new ArrayList<>(map.values());
+    }
+    
+    //Adding in additional properties manually for now so we can test in the Test Suite
+    private Organization addAdditionalProperties(Organization organization){
+        
+        List<IdentifierDt> identifiers = organization.getIdentifier();
+        String siteCode = getSiteCode(identifiers);
+        
+        CodingDt orgTypeCode = new CodingDt();
+        orgTypeCode.setCode("dept");
+        orgTypeCode.setDisplay("Hospital Department");
+        orgTypeCode.setSystem(SystemURL.VS_CC_ORGANISATION_TYPE);
+        
+        //Just mixing it up a bit
+        if(siteCode != null){
+            
+            if( siteCode.equals("Z99899")){
+                organization.addContact(getValidContact());
+                organization.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_CC_ORG_PERIOD);
+            }
+            
+            if( siteCode.equals("Z33433")){
+                orgTypeCode.setCode("prov");
+                orgTypeCode.setDisplay("Healthcare Provider");
+            }        
+        }
+                    
+        organization.addTelecom(getValidTelecom());
+        organization.addAddress(getValidAddress());
+
+        CodeableConceptDt orgType = new CodeableConceptDt();
+        orgType.addCoding(orgTypeCode);
+        organization.setType(orgType);
+        
+        organization.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_CC_MAIN_LOCATION);
+
+        return organization;
+    }
+    
+    
+    private String getSiteCode(List<IdentifierDt> idetifiers){
+        
+        for (IdentifierDt idetifier : idetifiers) {
+            
+            if(idetifier.getSystem().equals(SystemURL.ID_ODS_SITE_CODE)){
+                return idetifier.getValue();
+            }
+        }
+        
+        return null;
+    }
+    
+    private ContactPointDt getValidTelecom(){
+        
+        ContactPointDt orgTelCom = new ContactPointDt();
+        orgTelCom.addUndeclaredExtension(false, "testurl");
+        orgTelCom.setSystem(ContactPointSystemEnum.PHONE);
+        orgTelCom.setUse(ContactPointUseEnum.WORK);
+        
+        return orgTelCom;
+    }
+    
+    private AddressDt getValidAddress(){
+        
+        AddressDt orgAddress = new AddressDt();
+        orgAddress.setType(AddressTypeEnum.PHYSICAL);
+        orgAddress.setUse(AddressUseEnum.WORK);
+        
+        return orgAddress;
+    }
+    
+    private Contact getValidContact(){
+        
+        HumanNameDt orgCtName = new HumanNameDt();
+        orgCtName.setUse(NameUseEnum.USUAL);
+        orgCtName.addFamily("FamilyName");
+        
+        CodeableConceptDt orgCtPurpose = new CodeableConceptDt(SystemURL.VS_CC_ORG_CT_ENTITYTYPE, "ADMIN");
+        
+        Contact orgContact = new Contact();
+        orgContact.setName(orgCtName);
+        orgContact.addTelecom(getValidTelecom());
+        orgContact.setAddress(getValidAddress());
+        orgContact.setPurpose(orgCtPurpose);
+        
+        return orgContact;
     }
 }

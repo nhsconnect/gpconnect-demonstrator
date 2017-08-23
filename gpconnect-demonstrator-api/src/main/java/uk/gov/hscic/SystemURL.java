@@ -19,8 +19,8 @@ public final class SystemURL {
     public static final String ID_GPC_APPOINTMENT_IDENTIFIER = "http://fhir.nhs.net/Id/gpconnect-appointment-identifier";
     public static final String ID_GPC_SCHEDULE_IDENTIFIER = "http://fhir.nhs.net/Id/gpconnect-schedule-identifier";
     public static final String ID_NHS_NUMBER = "http://fhir.nhs.net/Id/nhs-number";
-    public static final String ID_ODS_ORGANIZATION_CODE = "http://fhir.nhs.net/Id/ods-organization-code";
-    public static final String ID_ODS_SITE_CODE = "http://fhir.nhs.net/Id/ods-site-code";
+    public static final String ID_ODS_ORGANIZATION_CODE = "https://fhir.nhs.uk/Id/ods-organization-code";
+    public static final String ID_ODS_SITE_CODE = "https://fhir.nhs.uk/Id/ods-site-code";
     public static final String ID_SDS_ROLE_PROFILE_ID = "http://fhir.nhs.net/Id/sds-role-profile-id";
     public static final String ID_SDS_USER_ID = "http://fhir.nhs.net/Id/sds-user-id";
 
@@ -35,9 +35,11 @@ public final class SystemURL {
     public static final String SD_EXTENSION_REGISTRATION_PERIOD = "http://fhir.nhs.net/StructureDefinition/extension-registration-period-1";
     public static final String SD_EXTENSION_REGISTRATION_STATUS = "http://fhir.nhs.net/StructureDefinition/extension-registration-status-1";
     public static final String SD_EXTENSION_REGISTRATION_TYPE = "http://fhir.nhs.net/StructureDefinition/extension-registration-type-1";
+    public static final String SD_EXTENSION_CC_MAIN_LOCATION = "https://fhir.hl7.org.uk/StructureDefinition/Extension-CareConnect-GPC-MainLocation-1";
+    public static final String SD_EXTENSION_CC_ORG_PERIOD = "http://hl7.org/fhir/StructureDefinition/organization-period";
     public static final String SD_GPC_CARERECORD_COMPOSITION = "http://fhir.nhs.net/StructureDefinition/gpconnect-carerecord-composition-1";
     public static final String SD_GPC_OPERATIONOUTCOME = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-    public static final String SD_GPC_ORGANIZATION = "http://fhir.nhs.net/StructureDefinition/gpconnect-organization-1";
+    public static final String SD_GPC_ORGANIZATION = "http://fhir.nhs.net/StructureDefinition/CareConnect-GPC-Organization-1";
     public static final String SD_GPC_PATIENT = "http://fhir.nhs.net/StructureDefinition/gpconnect-patient-1";
     public static final String SD_GPC_PRACTITIONER = "http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1";
     public static final String SD_GPC_APPOINTMENT = "http://fhir.nhs.net/StructureDefinition/gpconnect-appointment-1";
@@ -53,4 +55,6 @@ public final class SystemURL {
     public static final String VS_REGISTRATION_STATUS = "http://fhir.nhs.net/ValueSet/registration-status-1";
     public static final String VS_REGISTRATION_TYPE = "http://fhir.nhs.net/ValueSet/registration-type-1";
     public static final String VS_SDS_JOB_ROLE_NAME = "http://fhir.nhs.net/ValueSet/sds-job-role-name-1";
+    public static final String VS_CC_ORGANISATION_TYPE = "http://hl7.org/fhir/ValueSet/organization-type";
+    public static final String VS_CC_ORG_CT_ENTITYTYPE = "http://hl7.org/fhir/ValueSet/contactentity-type";
 }

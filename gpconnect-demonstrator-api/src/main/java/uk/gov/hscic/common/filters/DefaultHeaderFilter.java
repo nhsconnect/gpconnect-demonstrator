@@ -38,9 +38,9 @@ public class DefaultHeaderFilter implements Filter {
         
             LOG.info(headerOutput + " )");
             HttpServletResponse response = (HttpServletResponse) servletResponse;
-            if(response.getHeader("Cache-Control") == null){response.addHeader("Cache-Control", "no-cache, no-store");};
-            if(response.getHeader("Expires") == null){response.addHeader("Expires", "0");};
-            if(response.getHeader("Pragma") == null){response.addHeader("Pragma", "no-cache");};
+            response.setHeader("Cache-Control", "no-cache, no-store");
+            response.setHeader("Expires", "0");
+            response.setHeader("Pragma", "no-cache");
             chain.doFilter(new HeaderRequestWrapper((HttpServletRequest) request), response);
           
         } catch (HttpException e) {

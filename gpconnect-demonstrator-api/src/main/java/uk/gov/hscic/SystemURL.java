@@ -16,13 +16,14 @@ public final class SystemURL {
     public static final String HL7_VS_C80_PRACTICE_CODES = "http://hl7.org/fhir/ValueSet/c80-practice-codes";
 
     // FHIR ID Constants
-    public static final String ID_GPC_APPOINTMENT_IDENTIFIER = "http://fhir.nhs.net/Id/gpconnect-appointment-identifier";
-    public static final String ID_GPC_SCHEDULE_IDENTIFIER = "http://fhir.nhs.net/Id/gpconnect-schedule-identifier";
-    public static final String ID_NHS_NUMBER = "http://fhir.nhs.net/Id/nhs-number";
+    public static final String ID_GPC_APPOINTMENT_IDENTIFIER = "https://fhir.nhs.uk/Id/gpconnect-appointment-identifier";
+    public static final String ID_GPC_SCHEDULE_IDENTIFIER = "https://fhir.nhs.uk/Id/gpconnect-schedule-identifier";
+    public static final String ID_NHS_NUMBER = "https://fhir.nhs.uk/Id/nhs-number";
     public static final String ID_ODS_ORGANIZATION_CODE = "https://fhir.nhs.uk/Id/ods-organization-code";
     public static final String ID_ODS_SITE_CODE = "https://fhir.nhs.uk/Id/ods-site-code";
-    public static final String ID_SDS_ROLE_PROFILE_ID = "http://fhir.nhs.net/Id/sds-role-profile-id";
-    public static final String ID_SDS_USER_ID = "http://fhir.nhs.net/Id/sds-user-id";
+    public static final String ID_SDS_ROLE_PROFILE_ID = "https://fhir.nhs.uk/Id/sds-role-profile-id";
+    public static final String ID_SDS_USER_ID = "https://fhir.nhs.uk/Id/sds-user-id";
+    
 
     // FHIR StructureDefinition Constants
     public static final String SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-booking-method-1";
@@ -54,7 +55,7 @@ public final class SystemURL {
     public static final String VS_HUMAN_LANGUAGE = "http://fhir.nhs.net/ValueSet/human-language-1";
     public static final String VS_REGISTRATION_STATUS = "http://fhir.nhs.net/ValueSet/registration-status-1";
     public static final String VS_REGISTRATION_TYPE = "http://fhir.nhs.net/ValueSet/registration-type-1";
-    public static final String VS_SDS_JOB_ROLE_NAME = "http://fhir.nhs.net/ValueSet/sds-job-role-name-1";
+    public static final String VS_SDS_JOB_ROLE_NAME = "https://fhir.hl7.org.uk/ValueSet/CareConnect-SDSJobRoleName-1";
     public static final String VS_CC_ORGANISATION_TYPE = "http://hl7.org/fhir/ValueSet/organization-type";
     public static final String VS_CC_ORG_CT_ENTITYTYPE = "http://hl7.org/fhir/ValueSet/contactentity-type";
 }

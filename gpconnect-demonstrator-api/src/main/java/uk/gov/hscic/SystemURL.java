@@ -23,6 +23,7 @@ public final class SystemURL {
     public static final String ID_ODS_SITE_CODE = "https://fhir.nhs.uk/Id/ods-site-code";
     public static final String ID_SDS_ROLE_PROFILE_ID = "http://fhir.nhs.net/Id/sds-role-profile-id";
     public static final String ID_SDS_USER_ID = "http://fhir.nhs.net/Id/sds-user-id";
+    public static final String ID_LOCAL_LOCATION_IDENTIFIER = "https://fhir.nhs.uk/Id/local-location-identifier";
 
     // FHIR StructureDefinition Constants
     public static final String SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-booking-method-1";

@@ -44,7 +44,7 @@ public final class SystemURL {
     public static final String SD_GPC_OPERATIONOUTCOME = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
     public static final String SD_GPC_ORGANIZATION = "http://fhir.nhs.net/StructureDefinition/CareConnect-GPC-Organization-1";
     public static final String SD_GPC_PATIENT = "http://fhir.nhs.net/StructureDefinition/gpconnect-patient-1";
-    public static final String SD_GPC_PRACTITIONER = "http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1";
+    public static final String SD_GPC_PRACTITIONER = "http://fhir.nhs.net/StructureDefinition/CareConnect-GPC-Practitioner-1";
     public static final String SD_GPC_APPOINTMENT = "http://fhir.nhs.net/StructureDefinition/gpconnect-appointment-1";
     public static final String SD_GPC_GET_SCHEDULE_BUNDLE = "http://fhir.nhs.net/StructureDefinition/gpconnect-getschedule-bundle-1";
     public static final String SD_GPC_LOCATION = "http://fhir.nhs.net/StructureDefinition/gpconnect-location-1";

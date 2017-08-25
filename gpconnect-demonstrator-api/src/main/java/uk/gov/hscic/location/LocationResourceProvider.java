@@ -19,6 +19,7 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import java.util.ArrayList;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,16 +48,20 @@ public class LocationResourceProvider implements IResourceProvider {
     @Search
     public List<Location> getByIdentifierCode(@RequiredParam(name = Location.SP_IDENTIFIER) TokenParam identifierCode) {
         
-        if (!identifierCode.getSystem().equals(SystemURL.ID_ODS_SITE_CODE) && !identifierCode.getSystem().equals(SystemURL.ID_SDS_ROLE_PROFILE_ID))
+        List<String> idefList = new ArrayList<>();
+        idefList.add(SystemURL.ID_ODS_SITE_CODE);
+        //Currently not supported in the demonstrator
+        //idefList.add(SystemURL.ID_LOCAL_LOCATION_IDENTIFIER);
+        
+        if (!idefList.contains(identifierCode.getSystem()))
         {
-         
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Identifier System is invalid"),
-                    SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueTypeEnum.INVALID_CONTENT);
-          
+                    SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueTypeEnum.INVALID_CONTENT, 
+                    String.format("Identifier System must be one of: %s", String.join(", ", idefList)));
         }
         
-        List<LocationDetails> locationDetails = SystemURL.ID_ODS_ORGANIZATION_CODE.equalsIgnoreCase(identifierCode.getSystem())
+        List<LocationDetails> locationDetails = SystemURL.ID_LOCAL_LOCATION_IDENTIFIER.equalsIgnoreCase(identifierCode.getSystem())
                 ? locationSearch.findLocationDetailsByOrgOdsCode(identifierCode.getValue())
                 : locationSearch.findLocationDetailsBySiteOdsCode(identifierCode.getValue());
 

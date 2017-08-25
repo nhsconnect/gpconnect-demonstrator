@@ -21,10 +21,9 @@ public final class SystemURL {
     public static final String ID_NHS_NUMBER = "https://fhir.nhs.uk/Id/nhs-number";
     public static final String ID_ODS_ORGANIZATION_CODE = "https://fhir.nhs.uk/Id/ods-organization-code";
     public static final String ID_ODS_SITE_CODE = "https://fhir.nhs.uk/Id/ods-site-code";
+    public static final String ID_LOCAL_LOCATION_IDENTIFIER = "https://fhir.nhs.uk/Id/local-location-identifier";
     public static final String ID_SDS_ROLE_PROFILE_ID = "https://fhir.nhs.uk/Id/sds-role-profile-id";
     public static final String ID_SDS_USER_ID = "https://fhir.nhs.uk/Id/sds-user-id";
-
-    
 
 
     // FHIR StructureDefinition Constants
@@ -47,7 +46,7 @@ public final class SystemURL {
     public static final String SD_GPC_PRACTITIONER = "http://fhir.nhs.net/StructureDefinition/CareConnect-GPC-Practitioner-1";
     public static final String SD_GPC_APPOINTMENT = "http://fhir.nhs.net/StructureDefinition/gpconnect-appointment-1";
     public static final String SD_GPC_GET_SCHEDULE_BUNDLE = "http://fhir.nhs.net/StructureDefinition/gpconnect-getschedule-bundle-1";
-    public static final String SD_GPC_LOCATION = "http://fhir.nhs.net/StructureDefinition/gpconnect-location-1";
+    public static final String SD_GPC_LOCATION = "http://fhir.nhs.net/StructureDefinition/CareConnect-GPC-Location-1";
     public static final String SD_GPC_SLOT = "http://fhir.nhs.net/StructureDefinition/gpconnect-slot-1";
 
     // FHIR ValueSet Constants

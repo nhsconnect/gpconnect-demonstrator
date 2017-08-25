@@ -47,7 +47,7 @@ public class LocationResourceProvider implements IResourceProvider {
     @Search
     public List<Location> getByIdentifierCode(@RequiredParam(name = Location.SP_IDENTIFIER) TokenParam identifierCode) {
         
-        if (!identifierCode.getSystem().equals("http://fhir.nhs.net/Id/ods-site-code") && !identifierCode.getSystem().equals("ttp://fhir.nhs.net/Id/sds-role-profile-id"))
+        if (!identifierCode.getSystem().equals(SystemURL.ID_ODS_SITE_CODE) && !identifierCode.getSystem().equals(SystemURL.ID_SDS_ROLE_PROFILE_ID))
         {
          
             throw OperationOutcomeFactory.buildOperationOutcomeException(

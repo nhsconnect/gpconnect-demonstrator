@@ -18,7 +18,6 @@ package uk.gov.hscic.common.config;
 import org.apache.catalina.filters.HttpHeaderSecurityFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
@@ -32,6 +31,7 @@ import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
@@ -60,28 +60,35 @@ public class RestConfig {
     @Value("${server.keystore.name}")
     private String keystoreName;
 
+    @Value("${server.enable-hsts}")
+    private Boolean enableHsts;
+
     public static void main(String[] args) {
         SpringApplication.run(RestConfig.class, args);
     }
     
     
   @Bean
-  public EmbeddedServletContainerFactory servletContainer() {
-      TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {
-          @Override
-          protected void postProcessContext(Context context) {
-              SecurityConstraint securityConstraint = new SecurityConstraint();
-              securityConstraint.setUserConstraint("CONFIDENTIAL");
-              SecurityCollection collection = new SecurityCollection();
-              collection.addPattern("/*");
-              securityConstraint.addCollection(collection);
-              context.addConstraint(securityConstraint);
-          }
-      };
+  public EmbeddedServletContainerFactory servletContainer() {      
+      TomcatEmbeddedServletContainerFactory tomcat;
       
-      if (httpPort != null && httpPort > 0){
-          tomcat.addAdditionalTomcatConnectors(createHttpConnector());   
+      if (enableHsts && httpPort != null && httpPort > 0) {
+          tomcat = new TomcatEmbeddedServletContainerFactory() {
+              @Override
+              protected void postProcessContext(Context context) {
+                  SecurityConstraint securityConstraint = new SecurityConstraint();
+                  securityConstraint.setUserConstraint("CONFIDENTIAL");
+                  SecurityCollection collection = new SecurityCollection();
+                  collection.addPattern("/*");
+                  securityConstraint.addCollection(collection);
+                  context.addConstraint(securityConstraint);
+              }
+          };     
+      } else {
+          tomcat = new TomcatEmbeddedServletContainerFactory();
       }
+      
+      tomcat.addAdditionalTomcatConnectors(createHttpConnector());   
       
       return tomcat;
   }
@@ -92,8 +99,11 @@ public class RestConfig {
     connector.setScheme("http");
     connector.setSecure(false);
     connector.setPort(httpPort);
-    connector.setRedirectPort(httpsPort);
     
+    if (enableHsts){
+        connector.setRedirectPort(httpsPort);
+    }
+
     return connector;
   }
 
@@ -118,16 +128,17 @@ public class RestConfig {
       return filterRegBean;
     }
     
+    @ConditionalOnProperty(value="server.enable-hsts")
     @Bean
-    public FilterRegistrationBean getHttpHeaderSecurityFilterBean() {        
-        HttpHeaderSecurityFilter filter = new HttpHeaderSecurityFilter();
+    public FilterRegistrationBean getHttpHeaderSecurityFilterBean() {
+        final FilterRegistrationBean bean = new FilterRegistrationBean(); 
+        
+        HttpHeaderSecurityFilter filter = new HttpHeaderSecurityFilter();    
 
         filter.setHstsEnabled(true);
         filter.setHstsIncludeSubDomains(true);
-        filter.setHstsMaxAgeSeconds(31536000); 
-        
-        final FilterRegistrationBean bean = new FilterRegistrationBean();   
-        
+        filter.setHstsMaxAgeSeconds(31536000);
+
         bean.setFilter(filter);      
         bean.addUrlPatterns("/*");
         bean.setEnabled(Boolean.TRUE);

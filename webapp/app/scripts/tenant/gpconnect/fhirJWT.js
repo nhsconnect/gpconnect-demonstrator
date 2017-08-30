@@ -45,7 +45,7 @@ angular.module('gpConnect')
                     oPayload.requested_record = {
                         "resourceType": "Patient",
                         "identifier": [{
-                                "system": "http://fhir.nhs.net/Id/nhs-number",
+                                "system": "https://fhir.nhs.uk/Id/nhs-number",
                                 "value": identifier
                             }]
                     };

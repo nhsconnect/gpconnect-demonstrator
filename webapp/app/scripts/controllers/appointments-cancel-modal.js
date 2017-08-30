@@ -4,7 +4,7 @@ angular.module('gpConnect')
         .controller('AppointmentsCancelModalCtrl', function ($state, $stateParams, $scope, $modalInstance, $modal, usSpinnerService, appointment, Appointment) {
 
             $.each(appointment.patient.identifier, function (key, identifier) {
-                if (identifier.system == "http://fhir.nhs.net/Id/nhs-number") { $scope.patientNhsNumber = identifier.value; }
+                if (identifier.system == "https://fhir.nhs.uk/Id/nhs-number") { $scope.patientNhsNumber = identifier.value; }
             });
             
             $scope.appointmentCancel = appointment;

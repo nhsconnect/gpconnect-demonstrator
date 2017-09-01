@@ -116,8 +116,8 @@ public class OrganizationResourceProvider implements IResourceProvider {
             case SystemURL.ID_ODS_ORGANIZATION_CODE:
                 return convertOrganizaitonDetailsListToOrganizationList(organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue()));
 
-            case SystemURL.ID_ODS_SITE_CODE:
-                return convertOrganizaitonDetailsListToOrganizationList(organizationSearch.findOrganizationDetailsBySiteODSCode(tokenParam.getValue()));
+            //case SystemURL.ID_ODS_SITE_CODE:
+                //return convertOrganizaitonDetailsListToOrganizationList(organizationSearch.findOrganizationDetailsBySiteODSCode(tokenParam.getValue()));
 
             default:
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -256,16 +256,15 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
         for (OrganizationDetails organizationDetail : organizationDetails) {
             
-            String mapKey = String.format("%s_%s", organizationDetail.getOrgCode(), organizationDetail.getSiteCode());
+            String mapKey = String.format("%s", organizationDetail.getOrgCode());
             if (map.containsKey(mapKey)) {
                 continue;
             } 
             
             Organization organization = new Organization()
                     .setName(organizationDetail.getOrgName())
-                    .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_ORGANIZATION_CODE, organizationDetail.getOrgCode()))
-                    .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_SITE_CODE, organizationDetail.getSiteCode()));
-
+                    .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_ORGANIZATION_CODE, organizationDetail.getOrgCode()));
+                   
             organization.setId(String.valueOf(organizationDetail.getId()));
 
             organization.getMeta()
@@ -286,26 +285,13 @@ public class OrganizationResourceProvider implements IResourceProvider {
     private Organization addAdditionalProperties(Organization organization){
         
         List<IdentifierDt> identifiers = organization.getIdentifier();
-        String siteCode = getSiteCode(identifiers);
-        
+       
         CodingDt orgTypeCode = new CodingDt();
         orgTypeCode.setCode("dept");
         orgTypeCode.setDisplay("Hospital Department");
         orgTypeCode.setSystem(SystemURL.VS_CC_ORGANISATION_TYPE);
         
-        //Just mixing it up a bit
-        if(siteCode != null){
-            
-            if( siteCode.equals("Z99899")){
-                organization.addContact(getValidContact());
-                organization.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_CC_ORG_PERIOD);
-            }
-            
-            if( siteCode.equals("Z33433")){
-                orgTypeCode.setCode("prov");
-                orgTypeCode.setDisplay("Healthcare Provider");
-            }        
-        }
+     
                     
         organization.addTelecom(getValidTelecom());
         organization.addAddress(getValidAddress());
@@ -319,18 +305,6 @@ public class OrganizationResourceProvider implements IResourceProvider {
         return organization;
     }
     
-    
-    private String getSiteCode(List<IdentifierDt> idetifiers){
-        
-        for (IdentifierDt idetifier : idetifiers) {
-            
-            if(idetifier.getSystem().equals(SystemURL.ID_ODS_SITE_CODE)){
-                return idetifier.getValue();
-            }
-        }
-        
-        return null;
-    }
     
     private ContactPointDt getValidTelecom(){
         

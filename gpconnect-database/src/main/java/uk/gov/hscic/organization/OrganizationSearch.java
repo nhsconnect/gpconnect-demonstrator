@@ -30,27 +30,4 @@ public class OrganizationSearch {
                 .map(transformer::transform)
                 .collect(Collectors.toList());
     }
-
-    public List<OrganizationDetails> findOrganizationDetailsBySiteODSCode(String siteODSCode) {
-        List<OrganizationEntity> organizationEntities = organizationRepository.findBySiteCode(siteODSCode);
-
-        // First, find a list of entries that only have a site code
-        List<OrganizationDetails> orgsWithNoOrgCode = organizationEntities
-                .stream()
-                .filter(entity -> StringUtils.isBlank(entity.getOrgCode()))
-                .map(transformer::transform)
-                .collect(Collectors.toList());
-
-        // Now use the list of known org codes, to get the full list of site codes for each org
-        List<OrganizationDetails> orgsFromOrgCode = organizationEntities
-                .stream()
-                .map(OrganizationEntity::getOrgCode)
-                .filter(orgCode -> StringUtils.isNotBlank(orgCode))
-                .distinct()
-                .map(this::findOrganizationDetailsByOrgODSCode)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-
-        return ListUtils.union(orgsWithNoOrgCode, orgsFromOrgCode);
-    }
 }

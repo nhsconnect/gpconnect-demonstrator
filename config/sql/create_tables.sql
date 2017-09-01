@@ -128,7 +128,6 @@ CREATE TABLE gpconnect.practitioners (
 CREATE TABLE gpconnect.organizations (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   org_code    VARCHAR(30)  NULL,
-  site_code   VARCHAR(30)  NULL,
   org_name    VARCHAR(100) NULL,
   lastUpdated DATETIME     NULL,
   PRIMARY KEY (id)

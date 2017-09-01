@@ -6,7 +6,6 @@ import java.util.Date;
 public class OrganizationDetails implements Serializable {
     private Long id;
     private String orgCode;
-    private String siteCode;
     private String orgName;
     private Date lastUpdated;
 
@@ -24,14 +23,6 @@ public class OrganizationDetails implements Serializable {
 
     public void setOrgCode(String orgCode) {
         this.orgCode = orgCode;
-    }
-
-    public String getSiteCode() {
-        return siteCode;
-    }
-
-    public void setSiteCode(String siteCode) {
-        this.siteCode = siteCode;
     }
 
     public String getOrgName() {

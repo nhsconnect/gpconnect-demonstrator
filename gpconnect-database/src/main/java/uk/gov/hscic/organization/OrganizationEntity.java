@@ -18,10 +18,7 @@ public class OrganizationEntity {
 
     @Column(name = "org_code")
     private String orgCode;
-    
-    @Column(name = "site_code")
-    private String siteCode;
-    
+       
     @Column(name = "org_name")
     private String orgName;
     
@@ -42,14 +39,6 @@ public class OrganizationEntity {
 
     public void setOrgCode(String orgCode) {
         this.orgCode = orgCode;
-    }
-
-    public String getSiteCode() {
-        return siteCode;
-    }
-
-    public void setSiteCode(String siteCode) {
-        this.siteCode = siteCode;
     }
 
     public String getOrgName() {

@@ -91,7 +91,7 @@ public class GetScheduleOperation {
 		}
 
 		if (organizationSiteOdsCode != null) {
-			List<Location> locations = locationResourceProvider.getByIdentifierCode(new TokenParam(SystemURL.ID_ODS_SITE_CODE, organizationSiteOdsCode));
+			List<Location> locations = locationResourceProvider.getByIdentifierCode(new TokenParam(SystemURL.ID_ODS_SITE_CODE, organizationSiteOdsCode), null, null);
                         
 			Entry locationEntry = new Entry();
 			locationEntry.setResource(locations.get(0));

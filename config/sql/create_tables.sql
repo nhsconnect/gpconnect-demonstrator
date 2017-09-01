@@ -348,6 +348,7 @@ CREATE TABLE gpconnect.locations (
   org_ods_code_name  VARCHAR(250) NOT NULL,
   site_ods_code      VARCHAR(250) NOT NULL,
   site_ods_code_name VARCHAR(250) NOT NULL,
+  status             VARCHAR(100) NULL,
   lastUpdated        DATETIME     NULL,
   PRIMARY KEY (id)
 );

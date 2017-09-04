@@ -108,6 +108,21 @@ public class LocationResourceProvider implements IResourceProvider {
         //Update startIndex if we do paging
         return count != null ? results.subList(0, count) : results;
     }
+    
+    public List<Location> getByIdentifierOrgCode(String odsOrgCode) {
+        
+       
+        List<LocationDetails> locationDetails = locationSearch.findLocationDetailsByOrgOdsCode(odsOrgCode);
+
+        if (locationDetails.isEmpty()) {
+           
+            return null;
+        }
+        
+        List<Location> results = locationDetails.stream().map(loc -> locationDetailsToLocation(loc)).collect(Collectors.toList());
+        
+        return results;
+    }
 
     @Read(version = true)
     public Location getLocationById(@IdParam IdDt locationId) {

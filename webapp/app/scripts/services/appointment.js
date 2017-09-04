@@ -26,29 +26,41 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
     var getScheduleOperation = function (organizationOdsCode, startDateTime, endDateTime, patientId) {
         // Lookup Endpoint Organization localId "organizationId"
         return Organization.searchForOrganisation(organizationOdsCode, patientId, organizationOdsCode).then(function(organizationLookupResponse) {
-            if (organizationLookupResponse.data.entry != undefined) {
-                var organizationId = organizationLookupResponse.data.entry[0].resource.id;
+            
+            if(!organizationLookupResponse || !organizationLookupResponse.data || !organizationLookupResponse.data.entry){
+            var errMssg = "Unknown Error connecting to resource.";
                 
-                return FhirEndpointLookup.getEndpoint(organizationOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule").then(function(response) {
-                    var endpointLookupResult = response;
-                    
-                    return $http.post(
-                            endpointLookupResult.restUrlPrefix + '/Organization/' + organizationId + '/$gpc.getschedule',
-                            '{ "resourceType" : "Parameters", "parameter" : [ { "name" : "timePeriod", "valuePeriod" : { "start" : "' + startDateTime + '", "end" : "' + endDateTime + '" } } ] }',
-                            {
-                                headers: {
-                                    'Ssp-From': endpointLookupResult.fromASID,
-                                    'Ssp-To': endpointLookupResult.toASID,
-                                    'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule",
-                                    'Ssp-TraceID': fhirJWTFactory.guid(),
-                                    'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", organizationOdsCode),
-                                    'Accept': "application/json+fhir",
-                                    'Content-Type': "application/json+fhir"
-                                }
-                            }
-                    );
-                });
+                if(organizationLookupResponse && organizationLookupResponse.headers){
+                    var status = organizationLookupResponse.headers.status;
+                    if(status === 0){
+                        errMssg = "There was a problem trying to connect to: " + organizationLookupResponse.url;
+                    }
+                }
+                throw errMssg;
             }
+
+            var organizationId = organizationLookupResponse.data.entry[0].resource.id;
+            
+            return FhirEndpointLookup.getEndpoint(organizationOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule").then(function(response) {
+                var endpointLookupResult = response;
+                
+                return $http.post(
+                        endpointLookupResult.restUrlPrefix + '/Organization/' + organizationId + '/$gpc.getschedule',
+                        '{ "resourceType" : "Parameters", "parameter" : [ { "name" : "timePeriod", "valuePeriod" : { "start" : "' + startDateTime + '", "end" : "' + endDateTime + '" } } ] }',
+                        {
+                            headers: {
+                                'Ssp-From': endpointLookupResult.fromASID,
+                                'Ssp-To': endpointLookupResult.toASID,
+                                'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule",
+                                'Ssp-TraceID': fhirJWTFactory.guid(),
+                                'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", organizationOdsCode),
+                                'Accept': "application/json+fhir",
+                                'Content-Type': "application/json+fhir"
+                            }
+                        }
+                );
+            });
+            
         });
     };
 
@@ -126,7 +138,7 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
                             'Ssp-To': endpointLookupResult.toASID,
-                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:appointment",
+                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:update:appointment",
                             'Prefer': "return=representation",
                             'Ssp-TraceID': fhirJWTFactory.guid(),
                             'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "write", patientNHSNumber),

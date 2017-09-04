@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .factory('fhirJWTFactory', function (ProviderRouting) {
+        .factory('fhirJWTFactory', ['ProviderRouting', 'gpcResource', function (ProviderRouting, gpcResource) {
 
             var getJWT = function (scope, operation, identifier) {
 
@@ -45,7 +45,7 @@ angular.module('gpConnect')
                     oPayload.requested_record = {
                         "resourceType": "Patient",
                         "identifier": [{
-                                "system": "https://fhir.nhs.uk/Id/nhs-number",
+                                "system": gpcResource.getConst("ID_NHS_NUMBER"),
                                 "value": identifier
                             }]
                     };
@@ -54,7 +54,7 @@ angular.module('gpConnect')
                     oPayload.requested_record = {
                         "resourceType": "Organization",
                         "identifier": [{
-                                "system": "http://fhir.nhs.net/Id/ods-organization-code",
+                                "system": gpcResource.getConst("ID_ODS_ORGANIZATION_CODE"),
                                 "value": identifier
                             }]
                     };
@@ -83,7 +83,7 @@ angular.module('gpConnect')
                         "resourceType": "Organization",
                         "id": "1",
                         "identifier": [{
-                                "system": "http://fhir.nhs.net/Id/ods-organization-code",
+                                "system": gpcResource.getConst("ID_ODS_ORGANIZATION_CODE"),
                                 "value": "[ODSCode]"
                             }],
                         "name": "GP Connect Demonstrator"
@@ -101,7 +101,7 @@ angular.module('gpConnect')
                                 "role": {
                                     "coding": [
                                         {
-                                            "system": "http://fhir.nhs.net/ValueSet/sds-job-role-name-1",
+                                            "system": gpcResource.getConst("VS_SDS_JOB_ROLE_NAME"),
                                             "code": "AssuranceJobRole"
                                         }
                                     ]
@@ -110,7 +110,7 @@ angular.module('gpConnect')
                         ],
                         "identifier": [
                             {
-                                "system": "http://fhir.nhs.net/sds-user-id",
+                                "system": gpcResource.getConst("ID_SDS_USER_ID"),
                                 "value": "G13579135"
                             },
                             {
@@ -147,5 +147,5 @@ angular.module('gpConnect')
                 getJWT: getJWT,
                 guid: guid
             };
-        });
+        }]);
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .factory('Organization', function ($rootScope, $http, FhirEndpointLookup, fhirJWTFactory) {
+        .factory('Organization', ['$rootScope', '$http', 'FhirEndpointLookup', 'fhirJWTFactory', 'gpcResource', function ($rootScope, $http, FhirEndpointLookup, fhirJWTFactory, gpcResource) {
 
             var findOrganisation = function (patientId, orgId) {
                 return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:read:organization").then(function (response) {
@@ -23,7 +23,7 @@ angular.module('gpConnect')
             var searchForOrganisation = function (practiceOdsCode, patientId, searchOrgOdsCode) {
                 return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:organization").then(function (response) {
                     var endpointLookupResult = response;
-                    return $http.get(endpointLookupResult.restUrlPrefix + '/Organization?identifier=http://fhir.nhs.net/Id/ods-organization-code%7C' + searchOrgOdsCode,
+                    return $http.get(endpointLookupResult.restUrlPrefix + '/Organization?identifier='+gpcResource.getConst("ID_ODS_ORGANIZATION_CODE")+'%7C' + searchOrgOdsCode,
                             {
                                 headers: {
                                     'Ssp-From': endpointLookupResult.fromASID,
@@ -42,4 +42,4 @@ angular.module('gpConnect')
                 searchForOrganisation: searchForOrganisation
             };
 
-        });
+        }]);

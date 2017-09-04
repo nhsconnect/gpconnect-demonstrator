@@ -81,17 +81,17 @@ public class GetScheduleOperation {
 		bundle.addEntry(organisationEntry);
 
 		// location
-		String organizationSiteOdsCode = null;
+		String organizationOrgOdsCode = null;
 
 		for (IdentifierDt identifier : organization.getIdentifier()) {
-			if (SystemURL.ID_ODS_SITE_CODE.equalsIgnoreCase(identifier.getSystem())) {
-				organizationSiteOdsCode = identifier.getValue();
+			if (SystemURL.ID_ODS_ORGANIZATION_CODE.equalsIgnoreCase(identifier.getSystem())) {
+				organizationOrgOdsCode = identifier.getValue();
 				break;
 			}
 		}
 
-		if (organizationSiteOdsCode != null) {
-			List<Location> locations = locationResourceProvider.getByIdentifierCode(new TokenParam(SystemURL.ID_ODS_SITE_CODE, organizationSiteOdsCode));
+		if (organizationOrgOdsCode != null) {
+			List<Location> locations = locationResourceProvider.getByIdentifierOrgCode(organizationOrgOdsCode);
                         
 			Entry locationEntry = new Entry();
 			locationEntry.setResource(locations.get(0));

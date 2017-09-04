@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('gpConnect').factory('PatientService', function ($rootScope, $http, FhirEndpointLookup, $cacheFactory, fhirJWTFactory, ProviderRouting) {
+angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'FhirEndpointLookup', '$cacheFactory', 'fhirJWTFactory', 'ProviderRouting', 'gpcResource', function ($rootScope, $http, FhirEndpointLookup, $cacheFactory, fhirJWTFactory, ProviderRouting, gpcResource) {
     var findAllSummaries = function() {
         return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/patients');
     };
@@ -11,7 +11,7 @@ angular.module('gpConnect').factory('PatientService', function ($rootScope, $htt
 
             return $http.post(
                     endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getcarerecord',
-                    '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "http://fhir.nhs.net/Id/nhs-number", "value" : "' + patientId + '" }},{"name" : "recordSection","valueCodeableConcept" :{"coding" : [{"system":"http://fhir.nhs.net/ValueSet/gpconnect-record-section-1","code":"SUM","display":"Summary"}]}},{"name" : "timePeriod","valuePeriod" : { "start" : null, "end" : null }}]}',
+                    '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "'+gpcResource.getConst("ID_NHS_NUMBER")+'", "value" : "' + patientId + '" }},{"name" : "recordSection","valueCodeableConcept" :{"coding" : [{"system":"'+gpcResource.getConst("VS_GPC_RECORD_SECTION")+'","code":"SUM","display":"Summary"}]}},{"name" : "timePeriod","valuePeriod" : { "start" : null, "end" : null }}]}',
                     {
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
@@ -34,7 +34,7 @@ angular.module('gpConnect').factory('PatientService', function ($rootScope, $htt
             var endpointLookupResult = endpointResponse;
 
             var partientLookupResponse = $http.get(
-                    endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number%7C' + patientId,
+                    endpointLookupResult.restUrlPrefix + '/Patient?identifier='+gpcResource.getConst("ID_NHS_NUMBER")+'%7C' + patientId,
                     {
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
@@ -64,7 +64,7 @@ angular.module('gpConnect').factory('PatientService', function ($rootScope, $htt
         return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function(response) {
             var endpointLookupResult = response;
             var response = $http.get(
-                    endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number%7C' + patientId,
+                    endpointLookupResult.restUrlPrefix + '/Patient?identifier='+gpcResource.getConst("ID_NHS_NUMBER")+'%7C' + patientId,
                     {
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
@@ -115,4 +115,4 @@ angular.module('gpConnect').factory('PatientService', function ($rootScope, $htt
         getFhirPatient: getFhirPatient,
         registerPatient: registerPatient
     };
-});
+}]);

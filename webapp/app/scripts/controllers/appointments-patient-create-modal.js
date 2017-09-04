@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('AppointmentsPatientCreateModalCtrl', function ($stateParams, $scope, $modal, $modalInstance, patient, appointmentBookingParameters, PatientService, usSpinnerService, DateFormatter) {
+        .controller('AppointmentsPatientCreateModalCtrl', ['$stateParams', '$scope', '$modal', '$modalInstance', 'patient', 'appointmentBookingParameters', 'PatientService', 'usSpinnerService', 'DateFormatter', 'gpcResource', function ($stateParams, $scope, $modal, $modalInstance, patient, appointmentBookingParameters, PatientService, usSpinnerService, DateFormatter, gpcResource) {
 
             $scope.patientDetails = patient;
             $scope.appointmentBooking = appointmentBookingParameters;
@@ -16,16 +16,16 @@ angular.module('gpConnect')
                 newPatient.resourceType = "Patient";
                 newPatient.extension = [
                     {
-                        "url": "http://fhir.nhs.net/StructureDefinition/extension-registration-period-1",
+                        "url": gpcResource.getConst("SD_EXT_REG_PERIOD"),
                         "valuePeriod": {"start": DateFormatter.clean(new Date())}
                     },
                     {
-                        "url": "http://fhir.nhs.net/StructureDefinition/extension-registration-status-1",
-                        "valueCodeableConcept": {"coding": [{"system": "http://fhir.nhs.net/ValueSet/registration-status-1", "code": "A", "display": "Active"}]}
+                        "url": gpcResource.getConst("SD_EXT_REG_STATUS"),
+                        "valueCodeableConcept": {"coding": [{"system": gpcResource.getConst("VS_REG_STATUS"), "code": "A", "display": "Active"}]}
                     },
                     {
-                        "url": "http://fhir.nhs.net/StructureDefinition/extension-registration-type-1",
-                        "valueCodeableConcept": {"coding": [{"system": "http://fhir.nhs.net/ValueSet/registration-type-1", "code": "T", "display": "Temporary Resident"}]}
+                        "url": gpcResource.getConst("SD_EXT_REG_TYPE"),
+                        "valueCodeableConcept": {"coding": [{"system": gpcResource.getConst("VS_REG_TYPE"), "code": "T", "display": "Temporary Resident"}]}
                     }
                 ];
                 newPatient.identifier = $scope.patientDetails.identifier;
@@ -76,4 +76,4 @@ angular.module('gpConnect')
                 $modalInstance.dismiss('cancel');
             };
 
-        });
+        }]);

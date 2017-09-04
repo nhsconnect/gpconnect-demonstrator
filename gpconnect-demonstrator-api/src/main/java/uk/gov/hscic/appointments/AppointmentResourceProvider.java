@@ -376,7 +376,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             if (cancelComparisonResult) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnclassifiedServerFailureException(403, "Invalid Appointment property has been amended"),
+                        new UnclassifiedServerFailureException(403, "Invalid Appointment property has been amended (cancellation)"),
                         SystemCode.BAD_REQUEST, IssueTypeEnum.FORBIDDEN);
             }
 
@@ -453,7 +453,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-        results.add(Objects.equals(oldAppointmentDetail.getComment(), appointmentDetail.getComment()));
+        //results.add(Objects.equals(oldAppointmentDetail.getComment(), appointmentDetail.getComment()));
         results.add(
                 Objects.equals(oldAppointmentDetail.getExtensionBookURL(), appointmentDetail.getExtensionBookURL()));
         results.add(

@@ -10,6 +10,7 @@ public class LocationDetails implements Serializable {
     private String orgOdsCodeName;
     private String siteOdsCode;
     private String siteOdsCodeName;
+    private String status;
     private Date lastUpdated;
 
     public Long getId() {
@@ -66,5 +67,13 @@ public class LocationDetails implements Serializable {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+    
+    public void setStatus(String status){
+        this.status = status;
+    }
+    
+    public String getStatus(){
+        return status;
     }
 }

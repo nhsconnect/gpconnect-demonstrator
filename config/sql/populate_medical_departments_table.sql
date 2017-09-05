@@ -14,4 +14,5 @@ VALUES
   (2,'R1A14','Test GP Care Trust','2016-07-25 12:00:00'),
   (3,'R1A17','Test GP Second Care Trust','2016-07-25 12:00:00'),
   (4,'R1A14','The Hockey Surgery','2016-07-25 12:00:00'),
-  (5,'R1A15','Test GP Care Trust Site B','2016-07-25 12:00:00');
+  (5,'R1A15','Test GP Care Trust Site B','2016-07-25 12:00:00'),
+  (6,'R3B46','New GP Practice','2016-07-25 12:00:00');

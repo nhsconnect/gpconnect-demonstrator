@@ -73,7 +73,7 @@ public class LocationResourceProvider implements IResourceProvider {
         }
         
         List<LocationDetails> locationDetails = SystemURL.ID_LOCAL_LOCATION_IDENTIFIER.equalsIgnoreCase(identifierCode.getSystem())
-                ? locationSearch.findLocationDetailsByOrgOdsCode(identifierCode.getValue())
+                ? new ArrayList<>()
                 : locationSearch.findLocationDetailsBySiteOdsCode(identifierCode.getValue());
 
         if (locationDetails.isEmpty()) {

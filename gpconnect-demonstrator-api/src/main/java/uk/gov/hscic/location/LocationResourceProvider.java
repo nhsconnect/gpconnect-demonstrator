@@ -191,7 +191,7 @@ public class LocationResourceProvider implements IResourceProvider {
     
     private Organization FindOrganization(String orgCode){
         
-        List<Organization> orgz = organizationSearch.getOrganizationsByODSCode(new TokenParam(SystemURL.ID_ODS_ORGANIZATION_CODE, orgCode));
+        List<Organization> orgz = organizationSearch.getOrganizationsByODSCode(new TokenParam(SystemURL.ID_ODS_ORGANIZATION_CODE, orgCode), null, null);
         
         if(!orgz.isEmpty()){
             return orgz.get(0);

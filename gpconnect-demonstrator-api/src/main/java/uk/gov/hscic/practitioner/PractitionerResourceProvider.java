@@ -5,18 +5,27 @@ import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.Practitioner;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
+import ca.uhn.fhir.model.primitive.BoundCodeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.Sort;
+import ca.uhn.fhir.rest.api.SortOrderEnum;
+import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -26,6 +35,7 @@ import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.common.validators.IdentifierValidator;
+import uk.gov.hscic.model.location.LocationDetails;
 import uk.gov.hscic.model.practitioner.PractitionerDetails;
 
 @Component
@@ -57,9 +67,39 @@ public class PractitionerResourceProvider implements IResourceProvider {
 
     @Search
     public List<Practitioner> getPractitionerByPractitionerUserId(
-            @RequiredParam(name = Practitioner.SP_IDENTIFIER) TokenParam practitionerId) {
-        return practitionerSearch.findPractitionerByUserId(practitionerId.getValue()).stream()
+            @RequiredParam(name = Practitioner.SP_IDENTIFIER) TokenParam practitionerId, 
+            @Sort SortSpec sort,
+            @Count Integer count) {
+        
+    
+        
+        List<Practitioner> practitioners =  practitionerSearch.findPractitionerByUserId(practitionerId.getValue()).stream()
                 .map(this::practitionerDetailsToPractitionerResourceConverter).collect(Collectors.toList());
+        
+        if(sort != null && sort.getParamName().equalsIgnoreCase(Location.SP_STATUS)){
+            Collections.sort(practitioners, (Practitioner a, Practitioner b) -> {
+                
+                String aStatus = a.getGender();
+                String bStatus = b.getGender();
+                
+                if(aStatus == null && bStatus == null){
+                    return 0;
+                }
+                
+                if(aStatus == null && bStatus != null){
+                    return -1;
+                }
+                
+                if(aStatus != null && bStatus == null){
+                    return 1;
+                }
+                
+                return aStatus.compareToIgnoreCase(bStatus);
+            });
+        }
+
+        //Update startIndex if we do paging
+        return count != null ? practitioners.subList(0, count) : practitioners;
     }
 
     private Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails) {
@@ -71,7 +111,7 @@ public class PractitionerResourceProvider implements IResourceProvider {
                 .forEach(practitioner::addIdentifier);
 
         practitioner.setId(new IdDt(practitionerDetails.getId()));
-
+       
         practitioner.getMeta().setLastUpdated(practitionerDetails.getLastUpdated())
                 .setVersionId(String.valueOf(practitionerDetails.getLastUpdated().getTime()))
                 .addProfile(SystemURL.SD_GPC_PRACTITIONER);

@@ -8,6 +8,7 @@ import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
+import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Organization;
 import ca.uhn.fhir.model.dstu2.resource.Organization.Contact;
@@ -22,12 +23,15 @@ import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.Sort;
+import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
@@ -52,6 +56,7 @@ import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.common.validators.IdentifierValidator;
+import uk.gov.hscic.model.location.LocationDetails;
 import uk.gov.hscic.model.organization.OrganizationDetails;
 
 @Component
@@ -105,7 +110,11 @@ public class OrganizationResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public List<Organization> getOrganizationsByODSCode(@RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam tokenParam) {
+    public List<Organization> getOrganizationsByODSCode(@RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam tokenParam,
+            @Sort SortSpec sort,
+            @Count Integer count) {
+        
+        
         if (StringUtils.isBlank(tokenParam.getSystem()) || StringUtils.isBlank(tokenParam.getValue())) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Missing identifier token"),
@@ -114,11 +123,36 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
         switch (tokenParam.getSystem()) {
             case SystemURL.ID_ODS_ORGANIZATION_CODE:
-                return convertOrganizaitonDetailsListToOrganizationList(organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue()));
+                List<Organization> organizationDetails = convertOrganizaitonDetailsListToOrganizationList(organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue()));
+                if (organizationDetails.isEmpty()) {
+                    
+                    return null;
+                }
+                if(sort != null && sort.getParamName().equalsIgnoreCase(Location.SP_STATUS)){
+                    Collections.sort(organizationDetails, (Organization a, Organization b) -> {
+                        
+                        String aStatus = a.getName();
+                        String bStatus = b.getName();
+                        
+                        if(aStatus == null && bStatus == null){
+                            return 0;
+                        }
+                        
+                        if(aStatus == null && bStatus != null){
+                            return -1;
+                        }
+                        
+                        if(aStatus != null && bStatus == null){
+                            return 1;
+                        }
+                        
+                        return aStatus.compareToIgnoreCase(bStatus);
+                    });
+                }
 
-            //case SystemURL.ID_ODS_SITE_CODE:
-                //return convertOrganizaitonDetailsListToOrganizationList(organizationSearch.findOrganizationDetailsBySiteODSCode(tokenParam.getValue()));
-
+                //Update startIndex if we do paging
+                return count != null ? organizationDetails.subList(0, count) : organizationDetails;
+                 
             default:
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("Invalid system code"),

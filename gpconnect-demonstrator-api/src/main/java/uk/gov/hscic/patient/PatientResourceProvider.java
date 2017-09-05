@@ -927,8 +927,15 @@ public class PatientResourceProvider implements IResourceProvider {
         
         String maritalStatus = patientDetails.getMaritalStatus();
         if (maritalStatus != null) {
-            BoundCodeableConceptDt<MaritalStatusCodesEnum> marital = new BoundCodeableConceptDt();
+            BoundCodeableConceptDt<MaritalStatusCodesEnum> marital = new BoundCodeableConceptDt<>();
+            CodingDt maritalCoding = new CodingDt();
+            maritalCoding.setSystem("http://hl7.org/fhir/v3/MaritalStatus");
+            maritalCoding.setCode(patientDetails.getMaritalStatus());
+            maritalCoding.setDisplay("Married");
+            marital.addCoding(maritalCoding);
+            
             marital.setText(patientDetails.getMaritalStatus());
+          
             patient.setMaritalStatus(marital);
         }
         

@@ -84,8 +84,9 @@ public class WebTokenFactory {
         }
 
         try {
-            String claimsJsonString = new String(Base64.getDecoder().decode(authorizationHeaderComponents[1].split("\\.")[1]));
+            String claimsJsonString = new String(Base64.getUrlDecoder().decode(authorizationHeaderComponents[1].split("\\.")[1]));
             webToken = new ObjectMapper().readValue(claimsJsonString, WebToken.class);
+            
             jwtParseResourcesValidation(claimsJsonString);
         } catch (IllegalArgumentException iae) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(

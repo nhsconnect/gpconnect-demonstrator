@@ -84,7 +84,14 @@ public class WebTokenFactory {
         }
 
         try {
-            String claimsJsonString = new String(Base64.getUrlDecoder().decode(authorizationHeaderComponents[1].split("\\.")[1]));
+            if(authorizationHeaderComponents[1].contains("==") || authorizationHeaderComponents[1].contains("/") || authorizationHeaderComponents[1].contains("+"))
+            {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("JWT must be encoded using Base64URL. Padding is not allowed"),
+                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT); 
+            }
+
+            String claimsJsonString = new String(Base64.getDecoder().decode(authorizationHeaderComponents[1].split("\\.")[1]));
             webToken = new ObjectMapper().readValue(claimsJsonString, WebToken.class);
             
             jwtParseResourcesValidation(claimsJsonString);

@@ -934,7 +934,6 @@ public class PatientResourceProvider implements IResourceProvider {
             maritalCoding.setDisplay("Married");
             marital.addCoding(maritalCoding);
             
-            marital.setText(patientDetails.getMaritalStatus());
           
             patient.setMaritalStatus(marital);
         }

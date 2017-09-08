@@ -18,4 +18,10 @@ public class PatientStore {
 
 		patientRepository.saveAndFlush(patientEntity);
 	}
+        
+        public void update(PatientDetails patientDetails) {
+		PatientEntity patientEntity = transformer.transform(patientDetails);
+
+		patientRepository.saveAndFlush(patientEntity);
+	}
 }

@@ -28,9 +28,11 @@ import ca.uhn.fhir.model.dstu2.valueset.CompositionStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ContactPointSystemEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ContactPointUseEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+import ca.uhn.fhir.model.dstu2.valueset.LocationStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.MaritalStatusCodesEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.primitive.BooleanDt;
+import ca.uhn.fhir.model.primitive.CodeDt;
 import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -51,6 +53,7 @@ import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -68,6 +71,7 @@ import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.validators.IdentifierValidator;
+import uk.gov.hscic.common.validators.ValueSetValidator;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
@@ -119,6 +123,9 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PageSectionFactory pageSectionFactory;
+    
+    @Autowired
+    private ValueSetValidator valueSetValidator;
 
     private NhsNumber nhsNumber;
 
@@ -535,8 +542,15 @@ public class PatientResourceProvider implements IResourceProvider {
            
             PatientDetails patientDetails = patientSearch.findPatient(nhsNumber.fromPatientResource(unregisteredPatient));
 
-            if (patientDetails == null) {
-                patientStore.create(registerPatientResourceConverterToPatientDetail(unregisteredPatient));
+            if (patientDetails == null || IsInactiveTemporaryPatient(patientDetails)) {
+                
+                if(patientDetails == null){
+                    patientDetails = registerPatientResourceConverterToPatientDetail(unregisteredPatient);
+                    patientStore.create(patientDetails);
+                }else{
+                    patientDetails.setRegistrationStatus("A");
+                    patientStore.update(patientDetails);
+                }
                 registeredPatient = patientDetailsToRegisterPatientResourceConverter(
                         patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
             } else {
@@ -554,6 +568,14 @@ public class PatientResourceProvider implements IResourceProvider {
         bundle.addEntry().setResource(registeredPatient);
         return bundle;
     }
+    
+    public Boolean IsInactiveTemporaryPatient(PatientDetails patientDetails){
+        
+        return patientDetails.getRegistrationType() != null && 
+                "T".equals(patientDetails.getRegistrationType()) &&
+                patientDetails.getRegistrationStatus() != null && 
+                "I".equals(patientDetails.getRegistrationStatus());
+    }
 
     public String getNhsNumber(Object source) {
         return nhsNumber.getNhsNumber(source);
@@ -561,18 +583,29 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private void validatePatient(Patient patient) {
         validateIdentifiers(patient);
-        validateRegistrationPeriod(patient);
-        validateRegistrationStatusAndType(patient);
+        validateRegistrationDetails(patient);
         validateConstrainedOutProperties(patient);
         valiateNames(patient);
         validateDateOfBirth(patient);
-        valiateGender(patient);
-      
+        valiateGender(patient);      
+    }
+    
+    private void validateRegistrationDetails(Patient patient){
+        
+        List<ExtensionDt> registrationPeriodExtensions = patient
+                .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
+        
+        if(registrationPeriodExtensions.size() > 0) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("An extension of type registrationDetails is invalid for a registration request."),
+                                                SystemCode.BAD_REQUEST,
+                                                IssueTypeEnum.INVALID_CONTENT); 
+        }
     }
 
     private void validateRegistrationPeriod(Patient patient) {
         List<ExtensionDt> registrationPeriodExtensions = patient
-                .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_REGISTRATION_PERIOD);
+                .getUndeclaredExtensionsByUrl(SystemURL.SD_CC_EXT_REGISTRATION_PERIOD);
         
         if(registrationPeriodExtensions.size() == 1) {
             // we need a non null period
@@ -610,11 +643,24 @@ public class PatientResourceProvider implements IResourceProvider {
     private void valiateGender(Patient patient) {
         String gender = patient.getGender();
         
-        if(gender == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("A Patient's gender must be supplied"),
-                                                SystemCode.BAD_REQUEST,
-                                                IssueTypeEnum.INVALID_CONTENT); 
+        if(gender != null) {
+
+            EnumSet<AdministrativeGenderEnum> genderList = EnumSet.allOf(AdministrativeGenderEnum.class);
+            Boolean valid = false;
+            for(AdministrativeGenderEnum genderItem : genderList){
+
+                if(genderItem.getCode().equalsIgnoreCase(gender)){
+                    valid = true;
+                    break;
+                }
+            }
+
+            if(!valid) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException(String.format("The supplied Patient's gender %s is invalid", gender)),
+                                                    SystemCode.BAD_REQUEST,
+                                                    IssueTypeEnum.INVALID_CONTENT); 
+            }
         }
     }
 
@@ -675,18 +721,21 @@ public class PatientResourceProvider implements IResourceProvider {
 
         Set<String> invalidFields = new HashSet<String>();
 
-        if (patient.getActive() != null) invalidFields.add("active");
-        if (patient.getTelecom().isEmpty() == false) invalidFields.add("telecom");
-        if (patient.getDeceased() != null && patient.getDeceased().isEmpty() == false) invalidFields.add("deceased");
-        if (patient.getAddress().isEmpty() == false) invalidFields.add("address");
-        if (patient.getMaritalStatus().isEmpty() == false) invalidFields.add("marital status");
-        if (patient.getMultipleBirth() != null && patient.getMultipleBirth().isEmpty() == false) invalidFields.add("multiple birth");
+        //if (patient.getActive() != null) invalidFields.add("active");
+        //if (patient.getTelecom().isEmpty() == false) invalidFields.add("telecom");
+        //if (patient.getDeceased() != null && patient.getDeceased().isEmpty() == false) invalidFields.add("deceased");
+        //if (patient.getAddress().isEmpty() == false) invalidFields.add("address");
+        //if (patient.getMaritalStatus().isEmpty() == false) invalidFields.add("marital status");
+        //if (patient.getMultipleBirth() != null && patient.getMultipleBirth().isEmpty() == false) invalidFields.add("multiple birth");
+        //if (patient.getCareProvider().isEmpty() == false) invalidFields.add("care provider");
+        //if (patient.getManagingOrganization().isEmpty() == false) invalidFields.add("managing organisation");
+        //if (patient.getContact().isEmpty() == false) invalidFields.add("contact");
+        
+        // ## The above can exist in the patient resource but can be ignored. If they are saved by the provider then they should be returned in the response!
+        
         if (patient.getPhoto().isEmpty() == false) invalidFields.add("photo");
-        if (patient.getContact().isEmpty() == false) invalidFields.add("contact");
         if (patient.getAnimal().isEmpty() == false) invalidFields.add("animal");
         if (patient.getCommunication().isEmpty() == false) invalidFields.add("communication");
-        if (patient.getCareProvider().isEmpty() == false) invalidFields.add("care provider");
-        if (patient.getManagingOrganization().isEmpty() == false) invalidFields.add("managing organisation");
         if (patient.getLink().isEmpty() == false) invalidFields.add("link");
 
         if(invalidFields.isEmpty() == false) {
@@ -699,11 +748,28 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private void valiateNames(Patient patient) {
         List<HumanNameDt> names = patient.getName();
-        validateNameCount(names, "name");
+        
+        if(names.size() < 1){
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("The patient must have at least one Name."),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
+        
+        Integer usualNameCount = 0;
+        for(HumanNameDt name : names){
+            if(NameUseEnum.USUAL.getCode().equals(name.getUse())){
+                usualNameCount++;
+            } 
+        }
+        
+        if(!usualNameCount.equals(1)){
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("The patient must have one Name with a Use of USUAL"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
 
         HumanNameDt name = names.iterator().next();
         validateNameCount(name.getFamily(), "family");
-        validateNameCount(name.getGiven(), "given");
     }
 
     private void validateNameCount(List<?> names, String nameType) {
@@ -725,32 +791,32 @@ public class PatientResourceProvider implements IResourceProvider {
         patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
 
         BooleanDt multipleBirth = (BooleanDt) patientResource.getMultipleBirth();
-		if (multipleBirth != null) {
-			try {
-				patientDetails.setMultipleBirth(multipleBirth.getValue());
-			} catch (ClassCastException cce) {
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
-						SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
-			}
-		}
+        if (multipleBirth != null) {
+                try {
+                        patientDetails.setMultipleBirth(multipleBirth.getValue());
+                } catch (ClassCastException cce) {
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                        new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
+                                        SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
+                }
+        }
 
-		DateTimeDt deceased = (DateTimeDt) patientResource.getDeceased();
-		if(deceased != null) {
-			try {
-	        	patientDetails.setDeceased(deceased.getValue());
-	        }
-	        catch(ClassCastException cce) {
-	            throw OperationOutcomeFactory.buildOperationOutcomeException(
-	                    new UnprocessableEntityException("The multiple deceased property is expected to be a datetime"),
-	                    SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
-	        }
-		}
+        DateTimeDt deceased = (DateTimeDt) patientResource.getDeceased();
+        if(deceased != null) {
+            try {
+                patientDetails.setDeceased(deceased.getValue());
+            }
+            catch(ClassCastException cce) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("The multiple deceased property is expected to be a datetime"),
+                        SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
+            }
+        }
 
-        patientDetails.setRegistrationStartDateTime(getRegistrationStartDate(patientResource));
-        patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
-        patientDetails.setRegistrationStatus(getRegistrationStatus(patientResource));
-        patientDetails.setRegistrationType(getRegistrationType(patientResource));
+        patientDetails.setRegistrationStartDateTime(new Date());
+        //patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
+        patientDetails.setRegistrationStatus("A");
+        patientDetails.setRegistrationType("T");
 
         return patientDetails;
     }
@@ -758,7 +824,7 @@ public class PatientResourceProvider implements IResourceProvider {
     private Date getRegistrationEndDate(Patient patient) {
         Date endDate = null;
         
-        PeriodDt registrationPeriod = getFirstExtensionCode(SystemURL.SD_EXTENSION_REGISTRATION_PERIOD, patient);
+        PeriodDt registrationPeriod = getFirstExtensionCode(SystemURL.SD_CC_EXT_REGISTRATION_PERIOD, patient);
        
         if(registrationPeriod != null) {
             endDate = registrationPeriod.getEnd();
@@ -770,7 +836,7 @@ public class PatientResourceProvider implements IResourceProvider {
     private Date getRegistrationStartDate(Patient patient) {
         Date startDate = null;
         
-        PeriodDt registrationPeriod = getFirstExtensionCode(SystemURL.SD_EXTENSION_REGISTRATION_PERIOD, patient);
+        PeriodDt registrationPeriod = getFirstExtensionCode(SystemURL.SD_CC_EXT_REGISTRATION_PERIOD, patient);
        
         if(registrationPeriod != null) {
             startDate = registrationPeriod.getStart();
@@ -782,7 +848,7 @@ public class PatientResourceProvider implements IResourceProvider {
     private String getRegistrationType(Patient patient) {
         String registrationType = null;
         
-        CodeableConceptDt typeCode =  getFirstExtensionCode(SystemURL.SD_EXTENSION_REGISTRATION_TYPE, patient);
+        CodeableConceptDt typeCode =  getFirstExtensionCode(SystemURL.SD_CC_EXT_REGISTRATION_TYPE, patient);
         
         if(typeCode != null) {
             registrationType = typeCode.getCodingFirstRep().getCode();
@@ -794,7 +860,7 @@ public class PatientResourceProvider implements IResourceProvider {
     private String getRegistrationStatus(Patient patient) {
         String registrationStatus = null;
         
-        CodeableConceptDt statusCode = getFirstExtensionCode(SystemURL.SD_EXTENSION_REGISTRATION_STATUS, patient);
+        CodeableConceptDt statusCode = getFirstExtensionCode(SystemURL.SD_CC_EXT_REGISTRATION_STATUS, patient);
         if(statusCode != null) {
            registrationStatus = statusCode.getCodingFirstRep().getCode();
         }
@@ -866,24 +932,62 @@ public class PatientResourceProvider implements IResourceProvider {
         Date registrationEndDateTime = patientDetails.getRegistrationEndDateTime();
         Date registrationStartDateTime = patientDetails.getRegistrationStartDateTime();
                 
+        ExtensionDt regDetailsExtension = new ExtensionDt(false, SystemURL.SD_EXTENSION_CC_REG_DETAILS);
+        
         PeriodDt registrationPeriod = new PeriodDt()
                                             .setStartWithSecondsPrecision(registrationStartDateTime)
                                             .setEndWithSecondsPrecision(registrationEndDateTime);
 
-        patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_PERIOD, registrationPeriod);
+        ExtensionDt regPeriodExt = new ExtensionDt(false, SystemURL.SD_CC_EXT_REGISTRATION_PERIOD, registrationPeriod);
+        regDetailsExtension.addUndeclaredExtension(regPeriodExt);
         
         String registrationStatusValue = patientDetails.getRegistrationStatus();
         if (registrationStatusValue != null) {
-            patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_STATUS, new CodeableConceptDt(
-                    SystemURL.VS_REGISTRATION_STATUS, registrationStatusValue));
+          
+            CodingDt regStatusCode = new CodingDt();
+            regStatusCode.setCode(registrationStatusValue);
+            regStatusCode.setDisplay("Active"); // Should always be Active
+            regStatusCode.setSystem(SystemURL.VS_REGISTRATION_STATUS);
+            CodeableConceptDt regStatusConcept = new CodeableConceptDt();
+            regStatusConcept.addCoding(regStatusCode);
+            ExtensionDt regStatusExt = new ExtensionDt(false, SystemURL.SD_CC_EXT_REGISTRATION_STATUS, regStatusConcept);
+            regDetailsExtension.addUndeclaredExtension(regStatusExt);
         }
 
         String registrationTypeValue = patientDetails.getRegistrationType();
-        if (registrationTypeValue != null) {
-            patient.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_REGISTRATION_TYPE, new CodeableConceptDt(
-                    SystemURL.VS_REGISTRATION_TYPE, registrationTypeValue));
+         if (registrationTypeValue != null) {
+            
+            CodingDt regTypeCode = new CodingDt();
+            regTypeCode.setCode(registrationTypeValue);
+            regTypeCode.setDisplay("Temporary"); // Should always be Temporary
+            regTypeCode.setSystem(SystemURL.VS_REGISTRATION_TYPE);
+            CodeableConceptDt regTypeConcept = new CodeableConceptDt();
+            regTypeConcept.addCoding(regTypeCode);
+            
+            ExtensionDt regTypeExt = new ExtensionDt(false, SystemURL.SD_CC_EXT_REGISTRATION_TYPE, regTypeConcept);
+            regDetailsExtension.addUndeclaredExtension(regTypeExt);
         }
 
+        patient.addUndeclaredExtension(regDetailsExtension);
+        
+        String maritalStatus = patientDetails.getMaritalStatus();
+        if (maritalStatus != null) {
+            BoundCodeableConceptDt<MaritalStatusCodesEnum> marital = new BoundCodeableConceptDt<>();
+            CodingDt maritalCoding = new CodingDt();
+            maritalCoding.setSystem(SystemURL.VS_CC_MARITAL_STATUS);
+            maritalCoding.setCode(patientDetails.getMaritalStatus());
+            maritalCoding.setDisplay("Married");
+            marital.addCoding(maritalCoding);
+          
+            patient.setMaritalStatus(marital);
+        }
+       
+        patient.setMultipleBirth(new BooleanDt(patientDetails.isMultipleBirth()));
+
+        if(patientDetails.isDeceased()) {
+        	patient.setDeceased(new DateTimeDt(patientDetails.getDeceased()));
+        }
+        
         return patient;
     }
 
@@ -924,32 +1028,13 @@ public class PatientResourceProvider implements IResourceProvider {
 
             patient.setTelecom(Collections.singletonList(telephone));
         }
-        
-        String maritalStatus = patientDetails.getMaritalStatus();
-        if (maritalStatus != null) {
-            BoundCodeableConceptDt<MaritalStatusCodesEnum> marital = new BoundCodeableConceptDt<>();
-            CodingDt maritalCoding = new CodingDt();
-            maritalCoding.setSystem("http://fhir.nhs.net/ValueSet/marital-status-1");
-            maritalCoding.setCode(patientDetails.getMaritalStatus());
-            maritalCoding.setDisplay("Married");
-            marital.addCoding(maritalCoding);
-            
-          
-            patient.setMaritalStatus(marital);
-        }
-        
+               
        String managingOrganization = patientDetails.getManagingOrganization();
        
         if (managingOrganization != null)
         {
             patient.setManagingOrganization(new ResourceReferenceDt("Organization/"+managingOrganization));
             
-        }
-        
-        patient.setMultipleBirth(new BooleanDt(patientDetails.isMultipleBirth()));
-
-        if(patientDetails.isDeceased()) {
-        	patient.setDeceased(new DateTimeDt(patientDetails.getDeceased()));
         }
 
         return patient;

@@ -24,6 +24,7 @@ public final class SystemURL {
     public static final String ID_LOCAL_LOCATION_IDENTIFIER = "https://fhir.nhs.uk/Id/local-location-identifier";
     public static final String ID_SDS_ROLE_PROFILE_ID = "https://fhir.nhs.uk/Id/sds-role-profile-id";
     public static final String ID_SDS_USER_ID = "https://fhir.nhs.uk/Id/sds-user-id";
+    public static final String ID_MARITAL_STATUS = "http://fhir.nhs.net/ValueSet/marital-status-1";
 
 
     // FHIR StructureDefinition Constants

@@ -36,6 +36,7 @@ import ca.uhn.fhir.model.primitive.CodeDt;
 import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
@@ -43,6 +44,8 @@ import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.Sort;
+import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -516,9 +519,10 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     @Search(compartmentName = "Appointment")
-    public List<Appointment> getPatientAppointments(@IdParam IdDt patientLocalId,
+    public List<Appointment> getPatientAppointments(@IdParam IdDt patientLocalId,  @Sort SortSpec sort,
+            @Count Integer count,
             @OptionalParam(name = "start") DateRangeParam startDate) {
-        return appointmentResourceProvider.getAppointmentsForPatientIdAndDates(patientLocalId, startDate);
+        return appointmentResourceProvider.getAppointmentsForPatientIdAndDates(patientLocalId,sort,count, startDate);
     }
 
     @Operation(name = REGISTER_PATIENT_OPERATION_NAME)
@@ -1028,8 +1032,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
             patient.setTelecom(Collections.singletonList(telephone));
         }
-               
-       String managingOrganization = patientDetails.getManagingOrganization();
+
+        String managingOrganization = patientDetails.getManagingOrganization();
        
         if (managingOrganization != null)
         {

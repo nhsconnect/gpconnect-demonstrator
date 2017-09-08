@@ -7,6 +7,7 @@ import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.Appointment;
+import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.Appointment.Participant;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.valueset.AppointmentStatusEnum;
@@ -16,6 +17,7 @@ import ca.uhn.fhir.model.dstu2.valueset.ParticipationStatusEnum;
 import ca.uhn.fhir.model.primitive.BoundCodeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
+import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.Create;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
@@ -23,8 +25,10 @@ import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
+import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ParamPrefixEnum;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -158,8 +162,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public List<Appointment> getAppointmentsForPatientIdAndDates(@RequiredParam(name = "patient") IdDt patientLocalId,
-            @OptionalParam(name = "start") DateRangeParam startDate) {
+    public List<Appointment> getAppointmentsForPatientIdAndDates(@RequiredParam(name = "patient") IdDt patientLocalId, @Sort SortSpec sort,
+            @Count Integer count,
+            @OptionalParam(name = "start") 
+            DateRangeParam startDate)
+           {
         Date startLowerDate = null;
         Date startUppderDate = null;
 
@@ -225,8 +232,15 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
         }
 
-        return appointmentSearch.searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUppderDate)
+        List<Appointment> appointment = appointmentSearch.searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUppderDate)
                 .stream().map(this::appointmentDetailToAppointmentResourceConverter).collect(Collectors.toList());
+        
+        if(appointment.isEmpty()) {
+           
+            return null;
+        }
+        //Update startIndex if we do paging
+        return count != null ? appointment.subList(0, count) : appointment;
     }
 
     @Create

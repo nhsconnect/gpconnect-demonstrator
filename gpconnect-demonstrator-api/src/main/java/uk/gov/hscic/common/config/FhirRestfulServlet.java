@@ -12,6 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.CorsInterceptor;
 import uk.gov.hscic.SystemHeader;
@@ -41,6 +43,11 @@ public class FhirRestfulServlet extends RestfulServer {
 
     @Override
     protected void initialize() throws ServletException {
+        
+        FhirContext ctx = FhirContext.forDstu2();
+        ctx.setParserErrorHandler(new StrictErrorHandler());
+        setFhirContext(ctx);
+       
         setResourceProviders(Arrays.asList(
                 applicationContext.getBean(PatientResourceProvider.class),
                 applicationContext.getBean(OrganizationResourceProvider.class),
@@ -54,6 +61,7 @@ public class FhirRestfulServlet extends RestfulServer {
                 applicationContext.getBean(ScheduleResourceProvider.class),
                 applicationContext.getBean(SlotResourceProvider.class),
                 applicationContext.getBean(OrderResourceProvider.class)
+             
         ));
 
         CorsConfiguration config = new CorsConfiguration();
@@ -90,5 +98,6 @@ public class FhirRestfulServlet extends RestfulServer {
         registerInterceptor(applicationContext.getBean(FhirRequestAuthInterceptor.class));
         registerInterceptor(applicationContext.getBean(FhirRequestGenericIntercepter.class));
         registerInterceptor(applicationContext.getBean(PatientJwtValidator.class));
+        
     }
 }

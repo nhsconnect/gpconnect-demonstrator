@@ -19,6 +19,7 @@ import ca.uhn.fhir.model.dstu2.resource.MedicationOrder;
 import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
+import ca.uhn.fhir.model.dstu2.resource.Patient.Contact;
 import ca.uhn.fhir.model.dstu2.resource.Practitioner;
 import ca.uhn.fhir.model.dstu2.valueset.AddressTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.AddressUseEnum;
@@ -27,12 +28,11 @@ import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.CompositionStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ContactPointSystemEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ContactPointUseEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IdentifierUseEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.LocationStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.MaritalStatusCodesEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.primitive.BooleanDt;
-import ca.uhn.fhir.model.primitive.CodeDt;
 import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -53,6 +53,7 @@ import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -73,6 +74,7 @@ import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
+import uk.gov.hscic.common.helpers.StaticElementsHelper;
 import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.common.validators.ValueSetValidator;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
@@ -129,6 +131,9 @@ public class PatientResourceProvider implements IResourceProvider {
     
     @Autowired
     private ValueSetValidator valueSetValidator;
+    
+    @Autowired
+    private StaticElementsHelper staticElHelper;
 
     private NhsNumber nhsNumber;
 
@@ -902,8 +907,94 @@ public class PatientResourceProvider implements IResourceProvider {
                     .addFamily(patientDetails.getSurname())
                     .addGiven(patientDetails.getForename())
                     .setUse(NameUseEnum.USUAL);
+        
+        patient = setStaticPatientData(patient);
 
         return patient;
+    }
+    
+    private Patient setStaticPatientData(Patient patient){
+        
+        patient.addUndeclaredExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY, SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
+        patient.addUndeclaredExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code", SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));
+        patient.addUndeclaredExtension(new ExtensionDt(false, SystemURL.SD_PATIENT_CADAVERIC_DON, new BooleanDt(false)));
+        patient.addUndeclaredExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS, SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS));
+        patient.addUndeclaredExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT, SystemURL.SD_CC_EXT_TREATMENT_CAT));
+        
+        ExtensionDt nhsCommExtension = new ExtensionDt();
+        nhsCommExtension.setUrl(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
+        nhsCommExtension.addUndeclaredExtension(createCodingExtension("en", "English", SystemURL.CS_CC_HUMAN_LANG, SystemURL.SD_CC_EXT_COMM_LANGUAGE));
+        nhsCommExtension.addUndeclaredExtension(new ExtensionDt(false, SystemURL.SD_CC_COMM_PREFERRED, new BooleanDt(false)));
+        nhsCommExtension.addUndeclaredExtension(createCodingExtension("RWR", "Received written", SystemURL.CS_CC_LANG_ABILITY_MODE, SystemURL.SD_CC_MODE_OF_COMM));
+        nhsCommExtension.addUndeclaredExtension(createCodingExtension("E", "Excellent", SystemURL.CS_CC_LANG_ABILITY_PROFI, SystemURL.SD_CC_COMM_PROFICIENCY));
+        nhsCommExtension.addUndeclaredExtension(new ExtensionDt(false, SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanDt(false)));
+        
+        patient.addUndeclaredExtension(nhsCommExtension);
+        
+        IdentifierDt localIdentifier = new IdentifierDt();
+        localIdentifier.setUse(IdentifierUseEnum.USUAL);
+        localIdentifier.setSystem(SystemURL.ID_LOCAL_PATIENT_IDENTIFIER);
+        localIdentifier.setValue("123456");
+        
+        BoundCodeableConceptDt liType = new BoundCodeableConceptDt();
+        CodingDt liTypeCoding = new CodingDt();
+        liTypeCoding.setCode("EN");
+        liTypeCoding.setDisplay("Employer number");
+        liTypeCoding.setSystem(SystemURL.VS_IDENTIFIER_TYPE);
+        liType.addCoding(liTypeCoding);
+        localIdentifier.setType(liType);
+
+        localIdentifier.setAssigner(new ResourceReferenceDt("Organization/1"));
+        patient.addIdentifier(localIdentifier);
+        
+        patient.addName()
+                    .addFamily("AdditionalFamily")
+                    .addGiven("AdditionalGiven")
+                    .setUse(NameUseEnum.TEMP);
+        
+        patient.addTelecom(staticElHelper.getValidTelecom());
+        patient.addAddress(staticElHelper.getValidAddress());
+        patient.addContact(getValidContact());
+        
+        return patient;
+    }
+    
+    private Contact getValidContact(){
+        
+        HumanNameDt ctName = new HumanNameDt();
+        ctName.setUse(NameUseEnum.USUAL);
+        ctName.addFamily("FamilyName");
+        
+        List<CodeableConceptDt> ctRelList = new ArrayList<>();
+        ctRelList.add(createCoding("family", "Family", SystemURL.VS_PATIENT_CONTACT_REL));
+        
+        Contact contact = new Contact();
+        contact.setName(ctName);
+        contact.addTelecom(staticElHelper.getValidTelecom());
+        contact.setAddress(staticElHelper.getValidAddress());
+        contact.setRelationship(ctRelList);
+        contact.setGender(AdministrativeGenderEnum.FEMALE);
+        
+        return contact;
+    }
+    
+    private ExtensionDt createCodingExtension(String code, String display, String vsSystem, String extSystem){
+        
+        ExtensionDt ext = new ExtensionDt(false, extSystem, createCoding(code, display, vsSystem));
+        
+        return ext;
+    }
+    
+    private CodeableConceptDt createCoding(String code, String display, String vsSystem){
+        
+        CodingDt coding = new CodingDt();
+        coding.setCode(code);
+        coding.setDisplay(display);
+        coding.setSystem(vsSystem);
+        CodeableConceptDt concept = new CodeableConceptDt();
+        concept.addCoding(coding);
+        
+        return concept;
     }
 
     private Patient patientDetailsToMinimalPatient(PatientDetails patientDetails) {
@@ -1038,7 +1129,6 @@ public class PatientResourceProvider implements IResourceProvider {
         if (managingOrganization != null)
         {
             patient.setManagingOrganization(new ResourceReferenceDt("Organization/"+managingOrganization));
-            
         }
 
         return patient;

@@ -33,6 +33,7 @@ import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.MaritalStatusCodesEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.primitive.BooleanDt;
+import ca.uhn.fhir.model.primitive.CodeDt;
 import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -914,6 +915,8 @@ public class PatientResourceProvider implements IResourceProvider {
     }
     
     private Patient setStaticPatientData(Patient patient){
+        
+        patient.setLanguage(new CodeDt("en-GB"));
         
         patient.addUndeclaredExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY, SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
         patient.addUndeclaredExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code", SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));

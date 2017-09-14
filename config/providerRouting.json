@@ -16,8 +16,8 @@
             "odsCode": "R1A14",
             "name": "Test GP Care Trust",
             "interactionIds": ["*"],
-            "endpointURL": "https://localhost:18080/fhir",
-            "apiEndpointURL": "https://localhost:18080/api",
+            "endpointURL": "https://localhost:33433/fhir",
+            "apiEndpointURL": "https://localhost:33433/api",
             "ASID": "200000000361"
         },
         {
@@ -25,8 +25,8 @@
             "odsCode": "R3B46",
             "name": "New GP Practice",
             "interactionIds": ["*"],
-            "endpointURL": "https://localhost:28080/fhir",
-            "apiEndpointURL": "https://localhost:28080/api",
+            "endpointURL": "https://localhost:43433/fhir",
+            "apiEndpointURL": "https://localhost:43433/api",
             "ASID": "200000000362"
         }
     ]

@@ -595,6 +595,7 @@ public class PatientResourceProvider implements IResourceProvider {
         validateIdentifiers(patient);
         validateRegistrationDetails(patient);
         validateConstrainedOutProperties(patient);
+        checkValidExtensions(patient.getUndeclaredExtensions());
         valiateNames(patient);
         validateDateOfBirth(patient);
         valiateGender(patient);      
@@ -667,7 +668,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
             if(!valid) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(String.format("The supplied Patient's gender %s is invalid", gender)),
+                        new InvalidRequestException(String.format("The supplied Patient's gender %s is an unrecognised type.", gender)),
                                                     SystemCode.BAD_REQUEST,
                                                     IssueTypeEnum.INVALID_CONTENT); 
             }
@@ -724,6 +725,27 @@ public class PatientResourceProvider implements IResourceProvider {
             throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
                                                                          SystemCode.BAD_REQUEST,
                                                                          IssueTypeEnum.INVALID_CONTENT);
+        }
+    }
+    
+    private void checkValidExtensions(List<ExtensionDt> undeclaredExtensions){
+        
+        List<String> extensionURLs = undeclaredExtensions.stream().map(ExtensionDt::getUrlAsString)
+                .collect(Collectors.toList());
+        
+        extensionURLs.remove(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
+        extensionURLs.remove(SystemURL.SD_CC_EXT_ETHNIC_CATEGORY);
+        extensionURLs.remove(SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI);
+        extensionURLs.remove(SystemURL.SD_PATIENT_CADAVERIC_DON);
+        extensionURLs.remove(SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS);
+        extensionURLs.remove(SystemURL.SD_CC_EXT_TREATMENT_CAT);
+        extensionURLs.remove(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
+
+        if (!extensionURLs.isEmpty()) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Invalid/multiple patient extensions found. The following are in excess or invalid: "
+                            + extensionURLs.stream().collect(Collectors.joining(", "))),
+                    SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
         }
     }
 
@@ -1045,7 +1067,7 @@ public class PatientResourceProvider implements IResourceProvider {
             CodingDt regStatusCode = new CodingDt();
             regStatusCode.setCode(registrationStatusValue);
             regStatusCode.setDisplay("Active"); // Should always be Active
-            regStatusCode.setSystem(SystemURL.VS_REGISTRATION_STATUS);
+            regStatusCode.setSystem(SystemURL.CS_REGISTRATION_STATUS);
             CodeableConceptDt regStatusConcept = new CodeableConceptDt();
             regStatusConcept.addCoding(regStatusCode);
             ExtensionDt regStatusExt = new ExtensionDt(false, SystemURL.SD_CC_EXT_REGISTRATION_STATUS, regStatusConcept);
@@ -1058,7 +1080,7 @@ public class PatientResourceProvider implements IResourceProvider {
             CodingDt regTypeCode = new CodingDt();
             regTypeCode.setCode(registrationTypeValue);
             regTypeCode.setDisplay("Temporary"); // Should always be Temporary
-            regTypeCode.setSystem(SystemURL.VS_REGISTRATION_TYPE);
+            regTypeCode.setSystem(SystemURL.CS_REGISTRATION_TYPE);
             CodeableConceptDt regTypeConcept = new CodeableConceptDt();
             regTypeConcept.addCoding(regTypeCode);
             

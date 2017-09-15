@@ -319,6 +319,20 @@ public class PatientResourceProvider implements IResourceProvider {
                 toDate = period.getEnd();
                 requestedFromDate = period.getStart();
                 requestedToDate = period.getEnd();
+                if (requestedFromDate != null && fromDate.toString().equals("Thu Jan 01 00:00:00 GMT 1970")
+                        && requestedToDate != null && toDate.toString().equals("Thu Jan 01 00:00:00 GMT 1970")) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("Invalid datatype"), SystemCode.INVALID_PARAMETER,
+                            IssueTypeEnum.INVALID_CONTENT);
+                } else if (requestedToDate != null && toDate.toString().equals("Thu Jan 01 00:00:00 GMT 1970")) {
+                    toDate = null;
+                    requestedToDate = null;
+
+                } else if (requestedFromDate != null && fromDate.toString().equals("Thu Jan 01 00:00:00 GMT 1970")) {
+                    requestedFromDate = null;
+                    fromDate = null;
+
+                }
 
                 if (fromDate != null && toDate != null && fromDate.after(toDate)) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -337,8 +351,8 @@ public class PatientResourceProvider implements IResourceProvider {
                 }
             } else {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException("Invalid datatype"),
-                        SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                        new InvalidRequestException("Invalid datatype"), SystemCode.INVALID_PARAMETER,
+                        IssueTypeEnum.INVALID_CONTENT);
             }
         }
 

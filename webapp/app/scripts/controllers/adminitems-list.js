@@ -23,24 +23,27 @@ angular.module('gpConnect')
             };
 
             $scope.dateChanged = function() {
-                var newDate = new Date($scope.toDateValue);
-                $scope.toDateValue = moment(newDate).format('YYYY-MM-DD');
-                newDate = new Date($scope.fromDateValue);
-                $scope.fromDateValue = moment(newDate).format('YYYY-MM-DD');
+                
+                var toDates = moment($scope.toDateValue);
+                if(toDates.isValid()){
+                    $scope.toDateValue = toDates.format('YYYY-MM-DD');
+                 }
+        
+               var fromDates = moment($scope.fromDateValue);
+               
+               if(fromDates.isValid()){
+                    $scope.fromDateValue = fromDates.format('YYYY-MM-DD');
+              }
+                    
                 loadHTML();
             };
-
-
-
-
-
              var loadHTML = function () {
 
 
 
 
 
-    AdminItem.findAllHTMLTables($stateParams.patientId,$scope.fromDateValue, $scope.toDateValue).then(function (result) {
+    AdminItem.findAllHTMLTables($stateParams.patientId,$scope.fromDateValue || '1970-01-01', $scope.toDateValue|| '1970-01-01').then(function (result) {
 
       // Default Page Content
       var text = '{"provider":"No Data","html":"No administrative items data available for this patient."}';

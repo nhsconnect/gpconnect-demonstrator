@@ -40,6 +40,7 @@ public final class SystemURL {
     public static final String SD_GPC_SLOT = "http://fhir.nhs.net/StructureDefinition/gpconnect-slot-1";
     
     // FHIR StructureDefinition Extension
+    public static final String SD_CC_EXT_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1";
     public static final String SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-booking-method-1";
     public static final String SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1";
     public static final String SD_EXTENSION_GPC_APPOINTMENT_CATEGORY = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-category-1";
@@ -101,5 +102,6 @@ public final class SystemURL {
     public static final String CS_CC_HUMAN_LANG = "https://fhir.nhs.uk/CareConnect-HumanLanguage-1";
     public static final String CS_CC_LANG_ABILITY_MODE = "https://fhir.nhs.uk/CareConnect-LanguageAbilityMode-1";
     public static final String CS_CC_LANG_ABILITY_PROFI = "https://fhir.nhs.uk/CareConnect-LanguageAbilityProficiency-1";
+    public static final String CS_CC_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/CareConnect-NHSNumberVerificationStatus-1";
     
 }

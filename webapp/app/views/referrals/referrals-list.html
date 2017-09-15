@@ -1,7 +1,6 @@
 <div>
   <h3>
     <strong>Referrals</strong>
-   
   </h3>
 
       <div class="form-inline dateRangePanel">
@@ -10,14 +9,20 @@
             <button type="button" class="btn btn-default btn-sm" ng-click="openDatePicker($event, 'fromDate')">
                 <i class="fa fa-calendar"></i>
             </button>
-            <input type="text" class="datepicker form-control input-sm popupinputs" ui-date id="fromDate" name="fromDate" ng-model="fromDateValue" ng-click="openDatePicker($event, 'fromDate')" ng-change='dateChanged()' datepicker-popup="dd-MMM-y" is-open="fromDate" required/>
+            <input type="text" class="datepicker form-control input-sm popupinputs" ui-date id="fromDate" name="fromDate" ng-model="fromDateValue" ng-click="openDatePicker($event, 'fromDate')" datepicker-popup="dd-MMM-y" is-open="fromDate" defaultDate=''/>
         </div>
         <div class="form-group">
             To : 
             <button type="button" class="btn btn-default btn-sm" ng-click="openDatePicker($event, 'toDate')">
                 <i class="fa fa-calendar"></i>
             </button>
-            <input type="text" class="datepicker form-control input-sm popupinputs" ui-date id="toDate" name="toDate" ng-model="toDateValue" ng-click="openDatePicker($event, 'toDate')" ng-change='dateChanged()' datepicker-popup="dd-MMM-y" is-open="toDate" required/>
+            <input type="text" class="datepicker form-control input-sm popupinputs" ui-date id="toDate" name="toDate" ng-model="toDateValue" ng-click="openDatePicker($event, 'toDate')" datepicker-popup="dd-MMM-y" is-open="toDate" defaultDate=''/>
+             <button type="button" id="date-button" class="btn btn-default btn-sm"  ng-click='dateChanged()'>
+            Search
+          </button>
+        </div>
+ 
+         
         </div>
     </div>
 

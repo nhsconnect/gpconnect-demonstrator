@@ -25,15 +25,27 @@ angular.module('gpConnect')
             };
 
             $scope.dateChanged = function() {
-                var newDate = new Date($scope.toDateValue);
-                $scope.toDateValue = moment(newDate).format('YYYY-MM-DD');
-                newDate = new Date($scope.fromDateValue);
-                $scope.fromDateValue = moment(newDate).format('YYYY-MM-DD');
+                //var newDate = new Date($scope.toDateValue);
+                //console.log(newDate);
+                var toDates = moment($scope.toDateValue);
+                 if(toDates.isValid()){
+                $scope.toDateValue = toDates.format('YYYY-MM-DD');
+                 }
+        
+               
+               // newDate = new Date($scope.fromDateValue);
+               var fromDates = moment($scope.fromDateValue);
+               if(fromDates.isValid()){
+                 console.log("IS VALID")
+                $scope.fromDateValue = fromDates.format('YYYY-MM-DD');
+              }
+                console.log($scope.fromDateValue)
+              
                 loadHTML();
             };
     
     var loadHTML = function () {
-    ClinicalItem.findAllHTMLTables($stateParams.patientId,$scope.fromDateValue, $scope.toDateValue).then(function (result) {
+    ClinicalItem.findAllHTMLTables($stateParams.patientId,$scope.fromDateValue || '1970-01-01', $scope.toDateValue|| '1970-01-01').then(function (result) {
         
       // Default Page Content
       var text = '{"provider":"No Data","html":"No clinical item data available for this patient."}';

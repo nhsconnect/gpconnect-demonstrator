@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('OrderCreateModalCtrl', ['$state', '$stateParams', '$scope', '$sce', '$modalInstance', 'usSpinnerService', 'OrderService', 'PatientService', 'ProviderRouting', 'Organization', 'gpcResource', function ($state, $stateParams, $scope, $sce, $modalInstance, usSpinnerService, OrderService, PatientService, ProviderRouting, Organization, gpcResource) {
+        .controller('OrderCreateModalCtrl', function ($state, $stateParams, $scope, $sce, $modalInstance, usSpinnerService, OrderService, PatientService, ProviderRouting, Organization) {
 
             $scope.federatedPractices = ProviderRouting.practices;
 
             PatientService.getFhirPatient(ProviderRouting.defaultPractice().odsCode, $stateParams.patientId).then(function (patient) {
                 $scope.patient = patient;
                 $.each(patient.identifier, function (key, identifier) {
-                    if (identifier.system == gpcResource.getConst("ID_NHS_NUMBER")) {
+                    if (identifier.system == "https://fhir.nhs.uk/Id/nhs-number") {
                         $scope.patientNhsNumber = identifier.value;
                     }
                 });
@@ -79,7 +79,7 @@ angular.module('gpConnect')
                     // so we can use that internal reference in the fhir model
                     Organization.findOrganisation($stateParams.patientId, localModel.sourceOrgId).then(function (localOrganizationFhirResourceResponse) {
                         for (var i = 0; i < localOrganizationFhirResourceResponse.data.identifier.length; i++) {
-                            if (localOrganizationFhirResourceResponse.data.identifier[i].system == gpcResource.getConst("ID_ODS_ORGANIZATION_CODE")) {
+                            if (localOrganizationFhirResourceResponse.data.identifier[i].system == "http://fhir.nhs.net/Id/ods-organization-code") {
                                 var sendingPracticeOdsCode = localOrganizationFhirResourceResponse.data.identifier[i].value;
                                 Organization.searchForOrganisation(recievingPracticeOdsCode, $stateParams.patientId, sendingPracticeOdsCode).then(function (sendingPracticeOrgResource) {
                                     if (sendingPracticeOrgResource.data.entry != undefined) {
@@ -114,7 +114,7 @@ angular.module('gpConnect')
                                 "id": "1",
                                 "text": {"div": "<div>" + localModel.detail + "</div>"},
                                 "code": {"coding": [{
-                                            "system": gpcResource.getConst("VS_BASIC_RESOURCE_TYPE"),
+                                            "system": "http://hl7.org/fhir/basic-resource-type",
                                             "code": "OrderDetails"}]
                                 }
                             }],
@@ -123,7 +123,7 @@ angular.module('gpConnect')
                         "target": {"reference": "Organization/" + $scope.recievingSysRecOrgLocalId},
                         "reasonCodeableConcept": {
                             "coding": [{
-                                    "system": gpcResource.getConst("VS_C80_PRACTICE_CODES"),
+                                    "system": "http://hl7.org/fhir/ValueSet/c80-practice-codes",
                                     "code": localModel.reasonCode,
                                     "display": localModel.reasonDescription
                                 }]
@@ -151,4 +151,4 @@ angular.module('gpConnect')
             var clearErrorMsg = function () {
                 $scope.validationError = "";
             };
-        }]);
+        });

@@ -23,11 +23,19 @@ angular.module('gpConnect')
                 $scope[name] = true;
             };
 
-            $scope.dateChanged = function() {
-                var newDate = new Date($scope.toDateValue);
-                $scope.toDateValue = moment(newDate).format('YYYY-MM-DD');
-                newDate = new Date($scope.fromDateValue);
-                $scope.fromDateValue = moment(newDate).format('YYYY-MM-DD');
+             $scope.dateChanged = function() {
+                
+                var toDates = moment($scope.toDateValue);
+                if(toDates.isValid()){
+                    $scope.toDateValue = toDates.format('YYYY-MM-DD');
+                 }
+        
+               var fromDates = moment($scope.fromDateValue);
+               
+               if(fromDates.isValid()){
+                    $scope.fromDateValue = fromDates.format('YYYY-MM-DD');
+              }
+                    
                 loadHTML();
             };
 
@@ -44,7 +52,7 @@ angular.module('gpConnect')
       $scope.query = $stateParams.filter;
     }
     var loadHTML = function () {
-    Referral.findAllHTMLTables($stateParams.patientId, $scope.fromDateValue, $scope.toDateValue).then(function (result) {
+    Referral.findAllHTMLTables($stateParams.patientId, $scope.fromDateValue || '1970-01-01', $scope.toDateValue|| '1970-01-01').then(function (result) {
       console.log($scope.fromDateValue);
       console.log($scope.toDateValue);
       // Default Page Content

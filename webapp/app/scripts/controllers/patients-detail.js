@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('PatientsDetailCtrl', ['$scope', '$stateParams', '$state', 'PatientService', 'ProviderRouting', 'gpcResource', function ($scope, $stateParams, $state, PatientService, ProviderRouting, gpcResource) {
+  .controller('PatientsDetailCtrl', function ($scope, $stateParams, $state, PatientService, ProviderRouting) {
 
     PatientService.getFhirPatient(ProviderRouting.defaultPractice().odsCode, $stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
       $.each(patient.identifier, function (key, identifier) {
-        if(identifier.system == gpcResource.getConst("ID_NHS_NUMBER")){
+        if(identifier.system == "https://fhir.nhs.uk/Id/nhs-number"){
             $scope.patientNhsNumber = identifier.value;
         }
       });
@@ -68,4 +68,4 @@ angular.module('gpConnect')
       $state.go(toState, requestHeader);
     };
 
-  }]);
+  });

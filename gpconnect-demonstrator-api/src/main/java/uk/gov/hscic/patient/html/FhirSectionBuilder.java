@@ -11,10 +11,12 @@ import uk.gov.hscic.SystemURL;
 
 public final class FhirSectionBuilder {
 
-    private FhirSectionBuilder() { }
+    private FhirSectionBuilder() {
+    }
 
     public static Composition.Section buildFhirSection(Page page) {
-        CodingDt coding = new CodingDt().setSystem(SystemURL.VS_GPC_RECORD_SECTION).setCode(page.getCode()).setDisplay(page.getName());
+        CodingDt coding = new CodingDt().setSystem(SystemURL.VS_GPC_RECORD_SECTION).setCode(page.getCode())
+                .setDisplay(page.getName());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);
         codableConcept.setText(page.getName());
 
@@ -22,10 +24,7 @@ public final class FhirSectionBuilder {
         narrative.setStatus(NarrativeStatusEnum.GENERATED);
         narrative.setDivAsString(createHtmlContent(page));
 
-        return new Composition.Section()
-                .setTitle(page.getName())
-                .setCode(codableConcept)
-                .setText(narrative);
+        return new Composition.Section().setTitle(page.getName()).setCode(codableConcept).setText(narrative);
     }
 
     private static String createHtmlContent(Page page) {
@@ -42,6 +41,16 @@ public final class FhirSectionBuilder {
             if (pageSection.getFromDate() != null && pageSection.getToDate() != null) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                 stringBuilder.append("<div><p>For the period '").append(dateFormat.format(pageSection.getFromDate())).append("' to '").append(dateFormat.format(pageSection.getToDate())).append("'</p></div>");
+            }   
+            else if(pageSection.getFromDate() != null && pageSection.getToDate() == null){
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                stringBuilder.append("<div><p>All Data Items from ").append(dateFormat.format(pageSection.getFromDate())).append("'</p></div>");
+            }
+            else if(pageSection.getFromDate() == null && pageSection.getToDate() != null){
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                    stringBuilder.append("<div><p>All Data Items until ").append(dateFormat.format(pageSection.getToDate())).append("'</p></div>");
+               
+           
             } else {
                 stringBuilder.append("<div><p>All relevant items</p></div>");
             }

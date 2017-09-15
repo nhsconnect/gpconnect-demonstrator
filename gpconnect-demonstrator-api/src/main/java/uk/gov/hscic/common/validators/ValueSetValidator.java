@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -185,6 +186,7 @@ public class ValueSetValidator {
         String systemUrl = code.getSystem();        
         ValueSet valSet =  loadValueSet(systemUrl);
         
+        //Check Code System
         ValueSet.CodeSystem codeSys = valSet.getCodeSystem();
         List<ValueSet.CodeSystemConcept> concepts = codeSys.getConcept();
 
@@ -193,6 +195,25 @@ public class ValueSetValidator {
             String displayEl = concept.getDisplay();
             
             if(codeEl.equals(code.getCode()) && displayEl.equals(code.getDisplay())){
+                return true;
+            }
+        }
+        
+        //Check Compose Includes
+        ValueSet.Compose compose = valSet.getCompose();
+        
+        List<ValueSet.ComposeIncludeConcept> includeConcepts = new ArrayList<>();
+        List<ValueSet.ComposeInclude> includes = compose.getInclude();
+        
+        for(ValueSet.ComposeInclude include : includes){
+            includeConcepts.addAll(include.getConcept());
+        }
+        
+        for (ValueSet.ComposeIncludeConcept includeConcept : includeConcepts) {
+            String incCodeEl = includeConcept.getCode();
+            String incDisplayEl = includeConcept.getDisplay();
+            
+            if(incCodeEl.equals(code.getCode()) && incDisplayEl.equals(code.getDisplay())){
                 return true;
             }
         }

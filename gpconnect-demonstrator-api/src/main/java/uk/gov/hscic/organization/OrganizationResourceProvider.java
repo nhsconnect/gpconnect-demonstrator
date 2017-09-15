@@ -329,6 +329,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
                     
         organization.addTelecom(getValidTelecom());
         organization.addAddress(getValidAddress());
+        organization.addContact(getValidContact());
 
         CodeableConceptDt orgType = new CodeableConceptDt();
         orgType.addCoding(orgTypeCode);

@@ -6,6 +6,7 @@ angular.module('gpConnect')
     "ID_ODS_ORGANIZATION_CODE": "https://fhir.nhs.uk/Id/ods-organization-code",
     "ID_SDS_USER_ID": "http://fhir.nhs.net/sds-user-id",
 
+    "SD_CC_PATIENT": "https://fhir.nhs.uk/StructureDefinition/CareConnect-GPC-Patient-1",
     "SD_EXT_GPC_APPOINT_CANC_REAS": "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1",
     "SD_EXT_REG_PERIOD": "http://fhir.nhs.net/StructureDefinition/extension-registration-period-1",
     "SD_EXT_REG_STATUS": "http://fhir.nhs.net/StructureDefinition/extension-registration-status-1",

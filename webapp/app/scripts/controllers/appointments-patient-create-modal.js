@@ -14,25 +14,14 @@ angular.module('gpConnect')
                 // Build patient fhir model
                 var newPatient = {};
                 newPatient.resourceType = "Patient";
-                newPatient.extension = [
-                    {
-                        "url": gpcResource.getConst("SD_EXT_REG_PERIOD"),
-                        "valuePeriod": {"start": DateFormatter.clean(new Date())}
-                    },
-                    {
-                        "url": gpcResource.getConst("SD_EXT_REG_STATUS"),
-                        "valueCodeableConcept": {"coding": [{"system": gpcResource.getConst("VS_REG_STATUS"), "code": "A", "display": "Active"}]}
-                    },
-                    {
-                        "url": gpcResource.getConst("SD_EXT_REG_TYPE"),
-                        "valueCodeableConcept": {"coding": [{"system": gpcResource.getConst("VS_REG_TYPE"), "code": "T", "display": "Temporary Resident"}]}
-                    }
-                ];
                 newPatient.identifier = $scope.patientDetails.identifier;
                 newPatient.name = $scope.patientDetails.name;
                 newPatient.gender = $scope.patientDetails.gender;
                 newPatient.birthDate = $scope.patientDetails.birthDate;
-                
+                newPatient.meta = {
+                    "profile": [gpcResource.getConst("SD_CC_PATIENT")]
+                };
+
                 var requestParameters = {
                     "resourceType": "Parameters",
                     "parameter": [

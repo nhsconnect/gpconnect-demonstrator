@@ -97,7 +97,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
                             'Ssp-To': endpointLookupResult.toASID,
                             'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient",
                             'Ssp-TraceID': fhirJWTFactory.guid(),
-                            'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
+                            'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "write", patientId),
                             'Accept': "application/json+fhir",
                             'Content-Type': "application/json+fhir"
                         }

@@ -454,7 +454,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
     private boolean compareAppointmentsForInvalidPropertyAmend(AppointmentDetail oldAppointmentDetail,
             AppointmentDetail appointmentDetail) {
         List<Boolean> results = new ArrayList<>();
-        results.add(Objects.equals(oldAppointmentDetail.getDescription(), appointmentDetail.getDescription()));
+       
         results.add(Objects.equals(oldAppointmentDetail.getId(), appointmentDetail.getId()));
         results.add(Objects.equals(oldAppointmentDetail.getStatus(), appointmentDetail.getStatus()));
         results.add(Objects.equals(oldAppointmentDetail.getTypeCode(), appointmentDetail.getTypeCode()));
@@ -467,7 +467,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-        //results.add(Objects.equals(oldAppointmentDetail.getComment(), appointmentDetail.getComment()));
+       
         results.add(
                 Objects.equals(oldAppointmentDetail.getExtensionBookURL(), appointmentDetail.getExtensionBookURL()));
         results.add(
@@ -489,7 +489,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
     private boolean compareAppointmentsForInvalidPropertyCancel(AppointmentDetail oldAppointmentDetail,
             AppointmentDetail appointmentDetail) {
         List<Boolean> results = new ArrayList<>();
-        results.add(Objects.equals(oldAppointmentDetail.getDescription(), appointmentDetail.getDescription()));
+ 
         results.add(Objects.equals(oldAppointmentDetail.getId(), appointmentDetail.getId()));
         results.add(Objects.equals(oldAppointmentDetail.getTypeCode(), appointmentDetail.getTypeCode()));
         results.add(Objects.equals(oldAppointmentDetail.getTypeDisplay(), appointmentDetail.getTypeDisplay()));
@@ -499,7 +499,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-        results.add(Objects.equals(oldAppointmentDetail.getComment(), appointmentDetail.getComment()));
+    
         results.add(
                 Objects.equals(oldAppointmentDetail.getExtensionBookURL(), appointmentDetail.getExtensionBookURL()));
         results.add(

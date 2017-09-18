@@ -682,7 +682,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
             if(!valid) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(String.format("The supplied Patient's gender %s is an unrecognised type.", gender)),
+                        new InvalidRequestException(String.format("The supplied Patient gender %s is an unrecognised type.", gender)),
                                                     SystemCode.BAD_REQUEST,
                                                     IssueTypeEnum.INVALID_CONTENT); 
             }
@@ -694,7 +694,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         if(birthDate == null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("A Patient's date of birth must be supplied"),
+                    new InvalidRequestException("The Patient date of birth must be supplied"),
                                                 SystemCode.BAD_REQUEST,
                                                 IssueTypeEnum.INVALID_CONTENT); 
         }
@@ -808,7 +808,7 @@ public class PatientResourceProvider implements IResourceProvider {
             } 
         }
         
-        if(!usualNameCount.equals(1)){
+        if(usualNameCount < 1){
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("The patient must have one Name with a Use of USUAL"),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
@@ -1055,7 +1055,10 @@ public class PatientResourceProvider implements IResourceProvider {
         patient.getMeta().addProfile(SystemURL.SD_GPC_PATIENT);
         patient.getMeta().setVersionId(versionId);
 
-        patient.addIdentifier(new IdentifierDt(SystemURL.ID_NHS_NUMBER, patientDetails.getNhsNumber()));
+        IdentifierDt patientNhsNumber = new IdentifierDt(SystemURL.ID_NHS_NUMBER, patientDetails.getNhsNumber());
+        patientNhsNumber.addUndeclaredExtension(createCodingExtension("01", "Number present and verified", SystemURL.CS_CC_NHS_NUMBER_VERIF, SystemURL.SD_CC_EXT_NHS_NUMBER_VERIF));
+        patient.addIdentifier(patientNhsNumber);
+        
         patient.setBirthDate(new DateDt(patientDetails.getDateOfBirth()));
 
         String gender = patientDetails.getGender();

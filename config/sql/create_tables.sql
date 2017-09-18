@@ -39,6 +39,7 @@ CREATE TABLE gpconnect.appointment_appointments (
   typeDisplay        TEXT(100) NULL,
   typeText           TEXT(100) NULL,
   description        TEXT(300) NULL,
+  reasonURL          TEXT(300) NULL,
   reasonCode         TEXT(300) NULL,
   reasonDisplay      TEXT(100) NULL,
   startDateTime      DATETIME  NULL,

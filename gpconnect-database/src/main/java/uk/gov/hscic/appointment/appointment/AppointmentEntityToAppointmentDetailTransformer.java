@@ -19,6 +19,7 @@ public class AppointmentEntityToAppointmentDetailTransformer implements Transfor
         appointmentDetail.setDescription(item.getDescription());
         appointmentDetail.setReasonCode(item.getReasonCode());
         appointmentDetail.setReasonDisplay(item.getReasonDisplay());
+        appointmentDetail.setReasonURL(item.getReasonURL());
         appointmentDetail.setStartDateTime(item.getStartDateTime());
         appointmentDetail.setEndDateTime(item.getEndDateTime());
         appointmentDetail.setSlotIds(item.getSlots().stream().map(SlotEntity::getId).collect(Collectors.toList()));

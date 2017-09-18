@@ -8,8 +8,6 @@ public final class SystemURL {
     public static final String AUTHORIZATION_TOKEN = "https://authorize.fhir.nhs.net/token";
     public static final String SDS_USER_ID = "http://fhir.nhs.net/sds-user-id";
     public static final String SNOMED = "http://snomed.info/sct";
-    public static final String READV2 = "http://read.info/readv2";
-    public static final String READCTV3 = "http://read.info/ctv2";
 
     // HL7 Constants
     public static final String HL7_BASIC_RESOURCE_TYPE = "http://hl7.org/fhir/basic-resource-type";

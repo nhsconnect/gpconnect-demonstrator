@@ -87,6 +87,9 @@ public class AppointmentEntity {
     @Column(name = "reasonDisplay")
     private String reasonDisplay;
 
+    @Column(name = "reasonURL")
+    private String reasonURL;
+    
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "appointment_appointments_slots", joinColumns = {
             @JoinColumn(name = "appointmentId", referencedColumnName = "id") }, inverseJoinColumns = {
@@ -194,6 +197,10 @@ public class AppointmentEntity {
 
     public String getReasonDisplay() {
         return reasonDisplay;
+    }
+
+    public String getReasonURL() {
+        return reasonURL;
     }
 
     public List<SlotEntity> getSlots() {
@@ -306,6 +313,10 @@ public class AppointmentEntity {
 
     public void setReasonDisplay(String reasonDisplay) {
         this.reasonDisplay = reasonDisplay;
+    }
+
+    public void setReasonURL(String reasonURL) {
+        this.reasonURL = reasonURL;
     }
 
     public void setSlots(List<SlotEntity> slots) {

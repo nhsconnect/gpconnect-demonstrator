@@ -18,32 +18,28 @@ public class AppointmentDetail {
     private String extensionConDisplay;
     private String extensionConURL;
     private Long id;
-
     private Date lastUpdated;
-
     private Long locationId;
-
     private Integer minutesDuration;
-
     private Long patientId;
-
     private Long practitionerId;
-
     private Integer priority;
-
     private String reasonCode;
-
     private String reasonDisplay;
-
+    private String reasonURL;
     private List<Long> slotIds;
-
     private Date startDateTime;
-
     private String status;
-
     private Long typeCode;
-
     private String typeDisplay;
+    
+    public String getReasonURL() {
+        return reasonURL;
+    }
+
+    public void setReasonURL(String reasonURL) {
+        this.reasonURL = reasonURL;
+    }
 
     private String typeText;
 

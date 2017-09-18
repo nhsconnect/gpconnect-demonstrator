@@ -612,8 +612,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         String reasonCode = appointmentDetail.getReasonCode();
         String reasonDisplay = appointmentDetail.getReasonDisplay();
-        if (reasonCode != null && reasonDisplay != null) {
-            CodingDt codingReason = new CodingDt().setSystem(SystemURL.SNOMED).setCode(String.valueOf(reasonCode))
+        String reasonSystem = appointmentDetail.getReasonURL();
+        if (reasonCode != null && reasonDisplay != null && reasonSystem != null) {
+            CodingDt codingReason = new CodingDt().setSystem(reasonSystem).setCode(String.valueOf(reasonCode))
                     .setDisplay(reasonDisplay);
             CodeableConceptDt codableConceptReason = new CodeableConceptDt().addCoding(codingReason);
             codableConceptReason.setText(reasonDisplay);
@@ -722,7 +723,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         CodingDt codingFirstRep = appointment.getReason().getCodingFirstRep();
         
-        List<String> allowReasonSystems = Arrays.asList(SystemURL.SNOMED, SystemURL.READV2, SystemURL.READCTV3);
+        List<String> allowReasonSystems = Arrays.asList(SystemURL.SNOMED);
 
         if (!codingFirstRep.isEmpty()) {
             if (!allowReasonSystems.contains(codingFirstRep.getSystem())) {
@@ -740,6 +741,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                             IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
                 } else {
                     appointmentDetail.setReasonCode(reasonCode);
+                    appointmentDetail.setReasonURL(SystemURL.SNOMED);
                 }
 
                 String reasonDisplay = codingFirstRep.getDisplay();

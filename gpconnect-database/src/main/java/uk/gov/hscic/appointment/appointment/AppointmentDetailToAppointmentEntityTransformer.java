@@ -22,6 +22,7 @@ public class AppointmentDetailToAppointmentEntityTransformer {
         appointmentEntity.setTypeText(item.getTypeText());
         appointmentEntity.setDescription(item.getDescription());
         appointmentEntity.setReasonCode(item.getReasonCode());
+        appointmentEntity.setReasonURL(item.getReasonURL());
         appointmentEntity.setReasonDisplay(item.getReasonDisplay());
         appointmentEntity.setStartDateTime(item.getStartDateTime());
         appointmentEntity.setEndDateTime(item.getEndDateTime());

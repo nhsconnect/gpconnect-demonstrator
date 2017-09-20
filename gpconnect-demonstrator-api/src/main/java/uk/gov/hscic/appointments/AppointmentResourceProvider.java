@@ -467,22 +467,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-       
-        results.add(
-                Objects.equals(oldAppointmentDetail.getExtensionBookURL(), appointmentDetail.getExtensionBookURL()));
-        results.add(
-                Objects.equals(oldAppointmentDetail.getExtensionBookCode(), appointmentDetail.getExtensionBookCode()));
-        results.add(Objects.equals(oldAppointmentDetail.getExtensionBookDisplay(),
-                appointmentDetail.getExtensionBookDisplay()));
-        results.add(Objects.equals(oldAppointmentDetail.getExtensionCatURL(), appointmentDetail.getExtensionCatURL()));
-        results.add(
-                Objects.equals(oldAppointmentDetail.getExtensionCatCode(), appointmentDetail.getExtensionCatCode()));
-        results.add(Objects.equals(oldAppointmentDetail.getExtensionCatDisplay(),
-                appointmentDetail.getExtensionCatDisplay()));
-        results.add(Objects.equals(oldAppointmentDetail.getExtensionConURL(), appointmentDetail.getExtensionConURL()));
-        results.add(Objects.equals(oldAppointmentDetail.getExtensionConURL(), appointmentDetail.getExtensionConURL()));
-        results.add(Objects.equals(oldAppointmentDetail.getExtensionConDisplay(),
-                appointmentDetail.getExtensionConDisplay()));
         return results.contains(false);
     }
 
@@ -499,22 +483,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-    
-        results.add(
-                Objects.equals(oldAppointmentDetail.getExtensionBookURL(), appointmentDetail.getExtensionBookURL()));
-        results.add(
-                Objects.equals(oldAppointmentDetail.getExtensionBookCode(), appointmentDetail.getExtensionBookCode()));
-        results.add(Objects.equals(oldAppointmentDetail.getExtensionBookDisplay(),
-                appointmentDetail.getExtensionBookDisplay()));
-        results.add(Objects.equals(oldAppointmentDetail.getExtensionCatURL(), appointmentDetail.getExtensionCatURL()));
-        results.add(
-                Objects.equals(oldAppointmentDetail.getExtensionCatCode(), appointmentDetail.getExtensionCatCode()));
-        results.add(Objects.equals(oldAppointmentDetail.getExtensionCatDisplay(),
-                appointmentDetail.getExtensionCatDisplay()));
-        results.add(Objects.equals(oldAppointmentDetail.getExtensionConURL(), appointmentDetail.getExtensionConURL()));
-        results.add(Objects.equals(oldAppointmentDetail.getExtensionConURL(), appointmentDetail.getExtensionConURL()));
-        results.add(Objects.equals(oldAppointmentDetail.getExtensionConDisplay(),
-                appointmentDetail.getExtensionConDisplay()));
         return results.contains(false);
     }
 
@@ -531,49 +499,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointment.getMeta().addProfile(SystemURL.SD_GPC_APPOINTMENT);
         appointment.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON,
                 new StringDt(appointmentDetail.getCancellationReason()));
-        
-        
-        if(appointmentDetail.getExtensionCatURL() != null )
-        {
-            extensionCoding= new CodingDt();
-            modelExtension = new ExtensionDt();
-            extensionCodableConcept= new CodeableConceptDt();
-            extensionCoding.setCode(appointmentDetail.getExtensionCatCode());
-            extensionCoding.setDisplay(appointmentDetail.getExtensionCatDisplay());
-            extensionCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-appointment-category-1");
-            modelExtension.setUrl(appointmentDetail.getExtensionCatURL());
-            extensionCodableConcept.addCoding(extensionCoding);
-            modelExtension.setValue(extensionCodableConcept);
-            appointment.addUndeclaredExtension(modelExtension);   
-        }
-        
-        if(appointmentDetail.getExtensionConURL() != null )
-        {
-            extensionCoding= new CodingDt();
-            modelExtension = new ExtensionDt();
-            extensionCodableConcept= new CodeableConceptDt();
-            extensionCoding.setCode(appointmentDetail.getExtensionConCode());
-            extensionCoding.setDisplay(appointmentDetail.getExtensionConDisplay());
-            modelExtension.setUrl(appointmentDetail.getExtensionConURL());
-            extensionCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-appointment-contact-method-1");
-            extensionCodableConcept.addCoding(extensionCoding);
-            modelExtension.setValue(extensionCodableConcept);
-            appointment.addUndeclaredExtension(modelExtension);   
-        }
-        
-        if(appointmentDetail.getExtensionBookURL() != null )
-        {
-            extensionCoding= new CodingDt();
-            modelExtension = new ExtensionDt();
-            extensionCodableConcept= new CodeableConceptDt();
-            extensionCoding.setCode(appointmentDetail.getExtensionBookCode());
-            extensionCoding.setDisplay(appointmentDetail.getExtensionBookDisplay());
-            modelExtension.setUrl(appointmentDetail.getExtensionBookURL());
-            extensionCoding.setSystem("http://fhir.nhs.net/ValueSet/gpconnect-appointment-booking-method-1");
-            extensionCodableConcept.addCoding(extensionCoding);
-            modelExtension.setValue(extensionCodableConcept);
-            appointment.addUndeclaredExtension(modelExtension);   
-        }
         
         appointment.setIdentifier(Collections.singletonList(
                 new IdentifierDt(SystemURL.ID_GPC_APPOINTMENT_IDENTIFIER, String.valueOf(appointmentDetail.getId()))));
@@ -680,14 +605,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
         List<ExtensionDt> extension = appointment
                 .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON);
 
-        List<ExtensionDt> bookingExtension = appointment
-                .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD);
-
-        List<ExtensionDt> contactExtension = appointment
-                .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CONTACT_METHOD);
-
-        List<ExtensionDt> categoryExtension = appointment
-                .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CATEGORY);
 
         if (extension != null && !extension.isEmpty()) {
             IBaseDatatype value = extension.get(0).getValue();
@@ -700,20 +617,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             appointmentDetail.setCancellationReason(value.toString());
         }
 
-        if (bookingExtension != null && !bookingExtension.isEmpty()) {
-            CodeableConceptDt values = (CodeableConceptDt) bookingExtension.get(0).getValue();
-            appointmentDetail = addBookExtensionDetails(values, appointmentDetail);
-        }
 
-        if (contactExtension != null && !contactExtension.isEmpty()) {
-            CodeableConceptDt values = (CodeableConceptDt) contactExtension.get(0).getValue();
-            appointmentDetail = addContactExtensionDetails(values, appointmentDetail);
-        }
-
-        if (categoryExtension != null && !categoryExtension.isEmpty()) {
-            CodeableConceptDt values = (CodeableConceptDt) categoryExtension.get(0).getValue();
-            appointmentDetail = addCategoryExtensionDetails(values, appointmentDetail);
-        }
         
         appointmentDetail.setStatus(appointment.getStatus().toLowerCase(Locale.UK));
         appointmentDetail.setTypeDisplay(appointment.getType().getCodingFirstRep().getDisplay());
@@ -787,40 +691,17 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 } else if (participantReference.contains("Location/")) {
                     appointmentDetail.setLocationId(actorId);
                 }
+            }else{
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException(String.format("Participant Actor cannot be null")),
+                        SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);   
             }
         }
 
         return appointmentDetail;
     }
 
-    private AppointmentDetail addBookExtensionDetails(CodeableConceptDt values, AppointmentDetail appointmentDetail) {
-        String extensionDisplay = values.getCoding().get(0).getDisplay();
-        String extensionCode = values.getCoding().get(0).getCode();
-        appointmentDetail.setExtensionBookURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD);
-        appointmentDetail.setExtensionBookDisplay(extensionDisplay);
-        appointmentDetail.setExtensionBookCode(extensionCode);
-        return appointmentDetail;
-    }
 
-    private AppointmentDetail addCategoryExtensionDetails(CodeableConceptDt values,
-            AppointmentDetail appointmentDetail) {
-        String extensionDisplay = values.getCoding().get(0).getDisplay();
-        String extensionCode = values.getCoding().get(0).getCode();
-        appointmentDetail.setExtensionCatURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CATEGORY);
-        appointmentDetail.setExtensionCatDisplay(extensionDisplay);
-        appointmentDetail.setExtensionCatCode(extensionCode);
-        return appointmentDetail;
-    }
-
-    private AppointmentDetail addContactExtensionDetails(CodeableConceptDt values,
-            AppointmentDetail appointmentDetail) {
-        String extensionDisplay = values.getCoding().get(0).getDisplay();
-        String extensionCode = values.getCoding().get(0).getCode();
-        appointmentDetail.setExtensionConURL(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CONTACT_METHOD);
-        appointmentDetail.setExtensionConDisplay(extensionDisplay);
-        appointmentDetail.setExtensionConCode(extensionCode);
-        return appointmentDetail;
-    }
     
     private void validateParticipantActor(ResourceReferenceDt participantActor){
         
@@ -896,10 +777,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         List<String> extensionURLs = undeclaredExtensions.stream().map(ExtensionDt::getUrlAsString)
                 .collect(Collectors.toList());
         
-        extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD);
         extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON);
-        extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CATEGORY);
-        extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CONTACT_METHOD);
 
         if (!extensionURLs.isEmpty()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(

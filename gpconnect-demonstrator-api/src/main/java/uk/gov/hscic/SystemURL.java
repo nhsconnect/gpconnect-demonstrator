@@ -39,10 +39,7 @@ public final class SystemURL {
     
     // FHIR StructureDefinition Extension
     public static final String SD_CC_EXT_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1";
-    public static final String SD_EXTENSION_GPC_APPOINTMENT_BOOKING_METHOD = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-booking-method-1";
     public static final String SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1";
-    public static final String SD_EXTENSION_GPC_APPOINTMENT_CATEGORY = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-category-1";
-    public static final String SD_EXTENSION_GPC_APPOINTMENT_CONTACT_METHOD = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-contact-method-1";
     public static final String SD_EXTENSION_GPC_PRACTITIONER = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1";
     public static final String SD_EXTENSION_MEDICATION_QUANTITY_TEXT = "http://fhir.nhs.net/StructureDefinition/extension-medication-quantity-text-1-0";
     public static final String SD_EXTENSION_PERSCRIPTION_REPEAT_REVIEW_DATE = "http://fhir.nhs.net/StructureDefinition/extension-prescription-repeat-review-date-1-0";

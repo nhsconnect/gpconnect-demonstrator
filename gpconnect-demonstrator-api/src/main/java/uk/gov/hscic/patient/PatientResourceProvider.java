@@ -987,6 +987,11 @@ public class PatientResourceProvider implements IResourceProvider {
         patient.addIdentifier(localIdentifier);
         
         patient.addName()
+                    .addFamily("AnotherUsualFamilyName")
+                    .addGiven("AnotherUsualGivenName")
+                    .setUse(NameUseEnum.USUAL);
+                
+        patient.addName()
                     .addFamily("AdditionalFamily")
                     .addGiven("AdditionalGiven")
                     .setUse(NameUseEnum.TEMP);

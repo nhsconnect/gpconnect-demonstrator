@@ -969,23 +969,7 @@ public class PatientResourceProvider implements IResourceProvider {
         nhsCommExtension.addUndeclaredExtension(new ExtensionDt(false, SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanDt(false)));
         
         patient.addUndeclaredExtension(nhsCommExtension);
-        
-        IdentifierDt localIdentifier = new IdentifierDt();
-        localIdentifier.setUse(IdentifierUseEnum.USUAL);
-        localIdentifier.setSystem(SystemURL.ID_LOCAL_PATIENT_IDENTIFIER);
-        localIdentifier.setValue("123456");
-        
-        BoundCodeableConceptDt liType = new BoundCodeableConceptDt();
-        CodingDt liTypeCoding = new CodingDt();
-        liTypeCoding.setCode("EN");
-        liTypeCoding.setDisplay("Employer number");
-        liTypeCoding.setSystem(SystemURL.VS_IDENTIFIER_TYPE);
-        liType.addCoding(liTypeCoding);
-        localIdentifier.setType(liType);
-
-        localIdentifier.setAssigner(new ResourceReferenceDt("Organization/1"));
-        patient.addIdentifier(localIdentifier);
-        
+              
         patient.addName()
                     .addFamily("AnotherUsualFamilyName")
                     .addGiven("AnotherUsualGivenName")

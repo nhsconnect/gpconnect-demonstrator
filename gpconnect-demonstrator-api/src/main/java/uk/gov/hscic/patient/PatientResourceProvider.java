@@ -572,7 +572,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     patientDetails = registerPatientResourceConverterToPatientDetail(unregisteredPatient);
                     patientStore.create(patientDetails);
                 }else{
-                    patientDetails.setRegistrationStatus("A");
+                    patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
                     patientStore.update(patientDetails);
                 }
                 registeredPatient = patientDetailsToRegisterPatientResourceConverter(
@@ -596,9 +596,9 @@ public class PatientResourceProvider implements IResourceProvider {
     public Boolean IsInactiveTemporaryPatient(PatientDetails patientDetails){
         
         return patientDetails.getRegistrationType() != null && 
-                "T".equals(patientDetails.getRegistrationType()) &&
+                TEMPORARY_RESIDENT_REGISTRATION_TYPE.equals(patientDetails.getRegistrationType()) &&
                 patientDetails.getRegistrationStatus() != null && 
-                "I".equals(patientDetails.getRegistrationStatus());
+                ACTIVE_REGISTRATION_STATUS.equals(patientDetails.getRegistrationStatus()) == false;
     }
 
     public String getNhsNumber(Object source) {
@@ -722,26 +722,6 @@ public class PatientResourceProvider implements IResourceProvider {
         }
     }
 
-    private void validateRegistrationStatusAndType(Patient patient) {
-        String registrationStatus = getRegistrationStatus(patient);
-        if (ACTIVE_REGISTRATION_STATUS.equals(registrationStatus) == false) {
-            String message = String.format("The given registration status is not valid. Expected - %s. Actual - %s", ACTIVE_REGISTRATION_STATUS, registrationStatus);
-
-            throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
-                                                                         SystemCode.BAD_REQUEST,
-                                                                         IssueTypeEnum.INVALID_CONTENT);
-        }
-
-        String registrationType = getRegistrationType(patient);
-        if (TEMPORARY_RESIDENT_REGISTRATION_TYPE.equals(registrationType) == false) {
-            String message = String.format("The given registration type is not valid. Expected - %s. Actual - %s", TEMPORARY_RESIDENT_REGISTRATION_TYPE, registrationType);
-
-            throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
-                                                                         SystemCode.BAD_REQUEST,
-                                                                         IssueTypeEnum.INVALID_CONTENT);
-        }
-    }
-    
     private void checkValidExtensions(List<ExtensionDt> undeclaredExtensions){
         
         List<String> extensionURLs = undeclaredExtensions.stream().map(ExtensionDt::getUrlAsString)
@@ -767,16 +747,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
         Set<String> invalidFields = new HashSet<String>();
 
-        //if (patient.getActive() != null) invalidFields.add("active");
-        //if (patient.getTelecom().isEmpty() == false) invalidFields.add("telecom");
-        //if (patient.getDeceased() != null && patient.getDeceased().isEmpty() == false) invalidFields.add("deceased");
-        //if (patient.getAddress().isEmpty() == false) invalidFields.add("address");
-        //if (patient.getMaritalStatus().isEmpty() == false) invalidFields.add("marital status");
-        //if (patient.getMultipleBirth() != null && patient.getMultipleBirth().isEmpty() == false) invalidFields.add("multiple birth");
-        //if (patient.getCareProvider().isEmpty() == false) invalidFields.add("care provider");
-        //if (patient.getManagingOrganization().isEmpty() == false) invalidFields.add("managing organisation");
-        //if (patient.getContact().isEmpty() == false) invalidFields.add("contact");
-        
         // ## The above can exist in the patient resource but can be ignored. If they are saved by the provider then they should be returned in the response!
         
         if (patient.getPhoto().isEmpty() == false) invalidFields.add("photo");
@@ -865,7 +835,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patientDetails.setRegistrationStartDateTime(new Date());
         //patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
-        patientDetails.setRegistrationStatus("A");
+        patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
         patientDetails.setRegistrationType("T");
 
         return patientDetails;
@@ -1099,7 +1069,7 @@ public class PatientResourceProvider implements IResourceProvider {
         
         
         String registrationStatusValue = patientDetails.getRegistrationStatus();
-        patient.setActive("A".equals(registrationStatusValue));
+        patient.setActive(ACTIVE_REGISTRATION_STATUS.equals(registrationStatusValue) || null == registrationStatusValue);
 
         String registrationTypeValue = patientDetails.getRegistrationType();
          if (registrationTypeValue != null) {

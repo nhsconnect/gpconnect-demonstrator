@@ -32,33 +32,6 @@ public class AppointmentEntity {
     @Column(name = "endDateTime")
     private Date endDateTime;
 
-    @Column(name = "extensionBookCode")
-    private String extensionBookCode;
-
-    @Column(name = "extensionBookDisplay")
-    private String extensionBookDisplay;
-
-    @Column(name = "extensionBookURL")
-    private String extensionBookURL;
-
-    @Column(name = "extensionCatCode")
-    private String extensionCatCode;
-
-    @Column(name = "extensionCatDisplay")
-    private String extensionCatDisplay;
-
-    @Column(name = "extensionCatURL")
-    private String extensionCatURL;
-
-    @Column(name = "extensionConCode")
-    private String extensionConCode;
-
-    @Column(name = "extensionConDisplay")
-    private String extensionConDisplay;
-
-    @Column(name = "extensionConURL")
-    private String extensionConURL;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -125,42 +98,6 @@ public class AppointmentEntity {
 
     public Date getEndDateTime() {
         return endDateTime;
-    }
-
-    public String getExtensionBookCode() {
-        return extensionBookCode;
-    }
-
-    public String getExtensionBookDisplay() {
-        return extensionBookDisplay;
-    }
-
-    public String getExtensionBookURL() {
-        return extensionBookURL;
-    }
-
-    public String getExtensionCatCode() {
-        return extensionCatCode;
-    }
-
-    public String getExtensionCatDisplay() {
-        return extensionCatDisplay;
-    }
-
-    public String getExtensionCatURL() {
-        return extensionCatURL;
-    }
-
-    public String getExtensionConCode() {
-        return extensionConCode;
-    }
-
-    public String getExtensionConDisplay() {
-        return extensionConDisplay;
-    }
-
-    public String getExtensionConURL() {
-        return extensionConURL;
     }
 
     public Long getId() {
@@ -241,42 +178,6 @@ public class AppointmentEntity {
 
     public void setEndDateTime(Date endDateTime) {
         this.endDateTime = endDateTime;
-    }
-
-    public void setExtensionBookCode(String extensionBookCode) {
-        this.extensionBookCode = extensionBookCode;
-    }
-
-    public void setExtensionBookDisplay(String extensionBookDisplay) {
-        this.extensionBookDisplay = extensionBookDisplay;
-    }
-
-    public void setExtensionBookURL(String extensionBookURL) {
-        this.extensionBookURL = extensionBookURL;
-    }
-
-    public void setExtensionCatCode(String extensionCatCode) {
-        this.extensionCatCode = extensionCatCode;
-    }
-
-    public void setExtensionCatDisplay(String extensionCatDisplay) {
-        this.extensionCatDisplay = extensionCatDisplay;
-    }
-
-    public void setExtensionCatURL(String extensionCatURL) {
-        this.extensionCatURL = extensionCatURL;
-    }
-
-    public void setExtensionConCode(String extensionConCode) {
-        this.extensionConCode = extensionConCode;
-    }
-
-    public void setExtensionConDisplay(String extensionConDisplay) {
-        this.extensionConDisplay = extensionConDisplay;
-    }
-
-    public void setExtensionConURL(String extensionConURL) {
-        this.extensionConURL = extensionConURL;
     }
 
     public void setId(Long id) {

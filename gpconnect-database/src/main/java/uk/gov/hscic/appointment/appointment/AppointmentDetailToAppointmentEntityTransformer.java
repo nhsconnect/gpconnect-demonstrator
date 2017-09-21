@@ -33,15 +33,6 @@ public class AppointmentDetailToAppointmentEntityTransformer {
         appointmentEntity.setLastUpdated(item.getLastUpdated());
         appointmentEntity.setMinutesDuration(item.getMinutesDuration());
         appointmentEntity.setPriority(item.getPriority());
-        appointmentEntity.setExtensionBookURL(item.getExtensionBookURL());
-        appointmentEntity.setExtensionBookDisplay(item.getExtensionBookDisplay());
-        appointmentEntity.setExtensionBookCode(item.getExtensionBookCode());
-        appointmentEntity.setExtensionCatURL(item.getExtensionCatURL());
-        appointmentEntity.setExtensionCatDisplay(item.getExtensionCatDisplay());
-        appointmentEntity.setExtensionCatCode(item.getExtensionCatCode());
-        appointmentEntity.setExtensionConURL(item.getExtensionConURL());
-        appointmentEntity.setExtensionConDisplay(item.getExtensionConDisplay());
-        appointmentEntity.setExtensionConCode(item.getExtensionConCode());
         return appointmentEntity;
     }
 }

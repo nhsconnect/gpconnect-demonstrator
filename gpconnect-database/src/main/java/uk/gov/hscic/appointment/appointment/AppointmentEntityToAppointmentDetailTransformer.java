@@ -30,15 +30,6 @@ public class AppointmentEntityToAppointmentDetailTransformer implements Transfor
         appointmentDetail.setLastUpdated(item.getLastUpdated());
         appointmentDetail.setMinutesDuration(item.getMinutesDuration());
         appointmentDetail.setPriority(item.getPriority());
-        appointmentDetail.setExtensionBookURL(item.getExtensionBookURL());
-        appointmentDetail.setExtensionBookDisplay(item.getExtensionBookDisplay());
-        appointmentDetail.setExtensionBookCode(item.getExtensionBookCode());
-        appointmentDetail.setExtensionCatURL(item.getExtensionCatURL());
-        appointmentDetail.setExtensionCatDisplay(item.getExtensionCatDisplay());
-        appointmentDetail.setExtensionCatCode(item.getExtensionCatCode());
-        appointmentDetail.setExtensionConURL(item.getExtensionConURL());
-        appointmentDetail.setExtensionConDisplay(item.getExtensionConDisplay());
-        appointmentDetail.setExtensionConCode(item.getExtensionConCode());
         
         return appointmentDetail;
     }

@@ -972,6 +972,7 @@ public class PatientResourceProvider implements IResourceProvider {
         nhsCommExtension.addUndeclaredExtension(new ExtensionDt(false, SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanDt(false)));
         
         patient.addUndeclaredExtension(nhsCommExtension);
+<<<<<<< HEAD
         
         IdentifierDt localIdentifier = new IdentifierDt();
         localIdentifier.setUse(IdentifierUseEnum.USUAL);
@@ -999,6 +1000,9 @@ public class PatientResourceProvider implements IResourceProvider {
                 
         PeriodDt pastPeriod = new PeriodDt().setStart(startDate).setEnd(endDate);
         
+=======
+              
+>>>>>>> aae6b3b844b2226b83998014ab1aa6b43bd30fdf
         patient.addName()
                     .addFamily("AnotherUsualFamilyName")
                     .addGiven("AnotherUsualGivenName")
@@ -1097,18 +1101,9 @@ public class PatientResourceProvider implements IResourceProvider {
         ExtensionDt regPeriodExt = new ExtensionDt(false, SystemURL.SD_CC_EXT_REGISTRATION_PERIOD, registrationPeriod);
         regDetailsExtension.addUndeclaredExtension(regPeriodExt);
         
+        
         String registrationStatusValue = patientDetails.getRegistrationStatus();
-        if (registrationStatusValue != null) {
-          
-            CodingDt regStatusCode = new CodingDt();
-            regStatusCode.setCode(registrationStatusValue);
-            regStatusCode.setDisplay("Active"); // Should always be Active
-            regStatusCode.setSystem(SystemURL.CS_REGISTRATION_STATUS);
-            CodeableConceptDt regStatusConcept = new CodeableConceptDt();
-            regStatusConcept.addCoding(regStatusCode);
-            ExtensionDt regStatusExt = new ExtensionDt(false, SystemURL.SD_CC_EXT_REGISTRATION_STATUS, regStatusConcept);
-            regDetailsExtension.addUndeclaredExtension(regStatusExt);
-        }
+        patient.setActive("A".equals(registrationStatusValue));
 
         String registrationTypeValue = patientDetails.getRegistrationType();
          if (registrationTypeValue != null) {

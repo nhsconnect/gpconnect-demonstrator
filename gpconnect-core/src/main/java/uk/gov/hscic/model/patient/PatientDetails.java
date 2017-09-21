@@ -1,6 +1,8 @@
 package uk.gov.hscic.model.patient;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class PatientDetails {
     private String address;
@@ -40,6 +42,10 @@ public class PatientDetails {
 
     public String getForename() {
         return forename;
+    }
+    
+    public List<String> getForenames() {      
+        return Arrays.asList(forename.split("\\s*,\\s*"));
     }
 
     public String getGender() {

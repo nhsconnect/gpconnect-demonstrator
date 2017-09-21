@@ -830,7 +830,11 @@ public class PatientResourceProvider implements IResourceProvider {
     private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
         PatientDetails patientDetails = new PatientDetails();
         HumanNameDt name = patientResource.getNameFirstRep();
-        patientDetails.setForename(name.getGivenAsSingleString());
+        
+        String givenNames = name.getGiven().stream().map(n -> n.getValue()).collect(Collectors.joining(","));       
+        
+        patientDetails.setForename(givenNames);
+        
         patientDetails.setSurname(name.getFamilyAsSingleString());
         patientDetails.setDateOfBirth(patientResource.getBirthDate());
         patientDetails.setGender(patientResource.getGender());
@@ -940,11 +944,10 @@ public class PatientResourceProvider implements IResourceProvider {
     private Patient patientDetailsToRegisterPatientResourceConverter(PatientDetails patientDetails) {
         Patient patient = patientDetailsToMinimalPatient(patientDetails);
 
-        patient.addName()
-                    .addFamily(patientDetails.getSurname())
-                    .addGiven(patientDetails.getForename())
-                    .setUse(NameUseEnum.USUAL);
+        HumanNameDt name = getPatientNameFromPatientDetails(patientDetails);
         
+        patient.addName(name);
+
         patient = setStaticPatientData(patient);
 
         return patient;
@@ -968,12 +971,39 @@ public class PatientResourceProvider implements IResourceProvider {
         nhsCommExtension.addUndeclaredExtension(createCodingExtension("E", "Excellent", SystemURL.CS_CC_LANG_ABILITY_PROFI, SystemURL.SD_CC_COMM_PROFICIENCY));
         nhsCommExtension.addUndeclaredExtension(new ExtensionDt(false, SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanDt(false)));
         
-        patient.addUndeclaredExtension(nhsCommExtension);
-              
+        patient.addUndeclaredExtension(nhsCommExtension); 
+       
+        IdentifierDt localIdentifier = new IdentifierDt();
+        localIdentifier.setUse(IdentifierUseEnum.USUAL);
+        localIdentifier.setSystem(SystemURL.ID_LOCAL_PATIENT_IDENTIFIER);
+        localIdentifier.setValue("123456");
+        
+        BoundCodeableConceptDt liType = new BoundCodeableConceptDt();
+        CodingDt liTypeCoding = new CodingDt();
+        liTypeCoding.setCode("EN");
+        liTypeCoding.setDisplay("Employer number");
+        liTypeCoding.setSystem(SystemURL.VS_IDENTIFIER_TYPE);
+        liType.addCoding(liTypeCoding);
+        localIdentifier.setType(liType);
+
+        localIdentifier.setAssigner(new ResourceReferenceDt("Organization/1"));
+        patient.addIdentifier(localIdentifier);
+        
+        Calendar calendar = Calendar.getInstance();
+        
+        calendar.set(2017, 1, 1);        
+        DateTimeDt endDate = new DateTimeDt(calendar.getTime());
+        
+        calendar.set(2016, 1, 1);
+        DateTimeDt startDate = new DateTimeDt(calendar.getTime()); 
+                
+        PeriodDt pastPeriod = new PeriodDt().setStart(startDate).setEnd(endDate);
+ 
         patient.addName()
                     .addFamily("AnotherUsualFamilyName")
                     .addGiven("AnotherUsualGivenName")
-                    .setUse(NameUseEnum.USUAL);
+                    .setUse(NameUseEnum.USUAL)
+                    .setPeriod(pastPeriod);
                 
         patient.addName()
                     .addFamily("AdditionalFamily")
@@ -1109,15 +1139,12 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     private Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) {
-        Patient patient = patientDetailsToMinimalPatient(patientDetails);
-
-        patient.addName()
-                .setText(patientDetails.getName())
-                .addFamily(patientDetails.getSurname())
-                .addGiven(patientDetails.getForename())
-                .addPrefix(patientDetails.getTitle())
-                .setUse(NameUseEnum.USUAL);
-
+        Patient patient = patientDetailsToMinimalPatient(patientDetails);             
+        
+        HumanNameDt name = getPatientNameFromPatientDetails(patientDetails);
+        
+        patient.addName(name);
+                
         String addressLines = patientDetails.getAddress();
         if (addressLines != null) {
             patient.addAddress()
@@ -1154,6 +1181,23 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         return patient;
+    }
+
+    private HumanNameDt getPatientNameFromPatientDetails(PatientDetails patientDetails) {
+        HumanNameDt name = new HumanNameDt();
+        
+        name.setText(patientDetails.getName())
+            .addFamily(patientDetails.getSurname())
+            .addPrefix(patientDetails.getTitle())
+            .setUse(NameUseEnum.USUAL);
+        
+        List<String> givenNames = patientDetails.getForenames();
+        
+        givenNames.forEach((givenName) -> {
+            name.addGiven(givenName);
+        });
+        
+        return name;
     }
 
     private class NhsNumber {

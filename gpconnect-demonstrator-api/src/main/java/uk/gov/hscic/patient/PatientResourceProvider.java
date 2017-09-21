@@ -971,9 +971,8 @@ public class PatientResourceProvider implements IResourceProvider {
         nhsCommExtension.addUndeclaredExtension(createCodingExtension("E", "Excellent", SystemURL.CS_CC_LANG_ABILITY_PROFI, SystemURL.SD_CC_COMM_PROFICIENCY));
         nhsCommExtension.addUndeclaredExtension(new ExtensionDt(false, SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanDt(false)));
         
-        patient.addUndeclaredExtension(nhsCommExtension);
-<<<<<<< HEAD
-        
+        patient.addUndeclaredExtension(nhsCommExtension); 
+       
         IdentifierDt localIdentifier = new IdentifierDt();
         localIdentifier.setUse(IdentifierUseEnum.USUAL);
         localIdentifier.setSystem(SystemURL.ID_LOCAL_PATIENT_IDENTIFIER);
@@ -999,10 +998,7 @@ public class PatientResourceProvider implements IResourceProvider {
         DateTimeDt startDate = new DateTimeDt(calendar.getTime()); 
                 
         PeriodDt pastPeriod = new PeriodDt().setStart(startDate).setEnd(endDate);
-        
-=======
-              
->>>>>>> aae6b3b844b2226b83998014ab1aa6b43bd30fdf
+ 
         patient.addName()
                     .addFamily("AnotherUsualFamilyName")
                     .addGiven("AnotherUsualGivenName")

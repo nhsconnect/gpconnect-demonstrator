@@ -50,15 +50,6 @@ CREATE TABLE gpconnect.appointment_appointments (
   locationId         BIGINT    NULL NOT NULL,
   minutesDuration    BIGINT    NULL,
   priority    		BIGINT    NULL,
-  extensionBookURL 		TEXT(300) NULL,
-  extensionBookCode		TEXT(300) NULL,
-  extensionBookDisplay	TEXT(300) NULL,
-    extensionCatURL 		TEXT(300) NULL,
-  extensionCatCode		TEXT(300) NULL,
-  extensionCatDisplay	TEXT(300) NULL,
-   extensionConURL 		TEXT(300) NULL,
-  extensionConCode		TEXT(300) NULL,
-  extensionConDisplay	TEXT(300) NULL,
   lastUpdated        DATETIME  NULL,
   PRIMARY KEY (id)
 );

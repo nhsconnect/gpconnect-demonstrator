@@ -588,7 +588,9 @@ public class PatientResourceProvider implements IResourceProvider {
                     SystemCode.INVALID_PARAMETER, IssueTypeEnum.NOT_FOUND);
         }
 
+
         Bundle bundle = new Bundle().setType(BundleTypeEnum.SEARCH_RESULTS);
+        bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
         bundle.addEntry().setResource(registeredPatient);
         return bundle;
     }
@@ -770,17 +772,15 @@ public class PatientResourceProvider implements IResourceProvider {
                     new InvalidRequestException("The patient must have at least one Name."),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
+              
+        List<HumanNameDt> usualActiveNames = names.stream()
+                                                .filter(nm -> IsActiveName(nm))
+                                                .filter(nm -> NameUseEnum.USUAL.getCode().equals(nm.getUse()))
+                                                .collect(Collectors.toList());
         
-        Integer usualNameCount = 0;
-        for(HumanNameDt name : names){
-            if(NameUseEnum.USUAL.getCode().equals(name.getUse())){
-                usualNameCount++;
-            } 
-        }
-        
-        if(usualNameCount < 1){
+        if(usualActiveNames.size() != 1){
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("The patient must have one Name with a Use of USUAL"),
+                    new InvalidRequestException("The patient must have one Active Name with a Use of USUAL"),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
@@ -795,6 +795,24 @@ public class PatientResourceProvider implements IResourceProvider {
                     new InvalidRequestException(message),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
+    }
+    
+    private Boolean IsActiveName(HumanNameDt name){
+        
+        PeriodDt period = name.getPeriod();
+
+        if(null == period){
+            return true;
+        }
+
+        Date start = period.getStart();
+        Date end = period.getEnd();
+           
+        if((null == end || end.after(new Date())) && (null == start || start.equals(new Date()) || start.before(new Date()))){
+            return true;
+        }
+       
+        return false;
     }
 
     private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {

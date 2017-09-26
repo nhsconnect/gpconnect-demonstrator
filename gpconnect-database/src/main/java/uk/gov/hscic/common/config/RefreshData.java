@@ -48,8 +48,9 @@ public class RefreshData {
     }
 
     private void resetAppointments() {
-        slotStore.clearSlots();
+
         appointmentStore.clearAppointments();
+        slotStore.clearSlots();
 
         try {
             List<String> lines = Files.readLines(new File(configPath + slotsFilename), StandardCharsets.UTF_8);

@@ -570,7 +570,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     patientDetails = registerPatientResourceConverterToPatientDetail(unregisteredPatient);
                     patientStore.create(patientDetails);
                 }else{
-                    patientDetails.setRegistrationStatus("A");
+                    patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
                     patientStore.update(patientDetails);
                 }
                 registeredPatient = patientDetailsToRegisterPatientResourceConverter(
@@ -594,9 +594,9 @@ public class PatientResourceProvider implements IResourceProvider {
     public Boolean IsInactiveTemporaryPatient(PatientDetails patientDetails){
         
         return patientDetails.getRegistrationType() != null && 
-                "T".equals(patientDetails.getRegistrationType()) &&
+                TEMPORARY_RESIDENT_REGISTRATION_TYPE.equals(patientDetails.getRegistrationType()) &&
                 patientDetails.getRegistrationStatus() != null && 
-                "I".equals(patientDetails.getRegistrationStatus());
+                ACTIVE_REGISTRATION_STATUS.equals(patientDetails.getRegistrationStatus()) == false;
     }
 
     public String getNhsNumber(Object source) {
@@ -720,26 +720,6 @@ public class PatientResourceProvider implements IResourceProvider {
         }
     }
 
-    private void validateRegistrationStatusAndType(Patient patient) {
-        String registrationStatus = getRegistrationStatus(patient);
-        if (ACTIVE_REGISTRATION_STATUS.equals(registrationStatus) == false) {
-            String message = String.format("The given registration status is not valid. Expected - %s. Actual - %s", ACTIVE_REGISTRATION_STATUS, registrationStatus);
-
-            throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
-                                                                         SystemCode.BAD_REQUEST,
-                                                                         IssueTypeEnum.INVALID_CONTENT);
-        }
-
-        String registrationType = getRegistrationType(patient);
-        if (TEMPORARY_RESIDENT_REGISTRATION_TYPE.equals(registrationType) == false) {
-            String message = String.format("The given registration type is not valid. Expected - %s. Actual - %s", TEMPORARY_RESIDENT_REGISTRATION_TYPE, registrationType);
-
-            throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
-                                                                         SystemCode.BAD_REQUEST,
-                                                                         IssueTypeEnum.INVALID_CONTENT);
-        }
-    }
-    
     private void checkValidExtensions(List<ExtensionDt> undeclaredExtensions){
         
         List<String> extensionURLs = undeclaredExtensions.stream().map(ExtensionDt::getUrlAsString)
@@ -765,16 +745,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
         Set<String> invalidFields = new HashSet<String>();
 
-        //if (patient.getActive() != null) invalidFields.add("active");
-        //if (patient.getTelecom().isEmpty() == false) invalidFields.add("telecom");
-        //if (patient.getDeceased() != null && patient.getDeceased().isEmpty() == false) invalidFields.add("deceased");
-        //if (patient.getAddress().isEmpty() == false) invalidFields.add("address");
-        //if (patient.getMaritalStatus().isEmpty() == false) invalidFields.add("marital status");
-        //if (patient.getMultipleBirth() != null && patient.getMultipleBirth().isEmpty() == false) invalidFields.add("multiple birth");
-        //if (patient.getCareProvider().isEmpty() == false) invalidFields.add("care provider");
-        //if (patient.getManagingOrganization().isEmpty() == false) invalidFields.add("managing organisation");
-        //if (patient.getContact().isEmpty() == false) invalidFields.add("contact");
-        
         // ## The above can exist in the patient resource but can be ignored. If they are saved by the provider then they should be returned in the response!
         
         if (patient.getPhoto().isEmpty() == false) invalidFields.add("photo");
@@ -828,7 +798,11 @@ public class PatientResourceProvider implements IResourceProvider {
     private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
         PatientDetails patientDetails = new PatientDetails();
         HumanNameDt name = patientResource.getNameFirstRep();
-        patientDetails.setForename(name.getGivenAsSingleString());
+        
+        String givenNames = name.getGiven().stream().map(n -> n.getValue()).collect(Collectors.joining(","));       
+        
+        patientDetails.setForename(givenNames);
+        
         patientDetails.setSurname(name.getFamilyAsSingleString());
         patientDetails.setDateOfBirth(patientResource.getBirthDate());
         patientDetails.setGender(patientResource.getGender());
@@ -859,7 +833,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patientDetails.setRegistrationStartDateTime(new Date());
         //patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
-        patientDetails.setRegistrationStatus("A");
+        patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
         patientDetails.setRegistrationType("T");
 
         return patientDetails;
@@ -938,11 +912,10 @@ public class PatientResourceProvider implements IResourceProvider {
     private Patient patientDetailsToRegisterPatientResourceConverter(PatientDetails patientDetails) {
         Patient patient = patientDetailsToMinimalPatient(patientDetails);
 
-        patient.addName()
-                    .addFamily(patientDetails.getSurname())
-                    .addGiven(patientDetails.getForename())
-                    .setUse(NameUseEnum.USUAL);
+        HumanNameDt name = getPatientNameFromPatientDetails(patientDetails);
         
+        patient.addName(name);
+
         patient = setStaticPatientData(patient);
 
         return patient;
@@ -966,8 +939,8 @@ public class PatientResourceProvider implements IResourceProvider {
         nhsCommExtension.addUndeclaredExtension(createCodingExtension("E", "Excellent", SystemURL.CS_CC_LANG_ABILITY_PROFI, SystemURL.SD_CC_COMM_PROFICIENCY));
         nhsCommExtension.addUndeclaredExtension(new ExtensionDt(false, SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanDt(false)));
         
-        patient.addUndeclaredExtension(nhsCommExtension);
-        
+        patient.addUndeclaredExtension(nhsCommExtension); 
+       
         IdentifierDt localIdentifier = new IdentifierDt();
         localIdentifier.setUse(IdentifierUseEnum.USUAL);
         localIdentifier.setSystem(SystemURL.ID_LOCAL_PATIENT_IDENTIFIER);
@@ -984,10 +957,21 @@ public class PatientResourceProvider implements IResourceProvider {
         localIdentifier.setAssigner(new ResourceReferenceDt("Organization/1"));
         patient.addIdentifier(localIdentifier);
         
+        Calendar calendar = Calendar.getInstance();
+        
+        calendar.set(2017, 1, 1);        
+        DateTimeDt endDate = new DateTimeDt(calendar.getTime());
+        
+        calendar.set(2016, 1, 1);
+        DateTimeDt startDate = new DateTimeDt(calendar.getTime()); 
+                
+        PeriodDt pastPeriod = new PeriodDt().setStart(startDate).setEnd(endDate);
+ 
         patient.addName()
                     .addFamily("AnotherUsualFamilyName")
                     .addGiven("AnotherUsualGivenName")
-                    .setUse(NameUseEnum.USUAL);
+                    .setUse(NameUseEnum.USUAL)
+                    .setPeriod(pastPeriod);
                 
         patient.addName()
                     .addFamily("AdditionalFamily")
@@ -1081,18 +1065,9 @@ public class PatientResourceProvider implements IResourceProvider {
         ExtensionDt regPeriodExt = new ExtensionDt(false, SystemURL.SD_CC_EXT_REGISTRATION_PERIOD, registrationPeriod);
         regDetailsExtension.addUndeclaredExtension(regPeriodExt);
         
+        
         String registrationStatusValue = patientDetails.getRegistrationStatus();
-        if (registrationStatusValue != null) {
-          
-            CodingDt regStatusCode = new CodingDt();
-            regStatusCode.setCode(registrationStatusValue);
-            regStatusCode.setDisplay("Active"); // Should always be Active
-            regStatusCode.setSystem(SystemURL.CS_REGISTRATION_STATUS);
-            CodeableConceptDt regStatusConcept = new CodeableConceptDt();
-            regStatusConcept.addCoding(regStatusCode);
-            ExtensionDt regStatusExt = new ExtensionDt(false, SystemURL.SD_CC_EXT_REGISTRATION_STATUS, regStatusConcept);
-            regDetailsExtension.addUndeclaredExtension(regStatusExt);
-        }
+        patient.setActive(ACTIVE_REGISTRATION_STATUS.equals(registrationStatusValue) || null == registrationStatusValue);
 
         String registrationTypeValue = patientDetails.getRegistrationType();
          if (registrationTypeValue != null) {
@@ -1132,15 +1107,12 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     private Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) {
-        Patient patient = patientDetailsToMinimalPatient(patientDetails);
-
-        patient.addName()
-                .setText(patientDetails.getName())
-                .addFamily(patientDetails.getSurname())
-                .addGiven(patientDetails.getForename())
-                .addPrefix(patientDetails.getTitle())
-                .setUse(NameUseEnum.USUAL);
-
+        Patient patient = patientDetailsToMinimalPatient(patientDetails);             
+        
+        HumanNameDt name = getPatientNameFromPatientDetails(patientDetails);
+        
+        patient.addName(name);
+                
         String addressLines = patientDetails.getAddress();
         if (addressLines != null) {
             patient.addAddress()
@@ -1177,6 +1149,23 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         return patient;
+    }
+
+    private HumanNameDt getPatientNameFromPatientDetails(PatientDetails patientDetails) {
+        HumanNameDt name = new HumanNameDt();
+        
+        name.setText(patientDetails.getName())
+            .addFamily(patientDetails.getSurname())
+            .addPrefix(patientDetails.getTitle())
+            .setUse(NameUseEnum.USUAL);
+        
+        List<String> givenNames = patientDetails.getForenames();
+        
+        givenNames.forEach((givenName) -> {
+            name.addGiven(givenName);
+        });
+        
+        return name;
     }
 
     private class NhsNumber {

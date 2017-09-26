@@ -135,8 +135,8 @@ CREATE TABLE gpconnect.medical_departments (
 CREATE TABLE gpconnect.patients (
   id                  BIGINT       NOT NULL AUTO_INCREMENT,
   title               VARCHAR(10)  NULL,
-  first_name          VARCHAR(30)  NULL,
-  last_name           VARCHAR(30)  NULL,
+  first_name          VARCHAR(300) NULL,
+  last_name           VARCHAR(300) NULL,
   address_1           VARCHAR(100) NULL,
   address_2           VARCHAR(100) NULL,
   address_3           VARCHAR(100) NULL,

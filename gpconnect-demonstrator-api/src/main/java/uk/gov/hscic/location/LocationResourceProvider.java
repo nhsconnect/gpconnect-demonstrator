@@ -123,6 +123,22 @@ public class LocationResourceProvider implements IResourceProvider {
         
         return results;
     }
+    
+    
+    public List<Location> getAllLocationDetails(){
+    
+        List<LocationDetails> allLocationDetails = locationSearch.findAllLocations();
+            
+                if (allLocationDetails.isEmpty()) {
+                    
+                    return null;
+                }
+                
+                List<Location> results = allLocationDetails.stream().map(loc -> locationDetailsToLocation(loc)).collect(Collectors.toList());
+                
+                return results;
+            }
+    
 
     @Read(version = true)
     public Location getLocationById(@IdParam IdDt locationId) {

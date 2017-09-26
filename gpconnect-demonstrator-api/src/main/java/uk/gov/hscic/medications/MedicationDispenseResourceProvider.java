@@ -66,7 +66,7 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
 
                 Medication medication = new Medication();
                 CodingDt coding = new CodingDt();
-                coding.setSystem(SystemURL.SNOMED);
+          
                 coding.setCode(String.valueOf(medicationDispenseDetail.getMedicationId()));
                 coding.setDisplay(medicationDispenseDetail.getMedicationName());
                 CodeableConceptDt codeableConcept = new CodeableConceptDt();

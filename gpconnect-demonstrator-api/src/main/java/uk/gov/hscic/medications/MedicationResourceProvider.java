@@ -35,11 +35,12 @@ public class MedicationResourceProvider implements IResourceProvider {
             throw new InternalErrorException("No medication details found for ID: " + medicationId.getIdPart(), operationalOutcome);
         }
 
-        CodingDt coding = new CodingDt(SystemURL.SNOMED, String.valueOf(medicationEntity.getId())).setDisplay(medicationEntity.getName());
-        CodeableConceptDt codableConcept = new CodeableConceptDt();
-        codableConcept.addCoding(coding);
+//        CodingDt coding = new CodingDt(SystemURL.SNOMED, String.valueOf(medicationEntity.getId())).setDisplay(medicationEntity.getName());
+//        CodeableConceptDt codableConcept = new CodeableConceptDt();
+//        codableConcept.addCoding(coding);
+        //.setCode(codableConcept);
 
-        Medication medication = new Medication().setCode(codableConcept);
+        Medication medication = new Medication();
         medication.setId(String.valueOf(medicationEntity.getId()));
         medication.getMeta().setLastUpdated(medicationEntity.getLastUpdated());
         medication.getMeta().setVersionId(String.valueOf(medicationEntity.getLastUpdated().getTime()));

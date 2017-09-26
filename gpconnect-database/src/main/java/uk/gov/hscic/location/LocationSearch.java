@@ -22,6 +22,11 @@ public class LocationSearch {
         return locationRepository.findByOrgOdsCode(orgOdsCode).stream().map(transformer::transform)
                 .collect(Collectors.toList());
     }
+    
+    public List<LocationDetails> findAllLocations()
+    {
+        return locationRepository.findAll().stream().map(transformer::transform).collect(Collectors.toList());
+    }
 
     public LocationDetails findLocationById(final String locationId) {
 

@@ -35,6 +35,10 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     private static final String PATIENT_RESOURCE_NAME = "Patient";
     private static final String APPOINTMENT_RESOURCE_NAME = "Appointment";
     private static final String ORDER_RESOURCE_NAME = "Order";
+    private static final String SCHEDULE_RESOURCE_NAME = "Schedule";
+    private static final String SLOT_RESOURCE_NAME = "Slot";
+    
+    
 
     private static final List<String> PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS = Arrays.asList(SystemURL.ID_ODS_ORGANIZATION_CODE);
 
@@ -56,7 +60,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         // in this map the key is the JWT resource type and the value is a set of permitted request resources
         validResourceCombinations = new HashMap<String, Set<String>>();
         validResourceCombinations.put(PATIENT_RESOURCE_NAME, new HashSet<String>(Arrays.asList(new String[]{PATIENT_RESOURCE_NAME, APPOINTMENT_RESOURCE_NAME})));
-        validResourceCombinations.put(ORGANIZATION_RESOURCE_NAME, new HashSet<String>(Arrays.asList(new String[]{ORGANIZATION_RESOURCE_NAME, PRACTITIONER_RESOURCE_NAME, LOCATION_RESOURCE_NAME, ORDER_RESOURCE_NAME})));
+        validResourceCombinations.put(ORGANIZATION_RESOURCE_NAME, new HashSet<String>(Arrays.asList(new String[]{ORGANIZATION_RESOURCE_NAME, PRACTITIONER_RESOURCE_NAME, LOCATION_RESOURCE_NAME, ORDER_RESOURCE_NAME,SCHEDULE_RESOURCE_NAME,SLOT_RESOURCE_NAME})));
     }
 
     @Override

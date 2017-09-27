@@ -140,5 +140,15 @@ public class WebTokenValidator {
                     new InvalidRequestException("Invalid Organization requested scope"),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
+        
+        if ("Slot".equals(webToken.getRequestedRecord().getResourceType())
+                && !webToken.getRequestedScope().matches("slot/\\*\\.(read|write)")) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("Invalid Slot requested scope"),
+                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+        }
+        
+       
+       
     }
 }

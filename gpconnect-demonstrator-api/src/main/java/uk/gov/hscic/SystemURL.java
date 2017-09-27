@@ -7,7 +7,6 @@ public final class SystemURL {
     // Base Constants
     public static final String AUTHORIZATION_TOKEN = "https://authorize.fhir.nhs.net/token";
     public static final String SDS_USER_ID = "http://fhir.nhs.net/sds-user-id";
-    public static final String SNOMED = "http://snomed.info/sct";
 
     // HL7 Constants
     public static final String HL7_BASIC_RESOURCE_TYPE = "http://hl7.org/fhir/basic-resource-type";
@@ -36,6 +35,7 @@ public final class SystemURL {
     public static final String SD_GPC_GET_SCHEDULE_BUNDLE = "http://fhir.nhs.net/StructureDefinition/gpconnect-getschedule-bundle-1";
     public static final String SD_GPC_LOCATION = "http://fhir.nhs.net/StructureDefinition/CareConnect-GPC-Location-1";
     public static final String SD_GPC_SLOT = "http://fhir.nhs.net/StructureDefinition/gpconnect-slot-1";
+    public static final String SD_GPC_SCHEDULE = "http://fhir.nhs.net/StructureDefinition/gpconnect-schedule-1";
     
     // FHIR StructureDefinition Extension
     public static final String SD_CC_EXT_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1";

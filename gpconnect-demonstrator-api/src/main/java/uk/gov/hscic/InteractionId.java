@@ -25,7 +25,6 @@ public final class InteractionId {
     public static final String CLAIM_PATIENT_PROCEDURES                = BASE + "claim:patient/Procedures.read";
     public static final String CLAIM_PATIENT_REFERRAL                  = BASE + "claim:patient/Referral.read";
     public static final String OPERATION_GPC_GET_CARE_RECORD           = BASE + "operation:gpc.getcarerecord";
-    public static final String OPERATION_GPC_GET_SCHEDULE              = BASE + "operation:gpc.getschedule";
     public static final String OPERATION_GPC_REGISTER_PATIENT          = BASE + "operation:gpc.registerpatient";
     public static final String REST_CREATE_APPOINTMENT                 = BASE + "rest:create:appointment";
     public static final String REST_CREATE_ORDER                       = BASE + "rest:create:order";
@@ -35,6 +34,7 @@ public final class InteractionId {
     public static final String REST_READ_ORGANIZATION                  = BASE + "rest:read:organization";
     public static final String REST_READ_PATIENT                       = BASE + "rest:read:patient";
     public static final String REST_READ_PRACTITIONER                  = BASE + "rest:read:practitioner";
+    public static final String REST_SEARCH_SLOT                        = BASE + "rest:search:slot";
     public static final String REST_SEARCH_LOCATION                    = BASE + "rest:search:location";
     public static final String REST_SEARCH_ORGANIZATION                = BASE + "rest:search:organization";
     public static final String REST_SEARCH_PATIENT                     = BASE + "rest:search:patient";
@@ -46,5 +46,6 @@ public final class InteractionId {
             REST_SEARCH_LOCATION,
             REST_SEARCH_ORGANIZATION,
             REST_SEARCH_PATIENT,
-            REST_SEARCH_PRACTITIONER);
+            REST_SEARCH_PRACTITIONER
+            );
 }

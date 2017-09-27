@@ -455,25 +455,27 @@ public class PatientResourceProvider implements IResourceProvider {
                 .setResource(patient)
                 .setFullUrl("Patient/" + patientId);
 
-//        CodingDt coding = new CodingDt()
-//                .setSystem(SystemURL.SNOMED)
-//                .setCode("425173008")
-//                .setDisplay("record extract (record artifact)");
-//
-//        CodeableConceptDt codableConcept = new CodeableConceptDt()
-//                .addCoding(coding)
-//                .setText("record extract (record artifact)");
-//
-//        CodingDt classCoding = new CodingDt()
-//                .setSystem(SystemURL.SNOMED)
-//                .setCode("700232004")
-//                .setDisplay("general medical service (qualifier value)");
+        CodingDt coding = new CodingDt()
+                .setSystem(SystemURL.SNOMED)
+                .setCode("425173008")
+                .setDisplay("record extract (record artifact)");
 
-//        CodeableConceptDt classCodableConcept = new CodeableConceptDt().addCoding(classCoding)
-//                .setText("general medical service (qualifier value)");
+        CodeableConceptDt codableConcept = new CodeableConceptDt()
+                .addCoding(coding)
+                .setText("record extract (record artifact)");
+
+        CodingDt classCoding = new CodingDt()
+                .setSystem(SystemURL.SNOMED)
+                .setCode("700232004")
+                .setDisplay("general medical service (qualifier value)");
+
+        CodeableConceptDt classCodableConcept = new CodeableConceptDt().addCoding(classCoding)
+                .setText("general medical service (qualifier value)");
 
         Composition careRecordComposition = new Composition()
                 .setDate(new DateTimeDt(Calendar.getInstance().getTime()))
+                .setType(codableConcept)
+                .setClassElement(classCodableConcept)
                 .setTitle("Patient Care Record")
                 .setStatus(CompositionStatusEnum.FINAL)
                 .setSubject(new ResourceReferenceDt("Patient/" + patientId));

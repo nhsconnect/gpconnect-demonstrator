@@ -630,13 +630,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
         List<String> allowReasonSystems = Arrays.asList(SystemURL.SNOMED);
 
         if (!codingFirstRep.isEmpty()) {
-            if (!allowReasonSystems.contains(codingFirstRep.getSystem())) {
-                String message = String.format(
-                        "Problem with reason property of the appointment. If the reason is provided then the system property must be, in order, one of the following: %s",
-                        String.join(", ", allowReasonSystems));
-                throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
-                        SystemCode.INVALID_RESOURCE, IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
-            } else {
+//            if (!allowReasonSystems.contains(codingFirstRep.getSystem())) {
+//                String message = String.format(
+//                        "Problem with reason property of the appointment. If the reason is provided then the system property must be, in order, one of the following: %s",
+//                        String.join(", ", allowReasonSystems));
+//                throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
+//                        SystemCode.INVALID_RESOURCE, IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
+//            } else {
                 String reasonCode = codingFirstRep.getCode();
                 if (reasonCode == null) {
                     String message = "Problem with reason property of the appointment. If the reason is provided then the code property must be set.";
@@ -657,7 +657,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 } else {
                     appointmentDetail.setReasonDisplay(reasonDisplay);
                 }
-            }
+//            }
         }
 
         appointmentDetail.setStartDateTime(appointment.getStart());

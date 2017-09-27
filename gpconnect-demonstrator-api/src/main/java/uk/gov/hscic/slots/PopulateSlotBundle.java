@@ -1,4 +1,4 @@
-package uk.gov.hscic.organization;
+package uk.gov.hscic.slots;
 
 import java.util.Date;
 import java.util.List;
@@ -23,8 +23,8 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
-import uk.gov.hscic.appointments.SlotResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
+import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 /**
@@ -32,7 +32,7 @@ import uk.gov.hscic.practitioner.PractitionerResourceProvider;
  * resource.
  */
 @Component
-public class GetScheduleOperation {
+public class PopulateSlotBundle {
 
     @Autowired
     private LocationResourceProvider locationResourceProvider;

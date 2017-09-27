@@ -1,4 +1,4 @@
-package uk.gov.hscic.appointments;
+package uk.gov.hscic.slots;
 
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -39,7 +39,6 @@ import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.model.appointment.SlotDetail;
-import uk.gov.hscic.organization.GetScheduleOperation;
 
 @Component
 public class SlotResourceProvider implements IResourceProvider {
@@ -48,7 +47,7 @@ public class SlotResourceProvider implements IResourceProvider {
     private SlotSearch slotSearch;
 
     @Autowired
-    public GetScheduleOperation getScheduleOperation;
+    public PopulateSlotBundle getScheduleOperation;
 
     @Override
     public Class<Slot> getResourceType() {
@@ -81,7 +80,7 @@ public class SlotResourceProvider implements IResourceProvider {
         boolean actorPractitioner = false;
         boolean actorLocation = false;
 
-        validateStartDateParamAndEndDateParam(startDate, endDate);
+      
 
         if (startDate != null) {
             if (startDate.getLowerBound() != null) {
@@ -89,61 +88,26 @@ public class SlotResourceProvider implements IResourceProvider {
                     startLowerDate = startDate.getLowerBound().getValue();
                 } else {
                     if (startDate.getLowerBound().getPrecision() == TemporalPrecisionEnum.DAY) {
-                        startLowerDate = startDate.getLowerBound().getValue(); // Remove
-                                                                               // a
-                                                                               // day
-                                                                               // to
-                                                                               // make
-                                                                               // time
-                                                                               // inclusive
-                                                                               // of
-                                                                               // parameter
-                                                                               // date
+                        startLowerDate = startDate.getLowerBound().getValue(); 
                     } else {
-                        startLowerDate = new Date(startDate.getLowerBound().getValue().getTime() - 1000); // Remove
-                                                                                                          // a
-                                                                                                          // second
-                                                                                                          // to
-                                                                                                          // make
-                                                                                                          // time
-                                                                                                          // inclusive
-                                                                                                          // of
-                                                                                                          // parameter
-                                                                                                          // date
+                        startLowerDate = new Date(startDate.getLowerBound().getValue().getTime() - 1000); 
                     }
                 }
             }
 
-            if (startDate.getUpperBound() != null) {
-                if (startDate.getUpperBound().getPrefix() == ParamPrefixEnum.LESSTHAN) {
-                    startUpperDate = startDate.getUpperBound().getValue();
+            if (endDate.getUpperBound() != null) {
+                if (endDate.getUpperBound().getPrefix() == ParamPrefixEnum.LESSTHAN) {
+                    startUpperDate = endDate.getUpperBound().getValue();
                 } else {
-                    if (startDate.getUpperBound().getPrecision() == TemporalPrecisionEnum.DAY) {
-                        startUpperDate = new Date(startDate.getUpperBound().getValue().getTime() + 86400000); // Add
-                                                                                                              // a
-                                                                                                              // day
-                                                                                                              // to
-                                                                                                              // make
-                                                                                                              // time
-                                                                                                              // inclusive
-                                                                                                              // of
-                                                                                                              // parameter
-                                                                                                              // date
+                    if (endDate.getUpperBound().getPrecision() == TemporalPrecisionEnum.DAY) {
+                        startUpperDate = new Date(endDate.getUpperBound().getValue().getTime() + 86400000); 
                     } else {
-                        startUpperDate = new Date(startDate.getUpperBound().getValue().getTime() + 1000); // Add
-                                                                                                          // a
-                                                                                                          // second
-                                                                                                          // to
-                                                                                                          // make
-                                                                                                          // time
-                                                                                                          // inclusive
-                                                                                                          // of
-                                                                                                          // parameter
-                                                                                                          // date
+                        startUpperDate = new Date(endDate.getUpperBound().getValue().getTime() + 1000); 
                     }
                 }
             }
         }
+        validateStartDateParamAndEndDateParam(startLowerDate, startUpperDate);
 
         for (Include include : theIncludes) {
 
@@ -211,11 +175,11 @@ public class SlotResourceProvider implements IResourceProvider {
         return slot;
     }
 
-    private void validateStartDateParamAndEndDateParam(DateRangeParam startParam, DateRangeParam endParam) {
+    private void validateStartDateParamAndEndDateParam(Date startLowerDate, Date startUpperDate) {
 
-        if (startParam != null && endParam != null) {
-            Date start = startParam.getLowerBoundAsInstant();
-            Date end = endParam.getLowerBoundAsInstant();
+        if (startLowerDate != null && startUpperDate != null) {
+            Date start = startLowerDate;
+            Date end = startUpperDate;
 
             if (start != null && end != null) {
                 long period = ChronoUnit.DAYS.between(start.toInstant(), end.toInstant());

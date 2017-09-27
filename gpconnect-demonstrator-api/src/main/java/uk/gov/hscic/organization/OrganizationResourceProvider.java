@@ -58,22 +58,19 @@ import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.model.location.LocationDetails;
 import uk.gov.hscic.model.organization.OrganizationDetails;
+import uk.gov.hscic.slots.PopulateSlotBundle;
 
 @Component
 public class OrganizationResourceProvider implements IResourceProvider {
 
-    private static final String GET_SCHEDULE_OPERATION_NAME = "$gpc.getschedule";
-
     @Autowired
-    public GetScheduleOperation getScheduleOperation;
+    public PopulateSlotBundle getScheduleOperation;
 
     @Autowired
     private OrganizationSearch organizationSearch;
 
     public static Set<String> getCustomReadOperations() {
         Set<String> customReadOperations = new HashSet<String>();
-        customReadOperations.add(GET_SCHEDULE_OPERATION_NAME);
-
         return customReadOperations;
     }
 

@@ -19,7 +19,6 @@ import ca.uhn.fhir.rest.server.interceptor.CorsInterceptor;
 import uk.gov.hscic.SystemHeader;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
-import uk.gov.hscic.appointments.SlotResourceProvider;
 import uk.gov.hscic.common.filters.FhirRequestAuthInterceptor;
 import uk.gov.hscic.common.filters.FhirRequestGenericIntercepter;
 import uk.gov.hscic.common.filters.PatientJwtValidator;
@@ -32,6 +31,7 @@ import uk.gov.hscic.order.OrderResourceProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.PatientResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
+import uk.gov.hscic.slots.SlotResourceProvider;
 
 @Configuration
 @WebServlet(urlPatterns = {"/fhir/*"}, displayName = "FHIR Server")

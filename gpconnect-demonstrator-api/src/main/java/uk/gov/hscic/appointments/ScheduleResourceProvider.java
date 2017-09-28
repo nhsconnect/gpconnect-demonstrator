@@ -49,8 +49,8 @@ import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.model.appointment.ScheduleDetail;
 import uk.gov.hscic.model.order.OrderDetail;
-import uk.gov.hscic.organization.GetScheduleOperation;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
+import uk.gov.hscic.slots.PopulateSlotBundle;
 import uk.gov.hscic.appointment.schedule.ScheduleSearch;
 
 @Component
@@ -60,7 +60,7 @@ public class ScheduleResourceProvider implements IResourceProvider {
     private ScheduleSearch scheduleSearch;
     
     @Autowired
-    public GetScheduleOperation getScheduleOperation;
+    public PopulateSlotBundle getScheduleOperation;
 
     @Override
     public Class<Schedule> getResourceType() {

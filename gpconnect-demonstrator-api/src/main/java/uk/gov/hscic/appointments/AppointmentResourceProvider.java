@@ -620,14 +620,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         CodingDt codingFirstRep = appointment.getReason().getCodingFirstRep();
 
         if (!codingFirstRep.isEmpty()) {
-
-            if (codingFirstRep.getSystem() == null) {
-                String message = "Problem with reason property of the appointment. If the reason is provided then the system property must be set.";
-                throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
-                        SystemCode.INVALID_RESOURCE, IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
-            } else {
-                appointmentDetail.setReasonCode(codingFirstRep.getSystem());
-            }
+          
             String reasonCode = codingFirstRep.getCode();
             if (reasonCode == null) {
                 String message = "Problem with reason property of the appointment. If the reason is provided then the code property must be set.";
@@ -645,7 +638,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             } else {
                 appointmentDetail.setReasonDisplay(reasonDisplay);
             }
-
+//            }
         }
 
         appointmentDetail.setStartDateTime(appointment.getStart());

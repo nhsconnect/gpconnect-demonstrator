@@ -44,9 +44,6 @@ public class PopulateSlotBundle {
     private SlotResourceProvider slotResourceProvider;
 
     @Autowired
-    private OrganizationResourceProvider organizationResourceProvider;
-
-    @Autowired
     private ScheduleResourceProvider scheduleResourceProvider;
 
     @SuppressWarnings("deprecation")
@@ -111,6 +108,10 @@ public class PopulateSlotBundle {
                                 slotEntry.setFullUrl("Slot/" + slot.getId().getIdPart());
                                 bundle.addEntry(slotEntry);
                                 bundle.addEntry(scheduleEntry);
+                                
+                                if (actorLocation == true){
+                                bundle.addEntry(locationEntry);
+                                }
 
                             }
                         }

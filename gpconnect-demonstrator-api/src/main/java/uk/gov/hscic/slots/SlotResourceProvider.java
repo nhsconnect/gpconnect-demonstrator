@@ -79,9 +79,16 @@ public class SlotResourceProvider implements IResourceProvider {
         Date startUpperDate = null;
         boolean actorPractitioner = false;
         boolean actorLocation = false;
-
+ 
+      if(!fbType.equals("free"))
+      {
+          throw OperationOutcomeFactory.buildOperationOutcomeException(
+                  new UnprocessableEntityException(
+                          "FbType incorrect: Must be equal to free"),
+                  SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+      }
+      validateStartDateParamAndEndDateParam(startDate.getLowerBoundAsInstant(), endDate.getLowerBoundAsInstant());
       
-
         if (startDate != null) {
             if (startDate.getLowerBound() != null) {
                 if (startDate.getLowerBound().getPrefix() == ParamPrefixEnum.GREATERTHAN) {
@@ -107,7 +114,7 @@ public class SlotResourceProvider implements IResourceProvider {
                 }
             }
         }
-        validateStartDateParamAndEndDateParam(startLowerDate, startUpperDate);
+       
 
         for (Include include : theIncludes) {
 

@@ -59,9 +59,6 @@ public class PopulateSlotBundle {
         Entry locationEntry = new Entry();
         locationEntry.setResource(locations.get(0));
         locationEntry.setFullUrl("Location/" + locations.get(0).getId().getIdPart());
-        if (actorLocation == true) {
-            bundle.addEntry(locationEntry);
-        }
 
         // schedules
         List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(
@@ -75,7 +72,6 @@ public class PopulateSlotBundle {
                 Entry scheduleEntry = new Entry();
                 scheduleEntry.setResource(schedule);
                 scheduleEntry.setFullUrl("Schedule/" + schedule.getId().getIdPart());
-                bundle.addEntry(scheduleEntry);
 
                 // practitioners
                 List<ExtensionDt> practitionerExtensions = scheduleResourceProvider.getPractitionerReferences(schedule);
@@ -102,50 +98,26 @@ public class PopulateSlotBundle {
                             bundle.addEntry(practionerEntry);
                         }
                     }
-                } else {
-                    String msg = String.format("No practitioners could be found for the schedule %s",
-                            schedule.getId().getIdPart());
-                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(msg);
 
-                    Entry operationOutcomeEntry = new Entry();
-                    operationOutcomeEntry.setResource(operationOutcome);
-                    bundle.addEntry(operationOutcomeEntry);
-                }
+                    // slots
+                    List<Slot> slots = slotResourceProvider.getSlotsForScheduleId(schedule.getId().getIdPart(),
+                            planningHorizonStart, planningHorizonEnd);
 
-                // slots
-                List<Slot> slots = slotResourceProvider.getSlotsForScheduleId(schedule.getId().getIdPart(),
-                        planningHorizonStart, planningHorizonEnd);
+                    if (!slots.isEmpty()) {
+                        for (Slot slot : slots) {
+                            if ("FREE".equalsIgnoreCase(slot.getFreeBusyType())) {
+                                Entry slotEntry = new Entry();
+                                slotEntry.setResource(slot);
+                                slotEntry.setFullUrl("Slot/" + slot.getId().getIdPart());
+                                bundle.addEntry(slotEntry);
+                                bundle.addEntry(scheduleEntry);
 
-                if (!slots.isEmpty()) {
-                    for (Slot slot : slots) {
-                        if ("FREE".equalsIgnoreCase(slot.getFreeBusyType())) {
-                            Entry slotEntry = new Entry();
-                            slotEntry.setResource(slot);
-                            slotEntry.setFullUrl("Slot/" + slot.getId().getIdPart());
-                            bundle.addEntry(slotEntry);
+                            }
                         }
                     }
-                } else {
-                    String msg = String.format(
-                            "No slots could be found for the schedule %s within the specified planning horizon (start - %s end - %s)",
-                            schedule.getId().getIdPart(), planningHorizonStart, planningHorizonEnd);
-                    operationOutcome.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(msg);
-
-                    Entry operationOutcomeEntry = new Entry();
-                    operationOutcomeEntry.setResource(operationOutcome);
-                    bundle.addEntry(operationOutcomeEntry);
                 }
             }
-        } else {
-            String msg = String.format(
-                    "No schedules could be found for the location within the planning horizon (start - %s end - %s)",
-                    planningHorizonStart, planningHorizonEnd);
-            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(msg);
-
-            Entry operationOutcomeEntry = new Entry();
-            operationOutcomeEntry.setResource(operationOutcome);
-            bundle.addEntry(operationOutcomeEntry);
-
         }
+
     }
 }

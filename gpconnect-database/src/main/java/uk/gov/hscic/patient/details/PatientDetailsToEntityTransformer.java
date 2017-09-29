@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient.details;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections4.Transformer;
@@ -55,9 +56,10 @@ public class PatientDetailsToEntityTransformer implements Transformer<PatientDet
 				}
 			}
 
-			if(patientDetails.isDeceased()) {
-				patientEntity.setDeceasedDateTime(patientDetails.getDeceased());
-			}
+			 Date deceased = patientEntity.getDeceasedDateTime();
+		        if(deceased != null) {
+		            patientEntity.setDeceasedDateTime(deceased);
+		        }
 
 			patientEntity.setNhsNumber(patientDetails.getNhsNumber());
 			patientEntity.setDateOfBirth(patientDetails.getDateOfBirth());

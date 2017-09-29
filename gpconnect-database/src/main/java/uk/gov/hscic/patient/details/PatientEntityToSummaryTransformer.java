@@ -15,6 +15,8 @@
  */
 package uk.gov.hscic.patient.details;
 
+import java.util.Date;
+
 import org.apache.commons.collections4.Transformer;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.model.patient.PatientSummary;
@@ -44,6 +46,11 @@ public class PatientEntityToSummaryTransformer implements Transformer<PatientEnt
         patientSummary.setDepartment(patientEntity.getDepartment().getDepartment());
         patientSummary.setSensitive(patientEntity.isSensitive());
         patientSummary.setLastUpdated(patientEntity.getLastUpdated());
+        
+        Date deceased = patientEntity.getDeceasedDateTime();
+        if(deceased != null) {
+            patientSummary.setDeceased(deceased);
+        }
 
         return patientSummary;
     }

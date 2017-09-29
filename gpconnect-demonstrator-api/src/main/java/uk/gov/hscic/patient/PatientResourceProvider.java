@@ -198,7 +198,12 @@ public class PatientResourceProvider implements IResourceProvider {
 //        }
 
         Patient patient = getPatientByPatientId(nhsNumber.fromToken(tokenParam));
-
+        if(patient.getDeceased() != null)
+        {
+            return null;
+        }
+        
+        
         return null == patient
                 ? Collections.emptyList()
                 : Collections.singletonList(patient);

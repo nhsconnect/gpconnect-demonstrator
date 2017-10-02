@@ -198,13 +198,8 @@ public class PatientResourceProvider implements IResourceProvider {
 //        }
 
         Patient patient = getPatientByPatientId(nhsNumber.fromToken(tokenParam));
-        if(patient.getDeceased() != null)
-        {
-            return null;
-        }
-        
-        
-        return null == patient
+      
+        return null == patient || patient.getDeceased() != null
                 ? Collections.emptyList()
                 : Collections.singletonList(patient);
     }
@@ -593,6 +588,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         Bundle bundle = new Bundle().setType(BundleTypeEnum.SEARCH_RESULTS);
+        bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
         bundle.addEntry().setResource(registeredPatient);
         return bundle;
     }
@@ -614,7 +610,7 @@ public class PatientResourceProvider implements IResourceProvider {
         validateRegistrationDetails(patient);
         validateConstrainedOutProperties(patient);
         checkValidExtensions(patient.getUndeclaredExtensions());
-        valiateNames(patient);
+        validateNames(patient);
         validateDateOfBirth(patient);
         valiateGender(patient);      
     }
@@ -766,7 +762,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
     }
 
-    private void valiateNames(Patient patient) {
+    private void validateNames(Patient patient) {
         List<HumanNameDt> names = patient.getName();
         
         if(names.size() < 1){

@@ -753,6 +753,7 @@ public class PatientResourceProvider implements IResourceProvider {
         if (patient.getAnimal().isEmpty() == false) invalidFields.add("animal");
         if (patient.getCommunication().isEmpty() == false) invalidFields.add("communication");
         if (patient.getLink().isEmpty() == false) invalidFields.add("link");
+        if (patient.getDeceased() != null) invalidFields.add("deceased");
 
         if(invalidFields.isEmpty() == false) {
             String message = String.format("The following properties have been constrained out on the Patient resource - %s", String.join(", ", invalidFields));

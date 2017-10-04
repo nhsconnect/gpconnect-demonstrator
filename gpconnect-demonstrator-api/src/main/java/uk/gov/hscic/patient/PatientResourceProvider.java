@@ -772,16 +772,16 @@ public class PatientResourceProvider implements IResourceProvider {
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
         
-        Integer usualNameCount = 0;
-        for(HumanNameDt name : names){
-            if(NameUseEnum.USUAL.getCode().equals(name.getUse())){
-                usualNameCount++;
-            } 
-        }
+                      
+        List<HumanNameDt> usualActiveNames = names.stream()
+                                                .filter(nm -> IsActiveName(nm))
+                                                .filter(nm -> NameUseEnum.USUAL.getCode().equals(nm.getUse()))
+                                                .collect(Collectors.toList());
+
         
-        if(usualNameCount < 1){
+        if(usualActiveNames.size() != 1){
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("The patient must have one Name with a Use of USUAL"),
+                    new InvalidRequestException("The patient must have one Active Name with a Use of USUAL"),
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
 
@@ -797,6 +797,25 @@ public class PatientResourceProvider implements IResourceProvider {
                     SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
         }
     }
+    
+    private Boolean IsActiveName(HumanNameDt name){
+        
+        PeriodDt period = name.getPeriod();
+
+        if(null == period){
+            return true;
+        }
+
+        Date start = period.getStart();
+        Date end = period.getEnd();
+           
+        if((null == end || end.after(new Date())) && (null == start || start.equals(new Date()) || start.before(new Date()))){
+            return true;
+        }
+       
+        return false;
+    }
+
 
     private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
         PatientDetails patientDetails = new PatientDetails();
@@ -837,7 +856,7 @@ public class PatientResourceProvider implements IResourceProvider {
         patientDetails.setRegistrationStartDateTime(new Date());
         //patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
         patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
-        patientDetails.setRegistrationType("T");
+        patientDetails.setRegistrationType(TEMPORARY_RESIDENT_REGISTRATION_TYPE);
 
         return patientDetails;
     }

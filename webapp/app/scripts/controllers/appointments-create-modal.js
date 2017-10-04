@@ -39,7 +39,7 @@ angular.module('gpConnect')
             };
            
             $scope.appointmentCreate.start = appointmentBookingParams.startTime;
-            $scope.appointmentCreate.end;
+            $scope.appointmentCreate.end = appointmentBookingParams.endTime;
             
             $scope.appointmentCreate.slot = [];
             for(var slotIndex = 0; slotIndex < appointmentBookingParams.slotIds.length; slotIndex++){

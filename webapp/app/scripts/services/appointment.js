@@ -23,37 +23,25 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
         });
     };
 
-    var getScheduleOperation = function (organizationOdsCode, startDateTime, endDateTime, patientId) {
-        // Lookup Endpoint Organization localId "organizationId"
-        return Organization.searchForOrganisation(organizationOdsCode, patientId, organizationOdsCode).then(function(organizationLookupResponse) {
-            
-            if(!organizationLookupResponse || !organizationLookupResponse.data || !organizationLookupResponse.data.entry){
-            var errMssg = "Unknown Error connecting to resource.";
-                
-                if(organizationLookupResponse && organizationLookupResponse.headers){
-                    var status = organizationLookupResponse.headers.status;
-                    if(status === 0){
-                        errMssg = "There was a problem trying to connect to: " + organizationLookupResponse.url;
-                    }
-                }
-                throw errMssg;
-            }
+    var searchForFreeSlots = function (practiceOdsCode, startDateTime, endDateTime) {
+           
 
-            var organizationId = organizationLookupResponse.data.entry[0].resource.id;
-            
-            return FhirEndpointLookup.getEndpoint(organizationOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule").then(function(response) {
+           
+            return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:slot").then(function(response) {
                 var endpointLookupResult = response;
                 
-                return $http.post(
-                        endpointLookupResult.restUrlPrefix + '/Organization/' + organizationId + '/$gpc.getschedule',
-                        '{ "resourceType" : "Parameters", "parameter" : [ { "name" : "timePeriod", "valuePeriod" : { "start" : "' + startDateTime + '", "end" : "' + endDateTime + '" } } ] }',
+                var requiredParams = 'start=' +startDateTime+ '&end=' +endDateTime+ '&fb-type=free&_include=Slot:schedule';
+                var optionalParams = '_include:recurse=Schedule:actor:Practitioner&_include:recurse=Schedule:actor:Location';
+                
+                return $http.get(
+                        endpointLookupResult.restUrlPrefix + '/Slot?' + requiredParams + '&' + optionalParams,
                         {
                             headers: {
                                 'Ssp-From': endpointLookupResult.fromASID,
                                 'Ssp-To': endpointLookupResult.toASID,
-                                'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getschedule",
+                                'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:slot",
                                 'Ssp-TraceID': fhirJWTFactory.guid(),
-                                'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", organizationOdsCode),
+                                'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", practiceOdsCode),
                                 'Accept': "application/json+fhir",
                                 'Content-Type': "application/json+fhir"
                             }
@@ -61,7 +49,7 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
                 );
             });
             
-        });
+
     };
 
     var findResourceByReference = function (practiceOdsCode, patientId, resourceReference) {
@@ -152,7 +140,7 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
 
     return {
         findAllAppointments: findAllAppointments,
-        getScheduleOperation: getScheduleOperation,
+        searchForFreeSlots: searchForFreeSlots,
         findResourceByReference: findResourceByReference,
         create: create,
         save: save

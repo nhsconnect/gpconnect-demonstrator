@@ -45,9 +45,13 @@ angular.module('gpConnect')
                 var responsePractitioners = {};     // We will lookup practitioner from the schedule using reference so we can use the reference as the key/name
                 var responseLocations = {};         // We will lookup location from the schedule using reference so we can use the reference as the key/name
 
-                Appointment.getScheduleOperation(practiceOdsCode, startDate, endDate, $stateParams.patientId).then(function (result) {
+                Appointment.searchForFreeSlots(practiceOdsCode, startDate, endDate).then(function (result) {
 
                     var getScheduleJson = result.data;
+                    
+                    if(!getScheduleJson || !getScheduleJson.entry){
+                        getScheduleJson = { entry : [] };
+                    }
 
                     // go through response and build arrays of all returned data
                     $.each(getScheduleJson.entry, function (key, value) {
@@ -199,6 +203,10 @@ angular.module('gpConnect')
                         practiceState.status = "Success";
                     } else {
                         practiceState.status = "No Slots";
+                    }
+
+                    if(result.status !== 200){
+                        practiceState.status = "Failed";
                     }
                 }, function (result) {
                     practiceState.status = "Failed";

@@ -295,7 +295,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             CodeableConceptDt participantType = participant.getTypeFirstRep();
             Boolean validParticipantType = validateParticipantType(participantType);
 
-            if (!searchParticipant && !validParticipantType) {
+            if (!searchParticipant || !validParticipantType) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new UnprocessableEntityException(
                                 "Supplied Participant is not valid. Must have an Actor or Type."),

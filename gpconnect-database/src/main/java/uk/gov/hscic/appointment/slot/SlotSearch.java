@@ -25,6 +25,8 @@ public class SlotSearch {
     public List<SlotDetail> findSlotsForScheduleId(Long scheduleId, Date startDate, Date endDate) {
         return slotRepository.findByScheduleReferenceAndEndDateTimeAfterAndStartDateTimeBefore(scheduleId, startDate, endDate)
                 .stream()
+                .filter(SlotEntity -> startDate == null || !SlotEntity.getStartDateTime().before(startDate))
+                .filter(SlotEntity -> endDate == null || !SlotEntity.getStartDateTime().after(endDate))
                 .map(transformer::transform)
                 .collect(Collectors.toList());
     }

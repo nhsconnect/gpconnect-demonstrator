@@ -1,5 +1,7 @@
 package uk.gov.hscic.slots;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +31,7 @@ import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ParamPrefixEnum;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -75,46 +78,30 @@ public class SlotResourceProvider implements IResourceProvider {
                     "Schedule:actor:Location" }) Set<Include> theIncludes) {
 
         Bundle bundle = new Bundle();
-        Date startLowerDate = null;
-        Date startUpperDate = null;
         boolean actorPractitioner = false;
         boolean actorLocation = false;
- 
-      if(!fbType.equals("free"))
-      {
-          throw OperationOutcomeFactory.buildOperationOutcomeException(
-                  new UnprocessableEntityException(
-                          "FbType incorrect: Must be equal to free"),
-                  SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
-      }
-      validateStartDateParamAndEndDateParam(startDate.getLowerBoundAsInstant(), endDate.getLowerBoundAsInstant());
-      
-        if (startDate != null) {
-            if (startDate.getLowerBound() != null) {
-                if (startDate.getLowerBound().getPrefix() == ParamPrefixEnum.GREATERTHAN) {
-                    startLowerDate = startDate.getLowerBound().getValue();
-                } else {
-                    if (startDate.getLowerBound().getPrecision() == TemporalPrecisionEnum.DAY) {
-                        startLowerDate = startDate.getLowerBound().getValue(); 
-                    } else {
-                        startLowerDate = new Date(startDate.getLowerBound().getValue().getTime() - 1000); 
-                    }
-                }
-            }
 
-            if (endDate.getUpperBound() != null) {
-                if (endDate.getUpperBound().getPrefix() == ParamPrefixEnum.LESSTHAN) {
-                    startUpperDate = endDate.getUpperBound().getValue();
-                } else {
-                    if (endDate.getUpperBound().getPrecision() == TemporalPrecisionEnum.DAY) {
-                        startUpperDate = new Date(endDate.getUpperBound().getValue().getTime() + 86400000); 
-                    } else {
-                        startUpperDate = new Date(endDate.getUpperBound().getValue().getTime() + 1000); 
-                    }
-                }
-            }
+        if (!fbType.equals("free")) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("FbType incorrect: Must be equal to free"),
+                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
-       
+
+        try {
+            startDate.isEmpty();
+            endDate.isEmpty();
+        } catch (Exception e) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Start Date and End Date must be populated with a correct date format"),
+                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+        }
+
+        validatePrefix(startDate, endDate);
+
+        Date startSortedDate = identifyDateBoundry(startDate);
+        Date endSortedDate = identifyDateBoundry(endDate);
+
+        validateStartDateParamAndEndDateParam(startSortedDate, endSortedDate);
 
         for (Include include : theIncludes) {
 
@@ -127,13 +114,13 @@ public class SlotResourceProvider implements IResourceProvider {
             ;
         }
 
-        getScheduleOperation.populateBundle(bundle, new OperationOutcome(), startLowerDate, startUpperDate,
+        getScheduleOperation.populateBundle(bundle, new OperationOutcome(), startSortedDate, endSortedDate,
                 actorPractitioner, actorLocation);
 
         return bundle;
 
     }
-    
+
     public List<Slot> getSlotsForScheduleId(String scheduleId, Date startDateTime, Date endDateTime) {
         ArrayList<Slot> slots = new ArrayList<>();
         List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), startDateTime,
@@ -208,5 +195,123 @@ public class SlotResourceProvider implements IResourceProvider {
                             "Invalid timePeriod one or both of start and end date were missing"),
                     SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
+    }
+
+    private Date identifyDateBoundry(DateRangeParam startDate) {
+        Date startLowerDate = null;
+        Date startUpperDate = null;
+
+        if (startDate != null) {
+            if (startDate.getLowerBound() != null) {
+                if (startDate.getLowerBound().getPrefix() == ParamPrefixEnum.GREATERTHAN) {
+                    startLowerDate = startDate.getLowerBound().getValue();
+                } else {
+                    if (startDate.getLowerBound().getPrecision() == TemporalPrecisionEnum.DAY) {
+                        startLowerDate = startDate.getLowerBound().getValue(); // Remove
+                                                                               // a
+                                                                               // day
+                                                                               // to
+                                                                               // make
+                                                                               // time
+                                                                               // inclusive
+                                                                               // of
+                                                                               // parameter
+                                                                               // date
+                    } else {
+                        startLowerDate = new Date(startDate.getLowerBound().getValue().getTime() - 1000); // Remove
+                                                                                                          // a
+                                                                                                          // second
+                                                                                                          // to
+                                                                                                          // make
+                                                                                                          // time
+                                                                                                          // inclusive
+                                                                                                          // of
+                                                                                                          // parameter
+                                                                                                          // date
+                    }
+                }
+            }
+
+            if (startDate.getUpperBound() != null) {
+                if (startDate.getUpperBound().getPrefix() == ParamPrefixEnum.LESSTHAN) {
+                    startUpperDate = startDate.getUpperBound().getValue();
+                } else {
+                    if (startDate.getUpperBound().getPrecision() == TemporalPrecisionEnum.DAY) {
+                        startUpperDate = new Date(startDate.getUpperBound().getValue().getTime() + 86400000); // Add
+                                                                                                              // a
+                                                                                                              // day
+                                                                                                              // to
+                                                                                                              // make
+                                                                                                              // time
+                                                                                                              // inclusive
+                                                                                                              // of
+                                                                                                              // parameter
+                                                                                                              // date
+                    } else {
+                        startUpperDate = new Date(startDate.getUpperBound().getValue().getTime() + 1000); // Add
+                                                                                                          // a
+                                                                                                          // second
+                                                                                                          // to
+                                                                                                          // make
+                                                                                                          // time
+                                                                                                          // inclusive
+                                                                                                          // of
+                                                                                                          // parameter
+                                                                                                          // date
+                    }
+                }
+            }
+        }
+
+        if (startUpperDate == null && startLowerDate != null) {
+            return startLowerDate;
+        } else {
+            return startUpperDate;
+
+        }
+
+    }
+
+    private void validatePrefix(DateRangeParam startDate, DateRangeParam endDate) {
+
+        if (startDate.getLowerBound() != null) {
+            ParamPrefixEnum startDateLowerBound = startDate.getLowerBound().getPrefix();
+            if (startDateLowerBound.equals(ParamPrefixEnum.LESSTHAN)
+                    || startDateLowerBound.equals(ParamPrefixEnum.LESSTHAN_OR_EQUALS)) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("Start Date Prefix Is Invalid"), SystemCode.INVALID_PARAMETER,
+                        IssueTypeEnum.INVALID_CONTENT);
+            }
+        }
+        if (startDate.getUpperBound() != null) {
+            ParamPrefixEnum startDateUpperBound = startDate.getUpperBound().getPrefix();
+            if (startDateUpperBound.equals(ParamPrefixEnum.LESSTHAN)
+                    || startDateUpperBound.equals(ParamPrefixEnum.LESSTHAN_OR_EQUALS)) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("Start Date Prefix Is Invalid"), SystemCode.INVALID_PARAMETER,
+                        IssueTypeEnum.INVALID_CONTENT);
+            }
+        }
+
+        if (endDate.getLowerBound() != null) {
+            ParamPrefixEnum endDateLowerBound = endDate.getLowerBound().getPrefix();
+            if (endDateLowerBound.equals(ParamPrefixEnum.GREATERTHAN)
+                    || endDateLowerBound.equals(ParamPrefixEnum.GREATERTHAN_OR_EQUALS)) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("End Date Prefix Is Invalid"), SystemCode.INVALID_PARAMETER,
+                        IssueTypeEnum.INVALID_CONTENT);
+            }
+        }
+
+        if (endDate.getUpperBound() != null) {
+            ParamPrefixEnum endDateUpperBound = endDate.getUpperBound().getPrefix();
+            if (endDateUpperBound.equals(ParamPrefixEnum.GREATERTHAN)
+                    || endDateUpperBound.equals(ParamPrefixEnum.GREATERTHAN_OR_EQUALS)) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("End Date Prefix Is Invalid"), SystemCode.INVALID_PARAMETER,
+                        IssueTypeEnum.INVALID_CONTENT);
+            }
+        }
+
     }
 }

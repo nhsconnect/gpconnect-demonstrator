@@ -584,7 +584,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 ACTIVE_REGISTRATION_STATUS.equals(patientDetails.getRegistrationStatus()) == false;
     }
 
-    private String getNhsNumber(Object source) {
+    public String getNhsNumber(Object source) {
         return nhsNumber.getNhsNumber(source);
     }
 

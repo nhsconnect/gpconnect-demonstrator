@@ -1,7 +1,5 @@
 package uk.gov.hscic.slots;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
@@ -33,7 +30,6 @@ import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ParamPrefixEnum;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
@@ -58,6 +54,7 @@ public class SlotResourceProvider implements IResourceProvider {
         return Slot.class;
     }
 
+    @SuppressWarnings("deprecation")
     @Read()
     public Slot getSlotById(@IdParam IdDt slotId) {
         SlotDetail slotDetail = slotSearch.findSlotByID(slotId.getIdPartAsLong());
@@ -101,9 +98,8 @@ public class SlotResourceProvider implements IResourceProvider {
         if (startDate.getPrefix() != ParamPrefixEnum.GREATERTHAN_OR_EQUALS
                 || endDate.getPrefix() != ParamPrefixEnum.LESSTHAN_OR_EQUALS) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException(
-                            "Invalid Prefix used"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                    new UnprocessableEntityException("Invalid Prefix used"), SystemCode.INVALID_PARAMETER,
+                    IssueTypeEnum.INVALID_CONTENT);
 
         }
 
@@ -141,7 +137,7 @@ public class SlotResourceProvider implements IResourceProvider {
         return slots;
     }
 
-    public Slot slotDetailToSlotResourceConverter(SlotDetail slotDetail) {
+    private Slot slotDetailToSlotResourceConverter(SlotDetail slotDetail) {
         Slot slot = new Slot();
         slot.setId(String.valueOf(slotDetail.getId()));
 
@@ -153,7 +149,7 @@ public class SlotResourceProvider implements IResourceProvider {
         slot.getMeta().setVersionId(String.valueOf(slotDetail.getLastUpdated().getTime()));
         slot.getMeta().addProfile(SystemURL.SD_GPC_SLOT);
         slot.setIdentifier(Collections.singletonList(new IdentifierDt(
-                "http://fhir.nhs.net/Id/gpconnect-slot-identifier", String.valueOf(slotDetail.getId()))));
+                SystemURL.VS_SLOT_IDENTIFIER, String.valueOf(slotDetail.getId()))));
         CodingDt coding = new CodingDt().setSystem(SystemURL.HL7_VS_C80_PRACTICE_CODES)
                 .setCode(String.valueOf(slotDetail.getTypeCode())).setDisplay(slotDetail.getTypeDisply());
         CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);
@@ -201,39 +197,5 @@ public class SlotResourceProvider implements IResourceProvider {
                             "Invalid timePeriod one or both of start and end date were missing"),
                     SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
         }
-    }
-
-    private void validatePrefix(DateRangeParam startDate, DateRangeParam endDate) {
-
-        if (startDate.getLowerBound() != null) {
-            ParamPrefixEnum startDateLowerBound = startDate.getLowerBound().getPrefix();
-            if (startDateLowerBound.equals(ParamPrefixEnum.LESSTHAN)
-                    || startDateLowerBound.equals(ParamPrefixEnum.LESSTHAN_OR_EQUALS)) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException("Start Date Prefix Is Invalid"), SystemCode.INVALID_PARAMETER,
-                        IssueTypeEnum.INVALID_CONTENT);
-            }
-        }
-
-        if (endDate.getLowerBound() != null) {
-            ParamPrefixEnum endDateLowerBound = endDate.getLowerBound().getPrefix();
-            if (endDateLowerBound.equals(ParamPrefixEnum.GREATERTHAN)
-                    || endDateLowerBound.equals(ParamPrefixEnum.GREATERTHAN_OR_EQUALS)) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException("End Date Prefix Is Invalid"), SystemCode.INVALID_PARAMETER,
-                        IssueTypeEnum.INVALID_CONTENT);
-            }
-        }
-
-        if (endDate.getUpperBound() != null) {
-            ParamPrefixEnum endDateUpperBound = endDate.getUpperBound().getPrefix();
-            if (endDateUpperBound.equals(ParamPrefixEnum.GREATERTHAN)
-                    || endDateUpperBound.equals(ParamPrefixEnum.GREATERTHAN_OR_EQUALS)) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException("End Date Prefix Is Invalid"), SystemCode.INVALID_PARAMETER,
-                        IssueTypeEnum.INVALID_CONTENT);
-            }
-        }
-
     }
 }

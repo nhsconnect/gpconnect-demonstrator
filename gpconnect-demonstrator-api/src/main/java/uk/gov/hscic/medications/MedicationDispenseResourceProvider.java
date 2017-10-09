@@ -1,5 +1,13 @@
 package uk.gov.hscic.medications;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
@@ -9,15 +17,8 @@ import ca.uhn.fhir.model.dstu2.valueset.MedicationDispenseStatusEnum;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.model.medication.MedicationDispenseDetail;
 import uk.gov.hscic.medication.dispense.MedicationDispenseSearch;
+import uk.gov.hscic.model.medication.MedicationDispenseDetail;
 
 @Component
 public class MedicationDispenseResourceProvider implements IResourceProvider {

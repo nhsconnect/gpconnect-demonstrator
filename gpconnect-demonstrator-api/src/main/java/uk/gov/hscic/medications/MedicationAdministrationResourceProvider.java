@@ -1,17 +1,19 @@
 package uk.gov.hscic.medications;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.MedicationAdministration;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import uk.gov.hscic.model.medication.MedicationAdministrationDetail;
 import uk.gov.hscic.medication.administration.MedicationAdministrationSearch;
+import uk.gov.hscic.model.medication.MedicationAdministrationDetail;
 
 @Component
 public class MedicationAdministrationResourceProvider  implements IResourceProvider {

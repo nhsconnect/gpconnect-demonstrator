@@ -1,5 +1,22 @@
 package uk.gov.hscic.appointments;
 
+import java.text.MessageFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import org.hl7.fhir.instance.model.api.IBaseDatatype;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
@@ -7,7 +24,6 @@ import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.Appointment;
-import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.Appointment.Participant;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.valueset.AppointmentStatusEnum;
@@ -37,22 +53,6 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-
-import java.text.MessageFormat;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import org.hl7.fhir.instance.model.api.IBaseDatatype;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -341,6 +341,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return methodOutcome;
     }
 
+    @SuppressWarnings("deprecation")
     @Update
     public MethodOutcome updateAppointment(@IdParam IdDt appointmentId, @ResourceParam Appointment appointment) {
         MethodOutcome methodOutcome = new MethodOutcome();
@@ -486,7 +487,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return results.contains(false);
     }
 
-    public Appointment appointmentDetailToAppointmentResourceConverter(AppointmentDetail appointmentDetail) {
+    private Appointment appointmentDetailToAppointmentResourceConverter(AppointmentDetail appointmentDetail) {
         Appointment appointment = new Appointment();
 
         appointment.setId(String.valueOf(appointmentDetail.getId()));
@@ -589,7 +590,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return lastUpdated;
     }
 
-    public AppointmentDetail appointmentResourceConverterToAppointmentDetail(Appointment appointment) {
+    private AppointmentDetail appointmentResourceConverterToAppointmentDetail(Appointment appointment) {
 
         validateAppointmentExtensions(appointment.getUndeclaredExtensions());
 
@@ -620,16 +621,16 @@ public class AppointmentResourceProvider implements IResourceProvider {
         CodingDt codingFirstRep = appointment.getReason().getCodingFirstRep();
 
         if (!codingFirstRep.isEmpty()) {
-            
+
             String reasonSystem = codingFirstRep.getSystem();
             if (reasonSystem == null) {
                 String message = "Problem with reason property of the appointment. If the reason is provided then the system property must be set.";
                 throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
                         SystemCode.INVALID_RESOURCE, IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
-            }else{
+            } else {
                 appointmentDetail.setReasonURL(reasonSystem);
             }
-          
+
             String reasonCode = codingFirstRep.getCode();
             if (reasonCode == null) {
                 String message = "Problem with reason property of the appointment. If the reason is provided then the code property must be set.";

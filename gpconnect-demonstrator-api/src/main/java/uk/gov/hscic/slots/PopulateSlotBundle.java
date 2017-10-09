@@ -24,7 +24,6 @@ import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
-import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 /**
@@ -46,7 +45,6 @@ public class PopulateSlotBundle {
     @Autowired
     private ScheduleResourceProvider scheduleResourceProvider;
 
-    @SuppressWarnings("deprecation")
     public void populateBundle(Bundle bundle, OperationOutcome operationOutcome, Date planningHorizonStart,
             Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation) {
         bundle.getMeta().addProfile(SystemURL.SD_GPC_GET_SCHEDULE_BUNDLE);

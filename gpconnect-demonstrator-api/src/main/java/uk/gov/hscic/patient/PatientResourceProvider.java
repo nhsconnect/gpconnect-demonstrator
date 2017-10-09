@@ -1,5 +1,25 @@
 package uk.gov.hscic.patient;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.activation.UnsupportedDataTypeException;
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.IDatatype;
 import ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt;
@@ -54,30 +74,12 @@ import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.activation.UnsupportedDataTypeException;
-import javax.annotation.PostConstruct;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.helpers.StaticElementsHelper;
 import uk.gov.hscic.common.validators.IdentifierValidator;
-import uk.gov.hscic.common.validators.ValueSetValidator;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
@@ -99,9 +101,6 @@ public class PatientResourceProvider implements IResourceProvider {
     private static final String TEMPORARY_RESIDENT_REGISTRATION_TYPE = "T";
     private static final String ACTIVE_REGISTRATION_STATUS = "A";
     private static final int ENCOUNTERS_SUMMARY_LIMIT = 3;
-
-    //private static final List<String> MANDATORY_PARAM_NAMES = Arrays.asList("patientNHSNumber", "recordSection");
-    //private static final List<String> OPTIONAL_PARAM_NAMES = Arrays.asList("timePeriod");
 
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
@@ -129,9 +128,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PageSectionFactory pageSectionFactory;
-    
-    @Autowired
-    private ValueSetValidator valueSetValidator;
     
     @Autowired
     private StaticElementsHelper staticElHelper;
@@ -191,11 +187,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Search
     public List<Patient> getPatientsByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam tokenParam) {
-//        if (!SystemURL.ID_NHS_NUMBER.equals(tokenParam.getSystem())) {
-//            throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                new InvalidRequestException("Invalid system code"),
-//                SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
-//        }
 
         Patient patient = getPatientByPatientId(nhsNumber.fromToken(tokenParam));
       
@@ -464,14 +455,6 @@ public class PatientResourceProvider implements IResourceProvider {
                 .addCoding(coding)
                 .setText("record extract (record artifact)");
 
-        CodingDt classCoding = new CodingDt()
-                .setSystem("valueSet")
-                .setCode("700232004")
-                .setDisplay("general medical service (qualifier value)");
-
-        CodeableConceptDt classCodableConcept = new CodeableConceptDt().addCoding(classCoding)
-                .setText("general medical service (qualifier value)");
-
         Composition careRecordComposition = new Composition()
                 .setDate(new DateTimeDt(Calendar.getInstance().getTime()))
                 .setTitle("Patient Care Record")
@@ -593,7 +576,7 @@ public class PatientResourceProvider implements IResourceProvider {
         return bundle;
     }
     
-    public Boolean IsInactiveTemporaryPatient(PatientDetails patientDetails){
+    private Boolean IsInactiveTemporaryPatient(PatientDetails patientDetails){
         
         return patientDetails.getRegistrationType() != null && 
                 TEMPORARY_RESIDENT_REGISTRATION_TYPE.equals(patientDetails.getRegistrationType()) &&
@@ -601,7 +584,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 ACTIVE_REGISTRATION_STATUS.equals(patientDetails.getRegistrationStatus()) == false;
     }
 
-    public String getNhsNumber(Object source) {
+    private String getNhsNumber(Object source) {
         return nhsNumber.getNhsNumber(source);
     }
 
@@ -626,43 +609,6 @@ public class PatientResourceProvider implements IResourceProvider {
                                                 SystemCode.BAD_REQUEST,
                                                 IssueTypeEnum.INVALID_CONTENT); 
         }
-    }
-
-    private void validateRegistrationPeriod(Patient patient) {
-        List<ExtensionDt> registrationPeriodExtensions = patient
-                .getUndeclaredExtensionsByUrl(SystemURL.SD_CC_EXT_REGISTRATION_PERIOD);
-        
-        if(registrationPeriodExtensions.size() == 1) {
-            // we need a non null period
-            ExtensionDt registrationPeriodExtension = registrationPeriodExtensions.get(0);
-            PeriodDt registrationPeriod = (PeriodDt) registrationPeriodExtension.getValue();
-            
-            if(registrationPeriod == null) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException("A registration period must be supplied"),
-                                                    SystemCode.BAD_REQUEST,
-                                                    IssueTypeEnum.INVALID_CONTENT); 
-            }
-            
-            // note that the spec says nothing about the content of the start or end dates
-            // therefore we do not carry out any further validation
-            
-        }
-        else if(registrationPeriodExtensions.size() > 1) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(String.format("Duplicate undeclared extensions (url scheme - %s) found on patient resource", SystemURL.SD_EXTENSION_REGISTRATION_PERIOD)),
-                                                SystemCode.BAD_REQUEST,
-                                                IssueTypeEnum.INVALID_CONTENT); 
-            
-        }
-        else if(registrationPeriodExtensions.size() < 1) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Registration period is mandatory"),
-                                                SystemCode.BAD_REQUEST,
-                                                IssueTypeEnum.INVALID_CONTENT); 
-            
-        }
-        
     }
 
     private void valiateGender(Patient patient) {
@@ -859,75 +805,6 @@ public class PatientResourceProvider implements IResourceProvider {
         patientDetails.setRegistrationType(TEMPORARY_RESIDENT_REGISTRATION_TYPE);
 
         return patientDetails;
-    }
-
-    private Date getRegistrationEndDate(Patient patient) {
-        Date endDate = null;
-        
-        PeriodDt registrationPeriod = getFirstExtensionCode(SystemURL.SD_CC_EXT_REGISTRATION_PERIOD, patient);
-       
-        if(registrationPeriod != null) {
-            endDate = registrationPeriod.getEnd();
-        }
-        
-        return endDate;
-    }
-    
-    private Date getRegistrationStartDate(Patient patient) {
-        Date startDate = null;
-        
-        PeriodDt registrationPeriod = getFirstExtensionCode(SystemURL.SD_CC_EXT_REGISTRATION_PERIOD, patient);
-       
-        if(registrationPeriod != null) {
-            startDate = registrationPeriod.getStart();
-        }
-        
-        return startDate;
-    }
-
-    private String getRegistrationType(Patient patient) {
-        String registrationType = null;
-        
-        CodeableConceptDt typeCode =  getFirstExtensionCode(SystemURL.SD_CC_EXT_REGISTRATION_TYPE, patient);
-        
-        if(typeCode != null) {
-            registrationType = typeCode.getCodingFirstRep().getCode();
-         }
-        
-        return registrationType;
-    }
-
-    private String getRegistrationStatus(Patient patient) {
-        String registrationStatus = null;
-        
-        CodeableConceptDt statusCode = getFirstExtensionCode(SystemURL.SD_CC_EXT_REGISTRATION_STATUS, patient);
-        if(statusCode != null) {
-           registrationStatus = statusCode.getCodingFirstRep().getCode();
-        }
-        
-        return registrationStatus;
-    }
-
-    @SuppressWarnings("unchecked")
-    private <V> V getFirstExtensionCode(String extensionUrl, Patient patient) {
-        V value = null;
-        
-        List<ExtensionDt> extensions = patient.getUndeclaredExtensionsByUrl(extensionUrl);
-        if(extensions.isEmpty() == false) {
-        
-            if(extensions.size() == 1) {
-                ExtensionDt extension = extensions.get(0);
-                value = (V) extension.getValue();
-            }
-            else {
-                // we do not allow duplicates
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(String.format("Duplicate undeclared extensions (url scheme - %s) found on patient resource", extensionUrl)),
-                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-            }
-        }
-        
-        return value;
     }
 
     // a cut-down Patient

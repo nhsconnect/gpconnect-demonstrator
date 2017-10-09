@@ -1,5 +1,12 @@
 package uk.gov.hscic.medications;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.MedicationOrder;
@@ -15,14 +22,9 @@ import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.model.medication.MedicationOrderDetails;
 import uk.gov.hscic.medication.orders.MedicationOrderSearch;
+import uk.gov.hscic.model.medication.MedicationOrderDetails;
 
 @Component
 public class MedicationOrderResourceProvider implements IResourceProvider {
@@ -63,7 +65,7 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
     }
 
 
-    public MedicationOrder medicationOrderDetailsToMedicationOrderResourceConverter(MedicationOrderDetails medicationOrderDetails) {
+    private MedicationOrder medicationOrderDetailsToMedicationOrderResourceConverter(MedicationOrderDetails medicationOrderDetails) {
         MedicationOrder medicationOrder = new MedicationOrder();
         medicationOrder.setId(String.valueOf(medicationOrderDetails.getId()));
         medicationOrder.getMeta().setLastUpdated(medicationOrderDetails.getLastUpdated());

@@ -533,7 +533,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         String reasonCode = appointmentDetail.getReasonCode();
         String reasonDisplay = appointmentDetail.getReasonDisplay();
-        String reasonSystem = appointmentDetail.getReasonURL();
+        String reasonSystem = SystemURL.DEFAULTREASONURL;
         if (reasonCode != null && reasonDisplay != null && reasonSystem != null) {
             CodingDt codingReason = new CodingDt().setSystem(reasonSystem).setCode(String.valueOf(reasonCode))
                     .setDisplay(reasonDisplay);

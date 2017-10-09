@@ -100,4 +100,7 @@ public final class SystemURL {
     public static final String CS_CC_LANG_ABILITY_PROFI = "https://fhir.nhs.uk/CareConnect-LanguageAbilityProficiency-1";
     public static final String CS_CC_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/CareConnect-NHSNumberVerificationStatus-1";
     
+    //Appointment Reason URL
+    public static final String DEFAULTREASONURL = "DefaultReasonURL";
+    
 }

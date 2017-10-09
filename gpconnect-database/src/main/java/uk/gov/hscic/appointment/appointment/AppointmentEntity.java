@@ -83,6 +83,13 @@ public class AppointmentEntity {
 
     @Column(name = "typeText")
     private String typeText;
+    
+    @Column(name = "bookingOrganisation")
+    private String bookingOrganisation;
+    
+    @Column(name = "created")
+    private Date created;
+        
 
     public String getCancellationReason() {
         return cancellationReason;
@@ -163,6 +170,14 @@ public class AppointmentEntity {
     public String getTypeText() {
         return typeText;
     }
+    
+    public String getBookingOrganisation(){
+        return bookingOrganisation;
+    }
+    
+    public Date getCreated() {
+        return created;
+    }
 
     public void setCancellationReason(String cancellationReason) {
         this.cancellationReason = cancellationReason;
@@ -242,5 +257,13 @@ public class AppointmentEntity {
 
     public void setTypeText(String typeText) {
         this.typeText = typeText;
+    }
+    
+    public void setBookingOrganisation(String bookingOrganisation){
+        this.bookingOrganisation = bookingOrganisation;
+    }
+    
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

@@ -1,20 +1,23 @@
 package uk.gov.hscic.appointments;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
+import ca.uhn.fhir.model.api.IResource;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.composite.ContainedDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.Appointment;
-import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.Appointment.Participant;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
+import ca.uhn.fhir.model.dstu2.resource.Organization;
 import ca.uhn.fhir.model.dstu2.valueset.AppointmentStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ParticipationStatusEnum;
 import ca.uhn.fhir.model.primitive.BoundCodeDt;
+import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.rest.annotation.Count;
@@ -43,6 +46,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
@@ -467,6 +471,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
+        results.add(Objects.equals(oldAppointmentDetail.getBookingOrganisation(), appointmentDetail.getBookingOrganisation()));
+        results.add(Objects.equals(oldAppointmentDetail.getCreated(), appointmentDetail.getCreated()));
         return results.contains(false);
     }
 
@@ -483,6 +489,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
+        results.add(Objects.equals(oldAppointmentDetail.getBookingOrganisation(), appointmentDetail.getBookingOrganisation()));
+        results.add(Objects.equals(oldAppointmentDetail.getCreated(), appointmentDetail.getCreated()));
         return results.contains(false);
     }
 
@@ -570,6 +578,29 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     .setActor(new ResourceReferenceDt("Practitioner/" + appointmentDetail.getPractitionerId()))
                     .setStatus(ParticipationStatusEnum.ACCEPTED);
         }
+        
+        if(null != appointmentDetail.getBookingOrganisation()){
+                    
+            String reference = "#bookingOrg1";
+            ResourceReferenceDt orgRef = new ResourceReferenceDt(reference);
+            ExtensionDt bookingOrgExt = new ExtensionDt(false, SystemURL.SD_CC_APPOINTMENT_BOOKINGORG, orgRef);
+            
+           appointment.addUndeclaredExtension(bookingOrgExt);
+            
+            Organization bookingOrg = new Organization();
+            bookingOrg.setId(reference);
+            bookingOrg.getNameElement().setValue(appointmentDetail.getBookingOrganisation());
+            
+            appointment.getContained().getContainedResources().add(bookingOrg);
+        }
+        
+        if(null != appointmentDetail.getCreated()){
+            
+            DateTimeDt created = new DateTimeDt(appointmentDetail.getCreated());
+            ExtensionDt createdExt = new ExtensionDt(false, SystemURL.SD_CC_APPOINTMENT_CREATED, created);
+            
+            appointment.addUndeclaredExtension(createdExt);
+        }
 
         return appointment;
     }
@@ -597,11 +628,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentDetail.setId(appointment.getId().getIdPartAsLong());
         appointmentDetail.setLastUpdated(getLastUpdated(appointment.getMeta().getLastUpdated()));
 
-        List<ExtensionDt> extension = appointment
+        List<ExtensionDt> cnlExtension = appointment
                 .getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON);
 
-        if (extension != null && !extension.isEmpty()) {
-            IBaseDatatype value = extension.get(0).getValue();
+        if (cnlExtension != null && !cnlExtension.isEmpty()) {
+            IBaseDatatype value = cnlExtension.get(0).getValue();
 
             if (null == value) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -688,6 +719,40 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
             }
         }
+        
+        List<ExtensionDt> crtExtension = appointment
+                .getUndeclaredExtensionsByUrl(SystemURL.SD_CC_APPOINTMENT_CREATED);        
+        
+        if (crtExtension != null && !crtExtension.isEmpty()) {
+            IBaseDatatype created = crtExtension.get(0).getValue();
+
+            if (null != created && created.getClass().getSimpleName().equals("DateTimeDt")) {
+                DateTimeDt createdDt = (DateTimeDt) created;
+                appointmentDetail.setCreated(createdDt.getValue());
+            }
+        }
+        
+        List<ExtensionDt> bktExtension = appointment
+                .getUndeclaredExtensionsByUrl(SystemURL.SD_CC_APPOINTMENT_BOOKINGORG);
+        
+        if (bktExtension != null && !bktExtension.isEmpty()) {
+            IBaseDatatype bookingOrg = bktExtension.get(0).getValue();
+            
+            if (null != bookingOrg && bookingOrg.getClass().getSimpleName().equals("ResourceReferenceDt")) {
+                for(IResource resource : appointment.getContained().getContainedResources())
+                {
+                    if(resource.getResourceName().equals("Organization"))
+                    {
+                        Organization bookingOrgRes = (Organization) resource;
+                        ResourceReferenceDt bookingOrgRef = (ResourceReferenceDt) bookingOrg;
+                        
+                        if(bookingOrgRes.getId().equals(bookingOrgRef.getReference().getValueAsString())){
+                            appointmentDetail.setBookingOrganisation(bookingOrgRes.getName());
+                        }
+                    }
+                }
+            }
+        }
 
         return appointmentDetail;
     }
@@ -771,6 +836,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 .collect(Collectors.toList());
 
         extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON);
+        extensionURLs.remove(SystemURL.SD_CC_APPOINTMENT_CREATED);
+        extensionURLs.remove(SystemURL.SD_CC_APPOINTMENT_BOOKINGORG);
 
         if (!extensionURLs.isEmpty()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -791,15 +858,18 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 }
                 continue;
             }
+            
+            IBaseDatatype ueValue = ue.getValue();
+            if(null != ueValue && ueValue.getClass().getSimpleName().equals("CodeableConceptDt")){
+                CodeableConceptDt codeConc = (CodeableConceptDt) ueValue;
+                CodingDt code = codeConc.getCodingFirstRep();
 
-            CodeableConceptDt codeConc = (CodeableConceptDt) ue.getValue();
-            CodingDt code = codeConc.getCodingFirstRep();
+                Boolean isValid = valueSetValidator.validateCode(code);
 
-            Boolean isValid = valueSetValidator.validateCode(code);
-
-            if (isValid == false) {
-                invalidCodes.add(MessageFormat.format("Code: {0} [Display: {1}, System: {2}]", code.getCode(),
-                        code.getDisplay(), code.getSystem()));
+                if (isValid == false) {
+                    invalidCodes.add(MessageFormat.format("Code: {0} [Display: {1}, System: {2}]", code.getCode(),
+                            code.getDisplay(), code.getSystem()));
+                }
             }
         }
 

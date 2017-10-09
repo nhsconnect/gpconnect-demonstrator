@@ -23,6 +23,8 @@ public class AppointmentDetail {
     private String status;
     private Long typeCode;
     private String typeDisplay;
+    private String bookingOrganisation;
+    private Date created;
     
     public String getReasonURL() {
         return reasonURL;
@@ -109,6 +111,14 @@ public class AppointmentDetail {
     public String getTypeText() {
         return typeText;
     }
+    
+    public String getBookingOrganisation() {
+        return bookingOrganisation;
+    }
+    
+    public Date getCreated() {
+        return created;
+    }
 
     public void setCancellationReason(String cancellationReason) {
         this.cancellationReason = cancellationReason;
@@ -186,4 +196,11 @@ public class AppointmentDetail {
         this.typeText = typeText;
     }
       
+    public void setBookingOrganisation(String bookingOrganisation) {
+        this.bookingOrganisation = bookingOrganisation;
+    }
+    
+    public void setCreated(Date created){
+        this.created = created;
+    }
 }

@@ -64,6 +64,8 @@ public final class SystemURL {
     public static final String SD_CC_MODE_OF_COMM = "modeOfCommunication";   
     public static final String SD_CC_COMM_PROFICIENCY = "communicationProficiency";   
     public static final String SD_CC_INTERPRETER_REQUIRED = "interpreterRequired";   
+    public static final String SD_CC_APPOINTMENT_BOOKINGORG = "bookingOrganization";   
+    public static final String SD_CC_APPOINTMENT_CREATED = "created";   
     
 
     // FHIR ValueSet Constants

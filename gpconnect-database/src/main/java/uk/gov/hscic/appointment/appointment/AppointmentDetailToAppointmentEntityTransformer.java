@@ -33,6 +33,8 @@ public class AppointmentDetailToAppointmentEntityTransformer {
         appointmentEntity.setLastUpdated(item.getLastUpdated());
         appointmentEntity.setMinutesDuration(item.getMinutesDuration());
         appointmentEntity.setPriority(item.getPriority());
+        appointmentEntity.setBookingOrganisation(item.getBookingOrganisation());
+        appointmentEntity.setCreated(item.getCreated());
         return appointmentEntity;
     }
 }

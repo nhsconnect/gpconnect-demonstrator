@@ -49,7 +49,9 @@ CREATE TABLE gpconnect.appointment_appointments (
   practitionerId     BIGINT    NULL,
   locationId         BIGINT    NULL NOT NULL,
   minutesDuration    BIGINT    NULL,
-  priority    		BIGINT    NULL,
+  bookingOrganisation TEXT(300) NULL,
+  created             DATETIME NULL,
+  priority    		   BIGINT    NULL,
   lastUpdated        DATETIME  NULL,
   PRIMARY KEY (id)
 );

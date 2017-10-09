@@ -30,6 +30,8 @@ public class AppointmentEntityToAppointmentDetailTransformer implements Transfor
         appointmentDetail.setLastUpdated(item.getLastUpdated());
         appointmentDetail.setMinutesDuration(item.getMinutesDuration());
         appointmentDetail.setPriority(item.getPriority());
+        appointmentDetail.setBookingOrganisation(item.getBookingOrganisation());
+        appointmentDetail.setCreated(item.getCreated());
         
         return appointmentDetail;
     }

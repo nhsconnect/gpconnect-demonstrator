@@ -1,7 +1,8 @@
 package uk.gov.hscic.medications;
 
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.dstu2.resource.Medication;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
@@ -10,9 +11,6 @@ import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import uk.gov.hscic.SystemURL;
 
 @Component
 public class MedicationResourceProvider implements IResourceProvider {
@@ -34,11 +32,6 @@ public class MedicationResourceProvider implements IResourceProvider {
             operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No medication details found for ID: " + medicationId.getIdPart());
             throw new InternalErrorException("No medication details found for ID: " + medicationId.getIdPart(), operationalOutcome);
         }
-
-//        CodingDt coding = new CodingDt(SystemURL.SNOMED, String.valueOf(medicationEntity.getId())).setDisplay(medicationEntity.getName());
-//        CodeableConceptDt codableConcept = new CodeableConceptDt();
-//        codableConcept.addCoding(coding);
-        //.setCode(codableConcept);
 
         Medication medication = new Medication();
         medication.setId(String.valueOf(medicationEntity.getId()));

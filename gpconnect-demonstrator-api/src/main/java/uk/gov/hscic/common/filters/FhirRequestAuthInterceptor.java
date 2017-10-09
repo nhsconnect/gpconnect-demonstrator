@@ -37,9 +37,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     private static final String ORDER_RESOURCE_NAME = "Order";
     private static final String SCHEDULE_RESOURCE_NAME = "Schedule";
     private static final String SLOT_RESOURCE_NAME = "Slot";
-    
-    
-
+     
     private static final List<String> PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS = Arrays.asList(SystemURL.ID_ODS_ORGANIZATION_CODE);
 
     @Value("${request.leeway:5}")

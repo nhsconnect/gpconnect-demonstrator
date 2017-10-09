@@ -8,6 +8,7 @@ import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.Organization;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.LocationStatusEnum;
+import ca.uhn.fhir.model.dstu2.valueset.LocationTypeEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
@@ -88,7 +89,8 @@ public class LocationResourceProvider implements IResourceProvider {
         locationGachTypeCode.setSystem(SystemURL.VS_CC_SER_DEL_LOCROLETYPE);
         locationGachTypeCode.setDisplay("Hospitals; General Acute Care Hospital");
         
-        BoundCodeableConceptDt locationType = new BoundCodeableConceptDt();
+        @SuppressWarnings("deprecation")
+        BoundCodeableConceptDt<LocationTypeEnum> locationType = new BoundCodeableConceptDt<LocationTypeEnum>();
         locationType.addCoding(locationCommTypeCode);
         locationType.addCoding(locationGachTypeCode);
         location.setType(locationType);

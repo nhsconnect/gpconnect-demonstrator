@@ -1,5 +1,19 @@
 package uk.gov.hscic.common.filters;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.parser.DataFormatException;
@@ -10,16 +24,6 @@ import ca.uhn.fhir.rest.method.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Locale;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
-import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.common.filters.model.WebToken;
@@ -28,7 +32,6 @@ import uk.gov.hscic.common.filters.model.WebTokenValidator;
 @Component
 public class WebTokenFactory {
     private static final Logger LOG = Logger.getLogger("AuthLog");
-
     private static final String PERMITTED_MEDIA_TYPE_HEADER_REGEX = "application/(xml|json)\\+fhir(;charset=utf-8)?";
 
     private IParser parser = null;
@@ -120,8 +123,6 @@ public class WebTokenFactory {
 
         try {
             JsonNode jsonNode = new ObjectMapper().readTree(claimsJsonString);
-
-            //LOG.info("Incoming FHIR request: " + jsonNode);
 
             parser.parseResource(jsonNode.get("requesting_practitioner").toString());
             parser.parseResource(jsonNode.get("requesting_device").toString());

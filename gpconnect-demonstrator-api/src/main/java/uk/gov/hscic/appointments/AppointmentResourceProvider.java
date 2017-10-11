@@ -582,7 +582,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         
         if(null != appointmentDetail.getBookingOrganisation()){
                     
-            String reference = "#bookingOrg1";
+            String reference = "#1";
             ResourceReferenceDt orgRef = new ResourceReferenceDt(reference);
             ExtensionDt bookingOrgExt = new ExtensionDt(false, SystemURL.SD_CC_APPOINTMENT_BOOKINGORG, orgRef);
             

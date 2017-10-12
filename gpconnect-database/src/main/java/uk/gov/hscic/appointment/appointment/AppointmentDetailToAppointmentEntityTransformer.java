@@ -2,12 +2,15 @@ package uk.gov.hscic.appointment.appointment;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import uk.gov.hscic.appointment.bookingOrganization.BookingOrgDetailToBookingOrgEntityTransformer;
 import uk.gov.hscic.appointment.slot.SlotDetailToSlotEntityTransformer;
 import uk.gov.hscic.model.appointment.AppointmentDetail;
 import uk.gov.hscic.model.appointment.SlotDetail;
 
 public class AppointmentDetailToAppointmentEntityTransformer {
 
+    private final BookingOrgDetailToBookingOrgEntityTransformer bookingOrgTransformer = new BookingOrgDetailToBookingOrgEntityTransformer();
+    
     public AppointmentEntity transform(AppointmentDetail item, List<SlotDetail> slots) {
         AppointmentEntity appointmentEntity = new AppointmentEntity();
         appointmentEntity.setId(item.getId());
@@ -33,8 +36,9 @@ public class AppointmentDetailToAppointmentEntityTransformer {
         appointmentEntity.setLastUpdated(item.getLastUpdated());
         appointmentEntity.setMinutesDuration(item.getMinutesDuration());
         appointmentEntity.setPriority(item.getPriority());
-        appointmentEntity.setBookingOrganisation(item.getBookingOrganisation());
         appointmentEntity.setCreated(item.getCreated());
+        appointmentEntity.setBookingOrganization(bookingOrgTransformer.transform(item.getBookingOrganization(), appointmentEntity));
+
         return appointmentEntity;
     }
 }

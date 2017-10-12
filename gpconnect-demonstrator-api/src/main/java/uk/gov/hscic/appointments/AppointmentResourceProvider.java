@@ -29,6 +29,8 @@ import ca.uhn.fhir.model.dstu2.resource.Appointment.Participant;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Organization;
 import ca.uhn.fhir.model.dstu2.valueset.AppointmentStatusEnum;
+import ca.uhn.fhir.model.dstu2.valueset.ContactPointSystemEnum;
+import ca.uhn.fhir.model.dstu2.valueset.ContactPointUseEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ParticipationStatusEnum;
@@ -66,6 +68,7 @@ import uk.gov.hscic.appointment.slot.SlotStore;
 import uk.gov.hscic.common.validators.ValueSetValidator;
 import uk.gov.hscic.location.LocationSearch;
 import uk.gov.hscic.model.appointment.AppointmentDetail;
+import uk.gov.hscic.model.appointment.BookingOrgDetail;
 import uk.gov.hscic.model.appointment.SlotDetail;
 import uk.gov.hscic.model.location.LocationDetails;
 import uk.gov.hscic.model.patient.PatientDetails;
@@ -472,7 +475,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-        results.add(Objects.equals(oldAppointmentDetail.getBookingOrganisation(), appointmentDetail.getBookingOrganisation()));
+        results.add(Objects.equals(oldAppointmentDetail.getBookingOrganization(), appointmentDetail.getBookingOrganization()));
         results.add(Objects.equals(oldAppointmentDetail.getCreated(), appointmentDetail.getCreated()));
         return results.contains(false);
     }
@@ -490,7 +493,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-        results.add(Objects.equals(oldAppointmentDetail.getBookingOrganisation(), appointmentDetail.getBookingOrganisation()));
+        results.add(Objects.equals(oldAppointmentDetail.getBookingOrganization(), appointmentDetail.getBookingOrganization()));
         results.add(Objects.equals(oldAppointmentDetail.getCreated(), appointmentDetail.getCreated()));
         return results.contains(false);
     }
@@ -580,18 +583,23 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     .setStatus(ParticipationStatusEnum.ACCEPTED);
         }
         
-        if(null != appointmentDetail.getBookingOrganisation()){
+        if(null != appointmentDetail.getBookingOrganization()){
                     
             String reference = "#1";
             ResourceReferenceDt orgRef = new ResourceReferenceDt(reference);
             ExtensionDt bookingOrgExt = new ExtensionDt(false, SystemURL.SD_CC_APPOINTMENT_BOOKINGORG, orgRef);
             
            appointment.addUndeclaredExtension(bookingOrgExt);
-            
+           BookingOrgDetail bookingOrgDetail =  appointmentDetail.getBookingOrganization();
+           
             Organization bookingOrg = new Organization();
             bookingOrg.setId(reference);
-            bookingOrg.getNameElement().setValue(appointmentDetail.getBookingOrganisation());
-            
+            bookingOrg.getNameElement().setValue(bookingOrgDetail.getName());
+            bookingOrg.getTelecomFirstRep().setValue(bookingOrgDetail.getTelephone()).setUse(ContactPointUseEnum.TEMP).setSystem(ContactPointSystemEnum.PHONE);
+            if(null != bookingOrgDetail.getOrgCode()){
+                bookingOrg.getIdentifierFirstRep().setSystem(SystemURL.ID_ODS_ORGANIZATION_CODE).setValue(bookingOrgDetail.getOrgCode());
+            }
+                    
             appointment.getContained().getContainedResources().add(bookingOrg);
         }
         
@@ -748,7 +756,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         ResourceReferenceDt bookingOrgRef = (ResourceReferenceDt) bookingOrg;
                         
                         if(bookingOrgRes.getId().equals(bookingOrgRef.getReference().getValueAsString())){
-                            appointmentDetail.setBookingOrganisation(bookingOrgRes.getName());
+                            BookingOrgDetail bookingOrgDetail = new BookingOrgDetail();
+                            bookingOrgDetail.setName(bookingOrgRes.getName());
+                            bookingOrgDetail.setTelephone(bookingOrgRes.getTelecomFirstRep().getValue());
+                            if(!bookingOrgRes.getIdentifier().isEmpty()){
+                                bookingOrgDetail.setOrgCode(bookingOrgRes.getIdentifierFirstRep().getValue());
+                            }
+                            bookingOrgDetail.setAppointmentDetail(appointmentDetail);
+                            appointmentDetail.setBookingOrganization(bookingOrgDetail);
                         }
                     }
                 }

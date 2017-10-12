@@ -25,11 +25,21 @@ DROP TABLE IF EXISTS gpconnect.clinicalitems;
 DROP TABLE IF EXISTS gpconnect.investigations;
 DROP TABLE IF EXISTS gpconnect.locations;
 DROP TABLE IF EXISTS gpconnect.orders;
+DROP TABLE IF EXISTS gpconnect.appointment_booking_orgz;
 DROP TABLE IF EXISTS gpconnect.appointment_appointments;
 DROP TABLE IF EXISTS gpconnect.general_practitioners;
 DROP TABLE IF EXISTS gpconnect.medical_departments;
 
 /* Create new table schemas */
+
+CREATE TABLE gpconnect.appointment_booking_orgz (
+  id              BIGINT       NOT NULL,
+  org_code        VARCHAR(30)  NULL,
+  name            VARCHAR(100) NOT NULL,
+  telephone       VARCHAR(100) NOT NULL,
+  lastUpdated     DATETIME     NULL,
+  PRIMARY KEY (id)
+);
 
 CREATE TABLE gpconnect.appointment_appointments (
   id                 BIGINT    NOT NULL AUTO_INCREMENT,
@@ -49,12 +59,15 @@ CREATE TABLE gpconnect.appointment_appointments (
   practitionerId     BIGINT    NULL,
   locationId         BIGINT    NULL NOT NULL,
   minutesDuration    BIGINT    NULL,
-  bookingOrganisation TEXT(300) NULL,
-  created             DATETIME NULL,
+  created            DATETIME  NULL,
   priority    		   BIGINT    NULL,
   lastUpdated        DATETIME  NULL,
   PRIMARY KEY (id)
 );
+
+ALTER TABLE gpconnect.appointment_booking_orgz
+ADD CONSTRAINT fk_appointment_appointments_booking_orgz
+FOREIGN KEY (id) REFERENCES gpconnect.appointment_appointments(id);
 
 CREATE TABLE gpconnect.appointment_schedules (
   id              BIGINT    NOT NULL AUTO_INCREMENT,

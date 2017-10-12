@@ -3,6 +3,7 @@ package uk.gov.hscic.appointment.appointment;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,7 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import uk.gov.hscic.appointment.bookingOrganization.BookingOrgEntity;
 import uk.gov.hscic.appointment.slot.SlotEntity;
 
 @Entity
@@ -83,9 +86,11 @@ public class AppointmentEntity {
 
     @Column(name = "typeText")
     private String typeText;
-    
-    @Column(name = "bookingOrganisation")
-    private String bookingOrganisation;
+      
+    //@OneToOne(cascade = CascadeType.PERSIST, mappedBy = "id")
+    //@JoinColumn(name = "id")
+    @OneToOne(cascade=CascadeType.ALL, mappedBy="appointmentEntity") 
+    private BookingOrgEntity bookingOrganization;
     
     @Column(name = "created")
     private Date created;
@@ -171,8 +176,8 @@ public class AppointmentEntity {
         return typeText;
     }
     
-    public String getBookingOrganisation(){
-        return bookingOrganisation;
+    public BookingOrgEntity getBookingOrganization(){
+        return bookingOrganization;
     }
     
     public Date getCreated() {
@@ -259,8 +264,8 @@ public class AppointmentEntity {
         this.typeText = typeText;
     }
     
-    public void setBookingOrganisation(String bookingOrganisation){
-        this.bookingOrganisation = bookingOrganisation;
+    public void setBookingOrganization(BookingOrgEntity bookingOrganization){
+        this.bookingOrganization = bookingOrganization;
     }
     
     public void setCreated(Date created) {

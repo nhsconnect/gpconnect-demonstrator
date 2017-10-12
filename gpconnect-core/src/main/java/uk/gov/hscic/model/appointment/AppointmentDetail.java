@@ -23,7 +23,7 @@ public class AppointmentDetail {
     private String status;
     private Long typeCode;
     private String typeDisplay;
-    private String bookingOrganisation;
+    private BookingOrgDetail bookingOrganization;
     private Date created;
     
     public String getReasonURL() {
@@ -112,8 +112,8 @@ public class AppointmentDetail {
         return typeText;
     }
     
-    public String getBookingOrganisation() {
-        return bookingOrganisation;
+    public BookingOrgDetail getBookingOrganization() {
+        return bookingOrganization;
     }
     
     public Date getCreated() {
@@ -196,8 +196,8 @@ public class AppointmentDetail {
         this.typeText = typeText;
     }
       
-    public void setBookingOrganisation(String bookingOrganisation) {
-        this.bookingOrganisation = bookingOrganisation;
+    public void setBookingOrganization(BookingOrgDetail bookingOrganization) {
+        this.bookingOrganization = bookingOrganization;
     }
     
     public void setCreated(Date created){

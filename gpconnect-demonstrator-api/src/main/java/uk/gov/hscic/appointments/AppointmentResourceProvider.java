@@ -473,7 +473,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
         results.add(Objects.equals(oldAppointmentDetail.getBookingOrganisation(), appointmentDetail.getBookingOrganisation()));
-        results.add(Objects.equals(oldAppointmentDetail.getCreated(), appointmentDetail.getCreated()));
         return results.contains(false);
     }
 
@@ -491,7 +490,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
         results.add(Objects.equals(oldAppointmentDetail.getBookingOrganisation(), appointmentDetail.getBookingOrganisation()));
-        results.add(Objects.equals(oldAppointmentDetail.getCreated(), appointmentDetail.getCreated()));
         return results.contains(false);
     }
 

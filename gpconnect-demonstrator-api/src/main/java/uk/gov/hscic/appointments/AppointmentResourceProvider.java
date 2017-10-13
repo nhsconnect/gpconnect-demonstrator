@@ -288,7 +288,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
                             "Appointment resource is not a valid resource required valid Patient and Location"),
                     SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
         }
-       
 
         for (Participant participant : appointment.getParticipant()) {
 
@@ -475,7 +474,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-        results.add(Objects.equals(oldAppointmentDetail.getBookingOrganization(), appointmentDetail.getBookingOrganization()));
+        results.add(Objects.equals(oldAppointmentDetail.getBookingOrganization(),
+                appointmentDetail.getBookingOrganization()));
 
         return results.contains(false);
     }
@@ -493,7 +493,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-        results.add(Objects.equals(oldAppointmentDetail.getBookingOrganization(), appointmentDetail.getBookingOrganization()));
+        results.add(Objects.equals(oldAppointmentDetail.getBookingOrganization(),
+                appointmentDetail.getBookingOrganization()));
 
         return results.contains(false);
     }
@@ -582,33 +583,35 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     .setActor(new ResourceReferenceDt("Practitioner/" + appointmentDetail.getPractitionerId()))
                     .setStatus(ParticipationStatusEnum.ACCEPTED);
         }
-        
-        if(null != appointmentDetail.getBookingOrganization()){
-                    
+
+        if (null != appointmentDetail.getCreated()) {
+
+            DateTimeDt created = new DateTimeDt(appointmentDetail.getCreated());
+            ExtensionDt createdExt = new ExtensionDt(false, SystemURL.SD_CC_APPOINTMENT_CREATED, created);
+
+            appointment.addUndeclaredExtension(createdExt);
+        }
+
+        if (null != appointmentDetail.getBookingOrganization()) {
+
             String reference = "#1";
             ResourceReferenceDt orgRef = new ResourceReferenceDt(reference);
             ExtensionDt bookingOrgExt = new ExtensionDt(false, SystemURL.SD_CC_APPOINTMENT_BOOKINGORG, orgRef);
-            
-           appointment.addUndeclaredExtension(bookingOrgExt);
-           BookingOrgDetail bookingOrgDetail =  appointmentDetail.getBookingOrganization();
-           
+
+            appointment.addUndeclaredExtension(bookingOrgExt);
+            BookingOrgDetail bookingOrgDetail = appointmentDetail.getBookingOrganization();
+
             Organization bookingOrg = new Organization();
             bookingOrg.setId(reference);
             bookingOrg.getNameElement().setValue(bookingOrgDetail.getName());
-            bookingOrg.getTelecomFirstRep().setValue(bookingOrgDetail.getTelephone()).setUse(ContactPointUseEnum.TEMP).setSystem(ContactPointSystemEnum.PHONE);
-            if(null != bookingOrgDetail.getOrgCode()){
-                bookingOrg.getIdentifierFirstRep().setSystem(SystemURL.ID_ODS_ORGANIZATION_CODE).setValue(bookingOrgDetail.getOrgCode());
+            bookingOrg.getTelecomFirstRep().setValue(bookingOrgDetail.getTelephone()).setUse(ContactPointUseEnum.TEMP)
+                    .setSystem(ContactPointSystemEnum.PHONE);
+            if (null != bookingOrgDetail.getOrgCode()) {
+                bookingOrg.getIdentifierFirstRep().setSystem(SystemURL.ID_ODS_ORGANIZATION_CODE)
+                        .setValue(bookingOrgDetail.getOrgCode());
             }
-                    
+
             appointment.getContained().getContainedResources().add(bookingOrg);
-        }
-        
-        if(null != appointmentDetail.getCreated()){
-            
-            DateTimeDt created = new DateTimeDt(appointmentDetail.getCreated());
-            ExtensionDt createdExt = new ExtensionDt(false, SystemURL.SD_CC_APPOINTMENT_CREATED, created);
-            
-            appointment.addUndeclaredExtension(createdExt);
         }
 
         return appointment;
@@ -728,10 +731,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         SystemCode.INVALID_RESOURCE, IssueTypeEnum.INVALID_CONTENT);
             }
         }
-        
-        List<ExtensionDt> crtExtension = appointment
-                .getUndeclaredExtensionsByUrl(SystemURL.SD_CC_APPOINTMENT_CREATED);        
-        
+
+        List<ExtensionDt> crtExtension = appointment.getUndeclaredExtensionsByUrl(SystemURL.SD_CC_APPOINTMENT_CREATED);
+
         if (crtExtension != null && !crtExtension.isEmpty()) {
             IBaseDatatype created = crtExtension.get(0).getValue();
 
@@ -740,26 +742,24 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 appointmentDetail.setCreated(createdDt.getValue());
             }
         }
-        
+
         List<ExtensionDt> bktExtension = appointment
                 .getUndeclaredExtensionsByUrl(SystemURL.SD_CC_APPOINTMENT_BOOKINGORG);
-        
+
         if (bktExtension != null && !bktExtension.isEmpty()) {
             IBaseDatatype bookingOrg = bktExtension.get(0).getValue();
-            
+
             if (null != bookingOrg && bookingOrg.getClass().getSimpleName().equals("ResourceReferenceDt")) {
-                for(IResource resource : appointment.getContained().getContainedResources())
-                {
-                    if(resource.getResourceName().equals("Organization"))
-                    {
+                for (IResource resource : appointment.getContained().getContainedResources()) {
+                    if (resource.getResourceName().equals("Organization")) {
                         Organization bookingOrgRes = (Organization) resource;
                         ResourceReferenceDt bookingOrgRef = (ResourceReferenceDt) bookingOrg;
-                        
-                        if(bookingOrgRes.getId().equals(bookingOrgRef.getReference().getValueAsString())){
+
+                        if (bookingOrgRes.getId().equals(bookingOrgRef.getReference().getValueAsString())) {
                             BookingOrgDetail bookingOrgDetail = new BookingOrgDetail();
                             bookingOrgDetail.setName(bookingOrgRes.getName());
                             bookingOrgDetail.setTelephone(bookingOrgRes.getTelecomFirstRep().getValue());
-                            if(!bookingOrgRes.getIdentifier().isEmpty()){
+                            if (!bookingOrgRes.getIdentifier().isEmpty()) {
                                 bookingOrgDetail.setOrgCode(bookingOrgRes.getIdentifierFirstRep().getValue());
                             }
                             bookingOrgDetail.setAppointmentDetail(appointmentDetail);
@@ -874,9 +874,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 }
                 continue;
             }
-            
+
             IBaseDatatype ueValue = ue.getValue();
-            if(null != ueValue && ueValue.getClass().getSimpleName().equals("CodeableConceptDt")){
+            if (null != ueValue && ueValue.getClass().getSimpleName().equals("CodeableConceptDt")) {
                 CodeableConceptDt codeConc = (CodeableConceptDt) ueValue;
                 CodingDt code = codeConc.getCodingFirstRep();
 

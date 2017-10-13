@@ -64,8 +64,8 @@ public final class SystemURL {
     public static final String SD_CC_MODE_OF_COMM = "modeOfCommunication";   
     public static final String SD_CC_COMM_PROFICIENCY = "communicationProficiency";   
     public static final String SD_CC_INTERPRETER_REQUIRED = "interpreterRequired";   
-    public static final String SD_CC_APPOINTMENT_BOOKINGORG = "bookingOrganization";   
-    public static final String SD_CC_APPOINTMENT_CREATED = "created";   
+    public static final String SD_CC_APPOINTMENT_BOOKINGORG = "https://fhir.nhs.uk/StructureDefinition/extension-gpconnect-booking-organisation-1";   
+    public static final String SD_CC_APPOINTMENT_CREATED = "https://fhir.nhs.uk/StructureDefinition/extension-gpconnect-appointment-created-1";   
     
 
     // FHIR ValueSet Constants

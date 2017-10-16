@@ -606,12 +606,15 @@ public class AppointmentResourceProvider implements IResourceProvider {
             bookingOrg.getNameElement().setValue(bookingOrgDetail.getName());
             bookingOrg.getTelecomFirstRep().setValue(bookingOrgDetail.getTelephone()).setUse(ContactPointUseEnum.TEMP)
                     .setSystem(ContactPointSystemEnum.PHONE);
+            bookingOrg.getMeta().addProfile(SystemURL.SD_GPC_ORGANIZATION);
+
             if (null != bookingOrgDetail.getOrgCode()) {
                 bookingOrg.getIdentifierFirstRep().setSystem(SystemURL.ID_ODS_ORGANIZATION_CODE)
                         .setValue(bookingOrgDetail.getOrgCode());
             }
 
             appointment.getContained().getContainedResources().add(bookingOrg);
+
         }
 
         return appointment;

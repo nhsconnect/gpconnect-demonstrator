@@ -21,6 +21,7 @@ import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemParameter;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.common.filters.model.RequestedRecord;
 import uk.gov.hscic.common.filters.model.WebToken;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.PatientResourceProvider;
@@ -74,21 +75,51 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
     private void validateOrganizationIdentifier(WebToken webToken, RequestDetails requestDetails) {
         Map<String, String[]> parameters = requestDetails.getParameters();
-
+        RequestedRecord requestedRecord = webToken.getRequestedRecord();
+        
         if (parameters != null && parameters.containsKey(SystemParameter.IDENTIFIER)) {
-            String identifierSystem = parameters.get(SystemParameter.IDENTIFIER)[0].split("\\|")[0];
-
+            String[] identifierParts = parameters.get(SystemParameter.IDENTIFIER)[0].split("\\|");
+            
+            String identifierSystem = identifierParts[0];
+            
             if (!PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS.contains(identifierSystem)) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("Invalid organization identifier system: " + identifierSystem),
                         SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
             }
-        }
-
-        if (null == webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_ODS_ORGANIZATION_CODE)) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Bad Request Exception"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+            
+  
+            String requestOdsCode = identifierParts[1];
+            String webTokenOdsCode = requestedRecord.getIdentifierValue(SystemURL.ID_ODS_ORGANIZATION_CODE);            
+            
+            if (requestOdsCode == null ? webTokenOdsCode != null : !requestOdsCode.equals(webTokenOdsCode)){
+                String message = String.format(
+                        "The JWT Requested Record Identifier ODS Code %s does not match the Identifier Parameter ODS Code %s.", 
+                        webTokenOdsCode, 
+                        requestOdsCode
+                );              
+                
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException(message),
+                        SystemCode.BAD_REQUEST, 
+                        IssueTypeEnum.INVALID_CONTENT);           
+            } 
+        } else {            
+            String getRequestId = requestDetails.getId().getIdPart();
+            String requestedRecordId = requestedRecord.getId();
+            
+            if (getRequestId == null ? requestedRecordId != null : !getRequestId.equals(requestedRecordId)){
+                  String message = String.format(
+                        "The JWT Requested Record Id %s does not match the GET request Id %s.", 
+                        requestedRecordId, 
+                        getRequestId
+                );              
+                
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException(message),
+                        SystemCode.BAD_REQUEST, 
+                        IssueTypeEnum.INVALID_CONTENT);     
+            }
         }
     }
 

@@ -8,6 +8,8 @@ import java.util.List;
 public class RequestedRecord {
     private String resourceType;
 
+    private String id;
+    
     @JsonProperty("identifier")
     private List<Identifier> identifiers;
 
@@ -30,5 +32,9 @@ public class RequestedRecord {
                 .map(Identifier::getValue)
                 .findFirst()
                 .orElse(null);
+    }
+    
+    public String getId(){
+        return id;
     }
 }

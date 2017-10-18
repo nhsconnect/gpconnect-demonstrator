@@ -1,5 +1,6 @@
 package uk.gov.hscic.common.filters.model;
 
+import ca.uhn.fhir.model.dstu2.resource.Organization;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
@@ -100,14 +101,18 @@ public class WebTokenValidator {
                     IssueTypeEnum.INVALID_CONTENT);
         }
 
-        if ("InvalidResourceType".equals(requestingDevice.getResourceType())
-                || "InvalidResourceType".equals(webToken.getRequestingOrganization().getResourceType())
-                || "InvalidResourceType".equals(webToken.getRequestingPractitioner().getResourceType())) {
+        String deviceType = requestingDevice.getResourceType();
+        String organizationType = webToken.getRequestingOrganization().getResourceType();
+        String practitionerType = webToken.getRequestingPractitioner().getResourceType();
+        
+        if (!deviceType.equals("Device") || !organizationType.equals("Organization") || !practitionerType.equals("Practitioner")) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("Invalid resource type"), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    new UnprocessableEntityException("Invalid resource type"), 
+                    SystemCode.BAD_REQUEST,
+                    IssueTypeEnum.INVALID_CONTENT
+            );
         }
-
+        
         if ("Patient".equals(webToken.getRequestedRecord().getResourceType())
                 && !webToken.getRequestedScope().matches("patient/\\*\\.(read|write)")) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -127,7 +132,6 @@ public class WebTokenValidator {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Invalid Slot requested scope"), SystemCode.BAD_REQUEST,
                     IssueTypeEnum.INVALID_CONTENT);
-        }
-
-    }
+        }     
+    }   
 }

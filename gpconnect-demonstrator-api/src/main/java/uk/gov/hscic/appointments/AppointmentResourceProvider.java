@@ -475,7 +475,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
         
-        results.add(Objects.equals(oldAppointmentDetail.getBookingOrganization().getOrgCode(), appointmentDetail.getBookingOrganization().getOrgCode()));
+        results.add(BookingOrganizationsEqual(oldAppointmentDetail.getBookingOrganization(), appointmentDetail.getBookingOrganization()));
 
         return results.contains(false);
     }
@@ -492,13 +492,20 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getPractitionerId(), appointmentDetail.getPractitionerId()));
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
-        results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-        results.add(Objects.equals(oldAppointmentDetail.getBookingOrganization().getOrgCode(),
-                appointmentDetail.getBookingOrganization().getOrgCode()));
+        results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));        
+        
+        results.add(BookingOrganizationsEqual(oldAppointmentDetail.getBookingOrganization(), appointmentDetail.getBookingOrganization()));
 
         return results.contains(false);
     }
 
+    private Boolean BookingOrganizationsEqual(BookingOrgDetail bookingOrg1, BookingOrgDetail bookingOrg2){
+        Boolean equalNames = bookingOrg1.getName().equals(bookingOrg2.getName());
+        Boolean equalNumbers = bookingOrg1.getTelephone().equals(bookingOrg2.getTelephone());
+        
+        return equalNames && equalNumbers;
+    }
+            
     private Appointment appointmentDetailToAppointmentResourceConverter(AppointmentDetail appointmentDetail) {
         Appointment appointment = new Appointment();
 

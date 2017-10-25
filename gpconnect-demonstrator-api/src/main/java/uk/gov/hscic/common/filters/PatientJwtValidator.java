@@ -3,10 +3,7 @@ package uk.gov.hscic.common.filters;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.api.RequestTypeEnum;
-import ca.uhn.fhir.rest.method.BaseMethodBinding;
-import ca.uhn.fhir.rest.method.IParameter;
-import ca.uhn.fhir.rest.method.MethodUtil;
-import ca.uhn.fhir.rest.method.RequestDetails;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.IRestfulServerDefaults;
 import ca.uhn.fhir.rest.server.ResourceBinding;
 import ca.uhn.fhir.rest.server.RestfulServer;
@@ -15,6 +12,9 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.interceptor.auth.AuthorizationInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.auth.IAuthRule;
 import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
+import ca.uhn.fhir.rest.server.method.BaseMethodBinding;
+import ca.uhn.fhir.rest.server.method.IParameter;
+import ca.uhn.fhir.rest.param.ParameterUtil;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +88,7 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
 
                     // the identifier may have been passed in the URL
                     if (parameterValue == null) {
-                        parameterValue = MethodUtil.convertIdToType(requestDetails.getId(), IdDt.class);
+                        parameterValue = ParameterUtil.convertIdToType(requestDetails.getId(), IdDt.class);
                     }
 
                     if (parameterValue != null) {

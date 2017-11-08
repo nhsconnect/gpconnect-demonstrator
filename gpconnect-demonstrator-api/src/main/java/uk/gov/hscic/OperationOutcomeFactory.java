@@ -1,41 +1,45 @@
 package uk.gov.hscic;
 
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
-import ca.uhn.fhir.model.dstu2.resource.OperationOutcome.Issue;
-import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+import org.hl7.fhir.dstu3.model.schema.*;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.OperationOutcome;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
+import org.hl7.fhir.dstu3.model.OperationOutcome.OperationOutcomeIssueComponent;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
+
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 
 public class OperationOutcomeFactory {
 
-    private OperationOutcomeFactory() { }
-
-    public static BaseServerResponseException buildOperationOutcomeException(BaseServerResponseException exception, String code, IssueTypeEnum issueTypeEnum ){
-        
-        return buildOperationOutcomeException(exception, code, issueTypeEnum, null);
+    private OperationOutcomeFactory() {
     }
-    
-    public static BaseServerResponseException buildOperationOutcomeException(BaseServerResponseException exception, String code, IssueTypeEnum issueTypeEnum, String diagnostics ) {
-        CodeableConceptDt codeableConceptDt = new CodeableConceptDt(SystemURL.VS_GPC_ERROR_WARNING_CODE, code)
-                .setText(exception.getMessage());
-        codeableConceptDt.getCodingFirstRep().setDisplay(code);
+
+    public static BaseServerResponseException buildOperationOutcomeException(BaseServerResponseException exception,
+            String code, IssueType issueType) {
+
+        return buildOperationOutcomeException(exception, code, issueType, null);
+    }
+
+    public static BaseServerResponseException buildOperationOutcomeException(BaseServerResponseException exception,
+            String code, IssueType issueType, String diagnostics) {
+        CodeableConcept codeableConcept = new CodeableConcept();
+        Coding coding = new Coding(SystemURL.VS_GPC_ERROR_WARNING_CODE, code, code);
+        codeableConcept.addCoding(coding);
+        codeableConcept.setText(exception.getMessage());
 
         OperationOutcome operationOutcome = new OperationOutcome();
 
-        Issue ooIssue = new Issue();
-        ooIssue.setSeverity(IssueSeverityEnum.ERROR)
-               .setCode(issueTypeEnum)
-               .setDetails(codeableConceptDt);
-        
-        if(diagnostics != null){
+        OperationOutcomeIssueComponent ooIssue = new OperationOutcomeIssueComponent();
+        ooIssue.setSeverity(IssueSeverity.ERROR).setDetails(codeableConcept).setCode(issueType);
+
+        if (diagnostics != null) {
             ooIssue.setDiagnostics(diagnostics);
         }
-        
+
         operationOutcome.addIssue(ooIssue);
-        
-        operationOutcome.getMeta()
-                .addProfile(SystemURL.SD_GPC_OPERATIONOUTCOME);
+
+        operationOutcome.getMeta().addProfile(SystemURL.SD_GPC_OPERATIONOUTCOME);
 
         exception.setOperationOutcome(operationOutcome);
         return exception;

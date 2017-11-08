@@ -9,24 +9,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hl7.fhir.dstu3.model.Organization;
+import org.hl7.fhir.utilities.validation.ValidationMessage.IssueType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.model.dstu2.composite.AddressDt;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.composite.ContactPointDt;
-import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
-import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
-import ca.uhn.fhir.model.dstu2.resource.Location;
-import ca.uhn.fhir.model.dstu2.resource.Organization;
-import ca.uhn.fhir.model.dstu2.resource.Organization.Contact;
-import ca.uhn.fhir.model.dstu2.valueset.AddressTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.AddressUseEnum;
-import ca.uhn.fhir.model.dstu2.valueset.ContactPointSystemEnum;
-import ca.uhn.fhir.model.dstu2.valueset.ContactPointUseEnum;
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
+
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
@@ -78,13 +66,13 @@ public class OrganizationResourceProvider implements IResourceProvider {
             if (organizationDetails == null) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
-                        SystemCode.ORGANISATION_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
+                        SystemCode.ORGANISATION_NOT_FOUND, IssueType.INVALID);
             }
         } catch (NumberFormatException nfe) {
 
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
-                    SystemCode.ORGANISATION_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.ORGANISATION_NOT_FOUND, IssueType.INVALID);
 
         }
 
@@ -101,7 +89,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
         if (StringUtils.isBlank(tokenParam.getSystem()) || StringUtils.isBlank(tokenParam.getValue())) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Missing identifier token"), SystemCode.INVALID_PARAMETER,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         switch (tokenParam.getSystem()) {
@@ -140,7 +128,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
         default:
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Invalid system code"), SystemCode.INVALID_PARAMETER,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
     }
 

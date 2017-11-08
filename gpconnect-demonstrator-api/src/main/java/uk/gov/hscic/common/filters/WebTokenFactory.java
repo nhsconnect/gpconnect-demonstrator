@@ -8,6 +8,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.parser.DataFormatException;
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.parser.StrictErrorHandler;
@@ -44,7 +44,7 @@ public class WebTokenFactory {
         if (null == authorizationHeader) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(HttpHeaders.AUTHORIZATION + " header missing"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
 
         String[] authorizationHeaderComponents = authorizationHeader.split(" ");
@@ -52,7 +52,7 @@ public class WebTokenFactory {
         if (authorizationHeaderComponents.length != 2 || !"Bearer".equalsIgnoreCase(authorizationHeaderComponents[0])) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(HttpHeaders.AUTHORIZATION + " header invalid"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
 
         String contentType = requestDetails.getHeader(HttpHeaders.CONTENT_TYPE);
@@ -61,12 +61,12 @@ public class WebTokenFactory {
             if (Arrays.asList(RequestTypeEnum.POST, RequestTypeEnum.PUT).contains(requestDetails.getRequestType())) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "No content media type set"),
-                        SystemCode.BAD_REQUEST, IssueTypeEnum.REQUIRED_ELEMENT_MISSING);
+                        SystemCode.BAD_REQUEST, IssueType.INCOMPLETE);
             }
         } else if (!contentType.replaceAll("; +", ";").toLowerCase(Locale.UK).matches(PERMITTED_MEDIA_TYPE_HEADER_REGEX)) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported content media type"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
 
         String[] formatParam = requestDetails.getParameters().get("_format");
@@ -83,7 +83,7 @@ public class WebTokenFactory {
         if (acceptHeader == null || !acceptHeader.replaceAll("; +", ";").toLowerCase(Locale.UK).matches(PERMITTED_MEDIA_TYPE_HEADER_REGEX)) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported accept media type"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
 
         try {
@@ -91,7 +91,7 @@ public class WebTokenFactory {
             {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("JWT must be encoded using Base64URL. Padding is not allowed"),
-                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT); 
+                        SystemCode.BAD_REQUEST, IssueType.INVALID); 
             }
 
             String claimsJsonString = new String(Base64.getDecoder().decode(authorizationHeaderComponents[1].split("\\.")[1]));
@@ -101,11 +101,11 @@ public class WebTokenFactory {
         } catch (IllegalArgumentException iae) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Not Base 64"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         } catch (IOException ex) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Invalid WebToken"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
 
         WebTokenValidator.validateWebToken(webToken, futureRequestLeeway);
@@ -130,11 +130,11 @@ public class WebTokenFactory {
         } catch (DataFormatException e) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException("Invalid Resource Present"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         } catch (IOException | NullPointerException ex) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Unparsable JSON"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
     }
 }

@@ -1,6 +1,5 @@
 package uk.gov.hscic.common.filters;
 
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
@@ -14,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
+
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -85,7 +86,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             if (!PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS.contains(identifierSystem)) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("Invalid organization identifier system: " + identifierSystem),
-                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                        SystemCode.BAD_REQUEST, IssueType.INVALID);
             }
             
   
@@ -102,7 +103,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException(message),
                         SystemCode.BAD_REQUEST, 
-                        IssueTypeEnum.INVALID_CONTENT);           
+                        IssueType.INVALID);           
             } 
         } else {            
             String getRequestId = requestDetails.getId().getIdPart();
@@ -118,7 +119,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException(message),
                         SystemCode.BAD_REQUEST, 
-                        IssueTypeEnum.INVALID_CONTENT);     
+                        IssueType.INVALID);     
             }
         }
     }
@@ -139,19 +140,19 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                         if(jwtIdentifierValue.equals(requestIdentifierValue) == false) {
                             throw OperationOutcomeFactory.buildOperationOutcomeException(
                                     new InvalidRequestException("Invalid NHS number: " + jwtIdentifierValue),
-                                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                                    SystemCode.BAD_REQUEST, IssueType.INVALID);
                         }
                     }
                     else {
                         throw OperationOutcomeFactory.buildOperationOutcomeException(
                                 new InvalidRequestException("Invalid NHS number in JWT: " + jwtIdentifierValue),
-                                SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
+                                SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
                     }
                 }
                 else {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
                             new InvalidRequestException("Invalid NHS number in request: " + requestIdentifierValue),
-                            SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
+                            SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
                 }
             }
         }
@@ -177,13 +178,13 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             if(requestResource != null && validRequestResources.contains(requestResource) == false) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException(String.format("Invalid request resource type from JWT (%s) does not match resource type from request (%s)", jwtResource, requestResource)),
-                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                        SystemCode.BAD_REQUEST, IssueType.INVALID);
             }
         }
         else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(String.format("Invalid request resource type from JWT (%s) does not match one of the expected resource types - Patient or Organisation", jwtResource)),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
     }
 
@@ -192,13 +193,13 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         if (requestOperation.isRead(requestDetails) && webToken.isReadRequestedScope() == false) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("The claim requested scope does not match the reqested operation (read)"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
 
         if (requestOperation.isWrite(requestDetails) && webToken.isWriteRequestedScope() == false) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("The claim requested scope does not match the reqested operation (write)"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
     }
 

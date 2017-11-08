@@ -3,12 +3,13 @@ package uk.gov.hscic.medications;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hl7.fhir.dstu3.model.DateType;
+import org.hl7.fhir.dstu3.model.MedicationAdministration;
+import org.hl7.fhir.dstu3.model.Reference;
+import org.hl7.fhir.dstu3.model.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.MedicationAdministration;
-import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -38,11 +39,11 @@ public class MedicationAdministrationResourceProvider  implements IResourceProvi
                 medicationAdministration.setId(String.valueOf(medicationAdministrationDetail.getId()));
                 medicationAdministration.getMeta().setLastUpdated(medicationAdministrationDetail.getLastUpdated());
                 medicationAdministration.getMeta().setVersionId(String.valueOf(medicationAdministrationDetail.getLastUpdated().getTime()));
-                medicationAdministration.setPatient(new ResourceReferenceDt("Patient/"+medicationAdministrationDetail.getPatientId()));
-                medicationAdministration.setPractitioner(new ResourceReferenceDt("Practitioner/"+medicationAdministrationDetail.getPractitionerId()));
-                medicationAdministration.setPrescription(new ResourceReferenceDt("MedicationOrder/"+medicationAdministrationDetail.getPrescriptionId()));
-                medicationAdministration.setEffectiveTime(new DateTimeDt(medicationAdministrationDetail.getAdministrationDate()));
-                medicationAdministration.setMedication(new ResourceReferenceDt("Medication/"+medicationAdministrationDetail.getMedicationId()));
+                medicationAdministration.addDefinition(new Reference("Patient/"+medicationAdministrationDetail.getPatientId()));
+                medicationAdministration.addDefinition(new Reference("Practitioner/"+medicationAdministrationDetail.getPractitionerId()));
+                medicationAdministration.setPrescription(new Reference("MedicationOrder/"+medicationAdministrationDetail.getPrescriptionId()));               
+                medicationAdministration.setEffective( new DateType(medicationAdministrationDetail.getAdministrationDate()));   
+                medicationAdministration.setMedication(new Reference("Medication/"+medicationAdministrationDetail.getMedicationId()));
                 medicationAdministrations.add(medicationAdministration);
             }
         }

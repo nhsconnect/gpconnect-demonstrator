@@ -8,20 +8,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.Identifier;
+import org.hl7.fhir.dstu3.model.OperationOutcome;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
+import org.hl7.fhir.dstu3.model.Reference;
+import org.hl7.fhir.dstu3.model.Slot;
+import org.hl7.fhir.dstu3.model.Slot.SlotStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
-import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
-import ca.uhn.fhir.model.dstu2.resource.Slot;
-import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.SlotStatusEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
@@ -61,8 +61,8 @@ public class SlotResourceProvider implements IResourceProvider {
 
         if (slotDetail == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                    .setDetails("No slot details found for ID: " + slotId.getIdPart());
+            operationalOutcome.addIssue().setSeverity(IssueSeverity.ERROR)
+                    .setDiagnostics("No slot details found for ID: " + slotId.getIdPart());
             throw new InternalErrorException("No slot details found for ID: " + slotId.getIdPart(), operationalOutcome);
         }
 
@@ -82,7 +82,7 @@ public class SlotResourceProvider implements IResourceProvider {
         if (!fbType.equals("free")) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException("FbType incorrect: Must be equal to free"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
         }
 
         try {
@@ -92,14 +92,14 @@ public class SlotResourceProvider implements IResourceProvider {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(
                             "Start Date and End Date must be populated with a correct date format"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
         }
 
         if (startDate.getPrefix() != ParamPrefixEnum.GREATERTHAN_OR_EQUALS
                 || endDate.getPrefix() != ParamPrefixEnum.LESSTHAN_OR_EQUALS) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException("Invalid Prefix used"), SystemCode.INVALID_PARAMETER,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
 
         }
 
@@ -148,23 +148,29 @@ public class SlotResourceProvider implements IResourceProvider {
         slot.getMeta().setLastUpdated(slotDetail.getLastUpdated());
         slot.getMeta().setVersionId(String.valueOf(slotDetail.getLastUpdated().getTime()));
         slot.getMeta().addProfile(SystemURL.SD_GPC_SLOT);
-        slot.setIdentifier(Collections.singletonList(new IdentifierDt(
-                SystemURL.VS_SLOT_IDENTIFIER, String.valueOf(slotDetail.getId()))));
-        CodingDt coding = new CodingDt().setSystem(SystemURL.HL7_VS_C80_PRACTICE_CODES)
+
+        slot.setIdentifier(Collections.singletonList(
+                new Identifier().setSystem(SystemURL.ID_SDS_USER_ID).setValue(slotDetail.getId().toString())));
+
+        Coding coding = new Coding().setSystem(SystemURL.HL7_VS_C80_PRACTICE_CODES)
                 .setCode(String.valueOf(slotDetail.getTypeCode())).setDisplay(slotDetail.getTypeDisply());
-        CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);
+        CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
         codableConcept.setText(slotDetail.getTypeDisply());
-        slot.setType(codableConcept);
-        slot.setSchedule(new ResourceReferenceDt("Schedule/" + slotDetail.getScheduleReference()));
-        slot.setStartWithMillisPrecision(slotDetail.getStartDateTime());
-        slot.setEndWithMillisPrecision(slotDetail.getEndDateTime());
+
+        List<CodeableConcept> serviceType = new ArrayList();
+        serviceType.add(codableConcept);
+        slot.setServiceType(serviceType);
+
+        slot.setSchedule(new Reference("Schedule/" + slotDetail.getScheduleReference()));
+        slot.setStart(slotDetail.getStartDateTime());
+        slot.setEnd(slotDetail.getEndDateTime());
 
         switch (slotDetail.getFreeBusyType().toLowerCase(Locale.UK)) {
         case "free":
-            slot.setFreeBusyType(SlotStatusEnum.FREE);
+            slot.setStatus(SlotStatus.FREE);
             break;
         default:
-            slot.setFreeBusyType(SlotStatusEnum.BUSY);
+            slot.setStatus(SlotStatus.BUSY);
             break;
         }
 
@@ -183,19 +189,19 @@ public class SlotResourceProvider implements IResourceProvider {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
                             new UnprocessableEntityException(
                                     "Invalid time period, was " + period + " days between (max is 14)"),
-                            SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                            SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                 }
             } else {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new UnprocessableEntityException(
                                 "Invalid timePeriod one or both of start and end date are not valid dates"),
-                        SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                        SystemCode.BAD_REQUEST, IssueType.INVALID);
             }
         } else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(
                             "Invalid timePeriod one or both of start and end date were missing"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
         }
     }
 }

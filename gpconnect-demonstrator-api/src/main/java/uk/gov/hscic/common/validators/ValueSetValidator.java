@@ -189,11 +189,11 @@ public class ValueSetValidator {
         ValueSet valSet =  loadValueSet(systemUrl);
         
         //Check Code System
-        ValueSet codeSys = valSet.getCodeSystem();
+        ValueSetComposeComponent codeSys = valSet.getCompose();
        
         
         
-        List<ValueSet.ConceptReferenceComponent> concepts = codeSys.getConcept();
+        List<ValueSet.ConceptReferenceComponent> concepts = null;
 
         for (ValueSet.ConceptReferenceComponent concept : concepts) {
             String codeEl = concept.getCode();
@@ -210,18 +210,18 @@ public class ValueSetValidator {
         List<ValueSet.ValueSetComposeComponent> includeConcepts = new ArrayList<>();
         List<ConceptSetComponent> includes = compose.getInclude();
         
-        for(ValueSet.ValueSetComposeComponent include : includes){
-            includeConcepts.addAll(include.getConcept());
-        }
-        
-        for (ValueSet.ComposeIncludeConcept includeConcept : includeConcepts) {
-            String incCodeEl = includeConcept.getCode();
-            String incDisplayEl = includeConcept.getDisplay();
-            
-            if(incCodeEl.equals(code.getCode()) && incDisplayEl.equals(code.getDisplay())){
-                return true;
-            }
-        }
+//        for(ValueSet.ValueSetComposeComponent include : includes){
+//            includeConcepts.addAll(include.getConcept());
+//        }
+//        
+//        for (ValueSet.ComposeIncludeConcept includeConcept : includeConcepts) {
+//            String incCodeEl = includeConcept.getCode();
+//            String incDisplayEl = includeConcept.getDisplay();
+//            
+//            if(incCodeEl.equals(code.getCode()) && incDisplayEl.equals(code.getDisplay())){
+//                return true;
+//            }
+//        }
         
         return false;
     }

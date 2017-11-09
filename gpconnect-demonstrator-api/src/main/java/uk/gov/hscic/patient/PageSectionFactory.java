@@ -1,11 +1,12 @@
 package uk.gov.hscic.patient;
 
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
@@ -110,7 +111,7 @@ public class PageSectionFactory {
         if (toDate != null && fromDate != null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Date Ranges not allowed to be set"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.BUSINESS_RULE_VIOLATION);
+                    SystemCode.INVALID_PARAMETER, IssueType.BUSINESSRULE);
         }
 
         List<List<Object>> currentAllergyRows = new ArrayList<>();
@@ -130,7 +131,7 @@ public class PageSectionFactory {
         if (toDate != null && fromDate != null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Date Ranges not allowed to be set"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.BUSINESS_RULE_VIOLATION);
+                    SystemCode.INVALID_PARAMETER, IssueType.BUSINESSRULE);
         }
 
         List<List<Object>> historicalAllergyRows = new ArrayList<>();
@@ -276,7 +277,7 @@ public class PageSectionFactory {
         if (toDate != null && fromDate != null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Date Ranges not allowed to be set"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.BUSINESS_RULE_VIOLATION);
+                    SystemCode.INVALID_PARAMETER, IssueType.BUSINESSRULE);
         }
 
         List<List<Object>> immunisationRows = new ArrayList<>();

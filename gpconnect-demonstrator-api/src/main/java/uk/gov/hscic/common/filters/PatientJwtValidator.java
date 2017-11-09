@@ -1,6 +1,5 @@
 package uk.gov.hscic.common.filters;
 
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.api.RequestTypeEnum;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
@@ -17,6 +16,8 @@ import ca.uhn.fhir.rest.server.method.IParameter;
 import ca.uhn.fhir.rest.param.ParameterUtil;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -55,19 +56,19 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
                 if(webTokenNhsNumber == null || webTokenNhsNumber.equals(requestNhsNumber) == false) {
                   throw OperationOutcomeFactory.buildOperationOutcomeException(
                   new InvalidRequestException("NHS number in identifier header doesn't match the header"),
-                  SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                  SystemCode.BAD_REQUEST, IssueType.INVALID);
                 }
 
                 if (!NhsCodeValidator.nhsNumberValid(webTokenNhsNumber)) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
                             new InvalidRequestException("Invalid NHS number: " + webTokenNhsNumber),
-                            SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
+                            SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
                 }
             }
             else {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("NHS number missing from request"),
-                        SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
+                        SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
             }
         }
     }
@@ -105,13 +106,13 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
                 if (RequestTypeEnum.GET == requestDetails.getRequestType()) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
                             new ResourceNotFoundException("No patient details found for patient ID: " + parameterValue),
-                            SystemCode.PATIENT_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
+                            SystemCode.PATIENT_NOT_FOUND, IssueType.INVALID);
                 }
 
                 // Otherwise, there should have been an identifier header
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("No NHS number submitted: " + parameterValue),
-                        SystemCode.INVALID_NHS_NUMBER, IssueTypeEnum.INVALID_CONTENT);
+                        SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
             }
         }
 

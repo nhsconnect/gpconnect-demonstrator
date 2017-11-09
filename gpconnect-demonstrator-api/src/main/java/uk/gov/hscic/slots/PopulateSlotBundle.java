@@ -3,22 +3,24 @@ package uk.gov.hscic.slots;
 import java.util.Date;
 import java.util.List;
 
+import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.Extension;
+import org.hl7.fhir.dstu3.model.Location;
+import org.hl7.fhir.dstu3.model.OperationOutcome;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
+import org.hl7.fhir.dstu3.model.Practitioner;
+import org.hl7.fhir.dstu3.model.Reference;
+import org.hl7.fhir.dstu3.model.Schedule;
+import org.hl7.fhir.dstu3.model.Slot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
-import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
-import ca.uhn.fhir.model.dstu2.resource.Location;
-import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
-import ca.uhn.fhir.model.dstu2.resource.Practitioner;
-import ca.uhn.fhir.model.dstu2.resource.Schedule;
-import ca.uhn.fhir.model.dstu2.resource.Slot;
-import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -51,69 +53,69 @@ public class PopulateSlotBundle {
 
         List<Location> locations = locationResourceProvider.getAllLocationDetails();
 
-        Entry locationEntry = new Entry();
+        BundleEntryComponent locationEntry = new BundleEntryComponent();
         locationEntry.setResource(locations.get(0));
-        locationEntry.setFullUrl("Location/" + locations.get(0).getId().getIdPart());
+        locationEntry.setFullUrl("Location/" + locations.get(0).getId());
 
         // schedules
         List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(
-                locations.get(0).getId().getIdPart(), planningHorizonStart, planningHorizonEnd);
+                locations.get(0).getId(), planningHorizonStart, planningHorizonEnd);
 
         if (!schedules.isEmpty()) {
             for (Schedule schedule : schedules) {
 
                 schedule.getMeta().addProfile(SystemURL.SD_GPC_SCHEDULE);
 
-                Entry scheduleEntry = new Entry();
+                BundleEntryComponent scheduleEntry = new BundleEntryComponent();
                 scheduleEntry.setResource(schedule);
-                scheduleEntry.setFullUrl("Schedule/" + schedule.getId().getIdPart());
+                scheduleEntry.setFullUrl("Schedule/" + schedule.getId());
 
                 // practitioners
-                List<ExtensionDt> practitionerExtensions = scheduleResourceProvider.getPractitionerReferences(schedule);
+                List<Extension> practitionerExtensions = scheduleResourceProvider.getPractitionerReferences(schedule);
 
                 if (!practitionerExtensions.isEmpty()) {
-                    for (ExtensionDt practionerExtension : practitionerExtensions) {
-                        ResourceReferenceDt practitionerRef = (ResourceReferenceDt) practionerExtension.getValue();
+                    for (Extension practionerExtension : practitionerExtensions) {
+                        Reference practitionerRef = (Reference) practionerExtension.getValue();
                         Practitioner practitioner = practitionerResourceProvider
-                                .getPractitionerById(practitionerRef.getReferenceElement());
+                                .getPractitionerById((IdDt) practitionerRef.getReferenceElement());
 
                         if (practitioner == null) {
-                            CodingDt errorCoding = new CodingDt().setSystem(SystemURL.VS_GPC_ERROR_WARNING_CODE)
+                            Coding errorCoding = new Coding().setSystem(SystemURL.VS_GPC_ERROR_WARNING_CODE)
                                     .setCode(SystemCode.REFERENCE_NOT_FOUND);
-                            CodeableConceptDt errorCodableConcept = new CodeableConceptDt().addCoding(errorCoding);
+                            CodeableConcept errorCodableConcept = new CodeableConcept().addCoding(errorCoding);
                             errorCodableConcept.setText("Invalid Reference");
-                            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR)
-                                    .setCode(IssueTypeEnum.NOT_FOUND).setDetails(errorCodableConcept);
+                            operationOutcome.addIssue().setSeverity(IssueSeverity.ERROR)
+                                    .setCode(IssueType.NOTFOUND).setDetails(errorCodableConcept);
                             throw new ResourceNotFoundException("Practitioner Reference returning null");
                         }
                         if (actorPractitioner == true) {
-                            Entry practionerEntry = new Entry();
+                            BundleEntryComponent practionerEntry = new BundleEntryComponent();
                             practionerEntry.setResource(practitioner);
-                            practionerEntry.setFullUrl("Practitioner/" + practitioner.getId().getIdPart());
+                            practionerEntry.setFullUrl("Practitioner/" + practitioner.getId());
                             bundle.addEntry(practionerEntry);
                         }
                     }
 
                     // slots
-                    List<Slot> slots = slotResourceProvider.getSlotsForScheduleId(schedule.getId().getIdPart(),
-                            planningHorizonStart, planningHorizonEnd);
+                   // List<Slot> slots = slotResourceProvider.getSlotsForScheduleId(schedule.getId().toString(),
+                     //       planningHorizonStart, planningHorizonEnd);
 
-                    if (!slots.isEmpty()) {
-                        for (Slot slot : slots) {
-                            if ("FREE".equalsIgnoreCase(slot.getFreeBusyType())) {
-                                Entry slotEntry = new Entry();
-                                slotEntry.setResource(slot);
-                                slotEntry.setFullUrl("Slot/" + slot.getId().getIdPart());
-                                bundle.addEntry(slotEntry);
-                                bundle.addEntry(scheduleEntry);
-                                
-                                if (actorLocation == true){
-                                bundle.addEntry(locationEntry);
-                                }
-
-                            }
-                        }
-                    }
+                 //   if (!slots.isEmpty()) {
+                   //     for (Slot slot : slots) {
+//                            if ("FREE".equalsIgnoreCase(slot.getStatus())) {
+//                                BundleEntryComponent slotEntry = new BundleEntryComponent();
+//                                slotEntry.setResource(slot);
+//                                slotEntry.setFullUrl("Slot/" + slot.getId());
+//                                bundle.addEntry(slotEntry);
+//                                bundle.addEntry(scheduleEntry);
+//                                
+//                                if (actorLocation == true){
+//                                bundle.addEntry(locationEntry);
+//                                }
+//
+                           // }
+                        //}
+                    //}
                 }
             }
         }

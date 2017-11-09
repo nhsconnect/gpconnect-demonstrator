@@ -9,11 +9,23 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hl7.fhir.dstu3.model.Address;
+import org.hl7.fhir.dstu3.model.Address.AddressType;
+import org.hl7.fhir.dstu3.model.Address.AddressUse;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.ContactDetail;
+import org.hl7.fhir.dstu3.model.ContactPoint;
+import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
+import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
+import org.hl7.fhir.dstu3.model.HumanName;
+import org.hl7.fhir.dstu3.model.HumanName.NameUse;
+import org.hl7.fhir.dstu3.model.Identifier;
+import org.hl7.fhir.dstu3.model.Location;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.hl7.fhir.dstu3.model.Organization;
-import org.hl7.fhir.utilities.validation.ValidationMessage.IssueType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
@@ -143,8 +155,9 @@ public class OrganizationResourceProvider implements IResourceProvider {
                 continue;
             }
 
-            Organization organization = new Organization().setName(organizationDetail.getOrgName()).addIdentifier(
-                    new IdentifierDt(SystemURL.ID_ODS_ORGANIZATION_CODE, organizationDetail.getOrgCode()));
+            Organization organization = new Organization().setName(organizationDetail.getOrgName())
+                    .addIdentifier(new Identifier().setSystem(SystemURL.ID_ODS_ORGANIZATION_CODE)
+                            .setValue(organizationDetail.getOrgCode()));
 
             organization.setId(String.valueOf(organizationDetail.getId()));
 
@@ -165,56 +178,60 @@ public class OrganizationResourceProvider implements IResourceProvider {
     // Test Suite
     private Organization addAdditionalProperties(Organization organization) {
 
-        CodingDt orgTypeCode = new CodingDt();
+        Coding orgTypeCode = new Coding();
         orgTypeCode.setCode("dept");
         orgTypeCode.setDisplay("Hospital Department");
         orgTypeCode.setSystem(SystemURL.VS_CC_ORGANISATION_TYPE);
 
         organization.addTelecom(getValidTelecom());
         organization.addAddress(getValidAddress());
-        organization.addContact(getValidContact());
+        //organization.addContact(getValidContact());
 
-        CodeableConceptDt orgType = new CodeableConceptDt();
+        CodeableConcept orgType = new CodeableConcept();
         orgType.addCoding(orgTypeCode);
-        organization.setType(orgType);
+        organization.addType(orgType);
 
-        organization.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_CC_MAIN_LOCATION);
+        organization.addExtension().setUrl(SystemURL.SD_EXTENSION_CC_MAIN_LOCATION);
 
         return organization;
     }
 
-    private ContactPointDt getValidTelecom() {
+    private ContactPoint getValidTelecom() {
 
-        ContactPointDt orgTelCom = new ContactPointDt();
-        orgTelCom.addUndeclaredExtension(false, "testurl");
-        orgTelCom.setSystem(ContactPointSystemEnum.PHONE);
-        orgTelCom.setUse(ContactPointUseEnum.WORK);
+        ContactPoint orgTelCom = new ContactPoint();
+        orgTelCom.addExtension().setUrl("testUrl");
+        orgTelCom.setSystem(ContactPointSystem.PHONE);
+        orgTelCom.setUse(ContactPointUse.WORK);
 
         return orgTelCom;
     }
 
-    private AddressDt getValidAddress() {
+    private Address getValidAddress() {
 
-        AddressDt orgAddress = new AddressDt();
-        orgAddress.setType(AddressTypeEnum.PHYSICAL);
-        orgAddress.setUse(AddressUseEnum.WORK);
+        Address orgAddress = new Address();
+        orgAddress.setType(AddressType.PHYSICAL);
+        orgAddress.setUse(AddressUse.WORK);
 
         return orgAddress;
     }
 
-    private Contact getValidContact() {
+    private ContactDetail getValidContact() {
 
-        HumanNameDt orgCtName = new HumanNameDt();
-        orgCtName.setUse(NameUseEnum.USUAL);
-        orgCtName.addFamily("FamilyName");
+        HumanName orgCtName = new HumanName();
+        orgCtName.setUse(NameUse.USUAL);
+        orgCtName.setFamily("FamilyName");
+        Coding coding = new Coding().setSystem(SystemURL.VS_CC_ORG_CT_ENTITYTYPE).setDisplay("ADMIN");
+        CodeableConcept orgCtPurpose = new CodeableConcept().addCoding(coding);
+      
+     
 
-        CodeableConceptDt orgCtPurpose = new CodeableConceptDt(SystemURL.VS_CC_ORG_CT_ENTITYTYPE, "ADMIN");
-
-        Contact orgContact = new Contact();
-        orgContact.setName(orgCtName);
+        ContactDetail orgContact = new ContactDetail();
+   
+        
+        orgContact.setNameElement(orgCtName.getFamilyElement());
         orgContact.addTelecom(getValidTelecom());
-        orgContact.setAddress(getValidAddress());
-        orgContact.setPurpose(orgCtPurpose);
+       // orgContact.setAddress(getValidAddress());
+       // orgContact.setPurpose(orgCtPurpose);
 
         return orgContact;
     }

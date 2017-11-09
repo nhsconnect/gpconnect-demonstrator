@@ -96,7 +96,8 @@ public class ScheduleResourceProvider implements IResourceProvider {
         return schedule;
     }
 
-    public List<ExtensionDt> getPractitionerReferences(Schedule schedule) {
-        return schedule.getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_PRACTITIONER);
+    public List<Extension> getPractitionerReferences(Schedule schedule) {
+        return schedule.getExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_PRACTITIONER);
+       // return schedule.getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_PRACTITIONER);
     }
 }

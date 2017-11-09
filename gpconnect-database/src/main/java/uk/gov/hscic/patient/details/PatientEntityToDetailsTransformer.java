@@ -48,7 +48,7 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         patient.setRegistrationEndDateTime(patientEntity.getRegistrationEndDateTime());
         patient.setRegistrationStatus(patientEntity.getRegistrationStatus());
         patient.setRegistrationType(patientEntity.getRegistrationType());
-        patient.setMultipleBirth(patientEntity.isMultipleBirth());
+       // patient.setMultipleBirth(patientEntity.isMultipleBirth());
         patient.setMaritalStatus(patientEntity.getMaritalStatus());
         patient.setManagingOrganization(patientEntity.getManagingOrganization());
 
@@ -61,7 +61,7 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         
         Date deceased = patientEntity.getDeceasedDateTime();
         if(deceased != null) {
-        	patient.setDeceased(deceased);
+        	//patient.setDeceased(deceased);
         }
 
         return patient;

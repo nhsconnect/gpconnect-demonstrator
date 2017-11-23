@@ -11,6 +11,7 @@ import java.util.Set;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
@@ -54,9 +55,8 @@ public class SlotResourceProvider implements IResourceProvider {
         return Slot.class;
     }
 
-    @SuppressWarnings("deprecation")
     @Read()
-    public Slot getSlotById(@IdParam IdDt slotId) {
+    public Slot getSlotById(@IdParam IdType slotId) {
         SlotDetail slotDetail = slotSearch.findSlotByID(slotId.getIdPartAsLong());
 
         if (slotDetail == null) {

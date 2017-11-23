@@ -1,5 +1,6 @@
 package uk.gov.hscic.medications;
 
+import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Medication;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
@@ -25,7 +26,7 @@ public class MedicationResourceProvider implements IResourceProvider {
     }
 
     @Read()
-    public Medication getMedicationById(@IdParam IdDt medicationId) {
+    public Medication getMedicationById(@IdParam IdType medicationId) {
         MedicationEntity medicationEntity = medicationRepository.findOne(medicationId.getIdPartAsLong());
 
         if (medicationEntity == null) {

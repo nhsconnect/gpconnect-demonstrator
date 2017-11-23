@@ -2,6 +2,7 @@ package uk.gov.hscic.common.validators;
 
 
 import org.hl7.fhir.dstu3.model.BaseResource;
+import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -11,7 +12,7 @@ import uk.gov.hscic.SystemCode;
 
 public class IdentifierValidator {
 
-    public static <T extends BaseResource> T versionComparison(IdDt id, T resource) {
+    public static <T extends BaseResource> T versionComparison(IdType id, T resource) {
         if(id.hasVersionIdPart()){
             String requestedVersion = id.getVersionIdPart();
             if(!requestedVersion.equals(resource.getMeta().getVersionId())){

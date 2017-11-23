@@ -8,6 +8,7 @@ import java.util.List;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Extension;
+import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.hl7.fhir.dstu3.model.Period;
@@ -44,7 +45,7 @@ public class ScheduleResourceProvider implements IResourceProvider {
     }
 
     @Read()
-    public Schedule getScheduleById(@IdParam IdDt scheduleId) {
+    public Schedule getScheduleById(@IdParam IdType scheduleId) {
         ScheduleDetail scheduleDetail = scheduleSearch.findScheduleByID(scheduleId.getIdPartAsLong());
 
         if (scheduleDetail == null) {
@@ -87,7 +88,8 @@ public class ScheduleResourceProvider implements IResourceProvider {
         CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
         codableConcept.setText(scheduleDetail.getTypeDescription());
         schedule.setServiceType(Collections.singletonList(codableConcept));
-        schedule.setActor((List<Reference>) new Reference("Location/" + scheduleDetail.getLocationId()));
+        schedule.addActor(new Reference("Location/" + scheduleDetail.getLocationId()));        
+        //schedule.setActor((List<Reference>) new Reference("Location/" + scheduleDetail.getLocationId()));
         Period period = new Period();
         period.setStart(scheduleDetail.getStartDateTime());
         period.setEnd(scheduleDetail.getEndDateTime());
@@ -98,6 +100,5 @@ public class ScheduleResourceProvider implements IResourceProvider {
 
     public List<Extension> getPractitionerReferences(Schedule schedule) {
         return schedule.getExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_PRACTITIONER);
-       // return schedule.getUndeclaredExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_PRACTITIONER);
     }
 }

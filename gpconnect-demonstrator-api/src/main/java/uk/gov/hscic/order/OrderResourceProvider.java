@@ -18,22 +18,22 @@ import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.model.order.OrderDetail;
 
 @Component
-public class OrderResourceProvider implements IResourceProvider {
+public abstract class OrderResourceProvider implements IResourceProvider {}
 
-    @Autowired
-    private OrderStore orderStore;
+//    @Autowired
+//    private OrderStore orderStore;
 //
 //    @Override
 //    public Class<Order> getResourceType() {
 //        return Order.class;
 //    }
-
-    @Override
-    public Class<? extends IBaseResource> getResourceType() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-}
+//
+//    @Override
+//    public Class<? extends IBaseResource> getResourceType() {
+//        // TODO Auto-generated method stub
+//        return null;
+//    }
+//}
 
 //    @Create
 //    public MethodOutcome createOrder(@ResourceParam Order order) {

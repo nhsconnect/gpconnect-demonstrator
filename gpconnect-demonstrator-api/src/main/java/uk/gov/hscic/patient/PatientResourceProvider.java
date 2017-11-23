@@ -36,6 +36,7 @@ import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.HumanName.NameUse;
+import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Identifier.IdentifierUse;
 import org.hl7.fhir.dstu3.model.MedicationAdministration;
@@ -173,7 +174,7 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     @Read(version = true)
-    public Patient getPatientById(@IdParam IdDt internalId) {
+    public Patient getPatientById(@IdParam IdType internalId) {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
 
         if (patientDetails == null) {
@@ -200,7 +201,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
         return null == patientDetails ? null : patientDetailsToPatientResourceConverter(patientDetails);
     }
-
     private void validateParameterNames(Parameters parameters, Map<String, Boolean> parameterDefinitions) {
         List<String> parameterNames = parameters.getParameter().stream().map(ParametersParameterComponent::getName)
                 .collect(Collectors.toList());
@@ -484,7 +484,7 @@ public class PatientResourceProvider implements IResourceProvider {
             String id = careProviderPractitionerList.get(0).getReference();
             careRecordComposition.setAuthor(Collections.singletonList(new Reference(id)));
 
-            Practitioner practitioner = practitionerResourceProvider.getPractitionerById(new IdDt(id));
+            Practitioner practitioner = practitionerResourceProvider.getPractitionerById(new IdType(id));
 
             if (practitioner == null) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -515,23 +515,23 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     @Search(compartmentName = "MedicationOrder")
-    public List<MedicationRequest> getPatientMedicationOrders(@IdParam IdDt patientLocalId) {
+    public List<MedicationRequest> getPatientMedicationOrders(@IdParam IdType patientLocalId) {
         return medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientLocalId.getIdPart());
     }
 
     @Search(compartmentName = "MedicationDispense")
-    public List<MedicationDispense> getPatientMedicationDispenses(@IdParam IdDt patientLocalId) {
+    public List<MedicationDispense> getPatientMedicationDispenses(@IdParam IdType patientLocalId) {
         return medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientLocalId.getIdPart());
     }
 
     @Search(compartmentName = "MedicationAdministration")
-    public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdDt patientLocalId) {
+    public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdType patientLocalId) {
         return medicationAdministrationResourceProvider
                 .getMedicationAdministrationsForPatientId(patientLocalId.getIdPart());
     }
 
     @Search(compartmentName = "Appointment")
-    public List<Appointment> getPatientAppointments(@IdParam IdDt patientLocalId, @Sort SortSpec sort,
+    public List<Appointment> getPatientAppointments(@IdParam IdType patientLocalId, @Sort SortSpec sort,
             @Count Integer count, @OptionalParam(name = "start") DateRangeParam startDate) {
         return appointmentResourceProvider.getAppointmentsForPatientIdAndDates(patientLocalId, sort, count, startDate);
     }
@@ -941,12 +941,12 @@ public class PatientResourceProvider implements IResourceProvider {
         Date lastUpdated = patientDetails.getLastUpdated();
         if (lastUpdated == null) {
             versionId = String.valueOf(new Date().getTime());
-
-            patient.setId(patientDetails.getId());
+            patient.setId(new IdDt(patientDetails.getId()));
+        
         } else {
             versionId = String.valueOf(lastUpdated.getTime());
-
-          //  patient.setId(new IdDt(patient.getResourceName(), patientDetails.getId(), versionId));
+            patient.setId(new IdDt(patientDetails.getId()));
+            //patient.setId(new IdDt(patientDetails.getId(), versionId));
             patient.getMeta().setLastUpdated(lastUpdated);
         }
 
@@ -1030,7 +1030,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
         Long gpId = patientDetails.getGpId();
         if (gpId != null) {
-            HumanName practitionerName = (HumanName) practitionerResourceProvider.getPractitionerById(new IdDt(gpId)).getName();
+            Practitioner prac = practitionerResourceProvider.getPractitionerById(new IdType(gpId));
+            HumanName practitionerName = prac.getNameFirstRep();
 
             Reference practitionerReference = new Reference("Practitioner/" + gpId)
                     .setDisplay(practitionerName.getPrefix() + " " + practitionerName.getGivenAsSingleString() + " "

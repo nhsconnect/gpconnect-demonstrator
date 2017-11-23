@@ -20,6 +20,7 @@ import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
 import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.HumanName.NameUse;
+import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Location;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
@@ -66,7 +67,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
     }
 
     @Read(version = true)
-    public Organization getOrganizationById(@IdParam IdDt organizationId) {
+    public Organization getOrganizationById(@IdParam IdType organizationId) {
 
         OrganizationDetails organizationDetails = null;
 

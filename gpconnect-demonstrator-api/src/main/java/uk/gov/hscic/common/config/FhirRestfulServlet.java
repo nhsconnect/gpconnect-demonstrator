@@ -44,7 +44,7 @@ public class FhirRestfulServlet extends RestfulServer {
     @Override
     protected void initialize() throws ServletException {
         
-        FhirContext ctx = FhirContext.forDstu2();
+        FhirContext ctx = FhirContext.forDstu3();
         ctx.setParserErrorHandler(new StrictErrorHandler());
         setFhirContext(ctx);
        
@@ -59,8 +59,8 @@ public class FhirRestfulServlet extends RestfulServer {
                 applicationContext.getBean(LocationResourceProvider.class),
                 applicationContext.getBean(AppointmentResourceProvider.class),
                 applicationContext.getBean(ScheduleResourceProvider.class),
-                applicationContext.getBean(SlotResourceProvider.class),
-                applicationContext.getBean(OrderResourceProvider.class)
+                applicationContext.getBean(SlotResourceProvider.class)
+               // applicationContext.getBean(OrderResourceProvider.class)
              
         ));
 

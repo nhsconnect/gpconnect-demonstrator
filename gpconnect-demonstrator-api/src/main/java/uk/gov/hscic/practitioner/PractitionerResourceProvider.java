@@ -10,6 +10,7 @@ import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.HumanName.NameUse;
+import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Location;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
@@ -48,7 +49,7 @@ public class PractitionerResourceProvider implements IResourceProvider {
     }
 
     @Read(version = true)
-    public Practitioner getPractitionerById(@IdParam IdDt practitionerId) {
+    public Practitioner getPractitionerById(@IdParam IdType practitionerId) {
         PractitionerDetails practitionerDetails = practitionerSearch
                 .findPractitionerDetails(practitionerId.getIdPart());
 

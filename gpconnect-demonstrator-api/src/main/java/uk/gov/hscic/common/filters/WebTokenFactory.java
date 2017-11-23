@@ -116,7 +116,7 @@ public class WebTokenFactory {
     private void jwtParseResourcesValidation(String claimsJsonString) {
         if (parser == null) {
             parser = FhirContext
-                .forDstu2()
+                .forDstu3()
                 .newJsonParser()
                 .setParserErrorHandler(new StrictErrorHandler());
         }

@@ -8,6 +8,7 @@ import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Extension;
+import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Location;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
@@ -77,7 +78,7 @@ public class PopulateSlotBundle {
                     for (Extension practionerExtension : practitionerExtensions) {
                         Reference practitionerRef = (Reference) practionerExtension.getValue();
                         Practitioner practitioner = practitionerResourceProvider
-                                .getPractitionerById((IdDt) practitionerRef.getReferenceElement());
+                                .getPractitionerById((IdType) practitionerRef.getReferenceElement());
 
                         if (practitioner == null) {
                             Coding errorCoding = new Coding().setSystem(SystemURL.VS_GPC_ERROR_WARNING_CODE)
@@ -96,26 +97,28 @@ public class PopulateSlotBundle {
                         }
                     }
 
-                    // slots
-                   // List<Slot> slots = slotResourceProvider.getSlotsForScheduleId(schedule.getId().toString(),
-                     //       planningHorizonStart, planningHorizonEnd);
-
-                 //   if (!slots.isEmpty()) {
-                   //     for (Slot slot : slots) {
-//                            if ("FREE".equalsIgnoreCase(slot.getStatus())) {
-//                                BundleEntryComponent slotEntry = new BundleEntryComponent();
-//                                slotEntry.setResource(slot);
-//                                slotEntry.setFullUrl("Slot/" + slot.getId());
-//                                bundle.addEntry(slotEntry);
-//                                bundle.addEntry(scheduleEntry);
-//                                
-//                                if (actorLocation == true){
-//                                bundle.addEntry(locationEntry);
-//                                }
-//
-                           // }
-                        //}
-                    //}
+                   
+                    List<Slot> slots = slotResourceProvider.getSlotsForScheduleId(schedule.getId().toString(),
+                            planningHorizonStart, planningHorizonEnd);
+                    String freeBusyType = "FREE";
+                    if (!slots.isEmpty()) {
+                        for (Slot slot : slots) {
+                            
+                            if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
+                                BundleEntryComponent slotEntry = new BundleEntryComponent();
+                                slotEntry.setResource(slot);
+                                slotEntry.setFullUrl("Slot/" + slot.getId());
+                                slotEntry.setFullUrlElement(slot.getIdElement());
+                                bundle.addEntry(slotEntry);
+                                bundle.addEntry(scheduleEntry);
+                                
+                                if (actorLocation == true){
+                                bundle.addEntry(locationEntry);
+                                }
+                            
+                            }
+                        }
+                    }
                 }
             }
         }

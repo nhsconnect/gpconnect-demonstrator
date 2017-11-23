@@ -51,7 +51,7 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
     }
 
     @Read()
-    public MedicationRequest getMedicationOrderById(@IdParam IdDt medicationOrderId) {
+    public MedicationRequest getMedicationOrderById(@IdParam IdType medicationOrderId) {
         MedicationOrderDetails medicationOrderDetails = medicationOrderSearch.findMedicationOrderByID(medicationOrderId.getIdPartAsLong());
 
         if (medicationOrderDetails == null) {

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Location;
 import org.hl7.fhir.dstu3.model.Location.LocationStatus;
@@ -60,7 +61,7 @@ public class LocationResourceProvider implements IResourceProvider {
     }
     
     @Read(version = true)
-    public Location getLocationById(@IdParam IdDt locationId) {
+    public Location getLocationById(@IdParam IdType locationId) {
         LocationDetails locationDetails = locationSearch.findLocationById(locationId.getIdPart());
        
         if (locationDetails == null) {

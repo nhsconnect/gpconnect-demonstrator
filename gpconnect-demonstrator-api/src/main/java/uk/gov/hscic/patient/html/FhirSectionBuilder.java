@@ -7,6 +7,7 @@ import java.util.List;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Composition;
+import org.hl7.fhir.dstu3.model.Composition.SectionComponent;
 import org.hl7.fhir.dstu3.model.Composition.SectionMode;
 import org.hl7.fhir.dstu3.model.Narrative;
 import org.hl7.fhir.dstu3.model.Narrative.NarrativeStatus;
@@ -18,17 +19,25 @@ public final class FhirSectionBuilder {
     private FhirSectionBuilder() {
     }
 
-    public static SectionMode buildFhirSection(Page page) {
-        Coding coding = new Coding().setSystem(SystemURL.VS_GPC_RECORD_SECTION).setCode(page.getCode())
+    public static SectionComponent buildFhirSection(Page page) {
+        Coding coding = new Coding()
+                .setSystem(SystemURL.VS_GPC_RECORD_SECTION)
+                .setCode(page.getCode())
                 .setDisplay(page.getName());
+        
         CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
         codableConcept.setText(page.getName());
 
         Narrative narrative = new Narrative();
         narrative.setStatus(NarrativeStatus.GENERATED);
-        narrative.setDivAsString(createHtmlContent(page));
-       // Composition.Section().setTitle(page.getName()).setCode(codableConcept).setText(narrative);
-        return null;
+        narrative.setDivAsString(createHtmlContent(page));      
+        
+        SectionComponent sectionComponent = new SectionComponent();
+        
+        sectionComponent.setCode(codableConcept);
+        sectionComponent.setTitle(page.getName()).setCode(codableConcept).setText(narrative);
+        
+        return sectionComponent;
     }
 
     private static String createHtmlContent(Page page) {

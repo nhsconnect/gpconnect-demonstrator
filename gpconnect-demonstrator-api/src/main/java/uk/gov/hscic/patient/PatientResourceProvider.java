@@ -75,6 +75,9 @@ import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import org.hl7.fhir.dstu3.model.Composition.SectionComponent;
+import org.hl7.fhir.dstu3.model.Composition.SectionMode;
+import org.hl7.fhir.instance.model.api.IBaseDatatype;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -246,7 +249,7 @@ public class PatientResourceProvider implements IResourceProvider {
         Date requestedToDate = null;
 
         for (ParametersParameterComponent param : params.getParameter()) {
-            IDatatype value = (IDatatype) param.getValue();
+            IBaseDatatype value = (IBaseDatatype) param.getValue();
 
             if (value instanceof Identifier) {
                 nhsNumber = getNhsNumber(value);
@@ -470,15 +473,16 @@ public class PatientResourceProvider implements IResourceProvider {
 
         careRecordComposition.getMeta().addProfile(SystemURL.SD_GPC_CARERECORD_COMPOSITION);
 
-        //careRecordComposition.setSection(Collections.singletonList(FhirSectionBuilder.buildFhirSection(page)));
+        ArrayList<SectionComponent> sections = new ArrayList<SectionComponent>();
+        sections.add(FhirSectionBuilder.buildFhirSection(page));
+        
+        careRecordComposition.setSection(sections);
 
         // Build the Care Record Composition
-        Bundle bundle = new Bundle().setType(BundleType.TRANSACTIONRESPONSE)
+        Bundle bundle = new Bundle().setType(BundleType.SEARCHSET)
                 .addEntry(new BundleEntryComponent().setResource(careRecordComposition));
 
-        List<Reference> careProviderPractitionerList = null;
-                
-               // ((Patient) patientEntry.getResource()).getCareProvider();
+        List<Reference> careProviderPractitionerList = ((Patient)patientEntry.getResource()).getGeneralPractitioner();
 
         if (!careProviderPractitionerList.isEmpty()) {
             String id = careProviderPractitionerList.get(0).getReference();
@@ -1162,15 +1166,16 @@ public class PatientResourceProvider implements IResourceProvider {
 
             if (source instanceof Parameters) {
                 Parameters parameters = (Parameters) source;
-                List<Parameter> params = new ArrayList<Parameter>();
-                //params.addAll(parameters.getParameter());
-                Parameter parameter = getParameterByName(params, "patientNHSNumber");
+                List<ParametersParameterComponent> params = new ArrayList<>();
+                params.addAll(parameters.getParameter());
+                
+                ParametersParameterComponent parameter = getParameterByName(params, "patientNHSNumber");
                 if (parameter != null) {
-                    //nhsNumber = fromIdentifier(parameter.getValue());
+                    nhsNumber = fromIdentifier(parameter.getValue());
                 } else {
-                    //parameter = getParameterByName(parameters.getParameter(), "registerPatient");
+                    parameter = getParameterByName(parameters.getParameter(), "registerPatient");
                     if (parameter != null) {
-                       // nhsNumber = fromPatientResource(parameter.getResource());
+                       nhsNumber = fromPatientResource(parameter.getResource());
                     } else {
                         throw OperationOutcomeFactory.buildOperationOutcomeException(
                                 new InvalidRequestException(
@@ -1195,10 +1200,10 @@ public class PatientResourceProvider implements IResourceProvider {
             return nhsNumber;
         }
 
-        private Parameter getParameterByName(List<Parameter> parameters, String parameterName) {
-            Parameter parameter = null;
+        private ParametersParameterComponent getParameterByName(List<ParametersParameterComponent> parameters, String parameterName) {
+            ParametersParameterComponent parameter = null;
 
-            List<Parameter> filteredParameters = parameters.stream()
+            List<ParametersParameterComponent> filteredParameters = parameters.stream()
                     .filter(currentParameter -> parameterName.equals(currentParameter.getName()))
                     .collect(Collectors.toList());
 

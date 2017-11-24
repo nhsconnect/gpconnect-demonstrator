@@ -25,6 +25,7 @@ import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
 import org.hl7.fhir.dstu3.model.Enumeration;
 import org.hl7.fhir.dstu3.model.Extension;
+import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseDatatype;
@@ -113,7 +114,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
     }
 
     @Read(version = true)
-    public Appointment getAppointmentById(@IdParam IdDt appointmentId) {
+    public Appointment getAppointmentById(@IdParam IdType appointmentId) {
         Appointment appointment = null;
 
         try {
@@ -171,7 +172,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public List<Appointment> getAppointmentsForPatientIdAndDates(@RequiredParam(name = "patient") IdDt patientLocalId,
+    public List<Appointment> getAppointmentsForPatientIdAndDates(@RequiredParam(name = "patient") IdType patientLocalId,
             @Sort SortSpec sort, @Count Integer count, @OptionalParam(name = "start") DateRangeParam startDate) {
         Date startLowerDate = null;
         Date startUppderDate = null;
@@ -286,7 +287,24 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 .map(participant -> participant.getActor().getReference()).collect(Collectors.toList())
                 .containsAll(Arrays.asList("Patient", "Location"));
 
-        if (!hasRequiredResources) {
+        List<String> actors = new ArrayList<String>();
+        for (int i = 0; i < appointment.getParticipant().size(); i++) {
+            actors.add(appointment.getParticipant().get(i).getActor().getReference());
+        }
+        boolean patientFound = false;
+        boolean locationFound = false;
+
+        for (int i = 0; i < appointment.getParticipant().size(); i++) {
+            if (appointment.getParticipant().get(i).getActor().getReference().contains("Patient")) {
+                patientFound = true;
+            }
+            if (appointment.getParticipant().get(i).getActor().getReference().contains("Location")) {
+                locationFound = true;
+            }
+
+        }
+
+        if (patientFound == false || locationFound == false) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(
                             "Appointment resource is not a valid resource required valid Patient and Location"),
@@ -312,7 +330,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         SystemCode.BAD_REQUEST, IssueType.INVALID);
             }
 
-            validateParticipantStatus(participant.getStatus(),participant.getStatusElement(), participant.getStatusElement());
+            validateParticipantStatus(participant.getStatus(), participant.getStatusElement(),
+                    participant.getStatusElement());
         }
 
         // Store New Appointment
@@ -350,9 +369,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return methodOutcome;
     }
 
-    @SuppressWarnings("deprecation")
     @Update
-    public MethodOutcome updateAppointment(@IdParam IdDt appointmentId, @ResourceParam Appointment appointment) {
+    public MethodOutcome updateAppointment(@IdParam IdType appointmentId, @ResourceParam Appointment appointment) {
         MethodOutcome methodOutcome = new MethodOutcome();
         OperationOutcome operationalOutcome = new OperationOutcome();
 
@@ -519,7 +537,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointment.getMeta().setVersionId(String.valueOf(appointmentDetail.getLastUpdated().getTime()));
         appointment.getMeta().addProfile(SystemURL.SD_GPC_APPOINTMENT);
         Extension extension = new Extension(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON,
-                new StringDt(appointmentDetail.getCancellationReason()));
+                new IdType(appointmentDetail.getCancellationReason()));
 
         appointment.addExtension(extension);
         Identifier identifier = new Identifier();
@@ -656,8 +674,10 @@ public class AppointmentResourceProvider implements IResourceProvider {
         validateAppointmentExtensions(appointment.getExtension());
 
         AppointmentDetail appointmentDetail = new AppointmentDetail();
-        Long appointmentId = new Long(appointment.getId());
-        appointmentDetail.setId(appointmentId);
+
+        Long id = appointment.getIdElement().getIdPartAsLong();
+        appointmentDetail.setId(id);
+
         appointmentDetail.setLastUpdated(getLastUpdated(appointment.getMeta().getLastUpdated()));
 
         List<Extension> cnlExtension = appointment
@@ -673,9 +693,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
             appointmentDetail.setCancellationReason(value.toString());
         }
-
-        // appointmentDetail.setStatus(appointment.getStatus().toLowerCase(Locale.UK));
-        // appointmentDetail.setStatus(appointment.getStatus());
+        appointmentDetail.setStatus(appointment.getStatus().toString().toLowerCase(Locale.UK));
         appointmentDetail.setTypeDisplay(appointment.getAppointmentType().getTextElement().toString());
         appointmentDetail.setMinutesDuration(appointment.getMinutesDuration());
         appointmentDetail.setPriority(appointment.getPriority());
@@ -721,8 +739,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         for (Reference slotReference : appointment.getSlot()) {
             try {
-                Long slotId = new Long(slotReference.getReference().toString());
-
+                String here = slotReference.getReference().substring(5).toString();
+                Long slotId = new Long(here);
                 slotIds.add(slotId);
             } catch (NumberFormatException ex) {
                 throw OperationOutcomeFactory
@@ -799,7 +817,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
     private void validateParticipantActor(Reference participantActor) {
 
         Reference actorRef = participantActor;
-        String resourcePart = actorRef.getResource().toString();
+        String resourcePart = actorRef.getReference().toString();
         String idPart = actorRef.getId();
 
         Boolean participantFailedSearch = false;
@@ -841,17 +859,17 @@ public class AppointmentResourceProvider implements IResourceProvider {
             if (!isValid) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new UnprocessableEntityException(MessageFormat.format(
-                                "Invalid Participant Type Code. Code: {0} [Display: {1}, System: {2}]", code.getCode(),
+                                "Invalid Participant Type Code. Code: {0} [Display: {1}, System:{2}]", code.getCode(),
                                 code.getDisplay(), code.getSystem())),
-                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
         }
 
         return isValid;
     }
 
-    private void validateParticipantStatus(ParticipationStatus participationStatus, Enumeration<ParticipationStatus> enumeration,
-            Enumeration<ParticipationStatus> enumeration2) {
+    private void validateParticipantStatus(ParticipationStatus participationStatus,
+            Enumeration<ParticipationStatus> enumeration, Enumeration<ParticipationStatus> enumeration2) {
 
         Boolean validStatus = false;
         String participantStatusErr = "is a requirement but is missing.";

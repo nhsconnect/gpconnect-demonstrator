@@ -100,7 +100,7 @@ public class ValueSetValidator {
                
         if (xmlContent != null) {
             try {
-                FhirContext fhirCtx = FhirContext.forDstu2();
+                FhirContext fhirCtx = FhirContext.forDstu3();
                 IParser parser = fhirCtx.newXmlParser();
                 valSet =  parser.parseResource(ValueSet.class, xmlContent);
 
@@ -190,26 +190,23 @@ public class ValueSetValidator {
         
         //Check Code System
         ValueSetComposeComponent codeSys = valSet.getCompose();
-       
-        
-        
-        List<ValueSet.ConceptReferenceComponent> concepts = null;
-
-        for (ValueSet.ConceptReferenceComponent concept : concepts) {
-            String codeEl = concept.getCode();
-            String displayEl = concept.getDisplay();
-            
-            if(codeEl.equals(code.getCode()) && displayEl.equals(code.getDisplay())){
-                return true;
-            }
-        }
+        List<ValueSet.ConceptReferenceComponent> concepts;
+//
+//        for (ValueSet.ConceptReferenceComponent concept : concepts) {
+//            String codeEl = concept.getCode();
+//            String displayEl = concept.getDisplay();
+//            
+//            if(codeEl.equals(code.getCode()) && displayEl.equals(code.getDisplay())){
+//                return true;
+//            }
+//        }
         
         //Check Compose Includes
-        ValueSetComposeComponent compose = valSet.getCompose();
-        
-        List<ValueSet.ValueSetComposeComponent> includeConcepts = new ArrayList<>();
-        List<ConceptSetComponent> includes = compose.getInclude();
-        
+//        ValueSetComposeComponent compose = valSet.getCompose();
+//        
+//        List<ValueSet.ValueSetComposeComponent> includeConcepts = new ArrayList<>();
+//        List<ConceptSetComponent> includes = compose.getInclude();
+//        
 //        for(ValueSet.ValueSetComposeComponent include : includes){
 //            includeConcepts.addAll(include.getConcept());
 //        }

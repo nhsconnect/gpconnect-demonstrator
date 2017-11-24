@@ -10,7 +10,7 @@ import java.util.Map;
 public class RequestingPractitioner {
     private String id;
     private String resourceType;
-    private Map<String, List<String>> name;
+    private List<Name> name;
 
     @JsonProperty("practitionerRole")
     private List<Map<String, Map<String, List<Coding>>>> practitionerRoles;
@@ -34,11 +34,11 @@ public class RequestingPractitioner {
         this.resourceType = resourceType;
     }
 
-    public Map<String, List<String>> getName() {
+    public List<Name> getName() {
         return name;
     }
 
-    public void setName(Map<String, List<String>> name) {
+    public void setName(List<Name> name) {
         this.name = name;
     }
 
@@ -77,5 +77,36 @@ public class RequestingPractitioner {
 
     public void setPractitionerRoles(List<Map<String, Map<String, List<Coding>>>> practitionerRoles) {
         this.practitionerRoles = practitionerRoles;
+    }
+}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+class Name {
+    private String family;
+    private List<String> given;
+    private List<String> prefix;    
+    
+    public String getFamily(){
+        return this.family;
+    }
+    
+    public void setFamily(String family){
+        this.family = family;
+    }
+    
+    public List<String> getGiven(){
+        return this.given;
+    }
+    
+    public void setGiven(List<String> given){
+        this.given = given;
+    }
+    
+    public List<String> getPrefix(){
+        return this.prefix;
+    }
+    
+    public void setPrefix(List<String> prefix){
+        this.prefix = prefix;
     }
 }

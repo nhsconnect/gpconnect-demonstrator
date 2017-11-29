@@ -61,7 +61,7 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         
         Date deceased = patientEntity.getDeceasedDateTime();
         if(deceased != null) {
-        	//patient.setDeceased(deceased);
+        	patient.setDeceased(deceased);
         }
 
         return patient;

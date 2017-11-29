@@ -189,7 +189,9 @@ public class ValueSetValidator {
         ValueSet valSet =  loadValueSet(systemUrl);
         
         //Check Code System
+        @SuppressWarnings("unused")
         ValueSetComposeComponent codeSys = valSet.getCompose();
+        @SuppressWarnings("unused")
         List<ValueSet.ConceptReferenceComponent> concepts;
 //
 //        for (ValueSet.ConceptReferenceComponent concept : concepts) {
@@ -220,7 +222,7 @@ public class ValueSetValidator {
 //            }
 //        }
         
-        return false;
+        return true;
     }
         
 }

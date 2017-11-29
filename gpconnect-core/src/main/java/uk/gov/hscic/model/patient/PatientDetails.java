@@ -7,7 +7,9 @@ import java.util.List;
 public class PatientDetails {
     private String address;
     private Date dateOfBirth;
-    private String deceased;
+    private Date deceased;
+  
+
     private String forename;
     private String gender;
     private String gpDetails;
@@ -36,9 +38,15 @@ public class PatientDetails {
         return dateOfBirth;
     }
 
-    public String getDeceased() {
-		return deceased;
-	}
+   
+
+    public Date getDeceased() {
+        return deceased;
+    }
+
+    public void setDeceased(Date deceased) {
+        this.deceased = deceased;
+    }
 
     public String getForename() {
         return forename;
@@ -132,9 +140,7 @@ public class PatientDetails {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public void setDeceased(String string) {
-		this.deceased = string;
-	}
+
 
     public void setForename(String forename) {
         this.forename = forename;

@@ -475,7 +475,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         methodOutcome.setId(new IdDt("Appointment", appointmentDetail.getId()));
         methodOutcome.setResource(appointmentDetailToAppointmentResourceConverter(appointmentDetail));
-
+        
         return methodOutcome;
     }
 
@@ -621,10 +621,10 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         if (null != appointmentDetail.getCreated()) {
 
-            DateTimeDt created = new DateTimeDt(appointmentDetail.getCreated());
-            Extension createdExt = new Extension(SystemURL.SD_CC_APPOINTMENT_CREATED, created);
+//            DateTimeDt created = new DateTimeDt(appointmentDetail.getCreated());
+//            Extension createdExt = new Extension(SystemURL.SD_CC_APPOINTMENT_CREATED, created);
 
-            appointment.addExtension(createdExt);
+            appointment.setCreated(appointmentDetail.getCreated());
         }
 
         if (null != appointmentDetail.getBookingOrganization()) {
@@ -774,16 +774,29 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
         }
 
-        List<Extension> crtExtension = appointment.getExtensionsByUrl(SystemURL.SD_CC_APPOINTMENT_CREATED);
-
-        if (crtExtension != null && !crtExtension.isEmpty()) {
-            IBaseDatatype created = crtExtension.get(0).getValue();
-
-            if (null != created && created.getClass().getSimpleName().equals("DateTimeDt")) {
-                DateTimeDt createdDt = (DateTimeDt) created;
-                appointmentDetail.setCreated(createdDt.getValue());
-            }
+         
+        if(appointment.getCreated() != null)
+        {
+            Date created = appointment.getCreated();
+            appointmentDetail.setCreated(created);
         }
+            
+        
+
+        List<Resource> contained = appointment.getContained();
+        Resource org = contained.get(0);
+        System.out.println(org.getResourceType().toString().equals("Organization"));
+        System.out.println(org.getResourceType());
+        Organization bookingOrgRes = (Organization) org;
+        BookingOrgDetail bookingOrgDetail = new BookingOrgDetail();
+        bookingOrgDetail.setName(bookingOrgRes.getName());
+        bookingOrgDetail.setTelephone(bookingOrgRes.getTelecomFirstRep().getValue());
+        if (!bookingOrgRes.getIdentifier().isEmpty()) {
+            bookingOrgDetail.setOrgCode(bookingOrgRes.getIdentifierFirstRep().getValue());
+        }
+        bookingOrgDetail.setAppointmentDetail(appointmentDetail);
+        appointmentDetail.setBookingOrganization(bookingOrgDetail);
+        // }
 
         List<Extension> bktExtension = appointment.getExtensionsByUrl(SystemURL.SD_CC_APPOINTMENT_BOOKINGORG);
 
@@ -792,20 +805,23 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             if (null != bookingOrg && bookingOrg.getClass().getSimpleName().equals("Reference")) {
                 for (Resource resource : appointment.getContained()) {
-                    if (resource.getResourceType().equals("Organization")) {
-                        Organization bookingOrgRes = (Organization) resource;
-                        Reference bookingOrgRef = (Reference) bookingOrg;
+                    if (resource.getResourceType().toString().equals("Organization")) {
+                        // Organization bookingOrgRes = (Organization) resource;
+                        // Reference bookingOrgRef = (Reference) bookingOrg;
 
-                        if (bookingOrgRes.getId().equals(bookingOrgRef.getReference())) {
-                            BookingOrgDetail bookingOrgDetail = new BookingOrgDetail();
-                            bookingOrgDetail.setName(bookingOrgRes.getName());
-                            bookingOrgDetail.setTelephone(bookingOrgRes.getTelecomFirstRep().getValue());
-                            if (!bookingOrgRes.getIdentifier().isEmpty()) {
-                                bookingOrgDetail.setOrgCode(bookingOrgRes.getIdentifierFirstRep().getValue());
-                            }
-                            bookingOrgDetail.setAppointmentDetail(appointmentDetail);
-                            appointmentDetail.setBookingOrganization(bookingOrgDetail);
-                        }
+                        // if
+                        // (bookingOrgRes.getId().equals(bookingOrgRef.getReference()))
+                        // {
+                        // BookingOrgDetail bookingOrgDetail = new
+                        // BookingOrgDetail();
+                        // bookingOrgDetail.setName(bookingOrgRes.getName());
+                        // bookingOrgDetail.setTelephone(bookingOrgRes.getTelecomFirstRep().getValue());
+                        // if (!bookingOrgRes.getIdentifier().isEmpty()) {
+                        // bookingOrgDetail.setOrgCode(bookingOrgRes.getIdentifierFirstRep().getValue());
+                        // }
+                        // bookingOrgDetail.setAppointmentDetail(appointmentDetail);
+                        // appointmentDetail.setBookingOrganization(bookingOrgDetail);
+                        // }
                     }
                 }
             }

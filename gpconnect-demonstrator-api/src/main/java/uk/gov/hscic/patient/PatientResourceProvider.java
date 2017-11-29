@@ -32,6 +32,7 @@ import org.hl7.fhir.dstu3.model.ContactDetail;
 import org.hl7.fhir.dstu3.model.ContactPoint;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
+import org.hl7.fhir.dstu3.model.DateTimeType;
 import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.HumanName;
@@ -475,7 +476,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         ArrayList<SectionComponent> sections = new ArrayList<SectionComponent>();
         sections.add(FhirSectionBuilder.buildFhirSection(page));
-        
+
         careRecordComposition.setSection(sections);
 
         // Build the Care Record Composition
@@ -495,13 +496,13 @@ public class PatientResourceProvider implements IResourceProvider {
                         new ResourceNotFoundException("Practitioner Reference returning null"),
                         SystemCode.REFERENCE_NOT_FOUND, IssueType.INVALID);
             }
+            }
+        Practitioner practitioner = practitionerResourceProvider.getPractitionerById(new IdType(1));
+           // bundle.addEntry(new BundleEntryComponent().setResource(practitioner).setFullUrl(id));
 
-            bundle.addEntry(new BundleEntryComponent().setResource(practitioner).setFullUrl(id));
+            Practitioner organizationId = practitioner;
+                    //getPractitionerRoleFirstRep().getManagingOrganization().getReference();
 
-//            IdDt organizationId = practitioner
-//                    
-//                  ///  getPractitionerRoleFirstRep().getManagingOrganization().getReference();
-//
 //            BundleEntryComponent organizationEntry = new BundleEntryComponent()
 //                    .setResource(organizationResourceProvider.getOrganizationById(organizationId))
 //                    .setFullUrl(organizationId.toString());
@@ -513,7 +514,7 @@ public class PatientResourceProvider implements IResourceProvider {
 //            }
 //
 //            bundle.addEntry(organizationEntry);
-        }
+        
 
         return bundle.addEntry(patientEntry);
     }
@@ -547,6 +548,8 @@ public class PatientResourceProvider implements IResourceProvider {
         validateParameterNames(params, registerPatientParams);
 
         Patient unregisteredPatient = null;
+       List<ParametersParameterComponent> param = params.getParameter();
+       System.out.println(param);
 //                params.getParameter().stream()
 //                .filter(param -> "registerPatient".equalsIgnoreCase(param.getName())).map(Parameter::getResource)
 //                .map(Patient.class::cast).findFirst().orElse(null);
@@ -801,10 +804,10 @@ public class PatientResourceProvider implements IResourceProvider {
             }
         }
 
-        Type deceased =  patientResource.getDeceased();
+        DateTimeType deceased =  (DateTimeType) patientResource.getDeceased();
         if (deceased != null) {
             try {
-                patientDetails.setDeceased(((ContactPoint) deceased).getValue());
+                patientDetails.setDeceased((deceased.getValue()));
             } catch (ClassCastException cce) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new UnprocessableEntityException("The multiple deceased property is expected to be a datetime"),
@@ -1014,7 +1017,8 @@ public class PatientResourceProvider implements IResourceProvider {
       //  patient.setMultipleBirth(patientDetails.isMultipleBirth());
 
         if (patientDetails.isDeceased()) {
-           // patient.setDeceased(new DateTimeDt(patientDetails.getDeceased()));
+            DateTimeType decesed = new DateTimeType(patientDetails.getDeceased());
+            patient.setDeceased(decesed);
         }
 
         return patient;

@@ -14,6 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.StrictErrorHandler;
+import ca.uhn.fhir.rest.server.ETagSupportEnum;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.CorsInterceptor;
 import uk.gov.hscic.SystemHeader;
@@ -47,6 +48,7 @@ public class FhirRestfulServlet extends RestfulServer {
         FhirContext ctx = FhirContext.forDstu3();
         ctx.setParserErrorHandler(new StrictErrorHandler());
         setFhirContext(ctx);
+        setETagSupport(ETagSupportEnum.ENABLED);
        
         setResourceProviders(Arrays.asList(
                 applicationContext.getBean(PatientResourceProvider.class),

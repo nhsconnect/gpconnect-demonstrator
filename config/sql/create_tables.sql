@@ -35,8 +35,8 @@ DROP TABLE IF EXISTS gpconnect.medical_departments;
 CREATE TABLE gpconnect.appointment_booking_orgz (
   id              BIGINT       NOT NULL,
   org_code        VARCHAR(30)  NULL,
-  name            VARCHAR(100) NOT NULL,
-  telephone       VARCHAR(100) NOT NULL,
+  name            VARCHAR(100) NULL,
+  telephone       VARCHAR(100) NULL,
   lastUpdated     DATETIME     NULL,
   PRIMARY KEY (id)
 );

@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.hl7.fhir.dstu3.model.Type;
+
 public class PatientDetails {
     private String address;
     private Date dateOfBirth;
@@ -18,7 +20,7 @@ public class PatientDetails {
     private Date lastUpdated;
     private String managingOrganization;
     private String maritalStatus;
-    private String multipleBirth;
+    private Type multipleBirth;
     private String name;
     private String nhsNumber;
     private String pasNumber;
@@ -128,7 +130,7 @@ public class PatientDetails {
 		return this.deceased != null;
 	}
 
-    public String isMultipleBirth() {
+    public Type isMultipleBirth() {
 		return multipleBirth;
 	}
 
@@ -174,7 +176,7 @@ public class PatientDetails {
         this.maritalStatus = maritalStatus;
     }
 
-	public void setMultipleBirth(String string) {
+	public void setMultipleBirth(Type string) {
 		this.multipleBirth = string;
 	}
 

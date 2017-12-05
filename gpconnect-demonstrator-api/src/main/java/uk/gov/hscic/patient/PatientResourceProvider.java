@@ -759,8 +759,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
         List<String> usualFamilyNames = new ArrayList<>();
         for (HumanName humanName : names) {
-            if(humanName.getFamily() != null){
-            usualFamilyNames.add(humanName.getFamily());
+            if (humanName.getFamily() != null) {
+                usualFamilyNames.add(humanName.getFamily());
             }
         }
 
@@ -769,8 +769,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private void validateNameCount(List<String> names, String nameType) {
         if (names.size() != 1) {
-            String message = String.format("The patient must have one and only one %s name property. Found %s", nameType,
-                    names.size());
+            String message = String.format("The patient must have one and only one %s name property. Found %s",
+                    nameType, names.size());
             throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
                     SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
@@ -802,10 +802,12 @@ public class PatientResourceProvider implements IResourceProvider {
         String givenNames = name.getGiven().stream().map(n -> n.getValue()).collect(Collectors.joining(","));
 
         patientDetails.setForename(givenNames);
-
-        patientDetails.setSurname(name.getGivenAsSingleString());
+       
+        patientDetails.setSurname(name.getFamily());
         patientDetails.setDateOfBirth(patientResource.getBirthDate());
-        patientDetails.setGender(patientResource.getGender().toString());
+        if (patientResource.getGender() != null) {
+            patientDetails.setGender(patientResource.getGender().toString());
+        }
         patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
 
         Type multipleBirth = patientResource.getMultipleBirth();

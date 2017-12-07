@@ -105,8 +105,8 @@ public class OrganizationResourceProvider implements IResourceProvider {
                     IssueType.INVALID);
         }
 
-        switch (tokenParam.getSystem()) {
-        case SystemURL.ID_ODS_ORGANIZATION_CODE:
+        if (tokenParam.getSystem().equals(SystemURL.ID_ODS_ORGANIZATION_CODE)
+                || tokenParam.getSystem().equals(SystemURL.ID_ODS_OLD_ORGANIZATION_CODE)) {
             List<Organization> organizationDetails = convertOrganizaitonDetailsListToOrganizationList(
                     organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue()));
             if (organizationDetails.isEmpty()) {
@@ -138,11 +138,12 @@ public class OrganizationResourceProvider implements IResourceProvider {
             // Update startIndex if we do paging
             return count != null ? organizationDetails.subList(0, count) : organizationDetails;
 
-        default:
+        } else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Invalid system code"), SystemCode.INVALID_PARAMETER,
                     IssueType.INVALID);
         }
+
     }
 
     private List<Organization> convertOrganizaitonDetailsListToOrganizationList(
@@ -186,7 +187,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
         organization.addTelecom(getValidTelecom());
         organization.addAddress(getValidAddress());
-        //organization.addContact(getValidContact());
+        // organization.addContact(getValidContact());
 
         CodeableConcept orgType = new CodeableConcept();
         orgType.addCoding(orgTypeCode);
@@ -223,16 +224,13 @@ public class OrganizationResourceProvider implements IResourceProvider {
         orgCtName.setFamily("FamilyName");
         Coding coding = new Coding().setSystem(SystemURL.VS_CC_ORG_CT_ENTITYTYPE).setDisplay("ADMIN");
         CodeableConcept orgCtPurpose = new CodeableConcept().addCoding(coding);
-      
-     
 
         ContactDetail orgContact = new ContactDetail();
-   
-        
+
         orgContact.setNameElement(orgCtName.getFamilyElement());
         orgContact.addTelecom(getValidTelecom());
-       // orgContact.setAddress(getValidAddress());
-       // orgContact.setPurpose(orgCtPurpose);
+        // orgContact.setAddress(getValidAddress());
+        // orgContact.setPurpose(orgCtPurpose);
 
         return orgContact;
     }

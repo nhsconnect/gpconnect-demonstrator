@@ -504,26 +504,23 @@ public class PatientResourceProvider implements IResourceProvider {
                         new ResourceNotFoundException("Practitioner Reference returning null"),
                         SystemCode.REFERENCE_NOT_FOUND, IssueType.INVALID);
             }
+
+            bundle.addEntry(new BundleEntryComponent().setResource(practitioner).setFullUrl(id));
         }
-        Practitioner practitioner = practitionerResourceProvider.getPractitionerById(new IdType(1));
-        // bundle.addEntry(new
-        // BundleEntryComponent().setResource(practitioner).setFullUrl(id));
 
-        Practitioner organizationId = practitioner;
-        // getPractitionerRoleFirstRep().getManagingOrganization().getReference();
+            IdType organizationId = new IdType(1);
+            BundleEntryComponent organizationEntry = new BundleEntryComponent()
+                    .setResource(organizationResourceProvider.getOrganizationById(organizationId))
+                    .setFullUrl(organizationId.toString());
 
-        // BundleEntryComponent organizationEntry = new BundleEntryComponent()
-        // .setResource(organizationResourceProvider.getOrganizationById(organizationId))
-        // .setFullUrl(organizationId.toString());
-        //
-        // if (organizationEntry.getResource() == null ||
-        // organizationEntry.getFullUrl() == null) {
-        // throw OperationOutcomeFactory.buildOperationOutcomeException(
-        // new ResourceNotFoundException("organizationResource returning null"),
-        // SystemCode.REFERENCE_NOT_FOUND, IssueType.INVALID);
-        // }
-        //
-        // bundle.addEntry(organizationEntry);
+            if (organizationEntry.getResource() == null || organizationEntry.getFullUrl() == null) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new ResourceNotFoundException("organizationResource returning null"),
+                        SystemCode.REFERENCE_NOT_FOUND, IssueType.INVALID);
+            }
+            organizationEntry.setFullUrl("Organization/2");
+            bundle.addEntry(organizationEntry);
+        
 
         return bundle.addEntry(patientEntry);
     }
@@ -758,7 +755,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         List<String> usualFamilyNames = new ArrayList<>();
-        for (HumanName humanName : names) {
+        for (HumanName humanName : usualActiveNames) {
             if (humanName.getFamily() != null) {
                 usualFamilyNames.add(humanName.getFamily());
             }
@@ -802,7 +799,7 @@ public class PatientResourceProvider implements IResourceProvider {
         String givenNames = name.getGiven().stream().map(n -> n.getValue()).collect(Collectors.joining(","));
 
         patientDetails.setForename(givenNames);
-       
+
         patientDetails.setSurname(name.getFamily());
         patientDetails.setDateOfBirth(patientResource.getBirthDate());
         if (patientResource.getGender() != null) {

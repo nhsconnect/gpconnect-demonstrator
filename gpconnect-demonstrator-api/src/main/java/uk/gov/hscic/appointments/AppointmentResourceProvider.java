@@ -243,12 +243,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 .searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUppderDate).stream()
                 .map(this::appointmentDetailToAppointmentResourceConverter).collect(Collectors.toList());
 
-        if (appointment.isEmpty()) {
+        List<Appointment> futureAppointments =  filterToReturnFutureAppointments(appointment);
+
+        if (futureAppointments.isEmpty()) {
 
             return null;
         }
         // Update startIndex if we do paging
-        return count != null ? appointment.subList(0, count) : appointment;
+        return count != null ? futureAppointments.subList(0, count) : futureAppointments;
     }
 
     @Create
@@ -475,7 +477,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         methodOutcome.setId(new IdDt("Appointment", appointmentDetail.getId()));
         methodOutcome.setResource(appointmentDetailToAppointmentResourceConverter(appointmentDetail));
-        
+
         return methodOutcome;
     }
 
@@ -621,8 +623,10 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         if (null != appointmentDetail.getCreated()) {
 
-//            DateTimeDt created = new DateTimeDt(appointmentDetail.getCreated());
-//            Extension createdExt = new Extension(SystemURL.SD_CC_APPOINTMENT_CREATED, created);
+            // DateTimeDt created = new
+            // DateTimeDt(appointmentDetail.getCreated());
+            // Extension createdExt = new
+            // Extension(SystemURL.SD_CC_APPOINTMENT_CREATED, created);
 
             appointment.setCreated(appointmentDetail.getCreated());
         }
@@ -774,19 +778,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
         }
 
-         
-        if(appointment.getCreated() != null)
-        {
+        if (appointment.getCreated() != null) {
             Date created = appointment.getCreated();
             appointmentDetail.setCreated(created);
         }
-            
-        
 
         List<Resource> contained = appointment.getContained();
         Resource org = contained.get(0);
-        System.out.println(org.getResourceType().toString().equals("Organization"));
-        System.out.println(org.getResourceType());
         Organization bookingOrgRes = (Organization) org;
         BookingOrgDetail bookingOrgDetail = new BookingOrgDetail();
         bookingOrgDetail.setName(bookingOrgRes.getName());
@@ -900,7 +898,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(
                             String.format("Appointment Participant %s Status %s", enumeration2, participantStatusErr)),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
         }
     }
 
@@ -951,6 +949,21 @@ public class AppointmentResourceProvider implements IResourceProvider {
                             + invalidCodes.stream().collect(Collectors.joining(", "))),
                     SystemCode.INVALID_RESOURCE, IssueType.INVALID);
         }
+    }
+    
+    private List<Appointment> filterToReturnFutureAppointments(List<Appointment> appointment) {
+        Date date = new Date();
+        List<Appointment> appointmentsFiltered = new ArrayList<>();
+
+        for (int i = 0; i < appointment.size(); i++) {
+            if (appointment.get(i).getStart().after(date)) {
+
+                appointmentsFiltered.add(appointment.get(i));
+            }
+
+        }
+        return appointmentsFiltered;
+
     }
 
 }

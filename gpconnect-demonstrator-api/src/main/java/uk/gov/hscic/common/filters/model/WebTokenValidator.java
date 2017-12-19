@@ -33,7 +33,7 @@ public class WebTokenValidator {
                     IssueType.INVALID);
         }
 
-        if (!SystemURL.AUTHORIZATION_TOKEN.equals(webToken.getAud())) {
+        if (!SystemURL.AUTHORIZATION_TOKEN.equals(webToken.getAud()) ) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Bad Request Exception"), SystemCode.BAD_REQUEST,
                     IssueType.INVALID);

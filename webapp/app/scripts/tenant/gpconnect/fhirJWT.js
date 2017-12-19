@@ -112,7 +112,7 @@ angular.module('gpConnect')
                             }
                         ],
                         "name": [{
-                            "family": ["Demonstrator"],
+                            "family": "Demonstrator",
                             "given": ["GPConnect"],
                             "prefix": ["Mr"]
                         }]

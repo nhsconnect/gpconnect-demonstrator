@@ -10,10 +10,9 @@ import java.util.Map;
 public class RequestingPractitioner {
     private String id;
     private String resourceType;
-    private List<Name> name;
 
-    @JsonProperty("practitionerRole")
-    private List<Map<String, Map<String, List<Coding>>>> practitionerRoles;
+    @JsonProperty("name")
+    private List<Name> name;
 
     @JsonProperty("identifier")
     private List<Identifier> identifiers;
@@ -50,63 +49,40 @@ public class RequestingPractitioner {
         if (null == identifiers) {
             return null;
         }
-        
-        return identifiers
-                .stream()
-                .filter(identifier -> identifier.getSystem().equals(system))
-                .map(Identifier::getValue)
-                .findFirst()
-                .orElse(null);
+
+        return identifiers.stream().filter(identifier -> identifier.getSystem().equals(system))
+                .map(Identifier::getValue).findFirst().orElse(null);
     }
 
-    public String getPractitionerRoleCode(String system) {
-        if (null == practitionerRoles || practitionerRoles.isEmpty()) {
-            return null;
-        }
-
-        return practitionerRoles
-                .get(0)
-                .getOrDefault("role", Collections.emptyMap())
-                .getOrDefault("coding", Collections.emptyList())
-                .stream()
-                .filter(coding -> system.equals(coding.getSystem()))
-                .map(Coding::getCode)
-                .findFirst()
-                .orElse(null);
-    }
-
-    public void setPractitionerRoles(List<Map<String, Map<String, List<Coding>>>> practitionerRoles) {
-        this.practitionerRoles = practitionerRoles;
-    }
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Name {
     private String family;
     private List<String> given;
-    private List<String> prefix;    
-    
-    public String getFamily(){
+    private List<String> prefix;
+
+    public String getFamily() {
         return this.family;
     }
-    
-    public void setFamily(String family){
+
+    public void setFamily(String family) {
         this.family = family;
     }
-    
-    public List<String> getGiven(){
+
+    public List<String> getGiven() {
         return this.given;
     }
-    
-    public void setGiven(List<String> given){
+
+    public void setGiven(List<String> given) {
         this.given = given;
     }
-    
-    public List<String> getPrefix(){
+
+    public List<String> getPrefix() {
         return this.prefix;
     }
-    
-    public void setPrefix(List<String> prefix){
+
+    public void setPrefix(List<String> prefix) {
         this.prefix = prefix;
     }
 }

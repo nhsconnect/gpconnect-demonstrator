@@ -71,8 +71,14 @@ angular.module('gpConnect')
                                 "system": "Web Interface",
                                 "value": "GP Connect Demonstrator"
                             }],
-                        "model": "Demonstrator",
-                        "version": "1.0"
+                                    "type": {
+                            "coding": [{
+                                "system": "DeviceIdentifierSystem",
+                                "code": "DeviceIdentifier"
+                            }]
+                        },
+                        "model": "v1",
+                        "version": "1.1"
                     };
                 }
                 
@@ -85,8 +91,7 @@ angular.module('gpConnect')
                         "identifier": [{
                                 "system": gpcResource.getConst("ID_ODS_ORGANIZATION_CODE"),
                                 "value": "[ODSCode]"
-                            }],
-                        "name": "GP Connect Demonstrator"
+                            }]
                     };
                 }
                 
@@ -96,18 +101,6 @@ angular.module('gpConnect')
                     oPayload.requesting_practitioner = {
                         "resourceType": "Practitioner",
                         "id": "1",
-                        "practitionerRole": [
-                            {
-                                "role": {
-                                    "coding": [
-                                        {
-                                            "system": gpcResource.getConst("VS_SDS_JOB_ROLE_NAME"),
-                                            "code": "AssuranceJobRole"
-                                        }
-                                    ]
-                                }
-                            }
-                        ],
                         "identifier": [
                             {
                                 "system": gpcResource.getConst("ID_SDS_USER_ID"),
@@ -118,11 +111,11 @@ angular.module('gpConnect')
                                 "value": "1"
                             }
                         ],
-                        "name": {
+                        "name": [{
                             "family": ["Demonstrator"],
                             "given": ["GPConnect"],
                             "prefix": ["Mr"]
-                        }
+                        }]
                     };
                 }
 

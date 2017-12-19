@@ -784,17 +784,18 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
 
         List<Resource> contained = appointment.getContained();
-        Resource org = contained.get(0);
-        Organization bookingOrgRes = (Organization) org;
-        BookingOrgDetail bookingOrgDetail = new BookingOrgDetail();
-        bookingOrgDetail.setName(bookingOrgRes.getName());
-        bookingOrgDetail.setTelephone(bookingOrgRes.getTelecomFirstRep().getValue());
-        if (!bookingOrgRes.getIdentifier().isEmpty()) {
-            bookingOrgDetail.setOrgCode(bookingOrgRes.getIdentifierFirstRep().getValue());
+        if (contained != null && !contained.isEmpty()) {
+	        Resource org = contained.get(0);
+	        Organization bookingOrgRes = (Organization) org;
+	        BookingOrgDetail bookingOrgDetail = new BookingOrgDetail();
+	        bookingOrgDetail.setName(bookingOrgRes.getName());
+	        bookingOrgDetail.setTelephone(bookingOrgRes.getTelecomFirstRep().getValue());
+	        if (!bookingOrgRes.getIdentifier().isEmpty()) {
+	            bookingOrgDetail.setOrgCode(bookingOrgRes.getIdentifierFirstRep().getValue());
+	        }
+	        bookingOrgDetail.setAppointmentDetail(appointmentDetail);
+	        appointmentDetail.setBookingOrganization(bookingOrgDetail);
         }
-        bookingOrgDetail.setAppointmentDetail(appointmentDetail);
-        appointmentDetail.setBookingOrganization(bookingOrgDetail);
-        // }
 
         List<Extension> bktExtension = appointment.getExtensionsByUrl(SystemURL.SD_CC_APPOINTMENT_BOOKINGORG);
 

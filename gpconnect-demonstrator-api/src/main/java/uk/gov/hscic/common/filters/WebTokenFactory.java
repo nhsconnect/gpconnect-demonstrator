@@ -24,6 +24,7 @@ import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import java.util.List;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.common.filters.model.WebToken;
@@ -33,7 +34,15 @@ import uk.gov.hscic.common.filters.model.WebTokenValidator;
 public class WebTokenFactory {
     private static final Logger LOG = Logger.getLogger("AuthLog");
     private static final String PERMITTED_MEDIA_TYPE_HEADER_REGEX = "application/(xml|json)\\+fhir(;charset=utf-8)?";
-
+    private static final List<String> CONTENT_TYPES = Arrays.asList(
+            "application/fhir+json",            
+            "application/fhir+xml",
+            "application/json+fhir",
+            "application/xml+fhir",
+            "application/json",
+            "application/xml",
+            "text/json"
+    );
     private IParser parser = null;
 
     WebToken getWebToken(RequestDetails requestDetails, int futureRequestLeeway) {
@@ -63,7 +72,7 @@ public class WebTokenFactory {
                         new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "No content media type set"),
                         SystemCode.BAD_REQUEST, IssueType.INCOMPLETE);
             }
-        } else if (!contentType.replaceAll("; +", ";").toLowerCase(Locale.UK).matches(PERMITTED_MEDIA_TYPE_HEADER_REGEX)) {
+        } else if (!CONTENT_TYPES.contains(contentType.split(";")[0])) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported content media type"),
                     SystemCode.BAD_REQUEST, IssueType.INVALID);
@@ -80,7 +89,7 @@ public class WebTokenFactory {
             acceptHeader = contentType;
         }
 
-        if (acceptHeader == null || !acceptHeader.replaceAll("; +", ";").toLowerCase(Locale.UK).matches(PERMITTED_MEDIA_TYPE_HEADER_REGEX)) {
+        if (acceptHeader == null || !CONTENT_TYPES.contains(acceptHeader.split(";")[0])) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported accept media type"),
                     SystemCode.BAD_REQUEST, IssueType.INVALID);

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import org.hl7.fhir.dstu3.model.IdType;
 import uk.gov.hscic.medication.administration.MedicationAdministrationSearch;
 import uk.gov.hscic.model.medication.MedicationAdministrationDetail;
 
@@ -36,9 +37,17 @@ public class MedicationAdministrationResourceProvider  implements IResourceProvi
         if (medicationAdministrationDetailList != null && !medicationAdministrationDetailList.isEmpty()) {
             for(MedicationAdministrationDetail medicationAdministrationDetail : medicationAdministrationDetailList) {
                 MedicationAdministration medicationAdministration = new MedicationAdministration();
-                medicationAdministration.setId(String.valueOf(medicationAdministrationDetail.getId()));
-                medicationAdministration.getMeta().setLastUpdated(medicationAdministrationDetail.getLastUpdated());
-                medicationAdministration.getMeta().setVersionId(String.valueOf(medicationAdministrationDetail.getLastUpdated().getTime()));
+                
+                String resourceId = String.valueOf(medicationAdministrationDetail.getId());
+                String versionId = String.valueOf(medicationAdministrationDetail.getLastUpdated().getTime());
+                String resourceType = medicationAdministration.getResourceType().toString();
+
+                IdType id = new IdType(resourceType, resourceId, versionId);
+
+                medicationAdministration.setId(id);
+                medicationAdministration.getMeta().setVersionId(versionId);
+                medicationAdministration.getMeta().setLastUpdated(medicationAdministrationDetail.getLastUpdated());       
+
                 medicationAdministration.addDefinition(new Reference("Patient/"+medicationAdministrationDetail.getPatientId()));
                 medicationAdministration.addDefinition(new Reference("Practitioner/"+medicationAdministrationDetail.getPractitionerId()));
                 medicationAdministration.setPrescription(new Reference("MedicationOrder/"+medicationAdministrationDetail.getPrescriptionId()));               

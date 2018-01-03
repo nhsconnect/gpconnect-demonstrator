@@ -76,11 +76,19 @@ public class LocationResourceProvider implements IResourceProvider {
 
     private Location locationDetailsToLocation(LocationDetails locationDetails) {
         Location location = new Location();
-        location.setId(new IdDt(locationDetails.getId()));
-        location.getMeta().setLastUpdated(locationDetails.getLastUpdated());
-        location.getMeta().setVersionId(String.valueOf(locationDetails.getLastUpdated().getTime()));
+        
+        String resourceId = String.valueOf(locationDetails.getId());
+        String versionId = String.valueOf(locationDetails.getLastUpdated().getTime());
+        String resourceType = location.getResourceType().toString();
+        
+        IdType id = new IdType(resourceType, resourceId, versionId);
+
+        location.setId(id);
+        location.getMeta().setVersionId(versionId);
+        location.getMeta().setLastUpdated(locationDetails.getLastUpdated());          
         location.getMeta().addProfile(SystemURL.SD_GPC_LOCATION);
-        location.setName(new String(locationDetails.getName()));
+        
+        location.setName(locationDetails.getName());
         location.setIdentifier(Collections.singletonList(new Identifier().setSystem(SystemURL.ID_ODS_SITE_CODE).setValue(locationDetails.getSiteOdsCode())));
         Coding locationCommTypeCode = new Coding();
         locationCommTypeCode.setCode("COMM");

@@ -36,10 +36,17 @@ public class MedicationResourceProvider implements IResourceProvider {
         }
 
         Medication medication = new Medication();
-        medication.setId(String.valueOf(medicationEntity.getId()));
-        medication.getMeta().setLastUpdated(medicationEntity.getLastUpdated());
-        medication.getMeta().setVersionId(String.valueOf(medicationEntity.getLastUpdated().getTime()));
 
+        String resourceId = String.valueOf(medicationEntity.getId());
+        String versionId = String.valueOf(medicationEntity.getLastUpdated().getTime());
+        String resourceType = medication.getResourceType().toString();
+
+        IdType id = new IdType(resourceType, resourceId, versionId);
+
+        medication.setId(id);
+        medication.getMeta().setVersionId(versionId);
+        medication.getMeta().setLastUpdated(medicationEntity.getLastUpdated());   
+                
         return medication;
     }
 }

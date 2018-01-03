@@ -32,8 +32,8 @@ import uk.gov.hscic.common.filters.model.WebTokenValidator;
 @Component
 public class WebTokenFactory {
     private static final Logger LOG = Logger.getLogger("AuthLog");
-    private static final String PERMITTED_MEDIA_TYPE_HEADER_REGEX = "application/(xml|json)\\+fhir(;charset=utf-8)?";
-
+    private static final String PERMITTED_MEDIA_TYPE_HEADER_REGEX = "application/fhir\\+(xml|json)(;charset=utf-8)?";
+  
     private IParser parser = null;
 
     WebToken getWebToken(RequestDetails requestDetails, int futureRequestLeeway) {

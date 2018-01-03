@@ -146,8 +146,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
     }
 
-    private List<Organization> convertOrganizaitonDetailsListToOrganizationList(
-            List<OrganizationDetails> organizationDetails) {
+    private List<Organization> convertOrganizaitonDetailsListToOrganizationList(List<OrganizationDetails> organizationDetails) {
         Map<String, Organization> map = new HashMap<>();
 
         for (OrganizationDetails organizationDetail : organizationDetails) {
@@ -157,15 +156,24 @@ public class OrganizationResourceProvider implements IResourceProvider {
                 continue;
             }
 
-            Organization organization = new Organization().setName(organizationDetail.getOrgName())
-                    .addIdentifier(new Identifier().setSystem(SystemURL.ID_ODS_ORGANIZATION_CODE)
-                            .setValue(organizationDetail.getOrgCode()));
+            Identifier identifier = new Identifier()
+                    .setSystem(SystemURL.ID_ODS_ORGANIZATION_CODE)
+                    .setValue(organizationDetail.getOrgCode());
+            
+            Organization organization = new Organization()
+                    .setName(organizationDetail.getOrgName())
+                    .addIdentifier(identifier);
 
-            organization.setId(String.valueOf(organizationDetail.getId()));
+            String resourceId = String.valueOf(organizationDetail.getId());
+            String versionId = String.valueOf(organizationDetail.getLastUpdated().getTime());
+            String resourceType = organization.getResourceType().toString();
 
-            organization.getMeta().addProfile(SystemURL.SD_GPC_ORGANIZATION)
-                    .setLastUpdated(organizationDetail.getLastUpdated())
-                    .setVersionId(String.valueOf(organizationDetail.getLastUpdated().getTime()));
+            IdType id = new IdType(resourceType, resourceId, versionId);
+
+            organization.setId(id);
+            organization.getMeta().setVersionId(versionId);
+            organization.getMeta().setLastUpdated(organizationDetail.getLastUpdated());            
+            organization.getMeta().addProfile(SystemURL.SD_GPC_ORGANIZATION);         
 
             organization = addAdditionalProperties(organization);
 

@@ -139,14 +139,20 @@ public class SlotResourceProvider implements IResourceProvider {
 
     private Slot slotDetailToSlotResourceConverter(SlotDetail slotDetail) {
         Slot slot = new Slot();
-        slot.setId(String.valueOf(slotDetail.getId()));
+        
+        Date lastUpdated = slotDetail.getLastUpdated() == null 
+                ? new Date() 
+                : slotDetail.getLastUpdated();
+        
+        String resourceId = String.valueOf(slotDetail.getId());
+        String versionId = String.valueOf(lastUpdated.getTime());
+        String resourceType = slot.getResourceType().toString();
+        
+        IdType id = new IdType(resourceType, resourceId, versionId);
 
-        if (slotDetail.getLastUpdated() == null) {
-            slotDetail.setLastUpdated(new Date());
-        }
-
-        slot.getMeta().setLastUpdated(slotDetail.getLastUpdated());
-        slot.getMeta().setVersionId(String.valueOf(slotDetail.getLastUpdated().getTime()));
+        slot.setId(id);
+        slot.getMeta().setVersionId(versionId);
+        slot.getMeta().setLastUpdated(lastUpdated);        
         slot.getMeta().addProfile(SystemURL.SD_GPC_SLOT);
 
         slot.setIdentifier(Collections.singletonList(

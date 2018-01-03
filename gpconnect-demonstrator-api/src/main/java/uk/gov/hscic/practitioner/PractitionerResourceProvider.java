@@ -102,40 +102,52 @@ public class PractitionerResourceProvider implements IResourceProvider {
     }
 
     private Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails) {
+        Identifier identifier = new Identifier()
+                .setSystem(SystemURL.ID_SDS_USER_ID)
+                .setValue(practitionerDetails.getUserId());
+        
         Practitioner practitioner = new Practitioner()
-                .addIdentifier(new Identifier().setSystem(SystemURL.ID_SDS_USER_ID).setValue(practitionerDetails.getUserId()));
-        practitionerDetails.getRoleIds().stream().distinct()
+                .addIdentifier(identifier);
+        
+        practitionerDetails
+                .getRoleIds()
+                .stream()
+                .distinct()
                 .map(roleId -> new Identifier().setSystem(SystemURL.ID_SDS_ROLE_PROFILE_ID).setValue(roleId))
                 .forEach(practitioner::addIdentifier);
 
-        practitioner.setId(new IdDt(practitionerDetails.getId()));
-       
-        practitioner.getMeta().setLastUpdated(practitionerDetails.getLastUpdated())
-                .setVersionId(String.valueOf(practitionerDetails.getLastUpdated().getTime()))
-                .addProfile(SystemURL.SD_GPC_PRACTITIONER);
+        String resourceId = String.valueOf(practitionerDetails.getId());
+        String versionId = String.valueOf(practitionerDetails.getLastUpdated().getTime());
+        String resourceType = practitioner.getResourceType().toString();
+        
+        IdType id = new IdType(resourceType, resourceId, versionId);
 
-        HumanName name = new HumanName().setFamily(practitionerDetails.getNameFamily())
-                .addGiven(practitionerDetails.getNameGiven()).addPrefix(practitionerDetails.getNamePrefix())
+        practitioner.setId(id);
+        practitioner.getMeta().setVersionId(versionId);
+        practitioner.getMeta().setLastUpdated(practitionerDetails.getLastUpdated());       
+        practitioner.getMeta().addProfile(SystemURL.SD_GPC_PRACTITIONER);
+
+        HumanName name = new HumanName()
+                .setFamily(practitionerDetails.getNameFamily())
+                .addGiven(practitionerDetails.getNameGiven())
+                .addPrefix(practitionerDetails.getNamePrefix())
                 .setUse(NameUse.USUAL);
 
         practitioner.addName(name);
 
         switch (practitionerDetails.getGender().toLowerCase(Locale.UK)) {
-        case "male":
-            practitioner.setGender(AdministrativeGender.MALE);
-            break;
-
-        case "female":
-            practitioner.setGender(AdministrativeGender.FEMALE);
-            break;
-
-        case "other":
-            practitioner.setGender(AdministrativeGender.OTHER);
-            break;
-
-        default:
-            practitioner.setGender(AdministrativeGender.UNKNOWN);
-            break;
+            case "male":
+                practitioner.setGender(AdministrativeGender.MALE);
+                break;
+            case "female":
+                practitioner.setGender(AdministrativeGender.FEMALE);
+                break;
+            case "other":
+                practitioner.setGender(AdministrativeGender.OTHER);
+                break;
+            default:
+                practitioner.setGender(AdministrativeGender.UNKNOWN);
+                break;
         }
 
         Coding roleCoding = new Coding(SystemURL.VS_SDS_JOB_ROLE_NAME, practitionerDetails.getRoleCode(), null)

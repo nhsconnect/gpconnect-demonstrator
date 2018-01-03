@@ -60,7 +60,7 @@ public class PopulateSlotBundle {
 
         // schedules
         List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(
-                locations.get(0).getId(), planningHorizonStart, planningHorizonEnd);
+                locations.get(0).getIdElement().getIdPart(), planningHorizonStart, planningHorizonEnd);
 
         if (!schedules.isEmpty()) {
             for (Schedule schedule : schedules) {
@@ -69,7 +69,7 @@ public class PopulateSlotBundle {
 
                 BundleEntryComponent scheduleEntry = new BundleEntryComponent();
                 scheduleEntry.setResource(schedule);
-                scheduleEntry.setFullUrl("Schedule/" + schedule.getId());
+                scheduleEntry.setFullUrl("Schedule/" + schedule.getIdElement().getIdPart());
 
                 // practitioners
                 List<Extension> practitionerExtensions = scheduleResourceProvider.getPractitionerReferences(schedule);
@@ -92,13 +92,13 @@ public class PopulateSlotBundle {
                         if (actorPractitioner == true) {
                             BundleEntryComponent practionerEntry = new BundleEntryComponent();
                             practionerEntry.setResource(practitioner);
-                            practionerEntry.setFullUrl("Practitioner/" + practitioner.getId());
+                            practionerEntry.setFullUrl("Practitioner/" + practitioner.getIdElement().getIdPart());
                             bundle.addEntry(practionerEntry);
                         }
                     }
 
                    
-                    List<Slot> slots = slotResourceProvider.getSlotsForScheduleId(schedule.getId().toString(),
+                    List<Slot> slots = slotResourceProvider.getSlotsForScheduleId(schedule.getIdElement().getIdPart(),
                             planningHorizonStart, planningHorizonEnd);
                     String freeBusyType = "FREE";
                     if (!slots.isEmpty()) {
@@ -107,8 +107,7 @@ public class PopulateSlotBundle {
                             if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
                                 BundleEntryComponent slotEntry = new BundleEntryComponent();
                                 slotEntry.setResource(slot);
-                                slotEntry.setFullUrl("Slot/" + slot.getId());
-                                slotEntry.setFullUrlElement(slot.getIdElement());
+                                slotEntry.setFullUrl("Slot/" + slot.getIdElement().getIdPart());                    
                                 bundle.addEntry(slotEntry);
                                 bundle.addEntry(scheduleEntry);
                                 

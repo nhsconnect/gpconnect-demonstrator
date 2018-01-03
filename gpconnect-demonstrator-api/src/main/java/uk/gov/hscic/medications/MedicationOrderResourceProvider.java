@@ -66,9 +66,17 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
 
     private MedicationRequest medicationOrderDetailsToMedicationOrderResourceConverter(MedicationOrderDetails medicationOrderDetails) {
         MedicationRequest medicationOrder = new MedicationRequest();
-        medicationOrder.setId(String.valueOf(medicationOrderDetails.getId()));
-        medicationOrder.getMeta().setLastUpdated(medicationOrderDetails.getLastUpdated());
-        medicationOrder.getMeta().setVersionId(String.valueOf(medicationOrderDetails.getLastUpdated().getTime()));
+        
+        String resourceId = String.valueOf(medicationOrderDetails.getId());
+        String versionId = String.valueOf(medicationOrderDetails.getLastUpdated().getTime());
+        String resourceType = medicationOrder.getResourceType().toString();
+        
+        IdType id = new IdType(resourceType, resourceId, versionId);
+
+        medicationOrder.setId(id);
+        medicationOrder.getMeta().setVersionId(versionId);
+        medicationOrder.getMeta().setLastUpdated(medicationOrderDetails.getLastUpdated()); 
+
         //medicationOrder.setDateWritten(new DateTimeDt(medicationOrderDetails.getDateWritten()));
     
         switch (medicationOrderDetails.getOrderStatus().toLowerCase(Locale.UK)) {

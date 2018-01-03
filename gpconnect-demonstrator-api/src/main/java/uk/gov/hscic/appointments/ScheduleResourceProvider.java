@@ -73,9 +73,17 @@ public class ScheduleResourceProvider implements IResourceProvider {
 
     private Schedule scheduleDetailToScheduleResourceConverter(ScheduleDetail scheduleDetail) {
         Schedule schedule = new Schedule();
-        schedule.setId(String.valueOf(scheduleDetail.getId()));
-        schedule.getMeta().setLastUpdated(scheduleDetail.getLastUpdated());
-        schedule.getMeta().setVersionId(String.valueOf(scheduleDetail.getLastUpdated().getTime()));
+        
+        String resourceId = String.valueOf(scheduleDetail.getId());
+        String versionId = String.valueOf(scheduleDetail.getLastUpdated().getTime());
+        String resourceType = schedule.getResourceType().toString();
+        
+        IdType id = new IdType(resourceType, resourceId, versionId);
+
+        schedule.setId(id);
+        schedule.getMeta().setVersionId(versionId);
+        schedule.getMeta().setLastUpdated(scheduleDetail.getLastUpdated());        
+        
         Extension extension = new Extension(SystemURL.SD_EXTENSION_GPC_PRACTITIONER,
                 new Reference("Practitioner/" + scheduleDetail.getPractitionerId()));
         schedule.addExtension(extension);

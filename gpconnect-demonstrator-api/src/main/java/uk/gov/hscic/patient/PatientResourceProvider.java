@@ -958,25 +958,34 @@ public class PatientResourceProvider implements IResourceProvider {
     private Patient patientDetailsToMinimalPatient(PatientDetails patientDetails) throws FHIRException {
         Patient patient = new Patient();
 
-        String versionId;
-        Date lastUpdated = patientDetails.getLastUpdated();
-        if (lastUpdated == null) {
-            versionId = String.valueOf(new Date().getTime());
-            patient.setId(new IdDt(patientDetails.getId()));
+        Date lastUpdated = patientDetails.getLastUpdated() == null 
+                ? new Date() 
+                : patientDetails.getLastUpdated();
+        
+        String resourceId = String.valueOf(patientDetails.getId());
+        String versionId = String.valueOf(lastUpdated.getTime());
+        String resourceType = patient.getResourceType().toString();
+        
+        IdType id = new IdType(resourceType, resourceId, versionId);
 
-        } else {
-            versionId = String.valueOf(lastUpdated.getTime());
-            patient.setId(new IdDt(patientDetails.getId()));
-            // patient.setId(new IdDt(patientDetails.getId(), versionId));
-            patient.getMeta().setLastUpdated(lastUpdated);
-        }
-
-        patient.getMeta().addProfile(SystemURL.SD_GPC_PATIENT);
+        patient.setId(id);
         patient.getMeta().setVersionId(versionId);
-        Identifier patientNhsNumber = new Identifier().setSystem(SystemURL.ID_NHS_NUMBER)
+        patient.getMeta().setLastUpdated(lastUpdated);
+        patient.getMeta().addProfile(SystemURL.SD_GPC_PATIENT);
+        
+
+        Identifier patientNhsNumber = new Identifier()
+                .setSystem(SystemURL.ID_NHS_NUMBER)
                 .setValue(patientDetails.getNhsNumber());
-        patientNhsNumber.addExtension(createCodingExtension("01", "Number present and verified",
-                SystemURL.CS_CC_NHS_NUMBER_VERIF, SystemURL.SD_CC_EXT_NHS_NUMBER_VERIF));
+        
+        Extension extension = createCodingExtension(
+                "01", 
+                "Number present and verified",
+                SystemURL.CS_CC_NHS_NUMBER_VERIF,
+                SystemURL.SD_CC_EXT_NHS_NUMBER_VERIF);
+        
+        patientNhsNumber.addExtension(extension);
+        
         patient.addIdentifier(patientNhsNumber);
 
         patient.setBirthDate(patientDetails.getDateOfBirth());

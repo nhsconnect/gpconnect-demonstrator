@@ -534,12 +534,18 @@ public class AppointmentResourceProvider implements IResourceProvider {
     private Appointment appointmentDetailToAppointmentResourceConverter(AppointmentDetail appointmentDetail) {
         Appointment appointment = new Appointment();
 
-        appointment.setId(String.valueOf(appointmentDetail.getId()));
-        appointment.getMeta().setLastUpdated(appointmentDetail.getLastUpdated());
-        appointment.getMeta().setVersionId(String.valueOf(appointmentDetail.getLastUpdated().getTime()));
+        String appointmentId = String.valueOf(appointmentDetail.getId());
+        String versionId = String.valueOf(appointmentDetail.getLastUpdated().getTime());
+        String resourceType = appointment.getResourceType().toString();
+        
+        IdType id = new IdType(resourceType, appointmentId, versionId);
+                
+        appointment.setId(id);
+        appointment.getMeta().setVersionId(versionId);
+        appointment.getMeta().setLastUpdated(appointmentDetail.getLastUpdated());    
         appointment.getMeta().addProfile(SystemURL.SD_GPC_APPOINTMENT);
-        Extension extension = new Extension(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON,
-                new IdType(appointmentDetail.getCancellationReason()));
+        
+        Extension extension = new Extension(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON, new IdType(appointmentDetail.getCancellationReason()));
 
         appointment.addExtension(extension);
         Identifier identifier = new Identifier();

@@ -64,6 +64,7 @@ public class Interactions {
         put(InteractionId.REST_SEARCH_PATIENT_APPOINTMENTS, new Interaction("Patient").identifier().containedResource("Appointment").httpVerb(RequestMethod.GET));
         put(InteractionId.REST_SEARCH_PRACTITIONER, new Interaction("Practitioner").addIdentifierSystems(SystemURL.ID_SDS_USER_ID).httpVerb(RequestMethod.GET));
         put(InteractionId.REST_UPDATE_APPOINTMENT, new Interaction("Appointment").identifier().httpVerb(RequestMethod.PUT));
+        put(InteractionId.REST_CANCEL_APPOINTMENT, new Interaction("Appointment").identifier().httpVerb(RequestMethod.PUT));
     }};
 
 	public Interaction getInteraction(String interactionId) {

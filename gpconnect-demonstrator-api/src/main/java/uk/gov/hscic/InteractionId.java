@@ -41,6 +41,7 @@ public final class InteractionId {
     public static final String REST_SEARCH_PATIENT_APPOINTMENTS        = BASE + "rest:search:patient_appointments";
     public static final String REST_SEARCH_PRACTITIONER                = BASE + "rest:search:practitioner";
     public static final String REST_UPDATE_APPOINTMENT                 = BASE + "rest:update:appointment";
+    public static final String REST_CANCEL_APPOINTMENT                 = BASE + "rest:cancel:appointment";
 
     public static final List<String> IDENTIFIER_INTERACTIONS = Arrays.asList(
             REST_SEARCH_LOCATION,

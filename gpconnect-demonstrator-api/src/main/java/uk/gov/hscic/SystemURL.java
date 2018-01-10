@@ -26,21 +26,21 @@ public final class SystemURL {
 
 
     // FHIR StructureDefinition Constants
-    public static final String SD_GPC_CARERECORD_COMPOSITION = "http://fhir.nhs.net/StructureDefinition/gpconnect-carerecord-composition-1";
-    public static final String SD_GPC_OPERATIONOUTCOME = "http://fhir.nhs.net/StructureDefinition/gpconnect-operationoutcome-1";
-    public static final String SD_GPC_ORGANIZATION = "http://fhir.nhs.net/StructureDefinition/CareConnect-GPC-Organization-1";
+    public static final String SD_GPC_CARERECORD_COMPOSITION = "https://fhir.nhs.uk/StructureDefinition/gpconnect-carerecord-composition-1";
+    public static final String SD_GPC_OPERATIONOUTCOME = "https://fhir.nhs.uk/StructureDefinition/gpconnect-operationoutcome-1";
+    public static final String SD_GPC_ORGANIZATION = "https://fhir.nhs.uk/StructureDefinition/CareConnect-GPC-Organization-1";
     public static final String SD_GPC_PATIENT = "https://fhir.nhs.uk/StructureDefinition/CareConnect-GPC-Patient-1";
-    public static final String SD_GPC_PRACTITIONER = "http://fhir.nhs.net/StructureDefinition/CareConnect-GPC-Practitioner-1";
-    public static final String SD_GPC_APPOINTMENT = "http://fhir.nhs.net/StructureDefinition/gpconnect-appointment-1";
-    public static final String SD_GPC_GET_SCHEDULE_BUNDLE = "http://fhir.nhs.net/StructureDefinition/gpconnect-getschedule-bundle-1";
-    public static final String SD_GPC_LOCATION = "http://fhir.nhs.net/StructureDefinition/CareConnect-GPC-Location-1";
-    public static final String SD_GPC_SLOT = "http://fhir.nhs.net/StructureDefinition/gpconnect-slot-1";
-    public static final String SD_GPC_SCHEDULE = "http://fhir.nhs.net/StructureDefinition/gpconnect-schedule-1";
+    public static final String SD_GPC_PRACTITIONER = "https://fhir.nhs.uk/StructureDefinition/CareConnect-GPC-Practitioner-1";
+    public static final String SD_GPC_APPOINTMENT = "https://fhir.nhs.uk/StructureDefinition/gpconnect-appointment-1";
+    public static final String SD_GPC_GET_SCHEDULE_BUNDLE = "https://fhir.nhs.uk/StructureDefinition/gpconnect-getschedule-bundle-1";
+    public static final String SD_GPC_LOCATION = "https://fhir.nhs.uk/StructureDefinition/CareConnect-GPC-Location-1";
+    public static final String SD_GPC_SLOT = "https://fhir.nhs.uk/StructureDefinition/gpconnect-slot-1";
+    public static final String SD_GPC_SCHEDULE = "https://fhir.nhs.uk/StructureDefinition/gpconnect-schedule-1";
     public static final String SD_GPC_SRCHSET_BUNDLE = "https://fhir.nhs.uk/StructureDefinition/gpconnect-searchset-bundle-1";
     
     // FHIR StructureDefinition Extension
     public static final String SD_CC_EXT_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1";
-    public static final String SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1";
+    public static final String SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON = "https://fhir.nhs.uk/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1";
     public static final String SD_EXTENSION_GPC_PRACTITIONER = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1";
     public static final String SD_EXTENSION_MEDICATION_QUANTITY_TEXT = "http://fhir.nhs.net/StructureDefinition/extension-medication-quantity-text-1-0";
     public static final String SD_EXTENSION_PERSCRIPTION_REPEAT_REVIEW_DATE = "http://fhir.nhs.net/StructureDefinition/extension-prescription-repeat-review-date-1-0";
@@ -71,7 +71,7 @@ public final class SystemURL {
     // FHIR ValueSet Constants
     public static final String VS_GPC_ERROR_WARNING_CODE = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
     public static final String VS_GPC_REASON_TYPE = "http://fhir.nhs.net/ValueSet/gpconnect-reason-type-1-0";
-    public static final String VS_GPC_RECORD_SECTION = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+    public static final String VS_GPC_RECORD_SECTION = "http://fhir.nhs.uk/ValueSet/gpconnect-record-section-1";
     public static final String VS_HUMAN_LANGUAGE = "http://fhir.nhs.net/ValueSet/human-language-1";
     public static final String VS_REGISTRATION_STATUS = "http://fhir.nhs.net/ValueSet/registration-status-1";
     public static final String VS_REGISTRATION_TYPE = "http://fhir.nhs.net/ValueSet/registration-type-1";

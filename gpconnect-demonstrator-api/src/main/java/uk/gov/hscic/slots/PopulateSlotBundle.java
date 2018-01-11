@@ -56,7 +56,7 @@ public class PopulateSlotBundle {
 
         BundleEntryComponent locationEntry = new BundleEntryComponent();
         locationEntry.setResource(locations.get(0));
-        locationEntry.setFullUrl("Location/" + locations.get(0).getId());
+        locationEntry.setFullUrl("Location/" + locations.get(0).getIdElement().getIdPart());
 
         // schedules
         List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(

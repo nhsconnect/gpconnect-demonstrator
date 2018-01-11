@@ -85,6 +85,9 @@ Environment properties are defined in 'gpconnect-demonstrator-api.properties'. I
 ### Installing front end packages
 
 NOTE: There is a problem with the latest version of 'npm' so you may need to revert you npm version to '4.5.0'!
+```sh
+npm install -g npm@4.5.0
+```
 
 Install Grunt, the JavaScript task runner (you may need to be root user):
 ```sh

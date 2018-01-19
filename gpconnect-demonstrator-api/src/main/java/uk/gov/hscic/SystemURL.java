@@ -38,7 +38,7 @@ public final class SystemURL {
     public static final String SD_GPC_LOCATION = "https://fhir.nhs.net/STU3/StructureDefinition/CareConnect-GPC-Location-1";
     public static final String SD_GPC_SLOT = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Slot-1";
     public static final String SD_GPC_SCHEDULE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Schedule-1";
-    public static final String SD_GPC_SRCHSET_BUNDLE = "http://fhir.nhs.net/StructureDefinition/gpconnect-searchset-bundle-1";
+    public static final String SD_GPC_SRCHSET_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Searchset-Bundle-1";
     
     // FHIR StructureDefinition Extension
     public static final String SD_CC_EXT_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1";

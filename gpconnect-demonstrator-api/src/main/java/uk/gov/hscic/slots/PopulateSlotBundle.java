@@ -50,7 +50,7 @@ public class PopulateSlotBundle {
 
     public void populateBundle(Bundle bundle, OperationOutcome operationOutcome, Date planningHorizonStart,
             Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation) {
-        bundle.getMeta().addProfile(SystemURL.SD_GPC_GET_SCHEDULE_BUNDLE);
+        bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
 
         List<Location> locations = locationResourceProvider.getAllLocationDetails();
 

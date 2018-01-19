@@ -419,7 +419,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             if (cancelComparisonResult) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnclassifiedServerFailureException(403,
+                        new UnclassifiedServerFailureException(400,
                                 "Invalid Appointment property has been amended (cancellation)"),
                         SystemCode.BAD_REQUEST, IssueType.FORBIDDEN);
             }

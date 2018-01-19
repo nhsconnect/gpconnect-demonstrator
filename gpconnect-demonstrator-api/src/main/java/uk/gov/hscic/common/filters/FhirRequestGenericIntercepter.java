@@ -28,6 +28,7 @@ import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.MethodNotAllowedException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 import uk.gov.hscic.InteractionId;
@@ -287,6 +288,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         // if(outgoingException != null) {
         // return outgoingException;
         // }
+        
+        if (theException instanceof ResourceVersionConflictException){
+            ResourceVersionConflictException exception = (ResourceVersionConflictException) theException;
+            
+            return OperationOutcomeFactory.buildOperationOutcomeException(exception, SystemCode.FHIR_CONSTRAINT_VIOLATION, IssueType.CONFLICT);
+        }
 
         if (theException instanceof BaseServerResponseException) {
             BaseServerResponseException baseServerResponseException = (BaseServerResponseException) theException;

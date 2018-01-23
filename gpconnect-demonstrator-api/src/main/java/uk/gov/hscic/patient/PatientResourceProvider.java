@@ -745,23 +745,27 @@ public class PatientResourceProvider implements IResourceProvider {
                     IssueType.INVALID);
         }
 
-        List<HumanName> usualActiveNames = names.stream().filter(nm -> IsActiveName(nm))
-                .filter(nm -> NameUse.USUAL.equals(nm.getUse())).collect(Collectors.toList());
+        List<HumanName> activeOfficialNames = names
+                .stream()
+                .filter(nm -> IsActiveName(nm))
+                .filter(nm -> NameUse.OFFICIAL.equals(nm.getUse()))
+                .collect(Collectors.toList());
 
-        if (usualActiveNames.size() != 1) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("The patient must have one Active Name with a Use of USUAL"),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+        if (activeOfficialNames.size() != 1) {
+            InvalidRequestException exception = new InvalidRequestException("The patient must have one Active Name with a Use of OFFICIAL");
+            
+            throw OperationOutcomeFactory.buildOperationOutcomeException(exception, SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
 
-        List<String> usualFamilyNames = new ArrayList<>();
-        for (HumanName humanName : usualActiveNames) {
+        List<String> officialFamilyNames = new ArrayList<>();
+        
+        for (HumanName humanName : activeOfficialNames) {
             if (humanName.getFamily() != null) {
-                usualFamilyNames.add(humanName.getFamily());
+                officialFamilyNames.add(humanName.getFamily());
             }
         }
 
-        validateNameCount(usualFamilyNames, "family");
+        validateNameCount(officialFamilyNames, "family");
     }
 
     private void validateNameCount(List<String> names, String nameType) {
@@ -904,10 +908,16 @@ public class PatientResourceProvider implements IResourceProvider {
 
         Period pastPeriod = new Period().setStart(calendar.getTime()).setEnd(calendar.getTime());
 
-        patient.addName().setFamily("AnotherUsualFamilyName").addGiven("AnotherUsualGivenName").setUse(NameUse.USUAL)
+        patient.addName()
+                .setFamily("AnotherOfficialFamilyName")
+                .addGiven("AnotherOfficialGivenName")
+                .setUse(NameUse.OFFICIAL)
                 .setPeriod(pastPeriod);
 
-        patient.addName().setFamily("AdditionalFamily").addGiven("AdditionalGiven").setUse(NameUse.TEMP);
+        patient.addName()
+                .setFamily("AdditionalFamily")
+                .addGiven("AdditionalGiven")
+                .setUse(NameUse.TEMP);
 
         patient.addTelecom(staticElHelper.getValidTelecom());
         patient.addAddress(staticElHelper.getValidAddress());
@@ -919,7 +929,7 @@ public class PatientResourceProvider implements IResourceProvider {
     private ContactDetail getValidContact() {
 
         HumanName ctName = new HumanName();
-        ctName.setUse(NameUse.USUAL);
+        ctName.setUse(NameUse.OFFICIAL);
         ctName.setFamily("FamilyName");
 
         List<CodeableConcept> ctRelList = new ArrayList<>();
@@ -1092,7 +1102,8 @@ public class PatientResourceProvider implements IResourceProvider {
         HumanName name = new HumanName();
 
         name.setText(patientDetails.getName()).setFamily(patientDetails.getSurname())
-                .addPrefix(patientDetails.getTitle()).setUse(NameUse.USUAL);
+            .addPrefix(patientDetails.getTitle())
+            .setUse(NameUse.OFFICIAL);
 
         List<String> givenNames = patientDetails.getForenames();
 

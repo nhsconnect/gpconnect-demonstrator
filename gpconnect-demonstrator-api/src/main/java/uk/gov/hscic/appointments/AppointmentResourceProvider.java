@@ -525,10 +525,18 @@ public class AppointmentResourceProvider implements IResourceProvider {
     }
 
     private Boolean BookingOrganizationsEqual(BookingOrgDetail bookingOrg1, BookingOrgDetail bookingOrg2) {
-        Boolean equalNames = bookingOrg1.getName().equals(bookingOrg2.getName());
-        Boolean equalNumbers = bookingOrg1.getTelephone().equals(bookingOrg2.getTelephone());
-
-        return equalNames && equalNumbers;
+        if(bookingOrg1 != null && bookingOrg2 != null){
+            Boolean equalNames = bookingOrg1.getName().equals(bookingOrg2.getName());
+            Boolean equalNumbers = bookingOrg1.getTelephone().equals(bookingOrg2.getTelephone());
+            return equalNames && equalNumbers;
+        } else {
+            // One of the booking orgs is null so both should be null
+            if(bookingOrg1 == bookingOrg2){
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     private Appointment appointmentDetailToAppointmentResourceConverter(AppointmentDetail appointmentDetail) {

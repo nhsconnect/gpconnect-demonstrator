@@ -72,7 +72,7 @@ public class SlotResourceProvider implements IResourceProvider {
     @Search
     public Bundle getSlotByIds(@RequiredParam(name = "start") DateParam startDate,
             @RequiredParam(name = "end") DateParam endDate, @RequiredParam(name = "fb-type") String fbType,
-            @IncludeParam(allow = { "Slot:schedule", "Schedule:Practitioner",
+            @IncludeParam(allow = { "Slot:schedule", "Schedule:actor:Practitioner",
                     "Schedule:actor:Location" }) Set<Include> theIncludes) {
 
         Bundle bundle = new Bundle();
@@ -107,10 +107,10 @@ public class SlotResourceProvider implements IResourceProvider {
 
         for (Include include : theIncludes) {
 
-            if (include.getValue().equals("Schedule:Practitioner")) {
+            if (include.getValue().equals("Schedule.actor:Practitioner")) {
                 actorPractitioner = true;
             }
-            if (include.getValue().equals("Schedule:actor:Location")) {
+            if (include.getValue().equals("Schedule.actor:Location")) {
                 actorLocation = true;
             }
             ;

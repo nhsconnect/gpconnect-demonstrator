@@ -108,10 +108,10 @@ public class SlotResourceProvider implements IResourceProvider {
 
         for (Include include : theIncludes) {
 
-            if (include.getValue().equals("Schedule.actor:Practitioner")) {
+            if (include.getValue().equals("Schedule:actor:Practitioner")) {
                 actorPractitioner = true;
             }
-            if (include.getValue().equals("Schedule.actor:Location")) {
+            if (include.getValue().equals("Schedule:actor:Location")) {
                 actorLocation = true;
             }
             ;

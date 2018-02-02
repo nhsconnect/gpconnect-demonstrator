@@ -74,7 +74,8 @@ public class SlotResourceProvider implements IResourceProvider {
             @RequiredParam(name = "end") DateParam endDate, @RequiredParam(name = "fb-type") String fbType,
             @IncludeParam(allow = { "Slot:schedule", "Schedule:actor:Practitioner",
                     "Schedule:actor:Location" }) Set<Include> theIncludes) {
-
+    	
+    	
         Bundle bundle = new Bundle();
         boolean actorPractitioner = false;
         boolean actorLocation = false;

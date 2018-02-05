@@ -9,24 +9,25 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hl7.fhir.dstu3.model.Address;
+import org.hl7.fhir.dstu3.model.Address.AddressType;
+import org.hl7.fhir.dstu3.model.Address.AddressUse;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.ContactDetail;
+import org.hl7.fhir.dstu3.model.ContactPoint;
+import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
+import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
+import org.hl7.fhir.dstu3.model.HumanName;
+import org.hl7.fhir.dstu3.model.HumanName.NameUse;
+import org.hl7.fhir.dstu3.model.IdType;
+import org.hl7.fhir.dstu3.model.Identifier;
+import org.hl7.fhir.dstu3.model.Location;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
+import org.hl7.fhir.dstu3.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.model.dstu2.composite.AddressDt;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.composite.ContactPointDt;
-import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
-import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
-import ca.uhn.fhir.model.dstu2.resource.Location;
-import ca.uhn.fhir.model.dstu2.resource.Organization;
-import ca.uhn.fhir.model.dstu2.resource.Organization.Contact;
-import ca.uhn.fhir.model.dstu2.valueset.AddressTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.AddressUseEnum;
-import ca.uhn.fhir.model.dstu2.valueset.ContactPointSystemEnum;
-import ca.uhn.fhir.model.dstu2.valueset.ContactPointUseEnum;
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
@@ -66,7 +67,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
     }
 
     @Read(version = true)
-    public Organization getOrganizationById(@IdParam IdDt organizationId) {
+    public Organization getOrganizationById(@IdParam IdType organizationId) {
 
         OrganizationDetails organizationDetails = null;
 
@@ -78,13 +79,13 @@ public class OrganizationResourceProvider implements IResourceProvider {
             if (organizationDetails == null) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
-                        SystemCode.ORGANISATION_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
+                        SystemCode.ORGANISATION_NOT_FOUND, IssueType.INVALID);
             }
         } catch (NumberFormatException nfe) {
 
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
-                    SystemCode.ORGANISATION_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.ORGANISATION_NOT_FOUND, IssueType.INVALID);
 
         }
 
@@ -101,11 +102,11 @@ public class OrganizationResourceProvider implements IResourceProvider {
         if (StringUtils.isBlank(tokenParam.getSystem()) || StringUtils.isBlank(tokenParam.getValue())) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Missing identifier token"), SystemCode.INVALID_PARAMETER,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
-        switch (tokenParam.getSystem()) {
-        case SystemURL.ID_ODS_ORGANIZATION_CODE:
+        if (tokenParam.getSystem().equals(SystemURL.ID_ODS_ORGANIZATION_CODE)
+                || tokenParam.getSystem().equals(SystemURL.ID_ODS_OLD_ORGANIZATION_CODE)) {
             List<Organization> organizationDetails = convertOrganizaitonDetailsListToOrganizationList(
                     organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue()));
             if (organizationDetails.isEmpty()) {
@@ -137,15 +138,15 @@ public class OrganizationResourceProvider implements IResourceProvider {
             // Update startIndex if we do paging
             return count != null ? organizationDetails.subList(0, count) : organizationDetails;
 
-        default:
+        } else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Invalid system code"), SystemCode.INVALID_PARAMETER,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
+
     }
 
-    private List<Organization> convertOrganizaitonDetailsListToOrganizationList(
-            List<OrganizationDetails> organizationDetails) {
+    private List<Organization> convertOrganizaitonDetailsListToOrganizationList(List<OrganizationDetails> organizationDetails) {
         Map<String, Organization> map = new HashMap<>();
 
         for (OrganizationDetails organizationDetail : organizationDetails) {
@@ -155,14 +156,24 @@ public class OrganizationResourceProvider implements IResourceProvider {
                 continue;
             }
 
-            Organization organization = new Organization().setName(organizationDetail.getOrgName()).addIdentifier(
-                    new IdentifierDt(SystemURL.ID_ODS_ORGANIZATION_CODE, organizationDetail.getOrgCode()));
+            Identifier identifier = new Identifier()
+                    .setSystem(SystemURL.ID_ODS_ORGANIZATION_CODE)
+                    .setValue(organizationDetail.getOrgCode());
+            
+            Organization organization = new Organization()
+                    .setName(organizationDetail.getOrgName())
+                    .addIdentifier(identifier);
 
-            organization.setId(String.valueOf(organizationDetail.getId()));
+            String resourceId = String.valueOf(organizationDetail.getId());
+            String versionId = String.valueOf(organizationDetail.getLastUpdated().getTime());
+            String resourceType = organization.getResourceType().toString();
 
-            organization.getMeta().addProfile(SystemURL.SD_GPC_ORGANIZATION)
-                    .setLastUpdated(organizationDetail.getLastUpdated())
-                    .setVersionId(String.valueOf(organizationDetail.getLastUpdated().getTime()));
+            IdType id = new IdType(resourceType, resourceId, versionId);
+
+            organization.setId(id);
+            organization.getMeta().setVersionId(versionId);
+            organization.getMeta().setLastUpdated(organizationDetail.getLastUpdated());            
+            organization.getMeta().addProfile(SystemURL.SD_GPC_ORGANIZATION);         
 
             organization = addAdditionalProperties(organization);
 
@@ -177,56 +188,57 @@ public class OrganizationResourceProvider implements IResourceProvider {
     // Test Suite
     private Organization addAdditionalProperties(Organization organization) {
 
-        CodingDt orgTypeCode = new CodingDt();
+        Coding orgTypeCode = new Coding();
         orgTypeCode.setCode("dept");
         orgTypeCode.setDisplay("Hospital Department");
         orgTypeCode.setSystem(SystemURL.VS_CC_ORGANISATION_TYPE);
 
         organization.addTelecom(getValidTelecom());
         organization.addAddress(getValidAddress());
-        organization.addContact(getValidContact());
+        // organization.addContact(getValidContact());
 
-        CodeableConceptDt orgType = new CodeableConceptDt();
+        CodeableConcept orgType = new CodeableConcept();
         orgType.addCoding(orgTypeCode);
-        organization.setType(orgType);
+        organization.addType(orgType);
 
-        organization.addUndeclaredExtension(false, SystemURL.SD_EXTENSION_CC_MAIN_LOCATION);
+        organization.addExtension().setUrl(SystemURL.SD_EXTENSION_CC_MAIN_LOCATION);
 
         return organization;
     }
 
-    private ContactPointDt getValidTelecom() {
+    private ContactPoint getValidTelecom() {
 
-        ContactPointDt orgTelCom = new ContactPointDt();
-        orgTelCom.addUndeclaredExtension(false, "testurl");
-        orgTelCom.setSystem(ContactPointSystemEnum.PHONE);
-        orgTelCom.setUse(ContactPointUseEnum.WORK);
+        ContactPoint orgTelCom = new ContactPoint();
+        orgTelCom.addExtension().setUrl("testUrl");
+        orgTelCom.setSystem(ContactPointSystem.PHONE);
+        orgTelCom.setUse(ContactPointUse.WORK);
 
         return orgTelCom;
     }
 
-    private AddressDt getValidAddress() {
+    private Address getValidAddress() {
 
-        AddressDt orgAddress = new AddressDt();
-        orgAddress.setType(AddressTypeEnum.PHYSICAL);
-        orgAddress.setUse(AddressUseEnum.WORK);
+        Address orgAddress = new Address();
+        orgAddress.setType(AddressType.PHYSICAL);
+        orgAddress.setUse(AddressUse.WORK);
 
         return orgAddress;
     }
 
-    private Contact getValidContact() {
+    private ContactDetail getValidContact() {
 
-        HumanNameDt orgCtName = new HumanNameDt();
-        orgCtName.setUse(NameUseEnum.USUAL);
-        orgCtName.addFamily("FamilyName");
+        HumanName orgCtName = new HumanName();
+        orgCtName.setUse(NameUse.USUAL);
+        orgCtName.setFamily("FamilyName");
+        Coding coding = new Coding().setSystem(SystemURL.VS_CC_ORG_CT_ENTITYTYPE).setDisplay("ADMIN");
+        CodeableConcept orgCtPurpose = new CodeableConcept().addCoding(coding);
 
-        CodeableConceptDt orgCtPurpose = new CodeableConceptDt(SystemURL.VS_CC_ORG_CT_ENTITYTYPE, "ADMIN");
+        ContactDetail orgContact = new ContactDetail();
 
-        Contact orgContact = new Contact();
-        orgContact.setName(orgCtName);
+        orgContact.setNameElement(orgCtName.getFamilyElement());
         orgContact.addTelecom(getValidTelecom());
-        orgContact.setAddress(getValidAddress());
-        orgContact.setPurpose(orgCtPurpose);
+        // orgContact.setAddress(getValidAddress());
+        // orgContact.setPurpose(orgCtPurpose);
 
         return orgContact;
     }

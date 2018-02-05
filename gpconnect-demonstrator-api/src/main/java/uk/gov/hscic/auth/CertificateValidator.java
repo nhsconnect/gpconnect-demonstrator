@@ -1,6 +1,6 @@
 package uk.gov.hscic.auth;
 
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -14,6 +14,8 @@ import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.servlet.http.HttpServletRequest;
+
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.springframework.http.HttpMethod;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
@@ -65,7 +67,7 @@ public final class CertificateValidator {
 
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnclassifiedServerFailureException(certificateException.getStatusCode(), warningMsg),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.FORBIDDEN);
+                    SystemCode.BAD_REQUEST, IssueType.FORBIDDEN);
         } catch (InvalidNameException ex) {
             java.util.logging.Logger.getLogger(CertificateValidator.class.getName()).log(Level.SEVERE, null, ex);
         }

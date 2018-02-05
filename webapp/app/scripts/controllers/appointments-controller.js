@@ -130,7 +130,7 @@ angular.module('gpConnect')
                             if(response.data == undefined || response.data == null){
                                 $scope.practitionerName = "[Lookup failed]";
                             } else {
-                                $scope.practitionerName = response.data.name.prefix[0] + " " + response.data.name.given[0] + " " + response.data.name.family[0];
+                                $scope.practitionerName = response.data.name[0].prefix[0] + " " + response.data.name[0].given[0] + " " + response.data.name[0].family;
                             }
                         },
                         function (failedResponse) {

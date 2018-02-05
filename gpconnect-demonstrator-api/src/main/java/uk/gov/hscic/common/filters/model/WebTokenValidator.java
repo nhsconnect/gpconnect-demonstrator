@@ -1,11 +1,12 @@
 package uk.gov.hscic.common.filters.model;
 
-import ca.uhn.fhir.model.dstu2.resource.Organization;
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import java.util.Arrays;
 import java.util.List;
+
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
+
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -23,19 +24,19 @@ public class WebTokenValidator {
         if (!(webToken.getRequestingPractitioner().getId().equals(webToken.getSub()))) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Practitioner ids do not match!"), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if (!PERMITTED_REQUESTED_SCOPES.contains(webToken.getRequestedScope())) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Bad Request Exception"), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
-        if (!SystemURL.AUTHORIZATION_TOKEN.equals(webToken.getAud())) {
+        if (!SystemURL.AUTHORIZATION_TOKEN.equals(webToken.getAud()) ) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Bad Request Exception"), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
     }
 
@@ -62,7 +63,7 @@ public class WebTokenValidator {
         if (null == object) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("JSON entry incomplete."), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
     }
 
@@ -74,14 +75,14 @@ public class WebTokenValidator {
         if (timeValidationIdentifierInt > (System.currentTimeMillis() / 1000) + futureRequestLeeway) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Creation time is in the future"), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         // Checking the expiry time is 5 minutes after creation
         if (webToken.getExp() - timeValidationIdentifierInt != 300) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Request time expired"), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
     }
 
@@ -90,7 +91,7 @@ public class WebTokenValidator {
         if (!"directcare".equals(webToken.getReasonForRequest())) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Reason for request is not directcare"), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         RequestingDevice requestingDevice = webToken.getRequestingDevice();
@@ -98,7 +99,7 @@ public class WebTokenValidator {
         if (null == requestingDevice) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("No requesting_device"), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         String deviceType = requestingDevice.getResourceType();
@@ -109,7 +110,7 @@ public class WebTokenValidator {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException("Invalid resource type"), 
                     SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT
+                    IssueType.INVALID
             );
         }
         
@@ -117,21 +118,21 @@ public class WebTokenValidator {
                 && !webToken.getRequestedScope().matches("patient/\\*\\.(read|write)")) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Invalid Patient requested scope"), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if ("Organization".equals(webToken.getRequestedRecord().getResourceType())
                 && !webToken.getRequestedScope().matches("organization/\\*\\.(read|write)")) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Invalid Organization requested scope"), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if ("Slot".equals(webToken.getRequestedRecord().getResourceType())
                 && !webToken.getRequestedScope().matches("slot/\\*\\.(read|write)")) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Invalid Slot requested scope"), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }     
     }   
 }

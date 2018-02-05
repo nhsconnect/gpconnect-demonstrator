@@ -55,19 +55,19 @@
         <div class="col-md-12 testConfigField">
             <label class="col-md-2" for="requesting_practitioner">requesting_practitioner</label>
             <label class="col-md-4">(FHIR resource, Practitioner making request) : </label>
-            <input class="col-md-5" type="text" id="requesting_practitioner" ng-model="jwtRequesting_practitioner" placeholder='{ "resourceType": "Practitioner", "id": "1", "practitionerRole": [{"role": {"coding": [{"system": "http://fhir.nhs.net/ValueSet/sds-job-role-name-1", "code": "AssuranceJobRole"}]}}]}, "identifier": [{ "system": "http://fhir.nhs.net/sds-user-id", "value": "G13579135" }, { "system": "localSystem", "value": "1" }], "name": { "family": ["Demonstrator"], "given": ["GPConnect"], "prefix": ["Mr"] } }'>
+            <input class="col-md-5" type="text" id="requesting_practitioner" ng-model="jwtRequesting_practitioner" placeholder='{ "resourceType": "Practitioner", "id": "1", "identifier": [{ "system": "https://fhir.nhs.uk/Id/sds-user-id", "value": "G13579135" }, { "system": "localSystem", "value": "1" }], "name": [{ "family": ["Demonstrator"], "given": ["GPConnect"], "prefix": ["Mr"] }] }'>
         </div>
 
         <div class="col-md-12 testConfigField">
             <label class="col-md-2" for="requesting_organization">requesting_organization</label>
             <label class="col-md-4">(FHIR resource, Organisation making request) : </label>
-            <input class="col-md-5" type="text" id="requesting_organization" ng-model="jwtRequesting_organization" placeholder='{ "resourceType": "Organization", "id": "1", "identifier": [{ "system": "http://fhir.nhs.net/Id/ods-organization-code", "value": "[ODSCode]" }], "name": "GP Connect Demonstrator" }'>
+            <input class="col-md-5" type="text" id="requesting_organization" ng-model="jwtRequesting_organization" placeholder='{ "resourceType": "Organization", "id": "1", "identifier": [{ "system": "https://fhir.nhs.uk/Id/ods-organization-code", "value": "[ODSCode]" }]}'>
         </div>
 
         <div class="col-md-12 testConfigField">
             <label class="col-md-2" for="requesting_device">requesting_device</label>
             <label class="col-md-4">(FHIR resource, device making request) : </label>
-            <input class="col-md-5" type="text" id="requesting_device" ng-model="jwtRequesting_device" placeholder='{ "resourceType": "Device", "id": "1", "identifier": [{ "system": "Web Interface", "value": "GP Connect Demonstrator" }], "model": "Demonstrator", "version": "1.0" }'>
+            <input class="col-md-5" type="text" id="requesting_device" ng-model="jwtRequesting_device" placeholder='{ "resourceType": "Device", "id": "1", "identifier": [{ "system": "Web Interface", "value": "GP Connect Demonstrator" }],"type": {"coding": [{"system": "DeviceIdentifierSystem","code": "DeviceIdentifier"}]},"model": "v1","version": "1.1" }'>
         </div>
 
         <div class="col-md-12 testConfigField">

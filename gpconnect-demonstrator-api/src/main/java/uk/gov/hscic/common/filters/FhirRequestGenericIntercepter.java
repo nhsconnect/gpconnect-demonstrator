@@ -15,19 +15,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.parser.DataFormatException;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.MethodNotAllowedException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 import uk.gov.hscic.InteractionId;
@@ -137,22 +138,22 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private static void throwBadRequestException(String exceptionMessage) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(exceptionMessage),
-                SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                SystemCode.BAD_REQUEST, IssueType.INVALID);
     }
 
     private static void throwInvalidIdentifierSystemException(String exceptionMessage) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(exceptionMessage),
-                SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueTypeEnum.INVALID_CONTENT);
+                SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueType.INVALID);
     }
 
     private static void throwInvalidRequestException(String exceptionMessage) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(exceptionMessage),
-                SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
     }
 
     private static void throwUnprocessableEntityException(String exceptionMessage) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(exceptionMessage),
-                SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
     }
 
     private static void throwResourceNotFoundException(String exceptionMessage, String resource) {
@@ -176,7 +177,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(exceptionMessage),
-                systemCode, IssueTypeEnum.INVALID_CONTENT);
+                systemCode, IssueType.INVALID);
     }
 
     /**
@@ -204,81 +205,81 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                 && theException.getMessage().contains("Invalid attribute value")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()), SystemCode.INVALID_PARAMETER,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if (theException instanceof InvalidRequestException
                 && theException.getMessage().contains("Unknown resource in URI")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException(theException.getMessage()), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if (theException instanceof InvalidRequestException && theException.getMessage()
                 .contains("Can not have multiple date range parameters for the same param ")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()), SystemCode.INVALID_PARAMETER,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if (theException instanceof DataFormatException) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()), SystemCode.INVALID_PARAMETER,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if (theException instanceof MethodNotAllowedException
                 && theException.getMessage().contains("request must use HTTP GET")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if (theException instanceof InvalidRequestException
                 && theException.getMessage().equals("Failed to parse request body as JSON resource. Error was: ")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(theException.getMessage()), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if (theException instanceof InvalidRequestException
                 && theException.getMessage().startsWith("Invalid request: ")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(theException.getMessage()), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if (theException instanceof InvalidRequestException
                 && theException.getMessage().contains("non-repeatable parameter")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(theException.getMessage()), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if (theException instanceof InvalidRequestException && theException.getMessage().contains("header blank")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(theException.getMessage()), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if (theException instanceof InvalidRequestException
                 && theException.getMessage().contains("InvalidResourceType")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()), SystemCode.INVALID_RESOURCE,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if (theException instanceof InvalidRequestException
                 && theException.getMessage().contains("Can not create resource with ID")) {
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()), SystemCode.BAD_REQUEST,
-                    IssueTypeEnum.INVALID_CONTENT);
+                    IssueType.INVALID);
         }
 
         if (theException instanceof ResourceNotFoundException
                 && theException.getMessage().contains("Unknown resource type")) {
             return OperationOutcomeFactory.buildOperationOutcomeException((ResourceNotFoundException) theException,
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
 
         // BaseServerResponseException outgoingException =
@@ -287,6 +288,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         // if(outgoingException != null) {
         // return outgoingException;
         // }
+        
+        if (theException instanceof ResourceVersionConflictException){
+            ResourceVersionConflictException exception = (ResourceVersionConflictException) theException;
+            
+            return OperationOutcomeFactory.buildOperationOutcomeException(exception, SystemCode.FHIR_CONSTRAINT_VIOLATION, IssueType.CONFLICT);
+        }
 
         if (theException instanceof BaseServerResponseException) {
             BaseServerResponseException baseServerResponseException = (BaseServerResponseException) theException;
@@ -294,14 +301,14 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             // If the OperationalOutcome is already set, just return it.
             return null == baseServerResponseException.getOperationOutcome()
                     ? OperationOutcomeFactory.buildOperationOutcomeException(baseServerResponseException,
-                            SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT)
+                            SystemCode.BAD_REQUEST, IssueType.INVALID)
                     : baseServerResponseException;
         }
 
         // Default catch all.
         return OperationOutcomeFactory.buildOperationOutcomeException(
                 new InvalidRequestException(theException.getMessage()), SystemCode.BAD_REQUEST,
-                IssueTypeEnum.INVALID_CONTENT);
+                IssueType.INVALID);
     }
 
     private void validateURIAgainstInteraction(Interaction interaction, String requestURI) {

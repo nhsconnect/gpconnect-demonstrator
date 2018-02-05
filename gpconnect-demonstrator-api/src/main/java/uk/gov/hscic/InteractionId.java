@@ -30,17 +30,19 @@ public final class InteractionId {
     public static final String REST_CREATE_ORDER                       = BASE + "rest:create:order";
     public static final String REST_READ_APPOINTMENT                   = BASE + "rest:read:appointment";
     public static final String REST_READ_LOCATION                      = BASE + "rest:read:location";
-    public static final String REST_READ_METADATA                      = BASE + "rest:read:metadata";
+    public static final String REST_READ_METADATA                      = BASE + "rest:read:metadata-1";
     public static final String REST_READ_ORGANIZATION                  = BASE + "rest:read:organization";
+    public static final String REST_READ_ORGANIZATION_OLD              = BASE + "rest:read:organization";
     public static final String REST_READ_PATIENT                       = BASE + "rest:read:patient";
     public static final String REST_READ_PRACTITIONER                  = BASE + "rest:read:practitioner";
     public static final String REST_SEARCH_SLOT                        = BASE + "rest:search:slot";
     public static final String REST_SEARCH_LOCATION                    = BASE + "rest:search:location";
     public static final String REST_SEARCH_ORGANIZATION                = BASE + "rest:search:organization";
+    public static final String REST_SEARCH_ORGANIZATION_OLD            = BASE + "rest:search:organization";
     public static final String REST_SEARCH_PATIENT                     = BASE + "rest:search:patient";
     public static final String REST_SEARCH_PATIENT_APPOINTMENTS        = BASE + "rest:search:patient_appointments";
     public static final String REST_SEARCH_PRACTITIONER                = BASE + "rest:search:practitioner";
-    public static final String REST_UPDATE_APPOINTMENT                 = BASE + "rest:update:appointment";
+    public static final String REST_UPDATE_APPOINTMENT                 = BASE + "rest:update:appointment";   
     public static final String REST_CANCEL_APPOINTMENT                 = BASE + "rest:cancel:appointment";
 
     public static final List<String> IDENTIFIER_INTERACTIONS = Arrays.asList(
@@ -49,4 +51,5 @@ public final class InteractionId {
             REST_SEARCH_PATIENT,
             REST_SEARCH_PRACTITIONER
             );
+
 }

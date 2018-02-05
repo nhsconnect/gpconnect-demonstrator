@@ -3,6 +3,7 @@ package uk.gov.hscic.model.appointment;
 import java.util.Date;
 import java.util.List;
 
+
 public class AppointmentDetail {
     private String cancellationReason;
     private String comment;
@@ -25,7 +26,7 @@ public class AppointmentDetail {
     private String typeDisplay;
     private BookingOrgDetail bookingOrganization;
     private Date created;
-    
+
     public String getReasonURL() {
         return reasonURL;
     }
@@ -55,19 +56,22 @@ public class AppointmentDetail {
     public Long getId() {
         return id;
     }
+
     public Date getLastUpdated() {
         return lastUpdated;
     }
+
     public Long getLocationId() {
         return locationId;
     }
+
     public Integer getMinutesDuration() {
         return minutesDuration;
     }
+
     public Long getPatientId() {
         return patientId;
     }
-    
 
     public Long getPractitionerId() {
         return practitionerId;
@@ -76,7 +80,6 @@ public class AppointmentDetail {
     public Integer getPriority() {
         return priority;
     }
-    
 
     public String getReasonCode() {
         return reasonCode;
@@ -85,8 +88,6 @@ public class AppointmentDetail {
     public String getReasonDisplay() {
         return reasonDisplay;
     }
-
-
 
     public List<Long> getSlotIds() {
         return slotIds;
@@ -111,13 +112,9 @@ public class AppointmentDetail {
     public String getTypeText() {
         return typeText;
     }
-    
+
     public BookingOrgDetail getBookingOrganization() {
         return bookingOrganization;
-    }
-    
-    public Date getCreated() {
-        return created;
     }
 
     public void setCancellationReason(String cancellationReason) {
@@ -195,12 +192,18 @@ public class AppointmentDetail {
     public void setTypeText(String typeText) {
         this.typeText = typeText;
     }
-      
+
     public void setBookingOrganization(BookingOrgDetail bookingOrganization) {
         this.bookingOrganization = bookingOrganization;
     }
-    
-    public void setCreated(Date created){
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
         this.created = created;
     }
+
+
 }

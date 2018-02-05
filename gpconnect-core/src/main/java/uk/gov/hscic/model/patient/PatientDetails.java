@@ -4,10 +4,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.hl7.fhir.dstu3.model.Type;
+
 public class PatientDetails {
     private String address;
     private Date dateOfBirth;
     private Date deceased;
+  
+
     private String forename;
     private String gender;
     private String gpDetails;
@@ -16,7 +20,7 @@ public class PatientDetails {
     private Date lastUpdated;
     private String managingOrganization;
     private String maritalStatus;
-    private boolean multipleBirth;
+    private Type multipleBirth;
     private String name;
     private String nhsNumber;
     private String pasNumber;
@@ -36,9 +40,15 @@ public class PatientDetails {
         return dateOfBirth;
     }
 
+   
+
     public Date getDeceased() {
-		return deceased;
-	}
+        return deceased;
+    }
+
+    public void setDeceased(Date deceased) {
+        this.deceased = deceased;
+    }
 
     public String getForename() {
         return forename;
@@ -120,7 +130,7 @@ public class PatientDetails {
 		return this.deceased != null;
 	}
 
-    public boolean isMultipleBirth() {
+    public Type isMultipleBirth() {
 		return multipleBirth;
 	}
 
@@ -132,9 +142,7 @@ public class PatientDetails {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public void setDeceased(Date deceased) {
-		this.deceased = deceased;
-	}
+
 
     public void setForename(String forename) {
         this.forename = forename;
@@ -168,8 +176,8 @@ public class PatientDetails {
         this.maritalStatus = maritalStatus;
     }
 
-	public void setMultipleBirth(boolean multipleBirth) {
-		this.multipleBirth = multipleBirth;
+	public void setMultipleBirth(Type string) {
+		this.multipleBirth = string;
 	}
 
 	public void setName(String name) {

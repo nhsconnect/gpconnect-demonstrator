@@ -1,11 +1,13 @@
 package uk.gov.hscic.medications;
 
+import org.hl7.fhir.dstu3.model.IdType;
+import org.hl7.fhir.dstu3.model.Medication;
+import org.hl7.fhir.dstu3.model.OperationOutcome;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.model.dstu2.resource.Medication;
-import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
-import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
+
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
@@ -24,20 +26,27 @@ public class MedicationResourceProvider implements IResourceProvider {
     }
 
     @Read()
-    public Medication getMedicationById(@IdParam IdDt medicationId) {
+    public Medication getMedicationById(@IdParam IdType medicationId) {
         MedicationEntity medicationEntity = medicationRepository.findOne(medicationId.getIdPartAsLong());
 
         if (medicationEntity == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No medication details found for ID: " + medicationId.getIdPart());
+            operationalOutcome.addIssue().setSeverity(IssueSeverity.ERROR).setDiagnostics("No medication details found for ID: " + medicationId.getIdPart());
             throw new InternalErrorException("No medication details found for ID: " + medicationId.getIdPart(), operationalOutcome);
         }
 
         Medication medication = new Medication();
-        medication.setId(String.valueOf(medicationEntity.getId()));
-        medication.getMeta().setLastUpdated(medicationEntity.getLastUpdated());
-        medication.getMeta().setVersionId(String.valueOf(medicationEntity.getLastUpdated().getTime()));
 
+        String resourceId = String.valueOf(medicationEntity.getId());
+        String versionId = String.valueOf(medicationEntity.getLastUpdated().getTime());
+        String resourceType = medication.getResourceType().toString();
+
+        IdType id = new IdType(resourceType, resourceId, versionId);
+
+        medication.setId(id);
+        medication.getMeta().setVersionId(versionId);
+        medication.getMeta().setLastUpdated(medicationEntity.getLastUpdated());   
+                
         return medication;
     }
 }

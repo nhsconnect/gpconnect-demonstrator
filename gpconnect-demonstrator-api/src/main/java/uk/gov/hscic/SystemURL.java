@@ -17,30 +17,32 @@ public final class SystemURL {
     public static final String ID_GPC_SCHEDULE_IDENTIFIER = "https://fhir.nhs.uk/Id/gpconnect-schedule-identifier";
     public static final String ID_NHS_NUMBER = "https://fhir.nhs.uk/Id/nhs-number";
     public static final String ID_ODS_ORGANIZATION_CODE = "https://fhir.nhs.uk/Id/ods-organization-code";
+    public static final String ID_ODS_OLD_ORGANIZATION_CODE = "http://fhir.nhs.net/Id/ods-organization-code";
     public static final String ID_ODS_SITE_CODE = "https://fhir.nhs.uk/Id/ods-site-code";
     public static final String ID_LOCAL_LOCATION_IDENTIFIER = "https://fhir.nhs.uk/Id/local-location-identifier";
     public static final String ID_LOCAL_PATIENT_IDENTIFIER = "https://fhir.nhs.uk/Id/local-patient-identifier";
     public static final String ID_SDS_ROLE_PROFILE_ID = "https://fhir.nhs.uk/Id/sds-role-profile-id";
     public static final String ID_SDS_USER_ID = "https://fhir.nhs.uk/Id/sds-user-id";
     public static final String ID_MARITAL_STATUS = "http://fhir.nhs.net/ValueSet/marital-status-1";
+    
 
 
     // FHIR StructureDefinition Constants
-    public static final String SD_GPC_CARERECORD_COMPOSITION = "https://fhir.nhs.uk/StructureDefinition/gpconnect-carerecord-composition-1";
-    public static final String SD_GPC_OPERATIONOUTCOME = "https://fhir.nhs.uk/StructureDefinition/gpconnect-operationoutcome-1";
-    public static final String SD_GPC_ORGANIZATION = "https://fhir.nhs.uk/StructureDefinition/CareConnect-GPC-Organization-1";
-    public static final String SD_GPC_PATIENT = "https://fhir.nhs.uk/StructureDefinition/CareConnect-GPC-Patient-1";
-    public static final String SD_GPC_PRACTITIONER = "https://fhir.nhs.uk/StructureDefinition/CareConnect-GPC-Practitioner-1";
-    public static final String SD_GPC_APPOINTMENT = "https://fhir.nhs.uk/StructureDefinition/gpconnect-appointment-1";
-    public static final String SD_GPC_GET_SCHEDULE_BUNDLE = "https://fhir.nhs.uk/StructureDefinition/gpconnect-getschedule-bundle-1";
-    public static final String SD_GPC_LOCATION = "https://fhir.nhs.uk/StructureDefinition/CareConnect-GPC-Location-1";
-    public static final String SD_GPC_SLOT = "https://fhir.nhs.uk/StructureDefinition/gpconnect-slot-1";
-    public static final String SD_GPC_SCHEDULE = "https://fhir.nhs.uk/StructureDefinition/gpconnect-schedule-1";
-    public static final String SD_GPC_SRCHSET_BUNDLE = "https://fhir.nhs.uk/StructureDefinition/gpconnect-searchset-bundle-1";
+    public static final String SD_GPC_CARERECORD_COMPOSITION = "http://fhir.nhs.net/StructureDefinition/gpconnect-carerecord-composition-1";
+    public static final String SD_GPC_OPERATIONOUTCOME = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-OperationOutcome-1";
+    public static final String SD_GPC_ORGANIZATION = "https://fhir.nhs.net/STU3/StructureDefinition/CareConnect-GPC-Organization-1";
+    public static final String SD_GPC_PATIENT = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Patient-1";
+    public static final String SD_GPC_PRACTITIONER = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1";
+    public static final String SD_GPC_APPOINTMENT = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Appointment-1";
+    public static final String SD_GPC_GET_SCHEDULE_BUNDLE = "http://fhir.nhs.net/StructureDefinition/gpconnect-getschedule-bundle-1";
+    public static final String SD_GPC_LOCATION = "https://fhir.nhs.net/STU3/StructureDefinition/CareConnect-GPC-Location-1";
+    public static final String SD_GPC_SLOT = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Slot-1";
+    public static final String SD_GPC_SCHEDULE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Schedule-1";
+    public static final String SD_GPC_SRCHSET_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Searchset-Bundle-1";
     
     // FHIR StructureDefinition Extension
-    public static final String SD_CC_EXT_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1";
-    public static final String SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON = "https://fhir.nhs.uk/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1";
+    public static final String SD_CC_EXT_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1";
+    public static final String SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-AppointmentCancellationReason-1";
     public static final String SD_EXTENSION_GPC_PRACTITIONER = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1";
     public static final String SD_EXTENSION_MEDICATION_QUANTITY_TEXT = "http://fhir.nhs.net/StructureDefinition/extension-medication-quantity-text-1-0";
     public static final String SD_EXTENSION_PERSCRIPTION_REPEAT_REVIEW_DATE = "http://fhir.nhs.net/StructureDefinition/extension-prescription-repeat-review-date-1-0";
@@ -50,28 +52,28 @@ public final class SystemURL {
     public static final String SD_CC_EXT_REGISTRATION_PERIOD = "registrationPeriod";
     public static final String SD_CC_EXT_REGISTRATION_STATUS = "registrationStatus";
     public static final String SD_CC_EXT_REGISTRATION_TYPE = "registrationType";
-    public static final String SD_CC_EXT_ETHNIC_CATEGORY = "https://fhir.nhs.uk/StructureDefinition/Extension-CareConnect-GPC-EthnicCategory-1";
-    public static final String SD_EXTENSION_CC_MAIN_LOCATION = "https://fhir.hl7.org.uk/StructureDefinition/Extension-CareConnect-GPC-MainLocation-1";
-    public static final String SD_EXTENSION_CC_REG_DETAILS = "https://fhir.nhs.uk/StructureDefinition/Extension-CareConnect-GPC-RegistrationDetails-1";
+    public static final String SD_CC_EXT_ETHNIC_CATEGORY = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-EthnicCategory-1";
+    public static final String SD_EXTENSION_CC_MAIN_LOCATION = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MainLocation-1";
+    public static final String SD_EXTENSION_CC_REG_DETAILS = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-RegistrationDetails-1";
     public static final String SD_EXTENSION_CC_ORG_PERIOD = "http://hl7.org/fhir/StructureDefinition/organization-period";
-    public static final String SD_CC_EXT_RELIGIOUS_AFFILI = "https://fhir.nhs.uk/StructureDefinition/Extension-CareConnect-GPC-ReligiousAffiliation-1";   
+    public static final String SD_CC_EXT_RELIGIOUS_AFFILI = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ReligiousAffiliation-1";   
     public static final String SD_PATIENT_CADAVERIC_DON = "http://hl7.org/fhir/StructureDefinition/patient-cadavericDonor";   
-    public static final String SD_CC_EXT_RESIDENTIAL_STATUS = "https://fhir.nhs.uk/StructureDefinition/Extension-CareConnect-GPC-ResidentialStatus-1";   
-    public static final String SD_CC_EXT_TREATMENT_CAT = "https://fhir.nhs.uk/StructureDefinition/Extension-CareConnect-GPC-TreatmentCategory-1";   
-    public static final String SD_CC_EXT_NHS_COMMUNICATION = "https://fhir.nhs.uk/StructureDefinition/Extension-CareConnect-GPC-NHSCommunication-1";   
+    public static final String SD_CC_EXT_RESIDENTIAL_STATUS = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ResidentialStatus-1";   
+    public static final String SD_CC_EXT_TREATMENT_CAT = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-TreatmentCategory-1";   
+    public static final String SD_CC_EXT_NHS_COMMUNICATION = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSCommunication-1";   
     public static final String SD_CC_EXT_COMM_LANGUAGE = "Language";   
     public static final String SD_CC_COMM_PREFERRED = "Preferred";   
     public static final String SD_CC_MODE_OF_COMM = "modeOfCommunication";   
     public static final String SD_CC_COMM_PROFICIENCY = "communicationProficiency";   
     public static final String SD_CC_INTERPRETER_REQUIRED = "interpreterRequired";   
-    public static final String SD_CC_APPOINTMENT_BOOKINGORG = "https://fhir.nhs.uk/StructureDefinition/extension-gpconnect-booking-organisation-1";   
+    public static final String SD_CC_APPOINTMENT_BOOKINGORG = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-BookingOrganisation-1";   
     public static final String SD_CC_APPOINTMENT_CREATED = "https://fhir.nhs.uk/StructureDefinition/extension-gpconnect-appointment-created-1";   
     
 
     // FHIR ValueSet Constants
-    public static final String VS_GPC_ERROR_WARNING_CODE = "http://fhir.nhs.net/ValueSet/gpconnect-error-or-warning-code-1";
+    public static final String VS_GPC_ERROR_WARNING_CODE = "https://fhir.nhs.uk/STU3/ValueSet/Spine-ErrorOrWarningCode-1";
     public static final String VS_GPC_REASON_TYPE = "http://fhir.nhs.net/ValueSet/gpconnect-reason-type-1-0";
-    public static final String VS_GPC_RECORD_SECTION = "http://fhir.nhs.uk/ValueSet/gpconnect-record-section-1";
+    public static final String VS_GPC_RECORD_SECTION = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
     public static final String VS_HUMAN_LANGUAGE = "http://fhir.nhs.net/ValueSet/human-language-1";
     public static final String VS_REGISTRATION_STATUS = "http://fhir.nhs.net/ValueSet/registration-status-1";
     public static final String VS_REGISTRATION_TYPE = "http://fhir.nhs.net/ValueSet/registration-type-1";
@@ -93,7 +95,7 @@ public final class SystemURL {
     
     // FHIR CodeSystem Constants
     public static final String CS_REGISTRATION_STATUS = "https://fhir.nhs.uk/CareConnect-RegistrationStatus-1";
-    public static final String CS_REGISTRATION_TYPE = "https://fhir.nhs.uk/CareConnect-RegistrationType-1";
+    public static final String CS_REGISTRATION_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-RegistrationType-1";
     public static final String CS_CC_ETHNIC_CATEGORY = "https://fhir.nhs.uk/CareConnect-EthnicCategory-1";
     public static final String CS_CC_RELIGIOUS_AFFILI = "https://fhir.nhs.uk/CareConnect-ReligiousAffiliation-1";
     public static final String CS_CC_RESIDENTIAL_STATUS = "https://fhir.nhs.uk/CareConnect-ResidentialStatus-1";

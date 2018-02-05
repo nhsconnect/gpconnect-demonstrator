@@ -17,26 +17,16 @@ angular.module('gpConnect')
             $scope.appointmentCreate = {};
             $scope.appointmentCreate.resourceType = "Appointment";
             $scope.appointmentCreate.status = "booked";
-            $scope.appointmentCreate.type = {
-                "coding": [
-                    {
-                        "system": gpcResource.getConst("VS_C80_PRACTICE_CODES"),
-                        "code": appointmentBookingParams.typeCode,
-                        "display": appointmentBookingParams.type
-                    }
-                ],
-                "text": appointmentBookingParams.type
-            };
-            $scope.appointmentCreate.reason = {
+            
+            $scope.appointmentCreate.reason = [{
                 "coding": [
                     {
                         "system": gpcResource.getConst("VS_SNOMED_SCT"),
                         "code": "00001",
                         "display": "Default Appointment Type"
                     }
-                ],
-                "text": "Generic Booking"
-            };
+                ]
+            }];
            
             $scope.appointmentCreate.start = appointmentBookingParams.startTime;
             $scope.appointmentCreate.end = appointmentBookingParams.endTime;

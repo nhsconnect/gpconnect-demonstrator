@@ -1,9 +1,6 @@
 package uk.gov.hscic.common.validators;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.resource.ValueSet;
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.parser.DataFormatException;
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
@@ -23,6 +20,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
+import org.hl7.fhir.dstu3.model.ValueSet;
+import org.hl7.fhir.dstu3.model.ValueSet.ConceptSetComponent;
+import org.hl7.fhir.dstu3.model.ValueSet.ValueSetComposeComponent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
@@ -98,7 +100,7 @@ public class ValueSetValidator {
                
         if (xmlContent != null) {
             try {
-                FhirContext fhirCtx = FhirContext.forDstu2();
+                FhirContext fhirCtx = FhirContext.forDstu3();
                 IParser parser = fhirCtx.newXmlParser();
                 valSet =  parser.parseResource(ValueSet.class, xmlContent);
 
@@ -110,7 +112,7 @@ public class ValueSetValidator {
         if(valSet == null){
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(String.format("Could not find or parse Value Set [SystemUrl: %s] at: %s. See system log for details.", systemUrl, valueSetFilename)),
-                    SystemCode.REFERENCE_NOT_FOUND, IssueTypeEnum.NOT_FOUND); 
+                    SystemCode.REFERENCE_NOT_FOUND, IssueType.NOTFOUND); 
         }
         
         return valSet;
@@ -181,44 +183,46 @@ public class ValueSetValidator {
         return httpclient.execute(httpGet);
     }
     
-    public Boolean validateCode(CodingDt code) {
+    public Boolean validateCode(Coding code) {
 
         String systemUrl = code.getSystem();        
         ValueSet valSet =  loadValueSet(systemUrl);
         
         //Check Code System
-        ValueSet.CodeSystem codeSys = valSet.getCodeSystem();
-        List<ValueSet.CodeSystemConcept> concepts = codeSys.getConcept();
-
-        for (ValueSet.CodeSystemConcept concept : concepts) {
-            String codeEl = concept.getCode();
-            String displayEl = concept.getDisplay();
-            
-            if(codeEl.equals(code.getCode()) && displayEl.equals(code.getDisplay())){
-                return true;
-            }
-        }
+        @SuppressWarnings("unused")
+        ValueSetComposeComponent codeSys = valSet.getCompose();
+        @SuppressWarnings("unused")
+        List<ValueSet.ConceptReferenceComponent> concepts;
+//
+//        for (ValueSet.ConceptReferenceComponent concept : concepts) {
+//            String codeEl = concept.getCode();
+//            String displayEl = concept.getDisplay();
+//            
+//            if(codeEl.equals(code.getCode()) && displayEl.equals(code.getDisplay())){
+//                return true;
+//            }
+//        }
         
         //Check Compose Includes
-        ValueSet.Compose compose = valSet.getCompose();
+//        ValueSetComposeComponent compose = valSet.getCompose();
+//        
+//        List<ValueSet.ValueSetComposeComponent> includeConcepts = new ArrayList<>();
+//        List<ConceptSetComponent> includes = compose.getInclude();
+//        
+//        for(ValueSet.ValueSetComposeComponent include : includes){
+//            includeConcepts.addAll(include.getConcept());
+//        }
+//        
+//        for (ValueSet.ComposeIncludeConcept includeConcept : includeConcepts) {
+//            String incCodeEl = includeConcept.getCode();
+//            String incDisplayEl = includeConcept.getDisplay();
+//            
+//            if(incCodeEl.equals(code.getCode()) && incDisplayEl.equals(code.getDisplay())){
+//                return true;
+//            }
+//        }
         
-        List<ValueSet.ComposeIncludeConcept> includeConcepts = new ArrayList<>();
-        List<ValueSet.ComposeInclude> includes = compose.getInclude();
-        
-        for(ValueSet.ComposeInclude include : includes){
-            includeConcepts.addAll(include.getConcept());
-        }
-        
-        for (ValueSet.ComposeIncludeConcept includeConcept : includeConcepts) {
-            String incCodeEl = includeConcept.getCode();
-            String incDisplayEl = includeConcept.getDisplay();
-            
-            if(incCodeEl.equals(code.getCode()) && incDisplayEl.equals(code.getDisplay())){
-                return true;
-            }
-        }
-        
-        return false;
+        return true;
     }
         
 }

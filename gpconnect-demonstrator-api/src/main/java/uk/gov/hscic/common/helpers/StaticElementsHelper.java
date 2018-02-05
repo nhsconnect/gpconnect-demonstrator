@@ -1,32 +1,34 @@
 package uk.gov.hscic.common.helpers;
 
-import ca.uhn.fhir.model.dstu2.composite.AddressDt;
-import ca.uhn.fhir.model.dstu2.composite.ContactPointDt;
-import ca.uhn.fhir.model.dstu2.valueset.AddressTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.AddressUseEnum;
-import ca.uhn.fhir.model.dstu2.valueset.ContactPointSystemEnum;
-import ca.uhn.fhir.model.dstu2.valueset.ContactPointUseEnum;
+import org.hl7.fhir.dstu3.model.Address;
+import org.hl7.fhir.dstu3.model.Address.AddressType;
+import org.hl7.fhir.dstu3.model.Address.AddressUse;
+import org.hl7.fhir.dstu3.model.ContactPoint;
+import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
+import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
+import org.hl7.fhir.dstu3.model.Extension;
 import org.springframework.stereotype.Component;
 
 @Component
 public class StaticElementsHelper {
     
-    public ContactPointDt getValidTelecom(){
+    public ContactPoint getValidTelecom(){
         
-        ContactPointDt orgTelCom = new ContactPointDt();
-        orgTelCom.addUndeclaredExtension(false, "testurl");
-        orgTelCom.setSystem(ContactPointSystemEnum.PHONE);
-        orgTelCom.setUse(ContactPointUseEnum.WORK);
+        ContactPoint orgTelCom = new ContactPoint();
+        Extension extension = new Extension("testurl");
+        orgTelCom.addExtension(extension);
+        orgTelCom.setSystem(ContactPointSystem.PHONE);
+        orgTelCom.setUse(ContactPointUse.WORK);
         orgTelCom.setValue("telecomVal");
         
         return orgTelCom;
     }
     
-    public AddressDt getValidAddress(){
+    public Address getValidAddress(){
         
-        AddressDt orgAddress = new AddressDt();
-        orgAddress.setType(AddressTypeEnum.PHYSICAL);
-        orgAddress.setUse(AddressUseEnum.WORK);
+        Address orgAddress = new Address();
+        orgAddress.setType(AddressType.PHYSICAL);
+        orgAddress.setUse(AddressUse.WORK);
         
         return orgAddress;
     }

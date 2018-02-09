@@ -6,7 +6,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
     };
 
     var getSummary = function(patientId) {
-        return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord").then(function(response) {
+        return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord-1").then(function(response) {
             var endpointLookupResult = response;
 
             return $http.post(
@@ -16,7 +16,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
                             'Ssp-To': endpointLookupResult.toASID,
-                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord",
+                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord-1",
                             'Ssp-TraceID': fhirJWTFactory.guid(),
                             'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
                             'Accept': "application/json+fhir",
@@ -30,7 +30,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
     var getPatientFhirId = function(patientId, odsCode) {
         var odsCode = (typeof odsCode !== 'undefined') ? odsCode : $rootScope.patientOdsCode;
 
-        return FhirEndpointLookup.getEndpoint(odsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function(endpointResponse) {
+        return FhirEndpointLookup.getEndpoint(odsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient-1").then(function(endpointResponse) {
             var endpointLookupResult = endpointResponse;
 
             var partientLookupResponse = $http.get(
@@ -39,7 +39,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
                             'Ssp-To': endpointLookupResult.toASID,
-                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient",
+                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient-1",
                             'Ssp-TraceID': fhirJWTFactory.guid(),
                             'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
                             'Accept': "application/json+fhir"
@@ -61,7 +61,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         var response;
         $rootScope.patientOdsCode = practiceOdsCode;
 
-        return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function(response) {
+        return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient-1").then(function(response) {
             var endpointLookupResult = response;
             var response = $http.get(
                     endpointLookupResult.restUrlPrefix + '/Patient?identifier='+gpcResource.getConst("ID_NHS_NUMBER")+'%7C' + patientId,
@@ -69,7 +69,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
                             'Ssp-To': endpointLookupResult.toASID,
-                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient",
+                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient-1",
                             'Ssp-TraceID': fhirJWTFactory.guid(),
                             'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
                             'Accept': "application/json+fhir"
@@ -88,14 +88,14 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
     };
 
     var registerPatient = function(practiceOdsCode, requestParameters, patientId) {
-        return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient").then(function(endpointLookupResult) {
+        return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient-1").then(function(endpointLookupResult) {
             return $http.post(
                     endpointLookupResult.restUrlPrefix + '/Patient/$gpc.registerpatient', requestParameters,
                     {
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
                             'Ssp-To': endpointLookupResult.toASID,
-                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient",
+                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient-1",
                             'Ssp-TraceID': fhirJWTFactory.guid(),
                             'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "write", patientId),
                             'Accept': "application/json+fhir",

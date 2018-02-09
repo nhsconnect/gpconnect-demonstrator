@@ -10,7 +10,7 @@ angular.module('gpConnect').factory('OrderService', function($rootScope, $http, 
     };
 
     var sendOrder = function (patientId, fhirOrder, practiceOdsCode) {
-        return FhirEndpointLookup.getEndpoint(practiceOdsCode,"urn:nhs:names:services:gpconnect:fhir:rest:create:order").then(function(response) {
+        return FhirEndpointLookup.getEndpoint(practiceOdsCode,"urn:nhs:names:services:gpconnect:fhir:rest:create:order-1").then(function(response) {
             var endpointLookupResult = response;
             
             return $http.post(
@@ -20,7 +20,7 @@ angular.module('gpConnect').factory('OrderService', function($rootScope, $http, 
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
                             'Ssp-To': endpointLookupResult.toASID,
-                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:create:order",
+                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:create:order-1",
                             'Ssp-TraceID': fhirJWTFactory.guid(),
                             'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "write", practiceOdsCode),
                             'Accept': "application/json+fhir",

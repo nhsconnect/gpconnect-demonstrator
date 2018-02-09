@@ -2,7 +2,7 @@
 
 angular.module('gpConnect').factory('Investigation', ['$rootScope', '$http', 'FhirEndpointLookup', 'fhirJWTFactory', 'gpcResource', function($rootScope, $http, FhirEndpointLookup, fhirJWTFactory, gpcResource) {
     var findAllHTMLTables = function (patientId) {
-        return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode,"urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord").then(function(response) {
+        return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode,"urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord-1").then(function(response) {
             var endpointLookupResult = response;
             
             return $http.post(
@@ -12,7 +12,7 @@ angular.module('gpConnect').factory('Investigation', ['$rootScope', '$http', 'Fh
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
                             'Ssp-To': endpointLookupResult.toASID,
-                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord",
+                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord-1",
                             'Ssp-TraceID': fhirJWTFactory.guid(),
                             'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
                             'Accept': "application/json+fhir",

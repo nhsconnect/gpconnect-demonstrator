@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, FhirEndpointLookup, fhirJWTFactory, Organization) {
+	
     var findAllAppointments = function (patientNHSNumber, patientId, odsCode) {
         var odsCode = (typeof odsCode !== 'undefined') ? odsCode : $rootScope.patientOdsCode;
                 
@@ -137,12 +138,36 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
             );
         });
     };
+	
+	var cancel = function (practiceOdsCode, patientNHSNumber, appointmentId, appointment) {
+        return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:read:appointment-1").then(function(response) {
+            var endpointLookupResult = response;
+            
+            return $http.put(
+                    endpointLookupResult.restUrlPrefix + '/Appointment/' + appointmentId,
+                    appointment,
+                    {
+                        headers: {
+                            'Ssp-From': endpointLookupResult.fromASID,
+                            'Ssp-To': endpointLookupResult.toASID,
+                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:cancel:appointment-1",
+                            'Prefer': "return=representation",
+                            'Ssp-TraceID': fhirJWTFactory.guid(),
+                            'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "write", patientNHSNumber),
+                            'Accept': "application/json+fhir",
+                            'Content-Type': "application/json+fhir"
+                        }
+                    }
+            );
+        });
+    };
 
     return {
         findAllAppointments: findAllAppointments,
         searchForFreeSlots: searchForFreeSlots,
         findResourceByReference: findResourceByReference,
         create: create,
-        save: save
+        save: save,
+		cancel: cancel
     };
 });

@@ -671,6 +671,14 @@ legend {
     margin: 10px 20px;
 }
 
+.versionBanner {
+	border: 1px solid;
+	border-color: red;
+	padding: 5px;
+  	margin-bottom: 20px;
+  	border-radius: 5px; 
+}
+
 /* Header - Search Bar */
 .advanced-search-text {
   font-size: 12px;
@@ -2462,7 +2470,7 @@ div#age-chart div.morris-hover.morris-default-style {
 }
 
 .providerHTMLTables table tr td:first-child {
-    width: 180px; 
+    width: 180px;
 }
 
 .modalDiv {

@@ -673,10 +673,17 @@ legend {
 
 .versionBanner {
 	border: 1px solid;
-	border-color: red;
-	padding: 5px;
-  	margin-bottom: 20px;
+	border-color: black;
+	padding: 2px;
+	padding-left: 10px;
+  	margin-top: 20px;
   	border-radius: 5px; 
+  	font-family: Hero;
+}
+
+.versionLink {
+    text-decoration: underline;
+    color: #428bca;
 }
 
 /* Header - Search Bar */

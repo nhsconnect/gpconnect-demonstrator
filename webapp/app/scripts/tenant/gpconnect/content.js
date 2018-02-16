@@ -2,5 +2,5 @@
 
 angular.module('gpConnect')
   .value("content", {
-    "gpconnect_title": "GP Connect 0.0.5 - Demonstrator"
+    "gpconnect_title": "GP Connect 0.5.0 - Demonstrator"
   });

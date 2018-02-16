@@ -671,6 +671,21 @@ legend {
     margin: 10px 20px;
 }
 
+.versionBanner {
+	border: 1px solid;
+	border-color: black;
+	padding: 2px;
+	padding-left: 10px;
+  	margin-top: 20px;
+  	border-radius: 5px; 
+  	font-family: Hero;
+}
+
+.versionLink {
+    text-decoration: underline;
+    color: #428bca;
+}
+
 /* Header - Search Bar */
 .advanced-search-text {
   font-size: 12px;

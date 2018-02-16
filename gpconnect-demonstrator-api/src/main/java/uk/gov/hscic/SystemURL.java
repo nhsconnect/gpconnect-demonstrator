@@ -28,14 +28,14 @@ public final class SystemURL {
 
 
     // FHIR StructureDefinition Constants
-    public static final String SD_GPC_CARERECORD_COMPOSITION = "http://fhir.nhs.net/StructureDefinition/gpconnect-carerecord-composition-1";
+    public static final String SD_GPC_CARERECORD_COMPOSITION = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-CareRecord-Composition-1";
     public static final String SD_GPC_OPERATIONOUTCOME = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-OperationOutcome-1";
-    public static final String SD_GPC_ORGANIZATION = "https://fhir.nhs.net/STU3/StructureDefinition/CareConnect-GPC-Organization-1";
+    public static final String SD_GPC_ORGANIZATION = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Organization-1";
     public static final String SD_GPC_PATIENT = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Patient-1";
     public static final String SD_GPC_PRACTITIONER = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1";
     public static final String SD_GPC_APPOINTMENT = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Appointment-1";
-    public static final String SD_GPC_GET_SCHEDULE_BUNDLE = "http://fhir.nhs.net/StructureDefinition/gpconnect-getschedule-bundle-1";
-    public static final String SD_GPC_LOCATION = "https://fhir.nhs.net/STU3/StructureDefinition/CareConnect-GPC-Location-1";
+    public static final String SD_GPC_GET_SCHEDULE_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Schedule-1";
+    public static final String SD_GPC_LOCATION = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Location-1";
     public static final String SD_GPC_SLOT = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Slot-1";
     public static final String SD_GPC_SCHEDULE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Schedule-1";
     public static final String SD_GPC_SRCHSET_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Searchset-Bundle-1";
@@ -73,7 +73,7 @@ public final class SystemURL {
     // FHIR ValueSet Constants
     public static final String VS_GPC_ERROR_WARNING_CODE = "https://fhir.nhs.uk/STU3/ValueSet/Spine-ErrorOrWarningCode-1";
     public static final String VS_GPC_REASON_TYPE = "http://fhir.nhs.net/ValueSet/gpconnect-reason-type-1-0";
-    public static final String VS_GPC_RECORD_SECTION = "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1";
+    public static final String VS_GPC_RECORD_SECTION = "https://fhir.nhs.uk/STU3/ValueSet/GPConnect-RecordSection-1";
     public static final String VS_HUMAN_LANGUAGE = "http://fhir.nhs.net/ValueSet/human-language-1";
     public static final String VS_REGISTRATION_STATUS = "http://fhir.nhs.net/ValueSet/registration-status-1";
     public static final String VS_REGISTRATION_TYPE = "http://fhir.nhs.net/ValueSet/registration-type-1";

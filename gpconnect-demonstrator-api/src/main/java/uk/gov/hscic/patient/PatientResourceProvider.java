@@ -58,7 +58,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
-import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.util.NhsCodeValidator;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
@@ -99,9 +98,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
-
-    @Autowired
-    private AppointmentResourceProvider appointmentResourceProvider;
 
     @Autowired
     private PatientStore patientStore;
@@ -474,12 +470,6 @@ public class PatientResourceProvider implements IResourceProvider {
     public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdDt patientLocalId) {
         return medicationAdministrationResourceProvider
                 .getMedicationAdministrationsForPatientId(patientLocalId.getIdPart());
-    }
-
-    @Search(compartmentName = "Appointment")
-    public List<Appointment> getPatientAppointments(@IdParam IdDt patientLocalId,
-            @OptionalParam(name = "start") DateRangeParam startDate) {
-        return appointmentResourceProvider.getAppointmentsForPatientIdAndDates(patientLocalId, startDate);
     }
 
     @Operation(name = "$gpc.registerpatient")

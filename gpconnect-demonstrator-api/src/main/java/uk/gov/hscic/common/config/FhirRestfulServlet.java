@@ -11,17 +11,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
-import uk.gov.hscic.appointments.AppointmentResourceProvider;
-import uk.gov.hscic.appointments.ScheduleResourceProvider;
-import uk.gov.hscic.appointments.SlotResourceProvider;
 import uk.gov.hscic.common.filters.FhirRequestAuthInterceptor;
 import uk.gov.hscic.common.filters.FhirRequestGenericIntercepter;
-import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.medications.MedicationResourceProvider;
-import uk.gov.hscic.order.OrderResourceProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.PatientResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
@@ -43,12 +38,7 @@ public class FhirRestfulServlet extends RestfulServer {
                 applicationContext.getBean(MedicationResourceProvider.class),
                 applicationContext.getBean(MedicationOrderResourceProvider.class),
                 applicationContext.getBean(MedicationDispenseResourceProvider.class),
-                applicationContext.getBean(MedicationAdministrationResourceProvider.class),
-                applicationContext.getBean(LocationResourceProvider.class),
-                applicationContext.getBean(AppointmentResourceProvider.class),
-                applicationContext.getBean(ScheduleResourceProvider.class),
-                applicationContext.getBean(SlotResourceProvider.class),
-                applicationContext.getBean(OrderResourceProvider.class)
+                applicationContext.getBean(MedicationAdministrationResourceProvider.class)
         ));
 
         CorsConfiguration config = new CorsConfiguration();

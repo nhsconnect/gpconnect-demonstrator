@@ -207,21 +207,7 @@ angular.module('gpConnect', [
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/appointments/appointments.html', controller: 'AppointmentsCtrl'}
-        }
-    }).state('orders-sent', {
-        url: '/patients/{patientId:int}/orders/sent',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/orders/sent/orders-sent.html', controller: 'OrdersSentCtrl'}
-        }
-    }).state('orders-received', {
-        url: '/patients/{patientId:int}/orders/received',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/orders/received/orders-received.html', controller: 'OrdersReceivedCtrl'}
+            main: {templateUrl: 'views/appointments/appointments.html'}
         }
     });
 }).directive('datepickerPopup', function() {

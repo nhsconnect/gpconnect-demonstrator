@@ -33,9 +33,6 @@ import uk.gov.hscic.organization.search.OrganizationSearch;
 public class OrganizationResourceProvider implements IResourceProvider {
 
     @Autowired
-    private GetScheduleOperation getScheduleOperation;
-
-    @Autowired
     private OrganizationSearch organizationSearch;
 
     @Override
@@ -72,43 +69,6 @@ public class OrganizationResourceProvider implements IResourceProvider {
         }
 
         return organizations;
-    }
-
-    @Operation(name = "$gpc.getschedule")
-    public Bundle getSchedule(@IdParam IdDt organizationId, @ResourceParam Parameters params) {
-        Bundle bundle = new Bundle();
-        bundle.setType(BundleTypeEnum.DOCUMENT);
-        OperationOutcome operationOutcome = new OperationOutcome();
-
-        // params
-        List<Parameter> parameters = params.getParameter();
-        String planningHorizonStart = null;
-        String planningHorizonEnd = null;
-
-        for (int p = 0; p < parameters.size(); p++) {
-            Parameter parameter = parameters.get(p);
-            switch (parameter.getName()) {
-                case "timePeriod":
-                    PeriodDt timePeriod = (PeriodDt) parameter.getValue();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                    planningHorizonStart = dateFormat.format(timePeriod.getStart());
-                    planningHorizonEnd = dateFormat.format(timePeriod.getEnd());
-                    break;
-            }
-        }
-
-        if (organizationId != null && planningHorizonStart != null && planningHorizonEnd != null) {
-            getScheduleOperation.populateBundle(bundle, operationOutcome, organizationId, planningHorizonStart, planningHorizonEnd);
-        } else {
-            String msg = String.format("Not all of the mandatory parameters were provided - orgId - %s planningHorizonStart - %s planningHorizonEnd - %s", organizationId, planningHorizonStart, planningHorizonEnd);
-            operationOutcome.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(msg);
-
-            Entry operationOutcomeEntry = new Entry();
-            operationOutcomeEntry.setResource(operationOutcome);
-            bundle.addEntry(operationOutcomeEntry);
-        }
-
-        return bundle;
     }
 
     public Organization organizaitonDetailsToOrganizationResourceConverter(OrganizationDetails organizationDetails) {

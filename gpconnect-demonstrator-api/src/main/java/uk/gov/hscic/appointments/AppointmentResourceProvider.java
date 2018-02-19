@@ -371,11 +371,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return methodOutcome;
     }
 
-    @Update
+ 
+	@Update
     public MethodOutcome updateAppointment(@IdParam IdType appointmentId, @ResourceParam Appointment appointment) {
         MethodOutcome methodOutcome = new MethodOutcome();
         OperationOutcome operationalOutcome = new OperationOutcome();
-
         AppointmentDetail appointmentDetail = appointmentResourceConverterToAppointmentDetail(appointment);
 
         // URL ID and Resource ID must be the same
@@ -439,7 +439,15 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 }
             }
         } else {
-
+        	if(appointment.getStatus().equals("cancelled")) 
+        	{
+        		 throw OperationOutcomeFactory.buildOperationOutcomeException(
+                         new UnclassifiedServerFailureException(400,
+                                 "Appointment has been cancelled and cannot be amended"),
+                         SystemCode.BAD_REQUEST, IssueType.FORBIDDEN);
+        	}
+        		
+        	
             boolean amendComparisonResult = compareAppointmentsForInvalidPropertyAmend(appointmentDetail,
                     oldAppointmentDetail);
 
@@ -517,7 +525,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
         results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
         results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-
+        results.add(Objects.equals(oldAppointmentDetail.getComment(), appointmentDetail.getComment()));
+        results.add(Objects.equals(oldAppointmentDetail.getDescription(), appointmentDetail.getDescription()));
+        results.add(Objects.equals(oldAppointmentDetail.getReasonDisplay(), appointmentDetail.getReasonDisplay()));
         results.add(BookingOrganizationsEqual(oldAppointmentDetail.getBookingOrganization(),
                 appointmentDetail.getBookingOrganization()));
 
@@ -802,6 +812,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 	        Resource org = contained.get(0);
 	        Organization bookingOrgRes = (Organization) org;
 	        BookingOrgDetail bookingOrgDetail = new BookingOrgDetail();
+	        validateBookingOrganizationValuesArePresent(bookingOrgRes);
 	        bookingOrgDetail.setName(bookingOrgRes.getName());
 	        bookingOrgDetail.setTelephone(bookingOrgRes.getTelecomFirstRep().getValue());
 	        if (!bookingOrgRes.getIdentifier().isEmpty()) {
@@ -843,7 +854,26 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return appointmentDetail;
     }
 
-    private void validateParticipantActor(Reference participantActor) {
+    private void validateBookingOrganizationValuesArePresent(Organization bookingOrgRes) {
+    	if(bookingOrgRes.getName() == null || bookingOrgRes.getName().isEmpty()) 
+	       {
+	    	   throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(String.format("Booking organization Name is null/empty")),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+	    	   
+	       }
+     
+     if(bookingOrgRes.getTelecomFirstRep().getValue() == null|| bookingOrgRes.getTelecomFirstRep().getValue().isEmpty()) 
+	       {
+	    	   throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(String.format("Booking organization Telecom is null/empty")),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+	    	   
+	       }
+		
+	}
+
+	private void validateParticipantActor(Reference participantActor) {
 
         Reference actorRef = participantActor;
         String resourcePart = actorRef.getReference().toString();
@@ -884,6 +914,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         if (hasCode) {
 
             isValid = valueSetValidator.validateCode(code);
+      
 
             if (!isValid) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(

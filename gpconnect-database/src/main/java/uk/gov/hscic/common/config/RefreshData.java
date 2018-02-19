@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import uk.gov.hscic.appointment.appointment.AppointmentStore;
 import uk.gov.hscic.appointment.slot.SlotStore;
 import uk.gov.hscic.model.appointment.SlotDetail;
-import uk.gov.hscic.order.OrderStore;
 
 @Service
 public class RefreshData {
@@ -28,9 +27,6 @@ public class RefreshData {
     private String slotsFilename;
 
     @Autowired
-    private OrderStore orderStore;
-
-    @Autowired
     private AppointmentStore appointmentStore;
 
     @Autowired
@@ -39,12 +35,7 @@ public class RefreshData {
     // Overnight cleardown of test data
     @Scheduled(cron = "${datasource.cleardown.cron}")
     public void scheduledResetOfData() {
-        clearTasks();
         resetAppointments();
-    }
-
-    private void clearTasks() {
-        orderStore.clearOrders();
     }
 
     private void resetAppointments() {

@@ -45,163 +45,6 @@ angular.module('gpConnect', [
                 controller: 'MainSearchController'
             }
         }
-    }).state('patients-summary', {
-        url: '/patients/{patientId:int}/patients-summary',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/patients/patients-summary.html', controller: 'PatientsSummaryCtrl'}
-        }
-    }).state('problem-list', {
-        url: '/patients/{patientId:int}/problem',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/problem/problem-list.html', controller: 'ProblemListCtrl'}
-        }
-    }).state('problem-detail', {
-        url: '/patients/{patientId:int}/problem/{problemIndex}?filter&source',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/problem/problem-list.html', controller: 'ProblemListCtrl'},
-            detail: {templateUrl: 'views/problem/problem-detail.html', controller: 'ProblemDetailCtrl'}
-        }
-    }).state('allergies', {
-        url: '/patients/{patientId:int}/allergies',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/allergies/allergies-list.html', controller: 'AllergiesListCtrl'}
-        }
-    }).state('allergies-detail', {
-        url: '/patients/{patientId:int}/allergies/{allergyIndex}?filter&source',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/allergies/allergies-list.html', controller: 'AllergiesListCtrl'},
-            detail: {templateUrl: 'views/allergies/allergies-detail.html', controller: 'AllergiesDetailCtrl'}
-        }
-    }).state('medications', {
-        url: '/patients/{patientId:int}/medications',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/medications/medications-list.html', controller: 'MedicationsListCtrl'}
-        }
-    }).state('medications-detail', {
-        url: '/patients/{patientId:int}/medications/{medicationIndex}?filter&source',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/medications/medications-list.html', controller: 'MedicationsListCtrl'},
-            detail: {templateUrl: 'views/medications/medications-detail.html', controller: 'MedicationsDetailCtrl'}
-        }
-    }).state('referrals', {
-        url: '/patients/{patientId:int}/referrals',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/referrals/referrals-list.html', controller: 'ReferralsListCtrl'}
-        }
-    }).state('referrals-detail', {
-        url: '/patients/{patientId:int}/referrals/{referralId}?filter&source',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/referrals/referrals-list.html', controller: 'ReferralsListCtrl'},
-            detail: {templateUrl: 'views/referrals/referrals-detail.html', controller: 'ReferralsDetailCtrl'}
-        }
-    }).state('observations', {
-        url: '/patients/{patientId:int}/observations',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/observations/observations-list.html', controller: 'ObservationsListCtrl'}
-        }
-    }).state('results-detail', {
-        url: '/patients/{patientId:int}/results/{resultIndex}?filter&source',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/results/observations-list.html', controller: 'ResultsListCtrl'},
-            detail: {templateUrl: 'views/results/observations-detail.html', controller: 'ResultsDetailCtrl'}
-        }
-    }).state('encounters', {
-        url: '/patients/{patientId:int}/encounters',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/encounters/encounters-list.html', controller: 'EncountersListCtrl'}
-        }
-    }).state('encounters-detail', {
-        url: '/patients/{patientId:int}/encounters/{encounterIndex}?filter&source',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/encounters/encounters-list.html', controller: 'EncountersListCtrl'},
-            detail: {templateUrl: 'views/encounters/encounters-detail.html', controller: 'EncountersDetailCtrl'}
-        }
-    }).state('immunisations', {
-        url: '/patients/{patientId:int}/immunisations',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/immunisations/immunisations-list.html', controller: 'ImmunisationsListCtrl'}
-        }
-    }).state('immunisations-detail', {
-        url: '/patients/{patientId:int}/immunisations/{immunisationIndex}?filter&source',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/immunisations/immunisations-list.html', controller: 'ImmunisationsListCtrl'},
-            detail: {templateUrl: 'views/immunisations/immunisations-detail.html', controller: 'ImmunisationsDetailCtrl'}
-        }
-    }).state('adminitems', {
-        url: '/patients/{patientId:int}/adminitems',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/adminitems/adminitems-list.html', controller: 'AdminItemsListCtrl'}
-        }
-    }).state('adminitems-detail', {
-        url: '/patients/{patientId:int}/adminitems/{adminItemIndex}?filter&source',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/adminitems/adminitems-list.html', controller: 'AdminItemsListCtrl'},
-            detail: {templateUrl: 'views/adminitems/adminitems-detail.html', controller: 'AdminItemsDetailCtrl'}
-        }
-    }).state('clinicalitems', {
-        url: '/patients/{patientId:int}/clinicalitems',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/clinicalitems/clinicalitems-list.html', controller: 'ClinicalItemsListCtrl'}
-        }
-    }).state('clinicalitems-detail', {
-        url: '/patients/{patientId:int}/clinicalitems/{clinicalItemIndex}?filter&source',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/clinicalitems/clinicalitems-list.html', controller: 'ClinicalItemsListCtrl'},
-            detail: {templateUrl: 'views/clinicalitems/clinicalitems-detail.html', controller: 'ClinicalItemsDetailCtrl'}
-        }
-    }).state('investigations', {
-        url: '/patients/{patientId:int}/investigations',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/investigations/investigations-list.html', controller: 'InvestigationsListCtrl'}
-        }
-    }).state('investigations-detail', {
-        url: '/patients/{patientId:int}/investigations/{investigationIndex}?filter&source',
-        views: {
-            'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
-            actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/investigations/investigations-list.html', controller: 'InvestigationsListCtrl'},
-            detail: {templateUrl: 'views/investigations/investigations-detail.html', controller: 'InvestigationsDetailCtrl'}
-        }
     }).state('appointments', {
         url: '/patients/{patientId:int}/appointments',
         views: {
@@ -209,19 +52,19 @@ angular.module('gpConnect', [
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/appointments/appointments.html', controller: 'AppointmentsCtrl'}
         }
-    }).state('orders-sent', {
-        url: '/patients/{patientId:int}/orders/sent',
+    }).state('access-record-html', {
+        url: '/patients/{patientId:int}/access-record/html',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/orders/sent/orders-sent.html', controller: 'OrdersSentCtrl'}
+            main: {templateUrl: 'views/access-record/access-record-html.html'}
         }
-    }).state('orders-received', {
-        url: '/patients/{patientId:int}/orders/received',
+    }).state('access-record-structured', {
+        url: '/patients/{patientId:int}/access-record/structured',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/orders/received/orders-received.html', controller: 'OrdersReceivedCtrl'}
+            main: {templateUrl: 'views/access-record/access-record-structured.html'}
         }
     });
 }).directive('datepickerPopup', function() {

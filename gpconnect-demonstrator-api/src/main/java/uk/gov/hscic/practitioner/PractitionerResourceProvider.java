@@ -27,88 +27,69 @@ import uk.gov.hscic.practitioner.model.PractitionerDetails;
 import uk.gov.hscic.practitioner.search.PractitionerSearch;
 
 @Component
-public class PractitionerResourceProvider  implements IResourceProvider {
+public class PractitionerResourceProvider {
 
-    @Autowired
-    private PractitionerSearch practitionerSearch;
+	@Autowired
+	private PractitionerSearch practitionerSearch;
 
-    @Override
-    public Class<Practitioner> getResourceType() {
-        return Practitioner.class;
-    }
+	public Practitioner getPractitionerById(@IdParam IdDt practitionerId) {
+		PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerDetails(practitionerId.getIdPart());
 
-    @Read()
-    public Practitioner getPractitionerById(@IdParam IdDt practitionerId) {
-        PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerDetails(practitionerId.getIdPart());
+		if (practitionerDetails == null) {
+			OperationOutcome operationalOutcome = new OperationOutcome();
+			operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No practitioner details found for practitioner ID: " + practitionerId.getIdPart());
+			throw new InternalErrorException("No practitioner details found for practitioner ID: " + practitionerId.getIdPart(), operationalOutcome);
+		}
 
-        if (practitionerDetails == null) {
-            OperationOutcome operationalOutcome = new OperationOutcome();
-            operationalOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("No practitioner details found for practitioner ID: " + practitionerId.getIdPart());
-            throw new InternalErrorException("No practitioner details found for practitioner ID: " + practitionerId.getIdPart(), operationalOutcome);
-        }
+		return practitionerDetailsToPractitionerResourceConverter(practitionerDetails);
+	}
 
-        return practitionerDetailsToPractitionerResourceConverter(practitionerDetails);
-    }
+	private Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails) {
+		Practitioner practitioner = new Practitioner();
+		practitioner.setId(new IdDt(practitionerDetails.getId()));
+		practitioner.getMeta().setLastUpdated(practitionerDetails.getLastUpdated());
+		practitioner.getMeta().setVersionId(String.valueOf(practitionerDetails.getLastUpdated().getTime()));
+		practitioner.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/sds-user-id", practitionerDetails.getUserId()));
+		practitioner.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/sds-role-profile-id", practitionerDetails.getRoleId()));
 
-    @Search
-    public List<Practitioner> getPractitionerByPractitionerUserId(@RequiredParam(name = Practitioner.SP_IDENTIFIER) TokenParam practitionerId) {
-        PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerByUserId(practitionerId.getValue());
+		HumanNameDt name = new HumanNameDt()
+				.addFamily(practitionerDetails.getNameFamily())
+				.addGiven(practitionerDetails.getNameGiven())
+				.addPrefix(practitionerDetails.getNamePrefix())
+				.setUse(NameUseEnum.USUAL);
 
-        if (practitionerDetails != null) {
-            Practitioner practitioner = practitionerDetailsToPractitionerResourceConverter(practitionerDetails);
-            practitioner.setId(String.valueOf(practitionerDetails.getId()));
-            return Collections.singletonList(practitioner);
-        }
+		practitioner.setName(name);
 
-        return Collections.emptyList();
-    }
+		switch (practitionerDetails.getGender().toLowerCase(Locale.UK)) {
+		case "male":
+			practitioner.setGender(AdministrativeGenderEnum.MALE);
+			break;
 
-    private Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails) {
-        Practitioner practitioner = new Practitioner();
-        practitioner.setId(new IdDt(practitionerDetails.getId()));
-        practitioner.getMeta().setLastUpdated(practitionerDetails.getLastUpdated());
-        practitioner.getMeta().setVersionId(String.valueOf(practitionerDetails.getLastUpdated().getTime()));
-        practitioner.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/sds-user-id", practitionerDetails.getUserId()));
-        practitioner.addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/sds-role-profile-id", practitionerDetails.getRoleId()));
+		case "female":
+			practitioner.setGender(AdministrativeGenderEnum.FEMALE);
+			break;
 
-        HumanNameDt name = new HumanNameDt()
-                .addFamily(practitionerDetails.getNameFamily())
-                .addGiven(practitionerDetails.getNameGiven())
-                .addPrefix(practitionerDetails.getNamePrefix())
-                .setUse(NameUseEnum.USUAL);
+		case "other":
+			practitioner.setGender(AdministrativeGenderEnum.OTHER);
+			break;
 
-        practitioner.setName(name);
+		default:
+			practitioner.setGender(AdministrativeGenderEnum.UNKNOWN);
+			break;
+		}
 
-        switch (practitionerDetails.getGender().toLowerCase(Locale.UK)) {
-            case "male":
-                practitioner.setGender(AdministrativeGenderEnum.MALE);
-                break;
+		CodingDt roleCoding = new CodingDt("http://fhir.nhs.net/ValueSet/sds-job-role-name-1", practitionerDetails.getRoleCode())
+				.setDisplay(practitionerDetails.getRoleDisplay());
 
-            case "female":
-                practitioner.setGender(AdministrativeGenderEnum.FEMALE);
-                break;
+		practitioner.addPractitionerRole()
+		.setRole(new CodeableConceptDt().addCoding(roleCoding))
+		.setManagingOrganization(new ResourceReferenceDt("Organization/"+practitionerDetails.getOrganizationId())); // Associated Organisation
 
-            case "other":
-                practitioner.setGender(AdministrativeGenderEnum.OTHER);
-                break;
+		CodingDt comCoding = new CodingDt("http://fhir.nhs.net/ValueSet/human-language-1", practitionerDetails.getComCode())
+				.setDisplay(practitionerDetails.getComDisplay());
 
-            default:
-                practitioner.setGender(AdministrativeGenderEnum.UNKNOWN);
-                break;
-        }
+		practitioner.addCommunication().addCoding(comCoding);
 
-        CodingDt roleCoding = new CodingDt("http://fhir.nhs.net/ValueSet/sds-job-role-name-1", practitionerDetails.getRoleCode())
-                .setDisplay(practitionerDetails.getRoleDisplay());
-
-        practitioner.addPractitionerRole()
-                .setRole(new CodeableConceptDt().addCoding(roleCoding))
-                .setManagingOrganization(new ResourceReferenceDt("Organization/"+practitionerDetails.getOrganizationId())); // Associated Organisation
-
-        CodingDt comCoding = new CodingDt("http://fhir.nhs.net/ValueSet/human-language-1", practitionerDetails.getComCode())
-                .setDisplay(practitionerDetails.getComDisplay());
-
-        practitioner.addCommunication().addCoding(comCoding);
-
-        return practitioner;
-    }
+		return practitioner;
+	}
 }

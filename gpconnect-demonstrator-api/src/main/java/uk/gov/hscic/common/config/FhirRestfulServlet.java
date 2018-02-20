@@ -13,10 +13,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import uk.gov.hscic.common.filters.FhirRequestAuthInterceptor;
 import uk.gov.hscic.common.filters.FhirRequestGenericIntercepter;
-import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
-import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
-import uk.gov.hscic.medications.MedicationOrderResourceProvider;
-import uk.gov.hscic.medications.MedicationResourceProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.PatientResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
@@ -32,13 +28,7 @@ public class FhirRestfulServlet extends RestfulServer {
     @Override
     protected void initialize() throws ServletException {
         setResourceProviders(Arrays.asList(
-                applicationContext.getBean(PatientResourceProvider.class),
-                applicationContext.getBean(OrganizationResourceProvider.class),
-                applicationContext.getBean(PractitionerResourceProvider.class),
-                applicationContext.getBean(MedicationResourceProvider.class),
-                applicationContext.getBean(MedicationOrderResourceProvider.class),
-                applicationContext.getBean(MedicationDispenseResourceProvider.class),
-                applicationContext.getBean(MedicationAdministrationResourceProvider.class)
+                applicationContext.getBean(PatientResourceProvider.class)
         ));
 
         CorsConfiguration config = new CorsConfiguration();

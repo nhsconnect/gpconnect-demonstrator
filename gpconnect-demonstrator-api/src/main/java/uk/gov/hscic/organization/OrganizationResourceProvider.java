@@ -30,17 +30,11 @@ import uk.gov.hscic.organization.model.OrganizationDetails;
 import uk.gov.hscic.organization.search.OrganizationSearch;
 
 @Component
-public class OrganizationResourceProvider implements IResourceProvider {
+public class OrganizationResourceProvider {
 
     @Autowired
     private OrganizationSearch organizationSearch;
 
-    @Override
-    public Class<Organization> getResourceType() {
-        return Organization.class;
-    }
-
-    @Read()
     public Organization getOrganizationById(@IdParam IdDt organizationId) {
         OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId.getIdPart());
 
@@ -51,24 +45,6 @@ public class OrganizationResourceProvider implements IResourceProvider {
         }
 
         return organizaitonDetailsToOrganizationResourceConverter(organizationDetails);
-    }
-
-    @Search
-    public List<Organization> getOrganizationsByODSCode(@RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam organizationId) {
-        ArrayList<Organization> organizations = new ArrayList<>();
-        List<OrganizationDetails> organizationDetailsList = null;
-
-        if (organizationId.getValue() != null) {
-            organizationDetailsList = organizationSearch.findOrganizationDetailsByOrgODSCode(organizationId.getValue());
-        }
-
-        if (organizationDetailsList != null) {
-            for (OrganizationDetails organizationDetails : organizationDetailsList) {
-                organizations.add(organizaitonDetailsToOrganizationResourceConverter(organizationDetails));
-            }
-        }
-
-        return organizations;
     }
 
     public Organization organizaitonDetailsToOrganizationResourceConverter(OrganizationDetails organizationDetails) {

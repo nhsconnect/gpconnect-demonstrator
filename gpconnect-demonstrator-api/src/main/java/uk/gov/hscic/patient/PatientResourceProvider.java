@@ -59,9 +59,6 @@ import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.common.util.NhsCodeValidator;
-import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
-import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
-import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.details.search.PatientSearch;
 import uk.gov.hscic.patient.details.store.PatientStore;
@@ -91,15 +88,6 @@ public class PatientResourceProvider implements IResourceProvider {
     private OrganizationResourceProvider organizationResourceProvider;
 
     @Autowired
-    private MedicationOrderResourceProvider medicationOrderResourceProvider;
-
-    @Autowired
-    private MedicationDispenseResourceProvider medicationDispenseResourceProvider;
-
-    @Autowired
-    private MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
-
-    @Autowired
     private PatientStore patientStore;
 
     @Autowired
@@ -111,25 +99,6 @@ public class PatientResourceProvider implements IResourceProvider {
     @Override
     public Class<Patient> getResourceType() {
         return Patient.class;
-    }
-
-    @Read
-    public Patient getPatientById(@IdParam IdDt internalId) {
-        PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
-
-        if (patientDetails == null) {
-            throw new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart(),
-                    OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
-                            OperationConstants.CODE_PATIENT_NOT_FOUND, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
-                            OperationConstants.META_GP_CONNECT_PATIENT, IssueTypeEnum.NOT_FOUND));
-        }
-
-        return patientDetailsToPatientResourceConverter(patientDetails);
-    }
-
-    @Search
-    public List<Patient> getPatientsByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam patientId) {
-        return Collections.singletonList(getPatientByPatientId(patientId));
     }
 
     private Patient getPatientByPatientId(TokenParam patientId) {
@@ -455,143 +424,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         return bundle.addEntry(patientEntry);
     }
-
-    @Search(compartmentName = "MedicationOrder")
-    public List<MedicationOrder> getPatientMedicationOrders(@IdParam IdDt patientLocalId) {
-        return medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientLocalId.getIdPart());
-    }
-
-    @Search(compartmentName = "MedicationDispense")
-    public List<MedicationDispense> getPatientMedicationDispenses(@IdParam IdDt patientLocalId) {
-        return medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientLocalId.getIdPart());
-    }
-
-    @Search(compartmentName = "MedicationAdministration")
-    public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdDt patientLocalId) {
-        return medicationAdministrationResourceProvider
-                .getMedicationAdministrationsForPatientId(patientLocalId.getIdPart());
-    }
-
-    @Operation(name = "$gpc.registerpatient")
-    public Bundle registerPatient(@ResourceParam Parameters params) {
-        Patient registeredPatient = null;
-
-        Patient unregisteredPatient = params.getParameter()
-                .stream()
-                .filter(param -> "registerPatient".equalsIgnoreCase(param.getName()))
-                .map(Parameter::getResource)
-                .map(Patient.class::cast)
-                .findFirst()
-                .orElse(null);
-
-        if (unregisteredPatient != null) {
-            // check if the patient already exists
-            PatientDetails patientDetails = patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue());
-
-            if (patientDetails == null) {
-                patientStore.create(registerPatientResourceConverterToPatientDetail(unregisteredPatient));
-                registeredPatient = patientDetailsToRegisterPatientResourceConverter(
-                        patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
-            } else {
-                registeredPatient = patientDetailsToRegisterPatientResourceConverter(patientDetails);
-            }
-        } else {
-            throw new UnprocessableEntityException("Section Case Invalid: ",
-                    OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
-                            OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
-                            OperationConstants.META_GP_CONNECT_PRACTITIONER, IssueTypeEnum.NOT_FOUND));
-        }
-
-        Bundle bundle = new Bundle().setType(BundleTypeEnum.TRANSACTION_RESPONSE);
-        bundle.addEntry().setResource(registeredPatient);
-        return bundle;
-    }
-
-    private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
-        PatientDetails patientDetails = new PatientDetails();
-        HumanNameDt name = patientResource.getNameFirstRep();
-        patientDetails.setForename(name.getGivenAsSingleString());
-        patientDetails.setSurname(name.getFamilyAsSingleString());
-        patientDetails.setDateOfBirth(patientResource.getBirthDate());
-        patientDetails.setGender(patientResource.getGender());
-        patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
-
-        List<ExtensionDt> registrationPeriodExtensions = patientResource
-                .getUndeclaredExtensionsByUrl(REGISTRATION_PERIOD_EXTENSION_URL);
-        ExtensionDt registrationPeriodExtension = registrationPeriodExtensions.get(0);
-        PeriodDt registrationPeriod = (PeriodDt) registrationPeriodExtension.getValue();
-
-        Date registrationStart = registrationPeriod.getStart();
-
-        if (registrationStart.compareTo(new Date()) <= 1) {
-            patientDetails.setRegistrationStartDateTime(registrationStart);
-        } else {
-            throw new IllegalArgumentException(String.format(
-                    "The given registration start (%c) is not valid. The registration start cannot be in the future.",
-                    registrationStart));
-        }
-
-        Date registrationEnd = registrationPeriod.getEnd();
-
-        if (registrationEnd != null) {
-            throw new IllegalArgumentException(String.format(
-                    "The given registration end (%c) is not valid. The registration end should be left blank to indicate an open-ended registration period.",
-                    registrationStart));
-        }
-
-        List<ExtensionDt> registrationStatusExtensions = patientResource
-                .getUndeclaredExtensionsByUrl(REGISTRATION_STATUS_EXTENSION_URL);
-        ExtensionDt registrationStatusExtension = registrationStatusExtensions.get(0);
-        CodeableConceptDt registrationStatusCode = (CodeableConceptDt) registrationStatusExtension.getValue();
-        String registrationStatus = registrationStatusCode.getCodingFirstRep().getCode();
-
-        if (ACTIVE_REGISTRATION_STATUS.equals(registrationStatus)) {
-            patientDetails.setRegistrationStatus(registrationStatus);
-        } else {
-            throw new IllegalArgumentException(String.format(
-                    "The given registration status is not valid. Expected - A. Actual - %s", registrationStatus));
-        }
-
-        List<ExtensionDt> registrationTypeExtensions = patientResource
-                .getUndeclaredExtensionsByUrl(REGISTRATION_TYPE_EXTENSION_URL);
-        ExtensionDt registrationTypeExtension = registrationTypeExtensions.get(0);
-        CodeableConceptDt registrationTypeCode = (CodeableConceptDt) registrationTypeExtension.getValue();
-        String registrationType = registrationTypeCode.getCodingFirstRep().getCode();
-
-        if (TEMPORARY_RESIDENT_REGISTRATION_TYPE.equals(registrationType)) {
-            patientDetails.setRegistrationType(registrationType);
-        } else {
-            throw new IllegalArgumentException(String
-                    .format("The given registration type is not valid. Expected - T. Actual - %s", registrationType));
-        }
-
-        return patientDetails;
-    }
-
-    // a cut-down Patient
-    private Patient patientDetailsToRegisterPatientResourceConverter(PatientDetails patientDetails) {
-        Patient patient = new Patient()
-                .addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/nhs-number", patientDetails.getNhsNumber()))
-                .setBirthDate(new DateDt(patientDetails.getDateOfBirth()))
-                .setGender(AdministrativeGenderEnum.forCode(patientDetails.getGender().toLowerCase()));
-
-        patient.setId(patientDetails.getId());
-        patient.addName().addFamily(patientDetails.getSurname()).addGiven(patientDetails.getForename()).setUse(NameUseEnum.USUAL);
-
-        PeriodDt registrationPeriod = new PeriodDt()
-                .setStartWithSecondsPrecision(patientDetails.getRegistrationStartDateTime())
-                .setEndWithSecondsPrecision(patientDetails.getRegistrationEndDateTime());
-        patient.addUndeclaredExtension(true, REGISTRATION_PERIOD_EXTENSION_URL, registrationPeriod);
-
-        patient.addUndeclaredExtension(true, REGISTRATION_STATUS_EXTENSION_URL, new CodeableConceptDt(
-                "http://fhir.nhs.net/ValueSet/registration-status-1", patientDetails.getRegistrationStatus()));
-
-        patient.addUndeclaredExtension(true, REGISTRATION_TYPE_EXTENSION_URL, new CodeableConceptDt(
-                "http://fhir.nhs.net/ValueSet/registration-type-1", patientDetails.getRegistrationType()));
-
-        return patient;
-    }
-
+    
     private Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) {
         Patient patient = new Patient();
         patient.setId(patientDetails.getId());

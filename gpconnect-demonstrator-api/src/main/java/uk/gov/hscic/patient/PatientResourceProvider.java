@@ -424,7 +424,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         return bundle.addEntry(patientEntry);
     }
-    
+
     private Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) {
         Patient patient = new Patient();
         patient.setId(patientDetails.getId());

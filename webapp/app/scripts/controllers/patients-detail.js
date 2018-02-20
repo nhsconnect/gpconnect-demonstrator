@@ -3,7 +3,7 @@
 angular.module('gpConnect')
   .controller('PatientsDetailCtrl', function ($scope, $stateParams, $state, PatientService, ProviderRouting) {
 
-    PatientService.getFhirPatient(ProviderRouting.defaultPractice().odsCode, $stateParams.patientId).then(function (patient) {
+    PatientService.getSummary($stateParams.patientId).then(function (patient) {
       $scope.patient = patient;
       $.each(patient.identifier, function (key, identifier) {
         if(identifier.system == "http://fhir.nhs.net/Id/nhs-number"){

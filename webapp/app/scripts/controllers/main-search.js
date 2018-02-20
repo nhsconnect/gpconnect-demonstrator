@@ -30,9 +30,6 @@ angular.module('gpConnect')
 
         usSpinnerService.spin('search-spinner');
 
-        PatientService.getFhirPatient(ProviderRouting.defaultPractice().odsCode, nhsNumber).then(function (patient) {
-          goToPatientSummary(nhsNumber);
-
         }).catch(function () {
           usSpinnerService.stop('search-spinner');
           $scope.setErrorOccurred(true);

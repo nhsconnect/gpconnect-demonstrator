@@ -6,7 +6,7 @@ angular.module('gpConnect').factory('PatientService', function ($rootScope, $htt
     };
 
     var getSummary = function(patientId) {
-        return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord").then(function(response) {
+    	return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord").then(function(response) {
             var endpointLookupResult = response;
 
             return $http.post(
@@ -27,39 +27,8 @@ angular.module('gpConnect').factory('PatientService', function ($rootScope, $htt
         });
     };
 
-    var getFhirPatient = function(practiceOdsCode, patientId) {
-        var response;
-        $rootScope.patientOdsCode = practiceOdsCode;
-
-        return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient").then(function(response) {
-            var endpointLookupResult = response;
-            var response = $http.get(
-                    endpointLookupResult.restUrlPrefix + '/Patient?identifier=http://fhir.nhs.net/Id/nhs-number%7C' + patientId,
-                    {
-                        headers: {
-                            'Ssp-From': endpointLookupResult.fromASID,
-                            'Ssp-To': endpointLookupResult.toASID,
-                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient",
-                            'Ssp-TraceID': fhirJWTFactory.guid(),
-                            'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
-                            'Accept': "application/json+fhir"
-                        }
-                    }
-            ).then(function(response) {
-                if (response.data != undefined && response.data.entry != undefined) {
-                    return response.data.entry[0].resource;
-                } else {
-                    return undefined;
-                }
-            });
-
-            return response;
-        });
-    };
-
     return {
         findAllSummaries: findAllSummaries,
-        getSummary: getSummary,
-        getFhirPatient: getFhirPatient
+        getSummary: getSummary
     };
 });

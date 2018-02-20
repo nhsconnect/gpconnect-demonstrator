@@ -3,15 +3,22 @@
 angular.module('gpConnect')
   .controller('PatientsDetailCtrl', function ($scope, $stateParams, $state, PatientService, ProviderRouting) {
 
-    PatientService.getFhirPatient(ProviderRouting.defaultPractice().odsCode, $stateParams.patientId).then(function (patient) {
-      $scope.patient = patient;
-      $.each(patient.identifier, function (key, identifier) {
-        if(identifier.system == "http://fhir.nhs.net/Id/nhs-number"){
-            $scope.patientNhsNumber = identifier.value;
-        }
-      });
-      $scope.patientLocalIdentifier = patient.id;
-    });
+    PatientService.getSummary($stateParams.patientId).then(function (summaryResponse) {
+    	var fhirJSON = summaryResponse.data;
+      	var entryObj = fhirJSON.entry;
+    	$.each(entryObj, function(key,value) {
+        	if (value.resource.resourceType == "Patient") { // Find Patient Entry
+            	var patient = value.resource;
+            	$scope.patient = patient;
+		    	$.each(patient.identifier, function (key, identifier) {
+		    		if(identifier.system == "http://fhir.nhs.net/Id/nhs-number"){
+		        		$scope.patientNhsNumber = identifier.value;
+		        	}
+		    	});
+		    	$scope.patientLocalIdentifier = patient.id;
+        	}
+      	});
+    });    
 
     $scope.goTo = function (section) {
       var requestHeader = {

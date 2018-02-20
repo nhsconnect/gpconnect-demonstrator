@@ -28,7 +28,13 @@ angular.module('gpConnect')
 
       if (!isNaN(nhsNumber) && nhsNumber.length == 10) {
         usSpinnerService.spin('search-spinner');
-        goToPatientSummary(nhsNumber)
+        PatientService.getSummary(nhsNumber).then(function (patient) {
+          goToPatientSummary(nhsNumber);
+
+        }).catch(function () {
+          usSpinnerService.stop('search-spinner');
+          $scope.setErrorOccurred(true);
+        });
       }
       else {
         usSpinnerService.stop('search-spinner');

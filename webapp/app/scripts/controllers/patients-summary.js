@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('gpConnect')
-  .controller('PatientsSummaryCtrl', function ($scope, $stateParams, $state, $rootScope, $location, $sce, usSpinnerService, PatientService) {
+  .controller('PatientsSummaryCtrl', function ($scope, $stateParams, $state, $rootScope, $location, $sce, usSpinnerService, PatientService, ProviderRouting) {
 
     $scope.patients = $stateParams.patientsList;
 
-    PatientService.getSummary($stateParams.patientId).then(function (patientSummaryResponse) {
+    PatientService.getSummary(ProviderRouting.defaultPractice().odsCode, $stateParams.patientId).then(function (patientSummaryResponse) {
       
       // Default Page Content
       var text = '{"provider":"No Data","html":"No patient summary available for this patient."}';

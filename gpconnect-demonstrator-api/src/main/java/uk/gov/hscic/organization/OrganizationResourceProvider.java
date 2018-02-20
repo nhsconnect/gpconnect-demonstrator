@@ -11,14 +11,7 @@ import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.Operation;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.RequiredParam;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
-import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +28,7 @@ public class OrganizationResourceProvider {
     @Autowired
     private OrganizationSearch organizationSearch;
 
-    public Organization getOrganizationById(@IdParam IdDt organizationId) {
+    public Organization getOrganizationById(IdDt organizationId) {
         OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId.getIdPart());
 
         if (organizationDetails == null) {

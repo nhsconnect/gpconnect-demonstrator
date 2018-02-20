@@ -11,12 +11,6 @@ import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.RequiredParam;
-import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +26,7 @@ public class PractitionerResourceProvider {
 	@Autowired
 	private PractitionerSearch practitionerSearch;
 
-	public Practitioner getPractitionerById(@IdParam IdDt practitionerId) {
+	public Practitioner getPractitionerById(IdDt practitionerId) {
 		PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerDetails(practitionerId.getIdPart());
 
 		if (practitionerDetails == null) {

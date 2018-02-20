@@ -28,7 +28,7 @@ angular.module('gpConnect')
 
       if (!isNaN(nhsNumber) && nhsNumber.length == 10) {
         usSpinnerService.spin('search-spinner');
-        PatientService.getSummary(nhsNumber).then(function (patient) {
+        PatientService.getSummary(ProviderRouting.defaultPractice().odsCode, nhsNumber).then(function (patient) {
           goToPatientSummary(nhsNumber);
 
         }).catch(function () {

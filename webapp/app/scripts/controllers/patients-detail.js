@@ -3,7 +3,7 @@
 angular.module('gpConnect')
   .controller('PatientsDetailCtrl', function ($scope, $stateParams, $state, PatientService, ProviderRouting) {
 
-    PatientService.getSummary($stateParams.patientId).then(function (summaryResponse) {
+	PatientService.getSummary(ProviderRouting.defaultPractice().odsCode, $stateParams.patientId).then(function (summaryResponse) {
     	var fhirJSON = summaryResponse.data;
       	var entryObj = fhirJSON.entry;
     	$.each(entryObj, function(key,value) {

@@ -5,7 +5,8 @@ angular.module('gpConnect').factory('PatientService', function ($rootScope, $htt
         return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/patients');
     };
 
-    var getSummary = function(patientId) {
+    var getSummary = function(practiceOdsCode, patientId) {
+    	 $rootScope.patientOdsCode = practiceOdsCode;
     	return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord").then(function(response) {
             var endpointLookupResult = response;
 

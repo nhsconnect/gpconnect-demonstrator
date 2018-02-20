@@ -27,13 +27,8 @@ angular.module('gpConnect')
       var nhsNumber = expression.replace(/\s+/g, '');
 
       if (!isNaN(nhsNumber) && nhsNumber.length == 10) {
-
         usSpinnerService.spin('search-spinner');
-
-        }).catch(function () {
-          usSpinnerService.stop('search-spinner');
-          $scope.setErrorOccurred(true);
-        });
+        goToPatientSummary(nhsNumber)
       }
       else {
         usSpinnerService.stop('search-spinner');

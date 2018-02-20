@@ -21,47 +21,14 @@ angular.module('gpConnect')
       var toState = '';
 
       switch (section) {
-      case 'summary':
-        toState = 'patients-summary';
-        break;
-      case 'problem':
-        toState = 'problem-list';
-        break;
-      case 'allergies':
-        toState = 'allergies';
-        break;
-      case 'medications':
-        toState = 'medications';
-        break;
-      case 'referrals':
-        toState = 'referrals';
-        break;
       case 'appointments':
         toState = 'appointments';
         break;
-      case 'encounters':
-        toState = 'encounters';
+      case 'access-record-html':
+        toState = 'access-record-html';
         break;
-      case 'observations':
-          toState = 'observations';
-          break;
-      case 'investigations':
-          toState = 'investigations';
-          break;
-      case 'immunisations':
-          toState = 'immunisations';
-          break;
-      case 'adminitems':
-          toState = 'adminitems';
-          break;
-      case 'clinicalitems':
-          toState = 'clinicalitems';
-          break;
-      case 'orders-sent':
-          toState = 'orders-sent';
-          break;
-      case 'orders-received':
-          toState = 'orders-received';
+      case 'access-record-structured':
+          toState = 'access-record-structured';
           break;
       }
 

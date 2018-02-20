@@ -61,7 +61,7 @@ angular.module('gpConnect')
     };
 
     var goToPatientSummary = function (nhsNumber) {
-      $state.go('patients-summary', {
+      $state.go('appointments', {
         patientId: nhsNumber,
         filter: $scope.query
       });

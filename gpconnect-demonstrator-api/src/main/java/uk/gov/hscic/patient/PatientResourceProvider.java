@@ -1,6 +1,5 @@
 package uk.gov.hscic.patient;
 
-import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.IDatatype;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -9,12 +8,8 @@ import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
 import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.Appointment;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import ca.uhn.fhir.model.dstu2.resource.Composition;
-import ca.uhn.fhir.model.dstu2.resource.MedicationAdministration;
-import ca.uhn.fhir.model.dstu2.resource.MedicationDispense;
-import ca.uhn.fhir.model.dstu2.resource.MedicationOrder;
 import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
@@ -31,14 +26,8 @@ import ca.uhn.fhir.model.dstu2.valueset.NameUseEnum;
 import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
-import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
@@ -61,7 +50,6 @@ import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.common.util.NhsCodeValidator;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.details.search.PatientSearch;
-import uk.gov.hscic.patient.details.store.PatientStore;
 import uk.gov.hscic.patient.html.FhirSectionBuilder;
 import uk.gov.hscic.patient.html.Page;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
@@ -73,8 +61,6 @@ public class PatientResourceProvider implements IResourceProvider {
     private static final String REGISTRATION_TYPE_EXTENSION_URL = "http://fhir.nhs.net/StructureDefinition/extension-registration-type-1";
     private static final String REGISTRATION_STATUS_EXTENSION_URL = "http://fhir.nhs.net/StructureDefinition/extension-registration-status-1";
     private static final String REGISTRATION_PERIOD_EXTENSION_URL = "http://fhir.nhs.net/StructureDefinition/extension-registration-period-1";
-    private static final String TEMPORARY_RESIDENT_REGISTRATION_TYPE = "T";
-    private static final String ACTIVE_REGISTRATION_STATUS = "A";
 
     private static final List<String> MANDATORY_PARAM_NAMES = Arrays.asList("patientNHSNumber", "recordSection");
     private static final List<String> PERMITTED_PARAM_NAMES = new ArrayList<String>(MANDATORY_PARAM_NAMES) {{
@@ -86,9 +72,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private OrganizationResourceProvider organizationResourceProvider;
-
-    @Autowired
-    private PatientStore patientStore;
 
     @Autowired
     private PatientSearch patientSearch;
@@ -114,8 +97,7 @@ public class PatientResourceProvider implements IResourceProvider {
         return patientDetailsToPatientResourceConverter(patientDetails);
     }
 
-    @SuppressWarnings("deprecation")
-    @Operation(name = "$gpc.getcarerecord")
+   @Operation(name = "$gpc.getcarerecord")
     public Bundle getPatientCareRecord(@ResourceParam Parameters params) throws UnsupportedDataTypeException {
         String nhsNumber = null;
         String sectionName = null;

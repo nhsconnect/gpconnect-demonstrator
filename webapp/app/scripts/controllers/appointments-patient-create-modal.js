@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('AppointmentsPatientCreateModalCtrl', function ($stateParams, $scope, $modal, $modalInstance, patient, appointmentBookingParameters, PatientService, usSpinnerService, DateFormatter) {
+        .controller('AppointmentsPatientCreateModalCtrl', ['$stateParams', '$scope', '$modal', '$modalInstance', 'patient', 'appointmentBookingParameters', 'PatientService', 'usSpinnerService', 'DateFormatter', 'gpcResource', function ($stateParams, $scope, $modal, $modalInstance, patient, appointmentBookingParameters, PatientService, usSpinnerService, DateFormatter, gpcResource) {
 
             $scope.patientDetails = patient;
             $scope.appointmentBooking = appointmentBookingParameters;
@@ -14,25 +14,14 @@ angular.module('gpConnect')
                 // Build patient fhir model
                 var newPatient = {};
                 newPatient.resourceType = "Patient";
-                newPatient.extension = [
-                    {
-                        "url": "http://fhir.nhs.net/StructureDefinition/extension-registration-period-1",
-                        "valuePeriod": {"start": DateFormatter.clean(new Date())}
-                    },
-                    {
-                        "url": "http://fhir.nhs.net/StructureDefinition/extension-registration-status-1",
-                        "valueCodeableConcept": {"coding": [{"system": "http://fhir.nhs.net/ValueSet/registration-status-1", "code": "A", "display": "Active"}]}
-                    },
-                    {
-                        "url": "http://fhir.nhs.net/StructureDefinition/extension-registration-type-1",
-                        "valueCodeableConcept": {"coding": [{"system": "http://fhir.nhs.net/ValueSet/registration-type-1", "code": "T", "display": "Temporary Resident"}]}
-                    }
-                ];
                 newPatient.identifier = $scope.patientDetails.identifier;
                 newPatient.name = $scope.patientDetails.name;
                 newPatient.gender = $scope.patientDetails.gender;
                 newPatient.birthDate = $scope.patientDetails.birthDate;
-                
+                newPatient.meta = {
+                    "profile": [gpcResource.getConst("SD_CC_PATIENT")]
+                };
+
                 var requestParameters = {
                     "resourceType": "Parameters",
                     "parameter": [
@@ -76,4 +65,4 @@ angular.module('gpConnect')
                 $modalInstance.dismiss('cancel');
             };
 
-        });
+        }]);

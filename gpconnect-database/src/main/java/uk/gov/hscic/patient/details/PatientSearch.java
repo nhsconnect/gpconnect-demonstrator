@@ -17,11 +17,13 @@ package uk.gov.hscic.patient.details;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.model.patient.PatientSummary;
 
@@ -52,12 +54,26 @@ public class PatientSearch {
                 : patientEntityToDetailsTransformer.transform(patient);
     }
 
-    public PatientDetails findPatientByInternalID(final String internalID) {
-        final PatientEntity patient = patientRepository.findById(Long.valueOf(internalID));
-
-        return patient == null
-                ? null
-                : patientEntityToDetailsTransformer.transform(patient);
+    /**
+     * @param rawInternalID
+     * @return PatientDetails - that match the ID or null if no match could be found
+     */
+    public PatientDetails findPatientByInternalID(final String rawInternalID) {
+        PatientDetails patientDetails;  
+        
+        try {
+            Long internaId = Long.valueOf(rawInternalID);
+            final PatientEntity patient = patientRepository.findById(internaId);
+            
+            patientDetails = patient == null
+                                 ? null
+                                 : patientEntityToDetailsTransformer.transform(patient);
+        }
+        catch(NumberFormatException nfe) {
+            patientDetails = null;
+        }
+        
+        return patientDetails;
     }
 
     public PatientSummary findPatientSummary(final String patientId) {

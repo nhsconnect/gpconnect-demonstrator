@@ -1,23 +1,24 @@
 package uk.gov.hscic.medications;
 
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.Medication;
-import ca.uhn.fhir.model.dstu2.resource.MedicationDispense;
-import ca.uhn.fhir.model.dstu2.valueset.MedicationDispenseStatusEnum;
-import ca.uhn.fhir.rest.annotation.RequiredParam;
-import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.server.IResourceProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.Medication;
+import org.hl7.fhir.dstu3.model.MedicationDispense;
+import org.hl7.fhir.dstu3.model.MedicationDispense.MedicationDispenseStatus;
+import org.hl7.fhir.dstu3.model.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.model.medication.MedicationDispenseDetail;
+
+import ca.uhn.fhir.rest.annotation.RequiredParam;
+import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.server.IResourceProvider;
 import uk.gov.hscic.medication.dispense.MedicationDispenseSearch;
+import uk.gov.hscic.model.medication.MedicationDispenseDetail;
 
 @Component
 public class MedicationDispenseResourceProvider implements IResourceProvider {
@@ -31,45 +32,49 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public List<MedicationDispense> getMedicationDispensesForPatientId(@RequiredParam(name = "patient") String patientId) {
+    public List<MedicationDispense> getMedicationDispensesForPatientId(
+            @RequiredParam(name = "patient") String patientId) {
         ArrayList<MedicationDispense> medicationDispenses = new ArrayList<>();
 
-        List<MedicationDispenseDetail> medicationDispenseDetailList = medicationDispenseSearch.findMedicationDispenseForPatient(Long.parseLong(patientId));
+        List<MedicationDispenseDetail> medicationDispenseDetailList = medicationDispenseSearch
+                .findMedicationDispenseForPatient(Long.parseLong(patientId));
 
         if (medicationDispenseDetailList != null && !medicationDispenseDetailList.isEmpty()) {
             for (MedicationDispenseDetail medicationDispenseDetail : medicationDispenseDetailList) {
                 MedicationDispense medicationDispense = new MedicationDispense();
                 medicationDispense.setId(String.valueOf(medicationDispenseDetail.getId()));
                 medicationDispense.getMeta().setLastUpdated(medicationDispenseDetail.getLastUpdated());
-                medicationDispense.getMeta().setVersionId(String.valueOf(medicationDispenseDetail.getLastUpdated().getTime()));
+                medicationDispense.getMeta()
+                        .setVersionId(String.valueOf(medicationDispenseDetail.getLastUpdated().getTime()));
 
                 switch (medicationDispenseDetail.getStatus().toLowerCase(Locale.UK)) {
-                    case "completed":
-                        medicationDispense.setStatus(MedicationDispenseStatusEnum.COMPLETED);
-                        break;
-                    case "entered_in_error":
-                        medicationDispense.setStatus(MedicationDispenseStatusEnum.ENTERED_IN_ERROR);
-                        break;
-                    case "in_progress":
-                        medicationDispense.setStatus(MedicationDispenseStatusEnum.IN_PROGRESS);
-                        break;
-                    case "on_hold":
-                        medicationDispense.setStatus(MedicationDispenseStatusEnum.ON_HOLD);
-                        break;
-                    case "stopped":
-                        medicationDispense.setStatus(MedicationDispenseStatusEnum.STOPPED);
-                        break;
+                case "completed":
+                    medicationDispense.setStatus(MedicationDispenseStatus.COMPLETED);
+                    break;
+                case "entered_in_error":
+                    medicationDispense.setStatus(MedicationDispenseStatus.ENTEREDINERROR);
+                    break;
+                case "in_progress":
+                    medicationDispense.setStatus(MedicationDispenseStatus.INPROGRESS);
+                    break;
+                case "on_hold":
+                    medicationDispense.setStatus(MedicationDispenseStatus.ONHOLD);
+                    break;
+                case "stopped":
+                    medicationDispense.setStatus(MedicationDispenseStatus.STOPPED);
+                    break;
                 }
 
-                medicationDispense.setPatient(new ResourceReferenceDt("Patient/"+patientId));
-                medicationDispense.setAuthorizingPrescription(Collections.singletonList(new ResourceReferenceDt("MedicationOrder/"+medicationDispenseDetail.getMedicationOrderId())));
+                medicationDispense.setSubject(new Reference("Patient/" + patientId));
+                medicationDispense.setAuthorizingPrescription(Collections.singletonList(
+                        new Reference("MedicationOrder/" + medicationDispenseDetail.getMedicationOrderId())));
 
                 Medication medication = new Medication();
-                CodingDt coding = new CodingDt();
-                coding.setSystem(SystemURL.SNOMED);
+                Coding coding = new Coding();
+
                 coding.setCode(String.valueOf(medicationDispenseDetail.getMedicationId()));
                 coding.setDisplay(medicationDispenseDetail.getMedicationName());
-                CodeableConceptDt codeableConcept = new CodeableConceptDt();
+                CodeableConcept codeableConcept = new CodeableConcept();
                 codeableConcept.setCoding(Collections.singletonList(coding));
                 medication.setCode(codeableConcept);
 

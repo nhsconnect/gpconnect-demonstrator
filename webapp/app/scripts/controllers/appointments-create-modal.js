@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('AppointmentsCreateModalCtrl', function ($state, $scope, $stateParams, $modalInstance, modal, appointmentBookingParams, Appointment, usSpinnerService) {
+        .controller('AppointmentsCreateModalCtrl', function ($state, $scope, $stateParams, $modalInstance, modal, appointmentBookingParams, Appointment, usSpinnerService, gpcResource) {
+
 
             $.each(appointmentBookingParams.patient.identifier, function (key, identifier) {
-                if (identifier.system == "http://fhir.nhs.net/Id/nhs-number") { $scope.patientNhsNumber = identifier.value; }
+            if (identifier.system == gpcResource.getConst("ID_NHS_NUMBER")) { $scope.patientNhsNumber = identifier.value; }
+
             });
             $scope.patient = appointmentBookingParams.patient;
             $scope.modal = modal;
@@ -15,27 +17,17 @@ angular.module('gpConnect')
             $scope.appointmentCreate = {};
             $scope.appointmentCreate.resourceType = "Appointment";
             $scope.appointmentCreate.status = "booked";
-            $scope.appointmentCreate.type = {
+            
+            $scope.appointmentCreate.reason = [{
                 "coding": [
                     {
-                        "system": "http://hl7.org/fhir/ValueSet/c80-practice-codes",
-                        "code": appointmentBookingParams.typeCode,
-                        "display": appointmentBookingParams.type
-                    }
-                ],
-                "text": appointmentBookingParams.type
-            };
-            $scope.appointmentCreate.reason = {
-                "coding": [
-                    {
-                        "system": "http://snomed.info/sct",
+                        "system": gpcResource.getConst("VS_SNOMED_SCT"),
                         "code": "00001",
                         "display": "Default Appointment Type"
                     }
-                ],
-                "text": "Generic Booking"
-            };
-            $scope.appointmentCreate.description = "";
+                ]
+            }];
+           
             $scope.appointmentCreate.start = appointmentBookingParams.startTime;
             $scope.appointmentCreate.end = appointmentBookingParams.endTime;
             
@@ -45,7 +37,7 @@ angular.module('gpConnect')
                 $scope.appointmentCreate.slot.push(reference);
             }
             
-            $scope.appointmentCreate.comment = "";
+            $scope.appointmentCreate.comment;
             $scope.appointmentCreate.participant = [
                 {
                     "actor": {

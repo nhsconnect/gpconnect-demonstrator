@@ -1,6 +1,6 @@
 package uk.gov.hscic.auth;
 
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
+
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -9,8 +9,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.log4j.Logger;
+
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.springframework.http.HttpMethod;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
@@ -20,39 +25,35 @@ import uk.gov.hscic.SystemCode;
  * in the trusted jks.</p>
  */
 public final class CertificateValidator {
-    private static final Logger LOG = Logger.getLogger(CertificateValidator.class);
+    private final String domainName = "msg.dev.spine2.ncrs.nhs.uk";    
+    private final String certificateAuthority = "VNIS03_SUBCA";
+    private final List<X509Certificate> storeCertificates = new ArrayList<>();
 
-    private final List<X509Certificate> knownCerts = new ArrayList<>();
-
-    public CertificateValidator(KeyStore keyStore) throws KeyStoreException {
+    public CertificateValidator(KeyStore keyStore) throws KeyStoreException { 
         for (String alias : Collections.list(keyStore.aliases())) {
             if (keyStore.isCertificateEntry(alias)) {
-                knownCerts.add((X509Certificate) keyStore.getCertificate(alias));
+                storeCertificates.add((X509Certificate) keyStore.getCertificate(alias));
             }
         }
     }
-
+            
     public void validateRequest(HttpServletRequest request) {
-        try {
+        try {            
             if (request.isSecure() && !HttpMethod.OPTIONS.name().equals(request.getMethod())) {
-                X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
+                
+                X509Certificate[] certificates = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
 
-                if (null == certs) {
+                if (certificates == null) {
                     throw new CertificateException("No certificate found!", 496);
                 }
 
-                X509Certificate x509Certificate = certs[0];
+                X509Certificate certificate = certificates[0];
 
-                if (!knownCerts.contains(x509Certificate)) {
-                    throw new CertificateException("Provided certificate is not in trusted list!", 495);
-                } else { // Otherwise, check the expiry
-                    knownCerts.stream()
-                            .filter(x509Certificate::equals)
-                            .peek(cert -> LOG.info("Certificate valid until: " + cert.getNotAfter()))
-                            .filter(cert -> new Date().before(cert.getNotAfter()))
-                            .findAny()
-                            .orElseThrow(() -> new CertificateException("Provided certificate has expired!", 495));
-                }
+                if (!storeCertificates.contains(certificate)) {
+                    String message = getCertificateError(certificate);                   
+                    
+                    throw new CertificateException(message, 495);
+                }               
             }
         } catch (CertificateException certificateException) {
             StringBuilder requestURL = new StringBuilder(request.getRequestURL());
@@ -66,7 +67,55 @@ public final class CertificateValidator {
 
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnclassifiedServerFailureException(certificateException.getStatusCode(), warningMsg),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.FORBIDDEN);
+                    SystemCode.BAD_REQUEST, IssueType.FORBIDDEN);
+        } catch (InvalidNameException ex) {
+            java.util.logging.Logger.getLogger(CertificateValidator.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private String getSubjectCommonName(X509Certificate x509Certificate) throws InvalidNameException {
+        String value = x509Certificate.getSubjectX500Principal().getName();
+        LdapName ldapDN = new LdapName(value);
+        
+        for(Rdn rdn: ldapDN.getRdns()) {
+            if (rdn.getType().equals("CN")){
+                return rdn.getValue().toString();
+            }
+        }
+        
+        return "";       
+    }
+    
+    private String getIssuerCommonName(X509Certificate x509Certificate) throws InvalidNameException {
+        String value = x509Certificate.getIssuerX500Principal().getName();
+        LdapName ldapDN = new LdapName(value);
+        
+        for(Rdn rdn: ldapDN.getRdns()) {
+            if (rdn.getType().equals("CN")){
+                return rdn.getValue().toString();
+            }
+        }
+        
+        return "";       
+    }
+    
+    private String getCertificateError(X509Certificate certificate) throws InvalidNameException {
+        if (certificate.getNotAfter().before(new Date())) {
+            return "Provided certificate is expired!";
+        } else {
+            String subjectCommonName = getSubjectCommonName(certificate);
+
+            if (!subjectCommonName.equals(domainName)) {
+                return "The certificate provided has an invalid FQDN.";
+            }
+
+            String issuerCommonName = getIssuerCommonName(certificate);
+
+            if (!issuerCommonName.equals(certificateAuthority)) {
+                return "The certificate provided has an invalid Certificate Authority.";
+            }
+        }
+
+        return  "Provided certificate is not in trusted list!";
     }
 }

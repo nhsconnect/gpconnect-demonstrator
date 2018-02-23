@@ -3,10 +3,13 @@ package uk.gov.hscic.patient.details;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+
 import uk.gov.hscic.medical.practicitioners.doctor.GPEntity;
 import uk.gov.hscic.model.patient.PatientDetails;
 
@@ -45,12 +48,20 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         patient.setRegistrationEndDateTime(patientEntity.getRegistrationEndDateTime());
         patient.setRegistrationStatus(patientEntity.getRegistrationStatus());
         patient.setRegistrationType(patientEntity.getRegistrationType());
+       // patient.setMultipleBirth(patientEntity.isMultipleBirth());
+        patient.setMaritalStatus(patientEntity.getMaritalStatus());
+        patient.setManagingOrganization(patientEntity.getManagingOrganization());
 
         GPEntity gp = patientEntity.getGp();
         
         if (gp != null) {
         	patient.setGpDetails(gp.getName());
         	patient.setGpId(gp.getId());
+        }
+        
+        Date deceased = patientEntity.getDeceasedDateTime();
+        if(deceased != null) {
+        	patient.setDeceased(deceased);
         }
 
         return patient;

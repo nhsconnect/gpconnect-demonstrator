@@ -32,7 +32,7 @@ public class HeaderRequestWrapper extends HttpServletRequestWrapper {
     }
 
     @Override
-    public Enumeration getHeaderNames() {
+    public Enumeration<String> getHeaderNames() {
         List<String> names = Collections.list(super.getHeaderNames());
 
         if (!names.contains(SystemHeader.PREFER)) {

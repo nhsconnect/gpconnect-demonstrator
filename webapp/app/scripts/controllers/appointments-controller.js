@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .controller('AppointmentsCtrl', function ($scope, $http, $stateParams, $state, $modal, $q, PatientService, usSpinnerService, Appointment, ProviderRouting) {
+        .controller('AppointmentsCtrl', ['$scope', '$http', '$stateParams', '$state', '$modal', '$q', 'PatientService', 'usSpinnerService', 'Appointment', 'ProviderRouting', 'gpcResource', function ($scope, $http, $stateParams, $state, $modal, $q, PatientService, usSpinnerService, Appointment, ProviderRouting, gpcResource) {
 
             $scope.currentPage = 1;
 
@@ -83,7 +83,7 @@ angular.module('gpConnect')
                         $.each($scope.appointments, function (key, appointment) {
                             if (appointment.resource.extension != undefined) {
                                 for (var i = 0; i < appointment.resource.extension.length; i++) {
-                                    if ("http://fhir.nhs.net/StructureDefinition/extension-gpconnect-appointment-cancellation-reason-1" == appointment.resource.extension[i].url) {
+                                    if (gpcResource.getConst("SD_EXT_GPC_APPOINT_CANC_REAS") == appointment.resource.extension[i].url) {
                                         appointment.cancellationReason = appointment.resource.extension[i].valueString;
                                         i = appointment.resource.extension.length;
                                     }
@@ -130,7 +130,7 @@ angular.module('gpConnect')
                             if(response.data == undefined || response.data == null){
                                 $scope.practitionerName = "[Lookup failed]";
                             } else {
-                                $scope.practitionerName = response.data.name.prefix[0] + " " + response.data.name.given[0] + " " + response.data.name.family[0];
+                                $scope.practitionerName = response.data.name[0].prefix[0] + " " + response.data.name[0].given[0] + " " + response.data.name[0].family;
                             }
                         },
                         function (failedResponse) {
@@ -198,4 +198,10 @@ angular.module('gpConnect')
                 });
             };
 
-        });
+            $scope.closeAppointmentDetail = function(){
+                $scope.appointmentDetail = undefined;
+                $scope.appointmentLocation = undefined;
+                $scope.practitionerName = undefined;
+            };
+
+        }]);

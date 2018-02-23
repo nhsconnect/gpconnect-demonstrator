@@ -14,11 +14,15 @@ public class PractitionerSearch {
     private PractitionerRepository practitionerRepository;
 
     public PractitionerDetails findPractitionerDetails(final String practitionerId) {
-        final PractitionerEntity item = practitionerRepository.findOne(Long.parseLong(practitionerId));
+        try {
+            PractitionerEntity item = practitionerRepository.findOne(Long.parseLong(practitionerId));
 
-        return item == null
+            return item == null
                 ? null
                 : transformer.transform(item);
+        } catch (NumberFormatException numberFormatException) {
+            return null;
+        }
     }
 
     public List<PractitionerDetails> findPractitionerByUserId(final String practitionerUserId) {

@@ -33,22 +33,25 @@ public class LocationEntity {
     
     @Column(name = "lastUpdated")
     private Date lastUpdated;
+    
+    @Column(name = "status")
+    private String status;
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+            return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+            this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+            return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+            this.name = name;
+    }
 
     public String getOrgOdsCode() {
         return orgOdsCode;
@@ -66,21 +69,21 @@ public class LocationEntity {
         this.orgOdsCodeName = orgOdsCodeName;
     }
 
-	public String getSiteOdsCode() {
-		return siteOdsCode;
-	}
+    public String getSiteOdsCode() {
+            return siteOdsCode;
+    }
 
-	public void setSiteOdsCode(String siteOdsCode) {
-		this.siteOdsCode = siteOdsCode;
-	}
+    public void setSiteOdsCode(String siteOdsCode) {
+            this.siteOdsCode = siteOdsCode;
+    }
 
-	public String getSiteOdsCodeName() {
-		return siteOdsCodeName;
-	}
+    public String getSiteOdsCodeName() {
+            return siteOdsCodeName;
+    }
 
-	public void setSiteOdsCodeName(String siteOdsCodeName) {
-		this.siteOdsCodeName = siteOdsCodeName;
-	}
+    public void setSiteOdsCodeName(String siteOdsCodeName) {
+            this.siteOdsCodeName = siteOdsCodeName;
+    }
 
     public Date getLastUpdated() {
         return lastUpdated;
@@ -88,5 +91,13 @@ public class LocationEntity {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+    
+    public void setStatus(String status){
+        this.status = status;
+    }
+    
+    public String getStatus(){
+        return status;
     }
 }

@@ -10,10 +10,9 @@ import java.util.Map;
 public class RequestingPractitioner {
     private String id;
     private String resourceType;
-    private Map<String, List<String>> name;
 
-    @JsonProperty("practitionerRole")
-    private List<Map<String, Map<String, List<Coding>>>> practitionerRoles;
+    @JsonProperty("name")
+    private List<Name> name;
 
     @JsonProperty("identifier")
     private List<Identifier> identifiers;
@@ -34,11 +33,11 @@ public class RequestingPractitioner {
         this.resourceType = resourceType;
     }
 
-    public Map<String, List<String>> getName() {
+    public List<Name> getName() {
         return name;
     }
 
-    public void setName(Map<String, List<String>> name) {
+    public void setName(List<Name> name) {
         this.name = name;
     }
 
@@ -50,32 +49,40 @@ public class RequestingPractitioner {
         if (null == identifiers) {
             return null;
         }
-        
-        return identifiers
-                .stream()
-                .filter(identifier -> identifier.getSystem().equals(system))
-                .map(Identifier::getValue)
-                .findFirst()
-                .orElse(null);
+
+        return identifiers.stream().filter(identifier -> identifier.getSystem().equals(system))
+                .map(Identifier::getValue).findFirst().orElse(null);
     }
 
-    public String getPractitionerRoleCode(String system) {
-        if (null == practitionerRoles || practitionerRoles.isEmpty()) {
-            return null;
-        }
+}
 
-        return practitionerRoles
-                .get(0)
-                .getOrDefault("role", Collections.emptyMap())
-                .getOrDefault("coding", Collections.emptyList())
-                .stream()
-                .filter(coding -> system.equals(coding.getSystem()))
-                .map(Coding::getCode)
-                .findFirst()
-                .orElse(null);
+@JsonIgnoreProperties(ignoreUnknown = true)
+class Name {
+    private String family;
+    private List<String> given;
+    private List<String> prefix;
+
+    public String getFamily() {
+        return this.family;
     }
 
-    public void setPractitionerRoles(List<Map<String, Map<String, List<Coding>>>> practitionerRoles) {
-        this.practitionerRoles = practitionerRoles;
+    public void setFamily(String family) {
+        this.family = family;
+    }
+
+    public List<String> getGiven() {
+        return this.given;
+    }
+
+    public void setGiven(List<String> given) {
+        this.given = given;
+    }
+
+    public List<String> getPrefix() {
+        return this.prefix;
+    }
+
+    public void setPrefix(List<String> prefix) {
+        this.prefix = prefix;
     }
 }

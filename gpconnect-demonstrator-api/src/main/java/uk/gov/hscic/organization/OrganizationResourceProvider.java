@@ -1,245 +1,245 @@
 package uk.gov.hscic.organization;
 
-import java.text.ParseException;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hl7.fhir.dstu3.model.Address;
+import org.hl7.fhir.dstu3.model.Address.AddressType;
+import org.hl7.fhir.dstu3.model.Address.AddressUse;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.ContactDetail;
+import org.hl7.fhir.dstu3.model.ContactPoint;
+import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
+import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
+import org.hl7.fhir.dstu3.model.HumanName;
+import org.hl7.fhir.dstu3.model.HumanName.NameUse;
+import org.hl7.fhir.dstu3.model.IdType;
+import org.hl7.fhir.dstu3.model.Identifier;
+import org.hl7.fhir.dstu3.model.Location;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
+import org.hl7.fhir.dstu3.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
-import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
-import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
-import ca.uhn.fhir.model.dstu2.resource.Organization;
-import ca.uhn.fhir.model.dstu2.resource.Parameters;
-import ca.uhn.fhir.model.dstu2.resource.Parameters.Parameter;
-import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
-import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
-import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.Sort;
+import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.model.organization.OrganizationDetails;
+import uk.gov.hscic.slots.PopulateSlotBundle;
 
 @Component
 public class OrganizationResourceProvider implements IResourceProvider {
 
     @Autowired
-    private GetScheduleOperation getScheduleOperation;
+    public PopulateSlotBundle getScheduleOperation;
 
     @Autowired
     private OrganizationSearch organizationSearch;
+
+    public static Set<String> getCustomReadOperations() {
+        Set<String> customReadOperations = new HashSet<String>();
+        return customReadOperations;
+    }
 
     @Override
     public Class<Organization> getResourceType() {
         return Organization.class;
     }
 
-    @Read()
-    public Organization getOrganizationById(@IdParam IdDt organizationId) {
+    @Read(version = true)
+    public Organization getOrganizationById(@IdParam IdType organizationId) {
 
-        OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId.getIdPart());
+        OrganizationDetails organizationDetails = null;
 
-        if (organizationDetails == null) {
+        String idPart = organizationId.getIdPart();
+
+        try {
+            Long id = Long.parseLong(idPart);
+            organizationDetails = organizationSearch.findOrganizationDetails(id);
+            if (organizationDetails == null) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
+                        SystemCode.ORGANISATION_NOT_FOUND, IssueType.INVALID);
+            }
+        } catch (NumberFormatException nfe) {
+
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No organization details found for organization ID: " + organizationId.getIdPart()),
-                    SystemCode.ORGANISATION_NOT_FOUND, IssueTypeEnum.INVALID_CONTENT);
+                    new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
+                    SystemCode.ORGANISATION_NOT_FOUND, IssueType.INVALID);
+
         }
 
-        return convertOrganizaitonDetailsListToOrganizationList(Collections.singletonList(organizationDetails)).get(0);
+        return IdentifierValidator.versionComparison(organizationId,
+                convertOrganizaitonDetailsListToOrganizationList(Collections.singletonList(organizationDetails))
+                        .get(0));
     }
 
     @Search
-    public List<Organization> getOrganizationsByODSCode(@RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam tokenParam) {
+    public List<Organization> getOrganizationsByODSCode(
+            @RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam tokenParam, @Sort SortSpec sort,
+            @Count Integer count) {
+
         if (StringUtils.isBlank(tokenParam.getSystem()) || StringUtils.isBlank(tokenParam.getValue())) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Missing identifier token"),
-                    SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
+                    new InvalidRequestException("Missing identifier token"), SystemCode.INVALID_PARAMETER,
+                    IssueType.INVALID);
         }
 
-        switch (tokenParam.getSystem()) {
-            case SystemURL.ID_ODS_ORGANIZATION_CODE:
-                return convertOrganizaitonDetailsListToOrganizationList(organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue()));
+        if (tokenParam.getSystem().equals(SystemURL.ID_ODS_ORGANIZATION_CODE)
+                || tokenParam.getSystem().equals(SystemURL.ID_ODS_OLD_ORGANIZATION_CODE)) {
+            List<Organization> organizationDetails = convertOrganizaitonDetailsListToOrganizationList(
+                    organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue()));
+            if (organizationDetails.isEmpty()) {
 
-            case SystemURL.ID_ODS_SITE_CODE:
-                return convertOrganizaitonDetailsListToOrganizationList(organizationSearch.findOrganizationDetailsBySiteODSCode(tokenParam.getValue()));
+                return null;
+            }
+            if (sort != null && sort.getParamName().equalsIgnoreCase(Location.SP_STATUS)) {
+                Collections.sort(organizationDetails, (Organization a, Organization b) -> {
 
-            default:
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException("Invalid system code"),
-                        SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);
-        }
-    }
+                    String aStatus = a.getName();
+                    String bStatus = b.getName();
 
-    @Operation(name = "$gpc.getschedule")
-    public Bundle getSchedule(@IdParam IdDt organizationId, @ResourceParam Parameters params) {
-        Bundle bundle = null;
-    	
-        List<Parameter> parameter = params.getParameter();
+                    if (aStatus == null && bStatus == null) {
+                        return 0;
+                    }
 
-        // there should only be 1 parameter
-		if(parameter.size() == 1) {        	
-        	PeriodDt timePeriod = getTimePeriod(parameter);
-        	validateTimePeriod(timePeriod);
-        	
-        	bundle = new Bundle().setType(BundleTypeEnum.SEARCH_RESULTS);
-        	
-        	try {
-        		getScheduleOperation.populateBundle(bundle, 
-        				new OperationOutcome(), 
-        				organizationId, 
-        				timePeriod.getStart(),
-        				getAfter(timePeriod.getEndElement()));
-        	} catch (ParseException e) {
-        		// TODO Auto-generated catch block
-        		e.printStackTrace();
-        	}
-        }
-        else {
+                    if (aStatus == null && bStatus != null) {
+                        return -1;
+                    }
+
+                    if (aStatus != null && bStatus == null) {
+                        return 1;
+                    }
+
+                    return aStatus.compareToIgnoreCase(bStatus);
+                });
+            }
+
+            // Update startIndex if we do paging
+            return count != null ? organizationDetails.subList(0, count) : organizationDetails;
+
+        } else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Invalid number of parameters. Only one parameter named timePeriod is permitted."),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
+                    new InvalidRequestException("Invalid system code"), SystemCode.INVALID_PARAMETER,
+                    IssueType.INVALID);
         }
-        
 
-        return bundle;
-    }
-    
-    private Date getAfter(DateTimeDt target) throws ParseException {
-    	Date after = null;
-    	
-    	Calendar calendar = null;
-    	
-    	TimeZone timeZone = target.getTimeZone();
-    	if(timeZone != null) {
-    		calendar = Calendar.getInstance(timeZone);
-    	}
-    	else {
-    		calendar = Calendar.getInstance();
-    	}
-    	
-    	calendar.setTime(target.getValue());
-    	
-    	switch(target.getPrecision()) {
-	    	case MINUTE : calendar.add(Calendar.MINUTE, 1);
-	    	break;
-	    	case DAY : calendar.add(Calendar.DAY_OF_MONTH, 1);
-	    	break;
-	    	case MONTH : calendar.add(Calendar.MONTH, 1);
-	    	break;	    	
-	    	case YEAR : calendar.add(Calendar.YEAR, 1);
-	    	break;
-	    	default : ; // do nothing
-	    	break;    		
-    	}
-    	
-    	after = calendar.getTime();
-    	
-    	return after;
-    }
-    
-    private PeriodDt getTimePeriod(List<Parameter> parameters) {
-    	PeriodDt timePeriod = null;
-    	
-    	// first we need a param called timePeriod. If we don't have one then we cannot proceed   
-    	// similarly if there's more than one then we cannot proceed.
-        timePeriod = parameters.stream()
-		        	    .filter(parameter -> "timePeriod".equals(parameter.getName()))
-		                .map(Parameter::getValue)
-		                .map(PeriodDt.class::cast)
-		        	    .reduce((a, b) -> {
-		        	    	throw OperationOutcomeFactory.buildOperationOutcomeException(
-		                            new InvalidRequestException("Multiple timePeriod parameters. Only one is permitted"),
-		                            SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-		                })
-		                .get();   
-
-        return timePeriod;   	
-    }
-    
-    private void validateTimePeriod(PeriodDt timePeriod) {
-        if(timePeriod != null) {
-        	DateTimeDt startElement = timePeriod.getStartElement();
-        	DateTimeDt endElement = timePeriod.getEndElement();
-        	
-        	String startString = startElement.getValueAsString();
-        	String endString = endElement.getValueAsString();
-        	
-        	if(startString != null && endString != null) {
-        		Date start = timePeriod.getStart();
-        		Date end = timePeriod.getEnd();
-        		
-        		if(start != null && end != null) {
-        			long period = ChronoUnit.DAYS.between(start.toInstant(), end.toInstant());
-        			if(period < 0l || period > 14l) {
-        				throw OperationOutcomeFactory.buildOperationOutcomeException(
-        						new UnprocessableEntityException("Invalid timePeriods, was " + period + " days between (max is 14)"),
-        						SystemCode.INVALID_PARAMETER, IssueTypeEnum.INVALID_CONTENT);	
-        			}
-        		}
-        		else {
-        			throw OperationOutcomeFactory.buildOperationOutcomeException(
-        					new UnprocessableEntityException("Invalid timePeriod one or both of start and end date are not valid dates"),
-        					SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-        		}    	
-        	}
-        	else {
-    			throw OperationOutcomeFactory.buildOperationOutcomeException(
-    					new InvalidRequestException("Invalid timePeriod one or both of start and end date were missing"),
-    					SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-        	}
-        }
-        else {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Missing timePeriod parameter"),
-                    SystemCode.BAD_REQUEST, IssueTypeEnum.INVALID_CONTENT);
-        }
     }
 
     private List<Organization> convertOrganizaitonDetailsListToOrganizationList(List<OrganizationDetails> organizationDetails) {
         Map<String, Organization> map = new HashMap<>();
 
         for (OrganizationDetails organizationDetail : organizationDetails) {
-            if (map.containsKey(organizationDetail.getOrgCode())) {
-                map.get(organizationDetail.getOrgCode()).addIdentifier(new IdentifierDt(SystemURL.ID_ODS_SITE_CODE, organizationDetail.getSiteCode()));
-            } else {
-                Organization organization = new Organization()
-                        .setName(organizationDetail.getOrgName())
-                        .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_ORGANIZATION_CODE, organizationDetail.getOrgCode()))
-                        .addIdentifier(new IdentifierDt(SystemURL.ID_ODS_SITE_CODE, organizationDetail.getSiteCode()));
 
-                organization.setId(String.valueOf(organizationDetail.getId()));
-
-                organization.getMeta()
-                        .addProfile(SystemURL.SD_GPC_ORGANIZATION)
-                        .setLastUpdated(organizationDetail.getLastUpdated())
-                        .setVersionId(String.valueOf(organizationDetail.getLastUpdated().getTime()));
-
-                map.put(organizationDetail.getOrgCode(), organization);
+            String mapKey = String.format("%s", organizationDetail.getOrgCode());
+            if (map.containsKey(mapKey)) {
+                continue;
             }
+
+            Identifier identifier = new Identifier()
+                    .setSystem(SystemURL.ID_ODS_ORGANIZATION_CODE)
+                    .setValue(organizationDetail.getOrgCode());
+            
+            Organization organization = new Organization()
+                    .setName(organizationDetail.getOrgName())
+                    .addIdentifier(identifier);
+
+            String resourceId = String.valueOf(organizationDetail.getId());
+            String versionId = String.valueOf(organizationDetail.getLastUpdated().getTime());
+            String resourceType = organization.getResourceType().toString();
+
+            IdType id = new IdType(resourceType, resourceId, versionId);
+
+            organization.setId(id);
+            organization.getMeta().setVersionId(versionId);
+            organization.getMeta().setLastUpdated(organizationDetail.getLastUpdated());            
+            organization.getMeta().addProfile(SystemURL.SD_GPC_ORGANIZATION);         
+
+            organization = addAdditionalProperties(organization);
+
+            map.put(mapKey, organization);
+
         }
 
         return new ArrayList<>(map.values());
+    }
+
+    // Adding in additional properties manually for now so we can test in the
+    // Test Suite
+    private Organization addAdditionalProperties(Organization organization) {
+
+        Coding orgTypeCode = new Coding();
+        orgTypeCode.setCode("dept");
+        orgTypeCode.setDisplay("Hospital Department");
+        orgTypeCode.setSystem(SystemURL.VS_CC_ORGANISATION_TYPE);
+
+        organization.addTelecom(getValidTelecom());
+        organization.addAddress(getValidAddress());
+        // organization.addContact(getValidContact());
+
+        CodeableConcept orgType = new CodeableConcept();
+        orgType.addCoding(orgTypeCode);
+        organization.addType(orgType);
+
+        organization.addExtension().setUrl(SystemURL.SD_EXTENSION_CC_MAIN_LOCATION);
+
+        return organization;
+    }
+
+    private ContactPoint getValidTelecom() {
+
+        ContactPoint orgTelCom = new ContactPoint();
+        orgTelCom.addExtension().setUrl("testUrl");
+        orgTelCom.setSystem(ContactPointSystem.PHONE);
+        orgTelCom.setUse(ContactPointUse.WORK);
+
+        return orgTelCom;
+    }
+
+    private Address getValidAddress() {
+
+        Address orgAddress = new Address();
+        orgAddress.setType(AddressType.PHYSICAL);
+        orgAddress.setUse(AddressUse.WORK);
+
+        return orgAddress;
+    }
+
+    private ContactDetail getValidContact() {
+
+        HumanName orgCtName = new HumanName();
+        orgCtName.setUse(NameUse.USUAL);
+        orgCtName.setFamily("FamilyName");
+        Coding coding = new Coding().setSystem(SystemURL.VS_CC_ORG_CT_ENTITYTYPE).setDisplay("ADMIN");
+        CodeableConcept orgCtPurpose = new CodeableConcept().addCoding(coding);
+
+        ContactDetail orgContact = new ContactDetail();
+
+        orgContact.setNameElement(orgCtName.getFamilyElement());
+        orgContact.addTelecom(getValidTelecom());
+        // orgContact.setAddress(getValidAddress());
+        // orgContact.setPurpose(orgCtPurpose);
+
+        return orgContact;
     }
 }

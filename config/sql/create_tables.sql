@@ -1,6 +1,7 @@
 USE gpconnect;
 
 /* Destroy all existing data */
+DROP TABLE IF EXISTS gpconnect.appointment_appointments_slots;
 DROP TABLE IF EXISTS gpconnect.appointment_schedules;
 DROP TABLE IF EXISTS gpconnect.appointment_slots;
 DROP TABLE IF EXISTS gpconnect.practitioners;
@@ -24,12 +25,21 @@ DROP TABLE IF EXISTS gpconnect.clinicalitems;
 DROP TABLE IF EXISTS gpconnect.investigations;
 DROP TABLE IF EXISTS gpconnect.locations;
 DROP TABLE IF EXISTS gpconnect.orders;
-
+DROP TABLE IF EXISTS gpconnect.appointment_booking_orgz;
 DROP TABLE IF EXISTS gpconnect.appointment_appointments;
 DROP TABLE IF EXISTS gpconnect.general_practitioners;
 DROP TABLE IF EXISTS gpconnect.medical_departments;
 
 /* Create new table schemas */
+
+CREATE TABLE gpconnect.appointment_booking_orgz (
+  id              BIGINT       NOT NULL,
+  org_code        VARCHAR(30)  NULL,
+  name            VARCHAR(100) NULL,
+  telephone       VARCHAR(100) NULL,
+  lastUpdated     DATETIME     NULL,
+  PRIMARY KEY (id)
+);
 
 CREATE TABLE gpconnect.appointment_appointments (
   id                 BIGINT    NOT NULL AUTO_INCREMENT,
@@ -37,17 +47,27 @@ CREATE TABLE gpconnect.appointment_appointments (
   status             TEXT(50)  NULL,
   typeCode           BIGINT    NULL,
   typeDisplay        TEXT(100) NULL,
-  reasonCode         BIGINT    NULL,
+  typeText           TEXT(100) NULL,
+  description        TEXT(300) NULL,
+  reasonURL          TEXT(300) NULL,
+  reasonCode         TEXT(300) NULL,
   reasonDisplay      TEXT(100) NULL,
   startDateTime      DATETIME  NULL,
   endDateTime        DATETIME  NULL,
   commentText        TEXT(300) NULL,
-  patientId          BIGINT    NULL,
+  patientId          BIGINT    NULL NOT NULL,
   practitionerId     BIGINT    NULL,
-  locationId         BIGINT    NULL,
+  locationId         BIGINT    NULL NOT NULL,
+  minutesDuration    BIGINT    NULL,
+  created            DATETIME  NULL,
+  priority    		   BIGINT    NULL,
   lastUpdated        DATETIME  NULL,
   PRIMARY KEY (id)
 );
+
+ALTER TABLE gpconnect.appointment_booking_orgz
+ADD CONSTRAINT fk_appointment_appointments_booking_orgz
+FOREIGN KEY (id) REFERENCES gpconnect.appointment_appointments(id);
 
 CREATE TABLE gpconnect.appointment_schedules (
   id              BIGINT    NOT NULL AUTO_INCREMENT,
@@ -65,7 +85,6 @@ CREATE TABLE gpconnect.appointment_schedules (
 
 CREATE TABLE gpconnect.appointment_slots (
   id                BIGINT    NOT NULL AUTO_INCREMENT,
-  appointmentId     BIGINT    NULL,
   typeCode          BIGINT    NULL,
   typeDisplay       TEXT(300) NULL,
   scheduleReference BIGINT    NULL,
@@ -73,8 +92,14 @@ CREATE TABLE gpconnect.appointment_slots (
   startDateTime     DATETIME  NULL,
   endDateTime       DATETIME  NULL,
   lastUpdated       DATETIME  NULL,
-  PRIMARY KEY (id),
-  FOREIGN KEY (appointmentId) REFERENCES gpconnect.appointment_appointments(id)
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE appointment_appointments_slots (
+	appointmentId	BIGINT    NOT NULL,
+	slotId			BIGINT    NOT NULL,
+	FOREIGN KEY (appointmentId) REFERENCES gpconnect.appointment_appointments(id),
+	FOREIGN KEY (slotId) 		REFERENCES gpconnect.appointment_slots(id)
 );
 
 CREATE TABLE gpconnect.general_practitioners (
@@ -110,7 +135,6 @@ CREATE TABLE gpconnect.practitioners (
 CREATE TABLE gpconnect.organizations (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   org_code    VARCHAR(30)  NULL,
-  site_code   VARCHAR(30)  NULL,
   org_name    VARCHAR(100) NULL,
   lastUpdated DATETIME     NULL,
   PRIMARY KEY (id)
@@ -126,8 +150,8 @@ CREATE TABLE gpconnect.medical_departments (
 CREATE TABLE gpconnect.patients (
   id                  BIGINT       NOT NULL AUTO_INCREMENT,
   title               VARCHAR(10)  NULL,
-  first_name          VARCHAR(30)  NULL,
-  last_name           VARCHAR(30)  NULL,
+  first_name          VARCHAR(300) NULL,
+  last_name           VARCHAR(300) NULL,
   address_1           VARCHAR(100) NULL,
   address_2           VARCHAR(100) NULL,
   address_3           VARCHAR(100) NULL,
@@ -147,6 +171,10 @@ CREATE TABLE gpconnect.patients (
   registration_status VARCHAR(10)  NULL,
   registration_type   VARCHAR(10)  NULL,
   sensitive_flag      BOOLEAN      NULL,
+  multiple_birth      BOOLEAN      NULL,
+  deceased			  DATETIME	   NULL,
+  marital_status      VARCHAR(10)  NULL,
+  managing_organization BIGINT     NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (department_id) REFERENCES gpconnect.medical_departments(id),
   FOREIGN KEY (gp_id) REFERENCES gpconnect.general_practitioners(id)
@@ -326,6 +354,7 @@ CREATE TABLE gpconnect.locations (
   org_ods_code_name  VARCHAR(250) NOT NULL,
   site_ods_code      VARCHAR(250) NOT NULL,
   site_ods_code_name VARCHAR(250) NOT NULL,
+  status             VARCHAR(100) NULL,
   lastUpdated        DATETIME     NULL,
   PRIMARY KEY (id)
 );

@@ -1,31 +1,43 @@
 package uk.gov.hscic.patient.html;
 
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.composite.NarrativeDt;
-import ca.uhn.fhir.model.dstu2.resource.Composition;
-import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.Composition;
+import org.hl7.fhir.dstu3.model.Composition.SectionComponent;
+import org.hl7.fhir.dstu3.model.Composition.SectionMode;
+import org.hl7.fhir.dstu3.model.Narrative;
+import org.hl7.fhir.dstu3.model.Narrative.NarrativeStatus;
+
 import uk.gov.hscic.SystemURL;
 
 public final class FhirSectionBuilder {
 
-    private FhirSectionBuilder() { }
+    private FhirSectionBuilder() {
+    }
 
-    public static Composition.Section buildFhirSection(Page page) {
-        CodingDt coding = new CodingDt().setSystem(SystemURL.VS_GPC_RECORD_SECTION).setCode(page.getCode()).setDisplay(page.getName());
-        CodeableConceptDt codableConcept = new CodeableConceptDt().addCoding(coding);
+    public static SectionComponent buildFhirSection(Page page) {
+        Coding coding = new Coding()
+                .setSystem(SystemURL.VS_GPC_RECORD_SECTION)
+                .setCode(page.getCode())
+                .setDisplay(page.getName());
+        
+        CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
         codableConcept.setText(page.getName());
 
-        NarrativeDt narrative = new NarrativeDt();
-        narrative.setStatus(NarrativeStatusEnum.GENERATED);
-        narrative.setDivAsString(createHtmlContent(page));
-
-        return new Composition.Section()
-                .setTitle(page.getName())
-                .setCode(codableConcept)
-                .setText(narrative);
+        Narrative narrative = new Narrative();
+        narrative.setStatus(NarrativeStatus.GENERATED);
+        narrative.setDivAsString(createHtmlContent(page));      
+        
+        SectionComponent sectionComponent = new SectionComponent();
+        
+        sectionComponent.setCode(codableConcept);
+        sectionComponent.setTitle(page.getName()).setCode(codableConcept).setText(narrative);
+        
+        return sectionComponent;
     }
 
     private static String createHtmlContent(Page page) {
@@ -42,6 +54,16 @@ public final class FhirSectionBuilder {
             if (pageSection.getFromDate() != null && pageSection.getToDate() != null) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                 stringBuilder.append("<div><p>For the period '").append(dateFormat.format(pageSection.getFromDate())).append("' to '").append(dateFormat.format(pageSection.getToDate())).append("'</p></div>");
+            }   
+            else if(pageSection.getFromDate() != null && pageSection.getToDate() == null){
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                stringBuilder.append("<div><p>All Data Items from ").append(dateFormat.format(pageSection.getFromDate())).append("'</p></div>");
+            }
+            else if(pageSection.getFromDate() == null && pageSection.getToDate() != null){
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                    stringBuilder.append("<div><p>All Data Items until ").append(dateFormat.format(pageSection.getToDate())).append("'</p></div>");
+               
+           
             } else {
                 stringBuilder.append("<div><p>All relevant items</p></div>");
             }

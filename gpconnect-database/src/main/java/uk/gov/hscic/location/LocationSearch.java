@@ -8,30 +8,35 @@ import uk.gov.hscic.model.location.LocationDetails;
 
 @Service
 public class LocationSearch {
-	private final LocationEntityToLocationDetailsTransformer transformer = new LocationEntityToLocationDetailsTransformer();
+    private final LocationEntityToLocationDetailsTransformer transformer = new LocationEntityToLocationDetailsTransformer();
 
-	@Autowired
-	private LocationRepository locationRepository;
+    @Autowired
+    private LocationRepository locationRepository;
 
-	public List<LocationDetails> findLocationDetailsBySiteOdsCode(String siteOdsCode) {
-		return locationRepository.findBySiteOdsCode(siteOdsCode)
-                .stream()
-                .map(transformer::transform)
+    public List<LocationDetails> findLocationDetailsBySiteOdsCode(String siteOdsCode) {
+        return locationRepository.findBySiteOdsCode(siteOdsCode).stream().map(transformer::transform)
                 .collect(Collectors.toList());
-	}
+    }
 
-	public List<LocationDetails> findLocationDetailsByOrgOdsCode(String orgOdsCode) {
-        return locationRepository.findByOrgOdsCode(orgOdsCode)
-                .stream()
-                .map(transformer::transform)
+    public List<LocationDetails> findLocationDetailsByOrgOdsCode(String orgOdsCode) {
+        return locationRepository.findByOrgOdsCode(orgOdsCode).stream().map(transformer::transform)
                 .collect(Collectors.toList());
-	}
+    }
+    
+    public List<LocationDetails> findAllLocations()
+    {
+        return locationRepository.findAll().stream().map(transformer::transform).collect(Collectors.toList());
+    }
 
     public LocationDetails findLocationById(final String locationId) {
-        final LocationEntity item = locationRepository.findOne(Long.parseLong(locationId));
 
-        return item == null
-                ? null
-                : transformer.transform(item);
+        final LocationEntity item;
+        try {
+            item = locationRepository.findOne(Long.parseLong(locationId));
+        } catch (NumberFormatException e) {
+            return null;
+        }
+
+        return item == null ? null : transformer.transform(item);
     }
 }

@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.http.HttpException;
 import org.apache.log4j.Logger;
 import org.springframework.core.annotation.Order;
@@ -21,19 +22,24 @@ public class DefaultHeaderFilter implements Filter {
     public void init(FilterConfig config) throws ServletException { }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws java.io.IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse servletResponse, FilterChain chain) throws java.io.IOException, ServletException {
         try {
             HttpServletRequest httpRequest = (HttpServletRequest) request;
-            
+         
+          
             String headerOutput = "Headers ( ";
+         
             Enumeration<String> headerNames = httpRequest.getHeaderNames();
             while(headerNames.hasMoreElements()){
                 String headerName = headerNames.nextElement();
                 headerOutput += "'" + headerName + "' : '" + httpRequest.getHeader(headerName) + "'";
             }
+        
             LOG.info(headerOutput + " )");
-            
+            HttpServletResponse response = (HttpServletResponse) servletResponse;
+            response.setHeader("Cache-Control", "no-store");
             chain.doFilter(new HeaderRequestWrapper((HttpServletRequest) request), response);
+          
         } catch (HttpException e) {
             LOG.error("Error passed back to Default Header Filter");
         }
@@ -41,11 +47,8 @@ public class DefaultHeaderFilter implements Filter {
 
     @Override
     public void destroy() { }
-
-
-
     
-
+ 
 
 
 }

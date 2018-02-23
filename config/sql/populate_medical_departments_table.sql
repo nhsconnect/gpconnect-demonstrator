@@ -8,9 +8,11 @@ VALUES
   (5,'Mental Health','2016-07-25 12:00:00');
 
 INSERT INTO gpconnect.organizations
-  (id,org_code,site_code,org_name,lastUpdated)
+  (id,org_code,org_name,lastUpdated)
 VALUES
-  (1,'GPC001','Z26556','GP Connect Demonstrator','2016-07-25 12:00:00'),
-  (2,'R1A14','Z33433','Test GP Care Trust','2016-07-25 12:00:00'),
-  (3,'R1A14','Z33432','Test GP Second Care Trust','2016-07-25 12:00:00'),
-  (4,'R1A17','Z33433','The Hockey Surgery','2016-07-25 12:00:00');
+  (1,'GPC001','GP Connect Demonstrator','2016-07-25 12:00:00'),
+  (2,'R1A14','Test GP Care Trust','2016-07-25 12:00:00'),
+  (3,'R1A17','Test GP Second Care Trust','2016-07-25 12:00:00'),
+  (4,'R1A14','The Hockey Surgery','2016-07-25 12:00:00'),
+  (5,'R1A15','Test GP Care Trust Site B','2016-07-25 12:00:00'),
+  (6,'R3B46','New GP Practice','2016-07-25 12:00:00');

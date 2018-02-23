@@ -7,20 +7,22 @@ class LocationEntityToLocationDetailsTransformer implements Transformer<Location
 
 	@Override
 	public LocationDetails transform(LocationEntity locationEntity) {
-		LocationDetails locationDetails = null;
+            
+            LocationDetails locationDetails = null;
 
-		if (locationEntity != null) {
-			locationDetails = new LocationDetails();
+            if (locationEntity != null) {
+                    locationDetails = new LocationDetails();
 
-			locationDetails.setId(locationEntity.getId());
-			locationDetails.setName(locationEntity.getName());
-            locationDetails.setOrgOdsCode(locationEntity.getOrgOdsCode());
-			locationDetails.setOrgOdsCodeName(locationEntity.getOrgOdsCodeName());
-			locationDetails.setSiteOdsCode(locationEntity.getSiteOdsCode());
-			locationDetails.setSiteOdsCodeName(locationEntity.getSiteOdsCodeName());
-            locationDetails.setLastUpdated(locationEntity.getLastUpdated());
-		}
+                    locationDetails.setId(locationEntity.getId());
+                    locationDetails.setName(locationEntity.getName());
+                    locationDetails.setOrgOdsCode(locationEntity.getOrgOdsCode());
+                    locationDetails.setOrgOdsCodeName(locationEntity.getOrgOdsCodeName());
+                    locationDetails.setSiteOdsCode(locationEntity.getSiteOdsCode());
+                    locationDetails.setSiteOdsCodeName(locationEntity.getSiteOdsCodeName());
+                    locationDetails.setLastUpdated(locationEntity.getLastUpdated());
+                    locationDetails.setStatus(locationEntity.getStatus());
+            }
 
-		return locationDetails;
+            return locationDetails;
 	}
 }

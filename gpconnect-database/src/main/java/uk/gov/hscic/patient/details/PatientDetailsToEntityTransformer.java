@@ -1,10 +1,13 @@
 package uk.gov.hscic.patient.details;
 
+import java.util.Date;
 import java.util.List;
+
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import uk.gov.hscic.medical.practicitioners.doctor.GPEntity;
 import uk.gov.hscic.medical.practicitioners.doctor.GPRepository;
 import uk.gov.hscic.model.patient.PatientDetails;
@@ -53,6 +56,11 @@ public class PatientDetailsToEntityTransformer implements Transformer<PatientDet
 				}
 			}
 
+			 Date deceased = patientEntity.getDeceasedDateTime();
+		        if(deceased != null) {
+		            patientEntity.setDeceasedDateTime(deceased);
+		        }
+
 			patientEntity.setNhsNumber(patientDetails.getNhsNumber());
 			patientEntity.setDateOfBirth(patientDetails.getDateOfBirth());
 			patientEntity.setFirstName(patientDetails.getForename());
@@ -68,6 +76,9 @@ public class PatientDetailsToEntityTransformer implements Transformer<PatientDet
 			patientEntity.setRegistrationEndDateTime(patientDetails.getRegistrationEndDateTime());
 			patientEntity.setRegistrationStatus(patientDetails.getRegistrationStatus());
 			patientEntity.setRegistrationType(patientDetails.getRegistrationType());
+			//patientEntity.setMultipleBirth(patientDetails.isMultipleBirth());
+			patientEntity.setMaritalStatus(patientDetails.getMaritalStatus());
+			patientEntity.setManagingOrganization(patientDetails.getManagingOrganization());
 		}
 
 		return patientEntity;

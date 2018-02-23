@@ -19,7 +19,6 @@
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Type</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -27,7 +26,6 @@
             <tbody>
                 <tr dir-paginate="appointment in appointments | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{appointment.resource.id}}')" ng-class="{info: selected(appointment.resource.id)}">
                     <td class="dateTime" style="width:155px">{{ appointment.resource.start | amDateFormat:'DD-MMM-YYYY HH:mm' }}</td>
-                    <td>{{ appointment.resource.type.text}}</td>
                     <td>{{ appointment.resource.status}}</td>
                 </tr>
 
@@ -61,10 +59,6 @@
                         <label class="control-label col-md-12">Practitioner</label>
                         <div class="col-md-12">
                             <div class="form-control-static">{{ practitionerName }}</div>
-                        </div>
-                        <label class="control-label col-md-12">Type:</label>
-                        <div class="col-md-12">
-                            <div class="form-control-static">{{ appointmentDetail.resource.type.text}}</div>
                         </div>
                     </div>
                     
@@ -106,6 +100,7 @@
                     
                     <div class="form-group form-group-sm">
                         <div class="text-right col-md-12 buttonBox">
+                            <button class="btn btn-default appAmendBtn pull-left" ng-click="closeAppointmentDetail()">Close</button>
                             <button class="btn btn-success appAmendBtn" ng-click="amendAppointment()" ng-show="!appointmentDetail.cancellationReason">Amend</button>
                             <button class="btn btn-success appAmendBtn" ng-click="amendAppointment()"ng-show="appointmentDetail.cancellationReason" >Amend Cancellation</button>
                             <button class="btn btn-danger" ng-click="cancelAppointment()" ng-show="!appointmentDetail.cancellationReason" >Cancel Appointment</button>

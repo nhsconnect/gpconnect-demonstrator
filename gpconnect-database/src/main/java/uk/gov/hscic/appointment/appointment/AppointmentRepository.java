@@ -10,4 +10,5 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
     List<AppointmentEntity> findByPatientId(Long patientId);
     List<AppointmentEntity> findByPatientIdAndEndDateTimeAfter(Long patientId, Date startDate);
     List<AppointmentEntity> findByPatientIdAndEndDateTimeAfterAndStartDateTimeBefore(Long patientId, Date startDate, Date endDate);
+    AppointmentEntity findOneByIdAndLastUpdated(Long id, Date lastUpdated);
 }

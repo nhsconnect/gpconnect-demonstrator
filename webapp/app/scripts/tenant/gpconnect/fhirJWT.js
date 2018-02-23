@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gpConnect')
-        .factory('fhirJWTFactory', function (ProviderRouting) {
+        .factory('fhirJWTFactory', ['ProviderRouting', 'gpcResource', function (ProviderRouting, gpcResource) {
 
             var getJWT = function (scope, operation, identifier) {
 
@@ -45,7 +45,7 @@ angular.module('gpConnect')
                     oPayload.requested_record = {
                         "resourceType": "Patient",
                         "identifier": [{
-                                "system": "http://fhir.nhs.net/Id/nhs-number",
+                                "system": gpcResource.getConst("ID_NHS_NUMBER"),
                                 "value": identifier
                             }]
                     };
@@ -54,7 +54,7 @@ angular.module('gpConnect')
                     oPayload.requested_record = {
                         "resourceType": "Organization",
                         "identifier": [{
-                                "system": "http://fhir.nhs.net/Id/ods-organization-code",
+                                "system": gpcResource.getConst("ID_ODS_ORGANIZATION_CODE"),
                                 "value": identifier
                             }]
                     };
@@ -71,8 +71,14 @@ angular.module('gpConnect')
                                 "system": "Web Interface",
                                 "value": "GP Connect Demonstrator"
                             }],
-                        "model": "Demonstrator",
-                        "version": "1.0"
+                                    "type": {
+                            "coding": [{
+                                "system": "DeviceIdentifierSystem",
+                                "code": "DeviceIdentifier"
+                            }]
+                        },
+                        "model": "v1",
+                        "version": "1.1"
                     };
                 }
                 
@@ -83,10 +89,9 @@ angular.module('gpConnect')
                         "resourceType": "Organization",
                         "id": "1",
                         "identifier": [{
-                                "system": "http://fhir.nhs.net/Id/ods-organization-code",
+                                "system": gpcResource.getConst("ID_ODS_ORGANIZATION_CODE"),
                                 "value": "[ODSCode]"
-                            }],
-                        "name": "GP Connect Demonstrator"
+                            }]
                     };
                 }
                 
@@ -96,21 +101,9 @@ angular.module('gpConnect')
                     oPayload.requesting_practitioner = {
                         "resourceType": "Practitioner",
                         "id": "1",
-                        "practitionerRole": [
-                            {
-                                "role": {
-                                    "coding": [
-                                        {
-                                            "system": "http://fhir.nhs.net/ValueSet/sds-job-role-name-1",
-                                            "code": "AssuranceJobRole"
-                                        }
-                                    ]
-                                }
-                            }
-                        ],
                         "identifier": [
                             {
-                                "system": "http://fhir.nhs.net/sds-user-id",
+                                "system": gpcResource.getConst("ID_SDS_USER_ID"),
                                 "value": "G13579135"
                             },
                             {
@@ -118,11 +111,11 @@ angular.module('gpConnect')
                                 "value": "1"
                             }
                         ],
-                        "name": {
-                            "family": ["Demonstrator"],
+                        "name": [{
+                            "family": "Demonstrator",
                             "given": ["GPConnect"],
                             "prefix": ["Mr"]
-                        }
+                        }]
                     };
                 }
 
@@ -147,5 +140,5 @@ angular.module('gpConnect')
                 getJWT: getJWT,
                 guid: guid
             };
-        });
+        }]);
 

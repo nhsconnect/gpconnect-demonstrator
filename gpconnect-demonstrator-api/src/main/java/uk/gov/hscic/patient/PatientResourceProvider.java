@@ -199,7 +199,10 @@ public class PatientResourceProvider implements IResourceProvider {
                 }
 
                 if (!system.equals(OperationConstants.SYSTEM_RECORD_SECTION)) {
-                    throw new InvalidRequestException(OperationConstants.SYSTEM_INVALID);
+                    throw new InvalidRequestException(OperationConstants.SYSTEM_INVALID,
+                            OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
+                                    OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
+                                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
                 }
             } else if (value instanceof PeriodDt) {
                 PeriodDt period = (PeriodDt) value;

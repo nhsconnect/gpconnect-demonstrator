@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient;
 
+import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationConstants;
+import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.medications.model.PatientMedicationHtmlEntity;
 import uk.gov.hscic.medications.repo.MedicationHtmlRepository;
 import uk.gov.hscic.patient.adminitems.model.AdminItemData;
@@ -109,7 +111,10 @@ public class PageSectionFactory {
 
     public PageSection getALLCurrentPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
-            throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
+        	throw new InvalidRequestException("Date Ranges not allowed to be set",
+                    OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
+                            OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                            IssueTypeEnum.BUSINESS_RULE_VIOLATION));
         }
 
         List<List<Object>> currentAllergyRows = new ArrayList<>();
@@ -127,7 +132,10 @@ public class PageSectionFactory {
 
     public PageSection getALLHistoricalPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
-            throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
+        	throw new InvalidRequestException("Date Ranges not allowed to be set",
+                    OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
+                            OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                            IssueTypeEnum.BUSINESS_RULE_VIOLATION));
         }
 
         List<List<Object>> historicalAllergyRows = new ArrayList<>();
@@ -271,7 +279,10 @@ public class PageSectionFactory {
 
     public PageSection getIMMPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
-            throw new InvalidRequestException(OperationConstants.DATE_RANGES_NOT_ALLOWED);
+        	throw new InvalidRequestException("Date Ranges not allowed to be set",
+                    OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
+                            OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                            IssueTypeEnum.BUSINESS_RULE_VIOLATION));
         }
 
         List<List<Object>> immunisationRows = new ArrayList<>();

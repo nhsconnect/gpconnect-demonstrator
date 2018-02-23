@@ -1,6 +1,9 @@
 package uk.gov.hscic;
 
+import java.util.Collections;
+
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
@@ -8,12 +11,15 @@ import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 public class OperationOutcomeFactory {
 
     public static OperationOutcome buildOperationOutcome(String system, String code, String codableConceptText, String metaProfile, IssueTypeEnum issueTypeEnum) {
-        CodeableConceptDt errorCodableConcept = new CodeableConceptDt(system, code).setText(codableConceptText);
-
+        CodingDt coding = new CodingDt().setDisplay(code).setSystem(system).setCode(code);
+    	CodeableConceptDt errorCodableConcept = new CodeableConceptDt().setText(codableConceptText).setCoding(Collections.singletonList(coding));
+        
         OperationOutcome operationOutcome = new OperationOutcome();
         operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(issueTypeEnum).setDetails(errorCodableConcept);
         operationOutcome.getMeta().addProfile(metaProfile);
 
         return operationOutcome;
     }
+    
+    
 }

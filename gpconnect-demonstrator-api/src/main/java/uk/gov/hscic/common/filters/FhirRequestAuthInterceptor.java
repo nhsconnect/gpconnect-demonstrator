@@ -29,6 +29,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import static uk.gov.hscic.OperationConstants.*;
+
+import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.common.filters.model.RequestBody;
 import uk.gov.hscic.common.filters.model.RequestedRecord;
@@ -49,17 +51,20 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         String[] authorizationHeaderComponents = requestDetails.getHeader(HttpHeaders.AUTHORIZATION).split(" ");
 
         if (authorizationHeaderComponents.length != 2 || !"Bearer".equalsIgnoreCase(authorizationHeaderComponents[0])) {
-            throw new InvalidRequestException(HttpHeaders.AUTHORIZATION + " header invalid.");
+        	throw new InvalidRequestException(HttpHeaders.AUTHORIZATION + " header invalid.", OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, HttpHeaders.AUTHORIZATION + " header invalid.", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         String contentType = requestDetails.getHeader(HttpHeaders.CONTENT_TYPE);
 
         if (contentType == null) {
             if (Arrays.asList(RequestTypeEnum.POST, RequestTypeEnum.PUT).contains(requestDetails.getRequestType())) {
-                throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "No content media type set");
+            	throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported content media type", OperationOutcomeFactory.buildOperationOutcome(
+                        SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Unsupported content media type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.BUSINESS_RULE_VIOLATION));
             }
         } else if (!contentType.replaceAll("; +", ";").toLowerCase(Locale.UK).matches(PERMITTED_MEDIA_TYPE_HEADER_REGEX)) {
-            throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported content media type");
+        	throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported content media type", OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Unsupported content media type", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.BUSINESS_RULE_VIOLATION));
         }
 
         String[] formatParam = requestDetails.getParameters().get("_format");
@@ -74,7 +79,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         }
 
         if (acceptHeader == null || !acceptHeader.replaceAll("; +", ";").toLowerCase(Locale.UK).matches(PERMITTED_MEDIA_TYPE_HEADER_REGEX)) {
-            throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported accept media type");
+        	throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported accept media type");
         }
 
         WebToken webToken;
@@ -85,9 +90,11 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             WebTokenValidator.validateWebToken(webToken, futureRequestLeeway);
             jwtParseResourcesValidation(claimsJsonString);
         } catch (IllegalArgumentException iae) {
-            throw new InvalidRequestException("Not Base 64");
+        	throw new InvalidRequestException("Not Base 64", OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Not Base 64", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         } catch (IOException ex) {
-            throw new InvalidRequestException("Invalid WebToken");
+        	throw new InvalidRequestException("Invalid WebToken", OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Invalid WebToken", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 
         RequestedRecord requestedRecord = webToken.getRequestedRecord();
@@ -134,9 +141,11 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             parser.parseResource(jsonNode.get("requesting_device").toString());
             parser.parseResource(jsonNode.get("requesting_organization").toString());
         } catch (DataFormatException e) {
-            throw new UnprocessableEntityException("Invalid Resource Present");
+            throw new UnprocessableEntityException("Invalid Resource Present", OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Present", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.STRUCTURAL_ISSUE));
         } catch (IOException ex) {
-            throw new InvalidRequestException("Unparsable JSON");
+            throw new InvalidRequestException("Unparsable JSON", OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Unparsable JSON", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.STRUCTURAL_ISSUE));
         }
     }
 

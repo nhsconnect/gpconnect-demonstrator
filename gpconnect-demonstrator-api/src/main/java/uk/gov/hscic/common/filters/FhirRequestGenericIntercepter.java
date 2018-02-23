@@ -182,6 +182,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     OperationConstants.SYSTEM_WARNING_CODE, "INVALID_RESOURCE", theException.getMessage(),
                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
+        
+        if (theException instanceof InvalidRequestException && theException.getMessage().contains("Did not find any content to parse")) {
+            return new InvalidRequestException(theException.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
+                    OperationConstants.SYSTEM_WARNING_CODE, "INVALID_CONTENT", theException.getMessage(),
+                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+        }
 
         return super.preProcessOutgoingException(theRequestDetails, theException, theServletRequest);
     }

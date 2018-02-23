@@ -31,7 +31,7 @@ public class OrganizationResourceProvider {
     }
 
     public Organization organizaitonDetailsToOrganizationResourceConverter(OrganizationDetails organizationDetails) {
-        Organization organization = new Organization()
+    	Organization organization = new Organization()
                 .setName(organizationDetails.getOrgName())
                 .addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/ods-organization-code", organizationDetails.getOrgCode()))
                 .addIdentifier(new IdentifierDt("http://fhir.nhs.net/Id/ods-site-code", organizationDetails.getSiteCode()));

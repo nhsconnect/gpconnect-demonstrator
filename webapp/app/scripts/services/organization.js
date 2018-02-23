@@ -14,7 +14,7 @@ angular.module('gpConnect')
                                     'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:organization-1",
                                     'Ssp-TraceID': fhirJWTFactory.guid(),
                                     'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", $rootScope.patientOdsCode),
-                                    'Accept': "application/json+fhir"
+                                    'Accept': "application/fhir+json"
                                 }
                             });
                 });
@@ -31,7 +31,7 @@ angular.module('gpConnect')
                                     'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:organization-1",
                                     'Ssp-TraceID': fhirJWTFactory.guid(),
                                     'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", searchOrgOdsCode),
-                                    'Accept': "application/json+fhir"
+                                    'Accept': "application/fhir+json"
                                 }
                             });
                 });

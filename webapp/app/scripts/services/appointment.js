@@ -17,7 +17,7 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
                             'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments-1",
                             'Ssp-TraceID': fhirJWTFactory.guid(),
                             'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientNHSNumber),
-                            'Accept': "application/json+fhir"
+                            'Accept': "application/fhir+json"
                         }
                     }
             );
@@ -43,8 +43,8 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
                                 'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:search:slot-1",
                                 'Ssp-TraceID': fhirJWTFactory.guid(),
                                 'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", practiceOdsCode),
-                                'Accept': "application/json+fhir",
-                                'Content-Type': "application/json+fhir"
+                                'Accept': "application/fhir+json",
+                                'Content-Type': "application/fhir+json"
                             }
                         }
                 );
@@ -67,7 +67,7 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
                                 'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:location-1",
                                 'Ssp-TraceID': fhirJWTFactory.guid(),
                                 'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", practiceOdsCode),
-                                'Accept': "application/json+fhir"
+                                'Accept': "application/fhir+json"
                             }
                         }
                 );
@@ -85,7 +85,7 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
                                 'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner-1",
                                 'Ssp-TraceID': fhirJWTFactory.guid(),
                                 'Authorization': "Bearer " + fhirJWTFactory.getJWT("organization", "read", practiceOdsCode),
-                                'Accept': "application/json+fhir"
+                                'Accept': "application/fhir+json"
                             }
                         }
                 );
@@ -108,8 +108,8 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
                             'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "write", patientId),
                             'Ssp-TraceID': fhirJWTFactory.guid(),
                             'Prefer': "return=representation",
-                            'Accept': "application/json+fhir",
-                            'Content-Type': "application/json+fhir"
+                            'Accept': "application/fhir+json",
+                            'Content-Type': "application/fhir+json"
                         }
                     }
             );
@@ -131,8 +131,8 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
                             'Prefer': "return=representation",
                             'Ssp-TraceID': fhirJWTFactory.guid(),
                             'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "write", patientNHSNumber),
-                            'Accept': "application/json+fhir",
-                            'Content-Type': "application/json+fhir"
+                            'Accept': "application/fhir+json",
+                            'Content-Type': "application/fhir+json"
                         }
                     }
             );
@@ -154,8 +154,8 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
                             'Prefer': "return=representation",
                             'Ssp-TraceID': fhirJWTFactory.guid(),
                             'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "write", patientNHSNumber),
-                            'Accept': "application/json+fhir",
-                            'Content-Type': "application/json+fhir"
+                            'Accept': "application/fhir+json",
+                            'Content-Type': "application/fhir+json"
                         }
                     }
             );

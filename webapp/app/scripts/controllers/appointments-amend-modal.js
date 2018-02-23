@@ -18,7 +18,7 @@ angular.module('gpConnect')
                     }
                 }
             }
-            $scope.commentDisplayText = $scope.appointmentAmend.appointmentResource.resource.comment;
+            $scope.descriptionDisplayText = $scope.appointmentAmend.appointmentResource.resource.description;
 
             $scope.amendAppointment = function (appointmentAmendForm) {
                 $scope.formSubmitted = true;
@@ -39,8 +39,8 @@ angular.module('gpConnect')
                     }
                 } else {
                     // Amend un-cancelled appointment
-                    if ($scope.commentDisplayText != null && $scope.commentDisplayText.length > 0) {
-                        $scope.appointmentAmend.appointmentResource.resource.comment = $scope.commentDisplayText;
+                    if ($scope.descriptionDisplayText != null && $scope.descriptionDisplayText.length > 0) {
+                        $scope.appointmentAmend.appointmentResource.resource.description = $scope.descriptionDisplayText;
                         usSpinnerService.spin('appointmentAmend-spinner');
                         Appointment.save($scope.appointmentAmend.appointmentResource.appointmentPracticeOdsCode, $stateParams.patientId, $scope.appointmentAmend.appointmentResource.resource.id, $scope.appointmentAmend.appointmentResource.resource).then(function (response) {
                             if (response.status != "200") {
@@ -51,7 +51,7 @@ angular.module('gpConnect')
                         $state.reload();
                         usSpinnerService.stop('appointmentAmend-spinner');
                     } else {
-                        $scope.validationError = "A comment is required.";
+                        $scope.validationError = "A description is required.";
                     }
                 }
             };

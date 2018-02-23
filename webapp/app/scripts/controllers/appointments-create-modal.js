@@ -37,7 +37,7 @@ angular.module('gpConnect')
                 $scope.appointmentCreate.slot.push(reference);
             }
             
-            $scope.appointmentCreate.comment;
+            $scope.appointmentCreate.description;
             $scope.appointmentCreate.participant = [
                 {
                     "actor": {
@@ -62,17 +62,19 @@ angular.module('gpConnect')
             $scope.ok = function (appointmentCreateForm) {
                 $scope.validationError = "";
                 $scope.formSubmitted = true;
-                if (appointmentCreateForm.$valid) {
-                    usSpinnerService.spin('appointmentCreate-spinner');
-                    Appointment.create(appointmentBookingParams.location.odsCode, $stateParams.patientId, $scope.appointmentCreate).then(function (response) {
-                        if (response.status != "201") {
-                            $scope.validationError = "An error occurred storing appointment, please try booking again";
-                        }
-                        $modalInstance.close();
-                        $state.reload();
-                        usSpinnerService.stop('appointmentCreate-spinner');
-                    });
-                }
+	            if (appointmentCreateForm.$valid) {
+	                usSpinnerService.spin('appointmentCreate-spinner');
+	                Appointment.create(appointmentBookingParams.location.odsCode, $stateParams.patientId, $scope.appointmentCreate).then(function (response) {
+	                   if (response.status != "201") {
+	                       $scope.validationError = "An error occurred storing appointment, please try booking again";
+	                   }
+	                   $modalInstance.close();
+	                   $state.reload();
+	                   usSpinnerService.stop('appointmentCreate-spinner');
+	               });
+	            } else {
+	            	 $scope.validationError = "A description is required.";
+	            }
             };
 
             $scope.cancel = function () {

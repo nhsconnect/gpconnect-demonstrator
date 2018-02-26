@@ -1,7 +1,6 @@
 package uk.gov.hscic.appointment.slot;
 
 import org.apache.commons.collections4.Transformer;
-import uk.gov.hscic.appointment.appointment.AppointmentEntity;
 import uk.gov.hscic.model.appointment.SlotDetail;
 
 public class SlotDetailToSlotEntityTransformer implements Transformer<SlotDetail, SlotEntity> {
@@ -24,6 +23,7 @@ public class SlotDetailToSlotEntityTransformer implements Transformer<SlotDetail
         slotEntity.setStartDateTime(item.getStartDateTime());
         slotEntity.setEndDateTime(item.getEndDateTime());
         slotEntity.setLastUpdated(item.getLastUpdated());
+        slotEntity.setGpConnectBookable(item.isGpConnectBookable());
         return slotEntity;
     }
 }

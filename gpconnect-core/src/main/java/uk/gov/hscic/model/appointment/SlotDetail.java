@@ -12,6 +12,7 @@ public class SlotDetail {
     private Date startDateTime;
     private Date endDateTime;
     private Date lastUpdated;
+    private boolean gpConnectBookable;
 
     public Long getId() {
         return id;
@@ -84,4 +85,12 @@ public class SlotDetail {
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+
+	public boolean isGpConnectBookable() {
+		return gpConnectBookable;
+	}
+
+	public void setGpConnectBookable(boolean gpConnectBookable) {
+		this.gpConnectBookable = gpConnectBookable;
+	}
 }

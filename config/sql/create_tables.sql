@@ -2,6 +2,7 @@ USE gpconnect;
 
 /* Destroy all existing data */
 DROP TABLE IF EXISTS gpconnect.appointment_appointments_slots;
+DROP TABLE IF EXISTS gpconnect.appointment_slots_organizations;
 DROP TABLE IF EXISTS gpconnect.appointment_schedules;
 DROP TABLE IF EXISTS gpconnect.appointment_slots;
 DROP TABLE IF EXISTS gpconnect.practitioners;
@@ -92,6 +93,7 @@ CREATE TABLE gpconnect.appointment_slots (
   startDateTime     DATETIME  NULL,
   endDateTime       DATETIME  NULL,
   lastUpdated       DATETIME  NULL,
+  gpConnectBookable BOOLEAN   NULL,
   PRIMARY KEY (id)
 );
 
@@ -138,6 +140,13 @@ CREATE TABLE gpconnect.organizations (
   org_name    VARCHAR(100) NULL,
   lastUpdated DATETIME     NULL,
   PRIMARY KEY (id)
+);
+
+CREATE TABLE appointment_slots_organizations (
+	slotId       	BIGINT    NOT NULL,
+	organizationId	BIGINT    NOT NULL,
+	FOREIGN KEY (organizationId) REFERENCES gpconnect.organizations(id),
+	FOREIGN KEY (slotId) 		REFERENCES gpconnect.appointment_slots(id)
 );
 
 CREATE TABLE gpconnect.medical_departments (

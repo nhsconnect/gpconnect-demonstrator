@@ -1,16 +1,22 @@
 package uk.gov.hscic.appointment.slot;
 
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import uk.gov.hscic.appointment.appointment.AppointmentEntity;
+
+import uk.gov.hscic.organization.OrganizationEntity;
 
 @Entity
 @Table(name = "appointment_slots")
@@ -45,6 +51,15 @@ public class SlotEntity {
     
     @Column(name = "lastUpdated")
     private Date lastUpdated;
+    
+    @Column(name = "gpConnectBookable")
+    private boolean gpConnectBookable;
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "appointment_slots_organizations", joinColumns = {
+            @JoinColumn(name = "slotId", referencedColumnName = "id") }, inverseJoinColumns = {
+                    @JoinColumn(name = "organizationId", referencedColumnName = "id") })
+    private List<OrganizationEntity> bookableOrganizations;
 
     public Long getId() {
         return id;
@@ -109,6 +124,22 @@ public class SlotEntity {
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+
+	public boolean isGpConnectBookable() {
+		return gpConnectBookable;
+	}
+
+	public void setGpConnectBookable(boolean gpConnectBookable) {
+		this.gpConnectBookable = gpConnectBookable;
+	}
+
+	public List<OrganizationEntity> getBookableOrganizations() {
+		return bookableOrganizations;
+	}
+
+	public void setBookableOrganizations(List<OrganizationEntity> bookableOrganizations) {
+		this.bookableOrganizations = bookableOrganizations;
+	}
 
 //    public AppointmentEntity getAppointmentId() {
 //        return appointmentId;

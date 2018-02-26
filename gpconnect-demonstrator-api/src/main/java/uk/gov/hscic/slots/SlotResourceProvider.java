@@ -30,8 +30,12 @@ import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.param.BaseAndListParam;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.ParamPrefixEnum;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.param.TokenOrListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
@@ -72,6 +76,7 @@ public class SlotResourceProvider implements IResourceProvider {
     @Search
     public Bundle getSlotByIds(@RequiredParam(name = "start") DateParam startDate,
             @RequiredParam(name = "end") DateParam endDate, @RequiredParam(name = "fb-type") String fbType,
+            @RequiredParam(name= "searchFilter") TokenAndListParam searchFilters,
             @IncludeParam(allow = { "Slot:schedule", "Schedule:actor:Practitioner",
                     "Schedule:actor:Location" }) Set<Include> theIncludes) {
     	
@@ -79,6 +84,8 @@ public class SlotResourceProvider implements IResourceProvider {
         Bundle bundle = new Bundle();
         boolean actorPractitioner = false;
         boolean actorLocation = false;
+        String bookingOdsCode = "";
+        String bookingOrgType = "";
 
         if (!fbType.equals("free")) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -105,6 +112,27 @@ public class SlotResourceProvider implements IResourceProvider {
         }
 
         validateStartDateParamAndEndDateParam(startDate.getValueAsInstantDt(), endDate.getValueAsInstantDt());
+        
+        List<TokenOrListParam> searchFilter = searchFilters.getValuesAsQueryTokens();
+        for (TokenOrListParam filter : searchFilter) {
+        	TokenParam token = filter.getValuesAsQueryTokens().get(0);
+        	if (token.getSystem().equals(SystemURL.VS_GPC_ORG_TYPE)) {
+        		bookingOrgType = token.getValue();
+        	}
+        	if (token.getSystem().equals(SystemURL.ID_ODS_ORGANIZATION_CODE)) {
+        		bookingOdsCode = token.getValue();
+        	}
+        }
+        
+        try {
+        	bookingOdsCode.isEmpty();
+        	bookingOrgType.isEmpty();
+        } catch (Exception e) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(
+                            "The ODS code and organisation type for the booking organisation must be supplied."),
+                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+        }
 
         for (Include include : theIncludes) {
 
@@ -117,17 +145,17 @@ public class SlotResourceProvider implements IResourceProvider {
             ;
         }
         startDate.getValueAsInstantDt().getValue();
-        getScheduleOperation.populateBundle(bundle, new OperationOutcome(), startDate.getValueAsInstantDt().getValue(),
-                endDate.getValueAsInstantDt().getValue(), actorPractitioner, actorLocation);
+        getScheduleOperation.populateBundle(bundle, new OperationOutcome(), startDate.getValueAsInstantDt().getValue(), 
+                endDate.getValueAsInstantDt().getValue(), actorPractitioner, actorLocation, bookingOdsCode, bookingOrgType);
 
         return bundle;
 
     }
 
-    public List<Slot> getSlotsForScheduleId(String scheduleId, Date startDateTime, Date endDateTime) {
+    public List<Slot> getSlotsForScheduleId(String scheduleId, Date startDateTime, Date endDateTime, Long orgId) {
         ArrayList<Slot> slots = new ArrayList<>();
         List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), startDateTime,
-                endDateTime);
+                endDateTime, orgId);
 
         if (slotDetails != null && !slotDetails.isEmpty()) {
             for (SlotDetail slotDetail : slotDetails) {

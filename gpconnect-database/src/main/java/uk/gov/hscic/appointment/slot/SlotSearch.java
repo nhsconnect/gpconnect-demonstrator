@@ -22,8 +22,9 @@ public class SlotSearch {
                 : transformer.transform(item);
     }
 
-    public List<SlotDetail> findSlotsForScheduleId(Long scheduleId, Date startDate, Date endDate) {
-        return slotRepository.findByScheduleReferenceAndEndDateTimeAfterAndStartDateTimeBefore(scheduleId, startDate, endDate)
+    public List<SlotDetail> findSlotsForScheduleId(Long scheduleId, Date startDate, Date endDate, Long orgId) {
+    	System.out.println("LUCYLUCYLUCY: " + orgId);
+        return slotRepository.findByScheduleReferenceAndEndDateTimeAfterAndStartDateTimeBeforeAndGpConnectBookableTrueAndBookableOrganizationsId(scheduleId, startDate, endDate, orgId)
                 .stream()
                 .filter(SlotEntity -> startDate == null || !SlotEntity.getStartDateTime().before(startDate))
                 .filter(SlotEntity -> endDate == null || !SlotEntity.getStartDateTime().after(endDate))

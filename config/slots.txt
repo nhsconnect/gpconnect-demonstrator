@@ -1,7 +1,7 @@
-1,9,0,0,9,10,0,408443003,General medical practice,2,FREE,true
-1,9,10,0,9,20,0,408443003,General medical practice,2,FREE,true
-1,9,20,0,9,30,0,408443003,General medical practice,2,FREE,true
-1,9,30,0,9,40,0,408443003,General medical practice,2,FREE,true
+1,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false
+1,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false
+1,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false
+1,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false
 1,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true
 1,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true
 1,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true
@@ -46,25 +46,25 @@
 1,16,30,0,16,40,0,408443003,General medical practice,2,FREE,true
 1,16,40,0,16,50,0,408443003,General medical practice,2,FREE,true
 1,16,50,0,17,0,0,408443003,General medical practice,2,FREE,true
-2,9,0,0,9,10,0,408443003,General medical practice,2,FREE,true
-2,9,10,0,9,20,0,408443003,General medical practice,2,FREE,true
-2,9,20,0,9,30,0,408443003,General medical practice,2,FREE,true
-2,9,30,0,9,40,0,408443003,General medical practice,2,FREE,true
-2,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true
-2,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true
-2,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true
-2,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true
-2,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true
-2,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true
-2,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true
-2,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true
-2,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true
-2,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true
-2,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true
-2,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true
-2,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true
-2,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true
-2,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true
+2,9,0,0,9,10,0,408443003,General medical practice,2,FREE,true,1 2
+2,9,10,0,9,20,0,408443003,General medical practice,2,FREE,true,1 2
+2,9,20,0,9,30,0,408443003,General medical practice,2,FREE,true,1 2
+2,9,30,0,9,40,0,408443003,General medical practice,2,FREE,true,1 2
+2,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,1 2
+2,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,1 2
+2,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,1 2
+2,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,1 2
+2,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,1 2
+2,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,1 2
+2,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,1 2
+2,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,1 2
+2,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,1 2
+2,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,1 2
+2,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,1 2
+2,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,1 2
+2,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,1 2
+2,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,1 2
+2,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,1 2
 2,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true
 2,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true
 2,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true
@@ -286,10 +286,10 @@
 6,16,30,0,16,40,0,408443003,General medical practice,2,FREE,true
 6,16,40,0,16,50,0,408443003,General medical practice,2,FREE,true
 6,16,50,0,17,0,0,408443003,General medical practice,2,FREE,true
-1,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,true
-1,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,true
-1,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,true
-1,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,true
+1,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false
+1,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false
+1,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false
+1,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false
 1,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true
 1,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true
 1,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true

@@ -1,6 +1,7 @@
 package uk.gov.hscic.model.appointment;
 
 import java.util.Date;
+import java.util.List;
 
 public class SlotDetail {
     private Long id;
@@ -13,6 +14,7 @@ public class SlotDetail {
     private Date endDateTime;
     private Date lastUpdated;
     private boolean gpConnectBookable;
+    private List<Long> organizationIds;
 
     public Long getId() {
         return id;
@@ -92,5 +94,13 @@ public class SlotDetail {
 
 	public void setGpConnectBookable(boolean gpConnectBookable) {
 		this.gpConnectBookable = gpConnectBookable;
+	}
+
+	public List<Long> getOrganizationIds() {
+		return organizationIds;
+	}
+
+	public void setOrganizationIds(List<Long> organizationIds) {
+		this.organizationIds = organizationIds;
 	}
 }

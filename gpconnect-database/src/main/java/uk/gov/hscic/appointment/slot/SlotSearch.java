@@ -22,7 +22,7 @@ public class SlotSearch {
                 : transformer.transform(item);
     }
 
-    public List<SlotDetail> findSlotsForScheduleId(Long scheduleId, Date startDate, Date endDate, Long orgId) {
+    public List<SlotDetail> findSlotsForScheduleIdAndOrganizationId(Long scheduleId, Date startDate, Date endDate, Long orgId) {
     	return slotRepository.findByScheduleReferenceAndEndDateTimeAfterAndStartDateTimeBeforeAndGpConnectBookableTrueAndBookableOrganizationsId(scheduleId, startDate, endDate, orgId)
                 .stream()
                 .filter(SlotEntity -> startDate == null || !SlotEntity.getStartDateTime().before(startDate))
@@ -30,4 +30,13 @@ public class SlotSearch {
                 .map(transformer::transform)
                 .collect(Collectors.toList());
     }
+
+	public List<SlotDetail> getSlotsForScheduleIdAndOrganizationType(Long scheduleId, Date startDate, Date endDate, String orgType) {
+		return slotRepository.findByScheduleReferenceAndEndDateTimeAfterAndStartDateTimeBeforeAndGpConnectBookableTrueAndBookableOrgTypes(scheduleId, startDate, endDate, orgType)
+                .stream()
+                .filter(SlotEntity -> startDate == null || !SlotEntity.getStartDateTime().before(startDate))
+                .filter(SlotEntity -> endDate == null || !SlotEntity.getStartDateTime().after(endDate))
+                .map(transformer::transform)
+                .collect(Collectors.toList());
+	}
 }

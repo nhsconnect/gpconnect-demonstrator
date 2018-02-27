@@ -5,15 +5,14 @@ import java.util.List;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import uk.gov.hscic.organization.OrganizationEntity;
@@ -55,11 +54,16 @@ public class SlotEntity {
     @Column(name = "gpConnectBookable")
     private boolean gpConnectBookable;
     
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "appointment_slots_organizations", joinColumns = {
             @JoinColumn(name = "slotId", referencedColumnName = "id") }, inverseJoinColumns = {
                     @JoinColumn(name = "organizationId", referencedColumnName = "id") })
     private List<OrganizationEntity> bookableOrganizations;
+    
+    @ElementCollection
+    @JoinTable(name = "appointment_slots_orgType", joinColumns = {
+            @JoinColumn(name = "slotId", referencedColumnName = "id") } )
+    private List<String> bookableOrgTypes;
 
     public Long getId() {
         return id;
@@ -139,6 +143,14 @@ public class SlotEntity {
 
 	public void setBookableOrganizations(List<OrganizationEntity> bookableOrganizations) {
 		this.bookableOrganizations = bookableOrganizations;
+	}
+
+	public List<String> getBookableOrgTypes() {
+		return bookableOrgTypes;
+	}
+
+	public void setBookableOrgTypes(List<String> bookableOrgTypes) {
+		this.bookableOrgTypes = bookableOrgTypes;
 	}
 
 //    public AppointmentEntity getAppointmentId() {

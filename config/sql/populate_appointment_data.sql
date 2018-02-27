@@ -14,15 +14,15 @@ VALUES
   (11,2,'Schedule011','394814010','General practice',5,'2010-10-22 01:01:01','2040-12-22 10:46:22','Schedule 11 for general appointments with practitioner','2016-07-25 12:00:00');
 
 INSERT INTO gpconnect.appointment_slots
-  (id,typeCode,typeDisplay,scheduleReference,freeBusyType,startDateTime,endDateTime,lastUpdated)
+  (id,typeCode,typeDisplay,scheduleReference,freeBusyType,startDateTime,endDateTime,lastUpdated,gpConnectBookable)
 VALUES
-  (1,408443003,'General medical practice',2,'FREE','2016-06-29 09:00:00','2016-06-29 09:59:59','2016-07-25 12:00:00'),
-  (2,408443003,'General medical practice',2,'FREE','2016-06-29 10:00:00','2016-06-29 10:59:59','2016-07-25 12:00:00'),
-  (3,408443003,'General medical practice',2,'FREE','2016-06-29 11:00:00','2016-06-29 11:59:59','2016-07-25 12:00:00'),
-  (4,408443003,'General medical practice',2,'FREE','2016-06-29 13:00:00','2016-06-29 13:59:59','2016-07-25 12:00:00'),
-  (5,408443003,'General medical practice',2,'FREE','2016-06-29 14:00:00','2016-06-29 14:59:59','2016-07-25 12:00:00'),
-  (6,408443003,'General medical practice',2,'FREE','2016-06-29 15:00:00','2016-06-29 15:59:59','2016-07-25 12:00:00'),
-  (7,408443003,'General medical practice',2,'FREE','2016-06-29 16:00:00','2016-06-29 16:59:59','2016-07-25 12:00:00');
+  (1,408443003,'General medical practice',2,'FREE','2016-06-29 09:00:00','2016-06-29 09:59:59','2016-07-25 12:00:00',1),
+  (2,408443003,'General medical practice',2,'FREE','2016-06-29 10:00:00','2016-06-29 10:59:59','2016-07-25 12:00:00',1),
+  (3,408443003,'General medical practice',2,'FREE','2016-06-29 11:00:00','2016-06-29 11:59:59','2016-07-25 12:00:00',1),
+  (4,408443003,'General medical practice',2,'FREE','2016-06-29 13:00:00','2016-06-29 13:59:59','2016-07-25 12:00:00',1),
+  (5,408443003,'General medical practice',2,'FREE','2016-06-29 14:00:00','2016-06-29 14:59:59','2016-07-25 12:00:00',1),
+  (6,408443003,'General medical practice',2,'FREE','2016-06-29 15:00:00','2016-06-29 15:59:59','2016-07-25 12:00:00',1),
+  (7,408443003,'General medical practice',2,'FREE','2016-06-29 16:00:00','2016-06-29 16:59:59','2016-07-25 12:00:00',1);
 
 INSERT INTO gpconnect.locations
   (id,name,org_ods_code,org_ods_code_name,site_ods_code,site_ods_code_name,status,lastUpdated)

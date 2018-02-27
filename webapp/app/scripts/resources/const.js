@@ -18,5 +18,6 @@ angular.module('gpConnect')
     "VS_SNOMED_SCT": "http://snomed.info/sct",
     "VS_REG_STATUS": "https://fhir.nhs.uk/ValueSet/registration-status-1",
     "VS_REG_TYPE": "https://fhir.nhs.uk/ValueSet/registration-type-1",
-    "VS_BASIC_RESOURCE_TYPE": "http://hl7.org/fhir/basic-resource-type"
+    "VS_BASIC_RESOURCE_TYPE": "http://hl7.org/fhir/basic-resource-type",
+    "VS_ORG_TYPE": "https://fhir.nhs.uk/STU3/ValueSet/GPConnect-OrganisationType-1"
   });

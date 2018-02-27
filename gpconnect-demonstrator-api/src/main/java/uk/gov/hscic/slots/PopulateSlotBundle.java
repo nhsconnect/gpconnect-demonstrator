@@ -1,7 +1,9 @@
 package uk.gov.hscic.slots;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
@@ -20,13 +22,13 @@ import org.hl7.fhir.dstu3.model.Slot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.model.api.ExtensionDt;
-import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
+import uk.gov.hscic.model.organization.OrganizationDetails;
+import uk.gov.hscic.organization.OrganizationSearch;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 /**
@@ -47,9 +49,12 @@ public class PopulateSlotBundle {
 
     @Autowired
     private ScheduleResourceProvider scheduleResourceProvider;
+    
+    @Autowired
+    private OrganizationSearch organizationSearch;
 
     public void populateBundle(Bundle bundle, OperationOutcome operationOutcome, Date planningHorizonStart,
-            Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation) {
+            Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation, String bookingOdsCode, String bookingOrgType) {
         bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
 
         List<Location> locations = locationResourceProvider.getAllLocationDetails();
@@ -57,7 +62,10 @@ public class PopulateSlotBundle {
         BundleEntryComponent locationEntry = new BundleEntryComponent();
         locationEntry.setResource(locations.get(0));
         locationEntry.setFullUrl("Location/" + locations.get(0).getIdElement().getIdPart());
-
+        
+        // find the organization from the ods code
+        List<OrganizationDetails> organizations = organizationSearch.findOrganizationDetailsByOrgODSCode(bookingOdsCode);
+        
         // schedules
         List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(
                 locations.get(0).getIdElement().getIdPart(), planningHorizonStart, planningHorizonEnd);
@@ -98,8 +106,11 @@ public class PopulateSlotBundle {
                     }
 
                    
-                    List<Slot> slots = slotResourceProvider.getSlotsForScheduleId(schedule.getIdElement().getIdPart(),
-                            planningHorizonStart, planningHorizonEnd);
+                    Set<Slot> slots = new HashSet<Slot>();
+                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
+                            planningHorizonStart, planningHorizonEnd, organizations.get(0).getId())); 
+                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationType(schedule.getIdElement().getIdPart(),
+                            planningHorizonStart, planningHorizonEnd, bookingOrgType));
                     String freeBusyType = "FREE";
                     if (!slots.isEmpty()) {
                         for (Slot slot : slots) {

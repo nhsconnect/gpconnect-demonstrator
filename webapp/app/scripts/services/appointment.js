@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, FhirEndpointLookup, fhirJWTFactory, Organization) {
+angular.module('gpConnect').factory('Appointment', ['$rootScope', '$http', 'FhirEndpointLookup', 'fhirJWTFactory', 'gpcResource', function ($rootScope, $http, FhirEndpointLookup, fhirJWTFactory, gpcResource) {
 	
     var findAllAppointments = function (patientNHSNumber, patientId, odsCode) {
         var odsCode = (typeof odsCode !== 'undefined') ? odsCode : $rootScope.patientOdsCode;
@@ -24,18 +24,17 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
         });
     };
 
-    var searchForFreeSlots = function (practiceOdsCode, startDateTime, endDateTime) {
-           
-
-           
-            return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:slot-1").then(function(response) {
+    var searchForFreeSlots = function (practiceOdsCode, practiceOrgType, startDateTime, endDateTime) {
+           return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:slot-1").then(function(response) {
                 var endpointLookupResult = response;
                 
-                var requiredParams = 'start=ge' +startDateTime+ '&end=le' +endDateTime+ '&fb-type=free&_include=Slot:schedule';
+                var requiredParams = 'start=ge' +startDateTime+ '&end=le' +endDateTime+ '&status=free&_include=Slot:schedule';
                 var optionalParams = '_include:recurse=Schedule:actor:Practitioner&_include:recurse=Schedule:actor:Location';
+                var searchFilterOrgType = 'searchFilter=' + gpcResource.getConst("VS_ORG_TYPE") + '%7C' + practiceOrgType;
+                var searchFilterOdsCode = 'searchFilter=' + gpcResource.getConst("ID_ODS_ORGANIZATION_CODE") + '%7C' + practiceOdsCode;
                 
                 return $http.get(
-                        endpointLookupResult.restUrlPrefix + '/Slot?' + requiredParams + '&' + optionalParams,
+                        endpointLookupResult.restUrlPrefix + '/Slot?' + requiredParams + '&' + optionalParams + '&' + searchFilterOrgType + '&' + searchFilterOdsCode,
                         {
                             headers: {
                                 'Ssp-From': endpointLookupResult.fromASID,
@@ -170,4 +169,4 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
         save: save,
 		cancel: cancel
     };
-});
+}]);

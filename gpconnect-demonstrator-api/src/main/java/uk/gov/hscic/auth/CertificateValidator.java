@@ -16,6 +16,8 @@ import javax.naming.ldap.Rdn;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
@@ -25,6 +27,10 @@ import uk.gov.hscic.SystemCode;
  * in the trusted jks.</p>
  */
 public final class CertificateValidator {
+	
+	@Autowired
+    private Environment env;
+	
     private final String domainName = "msg.dev.spine2.ncrs.nhs.uk";    
     private final String certificateAuthority = "VNIS03_SUBCA";
     private final List<X509Certificate> storeCertificates = new ArrayList<>();
@@ -38,8 +44,9 @@ public final class CertificateValidator {
     }
             
     public void validateRequest(HttpServletRequest request) {
-        try {            
-            if (request.isSecure() && !HttpMethod.OPTIONS.name().equals(request.getMethod())) {
+        try {        
+        	if (request.isSecure() && !HttpMethod.OPTIONS.name().equals(request.getMethod()) 
+        			&& (env.getProperty("clientAuth") == null || !env.getProperty("clientAuth").equals("false"))) {
                 
                 X509Certificate[] certificates = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
 

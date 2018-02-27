@@ -136,6 +136,11 @@ To start with SSL on https://localhost:19192:
 java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19192 --config.path=config\ --server.ssl.key-store=config\server.jks --server.ssl.key-store-password=password --server.ssl.trust-store=config\server.jks --server.ssl.trust-store-password=password --server.ssl.client-auth=want
 ```
 
+To start with SSL while skipping mutual authentication:
+```sh
+java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19192 --config.path=config\ --server.ssl.key-store=config\server.jks --server.ssl.key-store-password=password --server.ssl.trust-store=config\server.jks --server.ssl.trust-store-password=password --server.ssl.client-auth=want --clientAuth=false
+```
+
 To start with non-SSL on http://localhost:19191 and SSL on https://localhost:19192:
 ```sh
 java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19192 --server.port.http=19191 --config.path=config\ --server.ssl.key-store=config\server.jks --server.ssl.key-store-password=password --server.ssl.trust-store=config\server.jks --server.ssl.trust-store-password=password --server.ssl.client-auth=want

@@ -92,6 +92,7 @@ public final class SystemURL {
     public static final String VS_IDENTIFIER_TYPE = "http://hl7.org/fhir/ValueSet/identifier-type";
     public static final String VS_PATIENT_CONTACT_REL = "http://hl7.org/fhir/ValueSet/patient-contact-relationship";
     public static final String VS_SLOT_IDENTIFIER = "http://fhir.nhs.net/Id/gpconnect-slot-identifier";
+    public static final String VS_GPC_ORG_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/GPConnect-OrganisationType-1";
     
     // FHIR CodeSystem Constants
     public static final String CS_REGISTRATION_STATUS = "https://fhir.nhs.uk/CareConnect-RegistrationStatus-1";

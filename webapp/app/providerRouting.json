@@ -9,7 +9,8 @@
             "interactionIds": ["*"],
             "endpointURL": "/fhir",
             "apiEndpointURL": "/api",
-            "ASID": "200000000359"
+            "ASID": "200000000359",
+			"orgType": "GP Practice"
         },
         {
             "id": "2",
@@ -18,7 +19,8 @@
             "interactionIds": ["*"],
             "endpointURL": "http://localhost:18080/fhir",
             "apiEndpointURL": "http://localhost:18080/api",
-            "ASID": "200000000361"
+            "ASID": "200000000361",
+			"orgType": "GP Practice"
         },
         {
             "id": "3",
@@ -27,7 +29,8 @@
             "interactionIds": ["*"],
             "endpointURL": "http://localhost:28080/fhir",
             "apiEndpointURL": "http://localhost:28080/api",
-            "ASID": "200000000362"
+            "ASID": "200000000362",
+			"orgType": "GP Practice"
         }
     ]
 }

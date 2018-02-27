@@ -30,10 +30,11 @@ angular.module('gpConnect')
             var startDate = moment(appointmentSearchParams.startDate).format('YYYY-MM-DDTHH:mm:ss');
             var endDate = moment(appointmentSearchParams.endDate).add(23, 'hours').add(59, 'minutes').add(59, 'seconds').format('YYYY-MM-DDTHH:mm:ss');
 
-            var poputlateModel = function (practiceOdsCode, practiceName, startDate, endDate, primary) {
+            var poputlateModel = function (practiceOdsCode, practiceName, practiceOrgType, startDate, endDate, primary) {
                 var practiceState = {};
                 practiceState.practiceName = practiceName;
                 practiceState.practiceOdsCode = practiceOdsCode;
+                practiceState.practiceOrgType = practiceOrgType;
                 practiceState.status = "Searching";
                 $scope.practicesSearchingAndFails.push(practiceState);
 
@@ -45,7 +46,7 @@ angular.module('gpConnect')
                 var responsePractitioners = {};     // We will lookup practitioner from the schedule using reference so we can use the reference as the key/name
                 var responseLocations = {};         // We will lookup location from the schedule using reference so we can use the reference as the key/name
 
-                Appointment.searchForFreeSlots(practiceOdsCode, startDate, endDate).then(function (result) {
+                Appointment.searchForFreeSlots(practiceOdsCode, practiceOrgType, startDate, endDate).then(function (result) {
 
                     var getScheduleJson = result.data;
                     
@@ -218,11 +219,11 @@ angular.module('gpConnect')
             };
 
             if (appointmentSearchParams.primaryPractice.checked == true) {
-                poputlateModel(appointmentSearchParams.primaryPractice.odsCode, appointmentSearchParams.primaryPractice.name, startDate, endDate, true);
+                poputlateModel(appointmentSearchParams.primaryPractice.odsCode, appointmentSearchParams.primaryPractice.name, appointmentSearchParams.primaryPractice.orgType, startDate, endDate, true);
             }
             $.each(appointmentSearchParams.federatedPractices, function (index, practice) {
                 if (practice.checked == true) {
-                    poputlateModel(practice.odsCode, practice.name, startDate, endDate, false);
+                    poputlateModel(practice.odsCode, practice.name, practice.orgType, startDate, endDate, false);
                 }
             });
 

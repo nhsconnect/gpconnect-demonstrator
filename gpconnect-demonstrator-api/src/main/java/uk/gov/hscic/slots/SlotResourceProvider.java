@@ -75,7 +75,7 @@ public class SlotResourceProvider implements IResourceProvider {
 
     @Search
     public Bundle getSlotByIds(@RequiredParam(name = "start") DateParam startDate,
-            @RequiredParam(name = "end") DateParam endDate, @RequiredParam(name = "fb-type") String fbType,
+            @RequiredParam(name = "end") DateParam endDate, @RequiredParam(name = "status") String status,
             @RequiredParam(name= "searchFilter") TokenAndListParam searchFilters,
             @IncludeParam(allow = { "Slot:schedule", "Schedule:actor:Practitioner",
                     "Schedule:actor:Location" }) Set<Include> theIncludes) {
@@ -87,7 +87,7 @@ public class SlotResourceProvider implements IResourceProvider {
         String bookingOdsCode = "";
         String bookingOrgType = "";
 
-        if (!fbType.equals("free")) {
+        if (!status.equals("free")) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException("FbType incorrect: Must be equal to free"),
                     SystemCode.INVALID_PARAMETER, IssueType.INVALID);

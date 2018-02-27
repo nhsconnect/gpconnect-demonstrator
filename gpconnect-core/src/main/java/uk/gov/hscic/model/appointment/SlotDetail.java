@@ -15,6 +15,7 @@ public class SlotDetail {
     private Date lastUpdated;
     private boolean gpConnectBookable;
     private List<Long> organizationIds;
+    private List<String> organizationTypes;
 
     public Long getId() {
         return id;
@@ -102,5 +103,13 @@ public class SlotDetail {
 
 	public void setOrganizationIds(List<Long> organizationIds) {
 		this.organizationIds = organizationIds;
+	}
+
+	public List<String> getOrganizationTypes() {
+		return organizationTypes;
+	}
+
+	public void setOrganizationTypes(List<String> organizationTypes) {
+		this.organizationTypes = organizationTypes;
 	}
 }

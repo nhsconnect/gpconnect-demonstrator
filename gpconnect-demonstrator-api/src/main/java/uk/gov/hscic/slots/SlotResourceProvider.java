@@ -23,14 +23,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.param.BaseAndListParam;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.ParamPrefixEnum;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
@@ -152,9 +150,9 @@ public class SlotResourceProvider implements IResourceProvider {
 
     }
 
-    public List<Slot> getSlotsForScheduleId(String scheduleId, Date startDateTime, Date endDateTime, Long orgId) {
+    public List<Slot> getSlotsForScheduleIdAndOrganizationId(String scheduleId, Date startDateTime, Date endDateTime, Long orgId) {
         ArrayList<Slot> slots = new ArrayList<>();
-        List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), startDateTime,
+        List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleIdAndOrganizationId(Long.valueOf(scheduleId), startDateTime,
                 endDateTime, orgId);
 
         if (slotDetails != null && !slotDetails.isEmpty()) {
@@ -165,6 +163,21 @@ public class SlotResourceProvider implements IResourceProvider {
 
         return slots;
     }
+    
+
+	public List<Slot> getSlotsForScheduleIdAndOrganizationType(String scheduleId, Date startDateTime, Date endDateTime, String bookingOrgType) {
+		ArrayList<Slot> slots = new ArrayList<>();
+        List<SlotDetail> slotDetails = slotSearch.getSlotsForScheduleIdAndOrganizationType(Long.valueOf(scheduleId), startDateTime,
+                endDateTime, bookingOrgType);
+
+        if (slotDetails != null && !slotDetails.isEmpty()) {
+            for (SlotDetail slotDetail : slotDetails) {
+                slots.add(slotDetailToSlotResourceConverter(slotDetail));
+            }
+        }
+
+        return slots;
+	}
 
     private Slot slotDetailToSlotResourceConverter(SlotDetail slotDetail) {
         Slot slot = new Slot();

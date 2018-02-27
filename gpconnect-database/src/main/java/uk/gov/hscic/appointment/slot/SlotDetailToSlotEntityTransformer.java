@@ -20,8 +20,6 @@ public class SlotDetailToSlotEntityTransformer implements Transformer<SlotDetail
 //            appointment.setId(item.getAppointmentId());
 //            slotEntity.setAppointmentId(appointment);
 //        }
-        
-        List<OrganizationEntity> bookableOrganizations = item.getOrganizationIds().stream().map(id -> createOrganizationEntityWithId(id)).collect(Collectors.toList());
 
         slotEntity.setTypeCode(item.getTypeCode());
         slotEntity.setTypeDisply(item.getTypeDisply());
@@ -32,7 +30,11 @@ public class SlotDetailToSlotEntityTransformer implements Transformer<SlotDetail
         slotEntity.setLastUpdated(item.getLastUpdated());
         slotEntity.setGpConnectBookable(item.isGpConnectBookable());
         slotEntity.setBookableOrgTypes(item.getOrganizationTypes());
-        slotEntity.setBookableOrganizations(bookableOrganizations);
+        if(item.getOrganizationIds() != null) {
+        	List<OrganizationEntity> bookableOrganizations = item.getOrganizationIds().stream().map(id -> createOrganizationEntityWithId(id)).collect(Collectors.toList());
+        	slotEntity.setBookableOrganizations(bookableOrganizations);
+        }
+        
         return slotEntity;
     }
     

@@ -112,7 +112,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         if ("Patient".equals(requestedRecord.getResourceType())) {
             // If it is a patient orientated request
             if (!NhsCodeValidator.nhsNumberValid(requestedNhsNumber)) {
-                throw new InvalidRequestException("Dates are invalid: ", OperationOutcomeFactory.buildOperationOutcome(
+                throw new InvalidRequestException("Invalid NHS number: ", OperationOutcomeFactory.buildOperationOutcome(
                         SYSTEM_WARNING_CODE, CODE_INVALID_NHS_NUMBER, "Patient Record Not Found", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
             }
         } else {

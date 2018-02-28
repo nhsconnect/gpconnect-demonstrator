@@ -90,7 +90,7 @@ public class PatientResourceProvider implements IResourceProvider {
         if (null == patientDetails) {
         	throw new ResourceNotFoundException("No patient details found for patient ID: " + patientId,
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
-                            OperationConstants.CODE_PATIENT_NOT_FOUND, "1" + OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
+                            OperationConstants.CODE_PATIENT_NOT_FOUND, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                             OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
         }
 
@@ -203,8 +203,7 @@ public class PatientResourceProvider implements IResourceProvider {
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
                                     OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_INVALID_SYSTEM,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
-                } 
-                
+                }
             } else if (value instanceof PeriodDt) {
                 PeriodDt period = (PeriodDt) value;
 

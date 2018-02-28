@@ -88,7 +88,7 @@ public class PatientResourceProvider implements IResourceProvider {
         PatientDetails patientDetails = patientSearch.findPatient(patientId.getValue());
 
         if (null == patientDetails) {
-            throw new ResourceNotFoundException("No patient details found for patient ID: " + patientId,
+        	throw new ResourceNotFoundException("No patient details found for patient ID: " + patientId,
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
                             OperationConstants.CODE_PATIENT_NOT_FOUND, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                             OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
@@ -110,7 +110,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 .stream()
                 .map(Parameter::getName)
                 .collect(Collectors.toList());
-
+        
         if (!PERMITTED_PARAM_NAMES.containsAll(parameters)) {
             throw new UnprocessableEntityException("Invalid parameters",
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
@@ -141,9 +141,9 @@ public class PatientResourceProvider implements IResourceProvider {
                 nhsNumber = ((IdentifierDt) value).getValue();
 
                 if (StringUtils.isBlank(nhsNumber)) {
-                    throw new InvalidRequestException(OperationConstants.SYSTEM_INVALID,
+                	throw new InvalidRequestException("NHS Number is blank",
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
-                                    OperationConstants.CODE_INVALID_NHS_NUMBER, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
+                                    OperationConstants.CODE_INVALID_NHS_NUMBER, OperationConstants.CODE_INVALID_NHS_NUMBER,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
                 }
 
@@ -187,21 +187,21 @@ public class PatientResourceProvider implements IResourceProvider {
                 if (system == null || sectionName == null) {
                     throw new UnprocessableEntityException(OperationConstants.SYSTEM_INVALID,
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
-                                    OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
+                                    OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
                 }
 
                 if (!sectionName.equals(sectionName.toUpperCase())) {
                     throw new UnprocessableEntityException("Section Case Invalid: " + sectionName,
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
-                                    OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
+                                    OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_INVALID_SECTION,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
                 }
 
                 if (!system.equals(OperationConstants.SYSTEM_RECORD_SECTION)) {
                     throw new InvalidRequestException(OperationConstants.SYSTEM_INVALID,
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
-                                    OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
+                                    OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_INVALID_SYSTEM,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
                 }
             } else if (value instanceof PeriodDt) {
@@ -215,7 +215,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 if (fromDate != null && toDate != null && fromDate.after(toDate)) {
                     throw new UnprocessableEntityException("Dates are invalid: " + fromDate + ", " + toDate,
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
-                                    OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
+                                    OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_INVALID_DATES,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
                 }
 
@@ -400,7 +400,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 OperationConstants.SYSTEM_WARNING_CODE,
                                 OperationConstants.CODE_REFERENCE_NOT_FOUND,
                                 OperationConstants.COD_CONCEPT_RECORD_INVALID_REFERENCE,
-                                OperationConstants.META_GP_CONNECT_PRACTITIONER,
+                                OperationConstants.META_GP_CONNECT_ORGANIZATION,
                                 IssueTypeEnum.NOT_FOUND));
             }
 
@@ -452,7 +452,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
             patient.getCareProvider().add(practitionerReference);
         } else {
-            throw new ResourceNotFoundException("No GP record exists",
+        	throw new ResourceNotFoundException("No GP record exists",
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
                             OperationConstants.CODE_PATIENT_NOT_FOUND, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                             OperationConstants.META_GP_CONNECT_PRACTITIONER, IssueTypeEnum.NOT_FOUND));

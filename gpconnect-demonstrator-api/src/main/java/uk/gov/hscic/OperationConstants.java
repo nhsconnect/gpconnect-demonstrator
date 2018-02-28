@@ -23,6 +23,9 @@ public final class OperationConstants {
     public static final String COD_CONCEPT_RECORD_NHS_NUMBER_INVALID = "NHS Number Invalid";
     public static final String COD_CONCEPT_RECORD_NOT_FOUND = "Patient Record Not Found";
     public static final String COD_CONCEPT_RECORD_PATIENT_DATA_CONFIDENTIAL = "Patient Data Confidential";
+    public static final String COD_CONCEPT_RECORD_INVALID_SYSTEM = "Invalid system";
+    public static final String COD_CONCEPT_RECORD_INVALID_SECTION = "Invalid section";
+    public static final String COD_CONCEPT_RECORD_INVALID_DATES = "Dates are invalid";
 
     // MetaProfile Constants
     public static final String META_GP_CONNECT_CARERECORD_COMPOSITION = "http://fhir.nhs.net/StructureDefinition/gpconnect-carerecord-composition-1";

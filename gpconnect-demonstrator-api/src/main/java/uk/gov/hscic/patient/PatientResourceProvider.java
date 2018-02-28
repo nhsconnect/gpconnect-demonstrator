@@ -401,7 +401,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 OperationConstants.SYSTEM_WARNING_CODE,
                                 OperationConstants.CODE_REFERENCE_NOT_FOUND,
                                 OperationConstants.COD_CONCEPT_RECORD_INVALID_REFERENCE,
-                                OperationConstants.META_GP_CONNECT_PRACTITIONER,
+                                OperationConstants.META_GP_CONNECT_ORGANIZATION,
                                 IssueTypeEnum.NOT_FOUND));
             }
 
@@ -455,7 +455,7 @@ public class PatientResourceProvider implements IResourceProvider {
         } else {
         	throw new ResourceNotFoundException("No GP record exists",
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
-                            OperationConstants.CODE_PATIENT_NOT_FOUND, "3" + OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
+                            OperationConstants.CODE_PATIENT_NOT_FOUND, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                             OperationConstants.META_GP_CONNECT_PRACTITIONER, IssueTypeEnum.NOT_FOUND));
         }
 

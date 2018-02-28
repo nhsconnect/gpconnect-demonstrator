@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 
 /**
@@ -17,6 +19,10 @@ import org.springframework.http.HttpMethod;
  * in the trusted jks.</p>
  */
 public final class CertificateValidator {
+	
+	@Autowired
+    private Environment env;
+	
     private static final Logger LOG = Logger.getLogger(CertificateValidator.class);
 
     private final List<X509Certificate> knownCerts = new ArrayList<>();
@@ -31,8 +37,9 @@ public final class CertificateValidator {
 
     public void validateRequest(HttpServletRequest request) {
         try {
-            if (request.isSecure() && !HttpMethod.OPTIONS.name().equals(request.getMethod())) {
-                String cipherSuite = (String) request.getAttribute("javax.servlet.request.cipher_suite");
+        	if (request.isSecure() && !HttpMethod.OPTIONS.name().equals(request.getMethod())
+            	&& (env.getProperty("clientAuth") == null || !env.getProperty("clientAuth").equals("false"))) {
+            	String cipherSuite = (String) request.getAttribute("javax.servlet.request.cipher_suite");
                 X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
 
                 if (null == certs) {

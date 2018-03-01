@@ -13,9 +13,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import uk.gov.hscic.common.filters.FhirRequestAuthInterceptor;
 import uk.gov.hscic.common.filters.FhirRequestGenericIntercepter;
-import uk.gov.hscic.organization.OrganizationResourceProvider;
+import uk.gov.hscic.metadata.GpConnectServerConformanceProvider;
 import uk.gov.hscic.patient.PatientResourceProvider;
-import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 @Configuration
 @WebServlet(urlPatterns = {"/fhir/*"}, displayName = "FHIR Server")
@@ -64,5 +63,8 @@ public class FhirRestfulServlet extends RestfulServer {
         registerInterceptor(new CorsInterceptor(config));
         registerInterceptor(applicationContext.getBean(FhirRequestAuthInterceptor.class));
         registerInterceptor(applicationContext.getBean(FhirRequestGenericIntercepter.class));
+        
+        GpConnectServerConformanceProvider conStatementProvider = new GpConnectServerConformanceProvider(this);
+        super.setServerConformanceProvider(conStatementProvider);
     }
 }

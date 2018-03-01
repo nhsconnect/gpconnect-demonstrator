@@ -28,7 +28,7 @@ import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.medications.MedicationResourceProvider;
-import uk.gov.hscic.order.OrderResourceProvider;
+import uk.gov.hscic.metadata.GpConnectServerCapabilityStatementProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.PatientResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
@@ -101,5 +101,7 @@ public class FhirRestfulServlet extends RestfulServer {
         registerInterceptor(applicationContext.getBean(FhirRequestGenericIntercepter.class));
         registerInterceptor(applicationContext.getBean(PatientJwtValidator.class));
         
+        GpConnectServerCapabilityStatementProvider capStatementProvider = new GpConnectServerCapabilityStatementProvider(this);
+        super.setServerConformanceProvider(capStatementProvider);
     }
 }

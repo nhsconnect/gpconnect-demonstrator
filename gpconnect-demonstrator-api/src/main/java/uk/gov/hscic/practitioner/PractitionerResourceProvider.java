@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
+import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.HumanName.NameUse;
 import org.hl7.fhir.dstu3.model.IdType;
@@ -15,12 +16,9 @@ import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Location;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.hl7.fhir.dstu3.model.Practitioner;
-import org.hl7.fhir.dstu3.model.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
-import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
@@ -150,8 +148,13 @@ public class PractitionerResourceProvider implements IResourceProvider {
                 break;
         }
 
-        Coding roleCoding = new Coding(SystemURL.VS_SDS_JOB_ROLE_NAME, practitionerDetails.getRoleCode(), null)
-                .setDisplay(practitionerDetails.getRoleDisplay());
+        if(practitionerDetails.getRoleCode() != null) {
+        	Coding roleCoding = new Coding(SystemURL.VS_SDS_JOB_ROLE_NAME, practitionerDetails.getRoleCode(), 
+        			practitionerDetails.getRoleDisplay());
+        	Extension roleCodeExtension = new Extension(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE,
+        			new CodeableConcept().addCoding(roleCoding));        	
+        	practitioner.addExtension(roleCodeExtension);
+        }        
        
       /*  practitioner.addPractitionerRole().setRole(new CodeableConcept().addCoding(roleCoding))
                 .setManagingOrganization(
@@ -168,4 +171,9 @@ public class PractitionerResourceProvider implements IResourceProvider {
 
         return practitioner;
     }
+    
+    public List<Extension> getPractitionerRoleReferences(Practitioner practitioner) {
+        return practitioner.getExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE);
+    }
+    
 }

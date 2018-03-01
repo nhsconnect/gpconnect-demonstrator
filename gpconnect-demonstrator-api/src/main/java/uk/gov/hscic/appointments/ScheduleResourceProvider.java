@@ -17,8 +17,6 @@ import org.hl7.fhir.dstu3.model.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.model.api.ExtensionDt;
-import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -58,6 +56,7 @@ public class ScheduleResourceProvider implements IResourceProvider {
     }
 
     public List<Schedule> getSchedulesForLocationId(String locationId, Date startDateTime, Date endDateTime) {
+    	
         ArrayList<Schedule> schedules = new ArrayList<>();
         List<ScheduleDetail> scheduleDetails = scheduleSearch.findScheduleForLocationId(Long.valueOf(locationId),
                 startDateTime, endDateTime);
@@ -84,9 +83,35 @@ public class ScheduleResourceProvider implements IResourceProvider {
         schedule.getMeta().setVersionId(versionId);
         schedule.getMeta().setLastUpdated(scheduleDetail.getLastUpdated());        
         
-        Extension extension = new Extension(SystemURL.SD_EXTENSION_GPC_PRACTITIONER,
-                new Reference("Practitioner/" + scheduleDetail.getPractitionerId()));
-        schedule.addExtension(extension);
+        if(scheduleDetail.getPractitionerId() != null) {
+        	Extension practitionerExtension = new Extension(SystemURL.SD_EXTENSION_GPC_PRACTITIONER,
+        			new Reference("Practitioner/" + scheduleDetail.getPractitionerId()));
+        	
+        	schedule.addExtension(practitionerExtension);
+        }
+        
+        if(scheduleDetail.getPractitionerRoleCode() != null) {
+            
+            Coding roleCoding = new Coding(SystemURL.VS_GPC_PRACTITIONER_ROLE, scheduleDetail.getPractitionerRoleCode(),
+            		scheduleDetail.getPractitionerRoleDisplay());
+            
+            Extension practitionerRoleExtension = new Extension(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE, 
+            		new CodeableConcept().addCoding(roleCoding));
+        	
+        	schedule.addExtension(practitionerRoleExtension);
+        }
+        
+        if(scheduleDetail.getDeliveryChannelCode() != null) {
+        	
+        	Coding roleCoding = new Coding(SystemURL.VS_GPC_DELIVERY_CHANNEL, scheduleDetail.getDeliveryChannelCode(), 
+        			scheduleDetail.getDeliveryChannelDisplay());
+        	
+        	Extension deliveryChannelExtension = new Extension(SystemURL.SD_EXTENSION_GPC_DELIVERY_CHANNEL,
+        			new CodeableConcept().addCoding(roleCoding));
+        	
+        	schedule.addExtension(deliveryChannelExtension);
+        }
+        
         Identifier identifier = new Identifier();
         identifier.setSystem(SystemURL.ID_GPC_SCHEDULE_IDENTIFIER);
         identifier.setValue(scheduleDetail.getIdentifier());
@@ -109,4 +134,9 @@ public class ScheduleResourceProvider implements IResourceProvider {
     public List<Extension> getPractitionerReferences(Schedule schedule) {
         return schedule.getExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_PRACTITIONER);
     }
+   
+    public List<Extension> getPractitionerRoleReferences(Schedule schedule) {
+        return schedule.getExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE);
+    }
+    
 }

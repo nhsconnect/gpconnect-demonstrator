@@ -22,6 +22,8 @@ import org.hl7.fhir.dstu3.model.Slot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -81,12 +83,22 @@ public class PopulateSlotBundle {
 
                 // practitioners
                 List<Extension> practitionerExtensions = scheduleResourceProvider.getPractitionerReferences(schedule);
-
+                                
                 if (!practitionerExtensions.isEmpty()) {
                     for (Extension practionerExtension : practitionerExtensions) {
                         Reference practitionerRef = (Reference) practionerExtension.getValue();
+                        
                         Practitioner practitioner = practitionerResourceProvider
                                 .getPractitionerById((IdType) practitionerRef.getReferenceElement());
+                        
+                        if (scheduleResourceProvider.getPractitionerRoleReferences(schedule).isEmpty()) {
+                        	List<Extension> roleCodeExtensions = practitionerResourceProvider.getPractitionerRoleReferences(practitioner);
+                        	if(!roleCodeExtensions.isEmpty()) {
+                            	for (Extension roleCodeExtension : roleCodeExtensions) {
+                            		schedule.addExtension(roleCodeExtension);
+                            	}
+                            }
+                        }
 
                         if (practitioner == null) {
                             Coding errorCoding = new Coding().setSystem(SystemURL.VS_GPC_ERROR_WARNING_CODE)
@@ -105,30 +117,35 @@ public class PopulateSlotBundle {
                         }
                     }
 
-                   
-                    Set<Slot> slots = new HashSet<Slot>();
-                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
-                            planningHorizonStart, planningHorizonEnd, organizations.get(0).getId())); 
-                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationType(schedule.getIdElement().getIdPart(),
-                            planningHorizonStart, planningHorizonEnd, bookingOrgType));
-                    String freeBusyType = "FREE";
-                    if (!slots.isEmpty()) {
-                        for (Slot slot : slots) {
-                            
-                            if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
-                                BundleEntryComponent slotEntry = new BundleEntryComponent();
-                                slotEntry.setResource(slot);
-                                slotEntry.setFullUrl("Slot/" + slot.getIdElement().getIdPart());                    
-                                bundle.addEntry(slotEntry);
-                                bundle.addEntry(scheduleEntry);
-                                
-                                if (actorLocation == true){
-                                bundle.addEntry(locationEntry);
-                                }
-                            
-                            }
-                        }
-                    }
+                }
+                
+                IParser p = FhirContext.forDstu3().newXmlParser().setPrettyPrint(true);
+                String messageString = p.encodeResourceToString(bundle);
+                
+                System.out.println("BUNDLE: " + messageString);
+                
+                Set<Slot> slots = new HashSet<Slot>();
+                slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
+                		planningHorizonStart, planningHorizonEnd, organizations.get(0).getId())); 
+                slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationType(schedule.getIdElement().getIdPart(),
+                		planningHorizonStart, planningHorizonEnd, bookingOrgType));
+                String freeBusyType = "FREE";
+                if (!slots.isEmpty()) {
+                	for (Slot slot : slots) {
+                		
+                		if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
+                			BundleEntryComponent slotEntry = new BundleEntryComponent();
+                			slotEntry.setResource(slot);
+                			slotEntry.setFullUrl("Slot/" + slot.getIdElement().getIdPart());                    
+                			bundle.addEntry(slotEntry);
+                			bundle.addEntry(scheduleEntry);
+                			
+                			if (actorLocation == true){
+                				bundle.addEntry(locationEntry);
+                			}
+                			
+                		}
+                	}
                 }
             }
         }

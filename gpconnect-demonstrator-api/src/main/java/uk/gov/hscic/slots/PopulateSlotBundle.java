@@ -22,8 +22,6 @@ import org.hl7.fhir.dstu3.model.Slot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -90,15 +88,6 @@ public class PopulateSlotBundle {
                         
                         Practitioner practitioner = practitionerResourceProvider
                                 .getPractitionerById((IdType) practitionerRef.getReferenceElement());
-                        
-                        if (scheduleResourceProvider.getPractitionerRoleReferences(schedule).isEmpty()) {
-                        	List<Extension> roleCodeExtensions = practitionerResourceProvider.getPractitionerRoleReferences(practitioner);
-                        	if(!roleCodeExtensions.isEmpty()) {
-                            	for (Extension roleCodeExtension : roleCodeExtensions) {
-                            		schedule.addExtension(roleCodeExtension);
-                            	}
-                            }
-                        }
 
                         if (practitioner == null) {
                             Coding errorCoding = new Coding().setSystem(SystemURL.VS_GPC_ERROR_WARNING_CODE)
@@ -118,11 +107,6 @@ public class PopulateSlotBundle {
                     }
 
                 }
-                
-                IParser p = FhirContext.forDstu3().newXmlParser().setPrettyPrint(true);
-                String messageString = p.encodeResourceToString(bundle);
-                
-                System.out.println("BUNDLE: " + messageString);
                 
                 Set<Slot> slots = new HashSet<Slot>();
                 slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),

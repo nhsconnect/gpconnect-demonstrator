@@ -148,13 +148,8 @@ public class PractitionerResourceProvider implements IResourceProvider {
                 break;
         }
 
-        if(practitionerDetails.getRoleCode() != null) {
-        	Coding roleCoding = new Coding(SystemURL.VS_SDS_JOB_ROLE_NAME, practitionerDetails.getRoleCode(), 
-        			practitionerDetails.getRoleDisplay());
-        	Extension roleCodeExtension = new Extension(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE,
-        			new CodeableConcept().addCoding(roleCoding));        	
-        	practitioner.addExtension(roleCodeExtension);
-        }        
+        Coding roleCoding = new Coding(SystemURL.VS_SDS_JOB_ROLE_NAME, practitionerDetails.getRoleCode(), 
+        		practitionerDetails.getRoleDisplay());        
        
       /*  practitioner.addPractitionerRole().setRole(new CodeableConcept().addCoding(roleCoding))
                 .setManagingOrganization(

@@ -27,6 +27,9 @@ import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import java.util.LinkedList;
+import org.hl7.fhir.dstu3.model.Address;
+import org.hl7.fhir.dstu3.model.StringType;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -71,7 +74,13 @@ public class LocationResourceProvider implements IResourceProvider {
             
         }
 
-        return IdentifierValidator.versionComparison(locationId, locationDetailsToLocation(locationDetails));
+        Location location = locationDetailsToLocation(locationDetails);
+        List<StringType> list = new LinkedList<>();
+        list.add(new StringType("Trevelyan Square"));
+        list.add(new StringType("Boar Ln"));
+        list.add(new StringType("Leeds"));
+        location.setAddress(new Address().setPostalCode("LS1 6AE").setLine(list));
+        return location;
     }
 
     private Location locationDetailsToLocation(LocationDetails locationDetails) {

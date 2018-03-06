@@ -1,6 +1,5 @@
 package uk.gov.hscic.common.filters;
 
-import java.util.Enumeration;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -27,15 +26,15 @@ public class DefaultHeaderFilter implements Filter {
             HttpServletRequest httpRequest = (HttpServletRequest) request;
          
           
+            /*
             String headerOutput = "Headers ( ";
-         
             Enumeration<String> headerNames = httpRequest.getHeaderNames();
             while(headerNames.hasMoreElements()){
                 String headerName = headerNames.nextElement();
                 headerOutput += "'" + headerName + "' : '" + httpRequest.getHeader(headerName) + "'";
-            }
-        
+            }        
             LOG.info(headerOutput + " )");
+            */
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             response.setHeader("Cache-Control", "no-store");
             chain.doFilter(new HeaderRequestWrapper((HttpServletRequest) request), response);

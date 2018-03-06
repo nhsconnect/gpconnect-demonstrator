@@ -24,7 +24,7 @@
             </thead>
 
             <tbody>
-                <tr dir-paginate="appointment in appointments | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{appointment.resource.id}}')" ng-class="{info: selected(appointment.resource.id)}">
+                <tr dir-paginate="appointment in appointments | itemsPerPage: 9" current-page="currentPage"  ng-click="go('{{appointment.resource.id}}', '{{appointment.appointmentPractice}}')" ng-class="{info: selected(appointment.resource.id)}">
                     <td class="dateTime" style="width:155px">{{ appointment.resource.start | amDateFormat:'DD-MMM-YYYY HH:mm' }}</td>
                     <td>{{ appointment.resource.status}}</td>
                 </tr>

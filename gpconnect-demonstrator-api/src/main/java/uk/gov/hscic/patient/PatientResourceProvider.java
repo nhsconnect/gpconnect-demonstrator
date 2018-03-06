@@ -180,7 +180,13 @@ public class PatientResourceProvider implements IResourceProvider {
             throws FHIRException {
 
         Patient patient = getPatientByPatientId(nhsNumber.fromToken(tokenParam));
-
+        if(null != patient){
+            Extension regDetailsEx = patient.addExtension();
+            regDetailsEx.setUrl("https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-RegistrationDetails-1");
+            Extension branchSurgeryEx = regDetailsEx.addExtension();
+            branchSurgeryEx.setUrl("preferredBranchSurgery");
+            branchSurgeryEx.setValue(new Reference("Location/1"));
+        }
         return null == patient || patient.getDeceased() != null ? Collections.emptyList()
                 : Collections.singletonList(patient);
     }

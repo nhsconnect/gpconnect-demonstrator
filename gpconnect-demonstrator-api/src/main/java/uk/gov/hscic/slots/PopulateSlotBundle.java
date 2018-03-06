@@ -109,8 +109,10 @@ public class PopulateSlotBundle {
                 }
                 
                 Set<Slot> slots = new HashSet<Slot>();
-                slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
-                		planningHorizonStart, planningHorizonEnd, organizations.get(0).getId())); 
+                if (!organizations.isEmpty()) {
+                	slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
+                			planningHorizonStart, planningHorizonEnd, organizations.get(0).getId())); 
+                }
                 slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationType(schedule.getIdElement().getIdPart(),
                 		planningHorizonStart, planningHorizonEnd, bookingOrgType));
                 String freeBusyType = "FREE";

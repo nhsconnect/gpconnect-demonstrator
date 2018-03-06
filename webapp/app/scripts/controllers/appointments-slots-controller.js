@@ -27,8 +27,8 @@ angular.module('gpConnect')
             var internalGetScheduleModel = {}
             $scope.practicesSearchingAndFails = [];
 
-            var startDate = moment(appointmentSearchParams.startDate).format('YYYY-MM-DDTHH:mm:ss') + '%2B00:00';
-            var endDate = moment(appointmentSearchParams.endDate).add(23, 'hours').add(59, 'minutes').add(59, 'seconds').format('YYYY-MM-DDTHH:mm:ss') + '%2B00:00';;
+            var startDate = moment(appointmentSearchParams.startDate).format('YYYY-MM-DDTHH:mm:ssZ');
+            var endDate = moment(appointmentSearchParams.endDate).add(23, 'hours').add(59, 'minutes').add(59, 'seconds').format('YYYY-MM-DDTHH:mm:ssZ');
 
             var poputlateModel = function (practiceOdsCode, practiceName, practiceOrgType, startDate, endDate, primary) {
                 var practiceState = {};

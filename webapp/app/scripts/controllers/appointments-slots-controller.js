@@ -54,10 +54,19 @@ angular.module('gpConnect')
                         getScheduleJson = { entry : [] };
                     }
 
-                    var getPractitionerExtRef = function(value){
-                        for (var i=0; i < value.resource.extension.length; i++){
-                            if (value.resource.extension[i] && value.resource.extension[i].url === "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1"){
-                                    return value.resource.extension[i].valueReference.reference;
+                    var getPractitionerRef = function(value){
+                         for (var i=0; i < value.resource.actor.length; i++){
+                            if (value.resource.actor[i] && value.resource.actor[i].reference.startsWith("Practitioner")){
+                                    return value.resource.actor[i].reference;
+                            }
+                        }
+                        return null;
+                    }
+                    
+                    var getLocationRef = function(value){
+                         for (var i=0; i < value.resource.actor.length; i++){
+                            if (value.resource.actor[i] && value.resource.actor[i].reference.startsWith("Location")){
+                                    return value.resource.actor[i].reference;
                             }
                         }
                         return null;
@@ -81,8 +90,8 @@ angular.module('gpConnect')
 
                         if (value.resource.resourceType == "Schedule") {
                             responseSchedules[value.fullUrl] = {
-                                "locationRef": value.resource.actor[0].reference, 
-                                "practitionerRef": getPractitionerExtRef(value),
+                                "locationRef": getLocationRef(value), 
+                                "practitionerRef": getPractitionerRef(value),
                                 "practitionerRoleCoding": getExtensionCoding(value, "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-PractitionerRole-1"),
                                 "deliveryChannelCoding": getExtensionCoding(value, "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-DeliveryChannel-1"),
                                 "serviceTypeCoding": value.resource.serviceType[0].coding
@@ -108,7 +117,7 @@ angular.module('gpConnect')
                             };
                         }
                         if (value.resource.resourceType == "Location") {
-                            responseLocations[value.fullUrl] = {"name": value.resource.name, "id": value.resource.id};
+                        	responseLocations[value.fullUrl] = {"name": value.resource.name, "id": value.resource.id};
                         }
                     });
 
@@ -123,7 +132,7 @@ angular.module('gpConnect')
                             var practitionerName = responsePractitioners[schedule.practitionerRef] ? responsePractitioners[schedule.practitionerRef].fullName : null;
                             var practitionerId = responsePractitioners[schedule.practitionerRef] ? responsePractitioners[schedule.practitionerRef].id : null;
                             var scheduleType = schedule.serviceTypeCoding[0].display;
-                            var locationName = responseLocations[schedule.locationRef].name;
+                        	var locationName = responseLocations[schedule.locationRef].name;
                             var locationId = responseLocations[schedule.locationRef].id;
                             var practitionerRole = schedule.practitionerRoleCoding[0].display;
                             var deliveryChannel;
@@ -267,7 +276,6 @@ angular.module('gpConnect')
                     var practitionerSchedule = {
                         id: practitioners[i].id,
                         name: practitioners[i].fullName,
-                        type: practitioners[i].type,
                         role: practitioners[i].role,
                         deliveryChannel: practitioners[i].deliveryChannel,
                         height: '3em',

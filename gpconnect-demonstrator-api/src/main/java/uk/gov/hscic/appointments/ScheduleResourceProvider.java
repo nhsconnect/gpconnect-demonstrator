@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
@@ -84,10 +85,7 @@ public class ScheduleResourceProvider implements IResourceProvider {
         schedule.getMeta().setLastUpdated(scheduleDetail.getLastUpdated());        
         
         if(scheduleDetail.getPractitionerId() != null) {
-        	Extension practitionerExtension = new Extension(SystemURL.SD_EXTENSION_GPC_PRACTITIONER,
-        			new Reference("Practitioner/" + scheduleDetail.getPractitionerId()));
-        	
-        	schedule.addExtension(practitionerExtension);
+        	schedule.addActor(new Reference("Practitioner/" + scheduleDetail.getPractitionerId()));
         }
         
         if(scheduleDetail.getPractitionerRoleCode() != null) {
@@ -131,8 +129,10 @@ public class ScheduleResourceProvider implements IResourceProvider {
         return schedule;
     }
 
-    public List<Extension> getPractitionerReferences(Schedule schedule) {
-        return schedule.getExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_PRACTITIONER);
+    public List<Reference> getPractitionerReferences(Schedule schedule) {
+    	return schedule.getActor().stream()
+    			.filter(actor -> actor.getReference().startsWith("Practitioner"))
+    			.collect(Collectors.toList());
     }
    
     public List<Extension> getPractitionerRoleReferences(Schedule schedule) {

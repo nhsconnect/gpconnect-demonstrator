@@ -9,7 +9,6 @@ import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Location;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
@@ -80,14 +79,12 @@ public class PopulateSlotBundle {
                 scheduleEntry.setFullUrl("Schedule/" + schedule.getIdElement().getIdPart());
 
                 // practitioners
-                List<Extension> practitionerExtensions = scheduleResourceProvider.getPractitionerReferences(schedule);
+                List<Reference> practitionerActors = scheduleResourceProvider.getPractitionerReferences(schedule);
                                 
-                if (!practitionerExtensions.isEmpty()) {
-                    for (Extension practionerExtension : practitionerExtensions) {
-                        Reference practitionerRef = (Reference) practionerExtension.getValue();
-                        
+                if (!practitionerActors.isEmpty()) {
+                    for (Reference practitionerActor : practitionerActors) {
                         Practitioner practitioner = practitionerResourceProvider
-                                .getPractitionerById((IdType) practitionerRef.getReferenceElement());
+                                .getPractitionerById((IdType) practitionerActor.getReferenceElement());
 
                         if (practitioner == null) {
                             Coding errorCoding = new Coding().setSystem(SystemURL.VS_GPC_ERROR_WARNING_CODE)

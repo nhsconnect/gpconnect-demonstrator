@@ -1,0 +1,295 @@
+swagger: '2.0'
+info:
+  description: |-
+    This is the GP Connect 0.5.0 (DSTU2) API demonstration, which is built against the <a href='https://developer.nhs.uk/apis/gpconnect-0-5-0/'>GP Connect 0.5.0 specification</a>.
+
+    <p>The following other API demonstration are also available:</p>
+    <ul>
+      <li><a href='gpconnect-1-0-0.html'>GP Connect 1.0.0 (STU3)</li>
+    </ul>
+  version: 0.5.0
+  title: GP Connect
+  termsOfService: ''
+host: 'ec2-54-194-109-184.eu-west-1.compute.amazonaws.com:380'
+basePath: /fhir
+tags:
+  - name: Foundations
+    description: ''
+    externalDocs:
+      description: Specification
+      url: 'https://developer.nhs.uk/apis/gpconnect-0-5-0/foundations.html'
+  - name: Access Record HTML
+    description: ''
+    externalDocs:
+      description: Specification
+      url: 'https://developer.nhs.uk/apis/gpconnect-0-5-0/accessrecord.html'
+schemes:
+  - http
+paths:
+  /metadata:
+    get:
+      tags:
+      - Foundations
+      summary: Get the FHIR® conformance profile
+      description: ''
+      consumes:
+        - application/json+fhir
+      produces:
+        - application/json+fhir
+      parameters:
+        - in: header
+          name: Ssp-TraceID
+          type: string
+          x-example: 09a01679-2564-0fb4-5129-aecc81ea2706
+          description: Consumer trace identifier
+          required: true
+        - in: header
+          name: Ssp-From
+          type: string
+          x-example: '200000000359'
+          description: Consumer ASID
+          required: true
+        - in: header
+          name: Ssp-To
+          type: string
+          x-example: '200000000359'
+          description: Provider ASID
+          required: true
+        - in: header
+          name: Ssp-InteractionID
+          type: string
+          default: 'urn:nhs:names:services:gpconnect:fhir:rest:read:metadata'
+          description: SDS interaction identifier
+          required: true
+        - in: header
+          name: Authorization
+          type: string
+          x-multiline: true
+          description: Authorization header containing JWT
+          x-example: |-
+            {
+             "iss": "http://ec2-54-194-109-184.eu-west-1.compute.amazonaws.com/#/search",
+             "sub": "1",
+             "aud": "https://authorize.fhir.nhs.net/token",
+             "exp": 1519512608,
+             "iat": 1519512308,
+             "reason_for_request": "directcare",
+             "requested_record": {
+              "resourceType": "Organization",
+              "identifier": [
+               {
+                "system": "http://fhir.nhs.net/Id/ods-organization-code",
+                "value": "A11111"
+               }
+              ]
+             },
+             "requested_scope": "organization/*.read",
+             "requesting_device": {
+              "resourceType": "Device",
+              "id": "1",
+              "identifier": [
+               {
+                "system": "Web Interface",
+                "value": "GP Connect Demonstrator"
+               }
+              ],
+              "model": "Demonstrator",
+              "version": "1.0"
+             },
+             "requesting_organization": {
+              "resourceType": "Organization",
+              "id": "1",
+              "identifier": [
+               {
+                "system": "http://fhir.nhs.net/Id/ods-organization-code",
+                "value": "A11111"
+               }
+              ],
+              "name": "GP Connect Demonstrator"
+             },
+             "requesting_practitioner": {
+              "resourceType": "Practitioner",
+              "id": "1",
+              "identifier": [
+               {
+                "system": "http://fhir.nhs.net/sds-user-id",
+                "value": "G13579135"
+               },
+               {
+                "system": "localSystem",
+                "value": "1"
+               }
+              ],
+              "name": {
+                "family": [
+                  "Demonstrator"
+                ],
+                "given": [
+                  "GPConnect"
+                ],
+                "prefix": [
+                  "Mr"
+                ]
+              },
+              "practitionerRole": [
+                {
+                  "role": {
+                    "coding": [
+                      {
+                        "system": "http://fhir.nhs.net/ValueSet/sds-job-role-name-1",
+                        "code": "sds-job-role-name"
+                      }
+                    ]
+                  }
+                }
+              ]
+             }
+            }
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+  /Patient/$gpc.getcarerecord:
+    post:
+      tags:
+        - Access Record HTML
+      summary: Retrieve a care record section
+      consumes:
+        - application/json+fhir
+      produces:
+        - application/json+fhir
+      parameters:
+        - in: header
+          name: Ssp-TraceID
+          type: string
+          x-example: 09a01679-2564-0fb4-5129-aecc81ea2706
+          description: Consumer trace identifier
+          required: true
+        - in: header
+          name: Ssp-From
+          type: string
+          x-example: '200000000359'
+          description: Consumer ASID
+          required: true
+        - in: header
+          name: Ssp-To
+          type: string
+          x-example: '200000000359'
+          description: Provider ASID
+          required: true
+        - in: header
+          name: Ssp-InteractionID
+          type: string
+          default: 'urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord'
+          description: SDS interaction identifier
+          required: true
+        - in: header
+          name: Authorization
+          type: string
+          x-multiline: true
+          example: |-
+            {
+             "iss": "http://ec2-54-194-109-184.eu-west-1.compute.amazonaws.com/#/search",
+             "sub": "1",
+             "aud": "https://authorize.fhir.nhs.net/token",
+             "exp": 1519512608,
+             "iat": 1519512308,
+             "reason_for_request": "directcare",
+             "requested_record": {
+              "resourceType": "Patient",
+              "identifier": [
+               {
+                "system": "http://fhir.nhs.net/Id/nhs-number",
+                "value": "9476719958"
+               }
+              ]
+             },
+             "requested_scope": "patient/*.read",
+             "requesting_device": {
+              "resourceType": "Device",
+              "id": "1",
+              "identifier": [
+               {
+                "system": "Web Interface",
+                "value": "GP Connect Demonstrator"
+               }
+              ],
+              "model": "Demonstrator",
+              "version": "1.0"
+             },
+             "requesting_organization": {
+              "resourceType": "Organization",
+              "id": "1",
+              "identifier": [
+               {
+                "system": "http://fhir.nhs.net/Id/ods-organization-code",
+                "value": "A11111"
+               }
+              ],
+              "name": "GP Connect Demonstrator"
+             },
+             "requesting_practitioner": {
+              "resourceType": "Practitioner",
+              "id": "1",
+              "identifier": [
+               {
+                "system": "http://fhir.nhs.net/sds-user-id",
+                "value": "G13579135"
+               },
+               {
+                "system": "localSystem",
+                "value": "1"
+               }
+              ],
+              "name": {
+                "family": [
+                  "Demonstrator"
+                ],
+                "given": [
+                  "GPConnect"
+                ],
+                "prefix": [
+                  "Mr"
+                ]
+              },
+              "practitionerRole": [
+                {
+                  "role": {
+                    "coding": [
+                      {
+                        "system": "http://fhir.nhs.net/ValueSet/sds-job-role-name-1",
+                        "code": "sds-job-role-name"
+                      }
+                    ]
+                  }
+                }
+              ]
+             }
+            }
+          description: Authorization header containing JWT
+          required: true
+        - in: body
+          name: body
+          description: 'Care record section request'
+          required: true
+          schema:
+            type: object
+            example:
+              resourceType: "Parameters"
+              parameter: 
+                - name: "patientNHSNumber"
+                  valueIdentifier: 
+                    system: "http://fhir.nhs.net/Id/nhs-number"
+                    value: "9476719958"
+                - name: "recordSection"
+                  valueCodeableConcept: 
+                    coding:
+                      - system: "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1"
+                        code: "ALL"
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request

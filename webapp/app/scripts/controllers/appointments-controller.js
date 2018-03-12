@@ -84,7 +84,7 @@ angular.module('gpConnect')
                             if (appointment.resource.extension != undefined) {
                                 for (var i = 0; i < appointment.resource.extension.length; i++) {
                                     if (gpcResource.getConst("SD_EXT_GPC_APPOINT_CANC_REAS") == appointment.resource.extension[i].url) {
-                                        appointment.cancellationReason = appointment.resource.extension[i].valueString;
+                                        appointment.cancellationReason = appointment.resource.extension[i].valueId;
                                         i = appointment.resource.extension.length;
                                     }
                                 }

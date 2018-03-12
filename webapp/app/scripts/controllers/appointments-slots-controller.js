@@ -143,7 +143,7 @@ angular.module('gpConnect')
                                 var slots = [];
                                 slots.push(slot);
                                 var practitioners = [];
-                                var practitionerModel = {"fullName": practitionerName, "type": scheduleType, "slots": slots, "id": practitionerId, "role": practitionerRole, "deliveryChannel": deliveryChannel};
+                                var practitionerModel = {"fullName": practitionerName, "scheduleType": scheduleType, "slots": slots, "id": practitionerId, "role": practitionerRole, "deliveryChannel": deliveryChannel};
                                 practitioners.push(practitionerModel);
                                 var dayBlockOfSlots = [];
                                 var startDateTime = new Date(slot.startDateTime);
@@ -168,7 +168,7 @@ angular.module('gpConnect')
                                     var slots = [];
                                     slots.push(slot);
                                     var practitioners = [];
-                                    var practitionerModel = {"fullName": practitionerName, "type": scheduleType, "slots": slots, "id": practitionerId, "role": practitionerRole, "deliveryChannel": deliveryChannel};
+                                    var practitionerModel = {"fullName": practitionerName, "scheduleType": scheduleType, "slots": slots, "id": practitionerId, "role": practitionerRole, "deliveryChannel": deliveryChannel};
                                     practitioners.push(practitionerModel);
                                     var dayBlockOfSlots = [];
                                     var startDateTime = new Date(slot.startDateTime);
@@ -193,7 +193,7 @@ angular.module('gpConnect')
                                         var slots = [];
                                         slots.push(slot);
                                         var practitioners = [];
-                                        var practitionerModel = {"fullName": practitionerName, "type": scheduleType, "slots": slots, "id": practitionerId, "role": practitionerRole, "deliveryChannel": deliveryChannel};
+                                        var practitionerModel = {"fullName": practitionerName, "scheduleType": scheduleType, "slots": slots, "id": practitionerId, "role": practitionerRole, "deliveryChannel": deliveryChannel};
                                         practitioners.push(practitionerModel);
                                         var dayBlockOfSlots = [];
                                         var startDateTime = new Date(slot.startDateTime);
@@ -214,7 +214,7 @@ angular.module('gpConnect')
                                             // If we did not find a block of slots we need to make one
                                             var slots = [];
                                             slots.push(slot);
-                                            var practitionerModel = {"fullName": practitionerName, "type": scheduleType, "slots": slots, "id": practitionerId, "role": practitionerRole, "deliveryChannel": deliveryChannel};
+                                            var practitionerModel = {"fullName": practitionerName, "scheduleType": scheduleType, "slots": slots, "id": practitionerId, "role": practitionerRole, "deliveryChannel": deliveryChannel};
                                             internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners.push(practitionerModel);
                                         } else {
                                             internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners[practitionerIndex].slots.push(slot);
@@ -276,6 +276,7 @@ angular.module('gpConnect')
                     var practitionerSchedule = {
                         id: practitioners[i].id,
                         name: practitioners[i].fullName,
+                        scheduleType: practitioners[i].scheduleType,
                         role: practitioners[i].role,
                         deliveryChannel: practitioners[i].deliveryChannel,
                         height: '3em',
@@ -306,8 +307,8 @@ angular.module('gpConnect')
             };
 
             $scope.options = {
-                ganttTableColumns: ['model.name', 'model.role', 'model.type', 'model.deliveryChannel'],
-                ganttTableColumnHeaders: {'model.name': 'Name', 'model.role': 'Role', 'model.type': 'Type', 'model.deliveryChannel': 'Delivery'}
+                ganttTableColumns: ['model.name', 'model.role', 'model.scheduleType', 'model.deliveryChannel'],
+                ganttTableColumnHeaders: {'model.name': 'Name', 'model.role': 'Role', 'model.scheduleType': 'Type', 'model.deliveryChannel': 'Delivery'}
             };
 
             $scope.onSelectLocation = function (location) {
@@ -393,7 +394,7 @@ angular.module('gpConnect')
                 $scope.appointmentBookingParameters.endTime = lastToDate;
                 $scope.appointmentBookingParameters.practitionerId = $scope.selectedSlots[0].row.model.id;
                 $scope.appointmentBookingParameters.practitionerFullName = $scope.selectedSlots[0].row.model.name;
-                $scope.appointmentBookingParameters.scheduleType = $scope.selectedSlots[0].row.model.type;
+                $scope.appointmentBookingParameters.scheduleType = $scope.selectedSlots[0].row.model.scheduleType;
                 $scope.appointmentBookingParameters.practitionerRole = $scope.selectedSlots[0].row.model.role;
                 $scope.appointmentBookingParameters.deliveryChannel = $scope.selectedSlots[0].row.model.deliveryChannel;
                 $scope.appointmentBookingParameters.locationId = $scope.selectedLocation.id;

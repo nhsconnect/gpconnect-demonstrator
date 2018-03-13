@@ -1180,6 +1180,142 @@ paths:
           description: Bad request
 
 ############################################################
+# Read a patient's appointments
+############################################################
+  /Patient/{id}/Appointment:
+    get:
+      tags:
+      - Appointment Management
+      summary: Read a patient's appointments
+      description: ''
+      consumes:
+        - application/fhir+json
+      produces:
+        - application/fhir+json
+      parameters:
+        - in: header
+          name: Ssp-TraceID
+          type: string
+          x-example: 09a01679-2564-0fb4-5129-aecc81ea2706
+          description: Consumer trace identifier
+          required: true
+        - in: header
+          name: Ssp-From
+          type: string
+          x-example: '200000000359'
+          description: Consumer ASID
+          required: true
+        - in: header
+          name: Ssp-To
+          type: string
+          x-example: '200000000359'
+          description: Provider ASID
+          required: true
+        - in: header
+          name: Ssp-InteractionID
+          type: string
+          default: 'urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments-1'
+          description: SDS interaction identifier
+          required: true
+        - in: header
+          name: Authorization
+          type: string
+          x-multiline: true
+          description: Authorization header containing JWT
+          x-example: |-
+            {
+              "iss": "http://ec2-54-194-109-184.eu-west-1.compute.amazonaws.com/#/search",
+              "sub": "1",
+              "aud": "https://authorize.fhir.nhs.net/token",
+              "exp": 1520782200,
+              "iat": 1520781900,
+              "reason_for_request": "directcare",
+              "requested_record": {
+                "resourceType": "Patient",
+                "identifier": [
+                  {
+                    "system": "https://fhir.nhs.uk/Id/nhs-number",
+                    "value": "9476719958"
+                  }
+                ]
+              },
+              "requested_scope": "patient/*.read",
+              "requesting_device": {
+                "resourceType": "Device",
+                "identifier": [
+                  {
+                    "system": "Web Interface",
+                    "value": "GP Connect Demonstrator"
+                  }
+                ],
+                "model": "Demonstrator",
+                "version": "1.0",
+                "url": "http://ec2-54-194-109-184.eu-west-1.compute.amazonaws.com/#/search"
+              },
+              "requesting_organization": {
+                "resourceType": "Organization",
+                "identifier": [
+                  {
+                    "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+                    "value": "A11111"
+                  }
+                ],
+                "name": "GP Connect Demonstrator"
+              },
+              "requesting_practitioner": {
+                "resourceType": "Practitioner",
+                "id": "1",
+                "identifier": [
+                  {
+                    "system": "https://fhir.nhs.uk/sds-user-id",
+                    "value": "G13579135"
+                  },
+                  {
+                    "system": "https://fhir.nhs.uk/Id/sds-role-profile-id",
+                    "value": "111111111"
+                  },
+                  {
+                    "system": "LocalUserSystem",
+                    "value": "1"
+                  }
+                ],
+                "name": [
+                  {
+                    "family": "Demonstrator",
+                    "given": [
+                      "GPConnect"
+                    ],
+                    "prefix": [
+                      "Mr"
+                    ]
+                  }
+                ]
+              }
+            }
+          required: true
+        - in: path
+          name: id
+          type: string
+          description: Patient logical identifier
+          x-example: '4'
+          required: true
+        - in: query
+          name: start
+          type: array
+          collectionFormat: multi
+          description: Appointment start date/time
+          items:
+            type: string
+            enum: ['ge2017-07-11', 'le2017-09-14']
+          required: false
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+
+
+############################################################
 # Search for free slots
 ############################################################
   /Slot:
@@ -1298,38 +1434,340 @@ paths:
           name: start
           type: string
           description: Slot start date/time
-          x-example: 'ge2018-03-01T00:00:00'
+          x-example: 'ge2018-03-01'
           required: true
         - in: query
           name: end
           type: string
           description: Slot end date/time
-          x-example: 'le2018-03-14T00:00:00'
+          x-example: 'le2018-03-14'
           required: true
         - in: query
           name: status
           type: string
           description: Slot status
-          x-example: 'free'
+          enum: ['free']
           required: true
+          default: 'free'
         - in: query
           name: _include
           type: string
           description: Include
-          x-example: 'Slot:schedule'
+          enum: ['Slot:schedule']
+          required: true
+          default: 'Slot:schedule'
         - in: query
           name: _include:recurse
-          type: string
+          type: array
+          collectionFormat: multi
           description: Reverse include
-          x-example: 'Schedule:actor:Practitioner'
+          items:
+            type: string
+            enum: ['Schedule:actor:Practitioner', 'Schedule:actor:Location']
         - in: query
-          name: _include:recurse
-          type: string
-          description: Reverse include
-          x-example: 'Schedule:actor:Location'
-
+          name: searchFilter
+          type: array
+          collectionFormat: multi
+          description: Search filter
+          items:
+            type: string
+            enum: ['https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-OrganisationType-1|gp-practice', 'https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-OrganisationType-1|urgent-care', 'https://fhir.nhs.uk/Id/ods-organization-code|A11111']
+          default: 'https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-OrganisationType-1|gp-practice'
       responses:
         '200':
           description: OK
         '400':
           description: Bad request
+
+############################################################
+# Book an appointment
+############################################################
+  /Appointment:
+    post:
+      tags:
+      - Appointment Management
+      summary: Book an appointment
+      description: ''
+      consumes:
+        - application/fhir+json
+      produces:
+        - application/fhir+json
+      parameters:
+        - in: header
+          name: Ssp-TraceID
+          type: string
+          x-example: 09a01679-2564-0fb4-5129-aecc81ea2706
+          description: Consumer trace identifier
+          required: true
+        - in: header
+          name: Ssp-From
+          type: string
+          x-example: '200000000359'
+          description: Consumer ASID
+          required: true
+        - in: header
+          name: Ssp-To
+          type: string
+          x-example: '200000000359'
+          description: Provider ASID
+          required: true
+        - in: header
+          name: Ssp-InteractionID
+          type: string
+          default: 'urn:nhs:names:services:gpconnect:fhir:rest:create:appointment-1'
+          description: SDS interaction identifier
+          required: true
+        - in: header
+          name: Authorization
+          type: string
+          x-multiline: true
+          description: Authorization header containing JWT
+          x-example: |-
+            {
+              "iss": "http://ec2-54-194-109-184.eu-west-1.compute.amazonaws.com/#/search",
+              "sub": "1",
+              "aud": "https://authorize.fhir.nhs.net/token",
+              "exp": 1520782200,
+              "iat": 1520781900,
+              "reason_for_request": "directcare",
+              "requested_record": {
+                "resourceType": "Patient",
+                "identifier": [
+                  {
+                    "system": "https://fhir.nhs.uk/Id/nhs-number",
+                    "value": "9999999999"
+                  }
+                ]
+              },
+              "requested_scope": "patient/*.write",
+              "requesting_device": {
+                "resourceType": "Device",
+                "identifier": [
+                  {
+                    "system": "Web Interface",
+                    "value": "GP Connect Demonstrator"
+                  }
+                ],
+                "model": "Demonstrator",
+                "version": "1.0",
+                "url": "http://ec2-54-194-109-184.eu-west-1.compute.amazonaws.com/#/search"
+              },
+              "requesting_organization": {
+                "resourceType": "Organization",
+                "identifier": [
+                  {
+                    "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+                    "value": "A11111"
+                  }
+                ],
+                "name": "GP Connect Demonstrator"
+              },
+              "requesting_practitioner": {
+                "resourceType": "Practitioner",
+                "id": "1",
+                "identifier": [
+                  {
+                    "system": "https://fhir.nhs.uk/sds-user-id",
+                    "value": "G13579135"
+                  },
+                  {
+                    "system": "https://fhir.nhs.uk/Id/sds-role-profile-id",
+                    "value": "111111111"
+                  },
+                  {
+                    "system": "LocalUserSystem",
+                    "value": "1"
+                  }
+                ],
+                "name": [
+                  {
+                    "family": "Demonstrator",
+                    "given": [
+                      "GPConnect"
+                    ],
+                    "prefix": [
+                      "Mr"
+                    ]
+                  }
+                ]
+              }
+            }
+          required: true
+        - in: body
+          name: body
+          description: Appointment
+          schema:
+            type: object  
+            example:
+              resourceType: "Appointment"
+              meta:
+                profile:
+                  - "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Appointment-1"
+              identifier:
+                - system: "https://fhir.nhs.uk/Id/nhs-number"
+                  value: "9999999999"
+              status: "booked"
+              description: "description"
+              start: "2018-04-01T10:00:00"
+              end: "2018-04-01T10:10:00"
+              slot: 
+                - reference: "Slot/1"
+              participant:
+                - actor:
+                    reference: "Patient/1"
+                  status: "accepted"
+                - actor:
+                    reference: "Location/1"
+                  status: "accepted"
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+
+############################################################
+# Read an appointment
+############################################################
+  /Appointment/{id}:
+    get:
+      tags:
+      - Appointment Management
+      summary: Read an appointment
+      description: ''
+      consumes:
+        - application/fhir+json
+      produces:
+        - application/fhir+json
+      parameters:
+        - in: header
+          name: Ssp-TraceID
+          type: string
+          x-example: 09a01679-2564-0fb4-5129-aecc81ea2706
+          description: Consumer trace identifier
+          required: true
+        - in: header
+          name: Ssp-From
+          type: string
+          x-example: '200000000359'
+          description: Consumer ASID
+          required: true
+        - in: header
+          name: Ssp-To
+          type: string
+          x-example: '200000000359'
+          description: Provider ASID
+          required: true
+        - in: header
+          name: Ssp-InteractionID
+          type: string
+          default: 'urn:nhs:names:services:gpconnect:fhir:rest:read:appointment-1'
+          description: SDS interaction identifier
+          required: true
+        - in: header
+          name: Authorization
+          type: string
+          x-multiline: true
+          description: Authorization header containing JWT
+          x-example: |-
+            {
+              "iss": "http://ec2-54-194-109-184.eu-west-1.compute.amazonaws.com/#/search",
+              "sub": "1",
+              "aud": "https://authorize.fhir.nhs.net/token",
+              "exp": 1520782200,
+              "iat": 1520781900,
+              "reason_for_request": "directcare",
+              "requested_record": {
+                "resourceType": "Patient",
+                "identifier": [
+                  {
+                    "system": "https://fhir.nhs.uk/Id/nhs-number",
+                    "value": "9476719931"
+                  }
+                ]
+              },
+              "requested_scope": "patient/*.read",
+              "requesting_device": {
+                "resourceType": "Device",
+                "identifier": [
+                  {
+                    "system": "Web Interface",
+                    "value": "GP Connect Demonstrator"
+                  }
+                ],
+                "model": "Demonstrator",
+                "version": "1.0",
+                "url": "http://ec2-54-194-109-184.eu-west-1.compute.amazonaws.com/#/search"
+              },
+              "requesting_organization": {
+                "resourceType": "Organization",
+                "identifier": [
+                  {
+                    "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+                    "value": "A11111"
+                  }
+                ],
+                "name": "GP Connect Demonstrator"
+              },
+              "requesting_practitioner": {
+                "resourceType": "Practitioner",
+                "id": "1",
+                "identifier": [
+                  {
+                    "system": "https://fhir.nhs.uk/sds-user-id",
+                    "value": "G13579135"
+                  },
+                  {
+                    "system": "https://fhir.nhs.uk/Id/sds-role-profile-id",
+                    "value": "111111111"
+                  },
+                  {
+                    "system": "LocalUserSystem",
+                    "value": "1"
+                  }
+                ],
+                "name": [
+                  {
+                    "family": "Demonstrator",
+                    "given": [
+                      "GPConnect"
+                    ],
+                    "prefix": [
+                      "Mr"
+                    ]
+                  }
+                ]
+              }
+            }
+          required: true
+        - in: path
+          name: id
+          type: string
+          description: Appointment logical identifier
+          x-example: '1'
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+
+############################################################
+# Amend or cancel an appointment
+############################################################
+    put:
+      tags:
+      - Appointment Management
+      summary: Amend or cancel an appointment
+      description: 'TBC'
+      consumes:
+        - application/fhir+json
+      produces:
+        - application/fhir+json
+      parameters:
+        - in: header
+          name: Ssp-TraceID
+          type: string
+          x-example: 09a01679-2564-0fb4-5129-aecc81ea2706
+          description: Consumer trace identifier
+          required: true

@@ -310,7 +310,7 @@ angular.module('gpConnect')
 
             $scope.options = {
                 ganttTableColumns: ['model.name', 'model.role', 'model.deliveryChannel'],
-                ganttTableColumnHeaders: {'model.name': 'Name', 'model.role': 'Role', 'model.deliveryChannel': 'Delivery'}
+                ganttTableColumnHeaders: {'model.name': 'Practitioner', 'model.role': 'Role', 'model.deliveryChannel': 'Delivery'}
             };
 
             $scope.onSelectLocation = function (location) {

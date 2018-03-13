@@ -89,13 +89,9 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private static final String TEMPORARY_RESIDENT_REGISTRATION_TYPE = "T";
     private static final String ACTIVE_REGISTRATION_STATUS = "A";
-    private static final int ENCOUNTERS_SUMMARY_LIMIT = 3;
 
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
-
-    @Autowired
-    private OrganizationResourceProvider organizationResourceProvider;
 
     @Autowired
     private MedicationOrderResourceProvider medicationOrderResourceProvider;
@@ -114,9 +110,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PatientSearch patientSearch;
-
-    @Autowired
-    private PageSectionFactory pageSectionFactory;
 
     @Autowired
     private StaticElementsHelper staticElHelper;
@@ -164,15 +157,19 @@ public class PatientResourceProvider implements IResourceProvider {
     @Read(version = true)
     public Patient getPatientById(@IdParam IdType internalId) throws FHIRException {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
-
+      
         if (patientDetails == null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart()),
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
         }
 
-        return IdentifierValidator.versionComparison(internalId,
+        Patient patient =  IdentifierValidator.versionComparison(internalId,
                 patientDetailsToPatientResourceConverter(patientDetails));
+        if(null != patient){
+            addPreferredBranchSurgeryExtension(patient);
+        }
+        return patient;
     }
 
     @Search
@@ -180,10 +177,19 @@ public class PatientResourceProvider implements IResourceProvider {
             throws FHIRException {
 
         Patient patient = getPatientByPatientId(nhsNumber.fromToken(tokenParam));
-
+        if(null != patient){
+            addPreferredBranchSurgeryExtension(patient);
+        }
         return null == patient || patient.getDeceased() != null ? Collections.emptyList()
                 : Collections.singletonList(patient);
     }
+
+	private void addPreferredBranchSurgeryExtension(Patient patient) {
+		List<Extension> regDetailsEx = patient.getExtensionsByUrl(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
+		Extension branchSurgeryEx = regDetailsEx.get(0).addExtension();
+		branchSurgeryEx.setUrl("preferredBranchSurgery");
+		branchSurgeryEx.setValue(new Reference("Location/1"));
+	}
 
     private Patient getPatientByPatientId(String patientId) throws FHIRException {
         PatientDetails patientDetails = patientSearch.findPatient(patientId);

@@ -9,7 +9,6 @@ import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Location;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
@@ -80,13 +79,12 @@ public class PopulateSlotBundle {
                 scheduleEntry.setFullUrl("Schedule/" + schedule.getIdElement().getIdPart());
 
                 // practitioners
-                List<Extension> practitionerExtensions = scheduleResourceProvider.getPractitionerReferences(schedule);
-
-                if (!practitionerExtensions.isEmpty()) {
-                    for (Extension practionerExtension : practitionerExtensions) {
-                        Reference practitionerRef = (Reference) practionerExtension.getValue();
+                List<Reference> practitionerActors = scheduleResourceProvider.getPractitionerReferences(schedule);
+                                
+                if (!practitionerActors.isEmpty()) {
+                    for (Reference practitionerActor : practitionerActors) {
                         Practitioner practitioner = practitionerResourceProvider
-                                .getPractitionerById((IdType) practitionerRef.getReferenceElement());
+                                .getPractitionerById((IdType) practitionerActor.getReferenceElement());
 
                         if (practitioner == null) {
                             Coding errorCoding = new Coding().setSystem(SystemURL.VS_GPC_ERROR_WARNING_CODE)
@@ -105,30 +103,32 @@ public class PopulateSlotBundle {
                         }
                     }
 
-                   
-                    Set<Slot> slots = new HashSet<Slot>();
-                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
-                            planningHorizonStart, planningHorizonEnd, organizations.get(0).getId())); 
-                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationType(schedule.getIdElement().getIdPart(),
-                            planningHorizonStart, planningHorizonEnd, bookingOrgType));
-                    String freeBusyType = "FREE";
-                    if (!slots.isEmpty()) {
-                        for (Slot slot : slots) {
-                            
-                            if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
-                                BundleEntryComponent slotEntry = new BundleEntryComponent();
-                                slotEntry.setResource(slot);
-                                slotEntry.setFullUrl("Slot/" + slot.getIdElement().getIdPart());                    
-                                bundle.addEntry(slotEntry);
-                                bundle.addEntry(scheduleEntry);
-                                
-                                if (actorLocation == true){
-                                bundle.addEntry(locationEntry);
-                                }
-                            
-                            }
-                        }
-                    }
+                }
+                
+                Set<Slot> slots = new HashSet<Slot>();
+                if (!organizations.isEmpty()) {
+                	slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
+                			planningHorizonStart, planningHorizonEnd, organizations.get(0).getId())); 
+                }
+                slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationType(schedule.getIdElement().getIdPart(),
+                		planningHorizonStart, planningHorizonEnd, bookingOrgType));
+                String freeBusyType = "FREE";
+                if (!slots.isEmpty()) {
+                	for (Slot slot : slots) {
+                		
+                		if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
+                			BundleEntryComponent slotEntry = new BundleEntryComponent();
+                			slotEntry.setResource(slot);
+                			slotEntry.setFullUrl("Slot/" + slot.getIdElement().getIdPart());                    
+                			bundle.addEntry(slotEntry);
+                			bundle.addEntry(scheduleEntry);
+                			
+                			if (actorLocation == true){
+                				bundle.addEntry(locationEntry);
+                			}
+                			
+                		}
+                	}
                 }
             }
         }

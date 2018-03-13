@@ -84,7 +84,7 @@ angular.module('gpConnect')
                             if (appointment.resource.extension != undefined) {
                                 for (var i = 0; i < appointment.resource.extension.length; i++) {
                                     if (gpcResource.getConst("SD_EXT_GPC_APPOINT_CANC_REAS") == appointment.resource.extension[i].url) {
-                                        appointment.cancellationReason = appointment.resource.extension[i].valueString;
+                                        appointment.cancellationReason = appointment.resource.extension[i].valueId;
                                         i = appointment.resource.extension.length;
                                     }
                                 }
@@ -95,7 +95,7 @@ angular.module('gpConnect')
                 }
             }
 
-            $scope.go = function (id) {
+            $scope.go = function (id, practice) {
                 usSpinnerService.spin('patientSummary-spinner');
                 $scope.appointmentDetail = undefined;
                 $scope.appointmentLocation = undefined;
@@ -104,7 +104,7 @@ angular.module('gpConnect')
                 var appointment;
                 for (var index = 0; index < $scope.appointments.length; ++index) {
                     appointment = $scope.appointments[index];
-                    if (appointment.resource.id == id) {
+                    if (appointment.resource.id == id && appointment.appointmentPractice == practice) {
                         $scope.appointmentDetail = appointment;
                         break;
                     }

@@ -411,7 +411,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private enum Operation {
 
-        GetCareRecord("$gpc.getcarerecord"), GetSchedule("$gpc.getschedule"), RegisterPatient("$gpc.registerpatient");
+        GetCareRecord("$gpc.getcarerecord"), GetSchedule("$gpc.getschedule"), RegisterPatient("$gpc.registerpatient"), GetStructured("$gpc.getstructuredrecord");
 
         private Operation(String operationName) {
             this.operationName = operationName;

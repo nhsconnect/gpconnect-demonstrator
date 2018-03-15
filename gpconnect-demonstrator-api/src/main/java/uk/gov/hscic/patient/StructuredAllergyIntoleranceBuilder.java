@@ -38,8 +38,6 @@ public class StructuredAllergyIntoleranceBuilder {
 
 		List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntollerence(NHS);
 		System.out.println(allergyData.size());
-		
-		
 
 		ListResource activeAllergies = new ListResource();
 		activeAllergies.setTitle("Active Allergies");
@@ -79,8 +77,9 @@ public class StructuredAllergyIntoleranceBuilder {
 
 			// allergyIntolerance.setClinicalStatus(value );
 
-			//here =allergyIntolerance.Meta().addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
-			
+			// here
+			// =allergyIntolerance.Meta().addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
+
 			Date dateData = allergyData.get(0).getEndDate();
 
 			allergyIntolerance.setAssertedDate(dateData);
@@ -112,69 +111,12 @@ public class StructuredAllergyIntoleranceBuilder {
 			System.out.println(allergyData.get(i).getClinicalStatus());
 
 			if (allergyData.get(i).getClinicalStatus().equals("resolved")) {
-				resolvedAllergies.setId("1");
-				
-				resolvedAllergies.addContained(allergyIntolerance);
-				
-				
-				ListStatus resolvedAllergiesStatus = ListStatus.CURRENT;
-				resolvedAllergies.setStatus(resolvedAllergiesStatus);
-				
-				ListMode resolvedAllergiesMode = ListMode.SNAPSHOT;
-				resolvedAllergies.setMode(resolvedAllergiesMode);
-				
-				
-				CodeableConcept resolvedAllergiesCode = new CodeableConcept();
-				List<Coding> resolvedAllergiesCoding = new ArrayList<>();
-				Coding code = new Coding();
-				code.setCode("444");
-				resolvedAllergiesCoding.add(code);
-				
-				
-				resolvedAllergiesCode.setCoding(resolvedAllergiesCoding);
-				resolvedAllergies.setCode(resolvedAllergiesCode);
-				
-				Reference ref = new Reference("Patient/1");
-				ref.setDisplay("Patient/1");
-				resolvedAllergies.setSubject(ref);
-				resolvedAllergies.setEmptyReason(value);
-				
-				
+
+				listResourceBuilder(resolvedAllergies, allergyIntolerance);
 
 			} else {
-				activeAllergies.setId("1");
-				
-				
-				
-				
-				
-				activeAllergies.setEmptyReason(value);
-				
-				activeAllergies.addContained(allergyIntolerance);
-				
-				ListStatus activeAllergiesStatus = ListStatus.CURRENT;
-				activeAllergies.setStatus(activeAllergiesStatus);
-				
-				ListMode activeAllergiesMode = ListMode.SNAPSHOT;
-				activeAllergies.setMode(activeAllergiesMode);
-				
-				CodeableConcept activeAllergiesCode = new CodeableConcept();
-				List<Coding> activeAllergiesCoding = new ArrayList<>();
-				Coding code1 = new Coding();
-				code1.setCode("444");
-				activeAllergiesCoding.add(code1);
-				
-				activeAllergiesCode.setCoding(activeAllergiesCoding);
-				activeAllergies.setCode(activeAllergiesCode);
-				
-				
-				activeAllergies.setStatus(activeAllergiesStatus);
-				
-				Reference ref2  = new Reference("Patient/1");
-				ref2.setDisplay("Patient/1");
-				activeAllergies.setSubject(ref2);
-				
-				
+
+				listResourceBuilder(activeAllergies, allergyIntolerance);
 			}
 
 		}
@@ -188,6 +130,40 @@ public class StructuredAllergyIntoleranceBuilder {
 		}
 
 		return bundle;
+
+	}
+
+	private ListResource listResourceBuilder(ListResource buildingListResource, AllergyIntolerance allergyIntolerance) {
+		buildingListResource.setId("1");
+
+		CodeableConcept noContent = new CodeableConcept();
+		noContent.setText("noContent");
+		buildingListResource.setEmptyReason(noContent);
+
+		buildingListResource.addContained(allergyIntolerance);
+
+		ListStatus activeAllergiesStatus = ListStatus.CURRENT;
+		buildingListResource.setStatus(activeAllergiesStatus);
+
+		ListMode activeAllergiesMode = ListMode.SNAPSHOT;
+		buildingListResource.setMode(activeAllergiesMode);
+
+		CodeableConcept activeAllergiesCode = new CodeableConcept();
+		List<Coding> activeAllergiesCoding = new ArrayList<>();
+		Coding code1 = new Coding();
+		code1.setCode("444");
+		activeAllergiesCoding.add(code1);
+
+		activeAllergiesCode.setCoding(activeAllergiesCoding);
+		buildingListResource.setCode(activeAllergiesCode);
+
+		buildingListResource.setStatus(activeAllergiesStatus);
+
+		Reference ref2 = new Reference("Patient/1");
+		ref2.setDisplay("Patient/1");
+		buildingListResource.setSubject(ref2);
+
+		return buildingListResource;
 
 	}
 

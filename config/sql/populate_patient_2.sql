@@ -109,26 +109,16 @@ VALUES
 INSERT INTO gpconnect.medication_requests
  (id,groupIdentifier,statusCode,statusDisplay,intentCode,intentDisplay,medicationId,patientId,encounterId,authoredOn,
  requesterUrl,requesterId,authorisingPractitionerId,dosageText,dosageInstruction,dispenseRequestStartDate,dispenseRequestEndDate,
- dispenseQuantityValue,dispenseQuantityUnit,dispenseQuantityText,expectedSupplyDurationValue,expectedSupplyDurationUnit,
+ dispenseQuantityValue,dispenseQuantityUnit,dispenseQuantityText,expectedSupplyDuration,
  dispenseRequestOrganizationId,priorMedicationRequestId,numberOfRepeatPrescriptionsAllowed,numberOfRepeatPrescriptionsIssued,
  authorisationExpiryDate,prescriptionTypeCode,prescriptionTypeDisplay,statusReasonDate,statusReasonCode,statusReasonValue)
 VALUES
  (1,'group1','active','Active','plan','Plan',9,2,8,'2017-06-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
- '2017-06-12','2018-06-12',null,null,'200 Tablets','60','days',1,null,5,0,'2018-06-12','repeat','Repeat',null,null,null);
+ '2017-06-12','2018-06-12',null,null,'200 Tablets','60',1,null,5,0,'2018-06-12','repeat','Repeat',null,null,null);
 
 UPDATE gpconnect.medication_statements SET medicationRequestId = 1 WHERE id = 1;
 
-INSERT INTO gpconnect.medication_request_based_on
- (id,referenceUrl,referenceId)
-VALUES
- (1,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1',1);
-
-INSERT INTO gpconnect.medication_request_based_on_references
- (medicationRequestId,basedOnReferenceId)
-VALUES
- (1,1);
- 
 INSERT INTO gpconnect.medication_request_reason_codes
  (medicationRequestId,reasonCodeId)
 VALUES

@@ -4,9 +4,9 @@ VALUES
   (9476718900,"Current",'2016-07-01 12:17:00','2016-07-01 12:17:00',"Work allergy");
 
 INSERT INTO gpconnect.encounters
-  (nhsNumber,sectionDate,encounterDate,title,details)
+  (id,nhsNumber,sectionDate,encounterDate,title,details)
 VALUES
-  (9476718900,'2015-05-01 12:17:00','2015-05-01 12:17:00',"Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)","Haemoglobin A1c level - IFCC standardised 20.5 mmol/mol.<br />Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 10ml vials");
+  (1,9476718900,'2015-05-01 12:17:00','2015-05-01 12:17:00',"Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)","Haemoglobin A1c level - IFCC standardised 20.5 mmol/mol.<br />Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 10ml vials");
 
 INSERT INTO gpconnect.medications_html
   (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)

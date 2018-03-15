@@ -15,13 +15,22 @@ public class MedicationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "lastUpdated")
-    private Date lastUpdated;
     
+    @Column(name = "code")
+    private String code;
+    
+    @Column(name = "display")
+    private String display;
+    
+    @Column(name = "text")
+    private String text;
+    
+    @Column(name = "batchNumber")
+    private String batchNumber;
+    
+    @Column(name = "expiryDate")
+    private Date expiryDate;
+
     public Long getId() {
         return id;
     }
@@ -30,19 +39,44 @@ public class MedicationEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getCode() {
+		return code;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
+	public String getDisplay() {
+		return display;
+	}
 
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
+	public void setDisplay(String display) {
+		this.display = display;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public String getBatchNumber() {
+		return batchNumber;
+	}
+
+	public void setBatchNumber(String batchNumber) {
+		this.batchNumber = batchNumber;
+	}
+
+	public Date getExpiryDate() {
+		return expiryDate;
+	}
+
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
+	}
+
 }

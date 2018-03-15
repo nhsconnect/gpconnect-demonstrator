@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import javax.annotation.PostConstruct;
 
 import org.hl7.fhir.dstu3.model.Address.AddressType;
@@ -34,9 +35,6 @@ import org.hl7.fhir.dstu3.model.HumanName.NameUse;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Identifier.IdentifierUse;
-import org.hl7.fhir.dstu3.model.MedicationAdministration;
-import org.hl7.fhir.dstu3.model.MedicationDispense;
-import org.hl7.fhir.dstu3.model.MedicationRequest;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
@@ -48,6 +46,7 @@ import org.hl7.fhir.dstu3.model.Type;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
@@ -72,11 +71,7 @@ import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.helpers.StaticElementsHelper;
 import uk.gov.hscic.common.validators.IdentifierValidator;
-import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
-import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
-import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.model.patient.PatientDetails;
-import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.details.PatientSearch;
 import uk.gov.hscic.patient.details.PatientStore;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
@@ -92,15 +87,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
-
-    @Autowired
-    private MedicationOrderResourceProvider medicationOrderResourceProvider;
-
-    @Autowired
-    private MedicationDispenseResourceProvider medicationDispenseResourceProvider;
-
-    @Autowired
-    private MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
 
     @Autowired
     private AppointmentResourceProvider appointmentResourceProvider;
@@ -228,22 +214,6 @@ public class PatientResourceProvider implements IResourceProvider {
                     new InvalidRequestException("Not all mandatory parameters have been provided"),
                     SystemCode.INVALID_PARAMETER, IssueType.INVALID);
         }
-    }
-
-    @Search(compartmentName = "MedicationOrder")
-    public List<MedicationRequest> getPatientMedicationOrders(@IdParam IdType patientLocalId) {
-        return medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientLocalId.getIdPart());
-    }
-
-    @Search(compartmentName = "MedicationDispense")
-    public List<MedicationDispense> getPatientMedicationDispenses(@IdParam IdType patientLocalId) {
-        return medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientLocalId.getIdPart());
-    }
-
-    @Search(compartmentName = "MedicationAdministration")
-    public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdType patientLocalId) {
-        return medicationAdministrationResourceProvider
-                .getMedicationAdministrationsForPatientId(patientLocalId.getIdPart());
     }
 
     @Search(compartmentName = "Appointment")

@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import ca.uhn.fhir.rest.param.DateRangeParam;
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
 import org.hl7.fhir.dstu3.model.Appointment;
@@ -109,8 +110,8 @@ public class PatientResourceProvider implements IResourceProvider {
 	@Autowired
 	private MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
 
-	@Autowired
-	private AppointmentResourceProvider appointmentResourceProvider;
+    @Autowired
+    private AppointmentResourceProvider appointmentResourceProvider;
 
 	@Autowired
 	private OrganizationResourceProvider organizationResourceProvider;
@@ -563,137 +564,140 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	private Boolean IsActiveName(HumanName name) {
 
-		Period period = name.getPeriod();
+        Period period = name.getPeriod();
 
-		if (null == period) {
-			return true;
-		}
+        if (null == period) {
+            return true;
+        }
 
-		Date start = period.getStart();
-		Date end = period.getEnd();
+        Date start = period.getStart();
+        Date end = period.getEnd();
 
-		if ((null == end || end.after(new Date()))
-				&& (null == start || start.equals(new Date()) || start.before(new Date()))) {
-			return true;
-		}
+        if ((null == end || end.after(new Date()))
+                && (null == start || start.equals(new Date()) || start.before(new Date()))) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
-		PatientDetails patientDetails = new PatientDetails();
-		HumanName name = patientResource.getNameFirstRep();
+    private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
+        PatientDetails patientDetails = new PatientDetails();
+        HumanName name = patientResource.getNameFirstRep();
 
-		String givenNames = name.getGiven().stream().map(n -> n.getValue()).collect(Collectors.joining(","));
+        String givenNames = name.getGiven().stream().map(n -> n.getValue()).collect(Collectors.joining(","));
 
-		patientDetails.setForename(givenNames);
+        patientDetails.setForename(givenNames);
 
-		patientDetails.setSurname(name.getFamily());
-		patientDetails.setDateOfBirth(patientResource.getBirthDate());
-		if (patientResource.getGender() != null) {
-			patientDetails.setGender(patientResource.getGender().toString());
-		}
-		patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
+        patientDetails.setSurname(name.getFamily());
+        patientDetails.setDateOfBirth(patientResource.getBirthDate());
+        if (patientResource.getGender() != null) {
+            patientDetails.setGender(patientResource.getGender().toString());
+        }
+        patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
 
-		Type multipleBirth = patientResource.getMultipleBirth();
-		if (multipleBirth != null) {
-			try {
-				patientDetails.setMultipleBirth((multipleBirth));
-			} catch (ClassCastException cce) {
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
-						SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-			}
-		}
+        Type multipleBirth = patientResource.getMultipleBirth();
+        if (multipleBirth != null) {
+            try {
+                patientDetails.setMultipleBirth((multipleBirth));
+            } catch (ClassCastException cce) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            }
+        }
 
-		DateTimeType deceased = (DateTimeType) patientResource.getDeceased();
-		if (deceased != null) {
-			try {
-				patientDetails.setDeceased((deceased.getValue()));
-			} catch (ClassCastException cce) {
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new UnprocessableEntityException("The multiple deceased property is expected to be a datetime"),
-						SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-			}
-		}
+        DateTimeType deceased = (DateTimeType) patientResource.getDeceased();
+        if (deceased != null) {
+            try {
+                patientDetails.setDeceased((deceased.getValue()));
+            } catch (ClassCastException cce) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("The multiple deceased property is expected to be a datetime"),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            }
+        }
 
-		patientDetails.setRegistrationStartDateTime(new Date());
-		// patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
-		patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
-		patientDetails.setRegistrationType(TEMPORARY_RESIDENT_REGISTRATION_TYPE);
+        patientDetails.setRegistrationStartDateTime(new Date());
+        // patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
+        patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
+        patientDetails.setRegistrationType(TEMPORARY_RESIDENT_REGISTRATION_TYPE);
 
-		return patientDetails;
-	}
+        return patientDetails;
+    }
 
-	// a cut-down Patient
-	private Patient patientDetailsToRegisterPatientResourceConverter(PatientDetails patientDetails)
-			throws FHIRException {
-		Patient patient = patientDetailsToMinimalPatient(patientDetails);
+    // a cut-down Patient
+    private Patient patientDetailsToRegisterPatientResourceConverter(PatientDetails patientDetails)
+            throws FHIRException {
+        Patient patient = patientDetailsToMinimalPatient(patientDetails);
 
-		HumanName name = getPatientNameFromPatientDetails(patientDetails);
+        HumanName name = getPatientNameFromPatientDetails(patientDetails);
 
-		patient.addName(name);
+        patient.addName(name);
 
-		patient = setStaticPatientData(patient);
+        patient = setStaticPatientData(patient);
 
-		return patient;
-	}
+        return patient;
+    }
 
-	private Patient setStaticPatientData(Patient patient) {
+    private Patient setStaticPatientData(Patient patient) {
 
-		patient.setLanguage(("en-GB"));
+        patient.setLanguage(("en-GB"));
 
-		patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY,
-				SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
-		patient.addExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code",
-				SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));
-		patient.addExtension(new Extension(SystemURL.SD_PATIENT_CADAVERIC_DON, new BooleanType(false)));
-		patient.addExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS,
-				SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS));
-		patient.addExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT,
-				SystemURL.SD_CC_EXT_TREATMENT_CAT));
+        patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY,
+                SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
+        patient.addExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code",
+                SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));
+        patient.addExtension(new Extension(SystemURL.SD_PATIENT_CADAVERIC_DON, new BooleanType(false)));
+        patient.addExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS,
+                SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS));
+        patient.addExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT,
+                SystemURL.SD_CC_EXT_TREATMENT_CAT));
 
-		Extension nhsCommExtension = new Extension();
-		nhsCommExtension.setUrl(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
-		nhsCommExtension.addExtension(
-				createCodingExtension("en", "English", SystemURL.CS_CC_HUMAN_LANG, SystemURL.SD_CC_EXT_COMM_LANGUAGE));
-		nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_COMM_PREFERRED, new BooleanType(false)));
-		nhsCommExtension.addExtension(createCodingExtension("RWR", "Received written",
-				SystemURL.CS_CC_LANG_ABILITY_MODE, SystemURL.SD_CC_MODE_OF_COMM));
-		nhsCommExtension.addExtension(createCodingExtension("E", "Excellent", SystemURL.CS_CC_LANG_ABILITY_PROFI,
-				SystemURL.SD_CC_COMM_PROFICIENCY));
-		nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanType(false)));
+        Extension nhsCommExtension = new Extension();
+        nhsCommExtension.setUrl(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
+        nhsCommExtension.addExtension(
+                createCodingExtension("en", "English", SystemURL.CS_CC_HUMAN_LANG, SystemURL.SD_CC_EXT_COMM_LANGUAGE));
+        nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_COMM_PREFERRED, new BooleanType(false)));
+        nhsCommExtension.addExtension(createCodingExtension("RWR", "Received written",
+                SystemURL.CS_CC_LANG_ABILITY_MODE, SystemURL.SD_CC_MODE_OF_COMM));
+        nhsCommExtension.addExtension(createCodingExtension("E", "Excellent", SystemURL.CS_CC_LANG_ABILITY_PROFI,
+                SystemURL.SD_CC_COMM_PROFICIENCY));
+        nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanType(false)));
 
-		patient.addExtension(nhsCommExtension);
+        patient.addExtension(nhsCommExtension);
 
-		Identifier localIdentifier = new Identifier();
-		localIdentifier.setUse(IdentifierUse.USUAL);
-		localIdentifier.setSystem(SystemURL.ID_LOCAL_PATIENT_IDENTIFIER);
-		localIdentifier.setValue("123456");
+        Identifier localIdentifier = new Identifier();
+        localIdentifier.setUse(IdentifierUse.USUAL);
+        localIdentifier.setSystem(SystemURL.ID_LOCAL_PATIENT_IDENTIFIER);
+        localIdentifier.setValue("123456");
 
-		CodeableConcept liType = new CodeableConcept();
-		Coding liTypeCoding = new Coding();
-		liTypeCoding.setCode("EN");
-		liTypeCoding.setDisplay("Employer number");
-		liTypeCoding.setSystem(SystemURL.VS_IDENTIFIER_TYPE);
-		liType.addCoding(liTypeCoding);
-		localIdentifier.setType(liType);
+        CodeableConcept liType = new CodeableConcept();
+        Coding liTypeCoding = new Coding();
+        liTypeCoding.setCode("EN");
+        liTypeCoding.setDisplay("Employer number");
+        liTypeCoding.setSystem(SystemURL.VS_IDENTIFIER_TYPE);
+        liType.addCoding(liTypeCoding);
+        localIdentifier.setType(liType);
 
-		localIdentifier.setAssigner(new Reference("Organization/1"));
-		patient.addIdentifier(localIdentifier);
+        localIdentifier.setAssigner(new Reference("Organization/1"));
+        patient.addIdentifier(localIdentifier);
 
-		Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
 
-		calendar.set(2017, 1, 1);
-		DateTimeDt endDate = new DateTimeDt(calendar.getTime());
+        calendar.set(2017, 1, 1);
+        DateTimeDt endDate = new DateTimeDt(calendar.getTime());
 
-		calendar.set(2016, 1, 1);
-		DateTimeDt startDate = new DateTimeDt(calendar.getTime());
+        calendar.set(2016, 1, 1);
+        DateTimeDt startDate = new DateTimeDt(calendar.getTime());
 
-		Period pastPeriod = new Period().setStart(calendar.getTime()).setEnd(calendar.getTime());
+        Period pastPeriod = new Period().setStart(calendar.getTime()).setEnd(calendar.getTime());
 
-		patient.addName().setFamily("AnotherOfficialFamilyName").addGiven("AnotherOfficialGivenName")
-				.setUse(NameUse.OFFICIAL).setPeriod(pastPeriod);
+        patient.addName()
+                .setFamily("AnotherOfficialFamilyName")
+                .addGiven("AnotherOfficialGivenName")
+                .setUse(NameUse.OFFICIAL)
+                .setPeriod(pastPeriod);
 
 		patient.addName().setFamily("AdditionalFamily").addGiven("AdditionalGiven").setUse(NameUse.TEMP);
 
@@ -878,156 +882,157 @@ public class PatientResourceProvider implements IResourceProvider {
 
 		List<String> givenNames = patientDetails.getForenames();
 
-		givenNames.forEach((givenName) -> {
-			name.addGiven(givenName);
-		});
+        givenNames.forEach((givenName) -> {
+            name.addGiven(givenName);
+        });
 
-		return name;
-	}
+        return name;
+    }
 
-	private class NhsNumber {
+    private class NhsNumber {
 
-		private NhsNumber() {
-			super();
-		}
+        private NhsNumber() {
+            super();
+        }
 
-		private String getNhsNumber(Object source) {
-			String nhsNumber = fromIdDt(source);
+        private String getNhsNumber(Object source) {
+            String nhsNumber = fromIdDt(source);
 
-			if (nhsNumber == null) {
-				nhsNumber = fromToken(source);
+            if (nhsNumber == null) {
+                nhsNumber = fromToken(source);
 
-				if (nhsNumber == null) {
-					nhsNumber = fromParameters(source);
+                if (nhsNumber == null) {
+                    nhsNumber = fromParameters(source);
 
-					if (nhsNumber == null) {
-						nhsNumber = fromIdentifier(source);
-					}
-				}
-			}
+                    if (nhsNumber == null) {
+                        nhsNumber = fromIdentifier(source);
+                    }
+                }
+            }
 
-			if (nhsNumber != null && !NhsCodeValidator.nhsNumberValid(nhsNumber)) {
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new InvalidRequestException("Invalid NHS number submitted: " + nhsNumber),
-						SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
-			}
+            if (nhsNumber != null && !NhsCodeValidator.nhsNumberValid(nhsNumber)) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("Invalid NHS number submitted: " + nhsNumber),
+                        SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
+            }
 
-			return nhsNumber;
-		}
+            return nhsNumber;
+        }
 
-		private String fromIdentifier(Object source) {
-			String nhsNumber = null;
+        private String fromIdentifier(Object source) {
+            String nhsNumber = null;
 
-			if (source instanceof Identifier) {
-				Identifier Identifier = (Identifier) source;
+            if (source instanceof Identifier) {
+                Identifier Identifier = (Identifier) source;
 
-				String identifierSystem = Identifier.getSystem();
-				if (identifierSystem != null && SystemURL.ID_NHS_NUMBER.equals(identifierSystem)) {
-					nhsNumber = Identifier.getValue();
-				} else {
-					String message = String.format(
-							"The given identifier system code (%s) does not match the expected code - %s",
-							identifierSystem, SystemURL.ID_NHS_NUMBER);
+                String identifierSystem = Identifier.getSystem();
+                if (identifierSystem != null && SystemURL.ID_NHS_NUMBER.equals(identifierSystem)) {
+                    nhsNumber = Identifier.getValue();
+                } else {
+                    String message = String.format(
+                            "The given identifier system code (%s) does not match the expected code - %s",
+                            identifierSystem, SystemURL.ID_NHS_NUMBER);
 
-					throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
-							SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueType.INVALID);
-				}
-			}
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
+                            SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueType.INVALID);
+                }
+            }
 
-			return nhsNumber;
-		}
+            return nhsNumber;
+        }
 
-		private String fromIdDt(Object source) {
-			String nhsNumber = null;
+        private String fromIdDt(Object source) {
+            String nhsNumber = null;
 
-			if (source instanceof IdDt) {
-				IdDt idDt = (IdDt) source;
+            if (source instanceof IdDt) {
+                IdDt idDt = (IdDt) source;
 
-				PatientDetails patientDetails = patientSearch.findPatientByInternalID(idDt.getIdPart());
-				if (patientDetails != null) {
-					nhsNumber = patientDetails.getNhsNumber();
-				}
-			}
+                PatientDetails patientDetails = patientSearch.findPatientByInternalID(idDt.getIdPart());
+                if (patientDetails != null) {
+                    nhsNumber = patientDetails.getNhsNumber();
+                }
+            }
 
-			return nhsNumber;
-		}
+            return nhsNumber;
+        }
 
-		private String fromToken(Object source) {
-			String nhsNumber = null;
+        private String fromToken(Object source) {
+            String nhsNumber = null;
 
-			if (source instanceof TokenParam) {
-				TokenParam tokenParam = (TokenParam) source;
+            if (source instanceof TokenParam) {
+                TokenParam tokenParam = (TokenParam) source;
 
-				if (!SystemURL.ID_NHS_NUMBER.equals(tokenParam.getSystem())) {
-					throw OperationOutcomeFactory.buildOperationOutcomeException(
-							new InvalidRequestException("Invalid system code"), SystemCode.INVALID_PARAMETER,
-							IssueType.INVALID);
-				}
+                if (!SystemURL.ID_NHS_NUMBER.equals(tokenParam.getSystem())) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("Invalid system code"), SystemCode.INVALID_PARAMETER,
+                            IssueType.INVALID);
+                }
 
-				nhsNumber = tokenParam.getValue();
-			}
+                nhsNumber = tokenParam.getValue();
+            }
 
-			return nhsNumber;
-		}
+            return nhsNumber;
+        }
 
-		private String fromParameters(Object source) {
-			String nhsNumber = null;
+        private String fromParameters(Object source) {
+            String nhsNumber = null;
 
-			if (source instanceof Parameters) {
-				Parameters parameters = (Parameters) source;
-				List<ParametersParameterComponent> params = new ArrayList<>();
-				params.addAll(parameters.getParameter());
+            if (source instanceof Parameters) {
+                Parameters parameters = (Parameters) source;
+                List<ParametersParameterComponent> params = new ArrayList<>();
+                params.addAll(parameters.getParameter());
 
-				ParametersParameterComponent parameter = getParameterByName(params, "patientNHSNumber");
-				if (parameter != null) {
-					nhsNumber = fromIdentifier(parameter.getValue());
-				} else {
-					parameter = getParameterByName(parameters.getParameter(), "registerPatient");
-					if (parameter != null) {
-						nhsNumber = fromPatientResource(parameter.getResource());
-					} else {
-						throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(
-								"Unable to read parameters. Expecting one of patientNHSNumber or registerPatient both of which are case-sensitive"),
-								SystemCode.INVALID_PARAMETER, IssueType.INVALID);
-					}
-				}
-			}
+                ParametersParameterComponent parameter = getParameterByName(params, "patientNHSNumber");
+                if (parameter != null) {
+                    nhsNumber = fromIdentifier(parameter.getValue());
+                } else {
+                    parameter = getParameterByName(parameters.getParameter(), "registerPatient");
+                    if (parameter != null) {
+                        nhsNumber = fromPatientResource(parameter.getResource());
+                    } else {
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                new InvalidRequestException(
+                                        "Unable to read parameters. Expecting one of patientNHSNumber or registerPatient both of which are case-sensitive"),
+                                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                    }
+                }
+            }
 
-			return nhsNumber;
-		}
+            return nhsNumber;
+        }
 
-		private String fromPatientResource(Object source) {
-			String nhsNumber = null;
+        private String fromPatientResource(Object source) {
+            String nhsNumber = null;
 
-			if (source instanceof Patient) {
-				Patient patient = (Patient) source;
+            if (source instanceof Patient) {
+                Patient patient = (Patient) source;
 
-				nhsNumber = patient.getIdentifierFirstRep().getValue();
-			}
+                nhsNumber = patient.getIdentifierFirstRep().getValue();
+            }
 
-			return nhsNumber;
-		}
+            return nhsNumber;
+        }
 
-		private ParametersParameterComponent getParameterByName(List<ParametersParameterComponent> parameters,
-				String parameterName) {
-			ParametersParameterComponent parameter = null;
+        private ParametersParameterComponent getParameterByName(List<ParametersParameterComponent> parameters,
+                String parameterName) {
+            ParametersParameterComponent parameter = null;
 
-			List<ParametersParameterComponent> filteredParameters = parameters.stream()
-					.filter(currentParameter -> parameterName.equals(currentParameter.getName()))
-					.collect(Collectors.toList());
+            List<ParametersParameterComponent> filteredParameters = parameters.stream()
+                    .filter(currentParameter -> parameterName.equals(currentParameter.getName()))
+                    .collect(Collectors.toList());
 
-			if (filteredParameters != null) {
-				if (filteredParameters.size() == 1) {
-					parameter = filteredParameters.iterator().next();
-				} else if (filteredParameters.size() > 1) {
-					throw OperationOutcomeFactory.buildOperationOutcomeException(
-							new InvalidRequestException(
-									"The parameter " + parameterName + " cannot be set more than once"),
-							SystemCode.BAD_REQUEST, IssueType.INVALID);
-				}
-			}
+            if (filteredParameters != null) {
+                if (filteredParameters.size() == 1) {
+                    parameter = filteredParameters.iterator().next();
+                } else if (filteredParameters.size() > 1) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException(
+                                    "The parameter " + parameterName + " cannot be set more than once"),
+                            SystemCode.BAD_REQUEST, IssueType.INVALID);
+                }
+            }
 
-			return parameter;
-		}
-	}
+            return parameter;
+        }
+    }
 }

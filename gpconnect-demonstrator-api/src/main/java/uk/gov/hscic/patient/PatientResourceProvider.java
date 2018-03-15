@@ -282,10 +282,13 @@ public class PatientResourceProvider implements IResourceProvider {
 	public Bundle StructuredRecordOperation(@ResourceParam Parameters params) throws FHIRException {
 		Bundle structuredBundle = new Bundle();
 		Boolean getAllergies = false;
+		Type includeResolved = null;
 
 		for (int i = 0; i < params.getParameter().size(); i++) {
 			if (params.getParameter().get(i).getName().equals(SystemURL.INCLUDE_ALLERGIES)) {
 				getAllergies = true;
+				includeResolved= params.getParameter().get(i).getPart().get(0).getValue();
+			
 			}
 		}
 		
@@ -311,7 +314,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		structuredBundle.addEntry().setResource(pracResource);
 
 		if (getAllergies == true) {
-			structuredBundle=structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS,structuredBundle);
+			structuredBundle=structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS,structuredBundle,includeResolved);
 		}
 		structuredBundle.setType(BundleType.COLLECTION);
 		structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);

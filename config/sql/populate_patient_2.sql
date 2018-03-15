@@ -67,7 +67,7 @@ INSERT INTO gpconnect.referrals
 VALUES
   (9476719931,'2015-05-01 00:00:01','Airedale Hospital','Dr Johnson &amp; Partners','Routine','From Hospital out-patient for Diabetic Medicine<br />Receiving care','2016-07-25 12:00:00'),
   (9476719931,'2016-07-01 00:00:01','Dr Johnson &amp; Partners','Leeds District Nurses','Routine','Referral to local authority weight management programme<br />Waiting For Information','2016-07-25 12:00:00');
-
+  
 INSERT INTO gpconnect.medication_statements
  (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction)
@@ -79,17 +79,17 @@ INSERT INTO gpconnect.medication_reason_codes
 VALUES
  (1,'241006','Epilepsia partialis continua'),
  (2,'297009','Acute myringitis');
-
+ 
 INSERT INTO gpconnect.medication_reason_references
  (id,referenceUrl,referenceId)
 VALUES
  (1,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1',8);
-
+ 
 INSERT INTO gpconnect.medication_notes
  (id,note)
 VALUES
  (1,'medication note');
-
+ 
 INSERT INTO gpconnect.medication_statement_reason_codes
  (medicationStatementId,reasonCodeId)
 VALUES
@@ -100,7 +100,7 @@ INSERT INTO gpconnect.medication_statement_reason_references
  (medicationStatementId,reasonReferenceId)
 VALUES
  (1,1);
-
+ 
 INSERT INTO gpconnect.medication_statement_notes
  (medicationStatementId,noteId)
 VALUES
@@ -109,13 +109,13 @@ VALUES
 INSERT INTO gpconnect.medication_requests
  (id,groupIdentifier,statusCode,statusDisplay,intentCode,intentDisplay,medicationId,patientId,encounterId,authoredOn,
  requesterUrl,requesterId,authorisingPractitionerId,dosageText,dosageInstruction,dispenseRequestStartDate,dispenseRequestEndDate,
- dispenseQuantityValue,dispenseQuantityUnit,dispenseQuantityText,expectedSupplyDurationValue,expectedSupplyDurationUnit,
+ dispenseQuantityValue,dispenseQuantityUnit,dispenseQuantityText,expectedSupplyDuration,
  dispenseRequestOrganizationId,priorMedicationRequestId,numberOfRepeatPrescriptionsAllowed,numberOfRepeatPrescriptionsIssued,
  authorisationExpiryDate,prescriptionTypeCode,prescriptionTypeDisplay,statusReasonDate,statusReasonCode,statusReasonValue)
 VALUES
  (1,'group1','active','Active','plan','Plan',9,2,8,'2017-06-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
- '2017-06-12','2018-06-12',null,null,'200 Tablets','60','days',1,null,5,0,'2018-06-12','repeat','Repeat',null,null,null);
+ '2017-06-12','2018-06-12',null,null,'200 Tablets','60',1,null,5,0,'2018-06-12','repeat','Repeat',null,null,null);
 
 UPDATE gpconnect.medication_statements SET medicationRequestId = 1 WHERE id = 1;
 
@@ -139,7 +139,7 @@ INSERT INTO gpconnect.medication_request_reason_references
  (medicationRequestId,reasonReferenceId)
 VALUES
  (1,1);
-
+ 
 INSERT INTO gpconnect.medication_request_notes
  (medicationRequestId,noteId)
 VALUES

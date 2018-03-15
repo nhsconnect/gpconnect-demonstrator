@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import uk.gov.hscic.medications.MedicationNoteEntity;
 import uk.gov.hscic.medications.MedicationReasonCodeEntity;
 import uk.gov.hscic.medications.MedicationReasonReferenceEntity;
 
@@ -74,13 +75,13 @@ public class MedicationRequestEntity {
                     @JoinColumn(name = "reasonCodeId", referencedColumnName = "id") })
     private List<MedicationReasonCodeEntity> reasonCodes;
 	
-	@OneToMany
+	@ManyToMany
 	   @JoinTable(name = "medication_request_reason_references", joinColumns = {
 	           @JoinColumn(name = "medicationRequestId", referencedColumnName = "id") }, inverseJoinColumns = {
 	                   @JoinColumn(name = "reasonReferenceId", referencedColumnName = "id") })
     private List<MedicationReasonReferenceEntity> reasons;
 	
-	@OneToMany
+	@ManyToMany
     @JoinTable(name = "medication_request_notes", joinColumns = {
             @JoinColumn(name = "medicationRequestId", referencedColumnName = "id") }, inverseJoinColumns = {
                     @JoinColumn(name = "noteId", referencedColumnName = "id") })
@@ -109,13 +110,8 @@ public class MedicationRequestEntity {
     @Column(name = "dispenseQuantityText")
     private String dispenseQuantityText;
     
-    @Column(name = "expectedSupplyDurationValue")
-    private Double expectedSupplyDurationValue;
-    
-    @Column(name = "expectedSupplyDurationUnit")
-    private String expectedSupplyDurationUnit;
-    
-    // expected duration code and system?
+    @Column(name = "expectedSupplyDuration")
+    private Double expectedSupplyDuration;
     
     @Column(name = "dispenseRequestOrganizationId")
     private Long dispenseRequestOrganizationId;
@@ -340,19 +336,11 @@ public class MedicationRequestEntity {
 	}
 
 	public Double getExpectedSupplyDurationValue() {
-		return expectedSupplyDurationValue;
+		return expectedSupplyDuration;
 	}
 
-	public void setExpectedSupplyDurationValue(Double expectedSupplyDurationValue) {
-		this.expectedSupplyDurationValue = expectedSupplyDurationValue;
-	}
-
-	public String getExpectedSupplyDurationUnit() {
-		return expectedSupplyDurationUnit;
-	}
-
-	public void setExpectedSupplyDurationUnit(String expectedSupplyDurationUnit) {
-		this.expectedSupplyDurationUnit = expectedSupplyDurationUnit;
+	public void setExpectedSupplyDurationValue(Double expectedSupplyDuration) {
+		this.expectedSupplyDuration = expectedSupplyDuration;
 	}
 
 	public Long getDispenseRequestOrganizationId() {

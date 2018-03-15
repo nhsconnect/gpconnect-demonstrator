@@ -1,4 +1,4 @@
-package uk.gov.hscic.medication.request;
+package uk.gov.hscic.medications;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

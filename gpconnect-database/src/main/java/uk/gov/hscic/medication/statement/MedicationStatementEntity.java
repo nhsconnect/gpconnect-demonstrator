@@ -14,7 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import uk.gov.hscic.medication.request.MedicationNoteEntity;
+import uk.gov.hscic.medications.MedicationNoteEntity;
 import uk.gov.hscic.medications.MedicationReasonCodeEntity;
 import uk.gov.hscic.medications.MedicationReasonReferenceEntity;
 

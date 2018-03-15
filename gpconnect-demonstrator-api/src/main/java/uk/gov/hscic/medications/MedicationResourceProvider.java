@@ -1,5 +1,7 @@
 package uk.gov.hscic.medications;
 
+import java.util.Date;
+
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Medication;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
@@ -7,8 +9,6 @@ import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
-import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -38,14 +38,13 @@ public class MedicationResourceProvider implements IResourceProvider {
         Medication medication = new Medication();
 
         String resourceId = String.valueOf(medicationEntity.getId());
-        String versionId = String.valueOf(medicationEntity.getLastUpdated().getTime());
+        String versionId = String.valueOf(new Date());
         String resourceType = medication.getResourceType().toString();
 
         IdType id = new IdType(resourceType, resourceId, versionId);
 
         medication.setId(id);
         medication.getMeta().setVersionId(versionId);
-        medication.getMeta().setLastUpdated(medicationEntity.getLastUpdated());   
                 
         return medication;
     }

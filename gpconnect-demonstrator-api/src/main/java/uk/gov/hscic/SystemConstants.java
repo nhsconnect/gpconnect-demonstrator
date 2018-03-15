@@ -18,6 +18,11 @@ public final class SystemConstants {
 	public static final String PATIENT_REFERENCE_URL = "Patient/";
 	public static final String INCLUDE_RESOLVED_ALLERGIES = "includeResolvedAllergies";
 	public static final String INCLUDE_ALLERGIES = "includeAllergies";
-	public static final String INCLUDE_MEDICATION = "includeMedication";
 	public static final String PATIENT_NHS_NUMBER = "patientNHSNumber";
+	public static final String INCLUDE_MEDICATION = "includeMedication";
+	public static final String INCLUDE_PRESCRIPTION_ISSUES = "includePrescriptionIssues";
+	public static final String MEDICATION_DATE_PERIOD = "medicationDatePeriod";
+
+	public static final String MEDICATION_LIST = "Medication List";
+
 }

@@ -5,12 +5,15 @@ import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.dstu3.model.AllergyIntolerance;
+import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceCategory;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceClinicalStatus;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceReactionComponent;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceSeverity;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceVerificationStatus;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.ListResource;
 import org.hl7.fhir.dstu3.model.Meta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,68 +28,99 @@ public class StructuredAllergyIntoleranceBuilder {
 	@Autowired
 	private StructuredAllergySearch structuredAllergySearch;
 
-	public AllergyIntolerance buildStructuredAllergyIntolerence(String NHS) {
+	public Bundle buildStructuredAllergyIntolerence(String NHS, Bundle bundle) {
 
 		List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntollerence(NHS);
+		System.out.println(allergyData.size());
 
-		System.out.println(allergyData.get(0).getClinicalStatus());
+		ListResource activeAllergies = new ListResource();
+		activeAllergies.setTitle("Active Allergies");
+		ListResource resolvedAllergies = new ListResource();
+		resolvedAllergies.setTitle("Resolved Allergies");
+		AllergyIntolerance allergyIntolerance = new AllergyIntolerance();
 
-		List<AllergyIntolerance> allergyIntolerenceList = new ArrayList<>();
+		for (int i = 0; i < allergyData.size(); i++) {
 
-		AllergyIntolerance all = new AllergyIntolerance();
+			Meta met = new Meta();
+			met.setVersionId("3");
+			met.addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE);
 
-		Meta met = new Meta();
-		met.setVersionId("3");
-		met.addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE);
+			allergyIntolerance.setMeta(met);
 
-		all.setMeta(met);
+			allergyIntolerance.setId("1");
 
-		all.setId("1");
+			allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.ACTIVE);
 
-		all.setClinicalStatus(AllergyIntoleranceClinicalStatus.ACTIVE);
+			allergyIntolerance.addCategory(AllergyIntoleranceCategory.MEDICATION);
 
-		// all.addCategory(AllergyIntoleranceCategory.MEDICATION);
+			allergyIntolerance.setVerificationStatus(AllergyIntoleranceVerificationStatus.UNCONFIRMED);
 
-		all.setVerificationStatus(AllergyIntoleranceVerificationStatus.UNCONFIRMED);
+			CodeableConcept value = new CodeableConcept();
+			Coding coding = new Coding();
+			coding.setCode("CODE");
+			coding.setDisplay("DISPLAY");
+			coding.setSystem("SYSTEM");
+			value.addCoding(coding);
 
-		CodeableConcept value = new CodeableConcept();
-		Coding coding = new Coding();
-		coding.setCode("CODE");
-		coding.setDisplay("DISPLAY");
-		coding.setSystem("SYSTEM");
-		value.addCoding(coding);
+			allergyIntolerance.setCode(value);
 
-		all.setCode(value);
+			// Date date = new Date(System.currentTimeMillis());
 
-		// Date date = new Date(System.currentTimeMillis());
+			// all.setAssertedDate(date);
+			// structuredBundle.addEntry().setResource(allergyIntolerance);
 
-		// all.setAssertedDate(date);
-		// structuredBundle.addEntry().setResource(all);
+			// allergyIntolerance.setClinicalStatus(value );
 
-		// all.setClinicalStatus(value );
+			//here =allergyIntolerance.Meta().addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
+			
+			Date dateData = allergyData.get(0).getEndDate();
 
-		// here = all.Meta().addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
-		Date dateData = allergyData.get(0).getEndDate();
+			allergyIntolerance.setAssertedDate(dateData);
 
-		all.setAssertedDate(dateData);
+			AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
 
-		AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
+			// MANIFESTATION
+			List<CodeableConcept> theManifestation = new ArrayList<>();
+			CodeableConcept manifestation = new CodeableConcept();
+			Coding manifestationCoding = new Coding();
+			manifestationCoding.setDisplay("Peanut-induced anaphylaxis (disorder)");
+			manifestationCoding.setCode("241933001");
+			manifestationCoding.setSystem("http://snomed.info/sct");
+			manifestation.addCoding(manifestationCoding);
+			theManifestation.add(manifestation);
+			reaction.setManifestation(theManifestation);
 
-		List<CodeableConcept> theManifestation = new ArrayList<>();
-		reaction.setManifestation(theManifestation);
+			reaction.setDescription("MANIFESTATION DESCRIPTION");
 
-		reaction.setDescription("MANIFESTATION DESCRIPTION");
+			AllergyIntoleranceSeverity severity = AllergyIntoleranceSeverity.SEVERE;
+			reaction.setSeverity(severity);
 
-		AllergyIntoleranceSeverity severity = AllergyIntoleranceSeverity.MILD;
-		reaction.setSeverity(severity);
+			CodeableConcept exposureRoute = new CodeableConcept();
+			reaction.setExposureRoute(exposureRoute);
+			allergyIntolerance.addReaction(reaction);
 
-		CodeableConcept exposureRoute = new CodeableConcept();
-		reaction.setExposureRoute(exposureRoute);
-		all.addReaction(reaction);
+			// allergyIntolerenceList.add(all);
 
-		// allergyIntolerenceList.add(all);
+			System.out.println(allergyData.get(i).getClinicalStatus());
 
-		return all;
+			if (allergyData.get(i).getClinicalStatus().equals("resolved")) {
+				resolvedAllergies.addContained(allergyIntolerance);
+
+			} else {
+				activeAllergies.addContained(allergyIntolerance);
+			}
+
+		}
+
+		if (resolvedAllergies.hasContained()) {
+			bundle.addEntry().setResource(resolvedAllergies);
+		}
+		if (activeAllergies.hasContained()) {
+			bundle.addEntry().setResource(activeAllergies);
+
+		}
+
+		return bundle;
 
 	}
 

@@ -15,8 +15,8 @@ public class MedicationRequestBasedOnReferenceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
 	
-	@Column(name = "basedOnReferenceUrl")
-	private String referenceReferenceUrl;
+	@Column(name = "referenceUrl")
+	private String referenceUrl;
 	
 	@Column(name = "referenceId")
 	private Long referenceId;
@@ -29,12 +29,12 @@ public class MedicationRequestBasedOnReferenceEntity {
 		Id = id;
 	}
 
-	public String getBasedOnReferenceReferenceUrl() {
-		return referenceReferenceUrl;
+	public String getReferenceUrl() {
+		return referenceUrl;
 	}
 
-	public void setBasedOnReferenceReferenceUrl(String referenceReferenceUrl) {
-		this.referenceReferenceUrl = referenceReferenceUrl;
+	public void setReferenceUrl(String referenceUrl) {
+		this.referenceUrl = referenceUrl;
 	}
 
 	public Long getReferenceId() {

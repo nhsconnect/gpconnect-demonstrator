@@ -44,6 +44,7 @@ DROP TABLE IF EXISTS gpconnect.appointment_booking_orgz;
 DROP TABLE IF EXISTS gpconnect.appointment_appointments;
 DROP TABLE IF EXISTS gpconnect.general_practitioners;
 DROP TABLE IF EXISTS gpconnect.medical_departments;
+DROP TABLE IF EXISTS gpconnect.allInto;
 
 /* Create new table schemas */
 
@@ -539,4 +540,19 @@ CREATE TABLE gpconnect.orders (
   detail            VARCHAR(300) NULL,
   recieved          BOOLEAN      NULL,
   PRIMARY KEY (id)
+);
+
+
+
+CREATE TABLE gpconnect.allInto (
+id                BIGINT       NOT NULL AUTO_INCREMENT,
+nhsNumber         BIGINT       NULL,
+endDate  		  DATETIME  NULL,
+endReason			VARCHAR(250) NULL,
+note				VARCHAR(250) NULL,
+reactionDescription VARCHAR(250) NULL,
+clinicalStatus VARCHAR(250) NULL,
+  PRIMARY KEY (id)
+
+
 );

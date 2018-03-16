@@ -39,6 +39,8 @@ public final class SystemURL {
     public static final String SD_GPC_SLOT = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Slot-1";
     public static final String SD_GPC_SCHEDULE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Schedule-1";
     public static final String SD_GPC_SRCHSET_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Searchset-Bundle-1";
+    public static final String SD_GPC_STRUCTURED_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-GetStructuredRecord-Bundle-1";
+    public static final String SD_CC_ALLERGY_INTOLERANCE  = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-AllergyIntolerance-1";
     
     // FHIR StructureDefinition Extension
     public static final String SD_CC_EXT_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1";
@@ -70,6 +72,7 @@ public final class SystemURL {
     public static final String SD_CC_INTERPRETER_REQUIRED = "interpreterRequired";   
     public static final String SD_CC_APPOINTMENT_BOOKINGORG = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-BookingOrganisation-1";   
     public static final String SD_CC_APPOINTMENT_CREATED = "https://fhir.nhs.uk/StructureDefinition/extension-gpconnect-appointment-created-1";   
+   
     
 
     // FHIR ValueSet Constants
@@ -112,5 +115,8 @@ public final class SystemURL {
     
     //Appointment Reason URL
     public static final String DEFAULTREASONURL = "DefaultReasonURL";
+    
+    //Include Allergies Constant
+    public static final String INCLUDE_ALLERGIES = "includeAllergies";
     
 }

@@ -12,3 +12,10 @@ INSERT INTO gpconnect.problems
   (nhsNumber,activeOrInactive,startDate,endDate,entry,significance,details)
 VALUES
   (9476719958,"Inactive",'2016-07-01 12:00:00','2016-07-01 12:00:00',"Asthma","Major","Treated daily");
+  
+  
+  INSERT INTO gpconnect.allinto
+  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus)
+VALUES
+  (9476719958,'2016-07-01 12:00:00',"Cured","Asthma got better","Major", "resolved"),
+  (9476719958,'2016-07-01 12:00:00',"Ongoing","Cancer","Major", "active");

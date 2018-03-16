@@ -79,7 +79,7 @@ public class MedicationRequestEntity {
 	   @JoinTable(name = "medication_request_reason_references", joinColumns = {
 	           @JoinColumn(name = "medicationRequestId", referencedColumnName = "id") }, inverseJoinColumns = {
 	                   @JoinColumn(name = "reasonReferenceId", referencedColumnName = "id") })
-    private List<MedicationReasonReferenceEntity> reasons;
+    private List<MedicationReasonReferenceEntity> reasonReferences;
 	
 	@ManyToMany
     @JoinTable(name = "medication_request_notes", joinColumns = {
@@ -100,7 +100,7 @@ public class MedicationRequestEntity {
     private Date dispenseRequestEndDate;
     
     @Column(name = "dispenseQuantityValue")
-    private Double dispenseQuantityValue;
+    private String dispenseQuantityValue;
     
     @Column(name = "dispenseQuantityUnit")
     private String dispenseQuantityUnit;
@@ -111,7 +111,7 @@ public class MedicationRequestEntity {
     private String dispenseQuantityText;
     
     @Column(name = "expectedSupplyDuration")
-    private Double expectedSupplyDuration;
+    private String expectedSupplyDuration;
     
     @Column(name = "dispenseRequestOrganizationId")
     private Long dispenseRequestOrganizationId;
@@ -263,12 +263,12 @@ public class MedicationRequestEntity {
 		this.reasonCodes = reasonCodes;
 	}
 
-	public List<MedicationReasonReferenceEntity> getReasons() {
-		return reasons;
+	public List<MedicationReasonReferenceEntity> getReasonReferences() {
+		return reasonReferences;
 	}
 
-	public void setReasons(List<MedicationReasonReferenceEntity> reasons) {
-		this.reasons = reasons;
+	public void setReasonReferences(List<MedicationReasonReferenceEntity> reasonReferences) {
+		this.reasonReferences = reasonReferences;
 	}
 
 	public List<MedicationNoteEntity> getNotes() {
@@ -311,11 +311,11 @@ public class MedicationRequestEntity {
 		this.dispenseRequestEndDate = dispenseRequestEndDate;
 	}
 
-	public Double getDispenseQuantityValue() {
+	public String getDispenseQuantityValue() {
 		return dispenseQuantityValue;
 	}
 
-	public void setDispenseQuantityValue(Double dispenseQuantityValue) {
+	public void setDispenseQuantityValue(String dispenseQuantityValue) {
 		this.dispenseQuantityValue = dispenseQuantityValue;
 	}
 
@@ -335,11 +335,11 @@ public class MedicationRequestEntity {
 		this.dispenseQuantityText = dispenseQuantityText;
 	}
 
-	public Double getExpectedSupplyDurationValue() {
+	public String getExpectedSupplyDurationValue() {
 		return expectedSupplyDuration;
 	}
 
-	public void setExpectedSupplyDurationValue(Double expectedSupplyDuration) {
+	public void setExpectedSupplyDurationValue(String expectedSupplyDuration) {
 		this.expectedSupplyDuration = expectedSupplyDuration;
 	}
 

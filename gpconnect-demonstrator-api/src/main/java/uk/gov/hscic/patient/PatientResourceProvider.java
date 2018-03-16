@@ -82,6 +82,7 @@ import uk.gov.hscic.common.helpers.StaticElementsHelper;
 import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.model.organization.OrganizationDetails;
 import uk.gov.hscic.model.patient.PatientDetails;
+import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.organization.OrganizationSearch;
 import uk.gov.hscic.patient.details.PatientSearch;
 import uk.gov.hscic.patient.details.PatientStore;

@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
-import uk.gov.hscic.medications.MedicationHtmlRepository;
-import uk.gov.hscic.medications.PatientMedicationHtmlEntity;
 import uk.gov.hscic.model.patient.AdminItemData;
 import uk.gov.hscic.model.patient.ClinicalItemData;
 import uk.gov.hscic.model.patient.EncounterData;
@@ -48,9 +46,6 @@ public class PageSectionFactory {
 
     @Autowired
     private ClinicalItemSearch clinicalItemsSearch;
-
-    @Autowired
-    private MedicationHtmlRepository medicationHtmlRepository;
 
     @Autowired
     private ReferralSearch referralSearch;
@@ -159,69 +154,6 @@ public class PageSectionFactory {
 
         return new PageSection("Clinical Items",
                 new Table(Arrays.asList("Date", "Entry", "Details"), clinicalItemsRows),
-                requestedFromDate, requestedToDate);
-    }
-
-    public PageSection getMEDCurrentPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
-        List<List<Object>> currentMedRows = new ArrayList<>();
-
-        for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationHtmlRepository.findBynhsNumber(nhsNumber)) {
-            if ("Current".equals(patientMedicationHtmlEntity.getCurrentRepeatPast())) {
-                currentMedRows.add(Arrays.asList(
-                        patientMedicationHtmlEntity.getStartDate(),
-                        patientMedicationHtmlEntity.getMedicationItem(),
-                        patientMedicationHtmlEntity.getTypeMed(),
-                        patientMedicationHtmlEntity.getScheduledEnd(),
-                        patientMedicationHtmlEntity.getDaysDuration(),
-                        patientMedicationHtmlEntity.getDetails()));
-            }
-        }
-
-        return new PageSection("Current Medication Issues",
-                new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End", "Days Duration", "Details"), currentMedRows),
-                requestedFromDate, requestedToDate);
-    }
-
-    public PageSection getMEDRepeatPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
-        List<List<Object>> repeatMedRows = new ArrayList<>();
-
-        for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationHtmlRepository.findBynhsNumber(nhsNumber)) {
-            if ("Repeat".equals(patientMedicationHtmlEntity.getCurrentRepeatPast())) {
-                repeatMedRows.add(Arrays.asList(
-                        patientMedicationHtmlEntity.getLastIssued(),
-                        patientMedicationHtmlEntity.getMedicationItem(),
-                        patientMedicationHtmlEntity.getStartDate(),
-                        patientMedicationHtmlEntity.getReviewDate(),
-                        patientMedicationHtmlEntity.getNumberIssued(),
-                        patientMedicationHtmlEntity.getMaxIssues(),
-                        patientMedicationHtmlEntity.getDetails()));
-            }
-        }
-
-        return new PageSection("Current Repeat Medications",
-                new Table(Arrays.asList("Last Issued", "Medication Item", "Start Date", "Review Date", "Number Issued", "Max Issues", "Details"), repeatMedRows),
-                requestedFromDate, requestedToDate);
-    }
-
-    public PageSection getMEDPastPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
-        List<List<Object>> pastMedRows = new ArrayList<>();
-
-        for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationHtmlRepository.findBynhsNumber(nhsNumber)) {
-            if ("Past".equals(patientMedicationHtmlEntity.getCurrentRepeatPast())) {
-                pastMedRows.add(Arrays.asList(
-                        patientMedicationHtmlEntity.getStartDate(),
-                        patientMedicationHtmlEntity.getMedicationItem(),
-                        patientMedicationHtmlEntity.getTypeMed(),
-                        patientMedicationHtmlEntity.getLastIssued(),
-                        patientMedicationHtmlEntity.getReviewDate(),
-                        patientMedicationHtmlEntity.getNumberIssued(),
-                        patientMedicationHtmlEntity.getMaxIssues(),
-                        patientMedicationHtmlEntity.getDetails()));
-            }
-        }
-
-        return new PageSection("Past Medications",
-                new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Last Issued", "Review Date", "Number Issued", "Max Issues", "Details"), pastMedRows),
                 requestedFromDate, requestedToDate);
     }
 

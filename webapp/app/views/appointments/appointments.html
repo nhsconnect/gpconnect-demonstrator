@@ -4,8 +4,8 @@
         
         <div ng-show="appointment.geStartDateInvalid" class="alert alert-danger" role="alert">Please enter a valid 'from' date. This date should not be in the past.</div>
         <div ng-show="appointment.leStartDateInvalid" class="alert alert-danger" role="alert">Please enter a valid 'until' date. This should be after the 'from' date.</div>
-        <div class="col-md-12">
-            <div class="col-md-6">
+        <div class="col-md-12 appDateRange">
+            <div class="col-md-5">
                 <text> Search from:</text>
 	            <div class="input-group">
 	                <span class="input-group-btn">
@@ -19,7 +19,7 @@
 	        	</div>
         	</div>
             
-			<div class="col-md-6">
+			<div class="col-md-5">
             	<text>until:</text>
 	            <div class="input-group">
 	                <span class="input-group-btn">
@@ -34,9 +34,8 @@
 	            </div>
             </div>
             
-            <div class="row">
-            	<div class="col-md-12 hidden-xs"><div class="text-right search-button"><button class="btn btn-info" ng-click="searchAppointments();"><i class="fa fa-plus"></i> Search</button></div></div>
-              </div>
+            <div class="col-md-2 hidden-xs"><div class="text-right search-button"><button id= "appButtonSearchDateRange" class="btn btn-info" ng-click="searchAppointments();"><i class="fa"></i> Search</button></div></div>
+            
             </div>
 
         <div class="col-md-12 alert alert-info noteBox" >

@@ -9,10 +9,12 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
             var endpointLookupResult = response;
             
             var startDate = new Date(startDateTime);
+            startDate.setTime(startDate.getTime() + (60*60*1000)); 
             var endDate = new Date(endDateTime);
+            endDate.setTime(endDate.getTime() + (60*60*1000)); 
             
             var requiredParams = 'start=ge' + startDate.toISOString().split('T')[0] + '&start=le' + endDate.toISOString().split('T')[0];
-            
+
             return $http.get(
                     endpointLookupResult.restUrlPrefix + '/Patient/' + patientId + '/Appointment?' + requiredParams,
                     {

@@ -187,7 +187,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
         		gePrefix = true;
         	}
         	else if (token.getPrefix() == ParamPrefixEnum.LESSTHAN_OR_EQUALS) {
-        		startUpperDate = token.getValue();
+        		Calendar upper = Calendar.getInstance();
+        		upper.setTime(token.getValue());
+        		upper.add(Calendar.HOUR, 23);
+        		upper.add(Calendar.MINUTE, 59);
+        		upper.add(Calendar.SECOND, 59);
+        		startUpperDate = upper.getTime();
         		lePrefix = true;
         	}
         	else 

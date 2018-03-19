@@ -23,10 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
-import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.common.filters.model.WebToken;
 import uk.gov.hscic.patient.PatientResourceProvider;
-import uk.gov.hscic.util.NhsCodeValidator;
 
 @Component
 public class PatientJwtValidator extends AuthorizationInterceptor {
@@ -41,31 +38,17 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
 
     @Override
     public List<IAuthRule> buildRuleList(RequestDetails requestDetails) {
-       validateNhsNumbers(webTokenFactory.getWebToken(requestDetails, futureRequestLeeway), requestDetails);
+       validateNhsNumbers(requestDetails);
 
        return new RuleBuilder().allowAll().build();
     }
 
-    public void validateNhsNumbers(WebToken webToken, RequestDetails requestDetails) {
+    public void validateNhsNumbers(RequestDetails requestDetails) {
         if("Patient".equals(requestDetails.getResourceName())) {
 
-            String webTokenNhsNumber = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);
             String requestNhsNumber = getNhsNumber(requestDetails);
 
-            if(requestNhsNumber != null) {
-                if(webTokenNhsNumber == null || webTokenNhsNumber.equals(requestNhsNumber) == false) {
-                  throw OperationOutcomeFactory.buildOperationOutcomeException(
-                  new InvalidRequestException("NHS number in identifier header doesn't match the header"),
-                  SystemCode.BAD_REQUEST, IssueType.INVALID);
-                }
-
-                if (!NhsCodeValidator.nhsNumberValid(webTokenNhsNumber)) {
-                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new InvalidRequestException("Invalid NHS number: " + webTokenNhsNumber),
-                            SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
-                }
-            }
-            else {
+            if(requestNhsNumber == null){
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("NHS number missing from request"),
                         SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);

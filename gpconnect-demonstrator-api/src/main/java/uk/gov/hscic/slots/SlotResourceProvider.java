@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
@@ -31,12 +33,16 @@ import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.ParamPrefixEnum;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.param.TokenOrListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.SystemVariable;
 import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.model.appointment.SlotDetail;
 
@@ -70,7 +76,8 @@ public class SlotResourceProvider implements IResourceProvider {
 
     @Search
     public Bundle getSlotByIds(@RequiredParam(name = "start") DateParam startDate,
-            @RequiredParam(name = "end") DateParam endDate, @RequiredParam(name = "fb-type") String fbType,
+            @RequiredParam(name = "end") DateParam endDate, @RequiredParam(name = "status") String status,
+            @RequiredParam(name= "searchFilter") TokenAndListParam searchFilters,
             @IncludeParam(allow = { "Slot:schedule", "Schedule:actor:Practitioner",
                     "Schedule:actor:Location" }) Set<Include> theIncludes) {
     	
@@ -78,32 +85,45 @@ public class SlotResourceProvider implements IResourceProvider {
         Bundle bundle = new Bundle();
         boolean actorPractitioner = false;
         boolean actorLocation = false;
+        String bookingOdsCode = "";
+        String bookingOrgType = "";
 
-        if (!fbType.equals("free")) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("FbType incorrect: Must be equal to free"),
-                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+        if (!status.equals("free")) {
+        	throwInvalidParameterOperationalOutcome("Status incorrect: Must be equal to free");
         }
 
         try {
             startDate.isEmpty();
             endDate.isEmpty();
         } catch (Exception e) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException(
-                            "Start Date and End Date must be populated with a correct date format"),
-                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+        	throwInvalidParameterOperationalOutcome("Start Date and End Date must be populated with a correct date format");
         }
 
         if (startDate.getPrefix() != ParamPrefixEnum.GREATERTHAN_OR_EQUALS
                 || endDate.getPrefix() != ParamPrefixEnum.LESSTHAN_OR_EQUALS) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("Invalid Prefix used"), SystemCode.INVALID_PARAMETER,
-                    IssueType.INVALID);
+        	throwInvalidParameterOperationalOutcome("Invalid Prefix used");
 
         }
 
-        validateStartDateParamAndEndDateParam(startDate.getValueAsInstantDt(), endDate.getValueAsInstantDt());
+        validateStartDateParamAndEndDateParam(startDate, endDate);
+        
+        List<TokenOrListParam> searchFilter = searchFilters.getValuesAsQueryTokens();
+        for (TokenOrListParam filter : searchFilter) {
+        	TokenParam token = filter.getValuesAsQueryTokens().get(0);
+        	if (token.getSystem().equals(SystemURL.VS_GPC_ORG_TYPE)) {
+        		bookingOrgType = token.getValue();
+        	}
+        	if (token.getSystem().equals(SystemURL.ID_ODS_ORGANIZATION_CODE)) {
+        		bookingOdsCode = token.getValue();
+        	}
+        }
+        
+        try {
+        	bookingOdsCode.isEmpty();
+        	bookingOrgType.isEmpty();
+        } catch (Exception e) {
+            throwInvalidParameterOperationalOutcome("The ODS code and organisation type for the booking organisation must be supplied.");
+        }
 
         for (Include include : theIncludes) {
 
@@ -116,17 +136,17 @@ public class SlotResourceProvider implements IResourceProvider {
             ;
         }
         startDate.getValueAsInstantDt().getValue();
-        getScheduleOperation.populateBundle(bundle, new OperationOutcome(), startDate.getValueAsInstantDt().getValue(),
-                endDate.getValueAsInstantDt().getValue(), actorPractitioner, actorLocation);
+        getScheduleOperation.populateBundle(bundle, new OperationOutcome(), startDate.getValueAsInstantDt().getValue(), 
+                endDate.getValueAsInstantDt().getValue(), actorPractitioner, actorLocation, bookingOdsCode, bookingOrgType);
 
         return bundle;
 
     }
 
-    public List<Slot> getSlotsForScheduleId(String scheduleId, Date startDateTime, Date endDateTime) {
+    public List<Slot> getSlotsForScheduleIdAndOrganizationId(String scheduleId, Date startDateTime, Date endDateTime, Long orgId) {
         ArrayList<Slot> slots = new ArrayList<>();
-        List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), startDateTime,
-                endDateTime);
+        List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleIdAndOrganizationId(Long.valueOf(scheduleId), startDateTime,
+                endDateTime, orgId);
 
         if (slotDetails != null && !slotDetails.isEmpty()) {
             for (SlotDetail slotDetail : slotDetails) {
@@ -136,6 +156,21 @@ public class SlotResourceProvider implements IResourceProvider {
 
         return slots;
     }
+    
+
+	public List<Slot> getSlotsForScheduleIdAndOrganizationType(String scheduleId, Date startDateTime, Date endDateTime, String bookingOrgType) {
+		ArrayList<Slot> slots = new ArrayList<>();
+        List<SlotDetail> slotDetails = slotSearch.getSlotsForScheduleIdAndOrganizationType(Long.valueOf(scheduleId), startDateTime,
+                endDateTime, bookingOrgType);
+
+        if (slotDetails != null && !slotDetails.isEmpty()) {
+            for (SlotDetail slotDetail : slotDetails) {
+                slots.add(slotDetailToSlotResourceConverter(slotDetail));
+            }
+        }
+
+        return slots;
+	}
 
     private Slot slotDetailToSlotResourceConverter(SlotDetail slotDetail) {
         Slot slot = new Slot();
@@ -183,8 +218,25 @@ public class SlotResourceProvider implements IResourceProvider {
         return slot;
     }
 
-    private void validateStartDateParamAndEndDateParam(InstantDt instantDt, InstantDt instantDt2) {
+    private void validateStartDateParamAndEndDateParam(DateParam startDate, DateParam endDate) {
 
+        Pattern dateTimePattern = Pattern.compile(SystemVariable.DATE_TIME_REGEX);
+        Pattern dateOnlyPattern = Pattern.compile(SystemVariable.DATE_REGEX);
+        
+        //If the time is included then match against the date/time regex
+        if ((startDate.getPrecision().getCalendarConstant() > TemporalPrecisionEnum.DAY.getCalendarConstant() && !dateTimePattern.matcher(startDate.getValueAsString()).matches())
+        		|| (endDate.getPrecision().getCalendarConstant() > TemporalPrecisionEnum.DAY.getCalendarConstant() && !dateTimePattern.matcher(endDate.getValueAsString()).matches())) {
+        	throwInvalidParameterOperationalOutcome("Invalid date/time used");
+        }
+        //if only a date then match against the date regex
+        else if ( (startDate.getPrecision().getCalendarConstant() <= TemporalPrecisionEnum.DAY.getCalendarConstant() && !dateOnlyPattern.matcher(startDate.getValueAsString()).matches())
+        		|| (endDate.getPrecision().getCalendarConstant() <= TemporalPrecisionEnum.DAY.getCalendarConstant() && !dateOnlyPattern.matcher(endDate.getValueAsString()).matches()) ) {
+        	throwInvalidParameterOperationalOutcome("Invalid date used");
+        }
+        
+        InstantDt instantDt = startDate.getValueAsInstantDt();
+        InstantDt instantDt2 = endDate.getValueAsInstantDt();
+        
         if (instantDt != null && instantDt2 != null) {
             Date start = instantDt.getValue();
             Date end = instantDt2.getValue();
@@ -192,10 +244,7 @@ public class SlotResourceProvider implements IResourceProvider {
             if (start != null && end != null) {
                 long period = ChronoUnit.DAYS.between(start.toInstant(), end.toInstant());
                 if (period < 0l || period > 14l) {
-                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new UnprocessableEntityException(
-                                    "Invalid time period, was " + period + " days between (max is 14)"),
-                            SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                	throwInvalidParameterOperationalOutcome("Invalid time period, was " + period + " days between (max is 14)");
                 }
             } else {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -204,10 +253,14 @@ public class SlotResourceProvider implements IResourceProvider {
                         SystemCode.BAD_REQUEST, IssueType.INVALID);
             }
         } else {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException(
-                            "Invalid timePeriod one or both of start and end date were missing"),
-                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+            throwInvalidParameterOperationalOutcome("Invalid timePeriod one or both of start and end date were missing");
         }
     }
+
+    private void throwInvalidParameterOperationalOutcome(String error) {
+    	throw OperationOutcomeFactory.buildOperationOutcomeException(
+    			new UnprocessableEntityException(
+    					error),
+    			SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+	}
 }

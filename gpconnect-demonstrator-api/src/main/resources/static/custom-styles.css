@@ -1,0 +1,142 @@
+.scheme-container {
+	display: none;
+}
+
+.swagger-ui .info .title small pre.version {
+	font-size: 16px;
+}
+
+.swagger-ui .info .title small {
+	background-color: #005eb8;
+}
+
+.title:after {
+	content: url('nhs-digital-logo.png');
+	float: right;
+}
+
+.information-container .block .info .main a {
+	display: none;
+}
+
+.parameters-col_description div p {
+	margin: 0;
+	font-size: 14px;
+}
+
+.parameters-col_description div {
+	font-size: 14px;
+}
+
+.swagger-ui table tbody tr td.parameters-col_description {
+	padding: 10px 0px 10px 0px;
+}
+
+.parameters-col_description div ul.tab {
+	margin: 0;
+	padding-bottom: 10px;
+}
+
+.swagger-ui .tab .model-example-tabitem {
+	display: none;
+	cursor: text;
+	padding-top: 10px;
+}
+
+.swagger-ui .tab .model-example-tabitem a {
+	font-weight: normal;
+	font-size: 14px;
+	font-style: italic;
+}
+
+/*.swagger-ui .tab .model-example-tabitem a::after {
+	content: ':'
+}
+*/
+.swagger-ui .tab .model-model-tabitem {
+	display: none;
+}
+
+.swagger-ui .tab li:first-of-type::after {
+	width: 0px;
+}
+
+.parameter__description {
+	font-weight: bold;
+}
+
+.parameter__defaultvalue,
+.parameter__examplevalue {
+	padding-top: 10px;
+}
+
+.parameter__defaultvalue_header,
+.parameter__examplevalue_header {
+	font-style: italic;
+	padding-right: 5px;
+}
+
+.parameter__defaultvalue_value,
+.parameter__examplevalue_value {
+	font-family: Source Code Pro, monospace;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.swagger-ui input[type="email"], 
+.swagger-ui input[type="file"], 
+.swagger-ui input[type="password"], 
+.swagger-ui input[type="search"], 
+.swagger-ui input[type="text"],
+.swagger-ui textarea
+{
+	margin-top: 5px;
+}
+
+div#swagger-ui section.swagger-ui div.wrapper section span a {
+	display: none;
+}
+
+.swagger-ui input {
+	font-family: Source Code Pro, monospace;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.swagger-ui .parameters-col_description input[type="text"] {
+	max-width: none;
+}
+
+table.parameters thead tr th.parameters-col_name {
+	width: 30%;
+}
+
+h4,
+.swagger-ui .info .title small pre,
+.swagger-ui .parameter__name,
+.swagger-ui .opblock-tag,
+.swagger-ui .opblock .opblock-section-header h4,
+.swagger-ui .opblock .opblock-section-header label,
+td.parameters-col_description div.markdown:nth-child(2) p i,
+.swagger-ui label,
+.swagger-ui select,
+.swagger-ui .tab li,
+.swagger-ui section.models h4,
+.swagger-ui .model-title,
+.swagger-ui .btn,
+.swagger-ui .btn.cancel {
+	font-family: Open Sans, sans-serif;
+}
+
+.swagger-ui .btn {
+	font-size: 18px;
+}
+
+.swagger-ui .opblock .opblock-summary-method {
+	font-family: Source Code Pro, monospace;
+}
+
+div.description div.markdown p,
+div.description div.markdown a {
+	font-size: 16px;
+}

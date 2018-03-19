@@ -22,7 +22,7 @@
 	</div>
 
   <div gantt api=registerEventFunctions data="ganttModel" from-date="displayFromDate" to-date="displayToDate" headers="['day', 'hour']" headers-formats="ganttHeaderFormats">
-    <gantt-tree></gantt-tree>
+    <gantt-table columns="options.ganttTableColumns" headers="options.ganttTableColumnHeaders" />
     <gantt-groups></gantt-groups>
     <gantt-tooltips></gantt-tooltips>
     <gantt-bounds></gantt-bounds>

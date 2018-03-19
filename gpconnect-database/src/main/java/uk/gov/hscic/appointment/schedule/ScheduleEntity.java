@@ -31,6 +31,18 @@ public class ScheduleEntity {
     @Column(name = "locationId")
     private Long locationId;
     
+    @Column(name = "practitionerRoleCode")
+    private String practitionerRoleCode;
+    
+    @Column(name = "practitionerRoleDisplay")
+    private String practitionerRoleDisplay;
+    
+    @Column(name = "deliveryChannelCode")
+    private String deliveryChannelCode;
+    
+    @Column(name = "deliveryChannelDisplay")
+    private String deliveryChannelDisplay;
+
     @Column(name = "startDateTime")
     private Date startDateTime;
     
@@ -91,7 +103,39 @@ public class ScheduleEntity {
         this.locationId = locationId;
     }
 
-    public Date getStartDateTime() {
+    public String getPractitionerRoleCode() {
+		return practitionerRoleCode;
+	}
+
+	public void setPractitionerRoleCode(String practitionerRoleCode) {
+		this.practitionerRoleCode = practitionerRoleCode;
+	}
+
+	public String getPractitionerRoleDisplay() {
+		return practitionerRoleDisplay;
+	}
+
+	public void setPractitionerRoleDisplay(String practitionerRoleDisplay) {
+		this.practitionerRoleDisplay = practitionerRoleDisplay;
+	}
+
+	public String getDeliveryChannelCode() {
+		return deliveryChannelCode;
+	}
+
+	public void setDeliveryChannelCode(String deliveryChannelCode) {
+		this.deliveryChannelCode = deliveryChannelCode;
+	}
+
+	public String getDeliveryChannelDisplay() {
+		return deliveryChannelDisplay;
+	}
+
+	public void setDeliveryChannelDisplay(String deliveryChannelDisplay) {
+		this.deliveryChannelDisplay = deliveryChannelDisplay;
+	}
+
+	public Date getStartDateTime() {
         return startDateTime;
     }
 

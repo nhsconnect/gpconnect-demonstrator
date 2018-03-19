@@ -781,8 +781,15 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
 		for (AppointmentParticipantComponent participant : appointment.getParticipant()) {
 			if (participant.getActor() != null) {
-				String participantReference = participant.getActor().getReference().toString();
-				Long actorId = Long.valueOf(participantReference.substring(participantReference.lastIndexOf("/") + 1));
+				String participantReference = participant.getActor().getReference().toString(); 
+				String actorIdString = participantReference.substring(participantReference.lastIndexOf("/") + 1);
+				Long actorId;
+				if(actorIdString.equals("null")) {
+					actorId = null;
+				} else {
+					actorId = Long.valueOf(actorIdString);					
+				}
+				
 				if (participantReference.contains("Patient/")) {
 					appointmentDetail.setPatientId(actorId);
 				} else if (participantReference.contains("Practitioner/")) {

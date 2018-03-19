@@ -1,6 +1,8 @@
 USE gpconnect;
 
 /* Destroy all existing data */
+DROP TABLE IF EXISTS gpconnect.appointment_slots_organizations;
+DROP TABLE IF EXISTS gpconnect.appointment_slots_orgType;
 DROP TABLE IF EXISTS gpconnect.appointment_appointments_slots;
 DROP TABLE IF EXISTS gpconnect.appointment_schedules;
 DROP TABLE IF EXISTS gpconnect.appointment_slots;
@@ -76,6 +78,10 @@ CREATE TABLE gpconnect.appointment_schedules (
   typeCode        TEXT(50)  NULL,
   typeDescription TEXT(250) NULL,
   locationId      BIGINT    NULL,
+  deliveryChannelCode	TEXT(50)  NULL,
+  deliveryChannelDisplay  TEXT(50)  NULL,
+  practitionerRoleCode	TEXT(50)  NULL,
+  practitionerRoleDisplay  TEXT(50)  NULL,
   startDateTime   DATETIME  NULL,
   endDateTime     DATETIME  NULL,
   scheduleComment TEXT(300) NULL,
@@ -92,8 +98,16 @@ CREATE TABLE gpconnect.appointment_slots (
   startDateTime     DATETIME  NULL,
   endDateTime       DATETIME  NULL,
   lastUpdated       DATETIME  NULL,
+  gpConnectBookable BOOLEAN   NULL,
   PRIMARY KEY (id)
 );
+
+CREATE TABLE `appointment_slots_orgType` (
+  `slotId` bigint(20) NOT NULL,
+  `bookableOrgTypes` varchar(255) NOT NULL,
+  KEY `slotId` (`slotId`),
+  CONSTRAINT `appointment_slots_orgType_ibfk_1` FOREIGN KEY (`slotId`) REFERENCES `appointment_slots` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE appointment_appointments_slots (
 	appointmentId	BIGINT    NOT NULL,
@@ -138,6 +152,13 @@ CREATE TABLE gpconnect.organizations (
   org_name    VARCHAR(100) NULL,
   lastUpdated DATETIME     NULL,
   PRIMARY KEY (id)
+);
+
+CREATE TABLE appointment_slots_organizations (
+	slotId       	BIGINT    NOT NULL,
+	organizationId	BIGINT    NOT NULL,
+	FOREIGN KEY (organizationId) REFERENCES gpconnect.organizations(id),
+	FOREIGN KEY (slotId) 		REFERENCES gpconnect.appointment_slots(id)
 );
 
 CREATE TABLE gpconnect.medical_departments (

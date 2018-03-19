@@ -2,14 +2,19 @@
 
 angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, FhirEndpointLookup, fhirJWTFactory, Organization) {
 	
-    var findAllAppointments = function (patientNHSNumber, patientId, odsCode) {
+    var findAllAppointments = function (patientNHSNumber, patientId, odsCode, startDateTime, endDateTime) {
         var odsCode = (typeof odsCode !== 'undefined') ? odsCode : $rootScope.patientOdsCode;
                 
         return FhirEndpointLookup.getEndpoint(odsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments-1").then(function(response) {
             var endpointLookupResult = response;
             
+            var startDate = new Date(startDateTime);
+            var endDate = new Date(endDateTime);
+            
+            var requiredParams = 'start=ge' + startDate.toISOString().split('T')[0] + '&start=le' + endDate.toISOString().split('T')[0];
+            
             return $http.get(
-                    endpointLookupResult.restUrlPrefix + '/Patient/' + patientId + '/Appointment',
+                    endpointLookupResult.restUrlPrefix + '/Patient/' + patientId + '/Appointment?' + requiredParams,
                     {
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,
@@ -25,8 +30,6 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
     };
 
     var searchForFreeSlots = function (practiceOdsCode, startDateTime, endDateTime) {
-           
-
            
             return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:slot-1").then(function(response) {
                 var endpointLookupResult = response;

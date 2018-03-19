@@ -1,6 +1,43 @@
 <div class="container-fluid">
     <div class="col-md-5" >
         <h3><strong>Appointments</strong></h3>
+        
+        <div ng-show="appointment.geStartDateInvalid" class="alert alert-danger" role="alert">Please enter a valid 'from' date. This date should not be in the past.</div>
+        <div ng-show="appointment.leStartDateInvalid" class="alert alert-danger" role="alert">Please enter a valid 'until' date. This should be after the 'from' date.</div>
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <text> Search from:</text>
+	            <div class="input-group">
+	                <span class="input-group-btn">
+	                    <button type="button" class="btn btn-default btn-sm" ng-click="openDatePicker($event, 'geStartDate')">
+	                        <i class="fa fa-calendar"></i>
+	                    </button>
+	            	</span>
+	            	<input type="text" class="form-control input-sm popupinputs" id="geStartDate" name="geStartDate"
+	                   ng-model="appointment.geStartDate" ng-click="openDatePicker($event, 'geStartDate')"
+	                   datepicker-popup="dd-MMM-y" min-date="appointment.minGeStartDate" is-open="geStartDate" required/>
+	        	</div>
+        	</div>
+            
+			<div class="col-md-6">
+            	<text>until:</text>
+	            <div class="input-group">
+	                <span class="input-group-btn">
+	                    <button type="button" class="btn btn-default btn-sm" ng-click="openDatePicker($event, 'leStartDate')" ng-disabled="!appointment.geStartDate">
+	                        <i class="fa fa-calendar"></i>
+	                    </button>
+	                </span>
+	                <input type="text" class="form-control input-sm popupinputs" id="leStartDate" name="leStartDate"
+	                       ng-model="appointment.leStartDate" ng-click="openDatePicker($event, 'leStartDate')"
+	                       datepicker-popup="dd-MMM-y" min-date="appointment.minLeStartDate" is-open="leStartDate"  
+	                       ng-disabled="!appointment.geStartDate"/>
+	            </div>
+            </div>
+            
+            <div class="row">
+            	<div class="col-md-12 hidden-xs"><div class="text-right search-button"><button class="btn btn-info" ng-click="searchAppointments();"><i class="fa fa-plus"></i> Search</button></div></div>
+              </div>
+            </div>
 
         <div class="col-md-12 alert alert-info noteBox" >
             <div>Any amendments to appointments may take up to a minute to propagate through the system. You may need to refresh the page to see your changes.</div>
@@ -14,7 +51,7 @@
                 </tr>
             </table>
         </div>
-
+                
         <table class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>

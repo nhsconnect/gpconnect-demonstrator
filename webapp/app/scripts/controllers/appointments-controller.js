@@ -3,6 +3,8 @@
 angular.module('gpConnect')
         .controller('AppointmentsCtrl', ['$scope', '$http', '$stateParams', '$state', '$modal', '$q', 'PatientService', 'usSpinnerService', 'Appointment', 'ProviderRouting', 'gpcResource', function ($scope, $http, $stateParams, $state, $modal, $q, PatientService, usSpinnerService, Appointment, ProviderRouting, gpcResource) {
 
+			$scope.appointment = {};
+
             $scope.currentPage = 1;
 
             $scope.pageChangeHandler = function (newPage) {
@@ -16,6 +18,44 @@ angular.module('gpConnect')
             if ($stateParams.filter) {
                 $scope.query = $stateParams.filter;
             }
+            
+            $scope.openDatePicker = function ($event, name) {
+      			$event.preventDefault();
+      			$event.stopPropagation();
+     			$scope.geStartDate = false;
+     			$scope.leStartDate = false;
+      			$scope[name] = true;
+    		};
+            
+            $scope.initaliseDates = function() {
+            	var today = new Date();
+            	var lower = new Date();
+            	var upper = new Date();
+            	$scope.appointment.geStartDate = lower.setDate(today.getDate());
+            	$scope.appointment.leStartDate = upper.setDate(today.getDate() + 14);
+        		$scope.appointment.minGeStartDate = new Date();
+        		$scope.appointment.minLeStartDate = false;
+        		$scope.appointment.geStartDateInvalid = false;
+        		$scope.appointment.leStartDateInvalid = false;
+    		};
+    		$scope.initaliseDates();
+    		
+    		$scope.onGeStartDate = function() {
+    			var geStartDate = $scope.appointment.geStartDate;
+    			$scope.appointment.minLeStartDate = geStartDate;
+    		};
+    
+    		$scope.onLeStartDate = function() {
+    			var leStartDate = $scope.appointment.leStartDate;
+    		};
+  
+    		$scope.$watch("geStartDate", function(newValue, oldValue) {
+        		$scope.onGeStartDate();
+    		}); 
+    
+    		$scope.$watch("leStartDate", function(newValue, oldValue) {
+        		$scope.onLeStartDate();
+    		});
 
             initAppointments();
 
@@ -38,7 +78,7 @@ angular.module('gpConnect')
                                     onFindAppointmentDone();
                                 } else {
                                     $scope.fhirPatient = patient;
-                                    Appointment.findAllAppointments($stateParams.patientId, patient.id, practice.odsCode).then(
+                                    Appointment.findAllAppointments($stateParams.patientId, patient.id, practice.odsCode, $scope.appointment.geStartDate, $scope.appointment.leStartDate).then(
                                             function (findAllAppointmentsSuccess) {
                                                 var appointments = findAllAppointmentsSuccess.data.entry;
                                                 if (appointments != undefined) {
@@ -202,6 +242,27 @@ angular.module('gpConnect')
                 $scope.appointmentDetail = undefined;
                 $scope.appointmentLocation = undefined;
                 $scope.practitionerName = undefined;
+            };
+            
+            $scope.searchAppointments = function () {
+            	$scope.appointment.geStartDateInvalid = false;
+				$scope.appointment.leStartDateInvalid = false;
+	            
+	            var startDate = $scope.appointment.geStartDate;
+	            var endDate = $scope.appointment.leStartDate;
+	    		
+	    		if (!startDate || moment(startDate).diff(new Date(), 'days') < 0) {
+	    			$scope.appointment.geStartDateInvalid = true;
+	    		} 
+	    		else if (!endDate || moment(endDate).diff(startDate, 'days') < 0) 
+	    		{
+	    			$scope.appointment.leStartDateInvalid = true;
+	    		} 
+				else
+				{
+					$scope.closeAppointmentDetail();
+	            	initAppointments();
+	            }
             };
 
         }]);

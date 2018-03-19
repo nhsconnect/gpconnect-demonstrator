@@ -4,6 +4,7 @@ import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.time.DateUtils;
@@ -57,14 +58,15 @@ public class RefreshData {
                 endDate.setHours(Integer.parseInt(element[4]));
                 endDate.setMinutes(Integer.parseInt(element[5]));
                 endDate.setSeconds(Integer.parseInt(element[6]));
-                slotStore.saveSlot(createSlot(Long.parseLong(element[7]), element[8], Long.parseLong(element[9]), element[10], startDate, endDate, currentDate));
+                slotStore.saveSlot(createSlot(Long.parseLong(element[7]), element[8], Long.parseLong(element[9]), element[10], startDate, endDate, currentDate, Boolean.parseBoolean(element[11]), Collections.singletonList(Long.parseLong(element[12])), Collections.singletonList(element[13])));
             }
         } catch (IOException e) {
             LOG.error("Error reading slots file", e);
         }
     }
 
-    private SlotDetail createSlot(Long typeCode, String typeDisplay, long scheduleReference, String freeBusy, Date startDate, Date endDate, Date lastUpdated) {
+    private SlotDetail createSlot(Long typeCode, String typeDisplay, long scheduleReference, String freeBusy, Date startDate, Date endDate, Date lastUpdated, 
+    			boolean gpConnectBookable, List<Long> organizationIds, List<String> organizationTypes) {
         SlotDetail slot = new SlotDetail();
         slot.setTypeCode(typeCode);
         slot.setTypeDisply(typeDisplay);
@@ -73,6 +75,9 @@ public class RefreshData {
         slot.setStartDateTime(startDate);
         slot.setEndDateTime(endDate);
         slot.setLastUpdated(lastUpdated);
+        slot.setGpConnectBookable(gpConnectBookable);
+        slot.setOrganizationTypes(organizationTypes);
+        slot.setOrganizationIds(organizationIds);
         return slot;
     }
 }

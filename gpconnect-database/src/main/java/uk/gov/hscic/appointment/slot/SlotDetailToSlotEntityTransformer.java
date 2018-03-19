@@ -1,8 +1,12 @@
 package uk.gov.hscic.appointment.slot;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.commons.collections4.Transformer;
-import uk.gov.hscic.appointment.appointment.AppointmentEntity;
+
 import uk.gov.hscic.model.appointment.SlotDetail;
+import uk.gov.hscic.organization.OrganizationEntity;
 
 public class SlotDetailToSlotEntityTransformer implements Transformer<SlotDetail, SlotEntity> {
 
@@ -24,6 +28,19 @@ public class SlotDetailToSlotEntityTransformer implements Transformer<SlotDetail
         slotEntity.setStartDateTime(item.getStartDateTime());
         slotEntity.setEndDateTime(item.getEndDateTime());
         slotEntity.setLastUpdated(item.getLastUpdated());
+        slotEntity.setGpConnectBookable(item.isGpConnectBookable());
+        slotEntity.setBookableOrgTypes(item.getOrganizationTypes());
+        if(item.getOrganizationIds() != null) {
+        	List<OrganizationEntity> bookableOrganizations = item.getOrganizationIds().stream().map(id -> createOrganizationEntityWithId(id)).collect(Collectors.toList());
+        	slotEntity.setBookableOrganizations(bookableOrganizations);
+        }
+        
         return slotEntity;
+    }
+    
+    private OrganizationEntity createOrganizationEntityWithId(Long id) {
+    	OrganizationEntity orgEnt = new OrganizationEntity();
+    	orgEnt.setId(id);
+    	return orgEnt;
     }
 }

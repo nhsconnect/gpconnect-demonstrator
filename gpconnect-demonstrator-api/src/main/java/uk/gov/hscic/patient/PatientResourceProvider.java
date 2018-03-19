@@ -12,23 +12,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import uk.gov.hscic.common.filters.model.Parameter;
-
-import javax.activation.UnsupportedDataTypeException;
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang.StringUtils;
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
 import org.hl7.fhir.dstu3.model.Appointment;
 import org.hl7.fhir.dstu3.model.BooleanType;
 import org.hl7.fhir.dstu3.model.Bundle;
-import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.Bundle.BundleType;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.Composition;
-import org.hl7.fhir.dstu3.model.Composition.CompositionStatus;
 import org.hl7.fhir.dstu3.model.ContactDetail;
 import org.hl7.fhir.dstu3.model.ContactPoint;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
@@ -51,16 +44,10 @@ import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Period;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.dstu3.model.Resource;
-import org.hl7.fhir.dstu3.model.Task.ParameterComponent;
 import org.hl7.fhir.dstu3.model.Type;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ca.uhn.fhir.model.api.IDatatype;
-import ca.uhn.fhir.model.primitive.BooleanDt;
-import ca.uhn.fhir.model.primitive.CodeDt;
-import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
@@ -77,13 +64,9 @@ import ca.uhn.fhir.rest.param.DateAndListParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import org.hl7.fhir.dstu3.model.Composition.SectionComponent;
-import org.hl7.fhir.dstu3.model.Composition.SectionMode;
-import org.hl7.fhir.instance.model.api.IBaseDatatype;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -94,12 +77,9 @@ import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.model.patient.PatientDetails;
-import uk.gov.hscic.model.patient.PatientSummary;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.details.PatientSearch;
 import uk.gov.hscic.patient.details.PatientStore;
-import uk.gov.hscic.patient.html.FhirSectionBuilder;
-import uk.gov.hscic.patient.html.Page;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 import uk.gov.hscic.util.NhsCodeValidator;
 
@@ -110,13 +90,9 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private static final String TEMPORARY_RESIDENT_REGISTRATION_TYPE = "T";
     private static final String ACTIVE_REGISTRATION_STATUS = "A";
-    private static final int ENCOUNTERS_SUMMARY_LIMIT = 3;
 
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
-
-    @Autowired
-    private OrganizationResourceProvider organizationResourceProvider;
 
     @Autowired
     private MedicationOrderResourceProvider medicationOrderResourceProvider;
@@ -135,9 +111,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PatientSearch patientSearch;
-
-    @Autowired
-    private PageSectionFactory pageSectionFactory;
 
     @Autowired
     private StaticElementsHelper staticElHelper;
@@ -185,15 +158,19 @@ public class PatientResourceProvider implements IResourceProvider {
     @Read(version = true)
     public Patient getPatientById(@IdParam IdType internalId) throws FHIRException {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
-
+      
         if (patientDetails == null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart()),
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
         }
 
-        return IdentifierValidator.versionComparison(internalId,
+        Patient patient =  IdentifierValidator.versionComparison(internalId,
                 patientDetailsToPatientResourceConverter(patientDetails));
+        if(null != patient){
+            addPreferredBranchSurgeryExtension(patient);
+        }
+        return patient;
     }
 
     @Search
@@ -201,10 +178,19 @@ public class PatientResourceProvider implements IResourceProvider {
             throws FHIRException {
 
         Patient patient = getPatientByPatientId(nhsNumber.fromToken(tokenParam));
-
+        if(null != patient){
+            addPreferredBranchSurgeryExtension(patient);
+        }
         return null == patient || patient.getDeceased() != null ? Collections.emptyList()
                 : Collections.singletonList(patient);
     }
+
+	private void addPreferredBranchSurgeryExtension(Patient patient) {
+		List<Extension> regDetailsEx = patient.getExtensionsByUrl(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
+		Extension branchSurgeryEx = regDetailsEx.get(0).addExtension();
+		branchSurgeryEx.setUrl("preferredBranchSurgery");
+		branchSurgeryEx.setValue(new Reference("Location/1"));
+	}
 
     private Patient getPatientByPatientId(String patientId) throws FHIRException {
         PatientDetails patientDetails = patientSearch.findPatient(patientId);

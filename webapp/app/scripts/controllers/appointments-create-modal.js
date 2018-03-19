@@ -11,6 +11,9 @@ angular.module('gpConnect')
             $scope.patient = appointmentBookingParams.patient;
             $scope.modal = modal;
             $scope.practitionerName = appointmentBookingParams.practitionerFullName;
+            $scope.scheduleType = appointmentBookingParams.scheduleType;
+            $scope.practitionerRole = appointmentBookingParams.practitionerRole;
+            $scope.deliveryChannel = appointmentBookingParams.deliveryChannel;
             $scope.practiceName = appointmentBookingParams.location.practiceName;
             $scope.locationName = appointmentBookingParams.location.name;
 

@@ -1,5 +1,7 @@
-GPConnect Demonstrator
-=========
+<img src="webapp/app/images/logo.png" height=72>
+
+# GP Connect Demonstrator
+
 This README contains information related to developing, building and running the GP Connect Demonstrator.
 
 ### Requirements
@@ -142,6 +144,11 @@ To start with SSL on https://localhost:19192:
 java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19192 --config.path=config\ --server.ssl.key-store=config\server.jks --server.ssl.key-store-password=password --server.ssl.trust-store=config\server.jks --server.ssl.trust-store-password=password --server.ssl.client-auth=want
 ```
 
+To start with SSL while skipping mutual authentication:
+```sh
+java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19192 --config.path=config\ --server.ssl.key-store=config\server.jks --server.ssl.key-store-password=password --server.ssl.trust-store=config\server.jks --server.ssl.trust-store-password=password --server.ssl.client-auth=want --clientAuth=false
+```
+
 To start with non-SSL on http://localhost:19191 and SSL on https://localhost:19192:
 ```sh
 java -jar gpconnect-demonstrator-api\target\gpconnect-demonstrator-api.war --server.port=19192 --server.port.http=19191 --config.path=config\ --server.ssl.key-store=config\server.jks --server.ssl.key-store-password=password --server.ssl.trust-store=config\server.jks --server.ssl.trust-store-password=password --server.ssl.client-auth=want
@@ -181,13 +188,18 @@ The row format of “slots.txt” is:
 * Slot Type Description
 * Practitioner internal ID
 * Slot status (FREE/BUSY)
+* Bookable by Gp Connect
+* Bookable organization id
+* Bookable organization type
 
 e.g.:
 ```
-0,9,0,0,9,30,0,408443003,General medical practice,2,FREE
-0,9,30,0,10,0,0,408443003,General medical practice,2,FREE
-0,10,0,0,10,30,0,408443003,General medical practice,2,FREE
+0,9,0,0,9,30,0,408443003,General medical practice,2,FREE,false,1,,
+0,9,30,0,10,0,0,408443003,General medical practice,2,FREE,true,1,,
+0,10,0,0,10,30,0,408443003,General medical practice,2,FREE,true,1,Urgent Care
 ```
+
+Currently slots between 09:00 and 09:40 are not available for booking by GpConnect. Slots from 09:40 to 12:50 are available to the organisation with ODS code GPC001. Those from 13:00 to 16:50 are available to the organisation with ODS code R1A14. Slots from 14:30 to 16:50 are also available to be booked by any Urgent Care organisation.
 
 ### Data clear down
 For Appointments and Tasks there is a clear down process which is scheduled using the "datasource.cleardown.cron" property. When the task runs it will delete all GP Connect Demonstrator Tasks previously added. It will also delete all Appointments and remove the currently available slots. It will then refresh the available slots using the "slots.txt" sample data file.

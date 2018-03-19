@@ -6,6 +6,7 @@ import java.util.List;
 public class Practice {
     private String id;
     private String odsCode;
+    private String orgType;
     private String name;
     private List<String> interactionIds;
     private String endpointURL;
@@ -28,6 +29,14 @@ public class Practice {
 
     public void setOdsCode(String odsCode) {
         this.odsCode = odsCode;
+    }
+
+    public String getOrgType() {
+        return orgType;
+    }
+
+    public void setOrgType(String orgType) {
+        this.orgType = orgType;
     }
 
     public String getName() {

@@ -9,6 +9,10 @@ public class ScheduleDetail {
     private String typeCode;
     private String typeDescription;
     private Long locationId;
+    private String deliveryChannelCode;
+    private String deliveryChannelDisplay;
+    private String practitionerRoleCode;
+    private String practitionerRoleDisplay;
     private Date startDateTime;
     private Date endDateTime;
     private String comment;
@@ -61,8 +65,40 @@ public class ScheduleDetail {
     public void setLocationId(Long locationId) {
         this.locationId = locationId;
     }
+    
+	public String getDeliveryChannelCode() {
+		return deliveryChannelCode;
+	}
 
-    public Date getStartDateTime() {
+	public void setDeliveryChannelCode(String deliveryChannelCode) {
+		this.deliveryChannelCode = deliveryChannelCode;
+	}
+
+	public String getDeliveryChannelDisplay() {
+		return deliveryChannelDisplay;
+	}
+
+	public void setDeliveryChannelDisplay(String deliveryChannelDisplay) {
+		this.deliveryChannelDisplay = deliveryChannelDisplay;
+	}
+
+	public String getPractitionerRoleCode() {
+		return practitionerRoleCode;
+	}
+
+	public void setPractitionerRoleCode(String practitionerRoleCode) {
+		this.practitionerRoleCode = practitionerRoleCode;
+	}
+
+    public String getPractitionerRoleDisplay() {
+		return practitionerRoleDisplay;
+	}
+
+	public void setPractitionerRoleDisplay(String practitionerRoleDisplay) {
+		this.practitionerRoleDisplay = practitionerRoleDisplay;
+	}
+
+	public Date getStartDateTime() {
         return startDateTime;
     }
 

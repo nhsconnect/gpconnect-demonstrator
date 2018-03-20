@@ -17,9 +17,6 @@ public class WebToken {
     @JsonProperty("requested_scope")
     private String requestedScope;
 
-    @JsonProperty("requested_record")
-    private RequestedRecord requestedRecord;
-
     @JsonProperty("requesting_device")
     private RequestingDevice requestingDevice;
 
@@ -83,14 +80,6 @@ public class WebToken {
 
     public void setRequestedScope(String requestedScope) {
         this.requestedScope = requestedScope;
-    }
-
-    public RequestedRecord getRequestedRecord() {
-        return requestedRecord;
-    }
-
-    public void setRequestedRecord(RequestedRecord requestedRecord) {
-        this.requestedRecord = requestedRecord;
     }
 
     public RequestingDevice getRequestingDevice() {

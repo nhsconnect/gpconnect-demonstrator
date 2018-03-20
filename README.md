@@ -83,6 +83,12 @@ You are welcome to use these configuration files in situ, however we ask that an
 Environment properties are defined in 'gpconnect-demonstrator-api.properties'. If you need to modify any of these properties for your environment, it is recommended you create a new file called 'gpconnect-demonstrator-api.environment.properties' and set the overriding properties in here, as the contents of this file will take precedence over 'gpconnect-demonstrator-api.properties'.
 
 ### Installing front end packages
+
+NOTE: There is a problem with the latest version of 'npm' so you may need to revert you npm version to '4.5.0'!
+```sh
+npm install -g npm@4.5.0
+```
+
 Install Grunt, the JavaScript task runner (you may need to be root user):
 ```sh
 npm install -g grunt-cli bower

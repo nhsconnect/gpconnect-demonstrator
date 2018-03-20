@@ -22,7 +22,6 @@ import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemParameter;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.common.filters.model.RequestedRecord;
 import uk.gov.hscic.common.filters.model.WebToken;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.PatientResourceProvider;
@@ -68,15 +67,13 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         WebToken webToken = webTokenFactory.getWebToken(requestDetails, futureRequestLeeway);
 
         validateClaim(webToken, requestDetails);
-        validateResource(webToken, requestDetails);
         validateIdentifier(webToken, requestDetails);
 
         return new RuleBuilder().allowAll().build();
     }
 
-    private void validateOrganizationIdentifier(WebToken webToken, RequestDetails requestDetails) {
+    private void validateOrganizationIdentifier(RequestDetails requestDetails) {
         Map<String, String[]> parameters = requestDetails.getParameters();
-        RequestedRecord requestedRecord = webToken.getRequestedRecord();
         
         if (parameters != null && parameters.containsKey(SystemParameter.IDENTIFIER)) {
             String[] identifierParts = parameters.get(SystemParameter.IDENTIFIER)[0].split("\\|");
@@ -88,43 +85,10 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                         new InvalidRequestException("Invalid organization identifier system: " + identifierSystem),
                         SystemCode.BAD_REQUEST, IssueType.INVALID);
             }
-            
-  
-            String requestOdsCode = identifierParts[1];
-            String webTokenOdsCode = requestedRecord.getIdentifierValue(SystemURL.ID_ODS_ORGANIZATION_CODE);            
-            
-            if (requestOdsCode == null ? webTokenOdsCode != null : !requestOdsCode.equals(webTokenOdsCode)){
-                String message = String.format(
-                        "The JWT Requested Record Identifier ODS Code %s does not match the Identifier Parameter ODS Code %s.", 
-                        webTokenOdsCode, 
-                        requestOdsCode
-                );              
-                
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(message),
-                        SystemCode.BAD_REQUEST, 
-                        IssueType.INVALID);           
-            } 
-        } else {            
-            String getRequestId = requestDetails.getId().getIdPart();
-            String requestedRecordId = requestedRecord.getId();
-            
-            if (getRequestId == null ? requestedRecordId != null : !getRequestId.equals(requestedRecordId)){
-                  String message = String.format(
-                        "The JWT Requested Record Id %s does not match the GET request Id %s.", 
-                        requestedRecordId, 
-                        getRequestId
-                );              
-                
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(message),
-                        SystemCode.BAD_REQUEST, 
-                        IssueType.INVALID);     
-            }
         }
     }
 
-    private void validatePatientIdentifier(WebToken webToken, RequestDetails requestDetails) {
+    private void validatePatientIdentifier(RequestDetails requestDetails) {
         Map<String, String[]> parameters = requestDetails.getParameters();
 
         if(parameters != null && parameters.isEmpty() == false) {
@@ -132,24 +96,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
             if(requestIdentifiers != null && requestIdentifiers.length > 0) {
                 String requestIdentifierValue = requestIdentifiers[0].split("\\|")[1];
-                if(NhsCodeValidator.nhsNumberValid(requestIdentifierValue)) {
-
-                    String jwtIdentifierValue = webToken.getRequestedRecord().getIdentifierValue(SystemURL.ID_NHS_NUMBER);
-                    if(NhsCodeValidator.nhsNumberValid(jwtIdentifierValue)) {
-
-                        if(jwtIdentifierValue.equals(requestIdentifierValue) == false) {
-                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                    new InvalidRequestException("Invalid NHS number: " + jwtIdentifierValue),
-                                    SystemCode.BAD_REQUEST, IssueType.INVALID);
-                        }
-                    }
-                    else {
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                new InvalidRequestException("Invalid NHS number in JWT: " + jwtIdentifierValue),
-                                SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
-                    }
-                }
-                else {
+                if(!NhsCodeValidator.nhsNumberValid(requestIdentifierValue)) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
                             new InvalidRequestException("Invalid NHS number in request: " + requestIdentifierValue),
                             SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
@@ -160,31 +107,10 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
     private void validateIdentifier(WebToken webToken, RequestDetails requestDetails) {
         if(PATIENT_RESOURCE_NAME.equals(requestDetails.getResourceName())) {
-            validatePatientIdentifier(webToken, requestDetails);
+            validatePatientIdentifier(requestDetails);
         }
         else if(ORGANIZATION_RESOURCE_NAME.equals(requestDetails.getResourceName())) {
-            validateOrganizationIdentifier(webToken, requestDetails);
-        }
-    }
-
-    private void validateResource(WebToken webToken, RequestDetails requestDetails) {
-        String jwtResource = webToken.getRequestedRecord().getResourceType();
-
-        Set<String> validRequestResources = validResourceCombinations.get(jwtResource);
-        if(validRequestResources != null) {
-            String requestResource = requestDetails.getResourceName();
-
-            // sometimes there is no resource eg on a GET "metadata" operation
-            if(requestResource != null && validRequestResources.contains(requestResource) == false) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(String.format("Invalid request resource type from JWT (%s) does not match resource type from request (%s)", jwtResource, requestResource)),
-                        SystemCode.BAD_REQUEST, IssueType.INVALID);
-            }
-        }
-        else {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(String.format("Invalid request resource type from JWT (%s) does not match one of the expected resource types - Patient or Organisation", jwtResource)),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+            validateOrganizationIdentifier(requestDetails);
         }
     }
 

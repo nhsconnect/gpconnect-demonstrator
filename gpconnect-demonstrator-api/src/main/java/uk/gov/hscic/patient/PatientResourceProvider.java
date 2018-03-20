@@ -71,6 +71,7 @@ import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.param.DateAndListParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -274,7 +275,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	@Search(compartmentName = "Appointment")
 	public List<Appointment> getPatientAppointments(@IdParam IdType patientLocalId, @Sort SortSpec sort,
-			@Count Integer count, @OptionalParam(name = "start") DateRangeParam startDate) {
+			@Count Integer count, @OptionalParam(name = "start") DateAndListParam startDate) {
 		return appointmentResourceProvider.getAppointmentsForPatientIdAndDates(patientLocalId, sort, count, startDate);
 	}
 

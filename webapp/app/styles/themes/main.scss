@@ -96,6 +96,11 @@ li {
   list-style: none;
 }
 
+.versionList {
+  list-style: disc;
+  list-style-position: inside;
+}
+
 
 /* Navigation Menu */
 
@@ -2236,6 +2241,11 @@ i.fa.cancel-reportType.fa-times {
     margin-top: 10px;
 }
 
+.search-button {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
 div#age-chart div.morris-hover.morris-default-style {
   display: none !important;
 }
@@ -2482,4 +2492,13 @@ div#age-chart div.morris-hover.morris-default-style {
 
 .modalDiv {
     padding-bottom: 10px;
+}
+
+.col-md-12.appDateRange {
+    padding: 0px 35px 0px 0px;
+    margin: 0px;
+}
+
+#appButtonSearchDateRange {
+    margin: 5px 0px 0px 0px;
 }

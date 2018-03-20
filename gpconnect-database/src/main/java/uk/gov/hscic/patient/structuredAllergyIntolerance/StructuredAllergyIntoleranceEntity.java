@@ -4,7 +4,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "allInto")
+@Table(name = "allergyIntolerance")
 public class StructuredAllergyIntoleranceEntity {
 
 	@Id
@@ -28,6 +28,21 @@ public class StructuredAllergyIntoleranceEntity {
 	
 	@Column(name = "clinicalStatus")
 	private String clinicalStatus;
+	
+	@Column(name = "verificationStatus")
+	private String verificationStatus;
+	
+	@Column(name = "category")
+	private String category;
+	
+	@Column(name = "patientRef")
+	private String patientRef;
+	
+	@Column(name = "onSetDateTime")
+	private Date onSetDateTime;
+	
+	@Column(name = "assertedDate")
+	private Date assertedDate;
 
 	public String getNhsNumber() {
 		return nhsNumber;
@@ -83,6 +98,46 @@ public class StructuredAllergyIntoleranceEntity {
 
 	public void setClinicalStatus(String clinicalStatus) {
 		this.clinicalStatus = clinicalStatus;
+	}
+
+	public String getVerificationStatus() {
+		return verificationStatus;
+	}
+
+	public void setVerificationStatus(String verificationStatus) {
+		this.verificationStatus = verificationStatus;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getPatientRef() {
+		return patientRef;
+	}
+
+	public void setPatientRef(String patientRef) {
+		this.patientRef = patientRef;
+	}
+
+	public Date getOnSetDateTime() {
+		return onSetDateTime;
+	}
+
+	public void setOnSetDateTime(Date onSetDateTime) {
+		this.onSetDateTime = onSetDateTime;
+	}
+
+	public Date getAssertedDate() {
+		return assertedDate;
+	}
+
+	public void setAssertedDate(Date assertedDate) {
+		this.assertedDate = assertedDate;
 	}
 	
 	

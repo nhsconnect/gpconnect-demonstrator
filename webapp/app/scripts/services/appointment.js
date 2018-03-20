@@ -36,7 +36,7 @@ angular.module('gpConnect').factory('Appointment', function ($rootScope, $http, 
             return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:slot-1").then(function(response) {
                 var endpointLookupResult = response;
                 
-                var requiredParams = 'start=ge' +startDateTime+ '&end=le' +endDateTime+ '&fb-type=free&_include=Slot:schedule';
+                var requiredParams = 'start=ge' +startDateTime+ '&end=le' +endDateTime+ '&status=free&_include=Slot:schedule';
                 var optionalParams = '_include:recurse=Schedule:actor:Practitioner&_include:recurse=Schedule:actor:Location';
                 
                 return $http.get(

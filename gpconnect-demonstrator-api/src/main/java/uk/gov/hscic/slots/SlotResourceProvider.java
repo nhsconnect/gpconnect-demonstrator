@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
@@ -164,7 +163,7 @@ public class SlotResourceProvider implements IResourceProvider {
         CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
         codableConcept.setText(slotDetail.getTypeDisply());
 
-        List<CodeableConcept> serviceType = new ArrayList();
+        List<CodeableConcept> serviceType = new ArrayList<CodeableConcept>();
         serviceType.add(codableConcept);
         slot.setServiceType(serviceType);
 

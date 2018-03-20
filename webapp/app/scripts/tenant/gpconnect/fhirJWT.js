@@ -42,22 +42,8 @@ angular.module('gpConnect')
                 }
 
                 if (scope.indexOf("patient") > -1) {
-                    oPayload.requested_record = {
-                        "resourceType": "Patient",
-                        "identifier": [{
-                                "system": gpcResource.getConst("ID_NHS_NUMBER"),
-                                "value": identifier
-                            }]
-                    };
                     oPayload.requested_scope = "patient/*." + operation;
                 } else {
-                    oPayload.requested_record = {
-                        "resourceType": "Organization",
-                        "identifier": [{
-                                "system": gpcResource.getConst("ID_ODS_ORGANIZATION_CODE"),
-                                "value": identifier
-                            }]
-                    };
                     oPayload.requested_scope = "organization/*." + operation;
                 }
 

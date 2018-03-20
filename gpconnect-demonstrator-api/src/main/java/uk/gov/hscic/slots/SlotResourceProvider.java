@@ -198,7 +198,7 @@ public class SlotResourceProvider implements IResourceProvider {
         CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
         codableConcept.setText(slotDetail.getTypeDisply());
 
-        List<CodeableConcept> serviceType = new ArrayList();
+        List<CodeableConcept> serviceType = new ArrayList<CodeableConcept>();
         serviceType.add(codableConcept);
         slot.setServiceType(serviceType);
 

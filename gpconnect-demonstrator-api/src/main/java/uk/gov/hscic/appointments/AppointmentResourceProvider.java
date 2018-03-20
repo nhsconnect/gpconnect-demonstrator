@@ -4,10 +4,12 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.hl7.fhir.dstu3.model.Appointment;
@@ -45,8 +47,14 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.param.DateAndListParam;
+import ca.uhn.fhir.rest.param.DateOrListParam;
+import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ParamPrefixEnum;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.param.TokenOrListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
@@ -147,74 +155,75 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
 	@Search
 	public List<Appointment> getAppointmentsForPatientIdAndDates(@RequiredParam(name = "patient") IdType patientLocalId,
-			@Sort SortSpec sort, @Count Integer count, @OptionalParam(name = "start") DateRangeParam startDate) {
+			@Sort SortSpec sort, @Count Integer count, @RequiredParam(name= "start") DateAndListParam startDates) {
+		
 		Date startLowerDate = null;
-		Date startUppderDate = null;
-
-		if (startDate != null) {
-			if (startDate.getLowerBound() != null) {
-				if (startDate.getLowerBound().getPrefix() == ParamPrefixEnum.GREATERTHAN) {
-					startLowerDate = startDate.getLowerBound().getValue();
-				} else {
-					if (startDate.getLowerBound().getPrecision() == TemporalPrecisionEnum.DAY) {
-						startLowerDate = startDate.getLowerBound().getValue(); // Remove
-																				// a
-																				// day
-																				// to
-																				// make
-																				// time
-																				// inclusive
-																				// of
-																				// parameter
-																				// date
-					} else {
-						startLowerDate = new Date(startDate.getLowerBound().getValue().getTime() - 1000); // Remove
-																											// a
-																											// second
-																											// to
-																											// make
-																											// time
-																											// inclusive
-																											// of
-																											// parameter
-																											// date
-					}
-				}
-			}
-
-			if (startDate.getUpperBound() != null) {
-				if (startDate.getUpperBound().getPrefix() == ParamPrefixEnum.LESSTHAN) {
-					startUppderDate = startDate.getUpperBound().getValue();
-				} else {
-					if (startDate.getUpperBound().getPrecision() == TemporalPrecisionEnum.DAY) {
-						startUppderDate = new Date(startDate.getUpperBound().getValue().getTime() + 86400000); // Add
-																												// a
-																												// day
-																												// to
-																												// make
-																												// time
-																												// inclusive
-																												// of
-																												// parameter
-																												// date
-					} else {
-						startUppderDate = new Date(startDate.getUpperBound().getValue().getTime() + 1000); // Add
-																											// a
-																											// second
-																											// to
-																											// make
-																											// time
-																											// inclusive
-																											// of
-																											// parameter
-																											// date
-					}
-				}
-			}
+		Date startUpperDate = null;
+		
+		List<DateOrListParam> startDateList = startDates.getValuesAsQueryTokens();
+		
+		if (startDateList.size() != 2) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Appointment search must have both 'le' and 'ge' start date parameters."),
+                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
 		}
+		
+		Pattern dateOnlyPattern = Pattern.compile("[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])))");
+		
+		boolean lePrefix = false;
+		boolean gePrefix = false;
+		
+        for (DateOrListParam filter : startDateList) {
+        	DateParam token = filter.getValuesAsQueryTokens().get(0);
+        	
+        	if(!dateOnlyPattern.matcher(token.getValueAsString()).matches()) {
+    			throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("Search dates must be of the format: yyyy-MM-dd and should not include time or timezone."),
+                        SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+    		}
+        	
+        	if (token.getPrefix() == ParamPrefixEnum.GREATERTHAN_OR_EQUALS) {
+        		startLowerDate = token.getValue();
+        		gePrefix = true;
+        	}
+        	else if (token.getPrefix() == ParamPrefixEnum.LESSTHAN_OR_EQUALS) {
+        		Calendar upper = Calendar.getInstance();
+        		upper.setTime(token.getValue());
+        		upper.add(Calendar.HOUR, 23);
+        		upper.add(Calendar.MINUTE, 59);
+        		upper.add(Calendar.SECOND, 59);
+        		startUpperDate = upper.getTime();
+        		lePrefix = true;
+        	}
+        	else 
+        	{
+        		throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("Unknown prefix on start date parameter: only le and ge prefixes are allowed."),
+                        SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+        	}
+        }	
+        
+        if (!gePrefix || !lePrefix) {
+        	throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Parameters must contain two start parameters, one with prefix 'ge' and one with prefix 'le'."),
+                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+        } else if (startLowerDate.before(getYesterday())) {
+        	throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Search dates from the past: " + startLowerDate.toString() + " are not allowed in appointment search."),
+                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+        } else if (startUpperDate.before(getYesterday())) {
+        	throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Search dates from the past: " + startUpperDate.toString() + " are not allowed in appointment search."),
+                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+        } else if (startUpperDate.before(startLowerDate)) {
+        	throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Upper search date must be after the lower search date."),
+                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+        }
+    	
 
 		List<Appointment> appointment = appointmentSearch
-				.searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUppderDate).stream()
+				.searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUpperDate).stream()
 				.map(this::appointmentDetailToAppointmentResourceConverter).collect(Collectors.toList());
 
 		List<Appointment> futureAppointments = appointmentValidation.filterToReturnFutureAppointments(appointment);
@@ -225,6 +234,15 @@ public class AppointmentResourceProvider implements IResourceProvider {
 		}
 		// Update startIndex if we do paging
 		return count != null ? futureAppointments.subList(0, count) : futureAppointments;
+	}
+
+	private Date getYesterday() {
+		Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR, 23);
+        cal.set(Calendar.MINUTE,59);
+        cal.set(Calendar.SECOND, 59);
+        cal.add(Calendar.DATE, -2);
+		return cal.getTime();
 	}
 
 	@Create

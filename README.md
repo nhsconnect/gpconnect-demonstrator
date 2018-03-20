@@ -1,5 +1,7 @@
-GPConnect Demonstrator
-=========
+<img src="webapp/app/images/logo.png" height=72>
+
+# GP Connect Demonstrator
+
 This README contains information related to developing, building and running the GP Connect Demonstrator.
 
 ### Requirements

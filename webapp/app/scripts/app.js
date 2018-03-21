@@ -25,7 +25,7 @@ angular.module('gpConnect', [
     $urlRouterProvider.otherwise('/');
 
     $stateProvider.state('patients-list', {
-        url: '/patients?ageRange&department&order&reverse',
+        url: 'patients?ageRange&department&order&reverse',
         views: {
             main: {
                 templateUrl: 'views/patients/patients-list.html',
@@ -38,7 +38,7 @@ angular.module('gpConnect', [
             displayEmptyTable: false
         }
     }).state('main-search', {
-        url: '/search',
+        url: 'search',
         views: {
             main: {
                 templateUrl: 'views/search/main-search.html',
@@ -46,21 +46,21 @@ angular.module('gpConnect', [
             }
         }
     }).state('appointments', {
-        url: '/patients/{patientId:int}/appointments',
+        url: 'patients/{patientId:int}/appointments',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/appointments/appointments.html', controller: 'AppointmentsCtrl'}
         }
     }).state('access-record-html', {
-        url: '/patients/{patientId:int}/access-record/html',
+        url: 'patients/{patientId:int}/access-record/html',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/access-record/access-record-html.html'}
         }
     }).state('access-record-structured', {
-        url: '/patients/{patientId:int}/access-record/structured',
+        url: 'patients/{patientId:int}/access-record/structured',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
@@ -203,7 +203,7 @@ angular.module('gpConnect', [
 
     this.$get = function() {
         var q = jQuery.ajax({
-            type: 'GET', url: '/providerRouting.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
+            type: 'GET', url: 'providerRouting.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
         });
 
         if (q.status === 200) {

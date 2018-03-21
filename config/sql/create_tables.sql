@@ -31,6 +31,7 @@ DROP TABLE IF EXISTS gpconnect.appointment_booking_orgz;
 DROP TABLE IF EXISTS gpconnect.appointment_appointments;
 DROP TABLE IF EXISTS gpconnect.general_practitioners;
 DROP TABLE IF EXISTS gpconnect.medical_departments;
+DROP TABLE IF EXISTS gpconnect.addresses;
 
 /* Create new table schemas */
 
@@ -348,6 +349,17 @@ CREATE TABLE gpconnect.adminitems (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE gpconnect.addresses (
+  id          BIGINT       NOT NULL AUTO_INCREMENT,
+  line   	  VARCHAR(100)NULL,
+  city        VARCHAR(50) NULL,
+  district    VARCHAR(50) NULL,
+  state       VARCHAR(50) NULL,
+  postalCode  VARCHAR(10) NULL,
+  country     VARCHAR(50) NULL,
+  PRIMARY KEY (id)
+);
+
 CREATE TABLE gpconnect.clinicalitems (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   nhsNumber   BIGINT       NULL,
@@ -377,7 +389,9 @@ CREATE TABLE gpconnect.locations (
   site_ods_code_name VARCHAR(250) NOT NULL,
   status             VARCHAR(100) NULL,
   lastUpdated        DATETIME     NULL,
-  PRIMARY KEY (id)
+  address_id         BIGINT       NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (address_id) REFERENCES gpconnect.addresses(id)
 );
 
 CREATE TABLE gpconnect.orders (

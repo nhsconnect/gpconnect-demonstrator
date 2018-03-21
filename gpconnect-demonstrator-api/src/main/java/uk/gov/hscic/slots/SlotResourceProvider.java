@@ -63,7 +63,6 @@ public class SlotResourceProvider implements IResourceProvider {
     @Read()
     public Slot getSlotById(@IdParam IdType slotId) {
         SlotDetail slotDetail = slotSearch.findSlotByID(slotId.getIdPartAsLong());
-
         if (slotDetail == null) {
             OperationOutcome operationalOutcome = new OperationOutcome();
             operationalOutcome.addIssue().setSeverity(IssueSeverity.ERROR)
@@ -80,7 +79,6 @@ public class SlotResourceProvider implements IResourceProvider {
             @RequiredParam(name= "searchFilter") TokenAndListParam searchFilters,
             @IncludeParam(allow = { "Slot:schedule", "Schedule:actor:Practitioner",
                     "Schedule:actor:Location" }) Set<Include> theIncludes) {
-    	
     	
         Bundle bundle = new Bundle();
         boolean actorPractitioner = false;

@@ -14,8 +14,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.appointment.appointment.AppointmentStore;
+import uk.gov.hscic.appointment.schedule.ScheduleStore;
 import uk.gov.hscic.appointment.slot.SlotStore;
+import uk.gov.hscic.model.appointment.AppointmentDetail;
+import uk.gov.hscic.model.appointment.ScheduleDetail;
 import uk.gov.hscic.model.appointment.SlotDetail;
+import uk.gov.hscic.patient.details.PatientEntity;
+import uk.gov.hscic.patient.details.PatientStore;
 
 @Service
 public class RefreshData {
@@ -26,13 +31,22 @@ public class RefreshData {
 
     @Value("${datasource.refresh.slots.filename}")
     private String slotsFilename;
+    
+    @Value("${datasource.patient.nhsNumber}")
+    private String nhsNumber;
 
     @Autowired
     private AppointmentStore appointmentStore;
 
     @Autowired
     private SlotStore slotStore;
-
+    
+    @Autowired
+    private PatientStore patientStore;
+    
+    @Autowired
+    private ScheduleStore scheduleStore;
+    
     // Overnight cleardown of test data
     @Scheduled(cron = "${datasource.cleardown.cron}")
     public void scheduledResetOfData() {
@@ -63,6 +77,19 @@ public class RefreshData {
         } catch (IOException e) {
             LOG.error("Error reading slots file", e);
         }
+        
+        try {
+            List<SlotDetail> slots = slotStore.findAllSlots();
+            if (slots.size() > 2) {
+            	AppointmentDetail appointment = createAppointment(slots.get(0), new Long(1), "A appointment to discuss test data");
+            	appointmentStore.saveAppointment(appointment, Collections.singletonList(slots.get(0)));
+
+            	AppointmentDetail appointment2 = createAppointment(slots.get(1), new Long(2), "A follow-up appointment for tests.");
+            	appointmentStore.saveAppointment(appointment2, Collections.singletonList(slots.get(1)));
+            }            
+        } catch (Exception e) {
+        	LOG.error("Error booking test appointments", e);
+        }
     }
 
     private SlotDetail createSlot(Long typeCode, String typeDisplay, long scheduleReference, String freeBusy, Date startDate, Date endDate, Date lastUpdated, 
@@ -79,5 +106,31 @@ public class RefreshData {
         slot.setOrganizationTypes(organizationTypes);
         slot.setOrganizationIds(organizationIds);
         return slot;
+    }
+    
+    private AppointmentDetail createAppointment(SlotDetail slot, Long id, String description) {
+    	AppointmentDetail appointment = new AppointmentDetail();
+    	appointment.setDescription(description);
+    	appointment.setStartDateTime(slot.getStartDateTime());
+    	appointment.setEndDateTime(slot.getEndDateTime());
+    	appointment.setReasonCode("00001");
+    	appointment.setReasonURL("http://snomed.info/sct");
+    	appointment.setReasonDisplay("Default Appointment Type");
+    	appointment.setStatus("booked");
+    	appointment.setTypeText("attender");
+    	appointment.setPriority(0);
+    	appointment.setMinutesDuration(10);
+    	
+    	PatientEntity patient = patientStore.findByNhsNumber(nhsNumber);
+    	appointment.setPatientId(patient.getId());
+    	
+    	ScheduleDetail schedule = scheduleStore.findSchedule(slot.getScheduleReference());
+    	appointment.setPractitionerId(schedule.getPractitionerId());
+    	appointment.setLocationId(schedule.getLocationId());
+    	
+    	appointment.setLastUpdated(new Date());
+    	appointment.setId(id);
+    	
+    	return appointment;
     }
 }

@@ -116,7 +116,6 @@ public final class SystemURL {
     //Appointment Reason URL
     public static final String DEFAULTREASONURL = "DefaultReasonURL";
     
-    //Include Allergies Constant
-    public static final String INCLUDE_ALLERGIES = "includeAllergies";
+    
     
 }

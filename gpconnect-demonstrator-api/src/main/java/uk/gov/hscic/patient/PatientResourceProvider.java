@@ -17,14 +17,9 @@ import javax.annotation.PostConstruct;
 
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
-import org.hl7.fhir.dstu3.model.AllergyIntolerance;
-import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceClinicalStatus;
-import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceVerificationStatus;
 import org.hl7.fhir.dstu3.model.Appointment;
 import org.hl7.fhir.dstu3.model.BooleanType;
 import org.hl7.fhir.dstu3.model.Bundle;
-import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
-import org.hl7.fhir.dstu3.model.Bundle.BundleLinkComponent;
 import org.hl7.fhir.dstu3.model.Bundle.BundleType;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
@@ -40,11 +35,9 @@ import org.hl7.fhir.dstu3.model.HumanName.NameUse;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Identifier.IdentifierUse;
-import org.hl7.fhir.dstu3.model.ListResource;
 import org.hl7.fhir.dstu3.model.MedicationAdministration;
 import org.hl7.fhir.dstu3.model.MedicationDispense;
 import org.hl7.fhir.dstu3.model.MedicationRequest;
-import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Parameters;
@@ -53,7 +46,6 @@ import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Period;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.Type;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +64,6 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateAndListParam;
-import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
@@ -80,6 +71,7 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
+import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.helpers.StaticElementsHelper;
@@ -93,8 +85,6 @@ import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.organization.OrganizationSearch;
 import uk.gov.hscic.patient.details.PatientSearch;
 import uk.gov.hscic.patient.details.PatientStore;
-import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
-import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyRepository;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 import uk.gov.hscic.util.NhsCodeValidator;
 
@@ -121,7 +111,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	@Autowired
 	private AppointmentResourceProvider appointmentResourceProvider;
-	
+
 	@Autowired
 	private OrganizationResourceProvider organizationResourceProvider;
 
@@ -148,7 +138,6 @@ public class PatientResourceProvider implements IResourceProvider {
 	public static Set<String> getCustomReadOperations() {
 		Set<String> customReadOperations = new HashSet<String>();
 		customReadOperations.add(GET_CARE_RECORD_OPERATION_NAME);
-		// customReadOperations.add(GET_STRUCTURED_RECORD_OPERATION_NAME);
 
 		return customReadOperations;
 	}
@@ -283,17 +272,26 @@ public class PatientResourceProvider implements IResourceProvider {
 	public Bundle StructuredRecordOperation(@ResourceParam Parameters params) throws FHIRException {
 		Bundle structuredBundle = new Bundle();
 		Boolean getAllergies = false;
-		Type includeResolved = null;
+		Boolean includeResolved = false;
 
 		for (int i = 0; i < params.getParameter().size(); i++) {
-			if (params.getParameter().get(i).getName().equals(SystemURL.INCLUDE_ALLERGIES)) {
+			validateParametersName(params.getParameter().get(i).getName());
+			if (params.getParameter().get(i).getName().equals(SystemConstants.INCLUDE_ALLERGIES)) {
 				getAllergies = true;
-				includeResolved= params.getParameter().get(i).getPart().get(0).getValue();
-			
+				List<ParametersParameterComponent> part = params.getParameter().get(i).getPart();
+				if (!part.isEmpty()) {
+					if (!part.get(0).getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES)) {
+						throw OperationOutcomeFactory.buildOperationOutcomeException(
+								new UnprocessableEntityException("Incorrect parameter passed : " + part.get(0).getName()),
+								SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+					}
+
+					includeResolved = Boolean.valueOf(part.get(0).getValue().primitiveValue());
+				}
 			}
+
 		}
-		
-		
+
 		String NHS = getNhsNumber(params);
 
 		// Add Patient
@@ -303,8 +301,9 @@ public class PatientResourceProvider implements IResourceProvider {
 
 		// Add Organization
 		Long organizationId = new Long(patient.getManagingOrganization().getReference().replace("Organization/", ""));
-		OrganizationDetails organizationDetails =organizationSearch.findOrganizationDetails(organizationId);
-		Organization organization = organizationResourceProvider.convertOrganizaitonDetailsToOrganization(organizationDetails);
+		OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId);
+		Organization organization = organizationResourceProvider
+				.convertOrganizaitonDetailsToOrganization(organizationDetails);
 		structuredBundle.addEntry().setResource(organization);
 
 		// Add Practitioner
@@ -315,14 +314,22 @@ public class PatientResourceProvider implements IResourceProvider {
 		structuredBundle.addEntry().setResource(pracResource);
 
 		if (getAllergies == true) {
-			structuredBundle=structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS,structuredBundle,includeResolved);
+			structuredBundle = structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS,
+					structuredBundle, includeResolved);
 		}
 		structuredBundle.setType(BundleType.COLLECTION);
 		structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
-		
-	
-		
+
 		return structuredBundle;
+	}
+
+	private void validateParametersName(String name) {
+		if (!name.equals("patientNHSNumber") && !name.equals("includeAllergies") && !name.equals("includeMedication")) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new InvalidRequestException("Incorrect Paramater Names"), SystemCode.INVALID_PARAMETER,
+					IssueType.INVALID);
+		}
+
 	}
 
 	@Operation(name = REGISTER_PATIENT_OPERATION_NAME)

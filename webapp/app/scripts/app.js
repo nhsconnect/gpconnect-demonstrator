@@ -25,7 +25,7 @@ angular.module('gpConnect', [
     $urlRouterProvider.otherwise('/');
 
     $stateProvider.state('patients-list', {
-        url: '/patients?ageRange&department&order&reverse',
+        url: 'patients?ageRange&department&order&reverse',
         views: {
             main: {
                 templateUrl: 'views/patients/patients-list.html',
@@ -38,7 +38,7 @@ angular.module('gpConnect', [
             displayEmptyTable: false
         }
     }).state('main-search', {
-        url: '/search',
+        url: 'search',
         views: {
             main: {
                 templateUrl: 'views/search/main-search.html',
@@ -46,21 +46,21 @@ angular.module('gpConnect', [
             }
         }
     }).state('patients-summary', {
-        url: '/patients/{patientId:int}/patients-summary',
+        url: 'patients/{patientId:int}/patients-summary',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/patients/patients-summary.html', controller: 'PatientsSummaryCtrl'}
         }
     }).state('problem-list', {
-        url: '/patients/{patientId:int}/problem',
+        url: 'patients/{patientId:int}/problem',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/problem/problem-list.html', controller: 'ProblemListCtrl'}
         }
     }).state('problem-detail', {
-        url: '/patients/{patientId:int}/problem/{problemIndex}?filter&source',
+        url: 'patients/{patientId:int}/problem/{problemIndex}?filter&source',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
@@ -68,14 +68,14 @@ angular.module('gpConnect', [
             detail: {templateUrl: 'views/problem/problem-detail.html', controller: 'ProblemDetailCtrl'}
         }
     }).state('allergies', {
-        url: '/patients/{patientId:int}/allergies',
+        url: 'patients/{patientId:int}/allergies',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/allergies/allergies-list.html', controller: 'AllergiesListCtrl'}
         }
     }).state('allergies-detail', {
-        url: '/patients/{patientId:int}/allergies/{allergyIndex}?filter&source',
+        url: 'patients/{patientId:int}/allergies/{allergyIndex}?filter&source',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
@@ -83,14 +83,14 @@ angular.module('gpConnect', [
             detail: {templateUrl: 'views/allergies/allergies-detail.html', controller: 'AllergiesDetailCtrl'}
         }
     }).state('medications', {
-        url: '/patients/{patientId:int}/medications',
+        url: 'patients/{patientId:int}/medications',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/medications/medications-list.html', controller: 'MedicationsListCtrl'}
         }
     }).state('medications-detail', {
-        url: '/patients/{patientId:int}/medications/{medicationIndex}?filter&source',
+        url: 'patients/{patientId:int}/medications/{medicationIndex}?filter&source',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
@@ -98,14 +98,14 @@ angular.module('gpConnect', [
             detail: {templateUrl: 'views/medications/medications-detail.html', controller: 'MedicationsDetailCtrl'}
         }
     }).state('referrals', {
-        url: '/patients/{patientId:int}/referrals',
+        url: 'patients/{patientId:int}/referrals',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/referrals/referrals-list.html', controller: 'ReferralsListCtrl'}
         }
     }).state('referrals-detail', {
-        url: '/patients/{patientId:int}/referrals/{referralId}?filter&source',
+        url: 'patients/{patientId:int}/referrals/{referralId}?filter&source',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
@@ -113,14 +113,14 @@ angular.module('gpConnect', [
             detail: {templateUrl: 'views/referrals/referrals-detail.html', controller: 'ReferralsDetailCtrl'}
         }
     }).state('observations', {
-        url: '/patients/{patientId:int}/observations',
+        url: 'patients/{patientId:int}/observations',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/observations/observations-list.html', controller: 'ObservationsListCtrl'}
         }
     }).state('results-detail', {
-        url: '/patients/{patientId:int}/results/{resultIndex}?filter&source',
+        url: 'patients/{patientId:int}/results/{resultIndex}?filter&source',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
@@ -128,14 +128,14 @@ angular.module('gpConnect', [
             detail: {templateUrl: 'views/results/observations-detail.html', controller: 'ResultsDetailCtrl'}
         }
     }).state('encounters', {
-        url: '/patients/{patientId:int}/encounters',
+        url: 'patients/{patientId:int}/encounters',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/encounters/encounters-list.html', controller: 'EncountersListCtrl'}
         }
     }).state('encounters-detail', {
-        url: '/patients/{patientId:int}/encounters/{encounterIndex}?filter&source',
+        url: 'patients/{patientId:int}/encounters/{encounterIndex}?filter&source',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
@@ -143,14 +143,14 @@ angular.module('gpConnect', [
             detail: {templateUrl: 'views/encounters/encounters-detail.html', controller: 'EncountersDetailCtrl'}
         }
     }).state('immunisations', {
-        url: '/patients/{patientId:int}/immunisations',
+        url: 'patients/{patientId:int}/immunisations',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/immunisations/immunisations-list.html', controller: 'ImmunisationsListCtrl'}
         }
     }).state('immunisations-detail', {
-        url: '/patients/{patientId:int}/immunisations/{immunisationIndex}?filter&source',
+        url: 'patients/{patientId:int}/immunisations/{immunisationIndex}?filter&source',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
@@ -158,14 +158,14 @@ angular.module('gpConnect', [
             detail: {templateUrl: 'views/immunisations/immunisations-detail.html', controller: 'ImmunisationsDetailCtrl'}
         }
     }).state('adminitems', {
-        url: '/patients/{patientId:int}/adminitems',
+        url: 'patients/{patientId:int}/adminitems',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/adminitems/adminitems-list.html', controller: 'AdminItemsListCtrl'}
         }
     }).state('adminitems-detail', {
-        url: '/patients/{patientId:int}/adminitems/{adminItemIndex}?filter&source',
+        url: 'patients/{patientId:int}/adminitems/{adminItemIndex}?filter&source',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
@@ -173,14 +173,14 @@ angular.module('gpConnect', [
             detail: {templateUrl: 'views/adminitems/adminitems-detail.html', controller: 'AdminItemsDetailCtrl'}
         }
     }).state('clinicalitems', {
-        url: '/patients/{patientId:int}/clinicalitems',
+        url: 'patients/{patientId:int}/clinicalitems',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/clinicalitems/clinicalitems-list.html', controller: 'ClinicalItemsListCtrl'}
         }
     }).state('clinicalitems-detail', {
-        url: '/patients/{patientId:int}/clinicalitems/{clinicalItemIndex}?filter&source',
+        url: 'patients/{patientId:int}/clinicalitems/{clinicalItemIndex}?filter&source',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
@@ -188,14 +188,14 @@ angular.module('gpConnect', [
             detail: {templateUrl: 'views/clinicalitems/clinicalitems-detail.html', controller: 'ClinicalItemsDetailCtrl'}
         }
     }).state('investigations', {
-        url: '/patients/{patientId:int}/investigations',
+        url: 'patients/{patientId:int}/investigations',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/investigations/investigations-list.html', controller: 'InvestigationsListCtrl'}
         }
     }).state('investigations-detail', {
-        url: '/patients/{patientId:int}/investigations/{investigationIndex}?filter&source',
+        url: 'patients/{patientId:int}/investigations/{investigationIndex}?filter&source',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
@@ -203,7 +203,7 @@ angular.module('gpConnect', [
             detail: {templateUrl: 'views/investigations/investigations-detail.html', controller: 'InvestigationsDetailCtrl'}
         }
     }).state('appointments', {
-        url: '/patients/{patientId:int}/appointments',
+        url: 'patients/{patientId:int}/appointments',
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
@@ -346,7 +346,7 @@ angular.module('gpConnect', [
 
     this.$get = function() {
         var q = jQuery.ajax({
-            type: 'GET', url: '/providerRouting.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
+            type: 'GET', url: 'providerRouting.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
         });
 
         if (q.status === 200) {

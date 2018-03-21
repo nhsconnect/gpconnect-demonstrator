@@ -81,10 +81,10 @@ public class RefreshData {
         try {
             List<SlotDetail> slots = slotStore.findAllSlots();
             if (slots.size() > 2) {
-            	AppointmentDetail appointment = createAppointment(slots.get(0), new Long(1), "A appointment to discuss test data");
+            	AppointmentDetail appointment = createAppointment(slots.get(0), "A appointment to discuss test data");
             	appointmentStore.saveAppointment(appointment, Collections.singletonList(slots.get(0)));
 
-            	AppointmentDetail appointment2 = createAppointment(slots.get(1), new Long(2), "A follow-up appointment for tests.");
+            	AppointmentDetail appointment2 = createAppointment(slots.get(1), "A follow-up appointment for tests.");
             	appointmentStore.saveAppointment(appointment2, Collections.singletonList(slots.get(1)));
             }            
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class RefreshData {
         return slot;
     }
     
-    private AppointmentDetail createAppointment(SlotDetail slot, Long id, String description) {
+    private AppointmentDetail createAppointment(SlotDetail slot, String description) {
     	AppointmentDetail appointment = new AppointmentDetail();
     	appointment.setDescription(description);
     	appointment.setStartDateTime(slot.getStartDateTime());
@@ -129,7 +129,6 @@ public class RefreshData {
     	appointment.setLocationId(schedule.getLocationId());
     	
     	appointment.setLastUpdated(new Date());
-    	appointment.setId(id);
     	
     	return appointment;
     }

@@ -7,8 +7,8 @@
             "odsCode": "GPC001",
             "name": "GP Connect Demonstrator",
             "interactionIds": ["*"],
-            "endpointURL": "/fhir",
-            "apiEndpointURL": "/api",
+            "endpointURL": "fhir",
+            "apiEndpointURL": "api",
             "ASID": "200000000359",
 			"orgType": "GP Practice"
         },

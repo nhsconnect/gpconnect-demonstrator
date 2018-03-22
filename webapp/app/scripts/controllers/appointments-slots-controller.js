@@ -117,7 +117,28 @@ angular.module('gpConnect')
                             };
                         }
                         if (value.resource.resourceType == "Location") {
-                        	responseLocations[value.fullUrl] = {"name": value.resource.name, "id": value.resource.id};
+                        	var addressStr = value.resource.name;
+                        	if (value.resource.address != undefined) {
+	                        	if (value.resource.address.line != undefined) {
+	                                addressStr += ", " + value.resource.address.line;
+	                            }
+	                            if (value.resource.address.city != undefined) {
+	                                addressStr += ", " + value.resource.address.city;
+	                            }
+	                            if (value.resource.address.district != undefined) {
+	                                addressStr += ", " + value.resource.address.district;
+	                            }
+	                            if (value.resource.address.state != undefined) {
+	                                addressStr += ", " + value.resource.address.state;
+	                            }
+	                            if (value.resource.address.postalCode != undefined) {
+	                                addressStr += ", " + value.resource.address.postalCode;
+	                            }
+	                            if (value.resource.address.country != undefined) {
+	                                addressStr += ", " + value.resource.address.country;
+	                            }
+                            }
+                        	responseLocations[value.fullUrl] = {"id": value.resource.id, "address": addressStr};
                         }
                     });
 
@@ -132,8 +153,8 @@ angular.module('gpConnect')
                             var practitionerName = responsePractitioners[schedule.practitionerRef] ? responsePractitioners[schedule.practitionerRef].fullName : null;
                             var practitionerId = responsePractitioners[schedule.practitionerRef] ? responsePractitioners[schedule.practitionerRef].id : null;
                             var scheduleType = schedule.serviceTypeCoding[0].display;
-                        	var locationName = responseLocations[schedule.locationRef].name;
                             var locationId = responseLocations[schedule.locationRef].id;
+                            var locationAddress = responseLocations[schedule.locationRef].address;
                             var practitionerRole = schedule.practitionerRoleCoding[0].display;
                             var deliveryChannel;
                             if(schedule.deliveryChannelCoding) deliveryChannel = schedule.deliveryChannelCoding[0].display;
@@ -150,7 +171,7 @@ angular.module('gpConnect')
                                 var dayBlockOfSlotsModel = {"dayOfWeek": getDayFromDate(slot.startDateTime), "date": startDateTime.setHours(0, 0, 0, 0), "freeSlots": 1, "practitioners": practitioners};
                                 dayBlockOfSlots.push(dayBlockOfSlotsModel);
                                 var locations = [];
-                                var locationModel = {"name": locationName, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practiceOdsCode, "practiceName": practiceName, "primary": primary};
+                                var locationModel = {"address": locationAddress, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practiceOdsCode, "practiceName": practiceName, "primary": primary};
                                 locations.push(locationModel);
                                 internalGetScheduleModel.locations = locations;
                             } else {
@@ -173,7 +194,7 @@ angular.module('gpConnect')
                                     var dayBlockOfSlots = [];
                                     var startDateTime = new Date(slot.startDateTime);
                                     var dayBlockOfSlotsModel = {"dayOfWeek": getDayFromDate(slot.startDateTime), "date": startDateTime.setHours(0, 0, 0, 0), "freeSlots": 1, "practitioners": practitioners};
-                                    var locationModel = {"name": locationName, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practiceOdsCode, "practiceName": practiceName, "primary": primary};
+                                    var locationModel = {"address": locationAddress, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practiceOdsCode, "practiceName": practiceName, "primary": primary};
                                     internalGetScheduleModel.locations.push(locationModel);
                                 } else {
                                     // else get the existing model and add the new slot to it.

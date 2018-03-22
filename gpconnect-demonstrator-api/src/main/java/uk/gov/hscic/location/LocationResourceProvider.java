@@ -139,10 +139,10 @@ public class LocationResourceProvider implements IResourceProvider {
 		Address address = new Address();
         List<StringType> list = new LinkedList<>();
         list.add(new StringType(locationDetails.getAddressLine()));
+        list.add(new StringType(locationDetails.getAddressCity()));
         address.setLine(list);
-        address.setCity(locationDetails.getAddressCity());
-        address.setDistrict(locationDetails.getAddressDistrict());
-        address.setState(locationDetails.getAddressState());
+        address.setCity(locationDetails.getAddressDistrict());
+        address.setDistrict(locationDetails.getAddressState());
         address.setPostalCode(locationDetails.getAddressPostalCode());
         address.setCountry(locationDetails.getAddressCountry());
 		return address;

@@ -11,7 +11,7 @@ public final class SystemURL {
     // HL7 Constants
     public static final String HL7_BASIC_RESOURCE_TYPE = "http://hl7.org/fhir/basic-resource-type";
     public static final String HL7_VS_C80_PRACTICE_CODES = "http://hl7.org/fhir/ValueSet/c80-practice-codes";
-
+    
     // FHIR ID Constants
     public static final String ID_GPC_APPOINTMENT_IDENTIFIER = "https://fhir.nhs.uk/Id/gpconnect-appointment-identifier";
     public static final String ID_GPC_SCHEDULE_IDENTIFIER = "https://fhir.nhs.uk/Id/gpconnect-schedule-identifier";
@@ -41,7 +41,12 @@ public final class SystemURL {
     public static final String SD_GPC_SRCHSET_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Searchset-Bundle-1";
     public static final String SD_GPC_STRUCTURED_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-GetStructuredRecord-Bundle-1";
     public static final String SD_CC_ALLERGY_INTOLERANCE  = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-AllergyIntolerance-1";
-    
+    public static final String SD_GPC_OBSERVATION = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1";
+    public static final String SD_GPC_CONDITION = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Condition-1";
+    public static final String SD_GPC_MEDICATION_STATEMENT = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationStatement-1";
+    public static final String SD_GPC_MEDICATION_REQUEST = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1";
+    public static final String SD_GPC_MEDICATION = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Medication-1";
+    public static final String SD_GPC_MEDICATION_LIST = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Medication-List-1";
     // FHIR StructureDefinition Extension
     public static final String SD_CC_EXT_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1";
     public static final String SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-AppointmentCancellationReason-1";
@@ -72,9 +77,12 @@ public final class SystemURL {
     public static final String SD_CC_INTERPRETER_REQUIRED = "interpreterRequired";   
     public static final String SD_CC_APPOINTMENT_BOOKINGORG = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-BookingOrganisation-1";   
     public static final String SD_CC_APPOINTMENT_CREATED = "https://fhir.nhs.uk/StructureDefinition/extension-gpconnect-appointment-created-1";   
-   
+    public static final String SD_CC_EXT_MEDICATION_STATEMENT_LAST_ISSUE = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationStatementLastIssueDate-1";
+    public static final String SD_CC_EXT_MEDICATION_QUANTITY_TEXT = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1";
+    public static final String SD_CC_EXT_MEDICATION_REPEAT_INFORMATION = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationRepeatInformation-1";
+    public static final String SD_CC_EXT_MEDICATION_PRESCRIPTION_TYPE = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1";
+    public static final String SD_CC_EXT_MEDICATION_STATUS_REASON = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationStatusReason-1";
     
-
     // FHIR ValueSet Constants
     public static final String VS_GPC_ERROR_WARNING_CODE = "https://fhir.nhs.uk/STU3/ValueSet/Spine-ErrorOrWarningCode-1";
     public static final String VS_GPC_REASON_TYPE = "http://fhir.nhs.net/ValueSet/gpconnect-reason-type-1-0";
@@ -100,6 +108,8 @@ public final class SystemURL {
     public static final String VS_PATIENT_CONTACT_REL = "http://hl7.org/fhir/ValueSet/patient-contact-relationship";
     public static final String VS_SLOT_IDENTIFIER = "http://fhir.nhs.net/Id/gpconnect-slot-identifier";
     public static final String VS_GPC_ORG_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/GPConnect-OrganisationType-1";
+    public static final String VS_CONDITION_CODE = "http://hl7.org/fhir/stu3/valueset-condition-code.html";
+    public static final String VS_CC_PRESCRIPTION_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-PrescriptionType-1";
     
     // FHIR CodeSystem Constants
     public static final String CS_REGISTRATION_STATUS = "https://fhir.nhs.uk/CareConnect-RegistrationStatus-1";
@@ -112,9 +122,14 @@ public final class SystemURL {
     public static final String CS_CC_LANG_ABILITY_MODE = "https://fhir.nhs.uk/CareConnect-LanguageAbilityMode-1";
     public static final String CS_CC_LANG_ABILITY_PROFI = "https://fhir.nhs.uk/CareConnect-LanguageAbilityProficiency-1";
     public static final String CS_CC_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/CareConnect-NHSNumberVerificationStatus-1";
+    public static final String CS_LIST_ORDER = "http://hl7.org/fhir/codesystem-list-order.html";
     
     //Appointment Reason URL
     public static final String DEFAULTREASONURL = "DefaultReasonURL";
+    
+    //CodeSystem URLs
+    public static final String VS_SNOWMED = "http://snomed.info/sct";
+    public static final String CS_UNITS_OF_MEASURE = "http://unitsofmeasure.org";
     
     //Include Allergies Constant
     public static final String INCLUDE_ALLERGIES = "includeAllergies";

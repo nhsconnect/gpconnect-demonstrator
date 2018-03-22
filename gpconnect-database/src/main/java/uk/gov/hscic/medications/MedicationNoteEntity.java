@@ -1,5 +1,7 @@
 package uk.gov.hscic.medications;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,8 +17,18 @@ public class MedicationNoteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
 	
-	@Column(name = "note")
-	private String note;
+	@Column(name = "dateWritten")
+	private Date dateWritten;
+	
+	@Column(name = "authorReferenceUrl")
+	private String authorReferenceUrl;
+	
+	@Column(name = "authorId")
+	private Long authorId;
+
+	@Column(name = "noteText")
+	private String noteText;
+	
 
 	public Long getId() {
 		return Id;
@@ -26,11 +38,35 @@ public class MedicationNoteEntity {
 		Id = id;
 	}
 
-	public String getNote() {
-		return note;
+	public Date getDateWritten() {
+		return dateWritten;
 	}
 
-	public void setNote(String note) {
-		this.note = note;
+	public void setDateWritten(Date dateWritten) {
+		this.dateWritten = dateWritten;
+	}
+
+	public String getAuthorReferenceUrl() {
+		return authorReferenceUrl;
+	}
+
+	public void setAuthorReferenceUrl(String authorReferenceUrl) {
+		this.authorReferenceUrl = authorReferenceUrl;
+	}
+
+	public Long getAuthorId() {
+		return authorId;
+	}
+
+	public void setAuthorId(Long authorId) {
+		this.authorId = authorId;
+	}
+
+	public String getNoteText() {
+		return noteText;
+	}
+
+	public void setNoteText(String noteText) {
+		this.noteText = noteText;
 	}
 }

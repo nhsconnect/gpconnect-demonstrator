@@ -17,9 +17,14 @@ import javax.annotation.PostConstruct;
 
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
+import org.hl7.fhir.dstu3.model.AllergyIntolerance;
+import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceClinicalStatus;
+import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceVerificationStatus;
 import org.hl7.fhir.dstu3.model.Appointment;
 import org.hl7.fhir.dstu3.model.BooleanType;
 import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.dstu3.model.Bundle.BundleLinkComponent;
 import org.hl7.fhir.dstu3.model.Bundle.BundleType;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
@@ -35,6 +40,8 @@ import org.hl7.fhir.dstu3.model.HumanName.NameUse;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Identifier.IdentifierUse;
+import org.hl7.fhir.dstu3.model.ListResource;
+import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Parameters;
@@ -43,15 +50,14 @@ import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Period;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.Reference;
+import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.Type;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
-import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
@@ -74,13 +80,13 @@ import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.helpers.StaticElementsHelper;
 import uk.gov.hscic.common.validators.IdentifierValidator;
-import uk.gov.hscic.medications.PopulateMedicationBundle;
 import uk.gov.hscic.model.organization.OrganizationDetails;
 import uk.gov.hscic.model.patient.PatientDetails;
-import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.organization.OrganizationSearch;
 import uk.gov.hscic.patient.details.PatientSearch;
 import uk.gov.hscic.patient.details.PatientStore;
+import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
+import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyRepository;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 import uk.gov.hscic.util.NhsCodeValidator;
 
@@ -96,6 +102,12 @@ public class PatientResourceProvider implements IResourceProvider {
 	@Autowired
 	private PractitionerResourceProvider practitionerResourceProvider;
 
+	@Autowired
+	private MedicationOrderResourceProvider medicationOrderResourceProvider;
+	@Autowired
+	private MedicationDispenseResourceProvider medicationDispenseResourceProvider;
+	@Autowired
+	private MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
 	@Autowired
 	private AppointmentResourceProvider appointmentResourceProvider;
 	
@@ -116,9 +128,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	@Autowired
 	private StructuredAllergyIntoleranceBuilder structuredAllergyIntoleranceBuilder;
-	
-	@Autowired
-	private PopulateMedicationBundle populateMedicationBundle;
 
 	private NhsNumber nhsNumber;
 
@@ -245,10 +254,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	@Operation(name = GET_STRUCTURED_RECORD_OPERATION_NAME)
 	public Bundle StructuredRecordOperation(@ResourceParam Parameters params) throws FHIRException {
-		System.out.println("REACHED HERE????"); 
 		Bundle structuredBundle = new Bundle();
 		Boolean getAllergies = false;
-		boolean getMedications = true;
 		Type includeResolved = null;
 
 		for (int i = 0; i < params.getParameter().size(); i++) {
@@ -283,15 +290,10 @@ public class PatientResourceProvider implements IResourceProvider {
 		if (getAllergies == true) {
 			structuredBundle=structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS,structuredBundle,includeResolved);
 		}
-		if (getMedications) {
-			structuredBundle = populateMedicationBundle.addMedicationBundleEntries(structuredBundle, patientDetails);
-		}
 		structuredBundle.setType(BundleType.COLLECTION);
 		structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
 		
-		IParser p = FhirContext.forDstu3().newJsonParser().setPrettyPrint(true);
-		String messageString = p.encodeResourceToString(structuredBundle);
-		System.out.println(messageString); 
+	
 		
 		return structuredBundle;
 	}

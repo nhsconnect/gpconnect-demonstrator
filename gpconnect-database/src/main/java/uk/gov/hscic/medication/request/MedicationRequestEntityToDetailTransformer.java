@@ -1,8 +1,7 @@
 package uk.gov.hscic.medication.request;
 
 import org.apache.commons.collections4.Transformer;
-import org.hl7.fhir.exceptions.UcumException;
-import org.hl7.fhir.utilities.ucum.Decimal;
+import org.springframework.stereotype.Component;
 
 import uk.gov.hscic.model.medication.MedicationBasedOnReference;
 import uk.gov.hscic.model.medication.MedicationNote;
@@ -10,6 +9,7 @@ import uk.gov.hscic.model.medication.MedicationReasonCode;
 import uk.gov.hscic.model.medication.MedicationReasonReference;
 import uk.gov.hscic.model.medication.MedicationRequestDetail;
 
+@Component
 public class MedicationRequestEntityToDetailTransformer implements Transformer<MedicationRequestEntity, MedicationRequestDetail>{
 
 	@Override
@@ -59,7 +59,10 @@ public class MedicationRequestEntityToDetailTransformer implements Transformer<M
 		requestEntity.getNotes().forEach(n -> {
 			MedicationNote note = new MedicationNote();
 			note.setId(n.getId());
-			note.setNote(n.getNote());
+			note.setDateWritten(n.getDateWritten());
+			note.setAuthorReferenceUrl(n.getAuthorReferenceUrl());
+			note.setAuthorId(n.getAuthorId());
+			note.setNote(n.getNoteText());
 			requestDetail.addNote(note);
 		});
 		
@@ -67,19 +70,13 @@ public class MedicationRequestEntityToDetailTransformer implements Transformer<M
 		requestDetail.setDosageInstructions(requestEntity.getDosageInstruction());
 		requestDetail.setDispenseRequestStartDate(requestEntity.getDispenseRequestStartDate());
 		requestDetail.setDispenseRequestEndDate(requestEntity.getDispenseRequestEndDate());
-		try {
-			requestDetail.setDispenseQuantityValue(new Decimal(requestEntity.getDispenseQuantityValue()));
-		} catch (UcumException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(requestEntity.getDispenseQuantityValue() != null) {
+			requestDetail.setDispenseQuantityValue(Double.valueOf(requestEntity.getDispenseQuantityValue()));
 		}
 		requestDetail.setDispenseQuantityUnit(requestEntity.getDispenseQuantityUnit());
 		requestDetail.setDispenseQuantityText(requestEntity.getDispenseQuantityText());
-		try {
-			requestDetail.setExpectedSupplyDuration(new Decimal(requestEntity.getExpectedSupplyDurationValue()));
-		} catch (UcumException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(requestEntity.getExpectedSupplyDurationValue() != null) {
+			requestDetail.setExpectedSupplyDuration(Integer.valueOf(requestEntity.getExpectedSupplyDurationValue()));
 		}
 		requestDetail.setDispenseRequestOrganizationId(requestEntity.getDispenseRequestOrganizationId());
 		requestDetail.setPriorMedicationRequestId(requestEntity.getPriorMedicationRequestId());
@@ -88,8 +85,7 @@ public class MedicationRequestEntityToDetailTransformer implements Transformer<M
 		requestDetail.setAuthorisationExpiryDate(requestEntity.getAuthorisationExpiryDate());
 		requestDetail.setPrescriptionTypeCode(requestEntity.getPrescriptionTypeCode());
 		requestDetail.setPrescriptionTypeDisplay(requestEntity.getPrescriptionTypeDisplay());
-		requestDetail.setStatusReasonCode(requestEntity.getStatusReasonCode());
-		requestDetail.setStatusReasonValue(requestEntity.getStatusReasonValue());
+		requestDetail.setStatusReason(requestEntity.getStatusReason());
 		requestDetail.setStatusReasonDate(requestEntity.getStatusReasonDate());
 		
 		return requestDetail;

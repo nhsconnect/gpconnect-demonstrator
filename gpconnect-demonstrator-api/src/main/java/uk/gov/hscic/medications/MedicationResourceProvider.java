@@ -2,8 +2,13 @@ package uk.gov.hscic.medications;
 
 import java.util.Date;
 
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Medication;
+import org.hl7.fhir.dstu3.model.Medication.MedicationPackageBatchComponent;
+import org.hl7.fhir.dstu3.model.Medication.MedicationPackageComponent;
+import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +18,17 @@ import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.model.medication.MedicationDetail;
 
 @Component
 public class MedicationResourceProvider implements IResourceProvider {
 
     @Autowired
     private MedicationRepository medicationRepository;
+    
+    @Autowired
+    private MedicationEntityToDetailTransformer medicationEntityToDetailTransformer;
 
     @Override
     public Class<Medication> getResourceType() {
@@ -48,4 +58,30 @@ public class MedicationResourceProvider implements IResourceProvider {
                 
         return medication;
     }
+    
+    public Medication getMedicationResourceForBundle(Long medicationId) {
+		MedicationDetail medicationDetail = medicationEntityToDetailTransformer
+				.transform(medicationRepository.findOne(medicationId));
+		
+		Medication medication = new Medication();
+		
+		medication.setId(new IdType(medicationDetail.getId()));
+		
+		medication.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION));
+		
+		Coding coding = new Coding(SystemURL.VS_SNOWMED, 
+				medicationDetail.getCode(), medicationDetail.getDisplay());
+		
+		medication.setCode(new CodeableConcept().addCoding(coding).setText(medicationDetail.getText()));
+		
+		MedicationPackageComponent packageComponent = new MedicationPackageComponent();
+		MedicationPackageBatchComponent batchComponent = new MedicationPackageBatchComponent();
+		batchComponent.setLotNumber(medicationDetail.getBatchNumber());
+		batchComponent.setExpirationDate(medicationDetail.getExpiryDate());
+		packageComponent.addBatch(batchComponent);
+		
+		medication.setPackage(packageComponent);
+		
+		return medication;
+	}
 }

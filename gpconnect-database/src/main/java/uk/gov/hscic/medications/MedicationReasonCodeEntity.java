@@ -15,10 +15,10 @@ public class MedicationReasonCodeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
 	
-	@Column(name = "code")
+	@Column(name = "reasonCode")
 	private String code;
 	
-	@Column(name = "display")
+	@Column(name = "reasonDisplay")
 	private String display;
 
 	public Long getId() {

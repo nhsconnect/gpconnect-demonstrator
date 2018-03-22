@@ -130,6 +130,7 @@ public class MedicationStatementDetail {
 	}
 	
 	public List<MedicationReasonCode> getReasonCodes() {
+		if(reasonCodes == null)	return new ArrayList<>();
 		return reasonCodes;
 	}
 	
@@ -145,6 +146,7 @@ public class MedicationStatementDetail {
 	}
 	
 	public List<MedicationReasonReference> getReasonReferences() {
+		if(reasonReferences == null) return new ArrayList<>();
 		return reasonReferences;
 	}
 	
@@ -160,6 +162,7 @@ public class MedicationStatementDetail {
 	}
 	
 	public List<MedicationNote> getNotes() {
+		if(notes == null) return new ArrayList<>();
 		return notes;
 	}
 	

@@ -10,6 +10,11 @@ public class StructuredAllergyIntolerance {
 	private String note;
 	private String reactionDescription;
 	private String clinicalStatus;
+	private String verificationStatus;
+	private String category;
+	private String patientRef;
+	private Date onSetDateTime;
+	private Date assertedDate;
 
 	public void setId(Long id) {
 		Id = id;
@@ -58,5 +63,47 @@ public class StructuredAllergyIntolerance {
 	public void setClinicalStatus(String clinicalStatus) {
 		this.clinicalStatus = clinicalStatus;
 	}
+
+	public String getVerificationStatus() {
+		return verificationStatus;
+	}
+
+	public void setVerificationStatus(String verificationStatus) {
+		this.verificationStatus = verificationStatus;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getPatientRef() {
+		return patientRef;
+	}
+
+	public void setPatientRef(String patientRef) {
+		this.patientRef = patientRef;
+	}
+
+	public Date getOnSetDateTime() {
+		return onSetDateTime;
+	}
+
+	public void setOnSetDateTime(Date onSetDateTime) {
+		this.onSetDateTime = onSetDateTime;
+	}
+
+	public Date getAssertedDate() {
+		return assertedDate;
+	}
+
+	public void setAssertedDate(Date assertedDate) {
+		this.assertedDate = assertedDate;
+	}
+	
+	
 
 }

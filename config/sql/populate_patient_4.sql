@@ -14,8 +14,8 @@ VALUES
   (9476719958,"Inactive",'2016-07-01 12:00:00','2016-07-01 12:00:00',"Asthma","Major","Treated daily");
   
   
-  INSERT INTO gpconnect.allinto
-  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus)
+  INSERT INTO gpconnect.allergyintolerance
+  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate)
 VALUES
-  (9476719958,'2016-07-01 12:00:00',"Cured","Asthma got better","Major", "resolved"),
-  (9476719958,'2016-07-01 12:00:00',"Ongoing","Cancer","Major", "active");
+  (9476719958,'2016-07-01 12:00:00',"Cured","Asthma got better","Major", "resolved","unconfirmed","medication","2",'2016-05-01 12:00:00','2016-06-01 12:00:00'),
+  (9476719958,'2016-07-01 12:00:00',"Ongoing","Cancer","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00');

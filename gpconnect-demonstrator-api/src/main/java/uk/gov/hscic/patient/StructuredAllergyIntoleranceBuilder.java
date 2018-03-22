@@ -1,7 +1,6 @@
 package uk.gov.hscic.patient;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.dstu3.model.AllergyIntolerance;
@@ -18,10 +17,10 @@ import org.hl7.fhir.dstu3.model.ListResource.ListMode;
 import org.hl7.fhir.dstu3.model.ListResource.ListStatus;
 import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.dstu3.model.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch;
@@ -32,15 +31,14 @@ public class StructuredAllergyIntoleranceBuilder {
 	@Autowired
 	private StructuredAllergySearch structuredAllergySearch;
 
-	public Bundle buildStructuredAllergyIntolerence(String NHS, Bundle bundle, Type includeResolved) {
+	public Bundle buildStructuredAllergyIntolerence(String NHS, Bundle bundle, Boolean includedResolved) {
 
 		List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntollerence(NHS);
-		System.out.println(allergyData.size());
 
 		ListResource activeAllergies = new ListResource();
-		activeAllergies.setTitle("Active Allergies");
+		activeAllergies.setTitle(SystemConstants.ACTIVE_ALLERGIES);
 		ListResource resolvedAllergies = new ListResource();
-		resolvedAllergies.setTitle("Resolved Allergies");
+		resolvedAllergies.setTitle(SystemConstants.RESOLVED_ALLERGIES);
 		AllergyIntolerance allergyIntolerance = new AllergyIntolerance();
 
 		for (int i = 0; i < allergyData.size(); i++) {
@@ -51,36 +49,39 @@ public class StructuredAllergyIntoleranceBuilder {
 
 			allergyIntolerance.setMeta(met);
 
-			allergyIntolerance.setId("1");
+			allergyIntolerance.setId(allergyData.get(i).getId().toString());
 
-			allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.ACTIVE);
-
-			allergyIntolerance.addCategory(AllergyIntoleranceCategory.MEDICATION);
+			if (allergyData.get(i).getClinicalStatus().equals(SystemConstants.ACTIVE)) {
+				allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.ACTIVE);
+			} else {
+				allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.RESOLVED);
+			}
+			if (allergyData.get(i).getClinicalStatus().equals(SystemConstants.MEDICATION)) {
+				allergyIntolerance.addCategory(AllergyIntoleranceCategory.MEDICATION);
+			} else {
+				allergyIntolerance.addCategory(AllergyIntoleranceCategory.ENVIRONMENT);
+			}
 
 			allergyIntolerance.setVerificationStatus(AllergyIntoleranceVerificationStatus.UNCONFIRMED);
 
 			CodeableConcept value = new CodeableConcept();
 			Coding coding = new Coding();
-			coding.setCode("CODE");
-			coding.setDisplay("DISPLAY");
-			coding.setSystem("SYSTEM");
+			coding.setCode("241933001");
+			coding.setDisplay("Peanut-induced anaphylaxis (disorder)");
+			coding.setSystem(SystemConstants.SNOMED_URL);
 			value.addCoding(coding);
 
 			allergyIntolerance.setCode(value);
 
-			// Date date = new Date(System.currentTimeMillis());
+			allergyIntolerance.getMeta().addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE);
 
-			// all.setAssertedDate(date);
-			// structuredBundle.addEntry().setResource(allergyIntolerance);
+			allergyIntolerance.setAssertedDate(allergyData.get(i).getAssertedDate());
 
-			// allergyIntolerance.setClinicalStatus(value );
+			Reference patient = new Reference(
+					SystemConstants.PATIENT_REFERENCE_URL + allergyData.get(i).getPatientRef());
+			allergyIntolerance.setPatient(patient);
 
-			// here
-			// =allergyIntolerance.Meta().addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
-
-			Date dateData = allergyData.get(0).getEndDate();
-
-			allergyIntolerance.setAssertedDate(dateData);
+			// ADD END DATE AND REASON
 
 			AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
 
@@ -90,12 +91,12 @@ public class StructuredAllergyIntoleranceBuilder {
 			Coding manifestationCoding = new Coding();
 			manifestationCoding.setDisplay("Peanut-induced anaphylaxis (disorder)");
 			manifestationCoding.setCode("241933001");
-			manifestationCoding.setSystem("http://snomed.info/sct");
+			manifestationCoding.setSystem(SystemConstants.SNOMED_URL);
 			manifestation.addCoding(manifestationCoding);
 			theManifestation.add(manifestation);
 			reaction.setManifestation(theManifestation);
 
-			reaction.setDescription("MANIFESTATION DESCRIPTION");
+			reaction.setDescription(SystemConstants.MANIFESTATION_DESCRIPTION);
 
 			AllergyIntoleranceSeverity severity = AllergyIntoleranceSeverity.SEVERE;
 			reaction.setSeverity(severity);
@@ -104,11 +105,7 @@ public class StructuredAllergyIntoleranceBuilder {
 			reaction.setExposureRoute(exposureRoute);
 			allergyIntolerance.addReaction(reaction);
 
-			// allergyIntolerenceList.add(all);
-
-			System.out.println(allergyData.get(i).getClinicalStatus());
-
-			if (allergyData.get(i).getClinicalStatus().equals("resolved")) {
+			if (allergyData.get(i).getClinicalStatus().equals(SystemConstants.RESOLVED)) {
 
 				listResourceBuilder(resolvedAllergies, allergyIntolerance);
 
@@ -119,7 +116,7 @@ public class StructuredAllergyIntoleranceBuilder {
 
 		}
 
-		if (resolvedAllergies.hasContained() && includeResolved.primitiveValue().equals("true")) {
+		if (resolvedAllergies.hasContained() && includedResolved.equals(true)) {
 			bundle.addEntry().setResource(resolvedAllergies);
 		}
 		if (activeAllergies.hasContained()) {
@@ -132,10 +129,10 @@ public class StructuredAllergyIntoleranceBuilder {
 	}
 
 	private ListResource listResourceBuilder(ListResource buildingListResource, AllergyIntolerance allergyIntolerance) {
-		buildingListResource.setId("1");
+		buildingListResource.setId(allergyIntolerance.getId());
 
 		CodeableConcept noContent = new CodeableConcept();
-		noContent.setText("noContent");
+		noContent.setText(SystemConstants.NO_CONTENT);
 		buildingListResource.setEmptyReason(noContent);
 
 		buildingListResource.addContained(allergyIntolerance);
@@ -148,18 +145,18 @@ public class StructuredAllergyIntoleranceBuilder {
 
 		CodeableConcept activeAllergiesCode = new CodeableConcept();
 		List<Coding> activeAllergiesCoding = new ArrayList<>();
-		Coding code1 = new Coding();
-		code1.setCode("444");
-		activeAllergiesCoding.add(code1);
+		Coding coding = new Coding();
+		coding.setCode("List of code to be defined");
+		activeAllergiesCoding.add(coding);
 
 		activeAllergiesCode.setCoding(activeAllergiesCoding);
 		buildingListResource.setCode(activeAllergiesCode);
 
 		buildingListResource.setStatus(activeAllergiesStatus);
 
-		Reference ref2 = new Reference("Patient/1");
-		ref2.setDisplay("Patient/1");
-		buildingListResource.setSubject(ref2);
+		Reference reference = new Reference(SystemConstants.PATIENT_REFERENCE_URL + allergyIntolerance.getPatient());
+		reference.setDisplay(SystemConstants.PATIENT_REFERENCE_URL + allergyIntolerance.getPatient());
+		buildingListResource.setSubject(reference);
 
 		return buildingListResource;
 

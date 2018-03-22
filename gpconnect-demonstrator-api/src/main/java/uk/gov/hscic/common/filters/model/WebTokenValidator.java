@@ -47,8 +47,6 @@ public class WebTokenValidator {
         assertNotNull(webToken.getIss());
         assertNotNull(webToken.getSub());
         assertNotNull(webToken.getReasonForRequest());
-        assertNotNull(webToken.getRequestedRecord());
-        assertNotNull(webToken.getRequestedRecord().getResourceType());
         assertNotNull(webToken.getRequestedScope());
         assertNotNull(webToken.getRequestingDevice());
         assertNotNull(webToken.getRequestingDevice().getResourceType());
@@ -113,26 +111,5 @@ public class WebTokenValidator {
                     IssueType.INVALID
             );
         }
-        
-        if ("Patient".equals(webToken.getRequestedRecord().getResourceType())
-                && !webToken.getRequestedScope().matches("patient/\\*\\.(read|write)")) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Invalid Patient requested scope"), SystemCode.BAD_REQUEST,
-                    IssueType.INVALID);
-        }
-
-        if ("Organization".equals(webToken.getRequestedRecord().getResourceType())
-                && !webToken.getRequestedScope().matches("organization/\\*\\.(read|write)")) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Invalid Organization requested scope"), SystemCode.BAD_REQUEST,
-                    IssueType.INVALID);
-        }
-
-        if ("Slot".equals(webToken.getRequestedRecord().getResourceType())
-                && !webToken.getRequestedScope().matches("slot/\\*\\.(read|write)")) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Invalid Slot requested scope"), SystemCode.BAD_REQUEST,
-                    IssueType.INVALID);
-        }     
     }   
 }

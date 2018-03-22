@@ -15,6 +15,11 @@ public class StructuredAllergyEntityToDetailTransformer implements Transformer<S
 		structuredAllergyIntolerance.setNote(item.getNote());
 		structuredAllergyIntolerance.setReactionDescription(item.getReactionDescription());
 		structuredAllergyIntolerance.setClinicalStatus(item.getClinicalStatus());
+		structuredAllergyIntolerance.setVerificationStatus(item.getVerificationStatus());
+		structuredAllergyIntolerance.setCategory(item.getCategory());
+		structuredAllergyIntolerance.setPatientRef(item.getPatientRef());
+		structuredAllergyIntolerance.setOnSetDateTime(item.getOnSetDateTime());
+		structuredAllergyIntolerance.setAssertedDate(item.getAssertedDate());
 		return structuredAllergyIntolerance;
 	}
 

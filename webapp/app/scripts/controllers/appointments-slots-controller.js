@@ -231,6 +231,8 @@ angular.module('gpConnect')
                         $scope.selectDefaultLocation(internalGetScheduleModel.locations);
                         setTimeout(function () {
                             $('.gantt-scrollable').scrollLeft(100);
+							//gantt-side
+							$(".gantt-side").css("width","auto");
                         }, 10);
                     }
                     numberOfSearches--;
@@ -307,8 +309,8 @@ angular.module('gpConnect')
             };
 
             $scope.options = {
-                ganttTableColumns: ['model.name', 'model.role', 'model.scheduleType', 'model.deliveryChannel'],
-                ganttTableColumnHeaders: {'model.name': 'Name', 'model.role': 'Role', 'model.scheduleType': 'Type', 'model.deliveryChannel': 'Delivery'}
+                ganttTableColumns: ['model.name', 'model.role', 'model.deliveryChannel'],
+                ganttTableColumnHeaders: {'model.name': 'Practitioner', 'model.role': 'Role', 'model.deliveryChannel': 'Delivery'}
             };
 
             $scope.onSelectLocation = function (location) {

@@ -2,14 +2,21 @@
 
 angular.module('gpConnect').factory('Appointment', ['$rootScope', '$http', 'FhirEndpointLookup', 'fhirJWTFactory', 'gpcResource', function ($rootScope, $http, FhirEndpointLookup, fhirJWTFactory, gpcResource) {
 	
-    var findAllAppointments = function (patientNHSNumber, patientId, odsCode) {
+    var findAllAppointments = function (patientNHSNumber, patientId, odsCode, startDateTime, endDateTime) {
         var odsCode = (typeof odsCode !== 'undefined') ? odsCode : $rootScope.patientOdsCode;
                 
         return FhirEndpointLookup.getEndpoint(odsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments-1").then(function(response) {
             var endpointLookupResult = response;
             
+            var startDate = new Date(startDateTime);
+            startDate.setTime(startDate.getTime() + (60*60*1000)); 
+            var endDate = new Date(endDateTime);
+            endDate.setTime(endDate.getTime() + (60*60*1000)); 
+            
+            var requiredParams = 'start=ge' + startDate.toISOString().split('T')[0] + '&start=le' + endDate.toISOString().split('T')[0];
+
             return $http.get(
-                    endpointLookupResult.restUrlPrefix + '/Patient/' + patientId + '/Appointment',
+                    endpointLookupResult.restUrlPrefix + '/Patient/' + patientId + '/Appointment?' + requiredParams,
                     {
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,

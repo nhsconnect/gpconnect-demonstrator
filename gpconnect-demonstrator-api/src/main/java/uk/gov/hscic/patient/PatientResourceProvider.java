@@ -62,7 +62,7 @@ import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.DateAndListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
@@ -70,6 +70,7 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
+import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.helpers.StaticElementsHelper;
@@ -98,7 +99,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	@Autowired
 	private AppointmentResourceProvider appointmentResourceProvider;
-	
+
 	@Autowired
 	private OrganizationResourceProvider organizationResourceProvider;
 
@@ -128,7 +129,6 @@ public class PatientResourceProvider implements IResourceProvider {
 	public static Set<String> getCustomReadOperations() {
 		Set<String> customReadOperations = new HashSet<String>();
 		customReadOperations.add(GET_CARE_RECORD_OPERATION_NAME);
-		// customReadOperations.add(GET_STRUCTURED_RECORD_OPERATION_NAME);
 
 		return customReadOperations;
 	}
@@ -239,27 +239,35 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	@Search(compartmentName = "Appointment")
 	public List<Appointment> getPatientAppointments(@IdParam IdType patientLocalId, @Sort SortSpec sort,
-			@Count Integer count, @OptionalParam(name = "start") DateRangeParam startDate) {
+			@Count Integer count, @OptionalParam(name = "start") DateAndListParam startDate) {
 		return appointmentResourceProvider.getAppointmentsForPatientIdAndDates(patientLocalId, sort, count, startDate);
 	}
 
 	@Operation(name = GET_STRUCTURED_RECORD_OPERATION_NAME)
 	public Bundle StructuredRecordOperation(@ResourceParam Parameters params) throws FHIRException {
-		System.out.println("REACHED HERE????"); 
 		Bundle structuredBundle = new Bundle();
 		Boolean getAllergies = false;
+		Boolean includeResolved = false;
 		boolean getMedications = true;
-		Type includeResolved = null;
 
 		for (int i = 0; i < params.getParameter().size(); i++) {
-			if (params.getParameter().get(i).getName().equals(SystemURL.INCLUDE_ALLERGIES)) {
+			validateParametersName(params.getParameter().get(i).getName());
+			if (params.getParameter().get(i).getName().equals(SystemConstants.INCLUDE_ALLERGIES)) {
 				getAllergies = true;
-				includeResolved= params.getParameter().get(i).getPart().get(0).getValue();
-			
+				List<ParametersParameterComponent> part = params.getParameter().get(i).getPart();
+				if (!part.isEmpty()) {
+					if (!part.get(0).getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES)) {
+						throw OperationOutcomeFactory.buildOperationOutcomeException(
+								new UnprocessableEntityException("Incorrect parameter passed : " + part.get(0).getName()),
+								SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+					}
+
+					includeResolved = Boolean.valueOf(part.get(0).getValue().primitiveValue());
+				}
 			}
+
 		}
-		
-		
+
 		String NHS = getNhsNumber(params);
 
 		// Add Patient
@@ -269,8 +277,9 @@ public class PatientResourceProvider implements IResourceProvider {
 
 		// Add Organization
 		Long organizationId = new Long(patient.getManagingOrganization().getReference().replace("Organization/", ""));
-		OrganizationDetails organizationDetails =organizationSearch.findOrganizationDetails(organizationId);
-		Organization organization = organizationResourceProvider.convertOrganizaitonDetailsToOrganization(organizationDetails);
+		OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId);
+		Organization organization = organizationResourceProvider
+				.convertOrganizaitonDetailsToOrganization(organizationDetails);
 		structuredBundle.addEntry().setResource(organization);
 
 		// Add Practitioner
@@ -281,19 +290,29 @@ public class PatientResourceProvider implements IResourceProvider {
 		structuredBundle.addEntry().setResource(pracResource);
 
 		if (getAllergies == true) {
-			structuredBundle=structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS,structuredBundle,includeResolved);
+			structuredBundle = structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS,
+					structuredBundle, includeResolved);
 		}
 		if (getMedications) {
 			structuredBundle = populateMedicationBundle.addMedicationBundleEntries(structuredBundle, patientDetails);
 		}
 		structuredBundle.setType(BundleType.COLLECTION);
 		structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
-		
+
 		IParser p = FhirContext.forDstu3().newJsonParser().setPrettyPrint(true);
 		String messageString = p.encodeResourceToString(structuredBundle);
 		System.out.println(messageString); 
 		
 		return structuredBundle;
+	}
+	
+	private void validateParametersName(String name) {
+		if (!name.equals("patientNHSNumber") && !name.equals("includeAllergies") && !name.equals("includeMedication")) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new InvalidRequestException("Incorrect Paramater Names"), SystemCode.INVALID_PARAMETER,
+					IssueType.INVALID);
+		}
+
 	}
 
 	@Operation(name = REGISTER_PATIENT_OPERATION_NAME)

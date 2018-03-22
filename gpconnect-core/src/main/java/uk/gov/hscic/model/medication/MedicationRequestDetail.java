@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.utilities.ucum.Decimal;
-
 public class MedicationRequestDetail {
 	
 	private Long id;
@@ -29,10 +27,10 @@ public class MedicationRequestDetail {
 	private String dosageInstructions;
     private Date dispenseRequestStartDate;
     private Date dispenseRequestEndDate;
-    private Decimal dispenseQuantityValue;
+    private Double dispenseQuantityValue;
     private String dispenseQuantityUnit;
     private String dispenseQuantityText;
-    private Decimal expectedSupplyDuration;
+    private Integer expectedSupplyDuration;
     private Long dispenseRequestOrganizationId;
     private Long priorMedicationRequestId;
     private Integer numberOfRepeatPrescriptionsAllowed;
@@ -41,8 +39,7 @@ public class MedicationRequestDetail {
     private String prescriptionTypeCode;
     private String prescriptionTypeDisplay;    
     private Date statusReasonDate;	
-    private String statusReasonCode;
-    private String statusReasonValue;
+    private String statusReason;
 	
     public Long getId() {
 		return id;
@@ -53,6 +50,7 @@ public class MedicationRequestDetail {
 	}
 	
     public List<MedicationBasedOnReference> getBasedOnReferences() {
+    	if (basedOnReferences == null) return new ArrayList<>();
 		return basedOnReferences;
 	}
 	
@@ -165,6 +163,7 @@ public class MedicationRequestDetail {
 	}
 	
     public List<MedicationReasonCode> getReasonCodes() {
+    	if(reasonCodes == null) return new ArrayList<>();
 		return reasonCodes;
 	}
 	
@@ -180,6 +179,7 @@ public class MedicationRequestDetail {
     }
 	
     public List<MedicationReasonReference> getReasonReferences() {
+    	if(reasonReferences == null) return new ArrayList<>();
 		return reasonReferences;
 	}
 	
@@ -195,6 +195,7 @@ public class MedicationRequestDetail {
     }
 	
     public List<MedicationNote> getNotes() {
+    	if(notes == null) return new ArrayList<>();
 		return notes;
 	}
 	
@@ -241,11 +242,11 @@ public class MedicationRequestDetail {
 		this.dispenseRequestEndDate = dispenseRequestEndDate;
 	}
 	
-    public Decimal getDispenseQuantityValue() {
+    public Double getDispenseQuantityValue() {
 		return dispenseQuantityValue;
 	}
 	
-    public void setDispenseQuantityValue(Decimal dispenseQuantityValue) {
+    public void setDispenseQuantityValue(Double dispenseQuantityValue) {
 		this.dispenseQuantityValue = dispenseQuantityValue;
 	}
 	
@@ -265,11 +266,11 @@ public class MedicationRequestDetail {
 		this.dispenseQuantityText = dispenseQuantityText;
 	}
 	
-    public Decimal getExpectedSupplyDuration() {
+    public Integer getExpectedSupplyDuration() {
 		return expectedSupplyDuration;
 	}
 	
-    public void setExpectedSupplyDuration(Decimal expectedSupplyDuration) {
+    public void setExpectedSupplyDuration(Integer expectedSupplyDuration) {
 		this.expectedSupplyDuration = expectedSupplyDuration;
 	}
 	
@@ -337,20 +338,12 @@ public class MedicationRequestDetail {
 		this.statusReasonDate = statusReasonDate;
 	}
 	
-    public String getStatusReasonCode() {
-		return statusReasonCode;
+    public String getStatusReason() {
+		return statusReason;
 	}
 	
-    public void setStatusReasonCode(String statusReasonCode) {
-		this.statusReasonCode = statusReasonCode;
-	}
-	
-    public String getStatusReasonValue() {
-		return statusReasonValue;
-	}
-	
-    public void setStatusReasonValue(String statusReasonValue) {
-		this.statusReasonValue = statusReasonValue;
+    public void setStatusReason(String statusReason) {
+		this.statusReason = statusReason;
 	}
     
 }

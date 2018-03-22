@@ -15,6 +15,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import uk.gov.hscic.medications.MedicationNoteEntity;
 import uk.gov.hscic.medications.MedicationReasonCodeEntity;
 import uk.gov.hscic.medications.MedicationReasonReferenceEntity;
@@ -28,6 +31,7 @@ public class MedicationRequestEntity {
     private Long id;
 	
 	@OneToMany(fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name = "medication_request_based_on_references", joinColumns = {
             @JoinColumn(name = "medicationRequestId", referencedColumnName = "id") }, inverseJoinColumns = {
                     @JoinColumn(name = "basedOnReferenceId", referencedColumnName = "id") })
@@ -69,19 +73,22 @@ public class MedicationRequestEntity {
 	@Column(name = "authorisingPractitionerId")
 	private Long authorisingPractitionerId;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name = "medication_request_reason_codes", joinColumns = {
             @JoinColumn(name = "medicationRequestId", referencedColumnName = "id") }, inverseJoinColumns = {
                     @JoinColumn(name = "reasonCodeId", referencedColumnName = "id") })
     private List<MedicationReasonCodeEntity> reasonCodes;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	   @JoinTable(name = "medication_request_reason_references", joinColumns = {
 	           @JoinColumn(name = "medicationRequestId", referencedColumnName = "id") }, inverseJoinColumns = {
 	                   @JoinColumn(name = "reasonReferenceId", referencedColumnName = "id") })
     private List<MedicationReasonReferenceEntity> reasonReferences;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name = "medication_request_notes", joinColumns = {
             @JoinColumn(name = "medicationRequestId", referencedColumnName = "id") }, inverseJoinColumns = {
                     @JoinColumn(name = "noteId", referencedColumnName = "id") })
@@ -137,11 +144,8 @@ public class MedicationRequestEntity {
     @Column(name = "statusReasonDate")
     private Date statusReasonDate;	
     
-    @Column(name = "statusReasonCode")
-    private String statusReasonCode;
-    
-    @Column(name = "statusReasonValue")
-    private String statusReasonValue;
+    @Column(name = "statusReason")
+    private String statusReason;
 
 	public Long getId() {
 		return id;
@@ -407,20 +411,12 @@ public class MedicationRequestEntity {
 		this.statusReasonDate = statusReasonDate;
 	}
 
-	public String getStatusReasonCode() {
-		return statusReasonCode;
+	public String getStatusReason() {
+		return statusReason;
 	}
 
-	public void setStatusReasonCode(String statusReasonCode) {
-		this.statusReasonCode = statusReasonCode;
-	}
-
-	public String getStatusReasonValue() {
-		return statusReasonValue;
-	}
-
-	public void setStatusReasonValue(String statusReasonValue) {
-		this.statusReasonValue = statusReasonValue;
+	public void setStatusReason(String statusReason) {
+		this.statusReason = statusReason;
 	}
     
 }

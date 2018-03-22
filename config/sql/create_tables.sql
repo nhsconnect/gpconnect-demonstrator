@@ -301,8 +301,7 @@ CREATE TABLE gpconnect.medication_requests (
   prescriptionTypeCode               VARCHAR(20)  NULL,
   prescriptionTypeDisplay            VARCHAR(20)  NULL,
   statusReasonDate                   DATETIME     NULL,
-  statusReasonCode                   VARCHAR(50)  NULL,
-  statusReasonValue                  VARCHAR(50)  NULL,
+  statusReason                       VARCHAR(50)  NULL,
   PRIMARY KEY (id)
 );
 
@@ -321,8 +320,11 @@ CREATE TABLE gpconnect.medication_request_based_on (
 );
 
 CREATE TABLE gpconnect.medication_notes (
-  id   BIGINT    NOT NULL AUTO_INCREMENT,
-  note TEXT(300) NULL,
+  id                 BIGINT       NOT NULL AUTO_INCREMENT,
+  dateWritten        DATETIME     NULL,
+  authorReferenceUrl VARCHAR(100) NULL,
+  authorId           BIGINT       NULL,
+  noteText           TEXT(300)    NULL,
   PRIMARY KEY (id)
 );
 

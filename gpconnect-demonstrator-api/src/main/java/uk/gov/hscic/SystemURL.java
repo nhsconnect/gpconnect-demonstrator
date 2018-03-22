@@ -15,6 +15,7 @@ public final class SystemURL {
 
 
 
+
     // FHIR ID Constants
     public static final String ID_GPC_APPOINTMENT_IDENTIFIER = "https://fhir.nhs.uk/Id/gpconnect-appointment-identifier";
     public static final String ID_GPC_SCHEDULE_IDENTIFIER = "https://fhir.nhs.uk/Id/gpconnect-schedule-identifier";
@@ -43,6 +44,7 @@ public final class SystemURL {
     public static final String SD_GPC_SRCHSET_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Searchset-Bundle-1";
     public static final String SD_GPC_STRUCTURED_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-GetStructuredRecord-Bundle-1";
     public static final String SD_CC_ALLERGY_INTOLERANCE  = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-AllergyIntolerance-1";
+    public static final String SD_GPC_MEDICATION_LIST = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Medication-List-1";
     public static final String SD_GPC_OBSERVATION = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1";
     public static final String SD_GPC_CONDITION = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Condition-1";
     public static final String SD_GPC_MEDICATION_STATEMENT = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationStatement-1";
@@ -79,6 +81,7 @@ public final class SystemURL {
     public static final String SD_CC_INTERPRETER_REQUIRED = "interpreterRequired";   
     public static final String SD_CC_APPOINTMENT_BOOKINGORG = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-BookingOrganisation-1";   
     public static final String SD_CC_APPOINTMENT_CREATED = "https://fhir.nhs.uk/StructureDefinition/extension-gpconnect-appointment-created-1";   
+
     public static final String SD_CC_EXT_MEDICATION_STATEMENT_LAST_ISSUE = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationStatementLastIssueDate-1";
     public static final String SD_CC_EXT_MEDICATION_QUANTITY_TEXT = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1";
     public static final String SD_CC_EXT_MEDICATION_REPEAT_INFORMATION = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationRepeatInformation-1";
@@ -133,6 +136,7 @@ public final class SystemURL {
     public static final String VS_SNOWMED = "http://snomed.info/sct";
     public static final String CS_UNITS_OF_MEASURE = "http://unitsofmeasure.org";
 
-
+    //Include Allergies Constant
+    public static final String INCLUDE_ALLERGIES = "includeAllergies";
     
 }

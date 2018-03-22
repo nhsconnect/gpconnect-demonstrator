@@ -1,12 +1,14 @@
 package uk.gov.hscic.medication.statement;
 
 import org.apache.commons.collections4.Transformer;
+import org.springframework.stereotype.Component;
 
 import uk.gov.hscic.model.medication.MedicationNote;
 import uk.gov.hscic.model.medication.MedicationReasonCode;
 import uk.gov.hscic.model.medication.MedicationReasonReference;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 
+@Component
 public class MedicationStatementEntityToDetailTransformer implements Transformer<MedicationStatementEntity, MedicationStatementDetail>{
 
 	@Override
@@ -45,7 +47,9 @@ public class MedicationStatementEntityToDetailTransformer implements Transformer
 		statementEntity.getNotes().forEach(n -> {
 			MedicationNote note = new MedicationNote();
 			note.setId(n.getId());
-			note.setNote(n.getNote());
+			note.setAuthorReferenceUrl(n.getAuthorReferenceUrl());
+			note.setAuthorId(n.getAuthorId());
+			note.setNote(n.getNoteText());
 			statementDetail.addNote(note);
 		});
 		

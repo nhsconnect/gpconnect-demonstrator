@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import uk.gov.hscic.medications.MedicationNoteEntity;
 import uk.gov.hscic.medications.MedicationReasonCodeEntity;
@@ -62,19 +66,22 @@ public class MedicationStatementEntity {
     @Column(name = "takenDisplay")
     private String takenDisplay;
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name = "medication_statement_reason_codes", joinColumns = {
             @JoinColumn(name = "medicationStatementId", referencedColumnName = "id") }, inverseJoinColumns = {
                     @JoinColumn(name = "reasonCodeId", referencedColumnName = "id") })
     private List<MedicationReasonCodeEntity> reasonCodes;
     
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name = "medication_statement_reason_references", joinColumns = {
             @JoinColumn(name = "medicationStatementId", referencedColumnName = "id") }, inverseJoinColumns = {
                     @JoinColumn(name = "reasonReferenceId", referencedColumnName = "id") })
     private List<MedicationReasonReferenceEntity> reasonReferences;
     
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name = "medication_statement_notes", joinColumns = {
             @JoinColumn(name = "medicationStatementId", referencedColumnName = "id") }, inverseJoinColumns = {
                     @JoinColumn(name = "noteId", referencedColumnName = "id") })

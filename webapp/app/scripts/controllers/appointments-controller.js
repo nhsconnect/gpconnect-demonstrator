@@ -158,7 +158,28 @@ angular.module('gpConnect')
                             if(response.data == undefined || response.data == null){
                                 $scope.appointmentLocation = "[Lookup failed]";
                             } else {
-                                $scope.appointmentLocation = response.data.name;
+                            	var addressStr = response.data.name;
+                            	if (response.data.address != undefined) {
+		                        	if (response.data.address.line != undefined) {
+		                                addressStr += ", " + response.data.address.line;
+		                            }
+		                            if (response.data.address.city != undefined) {
+		                                addressStr += ", " + response.data.address.city;
+		                            }
+		                            if (response.data.address.district != undefined) {
+		                                addressStr += ", " + response.data.address.district;
+		                            }
+		                            if (response.data.address.state != undefined) {
+		                                addressStr += ", " + response.data.address.state;
+		                            }
+		                            if (response.data.address.postalCode != undefined) {
+		                                addressStr += ", " + response.data.address.postalCode;
+		                            }
+		                            if (response.data.address.country != undefined) {
+		                                addressStr += ", " + response.data.address.country;
+		                            }
+	                            }
+                                $scope.appointmentLocation = addressStr;
                             }
                         },
                         function (failedResponse) {

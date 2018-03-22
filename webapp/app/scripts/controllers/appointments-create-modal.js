@@ -15,7 +15,7 @@ angular.module('gpConnect')
             $scope.practitionerRole = appointmentBookingParams.practitionerRole;
             $scope.deliveryChannel = appointmentBookingParams.deliveryChannel;
             $scope.practiceName = appointmentBookingParams.location.practiceName;
-            $scope.locationName = appointmentBookingParams.location.name;
+            $scope.locationAddress = appointmentBookingParams.location.address;
 
             $scope.appointmentCreate = {};
             $scope.appointmentCreate.resourceType = "Appointment";

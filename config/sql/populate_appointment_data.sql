@@ -24,21 +24,40 @@ VALUES
   (6,408443003,'General medical practice',2,'FREE','2016-06-29 15:00:00','2016-06-29 15:59:59','2016-07-25 12:00:00',1),
   (7,408443003,'General medical practice',2,'FREE','2016-06-29 16:00:00','2016-06-29 16:59:59','2016-07-25 12:00:00',1);
 
-INSERT INTO gpconnect.locations
-  (id,name,org_ods_code,org_ods_code_name,site_ods_code,site_ods_code_name,status,lastUpdated)
+INSERT INTO gpconnect.addresses
+  (id,line,city,district,state,postalCode,country)
 VALUES
-  (1,'Building A','GPC001','GP Connect Demonstrator','Z26556','BUILDING A','active','2016-07-25 12:00:00'),
-  (2,'Building B','GPC001','GP Connect Demonstrator','Z33436','BUILDING B','active','2016-07-25 12:00:00'),
-  (3,'Building C','R1A14','Test GP Care Trust','Z33433','BUILDING C','suspended','2016-07-25 12:00:00'),
-  (4,'Annex A','R1A15','The Hepworth Surgery','Z33435','ANNEX A','active','2016-07-25 12:00:00'),
-  (5,'Building 5','R3B46','New GP Practice','Z12345','ANNEX','active','2016-07-25 12:00:00'),
-  (6,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','active','2016-07-25 12:00:00'),
-  (7,'Building 7','ORG115','BUILDING A','Z12346','ANNEX','active','2016-07-25 12:00:00'),
-  (8,'Building 8','R1A17','BUILDING A','Z33432','ANNEX','active','2016-07-25 12:00:00'),
-  (9,'Building 8','R1A17','BUILDING B','Z33432','ANNEX','suspended','2016-07-25 12:00:00'),
-  (10,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00'),
-  (11,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00'),
-  (12,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00'),
-  (13,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00'),
-  (14,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00'),
-  (15,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00');
+  (1,'23 Main Street','Pudsey','Leeds','West Yorkshire','GPC 111','UK'),
+  (2,'2 Garforth Avenue','Ardsley','Leeds','West Yorkshire','GPC 112','England'),
+  (3,'24 Back Lane','Farsley','Leeds','West Yorkshire','GPC 113','U.K.'),
+  (4,'58 St Albans','Bramley','Leeds','West Yorkshire','GPC 114','UK'),
+  (5,'12 Frog Terrace','Roundhay','Leeds','West Yorkshire','GPC 115','UK'),
+  (6,'Woodlands','Harehills','Leeds','West Yorkshire','GPC 116','UK'),
+  (7,'34 Woodlands Grove','Hunslet','Leeds','West Yorkshire','GPC 117','UK'),
+  (8,'23 Daniel Street','Beeston','Leeds','West Yorkshire','GPC 118','UK'),
+  (9,'Juniper Bay','Morley','Leeds','West Yorkshire','GPC 119','UK'),
+  (10,'Cloverfield','Tingley','Leeds','West Yorkshire','GPC 120','UK'),
+  (11,'17 Hopefield Ct','Normanton','Leeds','West Yorkshire','GPC 121','UK'),
+  (12,'Leigh View','Cleckheaton','Leeds','West Yorkshire','GPC 122','UK'),
+  (13,'69 Michael Lane','Garforth','Leeds','West Yorkshire','GPC 123','UK'),
+  (14,'West View','Armley','Leeds','West Yorkshire','GPC 124','UK'),
+  (15,'25 George Avenue','Calverley','Leeds','West Yorkshire','GPC 125','UK');
+  
+INSERT INTO gpconnect.locations
+  (id,name,org_ods_code,org_ods_code_name,site_ods_code,site_ods_code_name,status,lastUpdated,address_id)
+VALUES
+  (1,'Building A','GPC001','GP Connect Demonstrator','Z26556','BUILDING A','active','2016-07-25 12:00:00',1),
+  (2,'Building B','GPC001','GP Connect Demonstrator','Z33436','BUILDING B','active','2016-07-25 12:00:00',2),
+  (3,'Building C','R1A14','Test GP Care Trust','Z33433','BUILDING C','suspended','2016-07-25 12:00:00',3),
+  (4,'Annex A','R1A15','The Hepworth Surgery','Z33435','ANNEX A','active','2016-07-25 12:00:00',4),
+  (5,'Building 5','R3B46','New GP Practice','Z12345','ANNEX','active','2016-07-25 12:00:00',5),
+  (6,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','active','2016-07-25 12:00:00',6),
+  (7,'Building 7','ORG115','BUILDING A','Z12346','ANNEX','active','2016-07-25 12:00:00',7),
+  (8,'Building 8','R1A17','BUILDING A','Z33432','ANNEX','active','2016-07-25 12:00:00',8),
+  (9,'Building 8','R1A17','BUILDING B','Z33432','ANNEX','suspended','2016-07-25 12:00:00',9),
+  (10,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',10),
+  (11,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',11),
+  (12,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',12),
+  (13,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',13),
+  (14,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',14),
+  (15,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',15);

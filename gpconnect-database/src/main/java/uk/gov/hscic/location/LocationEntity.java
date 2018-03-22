@@ -6,7 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import uk.gov.hscic.address.AddressEntity;
 
 @Entity
 @Table(name = "locations")
@@ -36,6 +40,10 @@ public class LocationEntity {
     
     @Column(name = "status")
     private String status;
+    
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private AddressEntity address;
 
     public Long getId() {
             return id;
@@ -99,5 +107,13 @@ public class LocationEntity {
     
     public String getStatus(){
         return status;
+    }
+    
+    public void setAddress(AddressEntity address){
+        this.address = address;
+    }
+    
+    public AddressEntity getAddress(){
+        return address;
     }
 }

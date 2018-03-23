@@ -30,6 +30,9 @@ public class MedicationEntity {
     
     @Column(name = "expiryDate")
     private Date expiryDate;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
     public Long getId() {
         return id;
@@ -77,6 +80,14 @@ public class MedicationEntity {
 
 	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
+	}
+
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
 	}
 
 }

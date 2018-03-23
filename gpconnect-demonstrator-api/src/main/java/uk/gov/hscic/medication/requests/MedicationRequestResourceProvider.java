@@ -63,7 +63,8 @@ public class MedicationRequestResourceProvider {
 		MedicationRequest medicationRequest = new MedicationRequest();
 		
 		medicationRequest.setId(new IdType(requestDetail.getId()));
-		medicationRequest.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_REQUEST));
+		medicationRequest.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_REQUEST)
+				.setVersionId(String.valueOf(requestDetail.getLastUpdated().getTime())));
 		setBasedOnReferences(medicationRequest, requestDetail);			
 		medicationRequest.setGroupIdentifier(new Identifier().setValue(requestDetail.getGroupIdentifier()));
 		try {
@@ -215,7 +216,7 @@ public class MedicationRequestResourceProvider {
 		case(SystemURL.SD_GPC_PATIENT):
 			requesterComponent.setAgent(new Reference(new IdType("Patient", requestDetail.getRequesterId())));
 			break;
-		case(SystemURL.SD_EXTENSION_GPC_PRACTITIONER):
+		case(SystemURL.SD_GPC_PRACTITIONER):
 			requesterComponent.setAgent(new Reference(new IdType("Practitioner", requestDetail.getRequesterId())));
 			break;
 		case(SystemURL.SD_GPC_ORGANIZATION):

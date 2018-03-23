@@ -40,6 +40,7 @@ public class MedicationRequestDetail {
     private String prescriptionTypeDisplay;    
     private Date statusReasonDate;	
     private String statusReason;
+    private Date lastUpdated;
 	
     public Long getId() {
 		return id;
@@ -344,6 +345,14 @@ public class MedicationRequestDetail {
 	
     public void setStatusReason(String statusReason) {
 		this.statusReason = statusReason;
+	}
+
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
 	}
     
 }

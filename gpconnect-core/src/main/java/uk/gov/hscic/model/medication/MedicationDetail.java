@@ -10,6 +10,7 @@ public class MedicationDetail {
     private String text;
     private String batchNumber;
     private Date expiryDate;
+	private Date lastUpdated;
 	
     public Long getId() {
 		return id;
@@ -58,4 +59,13 @@ public class MedicationDetail {
     public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
 	}
+
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
+	}
+    
 }

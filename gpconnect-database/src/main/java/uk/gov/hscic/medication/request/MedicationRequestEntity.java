@@ -146,6 +146,9 @@ public class MedicationRequestEntity {
     
     @Column(name = "statusReason")
     private String statusReason;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
 	public Long getId() {
 		return id;
@@ -339,11 +342,11 @@ public class MedicationRequestEntity {
 		this.dispenseQuantityText = dispenseQuantityText;
 	}
 
-	public String getExpectedSupplyDurationValue() {
+	public String getExpectedSupplyDuration() {
 		return expectedSupplyDuration;
 	}
 
-	public void setExpectedSupplyDurationValue(String expectedSupplyDuration) {
+	public void setExpectedSupplyDuration(String expectedSupplyDuration) {
 		this.expectedSupplyDuration = expectedSupplyDuration;
 	}
 
@@ -417,6 +420,14 @@ public class MedicationRequestEntity {
 
 	public void setStatusReason(String statusReason) {
 		this.statusReason = statusReason;
+	}
+
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
 	}
     
 }

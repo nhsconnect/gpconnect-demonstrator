@@ -248,24 +248,19 @@ public class PatientResourceProvider implements IResourceProvider {
 		Bundle structuredBundle = new Bundle();
 		Boolean getAllergies = false;
 		Boolean includeResolved = false;
-		boolean getMedications = true;
+		Boolean getMedications = false;
+		Boolean includePrescriptionIssues = false;
 
-		for (int i = 0; i < params.getParameter().size(); i++) {
-			validateParametersName(params.getParameter().get(i).getName());
-			if (params.getParameter().get(i).getName().equals(SystemConstants.INCLUDE_ALLERGIES)) {
+		for(ParametersParameterComponent param: params.getParameter()) {
+			validateParametersName(param.getName());
+			if(param.getName().equals(SystemConstants.INCLUDE_ALLERGIES)) {
 				getAllergies = true;
-				List<ParametersParameterComponent> part = params.getParameter().get(i).getPart();
-				if (!part.isEmpty()) {
-					if (!part.get(0).getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES)) {
-						throw OperationOutcomeFactory.buildOperationOutcomeException(
-								new UnprocessableEntityException("Incorrect parameter passed : " + part.get(0).getName()),
-								SystemCode.INVALID_PARAMETER, IssueType.INVALID);
-					}
-
-					includeResolved = Boolean.valueOf(part.get(0).getValue().primitiveValue());
-				}
+				includeResolved = setIncludeParameter(param, SystemConstants.INCLUDE_RESOLVED_ALLERGIES);
 			}
-
+			if(param.getName().equals(SystemConstants.INCLUDE_MEDICATION)) {
+				getMedications = true;
+				includePrescriptionIssues = setIncludeParameter(param, SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
+			}
 		}
 
 		String NHS = getNhsNumber(params);
@@ -276,17 +271,14 @@ public class PatientResourceProvider implements IResourceProvider {
 		structuredBundle.addEntry().setResource(patient);
 
 		// Add Organization
-		Long organizationId = new Long(patient.getManagingOrganization().getReference().replace("Organization/", ""));
+		Long organizationId = Long.valueOf(patientDetails.getManagingOrganization());
 		OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId);
 		Organization organization = organizationResourceProvider
 				.convertOrganizaitonDetailsToOrganization(organizationDetails);
 		structuredBundle.addEntry().setResource(organization);
 
 		// Add Practitioner
-		List<Reference> practitionerReferenceList = patient.getGeneralPractitioner();
-		Reference practitioner = practitionerReferenceList.get(0);
-		String practitionerId = practitioner.getReference().replaceAll("Practitioner/", "");
-		Practitioner pracResource = practitionerResourceProvider.getPractitionerById(new IdType(practitionerId));
+		Practitioner pracResource = practitionerResourceProvider.getPractitionerById(new IdType(patientDetails.getGpId()));
 		structuredBundle.addEntry().setResource(pracResource);
 
 		if (getAllergies == true) {
@@ -294,7 +286,8 @@ public class PatientResourceProvider implements IResourceProvider {
 					structuredBundle, includeResolved);
 		}
 		if (getMedications) {
-			structuredBundle = populateMedicationBundle.addMedicationBundleEntries(structuredBundle, patientDetails);
+			structuredBundle = populateMedicationBundle.addMedicationBundleEntries(structuredBundle, 
+					patientDetails, includePrescriptionIssues);
 		}
 		structuredBundle.setType(BundleType.COLLECTION);
 		structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
@@ -305,11 +298,24 @@ public class PatientResourceProvider implements IResourceProvider {
 		
 		return structuredBundle;
 	}
+
+	private Boolean setIncludeParameter(ParametersParameterComponent param, String paramName) {
+		for(ParametersParameterComponent paramPart : param.getPart()) {
+			if(!paramPart.getName().equals(paramName)) {;
+				throw OperationOutcomeFactory.buildOperationOutcomeException(
+						new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
+						SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+			} else {
+				return Boolean.valueOf(paramPart.getValue().primitiveValue());
+			}
+		}
+		return false;
+	}
 	
 	private void validateParametersName(String name) {
 		if (!name.equals("patientNHSNumber") && !name.equals("includeAllergies") && !name.equals("includeMedication")) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new InvalidRequestException("Incorrect Paramater Names"), SystemCode.INVALID_PARAMETER,
+					new InvalidRequestException("Incorrect Parameter Names"), SystemCode.INVALID_PARAMETER,
 					IssueType.INVALID);
 		}
 

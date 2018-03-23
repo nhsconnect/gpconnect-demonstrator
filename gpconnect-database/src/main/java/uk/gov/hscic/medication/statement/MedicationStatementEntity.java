@@ -92,6 +92,9 @@ public class MedicationStatementEntity {
     
     @Column(name = "dosageInstruction")
     private String dosageInstruction;
+    
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
 	public Long getId() {
 		return id;
@@ -235,6 +238,14 @@ public class MedicationStatementEntity {
 
 	public void setDosageInstruction(String dosageInstruction) {
 		this.dosageInstruction = dosageInstruction;
+	}
+
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
 	}
     
 }

@@ -75,8 +75,8 @@ public class MedicationRequestEntityToDetailTransformer implements Transformer<M
 		}
 		requestDetail.setDispenseQuantityUnit(requestEntity.getDispenseQuantityUnit());
 		requestDetail.setDispenseQuantityText(requestEntity.getDispenseQuantityText());
-		if(requestEntity.getExpectedSupplyDurationValue() != null) {
-			requestDetail.setExpectedSupplyDuration(Integer.valueOf(requestEntity.getExpectedSupplyDurationValue()));
+		if(requestEntity.getExpectedSupplyDuration() != null) {
+			requestDetail.setExpectedSupplyDuration(Integer.valueOf(requestEntity.getExpectedSupplyDuration()));
 		}
 		requestDetail.setDispenseRequestOrganizationId(requestEntity.getDispenseRequestOrganizationId());
 		requestDetail.setPriorMedicationRequestId(requestEntity.getPriorMedicationRequestId());
@@ -87,6 +87,7 @@ public class MedicationRequestEntityToDetailTransformer implements Transformer<M
 		requestDetail.setPrescriptionTypeDisplay(requestEntity.getPrescriptionTypeDisplay());
 		requestDetail.setStatusReason(requestEntity.getStatusReason());
 		requestDetail.setStatusReasonDate(requestEntity.getStatusReasonDate());
+		requestDetail.setLastUpdated(requestEntity.getLastUpdated());
 		
 		return requestDetail;
 	}

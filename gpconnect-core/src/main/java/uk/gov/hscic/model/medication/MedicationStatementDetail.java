@@ -24,6 +24,7 @@ public class MedicationStatementDetail {
 	private List<MedicationNote> notes;
 	private String dosageText;
 	private String dosagePatientInstruction;
+	private Date lastUpdated;
 	
 	public Long getId() {
 		return id;
@@ -193,5 +194,12 @@ public class MedicationStatementDetail {
 		this.dosagePatientInstruction = dosagePatientInstruction;
 	}
 
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
+	}
 	
 }

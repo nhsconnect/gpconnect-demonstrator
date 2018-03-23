@@ -10,9 +10,9 @@ VALUES
   
 INSERT INTO gpconnect.medication_statements
  (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
-    patientId,takenCode,takenDisplay,dosageText,dosageInstruction)
+    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated)
 VALUES
- (3,'2018-03-14',13,'active','Active',5,'2018-01-12','2018-07-12','2018-01-12',5,'unk','Unknown','Dosage text','Dosage instructions');
+ (3,'2018-03-14',13,'active','Active',5,'2018-01-12','2018-07-12','2018-01-12',5,'unk','Unknown','Dosage text','Dosage instructions','2018-03-15');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)
@@ -51,20 +51,20 @@ INSERT INTO gpconnect.medication_requests
  requesterUrl,requesterId,authorisingPractitionerId,dosageText,dosageInstruction,dispenseRequestStartDate,dispenseRequestEndDate,
  dispenseQuantityValue,dispenseQuantityUnit,dispenseQuantityText,expectedSupplyDuration,
  dispenseRequestOrganizationId,priorMedicationRequestId,numberOfRepeatPrescriptionsAllowed,numberOfRepeatPrescriptionsIssued,
- authorisationExpiryDate,prescriptionTypeCode,prescriptionTypeDisplay,statusReasonDate,statusReason)
+ authorisationExpiryDate,prescriptionTypeCode,prescriptionTypeDisplay,statusReasonDate,statusReason,lastUpdated)
 VALUES
  (4,'group3','active','Active','plan','Plan',5,5,13,'2018-01-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'Dosage Text','Dosage Instructions',
- '2018-01-18','2018-07-04',null,null,'28 tablets','28',2,null,6,3,'2018-07-16','repeat','Repeat',null,null),
+ '2018-01-18','2018-07-04',null,null,'28 tablets','28',2,null,6,3,'2018-07-16','repeat','Repeat',null,null,'2018-03-15'),
  (5,'group3','active','Active','order','Order',5,5,13,'2018-01-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'Dosage Text','Dosage Instructions',
- '2018-01-18','2018-02-15',null,null,'28 tablets','28',2,null,6,1,'2018-07-16','repeat','Repeat',null,null),
+ '2018-01-18','2018-02-15',null,null,'28 tablets','28',2,null,6,1,'2018-07-16','repeat','Repeat',null,null,'2018-03-15'),
  (6,'group3','active','Active','order','Order',5,5,13,'2018-02-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'Dosage Text','Dosage Instructions',
- '2018-02-12','2018-03-12',null,null,'28 tablets','28',2,5,6,2,'2018-07-16','repeat','Repeat',null,null),
+ '2018-02-12','2018-03-12',null,null,'28 tablets','28',2,5,6,2,'2018-07-16','repeat','Repeat',null,null,'2018-03-15'),
  (7,'group3','active','Active','order','Order',5,5,13,'2018-03-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'Dosage Text','Dosage Instructions',
- '2018-03-12','2018-04-09',null,null,'28 tablets','28',2,6,6,3,'2018-07-16','repeat','Repeat',null,null);
+ '2018-03-12','2018-04-09',null,null,'28 tablets','28',2,6,6,3,'2018-07-16','repeat','Repeat',null,null,'2018-03-15');
 
 UPDATE gpconnect.medication_statements SET medicationRequestId = 4 WHERE id = 3;
 

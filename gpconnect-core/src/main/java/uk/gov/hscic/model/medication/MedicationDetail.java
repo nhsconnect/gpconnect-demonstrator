@@ -8,6 +8,8 @@ public class MedicationDetail {
     private String code;
     private String display;
     private String text;
+    private String snowmedDescriptionId;
+    private String snowmedDescriptionDisplay;
     private String batchNumber;
     private Date expiryDate;
 	private Date lastUpdated;
@@ -40,7 +42,23 @@ public class MedicationDetail {
 		return text;
 	}
 	
-    public void setText(String text) {
+    public String getSnowmedDescriptionId() {
+		return snowmedDescriptionId;
+	}
+
+	public void setSnowmedDescriptionId(String snowmedDescriptionId) {
+		this.snowmedDescriptionId = snowmedDescriptionId;
+	}
+
+	public String getSnowmedDescriptionDisplay() {
+		return snowmedDescriptionDisplay;
+	}
+
+	public void setSnowmedDescriptionDisplay(String snowmedDescriptionDisplay) {
+		this.snowmedDescriptionDisplay = snowmedDescriptionDisplay;
+	}
+
+	public void setText(String text) {
 		this.text = text;
 	}
 	

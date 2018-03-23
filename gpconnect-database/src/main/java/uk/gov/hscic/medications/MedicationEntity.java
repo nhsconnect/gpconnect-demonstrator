@@ -25,6 +25,12 @@ public class MedicationEntity {
     @Column(name = "text")
     private String text;
     
+    @Column(name = "snowmedDescriptionId")
+    private String snowmedDescriptionId;
+    
+    @Column(name = "snowmedDescriptionDisplay")
+    private String snowmedDescriptionDisplay;
+    
     @Column(name = "batchNumber")
     private String batchNumber;
     
@@ -64,6 +70,22 @@ public class MedicationEntity {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public String getSnowmedDescriptionId() {
+		return snowmedDescriptionId;
+	}
+
+	public void setSnowmedDescriptionId(String snowmedDescriptionId) {
+		this.snowmedDescriptionId = snowmedDescriptionId;
+	}
+
+	public String getSnowmedDescriptionDisplay() {
+		return snowmedDescriptionDisplay;
+	}
+
+	public void setSnowmedDescriptionDisplay(String snowmedDescriptionDisplay) {
+		this.snowmedDescriptionDisplay = snowmedDescriptionDisplay;
 	}
 
 	public String getBatchNumber() {

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Medication;
 import org.hl7.fhir.dstu3.model.Medication.MedicationPackageBatchComponent;
@@ -11,6 +12,7 @@ import org.hl7.fhir.dstu3.model.Medication.MedicationPackageComponent;
 import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
+import org.hl7.fhir.dstu3.model.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -73,6 +75,18 @@ public class MedicationResourceProvider implements IResourceProvider {
 				medicationDetail.getCode(), medicationDetail.getDisplay());
 		
 		medication.setCode(new CodeableConcept().addCoding(coding).setText(medicationDetail.getText()));
+		
+		Extension idExtension = null, displayExtension = null;
+		Extension snowmedExtension = new Extension(SystemURL.SD_EXT_SCT_DESC_ID);
+		if(medicationDetail.getSnowmedDescriptionId() != null) 
+			idExtension = new Extension("descriptionId").setValue(new IdType(medicationDetail.getSnowmedDescriptionId()));
+			snowmedExtension.addExtension(idExtension);
+		System.out.println(medicationDetail.getSnowmedDescriptionDisplay());
+		if(medicationDetail.getSnowmedDescriptionDisplay() != null)
+			displayExtension = new Extension("descriptionId").setValue(new StringType(medicationDetail.getSnowmedDescriptionDisplay()));
+			snowmedExtension.addExtension(displayExtension);
+		if(idExtension != null || displayExtension != null)
+			medication.addExtension(snowmedExtension);
 		
 		MedicationPackageComponent packageComponent = new MedicationPackageComponent();
 		MedicationPackageBatchComponent batchComponent = new MedicationPackageBatchComponent();

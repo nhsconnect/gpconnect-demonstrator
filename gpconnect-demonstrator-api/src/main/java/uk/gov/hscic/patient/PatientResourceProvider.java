@@ -42,10 +42,12 @@ import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Period;
 import org.hl7.fhir.dstu3.model.Practitioner;
+import org.hl7.fhir.dstu3.model.Property;
 import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.dstu3.model.Type;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.context.FhirContext;
@@ -250,19 +252,49 @@ public class PatientResourceProvider implements IResourceProvider {
 		Boolean includeResolved = false;
 		Boolean getMedications = false;
 		Boolean includePrescriptionIssues = false;
+		Period medicationPeriod = null;
 
 		for(ParametersParameterComponent param: params.getParameter()) {
 			validateParametersName(param.getName());
 			if(param.getName().equals(SystemConstants.INCLUDE_ALLERGIES)) {
 				getAllergies = true;
-				includeResolved = setIncludeParameter(param, SystemConstants.INCLUDE_RESOLVED_ALLERGIES);
+				for(ParametersParameterComponent paramPart : param.getPart()) {
+					if(paramPart.getValue() instanceof BooleanType 
+							&& paramPart.getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES)) {
+						includeResolved =  Boolean.valueOf(paramPart.getValue().primitiveValue());
+					}
+					else {
+						throw OperationOutcomeFactory.buildOperationOutcomeException(
+								new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
+								SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+					}
+				}
 			}
 			if(param.getName().equals(SystemConstants.INCLUDE_MEDICATION)) {
 				getMedications = true;
-				includePrescriptionIssues = setIncludeParameter(param, SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
+				for(ParametersParameterComponent paramPart : param.getPart()) {
+					if(paramPart.getValue() instanceof BooleanType 
+							&& paramPart.getName().equals(SystemConstants.INCLUDE_PRESCRIPTION_ISSUES)) {
+						includePrescriptionIssues =  Boolean.valueOf(paramPart.getValue().primitiveValue());
+					} else if(paramPart.getValue() instanceof Period 
+							&& paramPart.getName().equals(SystemConstants.MEDICATION_DATE_PERIOD)) {
+						medicationPeriod = (Period) paramPart.getValue();
+						if(medicationPeriod.getStart() != null && medicationPeriod.getEnd() != null 
+								&& medicationPeriod.getStart().compareTo(medicationPeriod.getEnd()) > 0) {
+							throw OperationOutcomeFactory.buildOperationOutcomeException(
+									new UnprocessableEntityException("Invalid Medication Date Period"),
+									SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+						}
+					}
+					else {
+						throw OperationOutcomeFactory.buildOperationOutcomeException(
+								new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
+								SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+					}
+				}
 			}
 		}
-
+		
 		String NHS = getNhsNumber(params);
 
 		// Add Patient
@@ -287,7 +319,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		}
 		if (getMedications) {
 			structuredBundle = populateMedicationBundle.addMedicationBundleEntries(structuredBundle, 
-					patientDetails, includePrescriptionIssues);
+					patientDetails, includePrescriptionIssues, medicationPeriod);
 		}
 		structuredBundle.setType(BundleType.COLLECTION);
 		structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
@@ -297,19 +329,6 @@ public class PatientResourceProvider implements IResourceProvider {
 		System.out.println(messageString); 
 		
 		return structuredBundle;
-	}
-
-	private Boolean setIncludeParameter(ParametersParameterComponent param, String paramName) {
-		for(ParametersParameterComponent paramPart : param.getPart()) {
-			if(!paramPart.getName().equals(paramName)) {;
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
-						SystemCode.INVALID_PARAMETER, IssueType.INVALID);
-			} else {
-				return Boolean.valueOf(paramPart.getValue().primitiveValue());
-			}
-		}
-		return false;
 	}
 	
 	private void validateParametersName(String name) {

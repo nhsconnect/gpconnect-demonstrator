@@ -76,17 +76,7 @@ public class MedicationResourceProvider implements IResourceProvider {
 		
 		medication.setCode(new CodeableConcept().addCoding(coding).setText(medicationDetail.getText()));
 		
-		Extension idExtension = null, displayExtension = null;
-		Extension snowmedExtension = new Extension(SystemURL.SD_EXT_SCT_DESC_ID);
-		if(medicationDetail.getSnowmedDescriptionId() != null) 
-			idExtension = new Extension("descriptionId").setValue(new IdType(medicationDetail.getSnowmedDescriptionId()));
-			snowmedExtension.addExtension(idExtension);
-		System.out.println(medicationDetail.getSnowmedDescriptionDisplay());
-		if(medicationDetail.getSnowmedDescriptionDisplay() != null)
-			displayExtension = new Extension("descriptionId").setValue(new StringType(medicationDetail.getSnowmedDescriptionDisplay()));
-			snowmedExtension.addExtension(displayExtension);
-		if(idExtension != null || displayExtension != null)
-			medication.addExtension(snowmedExtension);
+		addSnowmedExtensions(medication, medicationDetail);
 		
 		MedicationPackageComponent packageComponent = new MedicationPackageComponent();
 		MedicationPackageBatchComponent batchComponent = new MedicationPackageBatchComponent();
@@ -97,5 +87,21 @@ public class MedicationResourceProvider implements IResourceProvider {
 		medication.setPackage(packageComponent);
 		
 		return medication;
+	}
+
+	private void addSnowmedExtensions(Medication medication, MedicationDetail medicationDetail) {
+		Extension idExtension = null, displayExtension = null;
+		Extension snowmedExtension = new Extension(SystemURL.SD_EXT_SCT_DESC_ID);
+		
+		if(medicationDetail.getSnowmedDescriptionId() != null) 
+			idExtension = new Extension("descriptionId").setValue(new IdType(medicationDetail.getSnowmedDescriptionId()));
+			snowmedExtension.addExtension(idExtension);
+		
+		if(medicationDetail.getSnowmedDescriptionDisplay() != null)
+			displayExtension = new Extension("descriptionId").setValue(new StringType(medicationDetail.getSnowmedDescriptionDisplay()));
+			snowmedExtension.addExtension(displayExtension);
+		
+		if(idExtension != null || displayExtension != null)
+			medication.addExtension(snowmedExtension);
 	}
 }

@@ -13,35 +13,35 @@ angular
         $scope.ActiveAllergiesList = [];
         $scope.ResolvedAllergiesList = [];
 
-        $scope.patient = {
-            name: "",
-            id: "",
-            birthDate: ""
-        };
-        $scope.practitioner = {
-            name: "",
-            id: ""
-        };
-        $scope.organization = {
-            name: "",
-            id: ""
-        };
-
-        $scope.allergyIntolerance = {
-            assertedDate: "",
-            category: "",
-            clinicalStatus: "",
-            patient: "",
-            reaction: "",
-            resolvedDate: ""
-        };
+      
 
         $scope.getAllergyData = function() {
             {
+                $scope.patient = {
+                    name: "",
+                    id: "",
+                    birthDate: ""
+                };
+                $scope.practitioner = {
+                    name: "",
+                    id: ""
+                };
+                $scope.organization = {
+                    name: "",
+                    id: ""
+                };
+        
+                $scope.allergyIntolerance = {
+                    assertedDate: "",
+                    category: "",
+                    clinicalStatus: "",
+                    patient: "",
+                    reaction: "",
+                    resolvedDate: ""
+                };
                 PatientService.structured($stateParams.patientId).then(function(
                     patientSummaryResponse
                 ) {
-
                     for (
                         var i = 0;
                         i < patientSummaryResponse.entry.length;

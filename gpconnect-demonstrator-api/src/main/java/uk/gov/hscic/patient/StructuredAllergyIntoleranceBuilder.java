@@ -72,8 +72,6 @@ public class StructuredAllergyIntoleranceBuilder {
 
 			allergyIntolerance.setCode(value);
 
-			allergyIntolerance.getMeta().addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE);
-
 			allergyIntolerance.setAssertedDate(allergyData.get(i).getAssertedDate());
 
 			Reference patient = new Reference(
@@ -88,7 +86,7 @@ public class StructuredAllergyIntoleranceBuilder {
 			List<CodeableConcept> theManifestation = new ArrayList<>();
 			CodeableConcept manifestation = new CodeableConcept();
 			Coding manifestationCoding = new Coding();
-			manifestationCoding.setDisplay("Peanut-induced anaphylaxis (disorder)");
+			manifestationCoding.setDisplay(allergyData.get(i).getNote());
 			manifestationCoding.setCode("241933001");
 			manifestationCoding.setSystem(SystemConstants.SNOMED_URL);
 			manifestation.addCoding(manifestationCoding);

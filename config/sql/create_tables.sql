@@ -243,12 +243,15 @@ CREATE TABLE gpconnect.medications_html (
 );
 
 CREATE TABLE gpconnect.medications (
-  id          BIGINT    NOT NULL AUTO_INCREMENT,
-  code		  TEXT(20)  NULL,
-  display	  TEXT(100) NULL,
-  text		  TEXT(100) NULL, 
-  batchNumber TEXT(50)	NULL, 
-  expiryDate  DATETIME 	NULL,
+  id                        BIGINT    NOT NULL AUTO_INCREMENT,
+  code		                TEXT(20)  NULL,
+  display	                TEXT(100) NULL,
+  text		                TEXT(100) NULL, 
+  snowmedDescriptionId      TEXT(50)  NULL,
+  snowmedDescriptionDisplay TEXT(100) NULL,
+  batchNumber               TEXT(50)  NULL, 
+  expiryDate                DATETIME  NULL,
+  lastUpdated               DATETIME  NULL,
   PRIMARY KEY (id)
 );
 
@@ -268,6 +271,7 @@ CREATE TABLE gpconnect.medication_statements (
   takenDisplay        VARCHAR(50)  NULL,
   dosageText          VARCHAR(250) NULL,
   dosageInstruction   VARCHAR(50)  NULL,
+  lastUpdated         DATETIME     NULL,
   PRIMARY KEY (id)
 );
 
@@ -302,6 +306,7 @@ CREATE TABLE gpconnect.medication_requests (
   prescriptionTypeDisplay            VARCHAR(20)  NULL,
   statusReasonDate                   DATETIME     NULL,
   statusReason                       VARCHAR(50)  NULL,
+  lastUpdated                        DATETIME     NULL,
   PRIMARY KEY (id)
 );
 

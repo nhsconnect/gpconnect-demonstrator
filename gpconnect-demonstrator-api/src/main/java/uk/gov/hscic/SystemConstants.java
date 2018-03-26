@@ -27,4 +27,8 @@ public final class SystemConstants {
 
 	public static final String INCLUDE_MEDICATION = "includeMedication";
 	public static final String INCLUDE_PRESCRIPTION_ISSUES = "includePrescriptionIssues";
+	public static final String MEDICATION_DATE_PERIOD = "medicationDatePeriod";
+	
+	public static final String MEDICATION_LIST = "Medication List";
+	
 }

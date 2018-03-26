@@ -22,6 +22,7 @@ import org.hl7.fhir.dstu3.model.MedicationRequest;
 import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
+import org.hl7.fhir.dstu3.model.Period;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.exceptions.FHIRException;
@@ -29,8 +30,10 @@ import org.hl7.fhir.instance.model.api.IIdType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.medication.requests.MedicationRequestResourceProvider;
+import uk.gov.hscic.medication.statement.MedicationStatementEntity;
 import uk.gov.hscic.medication.statement.MedicationStatementEntityToDetailTransformer;
 import uk.gov.hscic.medication.statement.MedicationStatementRepository;
 import uk.gov.hscic.medication.statement.MedicationStatementResourceProvider;
@@ -67,9 +70,10 @@ public class PopulateMedicationBundle {
 	@Autowired
 	private PatientResourceProvider patientResourceProvider;
 
-	public Bundle addMedicationBundleEntries(Bundle structuredBundle, PatientDetails patientDetails, Boolean includePrescriptionIssues) {
+	public Bundle addMedicationBundleEntries(Bundle structuredBundle, PatientDetails patientDetails, Boolean includePrescriptionIssues,
+			Period medicationPeriod) {
 		BundleEntryComponent listEntry = new BundleEntryComponent();
-		List<MedicationStatementDetail> medicationStatements = findMedicationStatements(Long.valueOf(patientDetails.getId())); 
+		List<MedicationStatementDetail> medicationStatements = findMedicationStatements(Long.valueOf(patientDetails.getId()), medicationPeriod); 
 		structuredBundle.addEntry(listEntry.setResource(createListEntry(medicationStatements, patientDetails.getNhsNumber())));
 		medicationStatements.forEach(medicationStatement -> {
 			createBundleEntries(medicationStatement, includePrescriptionIssues, patientDetails)
@@ -85,12 +89,16 @@ public class PopulateMedicationBundle {
 				.setVersionId(String.valueOf(new Date().getTime())));
 		medicationStatementsList.setStatus(ListStatus.CURRENT);
 		medicationStatementsList.setMode(ListMode.SNAPSHOT);
-		medicationStatementsList.setTitle("Medication List");
+		medicationStatementsList.setTitle(SystemConstants.MEDICATION_LIST);
 		medicationStatementsList.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOWMED, "TBD", "Medication List")));
 		medicationStatementsList.setSubject(new Reference().setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
 		medicationStatementsList.setDate(new Date());
 		medicationStatementsList.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
 		
+		if(medicationStatements.isEmpty()) {
+			//TODO set empty reason
+			medicationStatementsList.setEmptyReason(new CodeableConcept().setText("no content"));
+		}
 		medicationStatements.forEach(statement -> {
 			Reference statementRef = new Reference(new IdType("MedicationStatement", statement.getId()));
 			ListEntryComponent listEntryComponent = new ListEntryComponent(statementRef);
@@ -120,7 +128,6 @@ public class PopulateMedicationBundle {
 		}
 		
 		bundleEntryComponents.addAll(getReferencedResources(medicationRequest, patientDetails));
-		
 		
 		return bundleEntryComponents;
 		
@@ -202,16 +209,53 @@ public class PopulateMedicationBundle {
 		
 	}
 
-	private List<MedicationStatementDetail> findMedicationStatements(Long patientId) {
+	private List<MedicationStatementDetail> findMedicationStatements(Long patientId, Period medicationPeriod) {
+		List<MedicationStatementEntity> medicationStatementEntities = medicationStatementRepository.findByPatientId(patientId);
 		List<MedicationStatementDetail> medicationStatements = new ArrayList<>();
 		
-		medicationStatementRepository.findByPatientId(patientId).forEach(entity ->{
-			medicationStatements.add(medicationStatementEntityToDetailTransformer.transform(entity));
-		});
-		
+		List<MedicationStatementEntity> statementsfilteredByDate = new ArrayList<>();
+		if(medicationPeriod != null) {
+			medicationStatementEntities.forEach(statement -> {
+				if(statement.getLastIssueDate() != null) {
+					if(dateIsWithinPeriod(statement.getLastIssueDate(), medicationPeriod)){
+						statementsfilteredByDate.add(statement);
+					}
+				} else if(statement.getStartDate() != null) {
+					if(dateIsWithinPeriod(statement.getStartDate(), medicationPeriod)) {
+						statementsfilteredByDate.add(statement);
+					}
+				} else if(statement.getDateAsserted() != null) {
+					if(dateIsWithinPeriod(statement.getDateAsserted(), medicationPeriod)) {
+						statementsfilteredByDate.add(statement);
+					}
+				}
+			});			
+			statementsfilteredByDate.forEach(entity ->{
+				medicationStatements.add(medicationStatementEntityToDetailTransformer.transform(entity));
+			});
+		} else {
+			medicationStatementEntities.forEach(entity ->{
+				medicationStatements.add(medicationStatementEntityToDetailTransformer.transform(entity));
+			});
+		}
+
 		medicationStatements.sort(Comparator.comparing(medicationStatement -> medicationStatement.getDateAsserted()));
 		
 		return medicationStatements;
+	}
+
+	private boolean dateIsWithinPeriod(Date date, Period period) {
+		Date startDate = period.getStart();
+		Date endDate = period.getEnd();
+		if(startDate != null && endDate != null) {
+			return date.compareTo(startDate) > 0 && date.compareTo(endDate) < 0;
+		} else if (startDate != null && endDate == null) {
+			return date.compareTo(startDate) > 0;
+		} else if (startDate == null && endDate != null) {
+			return date.compareTo(endDate) < 0;
+		} else {
+			return true;
+		}
 	}
 
 }

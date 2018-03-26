@@ -271,8 +271,8 @@ public class PatientResourceProvider implements IResourceProvider {
 	@Operation(name = GET_STRUCTURED_RECORD_OPERATION_NAME)
 	public Bundle StructuredRecordOperation(@ResourceParam Parameters params) throws FHIRException {
 		Bundle structuredBundle = new Bundle();
-		Boolean getAllergies = false;
-		Boolean includeResolved = false;
+		Boolean getAllergies = true;
+		Boolean includeResolved = true;
 
 		for (int i = 0; i < params.getParameter().size(); i++) {
 			validateParametersName(params.getParameter().get(i).getName());
@@ -292,10 +292,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
 		}
 
-		String NHS = getNhsNumber(params);
+		String nhsNumber = getNhsNumber(params);
 
 		// Add Patient
-		PatientDetails patientDetails = patientSearch.findPatient(NHS);
+		PatientDetails patientDetails = patientSearch.findPatient(nhsNumber);
 		Patient patient = patientDetailsToPatientResourceConverter(patientDetails);
 		structuredBundle.addEntry().setResource(patient);
 
@@ -314,7 +314,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		structuredBundle.addEntry().setResource(pracResource);
 
 		if (getAllergies == true) {
-			structuredBundle = structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS,
+			structuredBundle = structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(nhsNumber,
 					structuredBundle, includeResolved);
 		}
 		structuredBundle.setType(BundleType.COLLECTION);
@@ -324,7 +324,7 @@ public class PatientResourceProvider implements IResourceProvider {
 	}
 
 	private void validateParametersName(String name) {
-		if (!name.equals("patientNHSNumber") && !name.equals("includeAllergies") && !name.equals("includeMedication")) {
+		if (!name.equals(SystemConstants.PATIENT_NHS_NUMBER) && !name.equals(SystemConstants.INCLUDE_ALLERGIES) && !name.equals(SystemConstants.INCLUDE_MEDICATION)) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
 					new InvalidRequestException("Incorrect Paramater Names"), SystemCode.INVALID_PARAMETER,
 					IssueType.INVALID);

@@ -64,7 +64,7 @@ angular.module('gpConnect', [
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/access-record/access-record-structured.html'}
+            main: {templateUrl: 'views/access-record/access-record-structured.html' ,controller: 'AppointmentsStructuredCtrl'}
         }
     });
 }).directive('datepickerPopup', function() {

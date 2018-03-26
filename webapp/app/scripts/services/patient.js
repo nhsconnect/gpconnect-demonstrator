@@ -108,11 +108,38 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         });
     };
 
+
+       var structured = function(patientId) {
+        return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1").then(function(response) {
+            var endpointLookupResult = response;
+            return $http.post(
+                    endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getstructuredrecord',
+                    '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "'+gpcResource.getConst("ID_NHS_NUMBER")+'", "value" : "' + patientId + '" }},{"name" : "includeAllergies","valueCodeableConcept" :{"coding" : [{"system":"'+gpcResource.getConst("VS_GPC_RECORD_SECTION")+'","code":"SUM","display":"Summary"}]}},{"name" : "includeMedication","valuePeriod" : { "start" : null, "end" : null }}]}',
+                    {
+                        headers: {
+                            'Ssp-From': endpointLookupResult.fromASID,
+                            'Ssp-To': endpointLookupResult.toASID,
+                            'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1",
+                            'Ssp-TraceID': fhirJWTFactory.guid(),
+                            'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
+                            'Accept': "application/fhir+json",
+                            'Content-Type': "application/fhir+json"
+                        }
+                    }
+                ).then(function(response) {
+                        return response.data;
+                    });
+                });
+            };
+    
+
     return {
         findAllSummaries: findAllSummaries,
         getSummary: getSummary,
         getPatientFhirId: getPatientFhirId,
         getFhirPatient: getFhirPatient,
-        registerPatient: registerPatient
+        registerPatient: registerPatient,
+        structured: structured
+
     };
 }]);

@@ -12,11 +12,14 @@ import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceVerificatio
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.ListResource;
+import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
 import org.hl7.fhir.dstu3.model.ListResource.ListMode;
 import org.hl7.fhir.dstu3.model.ListResource.ListStatus;
 import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.Reference;
+import org.hl7.fhir.dstu3.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,15 +37,11 @@ public class StructuredAllergyIntoleranceBuilder {
 	public Bundle buildStructuredAllergyIntolerence(String NHS, Bundle bundle, Boolean includedResolved) {
 
 		List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntollerence(NHS);
-
-		ListResource activeAllergies = new ListResource();
-		activeAllergies.setTitle(SystemConstants.ACTIVE_ALLERGIES);
-		ListResource resolvedAllergies = new ListResource();
-		resolvedAllergies.setTitle(SystemConstants.RESOLVED_ALLERGIES);
-		AllergyIntolerance allergyIntolerance = new AllergyIntolerance();
+		ListResource listResource = new ListResource();
+		AllergyIntolerance allergyIntolerance;
 
 		for (int i = 0; i < allergyData.size(); i++) {
-
+			allergyIntolerance = new AllergyIntolerance();
 			Meta met = new Meta();
 			met.setVersionId("3");
 			met.addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE);
@@ -105,25 +104,23 @@ public class StructuredAllergyIntoleranceBuilder {
 			reaction.setExposureRoute(exposureRoute);
 			allergyIntolerance.addReaction(reaction);
 
-			if (allergyData.get(i).getClinicalStatus().equals(SystemConstants.RESOLVED)) {
+			allergyIntolerance.addNote().setText(allergyData.get(i).getNote());
 
-				listResourceBuilder(resolvedAllergies, allergyIntolerance);
+			if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {
+				listResource = listResourceBuilder(listResource, allergyIntolerance);
+				allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.ACTIVE);
+				bundle.addEntry().setResource(allergyIntolerance);
 
-			} else {
-
-				listResourceBuilder(activeAllergies, allergyIntolerance);
+			} else if (allergyIntolerance.getClinicalStatus().getDisplay().equals("Resolved")
+					&& includedResolved.equals(true)) {
+				listResource = listResourceBuilder(listResource, allergyIntolerance);
+				allergyIntolerance.setLastOccurrence(allergyData.get(i).getEndDate());
+				allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.RESOLVED);
+				bundle.addEntry().setResource(allergyIntolerance);
 			}
 
 		}
-
-		if (resolvedAllergies.hasContained() && includedResolved.equals(true)) {
-			bundle.addEntry().setResource(resolvedAllergies);
-		}
-		if (activeAllergies.hasContained()) {
-			bundle.addEntry().setResource(activeAllergies);
-
-		}
-
+		bundle.addEntry().setResource(listResource);
 		return bundle;
 
 	}
@@ -135,7 +132,13 @@ public class StructuredAllergyIntoleranceBuilder {
 		noContent.setText(SystemConstants.NO_CONTENT);
 		buildingListResource.setEmptyReason(noContent);
 
-		buildingListResource.addContained(allergyIntolerance);
+		List<Resource> value = new ArrayList<>();
+		value.add(allergyIntolerance);
+		buildingListResource.setContained(value);
+		ListEntryComponent comp = new ListEntryComponent();
+		Reference allergyReference = new Reference("AllergyIntolerance/" + allergyIntolerance.getId());
+		comp.setItem(allergyReference);
+		buildingListResource.addEntry(comp);
 
 		ListStatus activeAllergiesStatus = ListStatus.CURRENT;
 		buildingListResource.setStatus(activeAllergiesStatus);

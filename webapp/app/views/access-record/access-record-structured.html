@@ -1,15 +1,110 @@
-<div>
-  
-  <h3>
-    <strong>Access Record - Structured</strong>
-  </h3>
-  
-  <p>
-  	The 'Access Record - Structured' capability is not available in version 1.1.0 of the GP Connect specification. 
-  </p>
-  
-  <p>
-  	'Access Record - Structured' will be implemented in an upcoming release.
-  </p>
-  
- </div>
+<div class="container-fluid">
+  <div class="col-md-5">
+    <h3>
+      <strong>Access Record Structured</strong>
+    </h3>
+    <br>
+    <h1>Allergies</h1>
+    <div class="col-md-6 hidden-xs">
+        <div class="text-right create-button">
+          <button class="btn btn-info" ng-click="getAllergyData();">
+            <i class="fa fa-plus"></i> Request Allergy Data</button>
+        </div>
+      </div>
+    <br>
+<br>
+    <h4>Table of Active Allergies</h4>
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th scope="col">AssertedDate</th>
+          <th scope="col">Reaction</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="object in ActiveAllergiesList">
+          <td>{{object.assertedDate}}</td>
+          <td>{{object.reaction[0].manifestation[0].coding[0].display}}</td>
+          <td>{{object.clinicalStatus}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+    <h4>Table of Resolved Allergies</h4>
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th scope="col">AssertedDate</th>
+          <th scope="col">Reaction</th>
+          <th scope="col">Status</th>
+          <th scope="col">Resolved Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="object in ResolvedAllergiesList">
+          <td>{{object.assertedDate}}</td>
+          <td>{{object.reaction[0].manifestation[0].coding[0].display}}</td>
+          <td>{{object.clinicalStatus}}</td>
+          <td>{{object.resolvedDate}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+    <div>
+
+      <h2>Patient</h2>
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Patient Name</th>
+            <th>Patient Id</th>
+            <th>Patient DOB</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{patient.name}}</td>
+            <td>{{patient.id}}</td>
+            <td>{{patient.birthDate}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Practitioner</h2>
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Practitioner Name</th>
+            <th>Practitioner Id</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{practitioner.name[0].family}}</td>
+            <td>{{practitioner.id}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Organization</h2>
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Organization Name</th>
+            <th>Organization Id</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{organization.name}}</td>
+            <td>{{organization.id}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

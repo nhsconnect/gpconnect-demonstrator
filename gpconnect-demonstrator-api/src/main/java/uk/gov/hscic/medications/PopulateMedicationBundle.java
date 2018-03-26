@@ -85,19 +85,21 @@ public class PopulateMedicationBundle {
 	private ListResource createListEntry(List<MedicationStatementDetail> medicationStatements, String nhsNumber) {
 		ListResource medicationStatementsList = new ListResource();
 		
+		medicationStatementsList.setId(new IdType(1));
+		
 		medicationStatementsList.setMeta(new Meta().addProfile(SystemURL.SD_GPC_LIST)
 				.setVersionId(String.valueOf(new Date().getTime())));
 		medicationStatementsList.setStatus(ListStatus.CURRENT);
 		medicationStatementsList.setMode(ListMode.SNAPSHOT);
 		medicationStatementsList.setTitle(SystemConstants.MEDICATION_LIST);
 		medicationStatementsList.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOWMED, "TBD", "Medication List")));
-		medicationStatementsList.setSubject(new Reference().setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
+		medicationStatementsList.setSubject(new Reference(new IdType("Patient", 1L)).setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
 		medicationStatementsList.setDate(new Date());
 		medicationStatementsList.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
 		
 		if(medicationStatements.isEmpty()) {
 			//TODO set empty reason
-			medicationStatementsList.setEmptyReason(new CodeableConcept().setText("no content"));
+			medicationStatementsList.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT));
 		}
 		medicationStatements.forEach(statement -> {
 			Reference statementRef = new Reference(new IdType("MedicationStatement", statement.getId()));

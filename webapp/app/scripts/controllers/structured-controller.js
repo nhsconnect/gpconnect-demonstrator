@@ -71,20 +71,13 @@ angular
                         } else if (
                             resource.resourceType == "AllergyIntolerance"
                         ) {
-                            $scope.allergyIntolerance = {
-                                assertedDate: resource.assertedDate,
-                                category: resource.category,
-                                clinicalStatus: resource.clinicalStatus,
-                                patient: resource.patient,
-                                resolvedDate : resource.lastOccurence
-                                //  reaction: resource.reaction
-                            };
-
                             if (resource.clinicalStatus == "active") {
                                 $scope.ActiveAllergiesList.push(resource);
                             } else {
                                 $scope.ResolvedAllergiesList.push(resource);
                             }
+
+                          
                         }
                     }
                 });

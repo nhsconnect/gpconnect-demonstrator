@@ -8,8 +8,6 @@ angular
         PatientService,
         $stateParams
     ) {
-        $scope.ActiveAllergies = {};
-        $scope.ResolvedAllergies = {};
         $scope.ActiveAllergiesList = [];
         $scope.ResolvedAllergiesList = [];
 

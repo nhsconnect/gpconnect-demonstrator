@@ -119,7 +119,7 @@ public class MedicationRequestResourceProvider {
 	}
 
 	private void setBasedOnReferences(MedicationRequest medicationRequest, MedicationRequestDetail requestDetail) {
-		if(requestDetail.getPrescriptionTypeCode().equals("repeat")) {
+		if(requestDetail.getIntentCode().equals("order")) {
 			requestDetail.getBasedOnReferences().forEach(reference -> {
 				if(reference.getReferenceUrl().equals(SystemURL.SD_GPC_MEDICATION_REQUEST)) {
 					medicationRequest.addBasedOn(new Reference(new IdType("MedicationRequest", reference.getReferenceId())));

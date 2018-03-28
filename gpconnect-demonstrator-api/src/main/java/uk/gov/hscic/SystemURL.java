@@ -73,7 +73,7 @@ public final class SystemURL {
     
 
     // FHIR ValueSet Constants
-    public static final String VS_GPC_ERROR_WARNING_CODE = "https://fhir.nhs.uk/STU3/ValueSet/Spine-ErrorOrWarningCode-1";
+    public static final String VS_GPC_ERROR_WARNING_CODE = "https://fhir.nhs.uk/STU3/CodeSystem/Spine-ErrorOrWarningCode-1";
     public static final String VS_GPC_REASON_TYPE = "http://fhir.nhs.net/ValueSet/gpconnect-reason-type-1-0";
     public static final String VS_GPC_RECORD_SECTION = "https://fhir.nhs.uk/STU3/ValueSet/GPConnect-RecordSection-1";
     public static final String VS_GPC_DELIVERY_CHANNEL = "https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-DeliveryChannel-1";

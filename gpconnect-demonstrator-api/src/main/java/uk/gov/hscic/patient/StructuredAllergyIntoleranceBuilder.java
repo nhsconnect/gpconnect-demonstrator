@@ -1,25 +1,18 @@
 package uk.gov.hscic.patient;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.dstu3.model.AllergyIntolerance;
+import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceCategory;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceClinicalStatus;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceReactionComponent;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceSeverity;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceVerificationStatus;
-import org.hl7.fhir.dstu3.model.Bundle;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.Extension;
-import org.hl7.fhir.dstu3.model.ListResource;
 import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
 import org.hl7.fhir.dstu3.model.ListResource.ListMode;
 import org.hl7.fhir.dstu3.model.ListResource.ListStatus;
-import org.hl7.fhir.dstu3.model.Meta;
-import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.dstu3.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -80,7 +73,7 @@ public class StructuredAllergyIntoleranceBuilder {
 
 			// ADD END DATE AND REASON
 
-			AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
+            AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
 
 			// MANIFESTATION
 			List<CodeableConcept> theManifestation = new ArrayList<>();
@@ -113,7 +106,32 @@ public class StructuredAllergyIntoleranceBuilder {
 					&& includedResolved.equals(true)) {
 				listResource = listResourceBuilder(listResource, allergyIntolerance);
 				allergyIntolerance.setLastOccurrence(allergyData.get(i).getEndDate());
-				allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.RESOLVED);
+
+                final List<Extension> extension = new ArrayList<>();
+                final Extension allergyEnd = new Extension();
+
+                allergyEnd.setUrl("allergyEnd");
+
+                final Extension endDate = new Extension();
+                endDate.setUrl("endDate");
+                final Date endDateSource = allergyData.get(i).getEndDate();
+                endDate.setValue(new DateTimeType(endDateSource));
+
+                final Extension endReason = new Extension();
+                endReason.setUrl("endReason");
+                final String endReasonSource = allergyData.get(i).getEndReason();
+                endReason.setValue(new StringType(endReasonSource));
+
+                allergyEnd.addExtension(endDate);
+                allergyEnd.addExtension(endReason);
+
+                
+                extension.add(allergyEnd);
+                
+                allergyIntolerance.setExtension(extension);
+
+
+                allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.RESOLVED);
 				bundle.addEntry().setResource(allergyIntolerance);
 			}
 

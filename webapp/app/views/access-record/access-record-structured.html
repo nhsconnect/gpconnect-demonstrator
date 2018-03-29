@@ -6,13 +6,13 @@
     <br>
     <h1>Allergies</h1>
     <div class="col-md-6 hidden-xs">
-        <div class="text-right create-button">
-          <button class="btn btn-info" ng-click="getAllergyData();">
-            <i class="fa fa-plus"></i> Request Allergy Data</button>
-        </div>
+      <div class="text-right create-button">
+        <button class="btn btn-info" ng-click="getAllergyData();">
+          <i class="fa fa-plus"></i> Request Allergy Data</button>
       </div>
+    </div>
     <br>
-<br>
+    <br>
     <h4>Table of Active Allergies</h4>
     <table class="table table-bordered table-striped table-hover">
       <thead>
@@ -41,6 +41,8 @@
           <th scope="col">Reaction</th>
           <th scope="col">Status</th>
           <th scope="col">Resolved Date</th>
+          <th scope="col">End Date</th>
+          <th scope="col">End Reason</th>
         </tr>
       </thead>
       <tbody>
@@ -49,6 +51,8 @@
           <td>{{object.reaction[0].manifestation[0].coding[0].display}}</td>
           <td>{{object.clinicalStatus}}</td>
           <td>{{object.lastOccurrence}}</td>
+          <td>{{object.extension[0].extension[0].valueDateTime}}</td>
+          <td>{{object.extension[0].extension[1].valueString}}</td>
         </tr>
       </tbody>
     </table>

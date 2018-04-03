@@ -142,7 +142,7 @@ public class StructuredAllergyIntoleranceBuilder {
 
         }
 
-        if (active.isEmpty()) {
+        if (!active.hasEntry()) {
             active.addNote(new Annotation(new StringType("" +
                     "There are no allergies in the patient record but it has not been confirmed with the patient that " +
                     "they have no allergies (that is, a ‘no known allergies’ code has not been recorded)."
@@ -176,6 +176,8 @@ public class StructuredAllergyIntoleranceBuilder {
 
         final Meta meta = new Meta();
         meta.addProfile(SystemURL.SD_GPC_LIST);
+        meta.setVersionId("3");
+
         active.setMeta(meta);
         return active;
     }

@@ -272,7 +272,7 @@ public class PatientResourceProvider implements IResourceProvider {
 	public Bundle StructuredRecordOperation(@ResourceParam Parameters params) throws FHIRException {
 		Bundle structuredBundle = new Bundle();
 		Boolean getAllergies = true;
-		Boolean includeResolved = true;
+		Boolean includeResolved = false;
 
 		for (int i = 0; i < params.getParameter().size(); i++) {
 			validateParametersName(params.getParameter().get(i).getName());

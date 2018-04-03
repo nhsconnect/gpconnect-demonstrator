@@ -69,7 +69,8 @@ public class MedicationResourceProvider implements IResourceProvider {
 		
 		medication.setId(new IdType(medicationDetail.getId()));
 		
-		medication.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION));
+		medication.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION)
+				.setVersionId(String.valueOf(new Date()))); 
 		
 		Coding coding = new Coding(SystemURL.VS_SNOWMED, 
 				medicationDetail.getCode(), medicationDetail.getDisplay());

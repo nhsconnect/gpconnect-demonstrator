@@ -71,7 +71,7 @@ angular
                         ) {
                             if (resource.clinicalStatus == "active") {
                                 $scope.ActiveAllergiesList.push(resource);
-                            } else {
+                            } else if(resource.clinicalStatus == "resolved") {
                                 $scope.ResolvedAllergiesList.push(resource);
                             }
 

@@ -1,6 +1,7 @@
 package uk.gov.hscic.patient;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,6 @@ import org.hl7.fhir.dstu3.model.ListResource.ListStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
@@ -31,7 +31,12 @@ public class StructuredAllergyIntoleranceBuilder {
     public Bundle buildStructuredAllergyIntolerence(String NHS, Bundle bundle, Boolean includedResolved) {
 
         List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntollerence(NHS);
-        ListResource listResource = new ListResource();
+
+        ListResource active = addMetaToList();
+        ListResource resolved = addMetaToList();
+
+        resolved.setTitle("Resolved Allergies");
+
         AllergyIntolerance allergyIntolerance;
 
         if (includedResolved.equals(true) &&
@@ -39,12 +44,31 @@ public class StructuredAllergyIntoleranceBuilder {
                 allergyData.get(0).getClinicalStatus().equals(SystemConstants.NO_KNOWN)) {
             //only when this condition is true then "No Known Allergies" also will be true
             CodeableConcept noKnownAllergies = new CodeableConcept();
+
+            noKnownAllergies.setCoding(Arrays.asList(new Coding(
+                    SystemURL.HL7_SPECIAL_VALUES,
+                    "nil-known",
+                    "Nil Known")));
             noKnownAllergies.setText("No Known Allergies");
 
-            listResource.setEmptyReason(noKnownAllergies);
-            bundle.addEntry().setResource(listResource);
+            active.setEmptyReason(noKnownAllergies);
+            bundle.addEntry().setResource(active);
 
             return bundle;
+        }
+
+        if (!allergyData.isEmpty()) {
+            active.setTitle("Active Allergies");
+
+            final CodeableConcept coding = new CodeableConcept();
+
+            coding.setCoding(Arrays.asList(new Coding(
+                    "http://snomed.info/sct",
+                    "TBD",
+                    "Active Allergies"
+            )));
+
+            active.setCode(coding);
         }
 
         for (int i = 0; i < allergyData.size(); i++) {
@@ -113,38 +137,16 @@ public class StructuredAllergyIntoleranceBuilder {
 
 
             if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {
-                listResource = listResourceBuilder(listResource, allergyIntolerance);
+                active = listResourceBuilder(active, allergyIntolerance);
                 allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.ACTIVE);
                 bundle.addEntry().setResource(allergyIntolerance);
 
             } else if (allergyIntolerance.getClinicalStatus().getDisplay().equals("Resolved")
                     && includedResolved.equals(true)) {
-                listResource = listResourceBuilder(listResource, allergyIntolerance);
+                resolved = listResourceBuilder(resolved, allergyIntolerance);
                 allergyIntolerance.setLastOccurrence(allergyData.get(i).getEndDate());
 
-                final List<Extension> extension = new ArrayList<>();
-                final Extension allergyEnd = new Extension();
-
-                allergyEnd.setUrl("allergyEnd");
-
-                final Extension endDate = new Extension();
-                endDate.setUrl("endDate");
-                final Date endDateSource = allergyData.get(i).getEndDate();
-                endDate.setValue(new DateTimeType(endDateSource));
-
-                final Extension endReason = new Extension();
-                endReason.setUrl("endReason");
-                final String endReasonSource = allergyData.get(i).getEndReason();
-                endReason.setValue(new StringType(endReasonSource));
-
-                allergyEnd.addExtension(endDate);
-                allergyEnd.addExtension(endReason);
-
-
-                extension.add(allergyEnd);
-
-                allergyIntolerance.setExtension(extension);
-
+                allergyIntolerance.setExtension(createAllergyEndExtension(allergyData, i));
 
                 allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.RESOLVED);
                 bundle.addEntry().setResource(allergyIntolerance);
@@ -152,16 +154,44 @@ public class StructuredAllergyIntoleranceBuilder {
 
         }
 
-        if (listResource.isEmpty()) {
-            listResource.addNote(new Annotation(new StringType("" +
+        if (active.isEmpty()) {
+            active.addNote(new Annotation(new StringType("" +
                     "There are no allergies in the patient record but it has not been confirmed with the patient that " +
                     "they have no allergies (that is, a ‘no known allergies’ code has not been recorded)."
             )));
         }
 
-        bundle.addEntry().setResource(listResource);
+        bundle.addEntry().setResource(active);
+
+        if (includedResolved) {
+            bundle.addEntry().setResource(resolved);
+        }
+
+
         return bundle;
 
+    }
+
+    private ListResource addMetaToList() {
+        ListResource active = new ListResource();
+
+        final Meta meta = new Meta();
+        meta.addProfile(SystemURL.SD_GPC_LIST);
+        active.setMeta(meta);
+        return active;
+    }
+
+    private List<Extension> createAllergyEndExtension(List<StructuredAllergyIntoleranceEntity> allergyData, int i) {
+        final Extension allergyEnd = new Extension("allergyEnd");
+
+        final Extension endDate = new Extension("endDate", new DateTimeType(allergyData.get(i).getEndDate()));
+
+        final Extension endReason = new Extension("endReason", new StringType(allergyData.get(i).getEndReason()));
+
+        allergyEnd.addExtension(endDate);
+        allergyEnd.addExtension(endReason);
+
+        return Arrays.asList(allergyEnd);
     }
 
     private ListResource listResourceBuilder(ListResource buildingListResource, AllergyIntolerance allergyIntolerance) {

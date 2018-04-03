@@ -9,7 +9,8 @@ public final class SystemConstants {
 	public static final String ACTIVE_ALLERGIES = "Active Allergies";
 	public static final String RESOLVED_ALLERGIES = "Resolved Allergies";
 	public static final String RESOLVED = "resolved";
-	
+	public static final String NO_KNOWN = "no known";
+
 	public static final String SNOMED_URL = "http://snomed.info/sct";
 
 	public static final String MANIFESTATION_DESCRIPTION = "MANIFESTATION DESCRIPTION";

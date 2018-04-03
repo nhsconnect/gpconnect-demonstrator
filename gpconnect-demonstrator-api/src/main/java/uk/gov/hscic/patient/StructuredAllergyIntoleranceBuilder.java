@@ -2,7 +2,6 @@ package uk.gov.hscic.patient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.dstu3.model.*;
@@ -35,6 +34,13 @@ public class StructuredAllergyIntoleranceBuilder {
         ListResource active = addMetaToList();
         ListResource resolved = addMetaToList();
 
+        final CodeableConcept codingActive = createCoding("http://snomed.info/sct", "TBD", "Active Allergies");
+        final CodeableConcept codingResolved = createCoding("http://snomed.info/sct", "TBD", "Resolved Allergies");
+
+        active.setCode(codingActive);
+        resolved.setCode(codingResolved);
+
+        active.setTitle("Active Allergies");
         resolved.setTitle("Resolved Allergies");
 
         AllergyIntolerance allergyIntolerance;
@@ -42,13 +48,8 @@ public class StructuredAllergyIntoleranceBuilder {
         if (includedResolved.equals(true) &&
                 allergyData.size() == 1 &&
                 allergyData.get(0).getClinicalStatus().equals(SystemConstants.NO_KNOWN)) {
-            //only when this condition is true then "No Known Allergies" also will be true
-            CodeableConcept noKnownAllergies = new CodeableConcept();
 
-            noKnownAllergies.setCoding(Arrays.asList(new Coding(
-                    SystemURL.HL7_SPECIAL_VALUES,
-                    "nil-known",
-                    "Nil Known")));
+            CodeableConcept noKnownAllergies = createCoding(SystemURL.HL7_SPECIAL_VALUES, "nil-known", "Nil Known");
             noKnownAllergies.setText("No Known Allergies");
 
             active.setEmptyReason(noKnownAllergies);
@@ -57,19 +58,6 @@ public class StructuredAllergyIntoleranceBuilder {
             return bundle;
         }
 
-        if (!allergyData.isEmpty()) {
-            active.setTitle("Active Allergies");
-
-            final CodeableConcept coding = new CodeableConcept();
-
-            coding.setCoding(Arrays.asList(new Coding(
-                    "http://snomed.info/sct",
-                    "TBD",
-                    "Active Allergies"
-            )));
-
-            active.setCode(coding);
-        }
 
         for (int i = 0; i < allergyData.size(); i++) {
             allergyIntolerance = new AllergyIntolerance();
@@ -170,6 +158,17 @@ public class StructuredAllergyIntoleranceBuilder {
 
         return bundle;
 
+    }
+
+    private CodeableConcept createCoding(String system, String code, String display) {
+        final CodeableConcept codeableConcept = new CodeableConcept();
+        codeableConcept.setCoding(Arrays.asList(new Coding(
+                system,
+                code,
+                display
+        )));
+
+        return codeableConcept;
     }
 
     private ListResource addMetaToList() {

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ca.uhn.fhir.model.primitive.IdDt;
 import org.hl7.fhir.dstu3.model.Annotation;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
@@ -90,6 +91,8 @@ public class PopulateMedicationBundle {
 		medicationStatementsList.setMeta(new Meta().addProfile(SystemURL.SD_GPC_LIST)
 				.setVersionId(String.valueOf(new Date().getTime())));
 		medicationStatementsList.setStatus(ListStatus.CURRENT);
+		medicationStatementsList.setId(new IdDt(1));
+
 		medicationStatementsList.setMode(ListMode.SNAPSHOT);
 		medicationStatementsList.setTitle(SystemConstants.MEDICATION_LIST);
 		medicationStatementsList.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOWMED, "TBD", "Medication List")));

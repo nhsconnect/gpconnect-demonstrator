@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -11,10 +12,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
+import ca.uhn.fhir.model.primitive.InstantDt;
+import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
@@ -72,10 +77,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import uk.gov.hscic.OperationOutcomeFactory;
-import uk.gov.hscic.SystemCode;
-import uk.gov.hscic.SystemConstants;
-import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.*;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.helpers.StaticElementsHelper;
 import uk.gov.hscic.common.validators.IdentifierValidator;
@@ -328,6 +330,12 @@ public class PatientResourceProvider implements IResourceProvider {
 					} else if(paramPart.getValue() instanceof Period
 							&& paramPart.getName().equals(SystemConstants.MEDICATION_DATE_PERIOD)) {
 						medicationPeriod = (Period) paramPart.getValue();
+						if(medicationPeriod.getStart() != null && medicationPeriod.getEnd() != null
+
+						String startDate = medicationPeriod.getStartElement().asStringValue();
+						String endDate = medicationPeriod.getEndElement().asStringValue();
+
+  						validateStartDateParamAndEndDateParam(startDate,endDate);
 						if(medicationPeriod.getStart() != null && medicationPeriod.getEnd() != null
 								&& medicationPeriod.getStart().compareTo(medicationPeriod.getEnd()) > 0) {
 							throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -1094,5 +1102,21 @@ public class PatientResourceProvider implements IResourceProvider {
 
 			return parameter;
 		}
+	}
+
+	private void validateStartDateParamAndEndDateParam(String startDate, String endDate) {
+		Pattern dateOnlyPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+
+		//if only a date then match against the date regex
+		if(!dateOnlyPattern.matcher(startDate).matches() || !dateOnlyPattern.matcher(endDate).matches() ){
+			throwInvalidParameterOperationalOutcome("Invalid date used");
+		}
+	}
+
+	private void throwInvalidParameterOperationalOutcome(String error) {
+		throw OperationOutcomeFactory.buildOperationOutcomeException(
+				new UnprocessableEntityException(
+						error),
+				SystemCode.INVALID_PARAMETER, IssueType.INVALID);
 	}
 }

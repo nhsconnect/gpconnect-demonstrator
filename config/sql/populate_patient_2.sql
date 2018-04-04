@@ -72,7 +72,10 @@ INSERT INTO gpconnect.medication_statements
  (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated)
 VALUES
- (1,'2017-06-12',8,'active','Active',9,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Take 2 tablets every 4 hours','Take with meals','2018-03-15');
+ (1,'2017-06-12',8,'active','Active',9,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Take 2 tablets every 4 hours','Take with meals','2018-03-15'),
+  (4,'2017-06-12',8,'active','Active',6,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Take 2 tablets every 4 hours','Take with meals','2018-03-15'),
+  (5,'2017-06-12',8,'active','Active',12,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Take 2 tablets every 4 hours','Take with meals','2018-03-15'),
+  (6,'2017-06-12',8,'active','Active',14,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Take 2 tablets every 4 hours','Take with meals','2018-03-15');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)
@@ -118,6 +121,9 @@ VALUES
  '2017-06-12','2018-06-12',null,null,'200 Tablets','60',1,null,5,0,'2018-06-12','repeat','Repeat',null,null,'2018-03-15');
 
 UPDATE gpconnect.medication_statements SET medicationRequestId = 1 WHERE id = 1;
+UPDATE gpconnect.medication_statements SET medicationRequestId = 1 WHERE id = 4;
+UPDATE gpconnect.medication_statements SET medicationRequestId = 1 WHERE id = 5;
+UPDATE gpconnect.medication_statements SET medicationRequestId = 1 WHERE id = 6;
 
 INSERT INTO gpconnect.medication_request_based_on
  (id,referenceUrl,referenceId)

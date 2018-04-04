@@ -39,9 +39,13 @@ public class StructuredAllergyIntoleranceBuilder {
 
         active.setCode(codingActive);
         active.setId("33");
+        active.setStatus(ListStatus.CURRENT);
+        active.setMode(ListMode.SNAPSHOT);
 
         resolved.setCode(codingResolved);
         resolved.setId("33");
+        resolved.setStatus(ListStatus.CURRENT);
+        resolved.setMode(ListMode.SNAPSHOT);
 
 
         active.setTitle("Active Allergies");
@@ -57,6 +61,13 @@ public class StructuredAllergyIntoleranceBuilder {
             noKnownAllergies.setText("No Known Allergies");
 
             active.setEmptyReason(noKnownAllergies);
+
+
+            Reference patient = new Reference(
+                    SystemConstants.PATIENT_REFERENCE_URL + allergyData.get(0).getPatientRef());
+
+            active.setSubject(patient);
+
             bundle.addEntry().setResource(active);
 
             return bundle;
@@ -147,21 +158,36 @@ public class StructuredAllergyIntoleranceBuilder {
         }
 
         if (!active.hasEntry()) {
-            active.addNote(new Annotation(new StringType("" +
-                    "There are no allergies in the patient record but it has not been confirmed with the patient that " +
-                    "they have no allergies (that is, a ‘no known allergies’ code has not been recorded)."
-            )));
+            addIdentifier(NHS, active);
         }
 
         bundle.addEntry().setResource(active);
+
+        if (includedResolved && !resolved.hasEntry()) {
+            addIdentifier(NHS, resolved);
+        }
 
         if (includedResolved) {
             bundle.addEntry().setResource(resolved);
         }
 
-
         return bundle;
 
+    }
+
+    private void addIdentifier(String NHS, ListResource active) {
+        active.addNote(new Annotation(new StringType("" +
+                "There are no allergies in the patient record but it has not been confirmed with the patient that " +
+                "they have no allergies (that is, a ‘no known allergies’ code has not been recorded)."
+        )));
+
+        final Reference value = new Reference();
+        final Identifier identifier = new Identifier();
+        identifier.setSystem(SystemURL.ID_NHS_NUMBER);
+        identifier.setValue(NHS);
+
+        value.setIdentifier(identifier);
+        active.setSubject(value);
     }
 
     private CodeableConcept createCoding(String system, String code, String display) {

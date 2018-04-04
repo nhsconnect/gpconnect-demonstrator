@@ -108,6 +108,31 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         });
     };
 
+    var structured = function(patientId) {
+        return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1").then(function(response) {
+            var endpointLookupResult = response;
+            return $http.post(
+                endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getstructuredrecord',
+                '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "'+gpcResource.getConst("ID_NHS_NUMBER")+'", "value" : "' + patientId + '" }},{"name":"includeMedication","part":[{"name":"medicationDatePeriod","valuePeriod":{"start":"2012-02-02","end":"2018-02-02"}}]}]}',
+
+
+                {
+                    headers: {
+                        'Ssp-From': endpointLookupResult.fromASID,
+                        'Ssp-To': endpointLookupResult.toASID,
+                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1",
+                        'Ssp-TraceID': fhirJWTFactory.guid(),
+                        'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", patientId),
+                        'Accept': "application/fhir+json",
+                        'Content-Type': "application/fhir+json"
+                    }
+                }
+            ).then(function(response) {
+                return response.data;
+            });
+        });
+    };
+
 
     var structured = function (patientId) {
         return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1").then(function (response) {
@@ -141,5 +166,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         registerPatient: registerPatient,
         structured: structured
 
+        registerPatient: registerPatient,
+        structured:structured
     };
 }]);

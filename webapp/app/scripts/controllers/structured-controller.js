@@ -15,6 +15,14 @@ angular
 
         $scope.getAllergyData = function() {
             {
+        $scope.MedicationListList = [];
+        $scope.ResolvedAllergiesList = [];
+
+
+
+        $scope.getMedicationData = function() {
+            {
+                console.log("HERE");
                 $scope.patient = {
                     name: "",
                     id: "",
@@ -28,6 +36,7 @@ angular
                     name: "",
                     id: ""
                 };
+
         
                 $scope.allergyIntolerance = {
                     assertedDate: "",
@@ -77,6 +86,10 @@ angular
 
                           
                         }
+                            if (resource.resourceType == "Medication") {
+                                $scope.MedicationListList.push(resource);
+                            } 
+
                     }
                 });
             }

@@ -1,4 +1,30 @@
 <div class="container-fluid">
+    <div class="col-md-5">
+        <h3>
+            <strong>Access Record Structured</strong>
+        </h3>
+        <br>
+        <h1>Medications</h1>
+        <div class="col-md-6 hidden-xs">
+            <div class="text-right create-button">
+                <button class="btn btn-info" ng-click="getMedicationData();">
+                    <i class="fa fa-plus"></i> Request Medication Data</button>
+            </div>
+        </div>
+        <br>
+        <br>
+
+    </div>
+    </div>
+
+<h4>List of medications</h4>
+
+<ul>
+    <li ng-repeat="medication in MedicationListList">
+        {{medication.extension[0].extension[1].valueString}}
+    </li>
+</ul>
+<div class="container-fluid">
   <div class="col-md-5">
     <h3>
       <strong>Access Record Structured</strong>

@@ -183,7 +183,7 @@ public class StructuredAllergyIntoleranceBuilder {
     }
 
     private List<Extension> createAllergyEndExtension(List<StructuredAllergyIntoleranceEntity> allergyData, int i) {
-        final Extension allergyEnd = new Extension("allergyEnd");
+        final Extension allergyEnd = new Extension("https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-AllergyIntoleranceEnd-1");
 
         final Extension endDate = new Extension("endDate", new DateTimeType(allergyData.get(i).getEndDate()));
 

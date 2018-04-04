@@ -1108,7 +1108,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		Pattern dateOnlyPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
 
 		//if only a date then match against the date regex
-		if(!dateOnlyPattern.matcher(startDate).matches() || !dateOnlyPattern.matcher(endDate).matches() ){
+		if( (startDate!= null && !dateOnlyPattern.matcher(startDate).matches()) || (endDate != null && !dateOnlyPattern.matcher(endDate).matches())	 ){
 			throwInvalidParameterOperationalOutcome("Invalid date used");
 		}
 	}

@@ -38,7 +38,11 @@ public class StructuredAllergyIntoleranceBuilder {
         final CodeableConcept codingResolved = createCoding("http://snomed.info/sct", "TBD", "Resolved Allergies");
 
         active.setCode(codingActive);
+        active.setId("33");
+
         resolved.setCode(codingResolved);
+        resolved.setId("33");
+
 
         active.setTitle("Active Allergies");
         resolved.setTitle("Resolved Allergies");

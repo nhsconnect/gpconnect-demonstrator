@@ -22,6 +22,28 @@ angular
         initGetMedicationData();
 
          function initGetMedicationData() {
+             PatientService.medication($stateParams.patientId).then(function(
+                 patientSummaryResponse
+             ) {
+                 for (
+                     var i = 0;
+                     i < patientSummaryResponse.entry.length;
+                     i++
+                 ) {
+                     var resource = patientSummaryResponse.entry[i].resource;
+
+                     if (resource.resourceType == "Medication") {
+                         $scope.MedicationListList.push(resource);
+                     }
+
+                 }
+             });
+         }
+        
+
+      
+
+        $scope.getAllergyData = function() {
             {
                 $scope.patient = {
                     name: "",
@@ -84,7 +106,7 @@ angular
                                 $scope.ResolvedAllergiesList.push(resource);
                             }
 
-                          
+
                         }
                             if (resource.resourceType == "Medication") {
                                 $scope.MedicationListList.push(resource);
@@ -103,4 +125,15 @@ angular
                 }
             });
         }
+        };
+
+        $scope.showHIde = function() {
+            $scope.IsVisible = true;
+            PatientService.allMedications().then(function (mediacations) {
+                for(var i =0; i<mediacations.length;i++) {
+                    $scope.AllMedications.push(mediacations[i]);
+                }
+            });
+        }
     });
+

@@ -158,6 +158,12 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
     };
 
 
+    var allMedications = function () {
+        return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/medication/all').then(function (response) {
+            return response.data;
+        });
+    };
+
     return {
         findAllSummaries: findAllSummaries,
         getSummary: getSummary,
@@ -167,6 +173,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         structured: structured
 
         registerPatient: registerPatient,
-        structured:structured
+        structured:structured,
+        allMedications:allMedications
     };
 }]);

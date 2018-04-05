@@ -16,13 +16,13 @@ angular
         $scope.getAllergyData = function() {
             {
         $scope.MedicationListList = [];
-        $scope.ResolvedAllergiesList = [];
+        $scope.AllMedications = [];
+        $scope.IsVisible = false;
 
+        initGetMedicationData();
 
-
-        $scope.getMedicationData = function() {
+         function initGetMedicationData() {
             {
-                console.log("HERE");
                 $scope.patient = {
                     name: "",
                     id: "",
@@ -93,5 +93,14 @@ angular
                     }
                 });
             }
-        };
+        }
+
+        $scope.showHIde = function() {
+            $scope.IsVisible = true;
+            PatientService.allMedications().then(function (mediacations) {
+                for(var i =0; i<mediacations.length;i++) {
+                    $scope.AllMedications.push(mediacations[i]);
+                }
+            });
+        }
     });

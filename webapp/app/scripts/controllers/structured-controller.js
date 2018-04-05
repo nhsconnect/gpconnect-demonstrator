@@ -8,16 +8,11 @@ angular
         PatientService,
         $stateParams
     ) {
-        $scope.ActiveAllergiesList = [];
-        $scope.ResolvedAllergiesList = [];
-
-      
-
-        $scope.getAllergyData = function() {
-            {
         $scope.MedicationListList = [];
         $scope.AllMedications = [];
         $scope.IsVisible = false;
+        $scope.ActiveAllergiesList = [];
+        $scope.ResolvedAllergiesList = [];
 
         initGetMedicationData();
 
@@ -108,23 +103,9 @@ angular
 
 
                         }
-                            if (resource.resourceType == "Medication") {
-                                $scope.MedicationListList.push(resource);
-                            } 
-
                     }
                 });
             }
-        }
-
-        $scope.showHIde = function() {
-            $scope.IsVisible = true;
-            PatientService.allMedications().then(function (mediacations) {
-                for(var i =0; i<mediacations.length;i++) {
-                    $scope.AllMedications.push(mediacations[i]);
-                }
-            });
-        }
         };
 
         $scope.showHIde = function() {

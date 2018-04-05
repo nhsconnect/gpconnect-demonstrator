@@ -108,7 +108,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         });
     };
 
-    var structured = function(patientId) {
+    var medication = function(patientId) {
         return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1").then(function(response) {
             var endpointLookupResult = response;
             return $http.post(
@@ -169,11 +169,9 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         getSummary: getSummary,
         getPatientFhirId: getPatientFhirId,
         getFhirPatient: getFhirPatient,
+        structured: structured,
         registerPatient: registerPatient,
-        structured: structured
-
-        registerPatient: registerPatient,
-        structured:structured,
+        medication:medication,
         allMedications:allMedications
     };
 }]);

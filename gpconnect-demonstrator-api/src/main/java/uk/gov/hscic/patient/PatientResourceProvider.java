@@ -20,7 +20,6 @@ import javax.annotation.PostConstruct;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.DateRangeParam;
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
 import org.hl7.fhir.dstu3.model.Appointment;
@@ -77,7 +76,10 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import uk.gov.hscic.*;
+import uk.gov.hscic.OperationOutcomeFactory;
+import uk.gov.hscic.SystemCode;
+import uk.gov.hscic.SystemConstants;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.helpers.StaticElementsHelper;
 import uk.gov.hscic.common.validators.IdentifierValidator;
@@ -115,8 +117,8 @@ public class PatientResourceProvider implements IResourceProvider {
 	@Autowired
 	private MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
 
-    @Autowired
-    private AppointmentResourceProvider appointmentResourceProvider;
+	@Autowired
+	private AppointmentResourceProvider appointmentResourceProvider;
 
 	@Autowired
 	private OrganizationResourceProvider organizationResourceProvider;
@@ -273,42 +275,23 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	@Search(compartmentName = "Appointment")
 	public List<Appointment> getPatientAppointments(@IdParam IdType patientLocalId, @Sort SortSpec sort,
-			@Count Integer count, @OptionalParam(name = "start") DateAndListParam startDate) {
+													@Count Integer count, @OptionalParam(name = "start") DateAndListParam startDate) {
 		return appointmentResourceProvider.getAppointmentsForPatientIdAndDates(patientLocalId, sort, count, startDate);
 	}
 
 	@Operation(name = GET_STRUCTURED_RECORD_OPERATION_NAME)
 	public Bundle StructuredRecordOperation(@ResourceParam Parameters params) throws FHIRException {
-		System.out.println("REACHED HERE????");
 		Bundle structuredBundle = new Bundle();
 		Boolean getAllergies = true;
 		Boolean includeResolved = false;
 		Boolean getMedications = false;
 		Boolean includePrescriptionIssues = false;
 		Period medicationPeriod = null;
-		Boolean getAllergies = false;
-		boolean getMedications = true;
-		Type includeResolved = null;
 
-		for (int i = 0; i < params.getParameter().size(); i++) {
-			validateParametersName(params.getParameter().get(i).getName());
-			if (params.getParameter().get(i).getName().equals(SystemConstants.INCLUDE_ALLERGIES)) {
+		for(ParametersParameterComponent param: params.getParameter()) {
+			validateParametersName(param.getName());
+			if(param.getName().equals(SystemConstants.INCLUDE_ALLERGIES)) {
 				getAllergies = true;
-				List<ParametersParameterComponent> part = params.getParameter().get(i).getPart();
-				if (!part.isEmpty()) {
-					if (!part.get(0).getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES)) {
-						throw OperationOutcomeFactory.buildOperationOutcomeException(
-								new UnprocessableEntityException("Incorrect parameter passed : " + part.get(0).getName()),
-								SystemCode.INVALID_PARAMETER, IssueType.INVALID);
-					}
-
-					includeResolved = Boolean.valueOf(part.get(0).getValue().primitiveValue());
-				}
-			}
-
-		}
-
-		String nhsNumber = getNhsNumber(params);
 				for(ParametersParameterComponent paramPart : param.getPart()) {
 					if(paramPart.getValue() instanceof BooleanType
 							&& paramPart.getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES)) {
@@ -330,12 +313,11 @@ public class PatientResourceProvider implements IResourceProvider {
 					} else if(paramPart.getValue() instanceof Period
 							&& paramPart.getName().equals(SystemConstants.MEDICATION_DATE_PERIOD)) {
 						medicationPeriod = (Period) paramPart.getValue();
-						if(medicationPeriod.getStart() != null && medicationPeriod.getEnd() != null
 
 						String startDate = medicationPeriod.getStartElement().asStringValue();
 						String endDate = medicationPeriod.getEndElement().asStringValue();
 
-  						validateStartDateParamAndEndDateParam(startDate,endDate);
+						validateStartDateParamAndEndDateParam(startDate,endDate);
 						if(medicationPeriod.getStart() != null && medicationPeriod.getEnd() != null
 								&& medicationPeriod.getStart().compareTo(medicationPeriod.getEnd()) > 0) {
 							throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -352,7 +334,7 @@ public class PatientResourceProvider implements IResourceProvider {
 			}
 		}
 
-		String NHS = getNhsNumber(params);
+		String nhsNumber = getNhsNumber(params);
 
 		// Add Patient
 		PatientDetails patientDetails = patientSearch.findPatient(nhsNumber);
@@ -377,26 +359,16 @@ public class PatientResourceProvider implements IResourceProvider {
 			structuredBundle = structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(nhsNumber,
 					structuredBundle, includeResolved);
 		}
-		if (getMedications) {
-			structuredBundle = populateMedicationBundle.addMedicationBundleEntries(structuredBundle,
-					patientDetails, includePrescriptionIssues, medicationPeriod);
-		}
 		structuredBundle.setType(BundleType.COLLECTION);
 		structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
-
-
-		IParser p = FhirContext.forDstu3().newJsonParser().setPrettyPrint(true);
-		String messageString = p.encodeResourceToString(structuredBundle);
-		System.out.println(messageString);
 
 		return structuredBundle;
 	}
 
-
 	private void validateParametersName(String name) {
-		if (!name.equals("patientNHSNumber") && !name.equals("includeAllergies") && !name.equals("includeMedication")) {
+		if (!name.equals(SystemConstants.PATIENT_NHS_NUMBER) && !name.equals(SystemConstants.INCLUDE_ALLERGIES) && !name.equals(SystemConstants.INCLUDE_MEDICATION)) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new InvalidRequestException("Incorrect Parameter Names"), SystemCode.INVALID_PARAMETER,
+					new InvalidRequestException("Incorrect Paramater Names"), SystemCode.INVALID_PARAMETER,
 					IssueType.INVALID);
 		}
 
@@ -762,11 +734,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
 		Period pastPeriod = new Period().setStart(calendar.getTime()).setEnd(calendar.getTime());
 
-        patient.addName()
-                .setFamily("AnotherOfficialFamilyName")
-                .addGiven("AnotherOfficialGivenName")
-                .setUse(NameUse.OFFICIAL)
-                .setPeriod(pastPeriod);
+		patient.addName().setFamily("AnotherOfficialFamilyName").addGiven("AnotherOfficialGivenName")
+				.setUse(NameUse.OFFICIAL).setPeriod(pastPeriod);
 
 		patient.addName().setFamily("AdditionalFamily").addGiven("AdditionalGiven").setUse(NameUse.TEMP);
 
@@ -1060,7 +1029,7 @@ public class PatientResourceProvider implements IResourceProvider {
 						nhsNumber = fromPatientResource(parameter.getResource());
 					} else {
 						throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(
-								"Unable to read parameters. Expecting one of patientNHSNumber or registerPatient both of which are case-sensitive"),
+										"Unable to read parameters. Expecting one of patientNHSNumber or registerPatient both of which are case-sensitive"),
 								SystemCode.INVALID_PARAMETER, IssueType.INVALID);
 					}
 				}
@@ -1082,7 +1051,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		}
 
 		private ParametersParameterComponent getParameterByName(List<ParametersParameterComponent> parameters,
-				String parameterName) {
+																String parameterName) {
 			ParametersParameterComponent parameter = null;
 
 			List<ParametersParameterComponent> filteredParameters = parameters.stream()
@@ -1108,7 +1077,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		Pattern dateOnlyPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
 
 		//if only a date then match against the date regex
-		if( (startDate!= null && !dateOnlyPattern.matcher(startDate).matches()) || (endDate != null && !dateOnlyPattern.matcher(endDate).matches())	 ){
+		if(!dateOnlyPattern.matcher(startDate).matches() || !dateOnlyPattern.matcher(endDate).matches() ){
 			throwInvalidParameterOperationalOutcome("Invalid date used");
 		}
 	}

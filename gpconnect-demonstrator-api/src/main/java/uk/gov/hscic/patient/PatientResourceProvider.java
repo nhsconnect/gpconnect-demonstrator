@@ -110,7 +110,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	@Autowired
 	private MedicationOrderResourceProvider medicationOrderResourceProvider;
-
 	@Autowired
 	private MedicationDispenseResourceProvider medicationDispenseResourceProvider;
 
@@ -282,7 +281,7 @@ public class PatientResourceProvider implements IResourceProvider {
 	@Operation(name = GET_STRUCTURED_RECORD_OPERATION_NAME)
 	public Bundle StructuredRecordOperation(@ResourceParam Parameters params) throws FHIRException {
 		Bundle structuredBundle = new Bundle();
-		Boolean getAllergies = true;
+		Boolean getAllergies = false;
 		Boolean includeResolved = false;
 		Boolean getMedications = false;
 		Boolean includePrescriptionIssues = false;
@@ -334,15 +333,15 @@ public class PatientResourceProvider implements IResourceProvider {
 			}
 		}
 
-		String nhsNumber = getNhsNumber(params);
+		String NHS = getNhsNumber(params);
 
 		// Add Patient
-		PatientDetails patientDetails = patientSearch.findPatient(nhsNumber);
+		PatientDetails patientDetails = patientSearch.findPatient(NHS);
 		Patient patient = patientDetailsToPatientResourceConverter(patientDetails);
 		structuredBundle.addEntry().setResource(patient);
 
 		// Add Organization
-		Long organizationId = new Long(patient.getManagingOrganization().getReference().replace("Organization/", ""));
+		Long organizationId = Long.valueOf(patientDetails.getManagingOrganization());
 		OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId);
 		Organization organization = organizationResourceProvider
 				.convertOrganizaitonDetailsToOrganization(organizationDetails);
@@ -355,12 +354,20 @@ public class PatientResourceProvider implements IResourceProvider {
 		Practitioner pracResource = practitionerResourceProvider.getPractitionerById(new IdType(practitionerId));
 		structuredBundle.addEntry().setResource(pracResource);
 
-		if (getAllergies == true) {
-			structuredBundle = structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(nhsNumber,
+		if (getAllergies) {
+			structuredBundle = structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS,
 					structuredBundle, includeResolved);
+		}
+		if (getMedications) {
+			structuredBundle = populateMedicationBundle.addMedicationBundleEntries(structuredBundle,
+					patientDetails, includePrescriptionIssues, medicationPeriod);
 		}
 		structuredBundle.setType(BundleType.COLLECTION);
 		structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
+
+		IParser p = FhirContext.forDstu3().newJsonParser().setPrettyPrint(true);
+		String messageString = p.encodeResourceToString(structuredBundle);
+		System.out.println(messageString);
 
 		return structuredBundle;
 	}
@@ -1077,7 +1084,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		Pattern dateOnlyPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
 
 		//if only a date then match against the date regex
-		if(!dateOnlyPattern.matcher(startDate).matches() || !dateOnlyPattern.matcher(endDate).matches() ){
+		if( (startDate!= null && !dateOnlyPattern.matcher(startDate).matches()) || (endDate != null && !dateOnlyPattern.matcher(endDate).matches())	 ){
 			throwInvalidParameterOperationalOutcome("Invalid date used");
 		}
 	}

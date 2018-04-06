@@ -21,10 +21,7 @@ angular
                  patientSummaryResponse
              ) {
                  for (
-                     var i = 0;
-                     i < patientSummaryResponse.entry.length;
-                     i++
-                 ) {
+                     var i = 0; i < patientSummaryResponse.entry.length;i++) {
                      var resource = patientSummaryResponse.entry[i].resource;
 
                      if (resource.resourceType == "Medication") {
@@ -34,9 +31,24 @@ angular
                  }
              });
          }
-        
 
-      
+        $scope.openDatePicker = function ($event, name) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.startDate = false;
+            $scope.endDate = false;
+            $scope[name] = true;
+            highlightMonth();
+        };
+
+        var highlightMonth = function(){
+            $(".text-muted").parent().addClass("otherMonth");
+            $("button").unbind('click', highlightMonth);
+            $("button").bind('click', highlightMonth);
+        }
+
+
+
 
         $scope.getAllergyData = function() {
             {
@@ -54,7 +66,7 @@ angular
                     id: ""
                 };
 
-        
+
                 $scope.allergyIntolerance = {
                     assertedDate: "",
                     category: "",

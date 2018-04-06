@@ -3,6 +3,43 @@
         <h3>
             <strong>Medications</strong>
         </h3>
+        <p> Placeholder</p>
+        <!--Date Search: placeholder -->
+        <div class="col-md-12 appDateRange">
+            <div class="col-md-5">
+                <text> Search from:</text>
+                <div class="input-group">
+	                <span class="input-group-btn">
+	                    <button type="button" class="btn btn-default btn-sm" ng-click="openDatePicker($event, 'geStartDate')">
+	                        <i class="fa fa-calendar"></i>
+	                    </button>
+	            	</span>
+                    <input type="text" class="form-control input-sm popupinputs" id="geStartDate" name="geStartDate"
+                           ng-model="appointment.geStartDate" ng-click="openDatePicker($event, 'geStartDate')"
+                           datepicker-popup="dd-MMM-y" min-date="appointment.minGeStartDate" is-open="geStartDate" required/>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <text>until:</text>
+                <div class="input-group">
+	                <span class="input-group-btn">
+	                    <button type="button" class="btn btn-default btn-sm" ng-click="openDatePicker($event, 'leStartDate')" ng-disabled="!appointment.geStartDate">
+	                        <i class="fa fa-calendar"></i>
+	                    </button>
+	                </span>
+                    <input type="text" class="form-control input-sm popupinputs" id="leStartDate" name="leStartDate"
+                           ng-model="appointment.leStartDate" ng-click="openDatePicker($event, 'leStartDate')"
+                           datepicker-popup="dd-MMM-y" min-date="appointment.minLeStartDate" is-open="leStartDate"
+                           ng-disabled="!appointment.geStartDate"/>
+                </div>
+            </div>
+
+            <div class="col-md-2 hidden-xs"><div class="text-right search-button"><button id= "appButtonSearchDateRange" class="btn btn-info" ng-click="searchAppointments();"><i class="fa"></i> Search</button></div></div>
+
+        </div>
+        <!-- End -->
+
         <div class="create-button">
         <button class="btn btn-info" ng-click="showHIde();">
         <i class="fa fa-plus"></i> Add New Medication</button>
@@ -19,14 +56,6 @@
                 {{medication.extension[0].extension[1].valueString}}
             </li>
         </ul>
-
-
-        <!--<div class="col-md-6 hidden-xs">-->
-            <!--<div class="text-right create-button">-->
-                <!--<button class="btn btn-info" ng-click="getMedicationData();">-->
-                    <!--<i class="fa fa-plus"></i> Request Medication Data</button>-->
-            <!--</div>-->
-        <!--</div>-->
         <br>
         <br>
 
@@ -34,11 +63,6 @@
     </div>
 
 
-<ul>
-    <li ng-repeat="medication in MedicationListList">
-        {{medication.extension[0].extension[1].valueString}}
-    </li>
-</ul>
 <div class="container-fluid">
   <div class="col-md-5">
     <h3>

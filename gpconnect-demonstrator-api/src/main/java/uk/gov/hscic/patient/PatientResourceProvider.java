@@ -167,21 +167,16 @@ public class PatientResourceProvider implements IResourceProvider {
         return patient;
     }
 
-	@Search
-	public Bundle getPatientsByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam tokenParam)
+    @Search
+	public List<Patient> getPatientsByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam tokenParam)
 			throws FHIRException {
 
 		Patient patient = getPatientByPatientId(nhsNumber.fromToken(tokenParam));
 		if (null != patient) {
 			addPreferredBranchSurgeryExtension(patient);
 		}
-		
-		Bundle bundle = new Bundle().setType(BundleType.SEARCHSET);
-		if (patient != null && patient.getDeceased() == null) {
-			bundle.addEntry().setResource(patient);
-		}
-		
-		return bundle;
+		return null == patient || patient.getDeceased() != null ? Collections.emptyList()
+				: Collections.singletonList(patient);
 	}
 
 	private void addPreferredBranchSurgeryExtension(Patient patient) {

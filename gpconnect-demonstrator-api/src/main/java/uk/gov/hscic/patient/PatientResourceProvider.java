@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
-
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
 import org.hl7.fhir.dstu3.model.Appointment;
@@ -22,7 +21,6 @@ import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleType;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.ContactDetail;
 import org.hl7.fhir.dstu3.model.ContactPoint;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
@@ -48,12 +46,10 @@ import org.hl7.fhir.dstu3.model.Type;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
@@ -61,7 +57,6 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateAndListParam;
-import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
@@ -77,7 +72,6 @@ import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
 import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
 import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.model.patient.PatientDetails;
-import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.details.PatientSearch;
 import uk.gov.hscic.patient.details.PatientStore;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
@@ -173,17 +167,22 @@ public class PatientResourceProvider implements IResourceProvider {
         return patient;
     }
 
-    @Search
-    public List<Patient> getPatientsByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam tokenParam)
-            throws FHIRException {
+	@Search
+	public Bundle getPatientsByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam tokenParam)
+			throws FHIRException {
 
-        Patient patient = getPatientByPatientId(nhsNumber.fromToken(tokenParam));
-        if(null != patient){
-            addPreferredBranchSurgeryExtension(patient);
-        }
-        return null == patient || patient.getDeceased() != null ? Collections.emptyList()
-                : Collections.singletonList(patient);
-    }
+		Patient patient = getPatientByPatientId(nhsNumber.fromToken(tokenParam));
+		if (null != patient) {
+			addPreferredBranchSurgeryExtension(patient);
+		}
+		
+		Bundle bundle = new Bundle().setType(BundleType.SEARCHSET);
+		if (patient != null && patient.getDeceased() == null) {
+			bundle.addEntry().setResource(patient);
+		}
+		
+		return bundle;
+	}
 
 	private void addPreferredBranchSurgeryExtension(Patient patient) {
 		List<Extension> regDetailsEx = patient.getExtensionsByUrl(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
@@ -605,13 +604,8 @@ public class PatientResourceProvider implements IResourceProvider {
         patient.addIdentifier(localIdentifier);
 
         Calendar calendar = Calendar.getInstance();
-
         calendar.set(2017, 1, 1);
-        DateTimeDt endDate = new DateTimeDt(calendar.getTime());
-
         calendar.set(2016, 1, 1);
-        DateTimeDt startDate = new DateTimeDt(calendar.getTime());
-
         Period pastPeriod = new Period().setStart(calendar.getTime()).setEnd(calendar.getTime());
 
         patient.addName()
@@ -627,29 +621,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.addTelecom(staticElHelper.getValidTelecom());
         patient.addAddress(staticElHelper.getValidAddress());
-        // patient.setContact(getValidContact());
 
         return patient;
-    }
-
-    private ContactDetail getValidContact() {
-
-        HumanName ctName = new HumanName();
-        ctName.setUse(NameUse.OFFICIAL);
-        ctName.setFamily("FamilyName");
-
-        List<CodeableConcept> ctRelList = new ArrayList<>();
-        ctRelList.add(createCoding("family", "Family", SystemURL.VS_PATIENT_CONTACT_REL));
-
-        ContactDetail contact = new ContactDetail();
-        contact.setName(ctName.toString());
-        contact.addTelecom(staticElHelper.getValidTelecom());
-        // contact.
-        // contact.setAddress(staticElHelper.getValidAddress().toString());
-        // contact.setRelationship(ctRelList.toString());
-        // contact.setGender(AdministrativeGender.FEMALE);
-
-        return contact;
     }
 
     private Extension createCodingExtension(String code, String display, String vsSystem, String extSystem) {

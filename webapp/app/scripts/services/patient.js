@@ -162,6 +162,14 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/medication/all').then(function (response) {
             return response.data;
         });
+
+        $http.post()
+    };
+
+    var allergyDetialsByPatient = function(patientId) {
+        return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/allergy/'+patientId).then(function (response) {
+            return response.data;
+        });
     };
 
     return {
@@ -172,6 +180,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         structured: structured,
         registerPatient: registerPatient,
         medication:medication,
-        allMedications:allMedications
+        allMedications:allMedications,
+        allergyDetialsByPatient:allergyDetialsByPatient
     };
 }]);

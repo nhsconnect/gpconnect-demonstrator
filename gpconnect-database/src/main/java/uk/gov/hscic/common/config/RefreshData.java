@@ -1,12 +1,6 @@
 package uk.gov.hscic.common.config;
 
 import com.google.common.io.Files;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +15,13 @@ import uk.gov.hscic.model.appointment.ScheduleDetail;
 import uk.gov.hscic.model.appointment.SlotDetail;
 import uk.gov.hscic.patient.details.PatientEntity;
 import uk.gov.hscic.patient.details.PatientStore;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class RefreshData {
@@ -113,9 +114,6 @@ public class RefreshData {
     	appointment.setDescription(description);
     	appointment.setStartDateTime(slot.getStartDateTime());
     	appointment.setEndDateTime(slot.getEndDateTime());
-    	appointment.setReasonCode("00001");
-    	appointment.setReasonURL("http://snomed.info/sct");
-    	appointment.setReasonDisplay("Default Appointment Type");
     	appointment.setStatus("booked");
     	appointment.setTypeText("attender");
     	appointment.setPriority(0);

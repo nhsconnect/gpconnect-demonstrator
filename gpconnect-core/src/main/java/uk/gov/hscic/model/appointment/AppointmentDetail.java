@@ -16,9 +16,6 @@ public class AppointmentDetail {
     private Long patientId;
     private Long practitionerId;
     private Integer priority;
-    private String reasonCode;
-    private String reasonDisplay;
-    private String reasonURL;
     private List<Long> slotIds;
     private Date startDateTime;
     private String status;
@@ -26,14 +23,6 @@ public class AppointmentDetail {
     private String typeDisplay;
     private BookingOrgDetail bookingOrganization;
     private Date created;
-
-    public String getReasonURL() {
-        return reasonURL;
-    }
-
-    public void setReasonURL(String reasonURL) {
-        this.reasonURL = reasonURL;
-    }
 
     private String typeText;
 
@@ -79,14 +68,6 @@ public class AppointmentDetail {
 
     public Integer getPriority() {
         return priority;
-    }
-
-    public String getReasonCode() {
-        return reasonCode;
-    }
-
-    public String getReasonDisplay() {
-        return reasonDisplay;
     }
 
     public List<Long> getSlotIds() {
@@ -159,14 +140,6 @@ public class AppointmentDetail {
 
     public void setPriority(Integer integer) {
         this.priority = integer;
-    }
-
-    public void setReasonCode(String reasonCode) {
-        this.reasonCode = reasonCode;
-    }
-
-    public void setReasonDisplay(String reasonDisplay) {
-        this.reasonDisplay = reasonDisplay;
     }
 
     public void setSlotIds(List<Long> slotIds) {

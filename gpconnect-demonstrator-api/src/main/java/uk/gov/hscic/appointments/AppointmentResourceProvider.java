@@ -276,7 +276,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
 					new UnprocessableEntityException("Appointment identifier value is required"),
 					SystemCode.INVALID_RESOURCE, IssueType.INVALID);
 		}
-		
+
+        if (appointment.getId() != null || !appointment.getId().equals("null")) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Appointment id shouldn't be provided!"),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        }
+
 		boolean hasRequiredResources = appointment.getParticipant().stream()
 				.map(participant -> participant.getActor().getReference()).collect(Collectors.toList())
 				.containsAll(Arrays.asList("Patient", "Location"));

@@ -17,4 +17,6 @@ VALUES
   (14,26437003,'Oil of mustard (substance)',null,'457637653','Oil of mustard',null,null,'2018-01-01'),
   (15,34953000,'Colocynth (substance)',null,'574365853','Colocynth',null,null,'2018-01-01'),
   (16,40924008,'Water-soluble vitamin (substance)',null,'3465476537','Water-soluble vitamin',null,null,'2018-01-01'),
-  (17,32050003,'Pine oil (substance)',null,'874536356643','Pine oil',null,null,'2018-01-01');
+  (17,32050003,'Pine oil (substance)',null,'874536356643','Pine oil',null,null,'2018-01-01'),
+  (18,32050003,'Insulin',null,'874536356643','Pine oil',null,null,'2018-01-01'),
+  (19,32050003,'Asprin',null,'874536356643','Pine oil',null,null,'2018-01-01');

@@ -163,7 +163,6 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
             return response.data;
         });
 
-        $http.post()
     };
 
     var allergyDetialsByPatient = function(patientId) {

@@ -42,11 +42,11 @@
 
         <div class="create-button">
 
-            <select
-                    ng-options="m.display for m in AllMedications"
-                    ng-model="defaultMedication"
-                    ng-change="onChange()">
-                <option value="">--Select--</option>
+            <select ng-model="defaultMedication"
+                    ng-change="onChange(defaultMedication)">
+                <option value="" ng-repeat="(key ,value) in AllMedications"
+                        ng-style="{ 'background-color': value.length >0 ? 'red' :'white'}"
+                        ng-value="option" onselect="onChange()"> {{key}}</option>
             </select>
             <button class="btn btn-info" ng-click="addNewMedication()" ng-disabled="IsDisabled">Add New Medication</button>
         </div>
@@ -63,9 +63,9 @@
         <br>
 
 
-        <div  contenteditable="true" >
-            <ul ng-style="{'background-color':'white'}">
-                <li ng-repeat="allergyDetail in patientsAllergies">
+        <div class="patients_allergies">
+            <ul >
+                    <li ng-repeat="allergyDetail in patientsAllergies" ng-style="styleFunction(allergyDetail)">
                     {{allergyDetail}}
                 </li>
             </ul>

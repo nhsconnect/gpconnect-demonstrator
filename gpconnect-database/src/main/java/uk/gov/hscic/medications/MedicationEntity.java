@@ -1,12 +1,12 @@
 package uk.gov.hscic.medications;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import uk.gov.hscic.patient.allergies.AllergyEntity;
+
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.List;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "medications")
@@ -39,6 +39,13 @@ public class MedicationEntity {
     
     @Column(name = "lastUpdated")
     private Date lastUpdated;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
+	@JoinTable(name = "medication_allergies", joinColumns = {
+			@JoinColumn(name = "medicationId", referencedColumnName = "id") }, inverseJoinColumns = {
+			@JoinColumn(name = "allergyId", referencedColumnName = "id") })
+	public List<AllergyEntity> medicationAllergies;
 
     public Long getId() {
         return id;
@@ -112,4 +119,11 @@ public class MedicationEntity {
 		this.lastUpdated = lastUpdated;
 	}
 
+	public List<AllergyEntity> getMedicationAllergies() {
+		return medicationAllergies;
+	}
+
+	public void setMedicationAllergies(List<AllergyEntity> medicationAllergies) {
+		this.medicationAllergies = medicationAllergies;
+	}
 }

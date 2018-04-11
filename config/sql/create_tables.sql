@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS gpconnect.appointment_slots;
 DROP TABLE IF EXISTS gpconnect.practitioners;
 DROP TABLE IF EXISTS gpconnect.organizations;
 DROP TABLE IF EXISTS gpconnect.patients;
+DROP TABLE IF EXISTS gpconnect.medication_allergies;
 DROP TABLE IF EXISTS gpconnect.allergies;
 DROP TABLE IF EXISTS gpconnect.medications_html;
 DROP TABLE IF EXISTS gpconnect.medications;
@@ -568,3 +569,9 @@ assertedDate DATETIME  NULL,
 
 
 );
+
+CREATE TABLE gpconnect.medication_allergies (
+  medicationId BIGINT NOT NULL,
+  allergyId BIGINT NOT NULL,
+  FOREIGN KEY (medicationId) REFERENCES gpconnect.medications(id)
+  );

@@ -10,7 +10,10 @@ VALUES
   (9476719931,"Historical",'2015-05-01 12:17:00','2015-05-01 12:17:00',"Skin allergy"),
   (9476719931,"Historical",'2016-07-01 12:17:00','2016-07-01 12:17:00',"Beer allergy"),
   (9476719931,"Current",'2015-05-01 12:17:00','2015-05-01 12:17:00',"Work allergy"),
-  (9476719931,"Current",'2016-07-01 12:17:00','2016-07-01 12:17:00',"Work allergy");
+  (9476719931,"Current",'2016-07-01 12:17:00','2016-07-01 12:17:00',"Work allergy"),
+  (9476719931,"Current",'2016-07-01 12:17:00','2016-07-01 12:17:00',"Biphasic insulin allergy"),
+  (9476719931,"Current",'2016-07-01 12:17:00','2016-07-01 12:17:00',"Iodophore allergy"),
+  (9476719931,"Current",'2016-07-01 12:17:00','2016-07-01 12:17:00',"Salicylate allergy");
 
 INSERT INTO gpconnect.clinicalitems
   (nhsNumber,sectionDate,dateOfItem,Entry,Details)
@@ -157,3 +160,12 @@ VALUES
 VALUES
   (9476719931,'2016-07-01 12:00:00',"Cured","Asthma got better","Major", "resolved","unconfirmed","medication","2",'2016-05-01 12:00:00','2016-06-01 12:00:00'),
   (9476719931,'2016-07-01 12:00:00',"Ongoing","Cancer","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00');
+
+INSERT INTO gpconnect.medication_allergies
+(medicationId,allergyId)
+VALUES
+  (18,24),
+  (10,25),
+  (10,22),
+  (19,26),
+  (19,14);

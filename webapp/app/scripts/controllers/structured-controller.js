@@ -9,14 +9,14 @@ angular
         $stateParams
     ) {
         $scope.MedicationListList = [];
-        $scope.AllMedications = [];
+        $scope.AllMedications = {};
         $scope.IsDisabled = true;
         $scope.ActiveAllergiesList = [];
         $scope.ResolvedAllergiesList = [];
         $scope.patientsAllergies = [];
-        $scope.defaultMedication = 'Please select a medication';
         $scope.dropdwonListValue = '';
-
+        $scope.allergies = [];
+        $scope.highlightValues = false;
         $scope.data = {"Iodine (substance)": "Beer allergy"};
 
         initGetMedicationData();
@@ -62,15 +62,27 @@ angular
             });
         }
 
-        $scope.onChange = function() {
+        $scope.onChange = function(item) {
             $scope.IsDisabled = false;
-            $scope.dropdwonListValue = $scope.defaultMedication.display;
-
+            $scope.allergies = $scope.AllMedications[item];
 
         };
-        
+
+          $scope.styleFunction = function(index) {
+             if($scope.allergies.includes(index)) {
+                 return{
+                     "background-color": "yellow"
+                 }
+             }
+              else {
+                 return{
+                     "background-color": "white"
+                 }
+             }
+        };
+
         $scope.addNewMedication = function () {
-            alert("New medication functionality is not available. It will be implemented in an upcoming release.");  
+            alert("New medication functionality is not available. It will be implemented in an upcoming release.");
         };
 
 
@@ -145,21 +157,9 @@ angular
             }
         };
 
-        // $scope.showHIde = function() {
-        //     $scope.IsVisible = true;
-        //     PatientService.allMedications().then(function (mediacations) {
-        //         for(var i =0; i<mediacations.length;i++) {
-        //             $scope.AllMedications.push(mediacations[i]);
-        //         }
-        //     });
-        // }
-
-
         function initShowHide() {
             PatientService.allMedications().then(function (mediacations) {
-                for(var i =0; i<mediacations.length;i++) {
-                    $scope.AllMedications.push(mediacations[i]);
-                }
+                $scope.AllMedications = mediacations;
             });
         }
     });

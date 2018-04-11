@@ -682,7 +682,7 @@ legend {
 	padding: 2px;
 	padding-left: 10px;
   	margin-top: 20px;
-  	border-radius: 5px; 
+  	border-radius: 5px;
   	font-family: Hero;
 }
 
@@ -2487,7 +2487,7 @@ div#age-chart div.morris-hover.morris-default-style {
 }
 
 .providerHTMLTables table tr td:first-child {
-    width: 180px; 
+    width: 180px;
 }
 
 .modalDiv {
@@ -2501,4 +2501,8 @@ div#age-chart div.morris-hover.morris-default-style {
 
 #appButtonSearchDateRange {
     margin: 5px 0px 0px 0px;
+}
+
+.patients_allergies {
+    float: right;
 }

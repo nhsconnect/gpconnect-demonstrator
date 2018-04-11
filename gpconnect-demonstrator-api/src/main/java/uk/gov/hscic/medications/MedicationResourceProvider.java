@@ -1,6 +1,6 @@
 package uk.gov.hscic.medications;
 
-import java.util.Date;
+import java.util.*;
 
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
@@ -22,6 +22,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.model.medication.MedicationDetail;
+import uk.gov.hscic.patient.allergies.AllergyEntity;
 
 @Component
 public class MedicationResourceProvider implements IResourceProvider {
@@ -104,5 +105,21 @@ public class MedicationResourceProvider implements IResourceProvider {
 		
 		if(idExtension != null || displayExtension != null)
 			medication.addExtension(snowmedExtension);
+	}
+
+	public Map<String,List<String>> getAllMedicationAndAllergiesForPatient() {
+		Map<String,List<String>> allergiesAssociatedWithMedicationMap = new HashMap<>();
+		for (MedicationEntity medicationEntity:medicationRepository.findAll()) {
+			List<AllergyEntity> allergyEntities = medicationEntity.getMedicationAllergies();
+			if(allergyEntities.size() > 0) {
+				for (AllergyEntity allergy :allergyEntities) {
+
+					allergiesAssociatedWithMedicationMap.computeIfAbsent(medicationEntity.getDisplay(), k-> new ArrayList<>()).add(allergy.getDetails());
+				}
+			} else {
+				allergiesAssociatedWithMedicationMap.put(medicationEntity.getDisplay(), Collections.EMPTY_LIST);
+			}
+		}
+		return allergiesAssociatedWithMedicationMap;
 	}
 }

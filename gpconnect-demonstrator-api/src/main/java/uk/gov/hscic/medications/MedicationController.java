@@ -3,6 +3,7 @@ package uk.gov.hscic.medications;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import uk.gov.hscic.medication.statement.MedicationStatementEntity;
 
 import java.text.ParseException;
 import java.util.LinkedHashMap;
@@ -27,8 +28,7 @@ public class MedicationController {
     }
 
     @PutMapping("/medication/add")
-    public void addMedication(@RequestBody LinkedHashMap data) throws ParseException {
-        System.out.println(data);
-        medicationResourceProvider.addMedicationStatement(data);
+    public MedicationStatementEntity addMedication(@RequestBody LinkedHashMap data) throws ParseException {
+        return medicationResourceProvider.addMedicationStatement(data);
     }
 }

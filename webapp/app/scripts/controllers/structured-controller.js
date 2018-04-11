@@ -24,6 +24,7 @@ angular
         initGetAllergies();
 
          function initGetMedicationData() {
+             $scope.MedicationListList.length = 0;
              PatientService.medication($stateParams.patientId).then(function(
                  patientSummaryResponse
              ) {
@@ -90,6 +91,8 @@ angular
                 "nhsNumber":$stateParams.patientId
             };
             PatientService.addMedication(data ).then(function(response) {
+                console.log(response);
+                initGetMedicationData();
                 if(response.status == "200") {
                     console.log("Everything went fine.");
                 }

@@ -1,7 +1,10 @@
 package uk.gov.hscic.medications;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.apache.tomcat.util.http.parser.MediaTypeCache;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Extension;
@@ -21,8 +24,12 @@ import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.medication.statement.MedicationStatementEntity;
+import uk.gov.hscic.medication.statement.MedicationStatementRepository;
 import uk.gov.hscic.model.medication.MedicationDetail;
+import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.patient.allergies.AllergyEntity;
+import uk.gov.hscic.patient.details.PatientRepository;
 
 @Component
 public class MedicationResourceProvider implements IResourceProvider {
@@ -32,6 +39,12 @@ public class MedicationResourceProvider implements IResourceProvider {
     
     @Autowired
     private MedicationEntityToDetailTransformer medicationEntityToDetailTransformer;
+
+	@Autowired
+	private PatientRepository patientRepository;
+
+	@Autowired
+	private MedicationStatementRepository medicationStatementRepository;
 
     @Override
     public Class<Medication> getResourceType() {
@@ -121,5 +134,25 @@ public class MedicationResourceProvider implements IResourceProvider {
 			}
 		}
 		return allergiesAssociatedWithMedicationMap;
+	}
+
+	public MedicationStatementEntity addMedicationStatement(LinkedHashMap data) throws ParseException {
+		String pattern = "yyyy-MM-dd";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		System.out.println(data);
+
+		MedicationStatementEntity medicationStatementEntity = new MedicationStatementEntity();
+		medicationStatementEntity.setDateAsserted(simpleDateFormat.parse("2017-06-12"));
+		medicationStatementEntity.setDosageInstruction("Take with meals");
+		medicationStatementEntity.setDosageText("Take 2 tablets every 4 hours");
+		medicationStatementEntity.setEncounterId(8L);
+		medicationStatementEntity.setEndDate(simpleDateFormat.parse("2018-06-12"));
+		medicationStatementEntity.setLastIssueDate(simpleDateFormat.parse("2017-06-12"));
+		medicationStatementEntity.setLastUpdated(simpleDateFormat.parse("2018-03-15"));
+		medicationStatementEntity.setMedicationRequestId(1L);
+		medicationStatementEntity.setMedicationId(medicationRepository.getMedicationIdByName((String) data.get("medication"))); // get from frontend
+		medicationStatementEntity.setPatientId(patientRepository.getPatientIdByNhsNumbwer(String.valueOf(data.get("nhsNumber")))); // get from frontend
+
+		return medicationStatementRepository.save(medicationStatementEntity);
 	}
 }

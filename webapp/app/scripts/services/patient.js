@@ -171,6 +171,12 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         });
     };
 
+    var addMedication = function(data) {
+        return $http.put(ProviderRouting.defaultPractice().apiEndpointURL + '/medication/add',data).then(function(response) {
+            return response.data;
+        });
+    };
+
     return {
         findAllSummaries: findAllSummaries,
         getSummary: getSummary,
@@ -180,6 +186,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         registerPatient: registerPatient,
         medication:medication,
         allMedications:allMedications,
-        allergyDetialsByPatient:allergyDetialsByPatient
+        allergyDetialsByPatient:allergyDetialsByPatient,
+        addMedication:addMedication
     };
 }]);

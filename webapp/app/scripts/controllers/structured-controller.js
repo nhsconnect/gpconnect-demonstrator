@@ -65,6 +65,8 @@ angular
         $scope.onChange = function(item) {
             $scope.IsDisabled = false;
             $scope.allergies = $scope.AllMedications[item];
+            $scope.selectedMedication =item;
+
 
         };
 
@@ -82,7 +84,16 @@ angular
         };
 
         $scope.addNewMedication = function () {
-            alert("New medication functionality is not available. It will be implemented in an upcoming release.");
+            // alert("New medication functionality is not available. It will be implemented in an upcoming release.");
+            var data = {
+                "medication": $scope.selectedMedication,
+                "nhsNumber":$stateParams.patientId
+            };
+            PatientService.addMedication(data ).then(function(response) {
+                if(response.status == "200") {
+                    console.log("Everything went fine.");
+                }
+            });
         };
 
 

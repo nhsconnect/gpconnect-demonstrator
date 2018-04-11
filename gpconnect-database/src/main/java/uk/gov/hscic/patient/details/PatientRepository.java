@@ -18,6 +18,7 @@ package uk.gov.hscic.patient.details;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 
 public interface PatientRepository extends JpaRepository<PatientEntity, Long>, QueryDslPredicateExecutor<PatientEntity> {
@@ -25,4 +26,7 @@ public interface PatientRepository extends JpaRepository<PatientEntity, Long>, Q
     Long countByDepartmentDepartmentIgnoreCase(String department);
     List<PatientEntity> findPatientsByDepartmentDepartmentIgnoreCase(String department, Pageable pageable);
     PatientEntity findById(Long id);
+
+    @Query(value="SELECT p.id FROM gpconnect.patients p WHERE p.nhs_number = ?1", nativeQuery = true)
+    Long getPatientIdByNhsNumbwer(String NhsNumber);
 }

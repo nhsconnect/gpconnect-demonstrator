@@ -1,4 +1,0 @@
-create_database.sql
-create_tables.sql
-All other scripts except...
-populate_patients_table.sql (must be run last)

@@ -115,6 +115,8 @@ public final class SystemURL {
     public static final String VS_GPC_ORG_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/GPConnect-OrganisationType-1";
     public static final String VS_CONDITION_CODE = "http://hl7.org/fhir/stu3/valueset-condition-code.html";
     public static final String VS_CC_PRESCRIPTION_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-PrescriptionType-1";
+    public static final String VS_CC_NHS_NUMBERVERIF = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-NHSNumberVerificationStatus-1";
+    public static final String VS_CC_ETHNIC_CATEGORY_STU3 = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-EthnicCategory-1";
 
     // FHIR CodeSystem Constants
     public static final String CS_REGISTRATION_STATUS = "https://fhir.nhs.uk/CareConnect-RegistrationStatus-1";
@@ -127,6 +129,14 @@ public final class SystemURL {
     public static final String CS_CC_LANG_ABILITY_MODE = "https://fhir.nhs.uk/CareConnect-LanguageAbilityMode-1";
     public static final String CS_CC_LANG_ABILITY_PROFI = "https://fhir.nhs.uk/CareConnect-LanguageAbilityProficiency-1";
     public static final String CS_CC_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/CareConnect-NHSNumberVerificationStatus-1";
+    public static final String CS_CC_NHS_NUMBER_VERIF_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-NHSNumberVerificationStatus-1";
+    public static final String CS_CC_ETHNIC_CATEGORY_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-EthnicCategory-1";
+    public static final String CS_CC_RESIDENTIAL_STATUS_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-ResidentialStatus-1";
+    public static final String CS_CC_TREATMENT_CAT_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-TreatmentCategory-1";
+    public static final String CS_CC_HUMAN_LANG_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-HumanLanguage-1";
+    public static final String CS_CC_LANG_ABILITY_MODE_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-LanguageAbilityMode-1";
+    public static final String CS_CC_LANG_ABILITY_PROFI_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-LanguageAbilityProficiency-1";
+
     public static final String CS_LIST_ORDER = "http://hl7.org/fhir/codesystem-list-order.html";
 
     //Appointment Reason URL

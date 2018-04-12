@@ -6,7 +6,7 @@ VALUES
 INSERT INTO gpconnect.medications_html
   (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
 VALUES
-  (9476719974,"Current","14-09-2005","Lansoprazole 15mg gastro-resistant capsules","19-11-2019","Day Duration 2","3",NULL,NULL,NULL,NULL,"4");
+  (9476719974,"Current","14-09-2005","Lansoprazole 15mg gastro-resistant capsules","19-11-2019","2 /7","Take your doses 30 minutes before breakfast when your stomach is empty",NULL,NULL,NULL,NULL,"Acute");
 
 INSERT INTO gpconnect.problems
   (nhsNumber,activeOrInactive,startDate,endDate,entry,significance,details)

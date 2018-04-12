@@ -11,7 +11,7 @@ VALUES
 INSERT INTO gpconnect.medications_html
   (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
 VALUES
-  (9000000106,"Repeat","01-07-2016","Metformin 500mg tablets","19-11-2019","Day Duration 4","3","Issue more","Issue more","Issue more","Issue more","4");
+  (9000000106,"Repeat","01-07-2016","Metformin 500mg tablets","19-11-2019","4 /7","Take with food and water","Issue more","Issue more","Issue more","Issue more","Repeat");
 
 INSERT INTO gpconnect.problems
   (nhsNumber,activeOrInactive,startDate,endDate,entry,significance,details)

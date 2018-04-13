@@ -164,8 +164,8 @@ VALUES
 INSERT INTO gpconnect.medication_allergies
 (medicationId,allergyId)
 VALUES
-  (18,24),
-  (10,25),
-  (10,22),
+  (18,18),
+  (10,19),
+  (10,20),
   (19,26),
   (19,14);

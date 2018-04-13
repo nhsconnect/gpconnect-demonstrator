@@ -405,6 +405,7 @@ public class PatientResourceProvider implements IResourceProvider {
 					patientDetails = registerPatientResourceConverterToPatientDetail(unregisteredPatient);
 					patientStore.create(patientDetails);
 				} else {
+					patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
 					patientStore.update(patientDetails);
 				}
 				try {

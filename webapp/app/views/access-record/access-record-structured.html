@@ -64,9 +64,9 @@
 
 
         <div >
-            <ul >
-                    <li ng-repeat="allergyDetail in patientsAllergies" ng-style="styleFunction(allergyDetail)">
-                    {{allergyDetail}}
+            <ul>
+                <li ng-repeat="allergyDetail in ActiveAllergiesList" ng-style="styleFunction(allergyDetail)" >
+                    {{allergyDetail.code.coding[0].display}}
                 </li>
             </ul>
         </div>

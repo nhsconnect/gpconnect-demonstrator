@@ -83,7 +83,7 @@ VALUES
  (3,2);
 
   INSERT INTO gpconnect.allergyintolerance
-  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate)
+  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,coding,display)
 VALUES
-  (9476719974,'2016-07-01 12:00:00',"Cured","Asthma got better","Major", "resolved","unconfirmed","medication","2",'2016-05-01 12:00:00','2016-06-01 12:00:00'),
-  (9476719974,'2016-07-01 12:00:00',"Ongoing","Cancer","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00');
+  (9476719974,'2016-07-01 12:00:00',"Cured","Difficulty breathing","Major", "resolved","unconfirmed","environmental","2",'2016-05-01 12:00:00','2016-06-01 12:00:00',"419063004","Allergy to horse dander (disorder)"),
+  (9476719974,'2016-07-01 12:00:00',"Ongoing","Dry, red and cracked skin","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00',"294915005","Idophore allergy");

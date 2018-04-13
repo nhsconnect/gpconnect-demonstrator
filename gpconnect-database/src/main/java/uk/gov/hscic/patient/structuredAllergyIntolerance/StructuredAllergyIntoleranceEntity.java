@@ -43,6 +43,12 @@ public class StructuredAllergyIntoleranceEntity {
 	
 	@Column(name = "assertedDate")
 	private Date assertedDate;
+	
+	@Column(name = "coding")
+	private String coding;
+	
+	@Column(name = "display")
+	private String display;
 
 	public String getNhsNumber() {
 		return nhsNumber;
@@ -139,6 +145,21 @@ public class StructuredAllergyIntoleranceEntity {
 	public void setAssertedDate(Date assertedDate) {
 		this.assertedDate = assertedDate;
 	}
-	
+
+	public String getCoding() {
+		return coding;
+	}
+
+	public void setCoding(String coding) {
+		this.coding = coding;
+	}
+
+	public String getDisplay() {
+		return display;
+	}
+
+	public void setDisplay(String display) {
+		this.display = display;
+	}
 	
 }

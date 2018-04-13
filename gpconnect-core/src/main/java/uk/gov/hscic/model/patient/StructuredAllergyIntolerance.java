@@ -15,6 +15,8 @@ public class StructuredAllergyIntolerance {
 	private String patientRef;
 	private Date onSetDateTime;
 	private Date assertedDate;
+	private String coding;
+	private String display;
 
 	public void setId(Long id) {
 		Id = id;
@@ -103,7 +105,20 @@ public class StructuredAllergyIntolerance {
 	public void setAssertedDate(Date assertedDate) {
 		this.assertedDate = assertedDate;
 	}
-	
-	
 
+	public String getCoding() {
+		return coding;
+	}
+
+	public void setCoding(String coding) {
+		this.coding = coding;
+	}
+
+	public String getDisplay() {
+		return display;
+	}
+
+	public void setDisplay(String display) {
+		this.display = display;
+	}
 }

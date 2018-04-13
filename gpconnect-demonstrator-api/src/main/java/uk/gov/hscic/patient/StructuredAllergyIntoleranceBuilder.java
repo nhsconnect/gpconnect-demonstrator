@@ -37,22 +37,24 @@ public class StructuredAllergyIntoleranceBuilder {
 
         AllergyIntolerance allergyIntolerance;
 
-        if (includedResolved.equals(true) &&
-                allergyData.size() == 1 &&
+        if (allergyData.size() == 1 &&
                 allergyData.get(0).getClinicalStatus().equals(SystemConstants.NO_KNOWN)) {
 
             CodeableConcept noKnownAllergies = createCoding(SystemURL.HL7_SPECIAL_VALUES, "nil-known", "Nil Known");
             noKnownAllergies.setText("No Known Allergies");
-
             active.setEmptyReason(noKnownAllergies);
 
-            Reference patient = new Reference(
-                    SystemConstants.PATIENT_REFERENCE_URL + allergyData.get(0).getPatientRef());
+            Reference patient = new Reference(SystemConstants.PATIENT_REFERENCE_URL + allergyData.get(0).getPatientRef());
 
             active.setSubject(patient);
-
             bundle.addEntry().setResource(active);
-
+            
+            if (includedResolved) {
+            	resolved.setSubject(patient);
+            	resolved.setEmptyReason(noKnownAllergies);
+            	bundle.addEntry().setResource(resolved);
+            }
+            
             return bundle;
         }
 
@@ -79,8 +81,8 @@ public class StructuredAllergyIntoleranceBuilder {
 
             CodeableConcept value = new CodeableConcept();
             Coding coding = new Coding();
-            coding.setCode("241933001");
-            coding.setDisplay("Peanut-induced anaphylaxis (disorder)");
+            coding.setCode(allergyIntoleranceEntity.getCoding());
+            coding.setDisplay(allergyIntoleranceEntity.getDisplay());
             coding.setSystem(SystemConstants.SNOMED_URL);
             value.addCoding(coding);
 
@@ -92,8 +94,6 @@ public class StructuredAllergyIntoleranceBuilder {
                     SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
             allergyIntolerance.setPatient(patient);
 
-            // ADD END DATE AND REASON
-
             AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
 
             // MANIFESTATION
@@ -101,7 +101,7 @@ public class StructuredAllergyIntoleranceBuilder {
             CodeableConcept manifestation = new CodeableConcept();
             Coding manifestationCoding = new Coding();
             manifestationCoding.setDisplay(allergyIntoleranceEntity.getNote());
-            manifestationCoding.setCode("241933001");
+            manifestationCoding.setCode(allergyIntoleranceEntity.getCoding());
             manifestationCoding.setSystem(SystemConstants.SNOMED_URL);
             manifestation.addCoding(manifestationCoding);
             theManifestation.add(manifestation);
@@ -135,12 +135,14 @@ public class StructuredAllergyIntoleranceBuilder {
 
         if (!active.hasEntry()) {
             addEmptyListNote(active);
+            addEmptyReasonCode(active);
         }
 
         bundle.addEntry().setResource(active);
 
         if (includedResolved && !resolved.hasEntry()) {
             addEmptyListNote(resolved);
+            addEmptyReasonCode(resolved);
         }
 
         if (includedResolved) {
@@ -164,11 +166,17 @@ public class StructuredAllergyIntoleranceBuilder {
         return listResource;
     }
 
-    private ListResource addEmptyListNote(ListResource resolved) {
-        return resolved.addNote(new Annotation(new StringType("" +
+    private void addEmptyListNote(ListResource list) {
+        list.addNote(new Annotation(new StringType("" +
                 "There are no allergies in the patient record but it has not been confirmed with the patient that " +
                 "they have no allergies (that is, a ‘no known allergies’ code has not been recorded)."
         )));
+    }
+    
+    private void addEmptyReasonCode(ListResource list) {
+        CodeableConcept noContent = new CodeableConcept();
+        noContent.setText(SystemConstants.NO_CONTENT);
+        list.setEmptyReason(noContent);
     }
 
     private void addSubjectWithIdentifier(String NHS, ListResource active) {
@@ -215,10 +223,6 @@ public class StructuredAllergyIntoleranceBuilder {
 
     private void listResourceBuilder(ListResource buildingListResource, AllergyIntolerance allergyIntolerance) {
         buildingListResource.setId(allergyIntolerance.getId());
-
-        CodeableConcept noContent = new CodeableConcept();
-        noContent.setText(SystemConstants.NO_CONTENT);
-        buildingListResource.setEmptyReason(noContent);
 
         List<Resource> value = new ArrayList<>();
         value.add(allergyIntolerance);

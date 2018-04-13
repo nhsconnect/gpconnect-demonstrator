@@ -565,6 +565,8 @@ category VARCHAR(250) NULL,
 patientRef VARCHAR(250) NULL,
 onSetDateTime DATETIME  NULL,
 assertedDate DATETIME  NULL,
+coding VARCHAR(250) NULL,
+display VARCHAR(250) NULL,
   PRIMARY KEY (id)
 
 

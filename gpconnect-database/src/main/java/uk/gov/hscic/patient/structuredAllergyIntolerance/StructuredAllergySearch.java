@@ -13,10 +13,7 @@ public class StructuredAllergySearch {
 	 
 	 public List<StructuredAllergyIntoleranceEntity> getAllergyIntollerence(String NhsNumber) 
 	 {
-		 structuredAllergyRepository.findByNhsNumber(NhsNumber);
-		 
 		 return structuredAllergyRepository.findByNhsNumber(NhsNumber);
-		 
 	 }
 
 }

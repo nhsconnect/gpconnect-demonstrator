@@ -366,9 +366,6 @@ public class PatientResourceProvider implements IResourceProvider {
 		structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
 
 		IParser p = FhirContext.forDstu3().newJsonParser().setPrettyPrint(true);
-		String messageString = p.encodeResourceToString(structuredBundle);
-		System.out.println(messageString);
-
 		return structuredBundle;
 	}
 

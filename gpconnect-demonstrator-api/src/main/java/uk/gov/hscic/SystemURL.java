@@ -117,6 +117,7 @@ public final class SystemURL {
     public static final String VS_CC_PRESCRIPTION_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-PrescriptionType-1";
     public static final String VS_CC_NHS_NUMBERVERIF = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-NHSNumberVerificationStatus-1";
     public static final String VS_CC_ETHNIC_CATEGORY_STU3 = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-EthnicCategory-1";
+//    public static final String VS_HUMAN_LANGUAGE = "http://fhir.nhs.net/ValueSet/human-language-1";
 
     // FHIR CodeSystem Constants
     public static final String CS_REGISTRATION_STATUS = "https://fhir.nhs.uk/CareConnect-RegistrationStatus-1";

@@ -158,7 +158,7 @@ public class PractitionerResourceProvider implements IResourceProvider {
 
         for (int i = 0; i < practitionerDetails.getComCode().size(); i++) {
 
-            Coding comCoding = new Coding(SystemURL.VS_HUMAN_LANGUAGE, practitionerDetails.getComCode().get(i), null)
+            Coding comCoding = new Coding(SystemURL.CS_CC_HUMAN_LANG_STU3, practitionerDetails.getComCode().get(i), null)
                     .setDisplay(practitionerDetails.getComDisplay().get(i));
 
             practitioner.addCommunication().addCoding(comCoding);

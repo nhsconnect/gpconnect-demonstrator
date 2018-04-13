@@ -121,12 +121,21 @@ INSERT INTO gpconnect.medication_requests
 VALUES
  (1,'group1','active','Active','plan','Plan',9,2,8,'2017-06-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
- '2017-06-12','2018-06-12',null,null,'200 Tablets','60',1,null,5,0,'2018-06-12','repeat','Repeat',null,null,'2018-03-15');
-
+ '2017-06-12','2018-06-12',null,null,'200 Tablets','60',1,null,5,0,'2018-06-12','repeat','Repeat',null,null,'2018-03-15'),
+ (8,'group1','active','Active','plan','Plan',9,2,8,'2017-06-12',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
+ '2017-06-12','2018-05-12',null,null,'200 Tablets','60',1,null,5,0,'2018-05-12','repeat','Repeat',null,null,'2018-03-15'),
+ (9,'group1','active','Active','plan','Plan',9,2,8,'2017-06-12',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
+ '2017-06-12','2018-04-12',null,null,'200 Tablets','60',1,null,5,0,'2018-04-12','repeat','Repeat',null,null,'2018-03-15'),
+ (10,'group1','active','Active','plan','Plan',9,2,8,'2017-06-12',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
+ '2017-06-12','2018-03-12',null,null,'200 Tablets','60',1,null,5,0,'2018-03-12','repeat','Repeat',null,null,'2018-03-15');
+ 
 UPDATE gpconnect.medication_statements SET medicationRequestId = 1 WHERE id = 1;
-UPDATE gpconnect.medication_statements SET medicationRequestId = 1 WHERE id = 4;
-UPDATE gpconnect.medication_statements SET medicationRequestId = 1 WHERE id = 5;
-UPDATE gpconnect.medication_statements SET medicationRequestId = 1 WHERE id = 6;
+UPDATE gpconnect.medication_statements SET medicationRequestId = 8 WHERE id = 4;
+UPDATE gpconnect.medication_statements SET medicationRequestId = 9 WHERE id = 5;
+UPDATE gpconnect.medication_statements SET medicationRequestId = 10 WHERE id = 6;
 
 INSERT INTO gpconnect.medication_request_based_on
  (id,referenceUrl,referenceId)

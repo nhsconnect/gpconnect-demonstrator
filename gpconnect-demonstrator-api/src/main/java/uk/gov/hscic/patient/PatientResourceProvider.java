@@ -559,24 +559,24 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.setLanguage(("en-GB"));
 
-        patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY,
+        patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY_STU3,
                 SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
         patient.addExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code",
                 SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));
         patient.addExtension(new Extension(SystemURL.SD_PATIENT_CADAVERIC_DON, new BooleanType(false)));
-        patient.addExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS,
+        patient.addExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS_STU3,
                 SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS));
-        patient.addExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT,
+        patient.addExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT_STU3,
                 SystemURL.SD_CC_EXT_TREATMENT_CAT));
 
         Extension nhsCommExtension = new Extension();
         nhsCommExtension.setUrl(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
         nhsCommExtension.addExtension(
-                createCodingExtension("en", "English", SystemURL.CS_CC_HUMAN_LANG, SystemURL.SD_CC_EXT_COMM_LANGUAGE));
+                createCodingExtension("en", "English", SystemURL.CS_CC_HUMAN_LANG_STU3, SystemURL.SD_CC_EXT_COMM_LANGUAGE));
         nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_COMM_PREFERRED, new BooleanType(false)));
         nhsCommExtension.addExtension(createCodingExtension("RWR", "Received written",
-                SystemURL.CS_CC_LANG_ABILITY_MODE, SystemURL.SD_CC_MODE_OF_COMM));
-        nhsCommExtension.addExtension(createCodingExtension("E", "Excellent", SystemURL.CS_CC_LANG_ABILITY_PROFI,
+                SystemURL.CS_CC_LANG_ABILITY_MODE_STU3, SystemURL.SD_CC_MODE_OF_COMM));
+        nhsCommExtension.addExtension(createCodingExtension("E", "Excellent", SystemURL.CS_CC_LANG_ABILITY_PROFI_STU3,
                 SystemURL.SD_CC_COMM_PROFICIENCY));
         nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanType(false)));
 
@@ -656,7 +656,7 @@ public class PatientResourceProvider implements IResourceProvider {
         patient.getMeta().setVersionId(versionId);
         patient.getMeta().setLastUpdated(lastUpdated);
         patient.getMeta().addProfile(SystemURL.SD_GPC_PATIENT);
-        
+
 
         Identifier patientNhsNumber = new Identifier()
                 .setSystem(SystemURL.ID_NHS_NUMBER)
@@ -665,7 +665,7 @@ public class PatientResourceProvider implements IResourceProvider {
         Extension extension = createCodingExtension(
                 "01", 
                 "Number present and verified",
-                SystemURL.CS_CC_NHS_NUMBER_VERIF,
+                SystemURL.CS_CC_NHS_NUMBER_VERIF_STU3,
                 SystemURL.SD_CC_EXT_NHS_NUMBER_VERIF);
         
         patientNhsNumber.addExtension(extension);

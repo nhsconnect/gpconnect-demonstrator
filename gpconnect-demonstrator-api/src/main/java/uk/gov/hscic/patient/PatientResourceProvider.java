@@ -24,7 +24,6 @@ import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleType;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.ContactDetail;
 import org.hl7.fhir.dstu3.model.ContactPoint;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
@@ -52,10 +51,7 @@ import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
-import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
@@ -361,7 +357,6 @@ public class PatientResourceProvider implements IResourceProvider {
 		structuredBundle.setType(BundleType.COLLECTION);
 		structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
 
-		IParser p = FhirContext.forDstu3().newJsonParser().setPrettyPrint(true);
 		return structuredBundle;
 	}
 
@@ -405,8 +400,9 @@ public class PatientResourceProvider implements IResourceProvider {
 					registeredPatient = patientDetailsToRegisterPatientResourceConverter(
 							patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
 				} catch (FHIRException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					throw OperationOutcomeFactory.buildOperationOutcomeException(
+							new UnprocessableEntityException("Problem retrieving patient"), SystemCode.INVALID_PARAMETER,
+							IssueType.INVALID);
 				}
 			} else {
 				throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -727,10 +723,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		Calendar calendar = Calendar.getInstance();
 
 		calendar.set(2017, 1, 1);
-		DateTimeDt endDate = new DateTimeDt(calendar.getTime());
-
 		calendar.set(2016, 1, 1);
-		DateTimeDt startDate = new DateTimeDt(calendar.getTime());
 
 		Period pastPeriod = new Period().setStart(calendar.getTime()).setEnd(calendar.getTime());
 
@@ -744,26 +737,6 @@ public class PatientResourceProvider implements IResourceProvider {
 		// patient.setContact(getValidContact());
 
 		return patient;
-	}
-
-	private ContactDetail getValidContact() {
-
-		HumanName ctName = new HumanName();
-		ctName.setUse(NameUse.OFFICIAL);
-		ctName.setFamily("FamilyName");
-
-		List<CodeableConcept> ctRelList = new ArrayList<>();
-		ctRelList.add(createCoding("family", "Family", SystemURL.VS_PATIENT_CONTACT_REL));
-
-		ContactDetail contact = new ContactDetail();
-		contact.setName(ctName.toString());
-		contact.addTelecom(staticElHelper.getValidTelecom());
-		// contact.
-		// contact.setAddress(staticElHelper.getValidAddress().toString());
-		// contact.setRelationship(ctRelList.toString());
-		// contact.setGender(AdministrativeGender.FEMALE);
-
-		return contact;
 	}
 
 	private Extension createCodingExtension(String code, String display, String vsSystem, String extSystem) {

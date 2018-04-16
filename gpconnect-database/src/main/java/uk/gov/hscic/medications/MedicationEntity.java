@@ -2,7 +2,6 @@ package uk.gov.hscic.medications;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import uk.gov.hscic.patient.allergies.AllergyEntity;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
 
 import java.util.Date;

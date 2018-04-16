@@ -15,17 +15,11 @@
  */
 package uk.gov.hscic.patient.details;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import uk.gov.hscic.model.patient.PatientDetails;
-import uk.gov.hscic.model.patient.PatientSummary;
 
 @Service
 @Transactional
@@ -36,15 +30,6 @@ public class PatientSearch {
 
     @Autowired
     private PatientEntityToDetailsTransformer patientEntityToDetailsTransformer;
-
-    @Autowired
-    private PatientEntityToSummaryTransformer patientEntityToSummaryTransformer;
-
-    public List<PatientSummary> findAllPatients() {
-        final Iterable<PatientEntity> patients = patientRepository.findAll(new Sort("nhsNumber"));
-
-        return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
-    }
 
     public PatientDetails findPatient(final String patientNHSNumber) {
         final PatientEntity patient = patientRepository.findByNhsNumber(patientNHSNumber);
@@ -76,11 +61,4 @@ public class PatientSearch {
         return patientDetails;
     }
 
-    public PatientSummary findPatientSummary(final String patientId) {
-        final PatientEntity patient = patientRepository.findByNhsNumber(patientId);
-
-        return patient == null
-                ? null
-                : patientEntityToSummaryTransformer.transform(patient);
-    }
 }

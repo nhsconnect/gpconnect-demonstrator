@@ -2,6 +2,7 @@ package uk.gov.hscic.patient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.hl7.fhir.dstu3.model.*;
@@ -94,20 +95,23 @@ public class StructuredAllergyIntoleranceBuilder {
                     SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
             allergyIntolerance.setPatient(patient);
 
+            Annotation noteAnnotation = new Annotation(new StringType(allergyIntoleranceEntity.getNote()));
+            allergyIntolerance.setNote(Collections.singletonList(noteAnnotation));
+            
             AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
 
             // MANIFESTATION
             List<CodeableConcept> theManifestation = new ArrayList<>();
             CodeableConcept manifestation = new CodeableConcept();
             Coding manifestationCoding = new Coding();
-            manifestationCoding.setDisplay(allergyIntoleranceEntity.getNote());
-            manifestationCoding.setCode(allergyIntoleranceEntity.getCoding());
+            manifestationCoding.setDisplay(allergyIntoleranceEntity.getManifestationDisplay());
+            manifestationCoding.setCode(allergyIntoleranceEntity.getManifestationCoding());
             manifestationCoding.setSystem(SystemConstants.SNOMED_URL);
             manifestation.addCoding(manifestationCoding);
             theManifestation.add(manifestation);
             reaction.setManifestation(theManifestation);
 
-            reaction.setDescription(SystemConstants.MANIFESTATION_DESCRIPTION);
+            reaction.setDescription(allergyIntoleranceEntity.getNote());
 
             AllergyIntoleranceSeverity severity = AllergyIntoleranceSeverity.SEVERE;
             reaction.setSeverity(severity);
@@ -115,8 +119,6 @@ public class StructuredAllergyIntoleranceBuilder {
             CodeableConcept exposureRoute = new CodeableConcept();
             reaction.setExposureRoute(exposureRoute);
             allergyIntolerance.addReaction(reaction);
-
-            allergyIntolerance.addNote().setText(allergyIntoleranceEntity.getNote());
 
             if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {
                 listResourceBuilder(active, allergyIntolerance);

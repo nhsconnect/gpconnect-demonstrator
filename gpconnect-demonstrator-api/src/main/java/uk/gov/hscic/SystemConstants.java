@@ -13,7 +13,6 @@ public final class SystemConstants {
 
 	public static final String SNOMED_URL = "http://snomed.info/sct";
 
-	public static final String MANIFESTATION_DESCRIPTION = "MANIFESTATION DESCRIPTION";
 	public static final String NO_CONTENT = "noContent";
 	public static final String PATIENT_REFERENCE_URL = "Patient/";
 	public static final String INCLUDE_RESOLVED_ALLERGIES = "includeResolvedAllergies";

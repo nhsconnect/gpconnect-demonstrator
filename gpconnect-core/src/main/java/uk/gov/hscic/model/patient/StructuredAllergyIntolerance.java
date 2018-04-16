@@ -17,6 +17,8 @@ public class StructuredAllergyIntolerance {
 	private Date assertedDate;
 	private String coding;
 	private String display;
+	private String manifestationCoding;
+	private String manifestationDisplay;
 
 	public void setId(Long id) {
 		Id = id;
@@ -120,5 +122,21 @@ public class StructuredAllergyIntolerance {
 
 	public void setDisplay(String display) {
 		this.display = display;
+	}
+
+	public String getManifestationCoding() {
+		return manifestationCoding;
+	}
+
+	public void setManifestationCoding(String manifestationCoding) {
+		this.manifestationCoding = manifestationCoding;
+	}
+
+	public String getManifestationDisplay() {
+		return manifestationDisplay;
+	}
+
+	public void setManifestationDisplay(String manifestationDisplay) {
+		this.manifestationDisplay = manifestationDisplay;
 	}
 }

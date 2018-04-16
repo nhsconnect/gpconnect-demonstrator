@@ -49,6 +49,12 @@ public class StructuredAllergyIntoleranceEntity {
 	
 	@Column(name = "display")
 	private String display;
+	
+	@Column(name = "manCoding")
+	private String manifestationCoding;
+	
+	@Column(name = "manDisplay")
+	private String manifestationDisplay;
 
 	public String getNhsNumber() {
 		return nhsNumber;
@@ -160,6 +166,22 @@ public class StructuredAllergyIntoleranceEntity {
 
 	public void setDisplay(String display) {
 		this.display = display;
+	}
+
+	public String getManifestationCoding() {
+		return manifestationCoding;
+	}
+
+	public void setManifestationCoding(String manifestationCoding) {
+		this.manifestationCoding = manifestationCoding;
+	}
+
+	public String getManifestationDisplay() {
+		return manifestationDisplay;
+	}
+
+	public void setManifestationDisplay(String manifestationDisplay) {
+		this.manifestationDisplay = manifestationDisplay;
 	}
 	
 }

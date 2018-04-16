@@ -567,6 +567,8 @@ onSetDateTime DATETIME  NULL,
 assertedDate DATETIME  NULL,
 coding VARCHAR(250) NULL,
 display VARCHAR(250) NULL,
+manCoding VARCHAR(250) NULL,
+manDisplay VARCHAR(250) NULL,
   PRIMARY KEY (id)
 
 

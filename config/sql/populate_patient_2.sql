@@ -165,10 +165,10 @@ VALUES
 
 
  INSERT INTO gpconnect.allergyintolerance
-  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,coding,display)
+  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,coding,display,manCoding,manDisplay)
 VALUES
-  (9476719931,'2016-07-01 12:00:00',"Cured","Anaphylaxis","Major", "resolved","unconfirmed","environmental","2",'2016-05-01 12:00:00','2016-06-01 12:00:00',"419271008","Allergy to dog dander (disorder)"),
-  (9476719931,'2016-07-01 12:00:00',"Ongoing","Rash","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00',"294716003","Biphasic Insulin Allergy");
+  (9476719931,'2016-07-01 12:00:00',"Cured","Dalmation","Major", "resolved","unconfirmed","environmental","2",'2016-05-01 12:00:00','2016-06-01 12:00:00',"419271008","Allergy to dog dander (disorder)","61582004","Allergic rhinitis (disorder)"),
+  (9476719931,'2016-07-01 12:00:00',"Ongoing","Rash","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00',"294716003","Biphasic insulin allergy (disorder)","247472004", "Weal (disorder)");
 
 INSERT INTO gpconnect.medication_allergies
 (medicationId,allergyId)

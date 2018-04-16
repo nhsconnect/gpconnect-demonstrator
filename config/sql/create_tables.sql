@@ -1,5 +1,4 @@
 USE gpconnect;
-/*DROP TABLE `gpconnect`.`adminitems`, `gpconnect`.`allergies`, `gpconnect`.`clinicalitems`, `gpconnect`.`immunisations`, `gpconnect`.`investigations`, `gpconnect`.`problems`, `gpconnect`.`referrals`, `gpconnect`.`procedures`; */
 
 /* Destroy all existing data */
 DROP TABLE IF EXISTS gpconnect.appointment_slots_organizations;
@@ -36,6 +35,7 @@ DROP TABLE IF EXISTS gpconnect.appointment_appointments;
 DROP TABLE IF EXISTS gpconnect.general_practitioners;
 DROP TABLE IF EXISTS gpconnect.medical_departments;
 DROP TABLE IF EXISTS gpconnect.allergyintolerance;
+DROP TABLE IF EXISTS gpconnect.addresses;
 
 /* Create new table schemas */
 
@@ -56,9 +56,6 @@ CREATE TABLE gpconnect.appointment_appointments (
   typeDisplay        TEXT(100) NULL,
   typeText           TEXT(100) NULL,
   description        TEXT(300) NULL,
-  reasonURL          TEXT(300) NULL,
-  reasonCode         TEXT(300) NULL,
-  reasonDisplay      TEXT(100) NULL,
   startDateTime      DATETIME  NULL,
   endDateTime        DATETIME  NULL,
   commentText        TEXT(300) NULL,
@@ -413,6 +410,17 @@ CREATE TABLE gpconnect.observations (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE gpconnect.addresses (
+  id          BIGINT       NOT NULL AUTO_INCREMENT,
+  line   	  VARCHAR(100)NULL,
+  city        VARCHAR(50) NULL,
+  district    VARCHAR(50) NULL,
+  state       VARCHAR(50) NULL,
+  postalCode  VARCHAR(10) NULL,
+  country     VARCHAR(50) NULL,
+  PRIMARY KEY (id)
+);
+
 CREATE TABLE gpconnect.locations (
   id                 BIGINT       NOT NULL AUTO_INCREMENT,
   name               VARCHAR(250) NOT NULL,
@@ -422,7 +430,9 @@ CREATE TABLE gpconnect.locations (
   site_ods_code_name VARCHAR(250) NOT NULL,
   status             VARCHAR(100) NULL,
   lastUpdated        DATETIME     NULL,
-  PRIMARY KEY (id)
+  address_id         BIGINT       NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (address_id) REFERENCES gpconnect.addresses(id)
 );
 
 CREATE TABLE gpconnect.allergyintolerance (

@@ -1,22 +1,11 @@
 package uk.gov.hscic.appointment.appointment;
 
-import java.util.Date;
-import java.util.List;
-import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import uk.gov.hscic.appointment.bookingOrganization.BookingOrgEntity;
 import uk.gov.hscic.appointment.slot.SlotEntity;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "appointment_appointments")
@@ -57,15 +46,6 @@ public class AppointmentEntity {
     @Column(name = "priority")
     private Integer priority;
 
-    @Column(name = "reasonCode")
-    private String reasonCode;
-
-    @Column(name = "reasonDisplay")
-    private String reasonDisplay;
-
-    @Column(name = "reasonURL")
-    private String reasonURL;
-    
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "appointment_appointments_slots", joinColumns = {
             @JoinColumn(name = "appointmentId", referencedColumnName = "id") }, inverseJoinColumns = {
@@ -138,18 +118,6 @@ public class AppointmentEntity {
 
     public Integer getPriority() {
         return priority;
-    }
-
-    public String getReasonCode() {
-        return reasonCode;
-    }
-
-    public String getReasonDisplay() {
-        return reasonDisplay;
-    }
-
-    public String getReasonURL() {
-        return reasonURL;
     }
 
     public List<SlotEntity> getSlots() {
@@ -226,18 +194,6 @@ public class AppointmentEntity {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
-    }
-
-    public void setReasonCode(String reasonCode) {
-        this.reasonCode = reasonCode;
-    }
-
-    public void setReasonDisplay(String reasonDisplay) {
-        this.reasonDisplay = reasonDisplay;
-    }
-
-    public void setReasonURL(String reasonURL) {
-        this.reasonURL = reasonURL;
     }
 
     public void setSlots(List<SlotEntity> slots) {

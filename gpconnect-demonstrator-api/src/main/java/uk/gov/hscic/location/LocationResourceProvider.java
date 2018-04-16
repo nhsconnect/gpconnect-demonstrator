@@ -13,15 +13,12 @@ import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Location;
 import org.hl7.fhir.dstu3.model.Location.LocationStatus;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
-import org.hl7.fhir.dstu3.model.OperationOutcome.IssueTypeEnumFactory;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.model.primitive.IdDt;
-import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -33,7 +30,6 @@ import org.hl7.fhir.dstu3.model.StringType;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.model.location.LocationDetails;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 
@@ -75,11 +71,6 @@ public class LocationResourceProvider implements IResourceProvider {
         }
 
         Location location = locationDetailsToLocation(locationDetails);
-        List<StringType> list = new LinkedList<>();
-        list.add(new StringType("Trevelyan Square"));
-        list.add(new StringType("Boar Ln"));
-        list.add(new StringType("Leeds"));
-        location.setAddress(new Address().setPostalCode("LS1 6AE").setLine(list));
         return location;
     }
 
@@ -138,9 +129,24 @@ public class LocationResourceProvider implements IResourceProvider {
             }
         }
         
+        location.setAddress(createAddress(locationDetails));
+        
         location.setStatus(locationStatus);
         return location;
     }
+
+	private Address createAddress(LocationDetails locationDetails) {
+		Address address = new Address();
+        List<StringType> list = new LinkedList<>();
+        list.add(new StringType(locationDetails.getAddressLine()));
+        list.add(new StringType(locationDetails.getAddressCity()));
+        address.setLine(list);
+        address.setCity(locationDetails.getAddressDistrict());
+        address.setDistrict(locationDetails.getAddressState());
+        address.setPostalCode(locationDetails.getAddressPostalCode());
+        address.setCountry(locationDetails.getAddressCountry());
+		return address;
+	}
     
     private Organization FindOrganization(String orgCode){
         

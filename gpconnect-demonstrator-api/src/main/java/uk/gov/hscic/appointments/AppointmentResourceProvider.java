@@ -1,66 +1,27 @@
 package uk.gov.hscic.appointments;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import org.hl7.fhir.dstu3.model.Appointment;
-import org.hl7.fhir.dstu3.model.Appointment.AppointmentParticipantComponent;
-import org.hl7.fhir.dstu3.model.Appointment.AppointmentStatus;
-import org.hl7.fhir.dstu3.model.Appointment.ParticipationStatus;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
-import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
-import org.hl7.fhir.dstu3.model.Extension;
-import org.hl7.fhir.dstu3.model.IdType;
-import org.hl7.fhir.dstu3.model.Identifier;
-import org.hl7.fhir.dstu3.model.OperationOutcome;
-import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
-import org.hl7.fhir.dstu3.model.Organization;
-import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.dstu3.model.Resource;
-import org.hl7.fhir.instance.model.api.IBaseDatatype;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.RequiredParam;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
-import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
+import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateAndListParam;
 import ca.uhn.fhir.rest.param.DateOrListParam;
 import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ParamPrefixEnum;
-import ca.uhn.fhir.rest.param.TokenAndListParam;
-import ca.uhn.fhir.rest.param.TokenOrListParam;
-import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
-import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
-import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import ca.uhn.fhir.rest.server.exceptions.*;
+import org.hl7.fhir.dstu3.model.*;
+import org.hl7.fhir.dstu3.model.Appointment.AppointmentParticipantComponent;
+import org.hl7.fhir.dstu3.model.Appointment.AppointmentStatus;
+import org.hl7.fhir.dstu3.model.Appointment.ParticipationStatus;
+import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
+import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
+import org.hl7.fhir.instance.model.api.IBaseDatatype;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
@@ -71,6 +32,12 @@ import uk.gov.hscic.appointment.slot.SlotStore;
 import uk.gov.hscic.model.appointment.AppointmentDetail;
 import uk.gov.hscic.model.appointment.BookingOrgDetail;
 import uk.gov.hscic.model.appointment.SlotDetail;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class AppointmentResourceProvider implements IResourceProvider {
@@ -276,7 +243,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
 					new UnprocessableEntityException("Appointment identifier value is required"),
 					SystemCode.INVALID_RESOURCE, IssueType.INVALID);
 		}
-		
+
+        if (appointment.getId() != null || !appointment.getId().equals("null")) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Appointment id shouldn't be provided!"),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        }
+
 		boolean hasRequiredResources = appointment.getParticipant().stream()
 				.map(participant -> participant.getActor().getReference()).collect(Collectors.toList())
 				.containsAll(Arrays.asList("Patient", "Location"));
@@ -448,9 +421,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 			
 			// This is an Amend
 			oldAppointmentDetail.setComment(appointmentDetail.getComment());
-			oldAppointmentDetail.setReasonCode(appointmentDetail.getReasonCode());
 			oldAppointmentDetail.setDescription(appointmentDetail.getDescription());
-			oldAppointmentDetail.setReasonDisplay(appointmentDetail.getReasonDisplay());
 			oldAppointmentDetail.setTypeCode(appointmentDetail.getTypeCode());
 			oldAppointmentDetail.setTypeDisplay(appointmentDetail.getTypeDisplay());
 
@@ -516,7 +487,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
 		results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
 		results.add(Objects.equals(oldAppointmentDetail.getComment(), appointmentDetail.getComment()));
 		results.add(Objects.equals(oldAppointmentDetail.getDescription(), appointmentDetail.getDescription()));
-		results.add(Objects.equals(oldAppointmentDetail.getReasonDisplay(), appointmentDetail.getReasonDisplay()));
 		results.add(BookingOrganizationsEqual(oldAppointmentDetail.getBookingOrganization(),
 				appointmentDetail.getBookingOrganization()));
 
@@ -594,17 +564,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
 		appointment.setAppointmentType(codableConcept);
 		// Look into this
 		// appointment.getType().setText(appointmentDetail.getTypeText());
-
-		String reasonCode = appointmentDetail.getReasonCode();
-		String reasonDisplay = appointmentDetail.getReasonDisplay();
-		String reasonSystem = SystemURL.DEFAULTREASONURL;
-		if (reasonCode != null && reasonDisplay != null && reasonSystem != null) {
-			Coding codingReason = new Coding().setSystem(reasonSystem).setCode(String.valueOf(reasonCode))
-					.setDisplay(reasonDisplay);
-			CodeableConcept codableConceptReason = new CodeableConcept().addCoding(codingReason);
-			codableConceptReason.setText(reasonDisplay);
-			appointment.addReason(codableConceptReason);
-		}
 
 		appointment.setStart(appointmentDetail.getStartDateTime());
 		appointment.setEnd(appointmentDetail.getEndDateTime());
@@ -721,40 +680,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
 		appointmentDetail.setMinutesDuration(appointment.getMinutesDuration());
 		appointmentDetail.setPriority(appointment.getPriority());
 		appointmentDetail.setTypeText(appointment.getServiceType().toString());
-
-		Coding codingFirstRep = appointment.getReasonFirstRep().getCodingFirstRep();
-
-		if (!codingFirstRep.isEmpty()) {
-
-			String reasonSystem = codingFirstRep.getSystem();
-			if (reasonSystem == null) {
-				String message = "Problem with reason property of the appointment. If the reason is provided then the system property must be set.";
-				throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
-						SystemCode.INVALID_RESOURCE, IssueType.INCOMPLETE);
-			} else {
-				appointmentDetail.setReasonURL(reasonSystem);
-			}
-
-			String reasonCode = codingFirstRep.getCode();
-			if (reasonCode == null) {
-				String message = "Problem with reason property of the appointment. If the reason is provided then the code property must be set.";
-				throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
-						SystemCode.INVALID_RESOURCE, IssueType.INCOMPLETE);
-			} else {
-				appointmentDetail.setReasonCode(reasonCode);
-			}
-
-			String reasonDisplay = codingFirstRep.getDisplay();
-			if (reasonDisplay == null) {
-				String message = "Problem with reason property of the appointment. If the reason is provided then the display property must be set.";
-				throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
-						SystemCode.INVALID_RESOURCE, IssueType.INCOMPLETE);
-			} else {
-				appointmentDetail.setReasonDisplay(reasonDisplay);
-			}
-
-		}
-
 		appointmentDetail.setStartDateTime(appointment.getStart());
 		appointmentDetail.setEndDateTime(appointment.getEnd());
 

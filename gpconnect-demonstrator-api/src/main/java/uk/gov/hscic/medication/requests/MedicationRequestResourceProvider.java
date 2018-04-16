@@ -86,7 +86,7 @@ public class MedicationRequestResourceProvider {
 		if(requestDetail.getEncounterId() != null)
 			medicationRequest.setContext(new Reference(new IdType("Encounter", requestDetail.getEncounterId())));
 		medicationRequest.setAuthoredOn(requestDetail.getAuthoredOn());
-		medicationRequest.setRequester(getRequesterComponent(requestDetail));
+		//medicationRequest.setRequester(getRequesterComponent(requestDetail));
 		if(requestDetail.getAuthorisingPractitionerId() != null)
 			medicationRequest.setRecorder(new Reference(new IdType("Practitioner", requestDetail.getAuthorisingPractitionerId())));
 		setReasonCodes(medicationRequest, requestDetail);
@@ -191,7 +191,7 @@ public class MedicationRequestResourceProvider {
 		duration.setCode("d");
 		duration.setValue(requestDetail.getExpectedSupplyDuration());
 		duration.setUnit("day");
-		dispenseRequest.setExpectedSupplyDuration(duration);
+		//dispenseRequest.setExpectedSupplyDuration(duration);
 		
 		dispenseRequest.setPerformer(new Reference(new IdType("Organization",requestDetail.getDispenseRequestOrganizationId())));
 	

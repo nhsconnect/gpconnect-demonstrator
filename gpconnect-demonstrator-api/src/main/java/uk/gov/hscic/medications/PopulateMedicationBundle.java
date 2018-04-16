@@ -147,7 +147,6 @@ public class PopulateMedicationBundle {
 		IIdType recorderPractitionerRef = medicationRequest.getRecorder().getReferenceElement();
 		IIdType performerOrganizationRef = medicationRequest.getDispenseRequest().getPerformer().getReferenceElement();
 		IIdType requesterOnBehalfOfOrganizationRef = medicationRequest.getRequester().getOnBehalfOf().getReferenceElement();
-		IIdType requesterAgent = medicationRequest.getRequester().getAgent().getReferenceElement();
 		
 		List<BundleEntryComponent> bundleEntryComponents = new ArrayList<>();
 		
@@ -163,25 +162,6 @@ public class PopulateMedicationBundle {
 		if(requesterOnBehalfOfOrganizationRef != null) {
 			organizationIds.add(performerOrganizationRef.getIdPartAsLong());
 		}
-		if(requesterAgent != null) {
-			Long requesterAgentId = requesterAgent.getIdPartAsLong();
-			if(requesterAgent.getResourceType().equals("Practitioner")){
-				practitionerIds.add(requesterAgentId);
-			}
-			if(requesterAgent.getResourceType().equals("Organization")) {
-				organizationIds.add(requesterAgentId);
-			}
-			if(requesterAgent.getResourceType().equals("Patient") && requesterAgentId != patientId) {
-				try {
-					Patient patient = patientResourceProvider.getPatientById(new IdType(requesterAgentId));
-					bundleEntryComponents.add(new BundleEntryComponent().setResource(patient));
-				} catch (FHIRException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		
 		List<Annotation> notes = medicationRequest.getNote();
 		notes.forEach(note -> {
 			if(note.hasAuthorReference()) {

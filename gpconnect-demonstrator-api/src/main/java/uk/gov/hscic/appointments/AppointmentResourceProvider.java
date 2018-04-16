@@ -277,7 +277,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 					SystemCode.INVALID_RESOURCE, IssueType.INVALID);
 		}
 
-        if (appointment.getId() != null || !appointment.getId().equals("null")) {
+        if (appointment.getId() != null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException("Appointment id shouldn't be provided!"),
                     SystemCode.INVALID_RESOURCE, IssueType.INVALID);

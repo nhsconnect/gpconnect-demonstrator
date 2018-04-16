@@ -30,6 +30,7 @@ import uk.gov.hscic.model.medication.MedicationDetail;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.patient.allergies.AllergyEntity;
 import uk.gov.hscic.patient.details.PatientRepository;
+import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
 
 @Component
 public class MedicationResourceProvider implements IResourceProvider {
@@ -123,11 +124,11 @@ public class MedicationResourceProvider implements IResourceProvider {
 	public Map<String,List<String>> getAllMedicationAndAllergiesForPatient() {
 		Map<String,List<String>> allergiesAssociatedWithMedicationMap = new HashMap<>();
 		for (MedicationEntity medicationEntity:medicationRepository.findAll()) {
-			List<AllergyEntity> allergyEntities = medicationEntity.getMedicationAllergies();
+			List<StructuredAllergyIntoleranceEntity> allergyEntities = medicationEntity.getMedicationAllergies();
 			if(allergyEntities.size() > 0) {
-				for (AllergyEntity allergy :allergyEntities) {
+				for (StructuredAllergyIntoleranceEntity allergy :allergyEntities) {
 
-					allergiesAssociatedWithMedicationMap.computeIfAbsent(medicationEntity.getDisplay(), k-> new ArrayList<>()).add(allergy.getDetails());
+					allergiesAssociatedWithMedicationMap.computeIfAbsent(medicationEntity.getDisplay(), k-> new ArrayList<>()).add(allergy.getDisplay());
 				}
 			} else {
 				allergiesAssociatedWithMedicationMap.put(medicationEntity.getDisplay(), Collections.EMPTY_LIST);

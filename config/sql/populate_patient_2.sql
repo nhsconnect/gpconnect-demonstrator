@@ -171,10 +171,6 @@ VALUES
   (9476719931,'2016-07-01 12:00:00',"Ongoing","Rash","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00',"294716003","Biphasic insulin allergy (disorder)","247472004", "Weal (disorder)");
 
 INSERT INTO gpconnect.medication_allergies
-(medicationId,allergyId)
+(medicationId,allergyintoleranceId)
 VALUES
-  (18,18),
-  (10,19),
-  (10,20),
-  (19,26),
-  (19,14);
+  (18,14);

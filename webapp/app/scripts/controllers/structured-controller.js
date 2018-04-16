@@ -22,6 +22,7 @@ angular
         initGetMedicationData();
         initShowHide();
         initGetAllergies();
+        getAllergyData();
 
          function initGetMedicationData() {
              $scope.MedicationListList.length = 0;
@@ -101,7 +102,7 @@ angular
 
 
 
-        $scope.getAllergyData = function() {
+        function getAllergyData() {
             {
                 $scope.patient = {
                     name: "",
@@ -164,7 +165,7 @@ angular
                                 $scope.ResolvedAllergiesList.push(resource);
                             }
 
-
+console.log(scope.ResolvedAllergiesList);
                         }
                     }
                 });

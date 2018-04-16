@@ -3,6 +3,7 @@ package uk.gov.hscic.medications;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import uk.gov.hscic.patient.allergies.AllergyEntity;
+import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
 
 import java.util.Date;
 import java.util.List;
@@ -44,8 +45,8 @@ public class MedicationEntity {
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinTable(name = "medication_allergies", joinColumns = {
 			@JoinColumn(name = "medicationId", referencedColumnName = "id") }, inverseJoinColumns = {
-			@JoinColumn(name = "allergyId", referencedColumnName = "id") })
-	public List<AllergyEntity> medicationAllergies;
+			@JoinColumn(name = "allergyintoleranceId", referencedColumnName = "id") })
+	public List<StructuredAllergyIntoleranceEntity> medicationAllergies;
 
     public Long getId() {
         return id;
@@ -119,11 +120,11 @@ public class MedicationEntity {
 		this.lastUpdated = lastUpdated;
 	}
 
-	public List<AllergyEntity> getMedicationAllergies() {
+	public List<StructuredAllergyIntoleranceEntity> getMedicationAllergies() {
 		return medicationAllergies;
 	}
 
-	public void setMedicationAllergies(List<AllergyEntity> medicationAllergies) {
+	public void setMedicationAllergies(List<StructuredAllergyIntoleranceEntity> medicationAllergies) {
 		this.medicationAllergies = medicationAllergies;
 	}
 }

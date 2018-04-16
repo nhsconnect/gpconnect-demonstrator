@@ -52,7 +52,7 @@
         </div>
         <br>
         <br>
-        <h4>List of current medications</h4>
+        <h4>Current medications</h4>
 
         <ul>
             <li ng-repeat="medication in MedicationListList">
@@ -64,9 +64,19 @@
 
 
         <div >
-            <ul >
-                    <li ng-repeat="allergyDetail in patientsAllergies" ng-style="styleFunction(allergyDetail)">
-                    {{allergyDetail}}
+            <h4>Allergies</h4>
+            <ul>
+                <li ng-repeat="allergyDetail in ActiveAllergiesList" ng-style="styleFunction(allergyDetail.code.coding[0].display)" >
+                    {{allergyDetail.code.coding[0].display}}
+                </li>
+            </ul>
+        </div>
+
+        <div >
+            <h4>Resolved Allergies</h4>
+            <ul>
+                <li ng-repeat="allergyDetail in ResolvedAllergiesList" ng-style="styleFunction(allergyDetail.code.coding[0].display)" >
+                    {{allergyDetail.code.coding[0].display}}
                 </li>
             </ul>
         </div>

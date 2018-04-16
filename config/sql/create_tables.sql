@@ -576,6 +576,6 @@ manDisplay VARCHAR(250) NULL,
 
 CREATE TABLE gpconnect.medication_allergies (
   medicationId BIGINT NOT NULL,
-  allergyId BIGINT NOT NULL,
+  allergyintoleranceId BIGINT NOT NULL,
   FOREIGN KEY (medicationId) REFERENCES gpconnect.medications(id)
   );

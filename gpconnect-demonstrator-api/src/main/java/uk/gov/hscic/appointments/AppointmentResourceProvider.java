@@ -560,11 +560,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
 				.setCode(String.valueOf(appointmentDetail.getTypeCode()))
 				.setDisplay(appointmentDetail.getTypeDisplay());
 		CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
-		codableConcept.setText(appointmentDetail.getTypeDisplay());
+        codableConcept.setText(appointmentDetail.getTypeText());
 		appointment.setAppointmentType(codableConcept);
-		// Look into this
-		// appointment.getType().setText(appointmentDetail.getTypeText());
-
 		appointment.setStart(appointmentDetail.getStartDateTime());
 		appointment.setEnd(appointmentDetail.getEndDateTime());
 
@@ -628,6 +625,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
 			appointment.getContained().add(bookingOrg);
 		}
 
+        appointment.setMinutesDuration(appointmentDetail.getMinutesDuration());
+
 		return appointment;
 	}
 
@@ -676,10 +675,10 @@ public class AppointmentResourceProvider implements IResourceProvider {
 			appointmentDetail.setCancellationReason(value.toString());
 		}
 		appointmentDetail.setStatus(appointment.getStatus().toString().toLowerCase(Locale.UK));
-		appointmentDetail.setTypeDisplay(appointment.getAppointmentType().getTextElement().toString());
+        appointmentDetail.setTypeDisplay(appointment.getAppointmentType().getCoding().get(0).getDisplay());
 		appointmentDetail.setMinutesDuration(appointment.getMinutesDuration());
 		appointmentDetail.setPriority(appointment.getPriority());
-		appointmentDetail.setTypeText(appointment.getServiceType().toString());
+        appointmentDetail.setTypeText(appointment.getAppointmentType().getText());
 		appointmentDetail.setStartDateTime(appointment.getStart());
 		appointmentDetail.setEndDateTime(appointment.getEnd());
 

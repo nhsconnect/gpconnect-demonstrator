@@ -37,7 +37,6 @@ public class Interactions {
         put(InteractionId.CLAIM_PATIENT_CONDITION, new Interaction("Condition").httpVerb(RequestMethod.GET));
         put(InteractionId.CLAIM_PATIENT_DIAGNOSTIC_ORDER, new Interaction("DiagnosticOrder").httpVerb(RequestMethod.GET));
         put(InteractionId.CLAIM_PATIENT_DIAGNOSTIC_REPORT, new Interaction("DiagnosticReport").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_ENCOUNTER, new Interaction("Encounter").httpVerb(RequestMethod.GET));
         put(InteractionId.CLAIM_PATIENT_FLAG, new Interaction("Flag").httpVerb(RequestMethod.GET));
         put(InteractionId.CLAIM_PATIENT_MEDICATION_ADMINISTRATION, new Interaction("MedicationAdministration").httpVerb(RequestMethod.GET));
         put(InteractionId.CLAIM_PATIENT_MEDICATION_DISPENSE, new Interaction("MedicationDispense").httpVerb(RequestMethod.GET));

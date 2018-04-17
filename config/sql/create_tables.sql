@@ -6,11 +6,7 @@ DROP TABLE IF EXISTS gpconnect.appointment_slots_orgType;
 DROP TABLE IF EXISTS gpconnect.appointment_appointments_slots;
 DROP TABLE IF EXISTS gpconnect.appointment_schedules;
 DROP TABLE IF EXISTS gpconnect.appointment_slots;
-DROP TABLE IF EXISTS gpconnect.practitioners;
-DROP TABLE IF EXISTS gpconnect.organizations;
-DROP TABLE IF EXISTS gpconnect.patients;
 DROP TABLE IF EXISTS gpconnect.medication_allergies;
-DROP TABLE IF EXISTS gpconnect.medications;
 DROP TABLE IF EXISTS gpconnect.medication_statement_reason_codes;
 DROP TABLE IF EXISTS gpconnect.medication_statement_reason_references;
 DROP TABLE IF EXISTS gpconnect.medication_statement_notes;
@@ -27,8 +23,10 @@ DROP TABLE IF EXISTS gpconnect.medication_requests;
 DROP TABLE IF EXISTS gpconnect.medication_orders;
 DROP TABLE IF EXISTS gpconnect.medication_dispenses;
 DROP TABLE IF EXISTS gpconnect.medication_administrations;
-DROP TABLE IF EXISTS gpconnect.encounters;
-DROP TABLE IF EXISTS gpconnect.observations;
+DROP TABLE IF EXISTS gpconnect.patients;
+DROP TABLE IF EXISTS gpconnect.medications;
+DROP TABLE IF EXISTS gpconnect.practitioners;
+DROP TABLE IF EXISTS gpconnect.organizations;
 DROP TABLE IF EXISTS gpconnect.locations;
 DROP TABLE IF EXISTS gpconnect.appointment_booking_orgz;
 DROP TABLE IF EXISTS gpconnect.appointment_appointments;
@@ -268,7 +266,8 @@ CREATE TABLE gpconnect.medication_requests (
   statusReasonDate                   DATETIME     NULL,
   statusReason                       VARCHAR(50)  NULL,
   lastUpdated                        DATETIME     NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  FOREIGN KEY (medicationId) REFERENCES gpconnect.medications(id)  
 );
 
 CREATE TABLE gpconnect.medication_reason_references (
@@ -387,26 +386,6 @@ CREATE TABLE gpconnect.medication_administrations (
   administrationDate DATETIME NULL,
   medicationId       BIGINT   NULL,
   lastUpdated        DATETIME NULL,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE gpconnect.encounters (
-  id            BIGINT       NOT NULL AUTO_INCREMENT,
-  nhsNumber     VARCHAR(100) NULL,
-  sectionDate   DATETIME     NULL,
-  encounterDate VARCHAR(200) NULL,
-  title         VARCHAR(200) NULL,
-  details       VARCHAR(400) NULL,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE gpconnect.observations (
-  id              BIGINT       NOT NULL AUTO_INCREMENT,
-  nhsNumber       BIGINT       NULL,
-  observationDate VARCHAR(100) NULL,
-  entry           VARCHAR(100) NULL,
-  value           VARCHAR(100) NULL,
-  details         VARCHAR(100) NULL,
   PRIMARY KEY (id)
 );
 

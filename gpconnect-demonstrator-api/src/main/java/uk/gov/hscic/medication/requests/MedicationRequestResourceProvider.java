@@ -65,48 +65,65 @@ public class MedicationRequestResourceProvider {
 		medicationRequest.setId(new IdType(requestDetail.getId()));
 		medicationRequest.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_REQUEST)
 				.setVersionId(String.valueOf(requestDetail.getLastUpdated().getTime())));
-		setBasedOnReferences(medicationRequest, requestDetail);			
-		medicationRequest.setGroupIdentifier(new Identifier().setValue(requestDetail.getGroupIdentifier()));
+		setBasedOnReferences(medicationRequest, requestDetail);		
+		if (requestDetail.getPrescriptionTypeCode().contains("repeat")) {
+			medicationRequest.setGroupIdentifier(new Identifier().setValue(requestDetail.getGroupIdentifier()));
+		}
+		
 		try {
 			medicationRequest.setStatus(MedicationRequestStatus.fromCode(requestDetail.getStatusCode()));
 		} catch (FHIRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		try {
 			medicationRequest.setIntent(MedicationRequestIntent.fromCode(requestDetail.getIntentCode()));
 		} catch (FHIRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(requestDetail.getMedicationId() != null)
+		
+		if(requestDetail.getMedicationId() != null) {
 			medicationRequest.setMedication(new Reference(new IdType("Medication", requestDetail.getMedicationId())));
-		if(requestDetail.getPatientId() != null)
+		}
+		
+		if(requestDetail.getPatientId() != null) {
 			medicationRequest.setSubject(new Reference(new IdType("Patient", requestDetail.getPatientId())));
-		if(requestDetail.getEncounterId() != null)
+		}
+		
+		if(requestDetail.getEncounterId() != null) {
 			medicationRequest.setContext(new Reference(new IdType("Encounter", requestDetail.getEncounterId())));
-		medicationRequest.setAuthoredOn(requestDetail.getAuthoredOn());
-		//medicationRequest.setRequester(getRequesterComponent(requestDetail));
-		if(requestDetail.getAuthorisingPractitionerId() != null)
+		}
+		
+		if(requestDetail.getAuthorisingPractitionerId() != null) {
 			medicationRequest.setRecorder(new Reference(new IdType("Practitioner", requestDetail.getAuthorisingPractitionerId())));
+		}
+
+		if(requestDetail.getPriorMedicationRequestId() != null) {
+			medicationRequest.setPriorPrescription(new Reference(new IdType("MedicationRequest", requestDetail.getPriorMedicationRequestId())));
+		}
+		
+		medicationRequest.setAuthoredOn(requestDetail.getAuthoredOn());
+		medicationRequest.setDispenseRequest(getDispenseRequestComponent(requestDetail));
+		//medicationRequest.setRequester(getRequesterComponent(requestDetail)); //TODO - spec needs to clarify whether this should be populated or not
+		
 		setReasonCodes(medicationRequest, requestDetail);
 		setReasonReferences(medicationRequest, requestDetail);
 		setNotes(medicationRequest, requestDetail);
-		medicationRequest.addDosageInstruction(new Dosage()
-				.setText(requestDetail.getDosageText())
-				.setPatientInstruction(requestDetail.getDosageInstructions()));
-		medicationRequest.setDispenseRequest(getDispenseRequestComponent(requestDetail));
-		if(requestDetail.getPriorMedicationRequestId() != null)
-			medicationRequest.setPriorPrescription(new Reference(new IdType("MedicationRequest", requestDetail.getPriorMedicationRequestId())));
 		setRepeatInformation(medicationRequest, requestDetail);
 		setPrescriptionType(medicationRequest, requestDetail);
 		setStatusReason(medicationRequest, requestDetail);
-				
+		
+		medicationRequest.addDosageInstruction(new Dosage()
+				.setText(requestDetail.getDosageText())
+				.setPatientInstruction(requestDetail.getDosageInstructions()));
+		
 		return medicationRequest;
 	}
 
 	private void setPrescriptionType(MedicationRequest medicationRequest, MedicationRequestDetail requestDetail) {
-		Coding prescriptionTypeCoding = new Coding(SystemURL.VS_CC_PRESCRIPTION_TYPE, requestDetail.getPrescriptionTypeCode(), requestDetail.getPrescriptionTypeDisplay());
+		Coding prescriptionTypeCoding = new Coding(SystemURL.CS_CC_PRESCRIPTION_TYPE_STU3, requestDetail.getPrescriptionTypeCode(), requestDetail.getPrescriptionTypeDisplay());
 		Extension prescriptionTypeExtension = new Extension(SystemURL.SD_CC_EXT_MEDICATION_PRESCRIPTION_TYPE, new CodeableConcept().addCoding(prescriptionTypeCoding));
 		medicationRequest.addExtension(prescriptionTypeExtension);
 	}
@@ -191,6 +208,7 @@ public class MedicationRequestResourceProvider {
 		duration.setCode("d");
 		duration.setValue(requestDetail.getExpectedSupplyDuration());
 		duration.setUnit("day");
+		//TODO - spec needs to clarify whether this should be populated or not
 		//dispenseRequest.setExpectedSupplyDuration(duration);
 		
 		dispenseRequest.setPerformer(new Reference(new IdType("Organization",requestDetail.getDispenseRequestOrganizationId())));
@@ -210,6 +228,7 @@ public class MedicationRequestResourceProvider {
 		dispenseRequest.setQuantity(quantity);
 	}
 
+	//TODO - spec needs to clarify whether this should be populated or not
 	private MedicationRequestRequesterComponent getRequesterComponent(MedicationRequestDetail requestDetail) {
 		MedicationRequestRequesterComponent requesterComponent = new MedicationRequestRequesterComponent();
 		switch(requestDetail.getRequesterUrl()) {

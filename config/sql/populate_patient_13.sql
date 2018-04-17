@@ -1,13 +1,3 @@
-INSERT INTO gpconnect.encounters
-  (id,nhsNumber,sectionDate,encounterDate,title,details)
-VALUES
-  (4,9476718935,'2016-07-01 12:17:00','2016-07-01 12:17:00',"Miss Tanya Turnpike (Practice Nurse) - Dr Johnson and Partners (J12345)","Result : Full blood count - FBC - Normal - No Action.");
-
-INSERT INTO gpconnect.observations
-  (id,nhsNumber,observationDate,entry,value,details)
-VALUES
-  (4,9476718935,'2016-07-01 12:00:00',"Health of Nat Outc Sc item 1 - aggressive/disrupt behaviour","0","(Added from Questionnaire)");
-
 INSERT INTO gpconnect.allergyintolerance
   (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,coding,display,manCoding,manDisplay)
 VALUES

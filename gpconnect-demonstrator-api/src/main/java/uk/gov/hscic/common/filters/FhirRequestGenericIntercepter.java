@@ -473,7 +473,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private enum Resource {
 
-        AllergyIntolerance, Appointment, Condition, DiagnosticOrder, DiagnosticReport, Encounter, Flag, MedicationAdministration, MedicationDispense, MedicationOrder, Observation, Patient, Organization, Order, Location, metadata, Practitioner, Slot;
+        AllergyIntolerance, Appointment, Condition, DiagnosticOrder, DiagnosticReport, Flag, MedicationAdministration, MedicationDispense, MedicationOrder, Patient, Organization, Order, Location, metadata, Practitioner, Slot;
 
         private static final Map<String, Resource> mappings = new HashMap<>();
 

@@ -20,10 +20,11 @@ angular
         $scope.highlightValues = false;
         $scope.data = {"Iodine (substance)": "Beer allergy"};
         $scope.MedicationRequest = [];
+        $scope.MedicationStatement = [];
 
         initGetMedicationData();
         initShowHide();
-        initGetAllergies();
+        // initGetAllergies();
         getAllergyData();
 
          function initGetMedicationData() {
@@ -169,8 +170,13 @@ angular
                         } if(resource.resourceType =="MedicationRequest") {
                             $scope.MedicationRequest.push(resource);
                         }
+                        if(resource.resourceType =="MedicationStatement") {
+                            $scope.MedicationStatement.push(resource);
+                        }
                     }
                 });
+
+                console.log($scope.MedicationStatement);
             }
         };
 

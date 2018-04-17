@@ -21,9 +21,7 @@ public final class InteractionId {
     public static final String CLAIM_PATIENT_MEDICATION_DISPENSE       = BASE + "claim:patient/MedicationDispense.read-1";
     public static final String CLAIM_PATIENT_MEDICATION_ORDER          = BASE + "claim:patient/MedicationOrder.read-1";
     public static final String CLAIM_PATIENT_OBSERVATION               = BASE + "claim:patient/Observation.read-1";
-    public static final String CLAIM_PATIENT_PROBLEM                   = BASE + "claim:patient/Problem.read-1";
     public static final String CLAIM_PATIENT_PROCEDURES                = BASE + "claim:patient/Procedures.read-1";
-    public static final String CLAIM_PATIENT_REFERRAL                  = BASE + "claim:patient/Referral.read-1";
     public static final String OPERATION_GPC_GET_CARE_RECORD           = BASE + "operation:gpc.getcarerecord-1";
     public static final String OPERATION_GPC_REGISTER_PATIENT          = BASE + "operation:gpc.registerpatient-1";
     public static final String OPERATION_GPC_GET_STRUCTURED_RECORD     = BASE + "operation:gpc.getstructuredrecord-1";

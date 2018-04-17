@@ -1456,10 +1456,6 @@ textarea#cprdecisioncomment {
   width: 109%;
 }
 
-textarea#procedureNotes {
-  height: 108px;
-}
-
 #dateofdecision {
   width: 60%;
 }
@@ -1617,76 +1613,8 @@ textarea#procedureNotes {
   width: 97%;
 }
 
-.procedureForm input {
-  padding-top: 8px;
-}
-
-.procedureForm .input-group {
-  width: 100% !important;
-  padding-top: 8px;
-}
-
-.procedureForm .form-group {
-  padding-top: 10px;
-  width: 97%;
-  padding-left: 15px;
-}
-
-.procedureRightModal {
-  margin-left: -85px;
-}
-
-.procedureRightModal .rowTwo {
-  margin-left: -15px;
-}
-
-.procedureForm .procedureRightModal .input-group {
-  width: 140% !important;
-}
-
-.procedureForm .procedureRightModal .proceduretimeform {
-  padding-left: 55px;
-}
-
-.procedureForm .procedureRightModal .proceduretimepicker {
-  width: 350% !important;
-}
-
-.procedureRightModal .proceduredateform input {
-  width: 220px;
-}
-
-.procedureMobileform label {
-  float: none;
-}
-
-.procedureMobileform .popupinputs {
-  height: 30px;
-}
-
-.procedureMobileform .terminologylabel {
-  padding-left: 16px
-}
-
-.procedureMobileform {
-  width: 98% !important;
-}
-
-.procedureMobileform label {
-  padding-top: 10px;
-}
-
 #careserviceteam {
   width: 159%;
-}
-
-.referralForm .input-group {
-  width: 100% !important;
-  padding-top: 8px;
-}
-
-.referralForm .form-control {
-  height: 30px;
 }
 
 .appointmentLocationGroup {
@@ -1732,29 +1660,6 @@ textarea#procedureNotes {
 
 .referralDate input {
   width: 108% !important;
-}
-
-#reasonforreferral,
-#clinicalsummary {
-  height: 100px;
-}
-
-.reasonforreferralGroup {
-  padding-top: 22px;
-}
-
-.referral-calendar-view {
-  margin-right: 0px;
-  padding-right: 15px;
-}
-
-.referral-calendar-view label {
-  padding-bottom: 35px;
-}
-
-.referral-calendar-group {
-  float: right;
-  padding-right: 15px;
 }
 
 .filterInput input {
@@ -2506,3 +2411,8 @@ div#age-chart div.morris-hover.morris-default-style {
 .patients_allergies {
     float: right;
 }
+
+.linkText {
+	color: #2a6496;
+}
+

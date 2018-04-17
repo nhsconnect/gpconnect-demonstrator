@@ -25,5 +25,6 @@ public class AppointmentStore {
 
     public void clearAppointments(){
         appointmentRepository.deleteAll();
+    	appointmentRepository.resetAutoIncrementAppointmentTable();
     }
 }

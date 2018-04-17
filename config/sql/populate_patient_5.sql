@@ -1,13 +1,3 @@
-INSERT INTO gpconnect.medications_html
-  (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
-VALUES
-  (9476719966,"Past","01-07-2016","Metformin 500mg tablets","19-11-2019","Day Duration 4","3","Issue more","Issue more","Issue more","Issue more","4");
-
-INSERT INTO gpconnect.encounters
-  (id,nhsNumber,sectionDate,encounterDate,title,details)
-VALUES
-  (13,9476718897,'2016-07-01 12:17:00','2016-07-01 12:17:00',"Miss Tanya Turnpike (Practice Nurse) - Dr Johnson and Partners (J12345)","Result : Full blood count - FBC - Normal - No Action.");
-  
 INSERT INTO gpconnect.medication_statements
  (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated)

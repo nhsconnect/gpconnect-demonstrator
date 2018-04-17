@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.apache.tomcat.util.http.parser.MediaTypeCache;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Extension;
@@ -27,8 +26,6 @@ import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.medication.statement.MedicationStatementEntity;
 import uk.gov.hscic.medication.statement.MedicationStatementRepository;
 import uk.gov.hscic.model.medication.MedicationDetail;
-import uk.gov.hscic.model.medication.MedicationStatementDetail;
-import uk.gov.hscic.patient.allergies.AllergyEntity;
 import uk.gov.hscic.patient.details.PatientRepository;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
 

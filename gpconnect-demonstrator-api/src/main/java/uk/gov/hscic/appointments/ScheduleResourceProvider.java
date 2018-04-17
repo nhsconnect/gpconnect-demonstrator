@@ -46,7 +46,6 @@ public class ScheduleResourceProvider implements IResourceProvider {
     @Read()
     public Schedule getScheduleById(@IdParam IdType scheduleId) {
         ScheduleDetail scheduleDetail = scheduleSearch.findScheduleByID(scheduleId.getIdPartAsLong());
-
         if (scheduleDetail == null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InternalErrorException("No schedule details found for ID: " + scheduleId.getIdPart()),

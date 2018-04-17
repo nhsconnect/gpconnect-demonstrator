@@ -1,10 +1,11 @@
 package uk.gov.hscic.appointment.appointment;
 
-import java.util.stream.Collectors;
 import org.apache.commons.collections4.Transformer;
 import uk.gov.hscic.appointment.bookingOrganization.BookingOrgEntityToBookingOrgDetailTransformer;
 import uk.gov.hscic.appointment.slot.SlotEntity;
 import uk.gov.hscic.model.appointment.AppointmentDetail;
+
+import java.util.stream.Collectors;
 
 public class AppointmentEntityToAppointmentDetailTransformer implements Transformer<AppointmentEntity, AppointmentDetail> {
 
@@ -20,9 +21,6 @@ public class AppointmentEntityToAppointmentDetailTransformer implements Transfor
         appointmentDetail.setTypeDisplay(item.getTypeDisplay());
         appointmentDetail.setTypeText(item.getTypeText());
         appointmentDetail.setDescription(item.getDescription());
-        appointmentDetail.setReasonCode(item.getReasonCode());
-        appointmentDetail.setReasonDisplay(item.getReasonDisplay());
-        appointmentDetail.setReasonURL(item.getReasonURL());
         appointmentDetail.setStartDateTime(item.getStartDateTime());
         appointmentDetail.setEndDateTime(item.getEndDateTime());
         appointmentDetail.setSlotIds(item.getSlots().stream().map(SlotEntity::getId).collect(Collectors.toList()));

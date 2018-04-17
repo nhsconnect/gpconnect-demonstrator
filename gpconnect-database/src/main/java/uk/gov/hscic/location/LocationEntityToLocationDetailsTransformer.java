@@ -21,6 +21,27 @@ class LocationEntityToLocationDetailsTransformer implements Transformer<Location
                     locationDetails.setSiteOdsCodeName(locationEntity.getSiteOdsCodeName());
                     locationDetails.setLastUpdated(locationEntity.getLastUpdated());
                     locationDetails.setStatus(locationEntity.getStatus());
+                    if (locationEntity.getAddress() != null) {
+                    	if (locationEntity.getAddress().getLine() != null) {
+                    		locationDetails.setAddressLine(locationEntity.getAddress().getLine());
+                    	}
+                    	if (locationEntity.getAddress().getCity() != null) {
+                    		locationDetails.setAddressCity(locationEntity.getAddress().getCity());
+                    	}
+                    	if (locationEntity.getAddress().getDistrict() != null) {
+                    		locationDetails.setAddressDistrict(locationEntity.getAddress().getDistrict());
+                    	}
+                    	if (locationEntity.getAddress().getState() != null) {
+                    		locationDetails.setAddressState(locationEntity.getAddress().getState());
+                    	}
+                    	if (locationEntity.getAddress().getPostalCode() != null) {
+                    		locationDetails.setAddressPostalCode(locationEntity.getAddress().getPostalCode());
+                    	}
+                    	if (locationEntity.getAddress().getCountry() != null) {
+                    		locationDetails.setAddressCountry(locationEntity.getAddress().getCountry());
+                    	}                    		
+                    }
+                    
             }
 
             return locationDetails;

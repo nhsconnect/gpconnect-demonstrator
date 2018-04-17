@@ -1,23 +1,3 @@
-INSERT INTO gpconnect.allergies
-  (nhsNumber,currentOrHistoric,startDate,endDate,details)
-VALUES
-  (9476719974,"Current",'2014-12-10 12:17:00','2016-12-11 12:17:00',"PENICILLIN VK");
-
-INSERT INTO gpconnect.medications_html
-  (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
-VALUES
-  (9476719974,"Current","14-09-2005","Lansoprazole 15mg gastro-resistant capsules","19-11-2019","Day Duration 2","3",NULL,NULL,NULL,NULL,"4");
-
-INSERT INTO gpconnect.problems
-  (nhsNumber,activeOrInactive,startDate,endDate,entry,significance,details)
-VALUES
-  (9476719974,"Active",'2016-07-25 12:00:00','2016-07-25 12:00:00',"Type II diabetes mellitus","Major","Treated daily");
-
-INSERT INTO gpconnect.encounters
-  (id,nhsNumber,sectionDate,encounterDate,title,details)
-VALUES
-  (12,9476718900,'2015-05-01 12:17:00','2015-05-01 12:17:00',"Dr Jeffrey Johnson - Dr Johnson and Partners (J12345)","Haemoglobin A1c level - IFCC standardised 20.5 mmol/mol.<br />Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 10ml vials");
-
 INSERT INTO gpconnect.medication_statements
   (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated)

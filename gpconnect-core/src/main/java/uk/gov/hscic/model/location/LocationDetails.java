@@ -12,6 +12,12 @@ public class LocationDetails implements Serializable {
     private String siteOdsCodeName;
     private String status;
     private Date lastUpdated;
+    private String addressLine;
+    private String addressCity;
+    private String addressDistrict;
+    private String addressState;
+    private String addressPostalCode;
+    private String addressCountry;
 
     public Long getId() {
         return id;
@@ -76,4 +82,52 @@ public class LocationDetails implements Serializable {
     public String getStatus(){
         return status;
     }
+  
+	public String getAddressCity() {
+		return addressCity;
+	}
+
+	public void setAddressCity(String addressCity) {
+		this.addressCity = addressCity;
+	}
+
+	public String getAddressDistrict() {
+		return addressDistrict;
+	}
+
+	public void setAddressDistrict(String addressDistrict) {
+		this.addressDistrict = addressDistrict;
+	}
+
+	public String getAddressState() {
+		return addressState;
+	}
+
+	public void setAddressState(String addressState) {
+		this.addressState = addressState;
+	}
+
+	public String getAddressPostalCode() {
+		return addressPostalCode;
+	}
+
+	public void setAddressPostalCode(String addressPostalCode) {
+		this.addressPostalCode = addressPostalCode;
+	}
+
+	public String getAddressCountry() {
+		return addressCountry;
+	}
+
+	public void setAddressCountry(String addressCountry) {
+		this.addressCountry = addressCountry;
+	}
+
+	public String getAddressLine() {
+		return addressLine;
+	}
+
+	public void setAddressLine(String addressLine) {
+		this.addressLine = addressLine;
+	}
 }

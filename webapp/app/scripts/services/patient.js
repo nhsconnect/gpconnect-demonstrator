@@ -158,8 +158,8 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
     };
 
 
-    var allMedications = function () {
-        return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/medication/all').then(function (response) {
+    var allMedications = function (patientId) {
+        return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/medication/all/'+patientId).then(function (response) {
             return response.data;
         });
 

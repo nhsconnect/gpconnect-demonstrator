@@ -22,9 +22,9 @@ public class MedicationController {
     @Autowired
     private MedicationResourceProvider medicationResourceProvider;
 
-    @GetMapping("/medication/all")
-    public Map<String,List<String>> getAllMedications() {
-        return medicationResourceProvider.getAllMedicationAndAllergiesForPatient();
+    @GetMapping("/medication/all//{nhsnumber}")
+    public Map<String,List<String>> getAllMedications(@PathVariable("nhsnumber") String nhsnumber) {
+        return medicationResourceProvider.getAllMedicationAndAllergiesForPatient(nhsnumber);
     }
 
     @PutMapping("/medication/add")

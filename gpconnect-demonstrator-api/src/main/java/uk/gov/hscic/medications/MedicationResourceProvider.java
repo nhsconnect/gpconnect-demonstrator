@@ -121,14 +121,20 @@ public class MedicationResourceProvider implements IResourceProvider {
 			medication.addExtension(snowmedExtension);
 	}
 
-	public Map<String,List<String>> getAllMedicationAndAllergiesForPatient() {
+	public Map<String,List<String>> getAllMedicationAndAllergiesForPatient(String nhsNumber) {
 		Map<String,List<String>> allergiesAssociatedWithMedicationMap = new HashMap<>();
 		for (MedicationEntity medicationEntity:medicationRepository.findAll()) {
 			List<StructuredAllergyIntoleranceEntity> allergyEntities = medicationEntity.getMedicationAllergies();
 			if(allergyEntities.size() > 0) {
 				for (StructuredAllergyIntoleranceEntity allergy :allergyEntities) {
 
-					allergiesAssociatedWithMedicationMap.computeIfAbsent(medicationEntity.getDisplay(), k-> new ArrayList<>()).add(allergy.getDisplay());
+					if(Objects.equals(allergy.getNhsNumber(), nhsNumber)) {
+						allergiesAssociatedWithMedicationMap.computeIfAbsent(medicationEntity.getDisplay(), k-> new ArrayList<>()).add(allergy.getDisplay());
+					} else {
+						allergiesAssociatedWithMedicationMap.put(medicationEntity.getDisplay(), Collections.EMPTY_LIST);
+					}
+
+
 				}
 			} else {
 				allergiesAssociatedWithMedicationMap.put(medicationEntity.getDisplay(), Collections.EMPTY_LIST);

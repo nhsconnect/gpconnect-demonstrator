@@ -6,7 +6,8 @@ angular
         $scope,
         $http,
         PatientService,
-        $stateParams
+        $stateParams,
+        $modal
     ) {
         $scope.MedicationListList = [];
         $scope.AllMedications = {};
@@ -18,6 +19,7 @@ angular
         $scope.allergies = [];
         $scope.highlightValues = false;
         $scope.data = {"Iodine (substance)": "Beer allergy"};
+        $scope.MedicationRequest = [];
 
         initGetMedicationData();
         initShowHide();
@@ -92,7 +94,6 @@ angular
                 "nhsNumber":$stateParams.patientId
             };
             PatientService.addMedication(data ).then(function(response) {
-                console.log(response);
                 initGetMedicationData();
                 if(response.status == "200") {
                     console.log("Everything went fine.");
@@ -165,7 +166,8 @@ angular
                                 $scope.ResolvedAllergiesList.push(resource);
                             }
 
-console.log(scope.ResolvedAllergiesList);
+                        } if(resource.resourceType =="MedicationRequest") {
+                            $scope.MedicationRequest.push(resource);
                         }
                     }
                 });
@@ -173,9 +175,74 @@ console.log(scope.ResolvedAllergiesList);
         };
 
         function initShowHide() {
-            PatientService.allMedications().then(function (mediacations) {
+            PatientService.allMedications($stateParams.patientId).then(function (mediacations) {
+                console.log(mediacations);
                 $scope.AllMedications = mediacations;
             });
         }
+
+        $scope.showForm = function (listType) {
+            // $scope.title ='';
+
+            if(listType.resourceType == "Medication") {
+                $scope.showMedDetail = true;
+                $scope.showAllergyDetail = false;
+                $scope.showResAllergyDetail = false;
+                $scope.title = "Medication Details";
+
+                for(var i=0; i < $scope.MedicationRequest.length; i++) {
+                    if(listType.id == $scope.MedicationRequest[i].medicationReference.reference.split("/").slice(1).pop()) {
+                        $scope.medicationType = $scope.MedicationRequest[i].extension[1].valueCodeableConcept.coding[0].display;
+                    }
+                    break;
+                }
+                $scope.MedicationName = listType.code.coding[0].display;
+                $scope.practitionername = $scope.practitioner.name[0].prefix[0]+" "+$scope.practitioner.name[0].given[0] + " "+ $scope.practitioner.name[0].family;
+            }
+            else if (listType.resourceType == "AllergyIntolerance" && listType.clinicalStatus == "active") {
+                $scope.showAllergyDetail = true;
+                $scope.showMedDetail = false;
+                $scope.title = "Allergy Details";
+            }
+            else if (listType.resourceType == "AllergyIntolerance" && listType.clinicalStatus == "resolved") {
+                $scope.showResAllergyDetail = true;
+                $scope.showAllergyDetail = false;
+                $scope.showMedDetail = false;
+                $scope.title = "Resolved Allergy Details";
+            }
+
+            $scope.message = "Show Form Button Clicked";
+
+
+            var modalInstance = $modal.open({
+                templateUrl: '../views/access-record/modal.html',
+                // controller: ModalInstanceCtrl,
+                scope: $scope,
+                resolve: {
+                    params: function () {
+                        return {
+                            title: $scope.title,
+                            message: $scope.message
+                        };
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+            });
+        };
+
+        var ModalInstanceCtrl = function ($scope, $modalInstance) {
+            $scope.submitForm = function () {
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+        }
+
+
     });
 

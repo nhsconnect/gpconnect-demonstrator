@@ -25,6 +25,14 @@
         </ul>
         <br>
         <br>
+
+        <h4>Past medications</h4>
+
+        <ul>
+            <li  ng-repeat="historicMed in historicMedications">
+                {{historicMed.extension[0].extension[1].valueString}}
+            </li>
+        </ul>
     </div>
 
     <div class="left">

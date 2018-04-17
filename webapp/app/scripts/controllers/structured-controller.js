@@ -21,11 +21,12 @@ angular
         $scope.data = {"Iodine (substance)": "Beer allergy"};
         $scope.MedicationRequest = [];
         $scope.MedicationStatement = [];
+        $scope.historicMedications = [];
 
         initGetMedicationData();
         initShowHide();
-        // initGetAllergies();
         getAllergyData();
+        // initgetPastMedication();
 
          function initGetMedicationData() {
              $scope.MedicationListList.length = 0;
@@ -169,16 +170,16 @@ angular
 
                         } if(resource.resourceType =="MedicationRequest") {
                             $scope.MedicationRequest.push(resource);
-                        }
-                        if(resource.resourceType =="MedicationStatement") {
+                        } if(resource.resourceType =="MedicationStatement") {
+                            // console.log(resource);
                             $scope.MedicationStatement.push(resource);
                         }
                     }
+                    initgetPastMedication()
                 });
 
-                console.log($scope.MedicationStatement);
             }
-        };
+        }
 
         function initShowHide() {
             PatientService.allMedications($stateParams.patientId).then(function (mediacations) {
@@ -187,7 +188,25 @@ angular
             });
         }
 
-        $scope.showForm = function (listType) {
+        function initgetPastMedication() {
+            for(var i=0; i< $scope.MedicationStatement.length; i++){
+                // historic ID
+                var historicId = $scope.MedicationStatement[i].basedOn[0].reference.split("/").slice(1).pop();
+                for(var j=0; j < $scope.MedicationRequest.length; j++) {
+                    // check if the historic id matches anything in medication request
+                    if(historicId == $scope.MedicationRequest[j].id) {
+                        //get the medication name
+                        var medicationId = $scope.MedicationStatement[i].medicationReference.reference.split("/").slice(1).pop();
+                        var medicationNameList = $scope.MedicationListList.filter(function (x) {
+                            return x.id === medicationId;
+                        });
+                        $scope.historicMedications.push(medicationNameList[0]);
+                    }
+                }
+            }
+        }
+
+            $scope.showForm = function (listType) {
             // $scope.title ='';
 
             if(listType.resourceType == "Medication") {
@@ -222,7 +241,6 @@ angular
 
             var modalInstance = $modal.open({
                 templateUrl: '../views/access-record/modal.html',
-                // controller: ModalInstanceCtrl,
                 scope: $scope,
                 resolve: {
                     params: function () {
@@ -239,15 +257,6 @@ angular
             }, function () {
             });
         };
-
-        var ModalInstanceCtrl = function ($scope, $modalInstance) {
-            $scope.submitForm = function () {
-            };
-
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
-        }
 
 
     });

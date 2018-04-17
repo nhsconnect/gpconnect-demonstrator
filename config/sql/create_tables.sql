@@ -438,8 +438,7 @@ CREATE TABLE gpconnect.medication_allergies (
   medicationId BIGINT NOT NULL,
   allergyintoleranceId BIGINT NOT NULL,
   patientNhsnumber BIGINT NOT NULL,
-  FOREIGN KEY (medicationId) REFERENCES gpconnect.medications(id)
-  );
   FOREIGN KEY (medicationId) REFERENCES gpconnect.medications(id),
-  FOREIGN KEY (allergyintoleranceId) REFERENCES gpconnect.allergyintolerance(id)
- );
+  FOREIGN KEY (allergyintoleranceId) REFERENCES gpconnect.allergyintolerance(id),
+  FOREIGN KEY (patientNhsnumber) REFERENCES gpconnect.patients(nhs_number)
+  );

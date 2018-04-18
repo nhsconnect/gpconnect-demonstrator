@@ -1,22 +1,11 @@
 package uk.gov.hscic.medication.statement;
 
-import org.hl7.fhir.dstu3.model.Annotation;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.DateTimeType;
-import org.hl7.fhir.dstu3.model.Dosage;
-import org.hl7.fhir.dstu3.model.Extension;
-import org.hl7.fhir.dstu3.model.IdType;
-import org.hl7.fhir.dstu3.model.MedicationStatement;
+import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
+import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.MedicationStatement.MedicationStatementStatus;
 import org.hl7.fhir.dstu3.model.MedicationStatement.MedicationStatementTaken;
-import org.hl7.fhir.dstu3.model.Meta;
-import org.hl7.fhir.dstu3.model.Period;
-import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.stereotype.Component;
-
-import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 
@@ -92,8 +81,6 @@ public class MedicationStatementResourceProvider {
 				annotation.setAuthor(new Reference(new IdType("Practitioner", note.getAuthorId())));
 			} else if (note.getAuthorReferenceUrl().equals(SystemURL.SD_GPC_PATIENT)) {
 				annotation.setAuthor(new Reference(new IdType("Patient", note.getAuthorId())));
-			} else {
-				// TODO Related Person reference
 			}
 			medicationStatement.addNote(annotation);
 		});

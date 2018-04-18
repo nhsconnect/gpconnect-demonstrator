@@ -1,37 +1,21 @@
 package uk.gov.hscic.medication.requests;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.hl7.fhir.dstu3.model.Annotation;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.DateTimeType;
-import org.hl7.fhir.dstu3.model.Dosage;
-import org.hl7.fhir.dstu3.model.Duration;
-import org.hl7.fhir.dstu3.model.Extension;
-import org.hl7.fhir.dstu3.model.IdType;
-import org.hl7.fhir.dstu3.model.Identifier;
-import org.hl7.fhir.dstu3.model.MedicationRequest;
+import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.MedicationRequest.MedicationRequestDispenseRequestComponent;
 import org.hl7.fhir.dstu3.model.MedicationRequest.MedicationRequestIntent;
 import org.hl7.fhir.dstu3.model.MedicationRequest.MedicationRequestRequesterComponent;
 import org.hl7.fhir.dstu3.model.MedicationRequest.MedicationRequestStatus;
-import org.hl7.fhir.dstu3.model.Meta;
-import org.hl7.fhir.dstu3.model.Period;
-import org.hl7.fhir.dstu3.model.PositiveIntType;
-import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.dstu3.model.SimpleQuantity;
-import org.hl7.fhir.dstu3.model.StringType;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.medication.request.MedicationRequestEntityToDetailTransformer;
 import uk.gov.hscic.medication.request.MedicationRequestRepository;
 import uk.gov.hscic.model.medication.MedicationRequestDetail;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class MedicationRequestResourceProvider {
@@ -141,7 +125,8 @@ public class MedicationRequestResourceProvider {
 				if(reference.getReferenceUrl().equals(SystemURL.SD_GPC_MEDICATION_REQUEST)) {
 					medicationRequest.addBasedOn(new Reference(new IdType("MedicationRequest", reference.getReferenceId())));
 				}
-				// TODO reference type of care plan, procedure request or referral request;
+
+                // TODO reference type of care plan, procedure request or referral request;
 			});
 		}
 	}
@@ -173,10 +158,9 @@ public class MedicationRequestResourceProvider {
 				annotation.setAuthor(new Reference(new IdType("Practitioner", note.getAuthorId())));
 			} else if (note.getAuthorReferenceUrl().equals(SystemURL.SD_GPC_PATIENT)) {
 				annotation.setAuthor(new Reference(new IdType("Patient", note.getAuthorId())));
-			} else {
-				// TODO Related Person reference
 			}
-			medicationRequest.addNote(annotation);
+
+            medicationRequest.addNote(annotation);
 		});
 	}
 

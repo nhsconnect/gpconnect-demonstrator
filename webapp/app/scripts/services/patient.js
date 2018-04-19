@@ -4,11 +4,11 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
     var findAllSummaries = function () {
         return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/patients');
     };
-
+    
     var getSummary = function (patientId) {
         return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord-1").then(function (response) {
             var endpointLookupResult = response;
-
+            
             return $http.post(
                 endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getcarerecord',
                 '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "' + gpcResource.getConst("ID_NHS_NUMBER") + '", "value" : "' + patientId + '" }},{"name" : "recordSection","valueCodeableConcept" :{"coding" : [{"system":"' + gpcResource.getConst("VS_GPC_RECORD_SECTION") + '","code":"SUM","display":"Summary"}]}},{"name" : "timePeriod","valuePeriod" : { "start" : null, "end" : null }}]}',
@@ -26,13 +26,13 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
             );
         });
     };
-
+    
     var getPatientFhirId = function (patientId, odsCode) {
         var odsCode = (typeof odsCode !== 'undefined') ? odsCode : $rootScope.patientOdsCode;
-
+        
         return FhirEndpointLookup.getEndpoint(odsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient-1").then(function (endpointResponse) {
             var endpointLookupResult = endpointResponse;
-
+            
             var partientLookupResponse = $http.get(
                 endpointLookupResult.restUrlPrefix + '/Patient?identifier=' + gpcResource.getConst("ID_NHS_NUMBER") + '%7C' + patientId,
                 {
@@ -52,15 +52,15 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
                     return undefined;
                 }
             });
-
+            
             return partientLookupResponse;
         });
     };
-
+    
     var getFhirPatient = function (practiceOdsCode, patientId) {
         var response;
         $rootScope.patientOdsCode = practiceOdsCode;
-
+        
         return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:search:patient-1").then(function (response) {
             var endpointLookupResult = response;
             var response = $http.get(
@@ -82,11 +82,11 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
                     return undefined;
                 }
             });
-
+            
             return response;
         });
     };
-
+    
     var registerPatient = function (practiceOdsCode, requestParameters, patientId) {
         return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient-1").then(function (endpointLookupResult) {
             return $http.post(
@@ -107,15 +107,15 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
             });
         });
     };
-
+    
     var medication = function(patientId) {
         return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1").then(function(response) {
             var endpointLookupResult = response;
             return $http.post(
                 endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getstructuredrecord',
                 '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "'+gpcResource.getConst("ID_NHS_NUMBER")+'", "value" : "' + patientId + '" }},{"name":"includeMedication","part":[{"name":"medicationDatePeriod","valuePeriod":{"start":"2012-02-02","end":"2018-02-02"}}]}]}',
-
-
+                
+                
                 {
                     headers: {
                         'Ssp-From': endpointLookupResult.fromASID,
@@ -132,14 +132,24 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
             });
         });
     };
-
-
-    var structured = function (patientId) {
+    
+    
+    var structured = function (patientId, start, end, includePrescriptionIssues, includeResolvedAllergies) {
+        console.log(includePrescriptionIssues);
+        console.log(includeResolvedAllergies);
         return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1").then(function (response) {
             var endpointLookupResult = response;
+
+             var includeResolvedAllergiesPart = '"part": [{"name":"includeResolvedAllergies",  "valueBoolean":'+includeResolvedAllergies+'}]'
+            var includeMedication =  '{"name" : "includeMedication","part": [{"name":"medicationDatePeriod", "valuePeriod" : { "start" : "'+start+'", "end" : "'+end+'" }},{"name":"includePrescriptionIssues", "valueBoolean" : '+includePrescriptionIssues+'}]}';
+            var body = '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "' + gpcResource.getConst("ID_NHS_NUMBER") + '", "value" : "' + patientId + '" }},{"name" : "includeAllergies","valueCodeableConcept" :{"coding" : [{"system":"' + gpcResource.getConst("VS_GPC_RECORD_SECTION") + '","code":"SUM","display":"Summary"}]},  '+includeResolvedAllergiesPart+'},'+includeMedication+']}';
+            
+          
+                 
+            
             return $http.post(
                 endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getstructuredrecord',
-                '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "' + gpcResource.getConst("ID_NHS_NUMBER") + '", "value" : "' + patientId + '" }},{"name" : "includeAllergies","valueCodeableConcept" :{"coding" : [{"system":"' + gpcResource.getConst("VS_GPC_RECORD_SECTION") + '","code":"SUM","display":"Summary"}]},  "part": [{"name":"includeResolvedAllergies",  "valueBoolean":"true"}]},{"name" : "includeMedication","valuePeriod" : { "start" : null, "end" : null }}]}',
+                body,
                 {
                     headers: {
                         'Ssp-From': endpointLookupResult.fromASID,
@@ -156,27 +166,27 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
             });
         });
     };
-
-
+    
+    
     var allMedications = function (patientId) {
         return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/medication/all/'+patientId).then(function (response) {
             return response.data;
         });
-
+        
     };
-
+    
     var allergyDetialsByPatient = function(patientId) {
         return $http.get(ProviderRouting.defaultPractice().apiEndpointURL + '/allergy/'+patientId).then(function (response) {
             return response.data;
         });
     };
-
+    
     var addMedication = function(data) {
         return $http.put(ProviderRouting.defaultPractice().apiEndpointURL + '/medication/add',data).then(function(response) {
             return response.data;
         });
     };
-
+    
     return {
         findAllSummaries: findAllSummaries,
         getSummary: getSummary,

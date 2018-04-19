@@ -206,8 +206,6 @@ CREATE TABLE gpconnect.medications (
   code		                TEXT(20)  NULL,
   display	                TEXT(100) NULL,
   text		                TEXT(100) NULL, 
-  snowmedDescriptionId      TEXT(50)  NULL,
-  snowmedDescriptionDisplay TEXT(100) NULL,
   batchNumber               TEXT(50)  NULL, 
   expiryDate                DATETIME  NULL,
   lastUpdated               DATETIME  NULL,

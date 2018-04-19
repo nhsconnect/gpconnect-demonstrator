@@ -84,12 +84,14 @@ public class MedicationResourceProvider implements IResourceProvider {
 		medication.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION)
 				.setVersionId(String.valueOf(new Date()))); 
 		
-		Coding coding = new Coding(SystemURL.VS_SNOWMED, 
-				medicationDetail.getCode(), medicationDetail.getDisplay());
+		CodeableConcept code = new CodeableConcept();
+		Coding coding = new Coding();
+		coding.setSystem(SystemURL.VS_SNOWMED);
+		addSnowmedExtensions(coding, medicationDetail);
+		code.setCoding(Collections.singletonList(coding));
+		code.setText(medicationDetail.getText());
 		
-		medication.setCode(new CodeableConcept().addCoding(coding).setText(medicationDetail.getText()));
-		
-		addSnowmedExtensions(medication, medicationDetail);
+		medication.setCode(code);
 		
 		MedicationPackageComponent packageComponent = new MedicationPackageComponent();
 		MedicationPackageBatchComponent batchComponent = new MedicationPackageBatchComponent();
@@ -102,20 +104,23 @@ public class MedicationResourceProvider implements IResourceProvider {
 		return medication;
 	}
 
-	private void addSnowmedExtensions(Medication medication, MedicationDetail medicationDetail) {
-		Extension idExtension = null, displayExtension = null;
+	private void addSnowmedExtensions(Coding code, MedicationDetail medicationDetail) {
+		Extension idExtension = null;
+		Extension displayExtension = null;
 		Extension snowmedExtension = new Extension(SystemURL.SD_EXT_SCT_DESC_ID);
 		
-		if(medicationDetail.getSnowmedDescriptionId() != null) 
-			idExtension = new Extension("descriptionId").setValue(new IdType(medicationDetail.getSnowmedDescriptionId()));
+		if(medicationDetail.getCode() != null) { 
+			idExtension = new Extension("descriptionId").setValue(new IdType(medicationDetail.getCode()));
 			snowmedExtension.addExtension(idExtension);
+		}
 		
-		if(medicationDetail.getSnowmedDescriptionDisplay() != null)
-			displayExtension = new Extension("descriptionId").setValue(new StringType(medicationDetail.getSnowmedDescriptionDisplay()));
+		if(medicationDetail.getDisplay() != null) {
+			displayExtension = new Extension("descriptionDisplay").setValue(new StringType(medicationDetail.getDisplay()));
 			snowmedExtension.addExtension(displayExtension);
+		}
 		
 		if(idExtension != null || displayExtension != null)
-			medication.addExtension(snowmedExtension);
+			code.addExtension(snowmedExtension);
 	}
 
 	public Map<String,List<String>> getAllMedicationAndAllergiesForPatient(String nhsNumber) {

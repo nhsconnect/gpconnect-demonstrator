@@ -227,7 +227,7 @@ CREATE TABLE gpconnect.medication_statements (
   takenCode           VARCHAR(50)  NULL,
   takenDisplay        VARCHAR(50)  NULL,
   dosageText          VARCHAR(250) NULL,
-  dosageInstruction   VARCHAR(50)  NULL,
+  dosageInstruction   VARCHAR(250)  NULL,
   lastUpdated         DATETIME     NULL,
   PRIMARY KEY (id)
 );
@@ -247,7 +247,7 @@ CREATE TABLE gpconnect.medication_requests (
   requesterId                        BIGINT       NULL,
   authorisingPractitionerId          BIGINT       NULL,
   dosageText                         VARCHAR(250) NULL,
-  dosageInstruction                  VARCHAR(50)  NULL,
+  dosageInstruction                  VARCHAR(250)  NULL,
   dispenseRequestStartDate           DATETIME     NULL,
   dispenseRequestEndDate             DATETIME     NULL,
   dispenseQuantityValue              VARCHAR(20)  NULL,

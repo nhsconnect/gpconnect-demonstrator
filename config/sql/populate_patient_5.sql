@@ -45,16 +45,16 @@ INSERT INTO gpconnect.medication_requests
 VALUES
  (4,'group3','active','Active','plan','Plan',5,5,13,'2018-01-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'Use as often as required','Apply the medication after cleaning and drying the affected area',
- '2018-01-18','2018-07-04',null,null,'250ml','28 days',2,null,6,4,'2018-07-16','repeat','Repeat',null,null,'2018-04-15'),
+ '2018-01-18','2018-07-04',null,null,'250ml','28',2,null,6,4,'2018-07-16','repeat','Repeat',null,null,'2018-04-15'),
  (5,'group3','active','Active','order','Order',5,5,13,'2018-01-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'Use as often as required','Apply the medication after cleaning and drying the affected area',
- '2018-01-18','2018-02-15',null,null,'250ml','28 days',2,null,6,1,'2018-07-16','repeat','Repeat',null,null,'2018-01-15'),
+ '2018-01-18','2018-02-15',null,null,'250ml','28',2,null,6,1,'2018-07-16','repeat','Repeat',null,null,'2018-01-15'),
  (6,'group3','active','Active','order','Order',5,5,13,'2018-01-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'Use as often as required','Apply the medication after cleaning and drying the affected area',
- '2018-02-12','2018-03-12',null,null,'250ml','28 days',2,5,6,2,'2018-07-16','repeat','Repeat',null,null,'2018-03-15'),
+ '2018-02-12','2018-03-12',null,null,'250ml','28',2,5,6,2,'2018-07-16','repeat','Repeat',null,null,'2018-03-15'),
  (7,'group3','active','Active','order','Order',5,5,13,'2018-01-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'Use as often as required','Apply the medication after cleaning and drying the affected area',
- '2018-03-12','2018-04-09',null,null,'250ml','28 days',2,6,6,3,'2018-07-16','repeat','Repeat',null,null,'2018-03-15');
+ '2018-03-12','2018-04-09',null,null,'250ml','28',2,6,6,3,'2018-07-16','repeat','Repeat',null,null,'2018-03-15');
 
 UPDATE gpconnect.medication_statements SET medicationRequestId = 4 WHERE id = 3;
 

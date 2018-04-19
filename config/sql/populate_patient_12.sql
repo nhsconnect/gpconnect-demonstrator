@@ -44,7 +44,7 @@ VALUES
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Take one tablet three times a day','Take with a full glass of water',
  '1958-01-04',null,null,null,'90 tabletst','1',2,null,0,0,'1958-02-04','acute','Acute',null,null,'1958-03-15');
 
-UPDATE gpconnect.medication_statements SET medicationRequestId = 14 WHERE id = 4;
+UPDATE gpconnect.medication_statements SET medicationRequestId = 15 WHERE id = 7;
 
 INSERT INTO gpconnect.medication_request_based_on
  (id,referenceUrl,referenceId)

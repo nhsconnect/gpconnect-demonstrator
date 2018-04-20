@@ -8,7 +8,7 @@ VALUES
   (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated)
 VALUES
- (7,'1958-01-04',12,'completed','Completed',2,'1958-01-04','1958-01-04','1958-01-04',3,'y','Yes','Take one tablet three times a day','Take with a full glass of water','1958-03-15');
+ (7,'1958-01-04',12,'completed','Completed',2,'1958-01-04','1958-01-04','1958-01-04',12,'y','Yes','Take one tablet three times a day','Take with a full glass of water','1958-03-15');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)
@@ -37,10 +37,10 @@ INSERT INTO gpconnect.medication_requests
  dispenseRequestOrganizationId,priorMedicationRequestId,numberOfRepeatPrescriptionsAllowed,numberOfRepeatPrescriptionsIssued,
  authorisationExpiryDate,prescriptionTypeCode,prescriptionTypeDisplay,statusReasonDate,statusReason,lastUpdated)
 VALUES
- (15,'group7','completed','Completed','plan','Plan',5,3,12,'1958-01-04',
+ (15,'group7','completed','Completed','plan','Plan',5,12,12,'1958-01-04',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Take one tablet three times a day','Take with a full glass of water',
  '1958-01-04',null,null,null,'90 tablets','1',2,null,0,0,'1958-02-04','acute','Acute',null,null,'1958-03-15'),
- (16,'group7','completed','Completed','order','Order',5,3,12,'1958-01-04',
+ (16,'group7','completed','Completed','order','Order',5,12,12,'1958-01-04',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Take one tablet three times a day','Take with a full glass of water',
  '1958-01-04',null,null,null,'90 tabletst','1',2,null,0,0,'1958-02-04','acute','Acute',null,null,'1958-03-15');
 

@@ -3,21 +3,35 @@
 </div>
 
 <div class="modal-body" ng-show="showMedDetail">
-    <!-- <div ng-show="!includePrescriptionIssues"> -->
-
-    <div>Status: {{actualMedicationRequest.status}}</div>
-    <div>Type: {{actualMedicationRequest.extension[1].valueCodeableConcept.coding[0].display;}}</div>
-    <div>Start Date: {{actualMedicationRequest.dispenseRequest.validityPeriod.start.split('T')[0]}} End Date:
-        {{actualMedicationRequest.dispenseRequest.validityPeriod.end.split('T')[0]}}
+    <div>Status: {{actualMedicationRequestWithIssue.plan.status}}</div>
+    <div>Type: {{actualMedicationRequestWithIssue.requestType}}</div>
+    <div>Start Date: {{actualMedicationRequestWithIssue.plan.dispenseRequest.validityPeriod.start.split('T')[0]}} End
+        Date:
+        {{actualMedicationRequestWithIssue.plan.dispenseRequest.validityPeriod.end.split('T')[0]}}
     </div>
-    <div>Quantity: {{actualMedicationRequest.dispenseRequest.quantity.extension[0].valueString}}</div>
-    <div>Dosage: {{actualMedicationRequest.dosageInstruction[0].text}}</div>
-    <div>Instructions: {{actualMedicationRequest.dosageInstruction[0].patientInstruction}}</div>
+    <div>Quantity: {{actualMedicationRequestWithIssue.plan.dispenseRequest.quantity.extension[0].valueString}}</div>
+    <div>Dosage: {{actualMedicationRequestWithIssue.plan.dosageInstruction[0].text}}</div>
+    <div>Instructions: {{actualMedicationRequestWithIssue.plan.dosageInstruction[0].patientInstruction}}</div>
 
-    <div>No of repeats allowed: {{actualMedicationRequest.dispenseRequest[0].dispenseRequest.numberOfRepeatsAllowed}}
+    <div ng-if="actualMedicationRequestWithIssue.requestType === 'Repeat'">
+        <div>No of repeats allowed: {{actualMedicationRequestWithIssue.repeat[0].valuePositiveInt}}</div>
+        <div>No of repeats issued: {{actualMedicationRequestWithIssue.repeat[1].valuePositiveInt}}</div>
     </div>
-    <!-- <div>Practitioner who prescribed Med: {{practitionername}}</div>  -->
-    <!-- </div> -->
+
+    <div ng-repeat="issue in actualMedicationRequestWithIssue.issues">
+        <hr>
+        <div>Start Date: {{issue.dispenseRequest.validityPeriod.start.split('T')[0]}} End Date:
+            {{issue.dispenseRequest.validityPeriod.end.split('T')[0]}}
+        </div>
+        <div>Quantity: {{issue.dispenseRequest.quantity.extension[0].valueString}}</div>
+        <div>Dosage: {{issue.dosageInstruction[0].text}}</div>
+        <div>Instructions: {{issue.dosageInstruction[0].patientInstruction}}</div>
+
+        <div ng-if="issue.extension.length > 1">
+            <div>No of repeats allowed: {{issue.extension[0].extension[0].valuePositiveInt}}</div>
+            <div>No of repeats issued: {{issue.extension[0].extension[1].valuePositiveInt}}</div>
+        </div>
+    </div>
 
     <button class="btn pull-right" type="button" data-dismiss="dialog" ng-click="closeModalInstance()">
         close

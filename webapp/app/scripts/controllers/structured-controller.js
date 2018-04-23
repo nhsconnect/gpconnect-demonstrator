@@ -30,6 +30,9 @@ angular
     $scope.includeResolvedAllergies = true;
     $scope.includePrescriptionIssues = true;
     
+    $scope.dateInvalid = false;
+    
+    
     
     initShowHide();
     // $scope.getAllergyData("2019-01-02", "2019-04-20");
@@ -96,6 +99,8 @@ angular
     
     
     $scope.getAllergyData = function (start, end, includePrescriptionIssues, includeResolvedAllergies) {
+        
+        
         console.log("getAllergyData executed");
         console.log('includePrescriptionIssues'+includePrescriptionIssues)
         
@@ -107,9 +112,15 @@ angular
         
         start = startDate.toISOString().split('T')[0];
         end = endDate.toISOString().split('T')[0];
-    
         
+        $scope.dateInvalid = false;
+        
+        if (startDate > endDate) {
+            $scope.dateInvalid = true;
+        } 
+        else
         {
+            
             $scope.patient = {
                 name: "",
                 id: "",
@@ -250,24 +261,42 @@ angular
             $scope.showAllergyDetail = false;
             $scope.showResAllergyDetail = false;
             
+            $scope.actualMedicationRequestWithIssue = {issues: []};
+            
             for(var i=0; i < $scope.MedicationRequest.length; i++) {
                 if(listType.id == $scope.MedicationRequest[i].medicationReference.reference.split("/").pop()) {
-                    $scope.actualMedicationRequest = $scope.MedicationRequest[i];
+                    if($scope.MedicationRequest[i].intent === "plan"){
+                        $scope.actualMedicationRequestWithIssue.plan = $scope.MedicationRequest[i];
+                        if(!$scope.includePrescriptionIssues){
+                            break;
+                        }
+                    } else {
+                        $scope.actualMedicationRequestWithIssue.issues.push($scope.MedicationRequest[i]);
+                    }
                 }
-                break;
             }
-
-            for(var i=0; i < $scope.MedicationStatement.length; i++) {
-                if(listType.id == $scope.MedicationStatement[i].medicationReference.reference.split("/").pop()) {
-                    $scope.actualMedicationStatement = $scope.MedicationStatement[i];
-                }
-                break;
+            
+            var extensionArray =  $scope.actualMedicationRequestWithIssue.plan.extension;
+            
+            var requestType = extensionArray.find(function(element){
+                return element.url === "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1";
+            }).valueCodeableConcept.coding[0].display; 
+            
+            $scope.actualMedicationRequestWithIssue.requestType = requestType;
+            
+            if(requestType === "Repeat"){
+                $scope.actualMedicationRequestWithIssue.repeat = extensionArray.find(function(element){
+                    return element.url === "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationRepeatInformation-1";
+                }).extension;
             }
+            
+            
+            
             $scope.MedicationName = listType.code.coding[0].extension[0].extension[1].valueString;
             $scope.practitionername = $scope.practitioner.name[0].prefix[0]+" "+$scope.practitioner.name[0].given[0] + " "+ $scope.practitioner.name[0].family;
-
+            
             var medName = listType.code.coding[0].extension[0].extension[1].valueString == "Transfer-degraded medication entry" ? listType.code.text :  listType.code.coding[0].extension[0].extension[1].valueString
-            $scope.title = "Medication Details: "+medName;
+            $scope.title = "Medication Detail: "+medName;
             
         }
         else if (listType.resourceType == "AllergyIntolerance" && listType.clinicalStatus == "active") {
@@ -303,7 +332,7 @@ angular
                 }
             }
         });
-
+        
         $scope.closeModalInstance = function(){
             modalInstance.close();
         }

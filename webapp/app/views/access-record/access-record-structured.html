@@ -5,18 +5,19 @@
             <strong>Medications</strong>
         </h3>
 
-        <!-- <div ng-show="appointment.geStartDateInvalid" class="alert alert-danger" role="alert">Please enter a valid 'from' date. This date should not be in the past.</div>
-            <div ng-show="appointment.leStartDateInvalid" class="alert alert-danger" role="alert">Please enter a valid 'until' date. This should be after the 'from' date.</div> -->
+        <div ng-show="dateInvalid" class="alert alert-danger" role="alert">Please enter a valid dates, 'from' date
+            should be before 'to' date.
+        </div>
         <div class="col-md-12 appDateRange">
             <div class="col-md-5">
                 <text> Search from:</text>
                 <div class="input-group">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default btn-sm"
-                                    ng-click="openDatePicker($event, 'startDate')">
-                            <i class="fa fa-calendar"></i>
-                        </button>
-                    </span>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default btn-sm"
+                                ng-click="openDatePicker($event, 'startDate')">
+                        <i class="fa fa-calendar"></i>
+                    </button>
+                </span>
                     <input type="text" class="form-control input-sm popupinputs" id="startDate" name="startDate"
                            ng-model="search.startDate" ng-click="openDatePicker($event, 'startDate')"
                            datepicker-popup="dd-MMM-y" min-date="" is-open="startDate" required/>
@@ -26,12 +27,12 @@
             <div class="col-md-5">
                 <text>until:</text>
                 <div class="input-group">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default btn-sm"
-                                ng-click="openDatePicker($event, 'endDate')" ng-disabled="">
-                        <i class="fa fa-calendar"></i>
-                    </button>
-                </span>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default btn-sm"
+                            ng-click="openDatePicker($event, 'endDate')" ng-disabled="">
+                    <i class="fa fa-calendar"></i>
+                </button>
+            </span>
                     <input type="text" class="form-control input-sm popupinputs" id="endDate" name="endDate"
                            ng-model="search.endDate" ng-click="openDatePicker($event, 'endDate')"
                            datepicker-popup="dd-MMM-y" min-date="" is-open="endDate"
@@ -53,6 +54,7 @@
         <div class="col-md-12">
             <div class="col-md-6">
                 <input type="checkbox" id="includePrescriptionIssues" name="" ng-model="includePrescriptionIssues"
+                       ng-change="getAllergyData(search.startDate, search.endDate, includePrescriptionIssues, includeResolvedAllergies )"
                        ng-checked="true">
                 <label for="includePrescriptionIssues">include prescription issues</label>
             </div>
@@ -96,7 +98,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="historicMed in historicMedications">
+            <tr ng-repeat="historicMed in historicMedications" ng-click="showForm(historicMed.medication)">
                 <td>{{historicMed.medication.code.coding[0].extension[0].extension[1].valueString == "Transfer-degraded
                     medication entry" ? historicMed.medication.code.text :
                     historicMed.medication.code.coding[0].extension[0].extension[1].valueString}}
@@ -107,6 +109,7 @@
             </tbody>
         </table>
 
+        <h4>Prescribing</h4>
         <div class="create-button">
             <select ng-model="defaultMedication" ng-change="onChange(defaultMedication)">
                 <option value="" ng-repeat="(key ,value) in AllMedications"
@@ -114,8 +117,7 @@
                         ng-value="option" onselect="onChange()"> {{key}}
                 </option>
             </select>
-            <button class="btn btn-info" ng-click="addNewMedication()" ng-disabled="IsDisabled">Add New Medication
-            </button>
+            <button class="btn btn-info" ng-click="addNewMedication()" ng-disabled="IsDisabled">Add</button>
         </div>
 
 
@@ -130,6 +132,7 @@
         <div class="col-md-12">
             <div class="col-md-5">
                 <input type="checkbox" id="includeResolvedAllergies" name="" ng-model="includeResolvedAllergies"
+                       ng-change="getAllergyData(search.startDate, search.endDate, includePrescriptionIssues, includeResolvedAllergies )"
                        ng-checked="true">
                 <label for="includeResolvedAllergies">Resolved Allergies</label>
             </div>
@@ -152,14 +155,7 @@
             </tr>
             </tbody>
         </table>
-        <!-- <div >
-            <h4>Allergies</h4>
-            <ul>
-                <li ng-repeat="allergyDetail in ActiveAllergiesList" ng-style="styleFunction(allergyDetail.code.coding[0].display)" ng-click="showForm(allergyDetail)" >
-                    {{allergyDetail.code.coding[0].display}}
-                </li>
-            </ul>
-        </div> -->
+
         <div ng-show="includeResolvedAllergies">
             <h4>Resolved Allergies</h4>
             <table class="table table-bordered table-striped table-hover">
@@ -181,18 +177,9 @@
                 </tbody>
             </table>
         </div>
-
-        <!-- <div >
-            <h4>Resolved Allergies</h4>
-            <ul>
-                <li ng-repeat="allergyDetail in ResolvedAllergiesList" ng-style="styleFunction(allergyDetail.code.coding[0].display)" ng-click="showForm(allergyDetail)" >
-                    {{allergyDetail.code.coding[0].display}}
-                </li>
-            </ul>
-        </div> -->
-
-
     </div>
+</div>
+</div>
 
 </div>
 </div>

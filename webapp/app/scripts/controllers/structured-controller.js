@@ -194,9 +194,11 @@ angular
                 }
                 initgetPastMedication()
                 
-                $scope.MedicationStatement.forEach(medicationStatement => {
+                // $scope.MedicationStatement.forEach(medicationStatement => {
+                $scope.MedicationStatement.forEach(function(medicationStatement)  {
+                    
                     var medicationId = medicationStatement.medicationReference.reference.split("/").pop();
-                    var medication = $scope.MedicationListList.find(medication => medication.id === medicationId);
+                    var medication = $scope.MedicationListList.find(function(medication){ return medication.id === medicationId});
                     
                     var medHelpObj = {};
                     medHelpObj.statement = medicationStatement; 
@@ -219,17 +221,17 @@ angular
     }
     
     function initgetPastMedication() {
-        $scope.MedicationStatement.forEach(medicationStatement => {
+        $scope.MedicationStatement.forEach(function(medicationStatement) {
             // historic ID
             var historicId = medicationStatement.basedOn[0].reference.split("/").pop();
             
-            $scope.MedicationRequest.forEach(MedicationRequest => {
+            $scope.MedicationRequest.forEach(function(MedicationRequest) {
                 // check if the historic id matches anything in medication request
                 if(historicId == MedicationRequest.id) {
                     //get the medication name
                     var medicationId = medicationStatement.medicationReference.reference.split("/").pop();
                     
-                    var medication = $scope.MedicationListList.find(x => x.id === medicationId);
+                    var medication = $scope.MedicationListList.find(function(x) { return x.id === medicationId});
                     
                     var historyObj = {};
                     historyObj.medication = medication;                  
@@ -241,22 +243,32 @@ angular
     }
     
     $scope.showForm = function (listType) {
-        // $scope.title ='';
+        $scope.listType = listType;
         
         if(listType.resourceType == "Medication") {
             $scope.showMedDetail = true;
             $scope.showAllergyDetail = false;
             $scope.showResAllergyDetail = false;
-            $scope.title = "Medication Details";
             
             for(var i=0; i < $scope.MedicationRequest.length; i++) {
                 if(listType.id == $scope.MedicationRequest[i].medicationReference.reference.split("/").pop()) {
-                    $scope.medicationType = $scope.MedicationRequest[i].extension[1].valueCodeableConcept.coding[0].display;
+                    $scope.actualMedicationRequest = $scope.MedicationRequest[i];
+                }
+                break;
+            }
+
+            for(var i=0; i < $scope.MedicationStatement.length; i++) {
+                if(listType.id == $scope.MedicationStatement[i].medicationReference.reference.split("/").pop()) {
+                    $scope.actualMedicationStatement = $scope.MedicationStatement[i];
                 }
                 break;
             }
             $scope.MedicationName = listType.code.coding[0].extension[0].extension[1].valueString;
             $scope.practitionername = $scope.practitioner.name[0].prefix[0]+" "+$scope.practitioner.name[0].given[0] + " "+ $scope.practitioner.name[0].family;
+
+            var medName = listType.code.coding[0].extension[0].extension[1].valueString == "Transfer-degraded medication entry" ? listType.code.text :  listType.code.coding[0].extension[0].extension[1].valueString
+            $scope.title = "Medication Details: "+medName;
+            
         }
         else if (listType.resourceType == "AllergyIntolerance" && listType.clinicalStatus == "active") {
             $scope.showAllergyDetail = true;
@@ -277,15 +289,24 @@ angular
         var modalInstance = $modal.open({
             templateUrl: '../views/access-record/modal.html',
             scope: $scope,
+            // controller: function($scope, listType){
+            //     $scope.listType = listType;
+            // },
+            // showClose: true,
             resolve: {
                 params: function () {
                     return {
-                        title: $scope.title,
-                        message: $scope.message
+                        // title: $scope.title,
+                        // message: $scope.message,
+                        // listType: listType
                     };
                 }
             }
         });
+
+        $scope.closeModalInstance = function(){
+            modalInstance.close();
+        }
         
         modalInstance.result.then(function (selectedItem) {
             $scope.selected = selectedItem;

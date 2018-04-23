@@ -3,50 +3,64 @@
 </div>
 
 <div class="modal-body" ng-show="showMedDetail">
-    Medication: {{MedicationName}}
-    Type: {{medicationType}}
-    Practitioner who prescribed Med: {{practitionername}}    
+    <!-- <div ng-show="!includePrescriptionIssues"> -->
+
+    <div>Status: {{actualMedicationRequest.status}}</div>
+    <div>Type: {{actualMedicationRequest.extension[1].valueCodeableConcept.coding[0].display;}}</div>
+    <div>Start Date: {{actualMedicationRequest.dispenseRequest.validityPeriod.start.split('T')[0]}} End Date:
+        {{actualMedicationRequest.dispenseRequest.validityPeriod.end.split('T')[0]}}
+    </div>
+    <div>Quantity: {{actualMedicationRequest.dispenseRequest.quantity.extension[0].valueString}}</div>
+    <div>Dosage: {{actualMedicationRequest.dosageInstruction[0].text}}</div>
+    <div>Instructions: {{actualMedicationRequest.dosageInstruction[0].patientInstruction}}</div>
+
+    <div>No of repeats allowed: {{actualMedicationRequest.dispenseRequest[0].dispenseRequest.numberOfRepeatsAllowed}}
+    </div>
+    <!-- <div>Practitioner who prescribed Med: {{practitionername}}</div>  -->
+    <!-- </div> -->
+
+    <button class="btn pull-right" type="button" data-dismiss="dialog" ng-click="closeModalInstance()">
+        close
+    </button>
+    <br>
+    <br>
+
 </div>
 
 
 <div class="modal-body" ng-show="showAllergyDetail">
-    <table class="table table-bordered table-striped table-hover">
-        <thead>
-        <tr>
-            <th scope="col">AssertedDate</th>
-            <th scope="col">Reaction</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="object in ActiveAllergiesList">
-            <td>{{object.assertedDate}}</td>
-            <td>{{object.reaction[0].manifestation[0].coding[0].display}}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div>Clinical status: {{listType.clinicalStatus}}</div>
+    <div>Onset Date: {{listType.onsetDateTime.split('T')[0]}}</div>
+    <div>Reaction: {{listType.reaction[0].manifestation[0].coding[0].display}}</div>
+    <div>Criticality: {{listType.reaction[0].severity}}</div>
+    <div>Notes: {{listType.note[0].text}}</div>
+
+    <button class="btn pull-right" type="button" data-dismiss="dialog" ng-click="closeModalInstance()">
+        close
+    </button>
+    <br>
+    <br>
+
 </div>
 
 
 <div class="modal-body" ng-show="showResAllergyDetail">
-    <table class="table table-bordered table-striped table-hover">
-        <thead>
-        <tr>
-            <th scope="col">AssertedDate</th>
-            <th scope="col">Reaction</th>
-            <th scope="col">Status</th>
-            <th scope="col">Resolved Date</th>
-            <th scope="col">End Reason</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="object in ResolvedAllergiesList">
-            <td>{{object.assertedDate}}</td>
-            <td>{{object.reaction[0].manifestation[0].coding[0].display}}</td>
-            <td>{{object.clinicalStatus}}</td>
-            <td>{{object.lastOccurrence}}</td>
-            <td>{{object.extension[0].extension[1].valueString}}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div>Clinical status: {{listType.clinicalStatus}}</div>
+    <div>Onset Date: {{listType.onsetDateTime.split('T')[0]}}</div>
+    <div>Reaction: {{listType.reaction[0].manifestation[0].coding[0].display}}</div>
+    <div>Criticality: {{listType.reaction[0].severity}}</div>
+    <div>Notes: {{listType.note[0].text}}</div>
+
+    <hr>
+    <!-- ONLY FOR RESOLVED -->
+    <div>End Date: {{listType.extension[0].extension[0].valueDateTime.split('T')[0]}}</div>
+    <div>End Reason: {{listType.extension[0].extension[1].valueString}}</div>
+
+    <button class="btn pull-right" type="button" data-dismiss="dialog" ng-click="closeModalInstance()">
+        close
+    </button>
+    <br>
+    <br>
 </div>
+
 

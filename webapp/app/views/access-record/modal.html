@@ -2,39 +2,66 @@
     <h3 class="modal-title">{{title}}</h3>
 </div>
 
-<div class="modal-body" ng-show="showMedDetail">
-    <div>Status: {{actualMedicationRequestWithIssue.plan.status}}</div>
-    <div>Type: {{actualMedicationRequestWithIssue.requestType}}</div>
-    <div>Start Date: {{actualMedicationRequestWithIssue.plan.dispenseRequest.validityPeriod.start.split('T')[0]}} End
-        Date:
-        {{actualMedicationRequestWithIssue.plan.dispenseRequest.validityPeriod.end.split('T')[0]}}
+<div class="modal-body col-md-12" ng-show="showMedDetail">
+    <div>
+        <label>Status: </label>
+        {{actualMedicationRequestWithIssue.plan.status}}
     </div>
-    <div>Quantity: {{actualMedicationRequestWithIssue.plan.dispenseRequest.quantity.extension[0].valueString}}</div>
-    <div>Dosage: {{actualMedicationRequestWithIssue.plan.dosageInstruction[0].text}}</div>
-    <div>Instructions: {{actualMedicationRequestWithIssue.plan.dosageInstruction[0].patientInstruction}}</div>
+    <div>
+        <label>Type: </label>
+        {{actualMedicationRequestWithIssue.requestType}}
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Start Date: </label>
+            {{actualMedicationRequestWithIssue.plan.dispenseRequest.validityPeriod.start.split('T')[0]}}
+        </div>
+        <div class="col-md-6">
+            <label>End Date: </label>
+            {{actualMedicationRequestWithIssue.plan.dispenseRequest.validityPeriod.end.split('T')[0]}}
+        </div>
+    </div>
+
+    <div><label>Intent: </label> {{actualMedicationRequestWithIssue.plan.intent}}</div>
+    <div><label>Quantity: </label>
+        {{actualMedicationRequestWithIssue.plan.dispenseRequest.quantity.extension[0].valueString}}
+    </div>
+    <div><label>Dosage: </label> {{actualMedicationRequestWithIssue.plan.dosageInstruction[0].text}}</div>
+    <div><label>Instructions: </label> {{actualMedicationRequestWithIssue.plan.dosageInstruction[0].patientInstruction}}
+    </div>
 
     <div ng-if="actualMedicationRequestWithIssue.requestType === 'Repeat'">
-        <div>No of repeats allowed: {{actualMedicationRequestWithIssue.repeat[0].valuePositiveInt}}</div>
-        <div>No of repeats issued: {{actualMedicationRequestWithIssue.repeat[1].valuePositiveInt}}</div>
+        <div><label>No of repeats allowed: </label> {{actualMedicationRequestWithIssue.repeat[0].valuePositiveInt}}
+        </div>
+        <div><label>No of repeats issued: </label> {{actualMedicationRequestWithIssue.repeat[1].valuePositiveInt}}</div>
     </div>
 
     <div ng-repeat="issue in actualMedicationRequestWithIssue.issues">
         <hr>
-        <div>Start Date: {{issue.dispenseRequest.validityPeriod.start.split('T')[0]}} End Date:
-            {{issue.dispenseRequest.validityPeriod.end.split('T')[0]}}
+        <div class="row">
+            <div class="col-md-6">
+                <label>Start Date:</label>
+                {{issue.dispenseRequest.validityPeriod.start.split('T')[0]}}
+            </div>
+            <div class="col-md-6">
+                <label>End Date:</label>
+                {{issue.dispenseRequest.validityPeriod.end.split('T')[0]}}
+            </div>
         </div>
-        <div>Quantity: {{issue.dispenseRequest.quantity.extension[0].valueString}}</div>
-        <div>Dosage: {{issue.dosageInstruction[0].text}}</div>
-        <div>Instructions: {{issue.dosageInstruction[0].patientInstruction}}</div>
+
+        <div><label>Intent: </label> {{issue.intent}}</div>
+        <div><label>Quantity: </label> {{issue.dispenseRequest.quantity.extension[0].valueString}}</div>
+        <div><label>Dosage: </label> {{issue.dosageInstruction[0].text}}</div>
+        <div><label>Instructions: </label> {{issue.dosageInstruction[0].patientInstruction}}</div>
 
         <div ng-if="issue.extension.length > 1">
-            <div>No of repeats allowed: {{issue.extension[0].extension[0].valuePositiveInt}}</div>
-            <div>No of repeats issued: {{issue.extension[0].extension[1].valuePositiveInt}}</div>
+            <div><label>No of repeats allowed:</label> {{issue.extension[0].extension[0].valuePositiveInt}}</div>
+            <div><label>No of repeats issued:</label> {{issue.extension[0].extension[1].valuePositiveInt}}</div>
         </div>
     </div>
 
     <button class="btn pull-right" type="button" data-dismiss="dialog" ng-click="closeModalInstance()">
-        close
+        Close
     </button>
     <br>
     <br>
@@ -43,14 +70,14 @@
 
 
 <div class="modal-body" ng-show="showAllergyDetail">
-    <div>Clinical status: {{listType.clinicalStatus}}</div>
-    <div>Onset Date: {{listType.onsetDateTime.split('T')[0]}}</div>
-    <div>Reaction: {{listType.reaction[0].manifestation[0].coding[0].display}}</div>
-    <div>Criticality: {{listType.reaction[0].severity}}</div>
-    <div>Notes: {{listType.note[0].text}}</div>
+    <div><label>Clinical status: </label> {{listType.clinicalStatus}}</div>
+    <div><label>Onset Date: </label> {{listType.onsetDateTime.split('T')[0]}}</div>
+    <div><label>Reaction: </label> {{listType.reaction[0].manifestation[0].coding[0].display}}</div>
+    <div><label>Criticality: </label> {{listType.reaction[0].severity}}</div>
+    <div><label>Notes: </label> {{listType.note[0].text}}</div>
 
     <button class="btn pull-right" type="button" data-dismiss="dialog" ng-click="closeModalInstance()">
-        close
+        Close
     </button>
     <br>
     <br>
@@ -59,19 +86,19 @@
 
 
 <div class="modal-body" ng-show="showResAllergyDetail">
-    <div>Clinical status: {{listType.clinicalStatus}}</div>
-    <div>Onset Date: {{listType.onsetDateTime.split('T')[0]}}</div>
-    <div>Reaction: {{listType.reaction[0].manifestation[0].coding[0].display}}</div>
-    <div>Criticality: {{listType.reaction[0].severity}}</div>
-    <div>Notes: {{listType.note[0].text}}</div>
+    <div><label>Clinical status: </label> {{listType.clinicalStatus}}</div>
+    <div><label>Onset Date: </label> {{listType.onsetDateTime.split('T')[0]}}</div>
+    <div><label>Reaction: </label>{{listType.reaction[0].manifestation[0].coding[0].display}}</div>
+    <div><label>Criticality: </label>{{listType.reaction[0].severity}}</div>
+    <div><label>Notes: </label>{{listType.note[0].text}}</div>
 
     <hr>
     <!-- ONLY FOR RESOLVED -->
-    <div>End Date: {{listType.extension[0].extension[0].valueDateTime.split('T')[0]}}</div>
-    <div>End Reason: {{listType.extension[0].extension[1].valueString}}</div>
+    <div><label>End Date: </label> {{listType.extension[0].extension[0].valueDateTime.split('T')[0]}}</div>
+    <div><label>End Reason: </label> {{listType.extension[0].extension[1].valueString}}</div>
 
     <button class="btn pull-right" type="button" data-dismiss="dialog" ng-click="closeModalInstance()">
-        close
+        Close
     </button>
     <br>
     <br>

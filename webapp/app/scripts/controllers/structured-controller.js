@@ -25,8 +25,8 @@ angular
     
     $scope.currentMedications = [];
     $scope.search = {};
-    $scope.search.startDate = "2017-01-02";
-    $scope.search.endDate ="2019-04-20";
+    $scope.search.startDate = "";
+    $scope.search.endDate ="";
     $scope.includeResolvedAllergies = true;
     $scope.includePrescriptionIssues = true;
     
@@ -35,7 +35,6 @@ angular
     
     
     initShowHide();
-    // $scope.getAllergyData("2019-01-02", "2019-04-20");
     
     
     $scope.openDatePicker = function ($event, name) {
@@ -99,8 +98,7 @@ angular
     
     
     $scope.getAllergyData = function (start, end, includePrescriptionIssues, includeResolvedAllergies) {
-        
-        
+                
         console.log("getAllergyData executed");
         console.log('includePrescriptionIssues'+includePrescriptionIssues)
         
@@ -109,13 +107,25 @@ angular
         var endDate = new Date(end);
         endDate.setTime(endDate.getTime() + (60*60*1000)); 
         
-        
+  
+        $scope.dateInvalid = false;
+
+        // if(!moment(start, 'MM-DD-YYYY',true).isValid() || !moment(end, 'MM-DD-YYYY',true).isValid()){
+        //     $scope.dateInvalid = true;
+
+        //     return;
+        // }
+
+       if(isNaN(startDate) || isNaN(endDate)){
+            $scope.dateInvalid = true;
+            return;
+       }
+
+
         start = startDate.toISOString().split('T')[0];
         end = endDate.toISOString().split('T')[0];
-        
-        $scope.dateInvalid = false;
-        
-        if (startDate > endDate) {
+  
+       if (startDate > endDate) {
             $scope.dateInvalid = true;
         } 
         else
@@ -318,10 +328,6 @@ angular
         var modalInstance = $modal.open({
             templateUrl: '../views/access-record/modal.html',
             scope: $scope,
-            // controller: function($scope, listType){
-            //     $scope.listType = listType;
-            // },
-            // showClose: true,
             resolve: {
                 params: function () {
                     return {

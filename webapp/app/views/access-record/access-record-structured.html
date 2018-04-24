@@ -56,7 +56,7 @@
                 <input type="checkbox" id="includePrescriptionIssues" name="" ng-model="includePrescriptionIssues"
                        ng-change="getAllergyData(search.startDate, search.endDate, includePrescriptionIssues, includeResolvedAllergies )"
                        ng-checked="true">
-                <label for="includePrescriptionIssues">include prescription issues</label>
+                <label for="includePrescriptionIssues">Include prescription issues</label>
             </div>
         </div>
 
@@ -70,44 +70,24 @@
                 <th scope="col">Med Name</th>
                 <th scope="col">Start Date</th>
                 <th scope="col">End Date</th>
+                <th scope="col">Status</th>
 
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="currentElement in currentMedications" ng-click="showForm(currentElement.medication)">
-                Transfer-degraded medication entry
                 <td>{{currentElement.medication.code.coding[0].extension[0].extension[1].valueString ==
                     "Transfer-degraded medication entry" ? currentElement.medication.code.text :
                     currentElement.medication.code.coding[0].extension[0].extension[1].valueString}}
                 </td>
                 <td>{{currentElement.statement.effectivePeriod.start.split('T')[0]}}</td>
                 <td>{{currentElement.statement.effectivePeriod.end.split('T')[0]}}</td>
+                <td>{{currentElement.statement.status}}</td>
             </tr>
             </tbody>
         </table>
         <br>
         <br>
-
-        <h4>Past Medications</h4>
-        <table class="table table-bordered table-striped table-hover">
-            <thead>
-            <tr>
-                <th scope="col">Med Name</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="historicMed in historicMedications" ng-click="showForm(historicMed.medication)">
-                <td>{{historicMed.medication.code.coding[0].extension[0].extension[1].valueString == "Transfer-degraded
-                    medication entry" ? historicMed.medication.code.text :
-                    historicMed.medication.code.coding[0].extension[0].extension[1].valueString}}
-                </td>
-                <td>{{historicMed.statement.effectivePeriod.start.split('T')[0]}}</td>
-                <td>{{historicMed.statement.effectivePeriod.end.split('T')[0]}}</td>
-            </tr>
-            </tbody>
-        </table>
 
         <h4>Prescribing</h4>
         <div class="create-button">
@@ -117,7 +97,7 @@
                         ng-value="option" onselect="onChange()"> {{key}}
                 </option>
             </select>
-            <button class="btn btn-info" ng-click="addNewMedication()" ng-disabled="IsDisabled">Add</button>
+            <button class="btn btn-info" ng-click="addNewMedication()" ng-disabled="true">Add</button>
         </div>
 
 
@@ -132,7 +112,7 @@
         <div class="col-md-12">
             <div class="col-md-5">
                 <input type="checkbox" id="includeResolvedAllergies" name="" ng-model="includeResolvedAllergies"
-                       ng-change="getAllergyData(search.startDate, search.endDate, includePrescriptionIssues, includeResolvedAllergies )"
+                       ng-change="getAllergyData(search.startDate, search.endDate, includePrescriptionIssues, includeResolvedAllergies)"
                        ng-checked="true">
                 <label for="includeResolvedAllergies">Resolved Allergies</label>
             </div>

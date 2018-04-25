@@ -3,9 +3,9 @@ INSERT INTO gpconnect.medication_statements
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated)
 VALUES
  (1,'2017-06-12',8,'active','Active',9,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Use 1-4cm each time you use Ibuprofen Gel.','Apply the gel as a thin layer over the affected area.','2018-03-15'),
-  (4,'2017-06-12',8,'active','Active',6,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Take 2-3 times a day','Take without food','2018-03-15'),
-  (5,'2017-06-12',8,'active','Active',12,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Use as often as required','Clean and dry the affected area before use','2018-03-15'),
-  (6,'2017-06-12',8,'active','Active',14,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Take 2 tablets every 8 hours','Take with a full glass of water','2018-03-15');
+  (4,'2018-01-01',8,'completed','Completed',6,'2018-01-01',null,'2018-01-01',2,'unk','Unknown','Take 2-3 times a day','Take without food','2018-03-15'),
+  (5,'2018-03-01',8,'completed','Completed',12,'2018-03-01',null,'2018-03-01',2,'unk','Unknown','Use as often as required','Clean and dry the affected area before use','2018-03-15'),
+  (6,'2018-02-12',8,'completed','Completed',14,'2018-02-12',null,'2018-02-12',2,'unk','Unknown','Take 2 tablets every 8 hours','Take with a full glass of water','2018-03-15');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)

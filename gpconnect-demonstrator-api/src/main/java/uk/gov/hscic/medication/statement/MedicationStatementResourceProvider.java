@@ -16,24 +16,36 @@ public class MedicationStatementResourceProvider {
 		MedicationStatement medicationStatement = new MedicationStatement();
 
 		medicationStatement.setId(new IdType(statementDetail.getId()));
+		
 		medicationStatement.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_STATEMENT)
 				.setVersionId(String.valueOf(statementDetail.getLastUpdated().getTime())));
+		
 		medicationStatement.addExtension(new Extension(SystemURL.SD_CC_EXT_MEDICATION_STATEMENT_LAST_ISSUE, 
 				new DateTimeType(statementDetail.getLastIssueDate(), TemporalPrecisionEnum.DAY)));
-		if(statementDetail.getMedicationRequestPlanId() != null)
+		
+		if(statementDetail.getMedicationRequestPlanId() != null) {
 			medicationStatement.addBasedOn(new Reference(new IdType("MedicationRequest", statementDetail.getMedicationRequestPlanId())));
-		if(statementDetail.getEncounterId() != null)
+		}
+		
+		if(statementDetail.getEncounterId() != null) {
 			medicationStatement.setContext(new Reference(new IdType("Encounter", statementDetail.getEncounterId())));
+		}
+		
 		try {
 			medicationStatement.setStatus(MedicationStatementStatus.fromCode(statementDetail.getStatusCode()));
 		} catch (FHIRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(statementDetail.getMedicationId() != null)
+		
+		if(statementDetail.getMedicationId() != null) {
 			medicationStatement.setMedication(new Reference(new IdType("Medication", statementDetail.getMedicationId())));
+		}
+		
 		medicationStatement.setEffective(new Period().setStart(statementDetail.getStartDate()).setEnd(statementDetail.getEndDate()));
+		
 		medicationStatement.setDateAsserted(statementDetail.getDateAsserted());
+		
 		if(statementDetail.getPatientId() != null)
 			medicationStatement.setSubject(new Reference(new IdType("Patient", statementDetail.getPatientId())));
 		try {
@@ -43,6 +55,7 @@ public class MedicationStatementResourceProvider {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		setReasonCodes(medicationStatement, statementDetail);
 		setReasonReferences(medicationStatement, statementDetail);
 		setNotes(medicationStatement, statementDetail);

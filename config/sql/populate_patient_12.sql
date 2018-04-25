@@ -8,7 +8,7 @@ VALUES
   (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated)
 VALUES
- (7,'1958-01-04',12,'completed','Completed',2,'1958-01-04','1958-01-04','1958-01-04',12,'y','Yes','Take one tablet three times a day','Take with a full glass of water','1958-03-15');
+ (7,'1958-01-04',12,'completed','Completed',2,'1958-01-04',null,'1958-01-04',12,'y','Yes','Take one tablet three times a day','Take with a full glass of water','1958-03-15');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)

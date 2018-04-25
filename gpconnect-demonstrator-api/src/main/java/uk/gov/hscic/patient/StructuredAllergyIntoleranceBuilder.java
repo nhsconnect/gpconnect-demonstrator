@@ -32,6 +32,7 @@ public class StructuredAllergyIntoleranceBuilder {
 
         AllergyIntolerance allergyIntolerance;
 
+        //If there is a 'no known' allergies code then add the necessary coding and return the bundle
         if (allergyData.size() == 1 &&
                 allergyData.get(0).getClinicalStatus().equals(SystemConstants.NO_KNOWN)) {
 
@@ -117,7 +118,6 @@ public class StructuredAllergyIntoleranceBuilder {
             if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {
                 listResourceBuilder(active, allergyIntolerance);
                 bundle.addEntry().setResource(allergyIntolerance);
-
             } else if (allergyIntolerance.getClinicalStatus().getDisplay().equals("Resolved")
                     && includedResolved.equals(true)) {
                 listResourceBuilder(resolved, allergyIntolerance);

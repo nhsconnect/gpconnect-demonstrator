@@ -139,13 +139,19 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         console.log(includeResolvedAllergies);
         return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1").then(function (response) {
             var endpointLookupResult = response;
-
-             var includeResolvedAllergiesPart = '"part": [{"name":"includeResolvedAllergies",  "valueBoolean":'+includeResolvedAllergies+'}]'
-            var includeMedication =  '{"name" : "includeMedication","part": [{"name":"medicationDatePeriod", "valuePeriod" : { "start" : "'+start+'", "end" : "'+end+'" }},{"name":"includePrescriptionIssues", "valueBoolean" : '+includePrescriptionIssues+'}]}';
+            
+            var includeResolvedAllergiesPart = '"part": [{"name":"includeResolvedAllergies",  "valueBoolean":'+includeResolvedAllergies+'}]'
+            var datePeriod = "";
+            if(start !== "" || end !== ""){
+                start = start === "" ? null : start;
+                end = end === "" ? null : end;
+                datePeriod = '{"name":"medicationDatePeriod", "valuePeriod" : { "start" : '+start+', "end" : '+end+' }},';
+            }
+            var includeMedication =  '{"name" : "includeMedication","part": ['+datePeriod+'{"name":"includePrescriptionIssues", "valueBoolean" : '+includePrescriptionIssues+'}]}';
             var body = '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "' + gpcResource.getConst("ID_NHS_NUMBER") + '", "value" : "' + patientId + '" }},{"name" : "includeAllergies","valueCodeableConcept" :{"coding" : [{"system":"' + gpcResource.getConst("VS_GPC_RECORD_SECTION") + '","code":"SUM","display":"Summary"}]},  '+includeResolvedAllergiesPart+'},'+includeMedication+']}';
             
-          
-                 
+            
+            
             
             return $http.post(
                 endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getstructuredrecord',

@@ -98,37 +98,60 @@ angular
     
     
     $scope.getAllergyData = function (start, end, includePrescriptionIssues, includeResolvedAllergies) {
-                
-        console.log("getAllergyData executed");
-        console.log('includePrescriptionIssues'+includePrescriptionIssues)
-        
-        var startDate = new Date(start);
-        startDate.setTime(startDate.getTime() + (60*60*1000)); 
-        var endDate = new Date(end);
-        endDate.setTime(endDate.getTime() + (60*60*1000)); 
-        
-  
         $scope.dateInvalid = false;
+        if(start === undefined || start == null){
+            start = "";
+        }
 
-        // if(!moment(start, 'MM-DD-YYYY',true).isValid() || !moment(end, 'MM-DD-YYYY',true).isValid()){
-        //     $scope.dateInvalid = true;
-
-        //     return;
-        // }
-
-       if(isNaN(startDate) || isNaN(endDate)){
-            $scope.dateInvalid = true;
-            return;
-       }
-
-
-        start = startDate.toISOString().split('T')[0];
-        end = endDate.toISOString().split('T')[0];
-  
-       if (startDate > endDate) {
-            $scope.dateInvalid = true;
-        } 
-        else
+        if(end === undefined || end == null){
+            end = "";
+        }
+        
+        var createDate = function(stringDate){
+            var date = new Date(stringDate);
+            date.setTime(date.getTime() + (60*60*1000)); 
+            
+            return date;
+        };
+        
+        if(start !== "" && end !== ""){
+            var startDate = createDate(start);
+            
+            var endDate = new Date(end);
+            endDate.setTime(endDate.getTime() + (60*60*1000)); 
+            
+            if(isNaN(startDate) || isNaN(endDate) || startDate > endDate){
+                $scope.dateInvalid = true;
+                return;
+            } 
+            
+            start = startDate.toISOString().split('T')[0];
+            end = endDate.toISOString().split('T')[0];                                
+        } else {
+            if(start === "" && end !== ""){
+                var endDate = createDate(end); 
+                if(isNaN(endDate)){
+                    $scope.dateInvalid = true;
+                    return;
+                }
+                
+                end = endDate.toISOString().split('T')[0];                                
+                
+            }
+            
+            if(start !== "" && end === ""){              
+                var startDate = new Date(start);
+                
+                if(isNaN(startDate)){
+                    $scope.dateInvalid = true;
+                    return;
+                }
+                start = startDate.toISOString().split('T')[0];
+                
+            }
+        }
+        
+        
         {
             
             $scope.patient = {
@@ -349,6 +372,7 @@ angular
         });
     };
     
+    $scope.getAllergyData("", "", true, true);
     
 });
 

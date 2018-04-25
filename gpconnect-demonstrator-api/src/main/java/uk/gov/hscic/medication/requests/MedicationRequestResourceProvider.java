@@ -8,6 +8,8 @@ import org.hl7.fhir.dstu3.model.MedicationRequest.MedicationRequestStatus;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.medication.request.MedicationRequestEntityToDetailTransformer;
 import uk.gov.hscic.medication.request.MedicationRequestRepository;
@@ -57,15 +59,13 @@ public class MedicationRequestResourceProvider {
 		try {
 			medicationRequest.setStatus(MedicationRequestStatus.fromCode(requestDetail.getStatusCode()));
 		} catch (FHIRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new UnprocessableEntityException(e.getMessage());
 		}
 		
 		try {
 			medicationRequest.setIntent(MedicationRequestIntent.fromCode(requestDetail.getIntentCode()));
 		} catch (FHIRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new UnprocessableEntityException(e.getMessage());
 		}
 		
 		if(requestDetail.getMedicationId() != null) {
@@ -125,8 +125,6 @@ public class MedicationRequestResourceProvider {
 				if(reference.getReferenceUrl().equals(SystemURL.SD_GPC_MEDICATION_REQUEST)) {
 					medicationRequest.addBasedOn(new Reference(new IdType("MedicationRequest", reference.getReferenceId())));
 				}
-
-                // TODO reference type of care plan, procedure request or referral request;
 			});
 		}
 	}
@@ -192,8 +190,7 @@ public class MedicationRequestResourceProvider {
 		duration.setCode("d");
 		duration.setValue(requestDetail.getExpectedSupplyDuration());
 		duration.setUnit("day");
-		//TODO - spec needs to clarify whether this should be populated or not
-		//dispenseRequest.setExpectedSupplyDuration(duration);
+		//dispenseRequest.setExpectedSupplyDuration(duration); //TODO - spec needs to clarify whether this should be populated or not
 		
 		dispenseRequest.setPerformer(new Reference(new IdType("Organization",requestDetail.getDispenseRequestOrganizationId())));
 	
@@ -225,7 +222,6 @@ public class MedicationRequestResourceProvider {
 		case(SystemURL.SD_GPC_ORGANIZATION):
 			requesterComponent.setAgent(new Reference(new IdType("Organization", requestDetail.getRequesterId())));
 			break;
-		// TODO case (related person/device)
 		default:
 			break;
 		}

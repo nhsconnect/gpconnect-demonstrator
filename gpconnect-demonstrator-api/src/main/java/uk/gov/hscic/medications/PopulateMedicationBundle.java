@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+
 import org.hl7.fhir.dstu3.model.Annotation;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
@@ -22,7 +24,6 @@ import org.hl7.fhir.dstu3.model.ListResource.ListStatus;
 import org.hl7.fhir.dstu3.model.MedicationRequest;
 import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.Organization;
-import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Period;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.hl7.fhir.dstu3.model.Reference;
@@ -41,7 +42,6 @@ import uk.gov.hscic.medication.statement.MedicationStatementResourceProvider;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
-import uk.gov.hscic.patient.PatientResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
 @Component
@@ -67,9 +67,6 @@ public class PopulateMedicationBundle {
 	
 	@Autowired
 	private OrganizationResourceProvider organizationResourceProvider;
-	
-	@Autowired
-	private PatientResourceProvider patientResourceProvider;
 
 	public Bundle addMedicationBundleEntries(Bundle structuredBundle, PatientDetails patientDetails, Boolean includePrescriptionIssues,
 			Period medicationPeriod) {
@@ -101,7 +98,6 @@ public class PopulateMedicationBundle {
 		medicationStatementsList.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
 		
 		if(medicationStatements.isEmpty()) {
-			//TODO set empty reason
 			medicationStatementsList.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT));
 		}
 		medicationStatements.forEach(statement -> {
@@ -140,7 +136,6 @@ public class PopulateMedicationBundle {
 	
 	private List<BundleEntryComponent> getReferencedResources(MedicationRequest medicationRequest, PatientDetails patientDetails) {
 		
-		Long patientId = Long.valueOf(patientDetails.getId());
 		Long patientPractitionerId = patientDetails.getGpId();
 		Long patientOrganizationId = Long.valueOf(patientDetails.getManagingOrganization());
 		
@@ -168,8 +163,7 @@ public class PopulateMedicationBundle {
 				try {
 					practitionerIds.add(note.getAuthorReference().getReferenceElement().getIdPartAsLong());
 				} catch (FHIRException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					throw new UnprocessableEntityException(e.getMessage());
 				}
 			}
 		});

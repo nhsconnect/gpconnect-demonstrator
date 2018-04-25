@@ -1,6 +1,8 @@
 package uk.gov.hscic.medication.statement;
 
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.MedicationStatement.MedicationStatementStatus;
 import org.hl7.fhir.dstu3.model.MedicationStatement.MedicationStatementTaken;
@@ -34,8 +36,7 @@ public class MedicationStatementResourceProvider {
 		try {
 			medicationStatement.setStatus(MedicationStatementStatus.fromCode(statementDetail.getStatusCode()));
 		} catch (FHIRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new UnprocessableEntityException(e.getMessage());
 		}
 		
 		if(statementDetail.getMedicationId() != null) {
@@ -52,8 +53,7 @@ public class MedicationStatementResourceProvider {
 			medicationStatement.setTaken(statementDetail.getTakenCode() != null ? 
 					MedicationStatementTaken.fromCode(statementDetail.getTakenCode()) : MedicationStatementTaken.UNK);
 		} catch (FHIRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new UnprocessableEntityException(e.getMessage());
 		}
 		
 		setReasonCodes(medicationStatement, statementDetail);

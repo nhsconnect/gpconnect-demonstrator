@@ -1,22 +1,13 @@
 package uk.gov.hscic.medication.statement;
 
-import org.hl7.fhir.dstu3.model.Annotation;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.DateTimeType;
-import org.hl7.fhir.dstu3.model.Dosage;
-import org.hl7.fhir.dstu3.model.Extension;
-import org.hl7.fhir.dstu3.model.IdType;
-import org.hl7.fhir.dstu3.model.MedicationStatement;
+import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+
+import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.MedicationStatement.MedicationStatementStatus;
 import org.hl7.fhir.dstu3.model.MedicationStatement.MedicationStatementTaken;
-import org.hl7.fhir.dstu3.model.Meta;
-import org.hl7.fhir.dstu3.model.Period;
-import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.stereotype.Component;
-
-import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 
@@ -27,33 +18,44 @@ public class MedicationStatementResourceProvider {
 		MedicationStatement medicationStatement = new MedicationStatement();
 
 		medicationStatement.setId(new IdType(statementDetail.getId()));
+		
 		medicationStatement.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_STATEMENT)
 				.setVersionId(String.valueOf(statementDetail.getLastUpdated().getTime())));
+		
 		medicationStatement.addExtension(new Extension(SystemURL.SD_CC_EXT_MEDICATION_STATEMENT_LAST_ISSUE, 
 				new DateTimeType(statementDetail.getLastIssueDate(), TemporalPrecisionEnum.DAY)));
-		if(statementDetail.getMedicationRequestPlanId() != null)
+		
+		if(statementDetail.getMedicationRequestPlanId() != null) {
 			medicationStatement.addBasedOn(new Reference(new IdType("MedicationRequest", statementDetail.getMedicationRequestPlanId())));
-		if(statementDetail.getEncounterId() != null)
+		}
+		
+		if(statementDetail.getEncounterId() != null) {
 			medicationStatement.setContext(new Reference(new IdType("Encounter", statementDetail.getEncounterId())));
+		}
+		
 		try {
 			medicationStatement.setStatus(MedicationStatementStatus.fromCode(statementDetail.getStatusCode()));
 		} catch (FHIRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new UnprocessableEntityException(e.getMessage());
 		}
-		if(statementDetail.getMedicationId() != null)
+		
+		if(statementDetail.getMedicationId() != null) {
 			medicationStatement.setMedication(new Reference(new IdType("Medication", statementDetail.getMedicationId())));
+		}
+		
 		medicationStatement.setEffective(new Period().setStart(statementDetail.getStartDate()).setEnd(statementDetail.getEndDate()));
+		
 		medicationStatement.setDateAsserted(statementDetail.getDateAsserted());
+		
 		if(statementDetail.getPatientId() != null)
 			medicationStatement.setSubject(new Reference(new IdType("Patient", statementDetail.getPatientId())));
 		try {
 			medicationStatement.setTaken(statementDetail.getTakenCode() != null ? 
 					MedicationStatementTaken.fromCode(statementDetail.getTakenCode()) : MedicationStatementTaken.UNK);
 		} catch (FHIRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new UnprocessableEntityException(e.getMessage());
 		}
+		
 		setReasonCodes(medicationStatement, statementDetail);
 		setReasonReferences(medicationStatement, statementDetail);
 		setNotes(medicationStatement, statementDetail);
@@ -92,8 +94,6 @@ public class MedicationStatementResourceProvider {
 				annotation.setAuthor(new Reference(new IdType("Practitioner", note.getAuthorId())));
 			} else if (note.getAuthorReferenceUrl().equals(SystemURL.SD_GPC_PATIENT)) {
 				annotation.setAuthor(new Reference(new IdType("Patient", note.getAuthorId())));
-			} else {
-				// TODO Related Person reference
 			}
 			medicationStatement.addNote(annotation);
 		});

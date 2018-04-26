@@ -206,8 +206,6 @@ CREATE TABLE gpconnect.medications (
   code		                TEXT(20)  NULL,
   display	                TEXT(100) NULL,
   text		                TEXT(100) NULL, 
-  snowmedDescriptionId      TEXT(50)  NULL,
-  snowmedDescriptionDisplay TEXT(100) NULL,
   batchNumber               TEXT(50)  NULL, 
   expiryDate                DATETIME  NULL,
   lastUpdated               DATETIME  NULL,
@@ -229,7 +227,7 @@ CREATE TABLE gpconnect.medication_statements (
   takenCode           VARCHAR(50)  NULL,
   takenDisplay        VARCHAR(50)  NULL,
   dosageText          VARCHAR(250) NULL,
-  dosageInstruction   VARCHAR(50)  NULL,
+  dosageInstruction   VARCHAR(250)  NULL,
   lastUpdated         DATETIME     NULL,
   PRIMARY KEY (id)
 );
@@ -249,7 +247,7 @@ CREATE TABLE gpconnect.medication_requests (
   requesterId                        BIGINT       NULL,
   authorisingPractitionerId          BIGINT       NULL,
   dosageText                         VARCHAR(250) NULL,
-  dosageInstruction                  VARCHAR(50)  NULL,
+  dosageInstruction                  VARCHAR(250)  NULL,
   dispenseRequestStartDate           DATETIME     NULL,
   dispenseRequestEndDate             DATETIME     NULL,
   dispenseQuantityValue              VARCHAR(20)  NULL,
@@ -267,7 +265,7 @@ CREATE TABLE gpconnect.medication_requests (
   statusReason                       VARCHAR(50)  NULL,
   lastUpdated                        DATETIME     NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (medicationId) REFERENCES gpconnect.medications(id)  
+  FOREIGN KEY (medicationId) REFERENCES gpconnect.medications(id)
 );
 
 CREATE TABLE gpconnect.medication_reason_references (
@@ -438,6 +436,7 @@ CREATE TABLE gpconnect.allergyintolerance (
 CREATE TABLE gpconnect.medication_allergies (
   medicationId BIGINT NOT NULL,
   allergyintoleranceId BIGINT NOT NULL,
+  patientNhsnumber BIGINT NOT NULL,
   FOREIGN KEY (medicationId) REFERENCES gpconnect.medications(id),
   FOREIGN KEY (allergyintoleranceId) REFERENCES gpconnect.allergyintolerance(id)
- );
+  );

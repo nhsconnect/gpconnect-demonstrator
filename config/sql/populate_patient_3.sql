@@ -2,7 +2,7 @@ INSERT INTO gpconnect.medication_statements
   (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated)
 VALUES
- (2,'2018-01-04',12,'completed','Completed',5,'2018-01-04','2018-01-04','2018-01-04',3,'y','Yes','Dosage text','Dosage instructions','2018-03-15');
+ (2,'2018-01-04',12,'completed','Completed',5,'2018-01-04',null,'2018-01-04',3,'y','Yes','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)
@@ -12,7 +12,7 @@ VALUES
 INSERT INTO gpconnect.medication_notes
  (id,dateWritten,authorReferenceUrl,authorId,noteText)
 VALUES
- (2,'2018-01-03','https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,'Patient 3 medication note');
+ (2,'2018-01-03','https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,'Patient feels nauseous after taking');
  
 INSERT INTO gpconnect.medication_statement_reason_codes
  (medicationStatementId,reasonCodeId)
@@ -32,10 +32,10 @@ INSERT INTO gpconnect.medication_requests
  authorisationExpiryDate,prescriptionTypeCode,prescriptionTypeDisplay,statusReasonDate,statusReason,lastUpdated)
 VALUES
  (2,'group2','completed','Completed','plan','Plan',5,3,12,'2018-01-04',
- 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Dosage Text','Dosage Instructions',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Use as often as required','Apply the medication after cleaning and drying the affected area',
  '2018-01-04',null,null,null,'1 packet','10',2,null,0,0,'2018-02-04','acute','Acute',null,null,'2018-03-15'),
  (3,'group2','completed','Completed','order','Order',5,3,12,'2018-01-04',
- 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Dosage Text','Dosage Instructions',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Use as often as required','Apply the medication after cleaning and drying the affected area',
  '2018-01-04',null,null,null,'1 packet','10',2,null,0,0,'2018-02-04','acute','Acute',null,null,'2018-03-15');
 
 UPDATE gpconnect.medication_statements SET medicationRequestId = 2 WHERE id = 2;

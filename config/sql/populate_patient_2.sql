@@ -2,10 +2,10 @@ INSERT INTO gpconnect.medication_statements
  (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated)
 VALUES
- (1,'2017-06-12',8,'active','Active',9,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Take 2 tablets every 4 hours','Take with meals','2018-03-15'),
-  (4,'2017-06-12',8,'active','Active',6,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Take 2 tablets every 4 hours','Take with meals','2018-03-15'),
-  (5,'2017-06-12',8,'active','Active',12,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Take 2 tablets every 4 hours','Take with meals','2018-03-15'),
-  (6,'2017-06-12',8,'active','Active',14,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Take 2 tablets every 4 hours','Take with meals','2018-03-15');
+ (1,'2017-06-12',8,'active','Active',9,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Use 1-4cm each time you use Ibuprofen Gel.','Apply the gel as a thin layer over the affected area.','2018-03-15'),
+  (4,'2018-01-01',8,'completed','Completed',6,'2018-01-01',null,'2018-01-01',2,'unk','Unknown','Take 2-3 times a day','Take without food','2018-03-15'),
+  (5,'2018-03-01',8,'completed','Completed',12,'2018-03-01',null,'2018-03-01',2,'unk','Unknown','Use as often as required','Clean and dry the affected area before use','2018-03-15'),
+  (6,'2018-02-12',8,'completed','Completed',14,'2018-02-12',null,'2018-02-12',2,'unk','Unknown','Take 2 tablets every 8 hours','Take with a full glass of water','2018-03-15');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)
@@ -58,14 +58,14 @@ VALUES
  (10,'group1','active','Active','order','Order',9,2,8,'2017-07-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
  '2017-06-12','2018-03-12',null,null,'200 Tablets','60',1,null,5,0,'2018-03-12','repeat','Repeat',null,null,'2018-03-15'),
- (11,'one','completed','Complete','plan','Plan',9,2,9,'2016-06-12',
- 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
+ (11,'one','completed','Complete','plan','Plan',6,2,9,'2016-06-12',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2-3 times a day','Take without food',
  '2017-06-12',null,null,null,'200 Tablets','60',1,null,5,0,'2018-04-12','acute','Acute',null,null,'2018-03-15'),
- (12,'two','completed','Complete','plan','Plan',9,2,10,'2015-05-12',
- 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
+ (12,'two','completed','Complete','plan','Plan',12,2,10,'2015-05-12',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Use as often as required','Clean and dry the affected area before use',
  '2017-06-12',null,null,null,'200 Tablets','60',1,null,5,0,'2018-04-12','acute','Acute',null,null,'2018-03-15'),
- (13,'three','completed','Complete','plan','Plan',9,2,11,'2014-04-12',
- 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
+ (13,'three','completed','Complete','plan','Plan',14,2,11,'2014-04-12',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 8 hours','Take with a full glass of water',
  '2017-06-12',null,null,null,'200 Tablets','60',1,null,5,0,'2018-04-12','acute','Acute',null,null,'2018-03-15');
  
 UPDATE gpconnect.medication_statements SET medicationRequestId = 1 WHERE id = 1;
@@ -110,6 +110,6 @@ VALUES
   (9476719931,'2016-07-01 12:00:00',"Ongoing","Rash","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00',"294716003","Biphasic insulin allergy (disorder)","247472004", "Weal (disorder)", '9476719931');
 
 INSERT INTO gpconnect.medication_allergies
-(medicationId,allergyintoleranceId)
+(medicationId,allergyintoleranceId, patientNhsnumber)
 VALUES
-  (18,14);
+  (18,14,9476719931);

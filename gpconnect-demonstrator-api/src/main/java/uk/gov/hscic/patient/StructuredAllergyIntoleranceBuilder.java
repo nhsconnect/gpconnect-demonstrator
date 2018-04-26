@@ -1,29 +1,23 @@
 package uk.gov.hscic.patient;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.hl7.fhir.dstu3.model.*;
-import org.hl7.fhir.dstu3.model.AllergyIntolerance;
-import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceCategory;
-import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceClinicalStatus;
-import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceReactionComponent;
-import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceSeverity;
-import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceVerificationStatus;
+import org.hl7.fhir.dstu3.model.AllergyIntolerance.*;
 import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
 import org.hl7.fhir.dstu3.model.ListResource.ListMode;
 import org.hl7.fhir.dstu3.model.ListResource.ListStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.patient.details.PatientRepository;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch;
 import uk.gov.hscic.practitioner.PractitionerSearch;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 public class StructuredAllergyIntoleranceBuilder {
@@ -46,6 +40,7 @@ public class StructuredAllergyIntoleranceBuilder {
 
         AllergyIntolerance allergyIntolerance;
 
+        //If there is a 'no known' allergies code then add the necessary coding and return the bundle
         if (allergyData.size() == 1 &&
                 allergyData.get(0).getClinicalStatus().equals(SystemConstants.NO_KNOWN)) {
 
@@ -69,7 +64,7 @@ public class StructuredAllergyIntoleranceBuilder {
 
         for (StructuredAllergyIntoleranceEntity allergyIntoleranceEntity : allergyData) {
             allergyIntolerance = new AllergyIntolerance();
-
+            allergyIntolerance.setOnset(new DateTimeType(allergyIntoleranceEntity.getOnSetDateTime()));
             allergyIntolerance.setMeta(createMeta(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
 
             allergyIntolerance.setId(allergyIntoleranceEntity.getId().toString());
@@ -156,7 +151,6 @@ public class StructuredAllergyIntoleranceBuilder {
             if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {
                 listResourceBuilder(active, allergyIntolerance);
                 bundle.addEntry().setResource(allergyIntolerance);
-
             } else if (allergyIntolerance.getClinicalStatus().getDisplay().equals("Resolved")
                     && includedResolved.equals(true)) {
                 listResourceBuilder(resolved, allergyIntolerance);

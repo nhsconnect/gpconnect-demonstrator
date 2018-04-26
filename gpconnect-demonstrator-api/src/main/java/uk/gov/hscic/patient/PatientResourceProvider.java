@@ -134,7 +134,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	private NhsNumber nhsNumber;
 
-	private Map<String, Boolean> getCareRecordParams;
 	private Map<String, Boolean> registerPatientParams;
 
 	public static Set<String> getCustomReadOperations() {
@@ -159,14 +158,6 @@ public class PatientResourceProvider implements IResourceProvider {
 	@PostConstruct
 	public void postConstruct() {
 		nhsNumber = new NhsNumber();
-
-		boolean mandatory = true;
-		boolean optional = false;
-
-		getCareRecordParams = new HashMap<>();
-		getCareRecordParams.put("patientNHSNumber", mandatory);
-		getCareRecordParams.put("recordSection", mandatory);
-		getCareRecordParams.put("timePeriod", optional);
 
 		registerPatientParams = new HashMap<>();
 		registerPatientParams.put("registerPatient", true);

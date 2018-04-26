@@ -56,6 +56,9 @@ public class StructuredAllergyIntoleranceEntity {
 	@Column(name = "manDisplay")
 	private String manifestationDisplay;
 
+	@Column(name = "recorder")
+	private String recorder;
+
 	public String getNhsNumber() {
 		return nhsNumber;
 	}
@@ -183,5 +186,12 @@ public class StructuredAllergyIntoleranceEntity {
 	public void setManifestationDisplay(String manifestationDisplay) {
 		this.manifestationDisplay = manifestationDisplay;
 	}
-	
+
+	public String getRecorder() {
+		return recorder;
+	}
+
+	public void setRecorder(String recorder) {
+		this.recorder = recorder;
+	}
 }

@@ -20,14 +20,22 @@ import org.springframework.stereotype.Component;
 
 import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.patient.details.PatientRepository;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch;
+import uk.gov.hscic.practitioner.PractitionerSearch;
 
 @Component
 public class StructuredAllergyIntoleranceBuilder {
 
     @Autowired
     private StructuredAllergySearch structuredAllergySearch;
+
+    @Autowired
+    private PatientRepository patientRepository;
+
+    @Autowired
+    private PractitionerSearch practitionerSearch;
 
     public Bundle buildStructuredAllergyIntolerence(String NHS, Bundle bundle, Boolean includedResolved) {
 
@@ -120,6 +128,31 @@ public class StructuredAllergyIntoleranceBuilder {
             reaction.setExposureRoute(exposureRoute);
             allergyIntolerance.addReaction(reaction);
 
+            final Reference refValue = new Reference();
+            final Identifier identifier = new Identifier();
+            final String recorder = allergyIntoleranceEntity.getRecorder();
+
+            // TODO: This is just an example to demonstrate using Reference element instead of Identifier element
+
+            if(recorder.equals("9476719931")) {
+                Reference rec = new Reference(
+                        SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
+                allergyIntolerance.setRecorder(rec);
+            }
+            else if(patientRepository.findByNhsNumber(recorder) != null) {
+                identifier.setSystem(SystemURL.ID_NHS_NUMBER);
+                identifier.setValue(recorder);
+
+                refValue.setIdentifier(identifier);
+                allergyIntolerance.setRecorder(refValue);
+            } else if (practitionerSearch.findPractitionerByUserId(recorder) != null) {
+                identifier.setSystem(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE);
+                identifier.setValue(recorder);
+
+                refValue.setIdentifier(identifier);
+                allergyIntolerance.setRecorder(refValue);
+            }
+
             if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {
                 listResourceBuilder(active, allergyIntolerance);
                 bundle.addEntry().setResource(allergyIntolerance);
@@ -174,8 +207,8 @@ public class StructuredAllergyIntoleranceBuilder {
                 "they have no allergies (that is, a ‘no known allergies’ code has not been recorded)."
         )));
     }
-    
-    private void addEmptyReasonCode(ListResource list) {
+
+        private void addEmptyReasonCode(ListResource list) {
         CodeableConcept noContent = new CodeableConcept();
         noContent.setText(SystemConstants.NO_CONTENT);
         list.setEmptyReason(noContent);

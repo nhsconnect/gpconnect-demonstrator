@@ -91,6 +91,7 @@ angular.module('gpConnect')
 
       if ($scope.currentUser.role === 'gpconnect') {
         $scope.title = UserService.getContent('gpconnect_title');
+        $scope.privacy = UserService.getContent('gpconnect_privacy');
       }
       if ($scope.currentUser.role === 'phr') {
         $scope.title = UserService.getContent('phr_title');

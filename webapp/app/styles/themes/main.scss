@@ -622,6 +622,12 @@ legend {
   content: url($header-logo-url);
 }
 
+.privacyHeader {
+  font-weight: bold;
+  padding: 10px;
+  font-size: 17px;
+}
+
 /* Main search bar for home page */
 .search-logo {
   width: 30%;
@@ -861,7 +867,7 @@ i.clearAll {
   padding-bottom: 10px;
   border-top: 1px solid #CCCCCC;
   border-bottom: 1px solid #CCCCCC;
-  height: 100px;
+  height: 145px;
   line-height: 35px;
 }
 

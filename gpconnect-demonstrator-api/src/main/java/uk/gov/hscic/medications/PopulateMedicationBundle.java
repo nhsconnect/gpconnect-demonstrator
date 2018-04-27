@@ -226,12 +226,13 @@ public class PopulateMedicationBundle {
 	private boolean dateIsWithinPeriod(Date date, Period period) {
 		Date startDate = period.getStart();
 		Date endDate = period.getEnd();
+		
 		if(startDate != null && endDate != null) {
-			return date.compareTo(startDate) > 0 && date.compareTo(endDate) < 0;
-		} else if (startDate != null && endDate == null) {
-			return date.compareTo(startDate) > 0;
-		} else if (startDate == null && endDate != null) {
-			return date.compareTo(endDate) < 0;
+			return !date.before(startDate) && !date.after(endDate);
+		} else if (startDate != null) {
+			return !date.before(startDate);
+		} else if (endDate != null) {
+			return !date.after(endDate);
 		} else {
 			return true;
 		}

@@ -626,6 +626,7 @@ legend {
   font-weight: bold;
   padding: 10px;
   font-size: 17px;
+  color: crimson;
 }
 
 /* Main search bar for home page */
@@ -867,7 +868,6 @@ i.clearAll {
   padding-bottom: 10px;
   border-top: 1px solid #CCCCCC;
   border-bottom: 1px solid #CCCCCC;
-  height: 145px;
   line-height: 35px;
 }
 
@@ -883,11 +883,17 @@ i.clearAll {
   padding-left: 20px;
   font-family: "Hero";
   color: #FFF;
+  font-size: 27px;
+}
+
+.page-banner {
+  padding-top: 8px
 }
 
 .current-page-title {
   font-family: "Hero";
   color: #FFF;
+  font-size: 27px;
 }
 
 .current-page-title-mobile {

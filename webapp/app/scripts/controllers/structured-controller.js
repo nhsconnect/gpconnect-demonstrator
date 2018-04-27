@@ -18,7 +18,7 @@ angular
     $scope.dropdwonListValue = '';
     $scope.allergies = [];
     $scope.highlightValues = false;
-    $scope.data = {"Iodine (substance)": "Beer allergy"};
+    $scope.data = {"Iodine (substance)": "Iodine allergy"};
     $scope.MedicationRequest = [];
     $scope.MedicationStatement = [];
     $scope.historicMedications = [];
@@ -82,7 +82,6 @@ angular
     };
     
     $scope.addNewMedication = function () {
-        // alert("New medication functionality is not available. It will be implemented in an upcoming release.");
         var data = {
             "medication": $scope.selectedMedication,
             "nhsNumber":$stateParams.patientId
@@ -354,9 +353,6 @@ angular
             resolve: {
                 params: function () {
                     return {
-                        // title: $scope.title,
-                        // message: $scope.message,
-                        // listType: listType
                     };
                 }
             }

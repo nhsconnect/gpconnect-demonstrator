@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import uk.gov.hscic.OperationOutcomeFactory;
@@ -31,6 +32,9 @@ public final class CertificateValidator {
 	@Autowired
     private Environment env;
 	
+    @Value("${logCertsToConsole:false}")
+    private boolean logCertsToConsole;
+    
     private final String domainName = "msg.dev.spine2.ncrs.nhs.uk";    
     private final String certificateAuthority = "VNIS03_SUBCA";
     private final List<X509Certificate> storeCertificates = new ArrayList<>();
@@ -56,6 +60,15 @@ public final class CertificateValidator {
 
                 X509Certificate certificate = certificates[0];
 
+                if(logCertsToConsole){
+                    System.out.println("Known Certs: ");
+                    for(X509Certificate knownCert : storeCertificates){
+                        System.out.println(knownCert.toString());
+                    }
+                    System.out.println("Recieved Cert: ");
+                    System.out.println(certificate.toString());
+                }
+                
                 if (!storeCertificates.contains(certificate)) {
                     String message = getCertificateError(certificate);                   
                     

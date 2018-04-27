@@ -11,6 +11,10 @@ public final class SystemURL {
     // HL7 Constants
     public static final String HL7_BASIC_RESOURCE_TYPE = "http://hl7.org/fhir/basic-resource-type";
     public static final String HL7_VS_C80_PRACTICE_CODES = "http://hl7.org/fhir/ValueSet/c80-practice-codes";
+    public static final String HL7_SPECIAL_VALUES = "http://hl7.org/fhir/special-values";
+
+
+
 
     // FHIR ID Constants
     public static final String ID_GPC_APPOINTMENT_IDENTIFIER = "https://fhir.nhs.uk/Id/gpconnect-appointment-identifier";
@@ -24,8 +28,6 @@ public final class SystemURL {
     public static final String ID_SDS_ROLE_PROFILE_ID = "https://fhir.nhs.uk/Id/sds-role-profile-id";
     public static final String ID_SDS_USER_ID = "https://fhir.nhs.uk/Id/sds-user-id";
     public static final String ID_MARITAL_STATUS = "http://fhir.nhs.net/ValueSet/marital-status-1";
-    
-
 
     // FHIR StructureDefinition Constants
     public static final String SD_GPC_CARERECORD_COMPOSITION = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-CareRecord-Composition-1";

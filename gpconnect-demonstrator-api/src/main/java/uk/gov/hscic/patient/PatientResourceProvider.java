@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
+
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
 import org.hl7.fhir.dstu3.model.Appointment;
@@ -46,6 +47,7 @@ import org.hl7.fhir.dstu3.model.Type;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
@@ -261,7 +263,6 @@ public class PatientResourceProvider implements IResourceProvider {
             validatePatient(unregisteredPatient);
 
             // check if the patient already exists
-
             PatientDetails patientDetails = patientSearch
                     .findPatient(nhsNumber.fromPatientResource(unregisteredPatient));
 
@@ -277,6 +278,8 @@ public class PatientResourceProvider implements IResourceProvider {
                 try {
                     registeredPatient = patientDetailsToRegisterPatientResourceConverter(
                             patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
+                    
+                    addPreferredBranchSurgeryExtension(registeredPatient);
                 } catch (FHIRException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -296,6 +299,7 @@ public class PatientResourceProvider implements IResourceProvider {
         Bundle bundle = new Bundle().setType(BundleType.SEARCHSET);
         bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
         bundle.addEntry().setResource(registeredPatient);
+        
         return bundle;
     }
 
@@ -313,7 +317,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private void validatePatient(Patient patient) {
         validateIdentifiers(patient);
-        validateRegistrationDetails(patient);
+        validateTelecomAndAddress(patient);
         validateConstrainedOutProperties(patient);
         checkValidExtensions(patient.getExtension());
         validateNames(patient);
@@ -321,17 +325,27 @@ public class PatientResourceProvider implements IResourceProvider {
         valiateGender(patient);
     }
 
-    private void validateRegistrationDetails(Patient patient) {
+    private void validateTelecomAndAddress(Patient patient) {
+    	
+    	boolean telecomValid = patient.getTelecom().stream()
+    			.allMatch(telecom -> telecom.getUse() != ContactPointUse.OLD);
 
-        List<Extension> registrationPeriodExtensions = patient
-                .getExtensionsByUrl(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
+    	if (!telecomValid) {
+    		throw OperationOutcomeFactory.buildOperationOutcomeException(
+    				new InvalidRequestException(
+    						"The telecom use can not be set to old."),
+    				SystemCode.BAD_REQUEST, IssueType.INVALID);
+    	}
+    	
+    	boolean addressValid = patient.getAddress().stream()
+    			.allMatch(address -> address.getUse() != AddressUse.OLD);
 
-        if (registrationPeriodExtensions.size() > 0) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(
-                            "An extension of type registrationDetails is invalid for a registration request."),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
-        }
+    	if (!addressValid) {
+    		throw OperationOutcomeFactory.buildOperationOutcomeException(
+    				new InvalidRequestException(
+    						"The address use can not be set to old."),
+    				SystemCode.BAD_REQUEST, IssueType.INVALID);
+    	}
     }
 
     private void valiateGender(Patient patient) {

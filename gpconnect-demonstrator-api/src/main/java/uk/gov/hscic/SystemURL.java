@@ -121,7 +121,7 @@ public final class SystemURL {
 
     // FHIR CodeSystem Constants
     public static final String CS_REGISTRATION_STATUS = "https://fhir.nhs.uk/CareConnect-RegistrationStatus-1";
-    public static final String CS_REGISTRATION_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-RegistrationType-1";
+    public static final String CS_REGISTRATION_TYPE = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-RegistrationType-1";
     public static final String CS_CC_ETHNIC_CATEGORY = "https://fhir.nhs.uk/CareConnect-EthnicCategory-1";
     public static final String CS_CC_RELIGIOUS_AFFILI = "https://fhir.nhs.uk/CareConnect-ReligiousAffiliation-1";
     public static final String CS_CC_RESIDENTIAL_STATUS = "https://fhir.nhs.uk/CareConnect-ResidentialStatus-1";

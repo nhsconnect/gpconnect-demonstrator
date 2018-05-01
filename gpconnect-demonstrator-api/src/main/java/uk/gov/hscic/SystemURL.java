@@ -138,6 +138,8 @@ public final class SystemURL {
     public static final String CS_CC_LANG_ABILITY_MODE_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-LanguageAbilityMode-1";
     public static final String CS_CC_LANG_ABILITY_PROFI_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-LanguageAbilityProficiency-1";
 
+    public static final String CS_MARITAL_STATUS = "http://hl7.org/fhir/v3/MaritalStatus";
+    public static final String CS_NULL_FLAVOUR = "http://hl7.org/fhir/v3/NullFlavor";
     public static final String CS_LIST_ORDER = "http://hl7.org/fhir/codesystem-list-order.html";
 
     //Appointment Reason URL

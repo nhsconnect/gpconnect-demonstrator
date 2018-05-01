@@ -741,17 +741,20 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.addExtension(regDetailsExtension);
 
-        String maritalStatus = patientDetails.getMaritalStatus();
-        if (maritalStatus != null) {
-            CodeableConcept marital = new CodeableConcept();
-            Coding maritalCoding = new Coding();
-            maritalCoding.setSystem(SystemURL.VS_CC_MARITAL_STATUS);
+        CodeableConcept marital = new CodeableConcept();
+        Coding maritalCoding = new Coding();
+        if (patientDetails.getMaritalStatus() != null) {
+            maritalCoding.setSystem(SystemURL.CS_MARITAL_STATUS);
             maritalCoding.setCode(patientDetails.getMaritalStatus());
-            maritalCoding.setDisplay("Married");
-            marital.addCoding(maritalCoding);
-
-            patient.setMaritalStatus(marital);
+            maritalCoding.setDisplay("Married"); //TODO needs to actually match the marital code
+        } else {
+        	maritalCoding.setSystem(SystemURL.CS_NULL_FLAVOUR);
+        	maritalCoding.setCode("UNK");
+        	maritalCoding.setDisplay("unknown");
         }
+        marital.addCoding(maritalCoding);
+        patient.setMaritalStatus(marital);
+
 
         patient.setMultipleBirth(patientDetails.isMultipleBirth());
 

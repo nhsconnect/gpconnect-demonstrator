@@ -83,6 +83,7 @@ import uk.gov.hscic.model.organization.OrganizationDetails;
 import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.organization.OrganizationSearch;
+import uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder;
 import uk.gov.hscic.patient.details.PatientSearch;
 import uk.gov.hscic.patient.details.PatientStore;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
@@ -360,300 +361,396 @@ public class PatientResourceProvider implements IResourceProvider {
 
 	}
 
-	@Operation(name = REGISTER_PATIENT_OPERATION_NAME)
-	public Bundle registerPatient(@ResourceParam Parameters params) {
-		Patient registeredPatient = null;
+    @Operation(name = REGISTER_PATIENT_OPERATION_NAME)
+    public Bundle registerPatient(@ResourceParam Parameters params) {
+        Patient registeredPatient = null;
 
-		validateParameterNames(params, registerPatientParams);
+        validateParameterNames(params, registerPatientParams);
 
-		Patient unregisteredPatient = params.getParameter().stream()
-				.filter(param -> "registerPatient".equalsIgnoreCase(param.getName()))
-				.map(ParametersParameterComponent::getResource).map(Patient.class::cast).findFirst().orElse(null);
+        Patient unregisteredPatient = params.getParameter().stream()
+                .filter(param -> "registerPatient".equalsIgnoreCase(param.getName()))
+                .map(ParametersParameterComponent::getResource).map(Patient.class::cast).findFirst().orElse(null);
 
-		if (unregisteredPatient != null) {
-			validatePatient(unregisteredPatient);
+        if (unregisteredPatient != null) {
+            validatePatient(unregisteredPatient);
 
-			// check if the patient already exists
+            // check if the patient already exists
+            PatientDetails patientDetails = patientSearch
+                    .findPatient(nhsNumber.fromPatientResource(unregisteredPatient));
 
-			PatientDetails patientDetails = patientSearch
-					.findPatient(nhsNumber.fromPatientResource(unregisteredPatient));
+            if (patientDetails == null || IsInactiveTemporaryPatient(patientDetails)) {
 
-			if (patientDetails == null || IsInactiveTemporaryPatient(patientDetails)) {
+                if (patientDetails == null) {
+                    patientDetails = registerPatientResourceConverterToPatientDetail(unregisteredPatient);
+                    patientStore.create(patientDetails);
+                } else {
+                    patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
+                    patientStore.update(patientDetails);
+                }
+                try {
+                    registeredPatient = patientDetailsToRegisterPatientResourceConverter(
+                            patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
+                    
+                    addPreferredBranchSurgeryExtension(registeredPatient);
+                } catch (FHIRException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            } else {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException(String.format("Patient (NHS number - %s) already exists",
+                                nhsNumber.fromPatientResource(unregisteredPatient))),
+                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+            }
+        } else {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Patient record not found"), SystemCode.INVALID_PARAMETER,
+                    IssueType.INVALID);
+        }
 
-				if (patientDetails == null) {
-					patientDetails = registerPatientResourceConverterToPatientDetail(unregisteredPatient);
-					patientStore.create(patientDetails);
-				} else {
-					patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
-					patientStore.update(patientDetails);
-				}
-				try {
-					registeredPatient = patientDetailsToRegisterPatientResourceConverter(
-							patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
-				} catch (FHIRException e) {
-					throw OperationOutcomeFactory.buildOperationOutcomeException(
-							new UnprocessableEntityException("Problem retrieving patient"), SystemCode.INVALID_PARAMETER,
-							IssueType.INVALID);
-				}
-			} else {
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new InvalidRequestException(String.format("Patient (NHS number - %s) already exists",
-								nhsNumber.fromPatientResource(unregisteredPatient))),
-						SystemCode.BAD_REQUEST, IssueType.INVALID);
-			}
-		} else {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new UnprocessableEntityException("Patient record not found"), SystemCode.INVALID_PARAMETER,
-					IssueType.INVALID);
-		}
+        Bundle bundle = new Bundle().setType(BundleType.SEARCHSET);
+        bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
+        bundle.addEntry().setResource(registeredPatient);
+        
+        return bundle;
+    }
 
-		Bundle bundle = new Bundle().setType(BundleType.SEARCHSET);
-		bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
-		bundle.addEntry().setResource(registeredPatient);
-		return bundle;
-	}
+    private Boolean IsInactiveTemporaryPatient(PatientDetails patientDetails) {
 
-	private Boolean IsInactiveTemporaryPatient(PatientDetails patientDetails) {
+        return patientDetails.getRegistrationType() != null
+                && TEMPORARY_RESIDENT_REGISTRATION_TYPE.equals(patientDetails.getRegistrationType())
+                && patientDetails.getRegistrationStatus() != null
+                && ACTIVE_REGISTRATION_STATUS.equals(patientDetails.getRegistrationStatus()) == false;
+    }
 
-		return patientDetails.getRegistrationType() != null
-				&& TEMPORARY_RESIDENT_REGISTRATION_TYPE.equals(patientDetails.getRegistrationType())
-				&& patientDetails.getRegistrationStatus() != null
-				&& ACTIVE_REGISTRATION_STATUS.equals(patientDetails.getRegistrationStatus()) == false;
-	}
+    public String getNhsNumber(Object source) {
+        return nhsNumber.getNhsNumber(source);
+    }
 
-	public String getNhsNumber(Object source) {
-		return nhsNumber.getNhsNumber(source);
-	}
+    private void validatePatient(Patient patient) {
+        validateIdentifiers(patient);
+        validateTelecomAndAddress(patient);
+        validateConstrainedOutProperties(patient);
+        checkValidExtensions(patient.getExtension());
+        validateNames(patient);
+        validateDateOfBirth(patient);
+        valiateGender(patient);
+    }
 
-	private void validatePatient(Patient patient) {
-		validateIdentifiers(patient);
-		validateRegistrationDetails(patient);
-		validateConstrainedOutProperties(patient);
-		checkValidExtensions(patient.getExtension());
-		validateNames(patient);
-		validateDateOfBirth(patient);
-		valiateGender(patient);
-	}
+    private void validateTelecomAndAddress(Patient patient) {
+    	
+    	boolean telecomValid = patient.getTelecom().stream()
+    			.allMatch(telecom -> telecom.getUse() != ContactPointUse.OLD);
 
-	private void validateRegistrationDetails(Patient patient) {
+    	if (!telecomValid) {
+    		throw OperationOutcomeFactory.buildOperationOutcomeException(
+    				new InvalidRequestException(
+    						"The telecom use can not be set to old."),
+    				SystemCode.BAD_REQUEST, IssueType.INVALID);
+    	}
+    	
+    	boolean addressValid = patient.getAddress().stream()
+    			.allMatch(address -> address.getUse() != AddressUse.OLD);
 
-		List<Extension> registrationPeriodExtensions = patient
-				.getExtensionsByUrl(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
+    	if (!addressValid) {
+    		throw OperationOutcomeFactory.buildOperationOutcomeException(
+    				new InvalidRequestException(
+    						"The address use can not be set to old."),
+    				SystemCode.BAD_REQUEST, IssueType.INVALID);
+    	}
+    }
 
-		if (registrationPeriodExtensions.size() > 0) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new InvalidRequestException(
-							"An extension of type registrationDetails is invalid for a registration request."),
-					SystemCode.BAD_REQUEST, IssueType.INVALID);
-		}
-	}
+    private void valiateGender(Patient patient) {
+        AdministrativeGender gender = patient.getGender();
 
-	private void valiateGender(Patient patient) {
-		AdministrativeGender gender = patient.getGender();
+        if (gender != null) {
 
-		if (gender != null) {
+            EnumSet<AdministrativeGender> genderList = EnumSet.allOf(AdministrativeGender.class);
+            Boolean valid = false;
+            for (AdministrativeGender genderItem : genderList) {
 
-			EnumSet<AdministrativeGender> genderList = EnumSet.allOf(AdministrativeGender.class);
-			Boolean valid = false;
-			for (AdministrativeGender genderItem : genderList) {
+                if (genderItem.toCode().equalsIgnoreCase(gender.toString())) {
+                    valid = true;
+                    break;
+                }
+            }
 
-				if (genderItem.toCode().equalsIgnoreCase(gender.toString())) {
-					valid = true;
-					break;
-				}
-			}
+            if (!valid) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException(
+                                String.format("The supplied Patient gender %s is an unrecognised type.", gender)),
+                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+            }
+        }
+    }
 
-			if (!valid) {
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new InvalidRequestException(
-								String.format("The supplied Patient gender %s is an unrecognised type.", gender)),
-						SystemCode.BAD_REQUEST, IssueType.INVALID);
-			}
-		}
-	}
+    private void validateDateOfBirth(Patient patient) {
+        Date birthDate = patient.getBirthDate();
 
-	private void validateDateOfBirth(Patient patient) {
-		Date birthDate = patient.getBirthDate();
+        if (birthDate == null) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("The Patient date of birth must be supplied"), SystemCode.BAD_REQUEST,
+                    IssueType.INVALID);
+        }
+    }
 
-		if (birthDate == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new InvalidRequestException("The Patient date of birth must be supplied"), SystemCode.BAD_REQUEST,
-					IssueType.INVALID);
-		}
-	}
+    private void validateIdentifiers(Patient patient) {
+        List<Identifier> identifiers = patient.getIdentifier();
+        if (identifiers.isEmpty() == false) {
+            boolean identifiersValid = identifiers.stream()
+                    .allMatch(identifier -> identifier.getSystem() != null && identifier.getValue() != null);
 
-	private void validateIdentifiers(Patient patient) {
-		List<Identifier> identifiers = patient.getIdentifier();
-		if (identifiers.isEmpty() == false) {
-			boolean identifiersValid = identifiers.stream()
-					.allMatch(identifier -> identifier.getSystem() != null && identifier.getValue() != null);
+            if (identifiersValid == false) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException(
+                                "One or both of the system and/or value on some of the provided identifiers is null"),
+                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+            }
+        } else {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("At least one identifier must be supplied on a Patient resource"),
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+        }
+    }
 
-			if (identifiersValid == false) {
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new InvalidRequestException(
-								"One or both of the system and/or value on some of the provided identifiers is null"),
-						SystemCode.BAD_REQUEST, IssueType.INVALID);
-			}
-		} else {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new InvalidRequestException("At least one identifier must be supplied on a Patient resource"),
-					SystemCode.BAD_REQUEST, IssueType.INVALID);
-		}
-	}
+    private void checkValidExtensions(List<Extension> undeclaredExtensions) {
 
-	private void checkValidExtensions(List<Extension> undeclaredExtensions) {
+        List<String> extensionURLs = undeclaredExtensions.stream().map(Extension::getUrl).collect(Collectors.toList());
 
-		List<String> extensionURLs = undeclaredExtensions.stream().map(Extension::getUrl).collect(Collectors.toList());
+        extensionURLs.remove(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
+        extensionURLs.remove(SystemURL.SD_CC_EXT_ETHNIC_CATEGORY);
+        extensionURLs.remove(SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI);
+        extensionURLs.remove(SystemURL.SD_PATIENT_CADAVERIC_DON);
+        extensionURLs.remove(SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS);
+        extensionURLs.remove(SystemURL.SD_CC_EXT_TREATMENT_CAT);
+        extensionURLs.remove(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
 
-		extensionURLs.remove(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
-		extensionURLs.remove(SystemURL.SD_CC_EXT_ETHNIC_CATEGORY);
-		extensionURLs.remove(SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI);
-		extensionURLs.remove(SystemURL.SD_PATIENT_CADAVERIC_DON);
-		extensionURLs.remove(SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS);
-		extensionURLs.remove(SystemURL.SD_CC_EXT_TREATMENT_CAT);
-		extensionURLs.remove(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
+        if (!extensionURLs.isEmpty()) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(
+                            "Invalid/multiple patient extensions found. The following are in excess or invalid: "
+                                    + extensionURLs.stream().collect(Collectors.joining(", "))),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        }
+    }
 
-		if (!extensionURLs.isEmpty()) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new UnprocessableEntityException(
-							"Invalid/multiple patient extensions found. The following are in excess or invalid: "
-									+ extensionURLs.stream().collect(Collectors.joining(", "))),
-					SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-		}
-	}
+    private void validateConstrainedOutProperties(Patient patient) {
 
-	private void validateConstrainedOutProperties(Patient patient) {
+        Set<String> invalidFields = new HashSet<String>();
 
-		Set<String> invalidFields = new HashSet<String>();
+        // ## The above can exist in the patient resource but can be ignored. If
+        // they are saved by the provider then they should be returned in the
+        // response!
 
-		// ## The above can exist in the patient resource but can be ignored. If
-		// they are saved by the provider then they should be returned in the
-		// response!
+        if (patient.getPhoto().isEmpty() == false)
+            invalidFields.add("photo");
+        if (patient.getAnimal().isEmpty() == false)
+            invalidFields.add("animal");
+        if (patient.getCommunication().isEmpty() == false)
+            invalidFields.add("communication");
+        if (patient.getLink().isEmpty() == false)
+            invalidFields.add("link");
+        if (patient.getDeceased() != null)
+            invalidFields.add("deceased");
 
-		if (patient.getPhoto().isEmpty() == false)
-			invalidFields.add("photo");
-		if (patient.getAnimal().isEmpty() == false)
-			invalidFields.add("animal");
-		if (patient.getCommunication().isEmpty() == false)
-			invalidFields.add("communication");
-		if (patient.getLink().isEmpty() == false)
-			invalidFields.add("link");
-		if (patient.getDeceased() != null)
-			invalidFields.add("deceased");
+        if (invalidFields.isEmpty() == false) {
+            String message = String.format(
+                    "The following properties have been constrained out on the Patient resource - %s",
+                    String.join(", ", invalidFields));
+            throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
+                    SystemCode.BAD_REQUEST, IssueType.NOTSUPPORTED);
+        }
+    }
 
-		if (invalidFields.isEmpty() == false) {
-			String message = String.format(
-					"The following properties have been constrained out on the Patient resource - %s",
-					String.join(", ", invalidFields));
-			throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
-					SystemCode.BAD_REQUEST, IssueType.NOTSUPPORTED);
-		}
-	}
+    private void validateNames(Patient patient) {
+        List<HumanName> names = patient.getName();
 
-	private void validateNames(Patient patient) {
-		List<HumanName> names = patient.getName();
+        if (names.size() < 1) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("The patient must have at least one Name."), SystemCode.BAD_REQUEST,
+                    IssueType.INVALID);
+        }
 
-		if (names.size() < 1) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new InvalidRequestException("The patient must have at least one Name."), SystemCode.BAD_REQUEST,
-					IssueType.INVALID);
-		}
+        List<HumanName> activeOfficialNames = names
+                .stream()
+                .filter(nm -> IsActiveName(nm))
+                .filter(nm -> NameUse.OFFICIAL.equals(nm.getUse()))
+                .collect(Collectors.toList());
 
-		List<HumanName> activeOfficialNames = names.stream().filter(nm -> IsActiveName(nm))
-				.filter(nm -> NameUse.OFFICIAL.equals(nm.getUse())).collect(Collectors.toList());
+        if (activeOfficialNames.size() != 1) {
+            InvalidRequestException exception = new InvalidRequestException("The patient must have one Active Name with a Use of OFFICIAL");
+            
+            throw OperationOutcomeFactory.buildOperationOutcomeException(exception, SystemCode.BAD_REQUEST, IssueType.INVALID);
+        }
 
-		if (activeOfficialNames.size() != 1) {
-			InvalidRequestException exception = new InvalidRequestException(
-					"The patient must have one Active Name with a Use of OFFICIAL");
+        List<String> officialFamilyNames = new ArrayList<>();
+        
+        for (HumanName humanName : activeOfficialNames) {
+            if (humanName.getFamily() != null) {
+                officialFamilyNames.add(humanName.getFamily());
+            }
+        }
 
-			throw OperationOutcomeFactory.buildOperationOutcomeException(exception, SystemCode.BAD_REQUEST,
-					IssueType.INVALID);
-		}
+        validateNameCount(officialFamilyNames, "family");
+    }
 
-		List<String> officialFamilyNames = new ArrayList<>();
+    private void validateNameCount(List<String> names, String nameType) {
+        if (names.size() != 1) {
+            String message = String.format("The patient must have one and only one %s name property. Found %s",
+                    nameType, names.size());
+            throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+        }
+    }
 
-		for (HumanName humanName : activeOfficialNames) {
-			if (humanName.getFamily() != null) {
-				officialFamilyNames.add(humanName.getFamily());
-			}
-		}
+    private Boolean IsActiveName(HumanName name) {
 
-		validateNameCount(officialFamilyNames, "family");
-	}
+        Period period = name.getPeriod();
 
-	private void validateNameCount(List<String> names, String nameType) {
-		if (names.size() != 1) {
-			String message = String.format("The patient must have one and only one %s name property. Found %s",
-					nameType, names.size());
-			throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
-					SystemCode.BAD_REQUEST, IssueType.INVALID);
-		}
-	}
+        if (null == period) {
+            return true;
+        }
 
-	private Boolean IsActiveName(HumanName name) {
+        Date start = period.getStart();
+        Date end = period.getEnd();
 
-		Period period = name.getPeriod();
+        if ((null == end || end.after(new Date()))
+                && (null == start || start.equals(new Date()) || start.before(new Date()))) {
+            return true;
+        }
 
-		if (null == period) {
-			return true;
-		}
+        return false;
+    }
 
-		Date start = period.getStart();
-		Date end = period.getEnd();
+    private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
+        PatientDetails patientDetails = new PatientDetails();
+        HumanName name = patientResource.getNameFirstRep();
 
-		if ((null == end || end.after(new Date()))
-				&& (null == start || start.equals(new Date()) || start.before(new Date()))) {
-			return true;
-		}
+        String givenNames = name.getGiven().stream().map(n -> n.getValue()).collect(Collectors.joining(","));
 
-		return false;
-	}
+        patientDetails.setForename(givenNames);
 
-	private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
-		PatientDetails patientDetails = new PatientDetails();
-		HumanName name = patientResource.getNameFirstRep();
+        patientDetails.setSurname(name.getFamily());
+        patientDetails.setDateOfBirth(patientResource.getBirthDate());
+        if (patientResource.getGender() != null) {
+            patientDetails.setGender(patientResource.getGender().toString());
+        }
+        patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
 
-		String givenNames = name.getGiven().stream().map(n -> n.getValue()).collect(Collectors.joining(","));
+        Type multipleBirth = patientResource.getMultipleBirth();
+        if (multipleBirth != null) {
+            try {
+                patientDetails.setMultipleBirth((multipleBirth));
+            } catch (ClassCastException cce) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            }
+        }
 
-		patientDetails.setForename(givenNames);
+        DateTimeType deceased = (DateTimeType) patientResource.getDeceased();
+        if (deceased != null) {
+            try {
+                patientDetails.setDeceased((deceased.getValue()));
+            } catch (ClassCastException cce) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("The multiple deceased property is expected to be a datetime"),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            }
+        }
 
-		patientDetails.setSurname(name.getFamily());
-		patientDetails.setDateOfBirth(patientResource.getBirthDate());
-		if (patientResource.getGender() != null) {
-			patientDetails.setGender(patientResource.getGender().toString());
-		}
-		patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
+        patientDetails.setRegistrationStartDateTime(new Date());
+        // patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
+        patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
+        patientDetails.setRegistrationType(TEMPORARY_RESIDENT_REGISTRATION_TYPE);
 
-		Type multipleBirth = patientResource.getMultipleBirth();
-		if (multipleBirth != null) {
-			try {
-				patientDetails.setMultipleBirth((multipleBirth));
-			} catch (ClassCastException cce) {
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
-						SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-			}
-		}
+        return patientDetails;
+    }
 
-		DateTimeType deceased = (DateTimeType) patientResource.getDeceased();
-		if (deceased != null) {
-			try {
-				patientDetails.setDeceased((deceased.getValue()));
-			} catch (ClassCastException cce) {
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new UnprocessableEntityException("The multiple deceased property is expected to be a datetime"),
-						SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-			}
-		}
+    private Patient setStaticPatientData(Patient patient) {
 
-		patientDetails.setRegistrationStartDateTime(new Date());
-		// patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
-		patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
-		patientDetails.setRegistrationType(TEMPORARY_RESIDENT_REGISTRATION_TYPE);
+        patient.setLanguage(("en-GB"));
 
-		return patientDetails;
-	}
+        patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY_STU3,
+                SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
+        patient.addExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code",
+                SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));
+        patient.addExtension(new Extension(SystemURL.SD_PATIENT_CADAVERIC_DON, new BooleanType(false)));
+        patient.addExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS_STU3,
+                SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS));
+        patient.addExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT_STU3,
+                SystemURL.SD_CC_EXT_TREATMENT_CAT));
 
+        Extension nhsCommExtension = new Extension();
+        nhsCommExtension.setUrl(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
+        nhsCommExtension.addExtension(
+                createCodingExtension("en", "English", SystemURL.CS_CC_HUMAN_LANG_STU3, SystemURL.SD_CC_EXT_COMM_LANGUAGE));
+        nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_COMM_PREFERRED, new BooleanType(false)));
+        nhsCommExtension.addExtension(createCodingExtension("RWR", "Received written",
+                SystemURL.CS_CC_LANG_ABILITY_MODE_STU3, SystemURL.SD_CC_MODE_OF_COMM));
+        nhsCommExtension.addExtension(createCodingExtension("E", "Excellent", SystemURL.CS_CC_LANG_ABILITY_PROFI_STU3,
+                SystemURL.SD_CC_COMM_PROFICIENCY));
+        nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanType(false)));
+
+        patient.addExtension(nhsCommExtension);
+
+        Identifier localIdentifier = new Identifier();
+        localIdentifier.setUse(IdentifierUse.USUAL);
+        localIdentifier.setSystem(SystemURL.ID_LOCAL_PATIENT_IDENTIFIER);
+        localIdentifier.setValue("123456");
+
+        CodeableConcept liType = new CodeableConcept();
+        Coding liTypeCoding = new Coding();
+        liTypeCoding.setCode("EN");
+        liTypeCoding.setDisplay("Employer number");
+        liTypeCoding.setSystem(SystemURL.VS_IDENTIFIER_TYPE);
+        liType.addCoding(liTypeCoding);
+        localIdentifier.setType(liType);
+
+        localIdentifier.setAssigner(new Reference("Organization/1"));
+        patient.addIdentifier(localIdentifier);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2017, 1, 1);
+        calendar.set(2016, 1, 1);
+        Period pastPeriod = new Period().setStart(calendar.getTime()).setEnd(calendar.getTime());
+
+        patient.addName()
+                .setFamily("AnotherOfficialFamilyName")
+                .addGiven("AnotherOfficialGivenName")
+                .setUse(NameUse.OFFICIAL)
+                .setPeriod(pastPeriod);
+
+        patient.addName()
+                .setFamily("AdditionalFamily")
+                .addGiven("AdditionalGiven")
+                .setUse(NameUse.TEMP);
+
+        patient.addTelecom(staticElHelper.getValidTelecom());
+        patient.addAddress(staticElHelper.getValidAddress());
+
+        return patient;
+    }
+
+    private Extension createCodingExtension(String code, String display, String vsSystem, String extSystem) {
+
+        Extension ext = new Extension(extSystem, createCoding(code, display, vsSystem));
+
+        return ext;
+    }
+
+    private CodeableConcept createCoding(String code, String display, String vsSystem) {
+
+        Coding coding = new Coding();
+        coding.setCode(code);
+        coding.setDisplay(display);
+        coding.setSystem(vsSystem);
+        CodeableConcept concept = new CodeableConcept();
+        concept.addCoding(coding);
+
+        return concept;
+    }
+    
 	// a cut-down Patient
 	private Patient patientDetailsToRegisterPatientResourceConverter(PatientDetails patientDetails)
 			throws FHIRException {
@@ -666,87 +763,6 @@ public class PatientResourceProvider implements IResourceProvider {
 		patient = setStaticPatientData(patient);
 
 		return patient;
-	}
-
-	private Patient setStaticPatientData(Patient patient) {
-
-		patient.setLanguage(("en-GB"));
-
-		patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY_STU3,
-				SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
-		patient.addExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code",
-				SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));
-		patient.addExtension(new Extension(SystemURL.SD_PATIENT_CADAVERIC_DON, new BooleanType(false)));
-		patient.addExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS_STU3,
-				SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS));
-		patient.addExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT_STU3,
-				SystemURL.SD_CC_EXT_TREATMENT_CAT));
-
-		Extension nhsCommExtension = new Extension();
-		nhsCommExtension.setUrl(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
-		nhsCommExtension.addExtension(
-				createCodingExtension("en", "English", SystemURL.CS_CC_HUMAN_LANG_STU3, SystemURL.SD_CC_EXT_COMM_LANGUAGE));
-		nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_COMM_PREFERRED, new BooleanType(false)));
-		nhsCommExtension.addExtension(createCodingExtension("RWR", "Received written",
-				SystemURL.CS_CC_LANG_ABILITY_MODE_STU3, SystemURL.SD_CC_MODE_OF_COMM));
-		nhsCommExtension.addExtension(createCodingExtension("E", "Excellent", SystemURL.CS_CC_LANG_ABILITY_PROFI_STU3,
-				SystemURL.SD_CC_COMM_PROFICIENCY));
-		nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanType(false)));
-
-		patient.addExtension(nhsCommExtension);
-
-		Identifier localIdentifier = new Identifier();
-		localIdentifier.setUse(IdentifierUse.USUAL);
-		localIdentifier.setSystem(SystemURL.ID_LOCAL_PATIENT_IDENTIFIER);
-		localIdentifier.setValue("123456");
-
-		CodeableConcept liType = new CodeableConcept();
-		Coding liTypeCoding = new Coding();
-		liTypeCoding.setCode("EN");
-		liTypeCoding.setDisplay("Employer number");
-		liTypeCoding.setSystem(SystemURL.VS_IDENTIFIER_TYPE);
-		liType.addCoding(liTypeCoding);
-		localIdentifier.setType(liType);
-
-		localIdentifier.setAssigner(new Reference("Organization/1"));
-		patient.addIdentifier(localIdentifier);
-
-		Calendar calendar = Calendar.getInstance();
-
-		calendar.set(2017, 1, 1);
-		calendar.set(2016, 1, 1);
-
-		Period pastPeriod = new Period().setStart(calendar.getTime()).setEnd(calendar.getTime());
-
-		patient.addName().setFamily("AnotherOfficialFamilyName").addGiven("AnotherOfficialGivenName")
-				.setUse(NameUse.OFFICIAL).setPeriod(pastPeriod);
-
-		patient.addName().setFamily("AdditionalFamily").addGiven("AdditionalGiven").setUse(NameUse.TEMP);
-
-		patient.addTelecom(staticElHelper.getValidTelecom());
-		patient.addAddress(staticElHelper.getValidAddress());
-		// patient.setContact(getValidContact());
-
-		return patient;
-	}
-
-	private Extension createCodingExtension(String code, String display, String vsSystem, String extSystem) {
-
-		Extension ext = new Extension(extSystem, createCoding(code, display, vsSystem));
-
-		return ext;
-	}
-
-	private CodeableConcept createCoding(String code, String display, String vsSystem) {
-
-		Coding coding = new Coding();
-		coding.setCode(code);
-		coding.setDisplay(display);
-		coding.setSystem(vsSystem);
-		CodeableConcept concept = new CodeableConcept();
-		concept.addCoding(coding);
-
-		return concept;
 	}
 
 	private Patient patientDetailsToMinimalPatient(PatientDetails patientDetails) throws FHIRException {
@@ -812,17 +828,19 @@ public class PatientResourceProvider implements IResourceProvider {
 
 		patient.addExtension(regDetailsExtension);
 
-		String maritalStatus = patientDetails.getMaritalStatus();
-		if (maritalStatus != null) {
-			CodeableConcept marital = new CodeableConcept();
-			Coding maritalCoding = new Coding();
-			maritalCoding.setSystem(SystemURL.VS_CC_MARITAL_STATUS);
-			maritalCoding.setCode(patientDetails.getMaritalStatus());
-			maritalCoding.setDisplay("Married");
-			marital.addCoding(maritalCoding);
-
-			patient.setMaritalStatus(marital);
-		}
+		 CodeableConcept marital = new CodeableConcept();
+	        Coding maritalCoding = new Coding();
+	        if (patientDetails.getMaritalStatus() != null) {
+	            maritalCoding.setSystem(SystemURL.CS_MARITAL_STATUS);
+	            maritalCoding.setCode(patientDetails.getMaritalStatus());
+	            maritalCoding.setDisplay("Married"); //TODO needs to actually match the marital code
+	        } else {
+	        	maritalCoding.setSystem(SystemURL.CS_NULL_FLAVOUR);
+	        	maritalCoding.setCode("UNK");
+	        	maritalCoding.setDisplay("unknown");
+	        }
+	        marital.addCoding(maritalCoding);
+	        patient.setMaritalStatus(marital);
 
 		patient.setMultipleBirth(patientDetails.isMultipleBirth());
 

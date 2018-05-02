@@ -15,8 +15,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.server.ETagSupportEnum;
+import ca.uhn.fhir.rest.server.HardcodedServerAddressStrategy;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.CorsInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hscic.SystemHeader;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
@@ -42,6 +44,9 @@ public class FhirRestfulServlet extends RestfulServer {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Value("${serverBaseUrl:https://orange.testlab.nhs.uk/v1/fhir}")
+    private String serverBaseUrl;
+    
     @Override
     protected void initialize() throws ServletException {
         
@@ -50,6 +55,8 @@ public class FhirRestfulServlet extends RestfulServer {
         setFhirContext(ctx);
         setETagSupport(ETagSupportEnum.ENABLED);
        
+        setServerAddressStrategy(new HardcodedServerAddressStrategy(serverBaseUrl));
+        
         setResourceProviders(Arrays.asList(
                 applicationContext.getBean(PatientResourceProvider.class),
                 applicationContext.getBean(OrganizationResourceProvider.class),

@@ -11,6 +11,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 
@@ -23,6 +24,9 @@ public final class CertificateValidator {
 	@Autowired
     private Environment env;
 	
+    @Value("${logCertsToConsole:false}")
+    private boolean logCertsToConsole;
+
     private static final Logger LOG = Logger.getLogger(CertificateValidator.class);
 
     private final List<X509Certificate> knownCerts = new ArrayList<>();
@@ -48,6 +52,16 @@ public final class CertificateValidator {
 
                 X509Certificate x509Certificate = certs[0];
 
+                if(logCertsToConsole){
+                    System.out.println("Known Certs: ");
+                    for(X509Certificate knownCert : knownCerts){
+                        System.out.println(knownCert.toString());
+                    }
+                    System.out.println("Recieved Cert: ");
+                    System.out.println(x509Certificate.toString());
+                }
+
+                                
                 if (!knownCerts.contains(x509Certificate)) {
                     throw new CertificateException("Provided certificate is not in trusted list!", 495);
                 } else { // Otherwise, check the expiry

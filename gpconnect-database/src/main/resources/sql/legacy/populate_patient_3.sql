@@ -52,4 +52,4 @@ VALUES
 INSERT INTO gpconnect.referrals
   (nhsNumber,sectionDate,referral_from,referral_to,priority,details,lastUpdated)
 VALUES
-  (9476719974,'2016-06-01 06:00:00','Dr Parsonss','Referral to tier 2 MSK services','Routine','Pain in buttock and leg','2016-06-01');
+  (9476719974,'2016-06-01','Dr Parsons','Referral to tier 2 MSK services','Routine','Pain in buttock and leg','2016-06-01');

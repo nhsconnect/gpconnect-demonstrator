@@ -106,4 +106,4 @@ INSERT INTO gpconnect.practitioners
 VALUES
   (1,'G13579135','PT1234','Gilbert','Nichole','Miss','FEMALE',2,'R0050','Consultant','en','English','2016-07-25 12:00:00'),
   (2,'G22345655','PT1122','Slater','Kibo','Mr','MALE',1,'R0050','Consultant','en','English','2016-07-25 12:00:00'),
-  (3,'G11111116','PT1234','Parsons','Melissa','Mrs','FEMALE',2,'R0042','paediatrician','de','German','2016-07-25 12:00:00');
+  (3,'G11111116','PT1234','Parsons','Melissa','Dr','FEMALE',2,'R0042','paediatrician','de','German','2016-07-25 12:00:00');

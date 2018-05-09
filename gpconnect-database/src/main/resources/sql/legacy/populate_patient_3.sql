@@ -26,16 +26,16 @@ VALUES
  INSERT INTO gpconnect.investigations
    (nhsNumber,sectionDate,title,details,lastUpdated)
  VALUES
-   (9476719974,'2000-05-06','Microscopy, culture and sensitivity',"Abnormal but expected",'2000-05-06 14:00:00');
+   (9476719974,'2010-11-02','Microscopy, culture and sensitivity',"Abnormal but expected",'2000-05-06 14:00:00');
 
 INSERT INTO gpconnect.medications_html
   (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
 VALUES
-  (9476719974,"Current","1991-07-03","Beclometasone 100 micrograms/dose breath activated inhaler","","","2 puffs twice a day",NULL,NULL,NULL,NULL,"NHS Medication"),
-  (9476719974,"Current","1991-07-03","Salbutamol 100 mcgs/dose inhaler","","","2 puffs when required",NULL,NULL,NULL,NULL,"NHS Medication"),
-  (9476719974,"Current","2000-05-04","Cetirizine 10 mg tablets","","","1 to be taken twice daily",NULL,NULL,NULL,NULL,"NHS Medication"),
-  (9476719974,"Repeat","1992-07-03","Salbutamol 100 mcgs/dose inhaler","","","Inhale 2 doses as needed","2018-04-06","2019-04-20","1 out of 4","20","Repeat"),
-  (9476719974,"Repeat","2000-05-04","Cetirizine 10 mg tablets","","","1 to be taken twice daily","2018-04-06","2019-04-20","1 out of 4","34","Repeat");
+  (9476719974,"Current","1996-07-03","Beclometasone 100 micrograms/dose breath activated inhaler","","","2 puffs twice a day",NULL,NULL,NULL,NULL,"NHS Medication"),
+  (9476719974,"Current","1996-07-03","Salbutamol 100 mcgs/dose inhaler","","","2 puffs when required",NULL,NULL,NULL,NULL,"NHS Medication"),
+  (9476719974,"Current","2016-07-01","Cetirizine 10 mg tablets","","","1 to be taken twice daily",NULL,NULL,NULL,NULL,"NHS Medication"),
+  (9476719974,"Repeat","1996-07-03","Salbutamol 100 mcgs/dose inhaler","","","Inhale 2 doses as needed","2018-04-06","2019-04-20","1 out of 4","20","Repeat"),
+  (9476719974,"Repeat","2016-07-01","Cetirizine 10 mg tablets","","","1 to be taken twice daily","2018-04-06","2019-04-20","1 out of 4","34","Repeat");
 
 INSERT INTO gpconnect.observations
   (nhsNumber,observationDate,entry,value,details)
@@ -45,11 +45,11 @@ VALUES
 INSERT INTO gpconnect.problems
   (nhsNumber,activeOrInactive,startDate,endDate,entry,significance,details)
 VALUES
-  (9476719974,"Active",'1992-07-03',null,"Asthma","Major Active",""),
+  (9476719974,"Active",'1996-07-03',null,"Asthma","Major Active",""),
   (9476719974,"Active",'2016-07-01',null,"Urticaria","Minor Active",""),
-  (9476719974,"Inactive",'2000-05-04','2000-05-11',"Urinary Tract Infection","Minor Past","");
+  (9476719974,"Inactive",'2010-11-02','2010-11-02',"Urinary Tract Infection","Minor Past","");
 
 INSERT INTO gpconnect.referrals
   (nhsNumber,sectionDate,referral_from,referral_to,priority,details,lastUpdated)
 VALUES
-  (9476719974,'2016-06-01','Dr Parsons','Referral to tier 2 MSK services','Routine','Pain in buttock and leg','2016-06-01');
+  (9476719974,'2016-03-01','Dr Parsons','Referral to tier 2 MSK services','Routine','Pain in buttock and leg','2016-03-01');

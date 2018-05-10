@@ -81,7 +81,12 @@ public class WebTokenValidator {
     private static void verifyTimeValues(WebToken webToken, int futureRequestLeeway) {
         // Checking the creation date is not in the future
         int timeValidationIdentifierInt = webToken.getIat();
-
+        
+        //LucyW - added temporarily 
+        System.out.println();
+        System.out.println("Debug logging - futureRequestLeeway: " + futureRequestLeeway + " timeValidationIdentifierInt: " + timeValidationIdentifierInt + " current time: " + System.currentTimeMillis());
+        System.out.println();
+        
         // Checking creation time is not in the future (with a 5 second leeway
         if (timeValidationIdentifierInt > (System.currentTimeMillis() / 1000) + futureRequestLeeway) {
             throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(

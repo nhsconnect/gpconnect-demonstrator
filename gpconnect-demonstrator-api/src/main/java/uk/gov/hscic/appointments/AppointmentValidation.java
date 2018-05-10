@@ -1,6 +1,8 @@
 package uk.gov.hscic.appointments;
 
 import java.text.MessageFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
@@ -56,8 +58,11 @@ public class AppointmentValidation {
 	}
 
 	public List<Appointment> filterToReturnFutureAppointments(List<Appointment> appointment) {
-		Date date = new Date();
+		LocalDate localDate = LocalDate.now();
 		List<Appointment> appointmentsFiltered = new ArrayList<>();
+
+		//convert it to Date
+		Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 		for (int i = 0; i < appointment.size(); i++) {
 			if (appointment.get(i).getStart().after(date)) {

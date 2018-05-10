@@ -82,15 +82,9 @@ public class WebTokenValidator {
         // Checking the creation date is not in the future
         int timeValidationIdentifierInt = webToken.getIat();
         
-        //LucyW - added temporarily 
-        System.out.println("Debug logging - futureRequestLeeway: " + futureRequestLeeway + " timeValidationIdentifierInt: " + timeValidationIdentifierInt + " current time: " + System.currentTimeMillis());
-        
         // Checking creation time is not in the future (with a 5 second leeway
-        System.out.println("Debug logging " + ((System.currentTimeMillis() / 1000) + futureRequestLeeway));
-        System.out.println("Debug logging " + (timeValidationIdentifierInt > (System.currentTimeMillis() / 1000) + futureRequestLeeway));
         if (timeValidationIdentifierInt > (System.currentTimeMillis() / 1000) + futureRequestLeeway) {
-        	System.out.println("Debug logging error");
-            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
+        	throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Creation time is in the future", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
 

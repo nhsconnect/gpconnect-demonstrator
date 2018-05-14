@@ -326,25 +326,34 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     private void validateTelecomAndAddress(Patient patient) {
-    	
-    	boolean telecomValid = patient.getTelecom().stream()
-    			.allMatch(telecom -> telecom.getUse() != ContactPointUse.OLD);
-
-    	if (!telecomValid) {
+    	//Only a single telecom with type temp may be sent
+    	if (patient.getTelecom().size() > 1) {
     		throw OperationOutcomeFactory.buildOperationOutcomeException(
     				new InvalidRequestException(
-    						"The telecom use can not be set to old."),
+    						"Only a single telecom can be sent in a register patient request."),
     				SystemCode.BAD_REQUEST, IssueType.INVALID);
+    	} else if (patient.getTelecom().size() == 1) {
+    		if (patient.getTelecom().get(0).getUse() != ContactPointUse.TEMP) {
+    			throw OperationOutcomeFactory.buildOperationOutcomeException(
+        				new InvalidRequestException(
+        						"The telecom use must be set to temp."),
+        				SystemCode.BAD_REQUEST, IssueType.INVALID);
+    		}
     	}
-    	
-    	boolean addressValid = patient.getAddress().stream()
-    			.allMatch(address -> address.getUse() != AddressUse.OLD);
-
-    	if (!addressValid) {
+    	 
+    	//Only a sinlge address with type temp may be sent
+    	if (patient.getAddress().size() > 1) {
     		throw OperationOutcomeFactory.buildOperationOutcomeException(
     				new InvalidRequestException(
-    						"The address use can not be set to old."),
+    						"Only a single address can be sent in a register patient request."),
     				SystemCode.BAD_REQUEST, IssueType.INVALID);
+    	} else if (patient.getAddress().size() == 1) {
+    		if (patient.getAddress().get(0).getUse() != AddressUse.TEMP) {
+    			throw OperationOutcomeFactory.buildOperationOutcomeException(
+        				new InvalidRequestException(
+        						"The address use must be set to temp."),
+        				SystemCode.BAD_REQUEST, IssueType.INVALID);
+    		}
     	}
     }
 

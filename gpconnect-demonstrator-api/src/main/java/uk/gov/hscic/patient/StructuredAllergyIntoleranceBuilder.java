@@ -184,7 +184,13 @@ public class StructuredAllergyIntoleranceBuilder {
     private ListResource initiateListResource(String NHS, String display) {
         ListResource listResource = new ListResource();
 
-        listResource.setCode(createCoding("http://snomed.info/sct", "TBD", display));
+        if(display.equals("Active Allergies")) {
+            listResource.setCode(createCoding("http://snomed.info/sct", "886921000000105", display));
+        }
+        else if(display.equals("Resolved Allergies")) {
+            listResource.setCode(createCoding("http://snomed.info/sct", "TBD", display));
+        }
+
         listResource.setMeta(createMeta(SystemURL.SD_GPC_LIST));
         listResource.setId("33");
         listResource.setStatus(ListStatus.CURRENT);

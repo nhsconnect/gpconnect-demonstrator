@@ -77,8 +77,6 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
         medicationOrder.getMeta().setVersionId(versionId);
         medicationOrder.getMeta().setLastUpdated(medicationOrderDetails.getLastUpdated());
 
-        //medicationOrder.setDateWritten(new DateTimeDt(medicationOrderDetails.getDateWritten()));
-
         switch (medicationOrderDetails.getOrderStatus().toLowerCase(Locale.UK)) {
             case "active":
                 medicationOrder.setStatus(MedicationRequestStatus.ACTIVE);

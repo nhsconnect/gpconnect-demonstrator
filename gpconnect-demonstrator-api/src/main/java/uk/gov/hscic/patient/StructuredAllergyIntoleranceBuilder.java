@@ -127,8 +127,7 @@ public class StructuredAllergyIntoleranceBuilder {
             final Identifier identifier = new Identifier();
             final String recorder = allergyIntoleranceEntity.getRecorder();
 
-            // TODO: This is just an example to demonstrate using Reference element instead of Identifier element
-
+            //This is just an example to demonstrate using Reference element instead of Identifier element
             if(recorder.equals("9476719931")) {
                 Reference rec = new Reference(
                         SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
@@ -202,7 +201,7 @@ public class StructuredAllergyIntoleranceBuilder {
         )));
     }
 
-        private void addEmptyReasonCode(ListResource list) {
+    private void addEmptyReasonCode(ListResource list) {
         CodeableConcept noContent = new CodeableConcept();
         noContent.setText(SystemConstants.NO_CONTENT);
         list.setEmptyReason(noContent);

@@ -1,37 +1,16 @@
 package uk.gov.hscic.medications;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-
-import org.hl7.fhir.dstu3.model.Annotation;
-import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.IdType;
-import org.hl7.fhir.dstu3.model.Identifier;
-import org.hl7.fhir.dstu3.model.ListResource;
 import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
 import org.hl7.fhir.dstu3.model.ListResource.ListMode;
 import org.hl7.fhir.dstu3.model.ListResource.ListStatus;
-import org.hl7.fhir.dstu3.model.MedicationRequest;
-import org.hl7.fhir.dstu3.model.Meta;
-import org.hl7.fhir.dstu3.model.Organization;
-import org.hl7.fhir.dstu3.model.Period;
-import org.hl7.fhir.dstu3.model.Practitioner;
-import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IIdType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.medication.requests.MedicationRequestResourceProvider;
@@ -43,6 +22,8 @@ import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
+
+import java.util.*;
 
 @Component
 public class PopulateMedicationBundle {
@@ -99,6 +80,7 @@ public class PopulateMedicationBundle {
 		
 		if(medicationStatements.isEmpty()) {
 			medicationStatementsList.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT));
+            medicationStatementsList.setNote(Arrays.asList(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE))));
 		}
 		medicationStatements.forEach(statement -> {
 			Reference statementRef = new Reference(new IdType("MedicationStatement", statement.getId()));
@@ -226,12 +208,13 @@ public class PopulateMedicationBundle {
 	private boolean dateIsWithinPeriod(Date date, Period period) {
 		Date startDate = period.getStart();
 		Date endDate = period.getEnd();
+		
 		if(startDate != null && endDate != null) {
-			return date.compareTo(startDate) > 0 && date.compareTo(endDate) < 0;
-		} else if (startDate != null && endDate == null) {
-			return date.compareTo(startDate) > 0;
-		} else if (startDate == null && endDate != null) {
-			return date.compareTo(endDate) < 0;
+			return !date.before(startDate) && !date.after(endDate);
+		} else if (startDate != null) {
+			return !date.before(startDate);
+		} else if (endDate != null) {
+			return !date.after(endDate);
 		} else {
 			return true;
 		}

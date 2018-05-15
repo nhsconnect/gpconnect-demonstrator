@@ -160,6 +160,10 @@
                     <span class="glyphicon glyphicon-info-sign" ng-click="gpConnectInfo()"></span>
                 </div>
             </div>
+
+	        <div>
+	            <div class="col-md-12 privacyHeader" ng-if="privacy">{{ privacy }}</div>
+	        </div> 
         </div>
         <!-- /.Header -->
 
@@ -210,13 +214,13 @@
         <!-- /.Header mobile -->
 
         <!-- Header toolbar -->
-        <div class="row header-toolbar hidden-xs">
-            <div class="col-sm-5 previousGroup">
+        <div class="row header-toolbar hidden-xs page-banner">
+            <div class="col-sm-5 previousGroup page-banner">
                 <span class="glyphicon glyphicon-arrow-left previous-page-arrow" ng-if="previousPage && currentUser.role == 'gpconnect'" ng-click="goBack()"></span>
                 <span class="previous-page-title" ng-if="previousPage && currentUser.role == 'gpconnect'">Back</span>
 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6 page-banner">
                 <span class="current-page-title">{{pageHeader}}</span>
             </div>
         </div>

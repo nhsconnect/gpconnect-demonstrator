@@ -87,6 +87,7 @@ public final class SystemURL {
     public static final String SD_CC_EXT_MEDICATION_REPEAT_INFORMATION = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationRepeatInformation-1";
     public static final String SD_CC_EXT_MEDICATION_PRESCRIPTION_TYPE = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1";
     public static final String SD_CC_EXT_MEDICATION_STATUS_REASON = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationStatusReason-1";
+	public static final String SD_CC_EXT_REGISTRATION_DETAILS = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-RegistrationDetails-1";
     public static final String SD_EXT_SCT_DESC_ID = "https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid";
     // FHIR ValueSet Constants
     public static final String VS_GPC_ERROR_WARNING_CODE = "https://fhir.nhs.uk/STU3/ValueSet/Spine-ErrorOrWarningCode-1";
@@ -117,11 +118,12 @@ public final class SystemURL {
     public static final String VS_CC_PRESCRIPTION_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-PrescriptionType-1";
     public static final String VS_CC_NHS_NUMBERVERIF = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-NHSNumberVerificationStatus-1";
     public static final String VS_CC_ETHNIC_CATEGORY_STU3 = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-EthnicCategory-1";
+    public static final String VS_CC_REGISTRATION_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-RegistrationType-1";
 //    public static final String VS_HUMAN_LANGUAGE = "http://fhir.nhs.net/ValueSet/human-language-1";
 
     // FHIR CodeSystem Constants
     public static final String CS_REGISTRATION_STATUS = "https://fhir.nhs.uk/CareConnect-RegistrationStatus-1";
-    public static final String CS_REGISTRATION_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-RegistrationType-1";
+    public static final String CS_REGISTRATION_TYPE = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-RegistrationType-1";
     public static final String CS_CC_ETHNIC_CATEGORY = "https://fhir.nhs.uk/CareConnect-EthnicCategory-1";
     public static final String CS_CC_RELIGIOUS_AFFILI = "https://fhir.nhs.uk/CareConnect-ReligiousAffiliation-1";
     public static final String CS_CC_RESIDENTIAL_STATUS = "https://fhir.nhs.uk/CareConnect-ResidentialStatus-1";
@@ -139,6 +141,8 @@ public final class SystemURL {
     public static final String CS_CC_LANG_ABILITY_PROFI_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-LanguageAbilityProficiency-1";
     public static final String CS_CC_PRESCRIPTION_TYPE_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1";
 
+    public static final String CS_MARITAL_STATUS = "http://hl7.org/fhir/v3/MaritalStatus";
+    public static final String CS_NULL_FLAVOUR = "http://hl7.org/fhir/v3/NullFlavor";
     public static final String CS_LIST_ORDER = "http://hl7.org/fhir/codesystem-list-order.html";
 
     //Appointment Reason URL

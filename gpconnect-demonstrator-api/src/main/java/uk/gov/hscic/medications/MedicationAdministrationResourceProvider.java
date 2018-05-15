@@ -37,7 +37,7 @@ public class MedicationAdministrationResourceProvider  implements IResourceProvi
         if (medicationAdministrationDetailList != null && !medicationAdministrationDetailList.isEmpty()) {
             for(MedicationAdministrationDetail medicationAdministrationDetail : medicationAdministrationDetailList) {
                 MedicationAdministration medicationAdministration = new MedicationAdministration();
-                
+
                 String resourceId = String.valueOf(medicationAdministrationDetail.getId());
                 String versionId = String.valueOf(medicationAdministrationDetail.getLastUpdated().getTime());
                 String resourceType = medicationAdministration.getResourceType().toString();
@@ -46,12 +46,12 @@ public class MedicationAdministrationResourceProvider  implements IResourceProvi
 
                 medicationAdministration.setId(id);
                 medicationAdministration.getMeta().setVersionId(versionId);
-                medicationAdministration.getMeta().setLastUpdated(medicationAdministrationDetail.getLastUpdated());       
+                medicationAdministration.getMeta().setLastUpdated(medicationAdministrationDetail.getLastUpdated());
 
                 medicationAdministration.addDefinition(new Reference("Patient/"+medicationAdministrationDetail.getPatientId()));
                 medicationAdministration.addDefinition(new Reference("Practitioner/"+medicationAdministrationDetail.getPractitionerId()));
-                medicationAdministration.setPrescription(new Reference("MedicationOrder/"+medicationAdministrationDetail.getPrescriptionId()));               
-                medicationAdministration.setEffective( new DateType(medicationAdministrationDetail.getAdministrationDate()));   
+                medicationAdministration.setPrescription(new Reference("MedicationOrder/"+medicationAdministrationDetail.getPrescriptionId()));
+                medicationAdministration.setEffective( new DateType(medicationAdministrationDetail.getAdministrationDate()));
                 medicationAdministration.setMedication(new Reference("Medication/"+medicationAdministrationDetail.getMedicationId()));
                 medicationAdministrations.add(medicationAdministration);
             }

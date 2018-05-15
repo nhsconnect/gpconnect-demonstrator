@@ -48,21 +48,21 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
                         .setVersionId(String.valueOf(medicationDispenseDetail.getLastUpdated().getTime()));
 
                 switch (medicationDispenseDetail.getStatus().toLowerCase(Locale.UK)) {
-                case "completed":
-                    medicationDispense.setStatus(MedicationDispenseStatus.COMPLETED);
-                    break;
-                case "entered_in_error":
-                    medicationDispense.setStatus(MedicationDispenseStatus.ENTEREDINERROR);
-                    break;
-                case "in_progress":
-                    medicationDispense.setStatus(MedicationDispenseStatus.INPROGRESS);
-                    break;
-                case "on_hold":
-                    medicationDispense.setStatus(MedicationDispenseStatus.ONHOLD);
-                    break;
-                case "stopped":
-                    medicationDispense.setStatus(MedicationDispenseStatus.STOPPED);
-                    break;
+                    case "completed":
+                        medicationDispense.setStatus(MedicationDispenseStatus.COMPLETED);
+                        break;
+                    case "entered_in_error":
+                        medicationDispense.setStatus(MedicationDispenseStatus.ENTEREDINERROR);
+                        break;
+                    case "in_progress":
+                        medicationDispense.setStatus(MedicationDispenseStatus.INPROGRESS);
+                        break;
+                    case "on_hold":
+                        medicationDispense.setStatus(MedicationDispenseStatus.ONHOLD);
+                        break;
+                    case "stopped":
+                        medicationDispense.setStatus(MedicationDispenseStatus.STOPPED);
+                        break;
                 }
 
                 medicationDispense.setSubject(new Reference("Patient/" + patientId));

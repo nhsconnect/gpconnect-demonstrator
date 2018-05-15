@@ -37,17 +37,13 @@ public class Interactions {
         put(InteractionId.CLAIM_PATIENT_CONDITION, new Interaction("Condition").httpVerb(RequestMethod.GET));
         put(InteractionId.CLAIM_PATIENT_DIAGNOSTIC_ORDER, new Interaction("DiagnosticOrder").httpVerb(RequestMethod.GET));
         put(InteractionId.CLAIM_PATIENT_DIAGNOSTIC_REPORT, new Interaction("DiagnosticReport").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_ENCOUNTER, new Interaction("Encounter").httpVerb(RequestMethod.GET));
         put(InteractionId.CLAIM_PATIENT_FLAG, new Interaction("Flag").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_IMMUNIZATION, new Interaction("Immunization").httpVerb(RequestMethod.GET));
         put(InteractionId.CLAIM_PATIENT_MEDICATION_ADMINISTRATION, new Interaction("MedicationAdministration").httpVerb(RequestMethod.GET));
         put(InteractionId.CLAIM_PATIENT_MEDICATION_DISPENSE, new Interaction("MedicationDispense").httpVerb(RequestMethod.GET));
         put(InteractionId.CLAIM_PATIENT_MEDICATION_ORDER, new Interaction("MedicationOrder").httpVerb(RequestMethod.GET));
         put(InteractionId.CLAIM_PATIENT_OBSERVATION, new Interaction("Observation").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_PROBLEM, new Interaction("Problem").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_PROCEDURES, new Interaction("Procedure").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_REFERRAL, new Interaction("Referral").httpVerb(RequestMethod.GET));
         put(InteractionId.OPERATION_GPC_GET_CARE_RECORD, new Interaction("Patient").operation("$gpc.getcarerecord").httpVerb(RequestMethod.POST));
+        put(InteractionId.OPERATION_GPC_GET_STRUCTURED_RECORD, new Interaction("Patient").operation("$gpc.getstructuredrecord").httpVerb(RequestMethod.POST));
         put(InteractionId.REST_SEARCH_SLOT, new Interaction("Slot").httpVerb(RequestMethod.GET));
         put(InteractionId.OPERATION_GPC_REGISTER_PATIENT, new Interaction("Patient").operation("$gpc.registerpatient").httpVerb(RequestMethod.POST));
         put(InteractionId.REST_CREATE_APPOINTMENT, new Interaction("Appointment").httpVerb(RequestMethod.POST));

@@ -1,48 +1,69 @@
-INSERT INTO gpconnect.adminitems
-  (nhsNumber,sectionDate,adminDate,Entry,Details)
+INSERT INTO gpconnect.allergyintolerance
+  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,coding,display,manCoding,manDisplay, recorder)
 VALUES
-  (9476718927,'2015-05-01 12:17:00','2015-05-01 12:17:00',"Cervical Smear Defaulter","");
+  (9476718927,'2016-07-01 12:00:00',"Cured","Swollen lips, tongue, eyes","Major", "resolved","unconfirmed","medication","2",'2016-05-01 12:00:00','2016-06-01 12:00:00',"886921000000105","Amoxicillin allergy (disorder)","703630003","Red eye (finding)", '9476718927'),
+  (9476718927,'2016-07-01 12:00:00',"Ongoing","Wheezing, chest tightness, shortness of breath","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00',"886921000000105","Salicylate allergy (disorder)","23924001","Tight chest (finding)", '9476718927');
 
-INSERT INTO gpconnect.allergies
-  (nhsNumber,currentOrHistoric,startDate,endDate,details)
+  INSERT INTO gpconnect.medication_statements
+  (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
+    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated)
 VALUES
-  (9476718927,"Historical",'2015-05-01 12:17:00','2015-05-01 12:17:00',"Skin allergy"),
-  (9476718927,"Current",'2015-05-01 12:17:00','2015-05-01 12:17:00',"Work allergy");
+ (7,'1958-01-04',12,'completed','Completed',2,'1958-01-04',null,'1958-01-04',12,'y','Yes','Take one tablet three times a day','Take with a full glass of water','1958-03-15');
 
-INSERT INTO gpconnect.clinicalitems
-  (nhsNumber,sectionDate,dateOfItem,Entry,Details)
+INSERT INTO gpconnect.medication_reason_codes
+ (id,reasonCode,reasonDisplay)
 VALUES
-  (9476718927,'2015-05-01 12:17:00','2015-05-01 12:17:00',"Abdominal X-ray","No evidence of osteomyelitis.");
+ (7,'1383008','Hallucinogen mood disorder');
 
-INSERT INTO gpconnect.encounters
-  (nhsNumber,sectionDate,encounterDate,title,details)
+INSERT INTO gpconnect.medication_notes
+ (id,dateWritten,authorReferenceUrl,authorId,noteText)
 VALUES
-  (9476718927,'2016-07-01 12:17:00','2016-07-01 12:17:00',"Miss Tanya Turnpike (Practice Nurse) - Dr Johnson and Partners (J12345)","Result : Full blood count - FBC - Normal - No Action.");
+ (6,'1958-01-03','https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,'Patient feels nauseous after taking');
 
-INSERT INTO gpconnect.immunisations
-  (nhsNumber,dateOfVac,vaccination,part,contents,details)
+INSERT INTO gpconnect.medication_statement_reason_codes
+ (medicationStatementId,reasonCodeId)
 VALUES
-  (9476718927,'2016-07-01 09:22:00',"HIV Injection","Manufacturer : fred<br />Batch: 1<br />Injection Location:Left leg<br />Expiry Date: 04-Oct-2016","Dont know","Dont Know");
+ (7,7);
 
-INSERT INTO gpconnect.medications_html
-  (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
+INSERT INTO gpconnect.medication_statement_notes
+ (medicationStatementId,noteId)
 VALUES
-  (9476718927,"Current","01-07-2016","Amoxicillin 500mg capsules Supply (42) capsule(s)","19-11-2019","Day Duration 4","3",NULL,NULL,NULL,NULL,"2"),
-  (9476718927,"Repeat","01-07-2016","Metformin 500mg tablets","19-11-2019","Day Duration 4","3","Issue more","Issue more","Issue more","Issue more","4"),
-  (9476718927,"Past","01-07-2016","Metformin 500mg tablets","19-11-2019","Day Duration 4","3","Issue more","Issue more","Issue more","Issue more","4");
+ (7,6);
 
-INSERT INTO gpconnect.observations
-  (nhsNumber,observationDate,entry,value,details)
+INSERT INTO gpconnect.medication_requests
+ (id,groupIdentifier,statusCode,statusDisplay,intentCode,intentDisplay,medicationId,patientId,encounterId,authoredOn,
+ requesterUrl,requesterId,authorisingPractitionerId,dosageText,dosageInstruction,dispenseRequestStartDate,dispenseRequestEndDate,
+ dispenseQuantityValue,dispenseQuantityUnit,dispenseQuantityText,expectedSupplyDuration,
+ dispenseRequestOrganizationId,priorMedicationRequestId,numberOfRepeatPrescriptionsAllowed,numberOfRepeatPrescriptionsIssued,
+ authorisationExpiryDate,prescriptionTypeCode,prescriptionTypeDisplay,statusReasonDate,statusReason,lastUpdated)
 VALUES
-  (9476718927,'2016-07-01 12:00:00',"Health of Nat Outc Sc item 1 - aggressive/disrupt behaviour","0","(Added from Questionnaire)");
+ (15,'group7','completed','Completed','plan','Plan',2,12,12,'1958-01-04',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Take one tablet three times a day','Take with a full glass of water',
+ '1958-01-04',null,null,null,'90 tablets','1',2,null,0,0,'1958-02-04','acute','Acute',null,null,'1958-03-15'),
+ (16,'group7','completed','Completed','order','Order',5,12,12,'1958-01-04',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Take one tablet three times a day','Take with a full glass of water',
+ '1958-01-04',null,null,null,'90 tabletst','1',2,null,0,0,'1958-02-04','acute','Acute',null,null,'1958-03-15');
 
-INSERT INTO gpconnect.problems
-  (nhsNumber,activeOrInactive,startDate,endDate,entry,significance,details)
-VALUES
-  (9476718927,"Active",'2016-07-01 12:00:00','2016-07-01 12:00:00',"Low Back Pain","Minor","Treated daily"),
-  (9476718927,"Inactive",'2016-07-01 12:00:00','2016-07-01 12:00:00',"Asthma","Major","Treated daily");
+UPDATE gpconnect.medication_statements SET medicationRequestId = 15 WHERE id = 7;
 
-INSERT INTO gpconnect.referrals
-  (nhsNumber,sectionDate,referral_from,referral_to,priority,details,lastUpdated)
+INSERT INTO gpconnect.medication_request_based_on
+ (id,referenceUrl,referenceId)
 VALUES
-  (9476718927,'2016-07-01 00:00:01','Dr Johnson &amp; Partners','Leeds District Nurses','Routine','Referral to local authority weight management programme<br />Waiting For Information','2016-07-25 12:00:00');
+ (5,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1',2);
+
+INSERT INTO gpconnect.medication_request_based_on_references
+ (medicationRequestId,basedOnReferenceId)
+VALUES
+ (15,5);
+
+INSERT INTO gpconnect.medication_request_reason_codes
+ (medicationRequestId,reasonCodeId)
+VALUES
+ (15,7),
+ (16,7);
+
+INSERT INTO gpconnect.medication_request_notes
+ (medicationRequestId,noteId)
+VALUES
+ (15,6),
+ (16,6);

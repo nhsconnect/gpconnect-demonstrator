@@ -1,0 +1,107 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+
+<div class="modal-body col-md-12" ng-show="showMedDetail">
+    <div>
+        <label>Status: </label>
+        {{actualMedicationRequestWithIssue.plan.status}}
+    </div>
+    <div>
+        <label>Type: </label>
+        {{actualMedicationRequestWithIssue.requestType}}
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Start Date: </label>
+            {{actualMedicationRequestWithIssue.plan.dispenseRequest.validityPeriod.start.split('T')[0]}}
+        </div>
+        <div class="col-md-6">
+            <label>End Date: </label>
+            {{actualMedicationRequestWithIssue.plan.dispenseRequest.validityPeriod.end.split('T')[0]}}
+        </div>
+    </div>
+
+    <div><label>Intent: </label> {{actualMedicationRequestWithIssue.plan.intent}}</div>
+    <div><label>Quantity: </label>
+        {{actualMedicationRequestWithIssue.plan.dispenseRequest.quantity.extension[0].valueString}}
+    </div>
+    <div><label>Dosage: </label> {{actualMedicationRequestWithIssue.plan.dosageInstruction[0].text}}</div>
+    <div><label>Instructions: </label> {{actualMedicationRequestWithIssue.plan.dosageInstruction[0].patientInstruction}}
+    </div>
+
+    <div ng-if="actualMedicationRequestWithIssue.requestType === 'Repeat'">
+        <div><label>No of repeats allowed: </label> {{actualMedicationRequestWithIssue.repeat[0].valuePositiveInt}}
+        </div>
+        <div><label>No of repeats issued: </label> {{actualMedicationRequestWithIssue.repeat[1].valuePositiveInt}}</div>
+    </div>
+
+    <div ng-repeat="issue in actualMedicationRequestWithIssue.issues">
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Start Date:</label>
+                {{issue.dispenseRequest.validityPeriod.start.split('T')[0]}}
+            </div>
+            <div class="col-md-6">
+                <label>End Date:</label>
+                {{issue.dispenseRequest.validityPeriod.end.split('T')[0]}}
+            </div>
+        </div>
+
+        <div><label>Intent: </label> {{issue.intent}}</div>
+        <div><label>Quantity: </label> {{issue.dispenseRequest.quantity.extension[0].valueString}}</div>
+        <div><label>Dosage: </label> {{issue.dosageInstruction[0].text}}</div>
+        <div><label>Instructions: </label> {{issue.dosageInstruction[0].patientInstruction}}</div>
+
+        <div ng-if="issue.extension.length > 1">
+            <div><label>No of repeats allowed:</label> {{issue.extension[0].extension[0].valuePositiveInt}}</div>
+            <div><label>No of repeats issued:</label> {{issue.extension[0].extension[1].valuePositiveInt}}</div>
+        </div>
+    </div>
+
+    <button class="btn pull-right" type="button" data-dismiss="dialog" ng-click="closeModalInstance()">
+        Close
+    </button>
+    <br>
+    <br>
+
+</div>
+
+
+<div class="modal-body" ng-show="showAllergyDetail">
+    <div><label>Clinical status: </label> {{listType.clinicalStatus}}</div>
+    <div><label>Onset Date: </label> {{listType.onsetDateTime.split('T')[0]}}</div>
+    <div><label>Reaction: </label> {{listType.reaction[0].manifestation[0].coding[0].display}}</div>
+    <div><label>Criticality: </label> {{listType.reaction[0].severity}}</div>
+    <div><label>Notes: </label> {{listType.note[0].text}}</div>
+
+    <button class="btn pull-right" type="button" data-dismiss="dialog" ng-click="closeModalInstance()">
+        Close
+    </button>
+    <br>
+    <br>
+
+</div>
+
+
+<div class="modal-body" ng-show="showResAllergyDetail">
+    <div><label>Clinical status: </label> {{listType.clinicalStatus}}</div>
+    <div><label>Onset Date: </label> {{listType.onsetDateTime.split('T')[0]}}</div>
+    <div><label>Reaction: </label>{{listType.reaction[0].manifestation[0].coding[0].display}}</div>
+    <div><label>Criticality: </label>{{listType.reaction[0].severity}}</div>
+    <div><label>Notes: </label>{{listType.note[0].text}}</div>
+
+    <hr>
+    <!-- ONLY FOR RESOLVED -->
+    <div><label>End Date: </label> {{listType.extension[0].extension[0].valueDateTime.split('T')[0]}}</div>
+    <div><label>End Reason: </label> {{listType.extension[0].extension[1].valueString}}</div>
+
+    <button class="btn pull-right" type="button" data-dismiss="dialog" ng-click="closeModalInstance()">
+        Close
+    </button>
+    <br>
+    <br>
+</div>
+
+

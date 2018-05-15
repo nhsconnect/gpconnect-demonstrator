@@ -50,196 +50,221 @@ import uk.gov.hscic.slots.PopulateSlotBundle;
 @Component
 public class OrganizationResourceProvider implements IResourceProvider {
 
-    @Autowired
-    public PopulateSlotBundle getScheduleOperation;
+	@Autowired
+	public PopulateSlotBundle getScheduleOperation;
 
-    @Autowired
-    private OrganizationSearch organizationSearch;
+	@Autowired
+	private OrganizationSearch organizationSearch;
 
-    public static Set<String> getCustomReadOperations() {
-        Set<String> customReadOperations = new HashSet<String>();
-        return customReadOperations;
-    }
+	public static Set<String> getCustomReadOperations() {
+		Set<String> customReadOperations = new HashSet<String>();
+		return customReadOperations;
+	}
 
-    @Override
-    public Class<Organization> getResourceType() {
-        return Organization.class;
-    }
+	@Override
+	public Class<Organization> getResourceType() {
+		return Organization.class;
+	}
 
-    @Read(version = true)
-    public Organization getOrganizationById(@IdParam IdType organizationId) {
+	@Read(version = true)
+	public Organization getOrganizationById(@IdParam IdType organizationId) {
 
-        OrganizationDetails organizationDetails = null;
+		OrganizationDetails organizationDetails = null;
 
-        String idPart = organizationId.getIdPart();
+		String idPart = organizationId.getIdPart();
 
-        try {
-            Long id = Long.parseLong(idPart);
-            organizationDetails = organizationSearch.findOrganizationDetails(id);
-            if (organizationDetails == null) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
-                        SystemCode.ORGANISATION_NOT_FOUND, IssueType.INVALID);
-            }
-        } catch (NumberFormatException nfe) {
+		try {
+			Long id = Long.parseLong(idPart);
+			organizationDetails = organizationSearch.findOrganizationDetails(id);
+			if (organizationDetails == null) {
+				throw OperationOutcomeFactory.buildOperationOutcomeException(
+						new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
+						SystemCode.ORGANISATION_NOT_FOUND, IssueType.INVALID);
+			}
+		} catch (NumberFormatException nfe) {
 
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
-                    SystemCode.ORGANISATION_NOT_FOUND, IssueType.INVALID);
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
+					SystemCode.ORGANISATION_NOT_FOUND, IssueType.INVALID);
 
-        }
+		}
 
-        return IdentifierValidator.versionComparison(organizationId,
-                convertOrganizaitonDetailsListToOrganizationList(Collections.singletonList(organizationDetails))
-                        .get(0));
-    }
+		return IdentifierValidator.versionComparison(organizationId,
+				convertOrganizaitonDetailsListToOrganizationList(Collections.singletonList(organizationDetails))
+						.get(0));
+	}
 
-    @Search
-    public List<Organization> getOrganizationsByODSCode(
-            @RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam tokenParam, @Sort SortSpec sort,
-            @Count Integer count) {
+	@Search
+	public List<Organization> getOrganizationsByODSCode(
+			@RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam tokenParam, @Sort SortSpec sort,
+			@Count Integer count) {
 
-        if (StringUtils.isBlank(tokenParam.getSystem()) || StringUtils.isBlank(tokenParam.getValue())) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Missing identifier token"), SystemCode.INVALID_PARAMETER,
-                    IssueType.INVALID);
-        }
+		if (StringUtils.isBlank(tokenParam.getSystem()) || StringUtils.isBlank(tokenParam.getValue())) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new InvalidRequestException("Missing identifier token"), SystemCode.INVALID_PARAMETER,
+					IssueType.INVALID);
+		}
 
-        if (tokenParam.getSystem().equals(SystemURL.ID_ODS_ORGANIZATION_CODE)
-                || tokenParam.getSystem().equals(SystemURL.ID_ODS_OLD_ORGANIZATION_CODE)) {
-            List<Organization> organizationDetails = convertOrganizaitonDetailsListToOrganizationList(
-                    organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue()));
-            if (organizationDetails.isEmpty()) {
+		if (tokenParam.getSystem().equals(SystemURL.ID_ODS_ORGANIZATION_CODE)
+				|| tokenParam.getSystem().equals(SystemURL.ID_ODS_OLD_ORGANIZATION_CODE)) {
+			List<Organization> organizationDetails = convertOrganizaitonDetailsListToOrganizationList(
+					organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue()));
+			if (organizationDetails.isEmpty()) {
 
-                return null;
-            }
-            if (sort != null && sort.getParamName().equalsIgnoreCase(Location.SP_STATUS)) {
-                Collections.sort(organizationDetails, (Organization a, Organization b) -> {
+				return null;
+			}
+			if (sort != null && sort.getParamName().equalsIgnoreCase(Location.SP_STATUS)) {
+				Collections.sort(organizationDetails, (Organization a, Organization b) -> {
 
-                    String aStatus = a.getName();
-                    String bStatus = b.getName();
+					String aStatus = a.getName();
+					String bStatus = b.getName();
 
-                    if (aStatus == null && bStatus == null) {
-                        return 0;
-                    }
+					if (aStatus == null && bStatus == null) {
+						return 0;
+					}
 
-                    if (aStatus == null && bStatus != null) {
-                        return -1;
-                    }
+					if (aStatus == null && bStatus != null) {
+						return -1;
+					}
 
-                    if (aStatus != null && bStatus == null) {
-                        return 1;
-                    }
+					if (aStatus != null && bStatus == null) {
+						return 1;
+					}
 
-                    return aStatus.compareToIgnoreCase(bStatus);
-                });
-            }
+					return aStatus.compareToIgnoreCase(bStatus);
+				});
+			}
 
-            // Update startIndex if we do paging
-            return count != null ? organizationDetails.subList(0, count) : organizationDetails;
+			// Update startIndex if we do paging
+			return count != null ? organizationDetails.subList(0, count) : organizationDetails;
 
-        } else {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Invalid system code"), SystemCode.INVALID_PARAMETER,
-                    IssueType.INVALID);
-        }
+		} else {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new InvalidRequestException("Invalid system code"), SystemCode.INVALID_PARAMETER,
+					IssueType.INVALID);
+		}
 
-    }
+	}
 
-    private List<Organization> convertOrganizaitonDetailsListToOrganizationList(List<OrganizationDetails> organizationDetails) {
-        Map<String, Organization> map = new HashMap<>();
+	private List<Organization> convertOrganizaitonDetailsListToOrganizationList(
+			List<OrganizationDetails> organizationDetails) {
+		Map<String, Organization> map = new HashMap<>();
 
-        for (OrganizationDetails organizationDetail : organizationDetails) {
+		for (OrganizationDetails organizationDetail : organizationDetails) {
 
-            String mapKey = String.format("%s", organizationDetail.getOrgCode());
-            if (map.containsKey(mapKey)) {
-                continue;
-            }
+			String mapKey = String.format("%s", organizationDetail.getOrgCode());
+			if (map.containsKey(mapKey)) {
+				continue;
+			}
 
-            Identifier identifier = new Identifier()
-                    .setSystem(SystemURL.ID_ODS_ORGANIZATION_CODE)
-                    .setValue(organizationDetail.getOrgCode());
-            
-            Organization organization = new Organization()
-                    .setName(organizationDetail.getOrgName())
-                    .addIdentifier(identifier);
+			Identifier identifier = new Identifier().setSystem(SystemURL.ID_ODS_ORGANIZATION_CODE)
+					.setValue(organizationDetail.getOrgCode());
 
-            String resourceId = String.valueOf(organizationDetail.getId());
-            String versionId = String.valueOf(organizationDetail.getLastUpdated().getTime());
-            String resourceType = organization.getResourceType().toString();
+			Organization organization = new Organization().setName(organizationDetail.getOrgName())
+					.addIdentifier(identifier);
 
-            IdType id = new IdType(resourceType, resourceId, versionId);
+			String resourceId = String.valueOf(organizationDetail.getId());
+			String versionId = String.valueOf(organizationDetail.getLastUpdated().getTime());
+			String resourceType = organization.getResourceType().toString();
 
-            organization.setId(id);
-            organization.getMeta().setVersionId(versionId);
-            organization.getMeta().setLastUpdated(organizationDetail.getLastUpdated());            
-            organization.getMeta().addProfile(SystemURL.SD_GPC_ORGANIZATION);         
+			IdType id = new IdType(resourceType, resourceId, versionId);
 
-            organization = addAdditionalProperties(organization);
+			organization.setId(id);
+			organization.getMeta().setVersionId(versionId);
+			organization.getMeta().setLastUpdated(organizationDetail.getLastUpdated());
+			organization.getMeta().addProfile(SystemURL.SD_GPC_ORGANIZATION);
 
-            map.put(mapKey, organization);
+			organization = addAdditionalProperties(organization);
 
-        }
+			map.put(mapKey, organization);
 
-        return new ArrayList<>(map.values());
-    }
+		}
 
-    // Adding in additional properties manually for now so we can test in the
-    // Test Suite
-    private Organization addAdditionalProperties(Organization organization) {
+		return new ArrayList<>(map.values());
+	}
 
-        Coding orgTypeCode = new Coding();
-        orgTypeCode.setCode("dept");
-        orgTypeCode.setDisplay("Hospital Department");
-        orgTypeCode.setSystem(SystemURL.VS_CC_ORGANISATION_TYPE);
+	public Organization convertOrganizaitonDetailsToOrganization(OrganizationDetails organizationDetails) {
 
-        organization.addTelecom(getValidTelecom());
-        organization.addAddress(getValidAddress());
-        // organization.addContact(getValidContact());
+		String mapKey = String.format("%s", organizationDetails.getOrgCode());
 
-        CodeableConcept orgType = new CodeableConcept();
-        orgType.addCoding(orgTypeCode);
-        organization.addType(orgType);
+		Identifier identifier = new Identifier().setSystem(SystemURL.ID_ODS_ORGANIZATION_CODE)
+				.setValue(organizationDetails.getOrgCode());
 
-        organization.addExtension().setUrl(SystemURL.SD_EXTENSION_CC_MAIN_LOCATION);
+		Organization organization = new Organization().setName(organizationDetails.getOrgName())
+				.addIdentifier(identifier);
 
-        return organization;
-    }
+		String resourceId = String.valueOf(organizationDetails.getId());
+		String versionId = String.valueOf(organizationDetails.getLastUpdated().getTime());
+		String resourceType = organization.getResourceType().toString();
 
-    private ContactPoint getValidTelecom() {
+		IdType id = new IdType(resourceType, resourceId, versionId);
 
-        ContactPoint orgTelCom = new ContactPoint();
-        orgTelCom.addExtension().setUrl("testUrl");
-        orgTelCom.setSystem(ContactPointSystem.PHONE);
-        orgTelCom.setUse(ContactPointUse.WORK);
+		organization.setId(id);
+		organization.getMeta().setVersionId(versionId);
+		organization.getMeta().setLastUpdated(organizationDetails.getLastUpdated());
+		organization.getMeta().addProfile(SystemURL.SD_GPC_ORGANIZATION);
 
-        return orgTelCom;
-    }
+		organization = addAdditionalProperties(organization);
 
-    private Address getValidAddress() {
+		return organization;
+	}
 
-        Address orgAddress = new Address();
-        orgAddress.setType(AddressType.PHYSICAL);
-        orgAddress.setUse(AddressUse.WORK);
+	// Adding in additional properties manually for now so we can test in the
+	// Test Suite
+	private Organization addAdditionalProperties(Organization organization) {
 
-        return orgAddress;
-    }
+		Coding orgTypeCode = new Coding();
+		orgTypeCode.setCode("dept");
+		orgTypeCode.setDisplay("Hospital Department");
+		orgTypeCode.setSystem(SystemURL.VS_CC_ORGANISATION_TYPE);
 
-    private ContactDetail getValidContact() {
+		organization.addTelecom(getValidTelecom());
+		organization.addAddress(getValidAddress());
+		// organization.addContact(getValidContact());
 
-        HumanName orgCtName = new HumanName();
-        orgCtName.setUse(NameUse.USUAL);
-        orgCtName.setFamily("FamilyName");
-        Coding coding = new Coding().setSystem(SystemURL.VS_CC_ORG_CT_ENTITYTYPE).setDisplay("ADMIN");
-        CodeableConcept orgCtPurpose = new CodeableConcept().addCoding(coding);
+		CodeableConcept orgType = new CodeableConcept();
+		orgType.addCoding(orgTypeCode);
+		organization.addType(orgType);
 
-        ContactDetail orgContact = new ContactDetail();
+		organization.addExtension().setUrl(SystemURL.SD_EXTENSION_CC_MAIN_LOCATION);
 
-        orgContact.setNameElement(orgCtName.getFamilyElement());
-        orgContact.addTelecom(getValidTelecom());
-        // orgContact.setAddress(getValidAddress());
-        // orgContact.setPurpose(orgCtPurpose);
+		return organization;
+	}
 
-        return orgContact;
-    }
+	private ContactPoint getValidTelecom() {
+
+		ContactPoint orgTelCom = new ContactPoint();
+		orgTelCom.addExtension().setUrl("testUrl");
+		orgTelCom.setSystem(ContactPointSystem.PHONE);
+		orgTelCom.setUse(ContactPointUse.WORK);
+
+		return orgTelCom;
+	}
+
+	private Address getValidAddress() {
+
+		Address orgAddress = new Address();
+		orgAddress.setType(AddressType.PHYSICAL);
+		orgAddress.setUse(AddressUse.WORK);
+
+		return orgAddress;
+	}
+
+	private ContactDetail getValidContact() {
+
+		HumanName orgCtName = new HumanName();
+		orgCtName.setUse(NameUse.USUAL);
+		orgCtName.setFamily("FamilyName");
+		Coding coding = new Coding().setSystem(SystemURL.VS_CC_ORG_CT_ENTITYTYPE).setDisplay("ADMIN");
+		CodeableConcept orgCtPurpose = new CodeableConcept().addCoding(coding);
+
+		ContactDetail orgContact = new ContactDetail();
+
+		orgContact.setNameElement(orgCtName.getFamilyElement());
+		orgContact.addTelecom(getValidTelecom());
+		// orgContact.setAddress(getValidAddress());
+		// orgContact.setPurpose(orgCtPurpose);
+
+		return orgContact;
+	}
 }

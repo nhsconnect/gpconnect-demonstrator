@@ -1,15 +1,165 @@
-<div>
-  
-  <h3>
-    <strong>Access Record - Structured</strong>
-  </h3>
-  
-  <p>
-  	The 'Access Record - Structured' capability is not available in version 1.1.0 of the GP Connect specification. 
-  </p>
-  
-  <p>
-  	'Access Record - Structured' will be implemented in an upcoming release.
-  </p>
-  
- </div>
+<div class="container-fluid row">
+
+    <div class="col-md-6">
+        <h3>
+            <strong>Medications</strong>
+        </h3>
+
+        <div ng-show="dateInvalid" class="alert alert-danger" role="alert">Please enter a valid dates, 'from' date
+            should be before 'to' date.
+        </div>
+        <div class="col-md-12 appDateRange">
+            <div class="col-md-5">
+                <text> Search from:</text>
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default btn-sm"
+                                ng-click="openDatePicker($event, 'startDate')">
+                        <i class="fa fa-calendar"></i>
+                    </button>
+                </span>
+                    <input type="text" class="form-control input-sm popupinputs" id="startDate" name="startDate"
+                           ng-model="search.startDate" ng-click="openDatePicker($event, 'startDate')"
+                           datepicker-popup="dd-MMM-y" min-date="" is-open="startDate" required/>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <text>until:</text>
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default btn-sm"
+                            ng-click="openDatePicker($event, 'endDate')" ng-disabled="">
+                    <i class="fa fa-calendar"></i>
+                </button>
+            </span>
+                    <input type="text" class="form-control input-sm popupinputs" id="endDate" name="endDate"
+                           ng-model="search.endDate" ng-click="openDatePicker($event, 'endDate')"
+                           datepicker-popup="dd-MMM-y" min-date="" is-open="endDate"
+                           ng-disabled=""/>
+                </div>
+            </div>
+
+            <div class="col-md-2 hidden-xs">
+                <div class="text-right search-button">
+                    <button id="appButtonSearchDateRange" class="btn btn-info"
+                            ng-click="getAllergyData(search.startDate, search.endDate, includePrescriptionIssues, includeResolvedAllergies )">
+                        <i class="fa"></i> Search
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <input type="checkbox" id="includePrescriptionIssues" name="" ng-model="includePrescriptionIssues"
+                       ng-change="getAllergyData(search.startDate, search.endDate, includePrescriptionIssues, includeResolvedAllergies )"
+                       ng-checked="true">
+                <label for="includePrescriptionIssues">Include prescription issues</label>
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <h4>Current Medications</h4>
+
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Med Name</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Status</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="currentElement in currentMedications" ng-click="showForm(currentElement.medication)">
+                <td>{{currentElement.medication.code.coding[0].extension[0].extension[1].valueString ==
+                    "Transfer-degraded medication entry" ? currentElement.medication.code.text :
+                    currentElement.medication.code.coding[0].extension[0].extension[1].valueString}}
+                </td>
+                <td>{{currentElement.statement.effectivePeriod.start.split('T')[0]}}</td>
+                <td>{{currentElement.statement.effectivePeriod.end.split('T')[0]}}</td>
+                <td>{{currentElement.statement.status}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <br>
+
+        <h4>Prescribing</h4>
+        <div class="create-button">
+            <select ng-model="defaultMedication" ng-change="onChange(defaultMedication)">
+                <option value="" ng-repeat="(key ,value) in AllMedications"
+                        ng-style="{ 'background-color': value.length >0 ? 'red' :'white'}"
+                        ng-value="option" onselect="onChange()"> {{key}}
+                </option>
+            </select>
+            <button class="btn btn-info" ng-click="addNewMedication()" ng-disabled="true">Add</button>
+        </div>
+
+
+    </div>
+
+
+    <div class="col-md-6">
+        <h3>
+            <strong>Allergies</strong>
+        </h3>
+
+        <div class="col-md-12">
+            <div class="col-md-5">
+                <input type="checkbox" id="includeResolvedAllergies" name="" ng-model="includeResolvedAllergies"
+                       ng-change="getAllergyData(search.startDate, search.endDate, includePrescriptionIssues, includeResolvedAllergies)"
+                       ng-checked="true">
+                <label for="includeResolvedAllergies">Resolved Allergies</label>
+            </div>
+        </div>
+
+        <h4>Active Allergies</h4>
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Reaction</th>
+                <th scope="col">Start Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="allergyDetail in ActiveAllergiesList" ng-click="showForm(allergyDetail)">
+                <td>{{allergyDetail.code.coding[0].display}}</td>
+                <td>{{allergyDetail.reaction[0].manifestation[0].coding[0].display}}</td>
+                <td>{{allergyDetail.onsetDateTime.split('T')[0]}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div ng-show="includeResolvedAllergies">
+            <h4>Resolved Allergies</h4>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Reaction</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="allergyDetail in ResolvedAllergiesList" ng-click="showForm(allergyDetail)">
+                    <td>{{allergyDetail.code.coding[0].display}}</td>
+                    <td>{{allergyDetail.reaction[0].manifestation[0].coding[0].display}}</td>
+                    <td>{{allergyDetail.onsetDateTime.split('T')[0]}}</td>
+                    <td>{{allergyDetail.extension[0].extension[0].valueDateTime.split('T')[0]}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+
+</div>
+</div>

@@ -411,7 +411,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private enum Operation {
 
-        GetCareRecord("$gpc.getcarerecord"), GetSchedule("$gpc.getschedule"), RegisterPatient("$gpc.registerpatient");
+        GetCareRecord("$gpc.getcarerecord"), GetSchedule("$gpc.getschedule"), RegisterPatient("$gpc.registerpatient"), GetStructured("$gpc.getstructuredrecord");
 
         private Operation(String operationName) {
             this.operationName = operationName;
@@ -473,7 +473,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private enum Resource {
 
-        AllergyIntolerance, Appointment, Condition, DiagnosticOrder, DiagnosticReport, Encounter, Flag, Immunization, MedicationAdministration, MedicationDispense, MedicationOrder, Observation, Problem, Procedure, Referral, Patient, Organization, Order, Location, metadata, Practitioner, Slot;
+        AllergyIntolerance, Appointment, Condition, DiagnosticOrder, DiagnosticReport, Flag, MedicationAdministration, MedicationDispense, MedicationOrder, Patient, Organization, Order, Location, metadata, Practitioner, Slot;
 
         private static final Map<String, Resource> mappings = new HashMap<>();
 

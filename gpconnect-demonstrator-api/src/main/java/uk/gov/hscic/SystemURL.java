@@ -69,19 +69,19 @@ public final class SystemURL {
     public static final String SD_EXTENSION_CC_MAIN_LOCATION = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MainLocation-1";
     public static final String SD_EXTENSION_CC_REG_DETAILS = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-RegistrationDetails-1";
     public static final String SD_EXTENSION_CC_ORG_PERIOD = "http://hl7.org/fhir/StructureDefinition/organization-period";
-    public static final String SD_CC_EXT_RELIGIOUS_AFFILI = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ReligiousAffiliation-1";
-    public static final String SD_PATIENT_CADAVERIC_DON = "http://hl7.org/fhir/StructureDefinition/patient-cadavericDonor";
-    public static final String SD_CC_EXT_RESIDENTIAL_STATUS = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ResidentialStatus-1";
-    public static final String SD_CC_EXT_TREATMENT_CAT = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-TreatmentCategory-1";
-    public static final String SD_CC_EXT_NHS_COMMUNICATION = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSCommunication-1";
-    public static final String SD_CC_EXT_COMM_LANGUAGE = "Language";
-    public static final String SD_CC_COMM_PREFERRED = "Preferred";
-    public static final String SD_CC_MODE_OF_COMM = "modeOfCommunication";
-    public static final String SD_CC_COMM_PROFICIENCY = "communicationProficiency";
-    public static final String SD_CC_INTERPRETER_REQUIRED = "interpreterRequired";
-    public static final String SD_CC_APPOINTMENT_BOOKINGORG = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-BookingOrganisation-1";
-    public static final String SD_CC_APPOINTMENT_CREATED = "https://fhir.nhs.uk/StructureDefinition/extension-gpconnect-appointment-created-1";
 
+    public static final String SD_CC_EXT_RELIGIOUS_AFFILI = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ReligiousAffiliation-1";   
+    public static final String SD_PATIENT_CADAVERIC_DON = "http://hl7.org/fhir/StructureDefinition/patient-cadavericDonor";   
+    public static final String SD_CC_EXT_RESIDENTIAL_STATUS = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ResidentialStatus-1";   
+    public static final String SD_CC_EXT_TREATMENT_CAT = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-TreatmentCategory-1";   
+    public static final String SD_CC_EXT_NHS_COMMUNICATION = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSCommunication-1";   
+    public static final String SD_CC_EXT_COMM_LANGUAGE = "Language";   
+    public static final String SD_CC_COMM_PREFERRED = "Preferred";   
+    public static final String SD_CC_MODE_OF_COMM = "modeOfCommunication";   
+    public static final String SD_CC_COMM_PROFICIENCY = "communicationProficiency";   
+    public static final String SD_CC_INTERPRETER_REQUIRED = "interpreterRequired";   
+    public static final String SD_CC_APPOINTMENT_BOOKINGORG = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-BookingOrganisation-1";   
+    public static final String SD_CC_APPOINTMENT_CREATED = "https://fhir.nhs.uk/StructureDefinition/extension-gpconnect-appointment-created-1";   
     public static final String SD_CC_EXT_MEDICATION_STATEMENT_LAST_ISSUE = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationStatementLastIssueDate-1";
     public static final String SD_CC_EXT_MEDICATION_QUANTITY_TEXT = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1";
     public static final String SD_CC_EXT_MEDICATION_REPEAT_INFORMATION = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationRepeatInformation-1";
@@ -139,6 +139,7 @@ public final class SystemURL {
     public static final String CS_CC_HUMAN_LANG_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-HumanLanguage-1";
     public static final String CS_CC_LANG_ABILITY_MODE_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-LanguageAbilityMode-1";
     public static final String CS_CC_LANG_ABILITY_PROFI_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-LanguageAbilityProficiency-1";
+    public static final String CS_CC_PRESCRIPTION_TYPE_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1";
 
     public static final String CS_MARITAL_STATUS = "http://hl7.org/fhir/v3/MaritalStatus";
     public static final String CS_NULL_FLAVOUR = "http://hl7.org/fhir/v3/NullFlavor";
@@ -146,7 +147,7 @@ public final class SystemURL {
 
     //Appointment Reason URL
     public static final String DEFAULTREASONURL = "DefaultReasonURL";
-
+    
     //CodeSystem URLs
     public static final String VS_SNOWMED = "http://snomed.info/sct";
     public static final String CS_UNITS_OF_MEASURE = "http://unitsofmeasure.org";

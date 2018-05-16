@@ -67,7 +67,7 @@ public class PopulateMedicationBundle {
 		medicationStatementsList.setId(new IdType(1));
 		
 		medicationStatementsList.setMeta(new Meta().addProfile(SystemURL.SD_GPC_LIST)
-				.setVersionId(String.valueOf(new Date().getTime())));
+				.setVersionId(String.valueOf(new Date().getTime())).setLastUpdated(new Date()));
 		medicationStatementsList.setStatus(ListStatus.CURRENT);
 		medicationStatementsList.setId(new IdDt(1));
 

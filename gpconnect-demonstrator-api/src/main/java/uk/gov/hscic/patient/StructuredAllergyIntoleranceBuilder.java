@@ -14,10 +14,7 @@ import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntole
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch;
 import uk.gov.hscic.practitioner.PractitionerSearch;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class StructuredAllergyIntoleranceBuilder {
@@ -237,6 +234,7 @@ public class StructuredAllergyIntoleranceBuilder {
     private Meta createMeta(String profile) {
         final Meta meta = new Meta();
         meta.addProfile(profile);
+        meta.setLastUpdated(new Date());
         meta.setVersionId("3");
 
         return meta;

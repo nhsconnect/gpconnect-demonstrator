@@ -91,7 +91,7 @@ public class WebTokenValidator {
         // Checking the expiry time is 5 minutes after creation
         if (webToken.getExp() - timeValidationIdentifierInt != 300) {
             throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
-                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Request time expired", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "JWT expiry time is not 5 minutes after the creation time", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
     }
 

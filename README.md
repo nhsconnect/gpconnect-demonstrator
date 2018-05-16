@@ -196,10 +196,13 @@ In the WAR file there is a “defaultPracticeOdsCode.html” which contains the 
 ##### ENJOY!
 
 
-### Additional Config Options
+## Additional Config Options
 
 The following are config values that can be added to the demonstrator config file to allow for additional logging or functionality within the demonstrator deployment.
 
 | Config Name | Default | Description |
 | --- | --- | --- |
+| database.reset | true | This parameter controls the automatic cleardown of the appointment data within the demonstrator. For testing and the public demonstrator the application deletes all appointments and slot each night before creating new slots which can be used to create appointments within the demonstrator. This is so that there is always slots available for testing and demonstrating. |
+| request.leeway | 5 | This parameter allows a future JWT to be valid where the creation time is up to the number of seconds in the future that is specified by the paramter, default is 5 seconds. The expiry time must still be 5 minutes after Iat time but the Iat time can be up to the number of seconds into the future. This has implemented to compensate for time varience on public facing server which is not time sychronised. |
 | validateJWT | true | This parameter allows the JWT content validation to be turned off within the demonstrator. If the value is set to true the content of the JWT within the request will be ignored and will not cause the request to be rejected. |
+| logCertsToConsole | false | This parameter allows the recieved certificate from the consumer to be output to the console and also an output of the accepted certificates. |

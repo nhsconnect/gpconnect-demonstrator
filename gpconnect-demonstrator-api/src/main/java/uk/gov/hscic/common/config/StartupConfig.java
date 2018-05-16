@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class StartupConfig implements ApplicationListener<ContextRefreshedEvent> {
     private static final Logger LOG = Logger.getLogger(StartupConfig.class);
 
-    @Value("${database.reset}")
+    @Value("${database.reset:true}")
     private boolean databaseReset;
 
     @Autowired

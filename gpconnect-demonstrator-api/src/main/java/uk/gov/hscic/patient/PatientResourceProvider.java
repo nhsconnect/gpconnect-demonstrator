@@ -278,6 +278,12 @@ public class PatientResourceProvider implements IResourceProvider {
                 try {
                     registeredPatient = patientDetailsToRegisterPatientResourceConverter(
                             patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
+                    if(unregisteredPatient.hasTelecom()) {
+                        registeredPatient.setTelecom(unregisteredPatient.getTelecom());
+                    }
+                    if (unregisteredPatient.hasAddress()) {
+                        registeredPatient.setAddress(unregisteredPatient.getAddress());
+                    }
                     
                     addPreferredBranchSurgeryExtension(registeredPatient);
                 } catch (FHIRException e) {

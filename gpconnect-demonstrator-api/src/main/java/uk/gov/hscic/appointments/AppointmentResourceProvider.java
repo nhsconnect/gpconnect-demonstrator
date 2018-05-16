@@ -316,6 +316,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
                                 String.format("Slot resource reference value %s is not a valid resource.", slotId)),
                         SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
+            
+            if (slotDetail.getFreeBusyType().equals("BUSY")) {
+            	throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new ResourceVersionConflictException(
+                                String.format("Slot is already in use.", slotId)),
+                        SystemCode.DUPLICATE_REJECTED, IssueType.CONFLICT);
+            }
 
             slots.add(slotDetail);
         }

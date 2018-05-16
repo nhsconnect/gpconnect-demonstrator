@@ -289,6 +289,13 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         // return outgoingException;
         // }
         
+        if (theException instanceof ResourceVersionConflictException 
+        		&& theException.getMessage().contains("Slot is already in use.")){
+            ResourceVersionConflictException exception = (ResourceVersionConflictException) theException;
+            
+            return OperationOutcomeFactory.buildOperationOutcomeException(exception, SystemCode.DUPLICATE_REJECTED, IssueType.CONFLICT);
+        }
+        
         if (theException instanceof ResourceVersionConflictException){
             ResourceVersionConflictException exception = (ResourceVersionConflictException) theException;
             
@@ -360,7 +367,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             throwResourceNotFoundException(String.format("Unexpected resource identifier in URI - %s", requestURI),
                     interaction.getResource());
         }
-
+		
         if (interaction.validateContainedResource(requestURI) == false) {
             throwBadRequestException(String.format("Unexpected contained resource in URI - %s", requestURI));
         }

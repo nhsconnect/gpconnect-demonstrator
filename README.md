@@ -194,3 +194,12 @@ There is the concept of federated practices within the GP Connect Demonstrator, 
 In the WAR file there is a “defaultPracticeOdsCode.html” which contains the default practice ODS code for the instance of the GP Connect Demonstrator. This ODS code will be used to lookup the practice details within the “providerRouting.json” file.
 
 ##### ENJOY!
+
+
+### Additional Config Options
+
+The following are config values that can be added to the demonstrator config file to allow for additional logging or functionality within the demonstrator deployment.
+
+| Config Name | Default | Description |
+| --- | --- | --- |
+| validateJWT | true | This parameter allows the JWT content validation to be turned off within the demonstrator. If the value is set to true the content of the JWT within the request will be ignored and will not cause the request to be rejected. |

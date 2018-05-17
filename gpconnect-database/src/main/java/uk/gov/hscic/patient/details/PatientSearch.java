@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.hl7.fhir.dstu3.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,9 @@ public class PatientSearch {
 
     @Autowired
     private PatientEntityToSummaryTransformer patientEntityToSummaryTransformer;
+
+    @Autowired
+    private PatientDetailsToEntityTransformer patientDetailsToEntityTransformer;
 
     public List<PatientSummary> findAllPatients() {
         final Iterable<PatientEntity> patients = patientRepository.findAll(new Sort("nhsNumber"));
@@ -82,5 +86,10 @@ public class PatientSearch {
         return patient == null
                 ? null
                 : patientEntityToSummaryTransformer.transform(patient);
+    }
+
+    public void updatePatient(final PatientDetails patientDetails) {
+        PatientEntity patientEntity = patientDetailsToEntityTransformer.transform(patientDetails);
+        patientRepository.save(patientEntity);
     }
 }

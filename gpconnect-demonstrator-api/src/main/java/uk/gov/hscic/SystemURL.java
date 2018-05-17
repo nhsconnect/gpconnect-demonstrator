@@ -95,7 +95,7 @@ public final class SystemURL {
     public static final String VS_GPC_RECORD_SECTION = "https://fhir.nhs.uk/STU3/ValueSet/GPConnect-RecordSection-1";
     public static final String VS_GPC_DELIVERY_CHANNEL = "https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-DeliveryChannel-1";
     public static final String VS_GPC_PRACTITIONER_ROLE = "https://fhir.nhs.uk/STU3/ValueSet/GPConnect-PractitionerRole-1";
-    public static final String VS_HUMAN_LANGUAGE = "http://fhir.nhs.net/ValueSet/human-language-1";
+    public static final String VS_HUMAN_LANGUAGE = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-HumanLanguage-1";
     public static final String VS_REGISTRATION_STATUS = "http://fhir.nhs.net/ValueSet/registration-status-1";
     public static final String VS_REGISTRATION_TYPE = "http://fhir.nhs.net/ValueSet/registration-type-1";
     public static final String VS_SDS_JOB_ROLE_NAME = "https://fhir.hl7.org.uk/ValueSet/CareConnect-SDSJobRoleName-1";

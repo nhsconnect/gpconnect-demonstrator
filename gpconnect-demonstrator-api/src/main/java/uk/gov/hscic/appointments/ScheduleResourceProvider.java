@@ -113,12 +113,15 @@ public class ScheduleResourceProvider implements IResourceProvider {
         identifier.setSystem(SystemURL.ID_GPC_SCHEDULE_IDENTIFIER);
         identifier.setValue(scheduleDetail.getIdentifier());
         schedule.addIdentifier(identifier);
+                
         Coding coding = new Coding().setSystem(SystemURL.HL7_VS_C80_PRACTICE_CODES)
                 .setCode(scheduleDetail.getTypeCode()).setDisplay(scheduleDetail.getTypeDescription());
         CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
         codableConcept.setText(scheduleDetail.getTypeDescription());
-        schedule.setServiceType(Collections.singletonList(codableConcept));
-        schedule.addActor(new Reference("Location/" + scheduleDetail.getLocationId()));        
+        schedule.setSpecialty(Collections.singletonList(codableConcept));
+        
+        schedule.addActor(new Reference("Location/" + scheduleDetail.getLocationId()));    
+        
         //schedule.setActor((List<Reference>) new Reference("Location/" + scheduleDetail.getLocationId()));
         Period period = new Period();
         period.setStart(scheduleDetail.getStartDateTime());

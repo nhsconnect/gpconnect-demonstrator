@@ -687,6 +687,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         final List<Coding> codingList = appointment.getAppointmentType().getCoding();
 
         if (!codingList.isEmpty()) {
+        	appointmentDetail.setTypeCode(Long.valueOf(codingList.get(0).getCode()));
             appointmentDetail.setTypeDisplay(codingList.get(0).getDisplay());
         }
 

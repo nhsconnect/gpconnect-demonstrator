@@ -14,36 +14,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
-import org.hl7.fhir.dstu3.model.Appointment;
-import org.hl7.fhir.dstu3.model.BooleanType;
-import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleType;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.ContactPoint;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
-import org.hl7.fhir.dstu3.model.DateTimeType;
 import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
-import org.hl7.fhir.dstu3.model.Extension;
-import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.HumanName.NameUse;
-import org.hl7.fhir.dstu3.model.IdType;
-import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Identifier.IdentifierUse;
-import org.hl7.fhir.dstu3.model.MedicationAdministration;
-import org.hl7.fhir.dstu3.model.MedicationDispense;
-import org.hl7.fhir.dstu3.model.MedicationRequest;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
-import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
-import org.hl7.fhir.dstu3.model.Patient;
-import org.hl7.fhir.dstu3.model.Period;
-import org.hl7.fhir.dstu3.model.Practitioner;
-import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.dstu3.model.Type;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -278,7 +259,14 @@ public class PatientResourceProvider implements IResourceProvider {
                 try {
                     registeredPatient = patientDetailsToRegisterPatientResourceConverter(
                             patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
-                    
+                    if(unregisteredPatient.hasTelecom()) {
+                        registeredPatient.setTelecom(unregisteredPatient.getTelecom());
+                    }
+                    if (unregisteredPatient.hasAddress()) {
+                        registeredPatient.setAddress(unregisteredPatient.getAddress());
+                    }
+
+                    patientSearch.updatePatient(registerPatientResourceConverterToPatientDetail(registeredPatient));
                     addPreferredBranchSurgeryExtension(registeredPatient);
                 } catch (FHIRException e) {
                     // TODO Auto-generated catch block
@@ -560,6 +548,18 @@ public class PatientResourceProvider implements IResourceProvider {
         // patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
         patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
         patientDetails.setRegistrationType(TEMPORARY_RESIDENT_REGISTRATION_TYPE);
+        patientDetails.setTelephone(patientResource.getTelecom().get(0).getValue());
+        List<StringType> addressLineList = patientResource.getAddress().get(0).getLine();
+        StringBuilder addressBuilder = new StringBuilder();
+        for(StringType addressLine: addressLineList) {
+            addressBuilder.append(addressLine);
+            addressBuilder.append(",");
+        }
+        addressBuilder.append(patientResource.getAddress().get(0).getCity()).append(",");
+        addressBuilder.append(patientResource.getAddress().get(0).getPostalCode());
+
+
+        patientDetails.setAddress(addressBuilder.toString());
 
         return patientDetails;
     }

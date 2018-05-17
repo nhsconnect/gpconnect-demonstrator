@@ -246,6 +246,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     new UnprocessableEntityException("Appointment id shouldn't be provided!"),
                     SystemCode.INVALID_RESOURCE, IssueType.INVALID);
         }
+        if (!appointment.getReason().isEmpty()) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Appointment reason shouldn't be provided!"),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        }
 
         boolean hasRequiredResources = appointment.getParticipant().stream()
                 .map(participant -> participant.getActor().getReference()).collect(Collectors.toList())
@@ -310,6 +315,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         new UnprocessableEntityException(
                                 String.format("Slot resource reference value %s is not a valid resource.", slotId)),
                         SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            }
+            
+            if (slotDetail.getFreeBusyType().equals("BUSY")) {
+            	throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new ResourceVersionConflictException(
+                                String.format("Slot is already in use.", slotId)),
+                        SystemCode.DUPLICATE_REJECTED, IssueType.CONFLICT);
             }
 
             slots.add(slotDetail);
@@ -675,6 +687,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         final List<Coding> codingList = appointment.getAppointmentType().getCoding();
 
         if (!codingList.isEmpty()) {
+        	appointmentDetail.setTypeCode(Long.valueOf(codingList.get(0).getCode()));
             appointmentDetail.setTypeDisplay(codingList.get(0).getDisplay());
         }
 

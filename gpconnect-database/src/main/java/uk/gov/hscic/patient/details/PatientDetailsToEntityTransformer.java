@@ -27,7 +27,7 @@ public class PatientDetailsToEntityTransformer implements Transformer<PatientDet
 			String address = patientDetails.getAddress();
 
 			if (address != null) {
-				final String[] addressLines = StringUtils.split(address, ", ");
+				final String[] addressLines = StringUtils.split(address, ",");
 
 				if (addressLines.length > 0) {
 					patientEntity.setAddress1(addressLines[0]);

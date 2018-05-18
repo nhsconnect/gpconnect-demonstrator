@@ -16,37 +16,20 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
-import org.hl7.fhir.dstu3.model.Appointment;
-import org.hl7.fhir.dstu3.model.BooleanType;
-import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleType;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.ContactPoint;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse;
-import org.hl7.fhir.dstu3.model.DateTimeType;
 import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
-import org.hl7.fhir.dstu3.model.Extension;
-import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.HumanName.NameUse;
-import org.hl7.fhir.dstu3.model.IdType;
-import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Identifier.IdentifierUse;
-import org.hl7.fhir.dstu3.model.MedicationAdministration;
-import org.hl7.fhir.dstu3.model.MedicationDispense;
-import org.hl7.fhir.dstu3.model.MedicationRequest;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
+
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
-import org.hl7.fhir.dstu3.model.Patient;
-import org.hl7.fhir.dstu3.model.Period;
-import org.hl7.fhir.dstu3.model.Practitioner;
-import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.dstu3.model.Type;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -382,9 +365,12 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 if (patientDetails == null) {
                     patientDetails = registerPatientResourceConverterToPatientDetail(unregisteredPatient);
+                    
                     patientStore.create(patientDetails);
                 } else {
                     patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
+                    updateAddressAndTelecom(unregisteredPatient, patientDetails);
+                    
                     patientStore.update(patientDetails);
                 }
                 try {
@@ -414,6 +400,24 @@ public class PatientResourceProvider implements IResourceProvider {
         
         return bundle;
     }
+
+	private void updateAddressAndTelecom(Patient unregisteredPatient, PatientDetails patientDetails) {
+		if (unregisteredPatient.getTelecom().size() > 0) {
+			patientDetails.setTelephone(unregisteredPatient.getTelecom().get(0).getValue());
+		}
+		if (unregisteredPatient.getAddress().size() > 0) {
+			List<StringType> addressLineList = unregisteredPatient.getAddress().get(0).getLine();
+			StringBuilder addressBuilder = new StringBuilder();
+			for(StringType addressLine: addressLineList) {
+				addressBuilder.append(addressLine);
+				addressBuilder.append(",");
+			}
+			addressBuilder.append(unregisteredPatient.getAddress().get(0).getCity()).append(",");
+			addressBuilder.append(unregisteredPatient.getAddress().get(0).getPostalCode());
+
+			patientDetails.setAddress(addressBuilder.toString());
+		}
+	}
 
     private Boolean IsInactiveTemporaryPatient(PatientDetails patientDetails) {
 
@@ -453,7 +457,7 @@ public class PatientResourceProvider implements IResourceProvider {
     		}
     	}
     	 
-    	//Only a sinlge address with type temp may be sent
+    	//Only a single address with type temp may be sent
     	if (patient.getAddress().size() > 1) {
     		throw OperationOutcomeFactory.buildOperationOutcomeException(
     				new InvalidRequestException(
@@ -672,6 +676,7 @@ public class PatientResourceProvider implements IResourceProvider {
         // patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
         patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
         patientDetails.setRegistrationType(TEMPORARY_RESIDENT_REGISTRATION_TYPE);
+        updateAddressAndTelecom(patientResource, patientDetails);
 
         return patientDetails;
     }
@@ -812,7 +817,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
 		Extension regDetailsExtension = new Extension(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
 
-		Period registrationPeriod = new Period().setStart(registrationStartDateTime).setEnd(registrationEndDateTime);
+		Period registrationPeriod = new Period().setStart(registrationStartDateTime);
+        if (registrationEndDateTime != null) {
+        	registrationPeriod.setEnd(registrationEndDateTime);
+        }
 
 		Extension regPeriodExt = new Extension(SystemURL.SD_CC_EXT_REGISTRATION_PERIOD, registrationPeriod);
 		regDetailsExtension.addExtension(regPeriodExt);

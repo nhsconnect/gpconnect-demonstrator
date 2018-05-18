@@ -707,7 +707,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
         Extension regDetailsExtension = new Extension(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
 
-        Period registrationPeriod = new Period().setStart(registrationStartDateTime).setEnd(registrationEndDateTime);
+        Period registrationPeriod = new Period().setStart(registrationStartDateTime);
+        if (registrationEndDateTime != null) {
+        	registrationPeriod.setEnd(registrationEndDateTime);
+        }
 
         Extension regPeriodExt = new Extension(SystemURL.SD_CC_EXT_REGISTRATION_PERIOD, registrationPeriod);
         regDetailsExtension.addExtension(regPeriodExt);

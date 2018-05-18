@@ -251,22 +251,18 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 if (patientDetails == null) {
                     patientDetails = registerPatientResourceConverterToPatientDetail(unregisteredPatient);
+                    
                     patientStore.create(patientDetails);
                 } else {
                     patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
+                    updateAddressAndTelecom(unregisteredPatient, patientDetails);
+                    
                     patientStore.update(patientDetails);
                 }
                 try {
                     registeredPatient = patientDetailsToRegisterPatientResourceConverter(
                             patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
-                    if(unregisteredPatient.hasTelecom()) {
-                        registeredPatient.setTelecom(unregisteredPatient.getTelecom());
-                    }
-                    if (unregisteredPatient.hasAddress()) {
-                        registeredPatient.setAddress(unregisteredPatient.getAddress());
-                    }
-
-                    patientSearch.updatePatient(registerPatientResourceConverterToPatientDetail(registeredPatient));
+                    
                     addPreferredBranchSurgeryExtension(registeredPatient);
                 } catch (FHIRException e) {
                     // TODO Auto-generated catch block
@@ -290,6 +286,24 @@ public class PatientResourceProvider implements IResourceProvider {
         
         return bundle;
     }
+
+	private void updateAddressAndTelecom(Patient unregisteredPatient, PatientDetails patientDetails) {
+		if (unregisteredPatient.getTelecom().size() > 0) {
+			patientDetails.setTelephone(unregisteredPatient.getTelecom().get(0).getValue());
+		}
+		if (unregisteredPatient.getAddress().size() > 0) {
+			List<StringType> addressLineList = unregisteredPatient.getAddress().get(0).getLine();
+			StringBuilder addressBuilder = new StringBuilder();
+			for(StringType addressLine: addressLineList) {
+				addressBuilder.append(addressLine);
+				addressBuilder.append(",");
+			}
+			addressBuilder.append(unregisteredPatient.getAddress().get(0).getCity()).append(",");
+			addressBuilder.append(unregisteredPatient.getAddress().get(0).getPostalCode());
+
+			patientDetails.setAddress(addressBuilder.toString());
+		}
+	}
 
     private Boolean IsInactiveTemporaryPatient(PatientDetails patientDetails) {
 
@@ -329,7 +343,7 @@ public class PatientResourceProvider implements IResourceProvider {
     		}
     	}
     	 
-    	//Only a sinlge address with type temp may be sent
+    	//Only a single address with type temp may be sent
     	if (patient.getAddress().size() > 1) {
     		throw OperationOutcomeFactory.buildOperationOutcomeException(
     				new InvalidRequestException(
@@ -548,18 +562,7 @@ public class PatientResourceProvider implements IResourceProvider {
         // patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
         patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
         patientDetails.setRegistrationType(TEMPORARY_RESIDENT_REGISTRATION_TYPE);
-        patientDetails.setTelephone(patientResource.getTelecom().get(0).getValue());
-        List<StringType> addressLineList = patientResource.getAddress().get(0).getLine();
-        StringBuilder addressBuilder = new StringBuilder();
-        for(StringType addressLine: addressLineList) {
-            addressBuilder.append(addressLine);
-            addressBuilder.append(",");
-        }
-        addressBuilder.append(patientResource.getAddress().get(0).getCity()).append(",");
-        addressBuilder.append(patientResource.getAddress().get(0).getPostalCode());
-
-
-        patientDetails.setAddress(addressBuilder.toString());
+        updateAddressAndTelecom(patientResource, patientDetails);
 
         return patientDetails;
     }

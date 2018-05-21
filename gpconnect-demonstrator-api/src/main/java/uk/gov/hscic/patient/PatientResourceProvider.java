@@ -10,6 +10,23 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
+import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
 import org.hl7.fhir.dstu3.model.*;
@@ -20,6 +37,9 @@ import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.dstu3.model.HumanName.NameUse;
 import org.hl7.fhir.dstu3.model.Identifier.IdentifierUse;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
+
+import org.hl7.fhir.dstu3.model.Organization;
+import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -352,15 +372,18 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 if (patientDetails == null) {
                     patientDetails = registerPatientResourceConverterToPatientDetail(unregisteredPatient);
+
                     patientStore.create(patientDetails);
                 } else {
                     patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
+                    updateAddressAndTelecom(unregisteredPatient, patientDetails);
+
                     patientStore.update(patientDetails);
                 }
                 try {
                     registeredPatient = patientDetailsToRegisterPatientResourceConverter(
                             patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
-
+                    
                     addPreferredBranchSurgeryExtension(registeredPatient);
                 } catch (FHIRException e) {
                     // TODO Auto-generated catch block
@@ -385,6 +408,24 @@ public class PatientResourceProvider implements IResourceProvider {
         return bundle;
     }
 
+	private void updateAddressAndTelecom(Patient unregisteredPatient, PatientDetails patientDetails) {
+		if (unregisteredPatient.getTelecom().size() > 0) {
+			patientDetails.setTelephone(unregisteredPatient.getTelecom().get(0).getValue());
+		}
+		if (unregisteredPatient.getAddress().size() > 0) {
+			List<StringType> addressLineList = unregisteredPatient.getAddress().get(0).getLine();
+			StringBuilder addressBuilder = new StringBuilder();
+			for(StringType addressLine: addressLineList) {
+				addressBuilder.append(addressLine);
+				addressBuilder.append(",");
+			}
+			addressBuilder.append(unregisteredPatient.getAddress().get(0).getCity()).append(",");
+			addressBuilder.append(unregisteredPatient.getAddress().get(0).getPostalCode());
+
+			patientDetails.setAddress(addressBuilder.toString());
+		}
+	}
+
     private Boolean IsInactiveTemporaryPatient(PatientDetails patientDetails) {
 
         return patientDetails.getRegistrationType() != null
@@ -408,26 +449,35 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     private void validateTelecomAndAddress(Patient patient) {
+    	//Only a single telecom with type temp may be sent
+    	if (patient.getTelecom().size() > 1) {
+    		throw OperationOutcomeFactory.buildOperationOutcomeException(
+    				new InvalidRequestException(
+    						"Only a single telecom can be sent in a register patient request."),
+    				SystemCode.BAD_REQUEST, IssueType.INVALID);
+    	} else if (patient.getTelecom().size() == 1) {
+    		if (patient.getTelecom().get(0).getUse() != ContactPointUse.TEMP) {
+    			throw OperationOutcomeFactory.buildOperationOutcomeException(
+        				new InvalidRequestException(
+        						"The telecom use must be set to temp."),
+        				SystemCode.BAD_REQUEST, IssueType.INVALID);
+    		}
+    	}
 
-        boolean telecomValid = patient.getTelecom().stream()
-                .allMatch(telecom -> telecom.getUse() != ContactPointUse.OLD);
-
-        if (!telecomValid) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(
-                            "The telecom use can not be set to old."),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
-        }
-
-        boolean addressValid = patient.getAddress().stream()
-                .allMatch(address -> address.getUse() != AddressUse.OLD);
-
-        if (!addressValid) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(
-                            "The address use can not be set to old."),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
-        }
+    	//Only a single address with type temp may be sent
+    	if (patient.getAddress().size() > 1) {
+    		throw OperationOutcomeFactory.buildOperationOutcomeException(
+    				new InvalidRequestException(
+    						"Only a single address can be sent in a register patient request."),
+    				SystemCode.BAD_REQUEST, IssueType.INVALID);
+    	} else if (patient.getAddress().size() == 1) {
+    		if (patient.getAddress().get(0).getUse() != AddressUse.TEMP) {
+    			throw OperationOutcomeFactory.buildOperationOutcomeException(
+        				new InvalidRequestException(
+        						"The address use must be set to temp."),
+        				SystemCode.BAD_REQUEST, IssueType.INVALID);
+    		}
+    	}
     }
 
     private void valiateGender(Patient patient) {
@@ -633,6 +683,7 @@ public class PatientResourceProvider implements IResourceProvider {
         // patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
         patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
         patientDetails.setRegistrationType(TEMPORARY_RESIDENT_REGISTRATION_TYPE);
+        updateAddressAndTelecom(patientResource, patientDetails);
 
         return patientDetails;
     }
@@ -773,7 +824,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
         Extension regDetailsExtension = new Extension(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
 
-        Period registrationPeriod = new Period().setStart(registrationStartDateTime).setEnd(registrationEndDateTime);
+		Period registrationPeriod = new Period().setStart(registrationStartDateTime);
+        if (registrationEndDateTime != null) {
+        	registrationPeriod.setEnd(registrationEndDateTime);
+        }
 
         Extension regPeriodExt = new Extension(SystemURL.SD_CC_EXT_REGISTRATION_PERIOD, registrationPeriod);
         regDetailsExtension.addExtension(regPeriodExt);

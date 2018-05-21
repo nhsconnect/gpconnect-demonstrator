@@ -31,6 +31,9 @@ public class PatientSearch {
     @Autowired
     private PatientEntityToDetailsTransformer patientEntityToDetailsTransformer;
 
+    @Autowired
+    private PatientDetailsToEntityTransformer patientDetailsToEntityTransformer;
+
     public PatientDetails findPatient(final String patientNHSNumber) {
         final PatientEntity patient = patientRepository.findByNhsNumber(patientNHSNumber);
 
@@ -61,4 +64,8 @@ public class PatientSearch {
         return patientDetails;
     }
 
+    public void updatePatient(final PatientDetails patientDetails) {
+        PatientEntity patientEntity = patientDetailsToEntityTransformer.transform(patientDetails);
+        patientRepository.save(patientEntity);
+    }
 }

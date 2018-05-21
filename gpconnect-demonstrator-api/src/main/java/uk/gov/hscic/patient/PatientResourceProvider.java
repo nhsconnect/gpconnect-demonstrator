@@ -331,6 +331,7 @@ public class PatientResourceProvider implements IResourceProvider {
 		}
 		structuredBundle.setType(BundleType.COLLECTION);
 		structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
+		structuredBundle.getMeta().setLastUpdated(new Date());
 
 		return structuredBundle;
 	}

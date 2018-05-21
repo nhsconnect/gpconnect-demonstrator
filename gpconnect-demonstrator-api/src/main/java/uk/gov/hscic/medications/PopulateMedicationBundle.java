@@ -22,37 +22,42 @@ import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
+import uk.gov.hscic.practitioner.PractitionerRoleResourceProvider;
 
 import java.util.*;
 
 @Component
 public class PopulateMedicationBundle {
-	
+
 	@Autowired
 	private MedicationStatementRepository medicationStatementRepository;
-	
+
 	@Autowired
 	private MedicationStatementEntityToDetailTransformer medicationStatementEntityToDetailTransformer;
-	
+
 	@Autowired
 	private MedicationResourceProvider medicationResourceProvider;
-	
+
 	@Autowired
 	private MedicationStatementResourceProvider medicationStatementResourceProvider;
-	
+
 	@Autowired
 	private MedicationRequestResourceProvider medicationRequestResourceProvider;
-	
-	@Autowired
+
+    @Autowired
 	private PractitionerResourceProvider practitionerResourceProvider;
-	
+
+    @Autowired
+    private PractitionerRoleResourceProvider practitionerRoleResourceProvider;
+
 	@Autowired
 	private OrganizationResourceProvider organizationResourceProvider;
 
-	public Bundle addMedicationBundleEntries(Bundle structuredBundle, PatientDetails patientDetails, Boolean includePrescriptionIssues,
+
+    public Bundle addMedicationBundleEntries(Bundle structuredBundle, PatientDetails patientDetails, Boolean includePrescriptionIssues,
 			Period medicationPeriod) {
 		BundleEntryComponent listEntry = new BundleEntryComponent();
-		List<MedicationStatementDetail> medicationStatements = findMedicationStatements(Long.valueOf(patientDetails.getId()), medicationPeriod); 
+        List<MedicationStatementDetail> medicationStatements = findMedicationStatements(Long.valueOf(patientDetails.getId()), medicationPeriod);
 		structuredBundle.addEntry(listEntry.setResource(createListEntry(medicationStatements, patientDetails.getNhsNumber())));
 		medicationStatements.forEach(medicationStatement -> {
 			createBundleEntries(medicationStatement, includePrescriptionIssues, patientDetails)
@@ -60,13 +65,13 @@ public class PopulateMedicationBundle {
 		});
 		return structuredBundle;
 	}
-	
-	private ListResource createListEntry(List<MedicationStatementDetail> medicationStatements, String nhsNumber) {
+
+    private ListResource createListEntry(List<MedicationStatementDetail> medicationStatements, String nhsNumber) {
 		ListResource medicationStatementsList = new ListResource();
-		
-		medicationStatementsList.setId(new IdType(1));
-		
-		medicationStatementsList.setMeta(new Meta().addProfile(SystemURL.SD_GPC_LIST)
+
+        medicationStatementsList.setId(new IdType(1));
+
+        medicationStatementsList.setMeta(new Meta().addProfile(SystemURL.SD_GPC_LIST)
 				.setVersionId(String.valueOf(new Date().getTime())).setLastUpdated(new Date()));
 		medicationStatementsList.setStatus(ListStatus.CURRENT);
 		medicationStatementsList.setId(new IdDt(1));
@@ -77,8 +82,8 @@ public class PopulateMedicationBundle {
 		medicationStatementsList.setSubject(new Reference(new IdType("Patient", 1L)).setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
 		medicationStatementsList.setDate(new Date());
 		medicationStatementsList.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
-		
-		if(medicationStatements.isEmpty()) {
+
+        if(medicationStatements.isEmpty()) {
 			medicationStatementsList.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT));
             medicationStatementsList.setNote(Arrays.asList(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE))));
 		}
@@ -87,50 +92,50 @@ public class PopulateMedicationBundle {
 			ListEntryComponent listEntryComponent = new ListEntryComponent(statementRef);
 			medicationStatementsList.addEntry(listEntryComponent);
 		});
-		
-		return medicationStatementsList;
+
+        return medicationStatementsList;
 	}
 
 	private List<BundleEntryComponent> createBundleEntries(MedicationStatementDetail statementDetail, Boolean includePrescriptionIssues, PatientDetails patientDetails) {
 
 		List<BundleEntryComponent> bundleEntryComponents = new ArrayList<>();
-		
-		bundleEntryComponents.add(new BundleEntryComponent()
+
+        bundleEntryComponents.add(new BundleEntryComponent()
 				.setResource(medicationStatementResourceProvider.getMedicationStatementResource(statementDetail)));
-		
-		bundleEntryComponents.add(new BundleEntryComponent()
+
+        bundleEntryComponents.add(new BundleEntryComponent()
 				.setResource(medicationResourceProvider.getMedicationResourceForBundle(statementDetail.getMedicationId())));
-		
-		MedicationRequest medicationRequest = medicationRequestResourceProvider
+
+        MedicationRequest medicationRequest = medicationRequestResourceProvider
 				.getMedicationRequestPlanResource(statementDetail.getMedicationRequestPlanId());
 		bundleEntryComponents.add(new BundleEntryComponent().setResource(medicationRequest));
-		
-		if(includePrescriptionIssues) {
+
+        if(includePrescriptionIssues) {
 			medicationRequestResourceProvider.getMedicationRequestOrderResources(medicationRequest.getGroupIdentifier().getValue())
 			.forEach(requestOrder -> bundleEntryComponents.add(new BundleEntryComponent().setResource(requestOrder)));
 		}
-		
-		bundleEntryComponents.addAll(getReferencedResources(medicationRequest, patientDetails));
-		
-		return bundleEntryComponents;
-		
-	}
-	
+
+        bundleEntryComponents.addAll(getReferencedResources(medicationRequest, patientDetails));
+
+        return bundleEntryComponents;
+
+    }
+
 	private List<BundleEntryComponent> getReferencedResources(MedicationRequest medicationRequest, PatientDetails patientDetails) {
-		
-		Long patientPractitionerId = patientDetails.getGpId();
+
+        Long patientPractitionerId = patientDetails.getGpId();
 		Long patientOrganizationId = Long.valueOf(patientDetails.getManagingOrganization());
-		
-		IIdType recorderPractitionerRef = medicationRequest.getRecorder().getReferenceElement();
+
+        IIdType recorderPractitionerRef = medicationRequest.getRecorder().getReferenceElement();
 		IIdType performerOrganizationRef = medicationRequest.getDispenseRequest().getPerformer().getReferenceElement();
 		IIdType requesterOnBehalfOfOrganizationRef = medicationRequest.getRequester().getOnBehalfOf().getReferenceElement();
-		
-		List<BundleEntryComponent> bundleEntryComponents = new ArrayList<>();
-		
-		Set<Long> practitionerIds = new HashSet<>();
+
+        List<BundleEntryComponent> bundleEntryComponents = new ArrayList<>();
+
+        Set<Long> practitionerIds = new HashSet<>();
 		Set<Long> organizationIds = new HashSet<>();
-		
-		if(recorderPractitionerRef != null) {
+
+        if(recorderPractitionerRef != null) {
 			practitionerIds.add(recorderPractitionerRef.getIdPartAsLong());
 		}
 		if(performerOrganizationRef != null) {
@@ -149,32 +154,38 @@ public class PopulateMedicationBundle {
 				}
 			}
 		});
-		
-		practitionerIds.stream()
+
+        practitionerIds.stream()
 					   .filter(id -> id != patientPractitionerId)
 					   .forEach(id -> {
 						   Practitioner practitioner = practitionerResourceProvider
 									.getPractitionerById(new IdType(id));
-							bundleEntryComponents.add(new BundleEntryComponent().setResource(practitioner));
+
+                           final List<PractitionerRole> practitionerRoleList = practitionerRoleResourceProvider
+                                   .getPractitionerRoleByPracticionerId(new IdType(id));
+
+                           bundleEntryComponents.add(new BundleEntryComponent().setResource(practitioner));
+
+                           practitionerRoleList.forEach(role -> bundleEntryComponents.add(new BundleEntryComponent().setResource(role)));
 					   });
-		
-		organizationIds.stream()
+
+        organizationIds.stream()
 					   .filter(id -> id != patientOrganizationId)
 					   .forEach(id -> {
 							Organization organization = organizationResourceProvider
 									.getOrganizationById(new IdType(id));
 							bundleEntryComponents.add(new BundleEntryComponent().setResource(organization));
 					   });
-		
-		return bundleEntryComponents;
-		
-	}
+
+        return bundleEntryComponents;
+
+    }
 
 	private List<MedicationStatementDetail> findMedicationStatements(Long patientId, Period medicationPeriod) {
 		List<MedicationStatementEntity> medicationStatementEntities = medicationStatementRepository.findByPatientId(patientId);
 		List<MedicationStatementDetail> medicationStatements = new ArrayList<>();
-		
-		List<MedicationStatementEntity> statementsfilteredByDate = new ArrayList<>();
+
+        List<MedicationStatementEntity> statementsfilteredByDate = new ArrayList<>();
 		if(medicationPeriod != null) {
 			medicationStatementEntities.forEach(statement -> {
 				if(statement.getLastIssueDate() != null) {
@@ -190,7 +201,7 @@ public class PopulateMedicationBundle {
 						statementsfilteredByDate.add(statement);
 					}
 				}
-			});			
+            });
 			statementsfilteredByDate.forEach(entity ->{
 				medicationStatements.add(medicationStatementEntityToDetailTransformer.transform(entity));
 			});
@@ -201,15 +212,15 @@ public class PopulateMedicationBundle {
 		}
 
 		medicationStatements.sort(Comparator.comparing(medicationStatement -> medicationStatement.getDateAsserted()));
-		
-		return medicationStatements;
+
+        return medicationStatements;
 	}
 
 	private boolean dateIsWithinPeriod(Date date, Period period) {
 		Date startDate = period.getStart();
 		Date endDate = period.getEnd();
-		
-		if(startDate != null && endDate != null) {
+
+        if(startDate != null && endDate != null) {
 			return !date.before(startDate) && !date.after(endDate);
 		} else if (startDate != null) {
 			return !date.before(startDate);

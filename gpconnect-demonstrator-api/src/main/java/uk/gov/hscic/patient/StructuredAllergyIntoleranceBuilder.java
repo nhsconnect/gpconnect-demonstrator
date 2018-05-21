@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.model.practitioner.PractitionerDetails;
 import uk.gov.hscic.patient.details.PatientRepository;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch;
+import uk.gov.hscic.practitioner.PractitionerResourceProvider;
+import uk.gov.hscic.practitioner.PractitionerRoleResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerSearch;
 
 import java.util.*;
@@ -28,8 +31,14 @@ public class StructuredAllergyIntoleranceBuilder {
     @Autowired
     private PractitionerSearch practitionerSearch;
 
-    public Bundle buildStructuredAllergyIntolerence(String NHS, Bundle bundle, Boolean includedResolved) {
+    @Autowired
+    private PractitionerRoleResourceProvider practitionerRoleResourceProvider;
 
+    @Autowired
+    private PractitionerResourceProvider practitionerResourceProvider;
+
+
+    public Bundle buildStructuredAllergyIntolerence(String NHS, String practitionerId, Bundle bundle, Boolean includedResolved) {
         List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntollerence(NHS);
 
         ListResource active = initiateListResource(NHS, "Active Allergies");
@@ -49,13 +58,13 @@ public class StructuredAllergyIntoleranceBuilder {
 
             active.setSubject(patient);
             bundle.addEntry().setResource(active);
-            
+
             if (includedResolved) {
-            	resolved.setSubject(patient);
-            	resolved.setEmptyReason(noKnownAllergies);
-            	bundle.addEntry().setResource(resolved);
+                resolved.setSubject(patient);
+                resolved.setEmptyReason(noKnownAllergies);
+                bundle.addEntry().setResource(resolved);
             }
-            
+
             return bundle;
         }
 
@@ -97,7 +106,7 @@ public class StructuredAllergyIntoleranceBuilder {
 
             Annotation noteAnnotation = new Annotation(new StringType(allergyIntoleranceEntity.getNote()));
             allergyIntolerance.setNote(Collections.singletonList(noteAnnotation));
-            
+
             AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
 
             // MANIFESTATION
@@ -130,19 +139,32 @@ public class StructuredAllergyIntoleranceBuilder {
                 Reference rec = new Reference(
                         SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
                 allergyIntolerance.setRecorder(rec);
-            }
-            else if(patientRepository.findByNhsNumber(recorder) != null) {
+            } else if(patientRepository.findByNhsNumber(recorder) != null) {
                 identifier.setSystem(SystemURL.ID_NHS_NUMBER);
                 identifier.setValue(recorder);
 
                 refValue.setIdentifier(identifier);
                 allergyIntolerance.setRecorder(refValue);
             } else if (practitionerSearch.findPractitionerByUserId(recorder) != null) {
-                identifier.setSystem(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE);
-                identifier.setValue(recorder);
 
-                refValue.setIdentifier(identifier);
+                refValue.setReference("Practitioner/" + recorder);
+
                 allergyIntolerance.setRecorder(refValue);
+
+                if (!practitionerId.equals(recorder)) {
+                    final List<PractitionerDetails> practitionerByUserId = practitionerSearch.findPractitionerByUserId(recorder);
+                    if (!practitionerByUserId.isEmpty()) {
+                        final Practitioner practitioner = practitionerResourceProvider.getPractitionerById(new IdType(recorder));
+                        bundle.addEntry().setResource(practitioner);
+
+                        final List<PractitionerRole> practitionerRoleList = practitionerRoleResourceProvider.getPractitionerRoleByPracticionerId(new IdType(recorder));
+
+                        for (PractitionerRole role : practitionerRoleList) {
+                            bundle.addEntry().setResource(role);
+                        }
+                    }
+                }
+
             }
 
             if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {

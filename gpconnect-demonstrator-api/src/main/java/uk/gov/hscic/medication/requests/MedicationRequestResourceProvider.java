@@ -16,6 +16,7 @@ import uk.gov.hscic.medication.request.MedicationRequestRepository;
 import uk.gov.hscic.model.medication.MedicationRequestDetail;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +51,7 @@ public class MedicationRequestResourceProvider {
 		
 		medicationRequest.setId(new IdType(requestDetail.getId()));
 		medicationRequest.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_REQUEST)
-				.setVersionId(String.valueOf(requestDetail.getLastUpdated().getTime())));
+				.setVersionId(String.valueOf(requestDetail.getLastUpdated().getTime())).setLastUpdated(new Date()));
 		setBasedOnReferences(medicationRequest, requestDetail);		
 		if (requestDetail.getPrescriptionTypeCode().contains("repeat")) {
 			medicationRequest.setGroupIdentifier(new Identifier().setValue(requestDetail.getGroupIdentifier()));

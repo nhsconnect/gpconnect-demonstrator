@@ -135,11 +135,11 @@ public class StructuredAllergyIntoleranceBuilder {
             final String recorder = allergyIntoleranceEntity.getRecorder();
 
             //This is just an example to demonstrate using Reference element instead of Identifier element
-            if(recorder.equals("9476719931")) {
+            if (recorder.equals("9476719931")) {
                 Reference rec = new Reference(
                         SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
                 allergyIntolerance.setRecorder(rec);
-            } else if(patientRepository.findByNhsNumber(recorder) != null) {
+            } else if (patientRepository.findByNhsNumber(recorder) != null) {
                 identifier.setSystem(SystemURL.ID_NHS_NUMBER);
                 identifier.setValue(recorder);
 
@@ -168,11 +168,11 @@ public class StructuredAllergyIntoleranceBuilder {
             }
 
             if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {
-                listResourceBuilder(active, allergyIntolerance);
+                listResourceBuilder(active, allergyIntolerance, false);
                 bundle.addEntry().setResource(allergyIntolerance);
             } else if (allergyIntolerance.getClinicalStatus().getDisplay().equals("Resolved")
                     && includedResolved.equals(true)) {
-                listResourceBuilder(resolved, allergyIntolerance);
+                listResourceBuilder(resolved, allergyIntolerance, true);
                 allergyIntolerance.setLastOccurrence(allergyIntoleranceEntity.getEndDate());
 
                 allergyIntolerance.setExtension(createAllergyEndExtension(allergyIntoleranceEntity));
@@ -204,10 +204,9 @@ public class StructuredAllergyIntoleranceBuilder {
     private ListResource initiateListResource(String NHS, String display) {
         ListResource listResource = new ListResource();
 
-        if(display.equals("Active Allergies")) {
+        if (display.equals("Active Allergies")) {
             listResource.setCode(createCoding("http://snomed.info/sct", "886921000000105", display));
-        }
-        else if(display.equals("Resolved Allergies")) {
+        } else if (display.equals("Resolved Allergies")) {
             listResource.setCode(createCoding("http://snomed.info/sct", "TBD", display));
         }
 
@@ -276,15 +275,23 @@ public class StructuredAllergyIntoleranceBuilder {
         return Arrays.asList(allergyEnd);
     }
 
-    private void listResourceBuilder(ListResource buildingListResource, AllergyIntolerance allergyIntolerance) {
-        buildingListResource.setId(allergyIntolerance.getId());
-
-        List<Resource> value = new ArrayList<>();
-        value.add(allergyIntolerance);
-        buildingListResource.setContained(value);
+    private void listResourceBuilder(ListResource buildingListResource, AllergyIntolerance allergyIntolerance, boolean isResolved) {
         ListEntryComponent comp = new ListEntryComponent();
-        Reference allergyReference = new Reference("AllergyIntolerance/" + allergyIntolerance.getId());
-        comp.setItem(allergyReference);
+
+        if (isResolved) {
+            buildingListResource.setId(allergyIntolerance.getId());
+
+            buildingListResource.addContained(allergyIntolerance);
+
+            Reference allergyReference = new Reference("#" + allergyIntolerance.getId());
+            comp.setItem(allergyReference);
+        } else {
+            buildingListResource.setId(allergyIntolerance.getId());
+
+            Reference allergyReference = new Reference("AllergyIntolerance/" + allergyIntolerance.getId());
+            comp.setItem(allergyReference);
+        }
+
         buildingListResource.addEntry(comp);
     }
 

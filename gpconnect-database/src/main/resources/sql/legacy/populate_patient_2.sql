@@ -24,7 +24,7 @@ INSERT INTO gpconnect.immunisations
 VALUES
   (9476719931,'2010-10-04',"Influenza vaccine","1","Influenza",""),
   (9476719931,'2013-01-18',"Influenza vaccine","1","Influenza",""),
-  (9476719931,'2015-08-30',"Pneomovax II","1","Pneumoccocal","");
+  (9476719931,'2015-08-30',"Pneumovax II","1","Pneumoccocal","");
 
  INSERT INTO gpconnect.investigations
    (nhsNumber,sectionDate,title,details,lastUpdated)

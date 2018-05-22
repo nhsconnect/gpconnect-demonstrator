@@ -10,23 +10,6 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
-
-import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
 import org.hl7.fhir.dstu3.model.*;
@@ -37,9 +20,6 @@ import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.dstu3.model.HumanName.NameUse;
 import org.hl7.fhir.dstu3.model.Identifier.IdentifierUse;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
-
-import org.hl7.fhir.dstu3.model.Organization;
-import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -259,6 +239,13 @@ public class PatientResourceProvider implements IResourceProvider {
             validateParametersName(param.getName());
             if (param.getName().equals(SystemConstants.INCLUDE_ALLERGIES)) {
                 getAllergies = true;
+
+                if (param.getPart().isEmpty()) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
+                            SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
+                }
+
                 for (ParametersParameterComponent paramPart : param.getPart()) {
                     if (paramPart.getValue() instanceof BooleanType
                             && paramPart.getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES)) {
@@ -272,10 +259,21 @@ public class PatientResourceProvider implements IResourceProvider {
             }
             if (param.getName().equals(SystemConstants.INCLUDE_MEDICATION)) {
                 getMedications = true;
+
+                if (param.getPart().isEmpty()) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
+                            SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
+                }
+
+                boolean isIncludedPrescriptionIssuesExist = false;
                 for (ParametersParameterComponent paramPart : param.getPart()) {
+
+
                     if (paramPart.getValue() instanceof BooleanType
                             && paramPart.getName().equals(SystemConstants.INCLUDE_PRESCRIPTION_ISSUES)) {
                         includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
+                        isIncludedPrescriptionIssuesExist = true;
                     } else if (paramPart.getValue() instanceof Period
                             && paramPart.getName().equals(SystemConstants.MEDICATION_DATE_PERIOD)) {
                         medicationPeriod = (Period) paramPart.getValue();
@@ -295,6 +293,12 @@ public class PatientResourceProvider implements IResourceProvider {
                                 new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
                                 SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                     }
+                }
+
+                if (!isIncludedPrescriptionIssuesExist) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
+                            SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                 }
             }
         }
@@ -383,7 +387,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 try {
                     registeredPatient = patientDetailsToRegisterPatientResourceConverter(
                             patientSearch.findPatient(unregisteredPatient.getIdentifierFirstRep().getValue()));
-                    
+
                     addPreferredBranchSurgeryExtension(registeredPatient);
                 } catch (FHIRException e) {
                     // TODO Auto-generated catch block

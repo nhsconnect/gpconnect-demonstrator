@@ -9,6 +9,7 @@ public final class SystemCode {
     public static final String INVALID_NHS_NUMBER = "INVALID_NHS_NUMBER";
     public static final String INVALID_PARAMETER = "INVALID_PARAMETER";
     public static final String INVALID_RESOURCE = "INVALID_RESOURCE";
+    public static final String PARAMETER_NOT_FOUND = "PARAMETER_NOT_FOUND";
     public static final String NO_PATIENT_CONSENT = "NO_PATIENT_CONSENT";
     public static final String ORGANISATION_NOT_FOUND = "ORGANISATION_NOT_FOUND";
     public static final String PATIENT_NOT_FOUND = "PATIENT_NOT_FOUND";

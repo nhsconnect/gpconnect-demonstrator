@@ -59,16 +59,11 @@ public class PractitionerRoleResourceProvider implements IResourceProvider {
 
 
         final List<PractitionerRole> practitionerRoleList = roleIds.stream().map(roleId -> {
-            Identifier identifier = new Identifier();
-            identifier.setId(roleId);
-
-            return new PractitionerRole().addIdentifier(identifier).setCode(Arrays.asList(codeableConcept));
+        	PractitionerRole role = new PractitionerRole();
+        	role.setId(roleId);
+        	role.setCode(Arrays.asList(codeableConcept));
+            return role;
         }).collect(Collectors.toList());
-
-
-        Coding roleCoding = new Coding(SystemURL.VS_SDS_JOB_ROLE_NAME, practitionerDetails.getRoleCode(),
-                practitionerDetails.getRoleDisplay());
-
         return practitionerRoleList;
     }
 

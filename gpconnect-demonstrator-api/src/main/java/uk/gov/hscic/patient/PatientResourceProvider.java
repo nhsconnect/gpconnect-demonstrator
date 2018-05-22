@@ -262,7 +262,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 if (param.getPart().isEmpty()) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
+                            new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
                             SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                 }
 
@@ -297,7 +297,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 if (!isIncludedPrescriptionIssuesExist) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
+                            new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
                             SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                 }
             }

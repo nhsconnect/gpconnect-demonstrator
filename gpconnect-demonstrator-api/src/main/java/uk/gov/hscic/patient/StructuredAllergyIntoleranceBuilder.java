@@ -277,16 +277,15 @@ public class StructuredAllergyIntoleranceBuilder {
 
     private void listResourceBuilder(ListResource buildingListResource, AllergyIntolerance allergyIntolerance, boolean isResolved) {
         ListEntryComponent comp = new ListEntryComponent();
+        buildingListResource.setId(allergyIntolerance.getId());
 
         if (isResolved) {
-            buildingListResource.setId(allergyIntolerance.getId());
 
             buildingListResource.addContained(allergyIntolerance);
 
             Reference allergyReference = new Reference("#" + allergyIntolerance.getId());
             comp.setItem(allergyReference);
         } else {
-            buildingListResource.setId(allergyIntolerance.getId());
 
             Reference allergyReference = new Reference("AllergyIntolerance/" + allergyIntolerance.getId());
             comp.setItem(allergyReference);

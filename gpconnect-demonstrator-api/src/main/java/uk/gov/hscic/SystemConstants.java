@@ -25,5 +25,6 @@ public final class SystemConstants {
     public static final String MEDICATION_DATE_PERIOD = "medicationDatePeriod";
 
     public static final String MEDICATION_LIST = "Medication List";
+    public static final String NO_CONTENT_RECORDED = "No content recorded";
 
 }

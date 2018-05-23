@@ -221,11 +221,13 @@ public class StructuredAllergyIntoleranceBuilder {
     private void addEmptyListNote(ListResource list) {
         list.addNote(new Annotation(new StringType("Information not available."
         )));
+        list.addNote(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE)));
     }
 
     private void addEmptyReasonCode(ListResource list) {
         CodeableConcept noContent = new CodeableConcept();
-        noContent.setText(SystemConstants.NO_CONTENT_RECORDED);
+        noContent.setCoding(Arrays.asList(new Coding(SystemURL.HL7_SPECIAL_VALUES, SystemConstants.NO_CONTENT_RECORDED, SystemConstants.NO_CONTENT_RECORDED_DISPLAY)));
+        noContent.setText(SystemConstants.NO_CONTENT);
         list.setEmptyReason(noContent);
     }
 

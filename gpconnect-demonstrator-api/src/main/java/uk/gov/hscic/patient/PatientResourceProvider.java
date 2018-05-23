@@ -304,7 +304,9 @@ public class PatientResourceProvider implements IResourceProvider {
         // Add Patient
         PatientDetails patientDetails = patientSearch.findPatient(NHS);
         Patient patient = patientDetailsToPatientResourceConverter(patientDetails);
-        structuredBundle.addEntry().setResource(patient);
+        if(patient.getIdentifierFirstRep().getValue().equals(NHS)) {
+            structuredBundle.addEntry().setResource(patient);
+        }
 
         // Add Organization
         Long organizationId = Long.valueOf(patientDetails.getManagingOrganization());

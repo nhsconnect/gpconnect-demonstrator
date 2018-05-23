@@ -177,7 +177,6 @@ public class StructuredAllergyIntoleranceBuilder {
 
                 allergyIntolerance.setExtension(createAllergyEndExtension(allergyIntoleranceEntity));
 
-                bundle.addEntry().setResource(allergyIntolerance);
             }
         }
 

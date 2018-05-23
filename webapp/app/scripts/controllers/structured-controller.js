@@ -219,13 +219,19 @@ angular
                     ) {
                         if (resource.clinicalStatus == "active") {
                             $scope.ActiveAllergiesList.push(resource);
-                        } else if(resource.clinicalStatus == "resolved") {
-                            $scope.ResolvedAllergiesList.push(resource);
                         }
                         
-                    } if(resource.resourceType =="MedicationRequest") {
+                    }else if(
+                        resource.title == "Resolved Allergies" && 'contained' in resource
+                    ) {
+                        $scope.ResolvedAllergiesList=  $scope.ResolvedAllergiesList.concat(resource.contained);
+                    } else if(
+                        resource.resourceType =="MedicationRequest"
+                    ) {
                         $scope.MedicationRequest.push(resource);
-                    } if(resource.resourceType =="MedicationStatement") {
+                    } else if(
+                        resource.resourceType =="MedicationStatement"
+                    ) {
                         // console.log(resource);
                         $scope.MedicationStatement.push(resource);
                         

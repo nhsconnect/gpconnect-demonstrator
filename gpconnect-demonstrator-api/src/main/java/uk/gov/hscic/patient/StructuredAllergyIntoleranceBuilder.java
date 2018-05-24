@@ -220,9 +220,9 @@ public class StructuredAllergyIntoleranceBuilder {
         ListResource listResource = new ListResource();
 
         if (display.equals("Active Allergies")) {
-            listResource.setCode(createCoding("http://snomed.info/sct", "886921000000105", display));
+            listResource.setCode(createCoding(SystemURL.VS_SNOWMED, "886921000000105", display));
         } else if (display.equals("Resolved Allergies")) {
-            listResource.setCode(createCoding("http://snomed.info/sct", "TBD", display));
+            listResource.setCode(createCoding(SystemURL.VS_SNOWMED, "TBD", display));
         }
 
         listResource.setMeta(createMeta(SystemURL.SD_GPC_LIST));
@@ -276,7 +276,7 @@ public class StructuredAllergyIntoleranceBuilder {
     }
 
     private Extension createAllergyEndExtension(StructuredAllergyIntoleranceEntity allergyIntoleranceEntity) {
-        final Extension allergyEnd = new Extension("https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-AllergyIntoleranceEnd-1");
+        final Extension allergyEnd = new Extension(SystemURL.SD_CC_EXT_ALLERGY_INTOLERANCE_END);
 
         final Extension endDate = new Extension("endDate", new DateTimeType(allergyIntoleranceEntity.getEndDate()));
 
@@ -289,8 +289,7 @@ public class StructuredAllergyIntoleranceBuilder {
     }
 
     private Extension createEncounterExtension(StructuredAllergyIntoleranceEntity allergyIntoleranceEntity) {
-//        final Extension encounter = new Extension("http://hl7.org/fhir/StructureDefinition/encounter-associatedEncounter", new StringType(allergyIntoleranceEntity.getEncounter()));
-        final Extension encounter = new Extension("http://hl7.org/fhir/StructureDefinition/encounter-associatedEncounter", new Reference(allergyIntoleranceEntity.getEncounter()));
+        final Extension encounter = new Extension(SystemURL.SD_CC_EXT_ENCOUNTER_ACCOCIATED_ENCOUNTER, new Reference("Encounter/" + allergyIntoleranceEntity.getEncounter()));
 
         return encounter;
     }

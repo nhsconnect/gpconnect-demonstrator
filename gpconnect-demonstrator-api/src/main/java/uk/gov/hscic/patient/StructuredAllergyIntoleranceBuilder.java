@@ -219,8 +219,6 @@ public class StructuredAllergyIntoleranceBuilder {
     }
 
     private void addEmptyListNote(ListResource list) {
-        list.addNote(new Annotation(new StringType("Information not available."
-        )));
         list.addNote(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE)));
     }
 

@@ -430,6 +430,7 @@ CREATE TABLE gpconnect.allergyintolerance (
   manCoding VARCHAR(250) NULL,
   manDisplay VARCHAR(250) NULL,
   recorder VARCHAR(250) NOT NULL,
+  encounter VARCHAR(250),
   PRIMARY KEY (id)
 );
 

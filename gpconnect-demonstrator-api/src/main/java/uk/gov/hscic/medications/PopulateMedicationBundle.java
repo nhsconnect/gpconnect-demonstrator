@@ -10,6 +10,7 @@ import org.hl7.fhir.dstu3.model.ListResource.ListStatus;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IIdType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
@@ -75,6 +76,7 @@ public class PopulateMedicationBundle {
 				.setVersionId(String.valueOf(new Date().getTime())).setLastUpdated(new Date()));
 		medicationStatementsList.setStatus(ListStatus.CURRENT);
 		medicationStatementsList.setId(new IdDt(1));
+		medicationStatementsList.setIdentifier(Collections.singletonList(new Identifier()));
 
 		medicationStatementsList.setMode(ListMode.SNAPSHOT);
 		medicationStatementsList.setTitle(SystemConstants.MEDICATION_LIST);

@@ -76,7 +76,6 @@ public class PopulateMedicationBundle {
 				.setVersionId(String.valueOf(new Date().getTime())).setLastUpdated(new Date()));
 		medicationStatementsList.setStatus(ListStatus.CURRENT);
 		medicationStatementsList.setId(new IdDt(1));
-		medicationStatementsList.setIdentifier(Collections.singletonList(new Identifier()));
 
 		medicationStatementsList.setMode(ListMode.SNAPSHOT);
 		medicationStatementsList.setTitle(SystemConstants.MEDICATION_LIST);

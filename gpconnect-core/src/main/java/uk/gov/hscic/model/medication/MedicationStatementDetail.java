@@ -25,8 +25,17 @@ public class MedicationStatementDetail {
 	private String dosageText;
 	private String dosagePatientInstruction;
 	private Date lastUpdated;
-	
-	public Long getId() {
+    private String prescribingAgency;
+
+    public String getPrescribingAgency() {
+        return prescribingAgency;
+    }
+
+    public void setPrescribingAgency(String prescribingAgency) {
+        this.prescribingAgency = prescribingAgency;
+    }
+
+    public Long getId() {
 		return id;
 	}
 	

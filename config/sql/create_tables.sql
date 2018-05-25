@@ -229,6 +229,7 @@ CREATE TABLE gpconnect.medication_statements (
   dosageText          VARCHAR(250) NULL,
   dosageInstruction   VARCHAR(250)  NULL,
   lastUpdated         DATETIME     NULL,
+  prescribingAgency  VARCHAR(250) NULL,
   PRIMARY KEY (id)
 );
 

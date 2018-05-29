@@ -73,7 +73,7 @@ public class StructuredAllergyIntoleranceBuilder {
             allergyIntolerance.setOnset(new DateTimeType(allergyIntoleranceEntity.getOnSetDateTime()));
             allergyIntolerance.setMeta(createMeta(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
 
-            allergyIntolerance.setId(allergyIntoleranceEntity.getId().toString());
+            allergyIntolerance.setId(allergyIntoleranceEntity.getGuid());
 
             if (allergyIntoleranceEntity.getClinicalStatus().equals(SystemConstants.ACTIVE)) {
                 allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.ACTIVE);

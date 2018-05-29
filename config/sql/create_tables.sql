@@ -230,6 +230,7 @@ CREATE TABLE gpconnect.medication_statements (
   dosageInstruction   VARCHAR(250)  NULL,
   lastUpdated         DATETIME     NULL,
   prescribingAgency  VARCHAR(250) NULL,
+  guid               VARCHAR(250) NULL,
   PRIMARY KEY (id)
 );
 
@@ -265,6 +266,7 @@ CREATE TABLE gpconnect.medication_requests (
   statusReasonDate                   DATETIME     NULL,
   statusReason                       VARCHAR(50)  NULL,
   lastUpdated                        DATETIME     NULL,
+  guid                               VARCHAR(250) NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (medicationId) REFERENCES gpconnect.medications(id)
 );
@@ -432,6 +434,7 @@ CREATE TABLE gpconnect.allergyintolerance (
   manDisplay VARCHAR(250) NULL,
   recorder VARCHAR(250) NOT NULL,
   encounter VARCHAR(250),
+  guid      VARCHAR(250) NULL,
   PRIMARY KEY (id)
 );
 

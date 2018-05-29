@@ -18,7 +18,7 @@ public class MedicationStatementResourceProvider {
     public MedicationStatement getMedicationStatementResource(MedicationStatementDetail statementDetail) {
         MedicationStatement medicationStatement = new MedicationStatement();
 
-        medicationStatement.setId(new IdType(statementDetail.getId()));
+        medicationStatement.setId(new IdType(statementDetail.getGuid()));
 
         medicationStatement.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_STATEMENT)
                 .setVersionId(String.valueOf(statementDetail.getLastUpdated().getTime())).setLastUpdated(new Date()));

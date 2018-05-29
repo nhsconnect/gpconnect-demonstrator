@@ -15,6 +15,13 @@
  */
 package uk.gov.hscic.common.config;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,12 +29,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
@@ -49,9 +50,12 @@ public class DatabaseRefresher {
                 .map(Path::toString)
                 .filter(filename -> filename.startsWith("populate"))
                 .filter(filename -> !filename.equals("populate_patients_table.sql"))
+                .filter(filename -> !filename.equals("generate_uids.sql"))
                 .forEach(this::runSql);
 
+        runSql("generate_uids.sql");
         runSql("populate_patients_table.sql");
+
     }
 
     private void runSql(String filename) {

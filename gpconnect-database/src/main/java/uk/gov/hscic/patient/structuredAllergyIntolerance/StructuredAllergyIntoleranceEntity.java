@@ -62,6 +62,17 @@ public class StructuredAllergyIntoleranceEntity {
     @Column(name = "encounter")
     private String encounter;
 
+    @Column(name = "guid")
+    private String guid;
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
+
     public String getEncounter() {
         return encounter;
     }

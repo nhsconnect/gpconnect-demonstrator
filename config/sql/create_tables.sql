@@ -229,6 +229,7 @@ CREATE TABLE gpconnect.medication_statements (
   dosageText          VARCHAR(250) NULL,
   dosageInstruction   VARCHAR(250)  NULL,
   lastUpdated         DATETIME     NULL,
+  warningCode         VARCHAR(250)  NULL,
   PRIMARY KEY (id)
 );
 
@@ -430,6 +431,7 @@ CREATE TABLE gpconnect.allergyintolerance (
   manCoding VARCHAR(250) NULL,
   manDisplay VARCHAR(250) NULL,
   recorder VARCHAR(250) NOT NULL,
+  warningCode VARCHAR(250) NULL,
   PRIMARY KEY (id)
 );
 

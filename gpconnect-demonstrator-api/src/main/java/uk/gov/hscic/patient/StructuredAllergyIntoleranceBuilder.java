@@ -41,8 +41,8 @@ public class StructuredAllergyIntoleranceBuilder {
     public Bundle buildStructuredAllergyIntolerence(String NHS, String practitionerId, Bundle bundle, Boolean includedResolved) {
         List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntollerence(NHS);
 
-        ListResource active = initiateListResource(NHS, "Active Allergies");
-        ListResource resolved = initiateListResource(NHS, "Resolved Allergies");
+        ListResource active = initiateListResource(NHS, "Active Allergies", allergyData);
+        ListResource resolved = initiateListResource(NHS, "Resolved Allergies", allergyData);
 
         AllergyIntolerance allergyIntolerance;
 
@@ -200,13 +200,15 @@ public class StructuredAllergyIntoleranceBuilder {
 
     }
 
-    private ListResource initiateListResource(String NHS, String display) {
+    private ListResource initiateListResource(String NHS, String display, List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity) {
         ListResource listResource = new ListResource();
 
         if (display.equals("Active Allergies")) {
             listResource.setCode(createCoding("http://snomed.info/sct", "886921000000105", display));
+            listResource.setTitle("Allergies and adverse reactions");
         } else if (display.equals("Resolved Allergies")) {
             listResource.setCode(createCoding("http://snomed.info/sct", "TBD", display));
+            listResource.setTitle("Resolved allergies");
         }
 
         listResource.setMeta(createMeta(SystemURL.SD_GPC_LIST));
@@ -214,8 +216,40 @@ public class StructuredAllergyIntoleranceBuilder {
         listResource.setStatus(ListStatus.CURRENT);
         listResource.setMode(ListMode.SNAPSHOT);
         addSubjectWithIdentifier(NHS, listResource);
-        listResource.setTitle(display);
+
+        Extension warningCodeExtension = setWarningCode(allergyIntoleranceEntity,display);
+        Extension clinicalSettingExtension = setClinicalSetting(NHS,display, allergyIntoleranceEntity);
+        if(warningCodeExtension != null) {
+            listResource.addExtension(warningCodeExtension);
+        }
+
+        if(clinicalSettingExtension != null) {
+            listResource.addExtension(clinicalSettingExtension);
+        }
+
         return listResource;
+    }
+
+    private Extension setWarningCode(List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity, String display) {
+        String warningCode = null;
+        for(StructuredAllergyIntoleranceEntity structuredAllergyIntoleranceEntity: allergyIntoleranceEntity) {
+            warningCode = structuredAllergyIntoleranceEntity.getWarningCode();
+        }
+
+        return warningCode != null ? new Extension(SystemURL.WARNING_CODE, new Coding("https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-ListWarningCode-1",warningCode,display)) : null;
+
+    }
+    private Extension setClinicalSetting(String nhsNumber, String display, List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity) {
+        String warningCode = null;
+        for(StructuredAllergyIntoleranceEntity structuredAllergyIntoleranceEntity: allergyIntoleranceEntity) {
+            warningCode = structuredAllergyIntoleranceEntity.getWarningCode();
+        }
+        CodeableConcept codeableConcept = new CodeableConcept();
+        Coding coding = new Coding("http://snomed.info/sct","1060971000000108", "General practice services");
+        codeableConcept.setCoding(Collections.singletonList(coding));
+
+        return warningCode != null ? new Extension(SystemURL.CLINICAL_SETTING, codeableConcept) : null;
+
     }
 
     private void addEmptyListNote(ListResource list) {

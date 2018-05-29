@@ -155,4 +155,7 @@ public final class SystemURL {
     //Include Allergies Constant
     public static final String INCLUDE_ALLERGIES = "includeAllergies";
 
+    public static final String WARNING_CODE = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ListWarningCode-1";
+    public static final String CLINICAL_SETTING = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ClinicalSetting-1";
+
 }

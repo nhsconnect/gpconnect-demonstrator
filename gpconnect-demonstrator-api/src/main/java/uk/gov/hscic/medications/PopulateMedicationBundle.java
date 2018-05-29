@@ -22,6 +22,7 @@ import uk.gov.hscic.medication.statement.MedicationStatementResourceProvider;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
+import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerRoleResourceProvider;
 
@@ -84,6 +85,8 @@ public class PopulateMedicationBundle {
 		medicationStatementsList.setDate(new Date());
 		medicationStatementsList.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
 
+		medicationStatementsList.addExtension(setClinicalSetting());
+
         if(medicationStatements.isEmpty()) {
 			medicationStatementsList.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT));
             medicationStatementsList.setNote(Arrays.asList(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE))));
@@ -92,9 +95,31 @@ public class PopulateMedicationBundle {
 			Reference statementRef = new Reference(new IdType("MedicationStatement", statement.getId()));
 			ListEntryComponent listEntryComponent = new ListEntryComponent(statementRef);
 			medicationStatementsList.addEntry(listEntryComponent);
+
+			Extension warningCodeExtension = setWarningCode(statement);
+			if(warningCodeExtension != null) {
+				medicationStatementsList.addExtension(warningCodeExtension);
+			}
 		});
 
         return medicationStatementsList;
+	}
+
+	private Extension setWarningCode(MedicationStatementDetail medicationStatementDetail) {
+		String warningCode = medicationStatementDetail.getWarningCode();
+
+		return warningCode != null ? new Extension(SystemURL.WARNING_CODE, new Coding("https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-ListWarningCode-1",warningCode,null)) : null;
+
+	}
+	private Extension setClinicalSetting() {
+
+
+		CodeableConcept codeableConcept = new CodeableConcept();
+		Coding coding = new Coding("http://snomed.info/sct","1060971000000108", "General practice services");
+		codeableConcept.setCoding(Collections.singletonList(coding));
+
+		return new Extension(SystemURL.CLINICAL_SETTING, codeableConcept);
+
 	}
 
 	private List<BundleEntryComponent> createBundleEntries(MedicationStatementDetail statementDetail, Boolean includePrescriptionIssues, PatientDetails patientDetails) {

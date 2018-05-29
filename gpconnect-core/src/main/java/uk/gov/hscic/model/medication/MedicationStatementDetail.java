@@ -25,6 +25,7 @@ public class MedicationStatementDetail {
 	private String dosageText;
 	private String dosagePatientInstruction;
 	private Date lastUpdated;
+	private String warningCode;
 	
 	public Long getId() {
 		return id;
@@ -201,5 +202,12 @@ public class MedicationStatementDetail {
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
-	
+
+	public String getWarningCode() {
+		return warningCode;
+	}
+
+	public void setWarningCode(String warningCode) {
+		this.warningCode = warningCode;
+	}
 }

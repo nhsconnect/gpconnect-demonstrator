@@ -96,6 +96,9 @@ public class MedicationStatementEntity {
     @Column(name = "lastUpdated")
     private Date lastUpdated;
 
+	@Column(name = "warningCode")
+	private String warningCode;
+
 	public Long getId() {
 		return id;
 	}
@@ -247,5 +250,12 @@ public class MedicationStatementEntity {
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
-    
+
+	public String getWarningCode() {
+		return warningCode;
+	}
+
+	public void setWarningCode(String warningCode) {
+		this.warningCode = warningCode;
+	}
 }

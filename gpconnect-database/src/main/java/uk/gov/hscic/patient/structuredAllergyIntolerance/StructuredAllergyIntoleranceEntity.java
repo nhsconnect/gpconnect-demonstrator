@@ -59,6 +59,9 @@ public class StructuredAllergyIntoleranceEntity {
 	@Column(name = "recorder")
 	private String recorder;
 
+	@Column(name = "warningCode")
+	private String warningCode;
+
 	public String getNhsNumber() {
 		return nhsNumber;
 	}
@@ -193,5 +196,13 @@ public class StructuredAllergyIntoleranceEntity {
 
 	public void setRecorder(String recorder) {
 		this.recorder = recorder;
+	}
+
+	public String getWarningCode() {
+		return warningCode;
+	}
+
+	public void setWarningCode(String warningCode) {
+		this.warningCode = warningCode;
 	}
 }

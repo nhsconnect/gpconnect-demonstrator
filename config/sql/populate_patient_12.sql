@@ -44,10 +44,13 @@ VALUES
  '1958-01-04',null,null,null,'90 tablets','1',2,null,0,0,'1958-02-04','acute','Acute',null,null,'1958-03-15'),
  (16,'group7','completed','Completed','order','Order',5,12,12,'1958-01-04',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Take one tablet three times a day','Take with a full glass of water',
- '1958-01-04',null,null,null,'90 tabletst','1',2,null,0,0,'1958-02-04','acute','Acute',null,null,'1958-03-15');
+ '1958-01-04',null,null,null,'90 tabletst','1',2,null,0,0,'1958-02-04','acute','Acute',null,null,'1958-03-15'),
+ (17,'group7','completed','Completed','plan','Plan',2,12,12,'1958-01-04',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Take one tablet three times a day','Take with a full glass of water',
+ '1958-01-04',null,null,null,'90 tablets','1',2,null,0,0,'1958-02-04','acute','Acute',null,null,'1958-03-15');
 
 UPDATE gpconnect.medication_statements SET medicationRequestId = 15 WHERE id = 7;
-UPDATE gpconnect.medication_statements SET medicationRequestId = 16 WHERE id = 8;
+UPDATE gpconnect.medication_statements SET medicationRequestId = 17 WHERE id = 8;
 
 
 INSERT INTO gpconnect.medication_request_based_on

@@ -167,17 +167,33 @@ public class StructuredAllergyIntoleranceBuilder {
 
             }
 
+
+            List<Extension> extensions = new ArrayList<>();
+            if (!allergyIntoleranceEntity.getEncounter().equals("")) {
+                final Extension encounterExtension = createEncounterExtension(allergyIntoleranceEntity);
+                extensions.add(encounterExtension);
+            }
+
             if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {
                 listResourceBuilder(active, allergyIntolerance, false);
+
                 bundle.addEntry().setResource(allergyIntolerance);
             } else if (allergyIntolerance.getClinicalStatus().getDisplay().equals("Resolved")
                     && includedResolved.equals(true)) {
                 listResourceBuilder(resolved, allergyIntolerance, true);
                 allergyIntolerance.setLastOccurrence(allergyIntoleranceEntity.getEndDate());
 
-                allergyIntolerance.setExtension(createAllergyEndExtension(allergyIntoleranceEntity));
+
+                final Extension allergyEndExtension = createAllergyEndExtension(allergyIntoleranceEntity);
+                extensions.add(allergyEndExtension);
 
             }
+
+            if (!extensions.isEmpty()) {
+                allergyIntolerance.setExtension(extensions);
+            }
+
+
         }
 
         if (!active.hasEntry()) {
@@ -253,8 +269,6 @@ public class StructuredAllergyIntoleranceBuilder {
     }
 
     private void addEmptyListNote(ListResource list) {
-        list.addNote(new Annotation(new StringType("Information not available."
-        )));
         list.addNote(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE)));
     }
 
@@ -295,17 +309,23 @@ public class StructuredAllergyIntoleranceBuilder {
         return meta;
     }
 
-    private List<Extension> createAllergyEndExtension(StructuredAllergyIntoleranceEntity allergyIntoleranceEntity) {
-        final Extension allergyEnd = new Extension("https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-AllergyIntoleranceEnd-1");
+    private Extension createAllergyEndExtension(StructuredAllergyIntoleranceEntity allergyIntoleranceEntity) {
+        final Extension allergyEnd = new Extension(SystemURL.SD_CC_EXT_ALLERGY_INTOLERANCE_END);
 
         final Extension endDate = new Extension("endDate", new DateTimeType(allergyIntoleranceEntity.getEndDate()));
 
-        final Extension endReason = new Extension("endReason", new StringType(allergyIntoleranceEntity.getEndReason()));
+        final Extension endReason = new Extension("reasonEnded", new StringType(allergyIntoleranceEntity.getEndReason()));
 
         allergyEnd.addExtension(endDate);
         allergyEnd.addExtension(endReason);
 
-        return Arrays.asList(allergyEnd);
+        return allergyEnd;
+    }
+
+    private Extension createEncounterExtension(StructuredAllergyIntoleranceEntity allergyIntoleranceEntity) {
+        final Extension encounter = new Extension(SystemURL.SD_CC_EXT_ENCOUNTER_ACCOCIATED_ENCOUNTER, new Reference("Encounter/" + allergyIntoleranceEntity.getEncounter()));
+
+        return encounter;
     }
 
     private void listResourceBuilder(ListResource buildingListResource, AllergyIntolerance allergyIntolerance, boolean isResolved) {

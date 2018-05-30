@@ -1,7 +1,7 @@
 package uk.gov.hscic.patient.structuredAllergyIntolerance;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "allergyIntolerance")
@@ -63,6 +63,18 @@ public class StructuredAllergyIntoleranceEntity {
 	private String warningCode;
 
 	public String getNhsNumber() {
+    @Column(name = "encounter")
+    private String encounter;
+
+    public String getEncounter() {
+        return encounter;
+    }
+
+    public void setEncounter(String encounter) {
+        this.encounter = encounter;
+    }
+
+    public String getNhsNumber() {
 		return nhsNumber;
 	}
 

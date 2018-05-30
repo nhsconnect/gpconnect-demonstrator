@@ -66,11 +66,12 @@ public class MedicationStatementResourceProvider {
                 .setPatientInstruction(statementDetail.getDosagePatientInstruction()));
 
         if (!"".equals(statementDetail.getPrescribingAgency())) {
+            final String prescribingAgency = statementDetail.getPrescribingAgency();
 
-            medicationStatement.addExtension(new Extension(
-                    "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescribingAgency-1",
-                    new StringType(statementDetail.getPrescribingAgency())
-            ));
+            Coding coding = new Coding(SystemURL.SD_EXTENSION_CC_PRESCRIBING_AGENCY, prescribingAgency, prescribingAgency);
+
+            CodeableConcept codeableConcept = new CodeableConcept().addCoding(coding);
+            medicationStatement.addExtension(new Extension(SystemURL.SD_EXTENSION_CC_PRESCRIBING_AGENCY, codeableConcept));
         }
 
         return medicationStatement;

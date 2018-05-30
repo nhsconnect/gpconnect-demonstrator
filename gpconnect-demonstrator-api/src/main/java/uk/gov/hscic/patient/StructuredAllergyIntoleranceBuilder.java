@@ -19,6 +19,8 @@ import uk.gov.hscic.practitioner.PractitionerSearch;
 
 import java.util.*;
 
+import static uk.gov.hscic.SystemURL.CC_WARNING_CODE;
+
 @Component
 public class StructuredAllergyIntoleranceBuilder {
 
@@ -220,10 +222,10 @@ public class StructuredAllergyIntoleranceBuilder {
         ListResource listResource = new ListResource();
 
         if (display.equals("Active Allergies")) {
-            listResource.setCode(createCoding("http://snomed.info/sct", "886921000000105", display));
+            listResource.setCode(createCoding(SystemConstants.SNOMED_URL, "886921000000105", display));
             listResource.setTitle("Allergies and adverse reactions");
         } else if (display.equals("Resolved Allergies")) {
-            listResource.setCode(createCoding("http://snomed.info/sct", "TBD", display));
+            listResource.setCode(createCoding(SystemConstants.SNOMED_URL, "TBD", display));
             listResource.setTitle("Resolved Allergies");
         }
 
@@ -252,7 +254,7 @@ public class StructuredAllergyIntoleranceBuilder {
             warningCode = structuredAllergyIntoleranceEntity.getWarningCode();
         }
 
-        return warningCode != null ? new Extension(SystemURL.WARNING_CODE, new Coding("https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-ListWarningCode-1",warningCode,display)) : null;
+        return warningCode != null ? new Extension(SystemURL.WARNING_CODE, new Coding(SystemURL.CC_WARNING_CODE,warningCode,display)) : null;
 
     }
     private Extension setClinicalSetting(List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity) {
@@ -261,7 +263,7 @@ public class StructuredAllergyIntoleranceBuilder {
             warningCode = structuredAllergyIntoleranceEntity.getWarningCode();
         }
         CodeableConcept codeableConcept = new CodeableConcept();
-        Coding coding = new Coding("http://snomed.info/sct","1060971000000108", "General practice services");
+        Coding coding = new Coding(SystemConstants.SNOMED_URL,"1060971000000108", "General practice services");
         codeableConcept.setCoding(Collections.singletonList(coding));
 
         return warningCode != null ? new Extension(SystemURL.CLINICAL_SETTING, codeableConcept) : null;

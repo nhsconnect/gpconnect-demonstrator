@@ -115,7 +115,7 @@ public class PopulateMedicationBundle {
 
 
 		CodeableConcept codeableConcept = new CodeableConcept();
-		Coding coding = new Coding("http://snomed.info/sct","1060971000000108", "General practice services");
+		Coding coding = new Coding(SystemConstants.SNOMED_URL,"1060971000000108", "General practice services");
 		codeableConcept.setCoding(Collections.singletonList(coding));
 
 		return new Extension(SystemURL.CLINICAL_SETTING, codeableConcept);

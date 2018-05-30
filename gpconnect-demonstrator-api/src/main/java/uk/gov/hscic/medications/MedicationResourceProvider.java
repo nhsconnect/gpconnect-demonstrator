@@ -1,33 +1,25 @@
 package uk.gov.hscic.medications;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.Extension;
-import org.hl7.fhir.dstu3.model.IdType;
-import org.hl7.fhir.dstu3.model.Medication;
-import org.hl7.fhir.dstu3.model.Medication.MedicationPackageBatchComponent;
-import org.hl7.fhir.dstu3.model.Medication.MedicationPackageComponent;
-import org.hl7.fhir.dstu3.model.Meta;
-import org.hl7.fhir.dstu3.model.OperationOutcome;
-import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.dstu3.model.StringType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import org.hl7.fhir.dstu3.model.*;
+import org.hl7.fhir.dstu3.model.Medication.MedicationPackageBatchComponent;
+import org.hl7.fhir.dstu3.model.Medication.MedicationPackageComponent;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.medication.statement.MedicationStatementEntity;
 import uk.gov.hscic.medication.statement.MedicationStatementRepository;
 import uk.gov.hscic.model.medication.MedicationDetail;
 import uk.gov.hscic.patient.details.PatientRepository;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Component
 public class MedicationResourceProvider implements IResourceProvider {
@@ -158,7 +150,7 @@ public class MedicationResourceProvider implements IResourceProvider {
 		medicationStatementEntity.setEndDate(simpleDateFormat.parse("2018-06-12"));
 		medicationStatementEntity.setLastIssueDate(simpleDateFormat.parse("2017-06-12"));
 		medicationStatementEntity.setLastUpdated(simpleDateFormat.parse("2018-03-15"));
-		medicationStatementEntity.setMedicationRequestId(1L);
+        medicationStatementEntity.setMedicationRequestId("1");
 		medicationStatementEntity.setMedicationId(medicationRepository.getMedicationIdByName((String) data.get("medication"))); // get from frontend
 		medicationStatementEntity.setPatientId(patientRepository.getPatientIdByNhsNumbwer(String.valueOf(data.get("nhsNumber")))); // get from frontend
 

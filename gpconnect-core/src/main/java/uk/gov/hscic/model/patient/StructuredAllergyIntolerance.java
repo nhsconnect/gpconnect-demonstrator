@@ -4,139 +4,148 @@ import java.util.Date;
 
 public class StructuredAllergyIntolerance {
 
-	private Long Id;
-	private Date endDate;
-	private String endReason;
-	private String note;
-	private String reactionDescription;
-	private String clinicalStatus;
-	private String verificationStatus;
-	private String category;
-	private String patientRef;
-	private Date onSetDateTime;
-	private Date assertedDate;
-	private String coding;
-	private String display;
-	private String manifestationCoding;
-	private String manifestationDisplay;
+    private Long Id;
+    private Date endDate;
+    private String endReason;
+    private String note;
+    private String reactionDescription;
+    private String clinicalStatus;
+    private String verificationStatus;
+    private String category;
+    private String patientRef;
+    private Date onSetDateTime;
+    private Date assertedDate;
+    private String coding;
+    private String display;
+    private String manifestationCoding;
+    private String manifestationDisplay;
+    private String guid;
 
-	public void setId(Long id) {
-		Id = id;
-	}
+    public String getGuid() {
+        return guid;
+    }
 
-	public Long getId() {
-		return Id;
-	}
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
 
-	public Date getEndDate() {
-		return endDate;
-	}
+    public void setId(Long id) {
+        Id = id;
+    }
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+    public Long getId() {
+        return Id;
+    }
 
-	public String getEndReason() {
-		return endReason;
-	}
+    public Date getEndDate() {
+        return endDate;
+    }
 
-	public void setEndReason(String endReason) {
-		this.endReason = endReason;
-	}
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
-	public String getNote() {
-		return note;
-	}
+    public String getEndReason() {
+        return endReason;
+    }
 
-	public void setNote(String note) {
-		this.note = note;
-	}
+    public void setEndReason(String endReason) {
+        this.endReason = endReason;
+    }
 
-	public String getReactionDescription() {
-		return reactionDescription;
-	}
+    public String getNote() {
+        return note;
+    }
 
-	public void setReactionDescription(String reactionDescription) {
-		this.reactionDescription = reactionDescription;
-	}
+    public void setNote(String note) {
+        this.note = note;
+    }
 
-	public String getClinicalStatus() {
-		return clinicalStatus;
-	}
+    public String getReactionDescription() {
+        return reactionDescription;
+    }
 
-	public void setClinicalStatus(String clinicalStatus) {
-		this.clinicalStatus = clinicalStatus;
-	}
+    public void setReactionDescription(String reactionDescription) {
+        this.reactionDescription = reactionDescription;
+    }
 
-	public String getVerificationStatus() {
-		return verificationStatus;
-	}
+    public String getClinicalStatus() {
+        return clinicalStatus;
+    }
 
-	public void setVerificationStatus(String verificationStatus) {
-		this.verificationStatus = verificationStatus;
-	}
+    public void setClinicalStatus(String clinicalStatus) {
+        this.clinicalStatus = clinicalStatus;
+    }
 
-	public String getCategory() {
-		return category;
-	}
+    public String getVerificationStatus() {
+        return verificationStatus;
+    }
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
+    public void setVerificationStatus(String verificationStatus) {
+        this.verificationStatus = verificationStatus;
+    }
 
-	public String getPatientRef() {
-		return patientRef;
-	}
+    public String getCategory() {
+        return category;
+    }
 
-	public void setPatientRef(String patientRef) {
-		this.patientRef = patientRef;
-	}
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-	public Date getOnSetDateTime() {
-		return onSetDateTime;
-	}
+    public String getPatientRef() {
+        return patientRef;
+    }
 
-	public void setOnSetDateTime(Date onSetDateTime) {
-		this.onSetDateTime = onSetDateTime;
-	}
+    public void setPatientRef(String patientRef) {
+        this.patientRef = patientRef;
+    }
 
-	public Date getAssertedDate() {
-		return assertedDate;
-	}
+    public Date getOnSetDateTime() {
+        return onSetDateTime;
+    }
 
-	public void setAssertedDate(Date assertedDate) {
-		this.assertedDate = assertedDate;
-	}
+    public void setOnSetDateTime(Date onSetDateTime) {
+        this.onSetDateTime = onSetDateTime;
+    }
 
-	public String getCoding() {
-		return coding;
-	}
+    public Date getAssertedDate() {
+        return assertedDate;
+    }
 
-	public void setCoding(String coding) {
-		this.coding = coding;
-	}
+    public void setAssertedDate(Date assertedDate) {
+        this.assertedDate = assertedDate;
+    }
 
-	public String getDisplay() {
-		return display;
-	}
+    public String getCoding() {
+        return coding;
+    }
 
-	public void setDisplay(String display) {
-		this.display = display;
-	}
+    public void setCoding(String coding) {
+        this.coding = coding;
+    }
 
-	public String getManifestationCoding() {
-		return manifestationCoding;
-	}
+    public String getDisplay() {
+        return display;
+    }
 
-	public void setManifestationCoding(String manifestationCoding) {
-		this.manifestationCoding = manifestationCoding;
-	}
+    public void setDisplay(String display) {
+        this.display = display;
+    }
 
-	public String getManifestationDisplay() {
-		return manifestationDisplay;
-	}
+    public String getManifestationCoding() {
+        return manifestationCoding;
+    }
 
-	public void setManifestationDisplay(String manifestationDisplay) {
-		this.manifestationDisplay = manifestationDisplay;
-	}
+    public void setManifestationCoding(String manifestationCoding) {
+        this.manifestationCoding = manifestationCoding;
+    }
+
+    public String getManifestationDisplay() {
+        return manifestationDisplay;
+    }
+
+    public void setManifestationDisplay(String manifestationDisplay) {
+        this.manifestationDisplay = manifestationDisplay;
+    }
 }

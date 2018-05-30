@@ -2,12 +2,7 @@ package uk.gov.hscic.medication.request;
 
 import org.apache.commons.collections4.Transformer;
 import org.springframework.stereotype.Component;
-
-import uk.gov.hscic.model.medication.MedicationBasedOnReference;
-import uk.gov.hscic.model.medication.MedicationNote;
-import uk.gov.hscic.model.medication.MedicationReasonCode;
-import uk.gov.hscic.model.medication.MedicationReasonReference;
-import uk.gov.hscic.model.medication.MedicationRequestDetail;
+import uk.gov.hscic.model.medication.*;
 
 @Component
 public class MedicationRequestEntityToDetailTransformer implements Transformer<MedicationRequestEntity, MedicationRequestDetail>{
@@ -88,6 +83,7 @@ public class MedicationRequestEntityToDetailTransformer implements Transformer<M
 		requestDetail.setStatusReason(requestEntity.getStatusReason());
 		requestDetail.setStatusReasonDate(requestEntity.getStatusReasonDate());
 		requestDetail.setLastUpdated(requestEntity.getLastUpdated());
+        requestDetail.setGuid(requestEntity.getGuid());
 		
 		return requestDetail;
 	}

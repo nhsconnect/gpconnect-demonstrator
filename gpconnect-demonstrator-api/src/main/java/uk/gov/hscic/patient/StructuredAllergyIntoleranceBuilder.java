@@ -224,7 +224,7 @@ public class StructuredAllergyIntoleranceBuilder {
             listResource.setTitle("Allergies and adverse reactions");
         } else if (display.equals("Resolved Allergies")) {
             listResource.setCode(createCoding("http://snomed.info/sct", "TBD", display));
-            listResource.setTitle("Resolved allergies");
+            listResource.setTitle("Resolved Allergies");
         }
 
         listResource.setMeta(createMeta(SystemURL.SD_GPC_LIST));
@@ -234,7 +234,7 @@ public class StructuredAllergyIntoleranceBuilder {
         addSubjectWithIdentifier(NHS, listResource);
 
         Extension warningCodeExtension = setWarningCode(allergyIntoleranceEntity,display);
-        Extension clinicalSettingExtension = setClinicalSetting(NHS,display, allergyIntoleranceEntity);
+        Extension clinicalSettingExtension = setClinicalSetting(allergyIntoleranceEntity);
         if(warningCodeExtension != null) {
             listResource.addExtension(warningCodeExtension);
         }
@@ -255,7 +255,7 @@ public class StructuredAllergyIntoleranceBuilder {
         return warningCode != null ? new Extension(SystemURL.WARNING_CODE, new Coding("https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-ListWarningCode-1",warningCode,display)) : null;
 
     }
-    private Extension setClinicalSetting(String nhsNumber, String display, List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity) {
+    private Extension setClinicalSetting(List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity) {
         String warningCode = null;
         for(StructuredAllergyIntoleranceEntity structuredAllergyIntoleranceEntity: allergyIntoleranceEntity) {
             warningCode = structuredAllergyIntoleranceEntity.getWarningCode();

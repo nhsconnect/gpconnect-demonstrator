@@ -27,11 +27,11 @@ public class MedicationRequestResourceProvider {
 	
 	@Autowired
 	private MedicationRequestEntityToDetailTransformer medicationRequestEntityToDetailTransformer;
-	
-	public MedicationRequest getMedicationRequestPlanResource(Long medicationRequestId) {
-		MedicationRequestDetail requestDetail = medicationRequestEntityToDetailTransformer
-				.transform(medicationRequestRepository.findOne(medicationRequestId));
-		
+
+    public MedicationRequest getMedicationRequestPlanResource(String medicationRequestId) {
+        MedicationRequestDetail requestDetail = medicationRequestEntityToDetailTransformer
+                .transform(medicationRequestRepository.findByGUID(medicationRequestId));
+
 		MedicationRequest medicationRequest = getMedicationRequestFromDetail(requestDetail);
 		
 		return medicationRequest;

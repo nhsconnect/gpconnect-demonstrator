@@ -22,7 +22,7 @@ public class MedicationStatementEntity {
 	private Date lastIssueDate;
 	
 	@Column(name = "medicationRequestId")
-	private Long medicationRequestId;
+    private String medicationRequestId;
 	
 	@Column(name = "encounterId")
 	private Long encounterId;
@@ -122,11 +122,11 @@ public class MedicationStatementEntity {
 		this.lastIssueDate = lastIssueDate;
 	}
 
-	public Long getMedicationRequestId() {
+    public String getMedicationRequestId() {
 		return medicationRequestId;
 	}
 
-	public void setMedicationRequestId(Long medicationRequestId) {
+    public void setMedicationRequestId(String medicationRequestId) {
 		this.medicationRequestId = medicationRequestId;
 	}
 

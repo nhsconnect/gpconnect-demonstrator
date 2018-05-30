@@ -215,11 +215,11 @@ CREATE TABLE gpconnect.medications (
 CREATE TABLE gpconnect.medication_statements (
   id	              BIGINT       NOT NULL AUTO_INCREMENT,
   lastIssueDate       DATETIME     NULL,
-  medicationRequestId BIGINT       NULL,
+  medicationRequestId VARCHAR(50)       NULL,
   encounterId         BIGINT       NULL,
   statusCode          VARCHAR(50)  NULL,
   statusDisplay       VARCHAR(50)  NULL,
-  medicationId        BIGINT       NULL, 
+  medicationId        BIGINT       NULL,
   startDate           DATETIME     NULL,
   endDate             DATETIME     NULL,
   dateAsserted        DATETIME     NULL,

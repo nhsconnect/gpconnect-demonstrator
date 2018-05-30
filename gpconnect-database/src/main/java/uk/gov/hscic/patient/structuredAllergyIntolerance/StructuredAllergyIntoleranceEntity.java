@@ -62,9 +62,10 @@ public class StructuredAllergyIntoleranceEntity {
 	@Column(name = "warningCode")
 	private String warningCode;
 
-	public String getNhsNumber() {
-    @Column(name = "encounter")
-    private String encounter;
+	@Column(name = "encounter")
+	private String encounter;
+
+
 
     public String getEncounter() {
         return encounter;

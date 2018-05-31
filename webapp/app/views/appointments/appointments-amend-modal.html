@@ -22,9 +22,16 @@
                         {{ appointmentAmend.practitionerName}}
                     </div>
                 </div>
+                
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-md-3">Practitioner Role</label>
+                    <div class="col-md-9">
+                        {{ appointmentAmend.appointmentResource.resource.appointmentType.coding[0].display}}
+                    </div>
+                </div>
 
                 <div class="form-group form-group-sm">
-                    <label class="control-label col-md-3">Type</label>
+                    <label class="control-label col-md-3">Delivery Channel</label>
                     <div class="col-md-9">
                         {{ appointmentAmend.appointmentResource.resource.appointmentType.text}}
                     </div>

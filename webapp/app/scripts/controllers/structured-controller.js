@@ -187,8 +187,12 @@ angular
                 $scope.currentMedications=[];
                 $scope.historicMedications=[];
                 $scope.MedicationRequest = [];
-                const warnigCodeSet = new Set();
-                $scope.WarningCodes = [];
+                const medicationWarningCodeSet = new Set();
+                const activewarningCodeSet = new Set();
+                const resolvedwarningCodeSet = new Set();
+                $scope.MedicationWarningCodes = [];
+                $scope.ActiveAllergiesWarningCodes = [];
+                $scope.ResolvedAllergisWarningCodes = [];
 
                 for (
                     var i = 0;
@@ -243,20 +247,56 @@ angular
                         $scope.MedicationListList.push(resource);
                     }
                     if(resource.resourceType == "List" && resource.extension != null) {
+                        var warningCodeUrl = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ListWarningCode-1";
                         var extentionList = resource.extension;
                         for(var j =0; j <extentionList.length; j++) {
-                            var warningCodeUrl = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ListWarningCode-1";
-                            if(extentionList[j].url == warningCodeUrl) {
-                                warnigCodeSet.add(extentionList[j].valueCoding.code);
-                            }
+                                if(extentionList[j].url == warningCodeUrl) {
+                                    if(extentionList[j].valueCoding.display == "Medications and medical devices") {
+                                        medicationWarningCodeSet.add(extentionList[j].valueCoding.code);
+                                    }
+                                   else  if(extentionList[j].valueCoding.display == "Active Allergies") {
+                                        activewarningCodeSet.add(extentionList[j].valueCoding.code);
+                                    }
+                                    else if(extentionList[j].valueCoding.display == "Resolved Allergies") {
+                                        resolvedwarningCodeSet.add(extentionList[j].valueCoding.code);
+                                    }
+                                }
                         }
                     }
 
 
                 }
-                for(let entry of warnigCodeSet.values()) {
-                    $scope.WarningCodes.push(entry);
+
+                for(let entry of medicationWarningCodeSet.values()) {
+                    if(entry == "confidential-items") {
+                        $scope.MedicationWarningCodes.push("Confidential items");
+                    }
+                    else if(entry == "data-in-transit") {
+                        $scope.MedicationWarningCodes.push("Data in transit");
+                    }
+                    else if(entry == "data-awaiting-filing") {
+                        $scope.MedicationWarningCodes.push("Data awaiting filing");
+                    }
                 }
+
+                for(let entry of activewarningCodeSet.values()) {
+                    if(entry == "confidential-items") {
+                        $scope.ActiveAllergiesWarningCodes.push("Confidential items");
+                    }
+                    else if(entry == "data-in-transit") {
+                        $scope.ActiveAllergiesWarningCodes.push("Data in transit");
+                    }
+                    else if(entry == "data-awaiting-filing") {
+                        $scope.ActiveAllergiesWarningCodes.push("Data awaiting filing");
+                    }
+                }
+
+                for(let entry of resolvedwarningCodeSet.values()) {
+                    if(entry == "confidential-items") {
+                        $scope.ResolvedAllergisWarningCodes.push("Confidential items");
+                    }
+                }
+
 
                 initgetPastMedication();
 

@@ -108,7 +108,7 @@ public class PopulateMedicationBundle {
 	private Extension setWarningCode(MedicationStatementDetail medicationStatementDetail) {
 		String warningCode = medicationStatementDetail.getWarningCode();
 
-		return warningCode != null ? new Extension(SystemURL.WARNING_CODE, new Coding("https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-ListWarningCode-1",warningCode,null)) : null;
+		return warningCode != null ? new Extension(SystemURL.WARNING_CODE, new Coding("https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-ListWarningCode-1",warningCode,"Medications and medical devices")) : null;
 
 	}
 	private Extension setClinicalSetting() {

@@ -1,26 +1,14 @@
 package uk.gov.hscic.medication.statement;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-
 import uk.gov.hscic.medications.MedicationNoteEntity;
 import uk.gov.hscic.medications.MedicationReasonCodeEntity;
 import uk.gov.hscic.medications.MedicationReasonReferenceEntity;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "medication_statements")
@@ -34,7 +22,7 @@ public class MedicationStatementEntity {
 	private Date lastIssueDate;
 	
 	@Column(name = "medicationRequestId")
-	private Long medicationRequestId;
+    private String medicationRequestId;
 	
 	@Column(name = "encounterId")
 	private Long encounterId;
@@ -96,10 +84,32 @@ public class MedicationStatementEntity {
     @Column(name = "lastUpdated")
     private Date lastUpdated;
 
-	@Column(name = "warningCode")
-	private String warningCode;
+    @Column(name = "prescribingAgency")
+    private String prescribingAgency;
 
-	public Long getId() {
+    @Column(name = "guid")
+    private String guid;
+
+    @Column(name = "warningCode")
+    private String warningCode;
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
+
+    public String getPrescribingAgency() {
+        return prescribingAgency;
+    }
+
+    public void setPrescribingAgency(String prescribingAgency) {
+        this.prescribingAgency = prescribingAgency;
+    }
+
+    public Long getId() {
 		return id;
 	}
 
@@ -115,11 +125,11 @@ public class MedicationStatementEntity {
 		this.lastIssueDate = lastIssueDate;
 	}
 
-	public Long getMedicationRequestId() {
+    public String getMedicationRequestId() {
 		return medicationRequestId;
 	}
 
-	public void setMedicationRequestId(Long medicationRequestId) {
+    public void setMedicationRequestId(String medicationRequestId) {
 		this.medicationRequestId = medicationRequestId;
 	}
 

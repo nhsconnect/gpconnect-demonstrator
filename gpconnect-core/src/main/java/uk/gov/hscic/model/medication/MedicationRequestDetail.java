@@ -41,7 +41,16 @@ public class MedicationRequestDetail {
     private Date statusReasonDate;	
     private String statusReason;
     private Date lastUpdated;
-	
+    private String guid;
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
+
     public Long getId() {
 		return id;
 	}

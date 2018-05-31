@@ -1,5 +1,6 @@
 package uk.gov.hscic.medication.requests;
 
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.MedicationRequest.MedicationRequestDispenseRequestComponent;
 import org.hl7.fhir.dstu3.model.MedicationRequest.MedicationRequestIntent;
@@ -8,8 +9,6 @@ import org.hl7.fhir.dstu3.model.MedicationRequest.MedicationRequestStatus;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.medication.request.MedicationRequestEntityToDetailTransformer;
 import uk.gov.hscic.medication.request.MedicationRequestRepository;
@@ -28,11 +27,11 @@ public class MedicationRequestResourceProvider {
 	
 	@Autowired
 	private MedicationRequestEntityToDetailTransformer medicationRequestEntityToDetailTransformer;
-	
-	public MedicationRequest getMedicationRequestPlanResource(Long medicationRequestId) {
-		MedicationRequestDetail requestDetail = medicationRequestEntityToDetailTransformer
-				.transform(medicationRequestRepository.findOne(medicationRequestId));
-		
+
+    public MedicationRequest getMedicationRequestPlanResource(String medicationRequestId) {
+        MedicationRequestDetail requestDetail = medicationRequestEntityToDetailTransformer
+                .transform(medicationRequestRepository.findByGUID(medicationRequestId));
+
 		MedicationRequest medicationRequest = getMedicationRequestFromDetail(requestDetail);
 		
 		return medicationRequest;
@@ -48,8 +47,8 @@ public class MedicationRequestResourceProvider {
 
 	private MedicationRequest getMedicationRequestFromDetail(MedicationRequestDetail requestDetail) {
 		MedicationRequest medicationRequest = new MedicationRequest();
-		
-		medicationRequest.setId(new IdType(requestDetail.getId()));
+
+        medicationRequest.setId(new IdType(requestDetail.getGuid()));
 		medicationRequest.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_REQUEST)
 				.setVersionId(String.valueOf(requestDetail.getLastUpdated().getTime())).setLastUpdated(new Date()));
 		setBasedOnReferences(medicationRequest, requestDetail);		

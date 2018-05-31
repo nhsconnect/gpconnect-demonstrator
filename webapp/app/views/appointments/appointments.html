@@ -150,7 +150,7 @@
                         <div class="text-right col-md-12 buttonBox">
                             <button class="btn btn-default appAmendBtn pull-left" ng-click="closeAppointmentDetail()">Close</button>
                             <button class="btn btn-success appAmendBtn" ng-click="amendAppointment()" ng-show="!appointmentDetail.cancellationReason">Amend</button>
-                            <button class="btn btn-success appAmendBtn" ng-click="amendAppointment()"ng-show="appointmentDetail.cancellationReason" >Amend Cancellation</button>
+                            <button class="btn btn-success appAmendBtn" ng-click="cancelAppointment()"ng-show="appointmentDetail.cancellationReason" >Amend Cancellation</button>
                             <button class="btn btn-danger" ng-click="cancelAppointment()" ng-show="!appointmentDetail.cancellationReason" >Cancel Appointment</button>
                         </div>
                     </div>

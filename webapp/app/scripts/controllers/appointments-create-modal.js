@@ -11,7 +11,6 @@ angular.module('gpConnect')
     $scope.patient = appointmentBookingParams.patient;
     $scope.modal = modal;
     $scope.practitionerName = appointmentBookingParams.practitionerFullName;
-    $scope.scheduleType = appointmentBookingParams.scheduleType;
     $scope.practitionerRole = appointmentBookingParams.practitionerRole;
     $scope.deliveryChannel = appointmentBookingParams.deliveryChannel;
     $scope.practiceName = appointmentBookingParams.location.practiceName;
@@ -21,47 +20,15 @@ angular.module('gpConnect')
     $scope.appointmentCreate.resourceType = "Appointment";
     $scope.appointmentCreate.status = "booked";
     
-    $scope.appointmentCreate.reason = [{
-        "coding": [
-            {
-                "system": gpcResource.getConst("VS_SNOMED_SCT"),
-                "code": "00001",
-                "display": "Default Appointment Type"
-            }
-        ]
-    }];
-    
-    // $scope.appointmentCreate.serviceCategory = {
-    //     "coding": [
-    //         {
-    //             "system": "http://example.org/service-category",
-    //             "code": "gp",
-    //             "display": "General Practice"
-    //         }
-    //     ]
-    // };
-    
-    // $scope.appointmentCreate.specialty = [
-    //     {
-    //         "coding": [
-    //             {
-    //                 "system": "http://example.org/specialty",
-    //                 "code": "gp",
-    //                 "display": "General Practice"
-    //             }
-    //         ]
-    //     }
-    // ];
-    
     $scope.appointmentCreate.appointmentType =  {
         "coding": [
             {
                 "system": "http://example.org/appointment-type",
                 "code": appointmentBookingParams.typeCode,
-                "display": appointmentBookingParams.scheduleType
+                "display": appointmentBookingParams.practitionerRole
             }
         ],
-        "text": appointmentBookingParams.scheduleType
+        "text": appointmentBookingParams.deliveryChannel
     };
     
     $scope.appointmentCreate.start = appointmentBookingParams.startTime;

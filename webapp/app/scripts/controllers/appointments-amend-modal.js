@@ -24,7 +24,8 @@ angular.module('gpConnect')
                 $scope.formSubmitted = true;
                 if($scope.cancelReasonIndex != -1){
                     // Amend cancelled appointment
-                    if ($scope.appointmentAmend.appointmentResource.resource.extension[$scope.cancelReasonIndex].valueString.length > 0) {
+                    if ($scope.appointmentAmend.appointmentResource.resource.extension[$scope.cancelReasonIndex].valueId.length > 0) {
+                        $scope.appointmentAmend.appointmentResource.resource.description = $scope.descriptionDisplayText;
                         usSpinnerService.spin('appointmentAmend-spinner');
                         Appointment.save($scope.appointmentAmend.appointmentResource.appointmentPracticeOdsCode, $stateParams.patientId, $scope.appointmentAmend.appointmentResource.resource.id, $scope.appointmentAmend.appointmentResource.resource).then(function (response) {
                             if (response.status != "200") {

@@ -22,11 +22,18 @@
                         {{ appointmentCancel.practitionerName}}
                     </div>
                 </div>
+                
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-md-3">Practitioner Role</label>
+                    <div class="col-md-9">
+                        {{ appointmentCancel.appointmentResource.resource.appointmentType.coding[0].display}}
+                    </div>
+                </div>
 
                 <div class="form-group form-group-sm">
-                    <label class="control-label col-md-3">Type</label>
+                    <label class="control-label col-md-3">Delivery Channel</label>
                     <div class="col-md-9">
-                        {{ appointmentCancel.appointmentResource.resource.type.text}}
+                        {{ appointmentCancel.appointmentResource.resource.appointmentType.text}}
                     </div>
                 </div>
             </div>
@@ -51,7 +58,7 @@
                 <div class="form-group form-group-sm">
                     <label class="control-label col-md-12">Cancellation Reason</label>
                     <div class="col-md-12">
-                        <textarea ngRequired="true" class="col-md-12" name="cancelReason" id="appointmentComment" ng-model="appointmentCancel.appointmentResource.resource.extension[cancelReasonIndex].valueString" rows="3"></textarea>
+                        <textarea ngRequired="true" class="col-md-12" name="cancelReason" id="appointmentComment" ng-model="appointmentCancel.appointmentResource.resource.extension[cancelReasonIndex].valueId" rows="3"></textarea>
                     </div>
                 </div>
             </div>

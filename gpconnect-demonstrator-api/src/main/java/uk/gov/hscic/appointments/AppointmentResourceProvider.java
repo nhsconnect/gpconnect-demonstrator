@@ -424,8 +424,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             if (amendComparisonResult) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnclassifiedServerFailureException(403, "Invalid Appointment property has been amended"),
-                        SystemCode.BAD_REQUEST, IssueType.FORBIDDEN);
+                        new UnclassifiedServerFailureException(422, "Invalid Appointment property has been amended"),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
 
             // This is an Amend

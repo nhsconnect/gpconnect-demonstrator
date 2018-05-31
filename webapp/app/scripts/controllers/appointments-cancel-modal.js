@@ -21,14 +21,14 @@ angular.module('gpConnect')
             if ($scope.cancelReasonIndex == -1) {
                 $scope.appointmentCancel.appointmentResource.resource.extension = [{
                         "url": gpcResource.getConst("SD_EXT_GPC_APPOINT_CANC_REAS"),
-                        "valueString": ""
+                        "valueId": ""
                     }];
                 $scope.cancelReasonIndex = 0;
             }
 
             $scope.cancelAppointment = function (appointmentCancelForm) {
                 $scope.formSubmitted = true;
-                if ($scope.appointmentCancel.appointmentResource.resource.extension[$scope.cancelReasonIndex].valueString.length > 0) {
+                if ($scope.appointmentCancel.appointmentResource.resource.extension[$scope.cancelReasonIndex].valueId.length > 0) {
                     usSpinnerService.spin('appointmentCancel-spinner');
                     Appointment.cancel($scope.appointmentCancel.appointmentResource.appointmentPracticeOdsCode, $stateParams.patientId, $scope.appointmentCancel.appointmentResource.resource.id, $scope.appointmentCancel.appointmentResource.resource).then(function (response) {
                         if (response.status != "200") {

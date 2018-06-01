@@ -267,35 +267,42 @@ angular
 
                 }
 
-                for(let entry of medicationWarningCodeSet.values()) {
-                    if(entry == "confidential-items") {
+                medicationWarningCodeSet.forEach(function (value) {
+                    if(value == "confidential-items") {
                         $scope.MedicationWarningCodes.push("Confidential items");
                     }
-                    else if(entry == "data-in-transit") {
+                    else if(value == "data-in-transit") {
                         $scope.MedicationWarningCodes.push("Data in transit");
                     }
-                    else if(entry == "data-awaiting-filing") {
+                    else if(value == "data-awaiting-filing") {
                         $scope.MedicationWarningCodes.push("Data awaiting filing");
                     }
-                }
+                });
 
-                for(let entry of activewarningCodeSet.values()) {
-                    if(entry == "confidential-items") {
+                activewarningCodeSet.forEach(function (value) {
+                    if(value == "confidential-items") {
                         $scope.ActiveAllergiesWarningCodes.push("Confidential items");
                     }
-                    else if(entry == "data-in-transit") {
+                    else if(value == "data-in-transit") {
                         $scope.ActiveAllergiesWarningCodes.push("Data in transit");
                     }
-                    else if(entry == "data-awaiting-filing") {
+                    else if(value == "data-awaiting-filing") {
                         $scope.ActiveAllergiesWarningCodes.push("Data awaiting filing");
                     }
-                }
+                });
 
-                for(let entry of resolvedwarningCodeSet.values()) {
-                    if(entry == "confidential-items") {
+
+                resolvedwarningCodeSet.forEach(function (value) {
+                    if(value == "confidential-items") {
                         $scope.ResolvedAllergisWarningCodes.push("Confidential items");
                     }
-                }
+                    else if(value == "data-in-transit") {
+                        $scope.ResolvedAllergisWarningCodes.push("Data in transit");
+                    }
+                    else if(value == "data-awaiting-filing") {
+                        $scope.ResolvedAllergisWarningCodes.push("Data awaiting filing");
+                    }
+                });
 
 
                 initgetPastMedication();

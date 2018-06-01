@@ -63,7 +63,7 @@
 
         <br>
         <br>
-            <h4>Current Medications <span ng-repeat="code in MedicationWarningCodes" style="color:red;font-size: 15px;">(WarningCode{{code}})</span></h4>
+            <h4>Current Medications <span ng-repeat="code in MedicationWarningCodes" style="color:red;font-size: 15px;">(WarningCode: {{code}})</span></h4>
 
 
         <table class="table table-bordered table-striped table-hover">
@@ -120,7 +120,7 @@
             </div>
         </div>
 
-        <h4>Active Allergies <span ng-repeat="code in ActiveAllergiesWarningCodes" style="color:red;font-size: 15px;">(WarningCode:{{code}})</span></h4>
+        <h4>Active Allergies <span ng-repeat="code in ActiveAllergiesWarningCodes" style="color:red;font-size: 15px;">(WarningCode: {{code}})</span></h4>
         <table class="table table-bordered table-striped table-hover">
             <thead>
             <tr>
@@ -139,7 +139,7 @@
         </table>
 
         <div ng-show="includeResolvedAllergies">
-            <h4>Resolved Allergies <span ng-repeat="code in ResolvedAllergisWarningCodes" style="color:red;font-size: 15px;">(WarningCode:{{code}})</span></h4>
+            <h4>Resolved Allergies <span ng-repeat="code in ResolvedAllergisWarningCodes" style="color:red;font-size: 15px;">(WarningCode: {{code}})</span></h4>
             <table class="table table-bordered table-striped table-hover">
                 <thead>
                 <tr>

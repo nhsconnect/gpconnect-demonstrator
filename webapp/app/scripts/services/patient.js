@@ -148,10 +148,8 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
                 datePeriod = '{"name":"medicationDatePeriod", "valuePeriod" : { "start" : '+start+', "end" : '+end+' }},';
             }
             var includeMedication =  '{"name" : "includeMedication","part": ['+datePeriod+'{"name":"includePrescriptionIssues", "valueBoolean" : '+includePrescriptionIssues+'}]}';
-            var body = '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "' + gpcResource.getConst("ID_NHS_NUMBER") + '", "value" : "' + patientId + '" }},{"name" : "includeAllergies","valueCodeableConcept" :{"coding" : [{"system":"' + gpcResource.getConst("VS_GPC_RECORD_SECTION") + '","code":"SUM","display":"Summary"}]},  '+includeResolvedAllergiesPart+'},'+includeMedication+']}';
-            
-            
-            
+            var body = '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "' + gpcResource.getConst("ID_NHS_NUMBER") + '", "value" : "' + patientId + '" }},{"name" : "includeAllergies",'+includeResolvedAllergiesPart+'},'+includeMedication+']}';
+                       
             
             return $http.post(
                 endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getstructuredrecord',

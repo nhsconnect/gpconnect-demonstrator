@@ -32,12 +32,6 @@ public class WebTokenValidator {
                     new InvalidRequestException("Bad Request Exception"), SystemCode.BAD_REQUEST,
                     IssueType.INVALID);
         }
-
-        if (!SystemURL.AUTHORIZATION_TOKEN.equals(webToken.getAud()) ) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Bad Request Exception"), SystemCode.BAD_REQUEST,
-                    IssueType.INVALID);
-        }
     }
 
     private static void verifyNoNullValues(WebToken webToken) {

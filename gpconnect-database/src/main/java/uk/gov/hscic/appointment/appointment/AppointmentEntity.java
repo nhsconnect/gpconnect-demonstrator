@@ -67,8 +67,6 @@ public class AppointmentEntity {
     @Column(name = "typeText")
     private String typeText;
       
-    //@OneToOne(cascade = CascadeType.PERSIST, mappedBy = "id")
-    //@JoinColumn(name = "id")
     @OneToOne(cascade=CascadeType.ALL, mappedBy="appointmentEntity") 
     private BookingOrgEntity bookingOrganization;
     

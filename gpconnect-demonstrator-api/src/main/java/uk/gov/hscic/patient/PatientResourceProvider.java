@@ -51,9 +51,6 @@ import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.helpers.StaticElementsHelper;
 import uk.gov.hscic.common.validators.IdentifierValidator;
-import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
-import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
-import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.patient.details.PatientSearch;
 import uk.gov.hscic.patient.details.PatientStore;
@@ -70,15 +67,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
-
-    @Autowired
-    private MedicationOrderResourceProvider medicationOrderResourceProvider;
-
-    @Autowired
-    private MedicationDispenseResourceProvider medicationDispenseResourceProvider;
-
-    @Autowired
-    private MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
 
     @Autowired
     private AppointmentResourceProvider appointmentResourceProvider;
@@ -206,22 +194,6 @@ public class PatientResourceProvider implements IResourceProvider {
                     new InvalidRequestException("Not all mandatory parameters have been provided"),
                     SystemCode.INVALID_PARAMETER, IssueType.INVALID);
         }
-    }
-
-    @Search(compartmentName = "MedicationOrder")
-    public List<MedicationRequest> getPatientMedicationOrders(@IdParam IdType patientLocalId) {
-        return medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientLocalId.getIdPart());
-    }
-
-    @Search(compartmentName = "MedicationDispense")
-    public List<MedicationDispense> getPatientMedicationDispenses(@IdParam IdType patientLocalId) {
-        return medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientLocalId.getIdPart());
-    }
-
-    @Search(compartmentName = "MedicationAdministration")
-    public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdType patientLocalId) {
-        return medicationAdministrationResourceProvider
-                .getMedicationAdministrationsForPatientId(patientLocalId.getIdPart());
     }
 
     @Search(compartmentName = "Appointment")
@@ -559,7 +531,6 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         patientDetails.setRegistrationStartDateTime(new Date());
-        // patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
         patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
         patientDetails.setRegistrationType(TEMPORARY_RESIDENT_REGISTRATION_TYPE);
         updateAddressAndTelecom(patientResource, patientDetails);

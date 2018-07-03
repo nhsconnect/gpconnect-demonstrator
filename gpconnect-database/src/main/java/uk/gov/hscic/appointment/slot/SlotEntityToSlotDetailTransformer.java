@@ -10,12 +10,6 @@ public class SlotEntityToSlotDetailTransformer implements Transformer<SlotEntity
         SlotDetail slotDetail = new SlotDetail();
         slotDetail.setId(item.getId());
 
-//        if (item.getAppointmentId() != null) {
-//            slotDetail.setAppointmentId(item.getAppointmentId().getId());
-//        }  else {
-//            slotDetail.setAppointmentId(null);
-//        }
-
         slotDetail.setTypeCode(item.getTypeCode());
         slotDetail.setTypeDisply(item.getTypeDisply());
         slotDetail.setScheduleReference(item.getScheduleReference());
@@ -23,6 +17,8 @@ public class SlotEntityToSlotDetailTransformer implements Transformer<SlotEntity
         slotDetail.setStartDateTime(item.getStartDateTime());
         slotDetail.setEndDateTime(item.getEndDateTime());
         slotDetail.setLastUpdated(item.getLastUpdated());
+        slotDetail.setGpConnectBookable(item.isGpConnectBookable());
+        
         return slotDetail;
     }
 }

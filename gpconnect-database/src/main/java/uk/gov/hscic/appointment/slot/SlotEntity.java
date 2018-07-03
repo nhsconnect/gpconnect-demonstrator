@@ -25,10 +25,6 @@ public class SlotEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-//    @ManyToOne(optional=true)
-//    @JoinColumn(name="appointmentId", referencedColumnName="id")
-//    private AppointmentEntity appointmentId;
     
     @Column(name = "typeCode")
     private Long typeCode;

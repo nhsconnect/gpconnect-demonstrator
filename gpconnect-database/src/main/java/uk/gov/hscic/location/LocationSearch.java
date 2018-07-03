@@ -12,16 +12,6 @@ public class LocationSearch {
 
     @Autowired
     private LocationRepository locationRepository;
-
-    public List<LocationDetails> findLocationDetailsBySiteOdsCode(String siteOdsCode) {
-        return locationRepository.findBySiteOdsCode(siteOdsCode).stream().map(transformer::transform)
-                .collect(Collectors.toList());
-    }
-
-    public List<LocationDetails> findLocationDetailsByOrgOdsCode(String orgOdsCode) {
-        return locationRepository.findByOrgOdsCode(orgOdsCode).stream().map(transformer::transform)
-                .collect(Collectors.toList());
-    }
     
     public List<LocationDetails> findAllLocations()
     {

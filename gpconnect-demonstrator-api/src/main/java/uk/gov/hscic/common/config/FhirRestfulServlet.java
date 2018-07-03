@@ -26,10 +26,6 @@ import uk.gov.hscic.common.filters.FhirRequestAuthInterceptor;
 import uk.gov.hscic.common.filters.FhirRequestGenericIntercepter;
 import uk.gov.hscic.common.filters.PatientJwtValidator;
 import uk.gov.hscic.location.LocationResourceProvider;
-import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
-import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
-import uk.gov.hscic.medications.MedicationOrderResourceProvider;
-import uk.gov.hscic.medications.MedicationResourceProvider;
 import uk.gov.hscic.metadata.GpConnectServerCapabilityStatementProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.PatientResourceProvider;
@@ -61,15 +57,10 @@ public class FhirRestfulServlet extends RestfulServer {
                 applicationContext.getBean(PatientResourceProvider.class),
                 applicationContext.getBean(OrganizationResourceProvider.class),
                 applicationContext.getBean(PractitionerResourceProvider.class),
-                applicationContext.getBean(MedicationResourceProvider.class),
-                applicationContext.getBean(MedicationOrderResourceProvider.class),
-                applicationContext.getBean(MedicationDispenseResourceProvider.class),
-                applicationContext.getBean(MedicationAdministrationResourceProvider.class),
                 applicationContext.getBean(LocationResourceProvider.class),
                 applicationContext.getBean(AppointmentResourceProvider.class),
                 applicationContext.getBean(ScheduleResourceProvider.class),
                 applicationContext.getBean(SlotResourceProvider.class)
-               // applicationContext.getBean(OrderResourceProvider.class)
              
         ));
 

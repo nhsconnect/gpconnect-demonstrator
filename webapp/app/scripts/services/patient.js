@@ -82,7 +82,6 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
                     return undefined;
                 }
             });
-
             return response;
         });
     };

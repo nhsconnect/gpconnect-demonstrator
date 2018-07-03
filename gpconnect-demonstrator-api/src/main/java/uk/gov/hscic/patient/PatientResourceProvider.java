@@ -779,12 +779,10 @@ public class PatientResourceProvider implements IResourceProvider {
         if (gpId != null) {
             Practitioner prac = practitionerResourceProvider.getPractitionerById(new IdType(gpId));
             HumanName practitionerName = prac.getNameFirstRep();
-
             Reference practitionerReference = new Reference("Practitioner/" + gpId)
-                    .setDisplay(practitionerName.getPrefix() + " " + practitionerName.getGivenAsSingleString() + " "
+                    .setDisplay(practitionerName.getPrefix().get(0) + " " + practitionerName.getGivenAsSingleString() + " "
                             + practitionerName.getFamily());
-
-            // patient.getCareProvider().add(practitionerReference);
+            patient.setGeneralPractitioner(Collections.singletonList(practitionerReference));
         }
 
         String telephoneNumber = patientDetails.getTelephone();

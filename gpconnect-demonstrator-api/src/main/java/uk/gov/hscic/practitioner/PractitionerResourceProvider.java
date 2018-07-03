@@ -132,7 +132,7 @@ public class PractitionerResourceProvider implements IResourceProvider {
                 .setUse(NameUse.USUAL);
 
         practitioner.addName(name);
-
+        
         switch (practitionerDetails.getGender().toLowerCase(Locale.UK)) {
             case "male":
                 practitioner.setGender(AdministrativeGender.MALE);

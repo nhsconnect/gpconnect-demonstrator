@@ -11,6 +11,7 @@ angular.module('gpConnect')
         }
       });
       $scope.patientLocalIdentifier = patient.id;
+      
     });
 
     $scope.goTo = function (section) {

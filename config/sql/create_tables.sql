@@ -20,9 +20,6 @@ DROP TABLE IF EXISTS gpconnect.medication_notes;
 DROP TABLE IF EXISTS gpconnect.medication_request_based_on;
 DROP TABLE IF EXISTS gpconnect.medication_statements;
 DROP TABLE IF EXISTS gpconnect.medication_requests;
-DROP TABLE IF EXISTS gpconnect.medication_orders;
-DROP TABLE IF EXISTS gpconnect.medication_dispenses;
-DROP TABLE IF EXISTS gpconnect.medication_administrations;
 DROP TABLE IF EXISTS gpconnect.patients;
 DROP TABLE IF EXISTS gpconnect.medications;
 DROP TABLE IF EXISTS gpconnect.practitioners;
@@ -349,46 +346,6 @@ CREATE TABLE gpconnect.medication_request_notes (
   noteId			  BIGINT NOT NULL,
   FOREIGN KEY (medicationRequestId) REFERENCES gpconnect.medication_requests(id),
   FOREIGN KEY (noteId) 		        REFERENCES gpconnect.medication_notes(id)
-);
-
-CREATE TABLE gpconnect.medication_orders (
-  id                       BIGINT    NOT NULL AUTO_INCREMENT,
-  date_written             DATETIME  NULL,
-  order_status             TEXT(50)  NULL,
-  patient_id               BIGINT    NULL,
-  author_id                BIGINT    NULL,
-  medication_id            BIGINT    NULL,
-  dosage_text              TEXT(300) NULL,
-  dispense_quantity_text   TEXT(300) NULL,
-  dispense_review_date     DATETIME  NULL,
-  dispense_medication_id   BIGINT    NULL,
-  dispense_repeats_allowed INT       NULL,
-  lastUpdated              DATETIME  NULL,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE gpconnect.medication_dispenses (
-  id                BIGINT    NOT NULL AUTO_INCREMENT,
-  status            TEXT(50)  NULL,
-  patientId         BIGINT    NULL,
-  medicationOrderId BIGINT    NULL,
-  medicationId      BIGINT    NULL,
-  medicationName    TEXT(300) NULL,
-  dosageText        TEXT(300) NULL,
-  lastUpdated       DATETIME  NULL,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE gpconnect.medication_administrations (
-  id                 BIGINT   NOT NULL AUTO_INCREMENT,
-  patientId          BIGINT   NULL,
-  practitionerId     BIGINT   NULL,
-  encounterId        BIGINT   NULL,
-  prescriptionId     BIGINT   NULL,
-  administrationDate DATETIME NULL,
-  medicationId       BIGINT   NULL,
-  lastUpdated        DATETIME NULL,
-  PRIMARY KEY (id)
 );
 
 CREATE TABLE gpconnect.addresses (

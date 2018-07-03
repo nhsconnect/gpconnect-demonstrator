@@ -3,8 +3,6 @@ package uk.gov.hscic.common.filters;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Locale;
-
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;

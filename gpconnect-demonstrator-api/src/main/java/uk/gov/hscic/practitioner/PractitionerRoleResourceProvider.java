@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
-import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.model.practitioner.PractitionerDetails;
 
 import java.util.Arrays;

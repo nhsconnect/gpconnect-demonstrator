@@ -122,7 +122,7 @@ public class PractitionerResourceProvider implements IResourceProvider {
                 .setUse(NameUse.USUAL);
 
         practitioner.addName(name);
-
+        
         switch (practitionerDetails.getGender().toLowerCase(Locale.UK)) {
             case "male":
                 practitioner.setGender(AdministrativeGender.MALE);
@@ -137,14 +137,6 @@ public class PractitionerResourceProvider implements IResourceProvider {
                 practitioner.setGender(AdministrativeGender.UNKNOWN);
                 break;
         }
-
-        Coding roleCoding = new Coding(SystemURL.VS_SDS_JOB_ROLE_NAME, practitionerDetails.getRoleCode(), 
-        		practitionerDetails.getRoleDisplay());        
-       
-      /*  practitioner.addPractitionerRole().setRole(new CodeableConcept().addCoding(roleCoding))
-                .setManagingOrganization(
-                        new Reference("Organization/" + practitionerDetails.getOrganizationId())); // Associated
-                                                                                                             // Organisation*/
 
         for (int i = 0; i < practitionerDetails.getComCode().size(); i++) {
 

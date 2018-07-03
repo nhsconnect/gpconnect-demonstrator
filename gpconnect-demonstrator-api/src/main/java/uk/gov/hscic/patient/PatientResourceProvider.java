@@ -31,9 +31,6 @@ import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.helpers.StaticElementsHelper;
 import uk.gov.hscic.common.validators.IdentifierValidator;
-import uk.gov.hscic.medications.MedicationAdministrationResourceProvider;
-import uk.gov.hscic.medications.MedicationDispenseResourceProvider;
-import uk.gov.hscic.medications.MedicationOrderResourceProvider;
 import uk.gov.hscic.medications.PopulateMedicationBundle;
 import uk.gov.hscic.model.organization.OrganizationDetails;
 import uk.gov.hscic.model.patient.PatientDetails;
@@ -64,14 +61,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PractitionerRoleResourceProvider practitionerRoleResourceProvider;
-
-    @Autowired
-    private MedicationOrderResourceProvider medicationOrderResourceProvider;
-    @Autowired
-    private MedicationDispenseResourceProvider medicationDispenseResourceProvider;
-
-    @Autowired
-    private MedicationAdministrationResourceProvider medicationAdministrationResourceProvider;
 
     @Autowired
     private AppointmentResourceProvider appointmentResourceProvider;
@@ -202,22 +191,6 @@ public class PatientResourceProvider implements IResourceProvider {
                     new InvalidRequestException("Not all mandatory parameters have been provided"),
                     SystemCode.INVALID_PARAMETER, IssueType.INVALID);
         }
-    }
-
-    @Search(compartmentName = "MedicationOrder")
-    public List<MedicationRequest> getPatientMedicationOrders(@IdParam IdType patientLocalId) {
-        return medicationOrderResourceProvider.getMedicationOrdersForPatientId(patientLocalId.getIdPart());
-    }
-
-    @Search(compartmentName = "MedicationDispense")
-    public List<MedicationDispense> getPatientMedicationDispenses(@IdParam IdType patientLocalId) {
-        return medicationDispenseResourceProvider.getMedicationDispensesForPatientId(patientLocalId.getIdPart());
-    }
-
-    @Search(compartmentName = "MedicationAdministration")
-    public List<MedicationAdministration> getPatientMedicationAdministration(@IdParam IdType patientLocalId) {
-        return medicationAdministrationResourceProvider
-                .getMedicationAdministrationsForPatientId(patientLocalId.getIdPart());
     }
 
     @Search(compartmentName = "Appointment")
@@ -900,7 +873,7 @@ public class PatientResourceProvider implements IResourceProvider {
             HumanName practitionerName = prac.getNameFirstRep();
 
             Reference practitionerReference = new Reference("Practitioner/" + gpId)
-                    .setDisplay(practitionerName.getPrefix() + " " + practitionerName.getGivenAsSingleString() + " "
+                    .setDisplay(practitionerName.getPrefix().get(0) + " " + practitionerName.getGivenAsSingleString() + " "
                             + practitionerName.getFamily());
             List<Reference> ref = new ArrayList<Reference>();
             ref.add(practitionerReference);

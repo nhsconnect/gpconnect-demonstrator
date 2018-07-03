@@ -10,7 +10,6 @@ import org.hl7.fhir.dstu3.model.ListResource.ListStatus;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IIdType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
@@ -22,7 +21,6 @@ import uk.gov.hscic.medication.statement.MedicationStatementResourceProvider;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
-import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerRoleResourceProvider;
 

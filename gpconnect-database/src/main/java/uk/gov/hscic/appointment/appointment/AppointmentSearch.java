@@ -30,28 +30,7 @@ public class AppointmentSearch {
         return item == null
                 ? null
                 : transformer.transform(item);
-    }    
-
-    public List<AppointmentDetail> findAppointmentForPatientId(Long patinetId) {
-        return appointmentRepository.findByPatientId(patinetId)
-                .stream()
-                .map(transformer::transform)
-                .collect(Collectors.toList());
-    }
-
-    public List<AppointmentDetail> findAppointmentForPatientId(Long patinetId, Date startDate) {
-        return appointmentRepository.findByPatientIdAndEndDateTimeAfter(patinetId, startDate)
-                .stream()
-                .map(transformer::transform)
-                .collect(Collectors.toList());
-    }
-
-    public List<AppointmentDetail> findAppointmentForPatientId(Long patinetId, Date startDate, Date endDate) {
-        return appointmentRepository.findByPatientIdAndEndDateTimeAfterAndStartDateTimeBefore(patinetId, startDate, endDate)
-                .stream()
-                .map(transformer::transform)
-                .collect(Collectors.toList());
-    }
+    }  
 
     public List<AppointmentDetail> searchAppointments(Long patientId, Date startLowerDate, Date startUpperDate) {
         return appointmentRepository.findByPatientId(patientId)

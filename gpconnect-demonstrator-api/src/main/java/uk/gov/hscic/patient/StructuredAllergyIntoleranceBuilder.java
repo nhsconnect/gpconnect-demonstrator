@@ -19,8 +19,6 @@ import uk.gov.hscic.practitioner.PractitionerSearch;
 
 import java.util.*;
 
-import static uk.gov.hscic.SystemURL.CC_WARNING_CODE;
-
 @Component
 public class StructuredAllergyIntoleranceBuilder {
 

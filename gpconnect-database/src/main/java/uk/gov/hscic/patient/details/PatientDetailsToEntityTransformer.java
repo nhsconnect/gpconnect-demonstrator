@@ -8,15 +8,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import uk.gov.hscic.medical.practicitioners.doctor.GPEntity;
-import uk.gov.hscic.medical.practicitioners.doctor.GPRepository;
 import uk.gov.hscic.model.patient.PatientDetails;
+import uk.gov.hscic.practitioner.PractitionerEntity;
+import uk.gov.hscic.practitioner.PractitionerRepository;
 
 @Component
 public class PatientDetailsToEntityTransformer implements Transformer<PatientDetails, PatientEntity> {
 
 	@Autowired
-	private GPRepository gPRepository;
+	private PractitionerRepository practitionerRepository;
 
 	@Override
 	public PatientEntity transform(PatientDetails patientDetails) {
@@ -47,10 +47,10 @@ public class PatientDetailsToEntityTransformer implements Transformer<PatientDet
 			}
 
 			if (patientDetails.getGpDetails() != null) {
-				List<GPEntity> gpList = gPRepository.findByName(patientDetails.getGpDetails());
+				List<PractitionerEntity> gpList = practitionerRepository.findByUserId(patientDetails.getGpDetails());
 
 				if (gpList.size() == 1) {
-					patientEntity.setGp(gpList.get(0));
+					patientEntity.setPractitioner(gpList.get(0));
 				} else if (gpList.size() > 1) {
 					throw new IllegalStateException(String.format("Invalid number of GPs associated with patient - (first name - %s, last name - %s). Expected - 1. Actual - %d", patientDetails.getForename(), patientDetails.getSurname(), gpList.size()));
 				}
@@ -76,7 +76,6 @@ public class PatientDetailsToEntityTransformer implements Transformer<PatientDet
 			patientEntity.setRegistrationEndDateTime(patientDetails.getRegistrationEndDateTime());
 			patientEntity.setRegistrationStatus(patientDetails.getRegistrationStatus());
 			patientEntity.setRegistrationType(patientDetails.getRegistrationType());
-			//patientEntity.setMultipleBirth(patientDetails.isMultipleBirth());
 			patientEntity.setMaritalStatus(patientDetails.getMaritalStatus());
 			patientEntity.setManagingOrganization(patientDetails.getManagingOrganization());
 		}

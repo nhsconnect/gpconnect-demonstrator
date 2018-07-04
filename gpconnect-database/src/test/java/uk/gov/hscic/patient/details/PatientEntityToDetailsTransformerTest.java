@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
-import uk.gov.hscic.medical.practicitioners.doctor.GPEntity;
 import uk.gov.hscic.model.patient.PatientDetails;
+import uk.gov.hscic.practitioner.PractitionerEntity;
 
 public class PatientEntityToDetailsTransformerTest {
     private static final String PATIENT_ID = "PATIENT";
@@ -42,7 +42,7 @@ public class PatientEntityToDetailsTransformerTest {
     private PatientEntity dummyPatientEntity() {
         final PatientEntity patient = new PatientEntity();
         patient.setNhsNumber(PATIENT_ID);
-        patient.setGp(new GPEntity());
+        patient.setPractitioner(new PractitionerEntity());
 
         return patient;
     }

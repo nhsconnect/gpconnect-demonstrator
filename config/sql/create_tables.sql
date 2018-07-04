@@ -6,13 +6,12 @@ DROP TABLE IF EXISTS gpconnect.appointment_slots_orgType;
 DROP TABLE IF EXISTS gpconnect.appointment_appointments_slots;
 DROP TABLE IF EXISTS gpconnect.appointment_schedules;
 DROP TABLE IF EXISTS gpconnect.appointment_slots;
-DROP TABLE IF EXISTS gpconnect.practitioners;
 DROP TABLE IF EXISTS gpconnect.organizations;
 DROP TABLE IF EXISTS gpconnect.patients;
+DROP TABLE IF EXISTS gpconnect.practitioners;
 DROP TABLE IF EXISTS gpconnect.locations;
 DROP TABLE IF EXISTS gpconnect.appointment_booking_orgz;
 DROP TABLE IF EXISTS gpconnect.appointment_appointments;
-DROP TABLE IF EXISTS gpconnect.general_practitioners;
 DROP TABLE IF EXISTS gpconnect.medical_departments;
 DROP TABLE IF EXISTS gpconnect.addresses;
 
@@ -97,19 +96,6 @@ CREATE TABLE appointment_appointments_slots (
 	FOREIGN KEY (slotId) 		REFERENCES gpconnect.appointment_slots(id)
 );
 
-CREATE TABLE gpconnect.general_practitioners (
-  id          BIGINT       NOT NULL AUTO_INCREMENT,
-  gp_name     VARCHAR(150) NULL,
-  address_1   VARCHAR(100) NULL,
-  address_2   VARCHAR(100) NULL,
-  address_3   VARCHAR(100) NULL,
-  address_4   VARCHAR(100) NULL,
-  address_5   VARCHAR(100) NULL,
-  postcode    VARCHAR(10)  NULL,
-  lastUpdated DATETIME     NULL,
-  PRIMARY KEY (id)
-);
-
 CREATE TABLE gpconnect.practitioners (
   id                BIGINT       NOT NULL AUTO_INCREMENT,
   userid            VARCHAR(30)  NULL,
@@ -179,7 +165,7 @@ CREATE TABLE gpconnect.patients (
   managing_organization BIGINT     NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (department_id) REFERENCES gpconnect.medical_departments(id),
-  FOREIGN KEY (gp_id) REFERENCES gpconnect.general_practitioners(id)
+  FOREIGN KEY (gp_id) REFERENCES gpconnect.practitioners(id)
 );
 
 CREATE TABLE gpconnect.addresses (

@@ -27,7 +27,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import uk.gov.hscic.medical.department.DepartmentEntity;
-import uk.gov.hscic.medical.practicitioners.doctor.GPEntity;
+import uk.gov.hscic.practitioner.PractitionerEntity;
 
 @Entity
 @Table(name = "patients")
@@ -68,7 +68,7 @@ public class PatientEntity {
 
     @ManyToOne
     @JoinColumn(name = "gp_id")
-    private GPEntity gp;
+    private PractitionerEntity practitioner;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -162,8 +162,8 @@ public class PatientEntity {
         return gender;
     }
 
-    public GPEntity getGp() {
-        return gp;
+    public PractitionerEntity getPractitioner() {
+        return practitioner;
     }
 
     public Long getId() {
@@ -270,8 +270,8 @@ public class PatientEntity {
         this.gender = gender;
     }
 
-    public void setGp(GPEntity gp) {
-        this.gp = gp;
+    public void setPractitioner(PractitionerEntity practitioner) {
+        this.practitioner = practitioner;
     }
 
     public void setId(Long id) {

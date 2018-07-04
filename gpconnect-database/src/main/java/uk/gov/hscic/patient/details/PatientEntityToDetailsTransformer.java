@@ -10,8 +10,8 @@ import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import uk.gov.hscic.medical.practicitioners.doctor.GPEntity;
 import uk.gov.hscic.model.patient.PatientDetails;
+import uk.gov.hscic.practitioner.PractitionerEntity;
 
 @Component
 public class PatientEntityToDetailsTransformer implements Transformer<PatientEntity, PatientDetails> {
@@ -48,14 +48,13 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         patient.setRegistrationEndDateTime(patientEntity.getRegistrationEndDateTime());
         patient.setRegistrationStatus(patientEntity.getRegistrationStatus());
         patient.setRegistrationType(patientEntity.getRegistrationType());
-       // patient.setMultipleBirth(patientEntity.isMultipleBirth());
         patient.setMaritalStatus(patientEntity.getMaritalStatus());
         patient.setManagingOrganization(patientEntity.getManagingOrganization());
 
-        GPEntity gp = patientEntity.getGp();
+        PractitionerEntity gp = patientEntity.getPractitioner();
         
         if (gp != null) {
-        	patient.setGpDetails(gp.getName());
+        	patient.setGpDetails(gp.getNamePrefix() + " " + gp.getNameGiven() + " " + gp.getNameFamily());
         	patient.setGpId(gp.getId());
         }
         

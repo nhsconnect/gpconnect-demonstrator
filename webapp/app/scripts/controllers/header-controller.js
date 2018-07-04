@@ -23,8 +23,9 @@ angular.module('gpConnect')
       }); // id is hard coded
     }
 
-    $rootScope.$on('$stateChangeSuccess', function (event, toState) {
-      var previousState = '';
+    $rootScope.$on('$stateChangeSuccess', function (event, to, toParams, from, toState) {
+      $scope.backState = from.name;
+	  var previousState = '';
       var pageHeader = '';
       var previousPage = '';
 
@@ -76,8 +77,12 @@ angular.module('gpConnect')
       $scope.mainWidth = mainWidth;
       $scope.detailWidth = detailWidth;
 
-      $scope.goBack = function () {
-        history.back();
+      $scope.goBack = function (patient) {
+		var requestHeader = {
+          patientId: $stateParams.patientId
+        };
+		
+        $state.go($scope.backState, requestHeader);
       };
 
       $scope.userContextViewExists = ('user-context' in $state.current.views);

@@ -77,7 +77,7 @@ angular.module('gpConnect')
       $scope.mainWidth = mainWidth;
       $scope.detailWidth = detailWidth;
 
-      $scope.goBack = function (patient) {
+      $scope.goBack = function () {
 		var requestHeader = {
           patientId: $stateParams.patientId
         };

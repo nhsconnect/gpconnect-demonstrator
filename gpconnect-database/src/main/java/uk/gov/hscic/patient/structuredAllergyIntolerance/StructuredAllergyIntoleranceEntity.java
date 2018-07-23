@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "allergyIntolerance")
+@Table(name = "allergyintolerance")
 public class StructuredAllergyIntoleranceEntity {
 
 	@Id

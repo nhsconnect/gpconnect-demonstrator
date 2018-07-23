@@ -44,6 +44,7 @@ public class DatabaseRefresher {
     // Reset entire db on startup
     public void resetDatabase() throws IOException {
         runSql("create_tables.sql");
+        runSql("populate_medications_table.sql");
 
         Files.list(Paths.get(configPath + "sql/"))
                 .map(Path::getFileName)
@@ -51,6 +52,7 @@ public class DatabaseRefresher {
                 .filter(filename -> filename.startsWith("populate"))
                 .filter(filename -> !filename.equals("populate_patients_table.sql"))
                 .filter(filename -> !filename.equals("generate_uids.sql"))
+                .filter(filename -> !filename.equals("populate_medications_table.sql"))
                 .forEach(this::runSql);
 
         runSql("generate_uids.sql");

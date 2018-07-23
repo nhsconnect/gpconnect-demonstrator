@@ -135,8 +135,6 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
     
     
     var structured = function (patientId, start, end, includePrescriptionIssues, includeResolvedAllergies) {
-        console.log(includePrescriptionIssues);
-        console.log(includeResolvedAllergies);
         return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1").then(function (response) {
             var endpointLookupResult = response;
             

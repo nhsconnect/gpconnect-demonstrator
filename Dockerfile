@@ -7,9 +7,8 @@ RUN npm install -g npm@4.5.0 grunt-cli bower
 COPY ./webapp .
 RUN bower install --allow-root
 RUN bower update --allow-root
-RUN npm install
-RUN npm rebuild node-sass
-RUN grunt build --force
+RUN npm update
+RUN grunt build 
 
 FROM maven:alpine AS api-build
 WORKDIR /app
@@ -18,18 +17,16 @@ COPY pom.xml .
 COPY gpconnect-core/pom.xml ./gpconnect-core/pom.xml
 COPY gpconnect-database/pom.xml ./gpconnect-database/pom.xml
 COPY gpconnect-demonstrator-api/pom.xml ./gpconnect-demonstrator-api/pom.xml
-RUN mvn verify clean --fail-never
 
 COPY ./gpconnect-core ./gpconnect-core
 COPY ./gpconnect-database ./gpconnect-database
 COPY ./gpconnect-demonstrator-api ./gpconnect-demonstrator-api
 COPY --from=ui-build ./gpconnect-demonstrator-api/src/main/webapp /app/dist 
-RUN mvn package
+RUN mvn verify clean package
 
 FROM openjdk:alpine
 WORKDIR /app
 
-COPY ./config ./config
 COPY ./config ./config
 COPY --from=api-build /app/gpconnect-demonstrator-api/target/gpconnect-demonstrator-api.war ./app.war
 EXPOSE 19191

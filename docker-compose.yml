@@ -2,8 +2,6 @@ version: "3"
 services:
   gpconnect-db:
     image: mysql
-    ports:
-      - "3309:3306"
     networks: 
       - gpconnect-network
     environment:
@@ -11,15 +9,17 @@ services:
       MYSQL_USER: answer
       MYSQL_PASSWORD: answer99q
       MYSQL_DATABASE: gpconnect
-      MYSQL_PORT: 3309
+      MYSQL_PORT: 3306
   gpconnect-api:
     image: gpconnect # rename to whatever you tagged the GP Connect build is
     ports:
       - 9000:19191
+      - 9001:19192
     networks: 
       - gpconnect-network
     environment:
       - DATABASE_ADDRESS=gpconnect-db
+      - DATABASE_PORT=3306
     links:
       - gpconnect-db
     depends_on:

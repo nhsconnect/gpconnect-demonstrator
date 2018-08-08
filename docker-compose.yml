@@ -13,6 +13,7 @@ services:
     image: gpconnect # rename to whatever you tagged the GP Connect build is
     ports:
       - 9000:19191
+      - 9001:19192
     networks: 
       - gpconnect-network
     environment:

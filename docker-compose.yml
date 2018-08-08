@@ -1,15 +1,14 @@
 version: "3"
 services:
   gpconnect-db:
-    image: mysql
+    image: mariadb
     networks: 
       - gpconnect-network
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: answer
-      MYSQL_PASSWORD: answer99q
-      MYSQL_DATABASE: gpconnect
-      MYSQL_PORT: 3306
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=answer
+      - MYSQL_PASSWORD=answer99q
+      - MYSQL_DATABASE=gpconnect
   gpconnect-api:
     image: gpconnect # rename to whatever you tagged the GP Connect build is
     ports:
@@ -19,7 +18,6 @@ services:
       - gpconnect-network
     environment:
       - DATABASE_ADDRESS=gpconnect-db
-      - DATABASE_PORT=3306
     links:
       - gpconnect-db
     depends_on:

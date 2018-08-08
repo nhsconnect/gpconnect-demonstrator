@@ -8,7 +8,7 @@ RUN cd /app/webapp && pwd && ls && bower install --allow-root && bower update --
 FROM maven:alpine AS api-build
 WORKDIR /app
 COPY --from=ui-build /app /app
-RUN mvn clean package
+RUN mvn verify clean package
 
 FROM openjdk:alpine
 WORKDIR /app
@@ -17,6 +17,8 @@ COPY ./config ./config
 COPY --from=api-build /app/gpconnect-demonstrator-api/target/gpconnect-demonstrator-api.war ./app.war
 EXPOSE 19191
 EXPOSE 19192
+ENV DATABASE_ADDRESS 10.100.100.61
+ENV DATABASE_PORT 3306
 ENTRYPOINT java -jar /app/app.war \
 --spring.config.location=file:/app/config/gpconnect-demonstrator-api.properties --server.port=19192 \
 --server.port.http=19191 --config.path=/app/config/ --server.ssl.key-store=/app/config/server.jks \

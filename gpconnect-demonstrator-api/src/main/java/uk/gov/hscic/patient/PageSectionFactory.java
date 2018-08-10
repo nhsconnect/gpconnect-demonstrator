@@ -29,7 +29,7 @@ import uk.gov.hscic.patient.investigations.repo.InvestigationRepository;
 import uk.gov.hscic.patient.observations.model.ObservationEntity;
 import uk.gov.hscic.patient.observations.repo.ObservationRepository;
 import uk.gov.hscic.patient.problems.model.ProblemEntity;
-import uk.gov.hscic.patient.problems.repo.ProblemRepository;
+import uk.gov.hscic.patient.problems.search.ProblemSearch;
 import uk.gov.hscic.patient.referrals.model.ReferralEntity;
 import uk.gov.hscic.patient.referrals.search.ReferralSearch;
 
@@ -37,7 +37,7 @@ import uk.gov.hscic.patient.referrals.search.ReferralSearch;
 public class PageSectionFactory {
 
     @Autowired
-    private ProblemRepository problemRepository;
+    private ProblemSearch problemSearch;
 
     @Autowired
     private EncounterSearch encounterSearch;
@@ -66,24 +66,22 @@ public class PageSectionFactory {
     @Autowired
     private AdminItemSearch adminItemSearch;
 
-    public PageSection getPRBActivePageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
+    public PageSection getPRBActivePageSection(String nhsNumber) {
         List<List<Object>> problemActiveRows = new ArrayList<>();
-
-        for (ProblemEntity problem : problemRepository.findBynhsNumber(nhsNumber)) {
+        for (ProblemEntity problem : problemSearch.findProblems(nhsNumber)) {
             if ("Active".equals(problem.getActiveOrInactive())) {
                 problemActiveRows.add(Arrays.asList(problem.getStartDate(), problem.getEntry(), problem.getSignificance(), problem.getDetails()));
             }
         }
-
         return new PageSection("Active Problems and Issues",
-                new Table(Arrays.asList("Start Date", "Entry", "Significance", "Details"), problemActiveRows),
-                requestedFromDate, requestedToDate);
+                new Table(Arrays.asList("Start Date", "Entry", "Significance", "Details"), problemActiveRows));
     }
 
     public PageSection getPRBInctivePageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
         List<List<Object>> problemInactiveRows = new ArrayList<>();
 
-        for (ProblemEntity problem : problemRepository.findBynhsNumber(nhsNumber)) {
+        List<ProblemEntity> findProblems = problemSearch.findProblems(nhsNumber, requestedFromDate, requestedToDate);
+        for (ProblemEntity problem : findProblems) {
             if (!"Active".equals(problem.getActiveOrInactive())) {
                 problemInactiveRows.add(Arrays.asList(problem.getStartDate(), problem.getEndDate(), problem.getEntry(), problem.getSignificance(), problem.getDetails()));
             }

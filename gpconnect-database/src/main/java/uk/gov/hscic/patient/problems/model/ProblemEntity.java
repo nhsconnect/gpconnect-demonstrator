@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "problems")
@@ -24,9 +26,11 @@ public class ProblemEntity {
     private String activeOrInactive;
     
     @Column(name = "startDate")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
     
     @Column(name = "endDate")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
 
     @Column(name = "entry")

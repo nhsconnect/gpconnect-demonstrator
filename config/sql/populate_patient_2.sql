@@ -51,8 +51,8 @@ VALUES
   (9476719931,"Active",'2015-05-01',null,"Type II Diabetes mellitus","Major Active","Diabetes type II blood glucose management"),
   (9476719931,"Active",'2006-03-01',null,"Essential hypertension","Major Active",""),
   (9476719931,"Active",'2018-04-25',null,"Lower back pain","Minor Active",""),
-  (9476719931,"Inactive",'1958-08-04',null,"Fracture of Clavicle","Minor Past","Fell off bicycle"),
-  (9476719931,"Inactive",'1978-09-03',null,"Conjunctivitus","Minor Past","");
+  (9476719931,"Inactive",'1958-08-04','1958-10-14',"Fracture of Clavicle","Minor Past","Fell off bicycle"),
+  (9476719931,"Inactive",'1978-09-03','1978-09-15',"Conjunctivitus","Minor Past","");
 
 INSERT INTO gpconnect.referrals
   (nhsNumber,sectionDate,referral_from,referral_to,priority,details,lastUpdated)

@@ -4,6 +4,8 @@ angular.module('gpConnect')
   .controller('ProblemListCtrl', function ($scope, $state, $stateParams, $location, $sce, $modal, usSpinnerService, PatientService, Problem) {
 
     $scope.currentPage = 1;
+    $scope.toDateValue = moment().format('YYYY-MM-DD');
+    $scope.fromDateValue = moment().subtract(3, 'years').format('YYYY-MM-DD');
 
     $scope.pageChangeHandler = function (newPage) {
       $scope.currentPage = newPage;
@@ -12,6 +14,23 @@ angular.module('gpConnect')
     if ($stateParams.page) {
       $scope.currentPage = $stateParams.page;
     }
+
+     $scope.openDatePicker = function ($event, name) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.toDate = false;
+                $scope.fromDate = false;
+                $scope[name] = true;
+            };
+
+            $scope.dateChanged = function() {
+                var newDate = new Date($scope.toDateValue);
+                $scope.toDateValue = moment(newDate).format('YYYY-MM-DD');
+                newDate = new Date($scope.fromDateValue);
+                $scope.fromDateValue = moment(newDate).format('YYYY-MM-DD');
+                loadHTML();
+            };
+    
 
     $scope.search = function (row) {
       return (
@@ -24,9 +43,11 @@ angular.module('gpConnect')
     if ($stateParams.filter) {
       $scope.query = $stateParams.filter;
     }
-
-    Problem.findAllHTMLTables($stateParams.patientId).then(function (result) {
-      
+    
+    var loadHTML = function () {
+    Problem.findAllHTMLTables($stateParams.patientId, $scope.fromDateValue, $scope.toDateValue).then(function (result) {
+      console.log($scope.fromDateValue);
+      console.log($scope.toDateValue);
       // Default Page Content
       var text = '{"provider":"No Data","html":"No problems data available for this patient."}';
       $scope.problemTable = JSON.parse(text);
@@ -52,6 +73,10 @@ angular.module('gpConnect')
       
       usSpinnerService.stop('problemSummary-spinner');
     });
+    
+    };
+
+     loadHTML();
 
     $scope.go = function (id, problemSource) {
       $state.go('problem-detail', {

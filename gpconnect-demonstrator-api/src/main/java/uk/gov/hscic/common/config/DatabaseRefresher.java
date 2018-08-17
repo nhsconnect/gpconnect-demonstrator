@@ -51,10 +51,13 @@ public class DatabaseRefresher {
                 .map(Path::toString)
                 .filter(filename -> filename.startsWith("populate"))
                 .filter(filename -> !filename.equals("populate_patients_table.sql"))
-                .filter(filename -> !filename.equals("generate_uids.sql"))
                 .filter(filename -> !filename.equals("populate_medications_table.sql"))
+                .filter(filename -> !filename.equals("populate_patient_2.sql"))
                 .forEach(this::runSql);
 
+        // we can only do this here after ensuring that medications and the allergyintolerance tables are poplulated
+        // otherwise there's a constraint violation when populating medication_allergies, be careful changing any orderings here
+        runSql("populate_patient_2.sql"); // this is the only file which currently populates the medication_allergies table
         runSql("generate_uids.sql");
         runSql("populate_patients_table.sql");
 

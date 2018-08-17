@@ -1,11 +1,11 @@
 INSERT INTO gpconnect.medication_statements
  (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
-    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, warningCode)
+    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, warningCode, prescribingAgency)
 VALUES
- (1,'2017-06-12',8,'active','Active',9,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Use 1-4cm each time you use Ibuprofen Gel.','Apply the gel as a thin layer over the affected area.','2018-03-15', 'confidential-items'),
-  (4,'2018-01-01',8,'completed','Completed',6,'2018-01-01',null,'2018-01-01',2,'unk','Unknown','Take 2-3 times a day','Take without food','2018-03-15', 'confidential-items'),
-  (5,'2018-03-01',8,'completed','Completed',12,'2018-03-01',null,'2018-03-01',2,'unk','Unknown','Use as often as required','Clean and dry the affected area before use','2018-03-15', 'confidential-items'),
-  (6,'2018-02-12',8,'completed','Completed',14,'2018-02-12',null,'2018-02-12',2,'unk','Unknown','Take 2 tablets every 8 hours','Take with a full glass of water','2018-03-15', 'confidential-items');
+ (1,'2017-06-12',8,'active','Active',9,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Use 1-4cm each time you use Ibuprofen Gel.','Apply the gel as a thin layer over the affected area.','2018-03-15', 'confidential-items','prescribingAgency'),
+  (4,'2018-01-01',8,'completed','Completed',6,'2018-01-01',null,'2018-01-01',2,'unk','Unknown','Take 2-3 times a day','Take without food','2018-03-15', 'confidential-items','prescribingAgency'),
+  (5,'2018-03-01',8,'completed','Completed',12,'2018-03-01',null,'2018-03-01',2,'unk','Unknown','Use as often as required','Clean and dry the affected area before use','2018-03-15', 'confidential-items','prescribingAgency'),
+  (6,'2018-02-12',8,'completed','Completed',14,'2018-02-12',null,'2018-02-12',2,'unk','Unknown','Take 2 tablets every 8 hours','Take with a full glass of water','2018-03-15', 'confidential-items','prescribingAgency');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)
@@ -106,10 +106,10 @@ VALUES
  INSERT INTO gpconnect.allergyintolerance
   (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,coding,display,manCoding,manDisplay, recorder, encounter)
 VALUES
-  (9476719931,'2016-07-01 12:00:00',"Cured","Dalmation","Major", "resolved","unconfirmed","environmental","2",'2016-05-01 12:00:00','2016-06-01 12:00:00',"419271008","Allergy to dog dander (disorder)","61582004","Allergic rhinitis (disorder)", '9476719931', '11'),
-  (9476719931,'2016-07-01 12:00:00',"Ongoing","Rash","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00',"294716003","Biphasic insulin allergy (disorder)","247472004", "Weal (disorder)", '9476719931', '');
+  (9658218873 ,'2016-07-01 12:00:00',"Cured","Dalmation","Major", "resolved","unconfirmed","environmental","2",'2016-05-01 12:00:00','2016-06-01 12:00:00',"419271008","Allergy to dog dander (disorder)","61582004","Allergic rhinitis (disorder)", '9658218873', '11'),
+  (9658218873 ,'2016-07-01 12:00:00',"Ongoing","Rash","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00',"294716003","Biphasic insulin allergy (disorder)","247472004", "Weal (disorder)", '9658218873', '');
 
 INSERT INTO gpconnect.medication_allergies
 (medicationId,allergyintoleranceId, patientNhsnumber)
 VALUES
-  (18,14,9476719931);
+  (18,14,9658218873 );

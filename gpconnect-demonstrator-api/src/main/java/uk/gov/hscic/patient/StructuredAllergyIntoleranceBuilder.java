@@ -18,6 +18,7 @@ import uk.gov.hscic.practitioner.PractitionerRoleResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerSearch;
 
 import java.util.*;
+import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
 
 @Component
 public class StructuredAllergyIntoleranceBuilder {
@@ -72,8 +73,14 @@ public class StructuredAllergyIntoleranceBuilder {
             allergyIntolerance = new AllergyIntolerance();
             allergyIntolerance.setOnset(new DateTimeType(allergyIntoleranceEntity.getOnSetDateTime()));
             allergyIntolerance.setMeta(createMeta(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
-
-            allergyIntolerance.setId(allergyIntoleranceEntity.getGuid());
+            
+            allergyIntolerance.setId(allergyIntoleranceEntity.getId().toString());
+            List<Identifier> identifiers = new ArrayList<>();
+            Identifier identifier1 = new Identifier()
+                    .setSystem("https://fhir.nhs.uk/Id/cross-care-setting-identifier")
+                    .setValue(allergyIntoleranceEntity.getGuid());
+            identifiers.add(identifier1);
+            allergyIntolerance.setIdentifier(identifiers);
 
             if (allergyIntoleranceEntity.getClinicalStatus().equals(SystemConstants.ACTIVE)) {
                 allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.ACTIVE);
@@ -135,7 +142,7 @@ public class StructuredAllergyIntoleranceBuilder {
             final String recorder = allergyIntoleranceEntity.getRecorder();
 
             //This is just an example to demonstrate using Reference element instead of Identifier element
-            if (recorder.equals("9476719931")) {
+            if (recorder.equals("9658218873")) {
                 Reference rec = new Reference(
                         SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
                 allergyIntolerance.setRecorder(rec);
@@ -223,7 +230,7 @@ public class StructuredAllergyIntoleranceBuilder {
             listResource.setCode(createCoding(SystemConstants.SNOMED_URL, "886921000000105", display));
             listResource.setTitle("Allergies and adverse reactions");
         } else if (display.equals("Resolved Allergies")) {
-            listResource.setCode(createCoding(SystemConstants.SNOMED_URL, "TBD", display));
+            listResource.setCode(createCoding(SystemConstants.SNOMED_URL, "1103671000000101", display));
             listResource.setTitle("Resolved Allergies");
         }
 
@@ -314,8 +321,8 @@ public class StructuredAllergyIntoleranceBuilder {
 
         final Extension endDate = new Extension("endDate", new DateTimeType(allergyIntoleranceEntity.getEndDate()));
 
-        final Extension endReason = new Extension("reasonEnded", new StringType(allergyIntoleranceEntity.getEndReason()));
-
+        String strEndReason = allergyIntoleranceEntity.getEndReason();
+        final Extension endReason = new Extension("reasonEnded", new StringType(strEndReason==null || strEndReason.trim().isEmpty() ? NO_INFORMATION_AVAILABLE : strEndReason ));
         allergyEnd.addExtension(endDate);
         allergyEnd.addExtension(endReason);
 

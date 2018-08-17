@@ -33,3 +33,4 @@ node_modules
 # Config #
 context-gpconnect.xml
 /bin/
+/gpconnect-demonstrator-api/src/main/resources/application.properties

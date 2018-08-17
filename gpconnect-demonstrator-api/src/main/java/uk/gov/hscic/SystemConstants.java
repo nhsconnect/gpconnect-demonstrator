@@ -17,6 +17,7 @@ public final class SystemConstants {
 	public static final String  NO_CONTENT = "noContent";
     public static final String NO_CONTENT_RECORDED = "nocontentrecorded";
     public static final String INFORMATION_NOT_AVAILABLE = "Information not available";
+    public static final String NO_INFORMATION_AVAILABLE = "No information available"; // required structured
     public static final String PATIENT_REFERENCE_URL = "Patient/";
     public static final String INCLUDE_RESOLVED_ALLERGIES = "includeResolvedAllergies";
     public static final String INCLUDE_ALLERGIES = "includeAllergies";

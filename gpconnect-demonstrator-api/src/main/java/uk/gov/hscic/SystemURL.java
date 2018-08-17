@@ -42,7 +42,7 @@ public final class SystemURL {
     public static final String SD_GPC_SCHEDULE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Schedule-1";
     public static final String SD_GPC_LIST = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1";
     public static final String SD_GPC_SRCHSET_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Searchset-Bundle-1";
-    public static final String SD_GPC_STRUCTURED_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-GetStructuredRecord-Bundle-1";
+    public static final String SD_GPC_STRUCTURED_BUNDLE = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1";
     public static final String SD_CC_ALLERGY_INTOLERANCE  = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-AllergyIntolerance-1";
     public static final String SD_GPC_MEDICATION_LIST = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-Medication-List-1";
     public static final String SD_GPC_OBSERVATION = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1";

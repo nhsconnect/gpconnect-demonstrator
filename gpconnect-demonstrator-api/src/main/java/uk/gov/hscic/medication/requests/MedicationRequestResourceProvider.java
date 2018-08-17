@@ -1,6 +1,7 @@
 package uk.gov.hscic.medication.requests;
 
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import java.util.ArrayList;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.MedicationRequest.MedicationRequestDispenseRequestComponent;
 import org.hl7.fhir.dstu3.model.MedicationRequest.MedicationRequestIntent;
@@ -18,10 +19,11 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
 
 @Component
 public class MedicationRequestResourceProvider {
-	
+    
 	@Autowired
 	private MedicationRequestRepository medicationRequestRepository;
 	
@@ -30,7 +32,7 @@ public class MedicationRequestResourceProvider {
 
     public MedicationRequest getMedicationRequestPlanResource(String medicationRequestId) {
         MedicationRequestDetail requestDetail = medicationRequestEntityToDetailTransformer
-                .transform(medicationRequestRepository.findByGUID(medicationRequestId));
+                .transform(medicationRequestRepository.findOne(Long.parseLong(medicationRequestId)));
 
 		MedicationRequest medicationRequest = getMedicationRequestFromDetail(requestDetail);
 		
@@ -48,7 +50,13 @@ public class MedicationRequestResourceProvider {
 	private MedicationRequest getMedicationRequestFromDetail(MedicationRequestDetail requestDetail) {
 		MedicationRequest medicationRequest = new MedicationRequest();
 
-        medicationRequest.setId(new IdType(requestDetail.getGuid()));
+        medicationRequest.setId(requestDetail.getId().toString());
+        List<Identifier> identifiers = new ArrayList<>();
+        Identifier identifier = new Identifier()
+                .setSystem("https://fhir.nhs.uk/Id/cross-care-setting-identifier")
+                .setValue(requestDetail.getGuid());
+        identifiers.add(identifier);
+        medicationRequest.setIdentifier(identifiers);
 		medicationRequest.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_REQUEST)
 				.setVersionId(String.valueOf(requestDetail.getLastUpdated().getTime())).setLastUpdated(new Date()));
 		setBasedOnReferences(medicationRequest, requestDetail);		
@@ -99,15 +107,22 @@ public class MedicationRequestResourceProvider {
 		setPrescriptionType(medicationRequest, requestDetail);
 		setStatusReason(medicationRequest, requestDetail);
 		
-		medicationRequest.addDosageInstruction(new Dosage()
-				.setText(requestDetail.getDosageText())
+        String dosageInstructionText = requestDetail.getDosageText();
+        medicationRequest.addDosageInstruction(new Dosage()
+				.setText(dosageInstructionText == null || dosageInstructionText.trim().isEmpty() ? NO_INFORMATION_AVAILABLE : dosageInstructionText)
 				.setPatientInstruction(requestDetail.getDosageInstructions()));
 		
 		return medicationRequest;
 	}
 
 	private void setPrescriptionType(MedicationRequest medicationRequest, MedicationRequestDetail requestDetail) {
-		Coding prescriptionTypeCoding = new Coding(SystemURL.CS_CC_PRESCRIPTION_TYPE_STU3, requestDetail.getPrescriptionTypeCode(), requestDetail.getPrescriptionTypeDisplay());
+        String prescriptionCode = requestDetail.getPrescriptionTypeCode();
+        Coding prescriptionTypeCoding = null;
+        if (prescriptionCode != null && !prescriptionCode.trim().isEmpty()) {
+            prescriptionTypeCoding = new Coding(SystemURL.CS_CC_PRESCRIPTION_TYPE_STU3, prescriptionCode, requestDetail.getPrescriptionTypeDisplay());
+        } else {
+            prescriptionTypeCoding = new Coding(SystemURL.CS_CC_PRESCRIPTION_TYPE_STU3, NO_INFORMATION_AVAILABLE, NO_INFORMATION_AVAILABLE);
+        }
 		Extension prescriptionTypeExtension = new Extension(SystemURL.SD_CC_EXT_MEDICATION_PRESCRIPTION_TYPE, new CodeableConcept().addCoding(prescriptionTypeCoding));
 		medicationRequest.addExtension(prescriptionTypeExtension);
 	}
@@ -116,6 +131,12 @@ public class MedicationRequestResourceProvider {
 		if(medicationRequest.getStatus().equals(MedicationRequestStatus.STOPPED)) {
 			Extension statusReasonExtension = new Extension(SystemURL.SD_CC_EXT_MEDICATION_STATUS_REASON);
 			statusReasonExtension.addExtension(new Extension("statusReason", new StringType(requestDetail.getStatusReason())));
+            Date statusReasonDate = requestDetail.getStatusReasonDate();
+            if (statusReasonDate != null) {
+                statusReasonExtension.addExtension(new Extension("statusChangeDate", new DateTimeType(statusReasonDate)));
+            } else {
+                statusReasonExtension.addExtension(new Extension("statusChangeDate", new StringType(NO_INFORMATION_AVAILABLE)));
+            }
 		}
 	}
 
@@ -190,7 +211,7 @@ public class MedicationRequestResourceProvider {
 		duration.setCode("d");
 		duration.setValue(requestDetail.getExpectedSupplyDuration());
 		duration.setUnit("day");
-		//dispenseRequest.setExpectedSupplyDuration(duration); //TODO - spec needs to clarify whether this should be populated or not
+		dispenseRequest.setExpectedSupplyDuration(duration); //TODO - spec needs to clarify whether this should be populated or not
 		
 		dispenseRequest.setPerformer(new Reference(new IdType("Organization",requestDetail.getDispenseRequestOrganizationId())));
 	

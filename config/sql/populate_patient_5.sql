@@ -1,13 +1,13 @@
 INSERT INTO gpconnect.allergyintolerance
   (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,coding,display,manCoding,manDisplay, recorder, encounter)
 VALUES
-  (9476719966,'2018-03-14',"","","", "no known","unconfirmed","","1",'2010-07-22','2010-07-22',"716186003","No known allergy","","",'9476719923', '');
+  (9658218989 ,'2018-03-14',"","","", "no known","unconfirmed","","1",'2010-07-22','2010-07-22',"716186003","No known allergy","","",'9476719923', '');
 
 INSERT INTO gpconnect.medication_statements
  (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
-    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated)
+    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, prescribingAgency)
 VALUES
- (3,'2018-03-14',13,'active','Active',5,'2018-01-12','2020-07-12','2018-01-12',5,'unk','Unknown','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15');
+ (3,'2018-03-14',13,'active','Active',5,'2018-01-12','2020-07-12','2018-01-12',5,'unk','Unknown','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15', 'prescribingAgency');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)

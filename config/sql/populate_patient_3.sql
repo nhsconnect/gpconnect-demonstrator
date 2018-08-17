@@ -1,8 +1,8 @@
 INSERT INTO gpconnect.medication_statements
   (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
-    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated)
+    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, prescribingAgency)
 VALUES
- (2,'2018-01-04',12,'completed','Completed',5,'2018-01-04',null,'2018-01-04',3,'y','Yes','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15');
+ (2,'2018-01-04',12,'completed','Completed',5,'2018-01-04',null,'2018-01-04',3,'unk','Yes','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15','prescribingAgency');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)
@@ -65,5 +65,5 @@ VALUES
   INSERT INTO gpconnect.allergyintolerance
   (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,coding,display,manCoding,manDisplay, recorder, encounter)
 VALUES
-  (9476719974,'2016-07-01 12:00:00',"Cured","Difficulty breathing","Major", "resolved","unconfirmed","environmental","2",'2016-05-01 12:00:00','2016-06-01 12:00:00',"419063004","Allergy to horse dander (disorder)","289100008","Difficulty taking deep breaths (finding)", '1',''),
-  (9476719974,'2016-07-01 12:00:00',"Ongoing","Dry, red and cracked skin","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00',"294915005","Iodophore allergy (disorder)","702757002","Severe dry skin (finding)", '1','');
+  (9658218881 ,'2016-07-01 12:00:00',"Cured","Difficulty breathing","Major", "resolved","unconfirmed","environmental","2",'2016-05-01 12:00:00','2016-06-01 12:00:00',"419063004","Allergy to horse dander (disorder)","289100008","Difficulty taking deep breaths (finding)", '1',''),
+  (9658218881 ,'2016-07-01 12:00:00',"Ongoing","Dry, red and cracked skin","Major", "active","unconfirmed","medication","1",'2016-05-01 12:00:00','2016-06-01 12:00:00',"294915005","Iodophore allergy (disorder)","702757002","Severe dry skin (finding)", '1','');

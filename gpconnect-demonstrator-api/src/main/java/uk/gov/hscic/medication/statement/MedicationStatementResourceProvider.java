@@ -2,6 +2,7 @@ package uk.gov.hscic.medication.statement;
 
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import java.util.ArrayList;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.MedicationStatement.MedicationStatementStatus;
 import org.hl7.fhir.dstu3.model.MedicationStatement.MedicationStatementTaken;
@@ -11,14 +12,22 @@ import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 
 import java.util.Date;
+import java.util.List;
+import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
 
 @Component
 public class MedicationStatementResourceProvider {
-
+    
     public MedicationStatement getMedicationStatementResource(MedicationStatementDetail statementDetail) {
         MedicationStatement medicationStatement = new MedicationStatement();
 
-        medicationStatement.setId(new IdType(statementDetail.getGuid()));
+        medicationStatement.setId(statementDetail.getId().toString());
+        List<Identifier> identifiers = new ArrayList<>();
+        Identifier identifier = new Identifier()
+                .setSystem("https://fhir.nhs.uk/Id/cross-care-setting-identifier")
+                .setValue(statementDetail.getGuid());
+        identifiers.add(identifier);
+        medicationStatement.setIdentifier(identifiers);
 
         medicationStatement.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_STATEMENT)
                 .setVersionId(String.valueOf(statementDetail.getLastUpdated().getTime())).setLastUpdated(new Date()));
@@ -61,19 +70,20 @@ public class MedicationStatementResourceProvider {
         setReasonReferences(medicationStatement, statementDetail);
         setNotes(medicationStatement, statementDetail);
 
+        String dosageText = statementDetail.getDosageText();
         medicationStatement.addDosage(new Dosage()
-                .setText(statementDetail.getDosageText())
+                .setText(dosageText == null || dosageText.trim().isEmpty() ? NO_INFORMATION_AVAILABLE : dosageText)
                 .setPatientInstruction(statementDetail.getDosagePatientInstruction()));
 
-        if (!"".equals(statementDetail.getPrescribingAgency())) {
-            final String prescribingAgency = statementDetail.getPrescribingAgency();
+        String prescribingAgency = statementDetail.getPrescribingAgency();
+        if (prescribingAgency != null && !prescribingAgency.trim().isEmpty()) {
 
             Coding coding = new Coding(SystemURL.SD_EXTENSION_CC_PRESCRIBING_AGENCY, prescribingAgency, prescribingAgency);
 
             CodeableConcept codeableConcept = new CodeableConcept().addCoding(coding);
             medicationStatement.addExtension(new Extension(SystemURL.SD_EXTENSION_CC_PRESCRIBING_AGENCY, codeableConcept));
         }
-
+        
         return medicationStatement;
     }
 

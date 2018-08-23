@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('gpConnect').factory('Medication', function($rootScope, $http, FhirEndpointLookup, fhirJWTFactory) {
-    var findAllHTMLTables = function(patientId, source) {
+    var findAllHTMLTables = function(patientId, fromDate, toDate, source) {
         return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode,"urn:nhs:names:services:gpconnect:fhir:operation:gpc.getcarerecord").then(function(response) {
             var endpointLookupResult = response;
             
             return $http.post(
                     endpointLookupResult.restUrlPrefix+'/Patient/$gpc.getcarerecord',
-                    '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "http://fhir.nhs.net/Id/nhs-number", "value" : "'+patientId+'" }},{"name" : "recordSection","valueCodeableConcept" :{"coding" : [{"system":"http://fhir.nhs.net/ValueSet/gpconnect-record-section-1","code":"MED","display":"Medication"}]}},{"name" : "timePeriod","valuePeriod" : { "start" : null, "end" : null }}]}',
+                    '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "http://fhir.nhs.net/Id/nhs-number", "value" : "'+patientId+'" }},{"name" : "recordSection","valueCodeableConcept" :{"coding" : [{"system":"http://fhir.nhs.net/ValueSet/gpconnect-record-section-1","code":"MED","display":"Medication"}]}},{"name" : "timePeriod","valuePeriod" : { "start" : "'+fromDate+'", "end" : "'+toDate+'"}}]}',
                     {
                         headers: {
                             'Ssp-From': endpointLookupResult.fromASID,

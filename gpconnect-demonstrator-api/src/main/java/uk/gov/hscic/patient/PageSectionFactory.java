@@ -2,16 +2,13 @@ package uk.gov.hscic.patient;
 
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.medications.model.PatientMedicationHtmlEntity;
 import uk.gov.hscic.medications.repo.MedicationHtmlRepository;
+import uk.gov.hscic.medications.search.MedicationSearch;
 import uk.gov.hscic.patient.adminitems.model.AdminItemData;
 import uk.gov.hscic.patient.adminitems.search.AdminItemSearch;
 import uk.gov.hscic.patient.allergies.model.AllergyEntity;
@@ -28,10 +25,16 @@ import uk.gov.hscic.patient.investigations.model.InvestigationEntity;
 import uk.gov.hscic.patient.investigations.repo.InvestigationRepository;
 import uk.gov.hscic.patient.observations.model.ObservationEntity;
 import uk.gov.hscic.patient.observations.repo.ObservationRepository;
+import uk.gov.hscic.patient.observations.search.ObservationSearch;
 import uk.gov.hscic.patient.problems.model.ProblemEntity;
 import uk.gov.hscic.patient.problems.search.ProblemSearch;
 import uk.gov.hscic.patient.referrals.model.ReferralEntity;
 import uk.gov.hscic.patient.referrals.search.ReferralSearch;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @Component
 public class PageSectionFactory {
@@ -56,6 +59,12 @@ public class PageSectionFactory {
 
     @Autowired
     private ObservationRepository observationRepository;
+
+    @Autowired
+    private ObservationSearch observationSearch;
+
+    @Autowired
+    private MedicationSearch medicationSearch;
 
     @Autowired
     private InvestigationRepository investigationRepository;
@@ -109,7 +118,7 @@ public class PageSectionFactory {
 
     public PageSection getALLCurrentPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
-        	throw new InvalidRequestException("Date Ranges not allowed to be set",
+            throw new InvalidRequestException("Date Ranges not allowed to be set",
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
                             OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
                             IssueTypeEnum.BUSINESS_RULE_VIOLATION));
@@ -130,7 +139,7 @@ public class PageSectionFactory {
 
     public PageSection getALLHistoricalPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
-        	throw new InvalidRequestException("Date Ranges not allowed to be set",
+            throw new InvalidRequestException("Date Ranges not allowed to be set",
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
                             OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
                             IssueTypeEnum.BUSINESS_RULE_VIOLATION));
@@ -208,18 +217,16 @@ public class PageSectionFactory {
     public PageSection getMEDPastPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
         List<List<Object>> pastMedRows = new ArrayList<>();
 
-        for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationHtmlRepository.findBynhsNumber(nhsNumber)) {
-            if ("Past".equals(patientMedicationHtmlEntity.getCurrentRepeatPast())) {
-                pastMedRows.add(Arrays.asList(
-                        patientMedicationHtmlEntity.getStartDate(),
-                        patientMedicationHtmlEntity.getMedicationItem(),
-                        patientMedicationHtmlEntity.getTypeMed(),
-                        patientMedicationHtmlEntity.getLastIssued(),
-                        patientMedicationHtmlEntity.getReviewDate(),
-                        patientMedicationHtmlEntity.getNumberIssued(),
-                        patientMedicationHtmlEntity.getMaxIssues(),
-                        patientMedicationHtmlEntity.getDetails()));
-            }
+        for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationSearch.findMedications(nhsNumber, requestedFromDate, requestedToDate, medicationSearch.PAST)) {
+            pastMedRows.add(Arrays.asList(
+                    patientMedicationHtmlEntity.getStartDate(),
+                    patientMedicationHtmlEntity.getMedicationItem(),
+                    patientMedicationHtmlEntity.getTypeMed(),
+                    patientMedicationHtmlEntity.getLastIssued(),
+                    patientMedicationHtmlEntity.getReviewDate(),
+                    patientMedicationHtmlEntity.getNumberIssued(),
+                    patientMedicationHtmlEntity.getMaxIssues(),
+                    patientMedicationHtmlEntity.getDetails()));
         }
 
         return new PageSection("Past Medications",
@@ -247,7 +254,7 @@ public class PageSectionFactory {
     public PageSection getOBSPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
         List<List<Object>> observationRows = new ArrayList<>();
 
-        for (ObservationEntity observationEntity : observationRepository.findBynhsNumber(nhsNumber)) {
+        for (ObservationEntity observationEntity : observationSearch.findObservations(nhsNumber, requestedFromDate, requestedToDate)) {
             observationRows.add(Arrays.asList(
                     observationEntity.getObservationDate(),
                     observationEntity.getEntry(),
@@ -277,7 +284,7 @@ public class PageSectionFactory {
 
     public PageSection getIMMPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
         if (toDate != null && fromDate != null) {
-        	throw new InvalidRequestException("Date Ranges not allowed to be set",
+            throw new InvalidRequestException("Date Ranges not allowed to be set",
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
                             OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
                             IssueTypeEnum.BUSINESS_RULE_VIOLATION));

@@ -15,7 +15,6 @@ public interface MedicationHtmlRepository extends JpaRepository<PatientMedicatio
             " where md.nhsNumber = :nhsNr and md.currentRepeatPast=:currRepPast", nativeQuery = true)
     List<PatientMedicationHtmlEntity> findBynhsNumber(@Param("nhsNr") String patientId, @Param("currRepPast") String currRepPast);
 
-
     @Query(value = "SELECT * FROM medications_html md" +
             " where md.nhsNumber = :nhsNr and md.currentRepeatPast=:currRepPast and md.startDate between :from and :to", nativeQuery = true)
     List<PatientMedicationHtmlEntity> findByNhsNumberAndBetweenDates(@Param("nhsNr") String patientId, @Param("from") String from, @Param("to") String to, @Param("currRepPast") String currRepPast);

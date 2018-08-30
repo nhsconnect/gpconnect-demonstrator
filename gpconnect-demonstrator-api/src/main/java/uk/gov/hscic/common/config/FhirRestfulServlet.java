@@ -41,7 +41,7 @@ public class FhirRestfulServlet extends RestfulServer {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Value("${serverBaseUrl:https://orange.testlab.nhs.uk/v1/fhir}")
+    @Value("${serverBaseUrl}")
     private String serverBaseUrl;
     
     @Override

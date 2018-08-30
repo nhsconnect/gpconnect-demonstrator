@@ -6,8 +6,8 @@ services:
       - gpconnect-network
     environment:
       - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_USER=answer
-      - MYSQL_PASSWORD=answer99q
+      - MYSQL_USER=gpconnectdbuser
+      - MYSQL_PASSWORD=gpc0nn3ct
       - MYSQL_DATABASE=gpconnect
   gpconnect-api:
     image: gpconnect # rename to whatever you tagged the GP Connect build is
@@ -18,6 +18,10 @@ services:
       - gpconnect-network
     environment:
       - DATABASE_ADDRESS=gpconnect-db
+      - DATABASE_USERNAME=gpconnectdbuser
+      - DATABASE_PASSWORD=gpc0nn3ct
+      - DATABASE_SCHEMA=gpconnect
+      - SERVER_BASE_URL=https://data.developer.nhs.uk/gpconnect-demonstrator/v1/fhir
     links:
       - gpconnect-db
     depends_on:

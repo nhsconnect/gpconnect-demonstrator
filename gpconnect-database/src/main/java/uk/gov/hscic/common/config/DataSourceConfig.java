@@ -27,19 +27,19 @@ public class DataSourceConfig {
     @Value("${datasource.vendor:mysql}")
     private String vendor;
 
-    @Value("${datasource.host:127.0.0.1}")
+    @Value("${datasource.host}")
     private String host;
 
-    @Value("${datasource.port:3306}")
+    @Value("${datasource.port}")
     private String port;
 
     @Value("${datasource.schema:gpconnect}")
     private String schema;
 
-    @Value("${datasource.username:answer}")
+    @Value("${datasource.username}")
     private String username;
 
-    @Value("${datasource.password:answer99q}")
+    @Value("${datasource.password}")
     private String password;
 
     @Value("${datasource.showSql:false}")

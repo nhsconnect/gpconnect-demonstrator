@@ -190,7 +190,7 @@ public class PageSectionFactory {
 
         return new PageSection("Current Medication Issues",
                 new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End Date", "Days Duration", "Details"), currentMedRows),
-                requestedFromDate, requestedToDate);
+                null, null);
     }
 
     public PageSection getMEDRepeatPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
@@ -211,7 +211,7 @@ public class PageSectionFactory {
 
         return new PageSection("Current Repeat Medications",
                 new Table(Arrays.asList("Last Issued", "Medication Item", "Start Date", "Review Date", "Number Issued", "Max Issues", "Details"), repeatMedRows),
-                requestedFromDate, requestedToDate);
+                null, null);
     }
 
     public PageSection getMEDPastPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {

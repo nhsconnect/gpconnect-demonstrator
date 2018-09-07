@@ -18,6 +18,7 @@ public class SlotEntityToSlotDetailTransformer implements Transformer<SlotEntity
         slotDetail.setEndDateTime(item.getEndDateTime());
         slotDetail.setLastUpdated(item.getLastUpdated());
         slotDetail.setGpConnectBookable(item.isGpConnectBookable());
+        slotDetail.setDeliveryChannelCodes(item.getDeliveryChannelCodes());
         
         return slotDetail;
     }

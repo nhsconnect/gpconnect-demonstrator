@@ -24,7 +24,7 @@ angular.module('gpConnect')
                 hour: 'HH:mm'
             };
 
-            var internalGetScheduleModel = {}
+            var internalGetScheduleModel = {};
             $scope.practicesSearchingAndFails = [];
 
             var startDate = moment(appointmentSearchParams.startDate).format('YYYY-MM-DDTHH:mm:ssZ');
@@ -62,7 +62,7 @@ angular.module('gpConnect')
                             }
                         }
                         return null;
-                    }
+                    };
                     
                     var getLocationRef = function(value){
                          for (var i=0; i < value.resource.actor.length; i++){
@@ -71,20 +71,32 @@ angular.module('gpConnect')
                             }
                         }
                         return null;
-                    }
+                    };
 
                     var getExtensionCoding = function(value, url){
                         for (var i=0; i < value.resource.extension.length; i++){
                             if (value.resource.extension[i] && value.resource.extension[i].url === url){
-                                    return value.resource.extension[i].valueCodeableConcept.coding;
+                                return value.resource.extension[i].valueCodeableConcept.coding;
                             }
                         }
                         return null;
+                    };
+
+                    var getMultipleExtensionCoding = function(value, url){
+                        var list = [];
+                        for (var i=0; i < value.resource.extension.length; i++){
+                            if (value.resource.extension[i] && value.resource.extension[i].url === url){
+                                list.push(value.resource.extension[i].valueCodeableConcept.coding);
+                            }
+                        }
+                        return list;
                     }
+                    
                     // go through response and build arrays of all returned data
                     $.each(getScheduleJson.entry, function (key, value) {
                         if (value.resource.resourceType == "Slot") { 
-                            var slot = {"scheduleRef": value.resource.schedule.reference, "startDateTime": value.resource.start, "endDateTime": value.resource.end, "type": value.resource.serviceType[0].coding[0].display, "typeCode": value.resource.serviceType[0].coding[0].code, "id": value.resource.id};
+                            var slot = {"scheduleRef": value.resource.schedule.reference, "startDateTime": value.resource.start, "endDateTime": value.resource.end, "type": value.resource.serviceType[0].coding[0].display, "typeCode": value.resource.serviceType[0].coding[0].code, "id": value.resource.id,
+                            "deliveryChannelCoding": getMultipleExtensionCoding(value, "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-DeliveryChannel-1")};
                             responseSlots.push(slot);
                         }
 
@@ -92,8 +104,7 @@ angular.module('gpConnect')
                             responseSchedules[value.fullUrl] = {
                                 "locationRef": getLocationRef(value), 
                                 "practitionerRef": getPractitionerRef(value),
-                                "practitionerRoleCoding": getExtensionCoding(value, "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-PractitionerRole-1"),
-                                "deliveryChannelCoding": getExtensionCoding(value, "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-DeliveryChannel-1")
+                                "practitionerRoleCoding": getExtensionCoding(value, "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-PractitionerRole-1")
                             };
                         }
                         if (value.resource.resourceType == "Practitioner") { 
@@ -145,8 +156,8 @@ angular.module('gpConnect')
                         $.each(responseSlots, function (key, value) {
                             // Build slot object
                            
-                            
-                            var slot = {"startDateTime": new Date(value.startDateTime), "endDateTime": new Date(value.endDateTime), "type": value.type, "typeCode": value.typeCode, "id": value.id};
+                            var slot = {"startDateTime": new Date(value.startDateTime), "endDateTime": new Date(value.endDateTime), "type": value.type, "typeCode": value.typeCode, "id": value.id,
+                                "deliveryChannelCoding" : value.deliveryChannelCoding};
                             // Find the schedule for that slot from array
                             var schedule = responseSchedules[value.scheduleRef];
                             // Find Location and practitioner for that schedule
@@ -156,15 +167,12 @@ angular.module('gpConnect')
                             var locationId = responseLocations[schedule.locationRef].id;
                             var locationAddress = responseLocations[schedule.locationRef].address;
                             var practitionerRole = schedule.practitionerRoleCoding[0].display;
-                            var deliveryChannel;
-                            if(schedule.deliveryChannelCoding) deliveryChannel = schedule.deliveryChannelCoding[0].display;
-
                             // Look at constructed object to see if the location exists already, is so add to existing or add new
                             if (internalGetScheduleModel.locations == undefined) {
                                 var slots = [];
                                 slots.push(slot);
                                 var practitioners = [];
-                                var practitionerModel = {"fullName": practitionerName, "slots": slots, "id": practitionerId, "role": practitionerRole, "deliveryChannel": deliveryChannel};
+                                var practitionerModel = {"fullName": practitionerName, "slots": slots, "id": practitionerId, "role": practitionerRole};
                                 practitioners.push(practitionerModel);
                                 var dayBlockOfSlots = [];
                                 var startDateTime = new Date(slot.startDateTime);
@@ -189,7 +197,7 @@ angular.module('gpConnect')
                                     var slots = [];
                                     slots.push(slot);
                                     var practitioners = [];
-                                    var practitionerModel = {"fullName": practitionerName, "slots": slots, "id": practitionerId, "role": practitionerRole, "deliveryChannel": deliveryChannel};
+                                    var practitionerModel = {"fullName": practitionerName, "slots": slots, "id": practitionerId, "role": practitionerRole};
                                     practitioners.push(practitionerModel);
                                     var dayBlockOfSlots = [];
                                     var startDateTime = new Date(slot.startDateTime);
@@ -235,7 +243,7 @@ angular.module('gpConnect')
                                             // If we did not find a block of slots we need to make one
                                             var slots = [];
                                             slots.push(slot);
-                                            var practitionerModel = {"fullName": practitionerName, "slots": slots, "id": practitionerId, "role": practitionerRole, "deliveryChannel": deliveryChannel};
+                                            var practitionerModel = {"fullName": practitionerName, "slots": slots, "id": practitionerId, "role": practitionerRole};
                                             internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners.push(practitionerModel);
                                         } else {
                                             internalGetScheduleModel.locations[locationIndex].dayBlockOfSlots[dayBlockOfSlotsIndex].practitioners[practitionerIndex].slots.push(slot);
@@ -300,7 +308,6 @@ angular.module('gpConnect')
                         id: practitioners[i].id,
                         name: practitioners[i].fullName,
                         role: practitioners[i].role,
-                        deliveryChannel: practitioners[i].deliveryChannel,
                         height: '3em',
                         sortable: false,
                         tasks: []
@@ -314,9 +321,9 @@ angular.module('gpConnect')
                             color: '#99ccff',
                             from: slots[j].startDateTime,
                             to: slots[j].endDateTime,
-                            id: slots[j].id
+                            id: slots[j].id,
+                            deliveryChannelCoding: slots[j].deliveryChannelCoding
                         };
-
                         practitionerSchedule.tasks.push(slot);
                     }
 
@@ -329,8 +336,8 @@ angular.module('gpConnect')
             };
 
             $scope.options = {
-                ganttTableColumns: ['model.name', 'model.role', 'model.deliveryChannel'],
-                ganttTableColumnHeaders: {'model.name': 'Practitioner', 'model.role': 'Role', 'model.deliveryChannel': 'Delivery'}
+                ganttTableColumns: ['model.name', 'model.role'],
+                ganttTableColumnHeaders: {'model.name': 'Practitioner', 'model.role': 'Role'}
             };
 
             $scope.onSelectLocation = function (location) {
@@ -385,7 +392,7 @@ angular.module('gpConnect')
                 var options = {weekday: 'short', year: '2-digit', month: 'short', day: 'numeric'};
                 var formattedDate = date.toLocaleString('en-GB', options);
 
-                return formattedDate
+                return formattedDate;
             };
 
             $scope.bookAppointment = function () {
@@ -417,7 +424,24 @@ angular.module('gpConnect')
                 $scope.appointmentBookingParameters.practitionerId = $scope.selectedSlots[0].row.model.id;
                 $scope.appointmentBookingParameters.practitionerFullName = $scope.selectedSlots[0].row.model.name;
                 $scope.appointmentBookingParameters.practitionerRole = $scope.selectedSlots[0].row.model.role;
-                $scope.appointmentBookingParameters.deliveryChannel = $scope.selectedSlots[0].row.model.deliveryChannel;
+                var tasks = $scope.selectedSlots[0].row.model.tasks;
+                for (var taskIndex = 0; taskIndex < tasks.length; taskIndex++) {
+                    // there's no guarantee any subsequent slots will have the same combination of delivery channel codes
+                    if ( slotIds[0] === tasks[taskIndex].id) {
+                        var startTask = tasks[taskIndex];
+                        if(startTask.deliveryChannelCoding.length > 0) {
+                            var deliveryChannel = "";
+                            for (var dc = 0; dc < startTask.deliveryChannelCoding.length; dc++) {
+                                if ( dc > 0) {
+                                    deliveryChannel += ",";
+                                }
+                                deliveryChannel += startTask.deliveryChannelCoding[dc][0].display;
+                            }
+                            $scope.appointmentBookingParameters.deliveryChannel = deliveryChannel;
+                        }
+                        break;
+                    }
+                }
                 $scope.appointmentBookingParameters.locationId = $scope.selectedLocation.id;
                 $scope.appointmentBookingParameters.typeCode = $scope.selectedSlots[0].model.typeCode;
                 $scope.appointmentBookingParameters.type = $scope.selectedSlots[0].model.name;

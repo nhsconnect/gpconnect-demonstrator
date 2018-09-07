@@ -53,6 +53,7 @@ public class RefreshData {
     public void scheduledResetOfData() {
         resetAppointments();
     }
+    
 
     private void resetAppointments() {
 
@@ -73,7 +74,28 @@ public class RefreshData {
                 endDate.setHours(Integer.parseInt(element[4]));
                 endDate.setMinutes(Integer.parseInt(element[5]));
                 endDate.setSeconds(Integer.parseInt(element[6]));
-                slotStore.saveSlot(createSlot(Long.parseLong(element[7]), element[8], Long.parseLong(element[9]), element[10], startDate, endDate, currentDate, Boolean.parseBoolean(element[11]), Collections.singletonList(Long.parseLong(element[12])), Collections.singletonList(element[13])));
+
+                // handle trailing comma on last entry
+                String deliveryChannelCodes = element.length >= 15 ? element[14] : "";
+                // 0 number of days to add to today
+                // 1 start hours
+                // 2 start minutes
+                // 3 start seconds
+                // 4 end hours
+                // 5 end minutes
+                // 6 end seconds
+                // 7 Slot type code long eg 408443003
+                // 8 Slot type description/display string eg General Medical Practice
+                // 9 Practitioner internal id /schedule reference eg 2
+                // 10 Slot Status FREE/BUSY string
+                // 11 boolean gp connect bookable boolean
+                // 12 organization id int 1 or 2
+                // 13 organization type String eg Urgent care
+                // 14 sequence of PVT delivery channel codes String P In-person, T Telephone, V Video eg TVP
+                
+                // The Collections.singletonList idiom is a way of converting a single item into a list containing one item
+                slotStore.saveSlot(createSlot(Long.parseLong(element[7]), element[8], Long.parseLong(element[9]), element[10], startDate, endDate, currentDate, 
+                        Boolean.parseBoolean(element[11]), Collections.singletonList(Long.parseLong(element[12])), Collections.singletonList(element[13]), deliveryChannelCodes));
             }
         } catch (IOException e) {
             LOG.error("Error reading slots file", e);
@@ -94,7 +116,7 @@ public class RefreshData {
     }
 
     private SlotDetail createSlot(Long typeCode, String typeDisplay, long scheduleReference, String freeBusy, Date startDate, Date endDate, Date lastUpdated, 
-    			boolean gpConnectBookable, List<Long> organizationIds, List<String> organizationTypes) {
+    			boolean gpConnectBookable, List<Long> organizationIds, List<String> organizationTypes, String deliveryChannelCodes) {
         SlotDetail slot = new SlotDetail();
         slot.setTypeCode(typeCode);
         slot.setTypeDisply(typeDisplay);
@@ -106,6 +128,7 @@ public class RefreshData {
         slot.setGpConnectBookable(gpConnectBookable);
         slot.setOrganizationTypes(organizationTypes);
         slot.setOrganizationIds(organizationIds);
+        slot.setDeliveryChannelCodes(deliveryChannelCodes);
         return slot;
     }
     

@@ -217,7 +217,7 @@ public class SlotResourceProvider implements IResourceProvider {
         String deliveryChannelCodes = slotDetail.getDeliveryChannelCodes().trim();
         if (deliveryChannelCodes != null && !deliveryChannelCodes.isEmpty()) {
             if ( deliveryChannelCodes.length() > 1 ) {
-                 //throw new InternalErrorException("Error only one delivery channel may be specified for a slot (deliveryChannelCodes = "+deliveryChannelCodes+")");
+                 throw new InternalErrorException("Error only one delivery channel may be specified for a slot (deliveryChannelCodes = "+deliveryChannelCodes+")");
             }
             
             ArrayList<Extension> al = new ArrayList<>();

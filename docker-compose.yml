@@ -21,6 +21,7 @@ services:
       - DATABASE_USERNAME=gpconnectdbuser
       - DATABASE_PASSWORD=gpc0nn3ct
       - DATABASE_SCHEMA=gpconnect
+      - CONTEXT_PATH=/gpconnect-demonstrator/v0/
     links:
       - gpconnect-db
     depends_on:

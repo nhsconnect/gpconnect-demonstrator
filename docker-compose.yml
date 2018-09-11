@@ -22,6 +22,7 @@ services:
       - DATABASE_PASSWORD=gpc0nn3ct
       - DATABASE_SCHEMA=gpconnect
       - SERVER_BASE_URL=https://data.developer.nhs.uk/gpconnect-demonstrator/v1/fhir
+      - CONTEXT_PATH=/gpconnect-demonstrator/v1/
     links:
       - gpconnect-db
     depends_on:

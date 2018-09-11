@@ -418,7 +418,7 @@ angular
 
 
         var modalInstance = $modal.open({
-            templateUrl: '../views/access-record/modal.html',
+            templateUrl: '../v1/views/access-record/modal.html',
             scope: $scope,
             resolve: {
                 params: function () {

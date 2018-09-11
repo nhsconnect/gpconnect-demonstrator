@@ -17,7 +17,7 @@ import uk.gov.hscic.metadata.GpConnectServerConformanceProvider;
 import uk.gov.hscic.patient.PatientResourceProvider;
 
 @Configuration
-@WebServlet(urlPatterns = {"/fhir/*"}, displayName = "FHIR Server")
+@WebServlet(urlPatterns = {"/fhir/*","/gpconnect-demonstrator/v0/fhir/*"}, displayName = "FHIR Server")
 public class FhirRestfulServlet extends RestfulServer {
     private static final long serialVersionUID = 1L;
 

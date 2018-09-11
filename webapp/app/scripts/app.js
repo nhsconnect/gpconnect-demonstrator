@@ -21,7 +21,8 @@ angular.module('gpConnect', [
     'gantt.table',
     'gantt.tree',
     'gantt.groups'
-]).config(function($stateProvider, $urlRouterProvider) {
+]).config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+    
     $urlRouterProvider.otherwise('/');
 
     $stateProvider.state('patients-list', {
@@ -209,6 +210,10 @@ angular.module('gpConnect', [
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/appointments/appointments.html'}
         }
+    });
+    
+    $locationProvider.html5Mode({
+       enabled: true
     });
 }).directive('datepickerPopup', function() {
     return {

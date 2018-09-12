@@ -14,8 +14,7 @@ services:
   gpconnect-api:
     image: ${REGISTRY_PREFIX}gpconnect${IMAGE_TAG}
     ports:
-      - 9000:19191
-      - 9001:19192
+      - 8120:19191
     networks: 
       - gpconnect-network
     environment:

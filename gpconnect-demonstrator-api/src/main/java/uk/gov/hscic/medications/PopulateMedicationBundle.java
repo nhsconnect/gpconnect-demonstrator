@@ -105,8 +105,21 @@ public class PopulateMedicationBundle {
 
 	private Extension setWarningCode(MedicationStatementDetail medicationStatementDetail) {
 		String warningCode = medicationStatementDetail.getWarningCode();
+		Extension warningExt = null;
 
-		return warningCode != null ? new Extension(SystemURL.WARNING_CODE, new Coding("https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-ListWarningCode-1",warningCode,"Medications and medical devices")) : null;
+		if (warningCode != null) {
+			String warningCodeDisplay = "";
+			if (warningCode.equals("confidential-items")) {
+				warningCodeDisplay = "Confidential Items";
+			} else if (warningCode.equals("data-in-transit")) {
+				warningCodeDisplay = "Data in Transit";
+			} else if (warningCode.equals("data-awaiting-filing")) {
+				warningCodeDisplay = "Data Awaiting Filing";
+			}
+			warningExt = new Extension(SystemURL.WARNING_CODE, new Coding("https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-ListWarningCode-1", warningCode, warningCodeDisplay));
+		}
+
+		return  warningExt;
 
 	}
 	private Extension setClinicalSetting() {

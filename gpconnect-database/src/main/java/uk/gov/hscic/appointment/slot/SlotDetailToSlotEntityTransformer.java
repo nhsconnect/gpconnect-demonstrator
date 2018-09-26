@@ -28,6 +28,7 @@ public class SlotDetailToSlotEntityTransformer implements Transformer<SlotDetail
         	List<OrganizationEntity> bookableOrganizations = item.getOrganizationIds().stream().map(id -> createOrganizationEntityWithId(id)).collect(Collectors.toList());
         	slotEntity.setBookableOrganizations(bookableOrganizations);
         }
+        slotEntity.setDeliveryChannelCodes(item.getDeliveryChannelCodes());
         
         return slotEntity;
     }

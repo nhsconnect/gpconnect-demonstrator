@@ -98,7 +98,8 @@ public class ScheduleResourceProvider implements IResourceProvider {
         	schedule.addExtension(practitionerRoleExtension);
         }
         
-        if(scheduleDetail.getDeliveryChannelCode() != null) {
+        //  disabled scf 
+        if(false && scheduleDetail.getDeliveryChannelCode() != null) {
         	
         	Coding roleCoding = new Coding(SystemURL.VS_GPC_DELIVERY_CHANNEL, scheduleDetail.getDeliveryChannelCode(), 
         			scheduleDetail.getDeliveryChannelDisplay());

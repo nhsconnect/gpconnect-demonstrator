@@ -50,6 +50,9 @@ public class SlotEntity {
     @Column(name = "gpConnectBookable")
     private boolean gpConnectBookable;
     
+    @Column(name = "deliveryChannelCodes")
+    private String deliveryChannelCodes;
+
     @ManyToMany
     @JoinTable(name = "appointment_slots_organizations", joinColumns = {
             @JoinColumn(name = "slotId", referencedColumnName = "id") }, inverseJoinColumns = {
@@ -156,4 +159,12 @@ public class SlotEntity {
 //    public void setAppointmentId(AppointmentEntity appointmentId) {
 //        this.appointmentId = appointmentId;
 //    }
+
+    public void setDeliveryChannelCodes(String deliveryChannelCodes) {
+        this.deliveryChannelCodes = deliveryChannelCodes;
+    }
+
+    public String getDeliveryChannelCodes() {
+        return deliveryChannelCodes;
+    }
 }

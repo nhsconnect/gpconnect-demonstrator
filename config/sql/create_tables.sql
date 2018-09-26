@@ -96,6 +96,7 @@ CREATE TABLE gpconnect.appointment_slots (
   endDateTime       DATETIME  NULL,
   lastUpdated       DATETIME  NULL,
   gpConnectBookable BOOLEAN   NULL,
+  deliveryChannelCodes TEXT(50)   NULL,
   PRIMARY KEY (id)
 );
 

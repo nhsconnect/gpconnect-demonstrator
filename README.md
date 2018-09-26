@@ -172,12 +172,14 @@ The row format of “slots.txt” is:
 * Bookable by Gp Connect
 * Bookable organization id
 * Bookable organization type
+* Delivery Channels (0..1 T|V|P) [ T : Telephone, V : Video, P : In-person ] ) 
+
 
 e.g.:
 ```
-0,9,0,0,9,30,0,408443003,General medical practice,2,FREE,false,1,,
-0,9,30,0,10,0,0,408443003,General medical practice,2,FREE,true,1,,
-0,10,0,0,10,30,0,408443003,General medical practice,2,FREE,true,1,Urgent Care
+0,9,0,0,9,30,0,408443003,General medical practice,2,FREE,false,1,,T
+0,9,30,0,10,0,0,408443003,General medical practice,2,FREE,true,1,,V
+0,10,0,0,10,30,0,408443003,General medical practice,2,FREE,true,1,Urgent Care,P
 ```
 
 Currently slots between 09:00 and 09:40 are not available for booking by GpConnect. Slots from 09:40 to 12:50 are available to the organisation with ODS code GPC001. Those from 13:00 to 16:50 are available to the organisation with ODS code R1A14. Slots from 14:30 to 16:50 are also available to be booked by any Urgent Care organisation.

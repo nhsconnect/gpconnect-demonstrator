@@ -21,7 +21,8 @@ angular.module('gpConnect', [
     'gantt.table',
     'gantt.tree',
     'gantt.groups'
-]).config(function($stateProvider, $urlRouterProvider) {
+]).config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+    
     $urlRouterProvider.otherwise('/');
 
     $stateProvider.state('patients-list', {
@@ -66,6 +67,10 @@ angular.module('gpConnect', [
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
             main: {templateUrl: 'views/access-record/access-record-structured.html' ,controller: 'AppointmentsStructuredCtrl'}
         }
+    });
+    
+    $locationProvider.html5Mode({
+       enabled: true
     });
 }).directive('datepickerPopup', function() {
     return {
@@ -203,14 +208,14 @@ angular.module('gpConnect', [
 
     this.$get = function() {
         var q = jQuery.ajax({
-            type: 'GET', url: 'providerRouting.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
+            type: 'GET', url: '/gpconnect-demonstrator/v1/providerRouting.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
         });
 
         if (q.status === 200) {
             providerRouting = angular.fromJson(q.responseText);
 
             providerRouting.defaultPractice = function() {
-                if (persistentDataModel.testingOdsCode != undefined && persistentDataModel.testingOdsCode.length > 0) {
+                if (persistentDataModel != undefined && persistentDataModel.testingOdsCode != undefined && persistentDataModel.testingOdsCode.length > 0) {
                     var defaultPracticeOdsCode = persistentDataModel.testingOdsCode;
                 } else {
                     var defaultPracticeOdsCode = $('#defaultPracticeOdsCode').html();

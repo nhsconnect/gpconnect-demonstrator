@@ -503,7 +503,6 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         public static Resource resolveFromName(String resourceName) {
             Resource resource = null;
-
             if (resourceName != null) {
                 resource = mappings.get(resourceName);
             }
@@ -514,12 +513,13 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         private static String getResourceFromUri(String requestUri) {
             String resource = null;
 
-            StringTokenizer tok = new StringTokenizer(requestUri, "/");
-            if (tok.countTokens() > 1) {
-                tok.nextToken();
-                resource = tok.nextToken();
+            String[] strArray = requestUri.split("/");
+            if (strArray[1].equalsIgnoreCase("fhir")) {
+            	resource = strArray[2];
+            } else {
+            	resource = strArray[4];
             }
-
+                        
             return resource;
         }
     }

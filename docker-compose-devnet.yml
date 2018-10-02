@@ -1,0 +1,34 @@
+version: "3"
+services:
+  gpconnect-db:
+    image: mariadb
+    networks: 
+      - gpconnect-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+    volumes:
+      - /docker-data/gpconnect-db/${IMAGE_TAG}:/var/lib/mysql
+  gpconnect-api:
+    image: ${REGISTRY_PREFIX}gpconnect${IMAGE_TAG}
+    ports:
+      - 8120:19191
+    networks: 
+      - gpconnect-network
+    environment:
+      - DATABASE_ADDRESS=gpconnect-db
+      - DATABASE_USERNAME=${DB_USER}
+      - DATABASE_PASSWORD=${DB_PASSWORD}
+      - DATABASE_SCHEMA=${DB_NAME}
+      - SERVER_BASE_URL=${SERVER_BASE}
+      - CONTEXT_PATH=${CONTEXT_PATH}
+    links:
+      - gpconnect-db
+    depends_on:
+      - gpconnect-db
+
+networks: 
+  gpconnect-network:
+    driver: bridge

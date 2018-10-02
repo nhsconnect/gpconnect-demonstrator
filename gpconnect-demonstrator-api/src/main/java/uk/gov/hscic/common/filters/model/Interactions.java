@@ -80,7 +80,7 @@ public class Interactions {
 		private final Set<String> identifierSystems = new HashSet<>();
 		private RequestMethod httpVerb;
 
-		private String currentRegex = "/fhir";
+		private String currentRegex = ".*/fhir";
 
 		private Interaction(String resource) {
 			this.resource = resource;

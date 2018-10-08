@@ -1,7 +1,7 @@
 INSERT INTO gpconnect.adminitems
   (nhsNumber,sectionDate,adminDate,Entry,Details)
 VALUES
-  (9476719931,'2015-04-22','2015-04-22',"Appointment Letter","Community diabetes clinic");
+  (9476719931,'2015-05-02','2015-05-02',"Appointment Letter","Community diabetes clinic");
 
 INSERT INTO gpconnect.allergies
   (nhsNumber,currentOrHistoric,startDate,endDate,details)

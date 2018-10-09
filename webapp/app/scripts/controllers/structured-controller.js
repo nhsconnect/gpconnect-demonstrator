@@ -32,10 +32,7 @@ angular
 
     $scope.dateInvalid = false;
 
-
-
     initShowHide();
-
 
     $scope.openDatePicker = function ($event, name) {
         $event.preventDefault();
@@ -52,7 +49,6 @@ angular
         $("button").bind('click', highlightMonth);
     };
 
-
     function initGetAllergies() {
         PatientService.allergyDetialsByPatient($stateParams.patientId
         ).then(function(allergySummaryResponse) {
@@ -64,8 +60,6 @@ angular
         $scope.IsDisabled = false;
         $scope.allergies = $scope.AllMedications[item];
         $scope.selectedMedication =item;
-
-
     };
 
     $scope.styleFunction = function(index) {
@@ -93,8 +87,6 @@ angular
             }
         });
     };
-
-
 
     $scope.getAllergyData = function (start, end, includePrescriptionIssues, includeResolvedAllergies) {
         $scope.dateInvalid = false;
@@ -148,10 +140,7 @@ angular
                 start = startDate.toISOString().split('T')[0];
 
             }
-        }
-
-
-        {
+        }{
 
             $scope.patient = {
                 name: "",
@@ -392,33 +381,30 @@ angular
                 }).extension;
             }
 
-
-
             $scope.MedicationName = listType.code.coding[0].extension[0].extension[1].valueString;
             $scope.practitionername = $scope.practitioner.name[0].prefix[0]+" "+$scope.practitioner.name[0].given[0] + " "+ $scope.practitioner.name[0].family;
 
             var medName = listType.code.coding[0].extension[0].extension[1].valueString == "Transfer-degraded medication entry" ? listType.code.text :  listType.code.coding[0].extension[0].extension[1].valueString
-            $scope.title = "Medication Detail: "+medName;
+            $scope.title = "Medication Detail: "+ medName;
 
         }
         else if (listType.resourceType == "AllergyIntolerance" && listType.clinicalStatus == "active") {
             $scope.showAllergyDetail = true;
             $scope.showMedDetail = false;
             $scope.showResAllergyDetail = false;
-            $scope.title = "Allergy Detail: "+listType.code.coding[0].display;
+            $scope.title = "Allergy Detail: "+ listType.code.coding[0].display;
         }
         else if (listType.resourceType == "AllergyIntolerance" && listType.clinicalStatus == "resolved") {
             $scope.showResAllergyDetail = true;
             $scope.showAllergyDetail = false;
             $scope.showMedDetail = false;
-            $scope.title = "Allergy Detail: "+listType.code.coding[0].display;
+            $scope.title = "Allergy Detail: "+ listType.code.coding[0].display;
         }
 
         $scope.message = "Show Form Button Clicked";
-
-
-        var modalInstance = $modal.open({
-            templateUrl: '../v1/views/access-record/modal.html',
+		var global = Function('return this')() || (42, eval)('this');
+  		var modalInstance = $modal.open({
+            templateUrl: global.__env.templateUrl,
             scope: $scope,
             resolve: {
                 params: function () {

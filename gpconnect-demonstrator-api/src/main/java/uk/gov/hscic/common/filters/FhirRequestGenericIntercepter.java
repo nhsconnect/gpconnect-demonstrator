@@ -131,11 +131,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         String url = httpRequest.getRequestURI();
+
         int index = url.indexOf("/fhir");
         if (index > -1) {
         	url = url.substring(index);
         }
-        if (!url.equals(INTERACTION_MAP.get(interactionIdHeader).replace("%ID%", String.valueOf(getIdFromUrl(url))))) {
+        if (INTERACTION_MAP.get(interactionIdHeader) == null || !url.equals(INTERACTION_MAP.get(interactionIdHeader).replace("%ID%", String.valueOf(getIdFromUrl(url))))) {
             throwInvalidRequestException("InteractionId Incorrect");
         }
 

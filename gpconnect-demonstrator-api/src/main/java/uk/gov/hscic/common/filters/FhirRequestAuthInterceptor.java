@@ -82,6 +82,11 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
         
         if (validateJWT) {
+        	if (requestDetails.getHeader(HttpHeaders.AUTHORIZATION) == null) {
+        		throw new InvalidRequestException("Authorization header blank", OperationOutcomeFactory.buildOperationOutcome(
+                        OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER, "Authorization header blank",
+                        OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+        	}
             String[] authorizationHeaderComponents = requestDetails.getHeader(HttpHeaders.AUTHORIZATION).split(" ");
 
             if (authorizationHeaderComponents.length != 2 || !"Bearer".equalsIgnoreCase(authorizationHeaderComponents[0])) {

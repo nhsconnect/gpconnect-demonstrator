@@ -39,6 +39,7 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import org.hl7.fhir.dstu3.model.CodeType;
 import org.hl7.fhir.dstu3.model.Extension;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
@@ -77,9 +78,9 @@ public class SlotResourceProvider implements IResourceProvider {
     @Search
     public Bundle getSlotByIds(@RequiredParam(name = "start") DateParam startDate,
             @RequiredParam(name = "end") DateParam endDate, @RequiredParam(name = "status") String status,
-            @RequiredParam(name= "searchFilter") TokenAndListParam searchFilters,
-            @IncludeParam(allow = { "Slot:schedule", "Schedule:actor:Practitioner",
-                    "Schedule:actor:Location" }) Set<Include> theIncludes) {
+            @RequiredParam(name = "searchFilter") TokenAndListParam searchFilters,
+            @IncludeParam(allow = {"Slot:schedule", "Schedule:actor:Practitioner",
+        "Schedule:actor:Location"}) Set<Include> theIncludes) {
 
         Bundle bundle = new Bundle();
         boolean actorPractitioner = false;
@@ -156,7 +157,6 @@ public class SlotResourceProvider implements IResourceProvider {
         return slots;
     }
 
-
     public List<Slot> getSlotsForScheduleIdAndOrganizationType(String scheduleId, Date startDateTime, Date endDateTime, String bookingOrgType) {
         ArrayList<Slot> slots = new ArrayList<>();
         List<SlotDetail> slotDetails = slotSearch.getSlotsForScheduleIdAndOrganizationType(Long.valueOf(scheduleId), startDateTime,
@@ -186,7 +186,7 @@ public class SlotResourceProvider implements IResourceProvider {
 
         slot.setId(id);
         slot.getMeta().setVersionId(versionId);
-        slot.getMeta().setLastUpdated(lastUpdated);
+        //slot.getMeta().setLastUpdated(lastUpdated);
         slot.getMeta().addProfile(SystemURL.SD_GPC_SLOT);
 
         slot.setIdentifier(Collections.singletonList(
@@ -197,7 +197,7 @@ public class SlotResourceProvider implements IResourceProvider {
         CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
         codableConcept.setText(slotDetail.getTypeDisply());
 
-        List<CodeableConcept> serviceType = new ArrayList<CodeableConcept>();
+        List<CodeableConcept> serviceType = new ArrayList<>();
         serviceType.add(codableConcept);
         slot.setServiceType(serviceType);
 
@@ -214,36 +214,13 @@ public class SlotResourceProvider implements IResourceProvider {
                 break;
         }
 
-        String deliveryChannelCodes = slotDetail.getDeliveryChannelCodes().trim();
-        if (deliveryChannelCodes != null && !deliveryChannelCodes.isEmpty()) {
-            if ( deliveryChannelCodes.length() > 1 ) {
-                 throw new InternalErrorException("Error only one delivery channel may be specified for a slot (deliveryChannelCodes = "+deliveryChannelCodes+")");
-            }
-            
-            ArrayList<Extension> al = new ArrayList<>();
-            for (char letter : deliveryChannelCodes.toCharArray()) {
-                String value = null;
-                switch (letter) {
-                    case 'P':
-                        value = "In-person";
-                        break;
-                    case 'T':
-                        value = "Telephone";
-                        break;
-                    case 'V':
-                        value = "Video";
-                        break;
-                    default:
-                        throw new InternalErrorException("Error unrecognised character \""+letter+"\" in slots config file delivery channel codes field");
-                }
-                Coding roleCoding = new Coding(SystemURL.VS_GPC_DELIVERY_CHANNEL, value, value);
-
-                Extension deliveryChannelExtension = new Extension(SystemURL.SD_EXTENSION_GPC_DELIVERY_CHANNEL,
-                        new CodeableConcept().addCoding(roleCoding));
-                al.add(deliveryChannelExtension);
-            }
-            slot.setExtension(al);
-        } 
+        String deliveryChannelCodes = slotDetail.getDeliveryChannelCodes();
+        ArrayList<Extension> al = new ArrayList<>();
+        if (deliveryChannelCodes != null && !deliveryChannelCodes.trim().isEmpty()) {
+            Extension deliveryChannelExtension = new Extension(SystemURL.SD_EXTENSION_GPC_DELIVERY_CHANNEL, new CodeType(deliveryChannelCodes));
+            al.add(deliveryChannelExtension);
+        }
+        slot.setExtension(al);
 
         return slot;
     }

@@ -14,8 +14,6 @@ public class ScheduleEntityToScheduleDetailTransformer implements Transformer<Sc
         scheduleDetail.setTypeCode(item.getTypeCode());
         scheduleDetail.setTypeDescription(item.getTypeDescription());
         scheduleDetail.setLocationId(item.getLocationId());
-        scheduleDetail.setDeliveryChannelCode(item.getDeliveryChannelCode());
-        scheduleDetail.setDeliveryChannelDisplay(item.getDeliveryChannelDisplay());
         scheduleDetail.setPractitionerRoleCode(item.getPractitionerRoleCode()); 
         scheduleDetail.setPractitionerRoleDisplay(item.getPractitionerRoleDisplay());
         scheduleDetail.setStartDateTime(item.getStartDateTime());

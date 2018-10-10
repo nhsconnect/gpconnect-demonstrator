@@ -30,8 +30,8 @@ angular.module('gpConnect')
             var startDate = moment(appointmentSearchParams.startDate).format('YYYY-MM-DDTHH:mm:ssZ');
             var endDate = moment(appointmentSearchParams.endDate).add(23, 'hours').add(59, 'minutes').add(59, 'seconds').format('YYYY-MM-DDTHH:mm:ssZ');
 
-            var poputlateModel = function (practiceOdsCode, practiceName, practiceOrgType, startDate, endDate, primary) {	
-            
+            var poputlateModel = function (practiceOdsCode, practiceName, practiceOrgType, startDate, endDate, primary) {
+
                 var practiceState = {};
                 practiceState.practiceName = practiceName;
                 practiceState.practiceOdsCode = practiceOdsCode;
@@ -50,64 +50,74 @@ angular.module('gpConnect')
                 Appointment.searchForFreeSlots(practiceOdsCode, practiceOrgType, startDate, endDate).then(function (result) {
 
                     var getScheduleJson = result.data;
-                    
-                    if(!getScheduleJson || !getScheduleJson.entry){
-                        getScheduleJson = { entry : [] };
+
+                    if (!getScheduleJson || !getScheduleJson.entry) {
+                        getScheduleJson = {entry: []};
                     }
 
-                    var getPractitionerRef = function(value){
-                         for (var i=0; i < value.resource.actor.length; i++){
-                            if (value.resource.actor[i] && value.resource.actor[i].reference.startsWith("Practitioner")){
-                                    return value.resource.actor[i].reference;
-                            }
-                        }
-                        return null;
-                    };
-                    
-                    var getLocationRef = function(value){
-                         for (var i=0; i < value.resource.actor.length; i++){
-                            if (value.resource.actor[i] && value.resource.actor[i].reference.startsWith("Location")){
-                                    return value.resource.actor[i].reference;
+                    var getPractitionerRef = function (value) {
+                        for (var i = 0; i < value.resource.actor.length; i++) {
+                            if (value.resource.actor[i] && value.resource.actor[i].reference.startsWith("Practitioner")) {
+                                return value.resource.actor[i].reference;
                             }
                         }
                         return null;
                     };
 
-                    var getExtensionCoding = function(value, url){
-                        for (var i=0; i < value.resource.extension.length; i++){
-                            if (value.resource.extension[i] && value.resource.extension[i].url === url){
+                    var getLocationRef = function (value) {
+                        for (var i = 0; i < value.resource.actor.length; i++) {
+                            if (value.resource.actor[i] && value.resource.actor[i].reference.startsWith("Location")) {
+                                return value.resource.actor[i].reference;
+                            }
+                        }
+                        return null;
+                    };
+
+                    var getExtensionCoding = function (value, url) {
+                        for (var i = 0; i < value.resource.extension.length; i++) {
+                            if (value.resource.extension[i] && value.resource.extension[i].url === url) {
                                 return value.resource.extension[i].valueCodeableConcept.coding;
                             }
                         }
                         return null;
                     };
 
-                    var getMultipleExtensionCoding = function(value, url){
+                    var getExtensionValueCoding = function (value, url) {
+                        for (var i = 0; i < value.resource.extension.length; i++) {
+                            if (value.resource.extension[i] && value.resource.extension[i].url === url) {
+                                //console.log(value.resource.extension[i]);
+                                return value.resource.extension[i].valueCode;
+                            }
+                        }
+                        return null;
+                    };
+
+                    var getMultipleExtensionCoding = function (value, url) {
                         var list = [];
-                        for (var i=0; i < value.resource.extension.length; i++){
-                            if (value.resource.extension[i] && value.resource.extension[i].url === url){
+                        for (var i = 0; i < value.resource.extension.length; i++) {
+                            if (value.resource.extension[i] && value.resource.extension[i].url === url) {
                                 list.push(value.resource.extension[i].valueCodeableConcept.coding);
                             }
                         }
                         return list;
                     }
-                    
+
                     // go through response and build arrays of all returned data
                     $.each(getScheduleJson.entry, function (key, value) {
-                        if (value.resource.resourceType == "Slot") { 
+                        if (value.resource.resourceType == "Slot") {
                             var slot = {"scheduleRef": value.resource.schedule.reference, "startDateTime": value.resource.start, "endDateTime": value.resource.end, "type": value.resource.serviceType[0].coding[0].display, "typeCode": value.resource.serviceType[0].coding[0].code, "id": value.resource.id,
-                            "deliveryChannelCoding": getMultipleExtensionCoding(value, "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-DeliveryChannel-1")};
+                                "deliveryChannelCoding": getExtensionValueCoding(value, "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-DeliveryChannel-2")};
                             responseSlots.push(slot);
                         }
 
-                        if (value.resource.resourceType == "Schedule") { 
+                        if (value.resource.resourceType == "Schedule") {
                             responseSchedules[value.fullUrl] = {
-                                "locationRef": getLocationRef(value), 
+                                "locationRef": getLocationRef(value),
                                 "practitionerRef": getPractitionerRef(value),
                                 "practitionerRoleCoding": getExtensionCoding(value, "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-PractitionerRole-1")
                             };
                         }
-                        if (value.resource.resourceType == "Practitioner") { 
+                        if (value.resource.resourceType == "Practitioner") {
                             var prefix = "";
                             var given = "";
                             var family = "";
@@ -127,37 +137,37 @@ angular.module('gpConnect')
                             };
                         }
                         if (value.resource.resourceType == "Location") {
-                        	var addressStr = value.resource.name;
-                        	if (value.resource.address != undefined) {
-	                        	if (value.resource.address.line != undefined) {
-	                                addressStr += ", " + value.resource.address.line;
-	                            }
-	                            if (value.resource.address.city != undefined) {
-	                                addressStr += ", " + value.resource.address.city;
-	                            }
-	                            if (value.resource.address.district != undefined) {
-	                                addressStr += ", " + value.resource.address.district;
-	                            }
-	                            if (value.resource.address.state != undefined) {
-	                                addressStr += ", " + value.resource.address.state;
-	                            }
-	                            if (value.resource.address.postalCode != undefined) {
-	                                addressStr += ", " + value.resource.address.postalCode;
-	                            }
-	                            if (value.resource.address.country != undefined) {
-	                                addressStr += ", " + value.resource.address.country;
-	                            }
+                            var addressStr = value.resource.name;
+                            if (value.resource.address != undefined) {
+                                if (value.resource.address.line != undefined) {
+                                    addressStr += ", " + value.resource.address.line;
+                                }
+                                if (value.resource.address.city != undefined) {
+                                    addressStr += ", " + value.resource.address.city;
+                                }
+                                if (value.resource.address.district != undefined) {
+                                    addressStr += ", " + value.resource.address.district;
+                                }
+                                if (value.resource.address.state != undefined) {
+                                    addressStr += ", " + value.resource.address.state;
+                                }
+                                if (value.resource.address.postalCode != undefined) {
+                                    addressStr += ", " + value.resource.address.postalCode;
+                                }
+                                if (value.resource.address.country != undefined) {
+                                    addressStr += ", " + value.resource.address.country;
+                                }
                             }
-                        	responseLocations[value.fullUrl] = {"id": value.resource.id, "address": addressStr};
+                            responseLocations[value.fullUrl] = {"id": value.resource.id, "address": addressStr};
                         }
                     });
 
                     if (responseSlots.length > 0) {
                         $.each(responseSlots, function (key, value) {
                             // Build slot object
-                           
+
                             var slot = {"startDateTime": new Date(value.startDateTime), "endDateTime": new Date(value.endDateTime), "type": value.type, "typeCode": value.typeCode, "id": value.id,
-                                "deliveryChannelCoding" : value.deliveryChannelCoding};
+                                "deliveryChannelCoding": value.deliveryChannelCoding};
                             // Find the schedule for that slot from array
                             var schedule = responseSchedules[value.scheduleRef];
                             // Find Location and practitioner for that schedule
@@ -182,7 +192,7 @@ angular.module('gpConnect')
                                 var locationModel = {"address": locationAddress, "freeSlots": 1, "dayBlockOfSlots": dayBlockOfSlots, "id": locationId, "odsCode": practiceOdsCode, "practiceName": practiceName, "primary": primary};
                                 locations.push(locationModel);
                                 internalGetScheduleModel.locations = locations;
-                            } else {                            
+                            } else {
                                 var locationIndex = -1;
                                 // search locations for location
                                 for (var i = 0; i < internalGetScheduleModel.locations.length; i++) {
@@ -222,7 +232,7 @@ angular.module('gpConnect')
                                         var slots = [];
                                         slots.push(slot);
                                         var practitioners = [];
-                                        var practitionerModel = {"fullName": practitionerName, "slots": slots, "id": practitionerId, "role": practitionerRole, "deliveryChannel": deliveryChannel};
+                                        var practitionerModel = {"fullName": practitionerName, "slots": slots, "id": practitionerId, "role": practitionerRole};
                                         practitioners.push(practitionerModel);
                                         var dayBlockOfSlots = [];
                                         var startDateTime = new Date(slot.startDateTime);
@@ -239,7 +249,7 @@ angular.module('gpConnect')
                                             }
                                         }
                                         ;
-                                        if (practitionerIndex == -1) { 
+                                        if (practitionerIndex == -1) {
                                             // If we did not find a block of slots we need to make one
                                             var slots = [];
                                             slots.push(slot);
@@ -260,8 +270,8 @@ angular.module('gpConnect')
                         $scope.selectDefaultLocation(internalGetScheduleModel.locations);
                         setTimeout(function () {
                             $('.gantt-scrollable').scrollLeft(100);
-							//gantt-side
-							$(".gantt-side").css("width","auto");
+                            //gantt-side
+                            $(".gantt-side").css("width", "auto");
                         }, 10);
                     }
                     numberOfSearches--;
@@ -276,7 +286,7 @@ angular.module('gpConnect')
                         practiceState.status = "No Slots";
                     }
 
-                    if(result.status !== 200){
+                    if (result.status !== 200) {
                         practiceState.status = "Failed";
                     }
                 }, function (result) {
@@ -331,7 +341,7 @@ angular.module('gpConnect')
                     $scope.displayFromDate = day.date;
                     $scope.displayToDate = day.date;
 
-                    
+
                 }
             };
 
@@ -427,18 +437,17 @@ angular.module('gpConnect')
                 var tasks = $scope.selectedSlots[0].row.model.tasks;
                 for (var taskIndex = 0; taskIndex < tasks.length; taskIndex++) {
                     // there's no guarantee any subsequent slots will have the same combination of delivery channel codes
-                    if ( slotIds[0] === tasks[taskIndex].id) {
+                    if (slotIds[0] === tasks[taskIndex].id) {
                         var startTask = tasks[taskIndex];
-                        if(startTask.deliveryChannelCoding.length > 0) {
-                            var deliveryChannel = "";
-                            for (var dc = 0; dc < startTask.deliveryChannelCoding.length; dc++) {
-                                if ( dc > 0) {
-                                    deliveryChannel += ",";
-                                }
-                                deliveryChannel += startTask.deliveryChannelCoding[dc][0].display;
-                            }
-                            $scope.appointmentBookingParameters.deliveryChannel = deliveryChannel;
-                        }
+//                        if(startTask.deliveryChannelCoding.length > 0) {
+//                            var deliveryChannel = "";
+//                            for (var dc = 0; dc < startTask.deliveryChannelCoding.length; dc++) {
+//                                if ( dc > 0) {
+//                                    deliveryChannel += ",";
+//                                }
+//                                deliveryChannel += startTask.deliveryChannelCoding[dc][0].display;
+//                            }
+                        $scope.appointmentBookingParameters.deliveryChannel = startTask.deliveryChannelCoding;
                         break;
                     }
                 }
@@ -541,7 +550,7 @@ angular.module('gpConnect')
                 $scope.selectedSlots = [];
                 $(".selectedSlot").removeClass("selectedSlot");
             };
-            
+
             $scope.registerEventFunctions = function (eventFunctions) {
                 eventFunctions.directives.on.new($scope, function (dName, dScope, dElement, dAttrs, dController) {
                     if (dName === 'ganttTask') {

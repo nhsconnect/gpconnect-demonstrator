@@ -56,7 +56,7 @@ public final class SystemURL {
     public static final String SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-AppointmentCancellationReason-1";
     public static final String SD_EXTENSION_GPC_PRACTITIONER = "http://fhir.nhs.net/StructureDefinition/extension-gpconnect-practitioner-1";
     public static final String SD_EXTENSION_GPC_PRACTITIONER_ROLE = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-PractitionerRole-1";
-    public static final String SD_EXTENSION_GPC_DELIVERY_CHANNEL = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-DeliveryChannel-1";
+    public static final String SD_EXTENSION_GPC_DELIVERY_CHANNEL = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-DeliveryChannel-2";
     public static final String SD_EXTENSION_MEDICATION_QUANTITY_TEXT = "http://fhir.nhs.net/StructureDefinition/extension-medication-quantity-text-1-0";
     public static final String SD_EXTENSION_PERSCRIPTION_REPEAT_REVIEW_DATE = "http://fhir.nhs.net/StructureDefinition/extension-prescription-repeat-review-date-1-0";
     public static final String SD_EXTENSION_REGISTRATION_PERIOD = "http://fhir.nhs.net/StructureDefinition/extension-registration-period-1";
@@ -96,7 +96,7 @@ public final class SystemURL {
     public static final String VS_GPC_ERROR_WARNING_CODE = "https://fhir.nhs.uk/STU3/ValueSet/Spine-ErrorOrWarningCode-1";
     public static final String VS_GPC_REASON_TYPE = "http://fhir.nhs.net/ValueSet/gpconnect-reason-type-1-0";
     public static final String VS_GPC_RECORD_SECTION = "https://fhir.nhs.uk/STU3/ValueSet/GPConnect-RecordSection-1";
-    public static final String VS_GPC_DELIVERY_CHANNEL = "https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-DeliveryChannel-1";
+    public static final String VS_GPC_DELIVERY_CHANNEL = "https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-DeliveryChannel-2";
     public static final String VS_GPC_PRACTITIONER_ROLE = "https://fhir.nhs.uk/STU3/ValueSet/GPConnect-PractitionerRole-1";
     public static final String VS_HUMAN_LANGUAGE = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-HumanLanguage-1";
     public static final String VS_REGISTRATION_STATUS = "http://fhir.nhs.net/ValueSet/registration-status-1";
@@ -116,7 +116,7 @@ public final class SystemURL {
     public static final String VS_IDENTIFIER_TYPE = "http://hl7.org/fhir/ValueSet/identifier-type";
     public static final String VS_PATIENT_CONTACT_REL = "http://hl7.org/fhir/ValueSet/patient-contact-relationship";
     public static final String VS_SLOT_IDENTIFIER = "http://fhir.nhs.net/Id/gpconnect-slot-identifier";
-    public static final String VS_GPC_ORG_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/GPConnect-OrganisationType-1";
+    public static final String VS_GPC_ORG_TYPE = "https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-OrganisationType-1";
     public static final String VS_CONDITION_CODE = "http://hl7.org/fhir/stu3/valueset-condition-code.html";
     public static final String VS_CC_PRESCRIPTION_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-PrescriptionType-1";
     public static final String VS_CC_NHS_NUMBERVERIF = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-NHSNumberVerificationStatus-1";

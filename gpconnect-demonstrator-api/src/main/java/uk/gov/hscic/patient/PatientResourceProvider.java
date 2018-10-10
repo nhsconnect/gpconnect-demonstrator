@@ -315,7 +315,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
         structuredBundle.setType(BundleType.COLLECTION);
         structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
-        structuredBundle.getMeta().setLastUpdated(new Date());
+        //structuredBundle.getMeta().setLastUpdated(new Date());
 
         return structuredBundle;
     }
@@ -778,7 +778,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.setId(id);
         patient.getMeta().setVersionId(versionId);
-        patient.getMeta().setLastUpdated(lastUpdated);
+//      patient.getMeta().setLastUpdated(lastUpdated);
         patient.getMeta().addProfile(SystemURL.SD_GPC_PATIENT);
 
         Identifier patientNhsNumber = new Identifier().setSystem(SystemURL.ID_NHS_NUMBER)

@@ -125,7 +125,7 @@ public class ValueSetValidator {
             return valSet;
         }
         
-        String filePathLocation = String.format("%s%s", fhirValueSetsPath, filename);
+        String filePathLocation = String.format("%sValueSet-%s", fhirValueSetsPath, filename);
         Path valueSetFilePath = new File(filePathLocation).toPath();
                
         if (valueSetFilePath.toFile().exists()) {

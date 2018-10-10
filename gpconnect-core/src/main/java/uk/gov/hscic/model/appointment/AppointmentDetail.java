@@ -23,7 +23,7 @@ public class AppointmentDetail {
     private String typeDisplay;
     private BookingOrgDetail bookingOrganization;
     private Date created;
-
+    
     private String typeText;
 
     public String getCancellationReason() {

@@ -57,8 +57,8 @@ public class MedicationRequestResourceProvider {
                 .setValue(requestDetail.getGuid());
         identifiers.add(identifier);
         medicationRequest.setIdentifier(identifiers);
-		medicationRequest.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_REQUEST)
-				.setVersionId(String.valueOf(requestDetail.getLastUpdated().getTime())).setLastUpdated(new Date()));
+ 		medicationRequest.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_REQUEST));
+//				.setVersionId(String.valueOf(requestDetail.getLastUpdated().getTime())).setLastUpdated(new Date()));
 		setBasedOnReferences(medicationRequest, requestDetail);		
 		if (requestDetail.getPrescriptionTypeCode().contains("repeat")) {
 			medicationRequest.setGroupIdentifier(new Identifier().setValue(requestDetail.getGroupIdentifier()));

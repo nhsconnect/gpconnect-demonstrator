@@ -37,186 +37,188 @@ import uk.gov.hscic.practitioner.PractitionerSearch;
 @Component
 public class AppointmentValidation {
 
-	@Autowired
-	private PatientSearch patientSearch;
+    @Autowired
+    private PatientSearch patientSearch;
 
-	@Autowired
-	private PractitionerSearch practitionerSearch;
+    @Autowired
+    private PractitionerSearch practitionerSearch;
 
-	@Autowired
-	private LocationSearch locationSearch;
+    @Autowired
+    private LocationSearch locationSearch;
 
-	@Autowired
-	private ValueSetValidator valueSetValidator;
-	
-	public boolean appointmentDescriptionTooLong(Appointment appointment) {
-		if (appointment.getDescription().length() >= 600) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    @Autowired
+    private ValueSetValidator valueSetValidator;
 
-	public List<Appointment> filterToReturnFutureAppointments(List<Appointment> appointment) {
-		LocalDate localDate = LocalDate.now();
-		List<Appointment> appointmentsFiltered = new ArrayList<>();
+    public boolean appointmentDescriptionTooLong(Appointment appointment) {
+        if (appointment.getDescription().length() >= 600) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-		//convert it to Date
-		Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    public List<Appointment> filterToReturnFutureAppointments(List<Appointment> appointment) {
+        LocalDate localDate = LocalDate.now();
+        List<Appointment> appointmentsFiltered = new ArrayList<>();
 
-		for (int i = 0; i < appointment.size(); i++) {
-			if (appointment.get(i).getStart().after(date)) {
+        //convert it to Date
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-				appointmentsFiltered.add(appointment.get(i));
-			}
+        for (int i = 0; i < appointment.size(); i++) {
+            if (appointment.get(i).getStart().after(date)) {
 
-		}
-		return appointmentsFiltered;
+                appointmentsFiltered.add(appointment.get(i));
+            }
 
-	}
+        }
+        return appointmentsFiltered;
 
-	public void validateAppointmentExtensions(List<Extension> undeclaredExtensions) {
-		List<String> extensionURLs = undeclaredExtensions.stream().map(Extension::getUrl).collect(Collectors.toList());
+    }
 
-		extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON);
-		extensionURLs.remove(SystemURL.SD_CC_APPOINTMENT_CREATED);
-		extensionURLs.remove(SystemURL.SD_CC_APPOINTMENT_BOOKINGORG);
+    public void validateAppointmentExtensions(List<Extension> undeclaredExtensions) {
+        List<String> extensionURLs = undeclaredExtensions.stream().map(Extension::getUrl).collect(Collectors.toList());
 
-		if (!extensionURLs.isEmpty()) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new UnprocessableEntityException(
-							"Invalid/multiple appointment extensions found. The following are in excess or invalid: "
-									+ extensionURLs.stream().collect(Collectors.joining(", "))),
-					SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-		}
+        extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON);
+        extensionURLs.remove(SystemURL.SD_CC_APPOINTMENT_CREATED);
+        extensionURLs.remove(SystemURL.SD_CC_APPOINTMENT_BOOKINGORG);
+        extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_DELIVERY_CHANNEL);
+        extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE);
 
-		List<String> invalidCodes = new ArrayList<>();
-		for (Extension ue : undeclaredExtensions) {
+        if (!extensionURLs.isEmpty()) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(
+                            "Invalid/multiple appointment extensions found. The following are in excess or invalid: "
+                            + extensionURLs.stream().collect(Collectors.joining(", "))),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        }
 
-			if (ue.getUrl().equals(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON)) {
+        List<String> invalidCodes = new ArrayList<>();
+        for (Extension ue : undeclaredExtensions) {
 
-				IBaseDatatype cancellationReason = ue.getValue();
-				if (cancellationReason.isEmpty()) {
-					invalidCodes.add("Cancellation Reason is missing.");
-				}
-				continue;
-			}
+            if (ue.getUrl().equals(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON)) {
 
-			IBaseDatatype ueValue = ue.getValue();
-			if (null != ueValue && ueValue.getClass().getSimpleName().equals("CodeableConcept")) {
-				CodeableConcept codeConc = (CodeableConcept) ueValue;
-				Coding code = codeConc.getCodingFirstRep();
+                IBaseDatatype cancellationReason = ue.getValue();
+                if (cancellationReason.isEmpty()) {
+                    invalidCodes.add("Cancellation Reason is missing.");
+                }
+                continue;
+            }
 
-				Boolean isValid = valueSetValidator.validateCode(code);
+            // disable this experimental code for release/1.2.1
+            IBaseDatatype ueValue = ue.getValue();
+            if (false && null != ueValue && ueValue.getClass().getSimpleName().equals("CodeableConcept")) {
+                CodeableConcept codeConc = (CodeableConcept) ueValue;
+                Coding code = codeConc.getCodingFirstRep();
 
-				if (isValid == false) {
-					invalidCodes.add(MessageFormat.format("Code: {0} [Display: {1}, System: {2}]", code.getCode(),
-							code.getDisplay(), code.getSystem()));
-				}
-			}
-		}
+                Boolean isValid = valueSetValidator.validateCode(code);
 
-		if (!invalidCodes.isEmpty()) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new UnprocessableEntityException("Invalid appointment extension codes: "
-							+ invalidCodes.stream().collect(Collectors.joining(", "))),
-					SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-		}
-	}
+                if (isValid == false) {
+                    invalidCodes.add(MessageFormat.format("Code: {0} [Display: {1}, System: {2}]", code.getCode(),
+                            code.getDisplay(), code.getSystem()));
+                }
+            }
+        }
 
-	public void validateParticipantStatus(ParticipationStatus participationStatus,
-			Enumeration<ParticipationStatus> enumeration, Enumeration<ParticipationStatus> enumeration2) {
+        if (!invalidCodes.isEmpty()) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Invalid appointment extension codes: "
+                            + invalidCodes.stream().collect(Collectors.joining(", "))),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        }
+    }
 
-		Boolean validStatus = false;
-		String participantStatusErr = "is a requirement but is missing.";
+    public void validateParticipantStatus(ParticipationStatus participationStatus,
+            Enumeration<ParticipationStatus> enumeration, Enumeration<ParticipationStatus> enumeration2) {
 
-		if (participationStatus != null) {
-			participantStatusErr = String.format("%s is not a valid ParticipationStatus code", participationStatus);
-			EnumSet<ParticipationStatus> statusList = EnumSet.allOf(ParticipationStatus.class);
-			validStatus = statusList.contains(enumeration.getValue());
-		}
+        Boolean validStatus = false;
+        String participantStatusErr = "is a requirement but is missing.";
 
-		if (!validStatus) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new UnprocessableEntityException(
-							String.format("Appointment Participant %s Status %s", enumeration2, participantStatusErr)),
-					SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-		}
-	}
+        if (participationStatus != null) {
+            participantStatusErr = String.format("%s is not a valid ParticipationStatus code", participationStatus);
+            EnumSet<ParticipationStatus> statusList = EnumSet.allOf(ParticipationStatus.class);
+            validStatus = statusList.contains(enumeration.getValue());
+        }
 
-	public Boolean validateParticipantType(CodeableConcept participantType) {
+        if (!validStatus) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(
+                            String.format("Appointment Participant %s Status %s", enumeration2, participantStatusErr)),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        }
+    }
 
-		Boolean hasCode = !participantType.isEmpty();
-		Coding code = participantType.getCodingFirstRep();
-		Boolean isValid = !hasCode;
+    public Boolean validateParticipantType(CodeableConcept participantType) {
 
-		if (hasCode) {
+        Boolean hasCode = !participantType.isEmpty();
+        Coding code = participantType.getCodingFirstRep();
+        Boolean isValid = !hasCode;
 
-			// isValid = valueSetValidator.validateCode(code);
-			isValid = true;
+        if (hasCode) {
 
-			if (!isValid) {
-				throw OperationOutcomeFactory
-						.buildOperationOutcomeException(
-								new UnprocessableEntityException(MessageFormat.format(
-										"Invalid Participant Type Code. Code: {0} [Display: {1}, System:{2}]",
-										code.getCode(), code.getDisplay(), code.getSystem())),
-								SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-			}
-		}
+            // isValid = valueSetValidator.validateCode(code);
+            isValid = true;
 
-		return isValid;
-	}
-	
-	public void validateParticipantActor(Reference participantActor) {
+            if (!isValid) {
+                throw OperationOutcomeFactory
+                        .buildOperationOutcomeException(
+                                new UnprocessableEntityException(MessageFormat.format(
+                                        "Invalid Participant Type Code. Code: {0} [Display: {1}, System:{2}]",
+                                        code.getCode(), code.getDisplay(), code.getSystem())),
+                                SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            }
+        }
 
-		Reference actorRef = participantActor;
-		String resourcePart = actorRef.getReference().toString();
-		String idPart = actorRef.getId();
+        return isValid;
+    }
 
-		Boolean participantFailedSearch = false;
+    public void validateParticipantActor(Reference participantActor) {
 
-		switch (resourcePart) {
-		case "Patient":
-			PatientDetails patient = patientSearch.findPatientByInternalID(idPart);
-			participantFailedSearch = (patient == null);
-			break;
-		case "Practitioner":
-			PractitionerDetails practitioner = practitionerSearch.findPractitionerDetails(idPart);
-			participantFailedSearch = (practitioner == null);
-			break;
-		case "Location":
-			LocationDetails location = locationSearch.findLocationById(idPart);
-			participantFailedSearch = (location == null);
-			break;
-		}
+        Reference actorRef = participantActor;
+        String resourcePart = actorRef.getReference().toString();
+        String idPart = actorRef.getId();
 
-		if (participantFailedSearch) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new UnprocessableEntityException(
-							String.format("%s resource reference is not a valid resource", resourcePart)),
-					SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-		}
+        Boolean participantFailedSearch = false;
 
-	}
-	
-	public void validateBookingOrganizationValuesArePresent(Organization bookingOrgRes) {
-		if (bookingOrgRes.getName() == null || bookingOrgRes.getName().isEmpty()) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new UnprocessableEntityException(String.format("Booking organization Name is null/empty")),
-					SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        switch (resourcePart) {
+            case "Patient":
+                PatientDetails patient = patientSearch.findPatientByInternalID(idPart);
+                participantFailedSearch = (patient == null);
+                break;
+            case "Practitioner":
+                PractitionerDetails practitioner = practitionerSearch.findPractitionerDetails(idPart);
+                participantFailedSearch = (practitioner == null);
+                break;
+            case "Location":
+                LocationDetails location = locationSearch.findLocationById(idPart);
+                participantFailedSearch = (location == null);
+                break;
+        }
 
-		}
+        if (participantFailedSearch) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(
+                            String.format("%s resource reference is not a valid resource", resourcePart)),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        }
 
-		if (bookingOrgRes.getTelecomFirstRep().getValue() == null
-				|| bookingOrgRes.getTelecomFirstRep().getValue().isEmpty()) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new UnprocessableEntityException(String.format("Booking organization Telecom is null/empty")),
-					SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+    }
 
-		}
+    public void validateBookingOrganizationValuesArePresent(Organization bookingOrgRes) {
+        if (bookingOrgRes.getName() == null || bookingOrgRes.getName().isEmpty()) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(String.format("Booking organization Name is null/empty")),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
 
-	}
+        }
 
+        if (bookingOrgRes.getTelecomFirstRep().getValue() == null
+                || bookingOrgRes.getTelecomFirstRep().getValue().isEmpty()) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException(String.format("Booking organization Telecom is null/empty")),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+
+        }
+
+    }
 
 }

@@ -38,6 +38,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import static uk.gov.hscic.SystemURL.ID_ODS_ORGANIZATION_CODE;
+import uk.gov.hscic.appointment.schedule.ScheduleSearch;
+import uk.gov.hscic.model.appointment.ScheduleDetail;
+import uk.gov.hscic.model.practitioner.PractitionerDetails;
+import uk.gov.hscic.practitioner.PractitionerSearch;
 
 @Component
 public class AppointmentResourceProvider implements IResourceProvider {
@@ -56,6 +61,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     @Autowired
     private AppointmentValidation appointmentValidation;
+
+    @Autowired
+    private PractitionerSearch practitionerSearch;
+
+    @Autowired
+    private ScheduleSearch scheduleSearch;
 
     @Override
     public Class<Appointment> getResourceType() {
@@ -122,7 +133,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     @Search
     public List<Appointment> getAppointmentsForPatientIdAndDates(@RequiredParam(name = "patient") IdType patientLocalId,
-                                                                 @Sort SortSpec sort, @Count Integer count, @RequiredParam(name = "start") DateAndListParam startDates) {
+            @Sort SortSpec sort, @Count Integer count, @RequiredParam(name = "start") DateAndListParam startDates) {
 
         Date startLowerDate = null;
         Date startUpperDate = null;
@@ -184,7 +195,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     new UnprocessableEntityException("Upper search date must be after the lower search date."),
                     SystemCode.INVALID_PARAMETER, IssueType.INVALID);
         }
-
 
         List<Appointment> appointment = appointmentSearch
                 .searchAppointments(patientLocalId.getIdPartAsLong(), startLowerDate, startUpperDate).stream()
@@ -302,11 +312,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
             appointmentValidation.validateParticipantStatus(participant.getStatus(), participant.getStatusElement(),
                     participant.getStatusElement());
         }
-
+        
         // Store New Appointment
         AppointmentDetail appointmentDetail = appointmentResourceConverterToAppointmentDetail(appointment);
         List<SlotDetail> slots = new ArrayList<>();
 
+        // we'll get the delivery channel from the slot
+        String deliveryChannel = null;
+        ScheduleDetail schedule = null;
         for (Long slotId : appointmentDetail.getSlotIds()) {
             SlotDetail slotDetail = slotSearch.findSlotByID(slotId);
 
@@ -316,16 +329,31 @@ public class AppointmentResourceProvider implements IResourceProvider {
                                 String.format("Slot resource reference value %s is not a valid resource.", slotId)),
                         SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
-            
+
             if (slotDetail.getFreeBusyType().equals("BUSY")) {
-            	throw OperationOutcomeFactory.buildOperationOutcomeException(
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new ResourceVersionConflictException(
                                 String.format("Slot is already in use.", slotId)),
                         SystemCode.DUPLICATE_REJECTED, IssueType.CONFLICT);
             }
 
+            if (deliveryChannel == null) {
+                deliveryChannel = slotDetail.getDeliveryChannelCodes();
+            }
+
+            if (schedule == null) {
+                // load the schedule so we can get the Practitioner ID
+                schedule = scheduleSearch.findScheduleByID(slotDetail.getScheduleReference());
+                
+                // add practitioner id so we can get the practitioner role
+                appointmentDetail.setPractitionerId(schedule.getPractitionerId());
+            }
             slots.add(slotDetail);
         }
+
+        // add deliveryChannel
+        appointmentDetail.setTypeText(deliveryChannel);
+        
 
         appointmentDetail = appointmentStore.saveAppointment(appointmentDetail, slots);
 
@@ -343,7 +371,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         methodOutcome.setCreated(Boolean.TRUE);
 
         return methodOutcome;
-    }
+    } // crateAppointment
 
     @Update
     public MethodOutcome updateAppointment(@IdParam IdType appointmentId, @ResourceParam Appointment appointment) {
@@ -386,7 +414,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             // This is a Cancellation - so copy across fields which can be
             // altered
-
             boolean cancelComparisonResult = compareAppointmentsForInvalidPropertyCancel(oldAppointmentDetail,
                     appointmentDetail);
 
@@ -456,10 +483,10 @@ public class AppointmentResourceProvider implements IResourceProvider {
         methodOutcome.setResource(appointmentDetailToAppointmentResourceConverter(appointmentDetail));
 
         return methodOutcome;
-    }
+    } // updateAppointment
 
     private boolean compareAppointmentsForInvalidPropertyAmend(AppointmentDetail oldAppointmentDetail,
-                                                               AppointmentDetail appointmentDetail) {
+            AppointmentDetail appointmentDetail) {
         List<Boolean> results = new ArrayList<>();
 
         results.add(Objects.equals(oldAppointmentDetail.getId(), appointmentDetail.getId()));
@@ -482,7 +509,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
     }
 
     private boolean compareAppointmentsForInvalidPropertyCancel(AppointmentDetail oldAppointmentDetail,
-                                                                AppointmentDetail appointmentDetail) {
+            AppointmentDetail appointmentDetail) {
         List<Boolean> results = new ArrayList<>();
 
         results.add(Objects.equals(oldAppointmentDetail.getId(), appointmentDetail.getId()));
@@ -507,8 +534,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
             Boolean equalNames = bookingOrg1.getName().equals(bookingOrg2.getName());
             Boolean equalNumbers = bookingOrg1.getTelephone().equals(bookingOrg2.getTelephone());
             return equalNames && equalNumbers;
-        } else {
-            // One of the booking orgs is null so both should be null
+        } else // One of the booking orgs is null so both should be null
+        {
             if (bookingOrg1 == bookingOrg2) {
                 return true;
             } else {
@@ -532,15 +559,36 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointment.getMeta().addProfile(SystemURL.SD_GPC_APPOINTMENT);
 
         Extension extension = new Extension(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON,
-                new IdType(appointmentDetail.getCancellationReason()));
-
+                new StringType(appointmentDetail.getCancellationReason()));
         appointment.addExtension(extension);
+        
         Identifier identifier = new Identifier();
         identifier.setSystem(SystemURL.ID_GPC_APPOINTMENT_IDENTIFIER)
                 .setValue(String.valueOf(appointmentDetail.getId()));
 
         appointment.addIdentifier(identifier);
 
+        String deliveryChannel = appointmentDetail.getTypeText();
+        if (deliveryChannel != null && !deliveryChannel.trim().isEmpty()) {
+            Extension deliveryChannelExtension = new Extension(SystemURL.SD_EXTENSION_GPC_DELIVERY_CHANNEL, new CodeType(deliveryChannel));
+            appointment.addExtension(deliveryChannelExtension);
+        }
+
+        // practitioner role extension here
+        // lookup the practitioner
+        Long practitionerID = appointmentDetail.getPractitionerId();
+        if (practitionerID != null) {
+            PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerDetails(Long.toString(practitionerID));
+            if (practitionerDetails != null) {
+                Coding roleCoding = new Coding(SystemURL.VS_GPC_PRACTITIONER_ROLE, practitionerDetails.getRoleCode(),
+                        practitionerDetails.getRoleDisplay());
+
+                Extension practitionerRoleExtension = new Extension(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE,
+                        new CodeableConcept().addCoding(roleCoding));
+                appointment.addExtension(practitionerRoleExtension);
+            }
+        }
+                
         switch (appointmentDetail.getStatus().toLowerCase(Locale.UK)) {
             case "pending":
                 appointment.setStatus(AppointmentStatus.PENDING);
@@ -606,7 +654,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
             // DateTimeDt(appointmentDetail.getCreated());
             // Extension createdExt = new
             // Extension(SystemURL.SD_CC_APPOINTMENT_CREATED, created);
-
             appointment.setCreated(appointmentDetail.getCreated());
         }
 
@@ -637,7 +684,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointment.setMinutesDuration(appointmentDetail.getMinutesDuration());
 
         return appointment;
-    }
+    } // appointmentDetailToAppointmentResourceConverter
 
     private Date getLastUpdated(Date lastUpdated) {
         if (lastUpdated == null) {
@@ -666,7 +713,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         Long id = appointment.getIdElement().getIdPartAsLong();
         appointmentDetail.setId(id);
-
+        
         appointmentDetail.setLastUpdated(getLastUpdated(appointment.getMeta().getLastUpdated()));
 
         List<Extension> cnlExtension = appointment
@@ -687,7 +734,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         final List<Coding> codingList = appointment.getAppointmentType().getCoding();
 
         if (!codingList.isEmpty()) {
-        	appointmentDetail.setTypeCode(Long.valueOf(codingList.get(0).getCode()));
+            appointmentDetail.setTypeCode(Long.valueOf(codingList.get(0).getCode()));
             appointmentDetail.setTypeDisplay(codingList.get(0).getDisplay());
         }
 
@@ -758,6 +805,19 @@ public class AppointmentResourceProvider implements IResourceProvider {
             bookingOrgDetail.setTelephone(bookingOrgRes.getTelecomFirstRep().getValue());
             if (!bookingOrgRes.getIdentifier().isEmpty()) {
                 bookingOrgDetail.setOrgCode(bookingOrgRes.getIdentifierFirstRep().getValue());
+                String system = bookingOrgRes.getIdentifierFirstRep().getSystem();
+                // check that organization identifier system is https://fhir.nhs.uk/Id/ods-organization-code
+                if (system != null && !system.trim().isEmpty()) {
+                    if (!system.equals(ID_ODS_ORGANIZATION_CODE)) {
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                new UnprocessableEntityException("Appointment organisation identifier system must be an ODS code!"),
+                                SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+                    }
+                } else {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new UnprocessableEntityException("Appointment organisation identifier system must be populated!"),
+                            SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+                }
             }
             bookingOrgDetail.setAppointmentDetail(appointmentDetail);
             appointmentDetail.setBookingOrganization(bookingOrgDetail);
@@ -791,9 +851,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 }
             }
         }
-
+        
         return appointmentDetail;
-    }
-
+    } // appointmentResourceConverterToAppointmentDetail
 
 }

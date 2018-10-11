@@ -16,6 +16,7 @@ public class SlotDetail {
     private boolean gpConnectBookable;
     private List<Long> organizationIds;
     private List<String> organizationTypes;
+    private String deliveryChannelCodes;
 
     public Long getId() {
         return id;
@@ -51,6 +52,10 @@ public class SlotDetail {
 
     public Long getScheduleReference() {
         return scheduleReference;
+    }
+    
+    public String getDeliveryChannelCodes() {
+        return this.deliveryChannelCodes;
     }
 
     public void setScheduleReference(Long scheduleReference) {
@@ -112,4 +117,8 @@ public class SlotDetail {
 	public void setOrganizationTypes(List<String> organizationTypes) {
 		this.organizationTypes = organizationTypes;
 	}
+
+    public void setDeliveryChannelCodes(String dca) {
+        this.deliveryChannelCodes = dca;
+    }
 }

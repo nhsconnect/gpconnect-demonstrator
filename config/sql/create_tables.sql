@@ -75,8 +75,6 @@ CREATE TABLE gpconnect.appointment_schedules (
   typeCode        TEXT(50)  NULL,
   typeDescription TEXT(250) NULL,
   locationId      BIGINT    NULL,
-  deliveryChannelCode	TEXT(50)  NULL,
-  deliveryChannelDisplay  TEXT(50)  NULL,
   practitionerRoleCode	TEXT(50)  NULL,
   practitionerRoleDisplay  TEXT(50)  NULL,
   startDateTime   DATETIME  NULL,
@@ -96,6 +94,7 @@ CREATE TABLE gpconnect.appointment_slots (
   endDateTime       DATETIME  NULL,
   lastUpdated       DATETIME  NULL,
   gpConnectBookable BOOLEAN   NULL,
+  deliveryChannelCodes TEXT(50)   NULL,
   PRIMARY KEY (id)
 );
 

@@ -29,8 +29,8 @@ public class MedicationStatementResourceProvider {
         identifiers.add(identifier);
         medicationStatement.setIdentifier(identifiers);
 
-        medicationStatement.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_STATEMENT)
-                .setVersionId(String.valueOf(statementDetail.getLastUpdated().getTime())).setLastUpdated(new Date()));
+        medicationStatement.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION_STATEMENT));
+//                .setVersionId(String.valueOf(statementDetail.getLastUpdated().getTime())).setLastUpdated(new Date()));
 
         medicationStatement.addExtension(new Extension(SystemURL.SD_CC_EXT_MEDICATION_STATEMENT_LAST_ISSUE,
                 new DateTimeType(statementDetail.getLastIssueDate(), TemporalPrecisionEnum.DAY)));

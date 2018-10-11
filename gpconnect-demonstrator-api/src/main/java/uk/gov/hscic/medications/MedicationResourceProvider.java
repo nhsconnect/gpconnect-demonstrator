@@ -60,7 +60,7 @@ public class MedicationResourceProvider implements IResourceProvider {
         IdType id = new IdType(resourceType, resourceId, versionId);
 
         medication.setId(id);
-        medication.getMeta().setVersionId(versionId).setLastUpdated(new Date());
+        //medication.getMeta().setVersionId(versionId).setLastUpdated(new Date());
                 
         return medication;
     }
@@ -73,8 +73,8 @@ public class MedicationResourceProvider implements IResourceProvider {
 		
 		medication.setId(new IdType(medicationDetail.getId()));
 		
-		medication.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION)
-				.setVersionId(String.valueOf(new Date())).setLastUpdated(new Date()));
+		medication.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION));
+				//.setVersionId(String.valueOf(new Date())).setLastUpdated(new Date()));
 		
 		CodeableConcept code = new CodeableConcept();
 		Coding coding = new Coding();
@@ -91,7 +91,7 @@ public class MedicationResourceProvider implements IResourceProvider {
 		batchComponent.setExpirationDate(medicationDetail.getExpiryDate());
 		packageComponent.addBatch(batchComponent);
 		
-		medication.setPackage(packageComponent);
+//  	medication.setPackage(packageComponent);
 		
 		return medication;
 	}

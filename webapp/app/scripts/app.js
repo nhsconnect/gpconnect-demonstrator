@@ -1,5 +1,12 @@
 'use strict';
 
+var env = {};
+
+// Import variables if present (from env.js)
+if(window){  
+  Object.assign(env, window.__env);
+}
+
 angular.module('gpConnect', [
     'ngResource',
     'ngTouch',
@@ -21,7 +28,8 @@ angular.module('gpConnect', [
     'gantt.table',
     'gantt.tree',
     'gantt.groups'
-]).config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+]).constant('__env', env
+).config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     
     $urlRouterProvider.otherwise('/');
 
@@ -65,7 +73,7 @@ angular.module('gpConnect', [
         views: {
             'user-context': {templateUrl: 'views/patients/patients-context.html', controller: 'PatientsDetailCtrl'},
             actions: {templateUrl: 'views/patients/patients-sidebar.html', controller: 'PatientsDetailCtrl'},
-            main: {templateUrl: 'views/access-record/access-record-structured.html' ,controller: 'AppointmentsStructuredCtrl'}
+            main: {templateUrl: 'views/access-record/access-record-structured.html', controller: 'AppointmentsStructuredCtrl'}
         }
     });
     
@@ -206,9 +214,9 @@ angular.module('gpConnect', [
 
     var persistentDataModel = {}; // Holds configuration values
 
-    this.$get = function() {
+    this.$get = function(__env) {
         var q = jQuery.ajax({
-            type: 'GET', url: '/gpconnect-demonstrator/v1/providerRouting.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
+            type: 'GET', url: __env.baseUrl + 'providerRouting.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
         });
 
         if (q.status === 200) {

@@ -25,6 +25,7 @@ import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerRoleResourceProvider;
 
 import java.util.*;
+import static uk.gov.hscic.SystemConstants.MEDICATION_LIST;
 
 @Component
 public class PopulateMedicationBundle {
@@ -71,14 +72,14 @@ public class PopulateMedicationBundle {
 
         medicationStatementsList.setId(new IdType(1));
 
-        medicationStatementsList.setMeta(new Meta().addProfile(SystemURL.SD_GPC_LIST)
-				.setVersionId(String.valueOf(new Date().getTime())).setLastUpdated(new Date()));
+        medicationStatementsList.setMeta(new Meta().addProfile(SystemURL.SD_GPC_LIST));
+//				.setVersionId(String.valueOf(new Date().getTime())).setLastUpdated(new Date()));
 		medicationStatementsList.setStatus(ListStatus.CURRENT);
 		medicationStatementsList.setId(new IdDt(1));
 
 		medicationStatementsList.setMode(ListMode.SNAPSHOT);
 		medicationStatementsList.setTitle(SystemConstants.MEDICATION_LIST);
-		medicationStatementsList.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOWMED, "933361000000108", "Medication List")));
+		medicationStatementsList.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOWMED, "933361000000108", MEDICATION_LIST)));
 		medicationStatementsList.setSubject(new Reference(new IdType("Patient", 1L)).setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
 		medicationStatementsList.setDate(new Date());
 		medicationStatementsList.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
@@ -126,7 +127,7 @@ public class PopulateMedicationBundle {
 
 
 		CodeableConcept codeableConcept = new CodeableConcept();
-		Coding coding = new Coding(SystemConstants.SNOMED_URL,"1060971000000108", "General practice services");
+		Coding coding = new Coding(SystemConstants.SNOMED_URL,"1060971000000108", "General practice service");
 		codeableConcept.setCoding(Collections.singletonList(coding));
 
 		return new Extension(SystemURL.CLINICAL_SETTING, codeableConcept);

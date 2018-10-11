@@ -228,7 +228,7 @@ public class StructuredAllergyIntoleranceBuilder {
 
         if (display.equals("Active Allergies")) {
             listResource.setCode(createCoding(SystemConstants.SNOMED_URL, "886921000000105", display));
-            listResource.setTitle("Allergies and adverse reactions");
+            listResource.setTitle("Allergies and adverse reaction");
         } else if (display.equals("Resolved Allergies")) {
             listResource.setCode(createCoding(SystemConstants.SNOMED_URL, "1103671000000101", display));
             listResource.setTitle("Resolved Allergies");
@@ -268,7 +268,7 @@ public class StructuredAllergyIntoleranceBuilder {
             warningCode = structuredAllergyIntoleranceEntity.getWarningCode();
         }
         CodeableConcept codeableConcept = new CodeableConcept();
-        Coding coding = new Coding(SystemConstants.SNOMED_URL,"1060971000000108", "General practice services");
+        Coding coding = new Coding(SystemConstants.SNOMED_URL,"1060971000000108", "General practice service");
         codeableConcept.setCoding(Collections.singletonList(coding));
 
         return warningCode != null ? new Extension(SystemURL.CLINICAL_SETTING, codeableConcept) : null;
@@ -310,8 +310,8 @@ public class StructuredAllergyIntoleranceBuilder {
     private Meta createMeta(String profile) {
         final Meta meta = new Meta();
         meta.addProfile(profile);
-        meta.setLastUpdated(new Date());
-        meta.setVersionId("3");
+        //meta.setLastUpdated(new Date());
+        //meta.setVersionId("3");
 
         return meta;
     }

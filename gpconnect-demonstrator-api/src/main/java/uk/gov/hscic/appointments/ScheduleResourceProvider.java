@@ -98,17 +98,6 @@ public class ScheduleResourceProvider implements IResourceProvider {
         	schedule.addExtension(practitionerRoleExtension);
         }
         
-        if(scheduleDetail.getDeliveryChannelCode() != null) {
-        	
-        	Coding roleCoding = new Coding(SystemURL.VS_GPC_DELIVERY_CHANNEL, scheduleDetail.getDeliveryChannelCode(), 
-        			scheduleDetail.getDeliveryChannelDisplay());
-        	
-        	Extension deliveryChannelExtension = new Extension(SystemURL.SD_EXTENSION_GPC_DELIVERY_CHANNEL,
-        			new CodeableConcept().addCoding(roleCoding));
-        	
-        	schedule.addExtension(deliveryChannelExtension);
-        }
-        
         Identifier identifier = new Identifier();
         identifier.setSystem(SystemURL.ID_GPC_SCHEDULE_IDENTIFIER);
         identifier.setValue(scheduleDetail.getIdentifier());

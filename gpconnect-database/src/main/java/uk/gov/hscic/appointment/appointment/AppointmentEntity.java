@@ -66,13 +66,13 @@ public class AppointmentEntity {
 
     @Column(name = "typeText")
     private String typeText;
-      
+
     @OneToOne(cascade=CascadeType.ALL, mappedBy="appointmentEntity") 
     private BookingOrgEntity bookingOrganization;
-    
+
     @Column(name = "created")
     private Date created;
-        
+
 
     public String getCancellationReason() {
         return cancellationReason;
@@ -141,11 +141,11 @@ public class AppointmentEntity {
     public String getTypeText() {
         return typeText;
     }
-    
+
     public BookingOrgEntity getBookingOrganization(){
         return bookingOrganization;
     }
-    
+
     public Date getCreated() {
         return created;
     }
@@ -217,11 +217,11 @@ public class AppointmentEntity {
     public void setTypeText(String typeText) {
         this.typeText = typeText;
     }
-    
+
     public void setBookingOrganization(BookingOrgEntity bookingOrganization){
         this.bookingOrganization = bookingOrganization;
     }
-    
+
     public void setCreated(Date created) {
         this.created = created;
     }

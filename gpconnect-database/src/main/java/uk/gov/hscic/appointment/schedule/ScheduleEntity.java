@@ -37,12 +37,6 @@ public class ScheduleEntity {
     @Column(name = "practitionerRoleDisplay")
     private String practitionerRoleDisplay;
     
-    @Column(name = "deliveryChannelCode")
-    private String deliveryChannelCode;
-    
-    @Column(name = "deliveryChannelDisplay")
-    private String deliveryChannelDisplay;
-
     @Column(name = "startDateTime")
     private Date startDateTime;
     
@@ -117,22 +111,6 @@ public class ScheduleEntity {
 
 	public void setPractitionerRoleDisplay(String practitionerRoleDisplay) {
 		this.practitionerRoleDisplay = practitionerRoleDisplay;
-	}
-
-	public String getDeliveryChannelCode() {
-		return deliveryChannelCode;
-	}
-
-	public void setDeliveryChannelCode(String deliveryChannelCode) {
-		this.deliveryChannelCode = deliveryChannelCode;
-	}
-
-	public String getDeliveryChannelDisplay() {
-		return deliveryChannelDisplay;
-	}
-
-	public void setDeliveryChannelDisplay(String deliveryChannelDisplay) {
-		this.deliveryChannelDisplay = deliveryChannelDisplay;
 	}
 
 	public Date getStartDateTime() {

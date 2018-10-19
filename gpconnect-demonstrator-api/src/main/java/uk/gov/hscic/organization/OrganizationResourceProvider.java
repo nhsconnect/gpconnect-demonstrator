@@ -110,8 +110,10 @@ public class OrganizationResourceProvider implements IResourceProvider {
 			List<Organization> organizationDetails = convertOrganizaitonDetailsListToOrganizationList(
 					organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue()));
 			if (organizationDetails.isEmpty()) {
-
+                organizationDetails.add(new Organization());
 				return null;
+                // TODO Priv's request for fix of off spec behaviour
+                //return organizationDetails;
 			}
 			if (sort != null && sort.getParamName().equalsIgnoreCase(Location.SP_STATUS)) {
 				Collections.sort(organizationDetails, (Organization a, Organization b) -> {

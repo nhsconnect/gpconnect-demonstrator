@@ -79,7 +79,7 @@ public class PopulateMedicationBundle {
 
 		medicationStatementsList.setMode(ListMode.SNAPSHOT);
 		medicationStatementsList.setTitle(SystemConstants.MEDICATION_LIST);
-		medicationStatementsList.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOWMED, "933361000000108", MEDICATION_LIST)));
+		medicationStatementsList.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, "933361000000108", MEDICATION_LIST)));
 		medicationStatementsList.setSubject(new Reference(new IdType("Patient", 1L)).setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
 		medicationStatementsList.setDate(new Date());
 		medicationStatementsList.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));

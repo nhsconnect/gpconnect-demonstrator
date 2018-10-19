@@ -48,13 +48,16 @@ public class AppointmentValidation {
 
     @Autowired
     private ValueSetValidator valueSetValidator;
+    
+    public static final int APPOINTMENT_DESCRIPTION_LENGTH =100;
+    public static final int APPOINTMENT_COMMENT_LENGTH = 500;
 
     public boolean appointmentDescriptionTooLong(Appointment appointment) {
-        if (appointment.getDescription().length() >= 600) {
-            return true;
-        } else {
-            return false;
-        }
+        return appointment.getDescription().length() > APPOINTMENT_DESCRIPTION_LENGTH;
+    }
+
+    public boolean appointmentCommentTooLong(Appointment appointment) {
+        return appointment.getComment() != null ? appointment.getComment().length() > APPOINTMENT_COMMENT_LENGTH : false;
     }
 
     public List<Appointment> filterToReturnFutureAppointments(List<Appointment> appointment) {

@@ -18,10 +18,15 @@ import uk.gov.hscic.practitioner.PractitionerRoleResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerSearch;
 
 import java.util.*;
+import org.springframework.beans.factory.annotation.Value;
+import static uk.gov.hscic.SystemConstants.ACTIVE_ALLERGIES_DISPLAY;
+import static uk.gov.hscic.SystemConstants.ACTIVE_ALLERGIES_TITLE;
 import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
+import static uk.gov.hscic.SystemConstants.RESOLVED_ALLERGIES_DISPLAY;
 
 @Component
 public class StructuredAllergyIntoleranceBuilder {
+
 
     @Autowired
     private StructuredAllergySearch structuredAllergySearch;
@@ -38,12 +43,14 @@ public class StructuredAllergyIntoleranceBuilder {
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
 
+    @Value("${datasource.patient.nhsNumber:#{null}}")
+    private String patient2Nhsno;
 
     public Bundle buildStructuredAllergyIntolerence(String NHS, String practitionerId, Bundle bundle, Boolean includedResolved) {
         List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntollerence(NHS);
 
-        ListResource active = initiateListResource(NHS, "Active Allergies", allergyData);
-        ListResource resolved = initiateListResource(NHS, "Resolved Allergies", allergyData);
+        ListResource active = initiateListResource(NHS, ACTIVE_ALLERGIES_DISPLAY, allergyData);
+        ListResource resolved = initiateListResource(NHS, RESOLVED_ALLERGIES_DISPLAY, allergyData);
 
         AllergyIntolerance allergyIntolerance;
 
@@ -142,7 +149,7 @@ public class StructuredAllergyIntoleranceBuilder {
             final String recorder = allergyIntoleranceEntity.getRecorder();
 
             //This is just an example to demonstrate using Reference element instead of Identifier element
-            if (recorder.equals("9658218873")) {
+            if (recorder.equals(patient2Nhsno)) {
                 Reference rec = new Reference(
                         SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
                 allergyIntolerance.setRecorder(rec);
@@ -226,12 +233,12 @@ public class StructuredAllergyIntoleranceBuilder {
     private ListResource initiateListResource(String NHS, String display, List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity) {
         ListResource listResource = new ListResource();
 
-        if (display.equals("Active Allergies")) {
+        if (display.equals(ACTIVE_ALLERGIES_DISPLAY)) {
             listResource.setCode(createCoding(SystemConstants.SNOMED_URL, "886921000000105", display));
-            listResource.setTitle("Allergies and adverse reaction");
-        } else if (display.equals("Resolved Allergies")) {
+            listResource.setTitle(ACTIVE_ALLERGIES_TITLE);
+        } else if (display.equals(RESOLVED_ALLERGIES_DISPLAY)) {
             listResource.setCode(createCoding(SystemConstants.SNOMED_URL, "1103671000000101", display));
-            listResource.setTitle("Resolved Allergies");
+            listResource.setTitle(SystemConstants.RESOLVED_ALLERGIES_TIILE);
         }
 
         listResource.setMeta(createMeta(SystemURL.SD_GPC_LIST));
@@ -282,7 +289,7 @@ public class StructuredAllergyIntoleranceBuilder {
     private void addEmptyReasonCode(ListResource list) {
         CodeableConcept noContent = new CodeableConcept();
         noContent.setCoding(Arrays.asList(new Coding(SystemURL.HL7_SPECIAL_VALUES, SystemConstants.NO_CONTENT_RECORDED, SystemConstants.NO_CONTENT_RECORDED_DISPLAY)));
-        noContent.setText(SystemConstants.NO_CONTENT_RECORDED_DISPLAY);
+        noContent.setText(SystemConstants.INFORMATION_NOT_AVAILABLE);
         list.setEmptyReason(noContent);
     }
 

@@ -1,7 +1,7 @@
 INSERT INTO gpconnect.allergyintolerance
   (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,coding,display,manCoding,manDisplay, recorder, encounter)
 VALUES
-  (9658218989 ,'2018-03-14',"","","", "no known","unconfirmed","","1",'2010-07-22','2010-07-22',"716186003","No known allergy","","",'9476719923', '');
+  (9658218989 ,'2018-03-14',"","","", "no known","unconfirmed","","5",'2010-07-22','2010-07-22',"716186003","No known allergy","","",'9476719923', '');
 
 INSERT INTO gpconnect.medication_statements
  (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,

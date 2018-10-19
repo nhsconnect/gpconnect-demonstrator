@@ -5,8 +5,6 @@ import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.hl7.fhir.dstu3.model.*;
-import org.hl7.fhir.dstu3.model.Medication.MedicationPackageBatchComponent;
-import org.hl7.fhir.dstu3.model.Medication.MedicationPackageComponent;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -78,41 +76,41 @@ public class MedicationResourceProvider implements IResourceProvider {
 		
 		CodeableConcept code = new CodeableConcept();
 		Coding coding = new Coding();
-		coding.setSystem(SystemURL.VS_SNOWMED);
-		addSnowmedExtensions(coding, medicationDetail);
+		coding.setSystem(SystemURL.VS_SNOMED);
+		addSnomedExtensions(coding, medicationDetail);
 		code.setCoding(Collections.singletonList(coding));
 		code.setText(medicationDetail.getText());
 		
 		medication.setCode(code);
 		
-		MedicationPackageComponent packageComponent = new MedicationPackageComponent();
-		MedicationPackageBatchComponent batchComponent = new MedicationPackageBatchComponent();
-		batchComponent.setLotNumber(medicationDetail.getBatchNumber());
-		batchComponent.setExpirationDate(medicationDetail.getExpiryDate());
-		packageComponent.addBatch(batchComponent);
+//		MedicationPackageComponent packageComponent = new MedicationPackageComponent();
+//		MedicationPackageBatchComponent batchComponent = new MedicationPackageBatchComponent();
+//		batchComponent.setLotNumber(medicationDetail.getBatchNumber());
+//		batchComponent.setExpirationDate(medicationDetail.getExpiryDate());
+//		packageComponent.addBatch(batchComponent);
 		
 //  	medication.setPackage(packageComponent);
 		
 		return medication;
 	}
 
-	private void addSnowmedExtensions(Coding code, MedicationDetail medicationDetail) {
+	private void addSnomedExtensions(Coding code, MedicationDetail medicationDetail) {
 		Extension idExtension = null;
 		Extension displayExtension = null;
-		Extension snowmedExtension = new Extension(SystemURL.SD_EXT_SCT_DESC_ID);
+		Extension snomedExtension = new Extension(SystemURL.SD_EXT_SCT_DESC_ID);
 		
 		if(medicationDetail.getCode() != null) { 
 			idExtension = new Extension("descriptionId").setValue(new IdType(medicationDetail.getCode()));
-			snowmedExtension.addExtension(idExtension);
+			snomedExtension.addExtension(idExtension);
 		}
 		
 		if(medicationDetail.getDisplay() != null) {
 			displayExtension = new Extension("descriptionDisplay").setValue(new StringType(medicationDetail.getDisplay()));
-			snowmedExtension.addExtension(displayExtension);
+			snomedExtension.addExtension(displayExtension);
 		}
 		
 		if(idExtension != null || displayExtension != null)
-			code.addExtension(snowmedExtension);
+			code.addExtension(snomedExtension);
 	}
 
 	public Map<String,List<String>> getAllMedicationAndAllergiesForPatient(String nhsNumber) {

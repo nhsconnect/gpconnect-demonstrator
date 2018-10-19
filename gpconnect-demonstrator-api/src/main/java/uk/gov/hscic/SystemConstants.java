@@ -6,8 +6,13 @@ public final class SystemConstants {
 
     public static final String MEDICATION = "medication";
     public static final String ACTIVE = "active";
-    public static final String ACTIVE_ALLERGIES = "Active Allergies";
-    public static final String RESOLVED_ALLERGIES = "Resolved Allergies";
+    
+    public static final String ACTIVE_ALLERGIES_DISPLAY = "Active Allergies";
+    public static final String ACTIVE_ALLERGIES_TITLE = "Allergies and adverse reaction";
+    
+    public static final String RESOLVED_ALLERGIES_DISPLAY = "Ended allergies (record artifact)";
+    public static final String RESOLVED_ALLERGIES_TIILE = "Resolved Allergies";
+
     public static final String RESOLVED = "resolved";
     public static final String NO_KNOWN = "no known";
     public static final String NO_CONTENT_RECORDED_DISPLAY = "No content recorded";
@@ -15,7 +20,7 @@ public final class SystemConstants {
     public static final String SNOMED_URL = "http://snomed.info/sct";
 
 	public static final String  NO_CONTENT = "noContent";
-    public static final String NO_CONTENT_RECORDED = "nocontentrecorded";
+    public static final String NO_CONTENT_RECORDED = "no-content-recorded";
     public static final String INFORMATION_NOT_AVAILABLE = "Information not available";
     public static final String NO_INFORMATION_AVAILABLE = "No information available"; // required structured
     public static final String PATIENT_REFERENCE_URL = "Patient/";
@@ -28,5 +33,5 @@ public final class SystemConstants {
     public static final String MEDICATION_DATE_PERIOD = "medicationDatePeriod";
 
     public static final String MEDICATION_LIST = "Medications and medical devices";
-
+    
 }

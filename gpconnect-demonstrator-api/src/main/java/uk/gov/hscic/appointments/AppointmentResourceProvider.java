@@ -40,6 +40,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import static uk.gov.hscic.SystemURL.ID_ODS_ORGANIZATION_CODE;
 import uk.gov.hscic.appointment.schedule.ScheduleSearch;
+import static uk.gov.hscic.appointments.AppointmentValidation.APPOINTMENT_COMMENT_LENGTH;
+import static uk.gov.hscic.appointments.AppointmentValidation.APPOINTMENT_DESCRIPTION_LENGTH;
 import uk.gov.hscic.model.appointment.ScheduleDetail;
 import uk.gov.hscic.model.practitioner.PractitionerDetails;
 import uk.gov.hscic.practitioner.PractitionerSearch;
@@ -371,7 +373,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         methodOutcome.setCreated(Boolean.TRUE);
 
         return methodOutcome;
-    } // crateAppointment
+    } // createAppointment
 
     @Update
     public MethodOutcome updateAppointment(@IdParam IdType appointmentId, @ResourceParam Appointment appointment) {
@@ -706,7 +708,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentValidation.validateAppointmentExtensions(appointment.getExtension());
 
         if (appointmentValidation.appointmentDescriptionTooLong(appointment)) {
-            throw new UnprocessableEntityException("Appointment description cannot be greater then 600 characters");
+            throw new UnprocessableEntityException("Appointment description cannot be greater then "+APPOINTMENT_DESCRIPTION_LENGTH +" characters");
         }
 
         AppointmentDetail appointmentDetail = new AppointmentDetail();
@@ -762,6 +764,10 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
 
         appointmentDetail.setSlotIds(slotIds);
+        if (appointmentValidation.appointmentCommentTooLong(appointment)) {
+            throw new UnprocessableEntityException("Appointment comment cannot be greater than "+ APPOINTMENT_COMMENT_LENGTH +" characters");
+        }
+        
         appointmentDetail.setComment(appointment.getComment());
         appointmentDetail.setDescription(appointment.getDescription());
 

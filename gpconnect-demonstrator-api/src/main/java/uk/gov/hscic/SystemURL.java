@@ -93,7 +93,7 @@ public final class SystemURL {
 	public static final String SD_CC_EXT_REGISTRATION_DETAILS = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-RegistrationDetails-1";
     public static final String SD_EXT_SCT_DESC_ID = "https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid";
     // FHIR ValueSet Constants
-    public static final String VS_GPC_ERROR_WARNING_CODE = "https://fhir.nhs.uk/STU3/ValueSet/Spine-ErrorOrWarningCode-1";
+    public static final String VS_GPC_ERROR_WARNING_CODE = "https://fhir.nhs.uk/STU3/CodeSystem/Spine-ErrorOrWarningCode-1";
     public static final String VS_GPC_REASON_TYPE = "http://fhir.nhs.net/ValueSet/gpconnect-reason-type-1-0";
     public static final String VS_GPC_RECORD_SECTION = "https://fhir.nhs.uk/STU3/ValueSet/GPConnect-RecordSection-1";
     public static final String VS_GPC_DELIVERY_CHANNEL = "https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-DeliveryChannel-2";
@@ -152,7 +152,7 @@ public final class SystemURL {
     public static final String DEFAULTREASONURL = "DefaultReasonURL";
     
     //CodeSystem URLs
-    public static final String VS_SNOWMED = "http://snomed.info/sct";
+    public static final String VS_SNOMED = "http://snomed.info/sct";
     public static final String CS_UNITS_OF_MEASURE = "http://unitsofmeasure.org";
 
     //Include Allergies Constant

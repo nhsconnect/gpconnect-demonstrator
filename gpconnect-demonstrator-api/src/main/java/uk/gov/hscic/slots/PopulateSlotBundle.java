@@ -48,7 +48,7 @@ public class PopulateSlotBundle {
 
     @Autowired
     private ScheduleResourceProvider scheduleResourceProvider;
-    
+
     @Autowired
     private OrganizationSearch organizationSearch;
 
@@ -61,15 +61,17 @@ public class PopulateSlotBundle {
         BundleEntryComponent locationEntry = new BundleEntryComponent();
         locationEntry.setResource(locations.get(0));
         locationEntry.setFullUrl("Location/" + locations.get(0).getIdElement().getIdPart());
-        
+
         // find the organization from the ods code
         List<OrganizationDetails> organizations = organizationSearch.findOrganizationDetailsByOrgODSCode(bookingOdsCode);
-        
+
         // schedules
         List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(
                 locations.get(0).getIdElement().getIdPart(), planningHorizonStart, planningHorizonEnd);
 
         if (!schedules.isEmpty()) {
+            HashSet<BundleEntryComponent> addedSchedule = new HashSet<>();
+            HashSet<String> addedPractitioner = new HashSet<>();
             for (Schedule schedule : schedules) {
 
                 schedule.getMeta().addProfile(SystemURL.SD_GPC_SCHEDULE);
@@ -80,7 +82,7 @@ public class PopulateSlotBundle {
 
                 // practitioners
                 List<Reference> practitionerActors = scheduleResourceProvider.getPractitionerReferences(schedule);
-                                
+
                 if (!practitionerActors.isEmpty()) {
                     for (Reference practitionerActor : practitionerActors) {
                         Practitioner practitioner = practitionerResourceProvider
@@ -96,39 +98,46 @@ public class PopulateSlotBundle {
                             throw new ResourceNotFoundException("Practitioner Reference returning null");
                         }
                         if (actorPractitioner == true) {
-                            BundleEntryComponent practionerEntry = new BundleEntryComponent();
-                            practionerEntry.setResource(practitioner);
-                            practionerEntry.setFullUrl("Practitioner/" + practitioner.getIdElement().getIdPart());
-                            bundle.addEntry(practionerEntry);
+                            if (!addedPractitioner.contains(practitioner.getIdElement().getIdPart())) {
+                                BundleEntryComponent practionerEntry = new BundleEntryComponent();
+                                practionerEntry.setResource(practitioner);
+                                practionerEntry.setFullUrl("Practitioner/" + practitioner.getIdElement().getIdPart());
+                                bundle.addEntry(practionerEntry);
+                                addedPractitioner.add(practitioner.getIdElement().getIdPart());
+                            }
                         }
                     }
 
                 }
-                
+
                 Set<Slot> slots = new HashSet<Slot>();
                 if (!organizations.isEmpty()) {
-                	slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
-                			planningHorizonStart, planningHorizonEnd, organizations.get(0).getId())); 
+                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
+                            planningHorizonStart, planningHorizonEnd, organizations.get(0).getId()));
                 }
                 slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationType(schedule.getIdElement().getIdPart(),
-                		planningHorizonStart, planningHorizonEnd, bookingOrgType));
+                        planningHorizonStart, planningHorizonEnd, bookingOrgType));
                 String freeBusyType = "FREE";
                 if (!slots.isEmpty()) {
-                	for (Slot slot : slots) {
-                		
-                		if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
-                			BundleEntryComponent slotEntry = new BundleEntryComponent();
-                			slotEntry.setResource(slot);
-                			slotEntry.setFullUrl("Slot/" + slot.getIdElement().getIdPart());                    
-                			bundle.addEntry(slotEntry);
-                			bundle.addEntry(scheduleEntry);
-                			
-                			if (actorLocation == true){
-                				bundle.addEntry(locationEntry);
-                			}
-                			
-                		}
-                	}
+                    for (Slot slot : slots) {
+
+                        if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
+                            BundleEntryComponent slotEntry = new BundleEntryComponent();
+                            slotEntry.setResource(slot);
+                            slotEntry.setFullUrl("Slot/" + slot.getIdElement().getIdPart());
+                            bundle.addEntry(slotEntry);
+                            if (!addedSchedule.contains(scheduleEntry)) {
+                                // only add a schedule if there's a reference to it and only add it once
+                                bundle.addEntry(scheduleEntry);
+                                addedSchedule.add(scheduleEntry);
+                            }
+
+                            if (actorLocation == true) {
+                                bundle.addEntry(locationEntry);
+                            }
+
+                        }
+                    }
                 }
             }
         }

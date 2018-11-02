@@ -28,7 +28,6 @@ import org.hl7.fhir.dstu3.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
@@ -57,7 +56,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
 	private OrganizationSearch organizationSearch;
 
 	public static Set<String> getCustomReadOperations() {
-		Set<String> customReadOperations = new HashSet<String>();
+		Set<String> customReadOperations = new HashSet<>();
 		return customReadOperations;
 	}
 
@@ -90,7 +89,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
 		}
 
 		return IdentifierValidator.versionComparison(organizationId,
-				convertOrganizaitonDetailsListToOrganizationList(Collections.singletonList(organizationDetails))
+				convertOrganizatonDetailsListToOrganizationList(Collections.singletonList(organizationDetails))
 						.get(0));
 	}
 
@@ -107,13 +106,10 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
 		if (tokenParam.getSystem().equals(SystemURL.ID_ODS_ORGANIZATION_CODE)
 				|| tokenParam.getSystem().equals(SystemURL.ID_ODS_OLD_ORGANIZATION_CODE)) {
-			List<Organization> organizationDetails = convertOrganizaitonDetailsListToOrganizationList(
+			List<Organization> organizationDetails = convertOrganizatonDetailsListToOrganizationList(
 					organizationSearch.findOrganizationDetailsByOrgODSCode(tokenParam.getValue()));
-			if (organizationDetails.isEmpty()) {
-                organizationDetails.add(new Organization());
-				return null;
-                // TODO Priv's request for fix of off spec behaviour
-                //return organizationDetails;
+            if (organizationDetails.isEmpty()) {
+				return organizationDetails;
 			}
 			if (sort != null && sort.getParamName().equalsIgnoreCase(Location.SP_STATUS)) {
 				Collections.sort(organizationDetails, (Organization a, Organization b) -> {
@@ -148,13 +144,15 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
 	}
 
-	private List<Organization> convertOrganizaitonDetailsListToOrganizationList(
+	private List<Organization> convertOrganizatonDetailsListToOrganizationList(
 			List<OrganizationDetails> organizationDetails) {
-		Map<String, Organization> map = new HashMap<>();
+		Map<Long, Organization> map = new HashMap<>();
 
 		for (OrganizationDetails organizationDetail : organizationDetails) {
-
-			String mapKey = String.format("%s", organizationDetail.getOrgCode());
+            
+            // Changed key to be logical id rather than ods code since can have > 1 org per ods code
+            // for 1.2.2
+			Long mapKey = organizationDetail.getId();
 			if (map.containsKey(mapKey)) {
 				continue;
 			}

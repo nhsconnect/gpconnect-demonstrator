@@ -9,7 +9,9 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import static java.lang.Integer.min;
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
 import org.hl7.fhir.dstu3.model.*;
@@ -46,16 +48,20 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Value;
 
 @Component
 public class PatientResourceProvider implements IResourceProvider {
 
-    private static final String REGISTER_PATIENT_OPERATION_NAME = "$gpc.registerpatient";
-    private static final String GET_CARE_RECORD_OPERATION_NAME = "$gpc.getcarerecord";
-    private static final String GET_STRUCTURED_RECORD_OPERATION_NAME = "$gpc.getstructuredrecord";
+    public static final String REGISTER_PATIENT_OPERATION_NAME = "$gpc.registerpatient";
+    public static final String GET_CARE_RECORD_OPERATION_NAME = "$gpc.getcarerecord";
+    public static final String GET_STRUCTURED_RECORD_OPERATION_NAME = "$gpc.getstructuredrecord";
 
     private static final String TEMPORARY_RESIDENT_REGISTRATION_TYPE = "T";
     private static final String ACTIVE_REGISTRATION_STATUS = "A";
+
+    private static final int ADDRESS_CITY_INDEX = 3;
+    private static final int ADDRESS_DISTRICT_INDEX = 4;
 
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
@@ -87,19 +93,25 @@ public class PatientResourceProvider implements IResourceProvider {
     @Autowired
     private PopulateMedicationBundle populateMedicationBundle;
 
+    @Value("${datasource.patient.notOnSpine:#{null}}")
+    private String patientNotOnSpine;
+
+    @Value("${datasource.patient.superseded:#{null}}")
+    private String patientSuperseded;
+
     private NhsNumber nhsNumber;
 
     private Map<String, Boolean> registerPatientParams;
 
     public static Set<String> getCustomReadOperations() {
-        Set<String> customReadOperations = new HashSet<String>();
+        Set<String> customReadOperations = new HashSet<>();
         customReadOperations.add(GET_CARE_RECORD_OPERATION_NAME);
 
         return customReadOperations;
     }
 
     public static Set<String> getCustomWriteOperations() {
-        Set<String> customWriteOperations = new HashSet<String>();
+        Set<String> customWriteOperations = new HashSet<>();
         customWriteOperations.add(REGISTER_PATIENT_OPERATION_NAME);
 
         return customWriteOperations;
@@ -116,21 +128,19 @@ public class PatientResourceProvider implements IResourceProvider {
 
         registerPatientParams = new HashMap<>();
         registerPatientParams.put("registerPatient", true);
+
+        // Spring does not strip trailing blanks from property values
+        patientNotOnSpine = patientNotOnSpine.trim();
+        patientSuperseded = patientSuperseded.trim();
     }
 
     @Read(version = true)
     public Patient getPatientById(@IdParam IdType internalId) throws FHIRException {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
 
-        if (patientDetails == null) {
+        if (patientDetails == null || patientDetails.isSensitive() || patientDetails.isDeceased() || !patientDetails.isActive()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart()),
-                    SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
-        }
-
-        if (patientDetails.isDeceased()) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("Patient with patient ID: " + internalId.getIdPart()+ " is deceased" ),
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
         }
 
@@ -150,9 +160,11 @@ public class PatientResourceProvider implements IResourceProvider {
         if (null != patient) {
             addPreferredBranchSurgeryExtension(patient);
         }
-        
-        // ie does not return a deceased patient in the list 
-        return null == patient || patient.getDeceased() != null ? Collections.emptyList()
+
+        PatientDetails patientDetails = patientSearch.findPatient(nhsNumber.fromToken(tokenParam));
+
+        // ie does not return a deceased, inactive or sensitive patient in the list 
+        return null == patient || patient.getDeceased() != null || !patientDetails.isActive() || patientDetails.isSensitive() ? Collections.emptyList()
                 : Collections.singletonList(patient);
     }
 
@@ -220,15 +232,11 @@ public class PatientResourceProvider implements IResourceProvider {
         String NHS = getNhsNumber(params);
 
         PatientDetails patientDetails = patientSearch.findPatient(NHS);
-        if (patientDetails == null) {
+
+        // see https://nhsconnect.github.io/gpconnect/accessrecord_structured_development_retrieve_patient_record.html#error-handling
+        if (patientDetails == null || patientDetails.isSensitive() || patientDetails.isDeceased() || !patientDetails.isActive()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No patient details found for patient ID: " + NHS),
-                    SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
-        }
-
-        if (patientDetails.isDeceased()) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("Patient with patient ID: " + NHS + " is deceased" ),
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
         }
 
@@ -359,6 +367,20 @@ public class PatientResourceProvider implements IResourceProvider {
                 .filter(param -> "registerPatient".equalsIgnoreCase(param.getName()))
                 .map(ParametersParameterComponent::getResource).map(Patient.class::cast).findFirst().orElse(null);
 
+        String nnn = nhsNumber.fromPatientResource(unregisteredPatient);
+
+        // see https://nhsconnect.github.io/gpconnect/foundations_use_case_register_a_patient.html#error-handling
+        // if its patient 14 spoof not on PDS and return the required error 
+        if (nnn.equals(patientNotOnSpine)) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(String.format("Patient (NHS number - %s) not present on PDS", nnn)),
+                    SystemCode.INVALID_PATIENT_DEMOGRAPHICS, IssueType.INVALID);
+        } else if (nnn.equals(patientSuperseded)) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(String.format("Patient (NHS number - %s) is superseded", nnn)),
+                    SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
+        }
+
         if (unregisteredPatient != null) {
             validatePatient(unregisteredPatient);
 
@@ -373,6 +395,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                     patientStore.create(patientDetails);
                 } else {
+                    // reactivate inactive non temporary patient
                     patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
                     updateAddressAndTelecom(unregisteredPatient, patientDetails);
 
@@ -387,11 +410,15 @@ public class PatientResourceProvider implements IResourceProvider {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
+            } else if (patientDetails.isDeceased() || patientDetails.isSensitive()) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException(String.format("Patient (NHS number - %s) has invalid demographics", nnn)),
+                        SystemCode.INVALID_PATIENT_DEMOGRAPHICS, IssueType.INVALID);
+
             } else {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(String.format("Patient (NHS number - %s) already exists",
-                                nhsNumber.fromPatientResource(unregisteredPatient))),
-                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                        new UnclassifiedServerFailureException(409, String.format("Patient (NHS number - %s) already exists", nnn)),
+                        SystemCode.DUPLICATE_REJECTED, IssueType.INVALID);
             }
         } else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -410,20 +437,44 @@ public class PatientResourceProvider implements IResourceProvider {
         if (unregisteredPatient.getTelecom().size() > 0) {
             patientDetails.setTelephone(unregisteredPatient.getTelecom().get(0).getValue());
         }
-        if (unregisteredPatient.getAddress().size() > 0) {
-            List<StringType> addressLineList = unregisteredPatient.getAddress().get(0).getLine();
-            StringBuilder addressBuilder = new StringBuilder();
-            for (StringType addressLine : addressLineList) {
-                addressBuilder.append(addressLine);
-                addressBuilder.append(",");
-            }
-            addressBuilder.append(unregisteredPatient.getAddress().get(0).getCity()).append(",");
-            addressBuilder.append(unregisteredPatient.getAddress().get(0).getPostalCode());
 
-            patientDetails.setAddress(addressBuilder.toString());
+        // actually a list of addresses not a single one
+        if (unregisteredPatient.getAddress().size() > 0) {
+            // get the first one off the block
+            Address address = unregisteredPatient.getAddress().get(0);
+            String[] addressLines = new String[ADDRESS_DISTRICT_INDEX + 1];
+            List<StringType> addressLineList = address.getLine();
+            for (int i = 0; i < ADDRESS_CITY_INDEX; i++) {
+                if (i < addressLineList.size()) {
+                    addressLines[i] = addressLineList.get(i).asStringValue();
+                } else {
+                    addressLines[i] = null;
+                }
+            }
+            addressLines[ADDRESS_CITY_INDEX] = address.getCity();
+            addressLines[ADDRESS_DISTRICT_INDEX] = address.getDistrict();
+            // address as text removed at 1.2.2
+//            StringBuilder addressBuilder = new StringBuilder();
+//            for (StringType addressLine : addressLineList) {
+//                addressBuilder.append(addressLine);
+//                addressBuilder.append(",");
+//            }
+//            addressBuilder.append(unregisteredPatient.getAddress().get(0).getCity()).append(",");
+//            addressBuilder.append(unregisteredPatient.getAddress().get(0).getPostalCode());
+
+            //patientDetails.setAddress(addressBuilder.toString());
+            patientDetails.setAddress(addressLines);
+            patientDetails.setPostcode(address.getPostalCode());
         }
     }
 
+    /**
+     * Returns true if registration type is temporary AND the record is marked
+     * inactive
+     *
+     * @param patientDetails assumed non null
+     * @return Boolean object
+     */
     private Boolean IsInactiveTemporaryPatient(PatientDetails patientDetails) {
 
         return patientDetails.getRegistrationType() != null
@@ -554,7 +605,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private void validateConstrainedOutProperties(Patient patient) {
 
-        Set<String> invalidFields = new HashSet<String>();
+        Set<String> invalidFields = new HashSet<>();
 
         // ## The above can exist in the patient resource but can be ignored. If
         // they are saved by the provider then they should be returned in the
@@ -573,6 +624,25 @@ public class PatientResourceProvider implements IResourceProvider {
         }
         if (patient.getDeceased() != null) {
             invalidFields.add("deceased");
+        }
+        // 6 extra fields added at 1.2.2 
+        if (patient.hasActive()) {
+            invalidFields.add("active");
+        }
+        if (patient.hasMaritalStatus()) {
+            invalidFields.add("maritalStatus");
+        }
+        if (patient.hasMultipleBirth()) {
+            invalidFields.add("multipleBirths");
+        }
+        if (patient.hasContact()) {
+            invalidFields.add("contact");
+        }
+        if (patient.hasManagingOrganization()) {
+            invalidFields.add("mangingOrganization");
+        }
+        if (patient.hasGeneralPractitioner()) {
+            invalidFields.add("generalPractitioner");
         }
 
         if (invalidFields.isEmpty() == false) {
@@ -636,12 +706,8 @@ public class PatientResourceProvider implements IResourceProvider {
         Date start = period.getStart();
         Date end = period.getEnd();
 
-        if ((null == end || end.after(new Date()))
-                && (null == start || start.equals(new Date()) || start.before(new Date()))) {
-            return true;
-        }
-
-        return false;
+        return (null == end || end.after(new Date()))
+                && (null == start || start.equals(new Date()) || start.before(new Date()));
     }
 
     private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
@@ -659,17 +725,17 @@ public class PatientResourceProvider implements IResourceProvider {
         }
         patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
 
-        Type multipleBirth = patientResource.getMultipleBirth();
-        if (multipleBirth != null) {
-            try {
-                patientDetails.setMultipleBirth((multipleBirth));
-            } catch (ClassCastException cce) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
-                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-            }
-        }
-
+        // mutliple birth rmeoved at 1.2.2
+//        Type multipleBirth = patientResource.getMultipleBirth();
+//        if (multipleBirth != null) {
+//            try {
+//                patientDetails.setMultipleBirth((multipleBirth));
+//            } catch (ClassCastException cce) {
+//                throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                        new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
+//                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+//            }
+//        }
         DateTimeType deceased = (DateTimeType) patientResource.getDeceased();
         if (deceased != null) {
             try {
@@ -681,11 +747,16 @@ public class PatientResourceProvider implements IResourceProvider {
             }
         }
 
+        // activate patient as temporary
         patientDetails.setRegistrationStartDateTime(new Date());
         // patientDetails.setRegistrationEndDateTime(getRegistrationEndDate(patientResource));
         patientDetails.setRegistrationStatus(ACTIVE_REGISTRATION_STATUS);
         patientDetails.setRegistrationType(TEMPORARY_RESIDENT_REGISTRATION_TYPE);
         updateAddressAndTelecom(patientResource, patientDetails);
+
+        // set some standard values for defaults, ensure managing org is always returned
+        // added at 1.2.2
+        patientDetails.setManagingOrganization("7");
 
         return patientDetails;
     }
@@ -694,16 +765,15 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.setLanguage(("en-GB"));
 
-        patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY_STU3,
-                SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
-        patient.addExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code",
-                SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));
-        patient.addExtension(new Extension(SystemURL.SD_PATIENT_CADAVERIC_DON, new BooleanType(false)));
-        patient.addExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS_STU3,
-                SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS));
-        patient.addExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT_STU3,
-                SystemURL.SD_CC_EXT_TREATMENT_CAT));
-
+        // inhibited at 1.2.2
+//        patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY_STU3,
+//                SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
+//        patient.addExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code",
+//                SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));
+//        patient.addExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS_STU3,
+//                SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS));
+//        patient.addExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT_STU3,
+//                SystemURL.SD_CC_EXT_TREATMENT_CAT));
         Extension nhsCommExtension = new Extension();
         nhsCommExtension.setUrl(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
         nhsCommExtension.addExtension(
@@ -750,6 +820,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 .setUse(NameUse.TEMP);
 
         patient.addTelecom(staticElHelper.getValidTelecom());
+        // TODO This appears to return a useless address element, only populated with use and type
         patient.addAddress(staticElHelper.getValidAddress());
 
         return patient;
@@ -854,29 +925,33 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.addExtension(regDetailsExtension);
 
-        CodeableConcept marital = new CodeableConcept();
-        Coding maritalCoding = new Coding();
-        if (patientDetails.getMaritalStatus() != null) {
-            maritalCoding.setSystem(SystemURL.CS_MARITAL_STATUS);
-            maritalCoding.setCode(patientDetails.getMaritalStatus());
-            maritalCoding.setDisplay("Married"); //TODO needs to actually match the marital code
-        } else {
-            maritalCoding.setSystem(SystemURL.CS_NULL_FLAVOUR);
-            maritalCoding.setCode("UNK");
-            maritalCoding.setDisplay("unknown");
-        }
-        marital.addCoding(maritalCoding);
-        patient.setMaritalStatus(marital);
-
-        patient.setMultipleBirth(patientDetails.isMultipleBirth());
-
+        // inhibited at 1.2.2
+//        CodeableConcept marital = new CodeableConcept();
+//        Coding maritalCoding = new Coding();
+//        if (patientDetails.getMaritalStatus() != null) {
+//            maritalCoding.setSystem(SystemURL.CS_MARITAL_STATUS);
+//            maritalCoding.setCode(patientDetails.getMaritalStatus());
+//            maritalCoding.setDisplay("Married"); //TODO needs to actually match the marital code
+//        } else {
+//            maritalCoding.setSystem(SystemURL.CS_NULL_FLAVOUR);
+//            maritalCoding.setCode("UNK");
+//            maritalCoding.setDisplay("unknown");
+//        }
+//        marital.addCoding(maritalCoding);
+        //patient.setMaritalStatus(marital);
+//      patient.setMultipleBirth(patientDetails.isMultipleBirth());
         if (patientDetails.isDeceased()) {
             DateTimeType decesed = new DateTimeType(patientDetails.getDeceased());
             patient.setDeceased(decesed);
         }
 
+        String managingOrganization = patientDetails.getManagingOrganization();
+        if (managingOrganization != null) {
+            patient.setManagingOrganization(new Reference("Organization/" + managingOrganization));
+        }
+
         return patient;
-    }
+    } // patientDetailsToMinimalPatient
 
     private Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) throws FHIRException {
         Patient patient = patientDetailsToMinimalPatient(patientDetails);
@@ -885,10 +960,18 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.addName(name);
 
-        String addressLines = patientDetails.getAddress();
-        if (addressLines != null) {
-            patient.addAddress().setUse(AddressUse.HOME).setType(AddressType.PHYSICAL).setText(addressLines);
+        // now returns structured address (not using text element) at 1.2.2
+        ArrayList<StringType> addressLines = new ArrayList<>();
+        for (int i = 0; i < min(ADDRESS_CITY_INDEX, patientDetails.getAddress().length); i++) {
+            addressLines.add(new StringType(patientDetails.getAddress()[i]));
         }
+        patient.addAddress().
+                setUse(AddressUse.HOME).
+                setType(AddressType.PHYSICAL).
+                setLine(addressLines).
+                setCity(patientDetails.getAddress().length > ADDRESS_CITY_INDEX ? patientDetails.getAddress()[ADDRESS_CITY_INDEX] : "").
+                setDistrict(patientDetails.getAddress().length > ADDRESS_DISTRICT_INDEX ? patientDetails.getAddress()[ADDRESS_DISTRICT_INDEX] : "").
+                setPostalCode(patientDetails.getPostcode());
 
         Long gpId = patientDetails.getGpId();
         if (gpId != null) {
@@ -898,7 +981,7 @@ public class PatientResourceProvider implements IResourceProvider {
             Reference practitionerReference = new Reference("Practitioner/" + gpId)
                     .setDisplay(practitionerName.getPrefix().get(0) + " " + practitionerName.getGivenAsSingleString() + " "
                             + practitionerName.getFamily());
-            List<Reference> ref = new ArrayList<Reference>();
+            List<Reference> ref = new ArrayList<>();
             ref.add(practitionerReference);
             patient.setGeneralPractitioner(ref);
         }
@@ -918,7 +1001,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         return patient;
-    }
+    } // patientDetailsToPatientResourceConverter
 
     private HumanName getPatientNameFromPatientDetails(PatientDetails patientDetails) {
         HumanName name = new HumanName();

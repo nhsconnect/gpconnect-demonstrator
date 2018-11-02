@@ -44,7 +44,7 @@ public class StructuredAllergyIntoleranceBuilder {
     private PractitionerResourceProvider practitionerResourceProvider;
 
     @Value("${datasource.patient.nhsNumber:#{null}}")
-    private String patient2Nhsno;
+    private String patient2NhsNo;
 
     public Bundle buildStructuredAllergyIntolerence(String NHS, String practitionerId, Bundle bundle, Boolean includedResolved) {
         List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntollerence(NHS);
@@ -149,7 +149,7 @@ public class StructuredAllergyIntoleranceBuilder {
             final String recorder = allergyIntoleranceEntity.getRecorder();
 
             //This is just an example to demonstrate using Reference element instead of Identifier element
-            if (recorder.equals(patient2Nhsno)) {
+            if (recorder.equals(patient2NhsNo.trim())) {
                 Reference rec = new Reference(
                         SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
                 allergyIntolerance.setRecorder(rec);

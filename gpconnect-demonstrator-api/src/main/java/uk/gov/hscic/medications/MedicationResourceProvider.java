@@ -77,8 +77,8 @@ public class MedicationResourceProvider implements IResourceProvider {
 		CodeableConcept code = new CodeableConcept();
 		Coding coding = new Coding();
 		coding.setSystem(SystemURL.VS_SNOMED);
-        coding.setCode(medicationDetail.getCode());
-        coding.setDisplay(medicationDetail.getDisplay());
+        coding.setCode(medicationDetail.getConceptCode());
+        coding.setDisplay(medicationDetail.getConceptDisplay());
         // for 1.2.2 none of the snomed codes matches [0-9]*1[0-9] so we can drop the extensions ie not a descrription code
         // they are all concept codes
         //addSnomedExtensions(coding, medicationDetail);
@@ -109,13 +109,13 @@ public class MedicationResourceProvider implements IResourceProvider {
 		Extension displayExtension = null;
 		Extension snomedExtension = new Extension(SystemURL.SD_EXT_SCT_DESC_ID);
 		
-		if(medicationDetail.getCode() != null) { 
-			idExtension = new Extension("descriptionId").setValue(new IdType(medicationDetail.getCode()));
+		if(medicationDetail.getConceptCode() != null) { 
+			idExtension = new Extension("descriptionId").setValue(new IdType(medicationDetail.getConceptCode()));
 			snomedExtension.addExtension(idExtension);
 		}
 		
-		if(medicationDetail.getDisplay() != null) {
-			displayExtension = new Extension("descriptionDisplay").setValue(new StringType(medicationDetail.getDisplay()));
+		if(medicationDetail.getConceptDisplay() != null) {
+			displayExtension = new Extension("descriptionDisplay").setValue(new StringType(medicationDetail.getConceptDisplay()));
 			snomedExtension.addExtension(displayExtension);
 		}
 		
@@ -131,15 +131,15 @@ public class MedicationResourceProvider implements IResourceProvider {
 				for (StructuredAllergyIntoleranceEntity allergy :allergyEntities) {
 
 					if(Objects.equals(allergy.getNhsNumber(), nhsNumber)) {
-						allergiesAssociatedWithMedicationMap.computeIfAbsent(medicationEntity.getDisplay(), k-> new ArrayList<>()).add(allergy.getDisplay());
+						allergiesAssociatedWithMedicationMap.computeIfAbsent(medicationEntity.getConceptDisplay(), k-> new ArrayList<>()).add(allergy.getDisplay());
 					} else {
-						allergiesAssociatedWithMedicationMap.put(medicationEntity.getDisplay(), Collections.EMPTY_LIST);
+						allergiesAssociatedWithMedicationMap.put(medicationEntity.getConceptDisplay(), Collections.EMPTY_LIST);
 					}
 
 
 				}
 			} else {
-				allergiesAssociatedWithMedicationMap.put(medicationEntity.getDisplay(), Collections.EMPTY_LIST);
+				allergiesAssociatedWithMedicationMap.put(medicationEntity.getConceptDisplay(), Collections.EMPTY_LIST);
 			}
 		}
 		return allergiesAssociatedWithMedicationMap;

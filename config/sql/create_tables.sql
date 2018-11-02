@@ -186,8 +186,10 @@ CREATE TABLE gpconnect.patients (
 
 CREATE TABLE gpconnect.medications (
   id                        BIGINT    NOT NULL AUTO_INCREMENT,
-  code		                TEXT(20)  NULL,
-  display	                TEXT(100) NULL,
+  concept_code              TEXT(20)  NULL,
+  concept_display	        TEXT(100) NULL,
+  desc_code                 TEXT(20)  NULL,
+  desc_display	            TEXT(100) NULL,
   text		                TEXT(100) NULL, 
   batchNumber               TEXT(50)  NULL, 
   expiryDate                DATETIME  NULL,

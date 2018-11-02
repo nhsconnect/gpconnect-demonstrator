@@ -22,11 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import org.hl7.fhir.dstu3.model.Organization;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.model.organization.OrganizationDetails;
+import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.organization.OrganizationSearch;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 
@@ -50,6 +52,9 @@ public class PopulateSlotBundle {
     private ScheduleResourceProvider scheduleResourceProvider;
 
     @Autowired
+    private OrganizationResourceProvider organizationResourceProvider;
+
+    @Autowired
     private OrganizationSearch organizationSearch;
 
     public void populateBundle(Bundle bundle, OperationOutcome operationOutcome, Date planningHorizonStart,
@@ -71,7 +76,10 @@ public class PopulateSlotBundle {
 
         if (!schedules.isEmpty()) {
             HashSet<BundleEntryComponent> addedSchedule = new HashSet<>();
+            HashSet<BundleEntryComponent> addedLocation = new HashSet<>();
             HashSet<String> addedPractitioner = new HashSet<>();
+            HashSet<String> addedOrganization = new HashSet<>();
+
             for (Schedule schedule : schedules) {
 
                 schedule.getMeta().addProfile(SystemURL.SD_GPC_SCHEDULE);
@@ -107,40 +115,56 @@ public class PopulateSlotBundle {
                             }
                         }
                     }
-
                 }
 
-                Set<Slot> slots = new HashSet<Slot>();
+                Set<Slot> slots = new HashSet<>();
+                OrganizationDetails organization = null;
                 if (!organizations.isEmpty()) {
+                    // at 1.2.2 these are added regardless of the status of the relevant parameter
+                    organization = organizations.get(0);
+                    // Just picks the first organization. There should only be one.
                     slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
-                            planningHorizonStart, planningHorizonEnd, organizations.get(0).getId()));
+                            planningHorizonStart, planningHorizonEnd, organization.getId()));
+
+                    // added at 1.2.2
+                    if (!addedOrganization.contains(organization.getOrgCode())) {
+                        BundleEntryComponent organizationEntry = new BundleEntryComponent();
+                        Long organizationId = organization.getId();
+                        OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId);
+                        Organization organizationResource = organizationResourceProvider
+                                .convertOrganizaitonDetailsToOrganization(organizationDetails);
+                        organizationEntry.setResource(organizationResource);
+                        organizationEntry.setFullUrl("Organization/" + organization.getId());
+                        bundle.addEntry(organizationEntry);
+                        addedOrganization.add(organization.getOrgCode());
+                    }
                 }
                 slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationType(schedule.getIdElement().getIdPart(),
                         planningHorizonStart, planningHorizonEnd, bookingOrgType));
                 String freeBusyType = "FREE";
-                if (!slots.isEmpty()) {
-                    for (Slot slot : slots) {
-
-                        if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
-                            BundleEntryComponent slotEntry = new BundleEntryComponent();
-                            slotEntry.setResource(slot);
-                            slotEntry.setFullUrl("Slot/" + slot.getIdElement().getIdPart());
-                            bundle.addEntry(slotEntry);
-                            if (!addedSchedule.contains(scheduleEntry)) {
-                                // only add a schedule if there's a reference to it and only add it once
-                                bundle.addEntry(scheduleEntry);
-                                addedSchedule.add(scheduleEntry);
-                            }
-
-                            if (actorLocation == true) {
-                                bundle.addEntry(locationEntry);
-                            }
-
+                
+                for (Slot slot : slots) {
+                    if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
+                        BundleEntryComponent slotEntry = new BundleEntryComponent();
+                        slotEntry.setResource(slot);
+                        slotEntry.setFullUrl("Slot/" + slot.getIdElement().getIdPart());
+                        bundle.addEntry(slotEntry);
+                        if (!addedSchedule.contains(scheduleEntry)) {
+                            // only add a schedule if there's a reference to it and only add it once
+                            bundle.addEntry(scheduleEntry);
+                            addedSchedule.add(scheduleEntry);
                         }
-                    }
-                }
-            }
-        }
 
-    }
+                        if (actorLocation == true) {
+                            // only add a unique location once
+                            if (!addedLocation.contains(locationEntry)) {
+                                bundle.addEntry(locationEntry);
+                                addedLocation.add(locationEntry);
+                            }
+                        }
+                    } // if
+                } // for slots
+            } // for schedules
+        } // if non empty schedules
+    } // populateBundle 
 }

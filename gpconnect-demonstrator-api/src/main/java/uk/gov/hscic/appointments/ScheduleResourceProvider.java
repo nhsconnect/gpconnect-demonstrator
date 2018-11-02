@@ -1,7 +1,6 @@
 package uk.gov.hscic.appointments;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -107,7 +106,8 @@ public class ScheduleResourceProvider implements IResourceProvider {
                 .setCode(scheduleDetail.getTypeCode()).setDisplay(scheduleDetail.getTypeDescription());
         CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
         codableConcept.setText(scheduleDetail.getTypeDescription());
-        schedule.setSpecialty(Collections.singletonList(codableConcept));
+        // removed at 1.2.2
+        //schedule.setSpecialty(Collections.singletonList(codableConcept));
         
         schedule.addActor(new Reference("Location/" + scheduleDetail.getLocationId()));    
         

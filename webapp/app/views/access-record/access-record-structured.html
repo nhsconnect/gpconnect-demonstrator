@@ -78,9 +78,8 @@
             </thead>
             <tbody>
             <tr ng-repeat="currentElement in currentMedications" ng-click="showForm(currentElement.medication)">
-                <td>{{currentElement.medication.code.coding[0].extension[0].extension[1].valueString ==
-                    "Transfer-degraded medication entry" ? currentElement.medication.code.text :
-                    currentElement.medication.code.coding[0].extension[0].extension[1].valueString}}
+                <td>{{currentElement.medication.code.coding[0].display == "Transfer-degraded medication entry" ? 
+                    currentElement.medication.code.text : currentElement.medication.code.coding[0].display}}
                 </td>
                 <td>{{currentElement.statement.effectivePeriod.start.split('T')[0]}}</td>
                 <td>{{currentElement.statement.effectivePeriod.end.split('T')[0]}}</td>

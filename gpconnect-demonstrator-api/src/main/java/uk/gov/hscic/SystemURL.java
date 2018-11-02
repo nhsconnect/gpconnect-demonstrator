@@ -13,9 +13,6 @@ public final class SystemURL {
     public static final String HL7_VS_C80_PRACTICE_CODES = "http://hl7.org/fhir/ValueSet/c80-practice-codes";
     public static final String HL7_SPECIAL_VALUES = "http://hl7.org/fhir/special-values";
 
-
-
-
     // FHIR ID Constants
     public static final String ID_GPC_APPOINTMENT_IDENTIFIER = "https://fhir.nhs.uk/Id/gpconnect-appointment-identifier";
     public static final String ID_GPC_SCHEDULE_IDENTIFIER = "https://fhir.nhs.uk/Id/gpconnect-schedule-identifier";
@@ -124,6 +121,11 @@ public final class SystemURL {
     public static final String VS_CC_REGISTRATION_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-RegistrationType-1";
 //    public static final String VS_HUMAN_LANGUAGE = "http://fhir.nhs.net/ValueSet/human-language-1";
 
+    // Operation Definitions
+    public static final String OD_GPC_REGISTER_PATIENT = "https://fhir.nhs.uk/STU3/OperationDefinition/GPConnect-RegisterPatient-Operation-1";
+    public static final String OD_GPC_GET_STRUCTURED_RECORD = "https://fhir.nhs.uk/STU3/OperationDefinition/GPConnect-GetStructuredRecord-Operation-1";
+    
+    
     // FHIR CodeSystem Constants
     public static final String CS_REGISTRATION_STATUS = "https://fhir.nhs.uk/CareConnect-RegistrationStatus-1";
     public static final String CS_REGISTRATION_TYPE = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-RegistrationType-1";

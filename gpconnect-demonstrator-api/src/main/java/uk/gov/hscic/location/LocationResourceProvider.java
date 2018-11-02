@@ -70,8 +70,7 @@ public class LocationResourceProvider implements IResourceProvider {
             
         }
 
-        Location location = locationDetailsToLocation(locationDetails);
-        return location;
+        return locationDetailsToLocation(locationDetails);
     }
 
     private Location locationDetailsToLocation(LocationDetails locationDetails) {
@@ -110,7 +109,7 @@ public class LocationResourceProvider implements IResourceProvider {
         
         if(orgz != null){
             Reference mngOrg = new Reference();
-            mngOrg.setReference("Organization/" + orgz.getId());
+            mngOrg.setReference(orgz.getId());
             mngOrg.setDisplay(orgz.getName());
             location.setManagingOrganization(mngOrg);
         }

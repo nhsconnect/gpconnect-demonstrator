@@ -26,11 +26,11 @@ public class StaticElementsHelper {
     
     public Address getValidAddress(){
         
-        Address orgAddress = new Address();
-        orgAddress.setType(AddressType.PHYSICAL);
-        orgAddress.setUse(AddressUse.WORK);
+        Address address = new Address();
+        address.setType(AddressType.PHYSICAL);
+        address.setUse(AddressUse.WORK);
         
-        return orgAddress;
+        return address;
     }
     
 }

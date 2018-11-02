@@ -38,6 +38,7 @@ import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.hl7.fhir.dstu3.model.CodeType;
 import org.hl7.fhir.dstu3.model.Extension;
@@ -79,8 +80,25 @@ public class SlotResourceProvider implements IResourceProvider {
     public Bundle getSlotByIds(@RequiredParam(name = "start") DateParam startDate,
             @RequiredParam(name = "end") DateParam endDate, @RequiredParam(name = "status") String status,
             @RequiredParam(name = "searchFilter") TokenAndListParam searchFilters,
-            @IncludeParam(allow = {"Slot:schedule", "Schedule:actor:Practitioner",
-        "Schedule:actor:Location"}) Set<Include> theIncludes) {
+            @IncludeParam(allow = {"Slot:schedule", 
+                "Schedule:actor:Practitioner",
+                "Schedule:actor:Location",
+                "Location:managingOrganization" // currently ignored for 1.2.2 but must be allowed
+            }) Set<Include> theIncludes) {
+
+        boolean foundSchedule = false;
+        for (Include anInclude : theIncludes) {
+            if (anInclude.getParamName().equals("schedule")) {
+                foundSchedule = true;
+                break;
+            }
+        }
+
+        if (!foundSchedule) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException("No include Slot:schedule parameter has been provided"), SystemCode.BAD_REQUEST,
+                    IssueType.INVALID);
+        }
 
         Bundle bundle = new Bundle();
         boolean actorPractitioner = false;
@@ -133,7 +151,6 @@ public class SlotResourceProvider implements IResourceProvider {
             if (include.getValue().equals("Schedule:actor:Location")) {
                 actorLocation = true;
             }
-            ;
         }
         startDate.getValueAsInstantDt().getValue();
         getScheduleOperation.populateBundle(bundle, new OperationOutcome(), startDate.getValueAsInstantDt().getValue(),

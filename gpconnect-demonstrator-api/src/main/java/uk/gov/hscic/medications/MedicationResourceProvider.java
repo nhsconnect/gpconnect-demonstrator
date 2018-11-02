@@ -77,7 +77,11 @@ public class MedicationResourceProvider implements IResourceProvider {
 		CodeableConcept code = new CodeableConcept();
 		Coding coding = new Coding();
 		coding.setSystem(SystemURL.VS_SNOMED);
-		addSnomedExtensions(coding, medicationDetail);
+        coding.setCode(medicationDetail.getCode());
+        coding.setDisplay(medicationDetail.getDisplay());
+        // for 1.2.2 none of the snomed codes matches [0-9]*1[0-9] so we can drop the extensions ie not a descrription code
+        // they are all concept codes
+        //addSnomedExtensions(coding, medicationDetail);
 		code.setCoding(Collections.singletonList(coding));
 		code.setText(medicationDetail.getText());
 		
@@ -94,6 +98,12 @@ public class MedicationResourceProvider implements IResourceProvider {
 		return medication;
 	}
 
+    /**
+     * handles description codes which have 1 as the penultimate digit
+     * not used for 1.2.2
+     * @param code
+     * @param medicationDetail 
+     */
 	private void addSnomedExtensions(Coding code, MedicationDetail medicationDetail) {
 		Extension idExtension = null;
 		Extension displayExtension = null;

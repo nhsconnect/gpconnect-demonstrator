@@ -43,6 +43,7 @@ import uk.gov.hscic.common.ldap.model.ProviderRouting;
 
 @Component
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
+
     private static final Logger LOG = Logger.getLogger(FhirRequestGenericIntercepter.class);
 
     @Autowired
@@ -81,7 +82,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     @Override
     public boolean incomingRequestPreProcessed(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         certificateValidator.validateRequest(httpRequest); // Validate
-                                                           // certificate first!
+        // certificate first!
 
         // Check there is a Ssp-TraceID header
         if (StringUtils.isBlank(httpRequest.getHeader(SystemHeader.SSP_TRACEID))) {
@@ -160,20 +161,20 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         String systemCode = null;
 
         switch (resource) {
-        case ORGANIZATION_RESOURCE_NAME:
-            systemCode = SystemCode.ORGANISATION_NOT_FOUND;
-            break;
+            case ORGANIZATION_RESOURCE_NAME:
+                systemCode = SystemCode.ORGANISATION_NOT_FOUND;
+                break;
 
-        case PATIENT_RESOURCE_NAME:
-            systemCode = SystemCode.PATIENT_NOT_FOUND;
-            break;
+            case PATIENT_RESOURCE_NAME:
+                systemCode = SystemCode.PATIENT_NOT_FOUND;
+                break;
 
-        case PRACTITIONER_RESOURCE_NAME:
-            systemCode = SystemCode.PRACTITIONER_NOT_FOUND;
-            break;
+            case PRACTITIONER_RESOURCE_NAME:
+                systemCode = SystemCode.PRACTITIONER_NOT_FOUND;
+                break;
 
-        default:
-            systemCode = SystemCode.REFERENCE_NOT_FOUND;
+            default:
+                systemCode = SystemCode.REFERENCE_NOT_FOUND;
         }
 
         throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(exceptionMessage),
@@ -188,7 +189,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
      * @param theException
      * @param theServletRequest
      * @return UnprocessableEntityException if a InvalidRequestException was
-     *         thrown.
+     * thrown.
      * @throws javax.servlet.ServletException
      */
     @Override
@@ -288,17 +289,16 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         // if(outgoingException != null) {
         // return outgoingException;
         // }
-        
-        if (theException instanceof ResourceVersionConflictException 
-        		&& theException.getMessage().contains("Slot is already in use.")){
+        if (theException instanceof ResourceVersionConflictException
+                && theException.getMessage().contains("Slot is already in use.")) {
             ResourceVersionConflictException exception = (ResourceVersionConflictException) theException;
-            
+
             return OperationOutcomeFactory.buildOperationOutcomeException(exception, SystemCode.DUPLICATE_REJECTED, IssueType.CONFLICT);
         }
-        
-        if (theException instanceof ResourceVersionConflictException){
+
+        if (theException instanceof ResourceVersionConflictException) {
             ResourceVersionConflictException exception = (ResourceVersionConflictException) theException;
-            
+
             return OperationOutcomeFactory.buildOperationOutcomeException(exception, SystemCode.FHIR_CONSTRAINT_VIOLATION, IssueType.CONFLICT);
         }
 
@@ -360,14 +360,12 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         // can we retireve a resource based in this - if it's null we say it's
         // an unknown resource
         // otherwise we pass it in?
-
         // if(interaction != null) {
-
         if (interaction.validateIdentifier(requestURI) == false) {
             throwResourceNotFoundException(String.format("Unexpected resource identifier in URI - %s", requestURI),
                     interaction.getResource());
         }
-		
+
         if (interaction.validateContainedResource(requestURI) == false) {
             throwBadRequestException(String.format("Unexpected contained resource in URI - %s", requestURI));
         }
@@ -412,7 +410,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         } else {
             throwUnprocessableEntityException(
                     "One or both of the identifier system and value are missing from given identifier : "
-                            + identifiers[0]);
+                    + identifiers[0]);
         }
     }
 
@@ -515,11 +513,11 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
             String[] strArray = requestUri.split("/");
             if (strArray[1].equalsIgnoreCase("fhir")) {
-            	resource = strArray[2];
+                resource = strArray[2];
             } else {
-            	resource = strArray[4];
+                resource = strArray[4];
             }
-                        
+
             return resource;
         }
     }

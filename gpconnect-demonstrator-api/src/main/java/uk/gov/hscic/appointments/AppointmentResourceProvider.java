@@ -8,7 +8,6 @@ import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateAndListParam;
 import ca.uhn.fhir.rest.param.DateOrListParam;
 import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.ParamPrefixEnum;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.*;
 import org.hl7.fhir.dstu3.model.*;
@@ -69,6 +68,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     @Autowired
     private ScheduleSearch scheduleSearch;
+
+    private static final int HTTP422_UNPROCESSABLE_ENTITY = 422;
 
     @Override
     public Class<Appointment> getResourceType() {
@@ -162,21 +163,24 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         SystemCode.INVALID_PARAMETER, IssueType.INVALID);
             }
 
-            if (token.getPrefix() == ParamPrefixEnum.GREATERTHAN_OR_EQUALS) {
-                startLowerDate = token.getValue();
-                gePrefix = true;
-            } else if (token.getPrefix() == ParamPrefixEnum.LESSTHAN_OR_EQUALS) {
-                Calendar upper = Calendar.getInstance();
-                upper.setTime(token.getValue());
-                upper.add(Calendar.HOUR, 23);
-                upper.add(Calendar.MINUTE, 59);
-                upper.add(Calendar.SECOND, 59);
-                startUpperDate = upper.getTime();
-                lePrefix = true;
-            } else {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException("Unknown prefix on start date parameter: only le and ge prefixes are allowed."),
-                        SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+            if (null != token.getPrefix()) switch (token.getPrefix()) {
+                case GREATERTHAN_OR_EQUALS:
+                    startLowerDate = token.getValue();
+                    gePrefix = true;
+                    break;
+                case LESSTHAN_OR_EQUALS:
+                    Calendar upper = Calendar.getInstance();
+                    upper.setTime(token.getValue());
+                    upper.add(Calendar.HOUR, 23);
+                    upper.add(Calendar.MINUTE, 59);
+                    upper.add(Calendar.SECOND, 59);
+                    startUpperDate = upper.getTime();
+                    lePrefix = true;
+                    break;
+                default:
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new UnprocessableEntityException("Unknown prefix on start date parameter: only le and ge prefixes are allowed."),
+                            SystemCode.INVALID_PARAMETER, IssueType.INVALID);
             }
         }
 
@@ -268,7 +272,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 .map(participant -> participant.getActor().getReference()).collect(Collectors.toList())
                 .containsAll(Arrays.asList("Patient", "Location"));
 
-        List<String> actors = new ArrayList<String>();
+        List<String> actors = new ArrayList<>();
         for (int i = 0; i < appointment.getParticipant().size(); i++) {
             actors.add(appointment.getParticipant().get(i).getActor().getReference());
         }
@@ -314,7 +318,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             appointmentValidation.validateParticipantStatus(participant.getStatus(), participant.getStatusElement(),
                     participant.getStatusElement());
         }
-        
+
         // Store New Appointment
         AppointmentDetail appointmentDetail = appointmentResourceConverterToAppointmentDetail(appointment);
         List<SlotDetail> slots = new ArrayList<>();
@@ -341,12 +345,19 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             if (deliveryChannel == null) {
                 deliveryChannel = slotDetail.getDeliveryChannelCodes();
+            } else if (!deliveryChannel.equals(slotDetail.getDeliveryChannelCodes())) {
+                // added at 1.2.2
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException(
+                                String.format("Subsequent slot (Slot/%s) delivery channel (%s) is not equal to initial slot delivery channel (%s).", 
+                                        slotId,deliveryChannel,slotDetail.getDeliveryChannelCodes())),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
 
             if (schedule == null) {
                 // load the schedule so we can get the Practitioner ID
                 schedule = scheduleSearch.findScheduleByID(slotDetail.getScheduleReference());
-                
+
                 // add practitioner id so we can get the practitioner role
                 appointmentDetail.setPractitionerId(schedule.getPractitionerId());
             }
@@ -355,7 +366,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         // add deliveryChannel
         appointmentDetail.setTypeText(deliveryChannel);
-        
 
         appointmentDetail = appointmentStore.saveAppointment(appointmentDetail, slots);
 
@@ -405,8 +415,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     + ") did not match the current resource version (" + oldAppointmentVersionId + ")");
         }
 
-        // Determin if it is a cancel or an amend
+        // Determine if it is a cancel or an amend
         if (appointmentDetail.getCancellationReason() != null) {
+            // added at 1.2.2
+            if (isInThePast(appointmentDetail.getStartDateTime())) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, "The cancellation start date cannot be in the past"),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            }
+            
             if (appointmentDetail.getCancellationReason().isEmpty()) {
                 operationalOutcome.addIssue().setSeverity(IssueSeverity.ERROR)
                         .setDiagnostics("The cancellation reason can not be blank");
@@ -420,8 +436,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     appointmentDetail);
 
             if (cancelComparisonResult) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnclassifiedServerFailureException(422,
+                throw OperationOutcomeFactory.buildOperationOutcomeException(new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY,
                                 "Invalid Appointment property has been amended (cancellation)"),
                         SystemCode.INVALID_RESOURCE, IssueType.FORBIDDEN);
             }
@@ -448,12 +463,17 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         SystemCode.BAD_REQUEST, IssueType.FORBIDDEN);
             }
 
+            // added at 1.2.2
+            if (isInThePast(appointmentDetail.getStartDateTime())) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, "The appointment amend start date cannot be in the past"),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            }
+
             boolean amendComparisonResult = compareAppointmentsForInvalidPropertyAmend(appointmentDetail,
                     oldAppointmentDetail);
 
             if (amendComparisonResult) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnclassifiedServerFailureException(422, "Invalid Appointment property has been amended"),
+                throw OperationOutcomeFactory.buildOperationOutcomeException(new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, "Invalid Appointment property has been amended"),
                         SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
 
@@ -563,7 +583,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         Extension extension = new Extension(SystemURL.SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON,
                 new StringType(appointmentDetail.getCancellationReason()));
         appointment.addExtension(extension);
-        
+
         Identifier identifier = new Identifier();
         identifier.setSystem(SystemURL.ID_GPC_APPOINTMENT_IDENTIFIER)
                 .setValue(String.valueOf(appointmentDetail.getId()));
@@ -590,7 +610,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 appointment.addExtension(practitionerRoleExtension);
             }
         }
-                
+
         switch (appointmentDetail.getStatus().toLowerCase(Locale.UK)) {
             case "pending":
                 appointment.setStatus(AppointmentStatus.PENDING);
@@ -672,7 +692,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             bookingOrg.setId(reference);
             bookingOrg.getNameElement().setValue(bookingOrgDetail.getName());
             bookingOrg.getTelecomFirstRep().setValue(bookingOrgDetail.getTelephone()).setUse(ContactPointUse.TEMP)
-                    .setSystem(ContactPointSystem.PHONE);
+                        .setSystem(ContactPointSystem.PHONE);
             bookingOrg.getMeta().addProfile(SystemURL.SD_GPC_ORGANIZATION);
 
             if (null != bookingOrgDetail.getOrgCode()) {
@@ -715,7 +735,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         Long id = appointment.getIdElement().getIdPartAsLong();
         appointmentDetail.setId(id);
-        
+
         appointmentDetail.setLastUpdated(getLastUpdated(appointment.getMeta().getLastUpdated()));
 
         List<Extension> cnlExtension = appointment
@@ -750,7 +770,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         for (Reference slotReference : appointment.getSlot()) {
             try {
-                String here = slotReference.getReference().substring(5).toString();
+                String here = slotReference.getReference().substring(5);
                 Long slotId = new Long(here);
                 slotIds.add(slotId);
             } catch (NumberFormatException ex) {
@@ -767,13 +787,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
         if (appointmentValidation.appointmentCommentTooLong(appointment)) {
             throw new UnprocessableEntityException("Appointment comment cannot be greater than "+ APPOINTMENT_COMMENT_LENGTH +" characters");
         }
-        
+
         appointmentDetail.setComment(appointment.getComment());
         appointmentDetail.setDescription(appointment.getDescription());
 
         for (AppointmentParticipantComponent participant : appointment.getParticipant()) {
             if (participant.getActor() != null) {
-                String participantReference = participant.getActor().getReference().toString();
+                String participantReference = participant.getActor().getReference();
                 String actorIdString = participantReference.substring(participantReference.lastIndexOf("/") + 1);
                 Long actorId;
                 if (actorIdString.equals("null")) {
@@ -857,8 +877,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 }
             }
         }
-        
+
         return appointmentDetail;
     } // appointmentResourceConverterToAppointmentDetail
+
+    private boolean isInThePast(Date dateTime) {
+        return dateTime.before(new Date());
+    }
 
 }

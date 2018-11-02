@@ -7,7 +7,8 @@ import java.util.List;
 import org.hl7.fhir.dstu3.model.Type;
 
 public class PatientDetails {
-    private String address;
+    // changed at 1.2.2
+    private String[] address;
     private Date dateOfBirth;
     private Date deceased;
   
@@ -31,16 +32,17 @@ public class PatientDetails {
     private String surname;  
     private String telephone;
     private String title;
+    // added at 1.2.2
+    private boolean sensitive;
+    private String postcode;
 
-    public String getAddress() {
+    public String[] getAddress() {
         return address;
     }
 
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
-
-   
 
     public Date getDeceased() {
         return deceased;
@@ -130,19 +132,29 @@ public class PatientDetails {
 		return this.deceased != null;
 	}
 
+    public boolean isSensitive() {
+        return sensitive;
+    }
+    
+    public boolean isActive() {
+        return registrationStatus == null || registrationStatus.equals("A");
+    }
+
     public Type isMultipleBirth() {
 		return multipleBirth;
 	}
 
-    public void setAddress(String address) {
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setAddress(String[] address) {
         this.address = address;
     }
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
-
-
 
     public void setForename(String forename) {
         this.forename = forename;
@@ -218,5 +230,14 @@ public class PatientDetails {
 	
 	public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setSensitive(boolean sensitive) {
+        this.sensitive = sensitive;
+    }
+
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
     }
 }

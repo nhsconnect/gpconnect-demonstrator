@@ -17,7 +17,12 @@
     <table class="table">
       <tbody>
         <tr>
-          <td width="40%"><label>Address:</label>  <strong>{{ patient.address[0].text }}</strong></td>
+          <td width="40%"><label>Address:</label>  <strong>{{ patient.address[0].line[0] + ", " + 
+                      patient.address[0].line[1] + ", " + 
+                      patient.address[0].line[2] + ", " + 
+                      patient.address[0].town + ", " + 
+                      patient.address[0].district +", " + 
+                      patient.address[0].postalCode}}</strong></td>
           <td width="20%"><label>Phone:</label> <strong>{{ patient.telecom[0].value }}</strong></td>
           <td width="20%"><label>GP Details:</label> <strong>{{ patient.generalPractitioner[0].display }}</strong></td>
           <td width="20%"><label>PAS No.:</label> <strong>{{ patientLocalIdentifier }}</strong></td>

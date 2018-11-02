@@ -24,27 +24,34 @@ public class PatientDetailsToEntityTransformer implements Transformer<PatientDet
 
 		if (patientDetails != null) {
 			patientEntity = new PatientEntity();
-			String address = patientDetails.getAddress();
+			String[] address = patientDetails.getAddress();
 
-			if (address != null) {
-				final String[] addressLines = StringUtils.split(address, ",");
-
-				if (addressLines.length > 0) {
-					patientEntity.setAddress1(addressLines[0]);
-
-					if (addressLines.length > 1) {
-						patientEntity.setAddress2(addressLines[1]);
-
-						if (addressLines.length > 2) {
-							patientEntity.setAddress3(addressLines[2]);
-
-							if (addressLines.length > 3) {
-								patientEntity.setPostcode(addressLines[3]);
-							}
-						}
-					}
-				}
+ 			if (address != null) {
+//				final String[] addressLines = StringUtils.split(address, ",");
+//
+//				if (addressLines.length > 0) {
+//					patientEntity.setAddress1(addressLines[0]);
+//
+//					if (addressLines.length > 1) {
+//						patientEntity.setAddress2(addressLines[1]);
+//
+//						if (addressLines.length > 2) {
+//							patientEntity.setAddress3(addressLines[2]);
+//
+//							if (addressLines.length > 3) {
+//								patientEntity.setPostcode(addressLines[3]);
+//							}
+//						}
+//					}
+//				}
+                patientEntity.setAddress1(address[0]);
+                patientEntity.setAddress2(address[1]);
+                patientEntity.setAddress3(address[2]);
+                patientEntity.setAddress4(address[3]);
+                patientEntity.setAddress5(address[4]);
 			}
+            
+            patientEntity.setPostcode(patientDetails.getPostcode());
 
 			if (patientDetails.getGpDetails() != null) {
 				List<PractitionerEntity> gpList = practitionerRepository.findByUserId(patientDetails.getGpDetails());
@@ -78,6 +85,7 @@ public class PatientDetailsToEntityTransformer implements Transformer<PatientDet
 			patientEntity.setRegistrationType(patientDetails.getRegistrationType());
 			patientEntity.setMaritalStatus(patientDetails.getMaritalStatus());
 			patientEntity.setManagingOrganization(patientDetails.getManagingOrganization());
+			patientEntity.setSensitive(patientDetails.isSensitive());
 		}
 
 		return patientEntity;

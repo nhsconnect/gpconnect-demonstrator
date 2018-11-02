@@ -17,4 +17,6 @@ public final class SystemCode {
     public static final String REFERENCE_NOT_FOUND = "REFERENCE_NOT_FOUND";
     public static final String FHIR_CONSTRAINT_VIOLATION = "FHIR_CONSTRAINT_VIOLATION";
     public static final String DUPLICATE_REJECTED = "DUPLICATE_REJECTED";
+    public static final String INVALID_PATIENT_DEMOGRAPHICS = "INVALID_PATIENT_DEMOGRAPHICS";
 }
+    

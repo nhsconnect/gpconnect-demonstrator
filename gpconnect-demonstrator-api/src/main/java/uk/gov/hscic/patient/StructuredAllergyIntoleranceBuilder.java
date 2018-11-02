@@ -128,8 +128,8 @@ public class StructuredAllergyIntoleranceBuilder {
             CodeableConcept manifestation = new CodeableConcept();
             Coding manifestationCoding = new Coding();
 
-            manifestationCoding.setDisplay("nullFlavor NI");
-            manifestationCoding.setCode("nullFlavor NI");
+            manifestationCoding.setDisplay(allergyIntoleranceEntity.getManifestationDisplay());
+            manifestationCoding.setCode(allergyIntoleranceEntity.getManifestationCoding());
             manifestationCoding.setSystem(SystemConstants.SNOMED_URL);
             manifestation.addCoding(manifestationCoding);
             theManifestation.add(manifestation);

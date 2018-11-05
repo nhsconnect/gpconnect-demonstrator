@@ -61,6 +61,12 @@ public class StructuredAllergyIntoleranceEntity {
 	
 	@Column(name = "manDisplay")
 	private String manifestationDisplay;
+	
+	@Column(name = "manDescCoding")
+	private String manifestationDescCoding;
+	
+	@Column(name = "manDescDisplay")
+	private String manifestationDescDisplay;
 
 	@Column(name = "recorder")
 	private String recorder;
@@ -70,8 +76,6 @@ public class StructuredAllergyIntoleranceEntity {
 
 	@Column(name = "encounter")
 	private String encounter;
-
-
 
     @Column(name = "guid")
     private String guid;
@@ -234,6 +238,22 @@ public class StructuredAllergyIntoleranceEntity {
 
 	public void setManifestationDisplay(String manifestationDisplay) {
 		this.manifestationDisplay = manifestationDisplay;
+	}
+
+	public String getManifestationDescCoding() {
+		return manifestationDescCoding;
+	}
+
+	public void setManifestationDescCoding(String manifestationDescCoding) {
+		this.manifestationDescCoding = manifestationDescCoding;
+	}
+
+	public String getManifestationDescDisplay() {
+		return manifestationDescDisplay;
+	}
+
+	public void setManifestationDescDisplay(String manifestationDescDisplay) {
+		this.manifestationDescDisplay = manifestationDescDisplay;
 	}
 
 	public String getRecorder() {

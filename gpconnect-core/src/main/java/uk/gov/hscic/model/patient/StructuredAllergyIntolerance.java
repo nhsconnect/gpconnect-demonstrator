@@ -21,6 +21,8 @@ public class StructuredAllergyIntolerance {
     private String descDisplay;
     private String manifestationCoding;
     private String manifestationDisplay;
+    private String manifestationDescCoding;
+    private String manifestationDescDisplay;
     private String guid;
 
     public String getGuid() {
@@ -165,5 +167,21 @@ public class StructuredAllergyIntolerance {
 
     public void setManifestationDisplay(String manifestationDisplay) {
         this.manifestationDisplay = manifestationDisplay;
+    }
+
+    public String getManifestationDescCoding() {
+        return manifestationDescCoding;
+    }
+
+    public void setManifestationDescCoding(String manifestationDescCoding) {
+        this.manifestationDescCoding = manifestationDescCoding;
+    }
+
+    public String getManifestationDescDisplay() {
+        return manifestationDescDisplay;
+    }
+
+    public void setManifestationDescDisplay(String manifestationDescDisplay) {
+        this.manifestationDescDisplay = manifestationDescDisplay;
     }
 }

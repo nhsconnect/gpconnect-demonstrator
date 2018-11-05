@@ -380,6 +380,8 @@ CREATE TABLE gpconnect.allergyintolerance (
   desc_display	            TEXT(100) NULL,
   manCoding VARCHAR(250) NULL,
   manDisplay VARCHAR(250) NULL,
+  manDescCoding VARCHAR(250) NULL,
+  manDescDisplay VARCHAR(250) NULL,
   recorder VARCHAR(250) NOT NULL,
   encounter VARCHAR(250),
   guid      VARCHAR(250) NULL,

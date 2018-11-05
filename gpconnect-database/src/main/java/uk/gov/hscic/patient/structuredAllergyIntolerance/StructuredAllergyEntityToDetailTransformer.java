@@ -26,6 +26,8 @@ public class StructuredAllergyEntityToDetailTransformer implements Transformer<S
 		structuredAllergyIntolerance.setDescDisplay(item.getDescDisplay());
 		structuredAllergyIntolerance.setManifestationCoding(item.getManifestationCoding());
 		structuredAllergyIntolerance.setManifestationDisplay(item.getManifestationDisplay());
+		structuredAllergyIntolerance.setManifestationDescCoding(item.getManifestationDescCoding());
+		structuredAllergyIntolerance.setManifestationDescDisplay(item.getManifestationDescDisplay());
 		
 		return structuredAllergyIntolerance;
 	}

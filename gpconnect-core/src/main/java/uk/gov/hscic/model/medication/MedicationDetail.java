@@ -5,8 +5,10 @@ import java.util.Date;
 public class MedicationDetail {
 
     private Long id;
-    private String code;
-    private String display;
+    private String conceptCode;
+    private String conceptDisplay;
+    private String descCode;
+    private String descDisplay;
     private String text;
     private String batchNumber;
     private Date expiryDate;
@@ -20,20 +22,36 @@ public class MedicationDetail {
 		this.id = id;
 	}
 	
-    public String getCode() {
-		return code;
+    public String getConceptCode() {
+		return conceptCode;
 	}
 	
-    public void setCode(String code) {
-		this.code = code;
+    public void setConceptCode(String conceptCode) {
+		this.conceptCode = conceptCode;
 	}
 	
-    public String getDisplay() {
-		return display;
+    public String getConceptDisplay() {
+		return conceptDisplay;
 	}
 	
-    public void setDisplay(String display) {
-		this.display = display;
+    public void setConceptDisplay(String conceptDisplay) {
+		this.conceptDisplay = conceptDisplay;
+	}
+	
+    public String getDescDisplay() {
+		return descDisplay;
+	}
+	
+    public void setDescDisplay(String descDisplay) {
+		this.descDisplay = descDisplay;
+	}
+    
+    public String getDescCode() {
+		return descCode;
+	}
+	
+    public void setDescCode(String descCode) {
+		this.descCode = descCode;
 	}
 	
     public String getText() {

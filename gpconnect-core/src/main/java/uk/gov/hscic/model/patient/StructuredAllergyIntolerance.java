@@ -15,8 +15,10 @@ public class StructuredAllergyIntolerance {
     private String patientRef;
     private Date onSetDateTime;
     private Date assertedDate;
-    private String coding;
-    private String display;
+    private String conceptCode;
+    private String conceptDisplay;
+    private String descCode;
+    private String descDisplay;
     private String manifestationCoding;
     private String manifestationDisplay;
     private String guid;
@@ -116,22 +118,38 @@ public class StructuredAllergyIntolerance {
     public void setAssertedDate(Date assertedDate) {
         this.assertedDate = assertedDate;
     }
-
-    public String getCoding() {
-        return coding;
-    }
-
-    public void setCoding(String coding) {
-        this.coding = coding;
-    }
-
-    public String getDisplay() {
-        return display;
-    }
-
-    public void setDisplay(String display) {
-        this.display = display;
-    }
+	
+    public String getConceptCode() {
+		return conceptCode;
+	}
+	
+    public void setConceptCode(String conceptCode) {
+		this.conceptCode = conceptCode;
+	}
+	
+    public String getConceptDisplay() {
+		return conceptDisplay;
+	}
+	
+    public void setConceptDisplay(String conceptDisplay) {
+		this.conceptDisplay = conceptDisplay;
+	}
+	
+    public String getDescDisplay() {
+		return descDisplay;
+	}
+	
+    public void setDescDisplay(String descDisplay) {
+		this.descDisplay = descDisplay;
+	}
+    
+    public String getDescCode() {
+		return descCode;
+	}
+	
+    public void setDescCode(String descCode) {
+		this.descCode = descCode;
+	}
 
     public String getManifestationCoding() {
         return manifestationCoding;

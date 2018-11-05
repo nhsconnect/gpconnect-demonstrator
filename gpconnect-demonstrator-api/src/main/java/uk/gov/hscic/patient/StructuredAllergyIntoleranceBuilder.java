@@ -105,8 +105,8 @@ public class StructuredAllergyIntoleranceBuilder {
 
             CodeableConcept value = new CodeableConcept();
             Coding coding = new Coding();
-            coding.setCode(allergyIntoleranceEntity.getCoding());
-            coding.setDisplay(allergyIntoleranceEntity.getDisplay());
+            coding.setCode(allergyIntoleranceEntity.getConceptCode());
+            coding.setDisplay(allergyIntoleranceEntity.getConceptDisplay());
             coding.setSystem(SystemConstants.SNOMED_URL);
             value.addCoding(coding);
 

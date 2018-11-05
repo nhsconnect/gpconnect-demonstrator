@@ -131,7 +131,7 @@ public class MedicationResourceProvider implements IResourceProvider {
 				for (StructuredAllergyIntoleranceEntity allergy :allergyEntities) {
 
 					if(Objects.equals(allergy.getNhsNumber(), nhsNumber)) {
-						allergiesAssociatedWithMedicationMap.computeIfAbsent(medicationEntity.getConceptDisplay(), k-> new ArrayList<>()).add(allergy.getDisplay());
+						allergiesAssociatedWithMedicationMap.computeIfAbsent(medicationEntity.getConceptDisplay(), k-> new ArrayList<>()).add(allergy.getConceptDisplay());
 					} else {
 						allergiesAssociatedWithMedicationMap.put(medicationEntity.getConceptDisplay(), Collections.EMPTY_LIST);
 					}

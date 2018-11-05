@@ -43,12 +43,18 @@ public class StructuredAllergyIntoleranceEntity {
 	
 	@Column(name = "assertedDate")
 	private Date assertedDate;
-	
-	@Column(name = "coding")
-	private String coding;
-	
-	@Column(name = "display")
-	private String display;
+    
+    @Column(name = "concept_code")
+    private String conceptCode;
+    
+    @Column(name = "concept_display")
+    private String conceptDisplay;
+
+    @Column(name = "desc_code")
+    private String descCode;
+    
+    @Column(name = "desc_display")
+    private String descDisplay;
 	
 	@Column(name = "manCoding")
 	private String manifestationCoding;
@@ -182,20 +188,36 @@ public class StructuredAllergyIntoleranceEntity {
 		this.assertedDate = assertedDate;
 	}
 
-	public String getCoding() {
-		return coding;
+    public String getConceptCode() {
+		return conceptCode;
 	}
 
-	public void setCoding(String coding) {
-		this.coding = coding;
+	public void setConceptCode(String conceptCode) {
+		this.conceptCode = conceptCode;
 	}
 
-	public String getDisplay() {
-		return display;
+	public String getConceptDisplay() {
+		return conceptDisplay;
 	}
 
-	public void setDisplay(String display) {
-		this.display = display;
+	public void setConceptDisplay(String conceptDisplay) {
+		this.conceptDisplay = conceptDisplay;
+	}
+
+    public String getDescCode() {
+		return descCode;
+	}
+
+	public void setDescCode(String descCode) {
+		this.descCode = descCode;
+	}
+
+	public String getDescDisplay() {
+		return descDisplay;
+	}
+
+	public void setDescDisplay(String descDisplay) {
+		this.descDisplay = descDisplay;
 	}
 
 	public String getManifestationCoding() {

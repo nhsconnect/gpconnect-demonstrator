@@ -96,7 +96,6 @@ public class PractitionerResourceProvider implements IResourceProvider {
 
     private Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails) {
     	
-    	System.out.println("LUCYLUCY1");
         Identifier identifier = new Identifier()
                 .setSystem(SystemURL.ID_SDS_USER_ID)
                 .setValue(practitionerDetails.getUserId());

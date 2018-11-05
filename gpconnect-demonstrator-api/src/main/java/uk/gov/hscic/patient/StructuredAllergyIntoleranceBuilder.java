@@ -183,11 +183,7 @@ public class StructuredAllergyIntoleranceBuilder {
 
 
             List<Extension> extensions = new ArrayList<>();
-            if (!allergyIntoleranceEntity.getEncounter().equals("")) {
-                final Extension encounterExtension = createEncounterExtension(allergyIntoleranceEntity);
-                extensions.add(encounterExtension);
-            }
-
+           
             if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {
                 listResourceBuilder(active, allergyIntolerance, false);
 
@@ -334,12 +330,6 @@ public class StructuredAllergyIntoleranceBuilder {
         allergyEnd.addExtension(endReason);
 
         return allergyEnd;
-    }
-
-    private Extension createEncounterExtension(StructuredAllergyIntoleranceEntity allergyIntoleranceEntity) {
-        final Extension encounter = new Extension(SystemURL.SD_CC_EXT_ENCOUNTER_ACCOCIATED_ENCOUNTER, new Reference("Encounter/" + allergyIntoleranceEntity.getEncounter()));
-
-        return encounter;
     }
 
     private void listResourceBuilder(ListResource buildingListResource, AllergyIntolerance allergyIntolerance, boolean isResolved) {

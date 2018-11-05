@@ -62,11 +62,6 @@ public class StructuredAllergyIntoleranceEntity {
 	@Column(name = "warningCode")
 	private String warningCode;
 
-	@Column(name = "encounter")
-	private String encounter;
-
-
-
     @Column(name = "guid")
     private String guid;
 
@@ -76,14 +71,6 @@ public class StructuredAllergyIntoleranceEntity {
 
     public void setGuid(String guid) {
         this.guid = guid;
-    }
-
-    public String getEncounter() {
-        return encounter;
-    }
-
-    public void setEncounter(String encounter) {
-        this.encounter = encounter;
     }
 
     public String getNhsNumber() {

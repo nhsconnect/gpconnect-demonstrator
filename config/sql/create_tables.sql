@@ -383,7 +383,6 @@ CREATE TABLE gpconnect.allergyintolerance (
   manDescCoding VARCHAR(250) NULL,
   manDescDisplay VARCHAR(250) NULL,
   recorder VARCHAR(250) NOT NULL,
-  encounter VARCHAR(250),
   guid      VARCHAR(250) NULL,
   warningCode VARCHAR(250) NULL,
   PRIMARY KEY (id)

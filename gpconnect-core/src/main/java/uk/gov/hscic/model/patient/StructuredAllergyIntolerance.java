@@ -19,10 +19,16 @@ public class StructuredAllergyIntolerance {
     private String conceptDisplay;
     private String descCode;
     private String descDisplay;
+    private String codeTranslationSystem;
+    private String codeTranslationId;
+    private String codeTranslationDisplay;
     private String manifestationCoding;
     private String manifestationDisplay;
     private String manifestationDescCoding;
     private String manifestationDescDisplay;
+    private String manTranslationSystem;
+    private String manTranslationId;
+    private String manTranslationDisplay;
     private String guid;
 
     public String getGuid() {
@@ -153,7 +159,31 @@ public class StructuredAllergyIntolerance {
 		this.descCode = descCode;
 	}
 
-    public String getManifestationCoding() {
+    public String getCodeTranslationSystem() {
+		return codeTranslationSystem;
+	}
+
+	public void setCodeTranslationSystem(String codeTranslationSystem) {
+		this.codeTranslationSystem = codeTranslationSystem;
+	}
+
+	public String getCodeTranslationId() {
+		return codeTranslationId;
+	}
+
+	public void setCodeTranslationId(String codeTranslationId) {
+		this.codeTranslationId = codeTranslationId;
+	}
+
+	public String getCodeTranslationDisplay() {
+		return codeTranslationDisplay;
+	}
+
+	public void setCodeTranslationDisplay(String codeTranslationDisplay) {
+		this.codeTranslationDisplay = codeTranslationDisplay;
+	}
+
+	public String getManifestationCoding() {
         return manifestationCoding;
     }
 
@@ -184,4 +214,28 @@ public class StructuredAllergyIntolerance {
     public void setManifestationDescDisplay(String manifestationDescDisplay) {
         this.manifestationDescDisplay = manifestationDescDisplay;
     }
+
+	public String getManTranslationSystem() {
+		return manTranslationSystem;
+	}
+
+	public void setManTranslationSystem(String manTranslationSystem) {
+		this.manTranslationSystem = manTranslationSystem;
+	}
+
+	public String getManTranslationId() {
+		return manTranslationId;
+	}
+
+	public void setManTranslationId(String manTranslationId) {
+		this.manTranslationId = manTranslationId;
+	}
+
+	public String getManTranslationDisplay() {
+		return manTranslationDisplay;
+	}
+
+	public void setManTranslationDisplay(String manTranslationDisplay) {
+		this.manTranslationDisplay = manTranslationDisplay;
+	}
 }

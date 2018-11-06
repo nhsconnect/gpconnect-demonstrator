@@ -19,16 +19,12 @@ public class StructuredAllergyIntolerance {
     private String conceptDisplay;
     private String descCode;
     private String descDisplay;
-    private String codeTranslationSystem;
-    private String codeTranslationId;
-    private String codeTranslationDisplay;
+    private String codeTranslationRef;
     private String manifestationCoding;
     private String manifestationDisplay;
     private String manifestationDescCoding;
     private String manifestationDescDisplay;
-    private String manTranslationSystem;
-    private String manTranslationId;
-    private String manTranslationDisplay;
+    private String manTranslationRef;
     private String guid;
 
     public String getGuid() {
@@ -159,28 +155,12 @@ public class StructuredAllergyIntolerance {
 		this.descCode = descCode;
 	}
 
-    public String getCodeTranslationSystem() {
-		return codeTranslationSystem;
+    public String getCodeTranslationRef() {
+		return codeTranslationRef;
 	}
 
-	public void setCodeTranslationSystem(String codeTranslationSystem) {
-		this.codeTranslationSystem = codeTranslationSystem;
-	}
-
-	public String getCodeTranslationId() {
-		return codeTranslationId;
-	}
-
-	public void setCodeTranslationId(String codeTranslationId) {
-		this.codeTranslationId = codeTranslationId;
-	}
-
-	public String getCodeTranslationDisplay() {
-		return codeTranslationDisplay;
-	}
-
-	public void setCodeTranslationDisplay(String codeTranslationDisplay) {
-		this.codeTranslationDisplay = codeTranslationDisplay;
+	public void setCodeTranslationRef(String codeTranslationRef) {
+		this.codeTranslationRef = codeTranslationRef;
 	}
 
 	public String getManifestationCoding() {
@@ -215,27 +195,12 @@ public class StructuredAllergyIntolerance {
         this.manifestationDescDisplay = manifestationDescDisplay;
     }
 
-	public String getManTranslationSystem() {
-		return manTranslationSystem;
+	public String getManTranslationRef() {
+		return manTranslationRef;
 	}
 
-	public void setManTranslationSystem(String manTranslationSystem) {
-		this.manTranslationSystem = manTranslationSystem;
+	public void setManTranslationRef(String manTranslationRef) {
+		this.manTranslationRef = manTranslationRef;
 	}
 
-	public String getManTranslationId() {
-		return manTranslationId;
-	}
-
-	public void setManTranslationId(String manTranslationId) {
-		this.manTranslationId = manTranslationId;
-	}
-
-	public String getManTranslationDisplay() {
-		return manTranslationDisplay;
-	}
-
-	public void setManTranslationDisplay(String manTranslationDisplay) {
-		this.manTranslationDisplay = manTranslationDisplay;
-	}
 }

@@ -31,6 +31,7 @@ DROP TABLE IF EXISTS gpconnect.appointment_appointments;
 DROP TABLE IF EXISTS gpconnect.medical_departments;
 DROP TABLE IF EXISTS gpconnect.allergyintolerance;
 DROP TABLE IF EXISTS gpconnect.addresses;
+DROP TABLE IF EXISTS gpconnect.translations;
 
 /* Create new table schemas */
 
@@ -190,9 +191,7 @@ CREATE TABLE gpconnect.medications (
   concept_display	        TEXT(100) NULL,
   desc_code                 TEXT(20)  NULL,
   desc_display	            TEXT(100) NULL,
-  code_translation_system   TEXT(100)  NULL,
-  code_translation_id       TEXT(20) NULL,
-  code_translation_display  TEXT(100)  NULL,
+  code_translation_ref		TEXT(10)  NULL,
   text		                TEXT(100) NULL, 
   batchNumber               TEXT(50)  NULL, 
   expiryDate                DATETIME  NULL,
@@ -381,16 +380,12 @@ CREATE TABLE gpconnect.allergyintolerance (
   concept_display	        VARCHAR(100) NULL,
   desc_code                 VARCHAR(20)  NULL,
   desc_display	            VARCHAR(100) NULL,
-  code_translation_system   VARCHAR(100)  NULL,
-  code_translation_id       VARCHAR(20) NULL,
-  code_translation_display   VARCHAR(100)  NULL,
+  code_translation_ref		VARCHAR(10)  NULL,
   manCoding VARCHAR(250) NULL,
   manDisplay VARCHAR(250) NULL,
   manDescCoding VARCHAR(250) NULL,
   manDescDisplay VARCHAR(250) NULL,
-  man_translation_system   VARCHAR(100)  NULL,
-  man_translation_id       VARCHAR(20) NULL,
-  man_translation_display   VARCHAR(100)  NULL,
+  man_translation_ref		VARCHAR(10)  NULL,
   recorder VARCHAR(250) NOT NULL,
   guid      VARCHAR(250) NULL,
   warningCode VARCHAR(250) NULL,
@@ -404,3 +399,11 @@ CREATE TABLE gpconnect.medication_allergies (
   FOREIGN KEY (medicationId) REFERENCES gpconnect.medications(id),
   FOREIGN KEY (allergyintoleranceId) REFERENCES gpconnect.allergyintolerance(id)
   );
+
+CREATE TABLE gpconnect.translations (
+  id          BIGINT       NOT NULL AUTO_INCREMENT,
+  system   	  VARCHAR(100)NULL,
+  code        VARCHAR(20) NULL,
+  display     VARCHAR(250) NULL,
+  PRIMARY KEY (id)
+);

@@ -4,6 +4,7 @@ import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import uk.gov.hscic.medication.statement.MedicationStatementRepository;
 import uk.gov.hscic.model.medication.MedicationDetail;
 import uk.gov.hscic.patient.details.PatientRepository;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -36,6 +36,8 @@ public class MedicationResourceProvider implements IResourceProvider {
 
 	@Autowired
 	private MedicationStatementRepository medicationStatementRepository;
+    @Autowired
+    private CodeableConceptBuilder codeableConceptBuilder;
 
     @Override
     public Class<Medication> getResourceType() {
@@ -77,11 +79,11 @@ public class MedicationResourceProvider implements IResourceProvider {
 		medication.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION));
 				//.setVersionId(String.valueOf(new Date())).setLastUpdated(new Date()));
 		
-		CodeableConceptBuilder builder = new CodeableConceptBuilder();
-        builder.addConceptCode(SystemConstants.SNOMED_URL, medicationDetail.getConceptCode(), medicationDetail.getConceptDisplay())
+		codeableConceptBuilder.addConceptCode(SystemConstants.SNOMED_URL, medicationDetail.getConceptCode(), medicationDetail.getConceptDisplay())
         	   .addDescription(medicationDetail.getDescCode(), medicationDetail.getDescDisplay())
-        	   .addTranslation(medicationDetail.getCodeTranslationSystem(), medicationDetail.getCodeTranslationId(), medicationDetail.getCodeTranslationDisplay());
-        CodeableConcept code = builder.build();
+        	   .addTranslation(medicationDetail.getCodeTranslationRef());
+        CodeableConcept code = codeableConceptBuilder.build();
+        codeableConceptBuilder.clear();
 		code.setText(medicationDetail.getText());
 		medication.setCode(code);
 		

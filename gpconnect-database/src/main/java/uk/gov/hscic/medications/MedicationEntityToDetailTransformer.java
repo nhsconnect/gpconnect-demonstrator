@@ -17,9 +17,7 @@ public class MedicationEntityToDetailTransformer implements Transformer<Medicati
 		medicationDetail.setConceptDisplay(medicationEntity.getConceptDisplay());
 		medicationDetail.setDescCode(medicationEntity.getDescCode());
 		medicationDetail.setDescDisplay(medicationEntity.getDescDisplay());
-		medicationDetail.setCodeTranslationSystem(medicationEntity.getCodeTranslationSystem());
-		medicationDetail.setCodeTranslationId(medicationEntity.getCodeTranslationId());
-		medicationDetail.setCodeTranslationDisplay(medicationEntity.getCodeTranslationDisplay());
+		medicationDetail.setCodeTranslationRef(medicationEntity.getCodeTranslationRef());
 		medicationDetail.setText(medicationEntity.getText());
 		medicationDetail.setBatchNumber(medicationEntity.getBatchNumber());
 		medicationDetail.setExpiryDate(medicationEntity.getExpiryDate());

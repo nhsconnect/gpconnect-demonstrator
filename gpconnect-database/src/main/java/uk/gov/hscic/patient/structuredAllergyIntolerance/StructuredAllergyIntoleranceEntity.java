@@ -56,14 +56,8 @@ public class StructuredAllergyIntoleranceEntity {
     @Column(name = "desc_display")
     private String descDisplay;
     
-    @Column(name= "code_translation_system")
-    private String codeTranslationSystem;
-    
-    @Column(name= "code_translation_id")
-    private String codeTranslationId;
-    
-    @Column(name= "code_translation_display")
-    private String codeTranslationDisplay;
+    @Column(name= "code_translation_ref")
+    private String codeTranslationRef;
 	
 	@Column(name = "manCoding")
 	private String manifestationCoding;
@@ -77,14 +71,8 @@ public class StructuredAllergyIntoleranceEntity {
 	@Column(name = "manDescDisplay")
 	private String manifestationDescDisplay;
     
-    @Column(name= "man_translation_system")
-    private String manTranslationSystem;
-    
-    @Column(name= "man_translation_id")
-    private String manTranslationId;
-    
-    @Column(name= "man_translation_display")
-    private String manTranslationDisplay;
+    @Column(name= "man_translation_ref")
+    private String manTranslationRef;
 
 	@Column(name = "recorder")
 	private String recorder;
@@ -231,28 +219,12 @@ public class StructuredAllergyIntoleranceEntity {
 		this.descDisplay = descDisplay;
 	}
 
-	public String getCodeTranslationSystem() {
-		return codeTranslationSystem;
+	public String getCodeTranslationRef() {
+		return codeTranslationRef;
 	}
 
-	public void setCodeTranslationSystem(String codeTranslationSystem) {
-		this.codeTranslationSystem = codeTranslationSystem;
-	}
-
-	public String getCodeTranslationId() {
-		return codeTranslationId;
-	}
-
-	public void setCodeTranslationId(String codeTranslationId) {
-		this.codeTranslationId = codeTranslationId;
-	}
-
-	public String getCodeTranslationDisplay() {
-		return codeTranslationDisplay;
-	}
-
-	public void setCodeTranslationDisplay(String codeTranslationDisplay) {
-		this.codeTranslationDisplay = codeTranslationDisplay;
+	public void setCodeTranslationRef(String codeTranslationRef) {
+		this.codeTranslationRef = codeTranslationRef;
 	}
 
 	public String getManifestationCoding() {
@@ -287,28 +259,12 @@ public class StructuredAllergyIntoleranceEntity {
 		this.manifestationDescDisplay = manifestationDescDisplay;
 	}
 
-	public String getManTranslationSystem() {
-		return manTranslationSystem;
+	public String getManTranslationRef() {
+		return manTranslationRef;
 	}
 
-	public void setManTranslationSystem(String manTranslationSystem) {
-		this.manTranslationSystem = manTranslationSystem;
-	}
-
-	public String getManTranslationId() {
-		return manTranslationId;
-	}
-
-	public void setManTranslationId(String manTranslationId) {
-		this.manTranslationId = manTranslationId;
-	}
-
-	public String getManTranslationDisplay() {
-		return manTranslationDisplay;
-	}
-
-	public void setManTranslationDisplay(String manTranslationDisplay) {
-		this.manTranslationDisplay = manTranslationDisplay;
+	public void setManTranslationRef(String manTranslationRef) {
+		this.manTranslationRef = manTranslationRef;
 	}
 
 	public String getRecorder() {

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.common.helpers.WarningCodeExtHelper;
 import uk.gov.hscic.medication.requests.MedicationRequestResourceProvider;
 import uk.gov.hscic.medication.statement.MedicationStatementEntity;
 import uk.gov.hscic.medication.statement.MedicationStatementEntityToDetailTransformer;
@@ -90,48 +91,29 @@ public class PopulateMedicationBundle {
 			medicationStatementsList.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT));
             medicationStatementsList.setNote(Arrays.asList(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE))));
 		}
+        
+        Set<String> warningCodes = new HashSet<>();
 		medicationStatements.forEach(statement -> {
 			Reference statementRef = new Reference(new IdType("MedicationStatement", statement.getId()));
 			ListEntryComponent listEntryComponent = new ListEntryComponent(statementRef);
 			medicationStatementsList.addEntry(listEntryComponent);
-
-			Extension warningCodeExtension = setWarningCode(statement);
-			if(warningCodeExtension != null) {
-				medicationStatementsList.addExtension(warningCodeExtension);
+			
+			if (statement.getWarningCode() != null) {
+				warningCodes.add(statement.getWarningCode());
 			}
 		});
+		
+		WarningCodeExtHelper.addWarningCodeExtensions(warningCodes, medicationStatementsList);
 
         return medicationStatementsList;
 	}
-
-	private Extension setWarningCode(MedicationStatementDetail medicationStatementDetail) {
-		String warningCode = medicationStatementDetail.getWarningCode();
-		Extension warningExt = null;
-
-		if (warningCode != null) {
-			String warningCodeDisplay = "";
-			if (warningCode.equals("confidential-items")) {
-				warningCodeDisplay = "Confidential Items";
-			} else if (warningCode.equals("data-in-transit")) {
-				warningCodeDisplay = "Data in Transit";
-			} else if (warningCode.equals("data-awaiting-filing")) {
-				warningCodeDisplay = "Data Awaiting Filing";
-			}
-			warningExt = new Extension(SystemURL.WARNING_CODE, new Coding("https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-ListWarningCode-1", warningCode, warningCodeDisplay));
-		}
-
-		return  warningExt;
-
-	}
+	
 	private Extension setClinicalSetting() {
-
-
 		CodeableConcept codeableConcept = new CodeableConcept();
 		Coding coding = new Coding(SystemConstants.SNOMED_URL,"1060971000000108", "General practice service");
 		codeableConcept.setCoding(Collections.singletonList(coding));
 
 		return new Extension(SystemURL.CLINICAL_SETTING, codeableConcept);
-
 	}
 
 	private List<BundleEntryComponent> createBundleEntries(MedicationStatementDetail statementDetail, Boolean includePrescriptionIssues, PatientDetails patientDetails) {

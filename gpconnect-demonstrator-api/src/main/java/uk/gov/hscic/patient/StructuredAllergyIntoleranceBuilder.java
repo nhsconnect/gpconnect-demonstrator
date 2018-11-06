@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.common.helpers.CodeableConceptBuilder;
+import uk.gov.hscic.common.helpers.WarningCodeExtHelper;
 import uk.gov.hscic.model.practitioner.PractitionerDetails;
 import uk.gov.hscic.patient.details.PatientRepository;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
@@ -242,11 +243,8 @@ public class StructuredAllergyIntoleranceBuilder {
         listResource.setMode(ListMode.SNAPSHOT);
         addSubjectWithIdentifier(NHS, listResource);
 
-        Extension warningCodeExtension = setWarningCode(allergyIntoleranceEntity,display);
+        addWarningCodeExtensions(allergyIntoleranceEntity, listResource);
         Extension clinicalSettingExtension = setClinicalSetting(allergyIntoleranceEntity);
-        if(warningCodeExtension != null) {
-            listResource.addExtension(warningCodeExtension);
-        }
 
         if(clinicalSettingExtension != null) {
             listResource.addExtension(clinicalSettingExtension);
@@ -255,15 +253,18 @@ public class StructuredAllergyIntoleranceBuilder {
         return listResource;
     }
 
-    private Extension setWarningCode(List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity, String display) {
-        String warningCode = null;
-        for(StructuredAllergyIntoleranceEntity structuredAllergyIntoleranceEntity: allergyIntoleranceEntity) {
-            warningCode = structuredAllergyIntoleranceEntity.getWarningCode();
-        }
-
-        return warningCode != null ? new Extension(SystemURL.WARNING_CODE, new Coding(SystemURL.CC_WARNING_CODE,warningCode,display)) : null;
-
+    private void addWarningCodeExtensions(List<StructuredAllergyIntoleranceEntity> allergyIntolerances, ListResource list) {
+    	
+    	Set<String> warningCodes = new HashSet<>();
+    	allergyIntolerances.forEach(allergy -> {
+			if (allergy.getWarningCode() != null) {
+				warningCodes.add(allergy.getWarningCode());
+			}
+		});
+    	
+    	WarningCodeExtHelper.addWarningCodeExtensions(warningCodes, list);
     }
+    
     private Extension setClinicalSetting(List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity) {
         String warningCode = null;
         for(StructuredAllergyIntoleranceEntity structuredAllergyIntoleranceEntity: allergyIntoleranceEntity) {

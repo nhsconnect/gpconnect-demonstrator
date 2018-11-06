@@ -36,6 +36,7 @@ public class MedicationResourceProvider implements IResourceProvider {
 
 	@Autowired
 	private MedicationStatementRepository medicationStatementRepository;
+	
     @Autowired
     private CodeableConceptBuilder codeableConceptBuilder;
 

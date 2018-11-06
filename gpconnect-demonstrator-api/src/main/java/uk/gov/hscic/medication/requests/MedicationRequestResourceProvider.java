@@ -84,10 +84,6 @@ public class MedicationRequestResourceProvider {
 			medicationRequest.setSubject(new Reference(new IdType("Patient", requestDetail.getPatientId())));
 		}
 		
-		if(requestDetail.getEncounterId() != null) {
-			medicationRequest.setContext(new Reference(new IdType("Encounter", requestDetail.getEncounterId())));
-		}
-		
 		if(requestDetail.getAuthorisingPractitionerId() != null) {
 			medicationRequest.setRecorder(new Reference(new IdType("Practitioner", requestDetail.getAuthorisingPractitionerId())));
 		}

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 
-import java.util.Date;
 import java.util.List;
 import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
 
@@ -37,10 +36,6 @@ public class MedicationStatementResourceProvider {
 
         if (statementDetail.getMedicationRequestPlanId() != null) {
             medicationStatement.addBasedOn(new Reference(new IdType("MedicationRequest", statementDetail.getMedicationRequestPlanId())));
-        }
-
-        if (statementDetail.getEncounterId() != null) {
-            medicationStatement.setContext(new Reference(new IdType("Encounter", statementDetail.getEncounterId())));
         }
 
         try {

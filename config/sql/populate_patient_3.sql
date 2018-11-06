@@ -1,8 +1,8 @@
 INSERT INTO gpconnect.medication_statements
-  (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
+  (id,lastIssueDate,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, prescribingAgency)
 VALUES
- (2,'2018-01-04',12,'completed','Completed',5,'2018-01-04',null,'2018-01-04',3,'unk','Yes','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15','prescribed-at-gp-practice');
+ (2,'2018-01-04','completed','Completed',5,'2018-01-04',null,'2018-01-04',3,'unk','Yes','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15','prescribed-at-gp-practice');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)
@@ -25,16 +25,16 @@ VALUES
  (2,2);
 
 INSERT INTO gpconnect.medication_requests
- (id,groupIdentifier,statusCode,statusDisplay,intentCode,intentDisplay,medicationId,patientId,encounterId,authoredOn,
+ (id,groupIdentifier,statusCode,statusDisplay,intentCode,intentDisplay,medicationId,patientId,authoredOn,
  requesterUrl,requesterId,authorisingPractitionerId,dosageText,dosageInstruction,dispenseRequestStartDate,dispenseRequestEndDate,
  dispenseQuantityValue,dispenseQuantityUnit,dispenseQuantityText,expectedSupplyDuration,
  dispenseRequestOrganizationId,priorMedicationRequestId,numberOfRepeatPrescriptionsAllowed,numberOfRepeatPrescriptionsIssued,
  authorisationExpiryDate,prescriptionTypeCode,prescriptionTypeDisplay,statusReasonDate,statusReason,lastUpdated)
 VALUES
- (2,'group2','completed','Completed','plan','Plan',5,3,12,'2018-01-04',
+ (2,'group2','completed','Completed','plan','Plan',5,3,'2018-01-04',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Use as often as required','Apply the medication after cleaning and drying the affected area',
  '2018-01-04',null,null,null,'1 packet','10',2,null,0,0,'2018-02-04','acute','Acute',null,null,'2018-03-15'),
- (3,'group2','completed','Completed','order','Order',5,3,12,'2018-01-04',
+ (3,'group2','completed','Completed','order','Order',5,3,'2018-01-04',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,2,'Use as often as required','Apply the medication after cleaning and drying the affected area',
  '2018-01-04',null,null,null,'1 packet','10',2,null,0,0,'2018-02-04','acute','Acute',null,null,'2018-03-15');
 

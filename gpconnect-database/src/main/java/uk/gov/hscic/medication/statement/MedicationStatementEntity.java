@@ -24,9 +24,6 @@ public class MedicationStatementEntity {
 	@Column(name = "medicationRequestId")
     private String medicationRequestId;
 	
-	@Column(name = "encounterId")
-	private Long encounterId;
-	
     @Column(name = "statusCode")
     private String statusCode;
     
@@ -132,15 +129,7 @@ public class MedicationStatementEntity {
     public void setMedicationRequestId(String medicationRequestId) {
 		this.medicationRequestId = medicationRequestId;
 	}
-
-	public Long getEncounterId() {
-		return encounterId;
-	}
-
-	public void setEncounterId(Long encounterId) {
-		this.encounterId = encounterId;
-	}
-
+    
 	public String getStatusCode() {
 		return statusCode;
 	}

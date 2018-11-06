@@ -46,9 +46,6 @@ public class MedicationRequestEntity {
 	@Column(name = "patientId")
 	private Long patientId;
 	
-	@Column(name = "encounterId")
-	private Long encounterId;
-	
 	@Column(name = "authoredOn")
 	private Date authoredOn;
 	
@@ -219,14 +216,6 @@ public class MedicationRequestEntity {
 
 	public void setPatientId(Long patientId) {
 		this.patientId = patientId;
-	}
-
-	public Long getEncounterId() {
-		return encounterId;
-	}
-
-	public void setEncounterId(Long encounterId) {
-		this.encounterId = encounterId;
 	}
 
 	public Date getAuthoredOn() {

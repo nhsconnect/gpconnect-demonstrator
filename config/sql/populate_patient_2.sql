@@ -1,11 +1,11 @@
 INSERT INTO gpconnect.medication_statements
- (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
+ (id,lastIssueDate,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, warningCode, prescribingAgency)
 VALUES
- (1,'2017-06-12',8,'active','Active',9,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Use 1-4cm each time you use Ibuprofen Gel.','Apply the gel as a thin layer over the affected area.','2018-03-15', 'confidential-items','prescribed-at-gp-practice'),
-  (4,'2018-01-01',8,'completed','Completed',6,'2018-01-01',null,'2018-01-01',2,'unk','Unknown','Take 2-3 times a day','Take without food','2018-03-15', 'confidential-items','prescribed-at-gp-practice'),
-  (5,'2018-03-01',8,'completed','Completed',12,'2018-03-01',null,'2018-03-01',2,'unk','Unknown','Use as often as required','Clean and dry the affected area before use','2018-03-15', 'confidential-items','prescribed-at-gp-practice'),
-  (6,'2018-02-12',8,'completed','Completed',14,'2018-02-12',null,'2018-02-12',2,'unk','Unknown','Take 2 tablets every 8 hours','Take with a full glass of water','2018-03-15', 'confidential-items','prescribed-at-gp-practice');
+ (1,'2017-06-12','active','Active',9,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Use 1-4cm each time you use Ibuprofen Gel.','Apply the gel as a thin layer over the affected area.','2018-03-15', 'confidential-items','prescribed-at-gp-practice'),
+  (4,'2018-01-01','completed','Completed',6,'2018-01-01',null,'2018-01-01',2,'unk','Unknown','Take 2-3 times a day','Take without food','2018-03-15', 'confidential-items','prescribed-at-gp-practice'),
+  (5,'2018-03-01','completed','Completed',12,'2018-03-01',null,'2018-03-01',2,'unk','Unknown','Use as often as required','Clean and dry the affected area before use','2018-03-15', 'confidential-items','prescribed-at-gp-practice'),
+  (6,'2018-02-12','completed','Completed',14,'2018-02-12',null,'2018-02-12',2,'unk','Unknown','Take 2 tablets every 8 hours','Take with a full glass of water','2018-03-15', 'confidential-items','prescribed-at-gp-practice');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)
@@ -40,31 +40,31 @@ VALUES
  (1,1);
 
 INSERT INTO gpconnect.medication_requests
- (id,groupIdentifier,statusCode,statusDisplay,intentCode,intentDisplay,medicationId,patientId,encounterId,authoredOn,
+ (id,groupIdentifier,statusCode,statusDisplay,intentCode,intentDisplay,medicationId,patientId,authoredOn,
  requesterUrl,requesterId,authorisingPractitionerId,dosageText,dosageInstruction,dispenseRequestStartDate,dispenseRequestEndDate,
  dispenseQuantityValue,dispenseQuantityUnit,dispenseQuantityText,expectedSupplyDuration,
  dispenseRequestOrganizationId,priorMedicationRequestId,numberOfRepeatPrescriptionsAllowed,numberOfRepeatPrescriptionsIssued,
  authorisationExpiryDate,prescriptionTypeCode,prescriptionTypeDisplay,statusReasonDate,statusReason,lastUpdated)
 VALUES
- (1,'group1','active','Active','plan','Plan',9,2,8,'2017-07-12',
+ (1,'group1','active','Active','plan','Plan',9,2,'2017-07-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
  '2017-06-12','2018-06-12',null,null,'200 Tablets','60',1,null,5,0,'2018-06-12','repeat','Repeat',null,null,'2018-03-15'),
- (8,'group1','active','Active','order','Order',9,2,8,'2017-07-12',
+ (8,'group1','active','Active','order','Order',9,2,'2017-07-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
  '2017-06-12','2018-05-12',null,null,'200 Tablets','60',1,null,5,0,'2018-05-12','repeat','Repeat',null,null,'2018-03-15'),
- (9,'group1','active','Active','order','Order',9,2,8,'2017-07-12',
+ (9,'group1','active','Active','order','Order',9,2,'2017-07-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
  '2017-06-12','2018-04-12',null,null,'200 Tablets','60',1,null,5,0,'2018-04-12','repeat','Repeat',null,null,'2018-03-15'),
- (10,'group1','active','Active','order','Order',9,2,8,'2017-07-12',
+ (10,'group1','active','Active','order','Order',9,2,'2017-07-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
  '2017-06-12','2018-03-12',null,null,'200 Tablets','60',1,null,5,0,'2018-03-12','repeat','Repeat',null,null,'2018-03-15'),
- (11,'one','completed','Complete','plan','Plan',6,2,9,'2016-06-12',
+ (11,'one','completed','Complete','plan','Plan',6,2,'2016-06-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2-3 times a day','Take without food',
  '2017-06-12',null,null,null,'200 Tablets','60',1,null,5,0,'2018-04-12','acute','Acute',null,null,'2018-03-15'),
- (12,'two','completed','Complete','plan','Plan',12,2,10,'2015-05-12',
+ (12,'two','completed','Complete','plan','Plan',12,2,'2015-05-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Use as often as required','Clean and dry the affected area before use',
  '2017-06-12',null,null,null,'200 Tablets','60',1,null,5,0,'2018-04-12','acute','Acute',null,null,'2018-03-15'),
- (13,'three','completed','Complete','plan','Plan',14,2,11,'2014-04-12',
+ (13,'three','completed','Complete','plan','Plan',14,2,'2014-04-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 8 hours','Take with a full glass of water',
  '2017-06-12',null,null,null,'200 Tablets','60',1,null,5,0,'2018-04-12','acute','Acute',null,null,'2018-03-15');
  

@@ -9,7 +9,6 @@ public class MedicationStatementDetail {
     private Long id;
     private Date lastIssueDate;
     private String medicationRequestPlanId;
-    private Long encounterId;
     private String statusCode;
     private String statusDisplay;
     private Long medicationId;
@@ -67,14 +66,6 @@ public class MedicationStatementDetail {
 
     public void setMedicationRequestPlanId(String medicationRequestPlanId) {
         this.medicationRequestPlanId = medicationRequestPlanId;
-    }
-
-    public Long getEncounterId() {
-        return encounterId;
-    }
-
-    public void setEncounterId(Long encounterId) {
-        this.encounterId = encounterId;
     }
 
     public String getStatusCode() {

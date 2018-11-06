@@ -98,7 +98,9 @@ public class MedicationRequestResourceProvider {
 		
 		setReasonCodes(medicationRequest, requestDetail);
 		setNotes(medicationRequest, requestDetail);
-		setRepeatInformation(medicationRequest, requestDetail);
+		if (medicationRequest.getIntent() != MedicationRequestIntent.ORDER) {
+			setRepeatInformation(medicationRequest, requestDetail);
+		}
 		setPrescriptionType(medicationRequest, requestDetail);
 		setStatusReason(medicationRequest, requestDetail);
 		

@@ -171,10 +171,13 @@ public class MedicationRequestResourceProvider {
 	private void setRepeatInformation(MedicationRequest medicationRequest, MedicationRequestDetail requestDetail) {
 		if(requestDetail.getPrescriptionTypeCode().equals("repeat")) {
 			Extension repeatInformationExtension = new Extension(SystemURL.SD_CC_EXT_MEDICATION_REPEAT_INFORMATION);
-			repeatInformationExtension.addExtension(new Extension("numberOfRepeatPrescriptionsAllowed", new PositiveIntType(requestDetail.getNumberOfRepeatPrescriptionsAllowed())));
+			if (requestDetail.getNumberOfRepeatPrescriptionsAllowed() != null) {
+				repeatInformationExtension.addExtension(new Extension("numberOfRepeatPrescriptionsAllowed", new PositiveIntType(requestDetail.getNumberOfRepeatPrescriptionsAllowed())));
+			} else {
+				repeatInformationExtension.addExtension(new Extension("authorisationExpiryDate", new DateTimeType(requestDetail.getAuthorisationExpiryDate())));
+			}
 			repeatInformationExtension.addExtension(new Extension("numberOfRepeatPrescriptionsIssued", new PositiveIntType(requestDetail.getNumberOfRepeatPrescriptionsIssued())));
-			repeatInformationExtension.addExtension(new Extension("authorisationExpiryDate", new DateTimeType(requestDetail.getAuthorisationExpiryDate())));
-			
+						
 			medicationRequest.addExtension(repeatInformationExtension);
 		}
 	}

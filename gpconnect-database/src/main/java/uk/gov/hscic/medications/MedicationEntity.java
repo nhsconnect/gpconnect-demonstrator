@@ -28,14 +28,8 @@ public class MedicationEntity {
     @Column(name = "desc_display")
     private String descDisplay;
     
-    @Column(name= "code_translation_system")
-    private String codeTranslationSystem;
-    
-    @Column(name= "code_translation_id")
-    private String codeTranslationId;
-    
-    @Column(name= "code_translation_display")
-    private String codeTranslationDisplay;
+    @Column(name= "code_translation_ref")
+    private String codeTranslationRef;
     
     @Column(name = "text")
     private String text;
@@ -96,30 +90,14 @@ public class MedicationEntity {
 		this.descDisplay = descDisplay;
 	}
 
-	public String getCodeTranslationSystem() {
-		return codeTranslationSystem;
+	public String getCodeTranslationRef() {
+		return codeTranslationRef;
 	}
 
-	public void setCodeTranslationSystem(String codeTranslationSystem) {
-		this.codeTranslationSystem = codeTranslationSystem;
+	public void setCodeTranslationRef(String codeTranslationRef) {
+		this.codeTranslationRef = codeTranslationRef;
 	}
-
-	public String getCodeTranslationId() {
-		return codeTranslationId;
-	}
-
-	public void setCodeTranslationId(String codeTranslationId) {
-		this.codeTranslationId = codeTranslationId;
-	}
-
-	public String getCodeTranslationDisplay() {
-		return codeTranslationDisplay;
-	}
-
-	public void setCodeTranslationDisplay(String codeTranslationDisplay) {
-		this.codeTranslationDisplay = codeTranslationDisplay;
-	}
-
+	
 	public String getText() {
 		return text;
 	}

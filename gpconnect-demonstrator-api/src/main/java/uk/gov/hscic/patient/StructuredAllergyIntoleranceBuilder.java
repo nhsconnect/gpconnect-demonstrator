@@ -18,7 +18,6 @@ import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerRoleResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerSearch;
-
 import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
 import static uk.gov.hscic.SystemConstants.ACTIVE_ALLERGIES_DISPLAY;
@@ -44,6 +43,9 @@ public class StructuredAllergyIntoleranceBuilder {
 
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
+    
+    @Autowired
+    private CodeableConceptBuilder codeableConceptBuilder;
 
     @Value("${datasource.patient.nhsNumber:#{null}}")
     private String patient2NhsNo;
@@ -106,11 +108,11 @@ public class StructuredAllergyIntoleranceBuilder {
             allergyIntolerance.setVerificationStatus(AllergyIntoleranceVerificationStatus.UNCONFIRMED);
 
             //CODE
-            CodeableConceptBuilder builder = new CodeableConceptBuilder();
-            builder.addConceptCode(SystemConstants.SNOMED_URL, allergyIntoleranceEntity.getConceptCode(), allergyIntoleranceEntity.getConceptDisplay())
+            codeableConceptBuilder.addConceptCode(SystemConstants.SNOMED_URL, allergyIntoleranceEntity.getConceptCode(), allergyIntoleranceEntity.getConceptDisplay())
             	   .addDescription(allergyIntoleranceEntity.getDescCode(), allergyIntoleranceEntity.getDescDisplay())
-            	   .addTranslation(allergyIntoleranceEntity.getCodeTranslationSystem(), allergyIntoleranceEntity.getCodeTranslationId(), allergyIntoleranceEntity.getCodeTranslationDisplay());
-            allergyIntolerance.setCode(builder.build());
+            	   .addTranslation(allergyIntoleranceEntity.getCodeTranslationRef());
+            allergyIntolerance.setCode(codeableConceptBuilder.build());
+            codeableConceptBuilder.clear();
 
             allergyIntolerance.setAssertedDate(allergyIntoleranceEntity.getAssertedDate());
 
@@ -124,12 +126,12 @@ public class StructuredAllergyIntoleranceBuilder {
             AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
 
             // MANIFESTATION
-            builder = new CodeableConceptBuilder();
             List<CodeableConcept> theManifestation = new ArrayList<>();
-            builder.addConceptCode(SystemConstants.SNOMED_URL, allergyIntoleranceEntity.getManifestationCoding(), allergyIntoleranceEntity.getManifestationDisplay())
+            codeableConceptBuilder.addConceptCode(SystemConstants.SNOMED_URL, allergyIntoleranceEntity.getManifestationCoding(), allergyIntoleranceEntity.getManifestationDisplay())
             	.addDescription(allergyIntoleranceEntity.getManifestationDescCoding(), allergyIntoleranceEntity.getManifestationDescDisplay())
-            	.addTranslation(allergyIntoleranceEntity.getManTranslationSystem(), allergyIntoleranceEntity.getManTranslationId(), allergyIntoleranceEntity.getManTranslationDisplay());
-            theManifestation.add(builder.build());
+            	.addTranslation(allergyIntoleranceEntity.getManTranslationRef());
+            theManifestation.add(codeableConceptBuilder.build());
+            codeableConceptBuilder.clear();
             reaction.setManifestation(theManifestation);
 
             reaction.setDescription(allergyIntoleranceEntity.getNote());

@@ -97,7 +97,6 @@ public class MedicationRequestResourceProvider {
 		//medicationRequest.setRequester(getRequesterComponent(requestDetail)); //TODO - spec needs to clarify whether this should be populated or not
 		
 		setReasonCodes(medicationRequest, requestDetail);
-		setReasonReferences(medicationRequest, requestDetail);
 		setNotes(medicationRequest, requestDetail);
 		setRepeatInformation(medicationRequest, requestDetail);
 		setPrescriptionType(medicationRequest, requestDetail);
@@ -150,16 +149,6 @@ public class MedicationRequestResourceProvider {
 		requestDetail.getReasonCodes().forEach(rc -> {
 			Coding coding = new Coding(SystemURL.VS_CONDITION_CODE, rc.getCode(), rc.getDisplay());
 			medicationRequest.addReasonCode(new CodeableConcept().addCoding(coding));
-		});
-	}
-
-	private void setReasonReferences(MedicationRequest medicationRequest, MedicationRequestDetail requestDetail) {
-		requestDetail.getReasonReferences().forEach(rr -> {
-			if(rr.getReferenceUrl().equals(SystemURL.SD_GPC_OBSERVATION)) {
-				medicationRequest.addReasonReference(new Reference(new IdType("Observation", rr.getReferenceId())));
-			} else if (rr.getReferenceUrl().equals(SystemURL.SD_GPC_CONDITION)) {
-				medicationRequest.addReasonReference(new Reference(new IdType("Condition", rr.getReferenceId())));
-			}
 		});
 	}
 

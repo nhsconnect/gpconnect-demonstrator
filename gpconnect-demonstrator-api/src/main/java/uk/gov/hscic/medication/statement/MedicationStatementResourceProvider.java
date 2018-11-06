@@ -62,7 +62,6 @@ public class MedicationStatementResourceProvider {
         }
 
         setReasonCodes(medicationStatement, statementDetail);
-        setReasonReferences(medicationStatement, statementDetail);
         setNotes(medicationStatement, statementDetail);
 
         String dosageText = statementDetail.getDosageText();
@@ -92,16 +91,6 @@ public class MedicationStatementResourceProvider {
         statementDetail.getReasonCodes().forEach(rc -> {
             Coding coding = new Coding(SystemURL.VS_CONDITION_CODE, rc.getCode(), rc.getDisplay());
             medicationStatement.addReasonCode(new CodeableConcept().addCoding(coding));
-        });
-    }
-
-    private void setReasonReferences(MedicationStatement medicationStatement, MedicationStatementDetail statementDetail) {
-        statementDetail.getReasonReferences().forEach(rr -> {
-            if (rr.getReferenceUrl().equals(SystemURL.SD_GPC_OBSERVATION)) {
-                medicationStatement.addReasonReference(new Reference(new IdType("Observation", rr.getReferenceId())));
-            } else if (rr.getReferenceUrl().equals(SystemURL.SD_GPC_CONDITION)) {
-                medicationStatement.addReasonReference(new Reference(new IdType("Condition", rr.getReferenceId())));
-            }
         });
     }
 

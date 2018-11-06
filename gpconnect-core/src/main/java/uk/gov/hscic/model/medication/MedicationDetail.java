@@ -9,6 +9,9 @@ public class MedicationDetail {
     private String conceptDisplay;
     private String descCode;
     private String descDisplay;
+    private String codeTranslationSystem;
+    private String codeTranslationId;
+    private String codeTranslationDisplay;
     private String text;
     private String batchNumber;
     private Date expiryDate;
@@ -54,7 +57,31 @@ public class MedicationDetail {
 		this.descCode = descCode;
 	}
 	
-    public String getText() {
+    public String getCodeTranslationSystem() {
+		return codeTranslationSystem;
+	}
+
+	public void setCodeTranslationSystem(String codeTranslationSystem) {
+		this.codeTranslationSystem = codeTranslationSystem;
+	}
+
+	public String getCodeTranslationId() {
+		return codeTranslationId;
+	}
+
+	public void setCodeTranslationId(String codeTranslationId) {
+		this.codeTranslationId = codeTranslationId;
+	}
+
+	public String getCodeTranslationDisplay() {
+		return codeTranslationDisplay;
+	}
+
+	public void setCodeTranslationDisplay(String codeTranslationDisplay) {
+		this.codeTranslationDisplay = codeTranslationDisplay;
+	}
+
+	public String getText() {
 		return text;
 	}
 

@@ -55,6 +55,15 @@ public class StructuredAllergyIntoleranceEntity {
     
     @Column(name = "desc_display")
     private String descDisplay;
+    
+    @Column(name= "code_translation_system")
+    private String codeTranslationSystem;
+    
+    @Column(name= "code_translation_id")
+    private String codeTranslationId;
+    
+    @Column(name= "code_translation_display")
+    private String codeTranslationDisplay;
 	
 	@Column(name = "manCoding")
 	private String manifestationCoding;
@@ -67,6 +76,15 @@ public class StructuredAllergyIntoleranceEntity {
 	
 	@Column(name = "manDescDisplay")
 	private String manifestationDescDisplay;
+    
+    @Column(name= "man_translation_system")
+    private String manTranslationSystem;
+    
+    @Column(name= "man_translation_id")
+    private String manTranslationId;
+    
+    @Column(name= "man_translation_display")
+    private String manTranslationDisplay;
 
 	@Column(name = "recorder")
 	private String recorder;
@@ -224,6 +242,30 @@ public class StructuredAllergyIntoleranceEntity {
 		this.descDisplay = descDisplay;
 	}
 
+	public String getCodeTranslationSystem() {
+		return codeTranslationSystem;
+	}
+
+	public void setCodeTranslationSystem(String codeTranslationSystem) {
+		this.codeTranslationSystem = codeTranslationSystem;
+	}
+
+	public String getCodeTranslationId() {
+		return codeTranslationId;
+	}
+
+	public void setCodeTranslationId(String codeTranslationId) {
+		this.codeTranslationId = codeTranslationId;
+	}
+
+	public String getCodeTranslationDisplay() {
+		return codeTranslationDisplay;
+	}
+
+	public void setCodeTranslationDisplay(String codeTranslationDisplay) {
+		this.codeTranslationDisplay = codeTranslationDisplay;
+	}
+
 	public String getManifestationCoding() {
 		return manifestationCoding;
 	}
@@ -254,6 +296,30 @@ public class StructuredAllergyIntoleranceEntity {
 
 	public void setManifestationDescDisplay(String manifestationDescDisplay) {
 		this.manifestationDescDisplay = manifestationDescDisplay;
+	}
+
+	public String getManTranslationSystem() {
+		return manTranslationSystem;
+	}
+
+	public void setManTranslationSystem(String manTranslationSystem) {
+		this.manTranslationSystem = manTranslationSystem;
+	}
+
+	public String getManTranslationId() {
+		return manTranslationId;
+	}
+
+	public void setManTranslationId(String manTranslationId) {
+		this.manTranslationId = manTranslationId;
+	}
+
+	public String getManTranslationDisplay() {
+		return manTranslationDisplay;
+	}
+
+	public void setManTranslationDisplay(String manTranslationDisplay) {
+		this.manTranslationDisplay = manTranslationDisplay;
 	}
 
 	public String getRecorder() {

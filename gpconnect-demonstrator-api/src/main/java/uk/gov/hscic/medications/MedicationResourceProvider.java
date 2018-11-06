@@ -8,7 +8,10 @@ import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.common.helpers.CodeableConceptBuilder;
 import uk.gov.hscic.medication.statement.MedicationStatementEntity;
 import uk.gov.hscic.medication.statement.MedicationStatementRepository;
 import uk.gov.hscic.model.medication.MedicationDetail;
@@ -74,53 +77,15 @@ public class MedicationResourceProvider implements IResourceProvider {
 		medication.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION));
 				//.setVersionId(String.valueOf(new Date())).setLastUpdated(new Date()));
 		
-		CodeableConcept code = new CodeableConcept();
-		Coding coding = new Coding();
-		coding.setSystem(SystemURL.VS_SNOMED);
-        coding.setCode(medicationDetail.getConceptCode());
-        coding.setDisplay(medicationDetail.getConceptDisplay());
-        // for 1.2.2 none of the snomed codes matches [0-9]*1[0-9] so we can drop the extensions ie not a descrription code
-        // they are all concept codes
-        //addSnomedExtensions(coding, medicationDetail);
-		code.setCoding(Collections.singletonList(coding));
+		CodeableConceptBuilder builder = new CodeableConceptBuilder();
+        builder.addConceptCode(SystemConstants.SNOMED_URL, medicationDetail.getConceptCode(), medicationDetail.getConceptDisplay())
+        	   .addDescription(medicationDetail.getDescCode(), medicationDetail.getDescDisplay())
+        	   .addTranslation(medicationDetail.getCodeTranslationSystem(), medicationDetail.getCodeTranslationId(), medicationDetail.getCodeTranslationDisplay());
+        CodeableConcept code = builder.build();
 		code.setText(medicationDetail.getText());
-		
 		medication.setCode(code);
 		
-//		MedicationPackageComponent packageComponent = new MedicationPackageComponent();
-//		MedicationPackageBatchComponent batchComponent = new MedicationPackageBatchComponent();
-//		batchComponent.setLotNumber(medicationDetail.getBatchNumber());
-//		batchComponent.setExpirationDate(medicationDetail.getExpiryDate());
-//		packageComponent.addBatch(batchComponent);
-		
-//  	medication.setPackage(packageComponent);
-		
 		return medication;
-	}
-
-    /**
-     * handles description codes which have 1 as the penultimate digit
-     * not used for 1.2.2
-     * @param code
-     * @param medicationDetail 
-     */
-	private void addSnomedExtensions(Coding code, MedicationDetail medicationDetail) {
-		Extension idExtension = null;
-		Extension displayExtension = null;
-		Extension snomedExtension = new Extension(SystemURL.SD_EXT_SCT_DESC_ID);
-		
-		if(medicationDetail.getConceptCode() != null) { 
-			idExtension = new Extension("descriptionId").setValue(new IdType(medicationDetail.getConceptCode()));
-			snomedExtension.addExtension(idExtension);
-		}
-		
-		if(medicationDetail.getConceptDisplay() != null) {
-			displayExtension = new Extension("descriptionDisplay").setValue(new StringType(medicationDetail.getConceptDisplay()));
-			snomedExtension.addExtension(displayExtension);
-		}
-		
-		if(idExtension != null || displayExtension != null)
-			code.addExtension(snomedExtension);
 	}
 
 	public Map<String,List<String>> getAllMedicationAndAllergiesForPatient(String nhsNumber) {
@@ -133,13 +98,13 @@ public class MedicationResourceProvider implements IResourceProvider {
 					if(Objects.equals(allergy.getNhsNumber(), nhsNumber)) {
 						allergiesAssociatedWithMedicationMap.computeIfAbsent(medicationEntity.getConceptDisplay(), k-> new ArrayList<>()).add(allergy.getConceptDisplay());
 					} else {
-						allergiesAssociatedWithMedicationMap.put(medicationEntity.getConceptDisplay(), Collections.EMPTY_LIST);
+						allergiesAssociatedWithMedicationMap.put(medicationEntity.getConceptDisplay(), Collections.emptyList());
 					}
 
 
 				}
 			} else {
-				allergiesAssociatedWithMedicationMap.put(medicationEntity.getConceptDisplay(), Collections.EMPTY_LIST);
+				allergiesAssociatedWithMedicationMap.put(medicationEntity.getConceptDisplay(), Collections.emptyList());
 			}
 		}
 		return allergiesAssociatedWithMedicationMap;

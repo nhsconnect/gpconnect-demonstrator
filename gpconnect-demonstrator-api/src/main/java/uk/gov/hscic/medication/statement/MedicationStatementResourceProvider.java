@@ -78,7 +78,13 @@ public class MedicationStatementResourceProvider {
         String prescribingAgency = statementDetail.getPrescribingAgency();
         if (prescribingAgency != null && !prescribingAgency.trim().isEmpty()) {
 
-            Coding coding = new Coding(SystemURL.SD_EXTENSION_CC_PRESCRIBING_AGENCY, prescribingAgency, prescribingAgency);
+        	String prescribingAgencyDisplay = "";
+        	if (prescribingAgency.equalsIgnoreCase("prescribed-at-gp-practice")) {
+        		prescribingAgencyDisplay = "Prescribed at GP practice";
+        	} else if (prescribingAgency.equalsIgnoreCase("prescribed-by-another-organisation")) {
+        		prescribingAgencyDisplay = "Prescribed by another organisation";
+        	}
+            Coding coding = new Coding(SystemURL.CS_CC_PRESCRIBING_AGENCY_STU3, prescribingAgency, prescribingAgencyDisplay);
 
             CodeableConcept codeableConcept = new CodeableConcept().addCoding(coding);
             medicationStatement.addExtension(new Extension(SystemURL.SD_EXTENSION_CC_PRESCRIBING_AGENCY, codeableConcept));

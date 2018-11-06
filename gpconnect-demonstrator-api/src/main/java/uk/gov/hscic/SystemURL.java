@@ -145,6 +145,7 @@ public final class SystemURL {
     public static final String CS_CC_LANG_ABILITY_MODE_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-LanguageAbilityMode-1";
     public static final String CS_CC_LANG_ABILITY_PROFI_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-LanguageAbilityProficiency-1";
     public static final String CS_CC_PRESCRIPTION_TYPE_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1";
+    public static final String CS_CC_PRESCRIBING_AGENCY_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescribingAgency-1";
 
     public static final String CS_MARITAL_STATUS = "http://hl7.org/fhir/v3/MaritalStatus";
     public static final String CS_NULL_FLAVOUR = "http://hl7.org/fhir/v3/NullFlavor";

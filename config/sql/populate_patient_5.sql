@@ -7,7 +7,7 @@ INSERT INTO gpconnect.medication_statements
  (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, prescribingAgency)
 VALUES
- (3,'2018-03-14',13,'active','Active',5,'2018-01-12','2020-07-12','2018-01-12',5,'unk','Unknown','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15', 'prescribingAgency');
+ (3,'2018-03-14',13,'active','Active',5,'2018-01-12','2020-07-12','2018-01-12',5,'unk','Unknown','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15', 'prescribed-at-gp-practice');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)

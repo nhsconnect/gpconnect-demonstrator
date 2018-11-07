@@ -381,10 +381,10 @@ angular
                 }).extension;
             }
 
-            $scope.MedicationName = listType.code.coding[0].extension[0].extension[1].valueString;
+            $scope.MedicationName = listType.code.coding[0].display;
             $scope.practitionername = $scope.practitioner.name[0].prefix[0]+" "+$scope.practitioner.name[0].given[0] + " "+ $scope.practitioner.name[0].family;
 
-            var medName = listType.code.coding[0].extension[0].extension[1].valueString == "Transfer-degraded medication entry" ? listType.code.text :  listType.code.coding[0].extension[0].extension[1].valueString
+            var medName = listType.code.coding[0].display == "Transfer-degraded medication entry" ? listType.code.text :  listType.code.coding[0].display
             $scope.title = "Medication Detail: "+ medName;
 
         }

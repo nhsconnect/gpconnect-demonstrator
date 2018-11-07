@@ -320,27 +320,35 @@ public class PatientResourceProvider implements IResourceProvider {
                 .convertOrganizaitonDetailsToOrganization(organizationDetails);
         structuredBundle.addEntry().setResource(organization);
 
-        // Add Practitioner
+        //Practitioner
+        Set<String> practitionerIds = new HashSet<>();
         List<Reference> practitionerReferenceList = patient.getGeneralPractitioner();
-        Reference practitioner = practitionerReferenceList.get(0);
-        String practitionerId = practitioner.getReference().replaceAll("Practitioner/", "");
-        Practitioner pracResource = practitionerResourceProvider.getPractitionerById(new IdType(practitionerId));
-        structuredBundle.addEntry().setResource(pracResource);
-
-        final List<PractitionerRole> practitionerRoleList = practitionerRoleResourceProvider.getPractitionerRoleByPracticionerId(new IdType(practitionerId));
-
-        for (PractitionerRole role : practitionerRoleList) {
-            structuredBundle.addEntry().setResource(role);
-        }
-
+        practitionerReferenceList.forEach(practitionerReference -> {
+        	String[] pracRef = practitionerReference.getReference().split("/");
+        	if (pracRef.length > 1) {
+        		practitionerIds.add(pracRef[1]);
+        	}
+        });
+        
         if (getAllergies) {
-            structuredBundle = structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS, practitionerId,
+            structuredBundle = structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS, practitionerIds,
                     structuredBundle, includeResolved);
         }
         if (getMedications) {
             structuredBundle = populateMedicationBundle.addMedicationBundleEntries(structuredBundle,
-                    patientDetails, includePrescriptionIssues, medicationPeriod);
+                    patientDetails, includePrescriptionIssues, medicationPeriod , practitionerIds);
         }
+        
+        for(String practitionerId : practitionerIds) {
+        	Practitioner pracResource = practitionerResourceProvider.getPractitionerById(new IdType(practitionerId));
+            structuredBundle.addEntry().setResource(pracResource);
+            
+            List<PractitionerRole> practitionerRoleList = practitionerRoleResourceProvider.getPractitionerRoleByPracticionerId(new IdType(practitionerId));
+            for(PractitionerRole role : practitionerRoleList) {
+            	structuredBundle.addEntry().setResource(role);
+            }
+        }
+        
         structuredBundle.setType(BundleType.COLLECTION);
         structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
         //structuredBundle.getMeta().setLastUpdated(new Date());

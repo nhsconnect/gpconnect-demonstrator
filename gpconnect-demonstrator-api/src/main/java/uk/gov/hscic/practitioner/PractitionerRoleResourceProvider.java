@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
+import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.model.practitioner.PractitionerDetails;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class PractitionerRoleResourceProvider implements IResourceProvider {
@@ -46,23 +48,28 @@ public class PractitionerRoleResourceProvider implements IResourceProvider {
     private List<PractitionerRole> practitionerDetailsToPractitionerRoleList(PractitionerDetails practitionerDetails) {
         final List<String> roleIds = practitionerDetails.getRoleIds();
 
-
         final CodeableConcept codeableConcept = new CodeableConcept();
 
         codeableConcept.setCoding(Arrays.asList(new Coding(
-                        "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-SDSJobRoleName-1",
+                        SystemURL.CS_CC_JOB_ROLE,
                         practitionerDetails.getRoleCode(),
                         practitionerDetails.getRoleDisplay()
                 )
         ));
-
-
-        final List<PractitionerRole> practitionerRoleList = roleIds.stream().map(roleId -> {
+        
+        List<PractitionerRole> practitionerRoleList = new ArrayList<>();
+        for(String roleId : roleIds) {
         	PractitionerRole role = new PractitionerRole();
+        	Meta meta = new Meta();
+        	meta.setProfile(Collections.singletonList(new UriType(SystemURL.SD_GPC_PRACTITIONER_ROLE)));
+        	role.setMeta(meta);
         	role.setId(roleId);
         	role.setCode(Arrays.asList(codeableConcept));
-            return role;
-        }).collect(Collectors.toList());
+        	
+        	role.setPractitioner(new Reference("Practitioner/" + practitionerDetails.getId()));
+        	role.setOrganization(new Reference ("Organization/" + practitionerDetails.getOrganizationId()));
+        	practitionerRoleList.add(role);
+        }
         return practitionerRoleList;
     }
 

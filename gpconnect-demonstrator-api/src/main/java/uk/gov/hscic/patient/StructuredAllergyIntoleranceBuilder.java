@@ -12,12 +12,9 @@ import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.common.helpers.CodeableConceptBuilder;
 import uk.gov.hscic.common.helpers.WarningCodeExtHelper;
-import uk.gov.hscic.model.practitioner.PractitionerDetails;
 import uk.gov.hscic.patient.details.PatientRepository;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch;
-import uk.gov.hscic.practitioner.PractitionerResourceProvider;
-import uk.gov.hscic.practitioner.PractitionerRoleResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerSearch;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,12 +35,6 @@ public class StructuredAllergyIntoleranceBuilder {
 
     @Autowired
     private PractitionerSearch practitionerSearch;
-
-    @Autowired
-    private PractitionerRoleResourceProvider practitionerRoleResourceProvider;
-
-    @Autowired
-    private PractitionerResourceProvider practitionerResourceProvider;
     
     @Autowired
     private CodeableConceptBuilder codeableConceptBuilder;
@@ -51,7 +42,7 @@ public class StructuredAllergyIntoleranceBuilder {
     @Value("${datasource.patient.nhsNumber:#{null}}")
     private String patient2NhsNo;
 
-    public Bundle buildStructuredAllergyIntolerence(String NHS, String practitionerId, Bundle bundle, Boolean includedResolved) {
+    public Bundle buildStructuredAllergyIntolerence(String NHS, Set<String> practitionerIds, Bundle bundle, Boolean includedResolved) {
         List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntollerence(NHS);
 
         ListResource active = initiateListResource(NHS, ACTIVE_ALLERGIES_DISPLAY, allergyData);
@@ -137,13 +128,16 @@ public class StructuredAllergyIntoleranceBuilder {
 
             reaction.setDescription(allergyIntoleranceEntity.getNote());
 
+            //SEVERITY
             AllergyIntoleranceSeverity severity = AllergyIntoleranceSeverity.SEVERE;
             reaction.setSeverity(severity);
 
+            //EXPOSURE
             CodeableConcept exposureRoute = new CodeableConcept();
             reaction.setExposureRoute(exposureRoute);
             allergyIntolerance.addReaction(reaction);
 
+            //RECORDER
             final Reference refValue = new Reference();
             final Identifier identifier = new Identifier();
             final String recorder = allergyIntoleranceEntity.getRecorder();
@@ -160,30 +154,14 @@ public class StructuredAllergyIntoleranceBuilder {
                 refValue.setIdentifier(identifier);
                 allergyIntolerance.setRecorder(refValue);
             } else if (practitionerSearch.findPractitionerByUserId(recorder) != null) {
-
                 refValue.setReference("Practitioner/" + recorder);
-
                 allergyIntolerance.setRecorder(refValue);
 
-                if (!practitionerId.equals(recorder)) {
-                    final List<PractitionerDetails> practitionerByUserId = practitionerSearch.findPractitionerByUserId(recorder);
-                    if (!practitionerByUserId.isEmpty()) {
-                        final Practitioner practitioner = practitionerResourceProvider.getPractitionerById(new IdType(recorder));
-                        bundle.addEntry().setResource(practitioner);
-
-                        final List<PractitionerRole> practitionerRoleList = practitionerRoleResourceProvider.getPractitionerRoleByPracticionerId(new IdType(recorder));
-
-                        for (PractitionerRole role : practitionerRoleList) {
-                            bundle.addEntry().setResource(role);
-                        }
-                    }
-                }
-
+                practitionerIds.add(recorder);
             }
 
-
+            //CLINICAL STATUS
             List<Extension> extensions = new ArrayList<>();
-           
             if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {
                 listResourceBuilder(active, allergyIntolerance, false);
 
@@ -202,7 +180,13 @@ public class StructuredAllergyIntoleranceBuilder {
             if (!extensions.isEmpty()) {
                 allergyIntolerance.setExtension(extensions);
             }
-
+            
+            //ASSERTER
+            Reference asserter = allergyIntolerance.getAsserter();
+            if (asserter != null && asserter.getReference() != null && asserter.getReference().startsWith("Practitioner")) {
+            	String[] split = asserter.getReference().split("/");
+            	practitionerIds.add(split[1]);
+            }
 
         }
 

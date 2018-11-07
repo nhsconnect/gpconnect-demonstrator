@@ -47,6 +47,7 @@ public final class SystemURL {
     public static final String SD_GPC_MEDICATION_STATEMENT = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationStatement-1";
     public static final String SD_GPC_MEDICATION_REQUEST = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1";
     public static final String SD_GPC_MEDICATION = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Medication-1";
+    public static final String SD_GPC_PRACTITIONER_ROLE = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-PractitionerRole-1";
 
     // FHIR StructureDefinition Extension
     public static final String SD_CC_EXT_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1";
@@ -146,6 +147,7 @@ public final class SystemURL {
     public static final String CS_CC_LANG_ABILITY_PROFI_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-LanguageAbilityProficiency-1";
     public static final String CS_CC_PRESCRIPTION_TYPE_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1";
     public static final String CS_CC_PRESCRIBING_AGENCY_STU3 = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescribingAgency-1";
+    public static final String CS_CC_JOB_ROLE = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-SDSJobRoleName-1";
 
     public static final String CS_MARITAL_STATUS = "http://hl7.org/fhir/v3/MaritalStatus";
     public static final String CS_NULL_FLAVOUR = "http://hl7.org/fhir/v3/NullFlavor";

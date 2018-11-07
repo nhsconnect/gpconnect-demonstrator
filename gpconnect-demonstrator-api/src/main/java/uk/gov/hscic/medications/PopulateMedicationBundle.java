@@ -22,8 +22,6 @@ import uk.gov.hscic.medication.statement.MedicationStatementResourceProvider;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
-import uk.gov.hscic.practitioner.PractitionerResourceProvider;
-import uk.gov.hscic.practitioner.PractitionerRoleResourceProvider;
 
 import java.util.*;
 import static uk.gov.hscic.SystemConstants.MEDICATION_LIST;
@@ -46,23 +44,17 @@ public class PopulateMedicationBundle {
 	@Autowired
 	private MedicationRequestResourceProvider medicationRequestResourceProvider;
 
-    @Autowired
-	private PractitionerResourceProvider practitionerResourceProvider;
-
-    @Autowired
-    private PractitionerRoleResourceProvider practitionerRoleResourceProvider;
-
 	@Autowired
 	private OrganizationResourceProvider organizationResourceProvider;
 
 
     public Bundle addMedicationBundleEntries(Bundle structuredBundle, PatientDetails patientDetails, Boolean includePrescriptionIssues,
-			Period medicationPeriod) {
+			Period medicationPeriod, Set<String> practitionerIds) {
 		BundleEntryComponent listEntry = new BundleEntryComponent();
         List<MedicationStatementDetail> medicationStatements = findMedicationStatements(Long.valueOf(patientDetails.getId()), medicationPeriod);
 		structuredBundle.addEntry(listEntry.setResource(createListEntry(medicationStatements, patientDetails.getNhsNumber())));
 		medicationStatements.forEach(medicationStatement -> {
-			createBundleEntries(medicationStatement, includePrescriptionIssues, patientDetails)
+			createBundleEntries(medicationStatement, includePrescriptionIssues, patientDetails, practitionerIds)
 				.forEach(bundleEntry -> structuredBundle.addEntry(bundleEntry));
 		});
 		return structuredBundle;
@@ -116,24 +108,30 @@ public class PopulateMedicationBundle {
 		return new Extension(SystemURL.CLINICAL_SETTING, codeableConcept);
 	}
 
-	private List<BundleEntryComponent> createBundleEntries(MedicationStatementDetail statementDetail, Boolean includePrescriptionIssues, PatientDetails patientDetails) {
+	private List<BundleEntryComponent> createBundleEntries(MedicationStatementDetail statementDetail, Boolean includePrescriptionIssues,
+			PatientDetails patientDetails, Set<String> practitionerIds) {
 
 		List<BundleEntryComponent> bundleEntryComponents = new ArrayList<>();
 
+		MedicationStatement medStatement = medicationStatementResourceProvider.getMedicationStatementResource(statementDetail);
         bundleEntryComponents.add(new BundleEntryComponent()
-				.setResource(medicationStatementResourceProvider.getMedicationStatementResource(statementDetail)));
-
+				.setResource(medStatement));
+        
         bundleEntryComponents.add(new BundleEntryComponent()
 				.setResource(medicationResourceProvider.getMedicationResourceForBundle(statementDetail.getMedicationId())));
 
-        MedicationRequest medicationRequest = medicationRequestResourceProvider
-				.getMedicationRequestPlanResource(statementDetail.getMedicationRequestPlanId());
+        MedicationRequest medicationRequest = medicationRequestResourceProvider.getMedicationRequestPlanResource(statementDetail.getMedicationRequestPlanId());
 		bundleEntryComponents.add(new BundleEntryComponent().setResource(medicationRequest));
 
         if(includePrescriptionIssues) {
-			medicationRequestResourceProvider.getMedicationRequestOrderResources(medicationRequest.getGroupIdentifier().getValue())
-			.forEach(requestOrder -> bundleEntryComponents.add(new BundleEntryComponent().setResource(requestOrder)));
+			List<MedicationRequest> prescriptionIssues = medicationRequestResourceProvider.getMedicationRequestOrderResources(medicationRequest.getGroupIdentifier().getValue());
+			prescriptionIssues.forEach(requestOrder -> bundleEntryComponents.add(new BundleEntryComponent().setResource(requestOrder)));
 		}
+        
+        List<MedicationRequest> allMedReqs = new ArrayList<>();
+        allMedReqs.add(medicationRequest);
+        allMedReqs.addAll(allMedReqs);
+		practitionerIds.addAll(getPractitionerIds(medStatement, allMedReqs));
 
         bundleEntryComponents.addAll(getReferencedResources(medicationRequest, patientDetails));
 
@@ -141,54 +139,57 @@ public class PopulateMedicationBundle {
 
     }
 
+	private Set<String> getPractitionerIds(MedicationStatement medStatement, List<MedicationRequest> allMedReqs) {
+		Set<String> practitionerIds = new HashSet<>();
+		medStatement.getNote().forEach(note -> {
+        	try {
+				if (note.getAuthorReference() != null && note.getAuthorReference().getReference() != null && note.getAuthorReference().getReference().startsWith("Practitioner")) {
+					String[] split = note.getAuthorReference().getReference().split("/");
+					practitionerIds.add(split[1]);
+				}
+			} catch (FHIRException e) {
+				throw new UnprocessableEntityException(e.getMessage());
+			}
+		});
+
+		allMedReqs.forEach(medReq -> {
+			medReq.getNote().forEach(note -> {
+				try {
+					if (note.getAuthorReference() != null && note.getAuthorReference().getReference() != null && note.getAuthorReference().getReference().startsWith("Practitioner")) {
+						String[] split = note.getAuthorReference().getReference().split("/");
+						practitionerIds.add(split[1]);
+					}
+				} catch (FHIRException e) {
+					throw new UnprocessableEntityException(e.getMessage());
+				}
+			});
+
+			if (medReq.getRecorder() != null && medReq.getRecorder().getReference().startsWith("Practitioner")) {
+				String[] split = medReq.getRecorder().getReference().split("/");
+				practitionerIds.add(split[1]);
+			}
+		});
+        return practitionerIds;
+	}
+
 	private List<BundleEntryComponent> getReferencedResources(MedicationRequest medicationRequest, PatientDetails patientDetails) {
 
-        Long patientPractitionerId = patientDetails.getGpId();
-		Long patientOrganizationId = Long.valueOf(patientDetails.getManagingOrganization());
+        Long patientOrganizationId = Long.valueOf(patientDetails.getManagingOrganization());
 
-        IIdType recorderPractitionerRef = medicationRequest.getRecorder().getReferenceElement();
-		IIdType performerOrganizationRef = medicationRequest.getDispenseRequest().getPerformer().getReferenceElement();
+        IIdType performerOrganizationRef = medicationRequest.getDispenseRequest().getPerformer().getReferenceElement();
 		IIdType requesterOnBehalfOfOrganizationRef = medicationRequest.getRequester().getOnBehalfOf().getReferenceElement();
 
         List<BundleEntryComponent> bundleEntryComponents = new ArrayList<>();
 
-        Set<Long> practitionerIds = new HashSet<>();
-		Set<Long> organizationIds = new HashSet<>();
+        Set<Long> organizationIds = new HashSet<>();
 
-        if(recorderPractitionerRef != null) {
-			practitionerIds.add(recorderPractitionerRef.getIdPartAsLong());
-		}
-		if(performerOrganizationRef != null) {
+       if(performerOrganizationRef != null) {
 			organizationIds.add(performerOrganizationRef.getIdPartAsLong());
 		}
 		if(requesterOnBehalfOfOrganizationRef != null) {
 			organizationIds.add(performerOrganizationRef.getIdPartAsLong());
 		}
-		List<Annotation> notes = medicationRequest.getNote();
-		notes.forEach(note -> {
-			if(note.hasAuthorReference()) {
-				try {
-					practitionerIds.add(note.getAuthorReference().getReferenceElement().getIdPartAsLong());
-				} catch (FHIRException e) {
-					throw new UnprocessableEntityException(e.getMessage());
-				}
-			}
-		});
-
-        practitionerIds.stream()
-					   .filter(id -> id != patientPractitionerId)
-					   .forEach(id -> {
-						   Practitioner practitioner = practitionerResourceProvider
-									.getPractitionerById(new IdType(id));
-
-                           final List<PractitionerRole> practitionerRoleList = practitionerRoleResourceProvider
-                                   .getPractitionerRoleByPracticionerId(new IdType(id));
-
-                           bundleEntryComponents.add(new BundleEntryComponent().setResource(practitioner));
-
-                           practitionerRoleList.forEach(role -> bundleEntryComponents.add(new BundleEntryComponent().setResource(role)));
-					   });
-
+		
         organizationIds.stream()
 					   .filter(id -> id != patientOrganizationId)
 					   .forEach(id -> {

@@ -21,10 +21,8 @@ import uk.gov.hscic.medication.statement.MedicationStatementRepository;
 import uk.gov.hscic.medication.statement.MedicationStatementResourceProvider;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.model.patient.PatientDetails;
-import uk.gov.hscic.organization.OrganizationResourceProvider;
-
 import java.util.*;
-import static uk.gov.hscic.SystemConstants.MEDICATION_LIST;
+import static uk.gov.hscic.SystemConstants.*;
 
 @Component
 public class PopulateMedicationBundle {
@@ -44,17 +42,14 @@ public class PopulateMedicationBundle {
 	@Autowired
 	private MedicationRequestResourceProvider medicationRequestResourceProvider;
 
-	@Autowired
-	private OrganizationResourceProvider organizationResourceProvider;
-
 
     public Bundle addMedicationBundleEntries(Bundle structuredBundle, PatientDetails patientDetails, Boolean includePrescriptionIssues,
-			Period medicationPeriod, Set<String> practitionerIds) {
+			Period medicationPeriod, Set<String> practitionerIds, Set<String> orgIds) {
 		BundleEntryComponent listEntry = new BundleEntryComponent();
         List<MedicationStatementDetail> medicationStatements = findMedicationStatements(Long.valueOf(patientDetails.getId()), medicationPeriod);
 		structuredBundle.addEntry(listEntry.setResource(createListEntry(medicationStatements, patientDetails.getNhsNumber())));
 		medicationStatements.forEach(medicationStatement -> {
-			createBundleEntries(medicationStatement, includePrescriptionIssues, patientDetails, practitionerIds)
+			createBundleEntries(medicationStatement, includePrescriptionIssues, patientDetails, practitionerIds, orgIds)
 				.forEach(bundleEntry -> structuredBundle.addEntry(bundleEntry));
 		});
 		return structuredBundle;
@@ -109,7 +104,7 @@ public class PopulateMedicationBundle {
 	}
 
 	private List<BundleEntryComponent> createBundleEntries(MedicationStatementDetail statementDetail, Boolean includePrescriptionIssues,
-			PatientDetails patientDetails, Set<String> practitionerIds) {
+			PatientDetails patientDetails, Set<String> practitionerIds, Set<String> orgIds) {
 
 		List<BundleEntryComponent> bundleEntryComponents = new ArrayList<>();
 
@@ -132,12 +127,29 @@ public class PopulateMedicationBundle {
         allMedReqs.add(medicationRequest);
         allMedReqs.addAll(allMedReqs);
 		practitionerIds.addAll(getPractitionerIds(medStatement, allMedReqs));
-
-        bundleEntryComponents.addAll(getReferencedResources(medicationRequest, patientDetails));
+		orgIds.addAll(getOrganisationIds(allMedReqs));
 
         return bundleEntryComponents;
 
     }
+
+	private Set<String> getOrganisationIds(List<MedicationRequest> allMedReqs) {
+		Set<String> orgIds = new HashSet<>();
+		
+		for(MedicationRequest medReq : allMedReqs) {
+			IIdType performerOrganizationRef = medReq.getDispenseRequest().getPerformer().getReferenceElement();
+			IIdType requesterOnBehalfOfOrganizationRef = medReq.getRequester().getOnBehalfOf().getReferenceElement();
+			
+			if(performerOrganizationRef != null && performerOrganizationRef.getIdPart() != null) {
+				orgIds.add(performerOrganizationRef.getIdPart());
+			}
+			if(requesterOnBehalfOfOrganizationRef != null && requesterOnBehalfOfOrganizationRef.getIdPart() != null) {
+				orgIds.add(requesterOnBehalfOfOrganizationRef.getIdPart());
+			}
+		}
+		
+		return orgIds;
+	}
 
 	private Set<String> getPractitionerIds(MedicationStatement medStatement, List<MedicationRequest> allMedReqs) {
 		Set<String> practitionerIds = new HashSet<>();
@@ -171,36 +183,6 @@ public class PopulateMedicationBundle {
 		});
         return practitionerIds;
 	}
-
-	private List<BundleEntryComponent> getReferencedResources(MedicationRequest medicationRequest, PatientDetails patientDetails) {
-
-        Long patientOrganizationId = Long.valueOf(patientDetails.getManagingOrganization());
-
-        IIdType performerOrganizationRef = medicationRequest.getDispenseRequest().getPerformer().getReferenceElement();
-		IIdType requesterOnBehalfOfOrganizationRef = medicationRequest.getRequester().getOnBehalfOf().getReferenceElement();
-
-        List<BundleEntryComponent> bundleEntryComponents = new ArrayList<>();
-
-        Set<Long> organizationIds = new HashSet<>();
-
-       if(performerOrganizationRef != null) {
-			organizationIds.add(performerOrganizationRef.getIdPartAsLong());
-		}
-		if(requesterOnBehalfOfOrganizationRef != null) {
-			organizationIds.add(performerOrganizationRef.getIdPartAsLong());
-		}
-		
-        organizationIds.stream()
-					   .filter(id -> id != patientOrganizationId)
-					   .forEach(id -> {
-							Organization organization = organizationResourceProvider
-									.getOrganizationById(new IdType(id));
-							bundleEntryComponents.add(new BundleEntryComponent().setResource(organization));
-					   });
-
-        return bundleEntryComponents;
-
-    }
 
 	private List<MedicationStatementDetail> findMedicationStatements(Long patientId, Period medicationPeriod) {
 		List<MedicationStatementEntity> medicationStatementEntities = medicationStatementRepository.findByPatientId(patientId);

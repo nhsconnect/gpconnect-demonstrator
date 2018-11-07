@@ -48,6 +48,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
 
 @Component
@@ -99,6 +100,9 @@ public class PatientResourceProvider implements IResourceProvider {
     @Value("${datasource.patient.superseded:#{null}}")
     private String patientSuperseded;
 
+    @Value("${datasource.patient.nhsNumber:#{null}}")
+    private String patient2;
+
     private NhsNumber nhsNumber;
 
     private Map<String, Boolean> registerPatientParams;
@@ -132,6 +136,7 @@ public class PatientResourceProvider implements IResourceProvider {
         // Spring does not strip trailing blanks from property values
         patientNotOnSpine = patientNotOnSpine.trim();
         patientSuperseded = patientSuperseded.trim();
+        patient2 = patient2.trim();
     }
 
     @Read(version = true)
@@ -278,8 +283,9 @@ public class PatientResourceProvider implements IResourceProvider {
                             && paramPart.getName().equals(SystemConstants.INCLUDE_PRESCRIPTION_ISSUES)) {
                         includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
                         isIncludedPrescriptionIssuesExist = true;
-                    } else if (paramPart.getValue() instanceof Period
+                    } else if (false && paramPart.getValue() instanceof Period
                             && paramPart.getName().equals(SystemConstants.MEDICATION_DATE_PERIOD)) {
+                        // 1.2.1
                         medicationPeriod = (Period) paramPart.getValue();
 
                         String startDate = medicationPeriod.getStartElement().asStringValue();
@@ -292,6 +298,15 @@ public class PatientResourceProvider implements IResourceProvider {
                                     new UnprocessableEntityException("Invalid Medication Date Period"),
                                     SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                         }
+                    } else if (paramPart.getValue() instanceof DateType 
+                            && paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)) {
+                        // 1.2.2
+                        DateType startDateDt = (DateType) paramPart.getValue();
+                        medicationPeriod = new Period();
+                        medicationPeriod.setStart(startDateDt.getValue());
+                        medicationPeriod.setEnd(null);
+                        String startDate = startDateDt.asStringValue();
+                        validateStartDateParamAndEndDateParam(startDate, null);
                     } else {
                         throw OperationOutcomeFactory.buildOperationOutcomeException(
                                 new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
@@ -950,8 +965,61 @@ public class PatientResourceProvider implements IResourceProvider {
             patient.setManagingOrganization(new Reference("Organization/" + managingOrganization));
         }
 
+        // for patient 2 add some contact details
+        if (patientDetails.getNhsNumber().equals(patient2)) {
+            createContact(patient);
+        }
+
         return patient;
     } // patientDetailsToMinimalPatient
+
+    /**
+     * add a set of contact details into the patient record
+     *
+     * @param patient
+     */
+    private void createContact(Patient patient) {
+
+        // relationships
+        Patient.ContactComponent contact = new ContactComponent();
+        for (String relationship : new String[]{"Emergency contact", "Next of kin", "Daughter"}) {
+            CodeableConcept crelationship = new CodeableConcept();
+            crelationship.setText(relationship);
+            contact.addRelationship(crelationship);
+        }
+
+        // contact address
+        Address address = new Address();
+        address.addLine("Trevelyan Square");
+        address.addLine("Boar Ln");
+        address.setPostalCode("LS1 6AE");
+        address.setType(AddressType.PHYSICAL);
+        address.setUse(AddressUse.HOME);
+        contact.setAddress(address);
+
+        // gender
+        contact.setGender(AdministrativeGender.FEMALE);
+
+        // telecom
+        ContactPoint telecom = new ContactPoint();
+        telecom.setSystem(ContactPointSystem.PHONE);
+        telecom.setUse(ContactPointUse.MOBILE);
+        telecom.setValue("07777123123");
+        contact.addTelecom(telecom);
+
+        // Name
+        HumanName name = new HumanName();
+        name.addGiven("Jane");
+        name.setFamily("Jackson");
+        List<StringType> prefixList = new ArrayList<>();
+        prefixList.add(new StringType("Miss"));
+        name.setPrefix(prefixList);
+        name.setText("JACKSON Jane (Miss)");
+        name.setUse(NameUse.OFFICIAL);
+        contact.setName(name);
+
+        patient.addContact(contact);
+    }
 
     private Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) throws FHIRException {
         Patient patient = patientDetailsToMinimalPatient(patientDetails);

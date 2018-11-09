@@ -298,7 +298,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     new UnprocessableEntityException("Invalid Medication Date Period"),
                                     SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                         }
-                    } else if (paramPart.getValue() instanceof DateType 
+                    } else if (paramPart.getValue() instanceof DateType
                             && paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)) {
                         // 1.2.2
                         DateType startDateDt = (DateType) paramPart.getValue();
@@ -449,8 +449,25 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     private void updateAddressAndTelecom(Patient unregisteredPatient, PatientDetails patientDetails) {
+        HashMap<ContactPointUse,ContactPoint> hmUse = new HashMap<>();
         if (unregisteredPatient.getTelecom().size() > 0) {
-            patientDetails.setTelephone(unregisteredPatient.getTelecom().get(0).getValue());
+            // look for a telecom of type phone, email ignored for now at 1.2.2
+            //TODO persist emails also now multiple telcoms fo different types
+            for (ContactPoint telecom : unregisteredPatient.getTelecom()) {
+                if (telecom.hasSystem() && telecom.getSystem() == telecom.getSystem().PHONE) {
+                    hmUse.put(telecom.getUse(), telecom);
+                }
+            }
+        }
+        
+        if (hmUse.size() >  0) {
+            // ordered preference list of numbers to save
+            for ( ContactPointUse use : new ContactPointUse[] {ContactPointUse.HOME,ContactPointUse.WORK,ContactPointUse.MOBILE,ContactPointUse.TEMP}) {
+                if (hmUse.containsKey(use)) {
+                    patientDetails.setTelephone(hmUse.get(use).getValue());
+                    break;
+                }
+            }
         }
 
         // actually a list of addresses not a single one
@@ -509,25 +526,83 @@ public class PatientResourceProvider implements IResourceProvider {
         checkValidExtensions(patient.getExtension());
         validateNames(patient);
         validateDateOfBirth(patient);
-        valiateGender(patient);
+        validateGender(patient);
     }
 
     private void validateTelecomAndAddress(Patient patient) {
-        //Only a single telecom with type temp may be sent
-        if (patient.getTelecom().size() > 1) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(
-                            "Only a single telecom can be sent in a register patient request."),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
-        } else if (patient.getTelecom().size() == 1) {
-            if (patient.getTelecom().get(0).getUse() != ContactPointUse.TEMP) {
+        // 0..1 of phone - (not nec. temp),  0..1 of email
+        HashSet<ContactPointUse> phoneUse = new HashSet<>();
+        int emailCount = 0;
+        for (ContactPoint telecom : patient.getTelecom()) {
+            if (telecom.hasSystem()) {
+                if (telecom.getSystem() != null) {
+                    switch (telecom.getSystem()) {
+                        case PHONE:
+                            if (telecom.hasUse()) {
+                                switch (telecom.getUse()) {
+                                    case HOME:
+                                    case WORK:
+                                    case MOBILE:
+                                    case TEMP:
+                                        if (!phoneUse.contains(telecom.getUse())) {
+                                            phoneUse.add(telecom.getUse());
+                                        } else {
+                                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                                    new InvalidRequestException(
+                                                            "Only one Telecom of type phone with use type " + telecom.getUse().toString().toLowerCase() + " is allowed in a register patient request."),
+                                                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+                                        }
+                                        break;
+                                    default:
+                                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                                new InvalidRequestException(
+                                                        "Invalid Telecom of type phone use type " + telecom.getUse().toString().toLowerCase() + " in a register patient request."),
+                                                SystemCode.BAD_REQUEST, IssueType.INVALID);
+                                }
+                            } else {
+                                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                        new InvalidRequestException(
+                                                "Invalid Telecom - no Use type provided in a register patient request."),
+                                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                            }
+                            break;
+                        case EMAIL:
+                            if (++emailCount > 1) {
+                                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                        new InvalidRequestException(
+                                                "Only one Telecom of type " + "email" + " is allowed in a register patient request."),
+                                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                            }
+                            break;
+                        default:
+                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new InvalidRequestException(
+                                            "Telecom system is missing in a register patient request."),
+                                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+                    }
+                }
+            } else {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException(
-                                "The telecom use must be set to temp."),
+                                "Telecom system is missing in a register patient request."),
                         SystemCode.BAD_REQUEST, IssueType.INVALID);
             }
-        }
+        } // iterate telcom 
 
+        // commented out at 1.2.2 structured
+//        if (patient.getTelecom().size() > 1) {
+//            throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                    new InvalidRequestException(
+//                            "Only a single telecom can be sent in a register patient request."),
+//                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+//        } else if (patient.getTelecom().size() == 1) {
+//            if (patient.getTelecom().get(0).getUse() != ContactPointUse.TEMP) {
+//                throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                        new InvalidRequestException(
+//                                "The telecom use must be set to temp."),
+//                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+//            }
+//        }
         //Only a single address with type temp may be sent
         if (patient.getAddress().size() > 1) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -544,7 +619,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
     }
 
-    private void valiateGender(Patient patient) {
+    private void validateGender(Patient patient) {
         AdministrativeGender gender = patient.getGender();
 
         if (gender != null) {

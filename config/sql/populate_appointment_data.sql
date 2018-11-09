@@ -12,7 +12,7 @@ VALUES
   (9,2,'Schedule009','394814009','General practice',4,'R0260','General Medical Practitioner','2013-12-22 09:46:22','2040-12-22 09:46:22','Schedule 9 for general appointments with practitioner Hudson, Inez G. @ The Hockey Surgery Annex','2016-07-25 12:00:00'),
   (10,3,'Schedule010','394814009','General practice',4,'R0260','General Medical Practitioner','2013-12-22 10:46:22','2040-12-22 10:46:22','Schedule 10 for general appointments with practitioner Joseph, May N. @ The Hockey Surgery Annex','2016-07-25 12:00:00'),
   (11,2,'Schedule011','394814010','General practice',5,'R0260','General Medical Practitioner','2010-10-22 01:01:01','2040-12-22 10:46:22','Schedule 11 for general appointments with practitioner','2016-07-25 12:00:00'),
-  (12,null,'Schedule012','394814010','General practice',1,'R0620','Staff Nurse','2010-10-22 01:01:01','2040-12-22 10:46:22','Schedule 12 for phone appointments with staff nurse','2016-07-25 12:00:00');
+  (12,1,'Schedule012','394814010','General practice',1,'R0620','Staff Nurse','2010-10-22 01:01:01','2040-12-22 10:46:22','Schedule 12 for phone appointments with staff nurse','2016-07-25 12:00:00');
 INSERT INTO gpconnect.appointment_slots
   (id,typeCode,typeDisplay,scheduleReference,freeBusyType,startDateTime,endDateTime,lastUpdated,gpConnectBookable)
 VALUES

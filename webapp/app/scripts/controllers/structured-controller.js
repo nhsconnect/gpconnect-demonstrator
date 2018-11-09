@@ -26,7 +26,6 @@ angular
     $scope.currentMedications = [];
     $scope.search = {};
     $scope.search.startDate = "";
-    $scope.search.endDate ="";
     $scope.includeResolvedAllergies = true;
     $scope.includePrescriptionIssues = true;
 
@@ -38,7 +37,6 @@ angular
         $event.preventDefault();
         $event.stopPropagation();
         $scope.startDate = false;
-        $scope.endDate = false;
         $scope[name] = true;
         highlightMonth();
     };
@@ -88,14 +86,10 @@ angular
         });
     };
 
-    $scope.getAllergyData = function (start, end, includePrescriptionIssues, includeResolvedAllergies) {
+    $scope.getAllergyData = function (start, includePrescriptionIssues, includeResolvedAllergies) {
         $scope.dateInvalid = false;
         if(start === undefined || start == null){
             start = "";
-        }
-
-        if(end === undefined || end == null){
-            end = "";
         }
 
         var createDate = function(stringDate){
@@ -105,32 +99,18 @@ angular
             return date;
         };
 
-        if(start !== "" && end !== ""){
+        if(start !== ""){
             var startDate = createDate(start);
 
-            var endDate = new Date(end);
-            endDate.setTime(endDate.getTime() + (60*60*1000));
-
-            if(isNaN(startDate) || isNaN(endDate) || startDate > endDate){
+            if(isNaN(startDate)){
                 $scope.dateInvalid = true;
                 return;
             }
 
             start = startDate.toISOString().split('T')[0];
-            end = endDate.toISOString().split('T')[0];
         } else {
-            if(start === "" && end !== ""){
-                var endDate = createDate(end);
-                if(isNaN(endDate)){
-                    $scope.dateInvalid = true;
-                    return;
-                }
-
-                end = endDate.toISOString().split('T')[0];
-
-            }
-
-            if(start !== "" && end === ""){
+         
+            if(start !== ""){
                 var startDate = new Date(start);
 
                 if(isNaN(startDate)){
@@ -165,7 +145,7 @@ angular
                 reaction: "",
                 resolvedDate: ""
             };
-            PatientService.structured($stateParams.patientId, start, end, includePrescriptionIssues, includeResolvedAllergies).then(function(
+            PatientService.structured($stateParams.patientId, start, includePrescriptionIssues, includeResolvedAllergies).then(function(
                 patientSummaryResponse
             ) {
                 $scope.ActiveAllergiesList = [];
@@ -424,7 +404,7 @@ angular
         });
     };
 
-    $scope.getAllergyData("", "", true, true);
+    $scope.getAllergyData("", true, true);
 
 });
 

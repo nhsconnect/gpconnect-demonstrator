@@ -511,11 +511,13 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         private static String getResourceFromUri(String requestUri) {
             String resource = null;
 
-            String[] strArray = requestUri.split("/");
-            if (strArray[1].equalsIgnoreCase("fhir")) {
-                resource = strArray[2];
-            } else {
-                resource = strArray[4];
+            // generalised to not expect the fhir path to be at any specific location
+            if (requestUri.contains("/fhir/")) {
+                // non greedy wildcard so only match to the first occurrence
+                resource = requestUri.replaceFirst("^.*?/fhir/","").replaceFirst("/.*$","");
+            } else
+            {
+                throwBadRequestException("Cannot extract resource name from Uri "+requestUri);
             }
 
             return resource;

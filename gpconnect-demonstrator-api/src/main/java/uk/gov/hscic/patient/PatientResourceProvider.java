@@ -461,39 +461,57 @@ public class PatientResourceProvider implements IResourceProvider {
 	}
 
 	private void updateAddressAndTelecom(Patient unregisteredPatient, PatientDetails patientDetails) {
-		if (unregisteredPatient.getTelecom().size() > 0) {
-			patientDetails.setTelephone(unregisteredPatient.getTelecom().get(0).getValue());
-		}
+        HashMap<ContactPointUse,ContactPoint> hmUse = new HashMap<>();
+        if (unregisteredPatient.getTelecom().size() > 0) {
+            // look for a telecom of type phone, email ignored for now at 1.2.2
+            //TODO persist emails also now multiple telcoms fo different types
+            for (ContactPoint telecom : unregisteredPatient.getTelecom()) {
+                if (telecom.hasSystem() && telecom.getSystem() == telecom.getSystem().PHONE) {
+                    hmUse.put(telecom.getUse(), telecom);
+                }
+            }
+        }
+        
+        if (hmUse.size() >  0) {
+            // ordered preference list of numbers to save
+            for ( ContactPointUse use : new ContactPointUse[] {ContactPointUse.HOME,ContactPointUse.WORK,ContactPointUse.MOBILE,ContactPointUse.TEMP}) {
+                if (hmUse.containsKey(use)) {
+                    patientDetails.setTelephone(hmUse.get(use).getValue());
+                    break;
+                }
+            }
+        }
 
-		// actually a list of addresses not a single one
-		if (unregisteredPatient.getAddress().size() > 0) {
-			// get the first one off the block
-			Address address = unregisteredPatient.getAddress().get(0);
-			String[] addressLines = new String[ADDRESS_DISTRICT_INDEX + 1];
-			List<StringType> addressLineList = address.getLine();
-			for (int i = 0; i < ADDRESS_CITY_INDEX; i++) {
-				if (i < addressLineList.size()) {
-					addressLines[i] = addressLineList.get(i).asStringValue();
-				} else {
-					addressLines[i] = null;
-				}
-			}
-			addressLines[ADDRESS_CITY_INDEX] = address.getCity();
-			addressLines[ADDRESS_DISTRICT_INDEX] = address.getDistrict();
-			// address as text removed at 1.2.2
-			//            StringBuilder addressBuilder = new StringBuilder();
-			//            for (StringType addressLine : addressLineList) {
-			//                addressBuilder.append(addressLine);
-			//                addressBuilder.append(",");
-			//            }
-			//            addressBuilder.append(unregisteredPatient.getAddress().get(0).getCity()).append(",");
-			//            addressBuilder.append(unregisteredPatient.getAddress().get(0).getPostalCode());
+        // actually a list of addresses not a single one
+        if (unregisteredPatient.getAddress().size() > 0) {
+            // get the first one off the block
+            Address address = unregisteredPatient.getAddress().get(0);
+            String[] addressLines = new String[ADDRESS_DISTRICT_INDEX + 1];
+            List<StringType> addressLineList = address.getLine();
+            for (int i = 0; i < ADDRESS_CITY_INDEX; i++) {
+                if (i < addressLineList.size()) {
+                    addressLines[i] = addressLineList.get(i).asStringValue();
+                } else {
+                    addressLines[i] = null;
+                }
+            }
+            addressLines[ADDRESS_CITY_INDEX] = address.getCity();
+            addressLines[ADDRESS_DISTRICT_INDEX] = address.getDistrict();
+            // address as text removed at 1.2.2
+//            StringBuilder addressBuilder = new StringBuilder();
+//            for (StringType addressLine : addressLineList) {
+//                addressBuilder.append(addressLine);
+//                addressBuilder.append(",");
+//            }
+//            addressBuilder.append(unregisteredPatient.getAddress().get(0).getCity()).append(",");
+//            addressBuilder.append(unregisteredPatient.getAddress().get(0).getPostalCode());
 
-			//patientDetails.setAddress(addressBuilder.toString());
-			patientDetails.setAddress(addressLines);
-			patientDetails.setPostcode(address.getPostalCode());
-		}
-	}
+            //patientDetails.setAddress(addressBuilder.toString());
+            patientDetails.setAddress(addressLines);
+            patientDetails.setPostcode(address.getPostalCode());
+        }
+    }
+
 
 	/**
 	 * Returns true if registration type is temporary AND the record is marked
@@ -521,42 +539,100 @@ public class PatientResourceProvider implements IResourceProvider {
 		checkValidExtensions(patient.getExtension());
 		validateNames(patient);
 		validateDateOfBirth(patient);
-		valiateGender(patient);
+		validateGender(patient);
 	}
 
-	private void validateTelecomAndAddress(Patient patient) {
-		//Only a single telecom with type temp may be sent
-		if (patient.getTelecom().size() > 1) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new InvalidRequestException(
-							"Only a single telecom can be sent in a register patient request."),
-					SystemCode.BAD_REQUEST, IssueType.INVALID);
-		} else if (patient.getTelecom().size() == 1) {
-			if (patient.getTelecom().get(0).getUse() != ContactPointUse.TEMP) {
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new InvalidRequestException(
-								"The telecom use must be set to temp."),
-						SystemCode.BAD_REQUEST, IssueType.INVALID);
-			}
-		}
+    private void validateTelecomAndAddress(Patient patient) {
+        // 0..1 of phone - (not nec. temp),  0..1 of email
+        HashSet<ContactPointUse> phoneUse = new HashSet<>();
+        int emailCount = 0;
+        for (ContactPoint telecom : patient.getTelecom()) {
+            if (telecom.hasSystem()) {
+                if (telecom.getSystem() != null) {
+                    switch (telecom.getSystem()) {
+                        case PHONE:
+                            if (telecom.hasUse()) {
+                                switch (telecom.getUse()) {
+                                    case HOME:
+                                    case WORK:
+                                    case MOBILE:
+                                    case TEMP:
+                                        if (!phoneUse.contains(telecom.getUse())) {
+                                            phoneUse.add(telecom.getUse());
+                                        } else {
+                                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                                    new InvalidRequestException(
+                                                            "Only one Telecom of type phone with use type " + telecom.getUse().toString().toLowerCase() + " is allowed in a register patient request."),
+                                                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+                                        }
+                                        break;
+                                    default:
+                                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                                new InvalidRequestException(
+                                                        "Invalid Telecom of type phone use type " + telecom.getUse().toString().toLowerCase() + " in a register patient request."),
+                                                SystemCode.BAD_REQUEST, IssueType.INVALID);
+                                }
+                            } else {
+                                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                        new InvalidRequestException(
+                                                "Invalid Telecom - no Use type provided in a register patient request."),
+                                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                            }
+                            break;
+                        case EMAIL:
+                            if (++emailCount > 1) {
+                                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                        new InvalidRequestException(
+                                                "Only one Telecom of type " + "email" + " is allowed in a register patient request."),
+                                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                            }
+                            break;
+                        default:
+                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new InvalidRequestException(
+                                            "Telecom system is missing in a register patient request."),
+                                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+                    }
+                }
+            } else {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException(
+                                "Telecom system is missing in a register patient request."),
+                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+            }
+        } // iterate telcom 
 
-		//Only a single address with type temp may be sent
-		if (patient.getAddress().size() > 1) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new InvalidRequestException(
-							"Only a single address can be sent in a register patient request."),
-					SystemCode.BAD_REQUEST, IssueType.INVALID);
-		} else if (patient.getAddress().size() == 1) {
-			if (patient.getAddress().get(0).getUse() != AddressUse.TEMP) {
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new InvalidRequestException(
-								"The address use must be set to temp."),
-						SystemCode.BAD_REQUEST, IssueType.INVALID);
-			}
-		}
-	}
+        // commented out at 1.2.2 structured
+//        if (patient.getTelecom().size() > 1) {
+//            throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                    new InvalidRequestException(
+//                            "Only a single telecom can be sent in a register patient request."),
+//                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+//        } else if (patient.getTelecom().size() == 1) {
+//            if (patient.getTelecom().get(0).getUse() != ContactPointUse.TEMP) {
+//                throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                        new InvalidRequestException(
+//                                "The telecom use must be set to temp."),
+//                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+//            }
+//        }
+        //Only a single address with type temp may be sent
+        if (patient.getAddress().size() > 1) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new InvalidRequestException(
+                            "Only a single address can be sent in a register patient request."),
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+        } else if (patient.getAddress().size() == 1) {
+            if (patient.getAddress().get(0).getUse() != AddressUse.TEMP) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException(
+                                "The address use must be set to temp."),
+                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+            }
+        }
+    }
 
-	private void valiateGender(Patient patient) {
+	private void validateGender(Patient patient) {
 		AdministrativeGender gender = patient.getGender();
 
 		if (gender != null) {

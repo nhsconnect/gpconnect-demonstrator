@@ -26,6 +26,7 @@ public class StructuredAllergyIntolerance {
     private String manifestationDescDisplay;
     private String manTranslationRef;
     private String guid;
+    private String severity;
 
     public String getGuid() {
         return guid;
@@ -201,6 +202,14 @@ public class StructuredAllergyIntolerance {
 
 	public void setManTranslationRef(String manTranslationRef) {
 		this.manTranslationRef = manTranslationRef;
+	}
+
+	public String getSeverity() {
+		return severity;
+	}
+
+	public void setSeverity(String severity) {
+		this.severity = severity;
 	}
 
 }

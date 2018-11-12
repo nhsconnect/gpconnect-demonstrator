@@ -5,9 +5,14 @@ import org.hl7.fhir.dstu3.model.AllergyIntolerance.*;
 import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
 import org.hl7.fhir.dstu3.model.ListResource.ListMode;
 import org.hl7.fhir.dstu3.model.ListResource.ListStatus;
+import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
+import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import uk.gov.hscic.OperationOutcomeFactory;
+import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.common.helpers.CodeableConceptBuilder;
@@ -129,8 +134,13 @@ public class StructuredAllergyIntoleranceBuilder {
             reaction.setDescription(allergyIntoleranceEntity.getNote());
 
             //SEVERITY
-            AllergyIntoleranceSeverity severity = AllergyIntoleranceSeverity.SEVERE;
-            reaction.setSeverity(severity);
+            try {
+				reaction.setSeverity(AllergyIntoleranceSeverity.fromCode(allergyIntoleranceEntity.getSeverity()));
+			} catch (FHIRException e) {
+				throw OperationOutcomeFactory.buildOperationOutcomeException(
+						new UnprocessableEntityException("Unknown severity: " + allergyIntoleranceEntity.getSeverity()),
+						SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+			}          
 
             //EXPOSURE
             CodeableConcept exposureRoute = new CodeableConcept();

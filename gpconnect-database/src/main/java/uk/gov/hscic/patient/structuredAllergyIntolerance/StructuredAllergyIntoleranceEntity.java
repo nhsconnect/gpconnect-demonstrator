@@ -82,6 +82,9 @@ public class StructuredAllergyIntoleranceEntity {
 
     @Column(name = "guid")
     private String guid;
+    
+    @Column(name = "severity") 
+    private String severity;
 
     public String getGuid() {
         return guid;
@@ -281,5 +284,13 @@ public class StructuredAllergyIntoleranceEntity {
 
 	public void setWarningCode(String warningCode) {
 		this.warningCode = warningCode;
+	}
+
+	public String getSeverity() {
+		return severity;
+	}
+
+	public void setSeverity(String severity) {
+		this.severity = severity;
 	}
 }

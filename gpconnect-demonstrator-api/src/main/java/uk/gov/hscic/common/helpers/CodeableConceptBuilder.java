@@ -46,15 +46,16 @@ public class CodeableConceptBuilder {
 	public CodeableConceptBuilder addDescription(String code, String display) {
 		if (!Strings.isNullOrEmpty(code) && !Strings.isNullOrEmpty(display)) {
 			Extension description = new Extension(SystemURL.SD_EXT_SCT_DESC_ID);
-
-			Extension descriptionId = new Extension("descriptionId", new IdType(code));
-			Extension descriptionDisplay = new Extension("descriptionDisplay", new StringType(display));
-			description.addExtension(descriptionId);
-			description.addExtension(descriptionDisplay);
-
+			if (!Strings.isNullOrEmpty(code)) {
+				Extension descriptionId = new Extension("descriptionId", new IdType(code));
+				description.addExtension(descriptionId);
+			}
+			if (!Strings.isNullOrEmpty(display)) {
+				Extension descriptionDisplay = new Extension("descriptionDisplay", new StringType(display));
+				description.addExtension(descriptionDisplay);
+			}
 			this.description = description;
 		}
-
         return this;
 	}
 	

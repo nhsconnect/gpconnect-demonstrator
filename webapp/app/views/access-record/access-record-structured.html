@@ -59,7 +59,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="currentElement in currentMedications" ng-click="showForm(currentElement.medication)">
+            <tr ng-repeat="currentElement in currentMedications" ng-click="showMedForm(currentElement.medication, currentElement.statement)">
                 <td>{{currentElement.medication.code.coding[0].display == "Transfer-degraded medication entry" ? 
                     currentElement.medication.code.text : currentElement.medication.code.coding[0].display}}
                 </td>
@@ -111,7 +111,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="allergyDetail in ActiveAllergiesList" ng-click="showForm(allergyDetail)">
+            <tr ng-repeat="allergyDetail in ActiveAllergiesList" ng-click="showAllergyForm(allergyDetail)">
                 <td>{{allergyDetail.code.coding[0].display}}</td>
                 <td>{{allergyDetail.reaction[0].manifestation[0].coding[0].display}}</td>
                 <td>{{allergyDetail.onsetDateTime.split('T')[0]}}</td>
@@ -131,7 +131,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="allergyDetail in ResolvedAllergiesList" ng-click="showForm(allergyDetail)">
+                <tr ng-repeat="allergyDetail in ResolvedAllergiesList" ng-click="showAllergyForm(allergyDetail)">
                     <td>{{allergyDetail.code.coding[0].display}}</td>
                     <td>{{allergyDetail.reaction[0].manifestation[0].coding[0].display}}</td>
                     <td>{{allergyDetail.onsetDateTime.split('T')[0]}}</td>

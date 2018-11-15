@@ -2,42 +2,26 @@ INSERT INTO gpconnect.medication_statements
  (id,lastIssueDate,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, warningCode, prescribingAgency)
 VALUES
- (1,'2017-06-12','active','Active',9,'2017-06-12','2018-06-12','2017-06-12',2,'unk','Unknown','Use 1-4cm each time you use Ibuprofen Gel.','Apply the gel as a thin layer over the affected area.','2018-03-15', 'confidential-items','prescribed-at-gp-practice'),
-  (4,'2018-01-01','completed','Completed',6,'2018-01-01',null,'2018-01-01',2,'unk','Unknown','Take 2-3 times a day','Take without food','2018-03-15', 'confidential-items','prescribed-at-gp-practice'),
-  (5,'2018-03-01','completed','Completed',12,'2018-03-01',null,'2018-03-01',2,'unk','Unknown','Use as often as required','Clean and dry the affected area before use','2018-03-15', 'confidential-items','prescribed-at-gp-practice'),
-  (6,'2018-02-12','completed','Completed',14,'2018-02-12',null,'2018-02-12',2,'unk','Unknown','Take 2 tablets every 8 hours','Take with a full glass of water','2018-03-15', 'confidential-items','prescribed-at-gp-practice');
-
+ (1,'2018-08-17','active','Active',20,'2017-11-10','2018-09-14','2017-11-10',2,'unk','Unknown','1 tablet once a day','Take in the morning','2018-08-17','confidential-items','prescribed-at-gp-practice'),
+ (9,'2018-08-29','active','Active',21,'2017-11-22','2018-09-26','2017-11-22',2,'unk','Unknown','2 tablets a day','With evening meal','2018-08-29','confidential-items','prescribed-at-gp-practice'),
+ (10,'2018-08-29','active','Active',22,'2017-11-22','2018-09-26','2017-11-22',2,'unk','Unknown','1 tablet a day','Night/nocte','2018-08-29','confidential-items','prescribed-at-gp-practice'),
+ (11,'2018-08-29','active','Active',23,'2017-11-22','2018-09-26','2017-11-22',2,'unk','Unknown','1 tablet a day','Morning','2018-08-29','confidential-items','prescribed-at-gp-practice'),
+ (12,'2018-08-27','active','Active',24,'2018-01-15','2018-12-14','2018-01-15',2,'unk','Unknown','As directed','Night/nocte','2018-08-27','confidential-items','prescribed-at-gp-practice');
+  
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)
 VALUES
- (1,'241006','Epilepsia partialis continua'),
- (2,'297009','Acute myringitis');
- 
-INSERT INTO gpconnect.medication_reason_references
- (id,referenceUrl,referenceId)
-VALUES
- (1,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1',8);
- 
-INSERT INTO gpconnect.medication_notes
- (id,dateWritten,authorReferenceUrl,authorId,noteText)
-VALUES
- (1,'2017-06-12','https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,'medication note');
+ (1,'35489007','Depressive Disorder'),
+ (2,'44054006','Type 2 diabetes mellitus');
  
 INSERT INTO gpconnect.medication_statement_reason_codes
  (medicationStatementId,reasonCodeId)
 VALUES
  (1,1),
- (1,2);
-
-INSERT INTO gpconnect.medication_statement_reason_references
- (medicationStatementId,reasonReferenceId)
-VALUES
- (1,1);
- 
-INSERT INTO gpconnect.medication_statement_notes
- (medicationStatementId,noteId)
-VALUES
- (1,1);
+ (9,2),
+ (10,2),
+ (11,2),
+ (12,2);
 
 INSERT INTO gpconnect.medication_requests
  (id,groupIdentifier,statusCode,statusDisplay,intentCode,intentDisplay,medicationId,patientId,authoredOn,
@@ -46,69 +30,268 @@ INSERT INTO gpconnect.medication_requests
  dispenseRequestOrganizationId,priorMedicationRequestId,numberOfRepeatPrescriptionsAllowed,numberOfRepeatPrescriptionsIssued,
  authorisationExpiryDate,prescriptionTypeCode,prescriptionTypeDisplay,statusReasonDate,statusReason,lastUpdated)
 VALUES
- (1,'group1','active','Active','plan','Plan',9,2,'2017-07-12',
- 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
- '2017-06-12','2018-06-12',null,null,'200 Tablets','60',1,null,5,0,'2018-06-12','repeat','Repeat',null,null,'2018-03-15'),
- (8,'group1','active','Active','order','Order',9,2,'2017-07-12',
- 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
- '2017-06-12','2018-05-12',null,null,'200 Tablets','60',1,null,5,0,'2018-05-12','repeat','Repeat',null,null,'2018-03-15'),
- (9,'group1','active','Active','order','Order',9,2,'2017-07-12',
- 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
- '2017-06-12','2018-04-12',null,null,'200 Tablets','60',1,null,5,0,'2018-04-12','repeat','Repeat',null,null,'2018-03-15'),
- (10,'group1','active','Active','order','Order',9,2,'2017-07-12',
- 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 4 hours','Take with meals',
- '2017-06-12','2018-03-12',null,null,'200 Tablets','60',1,null,5,0,'2018-03-12','repeat','Repeat',null,null,'2018-03-15'),
- (11,'one','completed','Complete','plan','Plan',6,2,'2016-06-12',
- 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2-3 times a day','Take without food',
- '2017-06-12',null,null,null,'200 Tablets','60',1,null,5,0,'2018-04-12','acute','Acute',null,null,'2018-03-15'),
- (12,'two','completed','Complete','plan','Plan',12,2,'2015-05-12',
- 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Use as often as required','Clean and dry the affected area before use',
- '2017-06-12',null,null,null,'200 Tablets','60',1,null,5,0,'2018-04-12','acute','Acute',null,null,'2018-03-15'),
- (13,'three','completed','Complete','plan','Plan',14,2,'2014-04-12',
- 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',2,2,'Take 2 tablets every 8 hours','Take with a full glass of water',
- '2017-06-12',null,null,null,'200 Tablets','60',1,null,5,0,'2018-04-12','acute','Acute',null,null,'2018-03-15');
+ (20,'M-3','active','Active','plan','Plan',20,2,'2017-11-10',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet once a day','Take in morning',
+ '2017-11-10','2018-08-15','28',null,'28','28',1,null,12,11,'2017-12-08','repeat','Repeat',null,null,'2018-08-15'),
+ (21,'M-3','completed','Completed','order','Order',20,2,'2017-11-10',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet once a day','Take in morning',
+ '2017-11-10','2017-12-08','28',null,'28','28',1,null,12,1,'2017-12-08','repeat','Repeat',null,null,'2017-11-10'),
+ (22,'M-3','completed','Completed','order','Order',20,2,'2017-12-08',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet once a day','Take in morning',
+ '2017-12-08','2018-01-04','28',null,'28','28',1,null,12,2,'2018-01-04','repeat','Repeat',null,null,'2017-12-08'),
+ (23,'M-3','completed','Completed','order','Order',20,2,'2018-01-05',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet once a day','Take in morning',
+ '2018-01-05','2018-02-01','28',null,'28','28',1,null,12,3,'2018-02-01','repeat','Repeat',null,null,'2018-01-05'),
+ (24,'M-3','completed','Completed','order','Order',20,2,'2018-02-02',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet once a day','Take in morning',
+ '2018-02-02','2018-03-01','28',null,'28','28',1,null,12,4,'2018-03-01','repeat','Repeat',null,null,'2018-02-02'),
+ (25,'M-3','completed','Completed','order','Order',20,2,'2018-03-02',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet once a day','Take in morning',
+ '2018-03-02','2018-03-29','28',null,'28','28',1,null,12,5,'2018-03-29','repeat','Repeat',null,null,'2018-03-02'),
+ (26,'M-3','completed','Completed','order','Order',20,2,'2018-03-30',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet once a day','Take in morning',
+ '2018-03-30','2018-04-26','28',null,'28','28',1,null,12,6,'2018-04-26','repeat','Repeat',null,null,'2018-03-30'),
+ (27,'M-3','completed','Completed','order','Order',20,2,'2018-04-27',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet once a day','Take in morning',
+ '2018-04-27','2018-05-24','28',null,'28','28',1,null,12,7,'2018-05-24','repeat','Repeat',null,null,'2018-04-27'),
+ (28,'M-3','completed','Completed','order','Order',20,2,'2018-05-25',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet once a day','Take in morning',
+ '2018-05-25','2018-06-21','28',null,'28','28',1,null,12,8,'2018-06-21','repeat','Repeat',null,null,'2018-05-25'),
+ (29,'M-3','completed','Completed','order','Order',20,2,'2018-06-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet once a day','Take in morning',
+ '2018-06-22','2018-07-19','28',null,'28','28',1,null,12,9,'2018-07-19','repeat','Repeat',null,null,'2018-07-19'),
+ (30,'M-3','completed','Completed','order','Order',20,2,'2018-07-20',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet once a day','Take in morning',
+ '2018-07-20','2018-08-16','28',null,'28','28',1,null,12,10,'2018-08-16','repeat','Repeat',null,null,'2018-07-20'),
+ (31,'M-3','completed','Completed','order','Order',20,2,'2018-08-15',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet once a day','Take in morning',
+ '2018-08-15','2018-09-13','28',null,'28','28',1,null,12,11,'2018-09-13','repeat','Repeat',null,null,'2018-08-15'),
  
-UPDATE gpconnect.medication_statements SET medicationRequestId = 1 WHERE id = 1;
-UPDATE gpconnect.medication_statements SET medicationRequestId = 11 WHERE id = 4;
-UPDATE gpconnect.medication_statements SET medicationRequestId = 12 WHERE id = 5;
-UPDATE gpconnect.medication_statements SET medicationRequestId = 13 WHERE id = 6;
+ (32,'M-2a','active','Active','plan','Plan',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2017-11-22','2018-12-27','56',null,'56','28',1,null,12,1,'2018-12-27','repeat-dispensing','Repeat dispensing',null,null,'2018-08-29'),
+  (33,'M-2a','completed','Completed','order','Order',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2017-11-22','2017-12-19','56',null,'56','28',1,null,12,1,'2017-12-19','repeat-dispensing','Repeat dispensing',null,null,'2017-11-22'),
+  (34,'M-2a','completed','Completed','order','Order',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2017-12-20','2018-01-16','56',null,'56','28',1,null,12,2,'2018-01-16','repeat-dispensing','Repeat dispensing',null,null,'2017-12-20'),
+  (35,'M-2a','completed','Completed','order','Order',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2018-01-17','2018-02-13','56',null,'56','28',1,null,12,3,'2018-02-13','repeat-dispensing','Repeat dispensing',null,null,'2018-01-17'),
+  (36,'M-2a','completed','Completed','order','Order',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2018-02-14','2018-03-13','56',null,'56','28',1,null,12,4,'2018-03-13','repeat-dispensing','Repeat dispensing',null,null,'2018-02-14'),
+  (37,'M-2a','completed','Completed','order','Order',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2018-03-14','2018-04-10','56',null,'56','28',1,null,12,5,'2018-04-10','repeat-dispensing','Repeat dispensing',null,null,'2018-03-14'),
+  (38,'M-2a','completed','Completed','order','Order',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2018-04-11','2018-05-08','56',null,'56','28',1,null,12,6,'2018-05-08','repeat-dispensing','Repeat dispensing',null,null,'2018-04-11'),
+  (39,'M-2a','completed','Completed','order','Order',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2018-05-09','2018-06-05','56',null,'56','28',1,null,12,7,'2018-06-05','repeat-dispensing','Repeat dispensing',null,null,'2018-05-09'),
+  (40,'M-2a','completed','Completed','order','Order',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2018-06-06','2018-07-03','56',null,'56','28',1,null,12,8,'2018-07-03','repeat-dispensing','Repeat dispensing',null,null,'2018-06-06'),
+  (41,'M-2a','completed','Completed','order','Order',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2018-07-04','2018-07-31','56',null,'56','28',1,null,12,9,'2018-07-31','repeat-dispensing','Repeat dispensing',null,null,'2018-07-04'),
+  (42,'M-2a','completed','Completed','order','Order',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2018-08-01','2018-08-28','56',null,'56','28',1,null,12,10,'2018-08-28','repeat-dispensing','Repeat dispensing',null,null,'2018-08-01'),
+  (43,'M-2a','completed','Completed','order','Order',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2018-08-29','2018-09-25','56',null,'56','28',1,null,12,11,'2018-09-25','repeat-dispensing','Repeat dispensing',null,null,'2018-08-29'),
+ (1043,'M-2a','active','Active','order','Order',21,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
+ '2018-09-25','2018-10-24','56',null,'56','28',1,null,12,12,'2018-10-24','repeat-dispensing','Repeat dispensing',null,null,'2018-09-25'),
+ 
+  (44,'M-2b','active','Active','plan','Plan',22,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Night/nocte',
+ '2017-11-22','2018-12-27','28',null,'28','28',1,null,12,11,'2018-12-27','repeat','Repeat',null,null,'2018-08-29'),
+  (45,'M-2b','completed','Completed','order','Order',22,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Night/nocte',
+ '2017-11-22','2017-12-19','28',null,'28','28',1,null,12,1,'2017-12-19','repeat','Repeat',null,null,'2017-11-22'),
+  (46,'M-2b','completed','Completed','order','Order',22,2,'2017-12-20',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Night/nocte',
+ '2017-12-20','2018-01-16','28',null,'28','28',1,null,12,2,'2018-01-16','repeat','Repeat',null,null,'2017-12-20'),
+  (47,'M-2b','completed','Completed','order','Order',22,2,'2018-01-17',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Night/nocte',
+ '2018-01-17','2018-02-13','28',null,'28','28',1,null,12,3,'2018-02-13','repeat','Repeat',null,null,'2018-01-17'),
+  (48,'M-2b','completed','Completed','order','Order',22,2,'2018-02-14',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Night/nocte',
+ '2018-02-14','2018-03-13','28',null,'28','28',1,null,12,4,'2018-03-13','repeat','Repeat',null,null,'2018-02-14'),
+  (49,'M-2b','completed','Completed','order','Order',22,2,'2018-03-14',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Night/nocte',
+ '2018-03-14','2018-04-10','28',null,'28','28',1,null,12,5,'2018-04-10','repeat','Repeat',null,null,'2018-03-14'),
+  (50,'M-2b','completed','Completed','order','Order',22,2,'2018-04-11',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Night/nocte',
+ '2018-04-11','2018-05-08','28',null,'28','28',1,null,12,6,'2018-05-08','repeat','Repeat',null,null,'2018-04-11'),
+  (51,'M-2b','completed','Completed','order','Order',22,2,'2018-05-09',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Night/nocte',
+ '2018-05-09','2018-06-05','28',null,'28','28',1,null,12,7,'2018-06-05','repeat','Repeat',null,null,'2018-05-09'),
+  (52,'M-2b','completed','Completed','order','Order',22,2,'2018-06-06',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Night/nocte',
+ '2018-06-06','2018-07-03','28',null,'28','28',1,null,12,8,'2018-07-03','repeat','Repeat',null,null,'2018-06-06'),
+  (53,'M-2b','completed','Completed','order','Order',22,2,'2018-07-04',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Night/nocte',
+ '2018-07-04','2018-07-31','28',null,'28','28',1,null,12,9,'2018-07-31','repeat','Repeat',null,null,'2018-07-04'),
+  (54,'M-2b','completed','Completed','order','Order',22,2,'2018-08-01',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Night/nocte',
+ '2018-08-01','2018-08-28','28',null,'28','28',1,null,12,10,'2018-08-28','repeat','Repeat',null,null,'2018-08-01'),
+  (55,'M-2b','completed','Completed','order','Order',22,2,'2018-08-29',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Night/nocte',
+ '2018-08-29','2018-09-25','28',null,'28','28',1,null,12,11,'2018-09-25','repeat','Repeat',null,null,'2018-08-29'),
+
+  (56,'M-2c','active','Active','plan','Plan',23,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Morning',
+ '2017-11-22','2018-12-27','28',null,'28','28',1,null,12,11,'2018-12-27','repeat','Repeat',null,null,'2018-08-29'),
+  (57,'M-2c','completed','Completed','order','Order',23,2,'2017-11-22',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Morning',
+ '2017-11-22','2017-12-19','28',null,'28','28',1,null,12,1,'2017-12-19','repeat','Repeat',null,null,'2017-11-22'),
+  (58,'M-2c','completed','Completed','order','Order',23,2,'2017-12-20',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Morning',
+ '2017-12-20','2018-01-16','28',null,'28','28',1,null,12,2,'2018-01-16','repeat','Repeat',null,null,'2017-12-20'),
+  (59,'M-2c','completed','Completed','order','Order',23,2,'2018-01-17',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Morning',
+ '2018-01-17','2018-02-13','28',null,'28','28',1,null,12,3,'2018-02-13','repeat','Repeat',null,null,'2018-01-17'),
+  (60,'M-2c','completed','Completed','order','Order',23,2,'2018-02-14',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Morning',
+ '2018-02-14','2018-03-13','28',null,'28','28',1,null,12,4,'2018-03-13','repeat','Repeat',null,null,'2018-02-14'),
+  (61,'M-2c','completed','Completed','order','Order',23,2,'2018-03-14',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Morning',
+ '2018-03-14','2018-04-10','28',null,'28','28',1,null,12,5,'2018-04-10','repeat','Repeat',null,null,'2018-03-14'),
+  (62,'M-2c','completed','Completed','order','Order',23,2,'2018-04-11',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Morning',
+ '2018-04-11','2018-05-08','28',null,'28','28',1,null,12,6,'2018-05-08','repeat','Repeat',null,null,'2018-04-11'),
+  (63,'M-2c','completed','Completed','order','Order',23,2,'2018-05-09',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Morning',
+ '2018-05-09','2018-06-05','28',null,'28','28',1,null,12,7,'2018-06-05','repeat','Repeat',null,null,'2018-05-09'),
+  (64,'M-2c','completed','Completed','order','Order',23,2,'2018-06-06',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Morning',
+ '2018-06-06','2018-07-03','28',null,'28','28',1,null,12,8,'2018-07-03','repeat','Repeat',null,null,'2018-06-06'),
+  (65,'M-2c','completed','Completed','order','Order',23,2,'2018-07-04',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Morning',
+ '2018-07-04','2018-07-31','28',null,'28','28',1,null,12,9,'2018-07-31','repeat','Repeat',null,null,'2018-07-04'),
+  (66,'M-2c','completed','Completed','order','Order',23,2,'2018-08-01',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Morning',
+ '2018-08-01','2018-08-28','28',null,'28','28',1,null,12,10,'2018-08-28','repeat','Repeat',null,null,'2018-08-01'),
+  (67,'M-2c','completed','Completed','order','Order',23,2,'2018-08-29',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'1 tablet a day','Morning',
+ '2018-08-29','2018-09-25','28',null,'28','28',1,null,12,11,'2018-09-25','repeat','Repeat',null,null,'2018-08-29'),
+ 
+ (68,'M-1','active','Active','plan','Plan',24,2,'2018-01-15',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'As directed','Night/Nocte',
+ '2018-01-15','2018-12-17','5',null,'5 pens','28',1,null,12,9,'2018-12-17','repeat','Repeat',null,null,'2018-08-27'),
+ (69,'M-1','completed','Completed','order','Order',24,2,'2018-01-15',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'As directed','Night/Nocte',
+ '2018-01-15','2018-02-11','5',null,'5 pens','28',1,null,12,1,'2018-02-11','repeat','Repeat',null,null,'2018-01-15'),
+ (70,'M-1','completed','Completed','order','Order',24,2,'2018-02-12',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'As directed','Night/Nocte',
+ '2018-02-12','2018-03-11','5',null,'5 pens','28',1,null,12,2,'2018-03-11','repeat','Repeat',null,null,'2018-02-12'),
+ (71,'M-1','completed','Completed','order','Order',24,2,'2018-03-12',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'As directed','Night/Nocte',
+ '2018-03-12','2018-04-08','5',null,'5 pens','28',1,null,12,3,'2018-04-08','repeat','Repeat',null,null,'2018-03-12'),
+ (72,'M-1','completed','Completed','order','Order',24,2,'2018-04-09',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'As directed','Night/Nocte',
+ '2018-04-09','2018-05-06','5',null,'5 pens','28',1,null,12,4,'2018-05-06','repeat','Repeat',null,null,'2018-04-09'),
+ (73,'M-1','completed','Completed','order','Order',24,2,'2018-05-07',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'As directed','Night/Nocte',
+ '2018-05-07','2018-06-03','5',null,'5 pens','28',1,null,12,5,'2018-06-03','repeat','Repeat',null,null,'2018-05-07'),
+ (74,'M-1','completed','Completed','order','Order',24,2,'2018-06-04',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'As directed','Night/Nocte',
+ '2018-06-04','2018-07-01','5',null,'5 pens','28',1,null,12,6,'2018-07-01','repeat','Repeat',null,null,'2018-06-04'),
+ (75,'M-1','completed','Completed','order','Order',24,2,'2018-07-02',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'As directed','Night/Nocte',
+ '2018-07-02','2018-07-29','5',null,'5 pens','28',1,null,12,7,'2018-07-29','repeat','Repeat',null,null,'2018-07-02'),
+ (76,'M-1','completed','Completed','order','Order',24,2,'2018-07-30',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'As directed','Night/Nocte',
+ '2018-07-30','2018-08-26','5',null,'5 pens','28',1,null,12,8,'2018-08-26','repeat','Repeat',null,null,'2018-07-30'),
+ (77,'M-1','completed','Completed','order','Order',24,2,'2018-08-27',
+ 'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'As directed','Night/Nocte',
+ '2018-08-27','2018-09-24','5',null,'5 pens','28',1,null,12,9,'2018-09-24','repeat','Repeat',null,null,'2018-08-27');
+ 
+UPDATE gpconnect.medication_statements SET medicationRequestId = 20 WHERE id = 1;
+UPDATE gpconnect.medication_statements SET medicationRequestId = 32 WHERE id = 9;
+UPDATE gpconnect.medication_statements SET medicationRequestId = 44 WHERE id = 10;
+UPDATE gpconnect.medication_statements SET medicationRequestId = 56 WHERE id = 11;
+UPDATE gpconnect.medication_statements SET medicationRequestId = 68 WHERE id = 12;
 
 INSERT INTO gpconnect.medication_request_based_on
  (id,referenceUrl,referenceId)
 VALUES
- (1,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1',1);
-
+ (10,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1',20),
+ (11,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1',32),
+ (12,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1',44),
+ (13,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1',56),
+ (14,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1',68);
+ 
 INSERT INTO gpconnect.medication_request_based_on_references
  (medicationRequestId,basedOnReferenceId)
 VALUES
- (1,1),
- (8,1),
- (9,1),
- (10,1);
-
-INSERT INTO gpconnect.medication_request_reason_codes
- (medicationRequestId,reasonCodeId)
-VALUES
- (1,1),
- (1,2);
-
-INSERT INTO gpconnect.medication_request_reason_references
- (medicationRequestId,reasonReferenceId)
-VALUES
- (1,1);
+ (21,10),
+ (22,10),
+ (23,10),
+ (24,10),
+ (25,10),
+ (26,10),
+ (27,10),
+ (28,10),
+ (29,10),
+ (30,10),
+ (31,10),
+ (33,11),
+ (34,11),
+ (35,11),
+ (36,11),
+ (37,11),
+ (38,11),
+ (39,11),
+ (40,11),
+ (41,11),
+ (42,11),
+ (43,11),
+ (1043,11),
+ (45,12),
+ (46,12),
+ (47,12),
+ (48,12),
+ (49,12),
+ (50,12),
+ (51,12),
+ (52,12),
+ (53,12),
+ (54,12),
+ (55,12),
+ (57,13),
+ (58,13),
+ (59,13),
+ (60,13),
+ (61,13),
+ (62,13),
+ (63,13),
+ (64,13),
+ (65,13),
+ (66,13),
+ (67,13),
+ (69,14),
+ (70,14),
+ (71,14),
+ (72,14),
+ (73,14),
+ (74,14),
+ (75,14),
+ (76,14),
+ (77,14);
  
-INSERT INTO gpconnect.medication_request_notes
- (medicationRequestId,noteId)
+INSERT INTO gpconnect.translations
+  (id, system, code, display)
 VALUES
- (1,1);
+  (1, 'http://read.info/ctv3', 'Xa1no', 'Peanut allergy');
 
 INSERT INTO gpconnect.allergyintolerance
-  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,concept_code,concept_display,manCoding,manDisplay,manDescCoding,manDescDisplay, recorder)
+  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,concept_code,concept_display,code_translation_ref,manCoding,manDisplay,manDescCoding,manDescDisplay, recorder, severity)
 VALUES
-  (9658218873 ,'2016-07-01 12:00:00',"Cured","Dalmation","Major", "resolved","unconfirmed","environmental","2",'2016-05-01 12:00:00','2016-06-01 12:00:00',"419271008","Allergy to dog dander (disorder)","61582004","Allergic rhinitis (disorder)","","", '1'),
-  (9658218873 ,'2016-07-01 12:00:00',"Ongoing","Rash","Major", "active","unconfirmed","medication","2",'2016-05-01 12:00:00','2016-06-01 12:00:00',"294716003","Biphasic insulin allergy (disorder)","247472004", "Weal (disorder)", "","",'1');
-
-INSERT INTO gpconnect.medication_allergies
-(medicationId,allergyintoleranceId, patientNhsnumber)
-VALUES
-  (18,14,9658218873 );
+  (9658218873 ,'2016-11-00 12:00:00',"Desensitised to Peanuts","","Major", "resolved","unconfirmed","environmental","2",'1962-08-12','2016-11-01',"91935009","Allergy to peanuts","1","249519007","Diarrhoea and vomiting","372285017","D&V – Diarrhoea and vomiting", '1', "mild"),
+  (9658218873 ,null,"","","Major", "active","unconfirmed","food","2",'1963-07-27 12:00:00','1963-07-27 12:00:00',"89707004","Sesame oil (substance)","","230145002", "Difficulty breathing", "","",'1', "severe");

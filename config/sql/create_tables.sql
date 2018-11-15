@@ -213,11 +213,11 @@ CREATE TABLE gpconnect.medication_statements (
   takenCode           VARCHAR(50)  NULL,
   takenDisplay        VARCHAR(50)  NULL,
   dosageText          VARCHAR(250) NULL,
-  dosageInstruction   VARCHAR(250)  NULL,
+  dosageInstruction   VARCHAR(250) NULL,
   lastUpdated         DATETIME     NULL,
-  prescribingAgency  VARCHAR(250) NULL,
-  guid               VARCHAR(250) NULL,
-  warningCode         VARCHAR(250)  NULL,
+  prescribingAgency   VARCHAR(250) NULL,
+  guid                VARCHAR(250) NULL,
+  warningCode         VARCHAR(250) NULL,
   PRIMARY KEY (id)
 );
 
@@ -387,6 +387,7 @@ CREATE TABLE gpconnect.allergyintolerance (
   recorder VARCHAR(250) NOT NULL,
   guid      VARCHAR(250) NULL,
   warningCode VARCHAR(250) NULL,
+  severity			  VARCHAR(10)  NULL,
   PRIMARY KEY (id)
 );
 

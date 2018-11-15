@@ -44,7 +44,7 @@ public class CodeableConceptBuilder {
 	}
 	
 	public CodeableConceptBuilder addDescription(String code, String display) {
-		if (!Strings.isNullOrEmpty(code) && !Strings.isNullOrEmpty(display)) {
+		if (!Strings.isNullOrEmpty(code) || !Strings.isNullOrEmpty(display)) {
 			Extension description = new Extension(SystemURL.SD_EXT_SCT_DESC_ID);
 			if (!Strings.isNullOrEmpty(code)) {
 				Extension descriptionId = new Extension("descriptionId", new IdType(code));

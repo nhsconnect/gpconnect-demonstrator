@@ -96,7 +96,7 @@ public class StructuredAllergyIntoleranceBuilder {
                 allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.RESOLVED);
             }
 
-            if (allergyIntoleranceEntity.getClinicalStatus().equals(SystemConstants.MEDICATION)) {
+            if (allergyIntoleranceEntity.getCategory().equals(SystemConstants.MEDICATION)) {
                 allergyIntolerance.addCategory(AllergyIntoleranceCategory.MEDICATION);
             } else {
                 allergyIntolerance.addCategory(AllergyIntoleranceCategory.ENVIRONMENT);

@@ -134,6 +134,7 @@ public class MedicationRequestResourceProvider {
             } else {
                 statusReasonExtension.addExtension(new Extension("statusChangeDate", new StringType(NO_INFORMATION_AVAILABLE)));
             }
+            medicationRequest.addExtension(statusReasonExtension);
 		}
 	}
 
@@ -149,7 +150,7 @@ public class MedicationRequestResourceProvider {
 
 	private void setReasonCodes(MedicationRequest medicationRequest, MedicationRequestDetail requestDetail) {
 		requestDetail.getReasonCodes().forEach(rc -> {
-			Coding coding = new Coding(SystemURL.VS_CONDITION_CODE, rc.getCode(), rc.getDisplay());
+			Coding coding = new Coding(SystemURL.VS_SNOMED, rc.getCode(), rc.getDisplay());
 			medicationRequest.addReasonCode(new CodeableConcept().addCoding(coding));
 		});
 	}

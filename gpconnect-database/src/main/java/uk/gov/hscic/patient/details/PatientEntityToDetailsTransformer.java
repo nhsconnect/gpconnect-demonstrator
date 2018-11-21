@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient.details;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.commons.collections4.Transformer;
@@ -7,7 +8,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import uk.gov.hscic.model.patient.PatientDetails;
+import uk.gov.hscic.model.telecom.TelecomDetails;
 import uk.gov.hscic.practitioner.PractitionerEntity;
+import uk.gov.hscic.telecom.TelecomEntity;
 
 @Component
 public class PatientEntityToDetailsTransformer implements Transformer<PatientEntity, PatientDetails> {
@@ -67,7 +70,30 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
         }
 
         patient.setSensitive(patientEntity.isSensitive());
+        
+        populateTelecoms(patient, patientEntity);
 
         return patient;
     }
+    
+    /**
+     * entity to details
+     * there must be a better way ..
+     * @param patientDetails
+     * @param patientEntity 
+     */
+    private void populateTelecoms(PatientDetails patientDetails, PatientEntity patientEntity) {
+        ArrayList<TelecomDetails> al = new ArrayList<>();
+        if ( patientEntity.getTelecoms() != null ) {
+            for (TelecomEntity telecomEntity : patientEntity.getTelecoms()) {
+                TelecomDetails telecomDetails = new TelecomDetails();
+                telecomDetails.setSystem(telecomEntity.getSystem());
+                telecomDetails.setUseType(telecomEntity.getUseType());
+                telecomDetails.setValue(telecomEntity.getValue());
+                al.add(telecomDetails);
+            }
+        }
+        patientDetails.setTelecoms(al);
+    }
+
 }

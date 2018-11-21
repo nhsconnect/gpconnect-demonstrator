@@ -1,15 +1,15 @@
 {
     "spineProxy": "",
-    "ASID": "200000000359",
+    "ASID": "918999199497",
     "practices": [
         {
             "id": "1",
-            "odsCode": "GPC001",
-            "name": "GP Connect Demonstrator",
+            "odsCode": "A20047",
+            "name": "HSCIC Test Practice",
             "interactionIds": ["*"],
             "endpointURL": "fhir",
             "apiEndpointURL": "api",
-            "ASID": "200000000359",
+            "ASID": "918999199497",
 			"orgType": "GP Practice"
         }
     ]

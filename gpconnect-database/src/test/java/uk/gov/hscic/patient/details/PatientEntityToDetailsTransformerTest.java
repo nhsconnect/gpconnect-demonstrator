@@ -31,6 +31,8 @@ public class PatientEntityToDetailsTransformerTest {
         final PatientDetails patientDetails = transformer.transform(patientEntity);
 
         assertNotNull(patientDetails);
+        // TODO Commented out for 1.2.2 build. Need to check this, get Address now returns an array of 5 strings one per line
+        // Changes at 1.2.2 remove the use of teh text field and stupulate a more strcutured address so this test no longer applies
         //assertEquals("line 1, line 3, postcode", patientDetails.getAddress());
     }
 

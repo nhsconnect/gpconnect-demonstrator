@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS gpconnect.medication_notes;
 DROP TABLE IF EXISTS gpconnect.medication_request_based_on;
 DROP TABLE IF EXISTS gpconnect.medication_statements;
 DROP TABLE IF EXISTS gpconnect.medication_requests;
+DROP TABLE IF EXISTS gpconnect.patient_telecoms;
 DROP TABLE IF EXISTS gpconnect.patients;
 DROP TABLE IF EXISTS gpconnect.medications;
 DROP TABLE IF EXISTS gpconnect.organizations;
@@ -405,4 +406,14 @@ CREATE TABLE gpconnect.translations (
   code        VARCHAR(20) NULL,
   display     VARCHAR(250) NULL,
   PRIMARY KEY (id)
+);
+
+CREATE TABLE gpconnect.patient_telecoms (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  patientId BIGINT NOT NULL,
+  system      VARCHAR(250) NULL,
+  usetype      VARCHAR(250) NULL,
+  value      VARCHAR(250) NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (patientId) REFERENCES gpconnect.patients(id)
 );

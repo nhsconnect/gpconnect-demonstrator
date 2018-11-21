@@ -16,18 +16,23 @@
 package uk.gov.hscic.patient.details;
 
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import uk.gov.hscic.medical.department.DepartmentEntity;
 import uk.gov.hscic.practitioner.PractitionerEntity;
+import uk.gov.hscic.telecom.TelecomEntity;
 
 @Entity
 @Table(name = "patients")
@@ -121,6 +126,10 @@ public class PatientEntity {
     
     @Column(name = "title")
     private String title;
+    
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn( name = "patientId")
+    private List<TelecomEntity> telecoms;
     
     public String getAddress1() {
         return address1;
@@ -336,5 +345,13 @@ public class PatientEntity {
 
 	public void setTitle(String title) {
         this.title = title;
+    }
+
+    public List<TelecomEntity> getTelecoms() {
+        return telecoms;
+    }
+
+    public void setTelecoms(List<TelecomEntity> telecoms) {
+        this.telecoms = telecoms;
     }
 }

@@ -1,10 +1,12 @@
 package uk.gov.hscic.model.patient;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.dstu3.model.Type;
+import uk.gov.hscic.model.telecom.TelecomDetails;
 
 public class PatientDetails {
     // changed at 1.2.2
@@ -35,6 +37,9 @@ public class PatientDetails {
     // added at 1.2.2
     private boolean sensitive;
     private String postcode;
+    
+    // added for 1.2.2 structured
+    private ArrayList<TelecomDetails> telecoms;
 
     public String[] getAddress() {
         return address;
@@ -148,6 +153,10 @@ public class PatientDetails {
         return postcode;
     }
 
+    public ArrayList<TelecomDetails> getTelecoms() {
+        return telecoms;
+    }
+
     public void setAddress(String[] address) {
         this.address = address;
     }
@@ -236,8 +245,13 @@ public class PatientDetails {
         this.sensitive = sensitive;
     }
 
-
     public void setPostcode(String postcode) {
         this.postcode = postcode;
     }
+
+    public void setTelecoms(ArrayList<TelecomDetails> telecoms) {
+        this.telecoms = telecoms;
+    }
+
+
 }

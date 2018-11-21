@@ -20,10 +20,17 @@ public class StructuredAllergyEntityToDetailTransformer implements Transformer<S
 		structuredAllergyIntolerance.setPatientRef(item.getPatientRef());
 		structuredAllergyIntolerance.setOnSetDateTime(item.getOnSetDateTime());
 		structuredAllergyIntolerance.setAssertedDate(item.getAssertedDate());
-		structuredAllergyIntolerance.setCoding(item.getCoding());
-		structuredAllergyIntolerance.setDisplay(item.getDisplay());
+		structuredAllergyIntolerance.setConceptCode(item.getConceptCode());
+		structuredAllergyIntolerance.setConceptDisplay(item.getConceptDisplay());
+		structuredAllergyIntolerance.setDescCode(item.getDescCode());
+		structuredAllergyIntolerance.setDescDisplay(item.getDescDisplay());
+		structuredAllergyIntolerance.setCodeTranslationRef(item.getCodeTranslationRef());
 		structuredAllergyIntolerance.setManifestationCoding(item.getManifestationCoding());
 		structuredAllergyIntolerance.setManifestationDisplay(item.getManifestationDisplay());
+		structuredAllergyIntolerance.setManifestationDescCoding(item.getManifestationDescCoding());
+		structuredAllergyIntolerance.setManifestationDescDisplay(item.getManifestationDescDisplay());
+		structuredAllergyIntolerance.setManTranslationRef(item.getManTranslationRef());
+		structuredAllergyIntolerance.setSeverity(item.getSeverity());
 		
 		return structuredAllergyIntolerance;
 	}

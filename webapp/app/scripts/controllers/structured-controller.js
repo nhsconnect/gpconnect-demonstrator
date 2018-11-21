@@ -26,7 +26,6 @@ angular
     $scope.currentMedications = [];
     $scope.search = {};
     $scope.search.startDate = "";
-    $scope.search.endDate ="";
     $scope.includeResolvedAllergies = true;
     $scope.includePrescriptionIssues = true;
 
@@ -38,7 +37,6 @@ angular
         $event.preventDefault();
         $event.stopPropagation();
         $scope.startDate = false;
-        $scope.endDate = false;
         $scope[name] = true;
         highlightMonth();
     };
@@ -88,14 +86,10 @@ angular
         });
     };
 
-    $scope.getAllergyData = function (start, end, includePrescriptionIssues, includeResolvedAllergies) {
+    $scope.getAllergyData = function (start, includePrescriptionIssues, includeResolvedAllergies) {
         $scope.dateInvalid = false;
         if(start === undefined || start == null){
             start = "";
-        }
-
-        if(end === undefined || end == null){
-            end = "";
         }
 
         var createDate = function(stringDate){
@@ -105,32 +99,18 @@ angular
             return date;
         };
 
-        if(start !== "" && end !== ""){
+        if(start !== ""){
             var startDate = createDate(start);
 
-            var endDate = new Date(end);
-            endDate.setTime(endDate.getTime() + (60*60*1000));
-
-            if(isNaN(startDate) || isNaN(endDate) || startDate > endDate){
+            if(isNaN(startDate)){
                 $scope.dateInvalid = true;
                 return;
             }
 
             start = startDate.toISOString().split('T')[0];
-            end = endDate.toISOString().split('T')[0];
         } else {
-            if(start === "" && end !== ""){
-                var endDate = createDate(end);
-                if(isNaN(endDate)){
-                    $scope.dateInvalid = true;
-                    return;
-                }
-
-                end = endDate.toISOString().split('T')[0];
-
-            }
-
-            if(start !== "" && end === ""){
+         
+            if(start !== ""){
                 var startDate = new Date(start);
 
                 if(isNaN(startDate)){
@@ -165,7 +145,7 @@ angular
                 reaction: "",
                 resolvedDate: ""
             };
-            PatientService.structured($stateParams.patientId, start, end, includePrescriptionIssues, includeResolvedAllergies).then(function(
+            PatientService.structured($stateParams.patientId, start, includePrescriptionIssues, includeResolvedAllergies).then(function(
                 patientSummaryResponse
             ) {
                 $scope.ActiveAllergiesList = [];
@@ -344,51 +324,87 @@ angular
         });
     }
 
-    $scope.showForm = function (listType) {
-        $scope.listType = listType;
+    $scope.showMedForm = function (medication, statement) {
+    	console.log(medication);
+    	console.log(statement);
+        
+        $scope.listType = medication;
 
-        if(listType.resourceType == "Medication") {
-            $scope.showMedDetail = true;
-            $scope.showAllergyDetail = false;
-            $scope.showResAllergyDetail = false;
+        $scope.showMedDetail = true;
+        $scope.showAllergyDetail = false;
+        $scope.showResAllergyDetail = false;
+ 
+        $scope.actualMedicationRequestWithIssue = {issues: []};
 
-            $scope.actualMedicationRequestWithIssue = {issues: []};
+		var groupId = "";
+            
+        for(var i=0; i < $scope.MedicationRequest.length; i++) {
+        	if(statement.basedOn[0].reference.split("/").pop() == $scope.MedicationRequest[i].id) {
+           		groupId = $scope.MedicationRequest[i].groupIdentifier.value;
+           		break;
+           	}
+        }
 
-            for(var i=0; i < $scope.MedicationRequest.length; i++) {
-                if(listType.id == $scope.MedicationRequest[i].medicationReference.reference.split("/").pop()) {
-                    if($scope.MedicationRequest[i].intent === "plan"){
-                        $scope.actualMedicationRequestWithIssue.plan = $scope.MedicationRequest[i];
-                        if(!$scope.includePrescriptionIssues){
-                            break;
-                        }
-                    } else {
-                        $scope.actualMedicationRequestWithIssue.issues.push($scope.MedicationRequest[i]);
+        for(var i=0; i < $scope.MedicationRequest.length; i++) {
+            if($scope.MedicationRequest[i].groupIdentifier != null && groupId == $scope.MedicationRequest[i].groupIdentifier.value) {
+                if($scope.MedicationRequest[i].intent === "plan"){
+                    $scope.actualMedicationRequestWithIssue.plan = $scope.MedicationRequest[i];
+                    if(!$scope.includePrescriptionIssues){
+                        break;
                     }
+                } else {
+                    $scope.actualMedicationRequestWithIssue.issues.push($scope.MedicationRequest[i]);
                 }
             }
-
-            var extensionArray =  $scope.actualMedicationRequestWithIssue.plan.extension;
-
-            var requestType = extensionArray.find(function(element){
-                return element.url === "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1";
-            }).valueCodeableConcept.coding[0].display;
-
-            $scope.actualMedicationRequestWithIssue.requestType = requestType;
-
-            if(requestType === "Repeat"){
-                $scope.actualMedicationRequestWithIssue.repeat = extensionArray.find(function(element){
-                    return element.url === "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationRepeatInformation-1";
-                }).extension;
-            }
-
-            $scope.MedicationName = listType.code.coding[0].extension[0].extension[1].valueString;
-            $scope.practitionername = $scope.practitioner.name[0].prefix[0]+" "+$scope.practitioner.name[0].given[0] + " "+ $scope.practitioner.name[0].family;
-
-            var medName = listType.code.coding[0].extension[0].extension[1].valueString == "Transfer-degraded medication entry" ? listType.code.text :  listType.code.coding[0].extension[0].extension[1].valueString
-            $scope.title = "Medication Detail: "+ medName;
-
         }
-        else if (listType.resourceType == "AllergyIntolerance" && listType.clinicalStatus == "active") {
+
+        var extensionArray =  $scope.actualMedicationRequestWithIssue.plan.extension;
+
+        var requestType = extensionArray.find(function(element){
+            return element.url === "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1";
+        }).valueCodeableConcept.coding[0].display;
+
+        $scope.actualMedicationRequestWithIssue.requestType = requestType;
+        if(requestType === "Repeat"){
+            $scope.actualMedicationRequestWithIssue.repeat = extensionArray.find(function(element){
+                return element.url === "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationRepeatInformation-1";
+            }).extension;
+        }
+        
+        $scope.MedicationName = medication.code.coding[0].display;
+        $scope.practitionername = $scope.practitioner.name[0].prefix[0]+" "+$scope.practitioner.name[0].given[0] + " "+ $scope.practitioner.name[0].family;
+
+        var medName = medication.code.coding[0].display == "Transfer-degraded medication entry" ? medication.code.text :  medication.code.coding[0].display
+        $scope.title = "Medication Detail: "+ medName;
+
+
+        $scope.message = "Show Form Button Clicked";
+		var global = Function('return this')() || (42, eval)('this');
+  		var modalInstance = $modal.open({
+            templateUrl: global.__env.templateUrl,
+            scope: $scope,
+            resolve: {
+                params: function () {
+                    return {
+                    };
+                }
+            }
+        });
+
+        $scope.closeModalInstance = function(){
+            modalInstance.close();
+        }
+
+        modalInstance.result.then(function (selectedItem) {
+            $scope.selected = selectedItem;
+        }, function () {
+        });
+    };
+
+    $scope.showAllergyForm = function (listType) {
+        $scope.listType = listType;
+
+        if (listType.resourceType == "AllergyIntolerance" && listType.clinicalStatus == "active") {
             $scope.showAllergyDetail = true;
             $scope.showMedDetail = false;
             $scope.showResAllergyDetail = false;
@@ -424,7 +440,7 @@ angular
         });
     };
 
-    $scope.getAllergyData("", "", true, true);
+    $scope.getAllergyData("", true, true);
 
 });
 

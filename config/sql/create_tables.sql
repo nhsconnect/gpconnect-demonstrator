@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS gpconnect.medication_notes;
 DROP TABLE IF EXISTS gpconnect.medication_request_based_on;
 DROP TABLE IF EXISTS gpconnect.medication_statements;
 DROP TABLE IF EXISTS gpconnect.medication_requests;
+DROP TABLE IF EXISTS gpconnect.patient_telecoms;
 DROP TABLE IF EXISTS gpconnect.patients;
 DROP TABLE IF EXISTS gpconnect.medications;
 DROP TABLE IF EXISTS gpconnect.organizations;
@@ -31,6 +32,7 @@ DROP TABLE IF EXISTS gpconnect.appointment_appointments;
 DROP TABLE IF EXISTS gpconnect.medical_departments;
 DROP TABLE IF EXISTS gpconnect.allergyintolerance;
 DROP TABLE IF EXISTS gpconnect.addresses;
+DROP TABLE IF EXISTS gpconnect.translations;
 
 /* Create new table schemas */
 
@@ -186,8 +188,11 @@ CREATE TABLE gpconnect.patients (
 
 CREATE TABLE gpconnect.medications (
   id                        BIGINT    NOT NULL AUTO_INCREMENT,
-  code		                TEXT(20)  NULL,
-  display	                TEXT(100) NULL,
+  concept_code              TEXT(20)  NULL,
+  concept_display	        TEXT(100) NULL,
+  desc_code                 TEXT(20)  NULL,
+  desc_display	            TEXT(100) NULL,
+  code_translation_ref		TEXT(10)  NULL,
   text		                TEXT(100) NULL, 
   batchNumber               TEXT(50)  NULL, 
   expiryDate                DATETIME  NULL,
@@ -199,7 +204,6 @@ CREATE TABLE gpconnect.medication_statements (
   id	              BIGINT       NOT NULL AUTO_INCREMENT,
   lastIssueDate       DATETIME     NULL,
   medicationRequestId VARCHAR(50)       NULL,
-  encounterId         BIGINT       NULL,
   statusCode          VARCHAR(50)  NULL,
   statusDisplay       VARCHAR(50)  NULL,
   medicationId        BIGINT       NULL,
@@ -210,11 +214,11 @@ CREATE TABLE gpconnect.medication_statements (
   takenCode           VARCHAR(50)  NULL,
   takenDisplay        VARCHAR(50)  NULL,
   dosageText          VARCHAR(250) NULL,
-  dosageInstruction   VARCHAR(250)  NULL,
+  dosageInstruction   VARCHAR(250) NULL,
   lastUpdated         DATETIME     NULL,
-  prescribingAgency  VARCHAR(250) NULL,
-  guid               VARCHAR(250) NULL,
-  warningCode         VARCHAR(250)  NULL,
+  prescribingAgency   VARCHAR(250) NULL,
+  guid                VARCHAR(250) NULL,
+  warningCode         VARCHAR(250) NULL,
   PRIMARY KEY (id)
 );
 
@@ -227,7 +231,6 @@ CREATE TABLE gpconnect.medication_requests (
   intentDisplay                      VARCHAR(50)  NULL, 
   medicationId                       BIGINT       NULL, 
   patientId                          BIGINT       NULL, 
-  encounterId                        BIGINT       NULL,
   authoredOn                         DATETIME     NULL,
   requesterUrl                       TEXT(100)    NULL,
   requesterId                        BIGINT       NULL,
@@ -372,14 +375,20 @@ CREATE TABLE gpconnect.allergyintolerance (
   patientRef VARCHAR(250) NULL,
   onSetDateTime DATETIME  NULL,
   assertedDate DATETIME  NULL,
-  coding VARCHAR(250) NULL,
-  display VARCHAR(250) NULL,
+  concept_code              VARCHAR(20)  NULL,
+  concept_display	        VARCHAR(100) NULL,
+  desc_code                 VARCHAR(20)  NULL,
+  desc_display	            VARCHAR(100) NULL,
+  code_translation_ref		VARCHAR(10)  NULL,
   manCoding VARCHAR(250) NULL,
   manDisplay VARCHAR(250) NULL,
+  manDescCoding VARCHAR(250) NULL,
+  manDescDisplay VARCHAR(250) NULL,
+  man_translation_ref		VARCHAR(10)  NULL,
   recorder VARCHAR(250) NOT NULL,
-  encounter VARCHAR(250),
   guid      VARCHAR(250) NULL,
   warningCode VARCHAR(250) NULL,
+  severity			  VARCHAR(10)  NULL,
   PRIMARY KEY (id)
 );
 
@@ -390,3 +399,21 @@ CREATE TABLE gpconnect.medication_allergies (
   FOREIGN KEY (medicationId) REFERENCES gpconnect.medications(id),
   FOREIGN KEY (allergyintoleranceId) REFERENCES gpconnect.allergyintolerance(id)
   );
+
+CREATE TABLE gpconnect.translations (
+  id          BIGINT       NOT NULL AUTO_INCREMENT,
+  system   	  VARCHAR(100)NULL,
+  code        VARCHAR(20) NULL,
+  display     VARCHAR(250) NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE gpconnect.patient_telecoms (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  patientId BIGINT NOT NULL,
+  system      VARCHAR(250) NULL,
+  usetype      VARCHAR(250) NULL,
+  value      VARCHAR(250) NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (patientId) REFERENCES gpconnect.patients(id)
+);

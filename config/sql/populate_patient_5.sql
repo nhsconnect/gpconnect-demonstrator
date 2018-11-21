@@ -1,13 +1,13 @@
 INSERT INTO gpconnect.allergyintolerance
-  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,coding,display,manCoding,manDisplay, recorder, encounter)
+  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,concept_code,concept_display,manCoding,manDisplay,manDescCoding,manDescDisplay, recorder)
 VALUES
-  (9658218989 ,'2018-03-14',"","","", "no known","unconfirmed","","5",'2010-07-22','2010-07-22',"716186003","No known allergy","","",'9476719923', '');
+  (9658218989 ,'2018-03-14',"","","", "no known","unconfirmed","","5",'2010-07-22','2010-07-22',"716186003","No known allergy","","","","",'3');
 
 INSERT INTO gpconnect.medication_statements
- (id,lastIssueDate,encounterId,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
+ (id,lastIssueDate,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, prescribingAgency)
 VALUES
- (3,'2018-03-14',13,'active','Active',5,'2018-01-12','2020-07-12','2018-01-12',5,'unk','Unknown','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15', 'prescribingAgency');
+ (3,'2018-03-14','active','Active',5,'2018-01-12','2020-07-12','2018-01-12',5,'unk','Unknown','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15', 'prescribed-at-gp-practice');
 
 INSERT INTO gpconnect.medication_reason_codes
  (id,reasonCode,reasonDisplay)
@@ -42,22 +42,22 @@ VALUES
  (3,2);
 
 INSERT INTO gpconnect.medication_requests
- (id,groupIdentifier,statusCode,statusDisplay,intentCode,intentDisplay,medicationId,patientId,encounterId,authoredOn,
+ (id,groupIdentifier,statusCode,statusDisplay,intentCode,intentDisplay,medicationId,patientId,authoredOn,
  requesterUrl,requesterId,authorisingPractitionerId,dosageText,dosageInstruction,dispenseRequestStartDate,dispenseRequestEndDate,
  dispenseQuantityValue,dispenseQuantityUnit,dispenseQuantityText,expectedSupplyDuration,
  dispenseRequestOrganizationId,priorMedicationRequestId,numberOfRepeatPrescriptionsAllowed,numberOfRepeatPrescriptionsIssued,
  authorisationExpiryDate,prescriptionTypeCode,prescriptionTypeDisplay,statusReasonDate,statusReason,lastUpdated)
 VALUES
- (4,'group3','active','Active','plan','Plan',5,5,13,'2018-01-12',
+ (4,'group3','active','Active','plan','Plan',5,5,'2018-01-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'Use as often as required','Apply the medication after cleaning and drying the affected area',
  '2018-01-18','2018-07-04',null,null,'250ml','28',2,null,6,4,'2018-07-16','repeat','Repeat',null,null,'2018-04-15'),
- (5,'group3','active','Active','order','Order',5,5,13,'2018-01-12',
+ (5,'group3','active','Active','order','Order',5,5,'2018-01-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'Use as often as required','Apply the medication after cleaning and drying the affected area',
  '2018-01-18','2018-02-15',null,null,'250ml','28',2,null,6,1,'2018-07-16','repeat','Repeat',null,null,'2018-01-15'),
- (6,'group3','active','Active','order','Order',5,5,13,'2018-01-12',
+ (6,'group3','active','Active','order','Order',5,5,'2018-01-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'Use as often as required','Apply the medication after cleaning and drying the affected area',
  '2018-02-12','2018-03-12',null,null,'250ml','28',2,5,6,2,'2018-07-16','repeat','Repeat',null,null,'2018-03-15'),
- (7,'group3','active','Active','order','Order',5,5,13,'2018-01-12',
+ (7,'group3','active','Active','order','Order',5,5,'2018-01-12',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'Use as often as required','Apply the medication after cleaning and drying the affected area',
  '2018-03-12','2018-04-09',null,null,'250ml','28',2,6,6,3,'2018-07-16','repeat','Repeat',null,null,'2018-03-15');
 

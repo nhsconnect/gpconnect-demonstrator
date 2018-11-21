@@ -16,7 +16,6 @@ public class MedicationStatementEntityToDetailTransformer implements Transformer
 		statementDetail.setId(statementEntity.getId());
 		statementDetail.setLastIssueDate(statementEntity.getLastIssueDate());
 		statementDetail.setMedicationRequestPlanId(statementEntity.getMedicationRequestId());
-		statementDetail.setEncounterId(statementEntity.getEncounterId());
 		statementDetail.setStatusCode(statementEntity.getStatusCode());
 		statementDetail.setStatusDisplay(statementEntity.getStatusDisplay());
 		statementDetail.setMedicationId(statementEntity.getMedicationId());

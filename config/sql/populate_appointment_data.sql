@@ -1,18 +1,18 @@
 INSERT INTO gpconnect.appointment_schedules
   (id,practitionerId,identifier,typeCode,typeDescription,locationId,practitionerRoleCode,practitionerRoleDisplay,startDateTime,endDateTime,scheduleComment,lastUpdated)
 VALUES
-  (1,1,'Schedule001','394802001','General medicine',1,'R0260','General Medical Practitioner','2016-03-22 10:00:00','2030-12-22 17:59:59','Schedule 1 for general appointments','2016-07-25 12:00:00'),
-  (2,2,'Schedule002','394814009','General practice',1,'R1480','Healthcare Assistant','2016-06-24 09:00:00','2034-06-22 09:00:00','Schedule 2 for general appointments','2016-07-25 12:00:00'),
+  (1,1,'Schedule001','394802001','General medicine',16,'R0260','General Medical Practitioner','2016-03-22 10:00:00','2030-12-22 17:59:59','Schedule 1 for general appointments','2016-07-25 12:00:00'),
+  (2,2,'Schedule002','394814009','General practice',16,'R1480','Healthcare Assistant','2016-06-24 09:00:00','2034-06-22 09:00:00','Schedule 2 for general appointments','2016-07-25 12:00:00'),
   (3,3,'Schedule003','394593009','Medical oncology',2,'R0260','General Medical Practitioner','2013-12-22 11:46:22','2040-12-22 11:46:22','Schedule 3 for general appointments','2016-07-25 12:00:00'),
-  (4,1,'Schedule004','394814009','General practice',1,'R0260','General Medical Practitioner','2013-12-22 11:46:22','2040-12-22 11:46:22','Schedule 4 for general appointments with practitioner Goff, Carolyn D. @ The Hepworth Surgery Main Building','2016-07-25 12:00:00'),
-  (5,2,'Schedule005','394814009','General practice',1,'R0260','General Medical Practitioner','2013-12-22 10:46:22','2040-12-22 10:46:22','Schedule 5 for general appointments with practitioner Cash, Claire F. @ The Hepworth Surgery Main Building','2016-07-25 12:00:00'),
+  (4,1,'Schedule004','394814009','General practice',16,'R0260','General Medical Practitioner','2013-12-22 11:46:22','2040-12-22 11:46:22','Schedule 4 for general appointments with practitioner Goff, Carolyn D. @ The Hepworth Surgery Main Building','2016-07-25 12:00:00'),
+  (5,2,'Schedule005','394814009','General practice',16,'R0260','General Medical Practitioner','2013-12-22 10:46:22','2040-12-22 10:46:22','Schedule 5 for general appointments with practitioner Cash, Claire F. @ The Hepworth Surgery Main Building','2016-07-25 12:00:00'),
   (6,3,'Schedule006','394814009','General practice',2,'R0260','General Medical Practitioner','2013-12-22 09:46:22','2040-12-22 09:46:22','Schedule 6 for general appointments with practitioner Spencer, Hyacinth A. @ The Moore Surgery Main Building','2016-07-25 12:00:00'),
   (7,3,'Schedule007','394814009','General practice',3,'R0260','General Medical Practitioner','2013-12-22 09:46:22','2040-12-22 09:46:22','Schedule 7 for general appointments with practitioner Bailey, Demetrius B. @ The Hockey Surgery Main Building','2016-07-25 12:00:00'),
   (8,1,'Schedule008','394814009','General practice',3,'R0260','General Medical Practitioner','2013-12-22 10:46:22','2040-12-22 10:46:22','Schedule 8 for general appointments with practitioner Guthrie, Indigo D. @ The Hockey Surgery Main Building','2016-07-25 12:00:00'),
   (9,2,'Schedule009','394814009','General practice',4,'R0260','General Medical Practitioner','2013-12-22 09:46:22','2040-12-22 09:46:22','Schedule 9 for general appointments with practitioner Hudson, Inez G. @ The Hockey Surgery Annex','2016-07-25 12:00:00'),
   (10,3,'Schedule010','394814009','General practice',4,'R0260','General Medical Practitioner','2013-12-22 10:46:22','2040-12-22 10:46:22','Schedule 10 for general appointments with practitioner Joseph, May N. @ The Hockey Surgery Annex','2016-07-25 12:00:00'),
   (11,2,'Schedule011','394814010','General practice',5,'R0260','General Medical Practitioner','2010-10-22 01:01:01','2040-12-22 10:46:22','Schedule 11 for general appointments with practitioner','2016-07-25 12:00:00'),
-  (12,null,'Schedule012','394814010','General practice',1,'R0620','Staff Nurse','2010-10-22 01:01:01','2040-12-22 10:46:22','Schedule 12 for phone appointments with staff nurse','2016-07-25 12:00:00');
+  (12,1,'Schedule012','394814010','General practice',16,'R0620','Staff Nurse','2010-10-22 01:01:01','2040-12-22 10:46:22','Schedule 12 for phone appointments with staff nurse','2016-07-25 12:00:00');
 INSERT INTO gpconnect.appointment_slots
   (id,typeCode,typeDisplay,scheduleReference,freeBusyType,startDateTime,endDateTime,lastUpdated,gpConnectBookable)
 VALUES
@@ -41,7 +41,8 @@ VALUES
   (12,'Leigh View','Cleckheaton','Leeds','West Yorkshire','GPC 122','UK'),
   (13,'69 Michael Lane','Garforth','Leeds','West Yorkshire','GPC 123','UK'),
   (14,'West View','Armley','Leeds','West Yorkshire','GPC 124','UK'),
-  (15,'25 George Avenue','Calverley','Leeds','West Yorkshire','GPC 125','UK');
+  (15,'25 George Avenue','Calverley','Leeds','West Yorkshire','GPC 125','UK'),
+  (16,'99 George Avenue','Calverley','Leeds','West Yorkshire','LS1 4HY','UK');
   
 INSERT INTO gpconnect.locations
   (id,name,org_ods_code,org_ods_code_name,site_ods_code,site_ods_code_name,status,lastUpdated,address_id)
@@ -60,4 +61,5 @@ VALUES
   (12,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',12),
   (13,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',13),
   (14,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',14),
-  (15,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',15);
+  (15,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',15),
+  (16,'Dr Leggs Surgery','A20047','BUILDING Z','Z55555','ANNEX','active','2016-07-25 12:00:00',16);

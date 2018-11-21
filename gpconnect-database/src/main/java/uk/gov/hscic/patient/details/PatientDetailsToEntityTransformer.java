@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient.details;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import uk.gov.hscic.model.patient.PatientDetails;
+import uk.gov.hscic.model.telecom.TelecomDetails;
 import uk.gov.hscic.practitioner.PractitionerEntity;
 import uk.gov.hscic.practitioner.PractitionerRepository;
+import uk.gov.hscic.telecom.TelecomEntity;
 
 @Component
 public class PatientDetailsToEntityTransformer implements Transformer<PatientDetails, PatientEntity> {
@@ -86,8 +89,31 @@ public class PatientDetailsToEntityTransformer implements Transformer<PatientDet
 			patientEntity.setMaritalStatus(patientDetails.getMaritalStatus());
 			patientEntity.setManagingOrganization(patientDetails.getManagingOrganization());
 			patientEntity.setSensitive(patientDetails.isSensitive());
+			populateTelecoms(patientDetails, patientEntity);
 		}
 
 		return patientEntity;
 	}
+
+    /**
+     * details to entity
+     * there must be a better way ..
+     * @param patientDetails
+     * @param patientEntity 
+     */
+    private void populateTelecoms(PatientDetails patientDetails, PatientEntity patientEntity) {
+        ArrayList<TelecomEntity> al = new ArrayList<>();
+        if (patientDetails.getTelecoms() != null) {
+            for (TelecomDetails telecomDetails : patientDetails.getTelecoms()){
+                TelecomEntity telecomEntity = new TelecomEntity();
+                // this has to be populated even though its wrong and get ovewritten with the correct value later
+                telecomEntity.setPatientId(1L);
+                telecomEntity.setSystem(telecomDetails.getSystem());
+                telecomEntity.setUseType(telecomDetails.getUseType());
+                telecomEntity.setValue(telecomDetails.getValue());
+                al.add(telecomEntity);
+            }
+        }
+        patientEntity.setTelecoms(al);
+    }
 }

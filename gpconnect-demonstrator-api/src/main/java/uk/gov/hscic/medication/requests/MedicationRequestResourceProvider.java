@@ -84,10 +84,6 @@ public class MedicationRequestResourceProvider {
 			medicationRequest.setSubject(new Reference(new IdType("Patient", requestDetail.getPatientId())));
 		}
 		
-		if(requestDetail.getEncounterId() != null) {
-			medicationRequest.setContext(new Reference(new IdType("Encounter", requestDetail.getEncounterId())));
-		}
-		
 		if(requestDetail.getAuthorisingPractitionerId() != null) {
 			medicationRequest.setRecorder(new Reference(new IdType("Practitioner", requestDetail.getAuthorisingPractitionerId())));
 		}
@@ -101,9 +97,10 @@ public class MedicationRequestResourceProvider {
 		//medicationRequest.setRequester(getRequesterComponent(requestDetail)); //TODO - spec needs to clarify whether this should be populated or not
 		
 		setReasonCodes(medicationRequest, requestDetail);
-		setReasonReferences(medicationRequest, requestDetail);
 		setNotes(medicationRequest, requestDetail);
-		setRepeatInformation(medicationRequest, requestDetail);
+		if (medicationRequest.getIntent() != MedicationRequestIntent.ORDER) {
+			setRepeatInformation(medicationRequest, requestDetail);
+		}
 		setPrescriptionType(medicationRequest, requestDetail);
 		setStatusReason(medicationRequest, requestDetail);
 		
@@ -137,6 +134,7 @@ public class MedicationRequestResourceProvider {
             } else {
                 statusReasonExtension.addExtension(new Extension("statusChangeDate", new StringType(NO_INFORMATION_AVAILABLE)));
             }
+            medicationRequest.addExtension(statusReasonExtension);
 		}
 	}
 
@@ -152,18 +150,8 @@ public class MedicationRequestResourceProvider {
 
 	private void setReasonCodes(MedicationRequest medicationRequest, MedicationRequestDetail requestDetail) {
 		requestDetail.getReasonCodes().forEach(rc -> {
-			Coding coding = new Coding(SystemURL.VS_CONDITION_CODE, rc.getCode(), rc.getDisplay());
+			Coding coding = new Coding(SystemURL.VS_SNOMED, rc.getCode(), rc.getDisplay());
 			medicationRequest.addReasonCode(new CodeableConcept().addCoding(coding));
-		});
-	}
-
-	private void setReasonReferences(MedicationRequest medicationRequest, MedicationRequestDetail requestDetail) {
-		requestDetail.getReasonReferences().forEach(rr -> {
-			if(rr.getReferenceUrl().equals(SystemURL.SD_GPC_OBSERVATION)) {
-				medicationRequest.addReasonReference(new Reference(new IdType("Observation", rr.getReferenceId())));
-			} else if (rr.getReferenceUrl().equals(SystemURL.SD_GPC_CONDITION)) {
-				medicationRequest.addReasonReference(new Reference(new IdType("Condition", rr.getReferenceId())));
-			}
 		});
 	}
 
@@ -186,10 +174,13 @@ public class MedicationRequestResourceProvider {
 	private void setRepeatInformation(MedicationRequest medicationRequest, MedicationRequestDetail requestDetail) {
 		if(requestDetail.getPrescriptionTypeCode().equals("repeat")) {
 			Extension repeatInformationExtension = new Extension(SystemURL.SD_CC_EXT_MEDICATION_REPEAT_INFORMATION);
-			repeatInformationExtension.addExtension(new Extension("numberOfRepeatPrescriptionsAllowed", new PositiveIntType(requestDetail.getNumberOfRepeatPrescriptionsAllowed())));
+			if (requestDetail.getNumberOfRepeatPrescriptionsAllowed() != null) {
+				repeatInformationExtension.addExtension(new Extension("numberOfRepeatPrescriptionsAllowed", new PositiveIntType(requestDetail.getNumberOfRepeatPrescriptionsAllowed())));
+			} else {
+				repeatInformationExtension.addExtension(new Extension("authorisationExpiryDate", new DateTimeType(requestDetail.getAuthorisationExpiryDate())));
+			}
 			repeatInformationExtension.addExtension(new Extension("numberOfRepeatPrescriptionsIssued", new PositiveIntType(requestDetail.getNumberOfRepeatPrescriptionsIssued())));
-			repeatInformationExtension.addExtension(new Extension("authorisationExpiryDate", new DateTimeType(requestDetail.getAuthorisationExpiryDate())));
-			
+						
 			medicationRequest.addExtension(repeatInformationExtension);
 		}
 	}

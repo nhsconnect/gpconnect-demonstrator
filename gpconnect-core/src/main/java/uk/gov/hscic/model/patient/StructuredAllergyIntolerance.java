@@ -15,11 +15,18 @@ public class StructuredAllergyIntolerance {
     private String patientRef;
     private Date onSetDateTime;
     private Date assertedDate;
-    private String coding;
-    private String display;
+    private String conceptCode;
+    private String conceptDisplay;
+    private String descCode;
+    private String descDisplay;
+    private String codeTranslationRef;
     private String manifestationCoding;
     private String manifestationDisplay;
+    private String manifestationDescCoding;
+    private String manifestationDescDisplay;
+    private String manTranslationRef;
     private String guid;
+    private String severity;
 
     public String getGuid() {
         return guid;
@@ -116,24 +123,48 @@ public class StructuredAllergyIntolerance {
     public void setAssertedDate(Date assertedDate) {
         this.assertedDate = assertedDate;
     }
+	
+    public String getConceptCode() {
+		return conceptCode;
+	}
+	
+    public void setConceptCode(String conceptCode) {
+		this.conceptCode = conceptCode;
+	}
+	
+    public String getConceptDisplay() {
+		return conceptDisplay;
+	}
+	
+    public void setConceptDisplay(String conceptDisplay) {
+		this.conceptDisplay = conceptDisplay;
+	}
+	
+    public String getDescDisplay() {
+		return descDisplay;
+	}
+	
+    public void setDescDisplay(String descDisplay) {
+		this.descDisplay = descDisplay;
+	}
+    
+    public String getDescCode() {
+		return descCode;
+	}
+	
+    public void setDescCode(String descCode) {
+		this.descCode = descCode;
+	}
 
-    public String getCoding() {
-        return coding;
-    }
+    public String getCodeTranslationRef() {
+		return codeTranslationRef;
+	}
 
-    public void setCoding(String coding) {
-        this.coding = coding;
-    }
+	public void setCodeTranslationRef(String codeTranslationRef) {
+		this.codeTranslationRef = codeTranslationRef;
+	}
 
-    public String getDisplay() {
-        return display;
-    }
-
-    public void setDisplay(String display) {
-        this.display = display;
-    }
-
-    public String getManifestationCoding() {
+	public String getManifestationCoding() {
         return manifestationCoding;
     }
 
@@ -148,4 +179,37 @@ public class StructuredAllergyIntolerance {
     public void setManifestationDisplay(String manifestationDisplay) {
         this.manifestationDisplay = manifestationDisplay;
     }
+
+    public String getManifestationDescCoding() {
+        return manifestationDescCoding;
+    }
+
+    public void setManifestationDescCoding(String manifestationDescCoding) {
+        this.manifestationDescCoding = manifestationDescCoding;
+    }
+
+    public String getManifestationDescDisplay() {
+        return manifestationDescDisplay;
+    }
+
+    public void setManifestationDescDisplay(String manifestationDescDisplay) {
+        this.manifestationDescDisplay = manifestationDescDisplay;
+    }
+
+	public String getManTranslationRef() {
+		return manTranslationRef;
+	}
+
+	public void setManTranslationRef(String manTranslationRef) {
+		this.manTranslationRef = manTranslationRef;
+	}
+
+	public String getSeverity() {
+		return severity;
+	}
+
+	public void setSeverity(String severity) {
+		this.severity = severity;
+	}
+
 }

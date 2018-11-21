@@ -9,7 +9,7 @@
         <div class="col-md-4 modalBannerLower">DOB: <b>{{ appointmentCancel.patient.birthDate | date:'dd-MMM-yyyy' }}</b></div>
         <div class="col-md-3 modalBannerLower">Gender: <b>{{ appointmentCancel.patient.gender | uppercase }}</b></div>
         <div class="col-md-5 modalBannerLower">NHS No. <b><span ng-bind="patientNhsNumber | formatNHSNumber"></span></b></div>
-        <div class="col-md-12 modalBannerLower">Address: <b>{{ appointmentCancel.patient.address[0].text}}</b></div>
+        <div class="col-md-12 modalBannerLower">Address: <b>{{ a = appointmentCancel.patient.address[0]; a.line.concat([ a.town, a.district, a.postalCode]).join()}}</b></div>
     </div>
 
     <div class="col-md-12">

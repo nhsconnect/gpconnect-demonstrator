@@ -113,7 +113,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
             var endpointLookupResult = response;
             return $http.post(
                 endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getstructuredrecord',
-                '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "'+gpcResource.getConst("ID_NHS_NUMBER")+'", "value" : "' + patientId + '" }},{"name":"includeMedication","part":[{"name":"medicationDatePeriod","valuePeriod":{"start":"2012-02-02","end":"2018-02-02"}}]}]}',
+                '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "'+gpcResource.getConst("ID_NHS_NUMBER")+'", "value" : "' + patientId + '" }},{"name":"includeMedication","part":[{"name":"medicationSearchFromDate","valueDate":"2012-02-02"}]}]}',
                 
                 
                 {
@@ -134,20 +134,18 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
     };
     
     
-    var structured = function (patientId, start, end, includePrescriptionIssues, includeResolvedAllergies) {
+    var structured = function (patientId, start, includePrescriptionIssues, includeResolvedAllergies) {
         return FhirEndpointLookup.getEndpoint($rootScope.patientOdsCode, "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1").then(function (response) {
             var endpointLookupResult = response;
             
             var includeResolvedAllergiesPart = '"part": [{"name":"includeResolvedAllergies",  "valueBoolean":'+includeResolvedAllergies+'}]'
-            var datePeriod = "";
-            if(start !== "" || end !== ""){
+            var dateFrom = "";
+            if(start !== ""){
                 start = start === "" ? null : start;
-                end = end === "" ? null : end;
-                datePeriod = '{"name":"medicationDatePeriod", "valuePeriod" : { "start" : '+start+', "end" : '+end+' }},';
+                dateFrom = '{"name":"medicationSearchFromDate", "valueDate" :' + start + '},';
             }
-            var includeMedication =  '{"name" : "includeMedication","part": ['+datePeriod+'{"name":"includePrescriptionIssues", "valueBoolean" : '+includePrescriptionIssues+'}]}';
-            var body = '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "' + gpcResource.getConst("ID_NHS_NUMBER") + '", "value" : "' + patientId + '" }},{"name" : "includeAllergies",'+includeResolvedAllergiesPart+'},'+includeMedication+']}';
-                       
+            var includeMedication =  '{"name" : "includeMedication","part": [' + dateFrom + '{"name":"includePrescriptionIssues", "valueBoolean" : ' + includePrescriptionIssues + '}]}';
+            var body = '{"resourceType" : "Parameters","parameter" : [{"name" : "patientNHSNumber","valueIdentifier" : { "system": "' + gpcResource.getConst("ID_NHS_NUMBER") + '", "value" : "' + patientId + '" }},{"name" : "includeAllergies",'+includeResolvedAllergiesPart+'},'+includeMedication+']}';        
             
             return $http.post(
                 endpointLookupResult.restUrlPrefix + '/Patient/$gpc.getstructuredrecord',

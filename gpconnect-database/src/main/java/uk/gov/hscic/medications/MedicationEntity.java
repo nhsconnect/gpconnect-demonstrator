@@ -16,11 +16,20 @@ public class MedicationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "code")
-    private String code;
+    @Column(name = "concept_code")
+    private String conceptCode;
     
-    @Column(name = "display")
-    private String display;
+    @Column(name = "concept_display")
+    private String conceptDisplay;
+
+    @Column(name = "desc_code")
+    private String descCode;
+    
+    @Column(name = "desc_display")
+    private String descDisplay;
+    
+    @Column(name= "code_translation_ref")
+    private String codeTranslationRef;
     
     @Column(name = "text")
     private String text;
@@ -49,22 +58,46 @@ public class MedicationEntity {
         this.id = id;
     }
 
-    public String getCode() {
-		return code;
+    public String getConceptCode() {
+		return conceptCode;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setConceptCode(String conceptCode) {
+		this.conceptCode = conceptCode;
 	}
 
-	public String getDisplay() {
-		return display;
+	public String getConceptDisplay() {
+		return conceptDisplay;
 	}
 
-	public void setDisplay(String display) {
-		this.display = display;
+	public void setConceptDisplay(String conceptDisplay) {
+		this.conceptDisplay = conceptDisplay;
 	}
 
+    public String getDescCode() {
+		return descCode;
+	}
+
+	public void setDescCode(String descCode) {
+		this.descCode = descCode;
+	}
+
+	public String getDescDisplay() {
+		return descDisplay;
+	}
+
+	public void setDescDisplay(String descDisplay) {
+		this.descDisplay = descDisplay;
+	}
+
+	public String getCodeTranslationRef() {
+		return codeTranslationRef;
+	}
+
+	public void setCodeTranslationRef(String codeTranslationRef) {
+		this.codeTranslationRef = codeTranslationRef;
+	}
+	
 	public String getText() {
 		return text;
 	}

@@ -30,7 +30,10 @@ public final class SystemConstants {
 
     public static final String INCLUDE_MEDICATION = "includeMedication";
     public static final String INCLUDE_PRESCRIPTION_ISSUES = "includePrescriptionIssues";
+    // 1.2.1
     public static final String MEDICATION_DATE_PERIOD = "medicationDatePeriod";
+    // 1.2.2
+    public static final String MEDICATION_SEARCH_FROM_DATE = "medicationSearchFromDate";
 
     public static final String MEDICATION_LIST = "Medications and medical devices";
     

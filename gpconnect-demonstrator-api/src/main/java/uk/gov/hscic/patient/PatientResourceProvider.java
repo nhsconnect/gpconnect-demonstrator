@@ -23,6 +23,7 @@ import org.hl7.fhir.dstu3.model.HumanName.NameUse;
 import org.hl7.fhir.dstu3.model.Identifier.IdentifierUse;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
+import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,7 +49,10 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
+import static uk.gov.hscic.SystemURL.SD_CC_EXT_NHS_COMMUNICATION;
+import uk.gov.hscic.model.telecom.TelecomDetails;
 
 @Component
 public class PatientResourceProvider implements IResourceProvider {
@@ -99,6 +103,9 @@ public class PatientResourceProvider implements IResourceProvider {
     @Value("${datasource.patient.superseded:#{null}}")
     private String patientSuperseded;
 
+    @Value("${datasource.patient.nhsNumber:#{null}}")
+    private String patient2;
+
     private NhsNumber nhsNumber;
 
     private Map<String, Boolean> registerPatientParams;
@@ -132,6 +139,7 @@ public class PatientResourceProvider implements IResourceProvider {
         // Spring does not strip trailing blanks from property values
         patientNotOnSpine = patientNotOnSpine.trim();
         patientSuperseded = patientSuperseded.trim();
+        patient2 = patient2.trim();
     }
 
     @Read(version = true)
@@ -278,20 +286,28 @@ public class PatientResourceProvider implements IResourceProvider {
                             && paramPart.getName().equals(SystemConstants.INCLUDE_PRESCRIPTION_ISSUES)) {
                         includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
                         isIncludedPrescriptionIssuesExist = true;
-                    } else if (paramPart.getValue() instanceof Period
+                    } else if (false && paramPart.getValue() instanceof Period
                             && paramPart.getName().equals(SystemConstants.MEDICATION_DATE_PERIOD)) {
-                        medicationPeriod = (Period) paramPart.getValue();
+                        //1.2.1
+                        /*medicationPeriod = (Period) paramPart.getValue();
 
-                        String startDate = medicationPeriod.getStartElement().asStringValue();
-                        String endDate = medicationPeriod.getEndElement().asStringValue();
+						String startDate = medicationPeriod.getStartElement().asStringValue();
+						String endDate = medicationPeriod.getEndElement().asStringValue();
 
-                        validateStartDateParamAndEndDateParam(startDate, endDate);
-                        if (medicationPeriod.getStart() != null && medicationPeriod.getEnd() != null
-                                && medicationPeriod.getStart().compareTo(medicationPeriod.getEnd()) > 0) {
-                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                    new UnprocessableEntityException("Invalid Medication Date Period"),
-                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
-                        }
+						validateStartDateParamAndEndDateParam(startDate, endDate);
+						if (medicationPeriod.getStart() != null && medicationPeriod.getEnd() != null
+								&& medicationPeriod.getStart().compareTo(medicationPeriod.getEnd()) > 0) {
+							throw OperationOutcomeFactory.buildOperationOutcomeException(
+									new UnprocessableEntityException("Invalid Medication Date Period"),
+									SystemCode.INVALID_PARAMETER, IssueType.INVALID);*/
+                    } else if (paramPart.getValue() instanceof DateType
+                            && paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)) {
+                        DateType startDateDt = (DateType) paramPart.getValue();
+                        medicationPeriod = new Period();
+                        medicationPeriod.setStart(startDateDt.getValue());
+                        medicationPeriod.setEnd(null);
+                        String startDate = startDateDt.asStringValue();
+                        validateStartDateParamAndEndDateParam(startDate, null);
                     } else {
                         throw OperationOutcomeFactory.buildOperationOutcomeException(
                                 new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
@@ -313,34 +329,47 @@ public class PatientResourceProvider implements IResourceProvider {
             structuredBundle.addEntry().setResource(patient);
         }
 
-        // Add Organization
-        Long organizationId = Long.valueOf(patientDetails.getManagingOrganization());
-        OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId);
-        Organization organization = organizationResourceProvider
-                .convertOrganizaitonDetailsToOrganization(organizationDetails);
-        structuredBundle.addEntry().setResource(organization);
+        //Organization from patient
+        Set<String> orgIds = new HashSet<>();
+        orgIds.add(patientDetails.getManagingOrganization());
 
-        // Add Practitioner
+        //Practitioner from patient
+        Set<String> practitionerIds = new HashSet<>();
         List<Reference> practitionerReferenceList = patient.getGeneralPractitioner();
-        Reference practitioner = practitionerReferenceList.get(0);
-        String practitionerId = practitioner.getReference().replaceAll("Practitioner/", "");
-        Practitioner pracResource = practitionerResourceProvider.getPractitionerById(new IdType(practitionerId));
-        structuredBundle.addEntry().setResource(pracResource);
-
-        final List<PractitionerRole> practitionerRoleList = practitionerRoleResourceProvider.getPractitionerRoleByPracticionerId(new IdType(practitionerId));
-
-        for (PractitionerRole role : practitionerRoleList) {
-            structuredBundle.addEntry().setResource(role);
-        }
+        practitionerReferenceList.forEach(practitionerReference -> {
+            String[] pracRef = practitionerReference.getReference().split("/");
+            if (pracRef.length > 1) {
+                practitionerIds.add(pracRef[1]);
+            }
+        });
 
         if (getAllergies) {
-            structuredBundle = structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS, practitionerId,
-                    structuredBundle, includeResolved);
+            structuredBundle = structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS, practitionerIds, structuredBundle, includeResolved);
         }
         if (getMedications) {
-            structuredBundle = populateMedicationBundle.addMedicationBundleEntries(structuredBundle,
-                    patientDetails, includePrescriptionIssues, medicationPeriod);
+            structuredBundle = populateMedicationBundle.addMedicationBundleEntries(structuredBundle, patientDetails, includePrescriptionIssues, medicationPeriod, practitionerIds, orgIds);
         }
+
+        //Add all practitioners and practitioner roles
+        for (String practitionerId : practitionerIds) {
+            Practitioner pracResource = practitionerResourceProvider.getPractitionerById(new IdType(practitionerId));
+            structuredBundle.addEntry().setResource(pracResource);
+
+            List<PractitionerRole> practitionerRoleList = practitionerRoleResourceProvider.getPractitionerRoleByPracticionerId(new IdType(practitionerId));
+            for (PractitionerRole role : practitionerRoleList) {
+                String[] split = role.getOrganization().getReference().split("/");
+                orgIds.add(split[1]);
+                structuredBundle.addEntry().setResource(role);
+            }
+        }
+
+        //Add all organizations
+        for (String orgId : orgIds) {
+            OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(new Long(orgId));
+            Organization organization = organizationResourceProvider.convertOrganizaitonDetailsToOrganization(organizationDetails);
+            structuredBundle.addEntry().setResource(organization);
+        }
+
         structuredBundle.setType(BundleType.COLLECTION);
         structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
         //structuredBundle.getMeta().setLastUpdated(new Date());
@@ -434,9 +463,17 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     private void updateAddressAndTelecom(Patient unregisteredPatient, PatientDetails patientDetails) {
+        ArrayList<TelecomDetails> al = new ArrayList<>();
         if (unregisteredPatient.getTelecom().size() > 0) {
-            patientDetails.setTelephone(unregisteredPatient.getTelecom().get(0).getValue());
+            for (ContactPoint contactPoint : unregisteredPatient.getTelecom()) {
+                TelecomDetails telecomDetails = new TelecomDetails();
+                telecomDetails.setSystem(contactPoint.getSystem().toString());
+                telecomDetails.setUseType(contactPoint.getUse().toString());
+                telecomDetails.setValue(contactPoint.getValue());
+                al.add(telecomDetails);
+            }
         }
+        patientDetails.setTelecoms(al);
 
         // actually a list of addresses not a single one
         if (unregisteredPatient.getAddress().size() > 0) {
@@ -494,25 +531,83 @@ public class PatientResourceProvider implements IResourceProvider {
         checkValidExtensions(patient.getExtension());
         validateNames(patient);
         validateDateOfBirth(patient);
-        valiateGender(patient);
+        validateGender(patient);
     }
 
     private void validateTelecomAndAddress(Patient patient) {
-        //Only a single telecom with type temp may be sent
-        if (patient.getTelecom().size() > 1) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(
-                            "Only a single telecom can be sent in a register patient request."),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
-        } else if (patient.getTelecom().size() == 1) {
-            if (patient.getTelecom().get(0).getUse() != ContactPointUse.TEMP) {
+        // 0..1 of phone - (not nec. temp),  0..1 of email
+        HashSet<ContactPointUse> phoneUse = new HashSet<>();
+        int emailCount = 0;
+        for (ContactPoint telecom : patient.getTelecom()) {
+            if (telecom.hasSystem()) {
+                if (telecom.getSystem() != null) {
+                    switch (telecom.getSystem()) {
+                        case PHONE:
+                            if (telecom.hasUse()) {
+                                switch (telecom.getUse()) {
+                                    case HOME:
+                                    case WORK:
+                                    case MOBILE:
+                                    case TEMP:
+                                        if (!phoneUse.contains(telecom.getUse())) {
+                                            phoneUse.add(telecom.getUse());
+                                        } else {
+                                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                                    new InvalidRequestException(
+                                                            "Only one Telecom of type phone with use type " + telecom.getUse().toString().toLowerCase() + " is allowed in a register patient request."),
+                                                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+                                        }
+                                        break;
+                                    default:
+                                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                                new InvalidRequestException(
+                                                        "Invalid Telecom of type phone use type " + telecom.getUse().toString().toLowerCase() + " in a register patient request."),
+                                                SystemCode.BAD_REQUEST, IssueType.INVALID);
+                                }
+                            } else {
+                                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                        new InvalidRequestException(
+                                                "Invalid Telecom - no Use type provided in a register patient request."),
+                                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                            }
+                            break;
+                        case EMAIL:
+                            if (++emailCount > 1) {
+                                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                        new InvalidRequestException(
+                                                "Only one Telecom of type " + "email" + " is allowed in a register patient request."),
+                                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                            }
+                            break;
+                        default:
+                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new InvalidRequestException(
+                                            "Telecom system is missing in a register patient request."),
+                                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+                    }
+                }
+            } else {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException(
-                                "The telecom use must be set to temp."),
+                                "Telecom system is missing in a register patient request."),
                         SystemCode.BAD_REQUEST, IssueType.INVALID);
             }
-        }
+        } // iterate telcom 
 
+        // commented out at 1.2.2 structured
+//        if (patient.getTelecom().size() > 1) {
+//            throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                    new InvalidRequestException(
+//                            "Only a single telecom can be sent in a register patient request."),
+//                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+//        } else if (patient.getTelecom().size() == 1) {
+//            if (patient.getTelecom().get(0).getUse() != ContactPointUse.TEMP) {
+//                throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                        new InvalidRequestException(
+//                                "The telecom use must be set to temp."),
+//                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+//            }
+//        }
         //Only a single address with type temp may be sent
         if (patient.getAddress().size() > 1) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -529,7 +624,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
     }
 
-    private void valiateGender(Patient patient) {
+    private void validateGender(Patient patient) {
         AdministrativeGender gender = patient.getGender();
 
         if (gender != null) {
@@ -584,19 +679,31 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private void checkValidExtensions(List<Extension> undeclaredExtensions) {
 
+        // This list must be empty for the request to be valid
         List<String> extensionURLs = undeclaredExtensions.stream().map(Extension::getUrl).collect(Collectors.toList());
 
+        // see https://nhsconnect.github.io/gpconnect/foundations_use_case_register_a_patient.html
         extensionURLs.remove(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
-        extensionURLs.remove(SystemURL.SD_CC_EXT_ETHNIC_CATEGORY);
-        extensionURLs.remove(SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI);
-        extensionURLs.remove(SystemURL.SD_PATIENT_CADAVERIC_DON);
-        extensionURLs.remove(SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS);
-        extensionURLs.remove(SystemURL.SD_CC_EXT_TREATMENT_CAT);
-        extensionURLs.remove(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
+
+        // these commented out enties are not allowed at 1.2.2 so don't get removed from the list
+        //extensionURLs.remove(SystemURL.SD_CC_EXT_ETHNIC_CATEGORY);
+        //extensionURLs.remove(SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI);
+        //extensionURLs.remove(SystemURL.SD_PATIENT_CADAVERIC_DON);
+        //extensionURLs.remove(SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS);
+        //extensionURLs.remove(SystemURL.SD_CC_EXT_TREATMENT_CAT);
+        //extensionURLs.remove(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
+        // 1.2.2 allows 0..1 SD_CC_EXT_NHS_COMMUNICATION
+        long communicationCount = extensionURLs.stream().filter(extension -> extension.equals(SD_CC_EXT_NHS_COMMUNICATION)).count();
+        if (communicationCount == 1) {
+            extensionURLs.remove(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
+            // also remove any associated "interpreterRequired" url, other urls from eg language etc dont appear in this list.
+            // so don't need to be removed
+            extensionURLs.remove(SystemURL.SD_CC_INTERPRETER_REQUIRED);
+        }
 
         if (!extensionURLs.isEmpty()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException(
+                    new InvalidRequestException(
                             "Invalid/multiple patient extensions found. The following are in excess or invalid: "
                             + extensionURLs.stream().collect(Collectors.joining(", "))),
                     SystemCode.INVALID_RESOURCE, IssueType.INVALID);
@@ -726,16 +833,16 @@ public class PatientResourceProvider implements IResourceProvider {
         patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
 
         // mutliple birth rmeoved at 1.2.2
-//        Type multipleBirth = patientResource.getMultipleBirth();
-//        if (multipleBirth != null) {
-//            try {
-//                patientDetails.setMultipleBirth((multipleBirth));
-//            } catch (ClassCastException cce) {
-//                throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                        new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
-//                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-//            }
-//        }
+        //        Type multipleBirth = patientResource.getMultipleBirth();
+        //        if (multipleBirth != null) {
+        //            try {
+        //                patientDetails.setMultipleBirth((multipleBirth));
+        //            } catch (ClassCastException cce) {
+        //                throw OperationOutcomeFactory.buildOperationOutcomeException(
+        //                        new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
+        //                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        //            }
+        //        }
         DateTimeType deceased = (DateTimeType) patientResource.getDeceased();
         if (deceased != null) {
             try {
@@ -755,25 +862,31 @@ public class PatientResourceProvider implements IResourceProvider {
         updateAddressAndTelecom(patientResource, patientDetails);
 
         // set some standard values for defaults, ensure managing org is always returned
-        // added at 1.2.2
+        // added at 1.2.2 7 is A20047 the default GP Practice
         patientDetails.setManagingOrganization("7");
 
         return patientDetails;
     }
 
+    /**
+     * only used on register patient call
+     *
+     * @param patient Patient object
+     * @return patient object adorned with "static" data
+     */
     private Patient setStaticPatientData(Patient patient) {
 
         patient.setLanguage(("en-GB"));
 
         // inhibited at 1.2.2
-//        patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY_STU3,
-//                SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
-//        patient.addExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code",
-//                SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));
-//        patient.addExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS_STU3,
-//                SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS));
-//        patient.addExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT_STU3,
-//                SystemURL.SD_CC_EXT_TREATMENT_CAT));
+        //        patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY_STU3,
+        //                SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
+        //        patient.addExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code",
+        //                SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));
+        //        patient.addExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS_STU3,
+        //                SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS));
+        //        patient.addExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT_STU3,
+        //                SystemURL.SD_CC_EXT_TREATMENT_CAT));
         Extension nhsCommExtension = new Extension();
         nhsCommExtension.setUrl(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
         nhsCommExtension.addExtension(
@@ -819,7 +932,8 @@ public class PatientResourceProvider implements IResourceProvider {
                 .addGiven("AdditionalGiven")
                 .setUse(NameUse.TEMP);
 
-        patient.addTelecom(staticElHelper.getValidTelecom());
+        // inhibited at 1.2.2 structured
+        //patient.addTelecom(staticElHelper.getValidTelecom());
         // TODO This appears to return a useless address element, only populated with use and type
         patient.addAddress(staticElHelper.getValidAddress());
 
@@ -854,9 +968,23 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.addName(name);
 
+        addTelecoms(patientDetails, patient);
+
         patient = setStaticPatientData(patient);
 
         return patient;
+    }
+
+    /**
+     * from details to patient
+     *
+     * @param patientDetails
+     * @param patient fhir resource
+     */
+    private void addTelecoms(PatientDetails patientDetails, Patient patient) {
+        for (TelecomDetails telecomDetails : patientDetails.getTelecoms()) {
+            patient.addTelecom(populateTelecom(telecomDetails));
+        }
     }
 
     private Patient patientDetailsToMinimalPatient(PatientDetails patientDetails) throws FHIRException {
@@ -872,7 +1000,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.setId(id);
         patient.getMeta().setVersionId(versionId);
-//      patient.getMeta().setLastUpdated(lastUpdated);
+        //      patient.getMeta().setLastUpdated(lastUpdated);
         patient.getMeta().addProfile(SystemURL.SD_GPC_PATIENT);
 
         Identifier patientNhsNumber = new Identifier().setSystem(SystemURL.ID_NHS_NUMBER)
@@ -926,20 +1054,20 @@ public class PatientResourceProvider implements IResourceProvider {
         patient.addExtension(regDetailsExtension);
 
         // inhibited at 1.2.2
-//        CodeableConcept marital = new CodeableConcept();
-//        Coding maritalCoding = new Coding();
-//        if (patientDetails.getMaritalStatus() != null) {
-//            maritalCoding.setSystem(SystemURL.CS_MARITAL_STATUS);
-//            maritalCoding.setCode(patientDetails.getMaritalStatus());
-//            maritalCoding.setDisplay("Married"); //TODO needs to actually match the marital code
-//        } else {
-//            maritalCoding.setSystem(SystemURL.CS_NULL_FLAVOUR);
-//            maritalCoding.setCode("UNK");
-//            maritalCoding.setDisplay("unknown");
-//        }
-//        marital.addCoding(maritalCoding);
+        //        CodeableConcept marital = new CodeableConcept();
+        //        Coding maritalCoding = new Coding();
+        //        if (patientDetails.getMaritalStatus() != null) {
+        //            maritalCoding.setSystem(SystemURL.CS_MARITAL_STATUS);
+        //            maritalCoding.setCode(patientDetails.getMaritalStatus());
+        //            maritalCoding.setDisplay("Married"); //TODO needs to actually match the marital code
+        //        } else {
+        //            maritalCoding.setSystem(SystemURL.CS_NULL_FLAVOUR);
+        //            maritalCoding.setCode("UNK");
+        //            maritalCoding.setDisplay("unknown");
+        //        }
+        //        marital.addCoding(maritalCoding);
         //patient.setMaritalStatus(marital);
-//      patient.setMultipleBirth(patientDetails.isMultipleBirth());
+        //      patient.setMultipleBirth(patientDetails.isMultipleBirth());
         if (patientDetails.isDeceased()) {
             DateTimeType decesed = new DateTimeType(patientDetails.getDeceased());
             patient.setDeceased(decesed);
@@ -950,8 +1078,62 @@ public class PatientResourceProvider implements IResourceProvider {
             patient.setManagingOrganization(new Reference("Organization/" + managingOrganization));
         }
 
+        // for patient 2 add some contact details
+        if (patientDetails.getNhsNumber().equals(patient2)) {
+            createContact(patient);
+        }
+
         return patient;
     } // patientDetailsToMinimalPatient
+
+    /**
+     * add a set of contact details into the patient record NB these are
+     * Contacts (related people etc) not contactpoints (telecoms)
+     *
+     * @param patient fhirResource object
+     */
+    private void createContact(Patient patient) {
+
+        // relationships
+        Patient.ContactComponent contact = new ContactComponent();
+        for (String relationship : new String[]{"Emergency contact", "Next of kin", "Daughter"}) {
+            CodeableConcept crelationship = new CodeableConcept();
+            crelationship.setText(relationship);
+            contact.addRelationship(crelationship);
+        }
+
+        // contact address
+        Address address = new Address();
+        address.addLine("Trevelyan Square");
+        address.addLine("Boar Ln");
+        address.setPostalCode("LS1 6AE");
+        address.setType(AddressType.PHYSICAL);
+        address.setUse(AddressUse.HOME);
+        contact.setAddress(address);
+
+        // gender
+        contact.setGender(AdministrativeGender.FEMALE);
+
+        // telecom
+        ContactPoint telecom = new ContactPoint();
+        telecom.setSystem(ContactPointSystem.PHONE);
+        telecom.setUse(ContactPointUse.MOBILE);
+        telecom.setValue("07777123123");
+        contact.addTelecom(telecom);
+
+        // Name
+        HumanName name = new HumanName();
+        name.addGiven("Jane");
+        name.setFamily("Jackson");
+        List<StringType> prefixList = new ArrayList<>();
+        prefixList.add(new StringType("Miss"));
+        name.setPrefix(prefixList);
+        name.setText("JACKSON Jane (Miss)");
+        name.setUse(NameUse.OFFICIAL);
+        contact.setName(name);
+
+        patient.addContact(contact);
+    }
 
     private Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) throws FHIRException {
         Patient patient = patientDetailsToMinimalPatient(patientDetails);
@@ -987,12 +1169,24 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         String telephoneNumber = patientDetails.getTelephone();
+        ArrayList<ContactPoint> al = new ArrayList<>();
+        // defaults to home, this is from the slot in the patients table
         if (telephoneNumber != null) {
-            ContactPoint telephone = new ContactPoint().setSystem(ContactPointSystem.PHONE).setValue(telephoneNumber)
-                    .setUse(ContactPointUse.HOME);
+            ContactPoint telephone = new ContactPoint().
+                    setSystem(ContactPointSystem.PHONE).
+                    setValue(telephoneNumber).
+                    setUse(ContactPointUse.HOME);
 
-            patient.setTelecom(Collections.singletonList(telephone));
+            al.add(telephone);
         }
+
+        // tack on any from the telecoms table 1.2.2 structured
+        if (patientDetails.getTelecoms() != null) {
+            for (TelecomDetails telecomDetails : patientDetails.getTelecoms()) {
+                al.add(populateTelecom(telecomDetails));
+            }
+        }
+        patient.setTelecom(al);
 
         String managingOrganization = patientDetails.getManagingOrganization();
 
@@ -1002,6 +1196,13 @@ public class PatientResourceProvider implements IResourceProvider {
 
         return patient;
     } // patientDetailsToPatientResourceConverter
+
+    private ContactPoint populateTelecom(TelecomDetails telecomDetails) {
+        return new ContactPoint().
+                setSystem(ContactPoint.ContactPointSystem.valueOf(telecomDetails.getSystem())).
+                setUse(ContactPoint.ContactPointUse.valueOf(telecomDetails.getUseType())).
+                setValue(telecomDetails.getValue());
+    }
 
     private HumanName getPatientNameFromPatientDetails(PatientDetails patientDetails) {
         HumanName name = new HumanName();

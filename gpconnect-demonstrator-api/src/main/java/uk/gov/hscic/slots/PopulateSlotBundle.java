@@ -27,6 +27,8 @@ import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
+import uk.gov.hscic.location.LocationSearch;
+import uk.gov.hscic.model.location.LocationDetails;
 import uk.gov.hscic.model.organization.OrganizationDetails;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.organization.OrganizationSearch;
@@ -57,22 +59,50 @@ public class PopulateSlotBundle {
     @Autowired
     private OrganizationSearch organizationSearch;
 
+    @Autowired
+    private LocationSearch locationSearch;
+
     public void populateBundle(Bundle bundle, OperationOutcome operationOutcome, Date planningHorizonStart,
             Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation, String bookingOdsCode, String bookingOrgType) {
         bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
 
+        // find first locationDetails for this ODS practice code
+        List<LocationDetails> locationDetails = locationSearch.findAllLocations();
+        LocationDetails locationDetail = null;
+        for (LocationDetails alocationDetail : locationDetails) {
+            if (alocationDetail.getOrgOdsCode().equals(bookingOdsCode)) {
+                locationDetail = alocationDetail;
+                break;
+            }
+        }
+
+        // find the matching location resource. There must be a better way
+        Location location = null;
         List<Location> locations = locationResourceProvider.getAllLocationDetails();
+        if (locationDetail != null) {
+            for (Location aLocation : locations) {
+                if (locationDetail.getSiteOdsCode().equals(aLocation.getIdentifierFirstRep().getValue())) {
+                    location = aLocation;
+                    break;
+                }
+            }
+        }
+
+        if (location == null) {
+            // default if matching location not found
+            location = locations.get(0);
+        }
 
         BundleEntryComponent locationEntry = new BundleEntryComponent();
-        locationEntry.setResource(locations.get(0));
-        locationEntry.setFullUrl("Location/" + locations.get(0).getIdElement().getIdPart());
+        locationEntry.setResource(location);
+        locationEntry.setFullUrl("Location/" + location.getIdElement().getIdPart());
 
         // find the organization from the ods code
         List<OrganizationDetails> organizations = organizationSearch.findOrganizationDetailsByOrgODSCode(bookingOdsCode);
 
         // schedules
         List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(
-                locations.get(0).getIdElement().getIdPart(), planningHorizonStart, planningHorizonEnd);
+                location.getIdElement().getIdPart(), planningHorizonStart, planningHorizonEnd);
 
         if (!schedules.isEmpty()) {
             HashSet<BundleEntryComponent> addedSchedule = new HashSet<>();
@@ -142,7 +172,7 @@ public class PopulateSlotBundle {
                 slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationType(schedule.getIdElement().getIdPart(),
                         planningHorizonStart, planningHorizonEnd, bookingOrgType));
                 String freeBusyType = "FREE";
-                
+
                 for (Slot slot : slots) {
                     if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
                         BundleEntryComponent slotEntry = new BundleEntryComponent();

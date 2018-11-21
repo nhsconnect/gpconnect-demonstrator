@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 
-import java.util.Date;
 import java.util.List;
 import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
 
@@ -39,10 +38,6 @@ public class MedicationStatementResourceProvider {
             medicationStatement.addBasedOn(new Reference(new IdType("MedicationRequest", statementDetail.getMedicationRequestPlanId())));
         }
 
-        if (statementDetail.getEncounterId() != null) {
-            medicationStatement.setContext(new Reference(new IdType("Encounter", statementDetail.getEncounterId())));
-        }
-
         try {
             medicationStatement.setStatus(MedicationStatementStatus.fromCode(statementDetail.getStatusCode()));
         } catch (FHIRException e) {
@@ -67,7 +62,6 @@ public class MedicationStatementResourceProvider {
         }
 
         setReasonCodes(medicationStatement, statementDetail);
-        setReasonReferences(medicationStatement, statementDetail);
         setNotes(medicationStatement, statementDetail);
 
         String dosageText = statementDetail.getDosageText();
@@ -78,7 +72,13 @@ public class MedicationStatementResourceProvider {
         String prescribingAgency = statementDetail.getPrescribingAgency();
         if (prescribingAgency != null && !prescribingAgency.trim().isEmpty()) {
 
-            Coding coding = new Coding(SystemURL.SD_EXTENSION_CC_PRESCRIBING_AGENCY, prescribingAgency, prescribingAgency);
+        	String prescribingAgencyDisplay = "";
+        	if (prescribingAgency.equalsIgnoreCase("prescribed-at-gp-practice")) {
+        		prescribingAgencyDisplay = "Prescribed at GP practice";
+        	} else if (prescribingAgency.equalsIgnoreCase("prescribed-by-another-organisation")) {
+        		prescribingAgencyDisplay = "Prescribed by another organisation";
+        	}
+            Coding coding = new Coding(SystemURL.CS_CC_PRESCRIBING_AGENCY_STU3, prescribingAgency, prescribingAgencyDisplay);
 
             CodeableConcept codeableConcept = new CodeableConcept().addCoding(coding);
             medicationStatement.addExtension(new Extension(SystemURL.SD_EXTENSION_CC_PRESCRIBING_AGENCY, codeableConcept));
@@ -91,16 +91,6 @@ public class MedicationStatementResourceProvider {
         statementDetail.getReasonCodes().forEach(rc -> {
             Coding coding = new Coding(SystemURL.VS_CONDITION_CODE, rc.getCode(), rc.getDisplay());
             medicationStatement.addReasonCode(new CodeableConcept().addCoding(coding));
-        });
-    }
-
-    private void setReasonReferences(MedicationStatement medicationStatement, MedicationStatementDetail statementDetail) {
-        statementDetail.getReasonReferences().forEach(rr -> {
-            if (rr.getReferenceUrl().equals(SystemURL.SD_GPC_OBSERVATION)) {
-                medicationStatement.addReasonReference(new Reference(new IdType("Observation", rr.getReferenceId())));
-            } else if (rr.getReferenceUrl().equals(SystemURL.SD_GPC_CONDITION)) {
-                medicationStatement.addReasonReference(new Reference(new IdType("Condition", rr.getReferenceId())));
-            }
         });
     }
 

@@ -1,27 +1,27 @@
-1,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,1, ,T
-1,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,1, ,T
-1,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,1, ,T
-1,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,1, ,T
-1,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-1,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,1, ,T
+1,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,7, ,T
+1,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,7, ,T
+1,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,7, ,T
+1,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,7, ,T
+1,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+1,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,7, ,T
 1,13,0,0,13,10,0,408443003,General medical practice,2,FREE,true,2, ,T
 1,13,10,0,13,20,0,408443003,General medical practice,2,FREE,true,2, ,T
 1,13,20,0,13,30,0,408443003,General medical practice,2,FREE,true,2, ,T
@@ -46,30 +46,30 @@
 1,16,30,0,16,40,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
 1,16,40,0,16,50,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
 1,16,50,0,17,0,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
-2,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,1, ,T
-2,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,1, ,T
-2,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,1, ,T
-2,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,1, ,T
-2,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-2,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,1, ,T
+2,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,7, ,T
+2,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,7, ,T
+2,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,7, ,T
+2,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,7, ,T
+2,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+2,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,7, ,T
 2,13,0,0,13,10,0,408443003,General medical practice,2,FREE,true,2, ,T
 2,13,10,0,13,20,0,408443003,General medical practice,2,FREE,true,2, ,T
 2,13,20,0,13,30,0,408443003,General medical practice,2,FREE,true,2, ,T
@@ -94,30 +94,30 @@
 2,16,30,0,16,40,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
 2,16,40,0,16,50,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
 2,16,50,0,17,0,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
-3,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,1, ,T
-3,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,1, ,T
-3,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,1, ,T
-3,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,1, ,T
-3,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-3,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,1, ,T
+3,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,7, ,T
+3,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,7, ,T
+3,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,7, ,T
+3,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,7, ,T
+3,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+3,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,7, ,T
 3,13,0,0,13,10,0,408443003,General medical practice,2,FREE,true,2, ,T
 3,13,10,0,13,20,0,408443003,General medical practice,2,FREE,true,2, ,T
 3,13,20,0,13,30,0,408443003,General medical practice,2,FREE,true,2, ,T
@@ -142,30 +142,30 @@
 3,16,30,0,16,40,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
 3,16,40,0,16,50,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
 3,16,50,0,17,0,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
-4,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,1, ,T
-4,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,1, ,T
-4,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,1, ,T
-4,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,1, ,T
-4,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-4,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,1, ,T
+4,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,7, ,T
+4,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,7, ,T
+4,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,7, ,T
+4,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,7, ,T
+4,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+4,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,7, ,T
 4,13,0,0,13,10,0,408443003,General medical practice,2,FREE,true,2, ,T
 4,13,10,0,13,20,0,408443003,General medical practice,2,FREE,true,2, ,T
 4,13,20,0,13,30,0,408443003,General medical practice,2,FREE,true,2, ,T
@@ -190,30 +190,30 @@
 4,16,30,0,16,40,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
 4,16,40,0,16,50,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
 4,16,50,0,17,0,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
-5,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,1, ,T
-5,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,1, ,T
-5,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,1, ,T
-5,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,1, ,T
-5,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-5,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,1, ,T
+5,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,7, ,T
+5,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,7, ,T
+5,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,7, ,T
+5,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,7, ,T
+5,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+5,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,7, ,T
 5,13,0,0,13,10,0,408443003,General medical practice,2,FREE,true,2, ,T
 5,13,10,0,13,20,0,408443003,General medical practice,2,FREE,true,2, ,T
 5,13,20,0,13,30,0,408443003,General medical practice,2,FREE,true,2, ,T
@@ -238,30 +238,30 @@
 5,16,30,0,16,40,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
 5,16,40,0,16,50,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
 5,16,50,0,17,0,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
-6,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,1, ,T
-6,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,1, ,T
-6,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,1, ,T
-6,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,1, ,T
-6,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,1, ,T
-6,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,1, ,T
+6,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,7, ,T
+6,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,7, ,T
+6,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,7, ,T
+6,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,7, ,T
+6,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,7, ,T
+6,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,7, ,T
 6,13,0,0,13,10,0,408443003,General medical practice,2,FREE,true,2, ,T
 6,13,10,0,13,20,0,408443003,General medical practice,2,FREE,true,2, ,T
 6,13,20,0,13,30,0,408443003,General medical practice,2,FREE,true,2, ,T
@@ -286,30 +286,30 @@
 6,16,30,0,16,40,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
 6,16,40,0,16,50,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
 6,16,50,0,17,0,0,408443003,General medical practice,2,FREE,true,2,Urgent Care,V
-1,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-1,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-1,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-1,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-1,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-1,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
+1,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+1,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+1,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+1,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+1,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+1,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
 1,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 1,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 1,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,2, ,P
@@ -334,30 +334,30 @@
 1,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 1,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 1,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
-2,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-2,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-2,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-2,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-2,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-2,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
+2,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+2,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+2,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+2,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+2,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+2,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
 2,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 2,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 2,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,2, ,P
@@ -382,30 +382,30 @@
 2,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 2,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 2,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
-3,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-3,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-3,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-3,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-3,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-3,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
+3,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+3,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+3,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+3,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+3,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+3,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
 3,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 3,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 3,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,2, ,P
@@ -430,30 +430,30 @@
 3,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 3,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 3,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
-4,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-4,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-4,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-4,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-4,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-4,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
+4,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+4,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+4,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+4,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+4,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+4,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
 4,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 4,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 4,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,2, ,P
@@ -478,30 +478,30 @@
 4,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 4,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 4,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
-5,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-5,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-5,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-5,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-5,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-5,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
+5,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+5,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+5,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+5,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+5,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+5,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
 5,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 5,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 5,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,2, ,P
@@ -526,30 +526,30 @@
 5,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 5,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 5,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
-6,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-6,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-6,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-6,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-6,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-6,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
+6,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+6,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+6,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+6,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+6,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+6,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
 6,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 6,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 6,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,2, ,P
@@ -574,30 +574,30 @@
 6,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 6,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 6,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
-7,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-7,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-7,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-7,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-7,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-7,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
+7,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+7,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+7,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+7,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+7,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+7,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
 7,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 7,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 7,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,2, ,P
@@ -622,30 +622,30 @@
 7,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 7,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 7,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
-8,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-8,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-8,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-8,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-8,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-8,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
+8,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+8,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+8,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+8,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+8,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+8,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
 8,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 8,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 8,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,2, ,P
@@ -670,30 +670,30 @@
 8,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 8,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 8,16,50,0,18,0,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
-9,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-9,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-9,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-9,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,1, ,P
-9,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,1, ,P
-9,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,1, ,P
+9,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+9,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+9,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+9,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,7, ,P
+9,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,7, ,P
+9,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,7, ,P
 9,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 9,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,2, ,P
 9,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,2, ,P
@@ -718,30 +718,30 @@
 9,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 9,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
 9,16,50,0,19,0,0,394592004,Clinical oncology,1,FREE,true,2,Urgent Care,V
-1,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,1, ,T
-1,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,1, ,T
-1,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,1, ,T
-1,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,1, ,T
-1,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-1,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,1, ,T
+1,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,7, ,T
+1,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,7, ,T
+1,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,7, ,T
+1,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,7, ,T
+1,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+1,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,7, ,T
 1,13,0,0,13,10,0,408443003,General medical practice,12,FREE,true,2, ,T
 1,13,10,0,13,20,0,408443003,General medical practice,12,FREE,true,2, ,T
 1,13,20,0,13,30,0,408443003,General medical practice,12,FREE,true,2, ,T
@@ -766,30 +766,30 @@
 1,16,30,0,16,40,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
 1,16,40,0,16,50,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
 1,16,50,0,17,0,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
-2,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,1, ,T
-2,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,1, ,T
-2,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,1, ,T
-2,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,1, ,T
-2,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-2,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,1, ,T
+2,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,7, ,T
+2,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,7, ,T
+2,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,7, ,T
+2,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,7, ,T
+2,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+2,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,7, ,T
 2,13,0,0,13,10,0,408443003,General medical practice,12,FREE,true,2, ,T
 2,13,10,0,13,20,0,408443003,General medical practice,12,FREE,true,2, ,T
 2,13,20,0,13,30,0,408443003,General medical practice,12,FREE,true,2, ,T
@@ -814,30 +814,30 @@
 2,16,30,0,16,40,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
 2,16,40,0,16,50,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
 2,16,50,0,17,0,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
-3,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,1, ,T
-3,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,1, ,T
-3,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,1, ,T
-3,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,1, ,T
-3,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-3,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,1, ,T
+3,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,7, ,T
+3,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,7, ,T
+3,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,7, ,T
+3,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,7, ,T
+3,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+3,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,7, ,T
 3,13,0,0,13,10,0,408443003,General medical practice,12,FREE,true,2, ,T
 3,13,10,0,13,20,0,408443003,General medical practice,12,FREE,true,2, ,T
 3,13,20,0,13,30,0,408443003,General medical practice,12,FREE,true,2, ,T
@@ -862,30 +862,30 @@
 3,16,30,0,16,40,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
 3,16,40,0,16,50,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
 3,16,50,0,17,0,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
-4,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,1, ,T
-4,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,1, ,T
-4,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,1, ,T
-4,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,1, ,T
-4,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-4,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,1, ,T
+4,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,7, ,T
+4,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,7, ,T
+4,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,7, ,T
+4,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,7, ,T
+4,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+4,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,7, ,T
 4,13,0,0,13,10,0,408443003,General medical practice,12,FREE,true,2, ,T
 4,13,10,0,13,20,0,408443003,General medical practice,12,FREE,true,2, ,T
 4,13,20,0,13,30,0,408443003,General medical practice,12,FREE,true,2, ,T
@@ -910,30 +910,30 @@
 4,16,30,0,16,40,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
 4,16,40,0,16,50,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
 4,16,50,0,17,0,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
-5,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,1, ,T
-5,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,1, ,T
-5,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,1, ,T
-5,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,1, ,T
-5,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-5,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,1, ,T
+5,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,7, ,T
+5,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,7, ,T
+5,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,7, ,T
+5,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,7, ,T
+5,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+5,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,7, ,T
 5,13,0,0,13,10,0,408443003,General medical practice,12,FREE,true,2, ,T
 5,13,10,0,13,20,0,408443003,General medical practice,12,FREE,true,2, ,T
 5,13,20,0,13,30,0,408443003,General medical practice,12,FREE,true,2, ,T
@@ -958,30 +958,30 @@
 5,16,30,0,16,40,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
 5,16,40,0,16,50,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
 5,16,50,0,17,0,0,408443003,General medical practice,12,FREE,true,2,Urgent Care,V
-6,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,1, ,T
-6,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,1, ,T
-6,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,1, ,T
-6,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,1, ,T
-6,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,1, ,T
-6,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,1, ,T
+6,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,7, ,T
+6,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,7, ,T
+6,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,7, ,T
+6,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,7, ,T
+6,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,7, ,T
+6,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,7, ,T
 6,13,0,0,13,10,0,408443003,General medical practice,12,FREE,true,2, ,T
 6,13,10,0,13,20,0,408443003,General medical practice,12,FREE,true,2, ,T
 6,13,20,0,13,30,0,408443003,General medical practice,12,FREE,true,2, ,T

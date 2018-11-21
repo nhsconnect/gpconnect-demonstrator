@@ -4,17 +4,20 @@ import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import uk.gov.hscic.SystemConstants;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.common.helpers.CodeableConceptBuilder;
 import uk.gov.hscic.medication.statement.MedicationStatementEntity;
 import uk.gov.hscic.medication.statement.MedicationStatementRepository;
 import uk.gov.hscic.model.medication.MedicationDetail;
 import uk.gov.hscic.patient.details.PatientRepository;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -33,6 +36,9 @@ public class MedicationResourceProvider implements IResourceProvider {
 
 	@Autowired
 	private MedicationStatementRepository medicationStatementRepository;
+	
+    @Autowired
+    private CodeableConceptBuilder codeableConceptBuilder;
 
     @Override
     public Class<Medication> getResourceType() {
@@ -74,53 +80,15 @@ public class MedicationResourceProvider implements IResourceProvider {
 		medication.setMeta(new Meta().addProfile(SystemURL.SD_GPC_MEDICATION));
 				//.setVersionId(String.valueOf(new Date())).setLastUpdated(new Date()));
 		
-		CodeableConcept code = new CodeableConcept();
-		Coding coding = new Coding();
-		coding.setSystem(SystemURL.VS_SNOMED);
-        coding.setCode(medicationDetail.getCode());
-        coding.setDisplay(medicationDetail.getDisplay());
-        // for 1.2.2 none of the snomed codes matches [0-9]*1[0-9] so we can drop the extensions ie not a descrription code
-        // they are all concept codes
-        //addSnomedExtensions(coding, medicationDetail);
-		code.setCoding(Collections.singletonList(coding));
+		codeableConceptBuilder.addConceptCode(SystemConstants.SNOMED_URL, medicationDetail.getConceptCode(), medicationDetail.getConceptDisplay())
+        	   .addDescription(medicationDetail.getDescCode(), medicationDetail.getDescDisplay())
+        	   .addTranslation(medicationDetail.getCodeTranslationRef());
+        CodeableConcept code = codeableConceptBuilder.build();
+        codeableConceptBuilder.clear();
 		code.setText(medicationDetail.getText());
-		
 		medication.setCode(code);
 		
-//		MedicationPackageComponent packageComponent = new MedicationPackageComponent();
-//		MedicationPackageBatchComponent batchComponent = new MedicationPackageBatchComponent();
-//		batchComponent.setLotNumber(medicationDetail.getBatchNumber());
-//		batchComponent.setExpirationDate(medicationDetail.getExpiryDate());
-//		packageComponent.addBatch(batchComponent);
-		
-//  	medication.setPackage(packageComponent);
-		
 		return medication;
-	}
-
-    /**
-     * handles description codes which have 1 as the penultimate digit
-     * not used for 1.2.2
-     * @param code
-     * @param medicationDetail 
-     */
-	private void addSnomedExtensions(Coding code, MedicationDetail medicationDetail) {
-		Extension idExtension = null;
-		Extension displayExtension = null;
-		Extension snomedExtension = new Extension(SystemURL.SD_EXT_SCT_DESC_ID);
-		
-		if(medicationDetail.getCode() != null) { 
-			idExtension = new Extension("descriptionId").setValue(new IdType(medicationDetail.getCode()));
-			snomedExtension.addExtension(idExtension);
-		}
-		
-		if(medicationDetail.getDisplay() != null) {
-			displayExtension = new Extension("descriptionDisplay").setValue(new StringType(medicationDetail.getDisplay()));
-			snomedExtension.addExtension(displayExtension);
-		}
-		
-		if(idExtension != null || displayExtension != null)
-			code.addExtension(snomedExtension);
 	}
 
 	public Map<String,List<String>> getAllMedicationAndAllergiesForPatient(String nhsNumber) {
@@ -131,15 +99,15 @@ public class MedicationResourceProvider implements IResourceProvider {
 				for (StructuredAllergyIntoleranceEntity allergy :allergyEntities) {
 
 					if(Objects.equals(allergy.getNhsNumber(), nhsNumber)) {
-						allergiesAssociatedWithMedicationMap.computeIfAbsent(medicationEntity.getDisplay(), k-> new ArrayList<>()).add(allergy.getDisplay());
+						allergiesAssociatedWithMedicationMap.computeIfAbsent(medicationEntity.getConceptDisplay(), k-> new ArrayList<>()).add(allergy.getConceptDisplay());
 					} else {
-						allergiesAssociatedWithMedicationMap.put(medicationEntity.getDisplay(), Collections.EMPTY_LIST);
+						allergiesAssociatedWithMedicationMap.put(medicationEntity.getConceptDisplay(), Collections.emptyList());
 					}
 
 
 				}
 			} else {
-				allergiesAssociatedWithMedicationMap.put(medicationEntity.getDisplay(), Collections.EMPTY_LIST);
+				allergiesAssociatedWithMedicationMap.put(medicationEntity.getConceptDisplay(), Collections.emptyList());
 			}
 		}
 		return allergiesAssociatedWithMedicationMap;
@@ -154,7 +122,6 @@ public class MedicationResourceProvider implements IResourceProvider {
 		medicationStatementEntity.setDateAsserted(simpleDateFormat.parse("2017-06-12"));
 		medicationStatementEntity.setDosageInstruction("Take with meals");
 		medicationStatementEntity.setDosageText("Take 2 tablets every 4 hours");
-		medicationStatementEntity.setEncounterId(8L);
 		medicationStatementEntity.setEndDate(simpleDateFormat.parse("2018-06-12"));
 		medicationStatementEntity.setLastIssueDate(simpleDateFormat.parse("2017-06-12"));
 		medicationStatementEntity.setLastUpdated(simpleDateFormat.parse("2018-03-15"));

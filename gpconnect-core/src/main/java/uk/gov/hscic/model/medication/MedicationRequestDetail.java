@@ -15,7 +15,6 @@ public class MedicationRequestDetail {
 	private String intentDisplay;
 	private Long medicationId;
 	private Long patientId;
-	private Long encounterId;
 	private Date authoredOn;
 	private String requesterUrl;
 	private Long requesterId;
@@ -130,14 +129,6 @@ public class MedicationRequestDetail {
 	
     public void setPatientId(Long patientId) {
 		this.patientId = patientId;
-	}
-	
-    public Long getEncounterId() {
-		return encounterId;
-	}
-	
-    public void setEncounterId(Long encounterId) {
-		this.encounterId = encounterId;
 	}
 	
     public Date getAuthoredOn() {

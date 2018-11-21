@@ -29,7 +29,6 @@ public class MedicationRequestEntityToDetailTransformer implements Transformer<M
 		requestDetail.setIntentDisplay(requestEntity.getIntentDisplay());
 		requestDetail.setMedicationId(requestEntity.getMedicationId());
 		requestDetail.setPatientId(requestEntity.getPatientId());
-		requestDetail.setEncounterId(requestEntity.getEncounterId());
 		requestDetail.setAuthoredOn(requestEntity.getAuthoredOn());
 		requestDetail.setRequesterUrl(requestEntity.getRequesterUrl());
 		requestDetail.setRequesterId(requestEntity.getRequesterId());

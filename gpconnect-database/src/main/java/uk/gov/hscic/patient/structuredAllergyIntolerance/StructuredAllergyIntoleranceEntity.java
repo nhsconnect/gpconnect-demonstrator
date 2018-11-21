@@ -43,18 +43,36 @@ public class StructuredAllergyIntoleranceEntity {
 	
 	@Column(name = "assertedDate")
 	private Date assertedDate;
-	
-	@Column(name = "coding")
-	private String coding;
-	
-	@Column(name = "display")
-	private String display;
+    
+    @Column(name = "concept_code")
+    private String conceptCode;
+    
+    @Column(name = "concept_display")
+    private String conceptDisplay;
+
+    @Column(name = "desc_code")
+    private String descCode;
+    
+    @Column(name = "desc_display")
+    private String descDisplay;
+    
+    @Column(name= "code_translation_ref")
+    private String codeTranslationRef;
 	
 	@Column(name = "manCoding")
 	private String manifestationCoding;
 	
 	@Column(name = "manDisplay")
 	private String manifestationDisplay;
+	
+	@Column(name = "manDescCoding")
+	private String manifestationDescCoding;
+	
+	@Column(name = "manDescDisplay")
+	private String manifestationDescDisplay;
+    
+    @Column(name= "man_translation_ref")
+    private String manTranslationRef;
 
 	@Column(name = "recorder")
 	private String recorder;
@@ -62,13 +80,11 @@ public class StructuredAllergyIntoleranceEntity {
 	@Column(name = "warningCode")
 	private String warningCode;
 
-	@Column(name = "encounter")
-	private String encounter;
-
-
-
     @Column(name = "guid")
     private String guid;
+    
+    @Column(name = "severity") 
+    private String severity;
 
     public String getGuid() {
         return guid;
@@ -76,14 +92,6 @@ public class StructuredAllergyIntoleranceEntity {
 
     public void setGuid(String guid) {
         this.guid = guid;
-    }
-
-    public String getEncounter() {
-        return encounter;
-    }
-
-    public void setEncounter(String encounter) {
-        this.encounter = encounter;
     }
 
     public String getNhsNumber() {
@@ -182,20 +190,44 @@ public class StructuredAllergyIntoleranceEntity {
 		this.assertedDate = assertedDate;
 	}
 
-	public String getCoding() {
-		return coding;
+    public String getConceptCode() {
+		return conceptCode;
 	}
 
-	public void setCoding(String coding) {
-		this.coding = coding;
+	public void setConceptCode(String conceptCode) {
+		this.conceptCode = conceptCode;
 	}
 
-	public String getDisplay() {
-		return display;
+	public String getConceptDisplay() {
+		return conceptDisplay;
 	}
 
-	public void setDisplay(String display) {
-		this.display = display;
+	public void setConceptDisplay(String conceptDisplay) {
+		this.conceptDisplay = conceptDisplay;
+	}
+
+    public String getDescCode() {
+		return descCode;
+	}
+
+	public void setDescCode(String descCode) {
+		this.descCode = descCode;
+	}
+
+	public String getDescDisplay() {
+		return descDisplay;
+	}
+
+	public void setDescDisplay(String descDisplay) {
+		this.descDisplay = descDisplay;
+	}
+
+	public String getCodeTranslationRef() {
+		return codeTranslationRef;
+	}
+
+	public void setCodeTranslationRef(String codeTranslationRef) {
+		this.codeTranslationRef = codeTranslationRef;
 	}
 
 	public String getManifestationCoding() {
@@ -214,6 +246,30 @@ public class StructuredAllergyIntoleranceEntity {
 		this.manifestationDisplay = manifestationDisplay;
 	}
 
+	public String getManifestationDescCoding() {
+		return manifestationDescCoding;
+	}
+
+	public void setManifestationDescCoding(String manifestationDescCoding) {
+		this.manifestationDescCoding = manifestationDescCoding;
+	}
+
+	public String getManifestationDescDisplay() {
+		return manifestationDescDisplay;
+	}
+
+	public void setManifestationDescDisplay(String manifestationDescDisplay) {
+		this.manifestationDescDisplay = manifestationDescDisplay;
+	}
+
+	public String getManTranslationRef() {
+		return manTranslationRef;
+	}
+
+	public void setManTranslationRef(String manTranslationRef) {
+		this.manTranslationRef = manTranslationRef;
+	}
+
 	public String getRecorder() {
 		return recorder;
 	}
@@ -228,5 +284,13 @@ public class StructuredAllergyIntoleranceEntity {
 
 	public void setWarningCode(String warningCode) {
 		this.warningCode = warningCode;
+	}
+
+	public String getSeverity() {
+		return severity;
+	}
+
+	public void setSeverity(String severity) {
+		this.severity = severity;
 	}
 }

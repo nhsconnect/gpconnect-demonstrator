@@ -95,6 +95,7 @@ public class PractitionerResourceProvider implements IResourceProvider {
     }
 
     private Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails) {
+    	
         Identifier identifier = new Identifier()
                 .setSystem(SystemURL.ID_SDS_USER_ID)
                 .setValue(practitionerDetails.getUserId());
@@ -142,13 +143,22 @@ public class PractitionerResourceProvider implements IResourceProvider {
                 practitioner.setGender(AdministrativeGender.UNKNOWN);
                 break;
         }
-
+        
+        
+        
+        CodeableConcept languages = new CodeableConcept();
         for (int i = 0; i < practitionerDetails.getComCode().size(); i++) {
 
             Coding comCoding = new Coding(SystemURL.CS_CC_HUMAN_LANG_STU3, practitionerDetails.getComCode().get(i), null)
                     .setDisplay(practitionerDetails.getComDisplay().get(i));
 
-            practitioner.addCommunication().addCoding(comCoding);
+            languages.addCoding(comCoding);
+        }
+        
+        if (languages.getCoding().size() > 0) {
+        	Extension language = new Extension("language", languages);
+        	Extension nhsCommunication = new Extension("https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSCommunication-1", language);
+        	practitioner.addExtension(nhsCommunication);
         }
 
         return practitioner;

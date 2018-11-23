@@ -293,5 +293,5 @@ VALUES
 INSERT INTO gpconnect.allergyintolerance
   (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,concept_code,concept_display,code_translation_ref,manCoding,manDisplay,manDescCoding,manDescDisplay, recorder, severity)
 VALUES
-  (9658218873 ,'2016-11-00 12:00:00',"Desensitised to Peanuts","","Major", "resolved","unconfirmed","environmental","2",'1962-08-12','2016-11-01',"91935009","Allergy to peanuts","1","249519007","Diarrhoea and vomiting","372285017","D&V – Diarrhoea and vomiting", '1', "mild"),
+  (9658218873 ,'2016-11-01',"Desensitised to Peanuts","","Major", "resolved","unconfirmed","environmental","2",'1962-08-12','2016-11-01',"91935009","Allergy to peanuts","1","249519007","Diarrhoea and vomiting","372285017","D&V – Diarrhoea and vomiting", '1', "mild"),
   (9658218873 ,null,"","","Major", "active","unconfirmed","food","2",'1963-07-27 12:00:00','1963-07-27 12:00:00',"89707004","Sesame oil (substance)","","230145002", "Difficulty breathing", "","",'1', "severe");

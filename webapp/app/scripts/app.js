@@ -1,5 +1,12 @@
 'use strict';
 
+var env = {};
+
+//import variables if present (from env.js)
+if(window) {
+	Object.assign(env, window.__env);
+}
+
 angular.module('gpConnect', [
     'ngResource',
     'ngTouch',
@@ -21,7 +28,8 @@ angular.module('gpConnect', [
     'gantt.table',
     'gantt.tree',
     'gantt.groups'
-]).config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+]).constant('__env', env
+).config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     
     $urlRouterProvider.otherwise('/');
 
@@ -349,16 +357,16 @@ angular.module('gpConnect', [
 
     var persistentDataModel = {}; // Holds configuration values
 
-    this.$get = function() {
+    this.$get = function(__env) {
         var q = jQuery.ajax({
-            type: 'GET', url: 'providerRouting.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
+            type: 'GET', url: __env.baseUrl + 'providerRouting.json', cache: false, async: false, contentType: 'application/json', dataType: 'json'
         });
 
         if (q.status === 200) {
             providerRouting = angular.fromJson(q.responseText);
 
             providerRouting.defaultPractice = function() {
-                if (persistentDataModel.testingOdsCode != undefined && persistentDataModel.testingOdsCode.length > 0) {
+                if (persistentDataModel != undefined && persistentDataModel.testingOdsCode != undefined && persistentDataModel.testingOdsCode.length > 0) {
                     var defaultPracticeOdsCode = persistentDataModel.testingOdsCode;
                 } else {
                     var defaultPracticeOdsCode = $('#defaultPracticeOdsCode').html();

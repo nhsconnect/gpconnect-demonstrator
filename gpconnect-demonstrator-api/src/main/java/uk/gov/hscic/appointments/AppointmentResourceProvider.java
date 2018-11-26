@@ -754,10 +754,15 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentDetail.setStatus(appointment.getStatus().toString().toLowerCase(Locale.UK));
 
         final List<Coding> codingList = appointment.getAppointmentType().getCoding();
-
+         
         if (!codingList.isEmpty()) {
-            appointmentDetail.setTypeCode(Long.valueOf(codingList.get(0).getCode()));
-            appointmentDetail.setTypeDisplay(codingList.get(0).getDisplay());
+        	try {
+        		appointmentDetail.setTypeCode(Long.valueOf(codingList.get(0).getCode()));
+        	} catch (NumberFormatException e) {
+        		//Temp fix only
+        		System.out.println("Code value can't be transformed to long: " + codingList.get(0).getCode());
+        	}
+        	appointmentDetail.setTypeDisplay(codingList.get(0).getDisplay());
         }
 
         appointmentDetail.setMinutesDuration(appointment.getMinutesDuration());

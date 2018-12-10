@@ -106,12 +106,9 @@ public class ScheduleResourceProvider implements IResourceProvider {
                 .setCode(scheduleDetail.getTypeCode()).setDisplay(scheduleDetail.getTypeDescription());
         CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
         codableConcept.setText(scheduleDetail.getTypeDescription());
-        // removed at 1.2.2
-        //schedule.setSpecialty(Collections.singletonList(codableConcept));
         
         schedule.addActor(new Reference("Location/" + scheduleDetail.getLocationId()));    
         
-        //schedule.setActor((List<Reference>) new Reference("Location/" + scheduleDetail.getLocationId()));
         Period period = new Period();
         period.setStart(scheduleDetail.getStartDateTime());
         period.setEnd(scheduleDetail.getEndDateTime());

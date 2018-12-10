@@ -30,23 +30,6 @@ public class PatientDetailsToEntityTransformer implements Transformer<PatientDet
 			String[] address = patientDetails.getAddress();
 
  			if (address != null) {
-//				final String[] addressLines = StringUtils.split(address, ",");
-//
-//				if (addressLines.length > 0) {
-//					patientEntity.setAddress1(addressLines[0]);
-//
-//					if (addressLines.length > 1) {
-//						patientEntity.setAddress2(addressLines[1]);
-//
-//						if (addressLines.length > 2) {
-//							patientEntity.setAddress3(addressLines[2]);
-//
-//							if (addressLines.length > 3) {
-//								patientEntity.setPostcode(addressLines[3]);
-//							}
-//						}
-//					}
-//				}
                 patientEntity.setAddress1(address[0]);
                 patientEntity.setAddress2(address[1]);
                 patientEntity.setAddress3(address[2]);

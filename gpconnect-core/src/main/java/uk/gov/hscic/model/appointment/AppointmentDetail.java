@@ -19,12 +19,8 @@ public class AppointmentDetail {
     private List<Long> slotIds;
     private Date startDateTime;
     private String status;
-    private Long typeCode;
-    private String typeDisplay;
     private BookingOrgDetail bookingOrganization;
     private Date created;
-    
-    private String typeText;
 
     public String getCancellationReason() {
         return cancellationReason;
@@ -80,18 +76,6 @@ public class AppointmentDetail {
 
     public String getStatus() {
         return status;
-    }
-
-    public Long getTypeCode() {
-        return typeCode;
-    }
-
-    public String getTypeDisplay() {
-        return typeDisplay;
-    }
-
-    public String getTypeText() {
-        return typeText;
     }
 
     public BookingOrgDetail getBookingOrganization() {
@@ -154,18 +138,6 @@ public class AppointmentDetail {
         this.status = status;
     }
 
-    public void setTypeCode(Long typeCode) {
-        this.typeCode = typeCode;
-    }
-
-    public void setTypeDisplay(String typeDisplay) {
-        this.typeDisplay = typeDisplay;
-    }
-
-    public void setTypeText(String typeText) {
-        this.typeText = typeText;
-    }
-
     public void setBookingOrganization(BookingOrgDetail bookingOrganization) {
         this.bookingOrganization = bookingOrganization;
     }
@@ -177,6 +149,4 @@ public class AppointmentDetail {
     public void setCreated(Date created) {
         this.created = created;
     }
-
-
 }

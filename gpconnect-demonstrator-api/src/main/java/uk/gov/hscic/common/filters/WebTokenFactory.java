@@ -22,7 +22,10 @@ import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.common.filters.model.WebToken;
@@ -30,12 +33,16 @@ import uk.gov.hscic.common.filters.model.WebTokenValidator;
 
 @Component
 public class WebTokenFactory {
+
     private static final Logger LOG = Logger.getLogger("AuthLog");
     private static final List<String> CONTENT_TYPES = Arrays.asList(
-            "application/fhir+json",            
+            "application/fhir+json",
             "application/fhir+xml"
     );
     private IParser parser = null;
+
+    private static final String JWT_HEADER_TYP = "typ";
+    private static final String JWT_HEADER_ALG = "alg";
 
     WebToken getWebToken(RequestDetails requestDetails, int futureRequestLeeway) {
         WebToken webToken = null;
@@ -88,17 +95,26 @@ public class WebTokenFactory {
         }
 
         try {
-            if(authorizationHeaderComponents[1].contains("==") || authorizationHeaderComponents[1].contains("/") || authorizationHeaderComponents[1].contains("+"))
-            {
+            if (authorizationHeaderComponents[1].contains("==") || authorizationHeaderComponents[1].contains("/") || authorizationHeaderComponents[1].contains("+")) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("JWT must be encoded using Base64URL. Padding is not allowed"),
-                        SystemCode.BAD_REQUEST, IssueType.INVALID); 
+                        SystemCode.BAD_REQUEST, IssueType.INVALID);
             }
 
-            String claimsJsonString = new String(Base64.getDecoder().decode(authorizationHeaderComponents[1].split("\\.")[1]));
-            webToken = new ObjectMapper().readValue(claimsJsonString, WebToken.class);
-            
-            jwtParseResourcesValidation(claimsJsonString);
+            String[] jWTParts = authorizationHeaderComponents[1].split("\\.");
+            if (jWTParts.length == 2) {
+                String headerJsonString = new String(Base64.getDecoder().decode(jWTParts[0]));
+                validateJWTHeader(headerJsonString);
+
+                String claimsJsonString = new String(Base64.getDecoder().decode(jWTParts[1]));
+                webToken = new ObjectMapper().readValue(claimsJsonString, WebToken.class);
+
+                jwtParseResourcesValidation(claimsJsonString);
+            } else {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("Invalid number of JWT base 64 blocks " + jWTParts.length),
+                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+            }
         } catch (IllegalArgumentException iae) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException("Not Base 64"),
@@ -114,12 +130,58 @@ public class WebTokenFactory {
         return webToken;
     }
 
+    /**
+     *
+     * @param headerJsonString
+     * @throws InvalidRequestException
+     * @throws IOException
+     */
+    private void validateJWTHeader(String headerJsonString) throws InvalidRequestException, IOException {
+        Iterator<Map.Entry<String, JsonNode>> iter = new ObjectMapper().readTree(headerJsonString).fields();
+        HashMap<String, String> validHeaderKeys = new HashMap<>();
+        validHeaderKeys.put(JWT_HEADER_ALG, null);
+        validHeaderKeys.put(JWT_HEADER_TYP, null);
+        while (iter.hasNext()) {
+            Map.Entry<String, JsonNode> entry = iter.next();
+            switch (entry.getKey()) {
+                case JWT_HEADER_ALG:
+                    if (!entry.getValue().asText().equals("none")) {
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                new InvalidRequestException("Invalid JWT header " + entry.getKey() + " value " + entry.getValue().asText()),
+                                SystemCode.BAD_REQUEST, IssueType.INVALID);
+                    }
+                    break;
+                case JWT_HEADER_TYP:
+                    if (!entry.getValue().asText().equals("JWT")) {
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                new InvalidRequestException("Invalid JWT header " + entry.getKey() + " value " + entry.getValue().asText()),
+                                SystemCode.BAD_REQUEST, IssueType.INVALID);
+                    }
+                    break;
+                default:
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("Unrecognised JWT Header header key " + entry.getKey()),
+                            SystemCode.BAD_REQUEST, IssueType.INVALID);
+            }
+            validHeaderKeys.put(entry.getKey(), entry.getValue().asText());
+        }
+
+        // check nothings missing
+        for (String key : validHeaderKeys.keySet()) {
+            if (validHeaderKeys.get(key) == null) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new InvalidRequestException("Missing JWT Header key " + key),
+                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+            }
+        }
+    }
+
     private void jwtParseResourcesValidation(String claimsJsonString) {
         if (parser == null) {
             parser = FhirContext
-                .forDstu3()
-                .newJsonParser()
-                .setParserErrorHandler(new StrictErrorHandler());
+                    .forDstu3()
+                    .newJsonParser()
+                    .setParserErrorHandler(new StrictErrorHandler());
         }
 
         try {

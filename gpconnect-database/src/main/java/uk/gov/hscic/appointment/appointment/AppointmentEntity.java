@@ -58,15 +58,6 @@ public class AppointmentEntity {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "typeCode")
-    private Long typeCode;
-
-    @Column(name = "typeDisplay")
-    private String typeDisplay;
-
-    @Column(name = "typeText")
-    private String typeText;
-
     @OneToOne(cascade=CascadeType.ALL, mappedBy="appointmentEntity") 
     private BookingOrgEntity bookingOrganization;
 
@@ -128,18 +119,6 @@ public class AppointmentEntity {
 
     public String getStatus() {
         return status;
-    }
-
-    public Long getTypeCode() {
-        return typeCode;
-    }
-
-    public String getTypeDisplay() {
-        return typeDisplay;
-    }
-
-    public String getTypeText() {
-        return typeText;
     }
 
     public BookingOrgEntity getBookingOrganization(){
@@ -204,18 +183,6 @@ public class AppointmentEntity {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public void setTypeCode(Long typeCode) {
-        this.typeCode = typeCode;
-    }
-
-    public void setTypeDisplay(String typeDisplay) {
-        this.typeDisplay = typeDisplay;
-    }
-
-    public void setTypeText(String typeText) {
-        this.typeText = typeText;
     }
 
     public void setBookingOrganization(BookingOrgEntity bookingOrganization){

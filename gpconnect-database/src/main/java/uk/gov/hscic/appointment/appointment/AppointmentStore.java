@@ -4,9 +4,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hscic.model.appointment.AppointmentDetail;
-import uk.gov.hscic.appointment.appointment.AppointmentEntity;
-import uk.gov.hscic.appointment.appointment.AppointmentRepository;
-import uk.gov.hscic.appointment.appointment.AppointmentEntityToAppointmentDetailTransformer;
 import uk.gov.hscic.model.appointment.SlotDetail;
 
 @Service

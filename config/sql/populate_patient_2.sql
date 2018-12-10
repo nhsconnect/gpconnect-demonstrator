@@ -1,4 +1,4 @@
-INSERT INTO gpconnect.medication_statements
+INSERT INTO gpconnect1.medication_statements
  (id,lastIssueDate,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, warningCode, prescribingAgency)
 VALUES
@@ -8,13 +8,13 @@ VALUES
  (11,'2018-08-29','active','Active',23,'2017-11-22','2018-09-26','2017-11-22',2,'unk','Unknown','1 tablet a day','Morning','2018-08-29','confidential-items','prescribed-at-gp-practice'),
  (12,'2018-08-27','active','Active',24,'2018-01-15','2018-12-14','2018-01-15',2,'unk','Unknown','As directed','Night/nocte','2018-08-27','confidential-items','prescribed-at-gp-practice');
   
-INSERT INTO gpconnect.medication_reason_codes
+INSERT INTO gpconnect1.medication_reason_codes
  (id,reasonCode,reasonDisplay)
 VALUES
  (1,'35489007','Depressive Disorder'),
  (2,'44054006','Type 2 diabetes mellitus');
  
-INSERT INTO gpconnect.medication_statement_reason_codes
+INSERT INTO gpconnect1.medication_statement_reason_codes
  (medicationStatementId,reasonCodeId)
 VALUES
  (1,1),
@@ -23,7 +23,7 @@ VALUES
  (11,2),
  (12,2);
 
-INSERT INTO gpconnect.medication_requests
+INSERT INTO gpconnect1.medication_requests
  (id,groupIdentifier,statusCode,statusDisplay,intentCode,intentDisplay,medicationId,patientId,authoredOn,
  requesterUrl,requesterId,authorisingPractitionerId,dosageText,dosageInstruction,dispenseRequestStartDate,dispenseRequestEndDate,
  dispenseQuantityValue,dispenseQuantityUnit,dispenseQuantityText,expectedSupplyDuration,
@@ -212,13 +212,13 @@ VALUES
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'As directed','Night/Nocte',
  '2018-08-27','2018-09-24','5',null,'5 pens','28',1,null,12,9,'2018-09-24','repeat','Repeat',null,null,'2018-08-27');
  
-UPDATE gpconnect.medication_statements SET medicationRequestId = 20 WHERE id = 1;
-UPDATE gpconnect.medication_statements SET medicationRequestId = 32 WHERE id = 9;
-UPDATE gpconnect.medication_statements SET medicationRequestId = 44 WHERE id = 10;
-UPDATE gpconnect.medication_statements SET medicationRequestId = 56 WHERE id = 11;
-UPDATE gpconnect.medication_statements SET medicationRequestId = 68 WHERE id = 12;
+UPDATE gpconnect1.medication_statements SET medicationRequestId = 20 WHERE id = 1;
+UPDATE gpconnect1.medication_statements SET medicationRequestId = 32 WHERE id = 9;
+UPDATE gpconnect1.medication_statements SET medicationRequestId = 44 WHERE id = 10;
+UPDATE gpconnect1.medication_statements SET medicationRequestId = 56 WHERE id = 11;
+UPDATE gpconnect1.medication_statements SET medicationRequestId = 68 WHERE id = 12;
 
-INSERT INTO gpconnect.medication_request_based_on
+INSERT INTO gpconnect1.medication_request_based_on
  (id,referenceUrl,referenceId)
 VALUES
  (10,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1',20),
@@ -227,7 +227,7 @@ VALUES
  (13,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1',56),
  (14,'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1',68);
  
-INSERT INTO gpconnect.medication_request_based_on_references
+INSERT INTO gpconnect1.medication_request_based_on_references
  (medicationRequestId,basedOnReferenceId)
 VALUES
  (21,10),
@@ -285,12 +285,12 @@ VALUES
  (76,14),
  (77,14);
  
-INSERT INTO gpconnect.translations
+INSERT INTO gpconnect1.translations
   (id, system, code, display)
 VALUES
   (1, 'http://read.info/ctv3', 'Xa1no', 'Peanut allergy');
 
-INSERT INTO gpconnect.allergyintolerance
+INSERT INTO gpconnect1.allergyintolerance
   (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,concept_code,concept_display,code_translation_ref,manCoding,manDisplay,manDescCoding,manDescDisplay, recorder, severity)
 VALUES
   (9658218873 ,'2016-11-01',"Desensitised to Peanuts","","Major", "resolved","unconfirmed","environmental","2",'1962-08-12','2016-11-01',"91935009","Allergy to peanuts","1","249519007","Diarrhoea and vomiting","372285017","D&V – Diarrhoea and vomiting", '1', "mild"),

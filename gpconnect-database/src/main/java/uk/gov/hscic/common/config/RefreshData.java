@@ -154,9 +154,6 @@ public class RefreshData {
         appointment.setStartDateTime(slot.getStartDateTime());
         appointment.setEndDateTime(slot.getEndDateTime());
         appointment.setStatus("booked");
-        appointment.setTypeText(slot.getDeliveryChannelCodes());
-        appointment.setTypeCode(new Long(408443003));
-        appointment.setTypeDisplay("General medical practice");
         appointment.setPriority(0);
         appointment.setMinutesDuration(10);
 

@@ -286,20 +286,6 @@ public class PatientResourceProvider implements IResourceProvider {
                             && paramPart.getName().equals(SystemConstants.INCLUDE_PRESCRIPTION_ISSUES)) {
                         includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
                         isIncludedPrescriptionIssuesExist = true;
-                    } else if (false && paramPart.getValue() instanceof Period
-                            && paramPart.getName().equals(SystemConstants.MEDICATION_DATE_PERIOD)) {
-                        //1.2.1
-                        /*medicationPeriod = (Period) paramPart.getValue();
-
-						String startDate = medicationPeriod.getStartElement().asStringValue();
-						String endDate = medicationPeriod.getEndElement().asStringValue();
-
-						validateStartDateParamAndEndDateParam(startDate, endDate);
-						if (medicationPeriod.getStart() != null && medicationPeriod.getEnd() != null
-								&& medicationPeriod.getStart().compareTo(medicationPeriod.getEnd()) > 0) {
-							throw OperationOutcomeFactory.buildOperationOutcomeException(
-									new UnprocessableEntityException("Invalid Medication Date Period"),
-									SystemCode.INVALID_PARAMETER, IssueType.INVALID);*/
                     } else if (paramPart.getValue() instanceof DateType
                             && paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)) {
                         DateType startDateDt = (DateType) paramPart.getValue();
@@ -372,7 +358,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
         structuredBundle.setType(BundleType.COLLECTION);
         structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
-        //structuredBundle.getMeta().setLastUpdated(new Date());
 
         return structuredBundle;
     }
@@ -490,16 +475,6 @@ public class PatientResourceProvider implements IResourceProvider {
             }
             addressLines[ADDRESS_CITY_INDEX] = address.getCity();
             addressLines[ADDRESS_DISTRICT_INDEX] = address.getDistrict();
-            // address as text removed at 1.2.2
-//            StringBuilder addressBuilder = new StringBuilder();
-//            for (StringType addressLine : addressLineList) {
-//                addressBuilder.append(addressLine);
-//                addressBuilder.append(",");
-//            }
-//            addressBuilder.append(unregisteredPatient.getAddress().get(0).getCity()).append(",");
-//            addressBuilder.append(unregisteredPatient.getAddress().get(0).getPostalCode());
-
-            //patientDetails.setAddress(addressBuilder.toString());
             patientDetails.setAddress(addressLines);
             patientDetails.setPostcode(address.getPostalCode());
         }
@@ -594,20 +569,6 @@ public class PatientResourceProvider implements IResourceProvider {
             }
         } // iterate telcom 
 
-        // commented out at 1.2.2 structured
-//        if (patient.getTelecom().size() > 1) {
-//            throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                    new InvalidRequestException(
-//                            "Only a single telecom can be sent in a register patient request."),
-//                    SystemCode.BAD_REQUEST, IssueType.INVALID);
-//        } else if (patient.getTelecom().size() == 1) {
-//            if (patient.getTelecom().get(0).getUse() != ContactPointUse.TEMP) {
-//                throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                        new InvalidRequestException(
-//                                "The telecom use must be set to temp."),
-//                        SystemCode.BAD_REQUEST, IssueType.INVALID);
-//            }
-//        }
         //Only a single address with type temp may be sent
         if (patient.getAddress().size() > 1) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -832,17 +793,6 @@ public class PatientResourceProvider implements IResourceProvider {
         }
         patientDetails.setNhsNumber(patientResource.getIdentifierFirstRep().getValue());
 
-        // mutliple birth rmeoved at 1.2.2
-        //        Type multipleBirth = patientResource.getMultipleBirth();
-        //        if (multipleBirth != null) {
-        //            try {
-        //                patientDetails.setMultipleBirth((multipleBirth));
-        //            } catch (ClassCastException cce) {
-        //                throw OperationOutcomeFactory.buildOperationOutcomeException(
-        //                        new UnprocessableEntityException("The multiple birth property is expected to be a boolean"),
-        //                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-        //            }
-        //        }
         DateTimeType deceased = (DateTimeType) patientResource.getDeceased();
         if (deceased != null) {
             try {
@@ -932,7 +882,6 @@ public class PatientResourceProvider implements IResourceProvider {
                 .addGiven("AdditionalGiven")
                 .setUse(NameUse.TEMP);
 
-        // inhibited at 1.2.2 structured
         //patient.addTelecom(staticElHelper.getValidTelecom());
         // TODO This appears to return a useless address element, only populated with use and type
         patient.addAddress(staticElHelper.getValidAddress());
@@ -1000,7 +949,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.setId(id);
         patient.getMeta().setVersionId(versionId);
-        //      patient.getMeta().setLastUpdated(lastUpdated);
         patient.getMeta().addProfile(SystemURL.SD_GPC_PATIENT);
 
         Identifier patientNhsNumber = new Identifier().setSystem(SystemURL.ID_NHS_NUMBER)
@@ -1053,21 +1001,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.addExtension(regDetailsExtension);
 
-        // inhibited at 1.2.2
-        //        CodeableConcept marital = new CodeableConcept();
-        //        Coding maritalCoding = new Coding();
-        //        if (patientDetails.getMaritalStatus() != null) {
-        //            maritalCoding.setSystem(SystemURL.CS_MARITAL_STATUS);
-        //            maritalCoding.setCode(patientDetails.getMaritalStatus());
-        //            maritalCoding.setDisplay("Married"); //TODO needs to actually match the marital code
-        //        } else {
-        //            maritalCoding.setSystem(SystemURL.CS_NULL_FLAVOUR);
-        //            maritalCoding.setCode("UNK");
-        //            maritalCoding.setDisplay("unknown");
-        //        }
-        //        marital.addCoding(maritalCoding);
-        //patient.setMaritalStatus(marital);
-        //      patient.setMultipleBirth(patientDetails.isMultipleBirth());
         if (patientDetails.isDeceased()) {
             DateTimeType decesed = new DateTimeType(patientDetails.getDeceased());
             patient.setDeceased(decesed);

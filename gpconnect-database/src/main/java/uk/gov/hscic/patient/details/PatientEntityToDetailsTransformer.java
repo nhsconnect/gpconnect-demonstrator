@@ -19,10 +19,6 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
     public PatientDetails transform(final PatientEntity patientEntity) {
         final PatientDetails patient = new PatientDetails();
 
-//        Collection<String> addressList = Arrays.asList(StringUtils.trimToNull(patientEntity.getAddress1()),
-//                StringUtils.trimToNull(patientEntity.getAddress2()),
-//                StringUtils.trimToNull(patientEntity.getAddress3()),
-//                StringUtils.trimToNull(patientEntity.getPostcode()));
 
         String[] address = new String[]{StringUtils.trimToNull(patientEntity.getAddress1()),
             StringUtils.trimToNull(patientEntity.getAddress2()),
@@ -30,9 +26,6 @@ public class PatientEntityToDetailsTransformer implements Transformer<PatientEnt
             StringUtils.trimToNull(patientEntity.getAddress4()),
             StringUtils.trimToNull(patientEntity.getAddress5())};
 
-//        addressList = CollectionUtils.removeAll(addressList, Collections.singletonList(null));
-//
-//        final String address = StringUtils.join(addressList, ", ");
         final String name = patientEntity.getFirstName() + " " + patientEntity.getLastName();
         final String patientId = patientEntity.getNhsNumber();
 

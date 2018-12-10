@@ -20,8 +20,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -44,9 +47,12 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     private static final Logger LOG = Logger.getLogger("AuthLog");
     private static final String PERMITTED_MEDIA_TYPE_HEADER_REGEX = "application/(xml|json)\\+fhir(;charset=utf-8)?";
 
+    private static final String JWT_HEADER_TYP = "typ";
+    private static final String JWT_HEADER_ALG = "alg";
+
     @Value("${request.leeway:5}")
     private int futureRequestLeeway;
-    
+
     @Value("${validateJWT:true}")
     private boolean validateJWT;
 
@@ -80,27 +86,36 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             throw new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported accept media type");
         }
 
-        
         if (validateJWT) {
-        	if (requestDetails.getHeader(HttpHeaders.AUTHORIZATION) == null) {
-        		throw new InvalidRequestException("Authorization header blank", OperationOutcomeFactory.buildOperationOutcome(
+            if (requestDetails.getHeader(HttpHeaders.AUTHORIZATION) == null) {
+                throw new InvalidRequestException("Authorization header blank", OperationOutcomeFactory.buildOperationOutcome(
                         OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER, "Authorization header blank",
                         OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
-        	}
+            }
             String[] authorizationHeaderComponents = requestDetails.getHeader(HttpHeaders.AUTHORIZATION).split(" ");
 
             if (authorizationHeaderComponents.length != 2 || !"Bearer".equalsIgnoreCase(authorizationHeaderComponents[0])) {
                 throw new InvalidRequestException(HttpHeaders.AUTHORIZATION + " header invalid.", OperationOutcomeFactory.buildOperationOutcome(
                         SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, HttpHeaders.AUTHORIZATION + " header invalid.", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             }
-        
+
             WebToken webToken;
 
             try {
-                String claimsJsonString = new String(Base64.getDecoder().decode(authorizationHeaderComponents[1].split("\\.")[1]));
-                webToken = new ObjectMapper().readValue(claimsJsonString, WebToken.class);
-                WebTokenValidator.validateWebToken(webToken, futureRequestLeeway);
-                jwtParseResourcesValidation(claimsJsonString);
+                String[] jWTParts = authorizationHeaderComponents[1].split("\\.");
+                if (jWTParts.length == 2) {
+                    String headerJsonString = new String(Base64.getDecoder().decode(jWTParts[0]));
+                    validateJWTHeader(headerJsonString);
+
+                    String claimsJsonString = new String(Base64.getDecoder().decode(jWTParts[1]));
+
+                    webToken = new ObjectMapper().readValue(claimsJsonString, WebToken.class);
+                    WebTokenValidator.validateWebToken(webToken, futureRequestLeeway);
+                    jwtParseResourcesValidation(claimsJsonString);
+                } else {
+                    throw new InvalidRequestException("Invalid number of JWT base 64 blocks "+jWTParts.length, OperationOutcomeFactory.buildOperationOutcome(
+                            SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Invalid number of JWT base 64 blocks "+jWTParts.length, META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                }
             } catch (IllegalArgumentException iae) {
                 throw new InvalidRequestException("Not Base 64", OperationOutcomeFactory.buildOperationOutcome(
                         SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Not Base 64", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
@@ -127,8 +142,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                     throw new InvalidRequestException("Invalid NHS number: ", OperationOutcomeFactory.buildOperationOutcome(
                             SYSTEM_WARNING_CODE, CODE_INVALID_NHS_NUMBER, "Patient Record Not Found", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
                 }
-            } else {
-                // If it is an organization oriantated request
+            } else // If it is an organization oriantated request
+            {
                 if (null == webToken.getRequestedRecord().getIdentifierValue("http://fhir.nhs.net/Id/ods-organization-code")) {
                     throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                             SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Bad Request", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
@@ -136,6 +151,49 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             }
         }
         return new RuleBuilder().allowAll().build();
+    }
+
+    /**
+     *
+     * @param headerJsonString
+     * @throws InvalidRequestException
+     * @throws IOException
+     */
+    private void validateJWTHeader(String headerJsonString) throws InvalidRequestException, IOException {
+        Iterator<Map.Entry<String, JsonNode>> iter = new ObjectMapper().readTree(headerJsonString).fields();
+        HashMap<String, String> validHeaderKeys = new HashMap<>();
+        validHeaderKeys.put(JWT_HEADER_ALG, null);
+        validHeaderKeys.put(JWT_HEADER_TYP, null);
+        while (iter.hasNext()) {
+            Map.Entry<String, JsonNode> entry = iter.next();
+            switch (entry.getKey()) {
+                case JWT_HEADER_ALG:
+                    if (!entry.getValue().asText().equals("none")) {
+                        throw new InvalidRequestException("Invalid JWT header " + entry.getKey() + " value " + entry.getValue().asText(), OperationOutcomeFactory.buildOperationOutcome(
+                                SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Invalid JWT header" + entry.getKey() + " value " + entry.getValue().asText(), META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                    }
+                    break;
+                case JWT_HEADER_TYP:
+                    if (!entry.getValue().asText().equals("JWT")) {
+                        throw new InvalidRequestException("Invalid JWT header " + entry.getKey() + " value " + entry.getValue().asText(), OperationOutcomeFactory.buildOperationOutcome(
+                                SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Invalid  JWT header " + entry.getKey() + " value " + entry.getValue().asText(), META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                    }
+                    break;
+                default:
+                    throw new InvalidRequestException("Unrecognised JWT Header header key " + entry.getKey(), OperationOutcomeFactory.buildOperationOutcome(
+                            SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Unrecognised JWT Header header key " + entry.getKey(), META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+            }
+            validHeaderKeys.put(entry.getKey(), entry.getValue().asText());
+        }
+
+        // check nothings missing
+        for (String key : validHeaderKeys.keySet()) {
+            if (validHeaderKeys.get(key) == null) {
+                throw new InvalidRequestException("Missing JWT Header key " + key, OperationOutcomeFactory.buildOperationOutcome(
+                        SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Missing JWT Header key " + key, META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+
+            }
+        }
     }
 
     private static void jwtParseResourcesValidation(String claimsJsonString) {

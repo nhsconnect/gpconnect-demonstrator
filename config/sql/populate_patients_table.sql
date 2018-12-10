@@ -1,5 +1,5 @@
-LOCK TABLES gpconnect.patients WRITE;
-INSERT INTO gpconnect.patients
+LOCK TABLES gpconnect1.patients WRITE;
+INSERT INTO gpconnect1.patients
 	   (id,title,first_name,last_name,address_1,address_2,address_3,address_4,address_5,postcode,phone,date_of_birth,gender,nhs_number,pas_number,department_id,gp_id,lastUpdated,sensitive_flag,multiple_birth,deceased,marital_status,managing_organization,registration_start, registration_status)
 VALUES
 (1,'MR','Garth','WRIGHT','','23 MARSH LANE','','BARTON-UPON-HUMBER','S HUMBERSIDE','DN18 5JD','01454587554','1933-11-14','Male',9658218865,000001,1,1,'2018-03-23 12:00:00',FALSE,FALSE,NULL,'S','7','1962-07-13','A'),
@@ -22,7 +22,7 @@ VALUES
 (20,'MS','Muriel','MAY','CRUACHAN','COMMONSIDE','CROWLE','SCUNTHORPE','S HUMBERSIDE','DN17 4EY','01454587554','1980-06-30','Female',9658219721,000020,1,1,'2018-03-23 12:00:00',FALSE,FALSE,NULL,'S','7','1962-07-13','A'),
 (21,'MS','Lynda','ORME','HOE HILL HOUSE','','HOE HILL','BARTON-UPON-HUMBER','S HUMBERSIDE','DN18 5RD','01454587554','1979-10-06','Female',9658219748,000021,1,1,'2018-03-23 12:00:00',FALSE,FALSE,NULL,'S','7','1962-07-13','N');
 /* re added by perl script since not derived from PDS */
-INSERT INTO gpconnect.patients
+INSERT INTO gpconnect1.patients
 	   (id,title,first_name,last_name,address_1,address_2,address_3,postcode,phone,date_of_birth,gender,nhs_number,pas_number,department_id,gp_id,lastUpdated,sensitive_flag,multiple_birth,deceased,marital_status,managing_organization,registration_start)
 VALUES
 (14,'MS','Georgina','HOPLEY','103 ENDERBY ROAD','','SCUNTHORPE','DN17 2JL','01454587554','1927-05-15','Female',9476718943,000014,1,3,'2016-07-25 12:00:00',FALSE,FALSE,NULL,'S','1','1935-11-05'),

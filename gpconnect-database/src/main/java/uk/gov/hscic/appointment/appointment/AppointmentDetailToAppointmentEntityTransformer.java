@@ -21,9 +21,6 @@ public class AppointmentDetailToAppointmentEntityTransformer {
         appointmentEntity.setSlots(slots.stream().map(slotTransformer::transform).collect(Collectors.toList()));
         appointmentEntity.setCancellationReason(item.getCancellationReason());
         appointmentEntity.setStatus(item.getStatus());
-        appointmentEntity.setTypeCode(item.getTypeCode());
-        appointmentEntity.setTypeDisplay(item.getTypeDisplay());
-        appointmentEntity.setTypeText(item.getTypeText());
         appointmentEntity.setDescription(item.getDescription());
         appointmentEntity.setStartDateTime(item.getStartDateTime());
         appointmentEntity.setEndDateTime(item.getEndDateTime());

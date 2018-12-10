@@ -23,6 +23,7 @@ public interface PatientRepository extends JpaRepository<PatientEntity, Long>, Q
     PatientEntity findByNhsNumber(String nhsNumber);
     PatientEntity findById(Long id);
 
-    @Query(value="SELECT p.id FROM gpconnect.patients p WHERE p.nhs_number = ?1", nativeQuery = true)
+    // TODO there's a harcoded schema name here not sure it can be easily removed though
+    @Query(value="SELECT p.id FROM gpconnect1.patients p WHERE p.nhs_number = ?1", nativeQuery = true)
     Long getPatientIdByNhsNumbwer(String NhsNumber);
 }

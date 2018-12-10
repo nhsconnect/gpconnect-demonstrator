@@ -17,9 +17,6 @@ public class AppointmentEntityToAppointmentDetailTransformer implements Transfor
         appointmentDetail.setId(item.getId());
         appointmentDetail.setCancellationReason(item.getCancellationReason());
         appointmentDetail.setStatus(item.getStatus());
-        appointmentDetail.setTypeCode(item.getTypeCode());
-        appointmentDetail.setTypeDisplay(item.getTypeDisplay());
-        appointmentDetail.setTypeText(item.getTypeText());
         appointmentDetail.setDescription(item.getDescription());
         appointmentDetail.setStartDateTime(item.getStartDateTime());
         appointmentDetail.setEndDateTime(item.getEndDateTime());

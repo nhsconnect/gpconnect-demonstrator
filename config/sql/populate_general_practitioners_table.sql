@@ -1,4 +1,4 @@
-INSERT INTO gpconnect.practitioners
+INSERT INTO gpconnect1.practitioners
   (id,userid,p_role_ids,p_name_family,p_name_given,p_name_prefix,p_gender,p_organization_id,p_role_code,p_role_display,p_com_code,p_com_display,lastUpdated)
 VALUES
   (1,'G13579135','','Gilbert','Nichole','Miss','FEMALE',2,'R0050','Consultant','de|en','German|English','2016-07-25 12:00:00'),

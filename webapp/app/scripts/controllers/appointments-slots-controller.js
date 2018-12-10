@@ -105,7 +105,13 @@ angular.module('gpConnect')
                     // go through response and build arrays of all returned data
                     $.each(getScheduleJson.entry, function (key, value) {
                         if (value.resource.resourceType == "Slot") {
-                            var slot = {"scheduleRef": value.resource.schedule.reference, "startDateTime": value.resource.start, "endDateTime": value.resource.end, "type": value.resource.serviceType[0].coding[0].display, "typeCode": value.resource.serviceType[0].coding[0].code, "id": value.resource.id,
+                            var slot = {"scheduleRef": value.resource.schedule.reference,
+                                "startDateTime": value.resource.start,
+                                "endDateTime": value.resource.end,
+                                // #158 slot no longer carries serviceType
+                                // "type": value.resource.serviceType[0].coding[0].display, 
+                                // "typeCode": value.resource.serviceType[0].coding[0].code,
+                                "id": value.resource.id,
                                 "deliveryChannelCoding": getExtensionValueCoding(value, "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-DeliveryChannel-2")};
                             responseSlots.push(slot);
                         }
@@ -436,23 +442,15 @@ angular.module('gpConnect')
                 $scope.appointmentBookingParameters.practitionerRole = $scope.selectedSlots[0].row.model.role;
                 var tasks = $scope.selectedSlots[0].row.model.tasks;
                 for (var taskIndex = 0; taskIndex < tasks.length; taskIndex++) {
-                    // there's no guarantee any subsequent slots will have the same combination of delivery channel codes
                     if (slotIds[0] === tasks[taskIndex].id) {
                         var startTask = tasks[taskIndex];
-//                        if(startTask.deliveryChannelCoding.length > 0) {
-//                            var deliveryChannel = "";
-//                            for (var dc = 0; dc < startTask.deliveryChannelCoding.length; dc++) {
-//                                if ( dc > 0) {
-//                                    deliveryChannel += ",";
-//                                }
-//                                deliveryChannel += startTask.deliveryChannelCoding[dc][0].display;
-//                            }
                         $scope.appointmentBookingParameters.deliveryChannel = startTask.deliveryChannelCoding;
                         break;
                     }
                 }
                 $scope.appointmentBookingParameters.locationId = $scope.selectedLocation.id;
-                $scope.appointmentBookingParameters.typeCode = $scope.selectedSlots[0].model.typeCode;
+                // removed #158 slots don't carry type code
+//              $scope.appointmentBookingParameters.typeCode = $scope.selectedSlots[0].model.typeCode;
                 $scope.appointmentBookingParameters.type = $scope.selectedSlots[0].model.name;
 
                 // Check the patient is on the remote system

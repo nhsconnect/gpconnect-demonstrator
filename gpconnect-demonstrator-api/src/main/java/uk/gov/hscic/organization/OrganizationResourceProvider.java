@@ -262,8 +262,6 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
 		orgContact.setNameElement(orgCtName.getFamilyElement());
 		orgContact.addTelecom(getValidTelecom());
-		// orgContact.setAddress(getValidAddress());
-		// orgContact.setPurpose(orgCtPurpose);
 
 		return orgContact;
 	}

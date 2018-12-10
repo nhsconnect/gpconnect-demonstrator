@@ -20,16 +20,17 @@ angular.module('gpConnect')
     $scope.appointmentCreate.resourceType = "Appointment";
     $scope.appointmentCreate.status = "booked";
     
-    $scope.appointmentCreate.appointmentType =  {
-        "coding": [
-            {
-                "system": "http://example.org/appointment-type",
-                "code": appointmentBookingParams.typeCode,
-                "display": appointmentBookingParams.practitionerRole
-            }
-        ],
-        "text": appointmentBookingParams.deliveryChannel
-    };
+    // #157 removed
+//    $scope.appointmentCreate.appointmentType =  {
+//        "coding": [
+//            {
+//                "system": "http://example.org/appointment-type",
+//                "code": appointmentBookingParams.typeCode,
+//                "display": appointmentBookingParams.practitionerRole
+//            }
+//        ],
+//        "text": appointmentBookingParams.deliveryChannel
+//    };
     
     $scope.appointmentCreate.start = appointmentBookingParams.startTime;
     $scope.appointmentCreate.end = appointmentBookingParams.endTime;

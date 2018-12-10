@@ -152,14 +152,6 @@ public class SlotEntity {
 		this.bookableOrgTypes = bookableOrgTypes;
 	}
 
-//    public AppointmentEntity getAppointmentId() {
-//        return appointmentId;
-//    }
-//
-//    public void setAppointmentId(AppointmentEntity appointmentId) {
-//        this.appointmentId = appointmentId;
-//    }
-
     public void setDeliveryChannelCodes(String deliveryChannelCodes) {
         this.deliveryChannelCodes = deliveryChannelCodes;
     }

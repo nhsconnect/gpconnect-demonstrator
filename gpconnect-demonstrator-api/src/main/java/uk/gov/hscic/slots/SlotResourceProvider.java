@@ -10,8 +10,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.hl7.fhir.dstu3.model.Bundle;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
@@ -203,20 +201,10 @@ public class SlotResourceProvider implements IResourceProvider {
 
         slot.setId(id);
         slot.getMeta().setVersionId(versionId);
-        //slot.getMeta().setLastUpdated(lastUpdated);
         slot.getMeta().addProfile(SystemURL.SD_GPC_SLOT);
 
         slot.setIdentifier(Collections.singletonList(
                 new Identifier().setSystem(SystemURL.ID_SDS_USER_ID).setValue(slotDetail.getId().toString())));
-
-        Coding coding = new Coding().setSystem(SystemURL.HL7_VS_C80_PRACTICE_CODES)
-                .setCode(String.valueOf(slotDetail.getTypeCode())).setDisplay(slotDetail.getTypeDisply());
-        CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
-        codableConcept.setText(slotDetail.getTypeDisply());
-
-        List<CodeableConcept> serviceType = new ArrayList<>();
-        serviceType.add(codableConcept);
-        slot.setServiceType(serviceType);
 
         slot.setSchedule(new Reference("Schedule/" + slotDetail.getScheduleReference()));
         slot.setStart(slotDetail.getStartDateTime());

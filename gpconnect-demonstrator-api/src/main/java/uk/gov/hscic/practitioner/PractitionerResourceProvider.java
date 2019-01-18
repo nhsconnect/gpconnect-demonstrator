@@ -145,21 +145,20 @@ public class PractitionerResourceProvider implements IResourceProvider {
         }
         
         
-        
-        CodeableConcept languages = new CodeableConcept();
+        // #164 modify returned structure for practitioner language
         for (int i = 0; i < practitionerDetails.getComCode().size(); i++) {
 
+            CodeableConcept languages = new CodeableConcept();
             Coding comCoding = new Coding(SystemURL.CS_CC_HUMAN_LANG_STU3, practitionerDetails.getComCode().get(i), null)
                     .setDisplay(practitionerDetails.getComDisplay().get(i));
 
             languages.addCoding(comCoding);
-        }
-        
-        if (languages.getCoding().size() > 0) {
         	Extension language = new Extension("language", languages);
-        	Extension nhsCommunication = new Extension("https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSCommunication-1", language);
+        	Extension nhsCommunication = new Extension("https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSCommunication-1");
+        	nhsCommunication.addExtension(language);
         	practitioner.addExtension(nhsCommunication);
         }
+        
 
         return practitioner;
     }

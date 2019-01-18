@@ -62,9 +62,27 @@ public class PopulateSlotBundle {
     @Autowired
     private LocationSearch locationSearch;
 
+    /**
+     *
+     * @param bundle Bundle resource to populate
+     * @param operationOutcome
+     * @param planningHorizonStart Date
+     * @param planningHorizonEnd Date
+     * @param actorPractitioner boolean
+     * @param actorLocation boolean
+     * @param bookingOdsCode String
+     * @param bookingOrgType String eg "Urgent Care"
+     */
     public void populateBundle(Bundle bundle, OperationOutcome operationOutcome, Date planningHorizonStart,
             Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation, String bookingOdsCode, String bookingOrgType) {
         bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
+
+        boolean noODSorOrgType = false;
+        if (bookingOdsCode.isEmpty() && bookingOrgType.isEmpty()) {
+            // default to logical id 7 A20047
+            bookingOdsCode = "A20047";
+            noODSorOrgType = true;
+        }
 
         // find first locationDetails for this ODS practice code
         List<LocationDetails> locationDetails = locationSearch.findAllLocations();
@@ -100,7 +118,7 @@ public class PopulateSlotBundle {
         // find the organization from the ods code
         List<OrganizationDetails> organizations = organizationSearch.findOrganizationDetailsByOrgODSCode(bookingOdsCode);
 
-        // schedules
+        // schedules for given location
         List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(
                 location.getIdElement().getIdPart(), planningHorizonStart, planningHorizonEnd);
 
@@ -110,6 +128,7 @@ public class PopulateSlotBundle {
             HashSet<String> addedPractitioner = new HashSet<>();
             HashSet<String> addedOrganization = new HashSet<>();
 
+            // process the schedules
             for (Schedule schedule : schedules) {
 
                 schedule.getMeta().addProfile(SystemURL.SD_GPC_SCHEDULE);
@@ -137,48 +156,59 @@ public class PopulateSlotBundle {
                         }
                         if (actorPractitioner == true) {
                             if (!addedPractitioner.contains(practitioner.getIdElement().getIdPart())) {
-                                BundleEntryComponent practionerEntry = new BundleEntryComponent();
-                                practionerEntry.setResource(practitioner);
-                                practionerEntry.setFullUrl("Practitioner/" + practitioner.getIdElement().getIdPart());
-                                bundle.addEntry(practionerEntry);
+                                addPractitioner(practitioner, bundle);
                                 addedPractitioner.add(practitioner.getIdElement().getIdPart());
                             }
                         }
-                    }
-                }
+                    } // for
+                } // if
 
+                // This Set does not work as expected because Slot does not implement hashCode
+                // so the second set call to getSlots returns different objects with the same slot id
                 Set<Slot> slots = new HashSet<>();
                 OrganizationDetails organization = null;
                 if (!organizations.isEmpty()) {
                     // at 1.2.2 these are added regardless of the status of the relevant parameter
                     organization = organizations.get(0);
                     // Just picks the first organization. There should only be one.
-                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
-                            planningHorizonStart, planningHorizonEnd, organization.getId()));
-
-                    // added at 1.2.2
-                    if (!addedOrganization.contains(organization.getOrgCode())) {
-                        BundleEntryComponent organizationEntry = new BundleEntryComponent();
-                        Long organizationId = organization.getId();
-                        OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId);
-                        Organization organizationResource = organizationResourceProvider
-                                .convertOrganizaitonDetailsToOrganization(organizationDetails);
-                        organizationEntry.setResource(organizationResource);
-                        organizationEntry.setFullUrl("Organization/" + organization.getId());
-                        bundle.addEntry(organizationEntry);
-                        addedOrganization.add(organization.getOrgCode());
+                    // get slots for given org
+                    if (!noODSorOrgType) {
+                        slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
+                                planningHorizonStart, planningHorizonEnd, organization.getId()));
                     }
                 }
-                slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationType(schedule.getIdElement().getIdPart(),
-                        planningHorizonStart, planningHorizonEnd, bookingOrgType));
+
+                if (!noODSorOrgType) {
+                    // get slots for given org type
+                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationType(schedule.getIdElement().getIdPart(),
+                            planningHorizonStart, planningHorizonEnd, bookingOrgType));
+                } else {
+                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdNoOrganizationTypeOrODS(schedule.getIdElement().getIdPart(),
+                            planningHorizonStart, planningHorizonEnd));
+                }
+
+                // added at 1.2.2 add the organisation but only if there are some slots available
+                if (slots.size() > 0 && organization != null && !addedOrganization.contains(organization.getOrgCode())) {
+                    addOrganisation(organization, bundle);
+                    addedOrganization.add(organization.getOrgCode());
+                }
+
                 String freeBusyType = "FREE";
 
+                // issue #165 don't add duplicate slots, hashSet contains slot id as String
+                HashSet<String> addedSlot = new HashSet<>();
+                // process all the slots to be returned
                 for (Slot slot : slots) {
                     if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
-                        BundleEntryComponent slotEntry = new BundleEntryComponent();
-                        slotEntry.setResource(slot);
-                        slotEntry.setFullUrl("Slot/" + slot.getIdElement().getIdPart());
-                        bundle.addEntry(slotEntry);
+                        String slotId = slot.getIdElement().getIdPart();
+                        if (!addedSlot.contains(slotId)) {
+                            BundleEntryComponent slotEntry = new BundleEntryComponent();
+                            slotEntry.setResource(slot);
+                            slotEntry.setFullUrl("Slot/" + slotId);
+                            bundle.addEntry(slotEntry);
+                            addedSlot.add(slotId);
+                        }
+
                         if (!addedSchedule.contains(scheduleEntry)) {
                             // only add a schedule if there's a reference to it and only add it once
                             bundle.addEntry(scheduleEntry);
@@ -197,4 +227,34 @@ public class PopulateSlotBundle {
             } // for schedules
         } // if non empty schedules
     } // populateBundle 
+
+    /**
+     * Add practitioner to Bundle
+     *
+     * @param practitioner
+     * @param bundle
+     */
+    private void addPractitioner(Practitioner practitioner, Bundle bundle) {
+        BundleEntryComponent practionerEntry = new BundleEntryComponent();
+        practionerEntry.setResource(practitioner);
+        practionerEntry.setFullUrl("Practitioner/" + practitioner.getIdElement().getIdPart());
+        bundle.addEntry(practionerEntry);
+    }
+
+    /**
+     * Add OrganizationResource to Bundle
+     *
+     * @param organization OrganizationDetails object to add to bundle
+     * @param bundle Bundle Resource to add organisation to
+     */
+    private void addOrganisation(OrganizationDetails organization, Bundle bundle) {
+        BundleEntryComponent organizationEntry = new BundleEntryComponent();
+        Long organizationId = organization.getId();
+        OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId);
+        Organization organizationResource = organizationResourceProvider
+                .convertOrganizaitonDetailsToOrganization(organizationDetails);
+        organizationEntry.setResource(organizationResource);
+        organizationEntry.setFullUrl("Organization/" + organization.getId());
+        bundle.addEntry(organizationEntry);
+    }
 }

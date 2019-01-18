@@ -9,7 +9,6 @@ import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
-import uk.gov.hscic.SystemURL;
 
 public class WebTokenValidator {
     private static final List<String> PERMITTED_REQUESTED_SCOPES = Arrays.asList("patient/*.read", "patient/*.write",
@@ -23,13 +22,13 @@ public class WebTokenValidator {
         // Checking the practionerId and the sub are equal in value
         if (!(webToken.getRequestingPractitioner().getId().equals(webToken.getSub()))) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Practitioner ids do not match!"), SystemCode.BAD_REQUEST,
+                    new InvalidRequestException("JWT Practitioner ids do not match!"), SystemCode.BAD_REQUEST,
                     IssueType.INVALID);
         }
 
         if (!PERMITTED_REQUESTED_SCOPES.contains(webToken.getRequestedScope())) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Bad Request Exception"), SystemCode.BAD_REQUEST,
+                    new InvalidRequestException("JWT Bad Request Exception"), SystemCode.BAD_REQUEST,
                     IssueType.INVALID);
         }
     }
@@ -54,7 +53,7 @@ public class WebTokenValidator {
     private static void assertNotNull(Object object) {
         if (null == object) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("JSON entry incomplete."), SystemCode.BAD_REQUEST,
+                    new InvalidRequestException("JWT JSON entry incomplete."), SystemCode.BAD_REQUEST,
                     IssueType.INVALID);
         }
     }
@@ -66,14 +65,14 @@ public class WebTokenValidator {
         // Checking creation time is not in the future (with a 5 second leeway
         if (timeValidationIdentifierInt > (System.currentTimeMillis() / 1000) + futureRequestLeeway) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Creation time is in the future"), SystemCode.BAD_REQUEST,
+                    new InvalidRequestException("JWT Creation time is in the future"), SystemCode.BAD_REQUEST,
                     IssueType.INVALID);
         }
 
         // Checking the expiry time is 5 minutes after creation
         if (webToken.getExp() - timeValidationIdentifierInt != 300) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Request time expired"), SystemCode.BAD_REQUEST,
+                    new InvalidRequestException("JWT Request time expired"), SystemCode.BAD_REQUEST,
                     IssueType.INVALID);
         }
     }
@@ -82,7 +81,7 @@ public class WebTokenValidator {
         // Checking the reason for request is directcare
         if (!"directcare".equals(webToken.getReasonForRequest())) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Reason for request is not directcare"), SystemCode.BAD_REQUEST,
+                    new InvalidRequestException("JWT Reason for request is not directcare"), SystemCode.BAD_REQUEST,
                     IssueType.INVALID);
         }
 
@@ -90,7 +89,7 @@ public class WebTokenValidator {
 
         if (null == requestingDevice) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("No requesting_device"), SystemCode.BAD_REQUEST,
+                    new InvalidRequestException("JWT No requesting_device"), SystemCode.BAD_REQUEST,
                     IssueType.INVALID);
         }
 
@@ -100,7 +99,7 @@ public class WebTokenValidator {
         
         if (!deviceType.equals("Device") || !organizationType.equals("Organization") || !practitionerType.equals("Practitioner")) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("Invalid resource type"), 
+                    new UnprocessableEntityException("JWT Invalid resource type"), 
                     SystemCode.BAD_REQUEST,
                     IssueType.INVALID
             );

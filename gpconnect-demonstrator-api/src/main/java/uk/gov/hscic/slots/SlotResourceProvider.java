@@ -26,6 +26,7 @@ import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
+import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
@@ -75,14 +76,16 @@ public class SlotResourceProvider implements IResourceProvider {
     }
 
     @Search
-    public Bundle getSlotByIds(@RequiredParam(name = "start") DateParam startDate,
-            @RequiredParam(name = "end") DateParam endDate, @RequiredParam(name = "status") String status,
-            @RequiredParam(name = "searchFilter") TokenAndListParam searchFilters,
-            @IncludeParam(allow = {"Slot:schedule", 
-                "Schedule:actor:Practitioner",
-                "Schedule:actor:Location",
-                "Location:managingOrganization" // currently ignored for 1.2.2 but must be allowed
-            }) Set<Include> theIncludes) {
+    public Bundle getSlotByIds(
+            @RequiredParam(name = "start") DateParam startDate,
+            @RequiredParam(name = "end") DateParam endDate,
+            @RequiredParam(name = "status") String status,
+            @OptionalParam(name = "searchFilter") TokenAndListParam searchFilters,
+            @IncludeParam(allow = {"Slot:schedule",
+        "Schedule:actor:Practitioner",
+        "Schedule:actor:Location",
+        "Location:managingOrganization" // currently ignored for 1.2.2 but must be allowed
+}) Set<Include> theIncludes) {
 
         boolean foundSchedule = false;
         for (Include anInclude : theIncludes) {
@@ -123,23 +126,25 @@ public class SlotResourceProvider implements IResourceProvider {
 
         validateStartDateParamAndEndDateParam(startDate, endDate);
 
-        List<TokenOrListParam> searchFilter = searchFilters.getValuesAsQueryTokens();
-        for (TokenOrListParam filter : searchFilter) {
-            TokenParam token = filter.getValuesAsQueryTokens().get(0);
-            if (token.getSystem().equals(SystemURL.VS_GPC_ORG_TYPE)) {
-                bookingOrgType = token.getValue();
-            }
-            if (token.getSystem().equals(SystemURL.ID_ODS_ORGANIZATION_CODE)) {
-                bookingOdsCode = token.getValue();
+        if (searchFilters != null) {
+            List<TokenOrListParam> searchFilter = searchFilters.getValuesAsQueryTokens();
+            for (TokenOrListParam filter : searchFilter) {
+                TokenParam token = filter.getValuesAsQueryTokens().get(0);
+                if (token.getSystem().equals(SystemURL.VS_GPC_ORG_TYPE)) {
+                    bookingOrgType = token.getValue();
+                }
+                if (token.getSystem().equals(SystemURL.ID_ODS_ORGANIZATION_CODE)) {
+                    bookingOdsCode = token.getValue();
+                }
             }
         }
 
-        try {
-            bookingOdsCode.isEmpty();
-            bookingOrgType.isEmpty();
-        } catch (Exception e) {
-            throwInvalidParameterOperationalOutcome("The ODS code and organisation type for the booking organisation must be supplied.");
-        }
+//        try {
+//            bookingOdsCode.isEmpty();
+//            bookingOrgType.isEmpty();
+//        } catch (Exception e) {
+//            throwInvalidParameterOperationalOutcome("The ODS code and organisation type for the booking organisation must be supplied.");
+//        }
 
         for (Include include : theIncludes) {
 
@@ -186,6 +191,26 @@ public class SlotResourceProvider implements IResourceProvider {
         return slots;
     }
 
+    /**
+     * returns any slots not having org type or org id assigned
+     * @param scheduleId
+     * @param startDateTime
+     * @param endDateTime
+     * @return
+     */
+    public List<Slot> getSlotsForScheduleIdNoOrganizationTypeOrODS(String scheduleId, Date startDateTime, Date endDateTime) {
+        ArrayList<Slot> slots = new ArrayList<>();
+        List<SlotDetail> slotDetails = slotSearch.getSlotsForScheduleIdNoOrganizationTypeOrODS(Long.valueOf(scheduleId), startDateTime,
+                endDateTime);
+
+        if (slotDetails != null && !slotDetails.isEmpty()) {
+            for (SlotDetail slotDetail : slotDetails) {
+                slots.add(slotDetailToSlotResourceConverter(slotDetail));
+            }
+        }
+        return slots;
+    }
+
     private Slot slotDetailToSlotResourceConverter(SlotDetail slotDetail) {
         Slot slot = new Slot();
 
@@ -219,10 +244,10 @@ public class SlotResourceProvider implements IResourceProvider {
                 break;
         }
 
-        String deliveryChannelCodes = slotDetail.getDeliveryChannelCodes();
+        String deliveryChannelCode = slotDetail.getDeliveryChannelCode();
         ArrayList<Extension> al = new ArrayList<>();
-        if (deliveryChannelCodes != null && !deliveryChannelCodes.trim().isEmpty()) {
-            Extension deliveryChannelExtension = new Extension(SystemURL.SD_EXTENSION_GPC_DELIVERY_CHANNEL, new CodeType(deliveryChannelCodes));
+        if (deliveryChannelCode != null && !deliveryChannelCode.trim().isEmpty()) {
+            Extension deliveryChannelExtension = new Extension(SystemURL.SD_EXTENSION_GPC_DELIVERY_CHANNEL, new CodeType(deliveryChannelCode));
             al.add(deliveryChannelExtension);
         }
         slot.setExtension(al);

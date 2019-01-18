@@ -8,10 +8,12 @@ public final class SystemConstants {
     public static final String ACTIVE = "active";
     
     public static final String ACTIVE_ALLERGIES_DISPLAY = "Active Allergies";
-    public static final String ACTIVE_ALLERGIES_TITLE = "Allergies and adverse reaction";
+    // #175
+    public static final String ACTIVE_ALLERGIES_TITLE = "Allergies and adverse reactions";
     
     public static final String RESOLVED_ALLERGIES_DISPLAY = "Ended allergies (record artifact)";
-    public static final String RESOLVED_ALLERGIES_TIILE = "Resolved Allergies";
+    // #175
+    public static final String RESOLVED_ALLERGIES_TIILE = "Ended allergies";
 
     public static final String RESOLVED = "resolved";
     public static final String NO_KNOWN = "no known";

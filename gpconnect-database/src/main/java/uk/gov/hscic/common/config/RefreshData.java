@@ -25,6 +25,23 @@ import java.util.List;
 
 @Service
 public class RefreshData {
+    
+    private static final int SLOT_FIELDS = 15;
+    
+    private static final int SLOT_INDEX_DAY_OFFSET = 0;
+    private static final int SLOT_INDEX_START_H = 1;
+    private static final int SLOT_INDEX_START_M = 2;
+    private static final int SLOT_INDEX_START_S = 3;
+    private static final int SLOT_INDEX_END_H = 4;
+    private static final int SLOT_INDEX_END_M = 5;
+    private static final int SLOT_INDEX_END_S = 6;
+    private static final int SLOT_INDEX_SLOT_TYPE_CODE = 7;
+    private static final int SLOT_INDEX_DESCRIPTION = 8;
+    private static final int SLOT_INDEX_PRACTITIONER_ID = 9;
+    private static final int SLOT_INDEX_FREE_BUSY = 10;
+    private static final int SLOT_INDEX_BOOKABLE = 11;
+    private static final int SLOT_INDEX_ORG_ID = 12;
+    private static final int SLOT_INDEX_ORG_TYPE = 13;
 
     private static final Logger LOG = Logger.getLogger(RefreshData.class);
 
@@ -66,17 +83,17 @@ public class RefreshData {
             for (String line : lines) {
                 String[] element = line.split(",");
                 Date currentDate = new Date();
-                Date startDate = DateUtils.addDays(currentDate, Integer.parseInt(element[0]));
-                Date endDate = DateUtils.addDays(currentDate, Integer.parseInt(element[0]));
-                startDate.setHours(Integer.parseInt(element[1]));
-                startDate.setMinutes(Integer.parseInt(element[2]));
-                startDate.setSeconds(Integer.parseInt(element[3]));
-                endDate.setHours(Integer.parseInt(element[4]));
-                endDate.setMinutes(Integer.parseInt(element[5]));
-                endDate.setSeconds(Integer.parseInt(element[6]));
+                Date startDate = DateUtils.addDays(currentDate, Integer.parseInt(element[SLOT_INDEX_DAY_OFFSET]));
+                Date endDate = DateUtils.addDays(currentDate, Integer.parseInt(element[SLOT_INDEX_DAY_OFFSET]));
+                startDate.setHours(Integer.parseInt(element[SLOT_INDEX_START_H]));
+                startDate.setMinutes(Integer.parseInt(element[SLOT_INDEX_START_M]));
+                startDate.setSeconds(Integer.parseInt(element[SLOT_INDEX_START_S]));
+                endDate.setHours(Integer.parseInt(element[SLOT_INDEX_END_H]));
+                endDate.setMinutes(Integer.parseInt(element[SLOT_INDEX_END_M]));
+                endDate.setSeconds(Integer.parseInt(element[SLOT_INDEX_END_S]));
 
                 // handle trailing comma on last entry
-                String deliveryChannelCodes = element.length >= 15 ? element[14] : "";
+                String deliveryChannelCode = element.length >= SLOT_FIELDS ? element[SLOT_FIELDS-1] : "";
                 // 0 number of days to add to today
                 // 1 start hours
                 // 2 start minutes
@@ -94,8 +111,18 @@ public class RefreshData {
                 // 14 sequence of PVT delivery channel codes String P In-person, T Telephone, V Video eg TVP
 
                 // The Collections.singletonList idiom is a way of converting a single item into a list containing one item
-                slotStore.saveSlot(createSlot(Long.parseLong(element[7]), element[8], Long.parseLong(element[9]), element[10], startDate, endDate, currentDate,
-                        Boolean.parseBoolean(element[11]), Collections.singletonList(Long.parseLong(element[12])), Collections.singletonList(element[13]), deliveryChannelCodes));
+                slotStore.saveSlot(createSlot(Long.parseLong(element[SLOT_INDEX_SLOT_TYPE_CODE]), 
+                        element[SLOT_INDEX_DESCRIPTION], 
+                        Long.parseLong(element[SLOT_INDEX_PRACTITIONER_ID]), 
+                        element[SLOT_INDEX_FREE_BUSY], 
+                        startDate, 
+                        endDate, 
+                        currentDate,
+                        Boolean.parseBoolean(element[SLOT_INDEX_BOOKABLE]), 
+                        element[SLOT_INDEX_ORG_ID].isEmpty() ? Collections.EMPTY_LIST : Collections.singletonList(Long.parseLong(element[SLOT_INDEX_ORG_ID])), 
+                        element[SLOT_INDEX_ORG_TYPE].trim().isEmpty() ? Collections.EMPTY_LIST : Collections.singletonList(element[SLOT_INDEX_ORG_TYPE].trim()), 
+                        deliveryChannelCode));
+                
             }
         } catch (IOException e) {
             LOG.error("Error reading slots file", e);
@@ -116,7 +143,7 @@ public class RefreshData {
     }
 
     private SlotDetail createSlot(Long typeCode, String typeDisplay, long scheduleReference, String freeBusy, Date startDate, Date endDate, Date lastUpdated,
-            boolean gpConnectBookable, List<Long> organizationIds, List<String> organizationTypes, String deliveryChannelCodes) {
+            boolean gpConnectBookable, List<Long> organizationIds, List<String> organizationTypes, String deliveryChannelCode) {
         SlotDetail slot = new SlotDetail();
         slot.setTypeCode(typeCode);
         slot.setTypeDisply(typeDisplay);
@@ -129,8 +156,8 @@ public class RefreshData {
         slot.setOrganizationTypes(organizationTypes);
         slot.setOrganizationIds(organizationIds);
         String deliveryChannel = "";
-        if (deliveryChannelCodes != null && !deliveryChannelCodes.trim().isEmpty()) {
-            switch (deliveryChannelCodes) {
+        if (deliveryChannelCode != null && !deliveryChannelCode.trim().isEmpty()) {
+            switch (deliveryChannelCode) {
                 case "P":
                     deliveryChannel = "In-person";
                     break;
@@ -141,10 +168,10 @@ public class RefreshData {
                     deliveryChannel = "Video";
                     break;
                 default:
-                    System.err.println("Unrecognised delivery channel codes "+deliveryChannelCodes);
+                    LOG.error("Unrecognised delivery channel code "+deliveryChannelCode);
             }
         }
-        slot.setDeliveryChannelCodes(deliveryChannel);
+        slot.setDeliveryChannelCode(deliveryChannel);
         return slot;
     }
 

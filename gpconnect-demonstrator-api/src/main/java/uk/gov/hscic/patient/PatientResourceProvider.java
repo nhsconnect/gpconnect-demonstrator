@@ -23,7 +23,6 @@ import org.hl7.fhir.dstu3.model.HumanName.NameUse;
 import org.hl7.fhir.dstu3.model.Identifier.IdentifierUse;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
-import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -569,21 +568,20 @@ public class PatientResourceProvider implements IResourceProvider {
             }
         } // iterate telcom 
 
-        //Only a single address with type temp may be sent
-        if (patient.getAddress().size() > 1) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(
-                            "Only a single address can be sent in a register patient request."),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
-        } else if (patient.getAddress().size() == 1) {
-            if (patient.getAddress().get(0).getUse() != AddressUse.TEMP) {
+        // count by useType TODO Only the first address is persisted at present
+        HashSet<AddressUse> useTypeCount = new HashSet<>();
+        for (Address address : patient.getAddress()) {
+            if (!useTypeCount.contains(address.getUse())) {
+                useTypeCount.add(address.getUse());
+            } else {
+                // #174 Only a single address of each usetype may be sent
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException(
-                                "The address use must be set to temp."),
+                                "Only a single address of each use type can be sent in a register patient request."),
                         SystemCode.BAD_REQUEST, IssueType.INVALID);
             }
         }
-    }
+    } //  validateTelecomAndAddress
 
     private void validateGender(Patient patient) {
         AdministrativeGender gender = patient.getGender();
@@ -664,7 +662,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
         if (!extensionURLs.isEmpty()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException(
+                    // #173 should be 422 not 400
+                    new UnprocessableEntityException(
                             "Invalid/multiple patient extensions found. The following are in excess or invalid: "
                             + extensionURLs.stream().collect(Collectors.joining(", "))),
                     SystemCode.INVALID_RESOURCE, IssueType.INVALID);
@@ -828,27 +827,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         patient.setLanguage(("en-GB"));
 
-        // inhibited at 1.2.2
-        //        patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY_STU3,
-        //                SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
-        //        patient.addExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code",
-        //                SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));
-        //        patient.addExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS_STU3,
-        //                SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS));
-        //        patient.addExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT_STU3,
-        //                SystemURL.SD_CC_EXT_TREATMENT_CAT));
-        Extension nhsCommExtension = new Extension();
-        nhsCommExtension.setUrl(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
-        nhsCommExtension.addExtension(
-                createCodingExtension("en", "English", SystemURL.CS_CC_HUMAN_LANG_STU3, SystemURL.SD_CC_EXT_COMM_LANGUAGE));
-        nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_COMM_PREFERRED, new BooleanType(false)));
-        nhsCommExtension.addExtension(createCodingExtension("RWR", "Received written",
-                SystemURL.CS_CC_LANG_ABILITY_MODE_STU3, SystemURL.SD_CC_MODE_OF_COMM));
-        nhsCommExtension.addExtension(createCodingExtension("E", "Excellent", SystemURL.CS_CC_LANG_ABILITY_PROFI_STU3,
-                SystemURL.SD_CC_COMM_PROFICIENCY));
-        nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanType(false)));
-
-        patient.addExtension(nhsCommExtension);
+        setStaticCommunicationData(patient);
 
         Identifier localIdentifier = new Identifier();
         localIdentifier.setUse(IdentifierUse.USUAL);
@@ -887,6 +866,30 @@ public class PatientResourceProvider implements IResourceProvider {
         patient.addAddress(staticElHelper.getValidAddress());
 
         return patient;
+    }
+
+    private void setStaticCommunicationData(Patient patient) {
+        // inhibited at 1.2.2
+        //        patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY_STU3,
+        //                SystemURL.SD_CC_EXT_ETHNIC_CATEGORY));
+        //        patient.addExtension(createCodingExtension("SomeSnomedCode", "Some Snomed Code",
+        //                SystemURL.CS_CC_RELIGIOUS_AFFILI, SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI));
+        //        patient.addExtension(createCodingExtension("H", "UK Resident", SystemURL.CS_CC_RESIDENTIAL_STATUS_STU3,
+        //                SystemURL.SD_CC_EXT_RESIDENTIAL_STATUS));
+        //        patient.addExtension(createCodingExtension("3", "To pay hotel fees only", SystemURL.CS_CC_TREATMENT_CAT_STU3,
+        //                SystemURL.SD_CC_EXT_TREATMENT_CAT));
+        Extension nhsCommExtension = new Extension();
+        nhsCommExtension.setUrl(SystemURL.SD_CC_EXT_NHS_COMMUNICATION);
+        nhsCommExtension.addExtension(
+                createCodingExtension("en", "English", SystemURL.CS_CC_HUMAN_LANG_STU3, SystemURL.SD_CC_EXT_COMM_LANGUAGE));
+        nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_COMM_PREFERRED, new BooleanType(false)));
+        nhsCommExtension.addExtension(createCodingExtension("RWR", "Received written",
+                SystemURL.CS_CC_LANG_ABILITY_MODE_STU3, SystemURL.SD_CC_MODE_OF_COMM));
+        nhsCommExtension.addExtension(createCodingExtension("E", "Excellent", SystemURL.CS_CC_LANG_ABILITY_PROFI_STU3,
+                SystemURL.SD_CC_COMM_PROFICIENCY));
+        nhsCommExtension.addExtension(new Extension(SystemURL.SD_CC_INTERPRETER_REQUIRED, new BooleanType(false)));
+
+        patient.addExtension(nhsCommExtension);
     }
 
     private Extension createCodingExtension(String code, String display, String vsSystem, String extSystem) {
@@ -1126,6 +1129,9 @@ public class PatientResourceProvider implements IResourceProvider {
         if (managingOrganization != null) {
             patient.setManagingOrganization(new Reference("Organization/" + managingOrganization));
         }
+
+        // # 163 add patient language etc
+        setStaticCommunicationData(patient);
 
         return patient;
     } // patientDetailsToPatientResourceConverter

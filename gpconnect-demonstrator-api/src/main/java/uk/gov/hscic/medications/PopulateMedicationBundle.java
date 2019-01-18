@@ -58,11 +58,13 @@ public class PopulateMedicationBundle {
     private ListResource createListEntry(List<MedicationStatementDetail> medicationStatements, String nhsNumber) {
 		ListResource medicationStatementsList = new ListResource();
 
-        medicationStatementsList.setId(new IdType(1));
+        // #179 dont populate List.id
+        //medicationStatementsList.setId(new IdType(1));
 
         medicationStatementsList.setMeta(new Meta().addProfile(SystemURL.SD_GPC_LIST));
 		medicationStatementsList.setStatus(ListStatus.CURRENT);
-		medicationStatementsList.setId(new IdDt(1));
+        // #179 dont populate List.id
+		//medicationStatementsList.setId(new IdDt(1));
 
 		medicationStatementsList.setMode(ListMode.SNAPSHOT);
 		medicationStatementsList.setTitle(SystemConstants.MEDICATION_LIST);

@@ -109,6 +109,13 @@ public class WebTokenFactory {
                 String claimsJsonString = new String(Base64.getDecoder().decode(jWTParts[1]));
                 webToken = new ObjectMapper().readValue(claimsJsonString, WebToken.class);
 
+                // #170 requested_record is not allowed
+                if (webToken.getRequestedRecord() != null) {
+                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                            new InvalidRequestException("JWT claim requested_record should not be present"),
+                            SystemCode.BAD_REQUEST, IssueType.INVALID);
+                }
+
                 jwtParseResourcesValidation(claimsJsonString);
             } else {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(

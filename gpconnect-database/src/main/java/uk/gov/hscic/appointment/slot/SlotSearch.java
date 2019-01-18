@@ -25,8 +25,8 @@ public class SlotSearch {
     public List<SlotDetail> findSlotsForScheduleIdAndOrganizationId(Long scheduleId, Date startDate, Date endDate, Long orgId) {
     	return slotRepository.findByScheduleReferenceAndEndDateTimeAfterAndStartDateTimeBeforeAndGpConnectBookableTrueAndBookableOrganizationsId(scheduleId, startDate, endDate, orgId)
                 .stream()
-                .filter(SlotEntity -> startDate == null || !SlotEntity.getStartDateTime().before(startDate))
-                .filter(SlotEntity -> endDate == null || !SlotEntity.getStartDateTime().after(endDate))
+                .filter(slotEntity -> startDate == null || !slotEntity.getStartDateTime().before(startDate))
+                .filter(slotEntity -> endDate == null || !slotEntity.getStartDateTime().after(endDate))
                 .map(transformer::transform)
                 .collect(Collectors.toList());
     }
@@ -34,8 +34,19 @@ public class SlotSearch {
 	public List<SlotDetail> getSlotsForScheduleIdAndOrganizationType(Long scheduleId, Date startDate, Date endDate, String orgType) {
 		return slotRepository.findByScheduleReferenceAndEndDateTimeAfterAndStartDateTimeBeforeAndGpConnectBookableTrueAndBookableOrgTypes(scheduleId, startDate, endDate, orgType)
                 .stream()
-                .filter(SlotEntity -> startDate == null || !SlotEntity.getStartDateTime().before(startDate))
-                .filter(SlotEntity -> endDate == null || !SlotEntity.getStartDateTime().after(endDate))
+                .filter(slotEntity -> startDate == null || !slotEntity.getStartDateTime().before(startDate))
+                .filter(slotEntity -> endDate == null || !slotEntity.getStartDateTime().after(endDate))
+                .map(transformer::transform)
+                .collect(Collectors.toList());
+	}
+
+    public List<SlotDetail> getSlotsForScheduleIdNoOrganizationTypeOrODS(Long scheduleId, Date startDate, Date endDate) {
+        return slotRepository.findByScheduleReferenceAndEndDateTimeAfterAndStartDateTimeBeforeAndGpConnectBookableTrue(scheduleId, startDate, endDate)
+                .stream()
+                .filter(slotEntity -> startDate == null || !slotEntity.getStartDateTime().before(startDate))
+                .filter(slotEntity -> endDate == null || !slotEntity.getStartDateTime().after(endDate))
+                .filter(slotEntity -> slotEntity.getBookableOrganizations().isEmpty())
+                .filter(slotEntity -> slotEntity.getBookableOrgTypes().isEmpty())
                 .map(transformer::transform)
                 .collect(Collectors.toList());
 	}

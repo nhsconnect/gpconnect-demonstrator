@@ -59,7 +59,7 @@ public class StructuredAllergyIntoleranceBuilder {
         if (allergyData.size() == 1 &&
                 allergyData.get(0).getClinicalStatus().equals(SystemConstants.NO_KNOWN)) {
 
-            CodeableConcept noKnownAllergies = createCoding(SystemURL.HL7_SPECIAL_VALUES, "nil-known", "Nil Known");
+            CodeableConcept noKnownAllergies = createCoding(SystemURL.VS_LIST_EMPTY_REASON_CODE, "nil-known", "Nil Known");
             noKnownAllergies.setText("No Known Allergies");
             active.setEmptyReason(noKnownAllergies);
 
@@ -232,7 +232,8 @@ public class StructuredAllergyIntoleranceBuilder {
         }
 
         listResource.setMeta(createMeta(SystemURL.SD_GPC_LIST));
-        listResource.setId("33");
+        // #179 dont populate List.id
+        //listResource.setId("33");
         listResource.setStatus(ListStatus.CURRENT);
         listResource.setMode(ListMode.SNAPSHOT);
         addSubjectWithIdentifier(NHS, listResource);
@@ -278,7 +279,7 @@ public class StructuredAllergyIntoleranceBuilder {
 
     private void addEmptyReasonCode(ListResource list) {
         CodeableConcept noContent = new CodeableConcept();
-        noContent.setCoding(Arrays.asList(new Coding(SystemURL.HL7_SPECIAL_VALUES, SystemConstants.NO_CONTENT_RECORDED, SystemConstants.NO_CONTENT_RECORDED_DISPLAY)));
+        noContent.setCoding(Arrays.asList(new Coding(SystemURL.VS_LIST_EMPTY_REASON_CODE, SystemConstants.NO_CONTENT_RECORDED, SystemConstants.NO_CONTENT_RECORDED_DISPLAY)));
         noContent.setText(SystemConstants.INFORMATION_NOT_AVAILABLE);
         list.setEmptyReason(noContent);
     }
@@ -328,7 +329,8 @@ public class StructuredAllergyIntoleranceBuilder {
 
     private void listResourceBuilder(ListResource buildingListResource, AllergyIntolerance allergyIntolerance, boolean isResolved) {
         ListEntryComponent comp = new ListEntryComponent();
-        buildingListResource.setId(allergyIntolerance.getId());
+        // #179 dont populate List.id
+        //buildingListResource.setId(allergyIntolerance.getId());
 
         if (isResolved) {
 

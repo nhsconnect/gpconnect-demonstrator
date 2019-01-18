@@ -7,6 +7,7 @@ import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import uk.gov.hscic.organization.OrganizationEntity;
 
@@ -50,15 +53,19 @@ public class SlotEntity {
     @Column(name = "gpConnectBookable")
     private boolean gpConnectBookable;
     
-    @Column(name = "deliveryChannelCodes")
-    private String deliveryChannelCodes;
+    @Column(name = "deliveryChannelCode")
+    private String deliveryChannelCode;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "appointment_slots_organizations", joinColumns = {
             @JoinColumn(name = "slotId", referencedColumnName = "id") }, inverseJoinColumns = {
                     @JoinColumn(name = "organizationId", referencedColumnName = "id") })
     private List<OrganizationEntity> bookableOrganizations;
     
+    // This is a workaround for the fact that you can't have > 1 fetch = FetchType.EAGER
+    // This is a way of achieving the same thing that the persistence manager does not object to
+    // see https://stackoverflow.com/questions/36263384/why-i-cant-use-2-lists-on-the-same-entity-class-using-fetchtype-eager
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @JoinTable(name = "appointment_slots_orgType", joinColumns = {
             @JoinColumn(name = "slotId", referencedColumnName = "id") } )
@@ -152,11 +159,11 @@ public class SlotEntity {
 		this.bookableOrgTypes = bookableOrgTypes;
 	}
 
-    public void setDeliveryChannelCodes(String deliveryChannelCodes) {
-        this.deliveryChannelCodes = deliveryChannelCodes;
+    public void setDeliveryChannelCode(String deliveryChannelCode) {
+        this.deliveryChannelCode = deliveryChannelCode;
     }
 
-    public String getDeliveryChannelCodes() {
-        return deliveryChannelCodes;
+    public String getDeliveryChannelCode() {
+        return deliveryChannelCode;
     }
 }

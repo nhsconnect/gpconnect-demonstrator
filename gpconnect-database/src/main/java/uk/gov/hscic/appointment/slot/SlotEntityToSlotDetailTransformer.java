@@ -1,7 +1,10 @@
 package uk.gov.hscic.appointment.slot;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.collections4.Transformer;
 import uk.gov.hscic.model.appointment.SlotDetail;
+import uk.gov.hscic.organization.OrganizationEntity;
 
 public class SlotEntityToSlotDetailTransformer implements Transformer<SlotEntity, SlotDetail> {
 
@@ -18,7 +21,15 @@ public class SlotEntityToSlotDetailTransformer implements Transformer<SlotEntity
         slotDetail.setEndDateTime(item.getEndDateTime());
         slotDetail.setLastUpdated(item.getLastUpdated());
         slotDetail.setGpConnectBookable(item.isGpConnectBookable());
-        slotDetail.setDeliveryChannelCodes(item.getDeliveryChannelCodes());
+        slotDetail.setDeliveryChannelCode(item.getDeliveryChannelCode());
+        
+        List<OrganizationEntity> organizations = item.getBookableOrganizations();
+        ArrayList<Long> al = new ArrayList<>();
+        for (OrganizationEntity organizationEntity : organizations) {
+            al.add(organizationEntity.getId());
+        }
+        slotDetail.setOrganizationIds(al);
+        slotDetail.setOrganizationTypes(item.getBookableOrgTypes());
         return slotDetail;
     }
 }

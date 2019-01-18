@@ -9,4 +9,5 @@ import org.springframework.transaction.annotation.Transactional;
 public interface SlotRepository extends JpaRepository<SlotEntity, Long> {
     List<SlotEntity> findByScheduleReferenceAndEndDateTimeAfterAndStartDateTimeBeforeAndGpConnectBookableTrueAndBookableOrganizationsId(Long scheduleId, Date startDate, Date endDate, Long orgId);
     List<SlotEntity> findByScheduleReferenceAndEndDateTimeAfterAndStartDateTimeBeforeAndGpConnectBookableTrueAndBookableOrgTypes(Long scheduleId, Date startDate, Date endDate, String orgType);
+    List<SlotEntity> findByScheduleReferenceAndEndDateTimeAfterAndStartDateTimeBeforeAndGpConnectBookableTrue(Long scheduleId, Date startDate, Date endDate);
 }

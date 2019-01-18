@@ -26,6 +26,9 @@ public class WebToken {
     @JsonProperty("requesting_practitioner")
     private RequestingPractitioner requestingPractitioner;
 
+    @JsonProperty("requested_record")
+    private RequestedRecord requestedRecord;
+
     public String getAud() {
         return aud;
     }
@@ -113,4 +116,12 @@ public class WebToken {
     public boolean isWriteRequestedScope() {
         return getRequestedScope().endsWith("write");
     }    
+
+    public RequestedRecord getRequestedRecord() {
+        return requestedRecord;
+    }
+
+    public void setRequestedRecord(RequestedRecord requestedRecord) {
+        this.requestedRecord = requestedRecord;
+    }
 }

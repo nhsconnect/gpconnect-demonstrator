@@ -2,6 +2,7 @@ package uk.gov.hscic;
 
 public final class SystemURL {
 
+
     private SystemURL() { }
 
     // Base Constants
@@ -74,8 +75,8 @@ public final class SystemURL {
     public static final String SD_CC_EXT_RESIDENTIAL_STATUS = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ResidentialStatus-1";   
     public static final String SD_CC_EXT_TREATMENT_CAT = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-TreatmentCategory-1";   
     public static final String SD_CC_EXT_NHS_COMMUNICATION = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSCommunication-1";   
-    public static final String SD_CC_EXT_COMM_LANGUAGE = "Language";   
-    public static final String SD_CC_COMM_PREFERRED = "Preferred";   
+    public static final String SD_CC_EXT_COMM_LANGUAGE = "language";   // # 177
+    public static final String SD_CC_COMM_PREFERRED = "preferred";   // # 177
     public static final String SD_CC_MODE_OF_COMM = "modeOfCommunication";   
     public static final String SD_CC_COMM_PROFICIENCY = "communicationProficiency";   
     public static final String SD_CC_INTERPRETER_REQUIRED = "interpreterRequired";   
@@ -121,6 +122,7 @@ public final class SystemURL {
     public static final String VS_CC_ETHNIC_CATEGORY_STU3 = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-EthnicCategory-1";
     public static final String VS_CC_REGISTRATION_TYPE = "https://fhir.nhs.uk/STU3/ValueSet/CareConnect-RegistrationType-1";
 //    public static final String VS_HUMAN_LANGUAGE = "http://fhir.nhs.net/ValueSet/human-language-1";
+    public static final String VS_LIST_EMPTY_REASON_CODE = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-ListEmptyReasonCode-1";
 
     // Operation Definitions
     public static final String OD_GPC_REGISTER_PATIENT = "https://fhir.nhs.uk/STU3/OperationDefinition/GPConnect-RegisterPatient-Operation-1";

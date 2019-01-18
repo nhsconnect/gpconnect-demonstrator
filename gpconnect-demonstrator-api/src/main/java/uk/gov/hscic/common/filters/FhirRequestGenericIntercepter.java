@@ -46,6 +46,13 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private static final Logger LOG = Logger.getLogger(FhirRequestGenericIntercepter.class);
 
+    /**
+     * @return the interactionId
+     */
+    public static String getInteractionId() {
+        return interactionId;
+    }
+
     @Autowired
     private Interactions interactions;
 
@@ -62,6 +69,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private static final String PRACTITIONER_RESOURCE_NAME = "Practitioner";
     private static final String ORGANIZATION_RESOURCE_NAME = "Organization";
     private static final String PATIENT_RESOURCE_NAME = "Patient";
+    
+    private static String interactionId;
 
     @PostConstruct
     public void postConstruct() {
@@ -114,6 +123,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             throwInvalidRequestException(SystemHeader.SSP_INTERACTIONID + " header blank");
         }
 
+        // workaround to make the interactionId visible to RespourceProviders
+        interactionId = interactionIdHeader;
         Interaction interaction = interactions.getInteraction(interactionIdHeader);
 
         if (interaction != null) {

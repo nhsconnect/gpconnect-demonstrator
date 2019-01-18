@@ -37,10 +37,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import static uk.gov.hscic.InteractionId.REST_CANCEL_APPOINTMENT;
 import static uk.gov.hscic.SystemURL.ID_ODS_ORGANIZATION_CODE;
 import uk.gov.hscic.appointment.schedule.ScheduleSearch;
 import static uk.gov.hscic.appointments.AppointmentValidation.APPOINTMENT_COMMENT_LENGTH;
 import static uk.gov.hscic.appointments.AppointmentValidation.APPOINTMENT_DESCRIPTION_LENGTH;
+import uk.gov.hscic.common.filters.FhirRequestGenericIntercepter;
 import uk.gov.hscic.model.appointment.ScheduleDetail;
 import uk.gov.hscic.model.practitioner.PractitionerDetails;
 import uk.gov.hscic.practitioner.PractitionerSearch;
@@ -270,6 +272,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     SystemCode.INVALID_RESOURCE, IssueType.INVALID);
         }
 
+        // #157 refers to typeCode but means specialty  (name was changed)
+        if (!appointment.getSpecialty().isEmpty()) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Appointment speciality shouldn't be provided!"),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        }
+
         boolean hasRequiredResources = appointment.getParticipant().stream()
                 .map(participant -> participant.getActor().getReference()).collect(Collectors.toList())
                 .containsAll(Arrays.asList("Patient", "Location"));
@@ -346,13 +355,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
 
             if (deliveryChannel == null) {
-                deliveryChannel = slotDetail.getDeliveryChannelCodes();
-            } else if (!deliveryChannel.equals(slotDetail.getDeliveryChannelCodes())) {
+                deliveryChannel = slotDetail.getDeliveryChannelCode();
+            } else if (!deliveryChannel.equals(slotDetail.getDeliveryChannelCode())) {
                 // added at 1.2.2
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new UnprocessableEntityException(
                                 String.format("Subsequent slot (Slot/%s) delivery channel (%s) is not equal to initial slot delivery channel (%s).",
-                                        slotId, deliveryChannel, slotDetail.getDeliveryChannelCodes())),
+                                        slotId, deliveryChannel, slotDetail.getDeliveryChannelCode())),
                         SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
 
@@ -368,7 +377,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         // add deliveryChannel #157 removed
         //appointmentDetail.setDeliveryChannel(deliveryChannel);
-
         appointmentDetail = appointmentStore.saveAppointment(appointmentDetail, slots);
 
         for (SlotDetail slot : slots) {
@@ -417,11 +425,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     + ") did not match the current resource version (" + oldAppointmentVersionId + ")");
         }
 
-        // Determine if it is a cancel or an amend
-        if (appointmentDetail.getCancellationReason() != null) {
+        // Determine if it is a cancel or an amend. This was previously a check for the rpesence of a cancellation reason
+        // but that is not sufficient.
+        if (FhirRequestGenericIntercepter.getInteractionId().equals(REST_CANCEL_APPOINTMENT)) {
             // added at 1.2.2
             if (isInThePast(appointmentDetail.getStartDateTime())) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, "The cancellation start date cannot be in the past"),
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, "The cancellation start date cannot be in the past"),
                         SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
 
@@ -430,6 +440,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         .setDiagnostics("The cancellation reason can not be blank");
                 methodOutcome.setOperationOutcome(operationalOutcome);
                 return methodOutcome;
+            }
+
+            // #172
+            String appointmentType = appointment.getAppointmentType().getText();
+            if (appointmentType != null) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, "The appointment type cannot be updated on a cancellation"),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
 
             // This is a Cancellation - so copy across fields which can be
@@ -457,7 +475,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     slotStore.saveSlot(slotDetail);
                 }
             }
-        } else {
+        } else { // amend appointment
             if (appointment.getStatus().equals("cancelled")) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new UnclassifiedServerFailureException(400,
@@ -465,9 +483,18 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         SystemCode.BAD_REQUEST, IssueType.FORBIDDEN);
             }
 
+            if (appointmentDetail.getCancellationReason() != null) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, ""
+                                + "Cannot amend cancellation reason in appointment amend"),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            }
+
             // added at 1.2.2
             if (isInThePast(appointmentDetail.getStartDateTime())) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, "The appointment amend start date cannot be in the past"),
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, 
+                                "The appointment amend start date cannot be in the past"),
                         SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
 
@@ -475,7 +502,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     oldAppointmentDetail);
 
             if (amendComparisonResult) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, "Invalid Appointment property has been amended"),
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, "Invalid Appointment property has been amended"),
                         SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
 
@@ -550,11 +578,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
             Boolean equalNumbers = bookingOrg1.getTelephone().equals(bookingOrg2.getTelephone());
             return equalNames && equalNumbers;
         } else // One of the booking orgs is null so both should be null
-         if (bookingOrg1 == bookingOrg2) {
+        {
+            if (bookingOrg1 == bookingOrg2) {
                 return true;
             } else {
                 return false;
             }
+        }
     }
 
     private Appointment appointmentDetailToAppointmentResourceConverter(AppointmentDetail appointmentDetail) {
@@ -586,7 +616,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         if (sids.size() > 0) {
             // get the first slot but it should not matter because for multi slot appts the deliveryChannel is always the same
             SlotDetail slotDetail = slotSearch.findSlotByID(sids.get(0));
-            String deliveryChannel = slotDetail.getDeliveryChannelCodes();
+            String deliveryChannel = slotDetail.getDeliveryChannelCode();
             if (deliveryChannel != null && !deliveryChannel.trim().isEmpty()) {
                 Extension deliveryChannelExtension = new Extension(SystemURL.SD_EXTENSION_GPC_DELIVERY_CHANNEL, new CodeType(deliveryChannel));
                 appointment.addExtension(deliveryChannelExtension);

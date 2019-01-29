@@ -426,7 +426,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
 
         // Determine if it is a cancel or an amend. This was previously a check for the rpesence of a cancellation reason
-        // but that is not sufficient.
+        // but that is not sufficient. TODO not sure this is safe becase its a static call
         if (FhirRequestGenericIntercepter.getInteractionId().equals(REST_CANCEL_APPOINTMENT)) {
             // added at 1.2.2
             if (isInThePast(appointmentDetail.getStartDateTime())) {

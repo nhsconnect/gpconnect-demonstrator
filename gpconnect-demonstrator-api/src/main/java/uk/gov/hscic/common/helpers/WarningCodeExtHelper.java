@@ -1,7 +1,8 @@
 package uk.gov.hscic.common.helpers;
 
 import java.util.Set;
-
+import org.hl7.fhir.dstu3.model.CodeType;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.ListResource;
@@ -21,8 +22,9 @@ public class WarningCodeExtHelper {
 				} else if (warningCode.equals("data-awaiting-filing")) {
 					warningCodeDisplay = "Data Awaiting Filing";
 				}
-				Extension warningExt = new Extension(SystemURL.WARNING_CODE, new Coding(SystemURL.CC_WARNING_CODE, warningCode, warningCodeDisplay));
-				list.addExtension(warningExt);
+                // #182
+				Extension warningExt = new Extension(SystemURL.WARNING_CODE, new CodeType(warningCode));
+                list.addExtension(warningExt);
 			}			
 		});
 	}

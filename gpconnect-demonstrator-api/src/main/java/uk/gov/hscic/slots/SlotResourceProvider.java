@@ -179,7 +179,7 @@ public class SlotResourceProvider implements IResourceProvider {
 
     public List<Slot> getSlotsForScheduleIdAndOrganizationType(String scheduleId, Date startDateTime, Date endDateTime, String bookingOrgType) {
         ArrayList<Slot> slots = new ArrayList<>();
-        List<SlotDetail> slotDetails = slotSearch.getSlotsForScheduleIdAndOrganizationType(Long.valueOf(scheduleId), startDateTime,
+        List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleIdAndOrganizationType(Long.valueOf(scheduleId), startDateTime,
                 endDateTime, bookingOrgType);
 
         if (slotDetails != null && !slotDetails.isEmpty()) {
@@ -200,7 +200,20 @@ public class SlotResourceProvider implements IResourceProvider {
      */
     public List<Slot> getSlotsForScheduleIdNoOrganizationTypeOrODS(String scheduleId, Date startDateTime, Date endDateTime) {
         ArrayList<Slot> slots = new ArrayList<>();
-        List<SlotDetail> slotDetails = slotSearch.getSlotsForScheduleIdNoOrganizationTypeOrODS(Long.valueOf(scheduleId), startDateTime,
+        List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleIdNoOrganizationTypeOrODS(Long.valueOf(scheduleId), startDateTime,
+                endDateTime);
+
+        if (slotDetails != null && !slotDetails.isEmpty()) {
+            for (SlotDetail slotDetail : slotDetails) {
+                slots.add(slotDetailToSlotResourceConverter(slotDetail));
+            }
+        }
+        return slots;
+    }
+
+    public List<Slot> getSlotsForScheduleId(String scheduleId, Date startDateTime, Date endDateTime) {
+        ArrayList<Slot> slots = new ArrayList<>();
+        List<SlotDetail> slotDetails = slotSearch.findSlotsForScheduleId(Long.valueOf(scheduleId), startDateTime,
                 endDateTime);
 
         if (slotDetails != null && !slotDetails.isEmpty()) {

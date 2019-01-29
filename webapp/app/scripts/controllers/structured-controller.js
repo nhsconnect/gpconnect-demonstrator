@@ -220,14 +220,14 @@ angular
                         var extentionList = resource.extension;
                         for(var j =0; j <extentionList.length; j++) {
                                 if(extentionList[j].url == warningCodeUrl) {
-                                    if(extentionList[j].valueCoding.display == "Medications and medical devices") {
-                                        medicationWarningCodeSet.add(extentionList[j].valueCoding.code);
+                                    if(extentionList[j].valueCode == "Medications and medical devices") {
+                                        medicationWarningCodeSet.add(extentionList[j].valueCode); // #182
                                     }
-                                   else  if(extentionList[j].valueCoding.display == "Active Allergies") {
-                                        activewarningCodeSet.add(extentionList[j].valueCoding.code);
+                                   else  if(extentionList[j].valueCode == "Active Allergies") {
+                                        activewarningCodeSet.add(extentionList[j].valueCode); // #182
                                     }
-                                    else if(extentionList[j].valueCoding.display == "Resolved Allergies") {
-                                        resolvedwarningCodeSet.add(extentionList[j].valueCoding.code);
+                                    else if(extentionList[j].valueCode == "Resolved Allergies") {
+                                        resolvedwarningCodeSet.add(extentionList[j].valueCode); // #182
                                     }
                                 }
                         }

@@ -179,10 +179,10 @@ e.g.:
 ```
 0,9,0,0,9,30,0,408443003,General medical practice,2,FREE,false,1,,T
 0,9,30,0,10,0,0,408443003,General medical practice,2,FREE,true,1,,V
-0,10,0,0,10,30,0,408443003,General medical practice,2,FREE,true,1,Urgent Care,P
+0,10,0,0,10,30,0,408443003,General medical practice,2,FREE,true,1,urgent-care,P
 ```
 
-Currently slots between 09:00 and 09:40 are not available for booking by GpConnect. Slots from 09:40 to 12:50 are available to the organisation with ODS code A20047. Those from 13:00 to 16:50 are available to the organisation with ODS code R1A14. Slots from 14:30 to 16:50 are also available to be booked by any Urgent Care organisation. Slots from 17:00 to 17:50 on the day + 1 have neither Organisation nor Type.
+Currently slots from 09:00 to 17:00 are available to any organisation or type. Slots from 17:00 to 17:50 on day + 1 are either restricted to organisation A20047 (logical id 7) or to Urgent Care/GP Practice or both organisation and type. See the slots.txt for specific details.
 
 ### Data clear down
 For Appointments and Tasks there is a clear down process which is scheduled using the "datasource.cleardown.cron" property. When the task runs it will delete all GP Connect Demonstrator Tasks previously added. It will also delete all Appointments and remove the currently available slots. It will then refresh the available slots using the "slots.txt" sample data file.

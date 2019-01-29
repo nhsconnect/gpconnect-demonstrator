@@ -28,7 +28,7 @@ public class WebTokenValidator {
 
         if (!PERMITTED_REQUESTED_SCOPES.contains(webToken.getRequestedScope())) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("JWT Bad Request Exception"), SystemCode.BAD_REQUEST,
+                    new InvalidRequestException("JWT Bad Request Exception Invalid requested scope: "+webToken.getRequestedScope()), SystemCode.BAD_REQUEST,
                     IssueType.INVALID);
         }
     }

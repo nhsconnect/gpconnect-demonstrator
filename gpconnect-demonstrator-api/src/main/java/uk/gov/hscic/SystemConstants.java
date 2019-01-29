@@ -11,13 +11,13 @@ public final class SystemConstants {
     // #175
     public static final String ACTIVE_ALLERGIES_TITLE = "Allergies and adverse reactions";
     
-    public static final String RESOLVED_ALLERGIES_DISPLAY = "Ended allergies (record artifact)";
+    public static final String RESOLVED_ALLERGIES_DISPLAY = "Ended allergies";
     // #175
     public static final String RESOLVED_ALLERGIES_TIILE = "Ended allergies";
 
     public static final String RESOLVED = "resolved";
     public static final String NO_KNOWN = "no known";
-    public static final String NO_CONTENT_RECORDED_DISPLAY = "No content recorded";
+    public static final String NO_CONTENT_RECORDED_DISPLAY = "No Content Recorded";
 
     public static final String SNOMED_URL = "http://snomed.info/sct";
 

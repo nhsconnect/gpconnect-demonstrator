@@ -5,7 +5,7 @@
 <div class="modal-body">
 
     <div class="col-md-12 modalBanner">
-        <div class="col-md-12 modalBannerUpper">{{ appointmentAmend.patient.name[0].prefix[0]}} {{ appointmentAmend.patient.name[0].given[0]}} {{ appointmentAmend.patient.name[0].family[0]}}</div>
+        <div class="col-md-12 modalBannerUpper">{{ appointmentAmend.patient.name[0].prefix[0]}} {{ appointmentAmend.patient.name[0].given[0]}} {{ appointmentAmend.patient.name[0].family}}</div>
         <div class="col-md-4 modalBannerLower">DOB: <b>{{ appointmentAmend.patient.birthDate | date:'dd-MMM-yyyy' }}</b></div>
         <div class="col-md-3 modalBannerLower">Gender: <b>{{ appointmentAmend.patient.gender | uppercase }}</b></div>
         <div class="col-md-5 modalBannerLower">NHS No. <b><span ng-bind="patientNhsNumber | formatNHSNumber"></span></b></div>

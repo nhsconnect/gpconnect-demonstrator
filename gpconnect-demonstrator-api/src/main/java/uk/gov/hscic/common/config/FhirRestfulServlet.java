@@ -58,10 +58,10 @@ public class FhirRestfulServlet extends RestfulServer {
                 applicationContext.getBean(PatientResourceProvider.class),
                 applicationContext.getBean(OrganizationResourceProvider.class),
                 applicationContext.getBean(PractitionerResourceProvider.class),
-                applicationContext.getBean(MedicationResourceProvider.class),
+                //applicationContext.getBean(MedicationResourceProvider.class), // #183
                 applicationContext.getBean(LocationResourceProvider.class),
                 applicationContext.getBean(AppointmentResourceProvider.class),
-                applicationContext.getBean(ScheduleResourceProvider.class),
+                //applicationContext.getBean(ScheduleResourceProvider.class), // #183
                 applicationContext.getBean(SlotResourceProvider.class)
              
         ));

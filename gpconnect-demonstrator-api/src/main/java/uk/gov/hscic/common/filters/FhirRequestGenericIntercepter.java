@@ -45,12 +45,24 @@ import uk.gov.hscic.common.ldap.model.ProviderRouting;
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private static final Logger LOG = Logger.getLogger(FhirRequestGenericIntercepter.class);
+    private static String sConfigPath = null;
 
     /**
+     * TODO Not sure this is safe since the interaction ID may change before the
+     * call is made workaround for interactionID check in
+     *
      * @return the interactionId
      */
     public static String getInteractionId() {
         return interactionId;
+    }
+
+    /**
+     * allows access to command line parameters
+     * @return 
+     */
+    public static String getConfigPath() {
+        return sConfigPath;
     }
 
     @Autowired
@@ -69,7 +81,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private static final String PRACTITIONER_RESOURCE_NAME = "Practitioner";
     private static final String ORGANIZATION_RESOURCE_NAME = "Organization";
     private static final String PATIENT_RESOURCE_NAME = "Patient";
-    
+
     private static String interactionId;
 
     @PostConstruct
@@ -85,6 +97,11 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     LOG.error("Error reading providerRoutingFile.");
                 }
             }
+        }
+
+        // workaround to enable CapabilityStatement to access config path
+        if (sConfigPath == null) {
+            sConfigPath = configPath;
         }
     }
 
@@ -525,10 +542,9 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
             // generalised to not expect the fhir path to be at any specific location
             if (requestUri.contains("/fhir/")) {
                 // non greedy wildcard so only match to the first occurrence
-                resource = requestUri.replaceFirst("^.*?/fhir/","").replaceFirst("/.*$","");
-            } else
-            {
-                throwBadRequestException("Cannot extract resource name from Uri "+requestUri);
+                resource = requestUri.replaceFirst("^.*?/fhir/", "").replaceFirst("/.*$", "");
+            } else {
+                throwBadRequestException("Cannot extract resource name from Uri " + requestUri);
             }
 
             return resource;

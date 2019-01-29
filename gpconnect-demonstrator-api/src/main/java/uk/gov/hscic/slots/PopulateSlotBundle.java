@@ -25,9 +25,11 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.dstu3.model.Organization;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.location.LocationSearch;
+import uk.gov.hscic.model.appointment.SlotDetail;
 import uk.gov.hscic.model.location.LocationDetails;
 import uk.gov.hscic.model.organization.OrganizationDetails;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
@@ -62,6 +64,9 @@ public class PopulateSlotBundle {
     @Autowired
     private LocationSearch locationSearch;
 
+    @Autowired
+    private SlotSearch slotSearch;
+
     /**
      *
      * @param bundle Bundle resource to populate
@@ -77,18 +82,13 @@ public class PopulateSlotBundle {
             Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation, String bookingOdsCode, String bookingOrgType) {
         bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
 
-        boolean noODSorOrgType = false;
-        if (bookingOdsCode.isEmpty() && bookingOrgType.isEmpty()) {
-            // default to logical id 7 A20047
-            bookingOdsCode = "A20047";
-            noODSorOrgType = true;
-        }
+        String ourOdsCode = "A20047";
 
         // find first locationDetails for this ODS practice code
         List<LocationDetails> locationDetails = locationSearch.findAllLocations();
         LocationDetails locationDetail = null;
         for (LocationDetails alocationDetail : locationDetails) {
-            if (alocationDetail.getOrgOdsCode().equals(bookingOdsCode)) {
+            if (alocationDetail.getOrgOdsCode().equals(ourOdsCode)) {
                 locationDetail = alocationDetail;
                 break;
             }
@@ -115,8 +115,25 @@ public class PopulateSlotBundle {
         locationEntry.setResource(location);
         locationEntry.setFullUrl("Location/" + location.getIdElement().getIdPart());
 
-        // find the organization from the ods code
-        List<OrganizationDetails> organizations = organizationSearch.findOrganizationDetailsByOrgODSCode(bookingOdsCode);
+        // find the provider organization from the ods code
+        List<OrganizationDetails> ourOrganizationsDetails = organizationSearch.findOrganizationDetailsByOrgODSCode(ourOdsCode);
+        OrganizationDetails ourOrganizationDetails = null;
+        if (!ourOrganizationsDetails.isEmpty()) {
+            // at 1.2.2 these are added regardless of the status of the relevant parameter
+            // Just picks the first organization. There should only be one.
+            ourOrganizationDetails = ourOrganizationsDetails.get(0);
+        } else {
+            // do something here .. should never happen
+        }
+
+        // find the bookng organization from the ods code
+        List<OrganizationDetails> bookingOrganizationsDetails = organizationSearch.findOrganizationDetailsByOrgODSCode(bookingOdsCode);
+        OrganizationDetails bookingOrganizationDetails = null;
+        if (!bookingOrganizationsDetails.isEmpty()) {
+            // at 1.2.2 these are added regardless of the status of the relevant parameter
+            // Just picks the first organization. There should only be one.
+            bookingOrganizationDetails = bookingOrganizationsDetails.get(0);
+        }
 
         // schedules for given location
         List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(
@@ -166,31 +183,51 @@ public class PopulateSlotBundle {
                 // This Set does not work as expected because Slot does not implement hashCode
                 // so the second set call to getSlots returns different objects with the same slot id
                 Set<Slot> slots = new HashSet<>();
-                OrganizationDetails organization = null;
-                if (!organizations.isEmpty()) {
-                    // at 1.2.2 these are added regardless of the status of the relevant parameter
-                    organization = organizations.get(0);
-                    // Just picks the first organization. There should only be one.
-                    // get slots for given org
-                    if (!noODSorOrgType) {
-                        slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationId(schedule.getIdElement().getIdPart(),
-                                planningHorizonStart, planningHorizonEnd, organization.getId()));
+
+                //  # 166 see https://nhsconnect.github.io/gpconnect/appointments_slotavailabilitymanagement.html
+                // for the details of the logic implemenetd here
+                // 
+                if (bookingOrgType.isEmpty() && bookingOdsCode.isEmpty()) {
+                    // OPTION 1 get slots Specfying  neither org type nor org code
+                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdNoOrganizationTypeOrODS(schedule.getIdElement().getIdPart(),
+                            planningHorizonStart, planningHorizonEnd));
+                } else if (!bookingOrgType.isEmpty() && bookingOdsCode.isEmpty()) {
+                    // OPTION 2 organisation type only
+                    for (Slot slot : slotResourceProvider.getSlotsForScheduleId(schedule.getIdElement().getIdPart(),
+                            planningHorizonStart, planningHorizonEnd)) {
+                        SlotDetail slotDetail = slotSearch.findSlotByID(Long.parseLong(slot.getIdentifierFirstRep().getValue()));
+                        if (slotDetail.getOrganizationIds().isEmpty()
+                                && (slotDetail.getOrganizationTypes().isEmpty()
+                                || slotDetail.getOrganizationTypes().contains(bookingOrgType))) {
+                            slots.add(slot);
+                        } 
+                    }
+                } else if (!bookingOdsCode.isEmpty() && bookingOrgType.isEmpty()) {
+                    // OPTION 3 org code only
+                    for (Slot slot : slotResourceProvider.getSlotsForScheduleId(schedule.getIdElement().getIdPart(),
+                            planningHorizonStart, planningHorizonEnd)) {
+                        SlotDetail slotDetail = slotSearch.findSlotByID(Long.parseLong(slot.getIdentifierFirstRep().getValue()));
+                        if (slotDetail.getOrganizationTypes().isEmpty()
+                                && (slotDetail.getOrganizationIds().isEmpty() || bookingOrganizationDetails != null && slotDetail.getOrganizationIds().contains(bookingOrganizationDetails.getId()))) {
+                            slots.add(slot);
+                        }
+                    }
+                } else if (!bookingOrgType.isEmpty() && !bookingOdsCode.isEmpty()) {
+                    // OPTION 4 both org code and org type
+                    for (Slot slot : slotResourceProvider.getSlotsForScheduleId(schedule.getIdElement().getIdPart(),
+                            planningHorizonStart, planningHorizonEnd)) {
+                        SlotDetail slotDetail = slotSearch.findSlotByID(Long.parseLong(slot.getIdentifierFirstRep().getValue()));
+                        if (((slotDetail.getOrganizationTypes().isEmpty() || slotDetail.getOrganizationTypes().contains(bookingOrgType)))
+                                && (slotDetail.getOrganizationIds().isEmpty() || bookingOrganizationDetails != null &&  slotDetail.getOrganizationIds().contains(bookingOrganizationDetails.getId()))) {
+                            slots.add(slot);
+                        } 
                     }
                 }
 
-                if (!noODSorOrgType) {
-                    // get slots for given org type
-                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdAndOrganizationType(schedule.getIdElement().getIdPart(),
-                            planningHorizonStart, planningHorizonEnd, bookingOrgType));
-                } else {
-                    slots.addAll(slotResourceProvider.getSlotsForScheduleIdNoOrganizationTypeOrODS(schedule.getIdElement().getIdPart(),
-                            planningHorizonStart, planningHorizonEnd));
-                }
-
                 // added at 1.2.2 add the organisation but only if there are some slots available
-                if (slots.size() > 0 && organization != null && !addedOrganization.contains(organization.getOrgCode())) {
-                    addOrganisation(organization, bundle);
-                    addedOrganization.add(organization.getOrgCode());
+                if (slots.size() > 0 && ourOrganizationDetails != null && !addedOrganization.contains(ourOrganizationDetails.getOrgCode())) {
+                    addOrganisation(ourOrganizationDetails, bundle);
+                    addedOrganization.add(ourOrganizationDetails.getOrgCode());
                 }
 
                 String freeBusyType = "FREE";

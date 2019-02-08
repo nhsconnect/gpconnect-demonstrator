@@ -48,6 +48,8 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import static org.hl7.fhir.dstu3.model.Address.AddressUse.OLD;
+import static org.hl7.fhir.dstu3.model.Address.AddressUse.WORK;
 import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_NHS_COMMUNICATION;
@@ -351,7 +353,7 @@ public class PatientResourceProvider implements IResourceProvider {
         //Add all organizations
         for (String orgId : orgIds) {
             OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(new Long(orgId));
-            Organization organization = organizationResourceProvider.convertOrganizaitonDetailsToOrganization(organizationDetails);
+            Organization organization = organizationResourceProvider.convertOrganizationDetailsToOrganization(organizationDetails);
             structuredBundle.addEntry().setResource(organization);
         }
 
@@ -571,16 +573,24 @@ public class PatientResourceProvider implements IResourceProvider {
         // count by useType TODO Only the first address is persisted at present
         HashSet<AddressUse> useTypeCount = new HashSet<>();
         for (Address address : patient.getAddress()) {
-            if (!useTypeCount.contains(address.getUse())) {
-                useTypeCount.add(address.getUse());
+            AddressUse useType = address.getUse();
+            // #189 address use types work and old are not allowed
+            if (useType == WORK || useType == OLD) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException( // 422
+                                "Address use type " + useType + " cannot be sent in a register patient request."),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            }
+            if (!useTypeCount.contains(useType)) {
+                useTypeCount.add(useType);
             } else {
                 // #174 Only a single address of each usetype may be sent
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(
+                        new UnprocessableEntityException(
                                 "Only a single address of each use type can be sent in a register patient request."),
-                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
-        }
+        } // for address
     } //  validateTelecomAndAddress
 
     private void validateGender(Patient patient) {

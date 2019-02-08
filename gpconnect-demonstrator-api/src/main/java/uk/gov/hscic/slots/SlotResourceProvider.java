@@ -2,7 +2,6 @@ package uk.gov.hscic.slots;
 
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -11,7 +10,6 @@ import java.util.regex.Pattern;
 
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.IdType;
-import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueSeverity;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
@@ -235,14 +233,16 @@ public class SlotResourceProvider implements IResourceProvider {
         String versionId = String.valueOf(lastUpdated.getTime());
         String resourceType = slot.getResourceType().toString();
 
-        IdType id = new IdType(resourceType, resourceId, versionId);
+        //IdType id = new IdType(resourceType, resourceId, versionId);
+        IdType id = new IdType(resourceId);
 
         slot.setId(id);
         slot.getMeta().setVersionId(versionId);
         slot.getMeta().addProfile(SystemURL.SD_GPC_SLOT);
 
-        slot.setIdentifier(Collections.singletonList(
-                new Identifier().setSystem(SystemURL.ID_SDS_USER_ID).setValue(slotDetail.getId().toString())));
+        // #191 slots should not contain SDS identifiers
+//        slot.setIdentifier(Collections.singletonList(
+//                new Identifier().setSystem(SystemURL.ID_SDS_USER_ID).setValue(slotDetail.getId().toString())));
 
         slot.setSchedule(new Reference("Schedule/" + slotDetail.getScheduleReference()));
         slot.setStart(slotDetail.getStartDateTime());

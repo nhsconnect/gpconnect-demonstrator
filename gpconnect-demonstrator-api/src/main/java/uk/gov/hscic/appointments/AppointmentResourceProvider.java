@@ -289,15 +289,20 @@ public class AppointmentResourceProvider implements IResourceProvider {
         }
         boolean patientFound = false;
         boolean locationFound = false;
-
-        for (int i = 0; i < appointment.getParticipant().size(); i++) {
-            if (appointment.getParticipant().get(i).getActor().getReference().contains("Patient")) {
-                patientFound = true;
+        for (AppointmentParticipantComponent participant : appointment.getParticipant()) {
+            if (participant.getActor().getReference() != null) {
+                String reference = participant.getActor().getReference();
+                if (reference.contains("Patient")) {
+                    patientFound = true;
+                } else if (reference.contains("Location")) {
+                    locationFound = true;
+                }
+            } else {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException(
+                                "Appointment resource is not valid as it does not contain a Participant Actor reference"),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
-            if (appointment.getParticipant().get(i).getActor().getReference().contains("Location")) {
-                locationFound = true;
-            }
-
         }
 
         if (patientFound == false || locationFound == false) {
@@ -493,7 +498,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             // added at 1.2.2
             if (isInThePast(appointmentDetail.getStartDateTime())) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, 
+                        new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY,
                                 "The appointment amend start date cannot be in the past"),
                         SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }

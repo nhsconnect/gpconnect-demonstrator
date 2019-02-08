@@ -34,26 +34,26 @@ public class WebTokenValidator {
     }
 
     private static void verifyNoNullValues(WebToken webToken) {
-        assertNotNull(webToken.getAud());
-        assertNotNull(webToken.getExp());
-        assertNotNull(webToken.getIat());
-        assertNotNull(webToken.getIss());
-        assertNotNull(webToken.getSub());
-        assertNotNull(webToken.getReasonForRequest());
-        assertNotNull(webToken.getRequestedScope());
-        assertNotNull(webToken.getRequestingDevice());
-        assertNotNull(webToken.getRequestingDevice().getResourceType());
-        assertNotNull(webToken.getRequestingOrganization());
-        assertNotNull(webToken.getRequestingOrganization().getResourceType());
-        assertNotNull(webToken.getRequestingPractitioner());
-        assertNotNull(webToken.getRequestingPractitioner().getResourceType());
+        assertNotNull("aud",webToken.getAud());
+        assertNotNull("exp",webToken.getExp());
+        assertNotNull("iat",webToken.getIat());
+        assertNotNull("iss",webToken.getIss());
+        assertNotNull("sub",webToken.getSub());
+        assertNotNull("reason_for_request",webToken.getReasonForRequest());
+        assertNotNull("requested_scope",webToken.getRequestedScope());
+        assertNotNull("requesting_device",webToken.getRequestingDevice());
+        assertNotNull("requesting_device.resourceType",webToken.getRequestingDevice().getResourceType());
+        assertNotNull("requesting_organization",webToken.getRequestingOrganization());
+        assertNotNull("requesting_organization.resourceType",webToken.getRequestingOrganization().getResourceType());
+        assertNotNull("requesting_practitioner",webToken.getRequestingPractitioner());
+        assertNotNull("requesting_practitioner.resourceType",webToken.getRequestingPractitioner().getResourceType());
 
     }
 
-    private static void assertNotNull(Object object) {
+    private static void assertNotNull(String claim, Object object) {
         if (null == object) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("JWT JSON entry incomplete."), SystemCode.BAD_REQUEST,
+                    new InvalidRequestException("JWT JSON entry incomplete: claim " + claim + " is null."), SystemCode.BAD_REQUEST,
                     IssueType.INVALID);
         }
     }

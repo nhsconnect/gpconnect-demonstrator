@@ -1,42 +1,42 @@
 USE gpconnect1;
 
 /* Destroy all existing data */
-DROP TABLE IF EXISTS gpconnect1.appointment_slots_organizations;
-DROP TABLE IF EXISTS gpconnect1.appointment_slots_orgType;
-DROP TABLE IF EXISTS gpconnect1.appointment_appointments_slots;
-DROP TABLE IF EXISTS gpconnect1.appointment_schedules;
-DROP TABLE IF EXISTS gpconnect1.appointment_slots;
-DROP TABLE IF EXISTS gpconnect1.medication_allergies;
-DROP TABLE IF EXISTS gpconnect1.medication_statement_reason_codes;
-DROP TABLE IF EXISTS gpconnect1.medication_statement_reason_references;
-DROP TABLE IF EXISTS gpconnect1.medication_statement_notes;
-DROP TABLE IF EXISTS gpconnect1.medication_request_reason_codes;
-DROP TABLE IF EXISTS gpconnect1.medication_request_reason_references;
-DROP TABLE IF EXISTS gpconnect1.medication_request_notes;
-DROP TABLE IF EXISTS gpconnect1.medication_request_based_on_references;
-DROP TABLE IF EXISTS gpconnect1.medication_reason_codes;
-DROP TABLE IF EXISTS gpconnect1.medication_reason_references;
-DROP TABLE IF EXISTS gpconnect1.medication_notes;
-DROP TABLE IF EXISTS gpconnect1.medication_request_based_on;
-DROP TABLE IF EXISTS gpconnect1.medication_statements;
-DROP TABLE IF EXISTS gpconnect1.medication_requests;
-DROP TABLE IF EXISTS gpconnect1.patient_telecoms;
-DROP TABLE IF EXISTS gpconnect1.patients;
-DROP TABLE IF EXISTS gpconnect1.medications;
-DROP TABLE IF EXISTS gpconnect1.organizations;
-DROP TABLE IF EXISTS gpconnect1.patients;
-DROP TABLE IF EXISTS gpconnect1.practitioners;
-DROP TABLE IF EXISTS gpconnect1.locations;
-DROP TABLE IF EXISTS gpconnect1.appointment_booking_orgz;
-DROP TABLE IF EXISTS gpconnect1.appointment_appointments;
-DROP TABLE IF EXISTS gpconnect1.medical_departments;
-DROP TABLE IF EXISTS gpconnect1.allergyintolerance;
-DROP TABLE IF EXISTS gpconnect1.addresses;
-DROP TABLE IF EXISTS gpconnect1.translations;
+DROP TABLE IF EXISTS appointment_slots_organizations;
+DROP TABLE IF EXISTS appointment_slots_orgType;
+DROP TABLE IF EXISTS appointment_appointments_slots;
+DROP TABLE IF EXISTS appointment_schedules;
+DROP TABLE IF EXISTS appointment_slots;
+DROP TABLE IF EXISTS medication_allergies;
+DROP TABLE IF EXISTS medication_statement_reason_codes;
+DROP TABLE IF EXISTS medication_statement_reason_references;
+DROP TABLE IF EXISTS medication_statement_notes;
+DROP TABLE IF EXISTS medication_request_reason_codes;
+DROP TABLE IF EXISTS medication_request_reason_references;
+DROP TABLE IF EXISTS medication_request_notes;
+DROP TABLE IF EXISTS medication_request_based_on_references;
+DROP TABLE IF EXISTS medication_reason_codes;
+DROP TABLE IF EXISTS medication_reason_references;
+DROP TABLE IF EXISTS medication_notes;
+DROP TABLE IF EXISTS medication_request_based_on;
+DROP TABLE IF EXISTS medication_statements;
+DROP TABLE IF EXISTS medication_requests;
+DROP TABLE IF EXISTS patient_telecoms;
+DROP TABLE IF EXISTS patients;
+DROP TABLE IF EXISTS medications;
+DROP TABLE IF EXISTS organizations;
+DROP TABLE IF EXISTS patients;
+DROP TABLE IF EXISTS practitioners;
+DROP TABLE IF EXISTS locations;
+DROP TABLE IF EXISTS appointment_booking_orgz;
+DROP TABLE IF EXISTS appointment_appointments;
+DROP TABLE IF EXISTS medical_departments;
+DROP TABLE IF EXISTS allergyintolerance;
+DROP TABLE IF EXISTS addresses;
+DROP TABLE IF EXISTS translations;
 
 /* Create new table schemas */
 
-CREATE TABLE gpconnect1.appointment_booking_orgz (
+CREATE TABLE appointment_booking_orgz (
   id              BIGINT       NOT NULL,
   org_code        VARCHAR(30)  NULL,
   name            VARCHAR(100) NULL,
@@ -45,7 +45,7 @@ CREATE TABLE gpconnect1.appointment_booking_orgz (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.appointment_appointments (
+CREATE TABLE appointment_appointments (
   id                 BIGINT    NOT NULL AUTO_INCREMENT,
   cancellationReason TEXT(300) NULL,
   status             TEXT(50)  NULL,
@@ -63,11 +63,11 @@ CREATE TABLE gpconnect1.appointment_appointments (
   PRIMARY KEY (id)
 );
 
-ALTER TABLE gpconnect1.appointment_booking_orgz
+ALTER TABLE appointment_booking_orgz
 ADD CONSTRAINT fk_appointment_appointments_booking_orgz
-FOREIGN KEY (id) REFERENCES gpconnect1.appointment_appointments(id);
+FOREIGN KEY (id) REFERENCES appointment_appointments(id);
 
-CREATE TABLE gpconnect1.appointment_schedules (
+CREATE TABLE appointment_schedules (
   id              BIGINT    NOT NULL AUTO_INCREMENT,
   practitionerId  BIGINT    NULL,
   identifier      TEXT(50)  NULL,
@@ -83,7 +83,7 @@ CREATE TABLE gpconnect1.appointment_schedules (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.appointment_slots (
+CREATE TABLE appointment_slots (
   id                BIGINT    NOT NULL AUTO_INCREMENT,
   typeCode          BIGINT    NULL,
   typeDisplay       TEXT(300) NULL,
@@ -97,21 +97,21 @@ CREATE TABLE gpconnect1.appointment_slots (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.appointment_slots_orgType (
+CREATE TABLE appointment_slots_orgType (
   `slotId` bigint(20) NOT NULL,
   `bookableOrgTypes` varchar(255) NOT NULL,
   KEY `slotId` (`slotId`),
   CONSTRAINT `appointment_slots_orgType_ibfk_1` FOREIGN KEY (`slotId`) REFERENCES `appointment_slots` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE gpconnect1.appointment_appointments_slots (
+CREATE TABLE appointment_appointments_slots (
 	appointmentId	BIGINT    NOT NULL,
 	slotId			BIGINT    NOT NULL,
-	FOREIGN KEY (appointmentId) REFERENCES gpconnect1.appointment_appointments(id),
-	FOREIGN KEY (slotId) 		REFERENCES gpconnect1.appointment_slots(id)
+	FOREIGN KEY (appointmentId) REFERENCES appointment_appointments(id),
+	FOREIGN KEY (slotId) 		REFERENCES appointment_slots(id)
 );
 
-CREATE TABLE gpconnect1.practitioners (
+CREATE TABLE practitioners (
   id                BIGINT       NOT NULL AUTO_INCREMENT,
   userid            VARCHAR(30)  NULL,
   p_role_ids        VARCHAR(30)  NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE gpconnect1.practitioners (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.organizations (
+CREATE TABLE organizations (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   org_code    VARCHAR(30)  NULL,
   org_name    VARCHAR(100) NULL,
@@ -136,21 +136,21 @@ CREATE TABLE gpconnect1.organizations (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.appointment_slots_organizations (
+CREATE TABLE appointment_slots_organizations (
 	slotId       	BIGINT    NOT NULL,
 	organizationId	BIGINT    NOT NULL,
-	FOREIGN KEY (organizationId) REFERENCES gpconnect1.organizations(id),
-	FOREIGN KEY (slotId) 		REFERENCES gpconnect1.appointment_slots(id)
+	FOREIGN KEY (organizationId) REFERENCES organizations(id),
+	FOREIGN KEY (slotId) 		REFERENCES appointment_slots(id)
 );
 
-CREATE TABLE gpconnect1.medical_departments (
+CREATE TABLE medical_departments (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   department  VARCHAR(150) NULL,
   lastUpdated DATETIME     NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.patients (
+CREATE TABLE patients (
   id                  BIGINT       NOT NULL AUTO_INCREMENT,
   title               VARCHAR(10)  NULL,
   first_name          VARCHAR(300) NULL,
@@ -179,11 +179,11 @@ CREATE TABLE gpconnect1.patients (
   marital_status      VARCHAR(10)  NULL,
   managing_organization BIGINT     NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES gpconnect1.medical_departments(id),
-  FOREIGN KEY (gp_id) REFERENCES gpconnect1.practitioners(id)
+  FOREIGN KEY (department_id) REFERENCES medical_departments(id),
+  FOREIGN KEY (gp_id) REFERENCES practitioners(id)
 );
 
-CREATE TABLE gpconnect1.medications (
+CREATE TABLE medications (
   id                        BIGINT    NOT NULL AUTO_INCREMENT,
   concept_code              TEXT(20)  NULL,
   concept_display	        TEXT(100) NULL,
@@ -197,7 +197,7 @@ CREATE TABLE gpconnect1.medications (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.medication_statements (
+CREATE TABLE medication_statements (
   id	              BIGINT       NOT NULL AUTO_INCREMENT,
   lastIssueDate       DATETIME     NULL,
   medicationRequestId VARCHAR(50)       NULL,
@@ -219,7 +219,7 @@ CREATE TABLE gpconnect1.medication_statements (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.medication_requests (
+CREATE TABLE medication_requests (
   id	                             BIGINT       NOT NULL AUTO_INCREMENT,
   groupIdentifier                    VARCHAR(250) NULL,
   statusCode                         VARCHAR(50)  NULL,
@@ -252,24 +252,24 @@ CREATE TABLE gpconnect1.medication_requests (
   lastUpdated                        DATETIME     NULL,
   guid                               VARCHAR(250) NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (medicationId) REFERENCES gpconnect1.medications(id)
+  FOREIGN KEY (medicationId) REFERENCES medications(id)
 );
 
-CREATE TABLE gpconnect1.medication_reason_references (
+CREATE TABLE medication_reason_references (
   id           BIGINT NOT NULL AUTO_INCREMENT,
   referenceUrl VARCHAR(100) NULL,
   referenceId  BIGINT NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.medication_request_based_on (
+CREATE TABLE medication_request_based_on (
   id           BIGINT NOT NULL AUTO_INCREMENT,
   referenceUrl VARCHAR(100) NULL,
   referenceId  BIGINT NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.medication_notes (
+CREATE TABLE medication_notes (
   id                 BIGINT       NOT NULL AUTO_INCREMENT,
   dateWritten        DATETIME     NULL,
   authorReferenceUrl VARCHAR(100) NULL,
@@ -278,63 +278,63 @@ CREATE TABLE gpconnect1.medication_notes (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.medication_reason_codes (
+CREATE TABLE medication_reason_codes (
   id            BIGINT      NOT NULL AUTO_INCREMENT,
   reasonCode    VARCHAR(50) NULL,
   reasonDisplay VARCHAR(150) NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.medication_statement_reason_codes (
+CREATE TABLE medication_statement_reason_codes (
   medicationStatementId	BIGINT NOT NULL,
   reasonCodeId			BIGINT NOT NULL,
-  FOREIGN KEY (medicationStatementId) REFERENCES gpconnect1.medication_statements(id),
-  FOREIGN KEY (reasonCodeId) 		  REFERENCES gpconnect1.medication_reason_codes(id)
+  FOREIGN KEY (medicationStatementId) REFERENCES medication_statements(id),
+  FOREIGN KEY (reasonCodeId) 		  REFERENCES medication_reason_codes(id)
 );
 
-CREATE TABLE gpconnect1.medication_statement_reason_references (
+CREATE TABLE medication_statement_reason_references (
   medicationStatementId	BIGINT NOT NULL,
   reasonReferenceId		BIGINT NOT NULL,
-  FOREIGN KEY (medicationStatementId) REFERENCES gpconnect1.medication_statements(id),
-  FOREIGN KEY (reasonReferenceId) 	  REFERENCES gpconnect1.medication_reason_references(id)
+  FOREIGN KEY (medicationStatementId) REFERENCES medication_statements(id),
+  FOREIGN KEY (reasonReferenceId) 	  REFERENCES medication_reason_references(id)
 );
 
-CREATE TABLE gpconnect1.medication_statement_notes (
+CREATE TABLE medication_statement_notes (
   medicationStatementId	BIGINT NOT NULL,
   noteId		    	BIGINT NOT NULL,
-  FOREIGN KEY (medicationStatementId) REFERENCES gpconnect1.medication_statements(id),
-  FOREIGN KEY (noteId) 		          REFERENCES gpconnect1.medication_notes(id)
+  FOREIGN KEY (medicationStatementId) REFERENCES medication_statements(id),
+  FOREIGN KEY (noteId) 		          REFERENCES medication_notes(id)
 );
 
-CREATE TABLE gpconnect1.medication_request_reason_codes (
+CREATE TABLE medication_request_reason_codes (
   medicationRequestId	BIGINT NOT NULL,
   reasonCodeId			BIGINT NOT NULL,
-  FOREIGN KEY (medicationRequestId) REFERENCES gpconnect1.medication_requests(id),
-  FOREIGN KEY (reasonCodeId) 	   	  REFERENCES gpconnect1.medication_reason_codes(id)
+  FOREIGN KEY (medicationRequestId) REFERENCES medication_requests(id),
+  FOREIGN KEY (reasonCodeId) 	   	  REFERENCES medication_reason_codes(id)
 );
 
-CREATE TABLE gpconnect1.medication_request_reason_references (
+CREATE TABLE medication_request_reason_references (
   medicationRequestId	BIGINT NOT NULL,
   reasonReferenceId		BIGINT NOT NULL,
-  FOREIGN KEY (medicationRequestId) REFERENCES gpconnect1.medication_requests(id),
-  FOREIGN KEY (reasonReferenceId)  	  REFERENCES gpconnect1.medication_reason_references(id)
+  FOREIGN KEY (medicationRequestId) REFERENCES medication_requests(id),
+  FOREIGN KEY (reasonReferenceId)  	  REFERENCES medication_reason_references(id)
 );
 
-CREATE TABLE gpconnect1.medication_request_based_on_references (
+CREATE TABLE medication_request_based_on_references (
   medicationRequestId	BIGINT NOT NULL,
   basedOnReferenceId	BIGINT NOT NULL,
-  FOREIGN KEY (medicationRequestId) REFERENCES gpconnect1.medication_requests(id),
-  FOREIGN KEY (basedOnReferenceId)  	  REFERENCES gpconnect1.medication_request_based_on(id)
+  FOREIGN KEY (medicationRequestId) REFERENCES medication_requests(id),
+  FOREIGN KEY (basedOnReferenceId)  	  REFERENCES medication_request_based_on(id)
 );
 
-CREATE TABLE gpconnect1.medication_request_notes (
+CREATE TABLE medication_request_notes (
   medicationRequestId BIGINT NOT NULL,
   noteId			  BIGINT NOT NULL,
-  FOREIGN KEY (medicationRequestId) REFERENCES gpconnect1.medication_requests(id),
-  FOREIGN KEY (noteId) 		        REFERENCES gpconnect1.medication_notes(id)
+  FOREIGN KEY (medicationRequestId) REFERENCES medication_requests(id),
+  FOREIGN KEY (noteId) 		        REFERENCES medication_notes(id)
 );
 
-CREATE TABLE gpconnect1.addresses (
+CREATE TABLE addresses (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   line   	  VARCHAR(100)NULL,
   city        VARCHAR(50) NULL,
@@ -345,7 +345,7 @@ CREATE TABLE gpconnect1.addresses (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.locations (
+CREATE TABLE locations (
   id                 BIGINT       NOT NULL AUTO_INCREMENT,
   name               VARCHAR(250) NOT NULL,
   org_ods_code       VARCHAR(250) NOT NULL,
@@ -356,10 +356,10 @@ CREATE TABLE gpconnect1.locations (
   lastUpdated        DATETIME     NULL,
   address_id         BIGINT       NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (address_id) REFERENCES gpconnect1.addresses(id)
+  FOREIGN KEY (address_id) REFERENCES addresses(id)
 );
 
-CREATE TABLE gpconnect1.allergyintolerance (
+CREATE TABLE allergyintolerance (
   id                BIGINT       NOT NULL AUTO_INCREMENT,
   nhsNumber         BIGINT       NULL,
   endDate  		  DATETIME  NULL,
@@ -389,15 +389,15 @@ CREATE TABLE gpconnect1.allergyintolerance (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.medication_allergies (
+CREATE TABLE medication_allergies (
   medicationId BIGINT NOT NULL,
   allergyintoleranceId BIGINT NOT NULL,
   patientNhsnumber BIGINT NOT NULL,
-  FOREIGN KEY (medicationId) REFERENCES gpconnect1.medications(id),
-  FOREIGN KEY (allergyintoleranceId) REFERENCES gpconnect1.allergyintolerance(id)
+  FOREIGN KEY (medicationId) REFERENCES medications(id),
+  FOREIGN KEY (allergyintoleranceId) REFERENCES allergyintolerance(id)
   );
 
-CREATE TABLE gpconnect1.translations (
+CREATE TABLE translations (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   system   	  VARCHAR(100)NULL,
   code        VARCHAR(20) NULL,
@@ -405,12 +405,12 @@ CREATE TABLE gpconnect1.translations (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect1.patient_telecoms (
+CREATE TABLE patient_telecoms (
   id BIGINT NOT NULL AUTO_INCREMENT,
   patientId BIGINT NOT NULL,
   system      VARCHAR(250) NULL,
   usetype      VARCHAR(250) NULL,
   value      VARCHAR(250) NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (patientId) REFERENCES gpconnect1.patients(id)
+  FOREIGN KEY (patientId) REFERENCES patients(id)
 );

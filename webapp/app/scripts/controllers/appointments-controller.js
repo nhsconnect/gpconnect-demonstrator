@@ -83,7 +83,8 @@ angular.module('gpConnect')
                                                 var appointments = findAllAppointmentsSuccess.data.entry;
                                                 if (appointments != undefined) {
                                                     $.each(appointments, function (key, appointment) {
-                                                        appointment.appointmentPractice = practice.name;
+                                                        // handle embedded single quotes
+                                                        appointment.appointmentPractice = practice.name.replace("'","\\\'");
                                                         appointment.appointmentPracticeOdsCode = practice.odsCode;
                                                     });
                                                     $scope.appointments = $scope.appointments.concat(appointments); // Add appointments to total list
@@ -144,6 +145,8 @@ angular.module('gpConnect')
                 var appointment;
                 for (var index = 0; index < $scope.appointments.length; ++index) {
                     appointment = $scope.appointments[index];
+                    // remove escaping of single quotes
+                    appointment.appointmentPractice = appointment.appointmentPractice.replace("\\\'","'");
                     if (appointment.resource.id == id && appointment.appointmentPractice == practice) {
                         $scope.appointmentDetail = appointment;
                         break;

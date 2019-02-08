@@ -134,6 +134,13 @@ public class LocationResourceProvider implements IResourceProvider {
         return location;
     }
 
+    /**
+     * Some of the assignments look rather odd but they are deliberate.
+     * They result from a change to spec to remove the state attribute from the address
+     * See the commit cd26528 by James Cox 6/3/18
+     * @param locationDetails
+     * @return 
+     */
 	private Address createAddress(LocationDetails locationDetails) {
 		Address address = new Address();
         List<StringType> list = new LinkedList<>();

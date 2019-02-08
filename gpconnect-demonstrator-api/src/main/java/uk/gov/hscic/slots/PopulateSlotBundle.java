@@ -185,7 +185,7 @@ public class PopulateSlotBundle {
                 Set<Slot> slots = new HashSet<>();
 
                 //  # 166 see https://nhsconnect.github.io/gpconnect/appointments_slotavailabilitymanagement.html
-                // for the details of the logic implemenetd here
+                // for the details of the logic implemeneted here
                 // 
                 if (bookingOrgType.isEmpty() && bookingOdsCode.isEmpty()) {
                     // OPTION 1 get slots Specfying  neither org type nor org code
@@ -195,7 +195,7 @@ public class PopulateSlotBundle {
                     // OPTION 2 organisation type only
                     for (Slot slot : slotResourceProvider.getSlotsForScheduleId(schedule.getIdElement().getIdPart(),
                             planningHorizonStart, planningHorizonEnd)) {
-                        SlotDetail slotDetail = slotSearch.findSlotByID(Long.parseLong(slot.getIdentifierFirstRep().getValue()));
+                        SlotDetail slotDetail = slotSearch.findSlotByID(Long.parseLong(slot.getId()));
                         if (slotDetail.getOrganizationIds().isEmpty()
                                 && (slotDetail.getOrganizationTypes().isEmpty()
                                 || slotDetail.getOrganizationTypes().contains(bookingOrgType))) {
@@ -206,7 +206,7 @@ public class PopulateSlotBundle {
                     // OPTION 3 org code only
                     for (Slot slot : slotResourceProvider.getSlotsForScheduleId(schedule.getIdElement().getIdPart(),
                             planningHorizonStart, planningHorizonEnd)) {
-                        SlotDetail slotDetail = slotSearch.findSlotByID(Long.parseLong(slot.getIdentifierFirstRep().getValue()));
+                        SlotDetail slotDetail = slotSearch.findSlotByID(Long.parseLong(slot.getId()));
                         if (slotDetail.getOrganizationTypes().isEmpty()
                                 && (slotDetail.getOrganizationIds().isEmpty() || bookingOrganizationDetails != null && slotDetail.getOrganizationIds().contains(bookingOrganizationDetails.getId()))) {
                             slots.add(slot);
@@ -216,7 +216,7 @@ public class PopulateSlotBundle {
                     // OPTION 4 both org code and org type
                     for (Slot slot : slotResourceProvider.getSlotsForScheduleId(schedule.getIdElement().getIdPart(),
                             planningHorizonStart, planningHorizonEnd)) {
-                        SlotDetail slotDetail = slotSearch.findSlotByID(Long.parseLong(slot.getIdentifierFirstRep().getValue()));
+                        SlotDetail slotDetail = slotSearch.findSlotByID(Long.parseLong(slot.getId()));
                         if (((slotDetail.getOrganizationTypes().isEmpty() || slotDetail.getOrganizationTypes().contains(bookingOrgType)))
                                 && (slotDetail.getOrganizationIds().isEmpty() || bookingOrganizationDetails != null &&  slotDetail.getOrganizationIds().contains(bookingOrganizationDetails.getId()))) {
                             slots.add(slot);
@@ -289,7 +289,7 @@ public class PopulateSlotBundle {
         Long organizationId = organization.getId();
         OrganizationDetails organizationDetails = organizationSearch.findOrganizationDetails(organizationId);
         Organization organizationResource = organizationResourceProvider
-                .convertOrganizaitonDetailsToOrganization(organizationDetails);
+                .convertOrganizationDetailsToOrganization(organizationDetails);
         organizationEntry.setResource(organizationResource);
         organizationEntry.setFullUrl("Organization/" + organization.getId());
         bundle.addEntry(organizationEntry);

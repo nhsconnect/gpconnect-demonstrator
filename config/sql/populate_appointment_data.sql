@@ -1,4 +1,5 @@
-INSERT INTO gpconnect1.appointment_schedules
+USE gpconnect1;
+INSERT INTO appointment_schedules
   (id,practitionerId,identifier,typeCode,typeDescription,locationId,practitionerRoleCode,practitionerRoleDisplay,startDateTime,endDateTime,scheduleComment,lastUpdated)
 VALUES
   (1,1,'Schedule001','394802001','General medicine',16,'R0260','General Medical Practitioner','2016-03-22 10:00:00','2030-12-22 17:59:59','Schedule 1 for general appointments','2016-07-25 12:00:00'),
@@ -13,7 +14,7 @@ VALUES
   (10,3,'Schedule010','394814009','General practice',4,'R0260','General Medical Practitioner','2013-12-22 10:46:22','2040-12-22 10:46:22','Schedule 10 for general appointments with practitioner Joseph, May N. @ The Hockey Surgery Annex','2016-07-25 12:00:00'),
   (11,2,'Schedule011','394814010','General practice',5,'R0260','General Medical Practitioner','2010-10-22 01:01:01','2040-12-22 10:46:22','Schedule 11 for general appointments with practitioner','2016-07-25 12:00:00'),
   (12,1,'Schedule012','394814010','General practice',16,'R0620','Staff Nurse','2010-10-22 01:01:01','2040-12-22 10:46:22','Schedule 12 for phone appointments with staff nurse','2016-07-25 12:00:00');
-INSERT INTO gpconnect1.appointment_slots
+INSERT INTO appointment_slots
   (id,typeCode,typeDisplay,scheduleReference,freeBusyType,startDateTime,endDateTime,lastUpdated,gpConnectBookable)
 VALUES
   (1,408443003,'General medical practice',2,'FREE','2016-06-29 09:00:00','2016-06-29 09:59:59','2016-07-25 12:00:00',1),
@@ -24,7 +25,7 @@ VALUES
   (6,408443003,'General medical practice',2,'FREE','2016-06-29 15:00:00','2016-06-29 15:59:59','2016-07-25 12:00:00',1),
   (7,408443003,'General medical practice',2,'FREE','2016-06-29 16:00:00','2016-06-29 16:59:59','2016-07-25 12:00:00',1);
 
-INSERT INTO gpconnect1.addresses
+INSERT INTO addresses
   (id,line,city,district,state,postalCode,country)
 VALUES
   (1,'23 Main Street','Pudsey','Leeds','West Yorkshire','GPC 111','UK'),
@@ -42,9 +43,9 @@ VALUES
   (13,'69 Michael Lane','Garforth','Leeds','West Yorkshire','GPC 123','UK'),
   (14,'West View','Armley','Leeds','West Yorkshire','GPC 124','UK'),
   (15,'25 George Avenue','Calverley','Leeds','West Yorkshire','GPC 125','UK'),
-  (16,'99 George Avenue','Calverley','Leeds','West Yorkshire','LS1 4HY','UK');
+  (16,'NHS NPFIT Test Data Manager','Princes Exchange','Leeds','West Yorkshire','LS1 4HY','UK');
   
-INSERT INTO gpconnect1.locations
+INSERT INTO locations
   (id,name,org_ods_code,org_ods_code_name,site_ods_code,site_ods_code_name,status,lastUpdated,address_id)
 VALUES
   (1,'Building A','GPC001','GP Connect Demonstrator','Z26556','BUILDING A','active','2016-07-25 12:00:00',1),
@@ -62,4 +63,4 @@ VALUES
   (13,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',13),
   (14,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',14),
   (15,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',15),
-  (16,'Dr Leggs Surgery','A20047','BUILDING Z','Z55555','ANNEX','active','2016-07-25 12:00:00',16);
+  (16,'Building 1','A20047','BUILDING Z','Z55555','ANNEX','active','2016-07-25 12:00:00',16);

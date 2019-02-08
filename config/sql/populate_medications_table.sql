@@ -1,4 +1,5 @@
-INSERT INTO gpconnect1.translations
+USE gpconnect1;
+INSERT INTO translations
   (id, system, code, display)
 VALUES
   (2, 'https://fhir.hl7.org.uk/Id/multilex-drug-codes', '06157009', 'Sertraline 100mg tablets'),
@@ -11,7 +12,7 @@ VALUES
   (9, 'https://fhir.hl7.org.uk/Id/multilex-drug-codes', '02876002', 'Propranolol 40mg tablets'),
   (10, 'https://fhir.hl7.org.uk/Id/multilex-drug-codes', '09493001', 'Acamprosate 333mg gastro-resistant tablets');
 
-INSERT INTO gpconnect1.medications
+INSERT INTO medications
   (id,concept_code,concept_display,desc_code,desc_display,code_translation_ref,text,batchNumber,expiryDate,lastUpdated)
 VALUES
   (1,196421000000109,'Transfer-degraded medication entry','','','','Co-proxamol',null,null,'2000-01-01'),

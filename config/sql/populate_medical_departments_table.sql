@@ -16,4 +16,5 @@ VALUES
   (4,'R1A14','Z33432','Test GP Second Care Trust','2016-07-25 12:00:00'),
   (5,'R1A15','Z33435','The Hepworth Surgery','2016-07-25 12:00:00'),
   (6,'R1A16','Z33436','The Moore Surgery','2016-07-25 12:00:00'),
-  (7,'R1A17','Z33437','The Hockey Surgery','2016-07-25 12:00:00');
+  (7,'R1A17','Z33437','The Hockey Surgery','2016-07-25 12:00:00'),
+  (8,'A20047','Z33438','Dr Legg''s Surgery','2019-01-30 12:00:00');

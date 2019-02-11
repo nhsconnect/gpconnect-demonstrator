@@ -1,14 +1,14 @@
 {
     "spineProxy": "",
-    "ASID": "200000000359",
+    "ASID": "918999198993",
     "practices": [
         {
             "id": "1",
-            "odsCode": "GPC001",
-            "name": "GP Connect Demonstrator",
+            "odsCode": "A20047",
+            "name": "Dr Leggs's Surgery",
             "interactionIds": ["*"],
             "endpointURL": "http://endpointUrl/A",
-            "ASID": "200000000359"
+            "ASID": "918999198993"
         },
         {
             "id": "2",

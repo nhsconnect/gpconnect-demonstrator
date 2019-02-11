@@ -102,6 +102,12 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             WebToken webToken;
 
             try {
+                // #171
+                if (authorizationHeaderComponents[1].contains("==") || authorizationHeaderComponents[1].contains("/") || authorizationHeaderComponents[1].contains("+")) {
+                    throw new InvalidRequestException("JWT must be encoded using Base64URL. Padding is not allowed", OperationOutcomeFactory.buildOperationOutcome(
+                            SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "JWT must be encoded using Base64URL. Padding is not allowed", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                }
+
                 String[] jWTParts = authorizationHeaderComponents[1].split("\\.");
                 if (jWTParts.length == 2) {
                     String headerJsonString = new String(Base64.getDecoder().decode(jWTParts[0]));
@@ -113,8 +119,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                     WebTokenValidator.validateWebToken(webToken, futureRequestLeeway);
                     jwtParseResourcesValidation(claimsJsonString);
                 } else {
-                    throw new InvalidRequestException("Invalid number of JWT base 64 blocks "+jWTParts.length, OperationOutcomeFactory.buildOperationOutcome(
-                            SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Invalid number of JWT base 64 blocks "+jWTParts.length, META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                    throw new InvalidRequestException("Invalid number of JWT base 64 blocks " + jWTParts.length, OperationOutcomeFactory.buildOperationOutcome(
+                            SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Invalid number of JWT base 64 blocks " + jWTParts.length, META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
                 }
             } catch (IllegalArgumentException iae) {
                 throw new InvalidRequestException("Not Base 64", OperationOutcomeFactory.buildOperationOutcome(
@@ -143,12 +149,10 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                             SYSTEM_WARNING_CODE, CODE_INVALID_NHS_NUMBER, "Patient Record Not Found", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
                 }
             } else // If it is an organization oriantated request
-            {
-                if (null == webToken.getRequestedRecord().getIdentifierValue("http://fhir.nhs.net/Id/ods-organization-code")) {
+             if (null == webToken.getRequestedRecord().getIdentifierValue("http://fhir.nhs.net/Id/ods-organization-code")) {
                     throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                             SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Bad Request", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
                 }
-            }
         }
         return new RuleBuilder().allowAll().build();
     }

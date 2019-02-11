@@ -83,7 +83,7 @@ paths:
                 "identifier": [
                   {
                     "system": "https://fhir.nhs.uk/Id/ods-organization-code",
-                    "value": "GPC001"
+                    "value": "A20047"
                   }
                 ]
               },
@@ -455,7 +455,7 @@ paths:
                 "identifier": [
                   {
                     "system": "https://fhir.nhs.uk/Id/ods-organization-code",
-                    "value": "GPC001"
+                    "value": "A20047"
                   }
                 ]
               },
@@ -581,7 +581,7 @@ paths:
                 "identifier": [
                   {
                     "system": "https://fhir.nhs.uk/Id/ods-organization-code",
-                    "value": "GPC001"
+                    "value": "A20047"
                   }
                 ]
               },
@@ -707,7 +707,7 @@ paths:
                 "identifier": [
                   {
                     "system": "https://fhir.nhs.uk/Id/ods-organization-code",
-                    "value": "GPC001"
+                    "value": "A20047"
                   }
                 ]
               },
@@ -769,7 +769,7 @@ paths:
           name: identifier
           type: string
           description: Organization identifier
-          x-example: 'https://fhir.nhs.uk/Id/ods-organization-code|GPC001'
+          x-example: 'https://fhir.nhs.uk/Id/ods-organization-code|A20047'
           required: true
       responses:
         '200':
@@ -834,7 +834,7 @@ paths:
                 "identifier": [
                   {
                     "system": "https://fhir.nhs.uk/Id/ods-organization-code",
-                    "value": "GPC001"
+                    "value": "A20047"
                   }
                 ]
               },
@@ -961,7 +961,7 @@ paths:
                 "identifier": [
                   {
                     "system": "https://fhir.nhs.uk/Id/ods-organization-code",
-                    "value": "GPC001"
+                    "value": "A20047"
                   }
                 ]
               },
@@ -1236,7 +1236,7 @@ paths:
                 "identifier": [
                   {
                     "system": "https://fhir.nhs.uk/Id/ods-organization-code",
-                    "value": "GPC001"
+                    "value": "A20047"
                   }
                 ]
               },

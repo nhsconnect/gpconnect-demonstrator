@@ -22,11 +22,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import org.hl7.fhir.dstu3.model.Organization;
+import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
+import uk.gov.hscic.common.filters.FhirRequestAuthInterceptor;
 import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.location.LocationSearch;
 import uk.gov.hscic.model.appointment.SlotDetail;
@@ -66,6 +75,16 @@ public class PopulateSlotBundle {
 
     @Autowired
     private SlotSearch slotSearch;
+
+    @Value("${serverBaseUrl}")
+    private String serverBaseUrl;
+
+    @PostConstruct
+    private void postConstruct() {
+        if (!serverBaseUrl.endsWith("/")) {
+            serverBaseUrl = serverBaseUrl + "/";
+        }
+    }
 
     /**
      *
@@ -113,7 +132,8 @@ public class PopulateSlotBundle {
 
         BundleEntryComponent locationEntry = new BundleEntryComponent();
         locationEntry.setResource(location);
-        locationEntry.setFullUrl("Location/" + location.getIdElement().getIdPart());
+        // #202 use full urls
+        locationEntry.setFullUrl(serverBaseUrl + "Location/" + location.getIdElement().getIdPart());
 
         // find the provider organization from the ods code
         List<OrganizationDetails> ourOrganizationsDetails = organizationSearch.findOrganizationDetailsByOrgODSCode(ourOdsCode);
@@ -147,38 +167,14 @@ public class PopulateSlotBundle {
 
             // process the schedules
             for (Schedule schedule : schedules) {
+                boolean slotsAdded = false;
 
                 schedule.getMeta().addProfile(SystemURL.SD_GPC_SCHEDULE);
 
                 BundleEntryComponent scheduleEntry = new BundleEntryComponent();
                 scheduleEntry.setResource(schedule);
-                scheduleEntry.setFullUrl("Schedule/" + schedule.getIdElement().getIdPart());
-
-                // practitioners
-                List<Reference> practitionerActors = scheduleResourceProvider.getPractitionerReferences(schedule);
-
-                if (!practitionerActors.isEmpty()) {
-                    for (Reference practitionerActor : practitionerActors) {
-                        Practitioner practitioner = practitionerResourceProvider
-                                .getPractitionerById((IdType) practitionerActor.getReferenceElement());
-
-                        if (practitioner == null) {
-                            Coding errorCoding = new Coding().setSystem(SystemURL.VS_GPC_ERROR_WARNING_CODE)
-                                    .setCode(SystemCode.REFERENCE_NOT_FOUND);
-                            CodeableConcept errorCodableConcept = new CodeableConcept().addCoding(errorCoding);
-                            errorCodableConcept.setText("Invalid Reference");
-                            operationOutcome.addIssue().setSeverity(IssueSeverity.ERROR)
-                                    .setCode(IssueType.NOTFOUND).setDetails(errorCodableConcept);
-                            throw new ResourceNotFoundException("Practitioner Reference returning null");
-                        }
-                        if (actorPractitioner == true) {
-                            if (!addedPractitioner.contains(practitioner.getIdElement().getIdPart())) {
-                                addPractitioner(practitioner, bundle);
-                                addedPractitioner.add(practitioner.getIdElement().getIdPart());
-                            }
-                        }
-                    } // for
-                } // if
+                // #202 use full urls
+                scheduleEntry.setFullUrl(serverBaseUrl + "Schedule/" + schedule.getIdElement().getIdPart());
 
                 // This Set does not work as expected because Slot does not implement hashCode
                 // so the second set call to getSlots returns different objects with the same slot id
@@ -200,7 +196,7 @@ public class PopulateSlotBundle {
                                 && (slotDetail.getOrganizationTypes().isEmpty()
                                 || slotDetail.getOrganizationTypes().contains(bookingOrgType))) {
                             slots.add(slot);
-                        } 
+                        }
                     }
                 } else if (!bookingOdsCode.isEmpty() && bookingOrgType.isEmpty()) {
                     // OPTION 3 org code only
@@ -218,9 +214,9 @@ public class PopulateSlotBundle {
                             planningHorizonStart, planningHorizonEnd)) {
                         SlotDetail slotDetail = slotSearch.findSlotByID(Long.parseLong(slot.getId()));
                         if (((slotDetail.getOrganizationTypes().isEmpty() || slotDetail.getOrganizationTypes().contains(bookingOrgType)))
-                                && (slotDetail.getOrganizationIds().isEmpty() || bookingOrganizationDetails != null &&  slotDetail.getOrganizationIds().contains(bookingOrganizationDetails.getId()))) {
+                                && (slotDetail.getOrganizationIds().isEmpty() || bookingOrganizationDetails != null && slotDetail.getOrganizationIds().contains(bookingOrganizationDetails.getId()))) {
                             slots.add(slot);
-                        } 
+                        }
                     }
                 }
 
@@ -241,9 +237,11 @@ public class PopulateSlotBundle {
                         if (!addedSlot.contains(slotId)) {
                             BundleEntryComponent slotEntry = new BundleEntryComponent();
                             slotEntry.setResource(slot);
-                            slotEntry.setFullUrl("Slot/" + slotId);
+                            // #202 use full urls
+                            slotEntry.setFullUrl(serverBaseUrl + "Slot/" + slotId);
                             bundle.addEntry(slotEntry);
                             addedSlot.add(slotId);
+                            slotsAdded = true;
                         }
 
                         if (!addedSchedule.contains(scheduleEntry)) {
@@ -259,8 +257,37 @@ public class PopulateSlotBundle {
                                 addedLocation.add(locationEntry);
                             }
                         }
-                    } // if
+                    } // if free/busy status matches
                 } // for slots
+
+                //  # 193 for each schedule only add a practitioner if there have been some slots added.
+                if (slotsAdded) {
+                    // practitioners for this schedule
+                    List<Reference> practitionerActors = scheduleResourceProvider.getPractitionerReferences(schedule);
+
+                    if (!practitionerActors.isEmpty()) {
+                        for (Reference practitionerActor : practitionerActors) {
+                            Practitioner practitioner = practitionerResourceProvider
+                                    .getPractitionerById((IdType) practitionerActor.getReferenceElement());
+
+                            if (practitioner == null) {
+                                Coding errorCoding = new Coding().setSystem(SystemURL.VS_GPC_ERROR_WARNING_CODE)
+                                        .setCode(SystemCode.REFERENCE_NOT_FOUND);
+                                CodeableConcept errorCodableConcept = new CodeableConcept().addCoding(errorCoding);
+                                errorCodableConcept.setText("Invalid Reference");
+                                operationOutcome.addIssue().setSeverity(IssueSeverity.ERROR)
+                                        .setCode(IssueType.NOTFOUND).setDetails(errorCodableConcept);
+                                throw new ResourceNotFoundException("Practitioner Reference returning null");
+                            }
+                            if (actorPractitioner) {
+                                if (!addedPractitioner.contains(practitioner.getIdElement().getIdPart())) {
+                                    addPractitioner(practitioner, bundle);
+                                    addedPractitioner.add(practitioner.getIdElement().getIdPart());
+                                }
+                            }
+                        } // for practitioner
+                    } // if non empty practitioner list
+                } // if slots added
             } // for schedules
         } // if non empty schedules
     } // populateBundle 
@@ -274,7 +301,8 @@ public class PopulateSlotBundle {
     private void addPractitioner(Practitioner practitioner, Bundle bundle) {
         BundleEntryComponent practionerEntry = new BundleEntryComponent();
         practionerEntry.setResource(practitioner);
-        practionerEntry.setFullUrl("Practitioner/" + practitioner.getIdElement().getIdPart());
+        // #202 use full urls
+        practionerEntry.setFullUrl(serverBaseUrl + "Practitioner/" + practitioner.getIdElement().getIdPart());
         bundle.addEntry(practionerEntry);
     }
 
@@ -291,7 +319,8 @@ public class PopulateSlotBundle {
         Organization organizationResource = organizationResourceProvider
                 .convertOrganizationDetailsToOrganization(organizationDetails);
         organizationEntry.setResource(organizationResource);
-        organizationEntry.setFullUrl("Organization/" + organization.getId());
+        // #202 use full urls
+        organizationEntry.setFullUrl(serverBaseUrl + "Organization/" + organization.getId());
         bundle.addEntry(organizationEntry);
     }
 }

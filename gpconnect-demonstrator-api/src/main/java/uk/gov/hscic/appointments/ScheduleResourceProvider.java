@@ -97,10 +97,11 @@ public class ScheduleResourceProvider implements IResourceProvider {
         	schedule.addExtension(practitionerRoleExtension);
         }
         
-        Identifier identifier = new Identifier();
-        identifier.setSystem(SystemURL.ID_GPC_SCHEDULE_IDENTIFIER);
-        identifier.setValue(scheduleDetail.getIdentifier());
-        schedule.addIdentifier(identifier);
+        // # 194
+//        Identifier identifier = new Identifier();
+//        identifier.setSystem(SystemURL.ID_GPC_SCHEDULE_IDENTIFIER);
+//        identifier.setValue(scheduleDetail.getIdentifier());
+//        schedule.addIdentifier(identifier);
                 
         Coding coding = new Coding().setSystem(SystemURL.HL7_VS_C80_PRACTICE_CODES)
                 .setCode(scheduleDetail.getTypeCode()).setDisplay(scheduleDetail.getTypeDescription());

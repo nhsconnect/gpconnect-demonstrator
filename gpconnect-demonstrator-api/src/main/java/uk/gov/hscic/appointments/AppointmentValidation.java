@@ -221,7 +221,5 @@ public class AppointmentValidation {
                     SystemCode.INVALID_RESOURCE, IssueType.INVALID);
 
         }
-
     }
-
 }

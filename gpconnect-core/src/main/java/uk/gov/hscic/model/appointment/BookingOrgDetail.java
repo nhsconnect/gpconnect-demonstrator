@@ -7,6 +7,8 @@ public class BookingOrgDetail {
     private String orgCode;
     private String name;
     private String telephone;
+    private String system;
+    private String usetype;
     private Date lastUpdated;
     private AppointmentDetail appointmentDetail;
     
@@ -56,5 +58,33 @@ public class BookingOrgDetail {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    /**
+     * @return the system
+     */
+    public String getSystem() {
+        return system;
+    }
+
+    /**
+     * @param system the system to set
+     */
+    public void setSystem(String system) {
+        this.system = system;
+    }
+
+    /**
+     * @return the usetype
+     */
+    public String getUsetype() {
+        return usetype;
+    }
+
+    /**
+     * @param usetype the usetype to set
+     */
+    public void setUsetype(String usetype) {
+        this.usetype = usetype;
     }
 }

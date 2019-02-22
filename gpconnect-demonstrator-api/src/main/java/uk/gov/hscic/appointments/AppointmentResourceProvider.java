@@ -10,6 +10,8 @@ import ca.uhn.fhir.rest.param.DateOrListParam;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Appointment.AppointmentParticipantComponent;
 import org.hl7.fhir.dstu3.model.Appointment.AppointmentStatus;
@@ -37,14 +39,15 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
+import org.hl7.fhir.exceptions.FHIRException;
 import static uk.gov.hscic.InteractionId.REST_CANCEL_APPOINTMENT;
+import static uk.gov.hscic.SystemHeader.SSP_INTERACTIONID;
 import static uk.gov.hscic.SystemURL.ID_ODS_ORGANIZATION_CODE;
 import uk.gov.hscic.appointment.schedule.ScheduleSearch;
 import static uk.gov.hscic.appointments.AppointmentValidation.APPOINTMENT_COMMENT_LENGTH;
 import static uk.gov.hscic.appointments.AppointmentValidation.APPOINTMENT_DESCRIPTION_LENGTH;
-import uk.gov.hscic.common.filters.FhirRequestGenericIntercepter;
 import uk.gov.hscic.model.appointment.ScheduleDetail;
-import uk.gov.hscic.model.practitioner.PractitionerDetails;
 import uk.gov.hscic.practitioner.PractitionerSearch;
 
 @Component
@@ -64,9 +67,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
     @Autowired
     private AppointmentValidation appointmentValidation;
-
-    @Autowired
-    private PractitionerSearch practitionerSearch;
 
     @Autowired
     private ScheduleSearch scheduleSearch;
@@ -229,6 +229,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return cal.getTime();
     }
 
+    /**
+     * Create a new appointment
+     *
+     * @param appointment Resource
+     * @return MethodOutcome
+     */
     @Create
     public MethodOutcome createAppointment(@ResourceParam Appointment appointment) {
         if (appointment.getStatus() == null) {
@@ -279,19 +285,24 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     SystemCode.INVALID_RESOURCE, IssueType.INVALID);
         }
 
-        boolean hasRequiredResources = appointment.getParticipant().stream()
-                .map(participant -> participant.getActor().getReference()).collect(Collectors.toList())
-                .containsAll(Arrays.asList("Patient", "Location"));
-
-        List<String> actors = new ArrayList<>();
-        for (int i = 0; i < appointment.getParticipant().size(); i++) {
-            actors.add(appointment.getParticipant().get(i).getActor().getReference());
-        }
+        // unused code
+//        boolean hasRequiredResources = appointment.getParticipant().stream()
+//                .map(participant -> participant.getActor().getReference()).collect(Collectors.toList())
+//                .containsAll(Arrays.asList("Patient", "Location"));
+//
+//        List<String> actors = new ArrayList<>();
+//        for (int i = 0; i < appointment.getParticipant().size(); i++) {
+//            actors.add(appointment.getParticipant().get(i).getActor().getReference());
+//        }
         boolean patientFound = false;
         boolean locationFound = false;
         for (AppointmentParticipantComponent participant : appointment.getParticipant()) {
             if (participant.getActor().getReference() != null) {
                 String reference = participant.getActor().getReference();
+
+                // check for absolute reference #200
+                checkReferenceIsRelative(reference);
+
                 if (reference.contains("Patient")) {
                     patientFound = true;
                 } else if (reference.contains("Location")) {
@@ -375,6 +386,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 schedule = scheduleSearch.findScheduleByID(slotDetail.getScheduleReference());
 
                 // add practitioner id so we can get the practitioner role
+                // TODO practitioner is also optionally available from the request. How do we deal with that?
+                // inferring a practitioner can cause the comparison to fail on a cancel or amend
+                // see https://nhsconnect.github.io/gpconnect/appointments_use_case_book_an_appointment.html
                 appointmentDetail.setPractitionerId(schedule.getPractitionerId());
             }
             slots.add(slotDetail);
@@ -400,8 +414,16 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return methodOutcome;
     } // createAppointment
 
+    /**
+     * amend or cancel an existing appointment
+     *
+     * @param appointmentId
+     * @param appointment Resource
+     * @param theRequest required to access the interaction id
+     * @return MethodOutcome
+     */
     @Update
-    public MethodOutcome updateAppointment(@IdParam IdType appointmentId, @ResourceParam Appointment appointment) {
+    public MethodOutcome updateAppointment(@IdParam IdType appointmentId, @ResourceParam Appointment appointment, HttpServletRequest theRequest) {
         MethodOutcome methodOutcome = new MethodOutcome();
         OperationOutcome operationalOutcome = new OperationOutcome();
         AppointmentDetail appointmentDetail = appointmentResourceConverterToAppointmentDetail(appointment);
@@ -430,9 +452,19 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     + ") did not match the current resource version (" + oldAppointmentVersionId + ")");
         }
 
-        // Determine if it is a cancel or an amend. This was previously a check for the rpesence of a cancellation reason
-        // but that is not sufficient. TODO not sure this is safe becase its a static call
-        if (FhirRequestGenericIntercepter.getInteractionId().equals(REST_CANCEL_APPOINTMENT)) {
+        // check for absolute reference #200
+        Iterator<AppointmentParticipantComponent> iter = appointment.getParticipant().iterator();
+        while (iter.hasNext()) {
+            AppointmentParticipantComponent participant = iter.next();
+            if (participant.getActor() != null) {
+                checkReferenceIsRelative(participant.getActor().getReference());
+            }
+        }
+
+        String interactionId = theRequest.getHeader(SSP_INTERACTIONID);
+        // Determine if it is a cancel or an amend. This was previously a check for the presence of a cancellation reason
+        // but that is not sufficient. We can sefely assume that the interaction id is populated at this point.
+        if (interactionId.equals(REST_CANCEL_APPOINTMENT)) {
             // added at 1.2.2
             if (isInThePast(appointmentDetail.getStartDateTime())) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -457,12 +489,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
             // This is a Cancellation - so copy across fields which can be
             // altered
-            boolean cancelComparisonResult = compareAppointmentsForInvalidPropertyCancel(oldAppointmentDetail,
+            List cancelComparisonResult = compareAppointmentsForInvalidPropertyCancel(oldAppointmentDetail,
                     appointmentDetail);
 
-            if (cancelComparisonResult) {
+            if (cancelComparisonResult.size() > 0) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY,
-                        "Invalid Appointment property has been amended (cancellation)"),
+                        "Invalid Appointment property has been amended (cancellation) " + cancelComparisonResult),
                         SystemCode.INVALID_RESOURCE, IssueType.FORBIDDEN);
             }
 
@@ -481,13 +513,16 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 }
             }
         } else { // amend appointment
-            if (appointment.getStatus().equals("cancelled")) {
+            // #199 (inhibit amend cancelled record) was checking incoming not existing record
+            // this subsumes #161 which only inhibited amendment of the cancellation reason in an amend
+            if (oldAppointmentDetail.getStatus().equals("cancelled")) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnclassifiedServerFailureException(400,
+                        new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY,
                                 "Appointment has been cancelled and cannot be amended"),
-                        SystemCode.BAD_REQUEST, IssueType.FORBIDDEN);
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
 
+            // #161 inhibit amendment of cancellation reason
             if (appointmentDetail.getCancellationReason() != null) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, ""
@@ -503,12 +538,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
 
-            boolean amendComparisonResult = compareAppointmentsForInvalidPropertyAmend(appointmentDetail,
+            List amendComparisonResult = compareAppointmentsForInvalidPropertyAmend(appointmentDetail,
                     oldAppointmentDetail);
 
-            if (amendComparisonResult) {
+            if (amendComparisonResult.size() > 0) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, "Invalid Appointment property has been amended"),
+                        new UnclassifiedServerFailureException(HTTP422_UNPROCESSABLE_ENTITY, "Invalid Appointment property has been amended " + amendComparisonResult),
                         SystemCode.INVALID_RESOURCE, IssueType.INVALID);
             }
 
@@ -539,44 +574,78 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return methodOutcome;
     } // updateAppointment
 
-    private boolean compareAppointmentsForInvalidPropertyAmend(AppointmentDetail oldAppointmentDetail,
+    /**
+     *
+     * @param oldAppointmentDetail
+     * @param appointmentDetail
+     * @return ArrayList of failing attributes
+     */
+    private ArrayList<String> compareAppointmentsForInvalidPropertyAmend(AppointmentDetail oldAppointmentDetail,
             AppointmentDetail appointmentDetail) {
-        List<Boolean> results = new ArrayList<>();
+        HashMap<String, Boolean> results = new HashMap<>();
+        results.put("id", Objects.equals(oldAppointmentDetail.getId(), appointmentDetail.getId()));
+        results.put("status", Objects.equals(oldAppointmentDetail.getStatus(), appointmentDetail.getStatus()));
+        results.put("startDateTime", Objects.equals(oldAppointmentDetail.getStartDateTime(), appointmentDetail.getStartDateTime()));
+        results.put("endDateTime", Objects.equals(oldAppointmentDetail.getEndDateTime(), appointmentDetail.getEndDateTime()));
+        results.put("patientId", Objects.equals(oldAppointmentDetail.getPatientId(), appointmentDetail.getPatientId()));
+        results.put("practitionerId", Objects.equals(oldAppointmentDetail.getPractitionerId(), appointmentDetail.getPractitionerId()));
+        results.put("locationId", Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
+        results.put("duration", Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
+        results.put("priority", Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
 
-        results.add(Objects.equals(oldAppointmentDetail.getId(), appointmentDetail.getId()));
-        results.add(Objects.equals(oldAppointmentDetail.getStatus(), appointmentDetail.getStatus()));
-        results.add(Objects.equals(oldAppointmentDetail.getStartDateTime(), appointmentDetail.getStartDateTime()));
-        results.add(Objects.equals(oldAppointmentDetail.getEndDateTime(), appointmentDetail.getEndDateTime()));
-        results.add(Objects.equals(oldAppointmentDetail.getPatientId(), appointmentDetail.getPatientId()));
-        results.add(Objects.equals(oldAppointmentDetail.getPractitionerId(), appointmentDetail.getPractitionerId()));
-        results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
-        results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
-        results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-
-        results.add(BookingOrganizationsEqual(oldAppointmentDetail.getBookingOrganization(),
+        results.put("bookingOrganization", BookingOrganizationsEqual(oldAppointmentDetail.getBookingOrganization(),
                 appointmentDetail.getBookingOrganization()));
 
-        return results.contains(false);
+        ArrayList<String> result = new ArrayList<>();
+        if (results.values().contains(false)) {
+            for (String key : results.keySet()) {
+                if (!results.get(key)) {
+                    result.add(key);
+                }
+            }
+        }
+        return result;
     }
 
-    private boolean compareAppointmentsForInvalidPropertyCancel(AppointmentDetail oldAppointmentDetail,
+    /**
+     *
+     * @param oldAppointmentDetail
+     * @param appointmentDetail
+     * @return ArrayList of failing attributes
+     */
+    private ArrayList<String> compareAppointmentsForInvalidPropertyCancel(AppointmentDetail oldAppointmentDetail,
             AppointmentDetail appointmentDetail) {
-        List<Boolean> results = new ArrayList<>();
 
-        results.add(Objects.equals(oldAppointmentDetail.getId(), appointmentDetail.getId()));
-        results.add(Objects.equals(oldAppointmentDetail.getPatientId(), appointmentDetail.getPatientId()));
-        results.add(Objects.equals(oldAppointmentDetail.getPractitionerId(), appointmentDetail.getPractitionerId()));
-        results.add(Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
-        results.add(Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
-        results.add(Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
-        results.add(Objects.equals(oldAppointmentDetail.getComment(), appointmentDetail.getComment()));
-        results.add(Objects.equals(oldAppointmentDetail.getDescription(), appointmentDetail.getDescription()));
-        results.add(BookingOrganizationsEqual(oldAppointmentDetail.getBookingOrganization(),
+        HashMap<String, Boolean> results = new HashMap<>();
+        results.put("id", Objects.equals(oldAppointmentDetail.getId(), appointmentDetail.getId()));
+        results.put("patientId", Objects.equals(oldAppointmentDetail.getPatientId(), appointmentDetail.getPatientId()));
+        results.put("practitionerId", Objects.equals(oldAppointmentDetail.getPractitionerId(), appointmentDetail.getPractitionerId()));
+        results.put("locationId", Objects.equals(oldAppointmentDetail.getLocationId(), appointmentDetail.getLocationId()));
+        results.put("duration", Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
+        results.put("priority", Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
+        results.put("comment", Objects.equals(oldAppointmentDetail.getComment(), appointmentDetail.getComment()));
+        results.put("description", Objects.equals(oldAppointmentDetail.getDescription(), appointmentDetail.getDescription()));
+
+        results.put("bookingOrganization", BookingOrganizationsEqual(oldAppointmentDetail.getBookingOrganization(),
                 appointmentDetail.getBookingOrganization()));
 
-        return results.contains(false);
+        ArrayList<String> result = new ArrayList<>();
+        if (results.values().contains(false)) {
+            for (String key : results.keySet()) {
+                if (!results.get(key)) {
+                    result.add(key);
+                }
+            }
+        }
+        return result;
     }
 
+    /**
+     *
+     * @param bookingOrg1
+     * @param bookingOrg2
+     * @return true for a failed comparison
+     */
     private Boolean BookingOrganizationsEqual(BookingOrgDetail bookingOrg1, BookingOrgDetail bookingOrg2) {
         if (bookingOrg1 != null && bookingOrg2 != null) {
             Boolean equalNames = bookingOrg1.getName().equals(bookingOrg2.getName());
@@ -584,14 +653,16 @@ public class AppointmentResourceProvider implements IResourceProvider {
             return equalNames && equalNumbers;
         } else // One of the booking orgs is null so both should be null
         {
-            if (bookingOrg1 == bookingOrg2) {
-                return true;
-            } else {
-                return false;
-            }
+            return bookingOrg1 == bookingOrg2;
         }
     }
 
+    /**
+     * AppointmentDetail to fhir resource Appointment
+     *
+     * @param appointmentDetail
+     * @return Appointment Resource
+     */
     private Appointment appointmentDetailToAppointmentResourceConverter(AppointmentDetail appointmentDetail) {
         Appointment appointment = new Appointment();
 
@@ -610,14 +681,15 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 new StringType(appointmentDetail.getCancellationReason()));
         appointment.addExtension(extension);
 
-        Identifier identifier = new Identifier();
-        identifier.setSystem(SystemURL.ID_GPC_APPOINTMENT_IDENTIFIER)
-                .setValue(String.valueOf(appointmentDetail.getId()));
-
-        appointment.addIdentifier(identifier);
-
+        // #196
+//        Identifier identifier = new Identifier();
+//        identifier.setSystem(SystemURL.ID_GPC_APPOINTMENT_IDENTIFIER)
+//                .setValue(String.valueOf(appointmentDetail.getId()));
+//
+//        appointment.addIdentifier(identifier);
         // #157 derive delivery channel from slot
         List<Long> sids = appointmentDetail.getSlotIds();
+        ScheduleDetail scheduleDetail = null;
         if (sids.size() > 0) {
             // get the first slot but it should not matter because for multi slot appts the deliveryChannel is always the same
             SlotDetail slotDetail = slotSearch.findSlotByID(sids.get(0));
@@ -626,16 +698,17 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 Extension deliveryChannelExtension = new Extension(SystemURL.SD_EXTENSION_GPC_DELIVERY_CHANNEL, new CodeType(deliveryChannel));
                 appointment.addExtension(deliveryChannelExtension);
             }
+            scheduleDetail = scheduleSearch.findScheduleByID(slotDetail.getScheduleReference());
         }
 
         // practitioner role extension here
         // lookup the practitioner
         Long practitionerID = appointmentDetail.getPractitionerId();
         if (practitionerID != null) {
-            PractitionerDetails practitionerDetails = practitionerSearch.findPractitionerDetails(Long.toString(practitionerID));
-            if (practitionerDetails != null) {
-                Coding roleCoding = new Coding(SystemURL.VS_GPC_PRACTITIONER_ROLE, practitionerDetails.getRoleCode(),
-                        practitionerDetails.getRoleDisplay());
+            // #195 we need to get this detail from the schedule not the practitioner table
+            if (scheduleDetail != null) {
+                Coding roleCoding = new Coding(SystemURL.VS_GPC_PRACTITIONER_ROLE, scheduleDetail.getPractitionerRoleCode(),
+                        scheduleDetail.getPractitionerRoleDisplay());
 
                 Extension practitionerRoleExtension = new Extension(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE,
                         new CodeableConcept().addCoding(roleCoding));
@@ -702,6 +775,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         if (null != appointmentDetail.getBookingOrganization()) {
 
+            // add extension with reference to contained item
             String reference = "#1";
             Reference orgRef = new Reference(reference);
             Extension bookingOrgExt = new Extension(SystemURL.SD_CC_APPOINTMENT_BOOKINGORG, orgRef);
@@ -712,8 +786,18 @@ public class AppointmentResourceProvider implements IResourceProvider {
             Organization bookingOrg = new Organization();
             bookingOrg.setId(reference);
             bookingOrg.getNameElement().setValue(bookingOrgDetail.getName());
-            bookingOrg.getTelecomFirstRep().setValue(bookingOrgDetail.getTelephone()).setUse(ContactPointUse.TEMP)
-                    .setSystem(ContactPointSystem.PHONE);
+
+            // #198 org phone now persists usetype and system
+            ContactPoint orgTelecom = bookingOrg.getTelecomFirstRep();
+            orgTelecom.setValue(bookingOrgDetail.getTelephone());
+            try {
+                orgTelecom.setSystem(ContactPointSystem.fromCode(bookingOrgDetail.getSystem().toLowerCase()));
+                if (bookingOrgDetail.getUsetype() != null && !bookingOrgDetail.getUsetype().trim().isEmpty()) {
+                    orgTelecom.setUse(ContactPointUse.fromCode(bookingOrgDetail.getUsetype().toLowerCase()));
+                }
+            } catch (FHIRException ex) {
+                //Logger.getLogger(AppointmentResourceProvider.class.getName()).log(Level.SEVERE, null, ex);
+            }
             bookingOrg.getMeta().addProfile(SystemURL.SD_GPC_ORGANIZATION);
 
             if (null != bookingOrgDetail.getOrgCode()) {
@@ -721,8 +805,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         .setValue(bookingOrgDetail.getOrgCode());
             }
 
+            // add contained booking organization resource
             appointment.getContained().add(bookingOrg);
-        }
+        }  // if bookingOrganization
 
         appointment.setMinutesDuration(appointmentDetail.getMinutesDuration());
 
@@ -744,6 +829,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return lastUpdated;
     }
 
+    /**
+     * fhir resource Appointment to AppointmentDetail
+     *
+     * @param appointment Resource
+     * @return populated AppointmentDetail
+     */
     private AppointmentDetail appointmentResourceConverterToAppointmentDetail(Appointment appointment) {
 
         appointmentValidation.validateAppointmentExtensions(appointment.getExtension());
@@ -782,8 +873,10 @@ public class AppointmentResourceProvider implements IResourceProvider {
         List<Long> slotIds = new ArrayList<>();
 
         for (Reference slotReference : appointment.getSlot()) {
+            // #200 check slots for absolute references
+            checkReferenceIsRelative(slotReference.getReference());
             try {
-                String here = slotReference.getReference().substring(5);
+                String here = slotReference.getReference().substring("Slot/".length());
                 Long slotId = new Long(here);
                 slotIds.add(slotId);
             } catch (NumberFormatException ex) {
@@ -834,6 +927,19 @@ public class AppointmentResourceProvider implements IResourceProvider {
             appointmentDetail.setCreated(created);
         }
 
+        // #200 check extensions for absolute references
+        List<Extension> extensions = appointment.getExtension();
+        for (Extension extension : extensions) {
+            try {
+                Reference reference = (Reference) extension.getValue();
+                if (reference != null) {
+                    checkReferenceIsRelative(reference.getReference());
+                }
+            } catch (ClassCastException ex) {
+
+            }
+        }
+
         List<Resource> contained = appointment.getContained();
         if (contained != null && !contained.isEmpty()) {
             Resource org = contained.get(0);
@@ -841,7 +947,24 @@ public class AppointmentResourceProvider implements IResourceProvider {
             BookingOrgDetail bookingOrgDetail = new BookingOrgDetail();
             appointmentValidation.validateBookingOrganizationValuesArePresent(bookingOrgRes);
             bookingOrgDetail.setName(bookingOrgRes.getName());
-            bookingOrgDetail.setTelephone(bookingOrgRes.getTelecomFirstRep().getValue());
+
+            // #198 add system and optional use type. Pick system phone if > 1 and available otherwise use the one supplied
+            Iterator<ContactPoint> iter = bookingOrgRes.getTelecom().iterator();
+            ContactPoint telecom = bookingOrgRes.getTelecomFirstRep();
+            while (iter.hasNext()) {
+                ContactPoint thisTelecom = iter.next();
+                if (thisTelecom.getSystem() == ContactPoint.ContactPointSystem.PHONE) {
+                    telecom = thisTelecom;
+                    break;
+                }
+            }
+
+            bookingOrgDetail.setTelephone(telecom.getValue());
+            bookingOrgDetail.setSystem(telecom.getSystem().toString());
+            if (telecom.getUse() != null && !telecom.getUse().toString().trim().isEmpty()) {
+                bookingOrgDetail.setUsetype(telecom.getUse().toString());
+            }
+
             if (!bookingOrgRes.getIdentifier().isEmpty()) {
                 bookingOrgDetail.setOrgCode(bookingOrgRes.getIdentifierFirstRep().getValue());
                 String system = bookingOrgRes.getIdentifierFirstRep().getSystem();
@@ -869,4 +992,25 @@ public class AppointmentResourceProvider implements IResourceProvider {
         return dateTime.before(new Date());
     }
 
+    /**
+     * absolute references look like valid URLs so..
+     *
+     * @param reference String
+     * @throws an UnprocessableEntityException if the reference is absolute
+     */
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
+    private void checkReferenceIsRelative(String reference) {
+        if (reference != null) {
+            try {
+                new URL(reference);
+            } catch (MalformedURLException ex) {
+                // if its not a valid URL its not absolute
+                return;
+            }
+            // if we get here its a valid URL so its an absolute reference
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Reference " + reference + " must be relative not absolute"),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        }
+    }
 }

@@ -37,6 +37,12 @@ public class BookingOrgEntity {
     @Column(name = "telephone")
     private String telephone;
       
+    @Column(name = "usetype")
+    private String usetype;
+
+    @Column(name = "system")
+    private String system;
+
     @Column(name = "lastUpdated")
     private Date lastUpdated;
 
@@ -87,6 +93,34 @@ public class BookingOrgEntity {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    /**
+     * @return the usetype
+     */
+    public String getUsetype() {
+        return usetype;
+    }
+
+    /**
+     * @param usetype the usetype to set
+     */
+    public void setUsetype(String usetype) {
+        this.usetype = usetype;
+    }
+
+    /**
+     * @return the system
+     */
+    public String getSystem() {
+        return system;
+    }
+
+    /**
+     * @param system the system to set
+     */
+    public void setSystem(String system) {
+        this.system = system;
     }
 
 }

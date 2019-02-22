@@ -171,7 +171,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         PatientDetails patientDetails = patientSearch.findPatient(nhsNumber.fromToken(tokenParam));
-
+        
         // ie does not return a deceased, inactive or sensitive patient in the list 
         return null == patient || patient.getDeceased() != null || !patientDetails.isActive() || patientDetails.isSensitive() ? Collections.emptyList()
                 : Collections.singletonList(patient);

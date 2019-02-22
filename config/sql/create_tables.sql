@@ -41,6 +41,8 @@ CREATE TABLE appointment_booking_orgz (
   org_code        VARCHAR(30)  NULL,
   name            VARCHAR(100) NULL,
   telephone       VARCHAR(100) NULL,
+  system          VARCHAR(100) NULL,
+  usetype         VARCHAR(100) NULL,
   lastUpdated     DATETIME     NULL,
   PRIMARY KEY (id)
 );

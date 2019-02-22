@@ -17,6 +17,8 @@ public class BookingOrgEntityToBookingOrgDetailTransformer implements Transforme
         bookingOrgDetail.setOrgCode(item.getOrgCode());
         bookingOrgDetail.setName(item.getName());
         bookingOrgDetail.setTelephone(item.getTelephone());
+        bookingOrgDetail.setUsetype(item.getUsetype());
+        bookingOrgDetail.setSystem(item.getSystem());
         bookingOrgDetail.setLastUpdated(item.getLastUpdated());
         return bookingOrgDetail;
     }

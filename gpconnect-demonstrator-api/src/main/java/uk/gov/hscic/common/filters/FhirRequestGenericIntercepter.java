@@ -48,16 +48,6 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private static String sConfigPath = null;
 
     /**
-     * TODO Not sure this is safe since the interaction ID may change before the
-     * call is made workaround for interactionID check in
-     *
-     * @return the interactionId
-     */
-    public static String getInteractionId() {
-        return interactionId;
-    }
-
-    /**
      * allows access to command line parameters
      * @return 
      */
@@ -81,8 +71,6 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private static final String PRACTITIONER_RESOURCE_NAME = "Practitioner";
     private static final String ORGANIZATION_RESOURCE_NAME = "Organization";
     private static final String PATIENT_RESOURCE_NAME = "Patient";
-
-    private static String interactionId;
 
     @PostConstruct
     public void postConstruct() {
@@ -139,9 +127,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         if (StringUtils.isBlank(interactionIdHeader)) {
             throwInvalidRequestException(SystemHeader.SSP_INTERACTIONID + " header blank");
         }
-
-        // workaround to make the interactionId visible to RespourceProviders
-        interactionId = interactionIdHeader;
+        
         Interaction interaction = interactions.getInteraction(interactionIdHeader);
 
         if (interaction != null) {

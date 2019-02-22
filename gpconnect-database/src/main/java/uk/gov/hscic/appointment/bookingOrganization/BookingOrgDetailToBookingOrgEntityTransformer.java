@@ -19,6 +19,8 @@ public class BookingOrgDetailToBookingOrgEntityTransformer {
         }
         bookingOrgEntity.setName(item.getName());
         bookingOrgEntity.setTelephone(item.getTelephone());
+        bookingOrgEntity.setUsetype(item.getUsetype());
+        bookingOrgEntity.setSystem(item.getSystem());
         bookingOrgEntity.setLastUpdated(item.getLastUpdated());
         bookingOrgEntity.setAppointmentEntity(appointment);
         return bookingOrgEntity;

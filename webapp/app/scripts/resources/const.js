@@ -7,10 +7,13 @@ angular.module('gpConnect')
     "ID_SDS_USER_ID": "https://fhir.nhs.uk/Id/sds-user-id",
 
     "SD_CC_PATIENT": "https://fhir.nhs.uk/StructureDefinition/CareConnect-GPC-Patient-1",
+    "SD_CC_ORGANISATION": "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Organization-1",
+    
     "SD_EXT_GPC_APPOINT_CANC_REAS": "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-AppointmentCancellationReason-1",
     "SD_EXT_REG_PERIOD": "https://fhir.nhs.uk/StructureDefinition/extension-registration-period-1",
     "SD_EXT_REG_STATUS": "https://fhir.nhs.uk/StructureDefinition/extension-registration-status-1",
     "SD_EXT_REG_TYPE": "https://fhir.nhs.uk/StructureDefinition/extension-registration-type-1",
+    "SD_EXT_ORGANISATION": "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-BookingOrganisation-1",
     
     "VS_SDS_JOB_ROLE_NAME": "https://fhir.nhs.uk/Id/sds-user-id",
     "VS_GPC_RECORD_SECTION": "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1",

@@ -119,7 +119,6 @@ public class SlotResourceProvider implements IResourceProvider {
         if (startDate.getPrefix() != ParamPrefixEnum.GREATERTHAN_OR_EQUALS
                 || endDate.getPrefix() != ParamPrefixEnum.LESSTHAN_OR_EQUALS) {
             throwInvalidParameterOperationalOutcome("Invalid Prefix used");
-
         }
 
         validateStartDateParamAndEndDateParam(startDate, endDate);
@@ -136,13 +135,6 @@ public class SlotResourceProvider implements IResourceProvider {
                 }
             }
         }
-
-//        try {
-//            bookingOdsCode.isEmpty();
-//            bookingOrgType.isEmpty();
-//        } catch (Exception e) {
-//            throwInvalidParameterOperationalOutcome("The ODS code and organisation type for the booking organisation must be supplied.");
-//        }
 
         for (Include include : theIncludes) {
 
@@ -231,18 +223,11 @@ public class SlotResourceProvider implements IResourceProvider {
 
         String resourceId = String.valueOf(slotDetail.getId());
         String versionId = String.valueOf(lastUpdated.getTime());
-        String resourceType = slot.getResourceType().toString();
-
-        //IdType id = new IdType(resourceType, resourceId, versionId);
         IdType id = new IdType(resourceId);
 
         slot.setId(id);
         slot.getMeta().setVersionId(versionId);
         slot.getMeta().addProfile(SystemURL.SD_GPC_SLOT);
-
-        // #191 slots should not contain SDS identifiers
-//        slot.setIdentifier(Collections.singletonList(
-//                new Identifier().setSystem(SystemURL.ID_SDS_USER_ID).setValue(slotDetail.getId().toString())));
 
         slot.setSchedule(new Reference("Schedule/" + slotDetail.getScheduleReference()));
         slot.setStart(slotDetail.getStartDateTime());

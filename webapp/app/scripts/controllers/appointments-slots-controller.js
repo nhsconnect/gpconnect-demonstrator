@@ -117,7 +117,8 @@ angular.module('gpConnect')
                         }
 
                         if (value.resource.resourceType == "Schedule") {
-                            responseSchedules[value.fullUrl] = {
+                            // NB add as a relative reference not absolute
+                            responseSchedules["Schedule/"+value.resource.id] = {
                                 "locationRef": getLocationRef(value),
                                 "practitionerRef": getPractitionerRef(value),
                                 "practitionerRoleCoding": getExtensionCoding(value, "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-PractitionerRole-1")
@@ -137,7 +138,8 @@ angular.module('gpConnect')
                                 family = value.resource.name[0].family;
                             }
                             var fullName = prefix + " " + given + " " + family;
-                            responsePractitioners[value.fullUrl] = {
+                            // NB relative not absolute
+                            responsePractitioners["Practitioner/"+value.resource.id] = {
                                 "fullName": fullName,
                                 "id": value.resource.id
                             };
@@ -164,7 +166,8 @@ angular.module('gpConnect')
                                     addressStr += ", " + value.resource.address.country;
                                 }
                             }
-                            responseLocations[value.fullUrl] = {"id": value.resource.id, "address": addressStr};
+                            // NB relative location ref not
+                            responseLocations["Location/"+value.resource.id] = {"id": value.resource.id, "address": addressStr};
                         }
                     });
 
@@ -202,7 +205,7 @@ angular.module('gpConnect')
                                 var locationIndex = -1;
                                 // search locations for location
                                 for (var i = 0; i < internalGetScheduleModel.locations.length; i++) {
-                                    if (locationId == internalGetScheduleModel.locations[i].id && practiceOdsCode == internalGetScheduleModel.locations[i].odsCode) {
+                                    if (locationId == internalGetScheduleModel.locations[i].id /*&& practiceOdsCode == internalGetScheduleModel.locations[i].odsCode*/) {
                                         locationIndex = i;
                                         break;
                                     }
@@ -454,7 +457,7 @@ angular.module('gpConnect')
                 $scope.appointmentBookingParameters.type = $scope.selectedSlots[0].model.name;
 
                 // Check the patient is on the remote system
-                PatientService.getPatientFhirId($stateParams.patientId, $scope.appointmentBookingParameters.location.odsCode).then(function (patientFhirIDResult) {
+                PatientService.getPatientFhirId($stateParams.patientId, "A20047").then(function (patientFhirIDResult) {
 
                     if (patientFhirIDResult == undefined) {
                         // The patient does not exist on the remote system so needs to be created

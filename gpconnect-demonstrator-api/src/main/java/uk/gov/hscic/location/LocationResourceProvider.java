@@ -1,7 +1,6 @@
 package uk.gov.hscic.location;
 
 
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,7 +8,6 @@ import java.util.stream.Collectors;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.IdType;
-import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Location;
 import org.hl7.fhir.dstu3.model.Location.LocationStatus;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
@@ -73,6 +71,11 @@ public class LocationResourceProvider implements IResourceProvider {
         return locationDetailsToLocation(locationDetails);
     }
 
+    /**
+     * convert locationDetails to fhir resource
+     * @param locationDetails
+     * @return Location resource
+     */
     private Location locationDetailsToLocation(LocationDetails locationDetails) {
         Location location = new Location();
         
@@ -88,7 +91,8 @@ public class LocationResourceProvider implements IResourceProvider {
         location.getMeta().addProfile(SystemURL.SD_GPC_LOCATION);
         
         location.setName(locationDetails.getName());
-        location.setIdentifier(Collections.singletonList(new Identifier().setSystem(SystemURL.ID_ODS_SITE_CODE).setValue(locationDetails.getSiteOdsCode())));
+        // #207 no site code
+        //location.setIdentifier(Collections.singletonList(new Identifier().setSystem(SystemURL.ID_ODS_SITE_CODE).setValue(locationDetails.getSiteOdsCode())));
         Coding locationCommTypeCode = new Coding();
         locationCommTypeCode.setCode("COMM");
         locationCommTypeCode.setSystem(SystemURL.VS_CC_SER_DEL_LOCROLETYPE);
@@ -139,7 +143,7 @@ public class LocationResourceProvider implements IResourceProvider {
      * They result from a change to spec to remove the state attribute from the address
      * See the commit cd26528 by James Cox 6/3/18
      * @param locationDetails
-     * @return 
+     * @return Address Resource
      */
 	private Address createAddress(LocationDetails locationDetails) {
 		Address address = new Address();

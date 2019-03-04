@@ -22,12 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +29,6 @@ import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
-import uk.gov.hscic.common.filters.FhirRequestAuthInterceptor;
 import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.location.LocationSearch;
 import uk.gov.hscic.model.appointment.SlotDetail;
@@ -95,40 +88,27 @@ public class PopulateSlotBundle {
      * @param actorPractitioner boolean
      * @param actorLocation boolean
      * @param bookingOdsCode String
-     * @param bookingOrgType String eg "Urgent Care"
+     * @param bookingOrgType String eg "urgent-care"
      */
     public void populateBundle(Bundle bundle, OperationOutcome operationOutcome, Date planningHorizonStart,
             Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation, String bookingOdsCode, String bookingOrgType) {
         bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
 
-        String ourOdsCode = "A20047";
+        // TODO remove hard coding pick up frpm providerRouting.json ?
+        final String OUR_ODS_CODE = "A20047";
 
         // find first locationDetails for this ODS practice code
         List<LocationDetails> locationDetails = locationSearch.findAllLocations();
         LocationDetails locationDetail = null;
         for (LocationDetails alocationDetail : locationDetails) {
-            if (alocationDetail.getOrgOdsCode().equals(ourOdsCode)) {
+            if (alocationDetail.getOrgOdsCode().equals(OUR_ODS_CODE)) {
                 locationDetail = alocationDetail;
                 break;
             }
         }
 
-        // find the matching location resource. There must be a better way
-        Location location = null;
-        List<Location> locations = locationResourceProvider.getAllLocationDetails();
-        if (locationDetail != null) {
-            for (Location aLocation : locations) {
-                if (locationDetail.getSiteOdsCode().equals(aLocation.getIdentifierFirstRep().getValue())) {
-                    location = aLocation;
-                    break;
-                }
-            }
-        }
-
-        if (location == null) {
-            // default if matching location not found
-            location = locations.get(0);
-        }
+        // find the matching location resource by ID
+        Location location = locationResourceProvider.getLocationById(new IdType(locationDetail.getId()));
 
         BundleEntryComponent locationEntry = new BundleEntryComponent();
         locationEntry.setResource(location);
@@ -136,7 +116,7 @@ public class PopulateSlotBundle {
         locationEntry.setFullUrl(serverBaseUrl + "Location/" + location.getIdElement().getIdPart());
 
         // find the provider organization from the ods code
-        List<OrganizationDetails> ourOrganizationsDetails = organizationSearch.findOrganizationDetailsByOrgODSCode(ourOdsCode);
+        List<OrganizationDetails> ourOrganizationsDetails = organizationSearch.findOrganizationDetailsByOrgODSCode(OUR_ODS_CODE);
         OrganizationDetails ourOrganizationDetails = null;
         if (!ourOrganizationsDetails.isEmpty()) {
             // at 1.2.2 these are added regardless of the status of the relevant parameter

@@ -19,6 +19,7 @@ import uk.gov.hscic.patient.details.PatientStore;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -83,14 +84,23 @@ public class RefreshData {
             for (String line : lines) {
                 String[] element = line.split(",");
                 Date currentDate = new Date();
-                Date startDate = DateUtils.addDays(currentDate, Integer.parseInt(element[SLOT_INDEX_DAY_OFFSET]));
-                Date endDate = DateUtils.addDays(currentDate, Integer.parseInt(element[SLOT_INDEX_DAY_OFFSET]));
-                startDate.setHours(Integer.parseInt(element[SLOT_INDEX_START_H]));
-                startDate.setMinutes(Integer.parseInt(element[SLOT_INDEX_START_M]));
-                startDate.setSeconds(Integer.parseInt(element[SLOT_INDEX_START_S]));
-                endDate.setHours(Integer.parseInt(element[SLOT_INDEX_END_H]));
-                endDate.setMinutes(Integer.parseInt(element[SLOT_INDEX_END_M]));
-                endDate.setSeconds(Integer.parseInt(element[SLOT_INDEX_END_S]));
+                Calendar calendar = Calendar.getInstance();
+
+                calendar.setTime(currentDate);
+                calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(element[SLOT_INDEX_DAY_OFFSET]));
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(element[SLOT_INDEX_START_H]));
+                calendar.set(Calendar.MINUTE, Integer.parseInt(element[SLOT_INDEX_START_M]));
+                calendar.set(Calendar.SECOND, Integer.parseInt(element[SLOT_INDEX_START_S]));
+                calendar.set(Calendar.MILLISECOND, 0);
+                Date startDate = calendar.getTime();
+
+                calendar.setTime(currentDate);
+                calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(element[SLOT_INDEX_DAY_OFFSET]));
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(element[SLOT_INDEX_END_H]));
+                calendar.set(Calendar.MINUTE, Integer.parseInt(element[SLOT_INDEX_END_M]));
+                calendar.set(Calendar.SECOND, Integer.parseInt(element[SLOT_INDEX_END_S]));
+                calendar.set(Calendar.MILLISECOND, 0);
+                Date endDate = calendar.getTime();
 
                 // handle trailing comma on last entry
                 String deliveryChannelCode = element.length >= SLOT_FIELDS ? element[SLOT_FIELDS-1] : "";

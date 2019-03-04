@@ -53,6 +53,7 @@ import static org.hl7.fhir.dstu3.model.Address.AddressUse.WORK;
 import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_NHS_COMMUNICATION;
+import static uk.gov.hscic.appointments.AppointmentResourceProvider.throwInvalidResource;
 import uk.gov.hscic.model.telecom.TelecomDetails;
 
 @Component
@@ -171,7 +172,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         PatientDetails patientDetails = patientSearch.findPatient(nhsNumber.fromToken(tokenParam));
-        
+
         // ie does not return a deceased, inactive or sensitive patient in the list 
         return null == patient || patient.getDeceased() != null || !patientDetails.isActive() || patientDetails.isSensitive() ? Collections.emptyList()
                 : Collections.singletonList(patient);
@@ -576,19 +577,13 @@ public class PatientResourceProvider implements IResourceProvider {
             AddressUse useType = address.getUse();
             // #189 address use types work and old are not allowed
             if (useType == WORK || useType == OLD) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException( // 422
-                                "Address use type " + useType + " cannot be sent in a register patient request."),
-                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+                throwInvalidResource("Address use type " + useType + " cannot be sent in a register patient request.");
             }
             if (!useTypeCount.contains(useType)) {
                 useTypeCount.add(useType);
             } else {
                 // #174 Only a single address of each usetype may be sent
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException(
-                                "Only a single address of each use type can be sent in a register patient request."),
-                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+                throwInvalidResource("Only a single address of each use type can be sent in a register patient request.");
             }
         } // for address
     } //  validateTelecomAndAddress
@@ -671,12 +666,8 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         if (!extensionURLs.isEmpty()) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    // #173 should be 422 not 400
-                    new UnprocessableEntityException(
-                            "Invalid/multiple patient extensions found. The following are in excess or invalid: "
-                            + extensionURLs.stream().collect(Collectors.joining(", "))),
-                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            throwInvalidResource("Invalid/multiple patient extensions found. The following are in excess or invalid: "
+                    + extensionURLs.stream().collect(Collectors.joining(", ")));
         }
     }
 
@@ -807,9 +798,7 @@ public class PatientResourceProvider implements IResourceProvider {
             try {
                 patientDetails.setDeceased((deceased.getValue()));
             } catch (ClassCastException cce) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException("The multiple deceased property is expected to be a datetime"),
-                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+                throwInvalidResource("The multiple deceased property is expected to be a datetime");
             }
         }
 

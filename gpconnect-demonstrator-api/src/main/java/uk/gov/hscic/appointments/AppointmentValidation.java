@@ -17,16 +17,13 @@ import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.dstu3.model.Appointment.ParticipationStatus;
-import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.hl7.fhir.instance.model.api.IBaseDatatype;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import uk.gov.hscic.OperationOutcomeFactory;
-import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
-import uk.gov.hscic.common.validators.ValueSetValidator;
+import static uk.gov.hscic.appointments.AppointmentResourceProvider.throwInvalidResource;
+import uk.gov.hscic.common.validators.VC;
 import uk.gov.hscic.location.LocationSearch;
 import uk.gov.hscic.model.location.LocationDetails;
 import uk.gov.hscic.model.patient.PatientDetails;
@@ -46,14 +43,12 @@ public class AppointmentValidation {
     @Autowired
     private LocationSearch locationSearch;
 
-    @Autowired
-    private ValueSetValidator valueSetValidator;
-    
-    public static final int APPOINTMENT_DESCRIPTION_LENGTH =100;
+    public static final int APPOINTMENT_DESCRIPTION_LENGTH = 100;
     public static final int APPOINTMENT_COMMENT_LENGTH = 500;
+    private String idPart = null; // remember this for validation against location/practitioner etc in schedule should be an integer
 
     public boolean appointmentDescriptionTooLong(Appointment appointment) {
-        return appointment.getDescription().length() > APPOINTMENT_DESCRIPTION_LENGTH;
+        return appointment.getDescription() != null ? appointment.getDescription().length() > APPOINTMENT_DESCRIPTION_LENGTH : false;
     }
 
     public boolean appointmentCommentTooLong(Appointment appointment) {
@@ -69,7 +64,6 @@ public class AppointmentValidation {
 
         for (int i = 0; i < appointment.size(); i++) {
             if (appointment.get(i).getStart().after(date)) {
-
                 appointmentsFiltered.add(appointment.get(i));
             }
 
@@ -78,6 +72,10 @@ public class AppointmentValidation {
 
     }
 
+    /**
+     * 
+     * @param undeclaredExtensions 
+     */
     public void validateAppointmentExtensions(List<Extension> undeclaredExtensions) {
         List<String> extensionURLs = undeclaredExtensions.stream().map(Extension::getUrl).collect(Collectors.toList());
 
@@ -88,11 +86,8 @@ public class AppointmentValidation {
         extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE);
 
         if (!extensionURLs.isEmpty()) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException(
-                            "Invalid/multiple appointment extensions found. The following are in excess or invalid: "
-                            + extensionURLs.stream().collect(Collectors.joining(", "))),
-                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            throwInvalidResource("Invalid/multiple appointment extensions found. The following are in excess or invalid: "
+                    + extensionURLs.stream().collect(Collectors.joining(", ")));
         }
 
         List<String> invalidCodes = new ArrayList<>();
@@ -104,29 +99,12 @@ public class AppointmentValidation {
                 if (cancellationReason.isEmpty()) {
                     invalidCodes.add("Cancellation Reason is missing.");
                 }
-                continue;
-            }
-
-            // disable this experimental code for release/1.2.1
-            IBaseDatatype ueValue = ue.getValue();
-            if (false && null != ueValue && ueValue.getClass().getSimpleName().equals("CodeableConcept")) {
-                CodeableConcept codeConc = (CodeableConcept) ueValue;
-                Coding code = codeConc.getCodingFirstRep();
-
-                Boolean isValid = valueSetValidator.validateCode(code);
-
-                if (isValid == false) {
-                    invalidCodes.add(MessageFormat.format("Code: {0} [Display: {1}, System: {2}]", code.getCode(),
-                            code.getDisplay(), code.getSystem()));
-                }
             }
         }
 
         if (!invalidCodes.isEmpty()) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("Invalid appointment extension codes: "
-                            + invalidCodes.stream().collect(Collectors.joining(", "))),
-                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            throwInvalidResource("Invalid appointment extension codes: "
+                    + invalidCodes.stream().collect(Collectors.joining(", ")));
         }
     }
 
@@ -143,13 +121,16 @@ public class AppointmentValidation {
         }
 
         if (!validStatus) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException(
-                            String.format("Appointment Participant %s Status %s", enumeration2, participantStatusErr)),
-                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            throwInvalidResource(String.format("Appointment Participant %s Status %s", enumeration2, participantStatusErr));
         }
     }
 
+    /**
+     * This method is effectively disabled since we dont check against value sets 
+     * This was experimental code that never worked correctly.
+     * @param participantType
+     * @return 
+     */
     public Boolean validateParticipantType(CodeableConcept participantType) {
 
         Boolean hasCode = !participantType.isEmpty();
@@ -162,23 +143,23 @@ public class AppointmentValidation {
             isValid = true;
 
             if (!isValid) {
-                throw OperationOutcomeFactory
-                        .buildOperationOutcomeException(
-                                new UnprocessableEntityException(MessageFormat.format(
-                                        "Invalid Participant Type Code. Code: {0} [Display: {1}, System:{2}]",
-                                        code.getCode(), code.getDisplay(), code.getSystem())),
-                                SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+                throwInvalidResource(MessageFormat.format(
+                        "Invalid Participant Type Code. Code: {0} [Display: {1}, System:{2}]",
+                        code.getCode(), code.getDisplay(), code.getSystem()));
             }
         }
 
         return isValid;
     }
 
+    /**
+     * check the resource exists 
+     * @param participantActor
+     */
     public void validateParticipantActor(Reference participantActor) {
 
-        Reference actorRef = participantActor;
-        String resourcePart = actorRef.getReference().toString();
-        String idPart = actorRef.getId();
+        String resourcePart = participantActor.getReference().replaceFirst("^(.*)/.*$", "$1");
+        idPart = participantActor.getReference().replaceFirst("^.*/(.*)$", "$1");
 
         Boolean participantFailedSearch = false;
 
@@ -195,31 +176,31 @@ public class AppointmentValidation {
                 LocationDetails location = locationSearch.findLocationById(idPart);
                 participantFailedSearch = (location == null);
                 break;
+            default:
+                System.err.println("Unhandled resourcePart " + resourcePart);
         }
 
         if (participantFailedSearch) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException(
-                            String.format("%s resource reference is not a valid resource", resourcePart)),
-                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            throwInvalidResource(String.format("%s resource reference %s is not a valid resource", resourcePart, idPart));
         }
 
     }
 
     public void validateBookingOrganizationValuesArePresent(Organization bookingOrgRes) {
-        if (bookingOrgRes.getName() == null || bookingOrgRes.getName().isEmpty()) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException(String.format("Booking organization Name is null/empty")),
-                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        VC.execute(new VC[]{
+            new VC(() -> bookingOrgRes.getName() == null, () -> "Booking organization Name is null"),
+            // can't happen for valid fhir
+            new VC(() -> bookingOrgRes.getName().isEmpty(), () -> "Booking organization Name is empty"),
+            new VC(() -> bookingOrgRes.getTelecomFirstRep().getValue() == null, () -> "Booking organization Telecom is null"),
+            // can't happen for valid fhir
+            new VC(() -> bookingOrgRes.getTelecomFirstRep().getValue().isEmpty(), () -> "Booking organization Telecom is empty"),}
+        );
+    }
 
-        }
-
-        if (bookingOrgRes.getTelecomFirstRep().getValue() == null
-                || bookingOrgRes.getTelecomFirstRep().getValue().isEmpty()) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException(String.format("Booking organization Telecom is null/empty")),
-                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-
-        }
+    /**
+     * @return the extracted id part of the reference
+     */
+    public String getId() {
+        return idPart;
     }
 }

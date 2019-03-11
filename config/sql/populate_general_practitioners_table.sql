@@ -1,4 +1,4 @@
-INSERT INTO gpconnect.general_practitioners
+INSERT INTO gpconnect0.general_practitioners
   (id,gp_name,address_1,address_2,address_3,address_4,address_5,postcode,lastUpdated)
 VALUES
   (1,'Goff, Carolyn D.',NULL,NULL,NULL,NULL,NULL,NULL,'2016-07-25 12:00:00'),
@@ -101,9 +101,9 @@ VALUES
   (98,'Sweet, Illiana H.',NULL,NULL,NULL,NULL,NULL,NULL,'2016-07-25 12:00:00'),
   (99,'Boone, Aretha M.',NULL,NULL,NULL,NULL,NULL,NULL,'2016-07-25 12:00:00');
 
-INSERT INTO gpconnect.practitioners
+INSERT INTO gpconnect0.practitioners
   (id,userid,p_role_id,p_name_family,p_name_given,p_name_prefix,p_gender,p_organization_id,p_role_code,p_role_display,p_com_code,p_com_display,lastUpdated)
 VALUES
-  (1,'G13579135','PT1234','Gilbert','Nichole','Miss','FEMALE',2,'R0050','Consultant','en','English','2016-07-25 12:00:00'),
+  (1,'G13579135','PT1234','Gilbert','Nichole','Miss','FEMALE',8,'R0050','Consultant','en','English','2016-07-25 12:00:00'),
   (2,'G22345655','PT1122','Slater','Kibo','Mr','MALE',1,'R0050','Consultant','en','English','2016-07-25 12:00:00'),
   (3,'G11111116','PT1234','Parsons','Melissa','Dr','FEMALE',2,'R0042','paediatrician','de','German','2016-07-25 12:00:00');

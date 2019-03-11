@@ -43,7 +43,7 @@ public class CertificateValidatorTest {
 
         mockMvc.perform(get("/api/ldap/endpointLookup")
                 .secure(true)
-                .param("odsCode", "GPC001")
+                .param("odsCode", "A20047")
                 .param("interactionId", "interactionId_A")
                 .with(x509(x)))
                 .andDo(print())
@@ -60,7 +60,7 @@ public class CertificateValidatorTest {
 //
 //        mockMvc.perform(get("/ldap/endpointLookup")
 //                .secure(true)
-//                .param("odsCode", "GPC001")
+//                .param("odsCode", "A20047")
 //                .param("interactionId", "interactionId_A")
 //                .with(x509(x)))
 //                .andDo(print())
@@ -77,7 +77,7 @@ public class CertificateValidatorTest {
 //
 //        mockMvc.perform(get("/ldap/endpointLookup")
 //                .secure(true)
-//                .param("odsCode", "GPC001")
+//                .param("odsCode", "A20047")
 //                .param("interactionId", "interactionId_A")
 //                .with(x509(x)))
 //                .andDo(print())
@@ -88,7 +88,7 @@ public class CertificateValidatorTest {
 //    public void noCertificateEndpointLookupTest() throws Exception {
 //        mockMvc.perform(get("/ldap/endpointLookup")
 //                .secure(true)
-//                .param("odsCode", "GPC001")
+//                .param("odsCode", "A20047")
 //                .param("interactionId", "interactionId_A"))
 //                .andDo(print())
 //                .andExpect(status().is(496));

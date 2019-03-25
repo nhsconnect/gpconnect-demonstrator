@@ -343,13 +343,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 break;
 
-            case "INV":
-                if (VERSION.getMinor() <= 5 && VERSION.getBugfix() < 1) {
-                    // investigations removed at 0.5.1
-                    page = new Page("Investigations", sectionName);
-                    page.addPageSection(pageSectionFactory.getINVPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                    break;
-                } 
             default:
                 throw new UnprocessableEntityException("Invalid section code: " + sectionName,
                         OperationOutcomeFactory.buildOperationOutcome(

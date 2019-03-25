@@ -10,15 +10,17 @@ public class PageSection {
     private Date toDate;
     private final List<String> banners;
     private Table table;
+    private String id; // html id
 
-    public PageSection(String header, Table table) {
+    public PageSection(String header, String id, Table table) {
         this.header = header;
         this.table = table;
+        this.id = id;
         banners = new ArrayList<>();
     }
 
-    public PageSection(String header, Table table, Date fromDate, Date toDate) {
-        this(header, table);
+    public PageSection(String header, String id, Table table, Date fromDate, Date toDate) {
+        this(header, id, table);
         this.fromDate = fromDate;
         this.toDate = toDate;
     }
@@ -45,5 +47,12 @@ public class PageSection {
 
     public Date getToDate() {
         return toDate;
+    }
+
+    /**
+     * @return the html id
+     */
+    public String getId() {
+        return id;
     }
 }

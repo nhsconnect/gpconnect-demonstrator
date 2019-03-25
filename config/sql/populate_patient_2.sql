@@ -1,51 +1,54 @@
-INSERT INTO gpconnect0.adminitems
+USE gpconnect0;
+
+INSERT INTO adminitems
   (nhsNumber,sectionDate,adminDate,Entry,Details)
 VALUES
   (9658218873 ,'2015-05-02','2015-05-02',"Appointment Letter","Community diabetes clinic");
 
-INSERT INTO gpconnect0.allergies
+INSERT INTO allergies
   (nhsNumber,currentOrHistoric,startDate,endDate,details)
 VALUES
   (9658218873 ,"Historic",'1963-06-02',null,"Hayfever, allergy to pollen"),
   (9658218873 ,"Current",'2016-03-15',null,"Allergy to Penicillin, Patient experienced rash, nausea and vomiting");
 
-INSERT INTO gpconnect0.clinicalitems
+INSERT INTO clinicalitems
   (nhsNumber,sectionDate,dateOfItem,Entry,Details)
 VALUES
   (9658218873 ,'2001-06-20','2001-06-20',"Mammogram","Normal");
 
-INSERT INTO gpconnect0.encounters
+INSERT INTO encounters
   (nhsNumber,sectionDate,encounterDate,title,details)
 VALUES
   (9658218873 ,'2018-02-01','2018-02-01',"Care navigation","Reception signposting regarding exercise classes");
 
-INSERT INTO gpconnect0.immunisations
+INSERT INTO immunisations
   (nhsNumber,dateOfVac,vaccination,part,contents,details)
 VALUES
   (9658218873 ,'2010-10-04',"Influenza vaccine","1","Influenza",""),
   (9658218873 ,'2013-01-18',"Influenza vaccine","1","Influenza",""),
   (9658218873 ,'2015-08-30',"Pneumovax II","1","Pneumoccocal","");
 
- INSERT INTO gpconnect0.investigations
+ INSERT INTO investigations
    (nhsNumber,sectionDate,title,details,lastUpdated)
  VALUES
    (9658218873 ,'2018-04-26','Lumbar spine x-ray',"Normal result",'2018-04-26');
 
-INSERT INTO gpconnect0.medications_html
-  (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
+INSERT INTO medications_html
+  (nhsNumber,currentRepeatPast,startDate,medicationItem,dosageInstruction,quantity,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed,discontinuationReason)
 VALUES
-  (9658218873 ,"Current","2018-04-25","Tramadol 50mg capsules","","28 days","Take 1 or 2 tablets as directed up to 4 times per day",NULL,NULL,NULL,NULL,"NHS Medication"),
-  (9658218873 ,"Repeat","2015-05-01","Metformin 500mg tablets","","","Take one tablet three times daily","2018-03-28","2018-10-15","3 issues","6 issues",""),
-  (9658218873 ,"Repeat","2006-03-01","Lercanidipine 20mg tablets","","","Take one tablet daily","2018-03-28","2018-10-15","3 issues","6 issues",""),
-  (9658218873 ,"Past","1978-09-03","Chloramphenicol eye drops preservative free 0.5%","","","1 drop in left eye four times daily for 4 weeks.",'','','','',"NHS Medication");
+  (9658218873 ,"Current",'2018-04-25',"Tramadol 50mg capsules","di2","q2",NULL,28,"Take 1 or 2 tablets as directed up to 4 times per day",NULL,NULL,NULL,NULL,"NHS Medication",""),
+  (9658218873 ,"Repeat",'2015-05-01',"Metformin 500mg tablets","di2a","q2a",NULL,NULL,"Take one tablet three times daily",'2018-03-28','2018-10-15',3,6,"",""),
+  (9658218873 ,"Repeat",'2006-03-01',"Lercanidipine 20mg tablets","di2b","q2b",NULL,NULL,"Take one tablet daily",'2018-03-20','2018-10-15',3,6,"",""),
+  (9658218873 ,"Past",'1978-09-03',"Chloramphenicol eye drops preservative free 0.5%","di2c","q2c",NULL,NULL,"1 drop in left eye four times daily for 4 weeks.",NULL,NULL,NULL,NULL,"NHS Medication","r2");
+ 
 
-INSERT INTO gpconnect0.observations
+INSERT INTO observations
   (nhsNumber,observationDate,entry,value,details)
 VALUES
   (9658218873 ,'2017-05-07',"Foot Risk Classification","Left diabetic foot at low risk","Annual review"),
   (9658218873 ,'2017-05-07',"Foot Risk Classification","Right diabetic foot at low risk","Annual review");
 
-INSERT INTO gpconnect0.problems
+INSERT INTO problems
   (nhsNumber,activeOrInactive,startDate,endDate,entry,significance,details)
 VALUES
   (9658218873 ,"Active",'2015-05-01',null,"Type II Diabetes mellitus","Major Active","Diabetes type II blood glucose management"),
@@ -54,7 +57,7 @@ VALUES
   (9658218873 ,"Inactive",'1958-08-04','1958-10-14',"Fracture of Clavicle","Minor Past","Fell off bicycle"),
   (9658218873 ,"Inactive",'1978-09-03','1978-09-15',"Conjunctivitus","Minor Past","");
 
-INSERT INTO gpconnect0.referrals
+INSERT INTO referrals
   (nhsNumber,sectionDate,referral_from,referral_to,priority,details,lastUpdated)
 VALUES
   (9658218873 ,'2016-07-02','Dr Johnson and Partners','Community Diabetic Clinic','Routine','Needs further support with dietary needs','2016-07-02');

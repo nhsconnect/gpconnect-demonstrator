@@ -2,6 +2,7 @@ package uk.gov.hscic.patient.adminitems.model;
 
 import java.util.Date;
 import javax.persistence.*;
+import static uk.gov.hscic.patient.encounters.model.EncounterEntity.convertTimestamp2Date;
 
 @Entity
 @Table(name = "adminitems")
@@ -18,7 +19,7 @@ public class AdminItemEntity {
     private Date sectionDate;
 
     @Column(name = "adminDate")
-    private String adminDate;
+    private Date adminDate;
 
     @Column(name = "entry")
     private String entry;
@@ -35,18 +36,18 @@ public class AdminItemEntity {
     }
 
     public Date getSectionDate() {
-        return sectionDate;
+        return convertTimestamp2Date(sectionDate);
     }
 
     public void setSectionDate(Date sectionDate) {
         this.sectionDate = sectionDate;
     }
 
-    public String getAdminDate() {
-        return adminDate;
+    public Date getAdminDate() {
+        return convertTimestamp2Date(adminDate);
     }
 
-    public void setAdminDate(String adminDate) {
+    public void setAdminDate(Date adminDate) {
         this.adminDate = adminDate;
     }
 

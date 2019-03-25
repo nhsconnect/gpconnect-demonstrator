@@ -8,10 +8,14 @@ import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import uk.gov.hscic.OperationConstants;
+import static uk.gov.hscic.metadata.GpConnectServerConformanceProvider.VERSION;
 
 public final class FhirSectionBuilder {
 
-    private FhirSectionBuilder() { }
+    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy");
+
+    private FhirSectionBuilder() {
+    }
 
     public static Composition.Section buildFhirSection(Page page) {
         CodingDt coding = new CodingDt().setSystem(OperationConstants.SYSTEM_RECORD_SECTION).setCode(page.getCode()).setDisplay(page.getName());
@@ -28,6 +32,12 @@ public final class FhirSectionBuilder {
                 .setText(narrative);
     }
 
+    /**
+     * generates the html for the whole page iterates through the page sections
+     *
+     * @param page
+     * @return String containing html
+     */
     private static String createHtmlContent(Page page) {
         StringBuilder stringBuilder = new StringBuilder("<div>");
 
@@ -40,10 +50,17 @@ public final class FhirSectionBuilder {
 
             // Date Range Banner
             if (pageSection.getFromDate() != null && pageSection.getToDate() != null) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-                stringBuilder.append("<div><p>For the period '").append(dateFormat.format(pageSection.getFromDate())).append("' to '").append(dateFormat.format(pageSection.getToDate())).append("'</p></div>");
+                stringBuilder.append("<div");
+                if (VERSION.getMinor() > 5) {
+                    stringBuilder.append(" class=\"date-banner\"");
+                }
+                stringBuilder.append("><p>For the period '").append(DATE_FORMAT.format(pageSection.getFromDate())).append("' to '").append(DATE_FORMAT.format(pageSection.getToDate())).append("'</p></div>");
             } else {
-                stringBuilder.append("<div><p>All relevant items subject to patient preferences and/or RCGP exclusions</p></div>");
+                stringBuilder.append("<div");
+                if (VERSION.getMinor() > 5) {
+                    stringBuilder.append(" class=\"exclusion-banner\"");
+                }
+                stringBuilder.append("><p>All relevant items subject to patient preferences and/or RCGP exclusions</p></div>");
             }
 
             // Additional Banners
@@ -63,7 +80,13 @@ public final class FhirSectionBuilder {
             if (table == null || table.getRows().isEmpty()) {
                 stringBuilder.append("<div><p>No '").append(pageSection.getHeader()).append("' data is recorded for this patient.</p></div>");
             } else {
-                stringBuilder.append("<div><table><thead><tr>");
+                stringBuilder.append("<div><table");
+                if (VERSION.getMinor() > 5) {
+                    stringBuilder.append(" id=\"").append(pageSection.getId()).append("\"");
+                }
+
+                // table headers
+                stringBuilder.append("><thead><tr>");
 
                 for (String header : table.getHeaders()) {
                     stringBuilder.append("<th>").append(header).append("</th>");
@@ -71,22 +94,53 @@ public final class FhirSectionBuilder {
 
                 stringBuilder.append("</tr></thead><tbody>");
 
+                // process the actual html table 
                 for (List<Object> row : table.getRows()) {
                     stringBuilder.append("<tr>");
-
-                    for (Object object : row) {
-                        stringBuilder.append("<td>").append(object).append("</td>");
+                    for (Object cellValue : row) {
+                        processCell(stringBuilder, row.size(), table, cellValue);
                     }
-
                     stringBuilder.append("</tr>");
                 }
 
                 stringBuilder.append("</tbody></table></div>");
             }
-
             stringBuilder.append("</div>");
         }
 
         return stringBuilder.append("</div>").toString();
+    }
+
+    /**
+     * Builds the td part of the table
+     *
+     * @param sb StringBuilder
+     * @param rowSize int
+     * @param table
+     * @param cellValue Object
+     */
+    private static void processCell(StringBuilder sb, int rowSize, Table table, Object cellValue) {
+        sb.append("<td");
+        if (rowSize == 1) {
+            // if we get a single cell then its a subsection split in a sorted table
+            sb.append(" colspan=\"").append(table.getHeaders().size()).append("\"><b>").append(cellValue).append("</b>");
+        } else if (cellValue == null) {
+            // do nothing leaves an empty cell
+            sb.append(">");
+        } else if (cellValue instanceof Integer) {
+            if (VERSION.getMinor() > 5) { // no attributes are allowed in current 0.5 provider tests
+                // Right align numbers
+                sb.append(" align=\"right\"");
+            }
+            sb.append(">").append(cellValue);
+        } else if (cellValue instanceof java.util.Date) {
+            if (VERSION.getMinor() > 5) {
+                sb.append(" class=\"date-column\"");
+            }
+            sb.append(">").append(DATE_FORMAT.format(cellValue));
+        } else {
+            sb.append(">").append(cellValue);
+        }
+        sb.append("</td>");
     }
 }

@@ -1,11 +1,13 @@
 package uk.gov.hscic.patient.allergies.model;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import static uk.gov.hscic.patient.encounters.model.EncounterEntity.convertTimestamp2Date;
 
 @Entity
 @Table(name = "allergies")
@@ -22,10 +24,10 @@ public class AllergyEntity {
     private String currentOrHistoric;
 
     @Column(name = "startDate")
-    private String startDate;
+    private Date startDate;
 
     @Column(name = "endDate")
-    private String endDate;
+    private Date endDate;
 
     @Column(name = "details")
     private String details;
@@ -46,19 +48,19 @@ public class AllergyEntity {
         this.currentOrHistoric = currentOrHistoric;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public Date getStartDate() {
+        return convertTimestamp2Date(startDate);
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public Date getEndDate() {
+        return convertTimestamp2Date(endDate);
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 

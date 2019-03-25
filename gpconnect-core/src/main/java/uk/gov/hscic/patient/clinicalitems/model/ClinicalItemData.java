@@ -6,7 +6,7 @@ public class ClinicalItemData {
 
     private String sourceId;
     private String source;
-    private String Date;
+    private Date itemDate;
     private String Entry;
     private String Details;
 
@@ -27,12 +27,12 @@ public class ClinicalItemData {
         this.source = source;
     }
 
-    public String getDate() {
-        return Date;
+    public Date getDate() {
+        return itemDate;
     }
 
-    public void setDate(String date) {
-        Date = date;
+    public void setDate(Date itemDate) {
+        this.itemDate = itemDate;
     }
 
     public String getEntry() {

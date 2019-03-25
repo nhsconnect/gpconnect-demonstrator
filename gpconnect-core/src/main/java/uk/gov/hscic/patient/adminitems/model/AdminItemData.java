@@ -1,10 +1,12 @@
 package uk.gov.hscic.patient.adminitems.model;
 
+import java.util.Date;
+
 public class AdminItemData {
 
     private String sourceId;
     private String source;
-    private String adminDate;
+    private Date adminDate;
     private String entry;
     private String details;
 
@@ -24,11 +26,11 @@ public class AdminItemData {
         this.source = source;
     }
 
-    public String getAdminDate() {
+    public Date getAdminDate() {
         return adminDate;
     }
 
-    public void setAdminDate(String adminDate) {
+    public void setAdminDate(Date adminDate) {
         this.adminDate = adminDate;
     }
 

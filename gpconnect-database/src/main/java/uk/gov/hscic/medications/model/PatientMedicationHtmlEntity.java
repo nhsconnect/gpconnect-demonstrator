@@ -1,11 +1,13 @@
 package uk.gov.hscic.medications.model;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import static uk.gov.hscic.patient.encounters.model.EncounterEntity.convertTimestamp2Date;
 
 @Entity
 @Table(name = "medications_html")
@@ -22,34 +24,43 @@ public class PatientMedicationHtmlEntity {
     private String currentRepeatPast;
 
     @Column(name = "startDate")
-    private String startDate;
+    private Date startDate;
 
     @Column(name = "medicationItem")
     private String medicationItem;
+
+    @Column(name = "dosageInstruction")
+    private String dosageInstruction;
+
+    @Column(name = "quantity")
+    private String quantity;
 
     @Column(name = "scheduledEnd")
     private String scheduledEnd;
 
     @Column(name = "daysDuration")
-    private String daysDuration;
+    private Integer daysDuration;
 
     @Column(name = "details")
     private String details;
 
     @Column(name = "lastIssued")
-    private String lastIssued;
+    private Date lastIssued;
 
     @Column(name = "reviewDate")
-    private String reviewDate;
+    private Date reviewDate;
 
     @Column(name = "numberIssued")
-    private String numberIssued;
+    private Integer numberIssued;
 
     @Column(name = "maxIssues")
-    private String maxIssues;
+    private Integer maxIssues;
 
     @Column(name = "typeMed")
     private String typeMed;
+
+    @Column(name = "discontinuationReason")
+    private String discontinuationReason;
 
     public Long getId() {
         return id;
@@ -75,11 +86,11 @@ public class PatientMedicationHtmlEntity {
         this.currentRepeatPast = currentRepeatPast;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public Date getStartDate() {
+        return convertTimestamp2Date(startDate);
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
@@ -99,11 +110,11 @@ public class PatientMedicationHtmlEntity {
         this.scheduledEnd = scheduledEnd;
     }
 
-    public String getDaysDuration() {
+    public Integer getDaysDuration() {
         return daysDuration;
     }
 
-    public void setDaysDuration(String daysDuration) {
+    public void setDaysDuration(int daysDuration) {
         this.daysDuration = daysDuration;
     }
 
@@ -115,35 +126,35 @@ public class PatientMedicationHtmlEntity {
         this.details = details;
     }
 
-    public String getLastIssued() {
-        return lastIssued;
+    public Date getLastIssued() {
+        return convertTimestamp2Date(lastIssued);
     }
 
-    public void setLastIssued(String lastIssued) {
+    public void setLastIssued(Date lastIssued) {
         this.lastIssued = lastIssued;
     }
 
-    public String getReviewDate() {
-        return reviewDate;
+    public Date getReviewDate() {
+        return convertTimestamp2Date(reviewDate);
     }
 
-    public void setReviewDate(String reviewDate) {
+    public void setReviewDate(Date reviewDate) {
         this.reviewDate = reviewDate;
     }
 
-    public String getNumberIssued() {
+    public Integer getNumberIssued() {
         return numberIssued;
     }
 
-    public void setNumberIssued(String numberIssued) {
+    public void setNumberIssued(Integer numberIssued) {
         this.numberIssued = numberIssued;
     }
 
-    public String getMaxIssues() {
+    public Integer getMaxIssues() {
         return maxIssues;
     }
 
-    public void setMaxIssues(String maxIssues) {
+    public void setMaxIssues(Integer maxIssues) {
         this.maxIssues = maxIssues;
     }
 
@@ -155,5 +166,29 @@ public class PatientMedicationHtmlEntity {
         this.typeMed = typeMed;
     }
 
+    public String getDosageInstruction() {
+        return dosageInstruction;
+    }
+
+    // 0.7 additions
+    public void setDosageInstruction(String dosageInstruction) {
+        this.dosageInstruction = dosageInstruction;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getDiscontinuationReason() {
+        return discontinuationReason;
+    }
+
+    public void setDiscontinuationReason(String discontinuationReason) {
+        this.discontinuationReason = discontinuationReason;
+    }
 
 }

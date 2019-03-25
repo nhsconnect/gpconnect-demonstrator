@@ -1,14 +1,16 @@
-INSERT INTO gpconnect0.allergies
+USE gpconnect0;
+
+INSERT INTO allergies
   (nhsNumber,currentOrHistoric,startDate,endDate,details)
 VALUES
-  (9658218903 ,"Historical",'2015-05-01 12:17:00','2015-05-01 12:17:00',"Skin allergy");
+  (9658218903 ,"Historical",'2015-05-01','2015-05-01',"Skin allergy");
 
-INSERT INTO gpconnect0.medications_html
-  (nhsNumber,currentRepeatPast,startDate,medicationItem,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
+INSERT INTO medications_html
+  (nhsNumber,currentRepeatPast,startDate,medicationItem,dosageInstruction,quantity,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
 VALUES
-  (9658218903 ,"Repeat","01-05-2015","Metformin 500mg tablets","19-11-2019","4 /7","Take with food and water","Issue more","Issue more","Issue more","Issue more","Repeat");
+  (9658218903 ,"Repeat",'2015-05-01',"Metformin 500mg tablets","di4","q4",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat");
 
-INSERT INTO gpconnect0.problems
+INSERT INTO problems
   (nhsNumber,activeOrInactive,startDate,endDate,entry,significance,details)
 VALUES
-  (9658218903 ,"Inactive",'2016-07-01 12:00:00','2016-07-01 12:00:00',"Asthma","Major","Treated daily");
+  (9658218903 ,"Inactive",'2016-07-01','2016-07-01',"Asthma","Major","Treated daily");

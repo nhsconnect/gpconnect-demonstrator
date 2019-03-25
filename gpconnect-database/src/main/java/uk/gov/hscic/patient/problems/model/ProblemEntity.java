@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import static uk.gov.hscic.patient.encounters.model.EncounterEntity.convertTimestamp2Date;
 
 @Entity
 @Table(name = "problems")
@@ -18,30 +19,29 @@ public class ProblemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(name = "nhsNumber")
     private String nhsNumber;
-    
+
     @Column(name = "activeOrInactive")
     private String activeOrInactive;
-    
+
     @Column(name = "startDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
-    
+
     @Column(name = "endDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
 
     @Column(name = "entry")
     private String entry;
-    
+
     @Column(name = "significance")
     private String significance;
-    
+
     @Column(name = "details")
     private String details;
-   
+
     public Long getId() {
         return id;
     }
@@ -67,7 +67,7 @@ public class ProblemEntity {
     }
 
     public Date getStartDate() {
-        return startDate;
+        return convertTimestamp2Date(startDate);
     }
 
     public void setStartDate(Date startDate) {
@@ -75,7 +75,7 @@ public class ProblemEntity {
     }
 
     public Date getEndDate() {
-        return endDate;
+        return convertTimestamp2Date(endDate);
     }
 
     public void setEndDate(Date endDate) {
@@ -106,5 +106,8 @@ public class ProblemEntity {
         this.details = details;
     }
 
-  
+    public boolean isMajor() {
+        return significance != null && significance.toLowerCase().contains("major");
+    }
+
 }

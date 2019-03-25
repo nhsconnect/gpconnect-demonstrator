@@ -2,6 +2,7 @@ package uk.gov.hscic.patient.investigations.model;
 
 import java.util.Date;
 import javax.persistence.*;
+import static uk.gov.hscic.patient.encounters.model.EncounterEntity.convertTimestamp2Date;
 
 @Entity
 @Table(name = "investigations")
@@ -45,7 +46,7 @@ public class InvestigationEntity {
     }
 
     public Date getDate() {
-        return date;
+        return convertTimestamp2Date(date);
     }
 
     public void setDate(Date date) {
@@ -69,7 +70,7 @@ public class InvestigationEntity {
     }
 
     public Date getLastUpdated() {
-        return lastUpdated;
+        return convertTimestamp2Date(lastUpdated);
     }
 
     public void setLastUpdated(Date lastUpdated) {

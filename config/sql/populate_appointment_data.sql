@@ -1,4 +1,6 @@
-INSERT INTO gpconnect0.appointment_schedules
+USE gpconnect0;
+
+INSERT INTO appointment_schedules
   (id,practitionerId,identifier,typeCode,typeDescription,locationId,startDateTime,endDateTime,scheduleComment,lastUpdated)
 VALUES
   (1,2,'Schedule001','394802001','General medicine',1,'2016-03-22 10:00:00','2030-12-22 17:59:59','Schedule 1 for general appointments','2016-07-25 12:00:00'),
@@ -13,7 +15,7 @@ VALUES
   (10,3,'Schedule010','394814009','General practice',4,'2013-12-22 10:46:22','2040-12-22 10:46:22','Schedule 10 for general appointments with practitioner Joseph, May N. @ The Hockey Surgery Annex','2016-07-25 12:00:00'),
   (11,2,'Schedule011','394814010','General practice',5,'2010-10-22 01:01:01','2040-12-22 10:46:22','Schedule 11 for general appointments with practitioner','2016-07-25 12:00:00');
 
-INSERT INTO gpconnect0.appointment_slots
+INSERT INTO appointment_slots
   (id,typeCode,typeDisplay,scheduleReference,freeBusyType,startDateTime,endDateTime,lastUpdated)
 VALUES
   (1,408443003,'General medical practice',2,'FREE','2016-06-29 09:00:00','2016-06-29 09:59:59','2016-07-25 12:00:00'),
@@ -24,7 +26,7 @@ VALUES
   (6,408443003,'General medical practice',2,'FREE','2016-06-29 15:00:00','2016-06-29 15:59:59','2016-07-25 12:00:00'),
   (7,408443003,'General medical practice',2,'FREE','2016-06-29 16:00:00','2016-06-29 16:59:59','2016-07-25 12:00:00');
 
-INSERT INTO gpconnect0.locations
+INSERT INTO locations
   (id,name,org_ods_code,org_ods_code_name,site_ods_code,site_ods_code_name,lastUpdated)
 VALUES
   (1,'Building A','GPC001','GP Connect Demonstrator','Z26556','BUILDING A','2016-07-25 12:00:00'),

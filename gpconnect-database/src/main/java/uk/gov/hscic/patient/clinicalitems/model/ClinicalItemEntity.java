@@ -2,6 +2,7 @@ package uk.gov.hscic.patient.clinicalitems.model;
 
 import java.util.Date;
 import javax.persistence.*;
+import static uk.gov.hscic.patient.encounters.model.EncounterEntity.convertTimestamp2Date;
 
 @Entity
 @Table(name = "clinicalitems")
@@ -18,7 +19,7 @@ public class ClinicalItemEntity {
     private Date sectionDate;
 
     @Column(name = "dateOfItem")
-    private String dateOfItem;
+    private Date dateOfItem;
 
     @Column(name = "entry")
     private String entry;
@@ -42,16 +43,17 @@ public class ClinicalItemEntity {
         this.nhsNumber = nhsNumber;
     }
 
-    public Date getSectionDate() {
-        return sectionDate;
-    }
+    // scf Commented out the sectionDate is not referenced anywhere in the code and appears to be a duplicate of date
+//    public Date getSectionDate() {
+//        return convertTimestamp2Date(sectionDate);
+//    }
+//
+//    public void setSectionDate(Date sectionDate) {
+//        this.sectionDate = sectionDate;
+//    }
 
-    public void setSectionDate(Date sectionDate) {
-        this.sectionDate = sectionDate;
-    }
-
-    public String getDate() {
-        return dateOfItem;
+    public Date getDate() {
+        return convertTimestamp2Date(dateOfItem);
     }
 
     public String getEntry() {
@@ -70,7 +72,7 @@ public class ClinicalItemEntity {
         this.details = details;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.dateOfItem = date;
     }
 

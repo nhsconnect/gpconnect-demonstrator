@@ -9,9 +9,9 @@ import uk.gov.hscic.patient.problems.model.ProblemEntity;
 
 public interface ProblemRepository extends JpaRepository<ProblemEntity, Long> {
 	
-    List<ProblemEntity> findBynhsNumber(String nhsNumber);
-    List<ProblemEntity> findBynhsNumberAndStartDateAfter(String nhsNumber, Date endDate);
-    List<ProblemEntity> findBynhsNumberAndStartDateBefore(String nhsNumber, Date startDate);
-    List<ProblemEntity> findBynhsNumberAndStartDateAfterAndStartDateBefore(String nhsNumber, Date startDate, Date endDate);
+    List<ProblemEntity> findBynhsNumberOrderByStartDateDesc(String nhsNumber);
+    List<ProblemEntity> findBynhsNumberAndStartDateAfterOrderByStartDateDesc(String nhsNumber, Date endDate);
+    List<ProblemEntity> findBynhsNumberAndStartDateBeforeOrderByStartDateDesc(String nhsNumber, Date startDate);
+    List<ProblemEntity> findBynhsNumberAndStartDateAfterAndStartDateBeforeOrderByStartDateDesc(String nhsNumber, Date startDate, Date endDate);
 
 }

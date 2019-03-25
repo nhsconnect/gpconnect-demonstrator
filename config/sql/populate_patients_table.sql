@@ -1,5 +1,7 @@
-LOCK TABLES gpconnect0.patients WRITE;
-INSERT INTO gpconnect0.patients
+USE gpconnect0;
+
+LOCK TABLES patients WRITE;
+INSERT INTO patients
    (id,title,first_name,last_name,address_1,address_2,address_3,address_4,address_5,postcode,phone,date_of_birth,gender,nhs_number,pas_number,department_id,gp_id,lastUpdated,sensitive_flag)
 VALUES
 (1,'MR','Garth','WRIGHT','','23 MARSH LANE','','BARTON-UPON-HUMBER','S HUMBERSIDE','DN18 5JD','01454587554','1933-11-14','Male',9658218865,000001,1,1,'2018-03-23 12:00:00',FALSE),

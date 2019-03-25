@@ -1,4 +1,6 @@
-INSERT INTO gpconnect0.medical_departments
+USE gpconnect0;
+
+INSERT INTO medical_departments
   (id,department,lastUpdated)
 VALUES
   (1,'Neighbourhood','2016-07-25 12:00:00'),
@@ -7,7 +9,7 @@ VALUES
   (4,'Primary Care','2016-07-25 12:00:00'),
   (5,'Mental Health','2016-07-25 12:00:00');
 
-INSERT INTO gpconnect0.organizations
+INSERT INTO organizations
   (id,org_code,site_code,org_name,lastUpdated)
 VALUES
   (1,'GPC001','Z26556','GP Connect Demonstrator','2016-07-25 12:00:00'),

@@ -23,11 +23,11 @@ public class ObservationSearch {
 
 
         if (fromDateString != null && toDateString != null) {
-            return observationRepository.findByNhsNumberBetweenDates(nhsNumberLong, fromDateString, toDateString);
+            return observationRepository.findByNhsNumberBetweenDatesOrderByObservationDateDesc(nhsNumberLong, fromDateString, toDateString);
         } else if (fromDateString != null) {
-            return observationRepository.findByNhsNumberAndAfterDate(nhsNumberLong, fromDateString);
+            return observationRepository.findByNhsNumberAndAfterDateOrderByObservationDateDesc(nhsNumberLong, fromDateString);
         } else if (toDateString != null) {
-            return observationRepository.findByNhsNumberAndBeforeDate(nhsNumberLong, toDateString);
+            return observationRepository.findByNhsNumberAndBeforeDateOrderByObservationDateDesc(nhsNumberLong, toDateString);
         }
 
         return observationRepository.findBynhsNumberOrderByObservationDateDesc(nhsNumber);

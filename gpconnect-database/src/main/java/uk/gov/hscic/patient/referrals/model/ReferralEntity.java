@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import static uk.gov.hscic.patient.encounters.model.EncounterEntity.convertTimestamp2Date;
 
 @Entity
 @Table(name = "referrals")
@@ -58,7 +59,7 @@ public class ReferralEntity {
     }
 
     public Date getSectionDate() {
-        return sectionDate;
+        return convertTimestamp2Date(sectionDate);
     }
 
     public void setSectionDate(Date sectionDate) {

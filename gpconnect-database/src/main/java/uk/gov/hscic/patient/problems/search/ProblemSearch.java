@@ -15,11 +15,11 @@ public class ProblemSearch {
 
     public List<ProblemEntity> findProblems(final String nhsNumber, Date fromDate, Date toDate) {
     	if (fromDate != null && toDate != null) {
-            return problemRepository.findBynhsNumberAndStartDateAfterAndStartDateBefore(nhsNumber, fromDate, toDate);
+            return problemRepository.findBynhsNumberAndStartDateAfterAndStartDateBeforeOrderByStartDateDesc(nhsNumber, fromDate, toDate);
         } else if (fromDate != null) {
-            return problemRepository.findBynhsNumberAndStartDateAfter(nhsNumber, fromDate);
+            return problemRepository.findBynhsNumberAndStartDateAfterOrderByStartDateDesc(nhsNumber, fromDate);
         } else if (toDate != null) {
-            return problemRepository.findBynhsNumberAndStartDateBefore(nhsNumber, toDate);
+            return problemRepository.findBynhsNumberAndStartDateBeforeOrderByStartDateDesc(nhsNumber, toDate);
         } else {
         	return findProblems(nhsNumber);
         }
@@ -27,7 +27,7 @@ public class ProblemSearch {
     
     public List<ProblemEntity> findProblems(final String nhsNumber) {
     	    	
-    	return problemRepository.findBynhsNumber(nhsNumber);
+    	return problemRepository.findBynhsNumberOrderByStartDateDesc(nhsNumber);
     	
     }
 }

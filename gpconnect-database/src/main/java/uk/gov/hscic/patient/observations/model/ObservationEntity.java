@@ -1,6 +1,8 @@
 package uk.gov.hscic.patient.observations.model;
 
+import java.util.Date;
 import javax.persistence.*;
+import static uk.gov.hscic.patient.encounters.model.EncounterEntity.convertTimestamp2Date;
 
 @Entity
 @Table(name = "observations")
@@ -14,7 +16,7 @@ public class ObservationEntity {
     private String nhsNumber;
 
     @Column(name = "observationDate")
-    private String observationDate;
+    private Date observationDate;
 
     @Column(name = "entry")
     private String entry;
@@ -41,11 +43,11 @@ public class ObservationEntity {
         this.id = id;
     }
 
-    public String getObservationDate() {
-        return observationDate;
+    public Date getObservationDate() {
+        return convertTimestamp2Date(observationDate);
     }
 
-    public void setObservationDate(String observationDate) {
+    public void setObservationDate(Date observationDate) {
         this.observationDate = observationDate;
     }
 

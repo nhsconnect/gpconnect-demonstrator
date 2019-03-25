@@ -2,6 +2,7 @@ package uk.gov.hscic.patient.immunisations.model;
 
 import java.util.Date;
 import javax.persistence.*;
+import static uk.gov.hscic.patient.encounters.model.EncounterEntity.convertTimestamp2Date;
 
 @Entity
 @Table(name = "immunisations")
@@ -13,22 +14,21 @@ public class ImmunisationEntity {
 
     @Column(name = "dateOfVac")
     private Date dateOfVac;
-    
+
     @Column(name = "nhsNumber")
     private String nhsNumber;
-    
+
     @Column(name = "vaccination")
     private String vaccination;
-    
+
     @Column(name = "part")
-    private String part;
-    
+    private Integer part;
+
     @Column(name = "contents")
     private String contents;
-    
+
     @Column(name = "details")
     private String details;
-
 
     public Long getId() {
         return id;
@@ -47,7 +47,7 @@ public class ImmunisationEntity {
     }
 
     public Date getDateOfVac() {
-        return dateOfVac;
+        return convertTimestamp2Date(dateOfVac);
     }
 
     public void setDateOfVac(Date dateOfVac) {
@@ -62,11 +62,11 @@ public class ImmunisationEntity {
         this.vaccination = vaccination;
     }
 
-    public String getPart() {
+    public Integer getPart() {
         return part;
     }
 
-    public void setPart(String part) {
+    public void setPart(Integer part) {
         this.part = part;
     }
 
@@ -85,5 +85,5 @@ public class ImmunisationEntity {
     public void setDetails(String details) {
         this.details = details;
     }
-    
+
 }

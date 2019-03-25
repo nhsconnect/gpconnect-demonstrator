@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import uk.gov.hscic.patient.investigations.model.InvestigationEntity;
 
 public interface InvestigationRepository extends JpaRepository<InvestigationEntity, Long> {
-    List<InvestigationEntity> findByNhsNumber(String nhsNumber);
+    // NB use the attribute name of the entity not the database attribute name
+    List<InvestigationEntity> findByNhsNumberOrderByDateDesc(String nhsNumber);
 }

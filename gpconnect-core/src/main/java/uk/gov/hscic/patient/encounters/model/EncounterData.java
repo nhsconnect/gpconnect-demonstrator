@@ -16,11 +16,13 @@
 
 package uk.gov.hscic.patient.encounters.model;
 
+import java.util.Date;
+
 public class EncounterData {
 
     private String sourceId;
     private String source;
-    private String encounterDate;
+    private Date encounterDate;
     private String title;
     private String details;
 
@@ -41,11 +43,11 @@ public class EncounterData {
         this.source = source;
     }
 
-    public String getEncounterDate() {
+    public Date getEncounterDate() {
         return encounterDate;
     }
 
-    public void setEncounterDate(String encounterDate) {
+    public void setEncounterDate(Date encounterDate) {
         this.encounterDate = encounterDate;
     }
 

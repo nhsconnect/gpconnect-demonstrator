@@ -11,6 +11,9 @@ import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.provider.dstu2.ServerConformanceProvider;
 
 public class GpConnectServerConformanceProvider extends ServerConformanceProvider {
+    
+	// **Change this for upgrade version**
+    public static final Version VERSION = new Version("0.5.0");
 
 	public GpConnectServerConformanceProvider(RestfulServer theRestfulServer) {
 		super(theRestfulServer);
@@ -21,8 +24,8 @@ public class GpConnectServerConformanceProvider extends ServerConformanceProvide
 		//Get the automatically generated statement
 		Conformance conformance = super.getServerConformance(theRequest);
 		//And add additional required information
-		conformance.setVersion("0.5.0");
-		conformance.setDescription("This server implements the GP Connect API version 0.5.0");
+		conformance.setVersion(VERSION.toString());
+		conformance.setDescription("This server implements the GP Connect API version "+ VERSION);
 		conformance.setName("GP Connect");
 		conformance.setCopyright("Copyright NHS Digital 2018");
 		DateTimeDt release = new DateTimeDt();

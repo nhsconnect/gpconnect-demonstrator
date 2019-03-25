@@ -11,13 +11,13 @@ public interface ObservationRepository extends JpaRepository<ObservationEntity, 
     List<ObservationEntity> findBynhsNumberOrderByObservationDateDesc(String patientNHSNumber);
 
     @Query(value = "Select * from observations ob where ob.observationDate >= :from and ob.nhsNumber = :nhsNr", nativeQuery = true)
-    List<ObservationEntity> findByNhsNumberAndAfterDate(@Param("nhsNr") Long nhsNr, @Param("from") String startDate);
+    List<ObservationEntity> findByNhsNumberAndAfterDateOrderByObservationDateDesc(@Param("nhsNr") Long nhsNr, @Param("from") String startDate);
 
     @Query(value = "Select * from observations ob where ob.observationDate <= :to and ob.nhsNumber = :nhsNr", nativeQuery = true)
-    List<ObservationEntity> findByNhsNumberAndBeforeDate(@Param("nhsNr") Long nhsNr, @Param("to") String endDate);
+    List<ObservationEntity> findByNhsNumberAndBeforeDateOrderByObservationDateDesc(@Param("nhsNr") Long nhsNr, @Param("to") String endDate);
 
     @Query(value = "Select * from observations ob where  ob.observationDate between :from and :to and ob.nhsNumber = :nhsNr", nativeQuery = true)
-    List<ObservationEntity> findByNhsNumberBetweenDates(
+    List<ObservationEntity> findByNhsNumberBetweenDatesOrderByObservationDateDesc(
             @Param("nhsNr") Long nhsNr, @Param("from") String startDate, @Param("to") String endDate);
 
 }

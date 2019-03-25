@@ -1,37 +1,37 @@
 USE gpconnect0;
 
 /* Destroy all existing data */
-DROP TABLE IF EXISTS gpconnect0.appointment_schedules;
-DROP TABLE IF EXISTS gpconnect0.appointment_slots;
-DROP TABLE IF EXISTS gpconnect0.practitioners;
-DROP TABLE IF EXISTS gpconnect0.organizations;
-DROP TABLE IF EXISTS gpconnect0.patients;
-DROP TABLE IF EXISTS gpconnect0.allergies;
-DROP TABLE IF EXISTS gpconnect0.medications_html;
-DROP TABLE IF EXISTS gpconnect0.medications;
-DROP TABLE IF EXISTS gpconnect0.medication_orders;
-DROP TABLE IF EXISTS gpconnect0.medication_dispenses;
-DROP TABLE IF EXISTS gpconnect0.medication_administrations;
-DROP TABLE IF EXISTS gpconnect0.problems;
-DROP TABLE IF EXISTS gpconnect0.referrals;
-DROP TABLE IF EXISTS gpconnect0.encounters;
-DROP TABLE IF EXISTS gpconnect0.patientsummary;
-DROP TABLE IF EXISTS gpconnect0.procedures;
-DROP TABLE IF EXISTS gpconnect0.observations;
-DROP TABLE IF EXISTS gpconnect0.immunisations;
-DROP TABLE IF EXISTS gpconnect0.adminitems;
-DROP TABLE IF EXISTS gpconnect0.clinicalitems;
-DROP TABLE IF EXISTS gpconnect0.investigations;
-DROP TABLE IF EXISTS gpconnect0.locations;
-DROP TABLE IF EXISTS gpconnect0.orders;
+DROP TABLE IF EXISTS appointment_schedules;
+DROP TABLE IF EXISTS appointment_slots;
+DROP TABLE IF EXISTS practitioners;
+DROP TABLE IF EXISTS organizations;
+DROP TABLE IF EXISTS patients;
+DROP TABLE IF EXISTS allergies;
+DROP TABLE IF EXISTS medications_html;
+DROP TABLE IF EXISTS medications;
+DROP TABLE IF EXISTS medication_orders;
+DROP TABLE IF EXISTS medication_dispenses;
+DROP TABLE IF EXISTS medication_administrations;
+DROP TABLE IF EXISTS problems;
+DROP TABLE IF EXISTS referrals;
+DROP TABLE IF EXISTS encounters;
+DROP TABLE IF EXISTS patientsummary;
+DROP TABLE IF EXISTS procedures;
+DROP TABLE IF EXISTS observations;
+DROP TABLE IF EXISTS immunisations;
+DROP TABLE IF EXISTS adminitems;
+DROP TABLE IF EXISTS clinicalitems;
+DROP TABLE IF EXISTS investigations;
+DROP TABLE IF EXISTS locations;
+DROP TABLE IF EXISTS orders;
 
-DROP TABLE IF EXISTS gpconnect0.appointment_appointments;
-DROP TABLE IF EXISTS gpconnect0.general_practitioners;
-DROP TABLE IF EXISTS gpconnect0.medical_departments;
+DROP TABLE IF EXISTS appointment_appointments;
+DROP TABLE IF EXISTS general_practitioners;
+DROP TABLE IF EXISTS medical_departments;
 
 /* Create new table schemas */
 
-CREATE TABLE gpconnect0.appointment_appointments (
+CREATE TABLE appointment_appointments (
   id                 BIGINT    NOT NULL AUTO_INCREMENT,
   cancellationReason TEXT(300) NULL,
   status             TEXT(50)  NULL,
@@ -49,7 +49,7 @@ CREATE TABLE gpconnect0.appointment_appointments (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.appointment_schedules (
+CREATE TABLE appointment_schedules (
   id              BIGINT    NOT NULL AUTO_INCREMENT,
   practitionerId  BIGINT    NULL,
   identifier      TEXT(50)  NULL,
@@ -63,7 +63,7 @@ CREATE TABLE gpconnect0.appointment_schedules (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.appointment_slots (
+CREATE TABLE appointment_slots (
   id                BIGINT    NOT NULL AUTO_INCREMENT,
   appointmentId     BIGINT    NULL,
   typeCode          BIGINT    NULL,
@@ -74,10 +74,10 @@ CREATE TABLE gpconnect0.appointment_slots (
   endDateTime       DATETIME  NULL,
   lastUpdated       DATETIME  NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (appointmentId) REFERENCES gpconnect0.appointment_appointments(id)
+  FOREIGN KEY (appointmentId) REFERENCES appointment_appointments(id)
 );
 
-CREATE TABLE gpconnect0.general_practitioners (
+CREATE TABLE general_practitioners (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   gp_name     VARCHAR(150) NULL,
   address_1   VARCHAR(100) NULL,
@@ -90,7 +90,7 @@ CREATE TABLE gpconnect0.general_practitioners (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.practitioners (
+CREATE TABLE practitioners (
   id                BIGINT       NOT NULL AUTO_INCREMENT,
   userid            VARCHAR(30)  NULL,
   p_role_id         VARCHAR(30)  NULL,
@@ -107,7 +107,7 @@ CREATE TABLE gpconnect0.practitioners (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.organizations (
+CREATE TABLE organizations (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   org_code    VARCHAR(30)  NULL,
   site_code   VARCHAR(30)  NULL,
@@ -116,14 +116,14 @@ CREATE TABLE gpconnect0.organizations (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.medical_departments (
+CREATE TABLE medical_departments (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   department  VARCHAR(150) NULL,
   lastUpdated DATETIME     NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.patients (
+CREATE TABLE patients (
   id                  BIGINT       NOT NULL AUTO_INCREMENT,
   title               VARCHAR(10)  NULL,
   first_name          VARCHAR(30)  NULL,
@@ -148,11 +148,11 @@ CREATE TABLE gpconnect0.patients (
   registration_type   VARCHAR(10)  NULL,
   sensitive_flag      BOOLEAN      NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES gpconnect0.medical_departments(id),
-  FOREIGN KEY (gp_id) REFERENCES gpconnect0.general_practitioners(id)
+  FOREIGN KEY (department_id) REFERENCES medical_departments(id),
+  FOREIGN KEY (gp_id) REFERENCES general_practitioners(id)
 );
 
-CREATE TABLE gpconnect0.allergies (
+CREATE TABLE allergies (
   id                BIGINT        NOT NULL AUTO_INCREMENT,
   nhsNumber         BIGINT        NULL,
   currentOrHistoric VARCHAR(4096) NULL,
@@ -162,31 +162,34 @@ CREATE TABLE gpconnect0.allergies (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.medications_html (
+CREATE TABLE medications_html (
   id                BIGINT       NOT NULL AUTO_INCREMENT,
   nhsNumber         VARCHAR(100) NULL,
   currentRepeatPast VARCHAR(100) NOT NULL,
-  startDate         VARCHAR(100) NULL,
+  startDate         DATETIME NULL,
   medicationItem    VARCHAR(100) NULL,
-  scheduledEnd      VARCHAR(100) NULL,
-  daysDuration      VARCHAR(100) NULL,
+  dosageInstruction VARCHAR(100) NULL,
+  quantity          VARCHAR(100) NULL,
+  scheduledEnd      DATETIME NULL,
+  daysDuration      BIGINT NULL,
   details           VARCHAR(100) NULL,
-  lastIssued        VARCHAR(100) NULL,
-  reviewDate        VARCHAR(100) NULL,
-  numberIssued      VARCHAR(100) NULL,
-  maxIssues         VARCHAR(100) NULL,
+  lastIssued        DATETIME NULL,
+  reviewDate        DATETIME NULL,
+  numberIssued      BIGINT NULL,
+  maxIssues         BIGINT NULL,
   typeMed           VARCHAR(100) NULL,
+  discontinuationReason           VARCHAR(100) NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.medications (
+CREATE TABLE medications (
   id          BIGINT    NOT NULL AUTO_INCREMENT,
   name        TEXT(100) NULL,
   lastUpdated DATETIME  NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.medication_orders (
+CREATE TABLE medication_orders (
   id                       BIGINT    NOT NULL AUTO_INCREMENT,
   date_written             DATETIME  NULL,
   order_status             TEXT(50)  NULL,
@@ -202,7 +205,7 @@ CREATE TABLE gpconnect0.medication_orders (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.medication_dispenses (
+CREATE TABLE medication_dispenses (
   id                BIGINT    NOT NULL AUTO_INCREMENT,
   status            TEXT(50)  NULL,
   patientId         BIGINT    NULL,
@@ -214,7 +217,7 @@ CREATE TABLE gpconnect0.medication_dispenses (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.medication_administrations (
+CREATE TABLE medication_administrations (
   id                 BIGINT   NOT NULL AUTO_INCREMENT,
   patientId          BIGINT   NULL,
   practitionerId     BIGINT   NULL,
@@ -226,7 +229,7 @@ CREATE TABLE gpconnect0.medication_administrations (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.problems (
+CREATE TABLE problems (
   id               BIGINT       NOT NULL AUTO_INCREMENT,
   nhsNumber        BIGINT       NULL,
   activeOrInactive VARCHAR(100) NULL,
@@ -238,7 +241,7 @@ CREATE TABLE gpconnect0.problems (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.referrals (
+CREATE TABLE referrals (
   id            BIGINT       NOT NULL AUTO_INCREMENT,
   nhsNumber     BIGINT       NULL,
   sectionDate   DATETIME     NULL,
@@ -250,17 +253,17 @@ CREATE TABLE gpconnect0.referrals (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.encounters (
+CREATE TABLE encounters (
   id            BIGINT       NOT NULL AUTO_INCREMENT,
   nhsNumber     VARCHAR(100) NULL,
   sectionDate   DATETIME     NULL,
-  encounterDate VARCHAR(200) NULL,
+  encounterDate DATETIME     NULL,
   title         VARCHAR(200) NULL,
   details       VARCHAR(400) NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.procedures (
+CREATE TABLE procedures (
   id          BIGINT        NOT NULL AUTO_INCREMENT,
   html        VARCHAR(4096) NULL,
   provider    VARCHAR(10)   NULL,
@@ -268,28 +271,28 @@ CREATE TABLE gpconnect0.procedures (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.observations (
+CREATE TABLE observations (
   id              BIGINT       NOT NULL AUTO_INCREMENT,
   nhsNumber       BIGINT       NULL,
-  observationDate VARCHAR(100) NULL,
+  observationDate DATETIME NULL,
   entry           VARCHAR(100) NULL,
   value           VARCHAR(100) NULL,
   details         VARCHAR(100) NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.immunisations (
+CREATE TABLE immunisations (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   nhsNumber   BIGINT       NULL,
   dateOfVac   DATETIME     NULL,
   vaccination VARCHAR(100) NULL,
-  part        VARCHAR(200) NULL,
+  part        BIGINT NULL,
   contents    VARCHAR(200) NULL,
   details     VARCHAR(200) NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.adminitems (
+CREATE TABLE adminitems (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   nhsNumber   BIGINT       NULL,
   sectionDate DATETIME     NULL,
@@ -299,7 +302,7 @@ CREATE TABLE gpconnect0.adminitems (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.clinicalitems (
+CREATE TABLE clinicalitems (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   nhsNumber   BIGINT       NULL,
   sectionDate DATETIME     NULL,
@@ -309,17 +312,17 @@ CREATE TABLE gpconnect0.clinicalitems (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.investigations (
-  id          BIGINT         NOT NULL AUTO_INCREMENT,
-  nhsNumber   BIGINT         NULL,
-  sectionDate DATETIME       NULL,
-  title       VARCHAR(100)   NULL,
-  details     VARCHAR(1000)  NULL,
-  lastUpdated DATETIME       NULL,
-  PRIMARY KEY (id)
+CREATE TABLE investigations (
+   id          BIGINT         NOT NULL AUTO_INCREMENT,
+   nhsNumber   BIGINT         NULL,
+   sectionDate DATETIME       NULL,
+   title       VARCHAR(100)   NULL,
+   details     VARCHAR(1000)  NULL,
+   lastUpdated DATETIME       NULL,
+   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.locations (
+CREATE TABLE locations (
   id                 BIGINT       NOT NULL AUTO_INCREMENT,
   name               VARCHAR(250) NOT NULL,
   org_ods_code       VARCHAR(250) NOT NULL,
@@ -330,7 +333,7 @@ CREATE TABLE gpconnect0.locations (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE gpconnect0.orders (
+CREATE TABLE orders (
   id                BIGINT       NOT NULL AUTO_INCREMENT,
   identifier        VARCHAR(250) NULL,
   orderDate         DATETIME     NULL,

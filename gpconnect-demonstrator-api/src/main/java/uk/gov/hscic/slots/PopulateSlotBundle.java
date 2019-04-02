@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import java.util.HashMap;
 import javax.annotation.PostConstruct;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.springframework.beans.factory.annotation.Value;
@@ -87,33 +88,31 @@ public class PopulateSlotBundle {
      * @param planningHorizonEnd Date
      * @param actorPractitioner boolean
      * @param actorLocation boolean
+     * @param managingOrganisation
      * @param bookingOdsCode String
      * @param bookingOrgType String eg "urgent-care"
      */
     public void populateBundle(Bundle bundle, OperationOutcome operationOutcome, Date planningHorizonStart,
-            Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation, String bookingOdsCode, String bookingOrgType) {
+            Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation, boolean managingOrganisation, String bookingOdsCode, String bookingOrgType) {
         bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
 
-        // TODO remove hard coding pick up frpm providerRouting.json ?
+        // TODO remove hard coding pick up from providerRouting.json ?
         final String OUR_ODS_CODE = "A20047";
 
-        // find first locationDetails for this ODS practice code
-        List<LocationDetails> locationDetails = locationSearch.findAllLocations();
-        LocationDetails locationDetail = null;
-        for (LocationDetails alocationDetail : locationDetails) {
-            if (alocationDetail.getOrgOdsCode().equals(OUR_ODS_CODE)) {
-                locationDetail = alocationDetail;
-                break;
+        // find all locations for this ODS practice code and construct Resources for them
+        // #144 generalise to handle 1..n locations for a practice
+        HashMap<String, BundleEntryComponent> locationEntries = new HashMap<>();
+        for (LocationDetails aLocationDetail : locationSearch.findAllLocations()) {
+            if (aLocationDetail.getOrgOdsCode().equals(OUR_ODS_CODE)) {
+                Location aLocationResource = locationResourceProvider.getLocationById(new IdType(aLocationDetail.getId()));
+                BundleEntryComponent locationEntry = new BundleEntryComponent();
+                locationEntry.setResource(aLocationResource);
+                // #202 use full urls
+                // #215 full url removed completely
+                //locationEntry.setFullUrl(serverBaseUrl + "Location/" + aLocationResource.getIdElement().getIdPart());
+                locationEntries.put(aLocationResource.getIdElement().getIdPart(), locationEntry);
             }
         }
-
-        // find the matching location resource by ID
-        Location location = locationResourceProvider.getLocationById(new IdType(locationDetail.getId()));
-
-        BundleEntryComponent locationEntry = new BundleEntryComponent();
-        locationEntry.setResource(location);
-        // #202 use full urls
-        locationEntry.setFullUrl(serverBaseUrl + "Location/" + location.getIdElement().getIdPart());
 
         // find the provider organization from the ods code
         List<OrganizationDetails> ourOrganizationsDetails = organizationSearch.findOrganizationDetailsByOrgODSCode(OUR_ODS_CODE);
@@ -135,18 +134,18 @@ public class PopulateSlotBundle {
             bookingOrganizationDetails = bookingOrganizationsDetails.get(0);
         }
 
-        // schedules for given location
-        List<Schedule> schedules = scheduleResourceProvider.getSchedulesForLocationId(
-                location.getIdElement().getIdPart(), planningHorizonStart, planningHorizonEnd);
+        HashSet<BundleEntryComponent> addedSchedule = new HashSet<>();
+        HashSet<BundleEntryComponent> addedLocation = new HashSet<>();
+        HashSet<String> addedPractitioner = new HashSet<>();
+        HashSet<String> addedOrganization = new HashSet<>();
+        // issue #165 don't add duplicate slots, hashSet contains slot id as String
+        HashSet<String> addedSlot = new HashSet<>();
 
-        if (!schedules.isEmpty()) {
-            HashSet<BundleEntryComponent> addedSchedule = new HashSet<>();
-            HashSet<BundleEntryComponent> addedLocation = new HashSet<>();
-            HashSet<String> addedPractitioner = new HashSet<>();
-            HashSet<String> addedOrganization = new HashSet<>();
+        // #144 process all locations
+        for (String locationId : locationEntries.keySet()) {
 
             // process the schedules
-            for (Schedule schedule : schedules) {
+            for (Schedule schedule : scheduleResourceProvider.getSchedulesForLocationId(locationId, planningHorizonStart, planningHorizonEnd)) {
                 boolean slotsAdded = false;
 
                 schedule.getMeta().addProfile(SystemURL.SD_GPC_SCHEDULE);
@@ -154,7 +153,8 @@ public class PopulateSlotBundle {
                 BundleEntryComponent scheduleEntry = new BundleEntryComponent();
                 scheduleEntry.setResource(schedule);
                 // #202 use full urls
-                scheduleEntry.setFullUrl(serverBaseUrl + "Schedule/" + schedule.getIdElement().getIdPart());
+                // #215 full url removed completely
+                //scheduleEntry.setFullUrl(serverBaseUrl + "Schedule/" + schedule.getIdElement().getIdPart());
 
                 // This Set does not work as expected because Slot does not implement hashCode
                 // so the second set call to getSlots returns different objects with the same slot id
@@ -201,15 +201,14 @@ public class PopulateSlotBundle {
                 }
 
                 // added at 1.2.2 add the organisation but only if there are some slots available
-                if (slots.size() > 0 && ourOrganizationDetails != null && !addedOrganization.contains(ourOrganizationDetails.getOrgCode())) {
+                // #216 added at 1.2.3 only supply org if requested
+                if (managingOrganisation && slots.size() > 0 && ourOrganizationDetails != null && !addedOrganization.contains(ourOrganizationDetails.getOrgCode())) {
                     addOrganisation(ourOrganizationDetails, bundle);
                     addedOrganization.add(ourOrganizationDetails.getOrgCode());
                 }
 
                 String freeBusyType = "FREE";
 
-                // issue #165 don't add duplicate slots, hashSet contains slot id as String
-                HashSet<String> addedSlot = new HashSet<>();
                 // process all the slots to be returned
                 for (Slot slot : slots) {
                     if (freeBusyType.equalsIgnoreCase(slot.getStatus().toString())) {
@@ -218,7 +217,8 @@ public class PopulateSlotBundle {
                             BundleEntryComponent slotEntry = new BundleEntryComponent();
                             slotEntry.setResource(slot);
                             // #202 use full urls
-                            slotEntry.setFullUrl(serverBaseUrl + "Slot/" + slotId);
+                            // #215 full url removed completely
+//                          slotEntry.setFullUrl(serverBaseUrl + "Slot/" + slotId);
                             bundle.addEntry(slotEntry);
                             addedSlot.add(slotId);
                             slotsAdded = true;
@@ -232,9 +232,9 @@ public class PopulateSlotBundle {
 
                         if (actorLocation == true) {
                             // only add a unique location once
-                            if (!addedLocation.contains(locationEntry)) {
-                                bundle.addEntry(locationEntry);
-                                addedLocation.add(locationEntry);
+                            if (!addedLocation.contains(locationEntries.get(locationId))) {
+                                bundle.addEntry(locationEntries.get(locationId));
+                                addedLocation.add(locationEntries.get(locationId));
                             }
                         }
                     } // if free/busy status matches
@@ -269,7 +269,7 @@ public class PopulateSlotBundle {
                     } // if non empty practitioner list
                 } // if slots added
             } // for schedules
-        } // if non empty schedules
+        } // for location
     } // populateBundle 
 
     /**
@@ -282,7 +282,8 @@ public class PopulateSlotBundle {
         BundleEntryComponent practionerEntry = new BundleEntryComponent();
         practionerEntry.setResource(practitioner);
         // #202 use full urls
-        practionerEntry.setFullUrl(serverBaseUrl + "Practitioner/" + practitioner.getIdElement().getIdPart());
+        // #215 full url removed completely
+        //practionerEntry.setFullUrl(serverBaseUrl + "Practitioner/" + practitioner.getIdElement().getIdPart());
         bundle.addEntry(practionerEntry);
     }
 
@@ -300,7 +301,8 @@ public class PopulateSlotBundle {
                 .convertOrganizationDetailsToOrganization(organizationDetails);
         organizationEntry.setResource(organizationResource);
         // #202 use full urls
-        organizationEntry.setFullUrl(serverBaseUrl + "Organization/" + organization.getId());
+        // #215 full url removed completely
+        //organizationEntry.setFullUrl(serverBaseUrl + "Organization/" + organization.getId());
         bundle.addEntry(organizationEntry);
     }
 }

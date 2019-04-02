@@ -56,6 +56,9 @@ import static uk.gov.hscic.appointments.AppointmentValidation.APPOINTMENT_COMMEN
 import static uk.gov.hscic.appointments.AppointmentValidation.APPOINTMENT_DESCRIPTION_LENGTH;
 import uk.gov.hscic.common.validators.VC;
 import uk.gov.hscic.model.appointment.ScheduleDetail;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntityInvalid422_ParameterException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
 
 @Component
 public class AppointmentResourceProvider implements IResourceProvider {
@@ -157,7 +160,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         List<DateOrListParam> startDateList = startDates.getValuesAsQueryTokens();
 
         if (startDateList.size() != 2) {
-            throwInvalidParameter("Appointment search must have both 'le' and 'ge' start date parameters.");
+            throwUnprocessableEntityInvalid422_ParameterException("Appointment search must have both 'le' and 'ge' start date parameters.");
         }
 
         Pattern dateOnlyPattern = Pattern.compile("[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])))");
@@ -169,7 +172,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             DateParam token = filter.getValuesAsQueryTokens().get(0);
 
             if (!dateOnlyPattern.matcher(token.getValueAsString()).matches()) {
-                throwInvalidParameter("Search dates must be of the format: yyyy-MM-dd and should not include time or timezone.");
+                throwUnprocessableEntityInvalid422_ParameterException("Search dates must be of the format: yyyy-MM-dd and should not include time or timezone.");
             }
 
             if (null != token.getPrefix()) {
@@ -188,19 +191,19 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         lePrefix = true;
                         break;
                     default:
-                        throwInvalidParameter("Unknown prefix on start date parameter: only le and ge prefixes are allowed.");
+                        throwUnprocessableEntityInvalid422_ParameterException("Unknown prefix on start date parameter: only le and ge prefixes are allowed.");
                 }
             }
         }
 
         if (!gePrefix || !lePrefix) {
-            throwInvalidParameter("Parameters must contain two start parameters, one with prefix 'ge' and one with prefix 'le'.");
+            throwUnprocessableEntityInvalid422_ParameterException("Parameters must contain two start parameters, one with prefix 'ge' and one with prefix 'le'.");
         } else if (startLowerDate.before(getYesterday())) {
-            throwInvalidParameter("Search dates from the past: " + startLowerDate.toString() + " are not allowed in appointment search.");
+            throwUnprocessableEntityInvalid422_ParameterException("Search dates from the past: " + startLowerDate.toString() + " are not allowed in appointment search.");
         } else if (startUpperDate.before(getYesterday())) {
-            throwInvalidParameter("Search dates from the past: " + startUpperDate.toString() + " are not allowed in appointment search.");
+            throwUnprocessableEntityInvalid422_ParameterException("Search dates from the past: " + startUpperDate.toString() + " are not allowed in appointment search.");
         } else if (startUpperDate.before(startLowerDate)) {
-            throwInvalidParameter("Upper search date must be after the lower search date.");
+            throwUnprocessableEntityInvalid422_ParameterException("Upper search date must be after the lower search date.");
         }
 
         List<Appointment> appointment = appointmentSearch
@@ -283,12 +286,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     locationFound = true;
                 }
             } else {
-                throwInvalidResource("Appointment resource is not valid as it does not contain a Participant Actor reference");
+                throwUnprocessableEntity422_InvalidResourceException("Appointment resource is not valid as it does not contain a Participant Actor reference");
             }
         }
 
         if (!patientFound || !locationFound) {
-            throwInvalidResource("Appointment resource is not a valid resource required valid Patient and Location");
+            throwUnprocessableEntity422_InvalidResourceException("Appointment resource is not a valid resource required valid Patient and Location");
         }
 
         // variable accessed in a lambda must be declared final
@@ -354,7 +357,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 deliveryChannel = slotDetail.getDeliveryChannelCode();
             } else if (!deliveryChannel.equals(slotDetail.getDeliveryChannelCode())) {
                 // added at 1.2.2
-                throwInvalidResource(String.format("Subsequent slot (Slot/%s) delivery channel (%s) is not equal to initial slot delivery channel (%s).",
+                throwUnprocessableEntity422_InvalidResourceException(String.format("Subsequent slot (Slot/%s) delivery channel (%s) is not equal to initial slot delivery channel (%s).",
                         slotId, deliveryChannel, slotDetail.getDeliveryChannelCode()));
             }
 
@@ -378,14 +381,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         // #203 check location id matches the one in the schedule
         if (locationId != null && !locationId.equals(schedule.getLocationId().toString())) {
-            throwInvalidResource(String.format("Provided location id (%s) is not equal to Schedule location id (%s)", 
+            throwUnprocessableEntity422_InvalidResourceException(String.format("Provided location id (%s) is not equal to Schedule location id (%s)", 
                     locationId, schedule.getLocationId().toString()));
         }
 
         // #203 check practitioner id matches the one in the schedule if there is one
         if (practitionerId != null) {
             if (!practitionerId.equals(schedule.getPractitionerId().toString())) {
-                throwInvalidResource(String.format("Provided practitioner id (%s) is not equal to Schedule practitioner id (%s)", 
+                throwUnprocessableEntity422_InvalidResourceException(String.format("Provided practitioner id (%s) is not equal to Schedule practitioner id (%s)", 
                         practitionerId, schedule.getPractitionerId().toString()));
             }
         }
@@ -460,7 +463,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                             codeableConcept.getCodingFirstRep().getCode(), fPractitionerRoleCode))
                         });
                     } catch (ClassCastException ex) {
-                        throwInvalidResource("Practitioner Role Extension value is not a valueCodeableConcept");
+                        throwUnprocessableEntity422_InvalidResourceException("Practitioner Role Extension value is not a valueCodeableConcept");
                     }
                     break;
 
@@ -472,7 +475,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                                 -> String.format("Delivery Channel provided (%s) doesn't match slot value (%s)",
                                         codeType.getValue(), fDeliveryChannel)).execute();
                     } catch (ClassCastException ex) {
-                        throwInvalidResource("Delivery Channel Extension value is not a valueCode");
+                        throwUnprocessableEntity422_InvalidResourceException("Delivery Channel Extension value is not a valueCode");
                     }
                     break;
             } //switch
@@ -520,7 +523,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             );
 
         } catch (ClassCastException ex) {
-            throwInvalidResource(String.format("Contained object with url %s is not an Organization", SD_CC_APPOINTMENT_BOOKINGORG));
+            throwUnprocessableEntity422_InvalidResourceException(String.format("Contained object with url %s is not an Organization", SD_CC_APPOINTMENT_BOOKINGORG));
         }
     }
 
@@ -613,7 +616,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 // #172
                 String appointmentType = appointment.getAppointmentType().getText();
                 if (appointmentType != null) {
-                    throwInvalidResource("The appointment type cannot be updated on a cancellation");
+                    throwUnprocessableEntity422_InvalidResourceException("The appointment type cannot be updated on a cancellation");
                 }
 
                 // This is a Cancellation - so copy across fields which can be
@@ -622,7 +625,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         appointmentDetail);
 
                 if (cancelComparisonResult.size() > 0) {
-                    throwInvalidResource("Invalid Appointment property has been amended (cancellation) " + cancelComparisonResult);
+                    throwUnprocessableEntity422_InvalidResourceException("Invalid Appointment property has been amended (cancellation) " + cancelComparisonResult);
                 }
 
                 oldAppointmentDetail.setCancellationReason(appointmentDetail.getCancellationReason());
@@ -656,7 +659,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         appointmentDetail);
 
                 if (amendComparisonResult.size() > 0) {
-                    throwInvalidResource("Invalid Appointment property has been amended " + amendComparisonResult);
+                    throwUnprocessableEntity422_InvalidResourceException("Invalid Appointment property has been amended " + amendComparisonResult);
                 }
 
                 validateAppointmentExtensions(appointment, profiles, appointmentOperation);
@@ -684,7 +687,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             SlotDetail slotDetail = slotSearch.findSlotByID(slotId);
 
             if (slotDetail == null) {
-                throwInvalidResource("Slot resource reference is not a valid resource");
+                throwUnprocessableEntity422_InvalidResourceException("Slot resource reference is not a valid resource");
             }
 
             if (deliveryChannel == null) {
@@ -717,7 +720,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             new VC(() -> appointment.getSlot().size() != slots.size(), 
                     () -> String.format("Slot count mismatch %d provided appointment has %d", appointment.getSlot().size(), slots.size())),});
 
-        // check the slots match TODO this doesn't currently happen for book appointment
+        // check the slots match
         HashSet<String> hs = new HashSet<>();
         for (SlotDetail slotDetail : slots) {
             hs.add("Slot/" + slotDetail.getId());
@@ -725,7 +728,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         for (Reference reference : appointment.getSlot()) {
             if (!hs.contains(reference.getReference())) {
-                throwInvalidResource(String.format("Provided slot id %s does not exist in booked appointment", reference.getReference()));
+                throwUnprocessableEntity422_InvalidResourceException(String.format("Provided slot id %s does not exist in booked appointment", reference.getReference()));
             }
         }
 
@@ -749,7 +752,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         // #203 check extension
         List<Extension> extensions = appointment.getExtension();
         if (extensions.isEmpty()) {
-            throwInvalidResource("Booking organization extension must be present");
+            throwUnprocessableEntity422_InvalidResourceException("Booking organization extension must be present");
         }
         Reference bookingOrgRef = null;
         for (Extension extension : extensions) {
@@ -758,18 +761,18 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     try {
                         bookingOrgRef = (Reference) extension.getValue();
                     } catch (ClassCastException ex) {
-                        throwInvalidResource("Booking Organisation Extension value is not a Reference");
+                        throwUnprocessableEntity422_InvalidResourceException("Booking Organisation Extension value is not a Reference");
                     }
                     break;
                 case SD_EXTENSION_GPC_APPOINTMENT_CANCELLATION_REASON:
                     if (appointmentOperation != AppointmentOperation.CANCEL) {
-                        throwInvalidResource("Cancellation Reason shouldn't be provided in " + appointmentOperation + " Appointment!");
+                        throwUnprocessableEntity422_InvalidResourceException("Cancellation Reason shouldn't be provided in " + appointmentOperation + " Appointment!");
                     }
                     break;
             }
         }
         if (bookingOrgRef == null) {
-            throwInvalidResource("Booking organization extension must be present");
+            throwUnprocessableEntity422_InvalidResourceException("Booking organization extension must be present");
         }
         // #203 check that the reference points to the contained booking org
         for (Resource resource : appointment.getContained()) {
@@ -1057,7 +1060,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         appointmentValidation.validateAppointmentExtensions(appointment.getExtension());
 
         if (appointmentValidation.appointmentDescriptionTooLong(appointment)) {
-            throwInvalidResource("Appointment description cannot be greater then " + APPOINTMENT_DESCRIPTION_LENGTH + " characters");
+            throwUnprocessableEntity422_InvalidResourceException("Appointment description cannot be greater then " + APPOINTMENT_DESCRIPTION_LENGTH + " characters");
         }
 
         AppointmentDetail appointmentDetail = new AppointmentDetail();
@@ -1074,9 +1077,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             IBaseDatatype value = cnlExtension.get(0).getValue();
 
             if (null == value) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException("Cancellation reason missing."), SystemCode.BAD_REQUEST,
-                        IssueType.INVALID);
+                throwInvalidRequest400_BadRequestException("Cancellation reason missing.");
             }
             appointmentDetail.setCancellationReason(value.toString());
         }
@@ -1097,13 +1098,13 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 Long slotId = new Long(here);
                 slotIds.add(slotId);
             } catch (NumberFormatException ex) {
-                throwInvalidResource(String.format("The slot reference value data type for %s is not valid.", slotReference.getReference()));
+                throwUnprocessableEntity422_InvalidResourceException(String.format("The slot reference value data type for %s is not valid.", slotReference.getReference()));
             }
         }
 
         appointmentDetail.setSlotIds(slotIds);
         if (appointmentValidation.appointmentCommentTooLong(appointment)) {
-            throwInvalidResource("Appointment comment cannot be greater than " + APPOINTMENT_COMMENT_LENGTH + " characters");
+            throwUnprocessableEntity422_InvalidResourceException("Appointment comment cannot be greater than " + APPOINTMENT_COMMENT_LENGTH + " characters");
         }
 
         appointmentDetail.setComment(appointment.getComment());
@@ -1128,7 +1129,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     appointmentDetail.setLocationId(actorId);
                 }
             } else {
-                throwInvalidResource("Participant Actor cannot be null");
+                throwUnprocessableEntity422_InvalidResourceException("Participant Actor cannot be null");
             }
         }
 
@@ -1181,10 +1182,10 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 // check that organization identifier system is https://fhir.nhs.uk/Id/ods-organization-code
                 if (system != null && !system.trim().isEmpty()) {
                     if (!system.equals(ID_ODS_ORGANIZATION_CODE)) {
-                        throwInvalidResource("Appointment organisation identifier system must be an ODS code!");
+                        throwUnprocessableEntity422_InvalidResourceException("Appointment organisation identifier system must be an ODS code!");
                     }
                 } else {
-                    throwInvalidResource("Appointment organisation identifier system must be populated!");
+                    throwUnprocessableEntity422_InvalidResourceException("Appointment organisation identifier system must be populated!");
                 }
             }
             bookingOrgDetail.setAppointmentDetail(appointmentDetail);
@@ -1214,29 +1215,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 return;
             }
             // if we get here its a valid URL so its an absolute reference
-            throwInvalidResource("Reference " + reference + " must be relative not absolute");
+            throwUnprocessableEntity422_InvalidResourceException("Reference " + reference + " must be relative not absolute");
         }
     }
 
-    /**
-     * 422 Invalid Parameter
-     *
-     * @param message
-     */
-    public static void throwInvalidParameter(String message) {
-        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                new UnprocessableEntityException(message),
-                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
-    }
-
-    /**
-     * 422 Invalid Resource
-     *
-     * @param message
-     */
-    public static void throwInvalidResource(String message) {
-        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                new UnprocessableEntityException(message),
-                SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-    }
 }

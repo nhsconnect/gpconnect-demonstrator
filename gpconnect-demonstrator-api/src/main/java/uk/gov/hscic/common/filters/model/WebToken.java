@@ -26,6 +26,7 @@ public class WebToken {
     @JsonProperty("requesting_practitioner")
     private RequestingPractitioner requestingPractitioner;
 
+    // This is no longer used see #44 and #170
     @JsonProperty("requested_record")
     private RequestedRecord requestedRecord;
 

@@ -26,6 +26,7 @@ import uk.gov.hscic.common.filters.model.WebToken;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.PatientResourceProvider;
 import uk.gov.hscic.util.NhsCodeValidator;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
 
 @Component
 public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
@@ -57,9 +58,9 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
         // only certain combinations of JWT resource type and request resource type are allowed
         // in this map the key is the JWT resource type and the value is a set of permitted request resources
-        validResourceCombinations = new HashMap<String, Set<String>>();
-        validResourceCombinations.put(PATIENT_RESOURCE_NAME, new HashSet<String>(Arrays.asList(new String[]{PATIENT_RESOURCE_NAME, APPOINTMENT_RESOURCE_NAME})));
-        validResourceCombinations.put(ORGANIZATION_RESOURCE_NAME, new HashSet<String>(Arrays.asList(new String[]{ORGANIZATION_RESOURCE_NAME, PRACTITIONER_RESOURCE_NAME, LOCATION_RESOURCE_NAME, ORDER_RESOURCE_NAME,SCHEDULE_RESOURCE_NAME,SLOT_RESOURCE_NAME})));
+        validResourceCombinations = new HashMap<>();
+        validResourceCombinations.put(PATIENT_RESOURCE_NAME, new HashSet<>(Arrays.asList(new String[]{PATIENT_RESOURCE_NAME, APPOINTMENT_RESOURCE_NAME})));
+        validResourceCombinations.put(ORGANIZATION_RESOURCE_NAME, new HashSet<>(Arrays.asList(new String[]{ORGANIZATION_RESOURCE_NAME, PRACTITIONER_RESOURCE_NAME, LOCATION_RESOURCE_NAME, ORDER_RESOURCE_NAME,SCHEDULE_RESOURCE_NAME,SLOT_RESOURCE_NAME})));
     }
 
     @Override
@@ -81,9 +82,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             String identifierSystem = identifierParts[0];
             
             if (!PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS.contains(identifierSystem)) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException("Invalid organization identifier system: " + identifierSystem),
-                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                throwInvalidRequest400_BadRequestException("Invalid organization identifier system: " + identifierSystem);
             }
         }
     }
@@ -116,16 +115,12 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
     private void validateClaim(WebToken webToken, RequestDetails requestDetails) {
 
-        if (requestOperation.isRead(requestDetails) && webToken.isReadRequestedScope() == false) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("The claim requested scope does not match the reqested operation (read)"),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+        if (requestOperation.isRead(requestDetails) && !webToken.isReadRequestedScope()) {
+            throwInvalidRequest400_BadRequestException("The claim requested scope does not match the reqested operation (read)");
         }
 
-        if (requestOperation.isWrite(requestDetails) && webToken.isWriteRequestedScope() == false) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("The claim requested scope does not match the reqested operation (write)"),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+        if (requestOperation.isWrite(requestDetails) && !webToken.isWriteRequestedScope()) {
+            throwInvalidRequest400_BadRequestException("TThe claim requested scope does not match the reqested operation (write)");
         }
     }
 
@@ -137,20 +132,20 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         Set<RestOperationTypeEnum> writeOperations;
 
         private RequestOperation() {
-            customReadOperations = new HashSet<String>();
+            customReadOperations = new HashSet<>();
             customReadOperations.addAll(PatientResourceProvider.getCustomReadOperations());
             customReadOperations.addAll(OrganizationResourceProvider.getCustomReadOperations());
 
-            customWriteOperations = new HashSet<String>();
+            customWriteOperations = new HashSet<>();
             customWriteOperations.addAll(PatientResourceProvider.getCustomWriteOperations());
 
-            readOperations = new HashSet<RestOperationTypeEnum>();
+            readOperations = new HashSet<>();
             readOperations.add(RestOperationTypeEnum.READ);
             readOperations.add(RestOperationTypeEnum.SEARCH_SYSTEM);
             readOperations.add(RestOperationTypeEnum.SEARCH_TYPE);
             readOperations.add(RestOperationTypeEnum.VREAD);
 
-            writeOperations = new HashSet<RestOperationTypeEnum>();
+            writeOperations = new HashSet<>();
             writeOperations.add(RestOperationTypeEnum.CREATE);
             writeOperations.add(RestOperationTypeEnum.DELETE);
             writeOperations.add(RestOperationTypeEnum.PATCH);

@@ -18,7 +18,7 @@ package uk.gov.hscic.common.validators;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
-import static uk.gov.hscic.appointments.AppointmentResourceProvider.throwInvalidResource;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
 
 /**
  * ValidatorChecker (VC)
@@ -48,7 +48,7 @@ public class VC {
      */
     public void execute() {
         if (test.getAsBoolean()) {
-            throwInvalidResource(message.get());
+            throwUnprocessableEntity422_InvalidResourceException(message.get());
         }
     }
     

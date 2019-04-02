@@ -25,6 +25,8 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
 import static uk.gov.hscic.SystemConstants.ACTIVE_ALLERGIES_DISPLAY;
 import static uk.gov.hscic.SystemConstants.ACTIVE_ALLERGIES_TITLE;
+import static uk.gov.hscic.SystemConstants.NO_CONTENT_RECORDED;
+import static uk.gov.hscic.SystemConstants.NO_CONTENT_RECORDED_DISPLAY;
 import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
 import static uk.gov.hscic.SystemConstants.RESOLVED_ALLERGIES_DISPLAY;
 
@@ -59,7 +61,8 @@ public class StructuredAllergyIntoleranceBuilder {
         if (allergyData.size() == 1 &&
                 allergyData.get(0).getClinicalStatus().equals(SystemConstants.NO_KNOWN)) {
 
-            CodeableConcept noKnownAllergies = createCoding(SystemURL.VS_LIST_EMPTY_REASON_CODE, "nil-known", "Nil Known");
+            // #214 had incorrect code and value for no known allergies
+            CodeableConcept noKnownAllergies = createCoding(SystemURL.VS_LIST_EMPTY_REASON_CODE, NO_CONTENT_RECORDED, NO_CONTENT_RECORDED_DISPLAY);
             noKnownAllergies.setText("No Known Allergies");
             active.setEmptyReason(noKnownAllergies);
 

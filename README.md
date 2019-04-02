@@ -1,4 +1,4 @@
-<img src="webapp/app/images/logo.png" height=72>
+<img src="logo.png" height=72>
 
 # GP Connect Demonstrator
 
@@ -172,7 +172,7 @@ The row format of “slots.txt” is:
 * Bookable by Gp Connect
 * Bookable organization id
 * Bookable organization type
-* Delivery Channels (0..1 T|V|P) [ T : Telephone, V : Video, P : In-person ] ) 
+* Delivery Channel (0..1 T|V|P) [ T : Telephone, V : Video, P : In-person ] ) 
 
 
 e.g.:

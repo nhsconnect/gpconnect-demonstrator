@@ -100,21 +100,21 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         // Check there is a Ssp-TraceID header
         if (StringUtils.isBlank(httpRequest.getHeader(SystemHeader.SSP_TRACEID))) {
-            throwInvalidRequestException(SystemHeader.SSP_TRACEID + "header blank");
+            throwInvalidRequest400_InvalidParameterException(SystemHeader.SSP_TRACEID + "header blank");
         }
 
         // Check there is a SSP-From header
         if (StringUtils.isBlank(httpRequest.getHeader(SystemHeader.SSP_FROM))) {
-            throwInvalidRequestException(SystemHeader.SSP_FROM + " header blank");
+            throwInvalidRequest400_InvalidParameterException(SystemHeader.SSP_FROM + " header blank");
         }
 
         // Check the SSP-To header is present and directed to our system
         String toASIDHeader = httpRequest.getHeader(SystemHeader.SSP_TO);
         if (StringUtils.isBlank(toASIDHeader)) {
-            throwInvalidRequestException(SystemHeader.SSP_TO + " header blank");
+            throwInvalidRequest400_InvalidParameterException(SystemHeader.SSP_TO + " header blank");
         } else if (systemSspToHeader != null && !toASIDHeader.equalsIgnoreCase(systemSspToHeader)) {
             // We loaded our ASID but the SSP-To header does not match the value
-            throwBadRequestException(SystemHeader.SSP_TO + " header does not match ASID of system");
+            throwInvalidRequest400_BadRequestException(SystemHeader.SSP_TO + " header does not match ASID of system");
         }
 
         validateInteraction(httpRequest);
@@ -125,7 +125,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private void validateInteraction(HttpServletRequest httpRequest) {
         String interactionIdHeader = httpRequest.getHeader(SystemHeader.SSP_INTERACTIONID);
         if (StringUtils.isBlank(interactionIdHeader)) {
-            throwInvalidRequestException(SystemHeader.SSP_INTERACTIONID + " header blank");
+            throwInvalidRequest400_InvalidParameterException(SystemHeader.SSP_INTERACTIONID + " header blank");
         }
         
         Interaction interaction = interactions.getInteraction(interactionIdHeader);
@@ -140,37 +140,91 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                             httpRequest.getParameterMap().get(SystemParameter.IDENTIFIER));
                 }
             } else {
-                throwBadRequestException(String.format(
+                throwInvalidRequest400_BadRequestException(String.format(
                         "The interaction ID does not match the HTTP request verb (interaction ID - %s HTTP verb - %s)",
                         interactionIdHeader, httpVerb));
             }
         } else {
-            throwBadRequestException(
+            throwInvalidRequest400_BadRequestException(
                     String.format("Unable to locate interaction corresponding to the given interaction ID (%s)",
                             interactionIdHeader));
         }
     }
 
-    private static void throwBadRequestException(String exceptionMessage) {
-        throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(exceptionMessage),
-                SystemCode.BAD_REQUEST, IssueType.INVALID);
+    /**
+     * 400 Invalid Request - Bad Request 
+     * @param exceptionMessage 
+     */
+    public static void throwInvalidRequest400_BadRequestException(String exceptionMessage) {
+        throwInvalidRequest400Exception(SystemCode.BAD_REQUEST, exceptionMessage);
     }
 
-    private static void throwInvalidIdentifierSystemException(String exceptionMessage) {
-        throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(exceptionMessage),
-                SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueType.INVALID);
+    /**
+     * 400 Invalid Request - Invalid Parameter NB Invalid Request
+     * @param exceptionMessage 
+     */
+    public static void throwInvalidRequest400_InvalidParameterException(String exceptionMessage) {
+        throwInvalidRequest400Exception(SystemCode.INVALID_PARAMETER, exceptionMessage);
     }
 
-    private static void throwInvalidRequestException(String exceptionMessage) {
-        throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(exceptionMessage),
-                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+    /**
+     * 400 Invalid Request - Invalid Identifier 
+     * @param exceptionMessage 
+     */
+    private static void throwInvalidRequest400_InvalidIdentifierSystemException(String exceptionMessage) {
+        throwInvalidRequest400Exception(SystemCode.INVALID_IDENTIFIER_SYSTEM, exceptionMessage);
     }
 
-    private static void throwUnprocessableEntityException(String exceptionMessage) {
+    /**
+     * 400 Invalid Request
+     * @param exceptionMessage 
+     */
+    private static void throwInvalidRequest400Exception(String code, String exceptionMessage) {
+        throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(exceptionMessage),
+                code, IssueType.INVALID);
+    }
+    
+
+    /**
+     * 422 Unprocessable Entity InvalidParameter
+     * @param exceptionMessage 
+     */
+    public static void throwUnprocessableEntityInvalid422_ParameterException(String exceptionMessage) {
+        throwUnprocessableEntity422Exception(SystemCode.INVALID_PARAMETER,exceptionMessage);
+    }
+    
+    /**
+     * 422 Bad Request
+     * @param message
+     */
+    public static void throwUnprocessableEntity422_BadRequestException(String exceptionMessage) {
+        throwUnprocessableEntity422Exception(SystemCode.BAD_REQUEST,exceptionMessage);
+    }
+
+    /**
+     * 422 Invalid Resource
+     *
+     * @param message
+     */
+    public static void throwUnprocessableEntity422_InvalidResourceException(String exceptionMessage) {
+        throwUnprocessableEntity422Exception(SystemCode.INVALID_RESOURCE,exceptionMessage);
+    }
+    
+
+    /**
+     * 422 Unprocessable Entity
+     * @param exceptionMessage 
+     */
+    private static void throwUnprocessableEntity422Exception(String code, String exceptionMessage) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(exceptionMessage),
-                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                code, IssueType.INVALID);
     }
 
+    /**
+     * 404 Resource Not Found
+     * @param exceptionMessage
+     * @param resource String name of resource type
+     */
     private static void throwResourceNotFoundException(String exceptionMessage, String resource) {
         String systemCode = null;
 
@@ -338,7 +392,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         Resource interactionResource = Resource.resolveFromName(interaction.getResource());
 
         if (interactionResource == null) {
-            throwBadRequestException(
+            throwInvalidRequest400_BadRequestException(
                     String.format("Interaction containts invalid resource (%s)", interaction.getResource()));
         }
         if (requestResource == null) {
@@ -347,7 +401,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                     requestURI);
         }
         if (interactionResource != requestResource) {
-            throwBadRequestException(String.format(
+            throwInvalidRequest400_BadRequestException(String.format(
                     "Resource in request does not match resource in interaction (request - %s interaction - %s)",
                     requestResource, interactionResource));
         }
@@ -357,16 +411,16 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         if (requestOperation != null) {
             if (interactionOperation != null) {
                 if (requestOperation != interactionOperation) {
-                    throwBadRequestException(String.format(
+                    throwInvalidRequest400_BadRequestException(String.format(
                             "Operation in request does not match operation in interaction (request - %s interaction - %s)",
                             requestOperation, interactionOperation));
                 }
             } else {
-                throwBadRequestException(String.format(
+                throwInvalidRequest400_BadRequestException(String.format(
                         "Request defines an operation but the interaction does not (request - %s)", requestOperation));
             }
         } else if (interactionOperation != null) {
-            throwBadRequestException(
+            throwInvalidRequest400_BadRequestException(
                     String.format("Interaction defines an operation but the request does not (interaction - %s)",
                             interactionOperation));
         }
@@ -381,7 +435,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         }
 
         if (interaction.validateContainedResource(requestURI) == false) {
-            throwBadRequestException(String.format("Unexpected contained resource in URI - %s", requestURI));
+            throwInvalidRequest400_BadRequestException(String.format("Unexpected contained resource in URI - %s", requestURI));
         }
 
         // if(interaction.validateOperation(requestURI) == false) {
@@ -398,11 +452,11 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private void validateIdentifierSystemAgainstInteraction(Interaction interaction, String[] identifiers) {
 
         if (null == identifiers) {
-            throwBadRequestException("No identifier parameter found!");
+            throwInvalidRequest400_BadRequestException("No identifier parameter found!");
         }
 
         if (1 != identifiers.length) {
-            throwBadRequestException("Invalid quantity of identifier parameter found: " + identifiers.length);
+            throwInvalidRequest400_BadRequestException("Invalid quantity of identifier parameter found: " + identifiers.length);
         }
 
         String[] identifierParts = identifiers[0].split("\\|");
@@ -413,16 +467,16 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
             if (StringUtils.isNotBlank(identifierSystem) && StringUtils.isNotBlank(identifierValue)) {
                 if (interaction.validateIdentifierSystem(identifierSystem) == false) {
-                    throwInvalidIdentifierSystemException(
+                    throwInvalidRequest400_InvalidIdentifierSystemException(
                             String.format("The given identifier system code (%s) is not an expected code - %s",
                                     identifierSystem, interaction.getIdentifierSystems().toString()));
                 }
             } else {
-                throwUnprocessableEntityException(String.format("The identifier is invalid. System - %s Value - %s",
+                throwUnprocessableEntityInvalid422_ParameterException(String.format("The identifier is invalid. System - %s Value - %s",
                         identifierSystem, identifierValue));
             }
         } else {
-            throwUnprocessableEntityException(
+            throwUnprocessableEntityInvalid422_ParameterException(
                     "One or both of the identifier system and value are missing from given identifier : "
                     + identifiers[0]);
         }
@@ -530,7 +584,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                 // non greedy wildcard so only match to the first occurrence
                 resource = requestUri.replaceFirst("^.*?/fhir/", "").replaceFirst("/.*$", "");
             } else {
-                throwBadRequestException("Cannot extract resource name from Uri " + requestUri);
+                throwInvalidRequest400_BadRequestException("Cannot extract resource name from Uri " + requestUri);
             }
 
             return resource;

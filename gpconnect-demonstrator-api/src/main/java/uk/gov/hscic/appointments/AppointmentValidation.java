@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import uk.gov.hscic.SystemURL;
-import static uk.gov.hscic.appointments.AppointmentResourceProvider.throwInvalidResource;
 import uk.gov.hscic.common.validators.VC;
 import uk.gov.hscic.location.LocationSearch;
 import uk.gov.hscic.model.location.LocationDetails;
@@ -30,6 +29,7 @@ import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.model.practitioner.PractitionerDetails;
 import uk.gov.hscic.patient.details.PatientSearch;
 import uk.gov.hscic.practitioner.PractitionerSearch;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
 
 @Component
 public class AppointmentValidation {
@@ -86,7 +86,7 @@ public class AppointmentValidation {
         extensionURLs.remove(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE);
 
         if (!extensionURLs.isEmpty()) {
-            throwInvalidResource("Invalid/multiple appointment extensions found. The following are in excess or invalid: "
+            throwUnprocessableEntity422_InvalidResourceException("Invalid/multiple appointment extensions found. The following are in excess or invalid: "
                     + extensionURLs.stream().collect(Collectors.joining(", ")));
         }
 
@@ -103,7 +103,7 @@ public class AppointmentValidation {
         }
 
         if (!invalidCodes.isEmpty()) {
-            throwInvalidResource("Invalid appointment extension codes: "
+            throwUnprocessableEntity422_InvalidResourceException("Invalid appointment extension codes: "
                     + invalidCodes.stream().collect(Collectors.joining(", ")));
         }
     }
@@ -121,7 +121,7 @@ public class AppointmentValidation {
         }
 
         if (!validStatus) {
-            throwInvalidResource(String.format("Appointment Participant %s Status %s", enumeration2, participantStatusErr));
+            throwUnprocessableEntity422_InvalidResourceException(String.format("Appointment Participant %s Status %s", enumeration2, participantStatusErr));
         }
     }
 
@@ -143,7 +143,7 @@ public class AppointmentValidation {
             isValid = true;
 
             if (!isValid) {
-                throwInvalidResource(MessageFormat.format(
+                throwUnprocessableEntity422_InvalidResourceException(MessageFormat.format(
                         "Invalid Participant Type Code. Code: {0} [Display: {1}, System:{2}]",
                         code.getCode(), code.getDisplay(), code.getSystem()));
             }
@@ -181,7 +181,7 @@ public class AppointmentValidation {
         }
 
         if (participantFailedSearch) {
-            throwInvalidResource(String.format("%s resource reference %s is not a valid resource", resourcePart, idPart));
+            throwUnprocessableEntity422_InvalidResourceException(String.format("%s resource reference %s is not a valid resource", resourcePart, idPart));
         }
 
     }

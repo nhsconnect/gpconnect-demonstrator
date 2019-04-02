@@ -1,6 +1,6 @@
 {
   "resourceType": "CapabilityStatement",
-  "version": "1.2.2",
+  "version": "This gets set from the java",
   "name": "GP Connect",
   "status": "active",
   "date": "2018-02-23",
@@ -10,7 +10,7 @@
       "name": "NHS Digital"
     }
   ],
-  "description": "This server implements the GP Connect API version 1.2.2",
+  "description": "This server implements the GP Connect API version This gets set from the java",
   "copyright": "Copyright NHS Digital 2016",
   "kind": "capability",
 	"software": {
@@ -145,6 +145,7 @@
           "searchInclude": [
             "Schedule:actor:Location",
             "Schedule:actor:Practitioner",
+            "Location:managingOrganization",
             "Slot:schedule"
           ],
           "searchParam": [

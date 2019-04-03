@@ -637,12 +637,14 @@ public class PageSectionFactory {
                     observationEntity.getObservationDate(),
                     observationEntity.getEntry(),
                     observationEntity.getValue(),
-                    observationEntity.getValue()));
+                    observationEntity.getRange(),
+                    // NB at 0.5 this was a repeat of getValue cut and paste error?
+                    observationEntity.getDetails()));
         }
 
         return new PageSection("Observations",
                 "obs-tab",
-                new Table(Arrays.asList("Date", "Entry", "Value", "Details"), observationRows),
+                new Table(Arrays.asList("Date", "Entry", "Value", "Range", "Details"), observationRows),
                 requestedFromDate, requestedToDate);
     }
 

@@ -277,6 +277,7 @@ CREATE TABLE observations (
   observationDate DATETIME NULL,
   entry           VARCHAR(100) NULL,
   value           VARCHAR(100) NULL,
+  theRange           VARCHAR(100) NULL,
   details         VARCHAR(100) NULL,
   PRIMARY KEY (id)
 );

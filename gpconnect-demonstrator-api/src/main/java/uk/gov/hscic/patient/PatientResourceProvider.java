@@ -162,20 +162,11 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 PatientSummary patientSummary = patientSearch.findPatientSummary(nhsNumber);
 
-                if (null == patientSummary || VERSION.getMinor() >= 7 && patientSummary.isSensitive()) {
+                if (null == patientSummary || patientSummary.isSensitive()) {
                     throw new ResourceNotFoundException("No patient details found for patient ID: " + nhsNumber,
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
                                     OperationConstants.CODE_PATIENT_NOT_FOUND, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
-                }
-
-                if (VERSION.getMinor() <= 5) {
-                    if (patientSummary.isSensitive()) {
-                        throw new ForbiddenOperationException("No patient consent", OperationOutcomeFactory.buildOperationOutcome(
-                                OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_NO_PATIENT_CONSENT,
-                                OperationConstants.COD_CONCEPT_RECORD_PATIENT_DATA_CONFIDENTIAL,
-                                OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.FORBIDDEN));
-                    }
                 }
 
             } else if (value instanceof CodeableConceptDt) {

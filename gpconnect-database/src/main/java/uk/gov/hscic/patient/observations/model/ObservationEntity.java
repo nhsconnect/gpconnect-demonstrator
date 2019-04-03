@@ -16,6 +16,7 @@ public class ObservationEntity {
     private String nhsNumber;
 
     @Column(name = "observationDate")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date observationDate;
 
     @Column(name = "entry")
@@ -23,6 +24,10 @@ public class ObservationEntity {
 
     @Column(name = "value")
     private String value;
+
+    // added at 0.7.1 NB reserved word..
+    @Column(name = "theRange")
+    private String range;
 
     @Column(name = "details")
     private String details;
@@ -73,5 +78,19 @@ public class ObservationEntity {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    /**
+     * @return the range
+     */
+    public String getRange() {
+        return range;
+    }
+
+    /**
+     * @param range the range to set
+     */
+    public void setRange(String range) {
+        this.range = range;
     }
 }

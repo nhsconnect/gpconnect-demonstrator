@@ -101,6 +101,9 @@ public class FhirRestfulServlet extends RestfulServer {
         registerInterceptor(applicationContext.getBean(FhirRequestGenericIntercepter.class));
         registerInterceptor(applicationContext.getBean(PatientJwtValidator.class));
         
+        // #215 don't populate Bundle.entry.fullurl
+        registerInterceptor(new PostProcessor());
+        
         GpConnectServerCapabilityStatementProvider capStatementProvider = new GpConnectServerCapabilityStatementProvider(this);
         super.setServerConformanceProvider(capStatementProvider);
     }

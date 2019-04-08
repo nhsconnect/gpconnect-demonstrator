@@ -1,5 +1,6 @@
 package uk.gov.hscic.appointments;
 
+import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.*;
@@ -12,6 +13,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Appointment.AppointmentParticipantComponent;
 import org.hl7.fhir.dstu3.model.Appointment.AppointmentStatus;
@@ -62,6 +64,9 @@ import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnp
 
 @Component
 public class AppointmentResourceProvider implements IResourceProvider {
+
+    // Z format does not include a colon ie it is +0000 not +00:00
+    private static final SimpleDateFormat TIMESTAMP_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ");
 
     private enum AppointmentOperation {
         BOOK,
@@ -243,7 +248,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         // #203 validations
         // Uses VC class and lamda functions for brevity and to avoid masses of duplicated code
         // first lamda takes no params and returns a Boolean representing the fail condition ie true for fail
-        // first lamda takes no params and returns a String describing the error condition
+        // second lamda takes no params and returns a String describing the error condition
         // VC.execute evaluates the first lamda and if true theows an InvalidResource exception containg the string from the second lambda
         VC.execute(new VC[]{
             new VC(() -> profiles.isEmpty(), () -> "Meta element must be present in Appointment"),
@@ -381,14 +386,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         // #203 check location id matches the one in the schedule
         if (locationId != null && !locationId.equals(schedule.getLocationId().toString())) {
-            throwUnprocessableEntity422_InvalidResourceException(String.format("Provided location id (%s) is not equal to Schedule location id (%s)", 
+            throwUnprocessableEntity422_InvalidResourceException(String.format("Provided location id (%s) is not equal to Schedule location id (%s)",
                     locationId, schedule.getLocationId().toString()));
         }
 
         // #203 check practitioner id matches the one in the schedule if there is one
         if (practitionerId != null) {
             if (!practitionerId.equals(schedule.getPractitionerId().toString())) {
-                throwUnprocessableEntity422_InvalidResourceException(String.format("Provided practitioner id (%s) is not equal to Schedule practitioner id (%s)", 
+                throwUnprocessableEntity422_InvalidResourceException(String.format("Provided practitioner id (%s) is not equal to Schedule practitioner id (%s)",
                         practitionerId, schedule.getPractitionerId().toString()));
             }
         }
@@ -396,12 +401,23 @@ public class AppointmentResourceProvider implements IResourceProvider {
         Date firstSlotStart = slots.get(0).getStartDateTime();
         Date lastSlotEnd = slots.get(slots.size() - 1).getEndDateTime();
 
+        // need to insert a colon in the timezone string
+        String firstSlotStartStr = TIMESTAMP_FORMAT.format(firstSlotStart).replaceFirst("([0-9]{2})([0-9]{2})$", "$1:$2");
+        String lastSlotEndStr = TIMESTAMP_FORMAT.format(lastSlotEnd).replaceFirst("([0-9]{2})([0-9]{2})$", "$1:$2");
+
         VC.execute(new VC[]{
-            new VC(() -> appointment.getStart().compareTo(firstSlotStart) != 0, 
-                    () -> String.format("Start date '%s' must match start date of first slot '%s'", appointment.getStart(), firstSlotStart)),
-            new VC(() -> appointment.getEnd().compareTo(lastSlotEnd) != 0, 
-                    () -> String.format("End date '%s' must match end date of last slot '%s'", appointment.getEnd(), lastSlotEnd)),
-            new VC(() -> appointment.getSlot().isEmpty(), () -> "Slot reference must be populated"),}
+            new VC(() -> appointment.getStart().compareTo(firstSlotStart) != 0,
+            () -> String.format("Start date '%s' must match start date of first slot '%s'", appointment.getStart(), firstSlotStart)),
+            new VC(() -> appointment.getEnd().compareTo(lastSlotEnd) != 0,
+            () -> String.format("End date '%s' must match end date of last slot '%s'", appointment.getEnd(), lastSlotEnd)),
+            // #218 strings should match exactly
+            new VC(() -> !appointment.getStartElement().getValueAsString().equals(firstSlotStartStr),
+            () -> String.format("Start date '%s' must lexically match start date of first slot '%s'", appointment.getStartElement().getValueAsString(), firstSlotStartStr)),
+            new VC(() -> !appointment.getEndElement().getValueAsString().equals(lastSlotEndStr),
+            () -> String.format("End date '%s' must lexically match end date of last slot '%s'", appointment.getEndElement().getValueAsString(), lastSlotEndStr)),
+            // This probably can never happen under fhir
+            new VC(() -> appointment.getSlot().isEmpty(), () -> "Slot reference must be populated")
+        }
         );
 
         int durationFromSlots = (int) (lastSlotEnd.getTime() - firstSlotStart.getTime()) / (1000 * 60);
@@ -455,7 +471,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     try {
                         final CodeableConcept codeableConcept = (CodeableConcept) extension.getValue();
                         VC.execute(new VC[]{
-                            new VC(() -> codeableConcept.getCodingFirstRep().getDisplay()!= null && !Objects.equals(codeableConcept.getCodingFirstRep().getDisplay(), fPractitionerRoleDisplay), ()
+                            new VC(() -> codeableConcept.getCodingFirstRep().getDisplay() != null && !Objects.equals(codeableConcept.getCodingFirstRep().getDisplay(), fPractitionerRoleDisplay), ()
                             -> String.format("Practitioner role display provided (%s) doesn't match schedule value (%s)",
                             codeableConcept.getCodingFirstRep().getDisplay(), fPractitionerRoleDisplay)),
                             new VC(() -> codeableConcept.getCodingFirstRep().getCode() != null && !Objects.equals(codeableConcept.getCodingFirstRep().getCode(), fPractitionerRoleCode), ()
@@ -471,7 +487,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     // #203 if present value must match slot value
                     try {
                         final CodeType codeType = (CodeType) extension.getValue();
-                        new VC(() -> !Objects.equals(codeType.getValue(),fDeliveryChannel), ()
+                        new VC(() -> !Objects.equals(codeType.getValue(), fDeliveryChannel), ()
                                 -> String.format("Delivery Channel provided (%s) doesn't match slot value (%s)",
                                         codeType.getValue(), fDeliveryChannel)).execute();
                     } catch (ClassCastException ex) {
@@ -712,13 +728,23 @@ public class AppointmentResourceProvider implements IResourceProvider {
         Date firstSlotStart = slots.get(0).getStartDateTime();
         Date lastSlotEnd = slots.get(slots.size() - 1).getEndDateTime();
 
+        // need to insert a colon in the timezone string
+        String firstSlotStartStr = TIMESTAMP_FORMAT.format(firstSlotStart).replaceFirst("([0-9]{2})([0-9]{2})$", "$1:$2");
+        String lastSlotEndStr = TIMESTAMP_FORMAT.format(lastSlotEnd).replaceFirst("([0-9]{2})([0-9]{2})$", "$1:$2");
+
         VC.execute(new VC[]{
-            new VC(() -> appointment.getStart().compareTo(firstSlotStart) != 0, 
-                    () -> String.format("Start date '%s' must match start date of first slot '%s'", appointment.getStart(), firstSlotStart)),
-            new VC(() -> appointment.getEnd().compareTo(lastSlotEnd) != 0, 
-                    () -> String.format("End date '%s' must match end date of last slot '%s'", appointment.getEnd(), lastSlotEnd)),
-            new VC(() -> appointment.getSlot().size() != slots.size(), 
-                    () -> String.format("Slot count mismatch %d provided appointment has %d", appointment.getSlot().size(), slots.size())),});
+            new VC(() -> appointment.getStart().compareTo(firstSlotStart) != 0,
+            () -> String.format("Start date '%s' must match start date of first slot '%s'", appointment.getStart(), firstSlotStart)),
+            new VC(() -> appointment.getEnd().compareTo(lastSlotEnd) != 0,
+            () -> String.format("End date '%s' must match end date of last slot '%s'", appointment.getEnd(), lastSlotEnd)),
+            // #218 strings should match exactly
+            new VC(() -> !appointment.getStartElement().getValueAsString().equals(firstSlotStartStr),
+            () -> String.format("Start date '%s' must lexically match start date of first slot '%s'", appointment.getStartElement().getValueAsString(), firstSlotStartStr)),
+            new VC(() -> !appointment.getEndElement().getValueAsString().equals(lastSlotEndStr),
+            () -> String.format("End date '%s' must lexically match end date of last slot '%s'", appointment.getEndElement().getValueAsString(), lastSlotEndStr)),
+
+            new VC(() -> appointment.getSlot().size() != slots.size(),
+            () -> String.format("Slot count mismatch %d provided appointment has %d", appointment.getSlot().size(), slots.size())),});
 
         // check the slots match
         HashSet<String> hs = new HashSet<>();
@@ -816,11 +842,11 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 results.put("endDateTime", Objects.equals(oldAppointmentDetail.getEndDateTime(), appointmentDetail.getEndDateTime()));
                 break;
             case CANCEL:
-                if (appointmentDetail.getComment()!= null) {
+                if (appointmentDetail.getComment() != null) {
                     results.put("comment", Objects.equals(oldAppointmentDetail.getComment(), appointmentDetail.getComment()));
                 }
-                if ( appointmentDetail.getDescription() != null ) {
-                    results.put("description",  Objects.equals(oldAppointmentDetail.getDescription(), appointmentDetail.getDescription()));
+                if (appointmentDetail.getDescription() != null) {
+                    results.put("description", Objects.equals(oldAppointmentDetail.getDescription(), appointmentDetail.getDescription()));
                 }
                 break;
             default:
@@ -864,10 +890,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
             // One of the booking orgs is null so both should be null
             if (bookingOrg1 != null && bookingOrg2 == null) {
                 results.put("original is not null, provided is null", false);
-            } else {
-                if (bookingOrg1 == null && bookingOrg2 != null) {
-                    results.put("original is null, provided is not null ", false);
-                }
+            } else if (bookingOrg1 == null && bookingOrg2 != null) {
+                results.put("original is null, provided is not null ", false);
             };
         }
 
@@ -962,6 +986,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         appointment.setStart(appointmentDetail.getStartDateTime());
         appointment.setEnd(appointmentDetail.getEndDateTime());
+        // #218 Date time formats
+        appointment.getStartElement().setPrecision(TemporalPrecisionEnum.SECOND);
+        appointment.getEndElement().setPrecision(TemporalPrecisionEnum.SECOND);
 
         List<Reference> slotResources = new ArrayList<>();
 

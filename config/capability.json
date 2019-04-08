@@ -145,8 +145,8 @@
           "searchInclude": [
             "Schedule:actor:Location",
             "Schedule:actor:Practitioner",
-            "Location:managingOrganization",
-            "Slot:schedule"
+            "Slot:schedule",
+            "Location:managingOrganization"
           ],
           "searchParam": [
             {

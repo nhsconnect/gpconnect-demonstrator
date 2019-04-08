@@ -34,6 +34,7 @@ import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import java.util.TimeZone;
 import org.hl7.fhir.dstu3.model.CodeType;
 import org.hl7.fhir.dstu3.model.Extension;
 import uk.gov.hscic.SystemURL;
@@ -46,6 +47,8 @@ import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnp
 
 @Component
 public class SlotResourceProvider implements IResourceProvider {
+
+    private static final String DATE_OFFSET_REGEXP = "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(.+)$";
 
     @Autowired
     private SlotSearch slotSearch;
@@ -237,6 +240,9 @@ public class SlotResourceProvider implements IResourceProvider {
         slot.setSchedule(new Reference("Schedule/" + slotDetail.getScheduleReference()));
         slot.setStart(slotDetail.getStartDateTime());
         slot.setEnd(slotDetail.getEndDateTime());
+        // #218 Date time formats
+        slot.getStartElement().setPrecision(TemporalPrecisionEnum.SECOND);
+        slot.getEndElement().setPrecision(TemporalPrecisionEnum.SECOND);
 
         switch (slotDetail.getFreeBusyType().toLowerCase(Locale.UK)) {
             case "free":
@@ -263,13 +269,19 @@ public class SlotResourceProvider implements IResourceProvider {
         Pattern dateTimePattern = Pattern.compile(SystemVariable.DATE_TIME_REGEX);
         Pattern dateOnlyPattern = Pattern.compile(SystemVariable.DATE_REGEX);
 
+        String startString = startDate.getValueAsString();
+        String endString = endDate.getValueAsString();
+
+        validateOffset("start", startDate);
+        validateOffset("end", endDate);
+
         //If the time is included then match against the date/time regex
-        if ((startDate.getPrecision().getCalendarConstant() > TemporalPrecisionEnum.DAY.getCalendarConstant() && !dateTimePattern.matcher(startDate.getValueAsString()).matches())
-                || (endDate.getPrecision().getCalendarConstant() > TemporalPrecisionEnum.DAY.getCalendarConstant() && !dateTimePattern.matcher(endDate.getValueAsString()).matches())) {
+        if ((startDate.getPrecision().getCalendarConstant() > TemporalPrecisionEnum.DAY.getCalendarConstant() && !dateTimePattern.matcher(startString).matches())
+                || (endDate.getPrecision().getCalendarConstant() > TemporalPrecisionEnum.DAY.getCalendarConstant() && !dateTimePattern.matcher(endString).matches())) {
             throwUnprocessableEntityInvalid422_ParameterException("Invalid date/time used");
         } //if only a date then match against the date regex
-        else if ((startDate.getPrecision().getCalendarConstant() <= TemporalPrecisionEnum.DAY.getCalendarConstant() && !dateOnlyPattern.matcher(startDate.getValueAsString()).matches())
-                || (endDate.getPrecision().getCalendarConstant() <= TemporalPrecisionEnum.DAY.getCalendarConstant() && !dateOnlyPattern.matcher(endDate.getValueAsString()).matches())) {
+        else if ((startDate.getPrecision().getCalendarConstant() <= TemporalPrecisionEnum.DAY.getCalendarConstant() && !dateOnlyPattern.matcher(startString).matches())
+                || (endDate.getPrecision().getCalendarConstant() <= TemporalPrecisionEnum.DAY.getCalendarConstant() && !dateOnlyPattern.matcher(endString).matches())) {
             throwUnprocessableEntityInvalid422_ParameterException("Invalid date used");
         }
 
@@ -293,4 +305,27 @@ public class SlotResourceProvider implements IResourceProvider {
         }
     }
 
+    /**
+     * #218 validating timezone offsets
+     * @param type String descriptor
+     * @param date DateParam 
+     */
+    private void validateOffset(String type, DateParam date) {
+        String dateStr = date.getValueAsString();
+        if (dateStr.matches(DATE_OFFSET_REGEXP)) {
+            String offset = dateStr.replaceFirst(DATE_OFFSET_REGEXP, "$1");
+            if (!offset.matches("^\\+0[01]:00$")) {
+                throwUnprocessableEntityInvalid422_ParameterException("Invalid " + type + " date offset (" + offset + ")");
+            }
+            if (TimeZone.getDefault().inDaylightTime(date.getValue())) {
+                if (!offset.equals("+01:00")) {
+                    throwUnprocessableEntityInvalid422_ParameterException("Invalid " + type + " date offset for BST (" + offset + ")");
+                }
+            } else {
+                if (!offset.equals("+00:00")) {
+                    throwUnprocessableEntityInvalid422_ParameterException("Invalid " + type + " date offset for GMT (" + offset + ")");
+                }
+            }
+        }
+    }
 }

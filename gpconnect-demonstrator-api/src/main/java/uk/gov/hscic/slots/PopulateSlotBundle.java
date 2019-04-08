@@ -88,7 +88,7 @@ public class PopulateSlotBundle {
      * @param planningHorizonEnd Date
      * @param actorPractitioner boolean
      * @param actorLocation boolean
-     * @param managingOrganisation
+     * @param managingOrganisation boolean
      * @param bookingOdsCode String
      * @param bookingOrgType String eg "urgent-care"
      */
@@ -201,8 +201,7 @@ public class PopulateSlotBundle {
                 }
 
                 // added at 1.2.2 add the organisation but only if there are some slots available
-                // #216 added at 1.2.3 only supply org if requested
-                if (managingOrganisation && slots.size() > 0 && ourOrganizationDetails != null && !addedOrganization.contains(ourOrganizationDetails.getOrgCode())) {
+                if (slots.size() > 0 && ourOrganizationDetails != null && !addedOrganization.contains(ourOrganizationDetails.getOrgCode())) {
                     addOrganisation(ourOrganizationDetails, bundle);
                     addedOrganization.add(ourOrganizationDetails.getOrgCode());
                 }

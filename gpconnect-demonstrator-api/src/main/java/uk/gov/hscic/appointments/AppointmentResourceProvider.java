@@ -66,7 +66,7 @@ import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnp
 public class AppointmentResourceProvider implements IResourceProvider {
 
     // Z format does not include a colon ie it is +0000 not +00:00
-    private static final SimpleDateFormat TIMESTAMP_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ");
+    private static final SimpleDateFormat TIMESTAMP_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
     private enum AppointmentOperation {
         BOOK,

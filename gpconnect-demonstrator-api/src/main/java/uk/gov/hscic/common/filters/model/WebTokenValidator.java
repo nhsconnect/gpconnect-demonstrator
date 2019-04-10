@@ -61,15 +61,22 @@ public class WebTokenValidator {
     private static void verifyTimeValues(WebToken webToken, int futureRequestLeeway) {
         // Checking the creation date is not in the future
         int timeValidationIdentifierInt = webToken.getIat();
+        int timeValidationIdentifierExp = webToken.getExp();
+        long epoch = System.currentTimeMillis() / 1000;
 
         // Checking creation time is not in the future (with a 5 second leeway
-        if (timeValidationIdentifierInt > (System.currentTimeMillis() / 1000) + futureRequestLeeway) {
+        if (timeValidationIdentifierInt > epoch + futureRequestLeeway) {
             throwInvalidRequest400_BadRequestException("JWT Creation time is in the future");
         }
 
         // Checking the expiry time is 5 minutes after creation
-        if (webToken.getExp() - timeValidationIdentifierInt != 300) {
-            throwInvalidRequest400_BadRequestException("JWT Request time expired");
+        if ((timeValidationIdentifierExp - timeValidationIdentifierInt) != 300 ) {
+            throwInvalidRequest400_BadRequestException("JWT expiry time is not 5 minutes after the creation time");
+        }
+
+        // Checking the expiry time is not in the past
+        if (timeValidationIdentifierExp < epoch ) {
+            throwInvalidRequest400_BadRequestException("JWT Request time has expired");
         }
     }
 

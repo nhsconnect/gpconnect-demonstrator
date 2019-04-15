@@ -1061,11 +1061,12 @@ public class PatientResourceProvider implements IResourceProvider {
         Long gpId = patientDetails.getGpId();
         if (gpId != null) {
             Practitioner prac = practitionerResourceProvider.getPractitionerById(new IdType(gpId));
-            HumanName practitionerName = prac.getNameFirstRep();
+//          HumanName practitionerName = prac.getNameFirstRep();
 
-            Reference practitionerReference = new Reference("Practitioner/" + gpId)
-                    .setDisplay(practitionerName.getPrefix().get(0) + " " + practitionerName.getGivenAsSingleString() + " "
-                            + practitionerName.getFamily());
+            Reference practitionerReference = new Reference("Practitioner/" + gpId);
+            // #243 remove display from reference elements
+//                    .setDisplay(practitionerName.getPrefix().get(0) + " " + practitionerName.getGivenAsSingleString() + " "
+//                            + practitionerName.getFamily());
             List<Reference> ref = new ArrayList<>();
             ref.add(practitionerReference);
             patient.setGeneralPractitioner(ref);

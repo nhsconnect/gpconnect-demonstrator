@@ -2,6 +2,8 @@ package uk.gov.hscic.common.filters.model;
 
 import java.util.Arrays;
 import java.util.List;
+import static uk.gov.hscic.SystemURL.ID_ODS_ORGANIZATION_CODE;
+import static uk.gov.hscic.SystemURL.ID_SDS_USER_ID;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_BadRequestException;
 
@@ -46,10 +48,30 @@ public class WebTokenValidator {
         assertNotNull("requested_scope", webToken.getRequestedScope());
         assertNotNull("requesting_device", webToken.getRequestingDevice());
         assertNotNull("requesting_device.resourceType", webToken.getRequestingDevice().getResourceType());
+
+        // #209
+        assertNotNull("requesting_device.identifier", webToken.getRequestingDevice().getIdentifiers());
+        assertNotNull("requesting_device.identifier.system", webToken.getRequestingDevice().getIdentifiers().get(0).getSystem());
+        assertNotNull("requesting_device.identifier.value", webToken.getRequestingDevice().getIdentifiers().get(0).getValue());
+        assertNotNull("requesting_device.identifier.model", webToken.getRequestingDevice().getModel());
+        assertNotNull("requesting_device.identifier.version", webToken.getRequestingDevice().getVersion());
+
         assertNotNull("requesting_organization", webToken.getRequestingOrganization());
+
+        // #209
+        assertNotNull("requesting_organization.name", webToken.getRequestingOrganization().getName());
+        assertNotNull("requesting_organization.identifier (ODS)", webToken.getRequestingOrganization().getIdentifierValue(ID_ODS_ORGANIZATION_CODE));
+        
         assertNotNull("requesting_organization.resourceType", webToken.getRequestingOrganization().getResourceType());
         assertNotNull("requesting_practitioner", webToken.getRequestingPractitioner());
         assertNotNull("requesting_practitioner.resourceType", webToken.getRequestingPractitioner().getResourceType());
+
+        // #209
+        assertNotNull("requesting_practitioner.id", webToken.getRequestingPractitioner().getId());
+        assertNotNull("requesting_practitioner.name", webToken.getRequestingPractitioner().getName());
+        assertNotNull("requesting_practitioner.name.family", webToken.getRequestingPractitioner().getName().get(0).getFamily());
+        assertNotNull("requesting_practitioner.name.given", webToken.getRequestingPractitioner().getName().get(0).getGiven().get(0));
+        assertNotNull("requesting_practitioner.identifier (SDS)", webToken.getRequestingPractitioner().getIdentifierValue(ID_SDS_USER_ID));
     }
 
     private static void assertNotNull(String claim, Object object) {
@@ -74,7 +96,7 @@ public class WebTokenValidator {
             throwInvalidRequest400_BadRequestException("JWT expiry time is not 5 minutes after the creation time");
         }
 
-        // Checking the expiry time is not in the past
+        // #238 Checking the expiry time is not in the past
         if (timeValidationIdentifierExp < epoch ) {
             throwInvalidRequest400_BadRequestException("JWT Request time has expired");
         }
@@ -96,9 +118,14 @@ public class WebTokenValidator {
         String organizationType = webToken.getRequestingOrganization().getResourceType();
         String practitionerType = webToken.getRequestingPractitioner().getResourceType();
 
-        if (!deviceType.equals("Device") || !organizationType.equals("Organization") || !practitionerType.equals("Practitioner")) {
-            // TODO NB This is UnprocessableEntity is that correct?
-            throwUnprocessableEntity422_BadRequestException("JWT Invalid resource type");
+        if (!"Device".equals(deviceType)) {
+            throwInvalidRequest400_BadRequestException("JWT Invalid requestingDevice resource type \""+deviceType+"\"");
+        }
+        if (!"Organization".equals(organizationType)) {
+            throwInvalidRequest400_BadRequestException("JWT Invalid requestingOrganization resource type \""+organizationType+"\"");
+        }
+        if (!"Practitioner".equals(practitionerType)) {
+            throwInvalidRequest400_BadRequestException("JWT Invalid requestingPractitioner resource type \""+practitionerType+"\"");
         }
     }
 }

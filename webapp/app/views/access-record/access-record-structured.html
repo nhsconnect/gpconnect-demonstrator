@@ -63,8 +63,8 @@
                 <td>{{currentElement.medication.code.coding[0].display == "Transfer-degraded medication entry" ? 
                     currentElement.medication.code.text : currentElement.medication.code.coding[0].display}}
                 </td>
-                <td>{{currentElement.statement.effectivePeriod.start.split('T')[0]}}</td>
-                <td>{{currentElement.statement.effectivePeriod.end.split('T')[0]}}</td>
+                <td>{{currentElement.statement.effectivePeriod.start.split('T')[0] | date:'dd-MMM-yyyy'}}</td>
+                <td>{{currentElement.statement.effectivePeriod.end.split('T')[0] | date:'dd-MMM-yyyy'}}</td>
                 <td>{{currentElement.statement.status}}</td>
             </tr>
             </tbody>
@@ -114,7 +114,7 @@
             <tr ng-repeat="allergyDetail in ActiveAllergiesList" ng-click="showAllergyForm(allergyDetail)">
                 <td>{{allergyDetail.code.coding[0].display}}</td>
                 <td>{{allergyDetail.reaction[0].manifestation[0].coding[0].display}}</td>
-                <td>{{allergyDetail.onsetDateTime.split('T')[0]}}</td>
+                <td>{{allergyDetail.onsetDateTime.split('T')[0] | date:'dd-MMM-yyyy'}}</td>
             </tr>
             </tbody>
         </table>
@@ -134,8 +134,8 @@
                 <tr ng-repeat="allergyDetail in ResolvedAllergiesList" ng-click="showAllergyForm(allergyDetail)">
                     <td>{{allergyDetail.code.coding[0].display}}</td>
                     <td>{{allergyDetail.reaction[0].manifestation[0].coding[0].display}}</td>
-                    <td>{{allergyDetail.onsetDateTime.split('T')[0]}}</td>
-                    <td>{{allergyDetail.extension[0].extension[0].valueDateTime.split('T')[0]}}</td>
+                    <td>{{allergyDetail.onsetDateTime.split('T')[0] | date:'dd-MMM-yyyy'}}</td>
+                    <td>{{allergyDetail.extension[0].extension[0].valueDateTime.split('T')[0] | date:'dd-MMM-yyyy'}}</td>
                 </tr>
                 </tbody>
             </table>

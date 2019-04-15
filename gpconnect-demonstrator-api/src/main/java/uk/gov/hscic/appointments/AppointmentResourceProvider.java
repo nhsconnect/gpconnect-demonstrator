@@ -494,6 +494,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         throwUnprocessableEntity422_InvalidResourceException("Delivery Channel Extension value is not a valueCode");
                     }
                     break;
+                    
+                case SD_CC_APPOINTMENT_BOOKINGORG:
+                    Reference reference = (Reference)extension.getValue();
+                    // #242
+                    if (!reference.getReference().startsWith("#")){
+                        throwUnprocessableEntity422_InvalidResourceException("Booking organization reference does not start with #");
+                    }
+                    break;
             } //switch
         } // for extensions
     }

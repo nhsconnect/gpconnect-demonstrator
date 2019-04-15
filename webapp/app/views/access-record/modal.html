@@ -14,11 +14,11 @@
     <div class="row">
         <div class="col-md-6">
             <label>Start Date: </label>
-            {{actualMedicationRequestWithIssue.plan.dispenseRequest.validityPeriod.start.split('T')[0]}}
+            {{actualMedicationRequestWithIssue.plan.dispenseRequest.validityPeriod.start.split('T')[0] | date:'dd-MMM-yyyy'}}
         </div>
         <div class="col-md-6">
             <label>End Date: </label>
-            {{actualMedicationRequestWithIssue.plan.dispenseRequest.validityPeriod.end.split('T')[0]}}
+            {{actualMedicationRequestWithIssue.plan.dispenseRequest.validityPeriod.end.split('T')[0] | date:'dd-MMM-yyyy'}}
         </div>
     </div>
 
@@ -41,11 +41,11 @@
         <div class="row">
             <div class="col-md-6">
                 <label>Start Date:</label>
-                {{issue.dispenseRequest.validityPeriod.start.split('T')[0]}}
+                {{issue.dispenseRequest.validityPeriod.start.split('T')[0] | date:'dd-MMM-yyyy'}}
             </div>
             <div class="col-md-6">
                 <label>End Date:</label>
-                {{issue.dispenseRequest.validityPeriod.end.split('T')[0]}}
+                {{issue.dispenseRequest.validityPeriod.end.split('T')[0] | date:'dd-MMM-yyyy'}}
             </div>
         </div>
 
@@ -71,7 +71,7 @@
 
 <div class="modal-body" ng-show="showAllergyDetail">
     <div><label>Clinical status: </label> {{listType.clinicalStatus}}</div>
-    <div><label>Onset Date: </label> {{listType.onsetDateTime.split('T')[0]}}</div>
+    <div><label>Onset Date: </label> {{listType.onsetDateTime.split('T')[0] | date:'dd-MMM-yyyy'}}</div>
     <div><label>Reaction: </label> {{listType.reaction[0].manifestation[0].coding[0].display}}</div>
     <div><label>Criticality: </label> {{listType.reaction[0].severity}}</div>
     <div><label>Notes: </label> {{listType.note[0].text}}</div>
@@ -87,14 +87,14 @@
 
 <div class="modal-body" ng-show="showResAllergyDetail">
     <div><label>Clinical status: </label> {{listType.clinicalStatus}}</div>
-    <div><label>Onset Date: </label> {{listType.onsetDateTime.split('T')[0]}}</div>
+    <div><label>Onset Date: </label> {{listType.onsetDateTime.split('T')[0] | date:'dd-MMM-yyyy'}}</div>
     <div><label>Reaction: </label>{{listType.reaction[0].manifestation[0].coding[0].display}}</div>
     <div><label>Criticality: </label>{{listType.reaction[0].severity}}</div>
     <div><label>Notes: </label>{{listType.note[0].text}}</div>
 
     <hr>
     <!-- ONLY FOR RESOLVED -->
-    <div><label>End Date: </label> {{listType.extension[0].extension[0].valueDateTime.split('T')[0]}}</div>
+    <div><label>End Date: </label> {{listType.extension[0].extension[0].valueDateTime.split('T')[0] | date:'dd-MMM-yyyy'}}</div>
     <div><label>End Reason: </label> {{listType.extension[0].extension[1].valueString}}</div>
 
     <button class="btn pull-right" type="button" data-dismiss="dialog" ng-click="closeModalInstance()">

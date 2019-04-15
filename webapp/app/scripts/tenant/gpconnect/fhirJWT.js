@@ -77,7 +77,8 @@ angular.module('gpConnect')
                         "identifier": [{
                                 "system": gpcResource.getConst("ID_ODS_ORGANIZATION_CODE"),
                                 "value": "[ODSCode]"
-                            }]
+                            }],
+                        "name" : "[Organization Name]" // #209 JWT validation requires org name to be present
                     };
                 }
                 

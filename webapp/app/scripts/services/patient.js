@@ -27,6 +27,12 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         });
     };
     
+    /**
+     * takes an optional ods code or uses the one from rootScope
+     * @param {type} patientId
+     * @param {type} odsCode
+     * @returns {unresolved}
+     */
     var getPatientFhirId = function (patientId, odsCode) {
         var odsCode = (typeof odsCode !== 'undefined') ? odsCode : $rootScope.patientOdsCode;
         
@@ -57,6 +63,12 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         });
     };
     
+    /**
+     * sets rootScope patientOdsCode
+     * @param {type} practiceOdsCode
+     * @param {type} patientId
+     * @returns {unresolved}
+     */
     var getFhirPatient = function (practiceOdsCode, patientId) {
         var response;
         $rootScope.patientOdsCode = practiceOdsCode;
@@ -186,7 +198,37 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
             return response.data;
         });
     };
+
+    var getPractitioner = function (practiceOdsCode, practitionerId) {
+       
+        return FhirEndpointLookup.getEndpoint(practiceOdsCode, "urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner-1").then(function (response) {
+            var endpointLookupResult = response;
+            var response = $http.get(
+                endpointLookupResult.restUrlPrefix + '/Practitioner/'+practitionerId,
+                {
+                    headers: {
+                        'Ssp-From': endpointLookupResult.fromASID,
+                        'Ssp-To': endpointLookupResult.toASID,
+                        'Ssp-InteractionID': "urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner-1",
+                        'Ssp-TraceID': fhirJWTFactory.guid(),
+                        'Authorization': "Bearer " + fhirJWTFactory.getJWT("patient", "read", practitionerId),
+                        'Accept': "application/fhir+json"
+                    }
+                }
+            ).then(function (response) {
+                if (response.data != undefined) {
+                    return response.data;
+                } else {
+                    return undefined;
+                }
+            });
+            
+            return response;
+        });
+    };
+
     
+        
     return {
         findAllSummaries: findAllSummaries,
         getSummary: getSummary,
@@ -197,6 +239,7 @@ angular.module('gpConnect').factory('PatientService', ['$rootScope', '$http', 'F
         medication:medication,
         allMedications:allMedications,
         allergyDetialsByPatient:allergyDetialsByPatient,
-        addMedication:addMedication
+        addMedication:addMedication,
+        getPractitioner:getPractitioner
     };
 }]);

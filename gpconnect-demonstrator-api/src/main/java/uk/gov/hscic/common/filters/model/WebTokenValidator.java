@@ -10,8 +10,8 @@ import static uk.gov.hscic.OperationConstants.SYSTEM_WARNING_CODE;
 import uk.gov.hscic.OperationOutcomeFactory;
 
 public class WebTokenValidator {
-    private static final List<String> PERMITTED_REQUESTED_SCOPES = Arrays.asList("patient/*.read", "patient/*.write",
-            "organization/*.read", "organization/*.write");
+    // #239 remove the */write scopes
+    private static final List<String> PERMITTED_REQUESTED_SCOPES = Arrays.asList("patient/*.read", "organization/*.read");
 
     public static void validateWebToken(WebToken webToken, int futureRequestLeeway) {
         verifyNoNullValues(webToken);
@@ -48,19 +48,25 @@ public class WebTokenValidator {
         assertNotNull("requested_record", webToken.getRequestedRecord());
         assertNotNull("requested_record.resourceType", webToken.getRequestedRecord().getResourceType());
 
-        assertNotNull("rqeuested_scope", webToken.getRequestedScope());
+        assertNotNull("requested_scope", webToken.getRequestedScope());
 
         assertNotNull("requesting_device", webToken.getRequestingDevice());
         assertNotNull("requesting_device.id", webToken.getRequestingDevice().getId());
         assertNotNull("requesting_device.model", webToken.getRequestingDevice().getModel());
         assertNotNull("requesting_device.resourceType", webToken.getRequestingDevice().getResourceType());
         assertNotNull("requesting_device.version", webToken.getRequestingDevice().getVersion());
+	
+        // #239 Extra checks on requesting_device.identifier
+        assertNotNull("requesting_device.identifiers", webToken.getRequestingDevice().getIdentifiers());
+        assertNotNull("requesting_device.identifier", webToken.getRequestingDevice().getIdentifiers().get(0));
+        assertNotNull("requesting_device.identifier.system", webToken.getRequestingDevice().getIdentifiers().get(0).getSystem());
+        assertNotNull("requesting_device.identifier.value", webToken.getRequestingDevice().getIdentifiers().get(0).getValue());
 
         assertNotNull("requesting_organization", webToken.getRequestingOrganization());
         assertNotNull("requesting_organization.id", webToken.getRequestingOrganization().getId());
         assertNotNull("requesting_organization.name", webToken.getRequestingOrganization().getName());
         assertNotNull("requesting_organization.resourceType", webToken.getRequestingOrganization().getResourceType());
-        assertNotNull("requesting_organization.identifier", webToken.getRequestingOrganization().getIdentifierValue("http://fhir.nhs.net/Id/ods-organization-code"));
+        assertNotNull("requesting_organization.identifier (ODS)", webToken.getRequestingOrganization().getIdentifierValue("http://fhir.nhs.net/Id/ods-organization-code"));
 
         assertNotNull("requesting_practitioner", webToken.getRequestingPractitioner());
         assertNotNull("requesting_practitioner.id", webToken.getRequestingPractitioner().getId());
@@ -69,7 +75,7 @@ public class WebTokenValidator {
         assertNotNull("requesting_practitioner.family", webToken.getRequestingPractitioner().getName().get("family"));
         assertNotNull("requesting_practitioner.given", webToken.getRequestingPractitioner().getName().get("given"));
         assertNotNull("requesting_practitioner.prefix", webToken.getRequestingPractitioner().getName().get("prefix"));
-        assertNotNull("requesting_practitioner.identifier", webToken.getRequestingPractitioner().getIdentifierValue("http://fhir.nhs.net/sds-user-id"));
+        assertNotNull("requesting_practitioner.identifier (SDS)", webToken.getRequestingPractitioner().getIdentifierValue("http://fhir.nhs.net/sds-user-id"));
         assertNotNull("requesting_practitioner.role.code", webToken.getRequestingPractitioner().getPractitionerRoleCode("http://fhir.nhs.net/ValueSet/sds-job-role-name-1"));
     }
 
@@ -84,8 +90,10 @@ public class WebTokenValidator {
         // Checking the creation date is not in the future
         int timeValidationIdentifierInt = webToken.getIat();
         
+        long epoch = System.currentTimeMillis() / 1000;
+        
         // Checking creation time is not in the future (with a 5 second leeway
-        if (timeValidationIdentifierInt > (System.currentTimeMillis() / 1000) + futureRequestLeeway) {
+        if (timeValidationIdentifierInt > epoch + futureRequestLeeway) {
         	throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "JWT Creation time is in the future", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
@@ -94,6 +102,12 @@ public class WebTokenValidator {
         if (webToken.getExp() - timeValidationIdentifierInt != 300) {
             throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
                     SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "JWT expiry time is not 5 minutes after the creation time", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+        }
+
+        // #238 Checking the token has not expired 
+        if (webToken.getExp() < epoch) {
+            throw new InvalidRequestException("Bad Request Exception", OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "JWT token has expired", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
         }
     }
 

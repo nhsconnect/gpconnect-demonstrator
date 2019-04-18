@@ -58,4 +58,11 @@ public class RequestingDevice {
                 .findFirst()
                 .orElse(null);
     }
+
+    /**
+     * @return the identifiers
+     */
+    public List<Identifier> getIdentifiers() {
+        return identifiers;
+    }
 }

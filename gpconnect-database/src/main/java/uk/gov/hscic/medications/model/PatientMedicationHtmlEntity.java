@@ -36,7 +36,7 @@ public class PatientMedicationHtmlEntity {
     private String quantity;
 
     @Column(name = "scheduledEnd")
-    private String scheduledEnd;
+    private Date scheduledEnd;
 
     @Column(name = "daysDuration")
     private Integer daysDuration;
@@ -102,11 +102,11 @@ public class PatientMedicationHtmlEntity {
         this.medicationItem = medicationItem;
     }
 
-    public String getScheduledEnd() {
-        return scheduledEnd;
+    public Date getScheduledEnd() {
+        return convertTimestamp2Date(scheduledEnd);
     }
 
-    public void setScheduledEnd(String scheduledEnd) {
+    public void setScheduledEnd(Date scheduledEnd) {
         this.scheduledEnd = scheduledEnd;
     }
 

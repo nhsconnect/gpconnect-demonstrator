@@ -49,12 +49,13 @@ public class WebTokenValidator {
         assertNotNull("requesting_device", webToken.getRequestingDevice());
         assertNotNull("requesting_device.resourceType", webToken.getRequestingDevice().getResourceType());
 
-        // #209
-        assertNotNull("requesting_device.identifier", webToken.getRequestingDevice().getIdentifiers());
+        // #209 Extra checks on requesting_device
+        assertNotNull("requesting_device.identifiers", webToken.getRequestingDevice().getIdentifiers());
+        assertNotNull("requesting_device.identifier", webToken.getRequestingDevice().getIdentifiers().get(0));
         assertNotNull("requesting_device.identifier.system", webToken.getRequestingDevice().getIdentifiers().get(0).getSystem());
         assertNotNull("requesting_device.identifier.value", webToken.getRequestingDevice().getIdentifiers().get(0).getValue());
-        assertNotNull("requesting_device.identifier.model", webToken.getRequestingDevice().getModel());
-        assertNotNull("requesting_device.identifier.version", webToken.getRequestingDevice().getVersion());
+        assertNotNull("requesting_device.model", webToken.getRequestingDevice().getModel());
+        assertNotNull("requesting_device.version", webToken.getRequestingDevice().getVersion());
 
         assertNotNull("requesting_organization", webToken.getRequestingOrganization());
 

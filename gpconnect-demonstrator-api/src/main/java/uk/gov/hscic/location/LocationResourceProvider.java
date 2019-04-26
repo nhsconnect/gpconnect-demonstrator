@@ -141,7 +141,7 @@ public class LocationResourceProvider implements IResourceProvider {
     /**
      * Some of the assignments look rather odd but they are deliberate.
      * They result from a change to spec to remove the state attribute from the address
-     * See the commit cd26528 by James Cox 6/3/18
+     * See the commit cd26528 by James Cox 6/3/18 see also OrganizationResourceProvider.getValidAddress 
      * @param locationDetails
      * @return Address Resource
      */

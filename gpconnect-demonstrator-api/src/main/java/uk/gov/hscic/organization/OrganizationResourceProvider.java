@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.dstu3.model.Address;
-import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
@@ -37,11 +36,11 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_InvalidParameterException;
 import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.location.LocationSearch;
 import uk.gov.hscic.model.location.LocationDetails;
@@ -104,9 +103,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
             @Count Integer count) {
 
         if (StringUtils.isBlank(tokenParam.getSystem()) || StringUtils.isBlank(tokenParam.getValue())) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Missing identifier token"), SystemCode.INVALID_PARAMETER,
-                    IssueType.INVALID);
+            throwInvalidRequest400_InvalidParameterException("Missing identifier token");
         }
 
         if (tokenParam.getSystem().equals(SystemURL.ID_ODS_ORGANIZATION_CODE)
@@ -142,11 +139,9 @@ public class OrganizationResourceProvider implements IResourceProvider {
             return count != null ? organizationDetails.subList(0, count) : organizationDetails;
 
         } else {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Invalid system code"), SystemCode.INVALID_PARAMETER,
-                    IssueType.INVALID);
+            throwInvalidRequest400_InvalidParameterException("Invalid system code");
         }
-
+        return null;
     }
 
     private List<Organization> convertOrganizatonDetailsListToOrganizationList(
@@ -262,7 +257,10 @@ public class OrganizationResourceProvider implements IResourceProvider {
             orgAddress = new Address();
             orgAddress.setUse(AddressUse.WORK);
             // #152 
-            // TODO this looks very odd, there's a similar issue in locationResourceProvider.createAddress
+            // this looks very odd but is deliberate, there's a similar issue in locationResourceProvider.createAddress
+            // They result from a change to spec to remove the state attribute from the address
+            // See the commit cd26528 by James Cox 6/3/18
+
             orgAddress.addLine(location.getAddressLine());
             orgAddress.addLine(location.getAddressCity());
             orgAddress.setCity(location.getAddressDistrict());

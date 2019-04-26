@@ -53,8 +53,9 @@ import static org.hl7.fhir.dstu3.model.Address.AddressUse.WORK;
 import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_NHS_COMMUNICATION;
-import static uk.gov.hscic.appointments.AppointmentResourceProvider.throwInvalidResource;
 import uk.gov.hscic.model.telecom.TelecomDetails;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
 
 @Component
 public class PatientResourceProvider implements IResourceProvider {
@@ -212,10 +213,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
             if (parameterDefinitionNames.containsAll(parameterNames) == false) {
                 parameterNames.removeAll(parameterDefinitionNames);
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(
-                                "Unrecognised parameters have been provided - " + parameterNames.toString()),
-                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                throwInvalidRequest400_BadRequestException("Unrecognised parameters have been provided - " + parameterNames.toString());
             }
         } else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -529,61 +527,46 @@ public class PatientResourceProvider implements IResourceProvider {
                                         if (!phoneUse.contains(telecom.getUse())) {
                                             phoneUse.add(telecom.getUse());
                                         } else {
-                                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                                    new InvalidRequestException(
-                                                            "Only one Telecom of type phone with use type " + telecom.getUse().toString().toLowerCase() + " is allowed in a register patient request."),
-                                                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+                                            throwInvalidRequest400_BadRequestException("Only one Telecom of type phone with use type "
+                                                    + telecom.getUse().toString().toLowerCase() + " is allowed in a register patient request.");
                                         }
                                         break;
                                     default:
-                                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                                new InvalidRequestException(
-                                                        "Invalid Telecom of type phone use type " + telecom.getUse().toString().toLowerCase() + " in a register patient request."),
-                                                SystemCode.BAD_REQUEST, IssueType.INVALID);
+                                        throwInvalidRequest400_BadRequestException(
+                                                "Invalid Telecom of type phone use type " + telecom.getUse().toString().toLowerCase()
+                                                + " in a register patient request.");
                                 }
                             } else {
-                                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                        new InvalidRequestException(
-                                                "Invalid Telecom - no Use type provided in a register patient request."),
-                                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                                throwInvalidRequest400_BadRequestException("Invalid Telecom - no Use type provided in a register patient request.");
                             }
                             break;
                         case EMAIL:
                             if (++emailCount > 1) {
-                                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                        new InvalidRequestException(
-                                                "Only one Telecom of type " + "email" + " is allowed in a register patient request."),
-                                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                                throwInvalidRequest400_BadRequestException("Only one Telecom of type " + "email" + " is allowed in a register patient request.");
                             }
                             break;
                         default:
-                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                    new InvalidRequestException(
-                                            "Telecom system is missing in a register patient request."),
-                                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+                            throwInvalidRequest400_BadRequestException("Telecom system is missing in a register patient request.");
                     }
                 }
             } else {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(
-                                "Telecom system is missing in a register patient request."),
-                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                throwInvalidRequest400_BadRequestException("Telecom system is missing in a register patient request.");
             }
         } // iterate telcom 
 
-        // count by useType TODO Only the first address is persisted at present
+        // count by useType - Only the first address is persisted at present
         HashSet<AddressUse> useTypeCount = new HashSet<>();
         for (Address address : patient.getAddress()) {
             AddressUse useType = address.getUse();
             // #189 address use types work and old are not allowed
             if (useType == WORK || useType == OLD) {
-                throwInvalidResource("Address use type " + useType + " cannot be sent in a register patient request.");
+                throwUnprocessableEntity422_InvalidResourceException("Address use type " + useType + " cannot be sent in a register patient request.");
             }
             if (!useTypeCount.contains(useType)) {
                 useTypeCount.add(useType);
             } else {
                 // #174 Only a single address of each usetype may be sent
-                throwInvalidResource("Only a single address of each use type can be sent in a register patient request.");
+                throwUnprocessableEntity422_InvalidResourceException("Only a single address of each use type can be sent in a register patient request.");
             }
         } // for address
     } //  validateTelecomAndAddress
@@ -604,10 +587,7 @@ public class PatientResourceProvider implements IResourceProvider {
             }
 
             if (!valid) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(
-                                String.format("The supplied Patient gender %s is an unrecognised type.", gender)),
-                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                throwInvalidRequest400_BadRequestException(String.format("The supplied Patient gender %s is an unrecognised type.", gender));
             }
         }
     }
@@ -616,9 +596,7 @@ public class PatientResourceProvider implements IResourceProvider {
         Date birthDate = patient.getBirthDate();
 
         if (birthDate == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("The Patient date of birth must be supplied"), SystemCode.BAD_REQUEST,
-                    IssueType.INVALID);
+            throwInvalidRequest400_BadRequestException("The Patient date of birth must be supplied");
         }
     }
 
@@ -629,15 +607,10 @@ public class PatientResourceProvider implements IResourceProvider {
                     .allMatch(identifier -> identifier.getSystem() != null && identifier.getValue() != null);
 
             if (identifiersValid == false) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new InvalidRequestException(
-                                "One or both of the system and/or value on some of the provided identifiers is null"),
-                        SystemCode.BAD_REQUEST, IssueType.INVALID);
+                throwInvalidRequest400_BadRequestException("One or both of the system and/or value on some of the provided identifiers is null");
             }
         } else {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("At least one identifier must be supplied on a Patient resource"),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+            throwInvalidRequest400_BadRequestException("At least one identifier must be supplied on a Patient resource");
         }
     }
 
@@ -666,7 +639,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         if (!extensionURLs.isEmpty()) {
-            throwInvalidResource("Invalid/multiple patient extensions found. The following are in excess or invalid: "
+            throwUnprocessableEntity422_InvalidResourceException("Invalid/multiple patient extensions found. The following are in excess or invalid: "
                     + extensionURLs.stream().collect(Collectors.joining(", ")));
         }
     }
@@ -726,9 +699,7 @@ public class PatientResourceProvider implements IResourceProvider {
         List<HumanName> names = patient.getName();
 
         if (names.size() < 1) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("The patient must have at least one Name."), SystemCode.BAD_REQUEST,
-                    IssueType.INVALID);
+            throwInvalidRequest400_BadRequestException("The patient must have at least one Name.");
         }
 
         List<HumanName> activeOfficialNames = names
@@ -738,9 +709,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 .collect(Collectors.toList());
 
         if (activeOfficialNames.size() != 1) {
-            InvalidRequestException exception = new InvalidRequestException("The patient must have one Active Name with a Use of OFFICIAL");
-
-            throw OperationOutcomeFactory.buildOperationOutcomeException(exception, SystemCode.BAD_REQUEST, IssueType.INVALID);
+            throwInvalidRequest400_BadRequestException("The patient must have one Active Name with a Use of OFFICIAL");
         }
 
         List<String> officialFamilyNames = new ArrayList<>();
@@ -756,10 +725,9 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private void validateNameCount(List<String> names, String nameType) {
         if (names.size() != 1) {
-            String message = String.format("The patient must have one and only one %s name property. Found %s",
-                    nameType, names.size());
-            throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
-                    SystemCode.BAD_REQUEST, IssueType.INVALID);
+            throwInvalidRequest400_BadRequestException(
+                    String.format("The patient must have one and only one %s name property. Found %s",
+                            nameType, names.size()));
         }
     }
 
@@ -798,7 +766,7 @@ public class PatientResourceProvider implements IResourceProvider {
             try {
                 patientDetails.setDeceased((deceased.getValue()));
             } catch (ClassCastException cce) {
-                throwInvalidResource("The multiple deceased property is expected to be a datetime");
+                throwUnprocessableEntity422_InvalidResourceException("The multiple deceased property is expected to be a datetime");
             }
         }
 
@@ -1093,11 +1061,12 @@ public class PatientResourceProvider implements IResourceProvider {
         Long gpId = patientDetails.getGpId();
         if (gpId != null) {
             Practitioner prac = practitionerResourceProvider.getPractitionerById(new IdType(gpId));
-            HumanName practitionerName = prac.getNameFirstRep();
+//          HumanName practitionerName = prac.getNameFirstRep();
 
-            Reference practitionerReference = new Reference("Practitioner/" + gpId)
-                    .setDisplay(practitionerName.getPrefix().get(0) + " " + practitionerName.getGivenAsSingleString() + " "
-                            + practitionerName.getFamily());
+            Reference practitionerReference = new Reference("Practitioner/" + gpId);
+            // #243 remove display from reference elements
+//                    .setDisplay(practitionerName.getPrefix().get(0) + " " + practitionerName.getGivenAsSingleString() + " "
+//                            + practitionerName.getFamily());
             List<Reference> ref = new ArrayList<>();
             ref.add(practitionerReference);
             patient.setGeneralPractitioner(ref);
@@ -1292,10 +1261,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 if (filteredParameters.size() == 1) {
                     parameter = filteredParameters.iterator().next();
                 } else if (filteredParameters.size() > 1) {
-                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new InvalidRequestException(
-                                    "The parameter " + parameterName + " cannot be set more than once"),
-                            SystemCode.BAD_REQUEST, IssueType.INVALID);
+                    throwInvalidRequest400_BadRequestException("The parameter " + parameterName + " cannot be set more than once");
                 }
             }
 

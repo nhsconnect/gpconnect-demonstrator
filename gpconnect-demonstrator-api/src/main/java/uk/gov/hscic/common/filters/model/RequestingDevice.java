@@ -38,7 +38,7 @@ public class RequestingDevice {
         this.model = model;
     }
 
-    public String getVersion() {
+    public String getVersion() {    
         return version;
     }
 
@@ -57,5 +57,12 @@ public class RequestingDevice {
                 .map(Identifier::getValue)
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * @return the identifiers
+     */
+    public List<Identifier> getIdentifiers() {
+        return identifiers;
     }
 }

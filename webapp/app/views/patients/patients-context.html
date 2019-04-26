@@ -19,7 +19,7 @@
         <tr>
           <td width="40%"><label>Address:</label>  <strong>{{ a = patient.address[0]; a.line.concat([a.town, a.district, a.postalCode]).join()}}</strong></td>
           <td width="20%"><label>Phone:</label> <strong>{{ patient.telecom[0].value }}</strong></td>
-          <td width="20%"><label>GP Details:</label> <strong>{{ patient.generalPractitioner[0].display }}</strong></td>
+          <td width="20%"><label>GP Details:</label> <strong>{{ name = practitioner.name[0]; [name.prefix[0], name.given[0], name.family].join(" ") }}</strong></td>
           <td width="20%"><label>PAS No.:</label> <strong>{{ patientLocalIdentifier }}</strong></td>
         </tr>
       </tbody>

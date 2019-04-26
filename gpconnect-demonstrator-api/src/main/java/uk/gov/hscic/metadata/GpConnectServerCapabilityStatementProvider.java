@@ -12,11 +12,6 @@ import ca.uhn.fhir.rest.server.RestfulServer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import static uk.gov.hscic.SystemURL.OD_GPC_GET_STRUCTURED_RECORD;
 import static uk.gov.hscic.SystemURL.OD_GPC_REGISTER_PATIENT;
 import uk.gov.hscic.SystemVariable;
@@ -32,10 +27,10 @@ public class GpConnectServerCapabilityStatementProvider extends ServerCapability
 
     @Override
     public CapabilityStatement getServerConformance(HttpServletRequest theRequest) {
-        boolean fromJson = true;
+        final boolean FROM_JSON = true;
 
         CapabilityStatement capabilityStatement = null;
-        if (!fromJson) {
+        if (!FROM_JSON) {
             //Get the automatically generated statement
             capabilityStatement = super.getServerConformance(theRequest);
 
@@ -60,7 +55,6 @@ public class GpConnectServerCapabilityStatementProvider extends ServerCapability
                 String capabilityJson = new String(Files.readAllBytes(Paths.get(FhirRequestGenericIntercepter.getConfigPath() + "/capability.json")));
                 FhirContext ctx = FhirContext.forDstu3();
                 capabilityStatement = (CapabilityStatement) ctx.newJsonParser().parseResource(capabilityJson);
-
             } catch (IOException ex) {
                 return null;
             }

@@ -26,6 +26,7 @@ public final class OperationConstants {
     public static final String COD_CONCEPT_RECORD_INVALID_SYSTEM = "Invalid system";
     public static final String COD_CONCEPT_RECORD_INVALID_SECTION = "Invalid section";
     public static final String COD_CONCEPT_RECORD_INVALID_DATES = "Dates are invalid";
+    public static final String COD_CONCEPT_RECORD_NO_PATIENT_CONSENT = "Patient has not consented to share";
 
     // MetaProfile Constants
     public static final String META_GP_CONNECT_CARERECORD_COMPOSITION = "http://fhir.nhs.net/StructureDefinition/gpconnect-carerecord-composition-1";

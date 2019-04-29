@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 import javax.activation.UnsupportedDataTypeException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
@@ -84,6 +85,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PageSectionFactory pageSectionFactory;
+    
+    @Value("${datasource.patient.noconsent}")
+    private String patientNoConsent;
+
 
     @Override
     public Class<Patient> getResourceType() {
@@ -162,12 +167,21 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 PatientSummary patientSummary = patientSearch.findPatientSummary(nhsNumber);
 
+                // patient 15 no consent return forbidden 403 This really needs to go after the sensitivity check but currently its also sensitive
+                if (nhsNumber != null && nhsNumber.equals(patientNoConsent)) {
+                    throw new ForbiddenOperationException("No patient consent to share for patient ID: " + nhsNumber,
+                            OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
+                                    OperationConstants.CODE_NO_PATIENT_CONSENT, OperationConstants.COD_CONCEPT_RECORD_NO_PATIENT_CONSENT,
+                                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.FORBIDDEN));
+                }
+
                 if (null == patientSummary || patientSummary.isSensitive()) {
                     throw new ResourceNotFoundException("No patient details found for patient ID: " + nhsNumber,
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
                                     OperationConstants.CODE_PATIENT_NOT_FOUND, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
                 }
+                
 
             } else if (value instanceof CodeableConceptDt) {
                 if (null != sectionName) {

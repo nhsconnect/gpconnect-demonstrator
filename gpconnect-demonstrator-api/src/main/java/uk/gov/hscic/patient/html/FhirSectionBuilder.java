@@ -48,19 +48,22 @@ public final class FhirSectionBuilder {
             // Header
             stringBuilder.append("<h2>").append(pageSection.getHeader()).append("</h2>");
 
+            stringBuilder.append("<div");
+            if (VERSION.getMinor() > 5) {
+                stringBuilder.append(" class=\"date-banner\"");
+            }
             // Date Range Banner
             if (pageSection.getFromDate() != null && pageSection.getToDate() != null) {
-                stringBuilder.append("<div");
-                if (VERSION.getMinor() > 5) {
-                    stringBuilder.append(" class=\"date-banner\"");
-                }
                 stringBuilder.append("><p>For the period '").append(DATE_FORMAT.format(pageSection.getFromDate())).append("' to '").append(DATE_FORMAT.format(pageSection.getToDate())).append("'</p></div>");
+            } else if (pageSection.getFromDate() != null && pageSection.getToDate() == null) {
+                // # 224
+                stringBuilder.append("><p>All data items from ").append(DATE_FORMAT.format(pageSection.getFromDate())).append("</p></div>");
+            } else if (pageSection.getFromDate() == null && pageSection.getToDate() != null) {
+                // #224
+                stringBuilder.append("><p>All data items until ").append(DATE_FORMAT.format(pageSection.getToDate())).append("</p></div>");
             } else {
-                stringBuilder.append("<div");
-                if (VERSION.getMinor() > 5) {
-                    stringBuilder.append(" class=\"exclusion-banner\"");
-                }
-                stringBuilder.append("><p>All relevant items subject to patient preferences and/or RCGP exclusions</p></div>");
+                // #225 change text on banner
+                stringBuilder.append("><p>All relevant items</p></div>");
             }
 
             // Additional Banners

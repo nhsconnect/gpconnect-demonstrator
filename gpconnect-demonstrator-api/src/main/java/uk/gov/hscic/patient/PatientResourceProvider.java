@@ -165,24 +165,22 @@ public class PatientResourceProvider implements IResourceProvider {
                 }
 
                 PatientSummary patientSummary = patientSearch.findPatientSummary(nhsNumber);
-                
-                // patient 15 no consent return forbidden 403 This really needs to go after the sensitivity check but currently its also sensitive
-                if (nhsNumber != null && nhsNumber.equals(patientNoConsent)) {
-                    throw new ForbiddenOperationException("No patient consent to share for patient ID: " + nhsNumber,
-                            OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
-                                    OperationConstants.CODE_NO_PATIENT_CONSENT, OperationConstants.COD_CONCEPT_RECORD_NO_PATIENT_CONSENT,
-                                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.FORBIDDEN));
-                }
-
 
                 // https://developer.nhs.uk/apis/gpconnect-0-7-1/overview_release_notes_0_5_1.html
-                // GP Connect ticket #528 S flag patients return patient not found
-                // NB There is no ticket for this in the githib demonstrator repos
+                // #223 S flag patients return patient not found
                 if (null == patientSummary || patientSummary.isSensitive()) {
                     throw new ResourceNotFoundException("No patient details found for patient ID: " + nhsNumber,
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
                                     OperationConstants.CODE_PATIENT_NOT_FOUND, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
+                }
+                
+                // #245 patient 15 no consent return forbidden 403
+                if (nhsNumber != null && nhsNumber.equals(patientNoConsent)) {
+                    throw new ForbiddenOperationException("No patient consent to share for patient ID: " + nhsNumber,
+                            OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
+                                    OperationConstants.CODE_NO_PATIENT_CONSENT, OperationConstants.COD_CONCEPT_RECORD_NO_PATIENT_CONSENT,
+                                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.FORBIDDEN));
                 }
 
             } else if (value instanceof CodeableConceptDt) {

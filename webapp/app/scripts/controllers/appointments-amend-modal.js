@@ -42,7 +42,7 @@ angular.module('gpConnect')
                                         "value": "A20047"
                                     }
                                 ],
-                                "name": "Test Organization Name",
+                                "name": "Dr Legg's Surgery",
                                 "telecom": [
                                     {
                                         "system": "phone",

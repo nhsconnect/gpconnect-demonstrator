@@ -37,7 +37,7 @@ angular.module('gpConnect')
                             "value": "A20047"
                         }
                     ],
-                    "name": "Test Organization Name",
+                    "name": "Dr Legg's Surgery",
                     "telecom": [
                         {
                             "system": "phone",
@@ -60,9 +60,9 @@ angular.module('gpConnect')
             $scope.appointmentCreate.status = "booked";
             $scope.appointmentCreate.created = new Date();
 
-            $scope.appointmentCreate.start = appointmentBookingParams.startTime;
-            $scope.appointmentCreate.end = appointmentBookingParams.endTime;
-
+            $scope.appointmentCreate.start = formatDate(appointmentBookingParams.startTime);
+            $scope.appointmentCreate.end = formatDate(appointmentBookingParams.endTime);
+            
             $scope.appointmentCreate.slot = [];
             for (var slotIndex = 0; slotIndex < appointmentBookingParams.slotIds.length; slotIndex++) {
                 var reference = {"reference": "Slot/" + appointmentBookingParams.slotIds[slotIndex]};
@@ -112,5 +112,57 @@ angular.module('gpConnect')
             $scope.cancel = function () {
                 $modalInstance.dismiss('cancel');
             };
-
+            
+            /**
+             * Takes a date object and returns a string formatted in the correct way for booking an appointment
+             * YYYY-MM-DDTHH:MM:SS+00:00 or YYYY-MM-DDTHH:MM:SS+01:00
+             * @param {type} day
+             * @returns {unresolved}
+             */
+            function formatDate (day){
+                // This function ignores the options parm but seems to produce a string in a workable format esp wrt DST offsets
+                var bareDate = day.toLocaleString('en-GB').replace(/^..../,"").replace("GMT","").replace(/ /g,"");
+                var month = bareDate.replace(/^(...).*$/,"$1");
+                var i;
+                switch (month) {
+                    case "Jan":
+                        i = "01";
+                        break;
+                    case "Feb":
+                        i = "02";
+                        break;
+                    case "Mar":
+                        i = "03";
+                        break;
+                    case "Apr":
+                        i = "04";
+                        break;
+                    case "May":
+                        i = "05";
+                        break;
+                    case "Jun":
+                        i = "06";
+                        break;
+                    case "Jul":
+                        i = "07";
+                        break;
+                    case "Aug":
+                        i = "08";
+                        break;
+                    case "Sep":
+                        i = "09";
+                        break;
+                    case "Oct":
+                        i = "10";
+                        break;
+                    case "Nov":
+                        i = "11";
+                        break;
+                    case "Dec":
+                        i = "12";
+                        break;
+                }
+                // reorders the years and day maps a month string to a number and inserts a colon into the DST offset
+                return bareDate.replace(/^(...)(..)(....)/,"$3-"+i+"-$2T").replace(/(..)(..)$/,"$1:$2");
+            }
         });

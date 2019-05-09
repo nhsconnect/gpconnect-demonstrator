@@ -93,28 +93,31 @@ public class LocationResourceProvider implements IResourceProvider {
         location.setName(locationDetails.getName());
         // #207 no site code
         //location.setIdentifier(Collections.singletonList(new Identifier().setSystem(SystemURL.ID_ODS_SITE_CODE).setValue(locationDetails.getSiteOdsCode())));
-        Coding locationCommTypeCode = new Coding();
-        locationCommTypeCode.setCode("COMM");
-        locationCommTypeCode.setSystem(SystemURL.VS_CC_SER_DEL_LOCROLETYPE);
-        locationCommTypeCode.setDisplay("Community Location");
         
-        Coding locationGachTypeCode = new Coding();
-        locationGachTypeCode.setCode("GACH");
-        locationGachTypeCode.setSystem(SystemURL.VS_CC_SER_DEL_LOCROLETYPE);
-        locationGachTypeCode.setDisplay("Hospitals; General Acute Care Hospital");
-        
-        @SuppressWarnings("deprecation")
-        CodeableConcept locationType = new CodeableConcept();
-        locationType.addCoding(locationCommTypeCode);
-        locationType.addCoding(locationGachTypeCode);
-        location.setType(locationType);
+        // #246 remove type element
+//        Coding locationCommTypeCode = new Coding();
+//        locationCommTypeCode.setCode("COMM");
+//        locationCommTypeCode.setSystem(SystemURL.VS_CC_SER_DEL_LOCROLETYPE);
+//        locationCommTypeCode.setDisplay("Community Location");
+//        
+//        Coding locationGachTypeCode = new Coding();
+//        locationGachTypeCode.setCode("GACH");
+//        locationGachTypeCode.setSystem(SystemURL.VS_CC_SER_DEL_LOCROLETYPE);
+//        locationGachTypeCode.setDisplay("Hospitals; General Acute Care Hospital");
+//        
+//        @SuppressWarnings("deprecation")
+//        CodeableConcept locationType = new CodeableConcept();
+//        locationType.addCoding(locationCommTypeCode);
+//        locationType.addCoding(locationGachTypeCode);
+//        location.setType(locationType);
         
         Organization orgz = FindOrganization(locationDetails.getOrgOdsCode());
         
         if(orgz != null){
             Reference mngOrg = new Reference();
             mngOrg.setReference(orgz.getId());
-            mngOrg.setDisplay(orgz.getName());
+            // #246 remove display element
+//          mngOrg.setDisplay(orgz.getName());
             location.setManagingOrganization(mngOrg);
         }
         

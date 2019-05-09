@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import uk.gov.hscic.model.appointment.BookingOrgDetail;
 
 @Service
 public class RefreshData {
@@ -185,6 +186,12 @@ public class RefreshData {
         return slot;
     }
 
+    /**
+     * only used to set up the first two appointments on start up
+     * @param slot
+     * @param description
+     * @return 
+     */
     private AppointmentDetail createAppointment(SlotDetail slot, String description) {
         AppointmentDetail appointment = new AppointmentDetail();
         appointment.setDescription(description);
@@ -203,6 +210,13 @@ public class RefreshData {
         appointment.setLocationId(schedule.getLocationId());
 
         appointment.setLastUpdated(new Date());
+        
+        BookingOrgDetail bookingOrgDetail = new BookingOrgDetail();
+        bookingOrgDetail.setOrgCode("A20047");
+        bookingOrgDetail.setName("Dr Legg's Surgery");
+        bookingOrgDetail.setTelephone("0300 303 5678");
+        bookingOrgDetail.setSystem("PHONE");
+        appointment.setBookingOrganization(bookingOrgDetail);
 
         return appointment;
     }

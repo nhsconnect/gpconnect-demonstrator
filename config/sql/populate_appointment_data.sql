@@ -43,7 +43,8 @@ VALUES
   (13,'69 Michael Lane','Garforth','Leeds','West Yorkshire','GPC 123','UK'),
   (14,'West View','Armley','Leeds','West Yorkshire','GPC 124','UK'),
   (15,'25 George Avenue','Calverley','Leeds','West Yorkshire','GPC 125','UK'),
-  (16,'NHS NPFIT Test Data Manager','Princes Exchange','Leeds','West Yorkshire','LS1 4HY','UK');
+  (16,'NHS NPFIT Test Data Manager','Princes Exchange','Leeds','West Yorkshire','LS1 4HY','UK'),
+  (17,'NHS Digital Test Data Manager','Whitehall 2','Leeds','West Yorkshire','LS1 4HR','UK');
   
 INSERT INTO locations
   (id,name,org_ods_code,org_ods_code_name,site_ods_code,site_ods_code_name,status,lastUpdated,address_id)
@@ -63,5 +64,5 @@ VALUES
   (13,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',13),
   (14,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',14),
   (15,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',15),
-  (16,'Building 1','A20047','BUILDING Z','Z55555','ANNEX','active','2016-07-25 12:00:00',16),
-  (17,'Building 2','A20047','BUILDING X','Z55556','ANNEX','active','2016-07-25 12:00:00',16);
+  (16,'Dr Legg''s Main Surgery','A20047','BUILDING Z','Z55555','ANNEX','active','2016-07-25 12:00:00',16),
+  (17,'Dr Legg''s Branch Surgery','A20047','BUILDING X','Z55556','ANNEX','active','2016-07-25 12:00:00',17);

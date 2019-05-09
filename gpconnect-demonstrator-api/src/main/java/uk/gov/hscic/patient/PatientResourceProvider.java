@@ -7,6 +7,7 @@ import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateAndListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
@@ -109,6 +110,9 @@ public class PatientResourceProvider implements IResourceProvider {
     @Value("${datasource.patient.nhsNumber:#{null}}")
     private String patient2;
 
+    @Value("${datasource.patient.noconsent:#{null}}")
+    private String patientNoconsent;
+
     private NhsNumber nhsNumber;
 
     private Map<String, Boolean> registerPatientParams;
@@ -142,6 +146,7 @@ public class PatientResourceProvider implements IResourceProvider {
         // Spring does not strip trailing blanks from property values
         patientNotOnSpine = patientNotOnSpine.trim();
         patientSuperseded = patientSuperseded.trim();
+        patientNoconsent = patientNoconsent.trim();
         patient2 = patient2.trim();
     }
 
@@ -154,7 +159,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart()),
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
         }
-
+        
         Patient patient = IdentifierValidator.versionComparison(internalId,
                 patientDetailsToPatientResourceConverter(patientDetails));
         if (null != patient) {
@@ -246,6 +251,12 @@ public class PatientResourceProvider implements IResourceProvider {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No patient details found for patient ID: " + NHS),
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
+        }
+        
+        if (NHS.equals(patientNoconsent)) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new ForbiddenOperationException("No patient consent to share for patient ID: " + NHS),
+                    SystemCode.NO_PATIENT_CONSENT, IssueType.FORBIDDEN);
         }
 
         for (ParametersParameterComponent param : params.getParameter()) {

@@ -206,7 +206,7 @@ public class PageSectionFactory {
             }
         }
 
-        return new PageSection("Encounters",
+        return new PageSection(maxRows != -1 ? "Last "+ maxRows +" Encounters" : "Encounters",
                 "enc-tab",
                 new Table(Arrays.asList("Date", "Title", "Details"), encounterRows),
                 requestedFromDate, requestedToDate);
@@ -385,7 +385,7 @@ public class PageSectionFactory {
             }
         }
 
-        return new PageSection("Acute Medication (Last 12 months)",
+        return new PageSection("Acute Medication (Last 12 Months)",
                 "med-tab-acu-med",
                 new Table(Arrays.asList(
                         "Type",

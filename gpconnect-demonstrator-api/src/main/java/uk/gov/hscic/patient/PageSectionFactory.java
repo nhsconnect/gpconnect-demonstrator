@@ -450,7 +450,8 @@ public class PageSectionFactory {
                             "Details"), repeatMedRows));
 
         } else {  // 0.7
-            return new PageSection("Current Repeat Medications",
+            // NB Now the singular
+            return new PageSection("Current Repeat Medication",
                     "med-tab-curr-rep",
                     new Table(Arrays.asList(
                             "Type",

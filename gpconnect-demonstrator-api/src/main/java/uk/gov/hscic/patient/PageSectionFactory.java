@@ -459,8 +459,8 @@ public class PageSectionFactory {
                             "Medication Item",
                             "Dosage Instruction",
                             "Quantity",
-                            "Last Issued",
-                            "Number Issued",
+                            "Last Issued Date",
+                            "Number of Prescriptions Issued",
                             "Max Issues",
                             "Review Date",
                             "Additional Information"), repeatMedRows));
@@ -494,7 +494,7 @@ public class PageSectionFactory {
                 "med-tab-dis-rep",
                 new Table(Arrays.asList(
                         "Type",
-                        "Last Issued",
+                        "Last Issued Date",
                         "Medication Item",
                         "Dosage Instruction",
                         "Quantity",

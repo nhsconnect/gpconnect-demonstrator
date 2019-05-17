@@ -12,10 +12,11 @@ public class OperationOutcomeFactory {
 
     public static OperationOutcome buildOperationOutcome(String system, String code, String codableConceptText, String metaProfile, IssueTypeEnum issueTypeEnum) {
         CodingDt coding = new CodingDt().setDisplay(code).setSystem(system).setCode(code);
-    	CodeableConceptDt errorCodableConcept = new CodeableConceptDt().setText(codableConceptText).setCoding(Collections.singletonList(coding));
+    	CodeableConceptDt errorCodableConcept = new CodeableConceptDt().setCoding(Collections.singletonList(coding));
         
         OperationOutcome operationOutcome = new OperationOutcome();
-        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(issueTypeEnum).setDetails(errorCodableConcept);
+		// #248 move codableConceptText from text to diagnostics element
+        operationOutcome.addIssue().setSeverity(IssueSeverityEnum.ERROR).setCode(issueTypeEnum).setDetails(errorCodableConcept).setDiagnostics(codableConceptText);
         operationOutcome.getMeta().addProfile(metaProfile);
 
         return operationOutcome;

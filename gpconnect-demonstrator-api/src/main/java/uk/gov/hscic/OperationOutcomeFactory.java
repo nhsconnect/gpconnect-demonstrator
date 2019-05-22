@@ -14,19 +14,33 @@ public class OperationOutcomeFactory {
     private OperationOutcomeFactory() {
     }
 
+    /**
+     * overload with null diagnostics
+     * @param exception
+     * @param code
+     * @param issueType
+     * @return BaseServerResponseException
+     */
     public static BaseServerResponseException buildOperationOutcomeException(BaseServerResponseException exception,
             String code, IssueType issueType) {
 
         return buildOperationOutcomeException(exception, code, issueType, null);
     }
 
+    /**
+     * 
+     * @param exception carries message used for diagnostics
+     * @param code
+     * @param issueType
+     * @param diagnostics may be null but will override exception.message if set
+     * @return BaseServerResponseException
+     */
     public static BaseServerResponseException buildOperationOutcomeException(BaseServerResponseException exception,
             String code, IssueType issueType, String diagnostics) {
         CodeableConcept codeableConcept = new CodeableConcept();
         Coding coding = new Coding(SystemURL.VS_GPC_ERROR_WARNING_CODE, code, code);
         codeableConcept.addCoding(coding);
-        codeableConcept.setText(exception.getMessage());
-
+        
         OperationOutcome operationOutcome = new OperationOutcome();
 
         OperationOutcomeIssueComponent ooIssue = new OperationOutcomeIssueComponent();
@@ -34,8 +48,12 @@ public class OperationOutcomeFactory {
 
         if (diagnostics != null) {
             ooIssue.setDiagnostics(diagnostics);
+        } else {
+            // #248 move exception.getMessage() from text to diagnostics element
+            ooIssue.setDiagnostics(exception.getMessage());
         }
 
+        
         operationOutcome.addIssue(ooIssue);
 
         operationOutcome.getMeta().addProfile(SystemURL.SD_GPC_OPERATIONOUTCOME);

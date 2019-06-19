@@ -306,7 +306,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         if (theException instanceof InvalidRequestException
                 && theException.getMessage().startsWith("Failed to parse request body as JSON resource. Error was: ")) {
-            // #250 422 INVALID_RESOURCE not 400 BAD_REQUEST
+			// #250 422 INVALID_RESOURCE not 400 BAD_REQUEST
             return OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(theException.getMessage()), SystemCode.INVALID_RESOURCE,
                     IssueType.INVALID);

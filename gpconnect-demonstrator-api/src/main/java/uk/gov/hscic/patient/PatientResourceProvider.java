@@ -701,7 +701,7 @@ public class PatientResourceProvider implements IResourceProvider {
             String message = String.format(
                     "The following properties have been constrained out on the Patient resource - %s",
                     String.join(", ", invalidFields));
-			// #250 422 INVALID_RESOURCE not 400 BAD_REQUEST
+            // #250 422 INVALID_RESOURCE not 400 BAD_REQUEST
             throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(message),
                     SystemCode.INVALID_RESOURCE, IssueType.INVALID);
         }

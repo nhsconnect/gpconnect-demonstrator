@@ -61,82 +61,82 @@ import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnp
 
 @Component
 public class PatientResourceProvider implements IResourceProvider {
-    
+
     public static final String REGISTER_PATIENT_OPERATION_NAME = "$gpc.registerpatient";
     public static final String GET_CARE_RECORD_OPERATION_NAME = "$gpc.getcarerecord";
     public static final String GET_STRUCTURED_RECORD_OPERATION_NAME = "$gpc.getstructuredrecord";
-    
+
     private static final String TEMPORARY_RESIDENT_REGISTRATION_TYPE = "T";
     private static final String ACTIVE_REGISTRATION_STATUS = "A";
-    
+
     private static final int ADDRESS_CITY_INDEX = 3;
     private static final int ADDRESS_DISTRICT_INDEX = 4;
-    
+
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
-    
+
     @Autowired
     private PractitionerRoleResourceProvider practitionerRoleResourceProvider;
-    
+
     @Autowired
     private AppointmentResourceProvider appointmentResourceProvider;
-    
+
     @Autowired
     private OrganizationResourceProvider organizationResourceProvider;
-    
+
     @Autowired
     private PatientStore patientStore;
-    
+
     @Autowired
     private PatientSearch patientSearch;
-    
+
     @Autowired
     private OrganizationSearch organizationSearch;
-    
+
     @Autowired
     private StaticElementsHelper staticElHelper;
-    
+
     @Autowired
     private StructuredAllergyIntoleranceBuilder structuredAllergyIntoleranceBuilder;
-    
+
     @Autowired
     private PopulateMedicationBundle populateMedicationBundle;
-    
+
     @Value("${datasource.patient.notOnSpine:#{null}}")
     private String patientNotOnSpine;
-    
+
     @Value("${datasource.patient.superseded:#{null}}")
     private String patientSuperseded;
-    
+
     @Value("${datasource.patient.nhsNumber:#{null}}")
     private String patient2;
-    
+
     @Value("${datasource.patient.noconsent:#{null}}")
     private String patientNoconsent;
-    
+
     private NhsNumber nhsNumber;
-    
+
     private Map<String, Boolean> registerPatientParams;
-    
+
     public static Set<String> getCustomReadOperations() {
         Set<String> customReadOperations = new HashSet<>();
         customReadOperations.add(GET_CARE_RECORD_OPERATION_NAME);
         
         return customReadOperations;
     }
-    
+
     public static Set<String> getCustomWriteOperations() {
         Set<String> customWriteOperations = new HashSet<>();
         customWriteOperations.add(REGISTER_PATIENT_OPERATION_NAME);
         
         return customWriteOperations;
     }
-    
+
     @Override
     public Class<Patient> getResourceType() {
         return Patient.class;
     }
-    
+
     @PostConstruct
     public void postConstruct() {
         nhsNumber = new NhsNumber();
@@ -150,7 +150,7 @@ public class PatientResourceProvider implements IResourceProvider {
         patientNoconsent = patientNoconsent.trim();
         patient2 = patient2.trim();
     }
-    
+
     @Read(version = true)
     public Patient getPatientById(@IdParam IdType internalId) throws FHIRException {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
@@ -168,7 +168,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
         return patient;
     }
-    
+
     @Search
     public List<Patient> getPatientsByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam tokenParam)
             throws FHIRException {
@@ -184,20 +184,20 @@ public class PatientResourceProvider implements IResourceProvider {
         return null == patient || patient.getDeceased() != null || !patientDetails.isActive() || patientDetails.isSensitive() ? Collections.emptyList()
                 : Collections.singletonList(patient);
     }
-    
+
     private void addPreferredBranchSurgeryExtension(Patient patient) {
         List<Extension> regDetailsEx = patient.getExtensionsByUrl(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
         Extension branchSurgeryEx = regDetailsEx.get(0).addExtension();
         branchSurgeryEx.setUrl("preferredBranchSurgery");
         branchSurgeryEx.setValue(new Reference("Location/1"));
     }
-    
+
     private Patient getPatientByPatientId(String patientId) throws FHIRException {
         PatientDetails patientDetails = patientSearch.findPatient(patientId);
         
         return null == patientDetails ? null : patientDetailsToPatientResourceConverter(patientDetails);
     }
-    
+
     private void validateParameterNames(Parameters parameters, Map<String, Boolean> parameterDefinitions) {
         List<String> parameterNames = parameters.getParameter().stream().map(ParametersParameterComponent::getName)
                 .collect(Collectors.toList());
@@ -227,13 +227,13 @@ public class PatientResourceProvider implements IResourceProvider {
                     SystemCode.INVALID_PARAMETER, IssueType.INVALID);
         }
     }
-    
+
     @Search(compartmentName = "Appointment")
     public List<Appointment> getPatientAppointments(@IdParam IdType patientLocalId, @Sort SortSpec sort,
             @Count Integer count, @OptionalParam(name = "start") DateAndListParam startDate) {
         return appointmentResourceProvider.getAppointmentsForPatientIdAndDates(patientLocalId, sort, count, startDate);
     }
-    
+
     @Operation(name = GET_STRUCTURED_RECORD_OPERATION_NAME)
     public Bundle StructuredRecordOperation(@ResourceParam Parameters params) throws FHIRException {
         Bundle structuredBundle = new Bundle();
@@ -402,7 +402,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     IssueType.INVALID);
         }
     }
-    
+
     @Operation(name = REGISTER_PATIENT_OPERATION_NAME)
     public Bundle registerPatient(@ResourceParam Parameters params) {
         Patient registeredPatient = null;
@@ -478,7 +478,7 @@ public class PatientResourceProvider implements IResourceProvider {
         
         return bundle;
     }
-    
+
     private void updateAddressAndTelecom(Patient unregisteredPatient, PatientDetails patientDetails) {
         ArrayList<TelecomDetails> al = new ArrayList<>();
         if (unregisteredPatient.getTelecom().size() > 0) {
@@ -526,11 +526,11 @@ public class PatientResourceProvider implements IResourceProvider {
                 && patientDetails.getRegistrationStatus() != null
                 && ACTIVE_REGISTRATION_STATUS.equals(patientDetails.getRegistrationStatus()) == false;
     }
-    
+
     public String getNhsNumber(Object source) {
         return nhsNumber.getNhsNumber(source);
     }
-    
+
     private void validatePatient(Patient patient) {
         validateIdentifiers(patient);
         validateTelecomAndAddress(patient);
@@ -540,7 +540,7 @@ public class PatientResourceProvider implements IResourceProvider {
         validateDateOfBirth(patient);
         validateGender(patient);
     }
-    
+
     private void validateTelecomAndAddress(Patient patient) {
         // 0..1 of phone - (not nec. temp),  0..1 of email
         HashSet<ContactPointUse> phoneUse = new HashSet<>();
@@ -623,7 +623,7 @@ public class PatientResourceProvider implements IResourceProvider {
             }
         }
     }
-    
+
     private void validateDateOfBirth(Patient patient) {
         Date birthDate = patient.getBirthDate();
         
@@ -631,7 +631,7 @@ public class PatientResourceProvider implements IResourceProvider {
             throwInvalidRequest400_BadRequestException("The Patient date of birth must be supplied");
         }
     }
-    
+
     private void validateIdentifiers(Patient patient) {
         List<Identifier> identifiers = patient.getIdentifier();
         if (identifiers.isEmpty() == false) {
@@ -645,7 +645,7 @@ public class PatientResourceProvider implements IResourceProvider {
             throwInvalidRequest400_BadRequestException("At least one identifier must be supplied on a Patient resource");
         }
     }
-    
+
     private void checkValidExtensions(List<Extension> undeclaredExtensions) {
 
         // This list must be empty for the request to be valid
@@ -675,7 +675,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     + extensionURLs.stream().collect(Collectors.joining(", ")));
         }
     }
-    
+
     private void validateConstrainedOutProperties(Patient patient) {
         
         Set<String> invalidFields = new HashSet<>();
@@ -727,7 +727,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     SystemCode.INVALID_RESOURCE, IssueType.INVALID);
         }
     }
-    
+
     private void validateNames(Patient patient) {
         List<HumanName> names = patient.getName();
         
@@ -755,7 +755,7 @@ public class PatientResourceProvider implements IResourceProvider {
         
         validateNameCount(officialFamilyNames, "family");
     }
-    
+
     private void validateNameCount(List<String> names, String nameType) {
         if (names.size() != 1) {
             throwInvalidRequest400_BadRequestException(
@@ -763,7 +763,7 @@ public class PatientResourceProvider implements IResourceProvider {
                             nameType, names.size()));
         }
     }
-    
+
     private Boolean IsActiveName(HumanName name) {
         
         Period period = name.getPeriod();
@@ -778,7 +778,7 @@ public class PatientResourceProvider implements IResourceProvider {
         return (null == end || end.after(new Date()))
                 && (null == start || start.equals(new Date()) || start.before(new Date()));
     }
-    
+
     private PatientDetails registerPatientResourceConverterToPatientDetail(Patient patientResource) {
         PatientDetails patientDetails = new PatientDetails();
         HumanName name = patientResource.getNameFirstRep();
@@ -867,7 +867,7 @@ public class PatientResourceProvider implements IResourceProvider {
         
         return patient;
     }
-    
+
     private void setStaticCommunicationData(Patient patient) {
         // inhibited at 1.2.2
         //        patient.addExtension(createCodingExtension("CG", "Greek Cypriot", SystemURL.CS_CC_ETHNIC_CATEGORY_STU3,
@@ -891,14 +891,14 @@ public class PatientResourceProvider implements IResourceProvider {
         
         patient.addExtension(nhsCommExtension);
     }
-    
+
     private Extension createCodingExtension(String code, String display, String vsSystem, String extSystem) {
         
         Extension ext = new Extension(extSystem, createCoding(code, display, vsSystem));
         
         return ext;
     }
-    
+
     private CodeableConcept createCoding(String code, String display, String vsSystem) {
         
         Coding coding = new Coding();
@@ -938,7 +938,7 @@ public class PatientResourceProvider implements IResourceProvider {
             patient.addTelecom(populateTelecom(telecomDetails));
         }
     }
-    
+
     private Patient patientDetailsToMinimalPatient(PatientDetails patientDetails) throws FHIRException {
         Patient patient = new Patient();
         
@@ -1070,7 +1070,7 @@ public class PatientResourceProvider implements IResourceProvider {
         
         patient.addContact(contact);
     }
-    
+
     private Patient patientDetailsToPatientResourceConverter(PatientDetails patientDetails) throws FHIRException {
         Patient patient = patientDetailsToMinimalPatient(patientDetails);
         
@@ -1143,7 +1143,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 setUse(ContactPoint.ContactPointUse.valueOf(telecomDetails.getUseType())).
                 setValue(telecomDetails.getValue());
     }
-    
+
     private HumanName getPatientNameFromPatientDetails(PatientDetails patientDetails) {
         HumanName name = new HumanName();
         
@@ -1158,7 +1158,7 @@ public class PatientResourceProvider implements IResourceProvider {
         
         return name;
     }
-    
+
     private class NhsNumber {
         
         private NhsNumber() {
@@ -1301,7 +1301,7 @@ public class PatientResourceProvider implements IResourceProvider {
             return parameter;
         }
     }
-    
+
     private void validateStartDateParamAndEndDateParam(String startDate, String endDate) {
         Pattern dateOnlyPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
 
@@ -1310,7 +1310,7 @@ public class PatientResourceProvider implements IResourceProvider {
             throwInvalidParameterOperationalOutcome("Invalid date used");
         }
     }
-    
+
     private void throwInvalidParameterOperationalOutcome(String error) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(
                 new UnprocessableEntityException(

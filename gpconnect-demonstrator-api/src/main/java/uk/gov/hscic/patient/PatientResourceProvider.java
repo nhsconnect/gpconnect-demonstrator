@@ -85,7 +85,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PageSectionFactory pageSectionFactory;
-    
+
     @Value("${datasource.patient.noconsent}")
     private String patientNoConsent;
 
@@ -174,7 +174,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     OperationConstants.CODE_PATIENT_NOT_FOUND, OperationConstants.COD_CONCEPT_RECORD_NOT_FOUND,
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
                 }
-                
+
                 // #245 patient 15 no consent return forbidden 403
                 if (nhsNumber != null && nhsNumber.equals(patientNoConsent)) {
                     throw new ForbiddenOperationException("No patient consent to share for patient ID: " + nhsNumber,
@@ -259,32 +259,19 @@ public class PatientResourceProvider implements IResourceProvider {
             case "SUM":
                 page = new Page("Summary", sectionName);
 
-                if (VERSION.getMinor() <= 5) {
-                    page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber));
-                    page.addPageSection(pageSectionFactory.getMEDCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, 3));
-
-                } else {
-                    page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, 3));
-                    page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber));
-                    page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                }
+                page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, 3));
+                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
                 break;
 
             case "PRB":
                 page = new Page("Problems", sectionName);
-                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber));
-                if (VERSION.getMinor() <= 5) {
-                    page.addPageSection(pageSectionFactory.getPRBInactivePageSection(nhsNumber, requestedFromDate, requestedToDate));
-                } else {
-                    page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getPRBOtherInactivePageSection(nhsNumber, requestedFromDate, requestedToDate));
-                }
+                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getPRBOtherInactivePageSection(nhsNumber, requestedFromDate, requestedToDate));
 
                 break;
 
@@ -309,18 +296,11 @@ public class PatientResourceProvider implements IResourceProvider {
 
             case "MED":
                 page = new Page("Medications", sectionName);
-
-                if (VERSION.getMinor() <= 5) {
-                    page.addPageSection(pageSectionFactory.getMEDCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getMEDPastPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                } else {
-                    page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getMEDDiscontinuedRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getMEDAllMedicationPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                    page.addPageSection(pageSectionFactory.getMEDAllMedicationIssuesPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                }
+                page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDDiscontinuedRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDAllMedicationPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDAllMedicationIssuesPageSection(nhsNumber, requestedFromDate, requestedToDate));
 
                 break;
 

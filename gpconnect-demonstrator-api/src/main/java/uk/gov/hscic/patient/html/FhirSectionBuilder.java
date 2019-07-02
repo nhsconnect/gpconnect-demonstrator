@@ -48,27 +48,9 @@ public final class FhirSectionBuilder {
             // Header
             stringBuilder.append("<h2>").append(pageSection.getHeader()).append("</h2>");
 
-            stringBuilder.append("<div");
-            if (VERSION.getMinor() > 5) {
-                stringBuilder.append(" class=\"date-banner\"");
-            }
-            // Date Range Banner
-            if (pageSection.getFromDate() != null && pageSection.getToDate() != null) {
-                stringBuilder.append("><p>For the period '").append(DATE_FORMAT.format(pageSection.getFromDate())).append("' to '").append(DATE_FORMAT.format(pageSection.getToDate())).append("'</p></div>");
-            } else if (pageSection.getFromDate() != null && pageSection.getToDate() == null) {
-                // # 224
-                stringBuilder.append("><p>All data items from ").append(DATE_FORMAT.format(pageSection.getFromDate())).append("</p></div>");
-            } else if (pageSection.getFromDate() == null && pageSection.getToDate() != null) {
-                // #224
-                stringBuilder.append("><p>All data items until ").append(DATE_FORMAT.format(pageSection.getToDate())).append("</p></div>");
-            } else {
-                // #225 change text on banner
-                stringBuilder.append("><p>All relevant items</p></div>");
-            }
-
-            // Additional Banners
             if (!pageSection.getBanners().isEmpty()) {
-                stringBuilder.append("<div>");
+                // currently all date-banners
+                stringBuilder.append("<div class=\"date-banner\">");
 
                 for (String banner : pageSection.getBanners()) {
                     stringBuilder.append("<p>").append(banner).append("</p>");

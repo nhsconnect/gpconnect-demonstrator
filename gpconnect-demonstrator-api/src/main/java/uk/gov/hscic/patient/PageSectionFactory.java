@@ -2,6 +2,7 @@ package uk.gov.hscic.patient;
 
 import ca.uhn.fhir.model.dstu2.valueset.IssueTypeEnum;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationConstants;
@@ -21,7 +22,6 @@ import uk.gov.hscic.patient.html.PageSection;
 import uk.gov.hscic.patient.html.Table;
 import uk.gov.hscic.patient.immunisations.model.ImmunisationEntity;
 import uk.gov.hscic.patient.immunisations.repo.ImmunisationRepository;
-import uk.gov.hscic.patient.investigations.model.InvestigationEntity;
 import uk.gov.hscic.patient.investigations.repo.InvestigationRepository;
 import uk.gov.hscic.patient.observations.model.ObservationEntity;
 import uk.gov.hscic.patient.observations.repo.ObservationRepository;
@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import static uk.gov.hscic.metadata.GpConnectServerConformanceProvider.VERSION;
 
 @Component
 public class PageSectionFactory {
@@ -76,46 +75,65 @@ public class PageSectionFactory {
     @Autowired
     private AdminItemSearch adminItemSearch;
 
+    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy");
+
     /**
-     * Active Problems
+     * overload default to dont check for a date range
      *
-     * @param nhsNumber
-     * @return PageSection
+     * @param pageSection
      */
-    public PageSection getPRBActivePageSection(String nhsNumber) {
-        List<List<Object>> problemActiveRows = new ArrayList<>();
-        for (ProblemEntity problem : problemSearch.findProblems(nhsNumber)) {
-            if ("Active".equals(problem.getActiveOrInactive())) {
-                problemActiveRows.add(Arrays.asList(problem.getStartDate(), problem.getEntry(), problem.getSignificance(), problem.getDetails()));
-            }
-        }
-        return new PageSection("Active Problems and Issues",
-                "prb-tab-act",
-                new Table(Arrays.asList("Start Date", "Entry", "Significance", "Details"), problemActiveRows));
+    private void addDateRangeBanners(PageSection pageSection) {
+        addDateRangeBanners(pageSection, false);
     }
 
     /**
-     * 0.5 only Inactive Problems
+     * TODO the start only and end only dates are not surrounded by quotes
+     * unlike the range
+     *
+     * @param pageSection
+     */
+    private void addDateRangeBanners(PageSection pageSection, boolean isDateRange) {
+        StringBuilder sb = new StringBuilder();
+        if (isDateRange) {
+            sb.append("Date filter not applied"); // #251 for subsections not applying a date range
+        } else {
+            // Date Range Banner
+            if (pageSection.getFromDate() != null && pageSection.getToDate() != null) {
+                sb.append("For the period '").append(DATE_FORMAT.format(pageSection.getFromDate())).append("' to '").append(DATE_FORMAT.format(pageSection.getToDate())).append("'");
+            } else if (pageSection.getFromDate() != null && pageSection.getToDate() == null) {
+                // # 224
+                sb.append("All data items from ").append(DATE_FORMAT.format(pageSection.getFromDate()));
+            } else if (pageSection.getFromDate() == null && pageSection.getToDate() != null) {
+                // #224
+                sb.append("All data items until ").append(DATE_FORMAT.format(pageSection.getToDate()));
+            } else {
+                // #225 change text on banner
+                sb.append("All relevant items");
+            }
+        }
+        pageSection.addBanner(sb.toString());
+    }
+
+    /**
+     * Active Problems
      *
      * @param nhsNumber
      * @param requestedFromDate
      * @param requestedToDate
      * @return PageSection
      */
-    public PageSection getPRBInactivePageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
-        List<List<Object>> problemInactiveRows = new ArrayList<>();
-
-        List<ProblemEntity> findProblems = problemSearch.findProblems(nhsNumber, requestedFromDate, requestedToDate);
-        for (ProblemEntity problem : findProblems) {
-            if (!"Active".equals(problem.getActiveOrInactive())) {
-                problemInactiveRows.add(Arrays.asList(problem.getStartDate(), problem.getEndDate(), problem.getEntry(), problem.getSignificance(), problem.getDetails()));
+    public PageSection getPRBActivePageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
+        List<List<Object>> problemActiveRows = new ArrayList<>();
+        for (ProblemEntity problem : problemSearch.findProblems(nhsNumber)) {
+            if ("Active".equals(problem.getActiveOrInactive())) {
+                problemActiveRows.add(Arrays.asList(problem.getStartDate(), problem.getEntry(), problem.getSignificance(), problem.getDetails()));
             }
         }
-
-        return new PageSection("Inactive Problems and Issues",
-                "",  // Not required at 0.5
-                new Table(Arrays.asList("Start Date", "End Date", "Entry", "Significance", "Details"), problemInactiveRows),
-                requestedFromDate, requestedToDate);
+        PageSection ps = new PageSection("Active Problems and Issues",
+                "prb-tab-act",
+                new Table(Arrays.asList("Start Date", "Entry", "Significance", "Details"), problemActiveRows));
+        addDateRangeBanners(ps, requestedFromDate != null || requestedToDate != null);  // #251 Date filter not applied to subsection
+        return ps;
     }
 
     /**
@@ -136,10 +154,12 @@ public class PageSectionFactory {
             }
         }
 
-        return new PageSection("Major Inactive Problems and Issues",
+        PageSection ps = new PageSection("Major Inactive Problems and Issues",
                 "prb-tab-majinact",
                 new Table(Arrays.asList("Start Date", "End Date", "Entry", "Significance", "Details"), problemInactiveRows),
                 requestedFromDate, requestedToDate);
+        addDateRangeBanners(ps);
+        return ps;
     }
 
     /**
@@ -160,10 +180,12 @@ public class PageSectionFactory {
             }
         }
 
-        return new PageSection("Other Inactive Problems and Issues",
+        PageSection ps = new PageSection("Other Inactive Problems and Issues",
                 "prb-tab-othinact",
                 new Table(Arrays.asList("Start Date", "End Date", "Entry", "Significance", "Details"), problemInactiveRows),
                 requestedFromDate, requestedToDate);
+        addDateRangeBanners(ps);
+        return ps;
     }
 
     /**
@@ -206,10 +228,12 @@ public class PageSectionFactory {
             }
         }
 
-        return new PageSection(maxRows != -1 ? "Last "+ maxRows +" Encounters" : "Encounters",
+        PageSection ps = new PageSection(maxRows != -1 ? "Last " + maxRows + " Encounters" : "Encounters",
                 "enc-tab",
                 new Table(Arrays.asList("Date", "Title", "Details"), encounterRows),
                 requestedFromDate, requestedToDate);
+        addDateRangeBanners(ps);
+        return ps;
     }
 
     /**
@@ -223,7 +247,7 @@ public class PageSectionFactory {
      * @return PageSection
      */
     public PageSection getALLCurrentPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
-        if (toDate != null && fromDate != null) {
+        if (toDate != null || fromDate != null) {
             throw new InvalidRequestException("Date Ranges not allowed to be set",
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
                             OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
@@ -238,10 +262,13 @@ public class PageSectionFactory {
             }
         }
 
-        return new PageSection("Current Allergies and Adverse Reactions",
+        PageSection ps = new PageSection("Current Allergies and Adverse Reactions",
                 "all-tab-curr",
                 new Table(Arrays.asList("Start Date", "Details"), currentAllergyRows),
                 requestedFromDate, requestedToDate);
+
+        addDateRangeBanners(ps);
+        return ps;
     }
 
     /**
@@ -255,7 +282,7 @@ public class PageSectionFactory {
      * @return PageSection
      */
     public PageSection getALLHistoricalPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
-        if (toDate != null && fromDate != null) {
+        if (toDate != null || fromDate != null) {
             throw new InvalidRequestException("Date Ranges not allowed to be set",
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
                             OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
@@ -270,10 +297,13 @@ public class PageSectionFactory {
             }
         }
 
-        return new PageSection("Historical Allergies and Adverse Reactions",
+        PageSection ps = new PageSection("Historical Allergies and Adverse Reactions",
                 "all-tab-hist",
                 new Table(Arrays.asList("Start Date", "End Date", "Details"), historicalAllergyRows),
                 requestedFromDate, requestedToDate);
+
+        addDateRangeBanners(ps);
+        return ps;
     }
 
     /**
@@ -296,73 +326,17 @@ public class PageSectionFactory {
             }
         }
 
-        return new PageSection("Clinical Items",
+        PageSection ps = new PageSection("Clinical Items",
                 "cli-tab",
                 new Table(Arrays.asList("Date", "Entry", "Details"), clinicalItemsRows),
                 requestedFromDate, requestedToDate);
+        addDateRangeBanners(ps);
+        return ps;
     }
 
     /**
-     * 0.5 only Current Medications
+     * 0.7 only Acute Medications order by start date desc
      *
-     * @param nhsNumber
-     * @param requestedFromDate
-     * @param requestedToDate
-     * @return PageSection
-     */
-    public PageSection getMEDCurrentPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
-        List<List<Object>> currentMedRows = new ArrayList<>();
-
-        for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationHtmlRepository.findBynhsNumberOrderByStartDateDesc(nhsNumber)) {
-            if ("Current".equals(patientMedicationHtmlEntity.getCurrentRepeatPast())) {
-                currentMedRows.add(Arrays.asList(
-                        patientMedicationHtmlEntity.getStartDate(),
-                        patientMedicationHtmlEntity.getMedicationItem(),
-                        patientMedicationHtmlEntity.getTypeMed(),
-                        patientMedicationHtmlEntity.getScheduledEnd(),
-                        patientMedicationHtmlEntity.getDaysDuration(),
-                        patientMedicationHtmlEntity.getDetails()));
-            }
-        }
-
-        return new PageSection("Current Medication Issues",
-                "", // Not required at 0.5
-                new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End Date", "Days Duration", "Details"), currentMedRows));
-    }
-
-    /**
-     * 0.5 only Past Medications
-     *
-     * @param nhsNumber
-     * @param requestedFromDate
-     * @param requestedToDate
-     * @return PageSection
-     */
-    public PageSection getMEDPastPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
-        List<List<Object>> pastMedRows = new ArrayList<>();
-
-        for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationSearch.findMedications(nhsNumber, requestedFromDate, requestedToDate, medicationSearch.PAST)) {
-            pastMedRows.add(Arrays.asList(
-                    patientMedicationHtmlEntity.getStartDate(),
-                    patientMedicationHtmlEntity.getMedicationItem(),
-                    patientMedicationHtmlEntity.getTypeMed(),
-                    patientMedicationHtmlEntity.getLastIssued(),
-                    patientMedicationHtmlEntity.getReviewDate(),
-                    patientMedicationHtmlEntity.getNumberIssued(),
-                    patientMedicationHtmlEntity.getMaxIssues(),
-                    patientMedicationHtmlEntity.getDetails()));
-        }
-
-        return new PageSection("Past Medications",
-                "", // Not required at 0.5
-                new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Last Issued", "Review Date", "Number Issued", "Max Issues", "Details"), pastMedRows),
-                requestedFromDate, requestedToDate);
-    }
-
-    /**
-     * 0.7 only Acute Medications
-     * order by 
-     *  start date desc
      * @param nhsNumber
      * @param requestedFromDate
      * @param requestedToDate
@@ -385,7 +359,7 @@ public class PageSectionFactory {
             }
         }
 
-        return new PageSection("Acute Medication (Last 12 Months)",
+        PageSection ps = new PageSection("Acute Medication (Last 12 Months)",
                 "med-tab-acu-med",
                 new Table(Arrays.asList(
                         "Type",
@@ -396,11 +370,13 @@ public class PageSectionFactory {
                         "Scheduled End Date",
                         "Days Duration",
                         "Additional Information"), currentMedRows));
+        addDateRangeBanners(ps, requestedFromDate != null || requestedToDate != null);  // #251 Date filter not applied to subsection
+        return ps;
     }
 
     /**
-     * Current Repeat Medications
-     * order by start date desc
+     * Current Repeat Medications order by start date desc
+     *
      * @param nhsNumber
      * @param requestedFromDate
      * @param requestedToDate
@@ -412,64 +388,41 @@ public class PageSectionFactory {
         for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationHtmlRepository.findBynhsNumberOrderByStartDateDesc(nhsNumber)) {
             if ("Repeat".equals(patientMedicationHtmlEntity.getCurrentRepeatPast())) {
 
-                if (VERSION.getMinor() <= 5) {
-                    repeatMedRows.add(Arrays.asList(
-                            patientMedicationHtmlEntity.getLastIssued(),
-                            patientMedicationHtmlEntity.getMedicationItem(),
-                            patientMedicationHtmlEntity.getStartDate(),
-                            patientMedicationHtmlEntity.getReviewDate(),
-                            patientMedicationHtmlEntity.getNumberIssued(),
-                            patientMedicationHtmlEntity.getMaxIssues(),
-                            patientMedicationHtmlEntity.getDetails()));
-                } else {
-                    repeatMedRows.add(Arrays.asList(
-                            patientMedicationHtmlEntity.getTypeMed(),
-                            patientMedicationHtmlEntity.getStartDate(),
-                            patientMedicationHtmlEntity.getMedicationItem(),
-                            patientMedicationHtmlEntity.getDosageInstruction(),
-                            patientMedicationHtmlEntity.getQuantity(),
-                            patientMedicationHtmlEntity.getLastIssued(),
-                            patientMedicationHtmlEntity.getNumberIssued(),
-                            patientMedicationHtmlEntity.getMaxIssues(),
-                            patientMedicationHtmlEntity.getReviewDate(),
-                            patientMedicationHtmlEntity.getDetails()));
-                }
+                repeatMedRows.add(Arrays.asList(
+                        patientMedicationHtmlEntity.getTypeMed(),
+                        patientMedicationHtmlEntity.getStartDate(),
+                        patientMedicationHtmlEntity.getMedicationItem(),
+                        patientMedicationHtmlEntity.getDosageInstruction(),
+                        patientMedicationHtmlEntity.getQuantity(),
+                        patientMedicationHtmlEntity.getLastIssued(),
+                        patientMedicationHtmlEntity.getNumberIssued(),
+                        patientMedicationHtmlEntity.getMaxIssues(),
+                        patientMedicationHtmlEntity.getReviewDate(),
+                        patientMedicationHtmlEntity.getDetails()));
             } // if repeat
         }  // for entity
 
-        if (VERSION.getMinor() <= 5) {
-            return new PageSection("Current Repeat Medications",
-                    "", // Not required at 0.5
-                    new Table(Arrays.asList(
-                            "Last Issued",
-                            "Medication Item",
-                            "Start Date",
-                            "Review Date",
-                            "Number Issued",
-                            "Max Issues",
-                            "Details"), repeatMedRows));
-
-        } else {  // 0.7
-            // NB Now the singular
-            return new PageSection("Current Repeat Medication",
-                    "med-tab-curr-rep",
-                    new Table(Arrays.asList(
-                            "Type",
-                            "Start Date",
-                            "Medication Item",
-                            "Dosage Instruction",
-                            "Quantity",
-                            "Last Issued Date",
-                            "Number of Prescriptions Issued",
-                            "Max Issues",
-                            "Review Date",
-                            "Additional Information"), repeatMedRows));
-        }
+        // NB Now the singular
+        PageSection ps = new PageSection("Current Repeat Medication",
+                "med-tab-curr-rep",
+                new Table(Arrays.asList(
+                        "Type",
+                        "Start Date",
+                        "Medication Item",
+                        "Dosage Instruction",
+                        "Quantity",
+                        "Last Issued Date",
+                        "Number of Prescriptions Issued",
+                        "Max Issues",
+                        "Review Date",
+                        "Additional Information"), repeatMedRows));
+        addDateRangeBanners(ps, requestedFromDate != null || requestedToDate != null);  // #251 Date filter not applied to subsection
+        return ps;
     }
 
     /**
-     * Discontinued Repeat Medications
-     * order by Last Issued Date desc
+     * Discontinued Repeat Medications order by Last Issued Date desc
+     *
      * @param nhsNumber
      * @param requestedFromDate
      * @param requestedToDate
@@ -490,7 +443,7 @@ public class PageSectionFactory {
                     patientMedicationHtmlEntity.getDetails()));
         }
 
-        return new PageSection("Discontinued Repeat Medication",
+        PageSection ps = new PageSection("Discontinued Repeat Medication",
                 "med-tab-dis-rep",
                 new Table(Arrays.asList(
                         "Type",
@@ -501,16 +454,18 @@ public class PageSectionFactory {
                         "Discontinued Date",
                         "Discontinuation Reason",
                         "Additional Information"), pastMedRows),
-                requestedFromDate, requestedToDate);
+                null, null);
+        addDateRangeBanners(ps, requestedFromDate != null || requestedToDate != null);
+        return ps;
     }
 
     /**
-     * 0.7 only All Medications (Summary)
-     * This is a grouped summarised list of the items in the All Medication Issues Table
-     *  grouped by Type, Start Date as min(Issue Date), Medication Item, Dosage Instruction, Quantity,count(*) as Number of Prescriptions, Last Issued Date as max(Issue Date)
-     *  sorted by 
-     *  medication item asc
-     *  start date desc
+     * 0.7 only All Medications (Summary) This is a grouped summarised list of
+     * the items in the All Medication Issues Table grouped by Type, Start Date
+     * as min(Issue Date), Medication Item, Dosage Instruction,
+     * Quantity,count(*) as Number of Prescriptions, Last Issued Date as
+     * max(Issue Date) sorted by medication item asc start date desc
+     *
      * @param nhsNumber
      * @param requestedFromDate
      * @param requestedToDate
@@ -537,7 +492,7 @@ public class PageSectionFactory {
                     patientMedicationHtmlEntity.getDetails()));
         }
 
-        return new PageSection("All Medication",
+        PageSection ps = new PageSection("All Medication",
                 "med-tab-all-sum",
                 new Table(Arrays.asList(
                         "Type",
@@ -549,14 +504,13 @@ public class PageSectionFactory {
                         "Number of Prescriptions Issued",
                         "Discontinuation Details",
                         "Additional Information"), currentMedRows));
+        addDateRangeBanners(ps);
+        return ps;
     }
 
     /**
-     * 0.7 only All medication Issues 
-     * itemised list 
-     * sorted by 
-     *  medication item asc
-     *  issue date desc
+     * 0.7 only All medication Issues itemised list sorted by medication item
+     * asc issue date desc
      *
      * @param nhsNumber
      * @param requestedFromDate
@@ -582,7 +536,7 @@ public class PageSectionFactory {
                     patientMedicationHtmlEntity.getDetails()));
         }
 
-        return new PageSection("All Medication Issues",
+        PageSection ps = new PageSection("All Medication Issues",
                 "med-tab-all-iss",
                 new Table(Arrays.asList(
                         "Type",
@@ -592,6 +546,8 @@ public class PageSectionFactory {
                         "Quantity",
                         "Days Duration",
                         "Additional Information"), currentMedRows));
+        addDateRangeBanners(ps);
+        return ps;
     }
 
     /**
@@ -616,10 +572,12 @@ public class PageSectionFactory {
                     referralEntity.getDetails()));
         }
 
-        return new PageSection("Referrals",
+        PageSection ps = new PageSection("Referrals",
                 "ref-tab",
                 new Table(Arrays.asList("Date", "From", "To", "Priority", "Details"), referralRows),
                 requestedFromDate, requestedToDate);
+        addDateRangeBanners(ps);
+        return ps;
     }
 
     /**
@@ -643,34 +601,12 @@ public class PageSectionFactory {
                     observationEntity.getDetails()));
         }
 
-        return new PageSection("Observations",
+        PageSection ps = new PageSection("Observations",
                 "obs-tab",
                 new Table(Arrays.asList("Date", "Entry", "Value", "Range", "Details"), observationRows),
                 requestedFromDate, requestedToDate);
-    }
-
-    /**
-     * Investigations
-     * Removed at 0.5.1
-     * @param nhsNumber
-     * @param requestedFromDate
-     * @param requestedToDate
-     * @return PageSection
-     */
-    public PageSection getINVPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
-        List<List<Object>> investigationRows = new ArrayList<>();
-
-        for (InvestigationEntity investigationEntity : investigationRepository.findByNhsNumberOrderByDateDesc(nhsNumber)) {
-            investigationRows.add(Arrays.asList(
-                    investigationEntity.getDate(),
-                    investigationEntity.getTitle(),
-                    investigationEntity.getDetails()));
-        }
-
-        return new PageSection("Investigations",
-                "", 
-                new Table(Arrays.asList("Date", "Title", "Details"), investigationRows),
-                requestedFromDate, requestedToDate);
+        addDateRangeBanners(ps);
+        return ps;
     }
 
     /**
@@ -684,7 +620,7 @@ public class PageSectionFactory {
      * @return PageSection
      */
     public PageSection getIMMPageSection(String nhsNumber, Date fromDate, Date toDate, Date requestedFromDate, Date requestedToDate) {
-        if (toDate != null && fromDate != null) {
+        if (toDate != null || fromDate != null) {
             throw new InvalidRequestException("Date Ranges not allowed to be set",
                     OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
                             OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
@@ -702,10 +638,12 @@ public class PageSectionFactory {
                     immunisationEntity.getDetails()));
         }
 
-        return new PageSection("Immunisations",
+        PageSection ps = new PageSection("Immunisations",
                 "imm-tab",
                 new Table(Arrays.asList("Date", "Vaccination", "Part", "Contents", "Details"), immunisationRows),
                 requestedFromDate, requestedToDate);
+        addDateRangeBanners(ps);
+        return ps;
     }
 
     /**
@@ -728,9 +666,11 @@ public class PageSectionFactory {
             }
         }
 
-        return new PageSection("Administrative Items",
+        PageSection ps = new PageSection("Administrative Items",
                 "adm-tab",
                 new Table(Arrays.asList("Date", "Entry", "Details"), adminItemsRows),
                 requestedFromDate, requestedToDate);
+        addDateRangeBanners(ps);
+        return ps;
     }
 }

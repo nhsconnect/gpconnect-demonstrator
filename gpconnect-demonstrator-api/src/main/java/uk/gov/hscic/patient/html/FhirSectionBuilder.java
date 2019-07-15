@@ -56,11 +56,11 @@ public final class FhirSectionBuilder {
             if (pageSection.getFromDate() != null && pageSection.getToDate() != null) {
                 stringBuilder.append("><p>For the period '").append(DATE_FORMAT.format(pageSection.getFromDate())).append("' to '").append(DATE_FORMAT.format(pageSection.getToDate())).append("'</p></div>");
             } else if (pageSection.getFromDate() != null && pageSection.getToDate() == null) {
-                // # 224
-                stringBuilder.append("><p>All data items from ").append(DATE_FORMAT.format(pageSection.getFromDate())).append("</p></div>");
+                // # 224, #255 add quotes
+                stringBuilder.append("><p>All data items from '").append(DATE_FORMAT.format(pageSection.getFromDate())).append("'").append("</p></div>");
             } else if (pageSection.getFromDate() == null && pageSection.getToDate() != null) {
-                // #224
-                stringBuilder.append("><p>All data items until ").append(DATE_FORMAT.format(pageSection.getToDate())).append("</p></div>");
+                // #224, #255 add quotes
+                stringBuilder.append("><p>All data items until '").append(DATE_FORMAT.format(pageSection.getToDate())).append("'").append("</p></div>");
             } else {
                 // #225 change text on banner
                 stringBuilder.append("><p>All relevant items</p></div>");

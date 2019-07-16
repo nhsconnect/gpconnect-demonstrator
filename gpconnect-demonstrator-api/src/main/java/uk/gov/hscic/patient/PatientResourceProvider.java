@@ -51,7 +51,6 @@ import org.springframework.stereotype.Component;
 import uk.gov.hscic.OperationConstants;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.common.util.NhsCodeValidator;
-import static uk.gov.hscic.metadata.GpConnectServerConformanceProvider.VERSION;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.details.search.PatientSearch;
 import uk.gov.hscic.patient.html.FhirSectionBuilder;
@@ -235,13 +234,18 @@ public class PatientResourceProvider implements IResourceProvider {
                                     OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
                 }
 
+                // its not clear what is going on here we end up with toDate being a day later than requestedToDate and requestedToDate being rounded?
+                // both fromDate and  requestedFromDate appear to always be identical..
                 if (toDate != null) {
+                    // add a day to toDate
                     toDate = period.getEndElement().getPrecision().add(toDate, 1);
 
+                    // add a day to requestedToDate
                     requestedToDate = period.getEndElement().getPrecision().add(requestedToDate, 1);
                     Calendar toDateCalendar = Calendar.getInstance();
                     toDateCalendar.setTime(requestedToDate);
                     toDateCalendar.add(Calendar.DATE, -1);
+                    // subtract a day from requestedToDate
                     requestedToDate = toDateCalendar.getTime();
                 }
             } else {
@@ -261,8 +265,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, 3));
                 page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, fromDate, toDate,requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
                 break;
@@ -270,8 +274,8 @@ public class PatientResourceProvider implements IResourceProvider {
             case "PRB":
                 page = new Page("Problems", sectionName);
                 page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getPRBOtherInactivePageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getPRBOtherInactivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
 
@@ -283,8 +287,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
             case "ALL":
                 page = new Page("Allergies and Adverse Reactions", sectionName);
-                page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getALLHistoricalPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getALLHistoricalPageSection(nhsNumber, requestedFromDate, requestedToDate));
 
                 break;
 
@@ -299,8 +303,8 @@ public class PatientResourceProvider implements IResourceProvider {
                 page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDDiscontinuedRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getMEDAllMedicationPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getMEDAllMedicationIssuesPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDAllMedicationPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDAllMedicationIssuesPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
 
@@ -312,13 +316,13 @@ public class PatientResourceProvider implements IResourceProvider {
 
             case "OBS":
                 page = new Page("Observations", sectionName);
-                page.addPageSection(pageSectionFactory.getOBSPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getOBSPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
 
             case "IMM":
                 page = new Page("Immunisations", sectionName);
-                page.addPageSection(pageSectionFactory.getIMMPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getIMMPageSection(nhsNumber, requestedFromDate, requestedToDate));
 
                 break;
 

@@ -41,12 +41,17 @@ public final class FhirSectionBuilder {
     private static String createHtmlContent(Page page) {
         StringBuilder stringBuilder = new StringBuilder("<div>");
 
+        // #252 add an h1 section header
+        stringBuilder.append("<h1>").append(page.getName()).append("</h1>");
+        
         // Add sections
         for (PageSection pageSection : page.getPageSections()) {
             stringBuilder.append("<div>");
 
-            // Header
-            stringBuilder.append("<h2>").append(pageSection.getHeader()).append("</h2>");
+            // Sub Section Header #252
+            if (!pageSection.isSingleTable()) {
+                stringBuilder.append("<h2>").append(pageSection.getHeader()).append("</h2>");
+            }
 
             if (!pageSection.getBanners().isEmpty()) {
                 // currently all date-banners

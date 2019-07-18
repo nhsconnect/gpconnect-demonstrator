@@ -272,7 +272,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 break;
 
             case "PRB":
-                page = new Page("Problems", sectionName);
+                page = new Page("Problems and Issues", sectionName);
                 page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getPRBOtherInactivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));

@@ -27,6 +27,7 @@ import javax.annotation.PostConstruct;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hscic.SystemCode;
+import static uk.gov.hscic.SystemConstants.OUR_ODS_CODE;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
@@ -96,8 +97,6 @@ public class PopulateSlotBundle {
             Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation, boolean managingOrganisation, String bookingOdsCode, String bookingOrgType) {
         bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
 
-        // TODO remove hard coding pick up from providerRouting.json ?
-        final String OUR_ODS_CODE = "A20047";
 
         // find all locations for this ODS practice code and construct Resources for them
         // #144 generalise to handle 1..n locations for a practice

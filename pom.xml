@@ -37,7 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <fhir.version>3.0.0</fhir.version>
+        <fhir.version>3.8.0</fhir.version>
     </properties>
 
     <modules>
@@ -75,7 +75,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.5</version>
+                <version>3.9</version>
             </dependency>
 
             <dependency>
@@ -84,7 +84,7 @@
                 <version>${fhir.version}</version>
             </dependency>
             
-             <dependency>
+            <dependency>
                 <groupId>ca.uhn.hapi.fhir</groupId>
                 <artifactId>hapi-fhir-server</artifactId>
                 <version>${fhir.version}</version>

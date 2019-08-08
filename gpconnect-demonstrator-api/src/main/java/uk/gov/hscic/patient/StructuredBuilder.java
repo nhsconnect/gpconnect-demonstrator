@@ -1,5 +1,5 @@
 /*
- Copyright 2016  Simon Farrow <simon.farrow1@hscic.gov.uk>
+ Copyright 2019  Simon Farrow <simon.farrow1@hscic.gov.uk>
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,11 +15,20 @@
  */
 package uk.gov.hscic.patient;
 
+import ca.uhn.fhir.context.ConfigurationException;
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.DataFormatException;
+import ca.uhn.fhir.parser.IParser;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hl7.fhir.dstu3.model.Annotation;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
@@ -37,9 +46,12 @@ import static uk.gov.hscic.SystemConstants.SNOMED_URL;
 
 /**
  * appends fixed test results to a Bundle
+ *
  * @author simonfarrow
  */
-public class TestResultBuilder {
+public class StructuredBuilder {
+
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss");
 
     /**
      * This does not work since all entry full urls were removed see issue #215
@@ -63,8 +75,42 @@ public class TestResultBuilder {
         for (Bundle.BundleEntryComponent entry : getObservationBundleEntries()) {
             structuredBundle.addEntry(entry);
         }
-
         return structuredBundle;
+    }
+
+    /**
+     * append the entries in the xml bundle file to the response bundle
+     * can handle xml or json source
+     * @param filename fully qualified file path to canned response file
+     * @param structuredBundle
+     * @throws DataFormatException
+     * @throws ConfigurationException
+     */
+    public void appendCannedResponse(String filename, Bundle structuredBundle) throws DataFormatException, ConfigurationException {
+        try {
+            // read from a pre prepared file
+            FhirContext ctx = FhirContext.forDstu3();
+            String suffix = filename.replaceFirst("^.*\\.([^\\.]+)$", "$1");
+            IParser parser = null;
+            switch ( suffix.toLowerCase() ) {
+                case "xml":
+                    parser = ctx.newXmlParser();
+                    break;
+                case "json":
+                    parser = ctx.newJsonParser();
+                    break;
+                default:
+                    System.err.println("Unrecognised file type "+suffix);
+            }
+            String s = new String(Files.readAllBytes(new File(filename).toPath()));
+            Bundle bundle = (Bundle) parser.parseResource(s);
+
+            for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {
+                structuredBundle.addEntry(entry);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(StructuredBuilder.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -147,6 +193,12 @@ public class TestResultBuilder {
                 setDisplay("REARDON, John");
         diagnosticReport.setSubject(ref);
 
+        try {
+            diagnosticReport.setIssued(formatter.parse("2019-04-03T12:00:00+00:00"));
+        } catch (ParseException ex) {
+            Logger.getLogger(StructuredBuilder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         DiagnosticReport.DiagnosticReportPerformerComponent performer = new DiagnosticReport.DiagnosticReportPerformerComponent();
         ref = new Reference().
                 setReference("urn:uuid:d6407de7-0e86-45eb-93cb-035094aaa49e").
@@ -193,7 +245,6 @@ public class TestResultBuilder {
                 setDisplay("REARDON, John");
         specimen.setSubject(ref);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss");
         try {
             specimen.setReceivedTime(formatter.parse("2017-11-01T15:00:00+00:00"));
 
@@ -279,7 +330,7 @@ public class TestResultBuilder {
         Coding coding = new Coding().
                 setSystem(SNOMED_URL).
                 setCode("394595002").
-                setDisplay("394595002");
+                setDisplay("Pathology (qualifier value)");
         category.addCoding(coding);
         observation.setCategory(Collections.singletonList(category));
 

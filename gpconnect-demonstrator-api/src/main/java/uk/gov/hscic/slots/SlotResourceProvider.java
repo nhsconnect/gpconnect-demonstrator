@@ -152,9 +152,8 @@ public class SlotResourceProvider implements IResourceProvider {
                     break;
             }
         }
-        startDate.getValueAsInstantDt().getValue();
-        getScheduleOperation.populateBundle(bundle, new OperationOutcome(), startDate.getValueAsInstantDt().getValue(),
-                endDate.getValueAsInstantDt().getValue(), actorPractitioner, actorLocation, managingOrganisation, bookingOdsCode, bookingOrgType);
+        getScheduleOperation.populateBundle(bundle, new OperationOutcome(), startDate.getValue(),
+                endDate.getValue(), actorPractitioner, actorLocation, managingOrganisation, bookingOdsCode, bookingOrgType);
 
         return bundle;
 
@@ -285,12 +284,12 @@ public class SlotResourceProvider implements IResourceProvider {
             throwUnprocessableEntityInvalid422_ParameterException("Invalid date used");
         }
 
-        InstantDt instantDt = startDate.getValueAsInstantDt();
-        InstantDt instantDt2 = endDate.getValueAsInstantDt();
+//        InstantDt instantDt = startDate.getValueAsInstantDt();
+//        InstantDt instantDt2 = endDate.getValueAsInstantDt();
 
-        if (instantDt != null && instantDt2 != null) {
-            Date start = instantDt.getValue();
-            Date end = instantDt2.getValue();
+        if (startDate.getValue() != null && endDate.getValue() != null) {
+            Date start = startDate.getValue();
+            Date end = endDate.getValue();
 
             if (start != null && end != null) {
                 long period = ChronoUnit.DAYS.between(start.toInstant(), end.toInstant());

@@ -53,8 +53,8 @@ public class RefreshData {
     @Value("${datasource.refresh.slots.filename}")
     private String slotsFilename;
 
-    @Value("${datasource.patient.nhsNumber:#{null}}")
-    private String patient2NhsNo;
+    @Value("${datasource.patients:#{null}}")
+    private String[] patients;
 
     @Autowired
     private AppointmentStore appointmentStore;
@@ -202,7 +202,7 @@ public class RefreshData {
         appointment.setMinutesDuration(10);
 
         // beware spring does not strip trailing blanks from property values
-        PatientEntity patient = patientStore.findByNhsNumber(patient2NhsNo.trim());
+        PatientEntity patient = patientStore.findByNhsNumber(patients[2].trim());
         appointment.setPatientId(patient.getId());
 
         ScheduleDetail schedule = scheduleStore.findSchedule(slot.getScheduleReference());

@@ -53,11 +53,16 @@ import static org.hl7.fhir.dstu3.model.Address.AddressUse.OLD;
 import static org.hl7.fhir.dstu3.model.Address.AddressUse.WORK;
 import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
+import static uk.gov.hscic.SystemConstants.OUR_ODS_CODE;
 import static uk.gov.hscic.SystemConstants.VALID_PARAMETER_NAMES;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_NHS_COMMUNICATION;
 import uk.gov.hscic.model.telecom.TelecomDetails;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
+import static uk.gov.hscic.SystemConstants.PATIENT_2;
+import static uk.gov.hscic.SystemConstants.PATIENT_NOCONSENT;
+import static uk.gov.hscic.SystemConstants.PATIENT_NOTONSPINE;
+import static uk.gov.hscic.SystemConstants.PATIENT_SUPERSEDED;
 
 @Component
 public class PatientResourceProvider implements IResourceProvider {
@@ -102,17 +107,14 @@ public class PatientResourceProvider implements IResourceProvider {
     @Autowired
     private PopulateMedicationBundle populateMedicationBundle;
 
-    @Value("${datasource.patient.notOnSpine:#{null}}")
-    private String patientNotOnSpine;
+    @Value("${datasource.patients:#{null}}")
+    private String[] patients;
 
-    @Value("${datasource.patient.superseded:#{null}}")
-    private String patientSuperseded;
+    @Value("${config.path}")
+    private String configPath;
 
-    @Value("${datasource.patient.nhsNumber:#{null}}")
-    private String patient2;
-
-    @Value("${datasource.patient.noconsent:#{null}}")
-    private String patientNoconsent;
+    @Value("#{${responses}}")
+    private Map<String,String> hmCannedResponse;
 
     private NhsNumber nhsNumber;
 
@@ -145,10 +147,9 @@ public class PatientResourceProvider implements IResourceProvider {
         registerPatientParams.put("registerPatient", true);
 
         // Spring does not strip trailing blanks from property values
-        patientNotOnSpine = patientNotOnSpine.trim();
-        patientSuperseded = patientSuperseded.trim();
-        patientNoconsent = patientNoconsent.trim();
-        patient2 = patient2.trim();
+        for ( int i = 0; i < patients.length; i++) {
+            patients[i] = patients[i].trim();
+        }
     }
 
     @Read(version = true)
@@ -237,11 +238,14 @@ public class PatientResourceProvider implements IResourceProvider {
     @Operation(name = GET_STRUCTURED_RECORD_OPERATION_NAME)
     public Bundle StructuredRecordOperation(@ResourceParam Parameters params) throws FHIRException {
         Bundle structuredBundle = new Bundle();
-        Boolean getAllergies = false;
         Boolean includeResolved = false;
-        Boolean getMedications = false;
         Boolean includePrescriptionIssues = false;
-        Boolean getTestResults = false;
+
+        Boolean getAllergies = false;
+        Boolean getMedications = false;
+
+        HashSet<String> hmInclude = new HashSet<>();
+
         Period medicationPeriod = null;
 
         String NHS = getNhsNumber(params);
@@ -255,7 +259,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
         }
 
-        if (NHS.equals(patientNoconsent)) {
+        if (NHS.equals(patients[PATIENT_NOCONSENT])) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ForbiddenOperationException("No patient consent to share for patient ID: " + NHS),
                     SystemCode.NO_PATIENT_CONSENT, IssueType.FORBIDDEN);
@@ -264,70 +268,131 @@ public class PatientResourceProvider implements IResourceProvider {
         for (ParametersParameterComponent param : params.getParameter()) {
             validateParametersName(param.getName());
 
-            // Allergies
-            if (param.getName().equals(SystemConstants.INCLUDE_ALLERGIES_PARM)) {
-                getAllergies = true;
+            switch (param.getName()) {
+                case SystemConstants.INCLUDE_ALLERGIES_PARM:
+                    getAllergies = true;
 
-                if (param.getPart().isEmpty()) {
-                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM),
-                            SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
-                }
-
-                for (ParametersParameterComponent paramPart : param.getPart()) {
-                    if (paramPart.getValue() instanceof BooleanType
-                            && paramPart.getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM)) {
-                        includeResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
-                    } else {
+                    if (param.getPart().isEmpty()) {
                         throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
-                                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM),
+                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                     }
-                }
-            }
 
-            // Medications
-            if (param.getName().equals(SystemConstants.INCLUDE_MEDICATION_PARM)) {
-                getMedications = true;
+                    for (ParametersParameterComponent paramPart : param.getPart()) {
+                        if (paramPart.getValue() instanceof BooleanType
+                                && paramPart.getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM)) {
+                            includeResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
+                        } else {
+                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
+                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                        }
+                    }
+                    break;
 
-                if (param.getPart().isEmpty()) {
-                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-                            SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
-                }
+                case SystemConstants.INCLUDE_MEDICATION_PARM:
+                    getMedications = true;
 
-                boolean isIncludedPrescriptionIssuesExist = false;
-                for (ParametersParameterComponent paramPart : param.getPart()) {
-
-                    if (paramPart.getValue() instanceof BooleanType
-                            && paramPart.getName().equals(SystemConstants.INCLUDE_PRESCRIPTION_ISSUES)) {
-                        includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
-                        isIncludedPrescriptionIssuesExist = true;
-                    } else if (paramPart.getValue() instanceof DateType
-                            && paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)) {
-                        DateType startDateDt = (DateType) paramPart.getValue();
-                        medicationPeriod = new Period();
-                        medicationPeriod.setStart(startDateDt.getValue());
-                        medicationPeriod.setEnd(null);
-                        String startDate = startDateDt.asStringValue();
-                        validateStartDateParamAndEndDateParam(startDate, null);
-                    } else {
+                    if (param.getPart().isEmpty()) {
                         throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
-                                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                new UnprocessableEntityException("Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
+                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                     }
-                }
 
-                if (!isIncludedPrescriptionIssuesExist) {
-                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-                            SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
-                }
-            } // Medications
+                    boolean isIncludedPrescriptionIssuesExist = false;
+                    for (ParametersParameterComponent paramPart : param.getPart()) {
 
-            // Pathology Test Results
-            if (param.getName().equals(SystemConstants.INCLUDE_TEST_RESULTS_PARM)) {
-                getTestResults = true;
+                        if (paramPart.getValue() instanceof BooleanType
+                                && paramPart.getName().equals(SystemConstants.INCLUDE_PRESCRIPTION_ISSUES)) {
+                            includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
+                            isIncludedPrescriptionIssuesExist = true;
+                        } else if (paramPart.getValue() instanceof DateType
+                                && paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)) {
+                            DateType startDateDt = (DateType) paramPart.getValue();
+                            medicationPeriod = new Period();
+                            medicationPeriod.setStart(startDateDt.getValue());
+                            medicationPeriod.setEnd(null);
+                            String startDate = startDateDt.asStringValue();
+                            validateStartDateParamAndEndDateParam(startDate, null);
+                        } else {
+                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
+                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                        }
+                    }
+
+                    if (!isIncludedPrescriptionIssuesExist) {
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
+                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
+                    }
+                    break;
+
+                case SystemConstants.INCLUDE_TEST_RESULTS_PARM:
+                case SystemConstants.INCLUDE_IMMUNIZATIONS_PARM:
+                    hmInclude.add(param.getName());
+                    break;
+
+                case SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM:
+                    hmInclude.add(param.getName());
+                    // optional part named uncategorisedDataSearchPeriod with a valuePeriod
+                    for (ParametersParameterComponent paramPart : param.getPart()) {
+
+                        if (paramPart.getValue() instanceof Period
+                                && paramPart.getName().equals(SystemConstants.UNCATEGORISED_DATA_SEARCH_PERIOD)) {
+                            Period period = (Period) paramPart.getValue();
+                            validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue());
+                        } else {
+                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
+                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                        }
+                    }
+                    break;
+
+                case SystemConstants.INCLUDE_CONSULTATIONS_PARM:
+                    hmInclude.add(param.getName());
+                    // optional part named consultationSearchPeriod with a valuePeriod
+                    // optional part named numberOfMostRecent with an integer count
+                    int numberOfMostRecent = -1;
+                    for (ParametersParameterComponent paramPart : param.getPart()) {
+
+                        if (paramPart.getValue() instanceof Period
+                                && paramPart.getName().equals(SystemConstants.CONSULTATION_SEARCH_PERIOD)) {
+                            Period period = (Period) paramPart.getValue();
+                            validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue());
+                        } else if (paramPart.getValue() instanceof IntegerType
+                                && paramPart.getName().equals(SystemConstants.NUMBER_OF_MOST_RECENT)) {
+                            numberOfMostRecent = ((IntegerType) paramPart.getValue()).getValue();
+                        } else {
+                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
+                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                        }
+                    }
+                    break;
+
+                case SystemConstants.INCLUDE_PROBLEMS_PARM:
+                    hmInclude.add(param.getName());
+                    // optional part named includeStatus with a valueCode eg active
+                    // optional part named includeSignificance with a valueCode eg major
+                    String status = null;
+                    String significance = null;
+                    for (ParametersParameterComponent paramPart : param.getPart()) {
+
+                        if (paramPart.getValue() instanceof CodeType
+                                && paramPart.getName().equals(SystemConstants.INCLUDE_STATUS)) {
+                            status = ((CodeType) paramPart.getValue()).getValue();
+                        } else if (paramPart.getValue() instanceof CodeType
+                                && paramPart.getName().equals(SystemConstants.INCLUDE_SIGNIFICANCE)) {
+                            significance = ((CodeType) paramPart.getValue()).getValue();
+                        } else {
+                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
+                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                        }
+                    }
+                    break;
             }
 
         } // for parms
@@ -359,8 +424,11 @@ public class PatientResourceProvider implements IResourceProvider {
             structuredBundle = populateMedicationBundle.addMedicationBundleEntries(structuredBundle, patientDetails, includePrescriptionIssues, medicationPeriod, practitionerIds, orgIds);
         }
 
-        if (getTestResults) {
-            structuredBundle = new TestResultBuilder().getTestReport(structuredBundle);
+        // append the required canned responses
+        Iterator<String> iter = hmInclude.iterator();
+        StructuredBuilder structureBuilder = new StructuredBuilder();
+        while (iter.hasNext()) {
+            structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(iter.next()), structuredBundle);
         }
 
         //Add all practitioners and practitioner roles
@@ -416,11 +484,11 @@ public class PatientResourceProvider implements IResourceProvider {
 
         // see https://nhsconnect.github.io/gpconnect/foundations_use_case_register_a_patient.html#error-handling
         // if its patient 14 spoof not on PDS and return the required error 
-        if (nnn.equals(patientNotOnSpine)) {
+        if (nnn.equals(patients[PATIENT_NOTONSPINE])) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(String.format("Patient (NHS number - %s) not present on PDS", nnn)),
                     SystemCode.INVALID_PATIENT_DEMOGRAPHICS, IssueType.INVALID);
-        } else if (nnn.equals(patientSuperseded)) {
+        } else if (nnn.equals(patients[PATIENT_SUPERSEDED])) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(String.format("Patient (NHS number - %s) is superseded", nnn)),
                     SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
@@ -811,7 +879,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
         // set some standard values for defaults, ensure managing org is always returned
         // added at 1.2.2 7 is A20047 the default GP Practice
-        patientDetails.setManagingOrganization("7");
+        List<OrganizationDetails> ourOrg = organizationSearch.findOrganizationDetailsByOrgODSCode(OUR_ODS_CODE);
+        patientDetails.setManagingOrganization(""+ourOrg.get(0).getId());
 
         return patientDetails;
     }
@@ -1014,7 +1083,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         // for patient 2 add some contact details
-        if (patientDetails.getNhsNumber().equals(patient2)) {
+        if (patientDetails.getNhsNumber().equals(patients[PATIENT_2])) {
             createContact(patient);
         }
 

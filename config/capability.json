@@ -18,7 +18,7 @@
 		"releaseDate": "2017-09-27T00:00:00+01:00",
 		"version": "3.0.0"
 	},
-  "fhirVersion": "3.0.1",
+  "fhirVersion": "3.8.0",
   "acceptUnknown": "both",
   "format": [
     "application/fhir+json",

@@ -34,10 +34,20 @@ public final class SystemConstants {
     public static final String INCLUDE_RESOLVED_ALLERGIES_PARM = "includeResolvedAllergies";
     public static final String INCLUDE_ALLERGIES_PARM = "includeAllergies";
     public static final String INCLUDE_TEST_RESULTS_PARM = "includeTestResults";
+    public static final String INCLUDE_IMMUNIZATIONS_PARM = "includeImmunizations";
+    public static final String INCLUDE_UNCATEGORISED_DATA_PARM = "includeUncategorised";
+    public static final String INCLUDE_CONSULTATIONS_PARM = "includeConsultations";
+    public static final String INCLUDE_PROBLEMS_PARM = "includeProblems";
+
     public static final String INCLUDE_MEDICATION_PARM = "includeMedication";
     public static final List VALID_PARAMETER_NAMES = Arrays.asList(SystemConstants.PATIENT_NHS_NUMBER_PARM,
             SystemConstants.INCLUDE_ALLERGIES_PARM,
             SystemConstants.INCLUDE_MEDICATION_PARM,
+            //SystemConstants.INCLUDE_TEST_RESULTS_PARM,
+            SystemConstants.INCLUDE_IMMUNIZATIONS_PARM,
+            SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM,
+            SystemConstants.INCLUDE_CONSULTATIONS_PARM,
+            SystemConstants.INCLUDE_PROBLEMS_PARM,
             SystemConstants.INCLUDE_TEST_RESULTS_PARM
     );
 
@@ -48,5 +58,22 @@ public final class SystemConstants {
     public static final String MEDICATION_SEARCH_FROM_DATE = "medicationSearchFromDate";
 
     public static final String MEDICATION_LIST = "Medications and medical devices";
+    
+    public static final String UNCATEGORISED_DATA_SEARCH_PERIOD = "uncategorisedDataSearchPeriod";
+    public static final String CONSULTATION_SEARCH_PERIOD = "consultationSearchPeriod";
+    public static final String NUMBER_OF_MOST_RECENT = "numberOfMostRecent";
+    public static final String INCLUDE_STATUS = "includeStatus";
+    public static final String INCLUDE_SIGNIFICANCE = "includeSignificance";
+    
+    // offsets into the patients property array. See the provider prerequsites spreadsheet for more details
+    // https://github.com/nhsconnect/gpconnect-provider-testing/blob/master/Data/Test%20Suite%20Prerequisites.xlsx
+    public static final int PATIENT_2 = 2; // patient 2 contains majority of structured test data
+    public static final int PATIENT_SUPERSEDED = 11; // patient 11 Superseded NHS Number
+    public static final int PATIENT_NOTONSPINE = 14; // patient 14 Not on PDS
+    public static final int PATIENT_NOCONSENT = 15; // patient 15 No consent to share
+    
+    // TODO remove hard coding pick up from providerRouting.json ?
+    public static final String OUR_ODS_CODE = "A20047";
+
 
 }

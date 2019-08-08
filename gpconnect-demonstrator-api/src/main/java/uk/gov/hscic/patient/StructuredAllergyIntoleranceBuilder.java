@@ -29,6 +29,7 @@ import static uk.gov.hscic.SystemConstants.NO_CONTENT_RECORDED;
 import static uk.gov.hscic.SystemConstants.NO_CONTENT_RECORDED_DISPLAY;
 import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
 import static uk.gov.hscic.SystemConstants.RESOLVED_ALLERGIES_DISPLAY;
+import static uk.gov.hscic.SystemConstants.PATIENT_2;
 
 @Component
 public class StructuredAllergyIntoleranceBuilder {
@@ -46,8 +47,8 @@ public class StructuredAllergyIntoleranceBuilder {
     @Autowired
     private CodeableConceptBuilder codeableConceptBuilder;
 
-    @Value("${datasource.patient.nhsNumber:#{null}}")
-    private String patient2NhsNo;
+    @Value("${datasource.patients:#{null}}")
+    private String[] patients;
 
     public Bundle buildStructuredAllergyIntolerence(String NHS, Set<String> practitionerIds, Bundle bundle, Boolean includedResolved) {
         List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntollerence(NHS);
@@ -156,7 +157,7 @@ public class StructuredAllergyIntoleranceBuilder {
             final String recorder = allergyIntoleranceEntity.getRecorder();
 
             //This is just an example to demonstrate using Reference element instead of Identifier element
-            if (recorder.equals(patient2NhsNo.trim())) {
+            if (recorder.equals(patients[PATIENT_2].trim())) {
                 Reference rec = new Reference(
                         SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
                 allergyIntolerance.setRecorder(rec);

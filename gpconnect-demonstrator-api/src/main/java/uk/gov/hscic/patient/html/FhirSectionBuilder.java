@@ -81,7 +81,8 @@ public final class FhirSectionBuilder {
             Table table = pageSection.getTable();
 
             if (table == null || table.getRows().isEmpty()) {
-                stringBuilder.append("<div><p>No '").append(pageSection.getHeader()).append("' data is recorded for this patient.</p></div>");
+                // last minute hack for emergency fix
+                stringBuilder.append("<div><p>No '").append(pageSection.getHeader().replaceFirst("^Last 3 Encounters$","Encounters")).append("' data is recorded for this patient.</p></div>");
             } else {
                 stringBuilder.append("<div><table");
                 if (VERSION.getMinor() > 5) {

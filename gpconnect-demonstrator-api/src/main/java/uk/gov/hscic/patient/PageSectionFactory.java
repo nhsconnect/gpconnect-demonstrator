@@ -206,7 +206,7 @@ public class PageSectionFactory {
             }
         }
 
-        return new PageSection("Encounters",
+        return new PageSection(maxRows == -1 ? "Encounters" : "Last 3 Encounters",
                 "enc-tab",
                 new Table(Arrays.asList("Date", "Title", "Details"), encounterRows),
                 requestedFromDate, requestedToDate);

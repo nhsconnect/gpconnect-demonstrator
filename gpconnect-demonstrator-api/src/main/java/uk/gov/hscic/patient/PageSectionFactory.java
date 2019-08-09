@@ -206,7 +206,7 @@ public class PageSectionFactory {
             }
         }
 
-        return new PageSection("Encounters",
+        return new PageSection(maxRows == -1 ? "Encounters" : "Last 3 Encounters",
                 "enc-tab",
                 new Table(Arrays.asList("Date", "Title", "Details"), encounterRows),
                 requestedFromDate, requestedToDate);
@@ -327,7 +327,7 @@ public class PageSectionFactory {
 
         return new PageSection("Current Medication Issues",
                 "", // Not required at 0.5
-                new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End Date", "Days Duration", "Details"), currentMedRows));
+                new Table(Arrays.asList("Start Date", "Medication Item", "Type", "Scheduled End", "Days Duration", "Details"), currentMedRows));
     }
 
     /**

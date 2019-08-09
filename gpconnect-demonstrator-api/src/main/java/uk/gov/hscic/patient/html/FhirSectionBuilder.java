@@ -56,11 +56,11 @@ public final class FhirSectionBuilder {
             if (pageSection.getFromDate() != null && pageSection.getToDate() != null) {
                 stringBuilder.append("><p>For the period '").append(DATE_FORMAT.format(pageSection.getFromDate())).append("' to '").append(DATE_FORMAT.format(pageSection.getToDate())).append("'</p></div>");
             } else if (pageSection.getFromDate() != null && pageSection.getToDate() == null) {
-                // # 224
-                stringBuilder.append("><p>All data items from ").append(DATE_FORMAT.format(pageSection.getFromDate())).append("</p></div>");
+                // # 224, #255 add quotes
+                stringBuilder.append("><p>All data items from '").append(DATE_FORMAT.format(pageSection.getFromDate())).append("'").append("</p></div>");
             } else if (pageSection.getFromDate() == null && pageSection.getToDate() != null) {
-                // #224
-                stringBuilder.append("><p>All data items until ").append(DATE_FORMAT.format(pageSection.getToDate())).append("</p></div>");
+                // #224, #255 add quotes
+                stringBuilder.append("><p>All data items until '").append(DATE_FORMAT.format(pageSection.getToDate())).append("'").append("</p></div>");
             } else {
                 // #225 change text on banner
                 stringBuilder.append("><p>All relevant items</p></div>");
@@ -81,7 +81,8 @@ public final class FhirSectionBuilder {
             Table table = pageSection.getTable();
 
             if (table == null || table.getRows().isEmpty()) {
-                stringBuilder.append("<div><p>No '").append(pageSection.getHeader()).append("' data is recorded for this patient.</p></div>");
+                // last minute hack for emergency fix
+                stringBuilder.append("<div><p>No '").append(pageSection.getHeader().replaceFirst("^Last 3 Encounters$","Encounters")).append("' data is recorded for this patient.</p></div>");
             } else {
                 stringBuilder.append("<div><table");
                 if (VERSION.getMinor() > 5) {

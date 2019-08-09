@@ -13,7 +13,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-// $Id: Edifact2xmlSuite.java 176 2017-02-28 15:55:23Z sfarrow $
 package uk.gov.hscic.common.config;
 
 import ca.uhn.fhir.rest.api.server.RequestDetails;

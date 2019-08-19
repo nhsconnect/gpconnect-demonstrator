@@ -113,7 +113,8 @@ public final class FhirSectionBuilder {
         sb.append("<td");
         if (rowSize == 1) {
             // if we get a single cell then its a subsection split in a sorted table
-            sb.append(" colspan=\"").append(table.getHeaders().size()).append("\"><b>").append(cellValue).append("</b>");
+            // #260 add med-item-column class attribute
+            sb.append(" colspan=\"").append(table.getHeaders().size()).append("\" class=\"med-item-column\"><b>").append(cellValue).append("</b>");
         } else if (cellValue == null) {
             // do nothing leaves an empty cell
             sb.append(">");

@@ -43,7 +43,16 @@ public final class FhirSectionBuilder {
 
         // #252 add an h1 section header
         stringBuilder.append("<h1>").append(page.getName()).append("</h1>");
-        
+
+        // add page banners #261 gp in transit
+        if (!page.getBanners().isEmpty()) {
+            stringBuilder.append("<div class=\"gptransfer-banner\">");
+            for (String banner : page.getBanners()) {
+                stringBuilder.append("<p>").append(banner).append("</p>");
+            }
+            stringBuilder.append("</div>");
+        }
+
         // Add sections
         for (PageSection pageSection : page.getPageSections()) {
             stringBuilder.append("<div>");

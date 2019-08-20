@@ -35,11 +35,13 @@ import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -55,6 +57,7 @@ import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.details.search.PatientSearch;
 import uk.gov.hscic.patient.html.FhirSectionBuilder;
 import uk.gov.hscic.patient.html.Page;
+import uk.gov.hscic.patient.html.PageSection;
 import uk.gov.hscic.patient.summary.model.PatientDetails;
 import uk.gov.hscic.patient.summary.model.PatientSummary;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
@@ -72,6 +75,7 @@ public class PatientResourceProvider implements IResourceProvider {
             add("timePeriod");
         }
     };
+    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy");
 
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
@@ -84,6 +88,9 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Autowired
     private PageSectionFactory pageSectionFactory;
+
+    @Value("${datasource.patient.intransit}")
+    private String patientInTransit;
 
     @Value("${datasource.patient.noconsent}")
     private String patientNoConsent;
@@ -262,10 +269,11 @@ public class PatientResourceProvider implements IResourceProvider {
         switch (sectionName) {
             case "SUM":
                 page = new Page("Summary", sectionName);
+                handlePageBanners(nhsNumber, page);
 
                 page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, 3));
                 page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, fromDate, toDate,requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
@@ -273,6 +281,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
             case "PRB":
                 page = new Page("Problems and Issues", sectionName);
+                handlePageBanners(nhsNumber, page);
                 page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getPRBOtherInactivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
@@ -281,12 +290,14 @@ public class PatientResourceProvider implements IResourceProvider {
 
             case "ENC":
                 page = new Page("Encounters", sectionName);
+                handlePageBanners(nhsNumber, page);
                 page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
 
             case "ALL":
                 page = new Page("Allergies and Adverse Reactions", sectionName);
+                handlePageBanners(nhsNumber, page);
                 page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getALLHistoricalPageSection(nhsNumber, requestedFromDate, requestedToDate));
 
@@ -294,12 +305,14 @@ public class PatientResourceProvider implements IResourceProvider {
 
             case "CLI":
                 page = new Page("Clinical Items", sectionName);
+                handlePageBanners(nhsNumber, page);
                 page.addPageSection(pageSectionFactory.getCLIPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
 
             case "MED":
                 page = new Page("Medications", sectionName);
+                handlePageBanners(nhsNumber, page);
                 page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDDiscontinuedRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
@@ -310,24 +323,28 @@ public class PatientResourceProvider implements IResourceProvider {
 
             case "REF":
                 page = new Page("Referrals", sectionName);
+                handlePageBanners(nhsNumber, page);
                 page.addPageSection(pageSectionFactory.getREFPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
 
             case "OBS":
                 page = new Page("Observations", sectionName);
+                handlePageBanners(nhsNumber, page);
                 page.addPageSection(pageSectionFactory.getOBSPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
 
             case "IMM":
                 page = new Page("Immunisations", sectionName);
+                handlePageBanners(nhsNumber, page);
                 page.addPageSection(pageSectionFactory.getIMMPageSection(nhsNumber, requestedFromDate, requestedToDate));
 
                 break;
 
             case "ADM":
                 page = new Page("Administrative Items", sectionName);
+                handlePageBanners(nhsNumber, page);
                 page.addPageSection(pageSectionFactory.getADMPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
@@ -426,6 +443,23 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         return bundle.addEntry(patientEntry);
+    }
+
+    /**
+     * #261 add in transfer banner
+     * should be registration date at new GP but default to a week ago
+     * spec says may not be populated not will not be populated
+     * @param nhsNumber
+     * @param page 
+     */
+    private void handlePageBanners(String nhsNumber, Page page) {
+        if ( nhsNumber.equals(patientInTransit)) {
+            Calendar cal = new GregorianCalendar();
+            Date now = new Date();
+            cal.setTime(now);
+            cal.add(Calendar.DAY_OF_YEAR, -7);
+            page.addGPTransferBanner(DATE_FORMAT.format(cal.getTime()));
+        }
     }
 
     private void validateDateTimeFormats(PeriodDt period) {

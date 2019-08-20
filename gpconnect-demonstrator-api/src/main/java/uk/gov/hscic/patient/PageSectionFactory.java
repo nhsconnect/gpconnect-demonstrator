@@ -88,12 +88,11 @@ public class PageSectionFactory {
     }
 
     /**
-     * TODO the start only and end only dates are not surrounded by quotes
-     * unlike the range
      *
      * @param pageSection
      */
     private void addDateRangeBanners(PageSection pageSection, boolean isDateRange) {
+
         StringBuilder sb = new StringBuilder();
         if (isDateRange) {
             sb.append("Date filter not applied"); // #251 for subsections not applying a date range
@@ -696,9 +695,8 @@ public class PageSectionFactory {
     }
 
     /**
-     * Not currently used but valuable for development
-     * algorithm fed back into sql
-     * see
+     * Not currently used but valuable for development algorithm fed back into
+     * sql see
      * https://developer.nhs.uk/apis/gpconnect-0-7-2/accessrecord_view_medications.html
      * for filtering rules
      *
@@ -740,9 +738,10 @@ public class PageSectionFactory {
     }
 
     /**
-     * munge date objects tooutput format string
+     * munge date objects to output format string
+     *
      * @param date
-     * @return 
+     * @return
      */
     private String md(Date date) {
         return date != null ? DATE_FORMAT.format(date) : "Null";

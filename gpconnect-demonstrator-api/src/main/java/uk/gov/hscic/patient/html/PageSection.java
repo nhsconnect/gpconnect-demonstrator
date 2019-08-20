@@ -9,7 +9,7 @@ public class PageSection {
     private final String header;
     private Date fromDate;
     private Date toDate;
-    private final List<String> banners;
+    private final List<String> sectionBanners;
     private Table table;
     private String id; // html id
     private boolean isSingleTable = false; // #252
@@ -49,14 +49,14 @@ public class PageSection {
         this.header = header;
         this.fromDate = fromDate;
         this.toDate = toDate;
-        this.banners = new ArrayList<>();
+        this.sectionBanners = new ArrayList<>();
         this.table = table;
         this.id = id;
         this.isSingleTable = isSingleTable;
     }
 
     public void addBanner(String bannerString) {
-        banners.add(bannerString);
+        sectionBanners.add(bannerString);
     }
 
     public String getHeader() {
@@ -64,7 +64,7 @@ public class PageSection {
     }
 
     public List<String> getBanners() {
-        return banners;
+        return sectionBanners;
     }
 
     public Table getTable() {

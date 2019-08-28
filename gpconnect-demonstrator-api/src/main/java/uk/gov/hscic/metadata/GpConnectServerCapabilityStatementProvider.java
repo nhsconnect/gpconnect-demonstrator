@@ -12,6 +12,7 @@ import ca.uhn.fhir.rest.server.RestfulServer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import static uk.gov.hscic.SystemURL.OD_GPC_GET_STRUCTURED_RECORD;
 import static uk.gov.hscic.SystemURL.OD_GPC_REGISTER_PATIENT;
 import uk.gov.hscic.SystemVariable;

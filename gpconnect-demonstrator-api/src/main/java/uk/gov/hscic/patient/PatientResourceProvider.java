@@ -119,6 +119,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private Map<String, Boolean> registerPatientParams;
 
+    private OperationOutcome operationOutcome;
+
     public static Set<String> getCustomReadOperations() {
         Set<String> customReadOperations = new HashSet<>();
         customReadOperations.add(GET_CARE_RECORD_OPERATION_NAME);
@@ -261,16 +263,17 @@ public class PatientResourceProvider implements IResourceProvider {
                     SystemCode.NO_PATIENT_CONSENT, IssueType.FORBIDDEN);
         }
 
-        OperationOutcome operationOutcome = null;
+        operationOutcome = null;
         for (ParametersParameterComponent param : params.getParameter()) {
             if (validateParametersName(param.getName())) {
                 if (param.getName().equals(SystemConstants.INCLUDE_ALLERGIES)) {
                     getAllergies = true;
 
                     if (param.getPart().isEmpty()) {
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
-                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
+                        addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES);
+//                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
+//                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                     }
 
                     for (ParametersParameterComponent paramPart : param.getPart()) {
@@ -278,10 +281,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                 && paramPart.getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES)) {
                             includeResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
                         } else {
-                            if (operationOutcome == null) {
-                                operationOutcome = createOperationOutcome();
-                            }
-                            addWarningIssue(param, operationOutcome, paramPart);
+                            addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
 //                            throw OperationOutcomeFactory.buildOperationOutcomeException(
 //                                    new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
 //                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
@@ -292,9 +292,10 @@ public class PatientResourceProvider implements IResourceProvider {
                     getMedications = true;
 
                     if (param.getPart().isEmpty()) {
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
+                        addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
+//                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
+//                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                     }
 
                     boolean isIncludedPrescriptionIssuesExist = false;
@@ -311,12 +312,11 @@ public class PatientResourceProvider implements IResourceProvider {
                             medicationPeriod.setStart(startDateDt.getValue());
                             medicationPeriod.setEnd(null);
                             String startDate = startDateDt.asStringValue();
-                            validateStartDateParamAndEndDateParam(startDate, null);
-                        } else {
-                            if (operationOutcome == null) {
-                                operationOutcome = createOperationOutcome();
+                            if (!validateStartDateParamAndEndDateParam(startDate, null)) {
+                                addWarningIssue(param, paramPart, IssueType.INVALID, "Invalid date used");
                             }
-                            addWarningIssue(param, operationOutcome, paramPart);
+                        } else {
+                            addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
 //                            throw OperationOutcomeFactory.buildOperationOutcomeException(
 //                                    new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
 //                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
@@ -324,26 +324,17 @@ public class PatientResourceProvider implements IResourceProvider {
                     }
 
                     if (!isIncludedPrescriptionIssuesExist) {
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
+                        addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
+//                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
+//                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                     }
                 }
             } else {
                 // invalid parameter
-                if (operationOutcome == null) {
-                    operationOutcome = createOperationOutcome();
-                }
-                addWarningIssue(param, operationOutcome);
+                addWarningIssue(param, IssueType.NOTSUPPORTED);
             }
         } // for parameter
-        
-        // #264 forward compatibility and above
-        if (!getAllergies && !getMedications) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("No clinical area requested"),
-                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
-        }
 
         // Add Patient
         Patient patient = patientDetailsToPatientResourceConverter(patientDetails);
@@ -402,49 +393,97 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     /**
-     * 
+     *
      * @return new Object
      */
-    private OperationOutcome createOperationOutcome() {
-        OperationOutcome operationOutcome = new OperationOutcome();
+    private void createOperationOutcome() {
+        operationOutcome = new OperationOutcome();
         // TODO Check this it doesn't look consistent but its as per the example
         operationOutcome.setId(java.util.UUID.randomUUID().toString());
         operationOutcome.getMeta().addProfile(SystemURL.SD_GPC_OPERATIONOUTCOME);
-        return operationOutcome;
     }
 
     /**
+     * Overload
+     *
      * @param param
-     * @param operationOutcome
+     * @param paramPart
+     * @param issueType
      */
-    private void addWarningIssue(ParametersParameterComponent param, OperationOutcome operationOutcome) {
-        addWarningIssue(param, operationOutcome, null);
+    private void addWarningIssue(ParametersParameterComponent param, ParametersParameterComponent paramPart, IssueType issueType) {
+        addWarningIssue(param, paramPart, issueType, null);
+    }
+
+    /**
+     * Overload
+     *
+     * @param param
+     * @param issueType
+     */
+    private void addWarningIssue(ParametersParameterComponent param, IssueType issueType) {
+        addWarningIssue(param, null, issueType, null);
+    }
+
+    /**
+     * Overload
+     *
+     * @param param
+     * @param issueType
+     * @param details
+     */
+    private void addWarningIssue(ParametersParameterComponent param, IssueType issueType, String details) {
+        addWarningIssue(param, null, issueType, details);
     }
 
     /**
      * see
      * https://gpconnect-1-2-4.netlify.com/accessrecord_structured_development_version_compatibility.html
-     * add an issue to the OperationOutcome to be returned in a successful response bundle
-     * this is for forward compatibility as specified in 1.2.4
-     * @param operationOutcome
+     * add an issue to the OperationOutcome to be returned in a successful
+     * response bundle this is for forward compatibility as specified in 1.2.4
+     *
+     * @param param
      * @param paramPart
+     * @param issueType
+     * @param details lower level details to be added to the text element
      */
-    private void addWarningIssue(ParametersParameterComponent param, OperationOutcome operationOutcome, ParametersParameterComponent paramPart) {
+    private void addWarningIssue(ParametersParameterComponent param, ParametersParameterComponent paramPart, IssueType issueType, String details) {
+        if (operationOutcome == null) {
+            createOperationOutcome();
+        }
         OperationOutcomeIssueComponent issue = new OperationOutcomeIssueComponent();
-        issue.setCode(IssueType.NOTSUPPORTED);
         issue.setSeverity(OperationOutcome.IssueSeverity.WARNING);
 
         CodeableConcept codeableConcept = new CodeableConcept();
         Coding coding = new Coding();
         coding.setSystem(VS_GPC_ERROR_WARNING_CODE);
-        coding.setCode("NOT_IMPLEMENTED");
-        coding.setDisplay("Not implemented");
+        switch (issueType) {
+            case NOTSUPPORTED:
+                issue.setCode(issueType);
+                coding.setCode(SystemCode.NOT_IMPLEMENTED);
+                coding.setDisplay("Not implemented");
+                break;
+            case REQUIRED:
+                issue.setCode(issueType);
+                coding.setCode(SystemCode.PARAMETER_NOT_FOUND);
+                coding.setDisplay("Parameter not found");
+                break;
+            case INVALID:
+                issue.setCode(issueType);
+                coding.setCode(SystemCode.INVALID_PARAMETER);
+                coding.setDisplay("Invalid Parameter");
+                break;
+        }
 
         codeableConcept.addCoding(coding);
         issue.setDetails(codeableConcept);
 
-        issue.setDiagnostics(param.getName() + (paramPart != null ? "." + paramPart.getName() : ""));
-        codeableConcept.setText(param.getName() + (paramPart != null ? "." + paramPart.getName() : "") + " is an unrecognised parameter");
+        String locus = paramPart != null ? "." + paramPart.getName() : "";
+        issue.setDiagnostics(param.getName() + locus);
+        if (details == null) {
+            codeableConcept.setText(param.getName() + locus + " is an unrecognised parameter" + (paramPart != null ? " part" : ""));
+        } else {
+            codeableConcept.setText(details);
+        }
         operationOutcome.addIssue(issue);
     }
 
@@ -1316,7 +1355,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     if (parameter != null) {
                         nhsNumber = fromPatientResource(parameter.getResource());
                     } else {
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(
+                        // 1.2.4 now Http 422 Unprocessable Entity not Http 400 Invalid Request
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(
                                 "Unable to read parameters. Expecting one of patientNHSNumber or registerPatient both of which are case-sensitive"),
                                 SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                     }
@@ -1358,13 +1398,15 @@ public class PatientResourceProvider implements IResourceProvider {
         }
     }
 
-    private void validateStartDateParamAndEndDateParam(String startDate, String endDate) {
+    private boolean validateStartDateParamAndEndDateParam(String startDate, String endDate) {
         Pattern dateOnlyPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
-
+        boolean result = true;
         //if only a date then match against the date regex
         if ((startDate != null && !dateOnlyPattern.matcher(startDate).matches()) || (endDate != null && !dateOnlyPattern.matcher(endDate).matches())) {
-            throwInvalidParameterOperationalOutcome("Invalid date used");
+            result = false;
+//          throwInvalidParameterOperationalOutcome("Invalid date used");
         }
+        return result;
     }
 
     private void throwInvalidParameterOperationalOutcome(String error) {

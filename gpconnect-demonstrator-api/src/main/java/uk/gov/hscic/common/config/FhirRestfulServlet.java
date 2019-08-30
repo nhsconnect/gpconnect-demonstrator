@@ -49,6 +49,14 @@ public class FhirRestfulServlet extends RestfulServer {
         
         FhirContext ctx = FhirContext.forDstu3();
         ctx.setParserErrorHandler(new StrictErrorHandler());
+        
+        // version required on capability statement operation definition
+        // see https://hapifhir.io/doc_resource_references.html
+        ctx.getParserOptions().setStripVersionsFromReferences(false);
+        
+        // This explicit call does not work
+        ///ctx.getParserOptions().setDontStripVersionsFromReferencesAtPaths("CapabilityStatement");
+        
         setFhirContext(ctx);
         setETagSupport(ETagSupportEnum.ENABLED);
        

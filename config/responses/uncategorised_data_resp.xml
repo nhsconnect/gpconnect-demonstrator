@@ -1,1 +1,273 @@
-/mnt/encrypted/home/simonfarrow/Documents/gpconnect/sample_messages/uncategorised_data_resp.xml
+<Bundle xmlns="http://hl7.org/fhir">
+   <meta>
+      <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1"></profile>
+   </meta>
+   <type value="collection"></type>
+   <!--
+   <entry>
+      <resource>
+         <Patient xmlns="http://hl7.org/fhir">
+            <id value="04603d77-1a4e-4d63-b246-d7504f8bd833"></id>
+            <meta>
+               <versionId value="1469448000000"></versionId>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Patient-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-RegistrationDetails-1">
+               <extension url="registrationPeriod">
+                  <valuePeriod>
+                     <start value="1962-07-13T00:00:00+00:00"></start>
+                  </valuePeriod>
+               </extension>
+            </extension>
+            <identifier>
+               <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1">
+                  <valueCodeableConcept>
+                     <coding>
+                        <system value="https://fhir.nhs.uk/CareConnect-NHSNumberVerificationStatus-1"></system>
+                        <code value="01"></code>
+                        <display value="Number present and verified"></display>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <system value="https://fhir.nhs.uk/Id/nhs-number"></system>
+               <value value="9999999999"></value>
+            </identifier>
+            <active value="true"></active>
+            <name>
+               <use value="official"></use>
+               <text value="JACKSON Jane (Miss)"></text>
+               <family value="Jackson"></family>
+               <given value="Jane"></given>
+               <prefix value="Miss"></prefix>
+            </name>
+            <telecom>
+               <system value="phone"></system>
+               <value value="01454587554"></value>
+               <use value="home"></use>
+            </telecom>
+            <gender value="female"></gender>
+            <birthDate value="1952-05-31"></birthDate>
+            <address>
+               <use value="home"></use>
+               <type value="physical"></type>
+               <line value="Cable Place"></line>
+               <line value="Roundhay"></line>
+               <city value="Leeds"></city>
+               <district value="West Yorkshire"></district>
+               <postalCode value="LS1 5HT"></postalCode>
+            </address>
+            <generalPractitioner>
+               <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+            </generalPractitioner>
+            <managingOrganization>
+               <reference value="Organization/db67f447-b30d-442a-8e31-6918d1367eeb"></reference>
+            </managingOrganization>
+         </Patient>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Organization xmlns="http://hl7.org/fhir">
+            <id value="db67f447-b30d-442a-8e31-6918d1367eeb"></id>
+            <meta>
+               <versionId value="636064088098730113"></versionId>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Organization-1"></profile>
+            </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/ods-organization-code"></system>
+               <value value="O001"></value>
+            </identifier>
+            <name value="The Trevelyan Practice"></name>
+            <telecom>
+               <system value="phone"></system>
+               <value value="03003035678"></value>
+               <use value="work"></use>
+            </telecom>
+            <address>
+               <line value="Trevelyan Square"></line>
+               <line value="Boar Ln"></line>
+               <city value="Leeds"></city>
+               <district value="West Yorkshire"></district>
+               <postalCode value="LS1 6AE"></postalCode>
+            </address>
+         </Organization>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Practitioner xmlns="http://hl7.org/fhir">
+            <id value="6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></id>
+            <meta>
+               <versionId value="1469448000000"></versionId>
+               <lastUpdated value="2016-07-25T12:00:00.000+00:00"></lastUpdated>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1"></profile>
+            </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/sds-user-id"></system>
+               <value value="G13579135"></value>
+            </identifier>
+            <name>
+               <use value="usual"></use>
+               <family value="Gilbert"></family>
+               <given value="Nichole"></given>
+               <prefix value="Miss"></prefix>
+            </name>
+            <gender value="female"></gender>
+         </Practitioner>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <PractitionerRole xmlns="http://hl7.org/fhir">
+            <id value="e0244de8-07ef-4274-9f7a-d7067bcc8d21"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-PractitionerRole-1"></profile>
+            </meta>
+            <practitioner>
+               <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+            </practitioner>
+            <organization>
+               <reference value="Organization/db67f447-b30d-442a-8e31-6918d1367eeb"></reference>
+            </organization>
+            <code>
+               <coding>
+                  <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-SDSJobRoleName-1"></system>
+                  <code value="R0260"></code>
+                  <display value="General Medical Practitioner"></display>
+               </coding>
+            </code>
+         </PractitionerRole>
+      </resource>
+   </entry>
+   -->
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Uncategorised data List"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="933361000000108"></code>
+                  <display value="Medications and medical devices"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <date value="2019-03-01T10:57:34+00:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="event-date"></code>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1_topic2_category_Examination_Observation_1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1_topic2_category_Examination_Observation_3"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_topic2_category_Examination_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="3008650016"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Temperature"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="703421000"></code>
+                  <display value="Temperature (observable entity)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00"></effectiveDateTime>
+            <valueQuantity>
+               <value value="36.7"></value>
+               <unit value="C"></unit>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="Cel"></code>
+            </valueQuantity>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_topic2_category_Examination_Observation_2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="2748921000000116"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Arterial oxygen saturation on room air at rest"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="1097811000000106"></code>
+                  <display value="Arterial oxygen saturation breathing room air at rest (observable entity)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_topic2_category_Examination_Observation_3"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="143107019"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Respiratory rate"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value=" 86290005"></code>
+                  <display value="Respiratory rate (observable entity)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+</Bundle>

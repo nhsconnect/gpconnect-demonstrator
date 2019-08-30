@@ -1,1 +1,329 @@
-/mnt/encrypted/home/simonfarrow/Documents/gpconnect/sample_messages/immunizations_resp.xml
+<Bundle xmlns="http://hl7.org/fhir">
+   <meta>
+      <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1"></profile>
+   </meta>
+   <type value="collection"></type>
+   <!--
+   <entry>
+      <resource>
+         <Patient xmlns="http://hl7.org/fhir">
+            <id value="04603d77-1a4e-4d63-b246-d7504f8bd833"></id>
+            <meta>
+               <versionId value="1469448000000"></versionId>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Patient-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-RegistrationDetails-1">
+               <extension url="registrationPeriod">
+                  <valuePeriod>
+                     <start value="1962-07-13T00:00:00+00:00"></start>
+                  </valuePeriod>
+               </extension>
+            </extension>
+            <identifier>
+               <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1">
+                  <valueCodeableConcept>
+                     <coding>
+                        <system value="https://fhir.nhs.uk/CareConnect-NHSNumberVerificationStatus-1"></system>
+                        <code value="01"></code>
+                        <display value="Number present and verified"></display>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <system value="https://fhir.nhs.uk/Id/nhs-number"></system>
+               <value value="9999999999"></value>
+            </identifier>
+            <active value="true"></active>
+            <name>
+               <use value="official"></use>
+               <text value="JACKSON Jane (Miss)"></text>
+               <family value="Jackson"></family>
+               <given value="Jane"></given>
+               <prefix value="Miss"></prefix>
+            </name>
+            <telecom>
+               <system value="phone"></system>
+               <value value="01454587554"></value>
+               <use value="home"></use>
+            </telecom>
+            <gender value="female"></gender>
+            <birthDate value="1952-05-31"></birthDate>
+            <address>
+               <use value="home"></use>
+               <type value="physical"></type>
+               <line value="Cable Place"></line>
+               <line value="Roundhay"></line>
+               <city value="Leeds"></city>
+               <district value="West Yorkshire"></district>
+               <postalCode value="LS1 5HT"></postalCode>
+            </address>
+            <generalPractitioner>
+               <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+            </generalPractitioner>
+            <managingOrganization>
+               <reference value="Organization/db67f447-b30d-442a-8e31-6918d1367eeb"></reference>
+            </managingOrganization>
+         </Patient>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Organization xmlns="http://hl7.org/fhir">
+            <id value="db67f447-b30d-442a-8e31-6918d1367eeb"></id>
+            <meta>
+               <versionId value="636064088098730113"></versionId>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Organization-1"></profile>
+            </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/ods-organization-code"></system>
+               <value value="O001"></value>
+            </identifier>
+            <name value="The Trevelyan Practice"></name>
+            <telecom>
+               <system value="phone"></system>
+               <value value="03003035678"></value>
+               <use value="work"></use>
+            </telecom>
+            <address>
+               <line value="Trevelyan Square"></line>
+               <line value="Boar Ln"></line>
+               <city value="Leeds"></city>
+               <district value="West Yorkshire"></district>
+               <postalCode value="LS1 6AE"></postalCode>
+            </address>
+         </Organization>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Practitioner xmlns="http://hl7.org/fhir">
+            <id value="6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></id>
+            <meta>
+               <versionId value="1469448000000"></versionId>
+               <lastUpdated value="2016-07-25T12:00:00.000+00:00"></lastUpdated>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1"></profile>
+            </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/sds-user-id"></system>
+               <value value="G13579135"></value>
+            </identifier>
+            <name>
+               <use value="usual"></use>
+               <family value="Gilbert"></family>
+               <given value="Nichole"></given>
+               <prefix value="Miss"></prefix>
+            </name>
+            <gender value="female"></gender>
+         </Practitioner>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <PractitionerRole xmlns="http://hl7.org/fhir">
+            <id value="e0244de8-07ef-4274-9f7a-d7067bcc8d21"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-PractitionerRole-1"></profile>
+            </meta>
+            <practitioner>
+               <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+            </practitioner>
+            <organization>
+               <reference value="Organization/db67f447-b30d-442a-8e31-6918d1367eeb"></reference>
+            </organization>
+            <code>
+               <coding>
+                  <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-SDSJobRoleName-1"></system>
+                  <code value="R0260"></code>
+                  <display value="General Medical Practitioner"></display>
+               </coding>
+            </code>
+         </PractitionerRole>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Organization xmlns="http://hl7.org/fhir">
+            <id value="db67f447-b30d-442a-8e31-6918d1367eec"></id>
+            <meta>
+               <versionId value="636064088098730113"></versionId>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Organization-1"></profile>
+            </meta>
+            <name value="Acme Drug Corp"></name>
+         </Organization>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Location xmlns="http://hl7.org/fhir">
+            <id value="17"></id>
+            <meta>
+               <versionId value="636064088100870233"></versionId>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Location-1"></profile>
+            </meta>
+            <name value="The Trevelyan Practice"></name>
+            <telecom>
+               <system value="phone"></system>
+               <value value="03003035678"></value>
+               <use value="work"></use>
+            </telecom>
+            <address>
+               <line value="Trevelyan Square"></line>
+               <line value="Boar Ln"></line>
+               <line value="Leeds"></line>
+               <postalCode value="LS1 6AE"></postalCode>
+            </address>
+            <managingOrganization>
+               <reference value="Organization/db67f447-b30d-442a-8e31-6918d1367eeb"></reference>
+            </managingOrganization>
+         </Location>
+      </resource>
+   </entry>
+   -->
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Immunisations List"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="1102181000000102"></code>
+                  <display value="Immunisations"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <date value="2019-03-01T10:57:34+00:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="event-date"></code>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Immunization/eba25af1-5b74-4790-aa5a-2134fd27ad45"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Immunization xmlns="http://hl7.org/fhir">
+            <id value="eba25af1-5b74-4790-aa5a-2134fd27ad45"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Immunization-1"></profile>
+            </meta>
+            <extension url=" https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ParentPresent-1">
+               <valueBoolean value="true"></valueBoolean>
+            </extension>
+            <extension url=" https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-DateRecorded-1">
+               <valueDateTime value="2019-06-28T10:00:00+01:00"></valueDateTime>
+            </extension>
+            <extension url=" https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-VaccinationProcedure-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://snomed.info/sct"></system>
+                     <code value="170378007"></code>
+                     <display value="First hepatitis A vaccination"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad75"></value>
+            </identifier>
+            <status value="completed"></status>
+            <notGiven value="false"></notGiven>
+            <vaccineCode>
+               <coding>
+                  <system value="http://hl7.org/fhir/v3/NullFlavor "></system>
+                  <code value="UNK"></code>
+               </coding>
+               <text value="Unknown"></text>
+            </vaccineCode>
+            <patient>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </patient>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-06-28"></date>
+            <primarySource value="true"></primarySource>
+            <location>
+               <reference value="Location/17"></reference>
+            </location>
+            <manufacturer>
+               <reference value="Organization/db67f447-b30d-442a-8e31-6918d1367eec"></reference>
+            </manufacturer>
+            <lotNumber value="AAJN11K"></lotNumber>
+            <expirationDate value="2019-12-15"></expirationDate>
+            <site>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="368209003"></code>
+                  <display value="Right upper arm"></display>
+               </coding>
+            </site>
+            <route>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="34206005"></code>
+                  <display value="Subcutaneous route"></display>
+               </coding>
+            </route>
+            <doseQuantity>
+               <value value="0.5"></value>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="ml"></code>
+            </doseQuantity>
+            <practitioner>
+               <role>
+                  <coding>
+                     <system value="http://hl7.org/fhir/stu3/valueset-immunization-role.html"></system>
+                     <code value="AP"></code>
+                  </coding>
+               </role>
+               <actor>
+                  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+               </actor>
+            </practitioner>
+            <note>
+               <text value="Notes on adminstration of vaccine"></text>
+            </note>
+            <explanation>
+               <reason>
+                  <coding>
+                     <system value="http://snomed.info/sct"></system>
+                     <code value="171279008"></code>
+                     <display value="Immunisation due"></display>
+                  </coding>
+               </reason>
+            </explanation>
+            <vaccinationProtocol>
+               <doseSequence value="1"></doseSequence>
+               <seriesDoses value="3"></seriesDoses>
+               <targetDisease>
+                  <coding>
+                     <system value="http://snomed.info/sct"></system>
+                     <code value="40468003"></code>
+                     <display value="Viral hepatitis, type A"></display>
+                  </coding>
+               </targetDisease>
+               <doseStatus>
+                  <coding>
+                     <system value="http://hl7.org/fhir/stu3/valueset-vaccination-protocol-dose-status.html"></system>
+                     <code value="count"></code>
+                     <display value="Counts"></display>
+                  </coding>
+               </doseStatus>
+            </vaccinationProtocol>
+         </Immunization>
+      </resource>
+   </entry>
+</Bundle>

@@ -1,1 +1,4026 @@
-/mnt/encrypted/home/simonfarrow/Documents/gpconnect/sample_messages/consultations_resp.xml
+<Bundle xmlns="http://hl7.org/fhir">
+   <meta>
+      <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1"></profile>
+   </meta>
+   <type value="collection"></type>
+   <entry>
+      <resource>
+         <Condition xmlns="http://hl7.org/fhir">
+            <id value="Problem_A_Anxiety_With_Depression"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
+            </meta>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Encounter/Encounter1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="List/Consultation1_Topic1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic1_Category_History_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic1_Category_Examination_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic1_Category_Social_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic1_Category_Social_Observation_2"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="MedicationRequest/Consultation1_Topic1_Category_Plan_Medication_Plan"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="MedicationRequest/Consultation1_Topic1_Category_Plan_Medication_Order"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic1_Category_Plan_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic1_Category_Plan_Observation_2"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Encounter/Encounter1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="List/Consultation2_Topic1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation2_Topic1_Category_History_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation2_Topic1_Category_Examination_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation2_Topic1_Category_Social_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="MedicationRequest/Consultation2_Topic1_Category_Plan_Medication_Plan"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="MedicationRequest/Consultation2_Topic1_Category_Plan_Medication_Order"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation2_Topic1_Category_Plan_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Encounter/Encounter3"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="List/Consultation3_Topic1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation3_Topic1_Category_History_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation3_Topic1_Category_Examination_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation3_Topic1_Category_Social_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="MedicationRequest/Consultation3_Topic1_Category_Plan_Medication_Plan"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="MedicationRequest/Consultation3_Topic1_Category_Plan_Medication_Order"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation3_Topic1_Category_Plan_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <clinicalStatus value="active"></clinicalStatus>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="346979010"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Mixed anxiety and depressive disorder"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="231504006"></code>
+                  <display value="Mixed anxiety and depressive disorder (disorder)"></display>
+               </coding>
+               <text value="Anxiety with depression"></text>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <onsetDateTime value="2019-03-28T10:30:00"></onsetDateTime>
+            <assertedDate value="2019-03-28T10:30:00"></assertedDate>
+         </Condition>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Condition xmlns="http://hl7.org/fhir">
+            <id value="Problem_B_Swollen_Legs"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
+            </meta>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Encounter/Encounter1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="List/Consultation1_Topic2"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic2_Category_History_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic2_Category_Examination_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic2_Category_Examination_Observation_2"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic2_Category_Examination_Observation_3"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic2_Category_Examination_Observation_4"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic2_Category_Examination_Observation_5"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic2_Category_Plan_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic2_Category_Plan_Observation_2"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Encounter/Encounter3"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="List/Consultation3_Topic2"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation3_Topic2_Category_History_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation3_Topic2_Category_Examination_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation3_Topic2_Category_Examination_Observation_2"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation3_Topic2_Category_Examination_Observation_3"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation3_Topic2_Category_Examination_Observation_4"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation3_Topic2_Category_Examination_Observation_5"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation3_Topic2_Category_Plan_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <clinicalStatus value="active"></clinicalStatus>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="2729461000000110"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Swollen leg"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="449614009"></code>
+                  <display value="Swelling of lower limb (finding)"></display>
+               </coding>
+               <text value="Swollen legs"></text>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <onsetDateTime value="2019-03-28T10:30:00"></onsetDateTime>
+            <assertedDate value="2019-03-28T10:30:00"></assertedDate>
+         </Condition>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Condition xmlns="http://hl7.org/fhir">
+            <id value="Problem_D_URTI"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
+            </meta>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Encounter/Encounter1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="List/Consultation1_Topic4"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic4_Category_History_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic4_Category_History_Observation_2"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic4_Category_History_Observation_3"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic4_Category_History_Observation_4"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1_Topic4_Category_Plan_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="MedicationRequest/MedicationRequest/Consultation1_Topic4_Category_Plan_Medication_Plan_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="MedicationRequest/MedicationRequest/Consultation1_Topic4_Category_Plan_Medication_Order_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Encounter/Encounter2"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="List/Consultation2_Topic2"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation2_Topic2_Category_History_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation2_Topic2_Category_Plan_Observation_1"></reference>
+               </valueReference>
+            </extension>
+            <clinicalStatus value="active"></clinicalStatus>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="1231298013"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Upper respiratory tract infection"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="54150009"></code>
+                  <display value="Upper respiratory infection (disorder)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <onsetDateTime value="2019-03-28T10:30:00"></onsetDateTime>
+            <assertedDate value="2019-03-28T10:30:00"></assertedDate>
+         </Condition>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Encounter xmlns="http://hl7.org/fhir">
+            <id value="Encounter1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Encounter-1"></profile>
+            </meta>
+            <status value="finished"></status>
+            <type>
+               <text value="Surgery Consultation"></text>
+            </type>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <participant>
+               <type>
+                  <coding>
+                     <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
+                     <code value="PPRF"></code>
+                     <display value="Primary Performer"></display>
+                  </coding>
+               </type>
+            </participant>
+            <participant>
+               <type>
+                  <coding>
+                     <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
+                     <code value="AUT"></code>
+                     <display value="Author"></display>
+                  </coding>
+               </type>
+            </participant>
+         </Encounter>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Surgery Consultation"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="325851000000107"></code>
+                  <display value="Consultation encounter type (record artifact)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic2"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic3"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic4"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic5"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+               <valueReference>
+                  <reference value="Condition/Problem_A_Anxiety_With_Depression"></reference>
+               </valueReference>
+            </extension>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Anxiety with Depression"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="25851000000105"></code>
+                  <display value="Topic (EHR) (record artifact)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic1_Category_History"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic1_Category_Examination"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic1_Category_Social"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic1_Category_Plan"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1_Category_History"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="History"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1_Category_Examination"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Examination"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1_Category_Social"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Social"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1_Category_Plan"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Plan"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+               <valueReference>
+                  <reference value="Condition/Problem_B_Swollen_Legs"></reference>
+               </valueReference>
+            </extension>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Swollen legs"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="25851000000105"></code>
+                  <display value="Topic (EHR) (record artifact)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic2_Category_History"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic2_Category_Examination"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic2_Category_Plan"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic2_Category_History"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="History"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic2_Category_Examination"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Examination"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic2_Category_Plan"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Plan"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic3"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="25851000000105"></code>
+                  <display value="Topic (EHR) (record artifact)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1_Topic3_flat_Observation_1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1_Topic3_flat_Observation_2"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="MedicationRequest/Consultation1_Topic3_flat_Medication_Plan_1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="MedicationRequest/Consultation1_Topic3_flat_Medication_Order_1"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic4"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Upper respiratory tract infection"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="25851000000105"></code>
+                  <display value="Topic (EHR) (record artifact)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic4_Category_History"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic4_Category_Plan"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+         <valueReference>
+            <reference value="Condition/Problem_D_URTI"></reference>
+         </valueReference>
+      </extension>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic4_Category_History"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="History"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic4_Category_Plan"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Plan"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic5"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Knee Pain"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="25851000000105"></code>
+                  <display value="Topic (EHR) (record artifact)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic5_Category_History"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic5_Category_Examination"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation1_Topic5_Category_Plan"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic5_Category_History"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="History"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic5_Category_Examination"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Examination"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic5_Category_Plan"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Plan"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter1"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1_Category_History_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1_Category_Examination_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1_Category_Social_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="397732011"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Never smoked tobacco"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="266919005"></code>
+                  <display value="Never smoked tobacco (finding)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1_Category_Social_Observation_2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="2713011000000113"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Alcohol units consumed per week"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="1082641000000106"></code>
+                  <display value="Alcohol units consumed per week (observable entity)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1_Category_Plan_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="451782016"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Referral to counsellor"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="308448008"></code>
+                  <display value="Referral to counselor (procedure)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1_Category_Plan_Observation_2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="452320010"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Walking practice"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="308931006"></code>
+                  <display value="Walking practice (regime/therapy)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationRequest xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1_Category_Plan_Medication_Plan"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="acute"></code>
+                     <display value="Acute"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <status value="completed"></status>
+            <intent value="plan"></intent>
+            <medicationReference>
+               <reference value="Medication/c260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <authoredOn value="2019-03-28"></authoredOn>
+            <recorder>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </recorder>
+            <note>
+               <text value="Pharmacy Notes: NOTES FOR PHARMACY"></text>
+            </note>
+            <dosageInstruction>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosageInstruction>
+            <dispenseRequest>
+               <validityPeriod>
+                  <start value="2019-03-28"></start>
+               </validityPeriod>
+               <quantity>
+                  <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
+                     <valueString value="capsule(s)"></valueString>
+                  </extension>
+                  <value value="28"></value>
+               </quantity>
+               <expectedSupplyDuration>
+                  <value value="28"></value>
+                  <unit value="day"></unit>
+                  <system value="http://unitsofmeasure.org"></system>
+                  <code value="d"></code>
+               </expectedSupplyDuration>
+            </dispenseRequest>
+         </MedicationRequest>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Medication xmlns="http://hl7.org/fhir">
+            <id value="c260b451-9821-42de-81f9-ba86dcea2c32"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Medication-1"></profile>
+            </meta>
+            <code>
+               <coding>
+                  <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="56992301000001116"></valueId>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="321987003"></code>
+                  <display value="Citalopram 20mg tablets"></display>
+               </coding>
+            </code>
+         </Medication>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationStatement xmlns="http://hl7.org/fhir">
+            <id value="6bff710a-0bdc-4c9b-b98b-40db0a107edc"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationStatement-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationStatementLastIssueDate-1">
+               <valueDateTime value="2019-03-28"></valueDateTime>
+            </extension>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescribingAgency-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescribingAgency-1"></system>
+                     <code value="prescribed-at-gp-practice"></code>
+                     <display value="Prescribed at GP practice"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <basedOn>
+               <reference value="MedicationRequest/Consultation1_Topic1_Category_Plan_Medication_Plan"></reference>
+            </basedOn>
+            <status value="completed"></status>
+            <medicationReference>
+               <reference value="Medication/c260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <effectiveDateTime value="2019-03-28"></effectiveDateTime>
+            <dateAsserted value="2019-03-28"></dateAsserted>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <taken value="unk"></taken>
+            <note>
+               <text value="Pharmacy Notes: NOTES FOR PHARMACY"></text>
+            </note>
+            <dosage>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosage>
+         </MedicationStatement>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationRequest xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic1_Category_Plan_Medication_Order"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="acute"></code>
+                     <display value="Acute"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <basedOn>
+               <reference value="MedicationRequest/MedicationRequest/Consultation1_Topic1_Category_Plan_Medication_Plan"></reference>
+            </basedOn>
+            <status value="completed"></status>
+            <intent value="order"></intent>
+            <medicationReference>
+               <reference value="Medication/c260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <authoredOn value="2019-03-28"></authoredOn>
+            <recorder>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </recorder>
+            <note>
+               <text value="NOTES FOR PHARMACY"></text>
+            </note>
+            <dosageInstruction>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosageInstruction>
+            <dispenseRequest>
+               <validityPeriod>
+                  <start value="2019-03-28"></start>
+               </validityPeriod>
+               <quantity>
+                  <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
+                     <valueString value="capsule(s)"></valueString>
+                  </extension>
+                  <value value="28"></value>
+               </quantity>
+               <expectedSupplyDuration>
+                  <value value="28"></value>
+                  <unit value="day"></unit>
+                  <system value="http://unitsofmeasure.org"></system>
+                  <code value="d"></code>
+               </expectedSupplyDuration>
+            </dispenseRequest>
+         </MedicationRequest>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic2_Category_History_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic2_Category_Examination_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="3008650016"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Temperature"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="703421000"></code>
+                  <display value="Temperature (observable entity)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic2_Category_Examination_Observation_2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="2748921000000116"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Arterial oxygen saturation on room air at rest"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="1097811000000106"></code>
+                  <display value="Arterial oxygen saturation breathing room air at rest (observable entity)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic2_Category_Examination_Observation_3"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="143107019"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Respiratory rate"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value=" 86290005"></code>
+                  <display value="Respiratory rate (observable entity)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic2_Category_Examination_Observation_4"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="406493011"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Pulse irregularly irregular"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="271637005"></code>
+                  <display value="Pulse irregularly irregular (finding)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic2_Category_Examination_Observation_5"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic2_Category_Plan_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic2_Category_Plan_Observation_2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="78049019"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Electrocardiographic monitoring"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="46825001"></code>
+                  <display value="Electrocardiographic monitoring (procedure)"></display>
+               </coding>
+            </code>
+            <effectiveDateTime value="2019-03-28T10:30:00"></effectiveDateTime>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic3_flat_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="2474699019"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Blood pressure recorded by patient at home"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="413153004"></code>
+                  <display value="Blood pressure recorded by patient at home (procedure)"></display>
+               </coding>
+            </code>
+            <effectiveDateTime value="2019-03-28T10:30:00"></effectiveDateTime>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic3_flat_Observation_2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdecsid">
+                     <extension url="DescriptionID">
+                        <valueId value="254063019"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueId value="O/E - blood pressure reading"></valueId>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="163020007"></code>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/3ddadd9a-e64a-4b6c-bdec-45ef1fcb89e2"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="1989-04-06T10:14:00"></effectiveDateTime>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://snomed.info/sct"></system>
+                     <code value="163030003"></code>
+                  </coding>
+                  <text value="O/E - Systolic BP reading"></text>
+               </code>
+               <valueQuantity>
+                  <value value="130"></value>
+                  <unit value="mmHg"></unit>
+               </valueQuantity>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://snomed.info/sct"></system>
+                     <code value="163031004"></code>
+                  </coding>
+                  <text value="O/E - Diastolic BP reading"></text>
+               </code>
+               <valueQuantity>
+                  <value value="72"></value>
+                  <unit value="mmHg"></unit>
+               </valueQuantity>
+            </component>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationRequest xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic3_flat_Medication_Plan_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="acute"></code>
+                     <display value="Acute"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <status value="completed"></status>
+            <intent value="plan"></intent>
+            <medicationReference>
+               <reference value="Medication/d260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <authoredOn value="2019-03-28"></authoredOn>
+            <recorder>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </recorder>
+            <note>
+               <text value="Pharmacy Notes: NOTES FOR PHARMACY"></text>
+            </note>
+            <dosageInstruction>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosageInstruction>
+            <dispenseRequest>
+               <validityPeriod>
+                  <start value="2019-03-28"></start>
+               </validityPeriod>
+               <quantity>
+                  <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
+                     <valueString value="tablet(s)"></valueString>
+                  </extension>
+                  <value value="28"></value>
+               </quantity>
+               <expectedSupplyDuration>
+                  <value value="28"></value>
+                  <unit value="day"></unit>
+                  <system value="http://unitsofmeasure.org"></system>
+                  <code value="d"></code>
+               </expectedSupplyDuration>
+            </dispenseRequest>
+         </MedicationRequest>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Medication xmlns="http://hl7.org/fhir">
+            <id value="d260b451-9821-42de-81f9-ba86dcea2c32"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Medication-1"></profile>
+            </meta>
+            <code>
+               <coding>
+                  <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="56938601000001119"></valueId>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="319284000"></code>
+                  <display value="Amlodipine 10mg tablets"></display>
+               </coding>
+            </code>
+         </Medication>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationStatement xmlns="http://hl7.org/fhir">
+            <id value="7bff710a-0bdc-4c9b-b98b-40db0a107edc"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationStatement-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationStatementLastIssueDate-1">
+               <valueDateTime value="2019-03-28"></valueDateTime>
+            </extension>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescribingAgency-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescribingAgency-1"></system>
+                     <code value="prescribed-at-gp-practice"></code>
+                     <display value="Prescribed at GP practice"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <basedOn>
+               <reference value="MedicationRequest/Consultation1_Topic3_flat_Medication_Plan_1"></reference>
+            </basedOn>
+            <status value="completed"></status>
+            <medicationReference>
+               <reference value="Medication/d260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <effectiveDateTime value="2019-03-28"></effectiveDateTime>
+            <dateAsserted value="2019-03-28"></dateAsserted>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <taken value="unk"></taken>
+            <note>
+               <text value="Pharmacy Notes: NOTES FOR PHARMACY"></text>
+            </note>
+            <dosage>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosage>
+         </MedicationStatement>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationRequest xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic3_flat_Medication_Order_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="acute"></code>
+                     <display value="Acute"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <basedOn>
+               <reference value="MedicationRequest/Consultation1_Topic3_flat_Medication_Plan_1"></reference>
+            </basedOn>
+            <status value="completed"></status>
+            <intent value="order"></intent>
+            <medicationReference>
+               <reference value="Medication/d260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <authoredOn value="2019-03-28"></authoredOn>
+            <recorder>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </recorder>
+            <note>
+               <text value="NOTES FOR PHARMACY"></text>
+            </note>
+            <dosageInstruction>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosageInstruction>
+            <dispenseRequest>
+               <validityPeriod>
+                  <start value="2019-03-28"></start>
+               </validityPeriod>
+               <quantity>
+                  <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
+                     <valueString value="tablet(s)"></valueString>
+                  </extension>
+                  <value value="28"></value>
+               </quantity>
+               <expectedSupplyDuration>
+                  <value value="28"></value>
+                  <unit value="day"></unit>
+                  <system value="http://unitsofmeasure.org"></system>
+                  <code value="d"></code>
+               </expectedSupplyDuration>
+            </dispenseRequest>
+         </MedicationRequest>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic4_Category_History_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic4_Category_History_Observation_2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="82824016"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Cough"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="49727002"></code>
+                  <display value="Cough (finding)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic4_Category_History_Observation_3"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="397999013"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Nose running"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="267101005"></code>
+                  <display value="Nasal discharge present (situation)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic4_Category_History_Observation_4"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="2164213014"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Sore throat"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="162397003"></code>
+                  <display value="Pain in throat (finding)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic4_Category_Plan_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationRequest xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic4_Category_Plan_Medication_Plan_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="acute"></code>
+                     <display value="Acute"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <status value="completed"></status>
+            <intent value="plan"></intent>
+            <medicationReference>
+               <reference value="Medication/a260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <authoredOn value="2019-03-28"></authoredOn>
+            <recorder>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </recorder>
+            <note>
+               <text value="Pharmacy Notes: NOTES FOR PHARMACY"></text>
+            </note>
+            <dosageInstruction>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosageInstruction>
+            <dispenseRequest>
+               <validityPeriod>
+                  <start value="2019-03-28"></start>
+               </validityPeriod>
+               <quantity>
+                  <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
+                     <valueString value="tablet(s)"></valueString>
+                  </extension>
+                  <value value="28"></value>
+               </quantity>
+               <expectedSupplyDuration>
+                  <value value="28"></value>
+                  <unit value="day"></unit>
+                  <system value="http://unitsofmeasure.org"></system>
+                  <code value="d"></code>
+               </expectedSupplyDuration>
+            </dispenseRequest>
+         </MedicationRequest>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Medication xmlns="http://hl7.org/fhir">
+            <id value="a260b451-9821-42de-81f9-ba86dcea2c32"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Medication-1"></profile>
+            </meta>
+            <code>
+               <coding>
+                  <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="56978101000001114"></valueId>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="322236009"></code>
+                  <display value="Paracetamol 500mg tablets"></display>
+               </coding>
+            </code>
+         </Medication>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationStatement xmlns="http://hl7.org/fhir">
+            <id value="7bff710a-0bdc-4c9b-b98b-40db0a107edc"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationStatement-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationStatementLastIssueDate-1">
+               <valueDateTime value="2019-03-28"></valueDateTime>
+            </extension>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescribingAgency-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescribingAgency-1"></system>
+                     <code value="prescribed-at-gp-practice"></code>
+                     <display value="Prescribed at GP practice"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <basedOn>
+               <reference value="MedicationRequest/Consultation1_Topic4_Category_Plan_Medication_Plan_1"></reference>
+            </basedOn>
+            <status value="completed"></status>
+            <medicationReference>
+               <reference value="Medication/a260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <effectiveDateTime value="2019-03-28"></effectiveDateTime>
+            <dateAsserted value="2019-03-28"></dateAsserted>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <taken value="unk"></taken>
+            <note>
+               <text value="Pharmacy Notes: NOTES FOR PHARMACY"></text>
+            </note>
+            <dosage>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosage>
+         </MedicationStatement>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationRequest xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic4_Category_Plan_Medication_Order_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="acute"></code>
+                     <display value="Acute"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <basedOn>
+               <reference value="Consultation1_Topic4_Category_Plan_Medication_Plan_1"></reference>
+            </basedOn>
+            <status value="completed"></status>
+            <intent value="order"></intent>
+            <medicationReference>
+               <reference value="Medication/a60b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <authoredOn value="2019-03-28"></authoredOn>
+            <recorder>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </recorder>
+            <note>
+               <text value="NOTES FOR PHARMACY"></text>
+            </note>
+            <dosageInstruction>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosageInstruction>
+            <dispenseRequest>
+               <validityPeriod>
+                  <start value="2019-03-28"></start>
+               </validityPeriod>
+               <quantity>
+                  <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
+                     <valueString value="tablet(s)"></valueString>
+                  </extension>
+                  <value value="28"></value>
+               </quantity>
+               <expectedSupplyDuration>
+                  <value value="28"></value>
+                  <unit value="day"></unit>
+                  <system value="http://unitsofmeasure.org"></system>
+                  <code value="d"></code>
+               </expectedSupplyDuration>
+            </dispenseRequest>
+         </MedicationRequest>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic5_Category_History_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="51875014"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Knee pain"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="30989003"></code>
+                  <display value="Knee pain (finding)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic5_Category_History_Observation_2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic5_Category_History_Observation_3"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic5_Category_Examination_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic5_Category_Examination_Observation_2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="440282017"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Tenderness on medial joint lne of knee"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="299373004"></code>
+                  <display value="Tenderness on medial joint lne of knee (finding)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic5_Category_Plan_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="451781011"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Referral to physiopherapist"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="308447003"></code>
+                  <display value="Referral to physiopherapist (procedure)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1_Topic5_Category_Plan_Observation_2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Encounter xmlns="http://hl7.org/fhir">
+            <id value="Encounter2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Encounter-1"></profile>
+            </meta>
+            <status value="finished"></status>
+            <type>
+               <text value="Surgery Consultation"></text>
+            </type>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <participant>
+               <type>
+                  <coding>
+                     <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
+                     <code value="PPRF"></code>
+                     <display value="Primary Performer"></display>
+                  </coding>
+               </type>
+            </participant>
+            <participant>
+               <type>
+                  <coding>
+                     <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
+                     <code value="AUT"></code>
+                     <display value="Author"></display>
+                  </coding>
+               </type>
+            </participant>
+         </Encounter>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Surgery Consultation"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="325851000000107"></code>
+                  <display value="Consultation encounter type (record artifact)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter2"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="List/Consultation2_Topic1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation2_Topic2"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+               <valueReference>
+                  <reference value="Condition/Problem_A_Anxiety_With_Depression"></reference>
+               </valueReference>
+            </extension>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Anxiety with Depression"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="25851000000105"></code>
+                  <display value="Topic (EHR) (record artifact)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter2"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="List/Consultation2_Topic1_Category_History"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation2_Topic1_Category_Examination"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation2_Topic1_Category_Social"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation2_Topic1_Category_Plan"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+               <valueReference>
+                  <reference value="Condition/Problem_D_URTI"></reference>
+               </valueReference>
+            </extension>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Upper respiratory tract infection"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="25851000000105"></code>
+                  <display value="Topic (EHR) (record artifact)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter2"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="List/Consultation2_Topic2_Category_History"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation2_Topic2_Category_Plan"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic1_Category_History"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="History"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter2"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic1_Category_Examination"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Examination"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter2"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic1_Category_Social"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Social"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter2"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic1_Category_Plan"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Plan"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter2"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic2_Category_History"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="History"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter2"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic2_Category_Plan"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Plan"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter2"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic1_Category_History_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic1_Category_Examination_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic1_Category_Social_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="2713011000000113"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Alcohol units consumed per week"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="1082641000000106"></code>
+                  <display value="Alcohol units consumed per week (observable entity)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationRequest xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic1_Category_Plan_Medication_Plan"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="acute"></code>
+                     <display value="Acute"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <status value="completed"></status>
+            <intent value="plan"></intent>
+            <medicationReference>
+               <reference value="Medication/b260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <authoredOn value="2019-03-28"></authoredOn>
+            <recorder>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </recorder>
+            <note>
+               <text value="Pharmacy Notes: NOTES FOR PHARMACY"></text>
+            </note>
+            <dosageInstruction>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosageInstruction>
+            <dispenseRequest>
+               <validityPeriod>
+                  <start value="2019-03-28"></start>
+               </validityPeriod>
+               <quantity>
+                  <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
+                     <valueString value="capsule(s)"></valueString>
+                  </extension>
+                  <value value="28"></value>
+               </quantity>
+               <expectedSupplyDuration>
+                  <value value="28"></value>
+                  <unit value="day"></unit>
+                  <system value="http://unitsofmeasure.org"></system>
+                  <code value="d"></code>
+               </expectedSupplyDuration>
+            </dispenseRequest>
+         </MedicationRequest>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Medication xmlns="http://hl7.org/fhir">
+            <id value="b260b451-9821-42de-81f9-ba86dcea2c32"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Medication-1"></profile>
+            </meta>
+            <code>
+               <coding>
+                  <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="56992301000001116"></valueId>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="321987003"></code>
+                  <display value="Citalopram 20mg tablets"></display>
+               </coding>
+            </code>
+         </Medication>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationStatement xmlns="http://hl7.org/fhir">
+            <id value="6bff710a-0bdc-4c9b-b98b-40db0a107edc"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationStatement-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationStatementLastIssueDate-1">
+               <valueDateTime value="2019-03-28"></valueDateTime>
+            </extension>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescribingAgency-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescribingAgency-1"></system>
+                     <code value="prescribed-at-gp-practice"></code>
+                     <display value="Prescribed at GP practice"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <basedOn>
+               <reference value="MedicationRequest/Consultation2_Topic1_Category_Plan_Medication_Plan"></reference>
+            </basedOn>
+            <status value="completed"></status>
+            <medicationReference>
+               <reference value="Medication/b260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <effectiveDateTime value="2019-03-28"></effectiveDateTime>
+            <dateAsserted value="2019-03-28"></dateAsserted>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <taken value="unk"></taken>
+            <note>
+               <text value="Pharmacy Notes: NOTES FOR PHARMACY"></text>
+            </note>
+            <dosage>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosage>
+         </MedicationStatement>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationRequest xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic1_Category_Plan_Medication_Order"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="acute"></code>
+                     <display value="Acute"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <basedOn>
+               <reference value="MedicationRequest/Consultation2_Topic1_Category_Plan_Medication_Plan"></reference>
+            </basedOn>
+            <status value="completed"></status>
+            <intent value="order"></intent>
+            <medicationReference>
+               <reference value="Medication/b260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <authoredOn value="2019-03-28"></authoredOn>
+            <recorder>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </recorder>
+            <note>
+               <text value="NOTES FOR PHARMACY"></text>
+            </note>
+            <dosageInstruction>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosageInstruction>
+            <dispenseRequest>
+               <validityPeriod>
+                  <start value="2019-03-28"></start>
+               </validityPeriod>
+               <quantity>
+                  <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
+                     <valueString value="capsule(s)"></valueString>
+                  </extension>
+                  <value value="28"></value>
+               </quantity>
+               <expectedSupplyDuration>
+                  <value value="28"></value>
+                  <unit value="day"></unit>
+                  <system value="http://unitsofmeasure.org"></system>
+                  <code value="d"></code>
+               </expectedSupplyDuration>
+            </dispenseRequest>
+         </MedicationRequest>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic1_Category_Plan_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic2_Category_History_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation2_Topic2_Category_Plan_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Encounter xmlns="http://hl7.org/fhir">
+            <id value="Encounter3"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Encounter-1"></profile>
+            </meta>
+            <status value="finished"></status>
+            <type>
+               <text value="Surgery Consultation"></text>
+            </type>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <participant>
+               <type>
+                  <coding>
+                     <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
+                     <code value="PPRF"></code>
+                     <display value="Primary Performer"></display>
+                  </coding>
+               </type>
+            </participant>
+            <participant>
+               <type>
+                  <coding>
+                     <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
+                     <code value="AUT"></code>
+                     <display value="Author"></display>
+                  </coding>
+               </type>
+            </participant>
+         </Encounter>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation3"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Surgery Consultation"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="325851000000107"></code>
+                  <display value="Consultation encounter type (record artifact)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter3"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="List/Consultation3_Topic1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation3_Topic2"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+               <valueReference>
+                  <reference value="Condition/Problem_A_Anxiety_With_Depression"></reference>
+               </valueReference>
+            </extension>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Anxiety with Depression"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="25851000000105"></code>
+                  <display value="Topic (EHR) (record artifact)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter3"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="List/Consultation3_Topic1_Category_History"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation3_Topic1_Category_Examination"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation3_Topic1_Category_Social"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation3_Topic1_Category_Plan"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+               <valueReference>
+                  <reference value="Condition/Problem_B_Swollen_Legs"></reference>
+               </valueReference>
+            </extension>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Swollen legs"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="25851000000105"></code>
+                  <display value="Topic (EHR) (record artifact)"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter3"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="List/Consultation3_Topic2_Category_History"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation3_Topic2_Category_Examination"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="List/Consultation3_Topic2_Category_Plan"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic1_Category_History"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="History"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter3"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic1_Category_Examination"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Examination"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter3"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic1_Category_Social"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Social"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter3"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic1_Category_Plan"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Plan"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter3"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic2_Category_History"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="History"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter3"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic2_Category_Examination"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Examination"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter3"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic2_Category_Plan"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Plan"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="24781000000107 "></code>
+                  <display value="Category (EHR) (record artifact)|"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <encounter>
+               <reference value="Encounter/Encounter3"></reference>
+            </encounter>
+            <date value="2019-03-28T10:30:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="system"></code>
+                  <display value="Sorted by System"></display>
+               </coding>
+            </orderedBy>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic1_Category_History_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic1_Category_Examination_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic1_Category_Social_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="2713011000000113"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Alcohol units consumed per week"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="1082641000000106"></code>
+                  <display value="Alcohol units consumed per week (observable entity)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationRequest xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic1_Category_Plan_Medication_Plan"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="acute"></code>
+                     <display value="Acute"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <status value="completed"></status>
+            <intent value="plan"></intent>
+            <medicationReference>
+               <reference value="Medication/f260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <authoredOn value="2019-03-28"></authoredOn>
+            <recorder>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </recorder>
+            <note>
+               <text value="Pharmacy Notes: NOTES FOR PHARMACY"></text>
+            </note>
+            <dosageInstruction>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosageInstruction>
+            <dispenseRequest>
+               <validityPeriod>
+                  <start value="2019-03-28"></start>
+               </validityPeriod>
+               <quantity>
+                  <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
+                     <valueString value="capsule(s)"></valueString>
+                  </extension>
+                  <value value="28"></value>
+               </quantity>
+               <expectedSupplyDuration>
+                  <value value="28"></value>
+                  <unit value="day"></unit>
+                  <system value="http://unitsofmeasure.org"></system>
+                  <code value="d"></code>
+               </expectedSupplyDuration>
+            </dispenseRequest>
+         </MedicationRequest>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Medication xmlns="http://hl7.org/fhir">
+            <id value="f260b451-9821-42de-81f9-ba86dcea2c32"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Medication-1"></profile>
+            </meta>
+            <code>
+               <coding>
+                  <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="56992301000001116"></valueId>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="321987003"></code>
+                  <display value="Citalopram 20mg tablets"></display>
+               </coding>
+            </code>
+         </Medication>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationStatement xmlns="http://hl7.org/fhir">
+            <id value="6bff710a-0bdc-4c9b-b98b-40db0a107edc"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationStatement-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationStatementLastIssueDate-1">
+               <valueDateTime value="2019-03-28"></valueDateTime>
+            </extension>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescribingAgency-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescribingAgency-1"></system>
+                     <code value="prescribed-at-gp-practice"></code>
+                     <display value="Prescribed at GP practice"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <basedOn>
+               <reference value="MedicationRequest/Consultation3_Topic1_Category_Plan_Medication_Plan"></reference>
+            </basedOn>
+            <status value="completed"></status>
+            <medicationReference>
+               <reference value="Medication/f260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <effectiveDateTime value="2019-03-28"></effectiveDateTime>
+            <dateAsserted value="2019-03-28"></dateAsserted>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <taken value="unk"></taken>
+            <note>
+               <text value="Pharmacy Notes: NOTES FOR PHARMACY"></text>
+            </note>
+            <dosage>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosage>
+         </MedicationStatement>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <MedicationRequest xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic1_Category_Plan_Medication_Order"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescriptionType-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="acute"></code>
+                     <display value="Acute"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <basedOn>
+               <reference value="MedicationRequest/Consultation3_Topic1_Category_Plan_Medication_Plan"></reference>
+            </basedOn>
+            <status value="completed"></status>
+            <intent value="order"></intent>
+            <medicationReference>
+               <reference value="Medication/f260b451-9821-42de-81f9-ba86dcea2c32"></reference>
+            </medicationReference>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <authoredOn value="2019-03-28"></authoredOn>
+            <recorder>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </recorder>
+            <note>
+               <text value="NOTES FOR PHARMACY"></text>
+            </note>
+            <dosageInstruction>
+               <text value="TAKE ONE DAILY"></text>
+               <patientInstruction value="INSTRUCTIONS FOR PATIENT"></patientInstruction>
+            </dosageInstruction>
+            <dispenseRequest>
+               <validityPeriod>
+                  <start value="2019-03-28"></start>
+               </validityPeriod>
+               <quantity>
+                  <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
+                     <valueString value="capsule(s)"></valueString>
+                  </extension>
+                  <value value="28"></value>
+               </quantity>
+               <expectedSupplyDuration>
+                  <value value="28"></value>
+                  <unit value="day"></unit>
+                  <system value="http://unitsofmeasure.org"></system>
+                  <code value="d"></code>
+               </expectedSupplyDuration>
+            </dispenseRequest>
+         </MedicationRequest>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic1_Category_Plan_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic2_Category_History_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic2_Category_Examination_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="3008650016"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Temperature"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="703421000"></code>
+                  <display value="Temperature (observable entity)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic2_Category_Examination_Observation_2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="2748921000000116"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Arterial oxygen saturation on room air at rest"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="1097811000000106"></code>
+                  <display value="Arterial oxygen saturation breathing room air at rest (observable entity)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic2_Category_Examination_Observation_3"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="143107019"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Respiratory rate"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value=" 86290005"></code>
+                  <display value="Respiratory rate (observable entity)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic2_Category_Examination_Observation_4"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="406493011"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Pulse irregularly irregular"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="271637005"></code>
+                  <display value="Pulse irregularly irregular (finding)"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic2_Category_History_Observation_5"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation3_Topic2_Category_Plan_Observation_1"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="37331000000100"></code>
+                  <display value="Comment note (record artifact)|"></display>
+               </coding>
+            </code>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Patient xmlns="http://hl7.org/fhir">
+            <id value="04603d77-1a4e-4d63-b246-d7504f8bd833"></id>
+            <meta>
+               <versionId value="1469448000000"></versionId>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Patient-1"></profile>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-RegistrationDetails-1">
+               <extension url="registrationPeriod">
+                  <valuePeriod>
+                     <start value="1962-07-13T00:00:00+00:00"></start>
+                  </valuePeriod>
+               </extension>
+            </extension>
+            <identifier>
+               <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1">
+                  <valueCodeableConcept>
+                     <coding>
+                        <system value="https://fhir.nhs.uk/CareConnect-NHSNumberVerificationStatus-1"></system>
+                        <code value="01"></code>
+                        <display value="Number present and verified"></display>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <system value="https://fhir.nhs.uk/Id/nhs-number"></system>
+               <value value="9999999999"></value>
+            </identifier>
+            <active value="true"></active>
+            <name>
+               <use value="official"></use>
+               <text value="JACKSON Jane (Miss)"></text>
+               <family value="Jackson"></family>
+               <given value="Jane"></given>
+               <prefix value="Miss"></prefix>
+            </name>
+            <telecom>
+               <system value="phone"></system>
+               <value value="01454587554"></value>
+               <use value="home"></use>
+            </telecom>
+            <gender value="female"></gender>
+            <birthDate value="1952-05-31"></birthDate>
+            <address>
+               <use value="home"></use>
+               <type value="physical"></type>
+               <line value="Cable Place"></line>
+               <line value="Roundhay"></line>
+               <city value="Leeds"></city>
+               <district value="West Yorkshire"></district>
+               <postalCode value="LS1 5HT"></postalCode>
+            </address>
+            <generalPractitioner>
+               <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+            </generalPractitioner>
+            <managingOrganization>
+               <reference value="Organization/db67f447-b30d-442a-8e31-6918d1367eeb"></reference>
+            </managingOrganization>
+         </Patient>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Organization xmlns="http://hl7.org/fhir">
+            <id value="db67f447-b30d-442a-8e31-6918d1367eeb"></id>
+            <meta>
+               <versionId value="636064088098730113"></versionId>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Organization-1"></profile>
+            </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/ods-organization-code"></system>
+               <value value="O001"></value>
+            </identifier>
+            <name value="The Trevelyan Practice"></name>
+            <telecom>
+               <system value="phone"></system>
+               <value value="03003035678"></value>
+               <use value="work"></use>
+            </telecom>
+            <address>
+               <line value="Trevelyan Square"></line>
+               <line value="Boar Ln"></line>
+               <city value="Leeds"></city>
+               <district value="West Yorkshire"></district>
+               <postalCode value="LS1 6AE"></postalCode>
+            </address>
+         </Organization>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Practitioner xmlns="http://hl7.org/fhir">
+            <id value="6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></id>
+            <meta>
+               <versionId value="1469448000000"></versionId>
+               <lastUpdated value="2016-07-25T12:00:00.000+00:00"></lastUpdated>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1"></profile>
+            </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/sds-user-id"></system>
+               <value value="G13579135"></value>
+            </identifier>
+            <name>
+               <use value="usual"></use>
+               <family value="Gilbert"></family>
+               <given value="Nichole"></given>
+               <prefix value="Miss"></prefix>
+            </name>
+            <gender value="female"></gender>
+         </Practitioner>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <PractitionerRole xmlns="http://hl7.org/fhir">
+            <id value="e0244de8-07ef-4274-9f7a-d7067bcc8d21"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-PractitionerRole-1"></profile>
+            </meta>
+            <practitioner>
+               <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+            </practitioner>
+            <organization>
+               <reference value="Organization/db67f447-b30d-442a-8e31-6918d1367eeb"></reference>
+            </organization>
+            <code>
+               <coding>
+                  <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-SDSJobRoleName-1"></system>
+                  <code value="R0260"></code>
+                  <display value="General Medical Practitioner"></display>
+               </coding>
+            </code>
+         </PractitionerRole>
+      </resource>
+   </entry>
+</Bundle>

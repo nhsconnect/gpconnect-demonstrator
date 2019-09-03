@@ -45,7 +45,7 @@
     {
       "mode": "server",
       "security": {
-        "cors": "true"
+        "cors": true
       },
       "resource": [
         {
@@ -126,7 +126,7 @@
               "code": "search-type"
             }
           ],
-          "updateCreate": "false",
+          "updateCreate": false,
           "searchParam": [
             {
               "name": "identifier",

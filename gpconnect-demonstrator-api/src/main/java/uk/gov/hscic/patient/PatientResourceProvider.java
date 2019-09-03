@@ -51,11 +51,13 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import static org.hl7.fhir.dstu3.model.Address.AddressUse.OLD;
 import static org.hl7.fhir.dstu3.model.Address.AddressUse.WORK;
+import org.hl7.fhir.dstu3.model.OperationOutcome.OperationOutcomeIssueComponent;
 import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
 import static uk.gov.hscic.SystemConstants.OUR_ODS_CODE;
 import static uk.gov.hscic.SystemConstants.VALID_PARAMETER_NAMES;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_NHS_COMMUNICATION;
+import static uk.gov.hscic.SystemURL.VS_GPC_ERROR_WARNING_CODE;
 import uk.gov.hscic.model.telecom.TelecomDetails;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
@@ -114,11 +116,13 @@ public class PatientResourceProvider implements IResourceProvider {
     private String configPath;
 
     @Value("#{${responses}}")
-    private Map<String,String> hmCannedResponse;
+    private Map<String, String> hmCannedResponse;
 
     private NhsNumber nhsNumber;
 
     private Map<String, Boolean> registerPatientParams;
+
+    private OperationOutcome operationOutcome;
 
     public static Set<String> getCustomReadOperations() {
         Set<String> customReadOperations = new HashSet<>();
@@ -147,7 +151,7 @@ public class PatientResourceProvider implements IResourceProvider {
         registerPatientParams.put("registerPatient", true);
 
         // Spring does not strip trailing blanks from property values
-        for ( int i = 0; i < patients.length; i++) {
+        for (int i = 0; i < patients.length; i++) {
             patients[i] = patients[i].trim();
         }
     }
@@ -265,137 +269,152 @@ public class PatientResourceProvider implements IResourceProvider {
                     SystemCode.NO_PATIENT_CONSENT, IssueType.FORBIDDEN);
         }
 
+        operationOutcome = null;
         for (ParametersParameterComponent param : params.getParameter()) {
-            validateParametersName(param.getName());
+            if (validateParametersName(param.getName())) {
 
-            switch (param.getName()) {
-                case SystemConstants.INCLUDE_ALLERGIES_PARM:
-                    getAllergies = true;
+                switch (param.getName()) {
+                    case SystemConstants.INCLUDE_ALLERGIES_PARM:
+                        getAllergies = true;
 
-                    if (param.getPart().isEmpty()) {
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM),
-                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
-                    }
-
-                    for (ParametersParameterComponent paramPart : param.getPart()) {
-                        if (paramPart.getValue() instanceof BooleanType
-                                && paramPart.getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM)) {
-                            includeResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
-                        } else {
-                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
-                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                        if (param.getPart().isEmpty()) {
+                            addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
+//                          throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                                    new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
+//                                    SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                         }
-                    }
-                    break;
 
-                case SystemConstants.INCLUDE_MEDICATION_PARM:
-                    getMedications = true;
-
-                    if (param.getPart().isEmpty()) {
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                new UnprocessableEntityException("Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
-                    }
-
-                    boolean isIncludedPrescriptionIssuesExist = false;
-                    for (ParametersParameterComponent paramPart : param.getPart()) {
-
-                        if (paramPart.getValue() instanceof BooleanType
-                                && paramPart.getName().equals(SystemConstants.INCLUDE_PRESCRIPTION_ISSUES)) {
-                            includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
-                            isIncludedPrescriptionIssuesExist = true;
-                        } else if (paramPart.getValue() instanceof DateType
-                                && paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)) {
-                            DateType startDateDt = (DateType) paramPart.getValue();
-                            medicationPeriod = new Period();
-                            medicationPeriod.setStart(startDateDt.getValue());
-                            medicationPeriod.setEnd(null);
-                            String startDate = startDateDt.asStringValue();
-                            validateStartDateParamAndEndDateParam(startDate, null);
-                        } else {
-                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
-                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                        for (ParametersParameterComponent paramPart : param.getPart()) {
+                            if (paramPart.getValue() instanceof BooleanType
+                                    && paramPart.getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM)) {
+                                includeResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
+                            } else {
+                                addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
+//                                throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                                        new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
+//                                        SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                            }
                         }
-                    }
+                        break;
 
-                    if (!isIncludedPrescriptionIssuesExist) {
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
-                    }
-                    break;
+                    case SystemConstants.INCLUDE_MEDICATION_PARM:
+                        getMedications = true;
 
-                case SystemConstants.INCLUDE_TEST_RESULTS_PARM:
-                case SystemConstants.INCLUDE_IMMUNIZATIONS_PARM:
-                    hmInclude.add(param.getName());
-                    break;
-
-                case SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM:
-                    hmInclude.add(param.getName());
-                    // optional part named uncategorisedDataSearchPeriod with a valuePeriod
-                    for (ParametersParameterComponent paramPart : param.getPart()) {
-
-                        if (paramPart.getValue() instanceof Period
-                                && paramPart.getName().equals(SystemConstants.UNCATEGORISED_DATA_SEARCH_PERIOD)) {
-                            Period period = (Period) paramPart.getValue();
-                            validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue());
-                        } else {
-                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
-                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                        if (param.getPart().isEmpty()) {
+                            addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
+//                          throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                                    new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
+//                                    SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                         }
-                    }
-                    break;
 
-                case SystemConstants.INCLUDE_CONSULTATIONS_PARM:
-                    hmInclude.add(param.getName());
-                    // optional part named consultationSearchPeriod with a valuePeriod
-                    // optional part named numberOfMostRecent with an integer count
-                    int numberOfMostRecent = -1;
-                    for (ParametersParameterComponent paramPart : param.getPart()) {
+                        boolean isIncludedPrescriptionIssuesExist = false;
+                        for (ParametersParameterComponent paramPart : param.getPart()) {
 
-                        if (paramPart.getValue() instanceof Period
-                                && paramPart.getName().equals(SystemConstants.CONSULTATION_SEARCH_PERIOD)) {
-                            Period period = (Period) paramPart.getValue();
-                            validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue());
-                        } else if (paramPart.getValue() instanceof IntegerType
-                                && paramPart.getName().equals(SystemConstants.NUMBER_OF_MOST_RECENT)) {
-                            numberOfMostRecent = ((IntegerType) paramPart.getValue()).getValue();
-                        } else {
-                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
-                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                            if (paramPart.getValue() instanceof BooleanType
+                                    && paramPart.getName().equals(SystemConstants.INCLUDE_PRESCRIPTION_ISSUES)) {
+                                includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
+                                isIncludedPrescriptionIssuesExist = true;
+                            } else if (paramPart.getValue() instanceof DateType
+                                    && paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)) {
+                                DateType startDateDt = (DateType) paramPart.getValue();
+                                medicationPeriod = new Period();
+                                medicationPeriod.setStart(startDateDt.getValue());
+                                medicationPeriod.setEnd(null);
+                                String startDate = startDateDt.asStringValue();
+                                if (!validateStartDateParamAndEndDateParam(startDate, null)) {
+                                    addWarningIssue(param, paramPart, IssueType.INVALID, "Invalid date used");
+                                }
+                            } else {
+                                addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
+//                              throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                                        new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
+//                                        SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                            }
                         }
-                    }
-                    break;
 
-                case SystemConstants.INCLUDE_PROBLEMS_PARM:
-                    hmInclude.add(param.getName());
-                    // optional part named includeStatus with a valueCode eg active
-                    // optional part named includeSignificance with a valueCode eg major
-                    String status = null;
-                    String significance = null;
-                    for (ParametersParameterComponent paramPart : param.getPart()) {
-
-                        if (paramPart.getValue() instanceof CodeType
-                                && paramPart.getName().equals(SystemConstants.INCLUDE_STATUS)) {
-                            status = ((CodeType) paramPart.getValue()).getValue();
-                        } else if (paramPart.getValue() instanceof CodeType
-                                && paramPart.getName().equals(SystemConstants.INCLUDE_SIGNIFICANCE)) {
-                            significance = ((CodeType) paramPart.getValue()).getValue();
-                        } else {
-                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
-                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                        if (!isIncludedPrescriptionIssuesExist) {
+                            addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
+//                           throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                                    new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
+//                                    SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                         }
-                    }
-                    break;
+                        break;
+
+                    case SystemConstants.INCLUDE_TEST_RESULTS_PARM:
+                    case SystemConstants.INCLUDE_IMMUNIZATIONS_PARM:
+                        hmInclude.add(param.getName());
+                        break;
+
+                    case SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM:
+                        hmInclude.add(param.getName());
+                        // optional part named uncategorisedDataSearchPeriod with a valuePeriod
+                        for (ParametersParameterComponent paramPart : param.getPart()) {
+
+                            if (paramPart.getValue() instanceof Period
+                                    && paramPart.getName().equals(SystemConstants.UNCATEGORISED_DATA_SEARCH_PERIOD)) {
+                                Period period = (Period) paramPart.getValue();
+                                validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue());
+                            } else {
+//                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
+//                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
+                            }
+                        }
+                        break;
+
+                    case SystemConstants.INCLUDE_CONSULTATIONS_PARM:
+                        hmInclude.add(param.getName());
+                        // optional part named consultationSearchPeriod with a valuePeriod
+                        // optional part named numberOfMostRecent with an integer count
+                        int numberOfMostRecent = -1;
+                        for (ParametersParameterComponent paramPart : param.getPart()) {
+
+                            if (paramPart.getValue() instanceof Period
+                                    && paramPart.getName().equals(SystemConstants.CONSULTATION_SEARCH_PERIOD)) {
+                                Period period = (Period) paramPart.getValue();
+                                validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue());
+                            } else if (paramPart.getValue() instanceof IntegerType
+                                    && paramPart.getName().equals(SystemConstants.NUMBER_OF_MOST_RECENT)) {
+                                numberOfMostRecent = ((IntegerType) paramPart.getValue()).getValue();
+                            } else {
+                                addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
+//                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
+//                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                            }
+                        }
+                        break;
+
+                    case SystemConstants.INCLUDE_PROBLEMS_PARM:
+                        hmInclude.add(param.getName());
+                        // optional part named includeStatus with a valueCode eg active
+                        // optional part named includeSignificance with a valueCode eg major
+                        String status = null;
+                        String significance = null;
+                        for (ParametersParameterComponent paramPart : param.getPart()) {
+
+                            if (paramPart.getValue() instanceof CodeType
+                                    && paramPart.getName().equals(SystemConstants.INCLUDE_STATUS)) {
+                                status = ((CodeType) paramPart.getValue()).getValue();
+                            } else if (paramPart.getValue() instanceof CodeType
+                                    && paramPart.getName().equals(SystemConstants.INCLUDE_SIGNIFICANCE)) {
+                                significance = ((CodeType) paramPart.getValue()).getValue();
+                            } else {
+                                addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
+//                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
+//                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                            }
+                        }
+                        break;
+
+                }  //switch
+            } else {
+                // invalid parameter
+                addWarningIssue(param, IssueType.NOTSUPPORTED);
             }
-
-        } // for parms
+        } // for parameter
 
         // Add Patient
         Patient patient = patientDetailsToPatientResourceConverter(patientDetails);
@@ -424,11 +443,13 @@ public class PatientResourceProvider implements IResourceProvider {
             structuredBundle = populateMedicationBundle.addMedicationBundleEntries(structuredBundle, patientDetails, includePrescriptionIssues, medicationPeriod, practitionerIds, orgIds);
         }
 
-        // append the required canned responses
-        Iterator<String> iter = hmInclude.iterator();
-        StructuredBuilder structureBuilder = new StructuredBuilder();
-        while (iter.hasNext()) {
-            structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(iter.next()), structuredBundle);
+        // append the required canned responses for patient 2 only
+        if (NHS.equals(patients[PATIENT_2])) {
+            Iterator<String> iter = hmInclude.iterator();
+            StructuredBuilder structureBuilder = new StructuredBuilder();
+            while (iter.hasNext()) {
+                structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(iter.next()), structuredBundle);
+            }
         }
 
         //Add all practitioners and practitioner roles
@@ -454,20 +475,109 @@ public class PatientResourceProvider implements IResourceProvider {
         structuredBundle.setType(BundleType.COLLECTION);
         structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
 
+        if (operationOutcome != null) {
+            structuredBundle.addEntry().setResource(operationOutcome);
+        }
         return structuredBundle;
     }
 
     /**
-     * parameter name
      *
-     * @param name
+     * @return new Object
      */
-    private void validateParametersName(String name) {
-        if (!VALID_PARAMETER_NAMES.contains(name)) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Incorrect Parameter Names"), SystemCode.INVALID_PARAMETER,
-                    IssueType.INVALID);
+    private void createOperationOutcome() {
+        operationOutcome = new OperationOutcome();
+        // TODO Check this it doesn't look consistent but its as per the example
+        operationOutcome.setId(java.util.UUID.randomUUID().toString());
+        operationOutcome.getMeta().addProfile(SystemURL.SD_GPC_OPERATIONOUTCOME);
+    }
+
+    /**
+     * Overload
+     *
+     * @param param
+     * @param paramPart
+     * @param issueType
+     */
+    private void addWarningIssue(ParametersParameterComponent param, ParametersParameterComponent paramPart, IssueType issueType) {
+        addWarningIssue(param, paramPart, issueType, null);
+    }
+
+    /**
+     * Overload
+     *
+     * @param param
+     * @param issueType
+     */
+    private void addWarningIssue(ParametersParameterComponent param, IssueType issueType) {
+        addWarningIssue(param, null, issueType, null);
+    }
+
+    /**
+     * Overload
+     *
+     * @param param
+     * @param issueType
+     * @param details
+     */
+    private void addWarningIssue(ParametersParameterComponent param, IssueType issueType, String details) {
+        addWarningIssue(param, null, issueType, details);
+    }
+
+    /**
+     * see
+     * https://gpconnect-1-2-4.netlify.com/accessrecord_structured_development_version_compatibility.html
+     * add an issue to the OperationOutcome to be returned in a successful
+     * response bundle this is for forward compatibility as specified in 1.2.4
+     *
+     * @param param
+     * @param paramPart
+     * @param issueType
+     * @param details lower level details to be added to the text element
+     */
+    private void addWarningIssue(ParametersParameterComponent param, ParametersParameterComponent paramPart, IssueType issueType, String details) {
+        if (operationOutcome == null) {
+            createOperationOutcome();
         }
+        OperationOutcomeIssueComponent issue = new OperationOutcomeIssueComponent();
+        issue.setSeverity(OperationOutcome.IssueSeverity.WARNING);
+
+        CodeableConcept codeableConcept = new CodeableConcept();
+        Coding coding = new Coding();
+        coding.setSystem(VS_GPC_ERROR_WARNING_CODE);
+        switch (issueType) {
+            case NOTSUPPORTED:
+                issue.setCode(issueType);
+                coding.setCode(SystemCode.NOT_IMPLEMENTED);
+                coding.setDisplay("Not implemented");
+                break;
+            case REQUIRED:
+                issue.setCode(issueType);
+                coding.setCode(SystemCode.PARAMETER_NOT_FOUND);
+                coding.setDisplay("Parameter not found");
+                break;
+            case INVALID:
+                issue.setCode(issueType);
+                coding.setCode(SystemCode.INVALID_PARAMETER);
+                coding.setDisplay("Invalid Parameter");
+                break;
+        }
+
+        codeableConcept.addCoding(coding);
+        issue.setDetails(codeableConcept);
+
+        String locus = paramPart != null ? "." + paramPart.getName() : "";
+        issue.setDiagnostics(param.getName() + locus);
+        if (details == null) {
+            codeableConcept.setText(param.getName() + locus + " is an unrecognised parameter" + (paramPart != null ? " part" : ""));
+        } else {
+            codeableConcept.setText(details);
+        }
+        operationOutcome.addIssue(issue);
+    }
+
+    private boolean validateParametersName(String name) {
+        return VALID_PARAMETER_NAMES.contains(name);
     }
 
     @Operation(name = REGISTER_PATIENT_OPERATION_NAME)
@@ -880,7 +990,7 @@ public class PatientResourceProvider implements IResourceProvider {
         // set some standard values for defaults, ensure managing org is always returned
         // added at 1.2.2 7 is A20047 the default GP Practice
         List<OrganizationDetails> ourOrg = organizationSearch.findOrganizationDetailsByOrgODSCode(OUR_ODS_CODE);
-        patientDetails.setManagingOrganization(""+ourOrg.get(0).getId());
+        patientDetails.setManagingOrganization("" + ourOrg.get(0).getId());
 
         return patientDetails;
     }
@@ -1328,7 +1438,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     if (parameter != null) {
                         nhsNumber = fromPatientResource(parameter.getResource());
                     } else {
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(
+                        // 1.2.4 now Http 422 Unprocessable Entity not Http 400 Invalid Request
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(
                                 "Unable to read parameters. Expecting one of patientNHSNumber or registerPatient both of which are case-sensitive"),
                                 SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                     }
@@ -1370,13 +1481,15 @@ public class PatientResourceProvider implements IResourceProvider {
         }
     }
 
-    private void validateStartDateParamAndEndDateParam(String startDate, String endDate) {
+    private boolean validateStartDateParamAndEndDateParam(String startDate, String endDate) {
         Pattern dateOnlyPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
-
+        boolean result = true;
         //if only a date then match against the date regex
         if ((startDate != null && !dateOnlyPattern.matcher(startDate).matches()) || (endDate != null && !dateOnlyPattern.matcher(endDate).matches())) {
-            throwInvalidParameterOperationalOutcome("Invalid date used");
+            result = false;
+//          throwInvalidParameterOperationalOutcome("Invalid date used");
         }
+        return result;
     }
 
     private void throwInvalidParameterOperationalOutcome(String error) {

@@ -43,12 +43,11 @@ public final class SystemConstants {
     public static final List VALID_PARAMETER_NAMES = Arrays.asList(SystemConstants.PATIENT_NHS_NUMBER_PARM,
             SystemConstants.INCLUDE_ALLERGIES_PARM,
             SystemConstants.INCLUDE_MEDICATION_PARM,
-            //SystemConstants.INCLUDE_TEST_RESULTS_PARM,
             SystemConstants.INCLUDE_IMMUNIZATIONS_PARM,
-            SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM,
+            SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM/*,
             SystemConstants.INCLUDE_CONSULTATIONS_PARM,
             SystemConstants.INCLUDE_PROBLEMS_PARM,
-            SystemConstants.INCLUDE_TEST_RESULTS_PARM
+            SystemConstants.INCLUDE_TEST_RESULTS_PARM */
     );
 
     public static final String INCLUDE_PRESCRIPTION_ISSUES = "includePrescriptionIssues";

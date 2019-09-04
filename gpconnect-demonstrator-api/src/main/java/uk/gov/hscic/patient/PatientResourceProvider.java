@@ -448,7 +448,7 @@ public class PatientResourceProvider implements IResourceProvider {
             Iterator<String> iter = hmInclude.iterator();
             StructuredBuilder structureBuilder = new StructuredBuilder();
             while (iter.hasNext()) {
-                structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(iter.next()), structuredBundle);
+                structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(iter.next().toString()), structuredBundle);
             }
         }
 

@@ -34,7 +34,7 @@ public final class SystemConstants {
     public static final String INCLUDE_RESOLVED_ALLERGIES_PARM = "includeResolvedAllergies";
     public static final String INCLUDE_ALLERGIES_PARM = "includeAllergies";
     public static final String INCLUDE_TEST_RESULTS_PARM = "includeTestResults";
-    public static final String INCLUDE_IMMUNIZATIONS_PARM = "includeImmunizations";
+    public static final String INCLUDE_IMMUNIZATIONS_PARM = "includeImmunisations";
     public static final String INCLUDE_UNCATEGORISED_DATA_PARM = "includeUncategorised";
     public static final String INCLUDE_CONSULTATIONS_PARM = "includeConsultations";
     public static final String INCLUDE_PROBLEMS_PARM = "includeProblems";

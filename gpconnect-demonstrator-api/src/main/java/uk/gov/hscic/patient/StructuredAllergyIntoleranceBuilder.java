@@ -278,7 +278,13 @@ public class StructuredAllergyIntoleranceBuilder {
     }
 
     private void addEmptyListNote(ListResource list) {
-        list.addNote(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE)));
+        // cardinality of note 0..1 #266
+        if (list.getNote().size() > 0) {
+            Annotation annotation = list.getNote().get(0);
+            annotation.setText(annotation.getText()+"\r\n"+SystemConstants.INFORMATION_NOT_AVAILABLE);
+        } else {
+            list.addNote(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE)));
+        }
     }
 
     private void addEmptyReasonCode(ListResource list) {

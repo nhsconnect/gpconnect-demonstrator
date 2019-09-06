@@ -24,7 +24,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>GPConnect</name>
+    <name>GPConnect 1.3.0</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -37,7 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <fhir.version>3.8.0</fhir.version>
+        <fhir.version>3.0.0</fhir.version>
     </properties>
 
     <modules>

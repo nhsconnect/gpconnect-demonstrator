@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Set;
 import org.hl7.fhir.dstu3.model.Annotation;
 import org.hl7.fhir.dstu3.model.CodeType;
@@ -14,25 +15,71 @@ import static uk.gov.hscic.SystemConstants.DATA_AWAITING_FILING_NOTE;
 import static uk.gov.hscic.SystemConstants.DATA_IN_TRANSIT_NOTE;
 
 import uk.gov.hscic.SystemURL;
+import uk.gov.hscic.medication.statement.MedicationStatementEntity;
+import uk.gov.hscic.medication.statement.MedicationStatementRepository;
+import uk.gov.hscic.patient.details.PatientEntity;
+import uk.gov.hscic.patient.details.PatientRepository;
+import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntoleranceEntity;
+import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch;
 
 public class WarningCodeExtHelper {
 
+    private static boolean dataInTransit = false;
+    private static boolean dataAwaitingFiling = false;
+
+    private static final String DATA_IN_TRANSIT = "data-in-transit";
+    private static final String CONFIDENTIAL_ITEMS = "confidential-items";
+    private static final String DATA_AWAITING_FILING = "data-awaiting-filing";
+
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy");
 
-    public static void addWarningCodeExtensions(Set<String> warningCodes, ListResource list) {
+    /**
+     * confidential items are per record but the other two are global values per
+     * patient
+     *
+     * @param warningCodes
+     * @param list
+     * @param patientRepository
+     * @param medicationStatementRepository
+     * @param structuredAllergySearch
+     */
+    public static void addWarningCodeExtensions(Set<String> warningCodes, ListResource list,
+            PatientRepository patientRepository, MedicationStatementRepository medicationStatementRepository, StructuredAllergySearch structuredAllergySearch) {
+
+        String NHS = list.getSubject().getIdentifier().getValue();
+
+        PatientEntity patientEntity = patientRepository.findByNhsNumber(NHS);
+        List<MedicationStatementEntity> medicationStatements = medicationStatementRepository.findByPatientId(patientEntity.getId());
+        for (MedicationStatementEntity medicationStatement : medicationStatements) {
+            setFlags(medicationStatement.getWarningCode());
+        }
+
+        List<StructuredAllergyIntoleranceEntity> allergies = structuredAllergySearch.getAllergyIntollerence(NHS);
+        for (StructuredAllergyIntoleranceEntity allergy : allergies) {
+            setFlags(allergy.getWarningCode());
+        }
+
+        // check medication_statements for either of the global flags
+        if (dataInTransit) {
+            warningCodes.add(DATA_IN_TRANSIT);
+        }
+        if (dataAwaitingFiling) {
+            warningCodes.add(DATA_AWAITING_FILING);
+        }
+
         StringBuilder sb = new StringBuilder();
         warningCodes.forEach(warningCode -> {
             if (warningCode != null) {
                 String warningCodeDisplay = "";
                 Annotation annotation = new Annotation();
                 switch (warningCode) {
-                    case "confidential-items":
+                    case CONFIDENTIAL_ITEMS:
                         warningCodeDisplay = "Confidential Items";
                         annotation.setText(CONFIDENTIAL_ITEMS_NOTE); // #266
                         //list.addNote(annotation);
                         sb.append("\r\n").append(annotation.getText());
                         break;
-                    case "data-in-transit":
+                    case DATA_IN_TRANSIT:
                         warningCodeDisplay = "Data in Transit";
                         Calendar cal = new GregorianCalendar();
                         Date now = new Date();
@@ -42,7 +89,7 @@ public class WarningCodeExtHelper {
                         //list.addNote(annotation);
                         sb.append("\r\n").append(annotation.getText());
                         break;
-                    case "data-awaiting-filing":
+                    case DATA_AWAITING_FILING:
                         warningCodeDisplay = "Data Awaiting Filing";
                         annotation.setText(DATA_AWAITING_FILING_NOTE); // #266
                         //list.addNote(annotation);
@@ -56,18 +103,35 @@ public class WarningCodeExtHelper {
                 list.addExtension(warningExt);
             }
         });
- 
+
         // cardinality of note 0..1 #266
         if (sb.length() > 0) {
             Annotation annotation = null;
             if (list.getNote().size() > 0) {
                 annotation = list.getNote().get(0);
                 annotation.setText(annotation.getText());
-                annotation.setText(annotation.getText()+sb.toString());
+                annotation.setText(annotation.getText() + sb.toString());
             } else {
                 annotation = new Annotation();
                 list.addNote(annotation);
-                annotation.setText(sb.toString().replaceFirst("^\r\n",""));
+                annotation.setText(sb.toString().replaceFirst("^\r\n", ""));
+            }
+        }
+    }
+
+    /**
+     * set flags
+     * @param code
+     */
+    private static void setFlags(String code) {
+        if (code != null) {
+            switch (code) {
+                case DATA_IN_TRANSIT:
+                    dataInTransit = true;
+                    break;
+                case DATA_AWAITING_FILING:
+                    dataAwaitingFiling = true;
+                    break;
             }
         }
     }

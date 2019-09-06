@@ -29,6 +29,7 @@ import static uk.gov.hscic.SystemConstants.NO_CONTENT_RECORDED;
 import static uk.gov.hscic.SystemConstants.NO_CONTENT_RECORDED_DISPLAY;
 import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
 import static uk.gov.hscic.SystemConstants.RESOLVED_ALLERGIES_DISPLAY;
+import uk.gov.hscic.medication.statement.MedicationStatementRepository;
 
 @Component
 public class StructuredAllergyIntoleranceBuilder {
@@ -44,6 +45,9 @@ public class StructuredAllergyIntoleranceBuilder {
 
     @Autowired
     private CodeableConceptBuilder codeableConceptBuilder;
+
+    @Autowired
+    private MedicationStatementRepository medicationStatementRepository;
 
     @Value("${datasource.patient.nhsNumber:#{null}}")
     private String patient2NhsNo;
@@ -258,7 +262,7 @@ public class StructuredAllergyIntoleranceBuilder {
             }
         });
 
-        WarningCodeExtHelper.addWarningCodeExtensions(warningCodes, list);
+        WarningCodeExtHelper.addWarningCodeExtensions(warningCodes, list, patientRepository, medicationStatementRepository, structuredAllergySearch);
     }
 
     private Extension setClinicalSetting(List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity) {

@@ -291,13 +291,6 @@ public class PatientResourceProvider implements IResourceProvider {
                 if (param.getName().equals(SystemConstants.INCLUDE_MEDICATION)) {
                     getMedications = true;
 
-                    if (param.getPart().isEmpty()) {
-                        addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
-//                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-//                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
-                    }
-
                     boolean isIncludedPrescriptionIssuesExist = false;
                     for (ParametersParameterComponent paramPart : param.getPart()) {
 

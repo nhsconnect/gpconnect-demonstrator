@@ -562,7 +562,8 @@ public class PatientResourceProvider implements IResourceProvider {
         String locus = paramPart != null ? "." + paramPart.getName() : "";
         issue.setDiagnostics(param.getName() + locus);
         if (details == null) {
-            codeableConcept.setText(param.getName() + locus + " is an unrecognised parameter" + (paramPart != null ? " part" : ""));
+            // mod to remove more informative text which was off spec
+            codeableConcept.setText(param.getName() + locus + " is an unrecognised parameter" /*+ (paramPart != null ? " part" : "")*/);
         } else {
             codeableConcept.setText(details);
         }

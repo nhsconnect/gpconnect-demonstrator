@@ -35,7 +35,7 @@ public final class SystemConstants {
     public static final String INCLUDE_ALLERGIES_PARM = "includeAllergies";
     public static final String INCLUDE_TEST_RESULTS_PARM = "includeTestResults";
     public static final String INCLUDE_IMMUNIZATIONS_PARM = "includeImmunisations";
-    public static final String INCLUDE_UNCATEGORISED_DATA_PARM = "includeUncategorised";
+    public static final String INCLUDE_UNCATEGORISED_DATA_PARM = "includeUncategorisedData"; // Changed at 1.3.1
     public static final String INCLUDE_CONSULTATIONS_PARM = "includeConsultations";
     public static final String INCLUDE_PROBLEMS_PARM = "includeProblems";
 
@@ -57,6 +57,8 @@ public final class SystemConstants {
     public static final String MEDICATION_SEARCH_FROM_DATE = "medicationSearchFromDate";
 
     public static final String MEDICATION_LIST = "Medications and medical devices";
+    public static final String IMMUNIZATIONS_LIST = "Immunisations";
+    public static final String UNCATEGORISED_LIST = "Miscellaneous record";
     
     public static final String UNCATEGORISED_DATA_SEARCH_PERIOD = "uncategorisedDataSearchPeriod";
     public static final String CONSULTATION_SEARCH_PERIOD = "consultationSearchPeriod";

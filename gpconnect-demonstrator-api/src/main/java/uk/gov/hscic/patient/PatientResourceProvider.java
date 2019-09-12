@@ -51,9 +51,14 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import static org.hl7.fhir.dstu3.model.Address.AddressUse.OLD;
 import static org.hl7.fhir.dstu3.model.Address.AddressUse.WORK;
+import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.OperationOutcome.OperationOutcomeIssueComponent;
 import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
+import static uk.gov.hscic.SystemConstants.IMMUNIZATIONS_LIST;
+import static uk.gov.hscic.SystemConstants.INCLUDE_IMMUNIZATIONS_PARM;
+import static uk.gov.hscic.SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM;
+import static uk.gov.hscic.SystemConstants.MEDICATION_LIST;
 import static uk.gov.hscic.SystemConstants.OUR_ODS_CODE;
 import static uk.gov.hscic.SystemConstants.VALID_PARAMETER_NAMES;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_NHS_COMMUNICATION;
@@ -65,6 +70,8 @@ import static uk.gov.hscic.SystemConstants.PATIENT_2;
 import static uk.gov.hscic.SystemConstants.PATIENT_NOCONSENT;
 import static uk.gov.hscic.SystemConstants.PATIENT_NOTONSPINE;
 import static uk.gov.hscic.SystemConstants.PATIENT_SUPERSEDED;
+import static uk.gov.hscic.SystemConstants.UNCATEGORISED_LIST;
+import uk.gov.hscic.common.helpers.WarningCodeExtHelper;
 
 @Component
 public class PatientResourceProvider implements IResourceProvider {
@@ -437,11 +444,14 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         // append the required canned responses for patient 2 only
-        if (NHS.equals(patients[PATIENT_2])) {
-            Iterator<String> iter = hmInclude.iterator();
-            StructuredBuilder structureBuilder = new StructuredBuilder();
-            while (iter.hasNext()) {
-                structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(iter.next().toString()), structuredBundle);
+        Iterator<String> iter = hmInclude.iterator();
+        StructuredBuilder structureBuilder = new StructuredBuilder();
+        while (iter.hasNext()) {
+            String clinicalArea = iter.next().toString();
+            if (NHS.equals(patients[PATIENT_2])) {
+                structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(clinicalArea), structuredBundle);
+            } else {
+                addEmptyList(clinicalArea, NHS, structuredBundle);
             }
         }
 
@@ -472,6 +482,44 @@ public class PatientResourceProvider implements IResourceProvider {
             structuredBundle.addEntry().setResource(operationOutcome);
         }
         return structuredBundle;
+    }
+
+    /**
+     * add a list item with empty flags set. No data returned for this clinical area.
+     * @param clinicalArea
+     * @param NHS
+     * @param structuredBundle 
+     */
+    private void addEmptyList(String clinicalArea, String NHS, Bundle structuredBundle) {
+        // see https://gpc-structured-futures.netlify.com/accessrecord_structured_development_list.html#emptyreason
+        // if its not patient 2 add an empty list for the requested include
+        ListResource list = new ListResource();
+        list.setMeta(new Meta().addProfile(SystemURL.SD_GPC_LIST));
+        list.setStatus(ListResource.ListStatus.CURRENT);
+        list.setMode(ListResource.ListMode.SNAPSHOT);
+        
+        switch (clinicalArea) {
+            case INCLUDE_IMMUNIZATIONS_PARM:
+                list.setTitle(IMMUNIZATIONS_LIST);
+                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, "1102181000000102", IMMUNIZATIONS_LIST)));
+                break;
+            case INCLUDE_UNCATEGORISED_DATA_PARM:
+                list.setTitle(UNCATEGORISED_LIST);
+                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, "826501000000100", UNCATEGORISED_LIST)));
+                break;
+        }
+        
+        list.setSubject(new Reference(new IdType("Patient", 1L)).setIdentifier(new Identifier().setValue(NHS).setSystem(SystemURL.ID_NHS_NUMBER)));
+        list.setDate(new Date());
+        list.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
+        list.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT));
+        list.setNote(Arrays.asList(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE))));
+        
+        // TODO call the warnings helper here?
+        
+        BundleEntryComponent entry = new BundleEntryComponent();
+        entry.setResource(list);
+        structuredBundle.addEntry(entry);
     }
 
     /**

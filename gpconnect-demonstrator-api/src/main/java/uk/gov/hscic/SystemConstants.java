@@ -63,8 +63,8 @@ public final class SystemConstants {
     public static final String UNCATEGORISED_DATA_SEARCH_PERIOD = "uncategorisedDataSearchPeriod";
     public static final String CONSULTATION_SEARCH_PERIOD = "consultationSearchPeriod";
     public static final String NUMBER_OF_MOST_RECENT = "numberOfMostRecent";
-    public static final String INCLUDE_STATUS = "includeStatus";
-    public static final String INCLUDE_SIGNIFICANCE = "includeSignificance";
+    public static final String FILTER_STATUS = "filterStatus"; // renamed at 1.3.1
+    public static final String FILTER_SIGNIFICANCE = "filterSignificance"; // renamed at 1.3.1
     
     // offsets into the patients property array. See the provider prerequsites spreadsheet for more details
     // https://github.com/nhsconnect/gpconnect-provider-testing/blob/master/Data/Test%20Suite%20Prerequisites.xlsx

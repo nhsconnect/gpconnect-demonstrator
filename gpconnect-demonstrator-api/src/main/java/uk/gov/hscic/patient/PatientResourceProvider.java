@@ -317,11 +317,13 @@ public class PatientResourceProvider implements IResourceProvider {
                             } else if (paramPart.getValue() instanceof DateType
                                     && paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)) {
                                 DateType startDateDt = (DateType) paramPart.getValue();
-                                medicationPeriod = new Period();
-                                medicationPeriod.setStart(startDateDt.getValue());
-                                medicationPeriod.setEnd(null);
                                 String startDate = startDateDt.asStringValue();
-                                if (!validateStartDateParamAndEndDateParam(startDate, null)) {
+                                if (validateStartDateParamAndEndDateParam(startDate, null)) {
+                                    // refined at 1.3.1 only apply date if its valid.
+                                    medicationPeriod = new Period();
+                                    medicationPeriod.setStart(startDateDt.getValue());
+                                    medicationPeriod.setEnd(null);
+                                } else {
                                     addWarningIssue(param, paramPart, IssueType.INVALID, "Invalid date used");
                                 }
                             } else {
@@ -353,7 +355,9 @@ public class PatientResourceProvider implements IResourceProvider {
                             if (paramPart.getValue() instanceof Period
                                     && paramPart.getName().equals(SystemConstants.UNCATEGORISED_DATA_SEARCH_PERIOD)) {
                                 Period period = (Period) paramPart.getValue();
-                                validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue());
+                                if (!validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue())) {
+                                    addWarningIssue(param, paramPart, IssueType.INVALID, "Invalid date used");
+                                }
                             } else {
 //                            throw OperationOutcomeFactory.buildOperationOutcomeException(
 //                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
@@ -373,7 +377,9 @@ public class PatientResourceProvider implements IResourceProvider {
                             if (paramPart.getValue() instanceof Period
                                     && paramPart.getName().equals(SystemConstants.CONSULTATION_SEARCH_PERIOD)) {
                                 Period period = (Period) paramPart.getValue();
-                                validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue());
+                                if (!validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue())) {
+                                    addWarningIssue(param, paramPart, IssueType.INVALID, "Invalid date used");
+                                }
                             } else if (paramPart.getValue() instanceof IntegerType
                                     && paramPart.getName().equals(SystemConstants.NUMBER_OF_MOST_RECENT)) {
                                 numberOfMostRecent = ((IntegerType) paramPart.getValue()).getValue();
@@ -388,17 +394,17 @@ public class PatientResourceProvider implements IResourceProvider {
 
                     case SystemConstants.INCLUDE_PROBLEMS_PARM:
                         hmInclude.add(param.getName());
-                        // optional part named includeStatus with a valueCode eg active
-                        // optional part named includeSignificance with a valueCode eg major
+                        // optional part named filterStatus with a valueCode eg active
+                        // optional part named filterSignificance with a valueCode eg major
                         String status = null;
                         String significance = null;
                         for (ParametersParameterComponent paramPart : param.getPart()) {
 
                             if (paramPart.getValue() instanceof CodeType
-                                    && paramPart.getName().equals(SystemConstants.INCLUDE_STATUS)) {
+                                    && paramPart.getName().equals(SystemConstants.FILTER_STATUS)) {
                                 status = ((CodeType) paramPart.getValue()).getValue();
                             } else if (paramPart.getValue() instanceof CodeType
-                                    && paramPart.getName().equals(SystemConstants.INCLUDE_SIGNIFICANCE)) {
+                                    && paramPart.getName().equals(SystemConstants.FILTER_SIGNIFICANCE)) {
                                 significance = ((CodeType) paramPart.getValue()).getValue();
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
@@ -485,10 +491,12 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     /**
-     * add a list item with empty flags set. No data returned for this clinical area.
+     * add a list item with empty flags set. No data returned for this clinical
+     * area.
+     *
      * @param clinicalArea
      * @param NHS
-     * @param structuredBundle 
+     * @param structuredBundle
      */
     private void addEmptyList(String clinicalArea, String NHS, Bundle structuredBundle) {
         // see https://gpc-structured-futures.netlify.com/accessrecord_structured_development_list.html#emptyreason
@@ -497,7 +505,7 @@ public class PatientResourceProvider implements IResourceProvider {
         list.setMeta(new Meta().addProfile(SystemURL.SD_GPC_LIST));
         list.setStatus(ListResource.ListStatus.CURRENT);
         list.setMode(ListResource.ListMode.SNAPSHOT);
-        
+
         switch (clinicalArea) {
             case INCLUDE_IMMUNIZATIONS_PARM:
                 list.setTitle(IMMUNIZATIONS_LIST);
@@ -508,15 +516,14 @@ public class PatientResourceProvider implements IResourceProvider {
                 list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, "826501000000100", UNCATEGORISED_LIST)));
                 break;
         }
-        
+
         list.setSubject(new Reference(new IdType("Patient", 1L)).setIdentifier(new Identifier().setValue(NHS).setSystem(SystemURL.ID_NHS_NUMBER)));
         list.setDate(new Date());
         list.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
         list.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT));
         list.setNote(Arrays.asList(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE))));
-        
+
         // TODO call the warnings helper here?
-        
         BundleEntryComponent entry = new BundleEntryComponent();
         entry.setResource(list);
         structuredBundle.addEntry(entry);

@@ -44,9 +44,9 @@ public final class SystemConstants {
             SystemConstants.INCLUDE_ALLERGIES_PARM,
             SystemConstants.INCLUDE_MEDICATION_PARM,
             SystemConstants.INCLUDE_IMMUNIZATIONS_PARM,
-            SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM/*,
+            SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM,
             SystemConstants.INCLUDE_CONSULTATIONS_PARM,
-            SystemConstants.INCLUDE_PROBLEMS_PARM,
+            SystemConstants.INCLUDE_PROBLEMS_PARM/*,
             SystemConstants.INCLUDE_TEST_RESULTS_PARM */
     );
 

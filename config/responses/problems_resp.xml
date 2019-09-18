@@ -5,59 +5,88 @@
    <type value="collection"></type>
    <entry>
       <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Problems"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="717711000000103"></code>
+                  <display value="Problems"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <date value="2019-03-01T10:57:34+00:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="event-date"></code>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Condition/Problem-D-URTI"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
          <Condition xmlns="http://hl7.org/fhir">
-            <id value="Problem_A_Anxiety_With_Depression"></id>
+            <id value="Problem-A-Anxiety-With-Depression"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
             </meta>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Encounter/Encounter1"></reference>
+                  <reference value="List/Consultation1-Topic1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="List/Consultation1_Topic1"></reference>
+                  <reference value="Observation/Consultation1-Topic1-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic1_Category_History_Observation_1"></reference>
+                  <reference value="Observation/Consultation1-Topic1-Category-Examination-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic1_Category_Examination_Observation_1"></reference>
+                  <reference value="Observation/Consultation1-Topic1-Category-Social-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic1_Category_Social_Observation_1"></reference>
+                  <reference value="Observation/Consultation1-Topic1-Category-Social-Observation-2"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic1_Category_Social_Observation_2"></reference>
+                  <reference value="MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Plan"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="MedicationRequest/Consultation1_Topic1_Category_Plan_Medication_Plan"></reference>
+                  <reference value="MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Order"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="MedicationRequest/Consultation1_Topic1_Category_Plan_Medication_Order"></reference>
+                  <reference value="Observation/Consultation1-Topic1-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic1_Category_Plan_Observation_1"></reference>
-               </valueReference>
-            </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
-                  <reference value="Observation/Consultation1_Topic1_Category_Plan_Observation_2"></reference>
+                  <reference value="Observation/Consultation1-Topic1-Category-Plan-Observation-2"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
@@ -67,37 +96,37 @@
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="List/Consultation2_Topic1"></reference>
+                  <reference value="List/Consultation2-Topic1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation2_Topic1_Category_History_Observation_1"></reference>
+                  <reference value="Observation/Consultation2-Topic1-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation2_Topic1_Category_Examination_Observation_1"></reference>
+                  <reference value="Observation/Consultation2-Topic1-Category-Examination-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation2_Topic1_Category_Social_Observation_1"></reference>
+                  <reference value="Observation/Consultation2-Topic1-Category-Social-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="MedicationRequest/Consultation2_Topic1_Category_Plan_Medication_Plan"></reference>
+                  <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Plan"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="MedicationRequest/Consultation2_Topic1_Category_Plan_Medication_Order"></reference>
+                  <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Order"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation2_Topic1_Category_Plan_Observation_1"></reference>
+                  <reference value="Observation/Consultation2-Topic1-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
@@ -107,37 +136,37 @@
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="List/Consultation3_Topic1"></reference>
+                  <reference value="List/Consultation3-Topic1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation3_Topic1_Category_History_Observation_1"></reference>
+                  <reference value="Observation/Consultation3-Topic1-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation3_Topic1_Category_Examination_Observation_1"></reference>
+                  <reference value="Observation/Consultation3-Topic1-Category-Examination-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation3_Topic1_Category_Social_Observation_1"></reference>
+                  <reference value="Observation/Consultation3-Topic1-Category-Social-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="MedicationRequest/Consultation3_Topic1_Category_Plan_Medication_Plan"></reference>
+                  <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Plan"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="MedicationRequest/Consultation3_Topic1_Category_Plan_Medication_Order"></reference>
+                  <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Order"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation3_Topic1_Category_Plan_Observation_1"></reference>
+                  <reference value="Observation/Consultation3-Topic1-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
             <clinicalStatus value="active"></clinicalStatus>
@@ -153,73 +182,71 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="231504006"></code>
-                  <display value="Mixed anxiety and depressive disorder (disorder)"></display>
+                  <display value="Mixed anxiety and depressive disorder"></display>
                </coding>
                <text value="Anxiety with depression"></text>
             </code>
             <subject>
                <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
             </subject>
-            <onsetDateTime value="2019-03-28T10:30:00"></onsetDateTime>
-            <assertedDate value="2019-03-28T10:30:00"></assertedDate>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <onsetDateTime value="2019-03-28T10:30:00+00:00"></onsetDateTime>
+            <assertedDate value="2019-03-28T10:30:00+00:00"></assertedDate>
          </Condition>
       </resource>
    </entry>
    <entry>
       <resource>
          <Condition xmlns="http://hl7.org/fhir">
-            <id value="Problem_B_Swollen_Legs"></id>
+            <id value="Problem-B-Swollen-Legs"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
             </meta>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Encounter/Encounter1"></reference>
+                  <reference value="List/Consultation1-Topic2"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="List/Consultation1_Topic2"></reference>
+                  <reference value="Observation/Consultation1-Topic2-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic2_Category_History_Observation_1"></reference>
+                  <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic2_Category_Examination_Observation_1"></reference>
+                  <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-2"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic2_Category_Examination_Observation_2"></reference>
+                  <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-3"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic2_Category_Examination_Observation_3"></reference>
+                  <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-4"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic2_Category_Examination_Observation_4"></reference>
+                  <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-5"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic2_Category_Examination_Observation_5"></reference>
+                  <reference value="Observation/Consultation1-Topic2-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic2_Category_Plan_Observation_1"></reference>
-               </valueReference>
-            </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
-                  <reference value="Observation/Consultation1_Topic2_Category_Plan_Observation_2"></reference>
+                  <reference value="Observation/Consultation1-Topic2-Category-Plan-Observation-2"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
@@ -229,42 +256,42 @@
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="List/Consultation3_Topic2"></reference>
+                  <reference value="List/Consultation3-Topic2"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation3_Topic2_Category_History_Observation_1"></reference>
+                  <reference value="Observation/Consultation3-Topic2-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation3_Topic2_Category_Examination_Observation_1"></reference>
+                  <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation3_Topic2_Category_Examination_Observation_2"></reference>
+                  <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-2"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation3_Topic2_Category_Examination_Observation_3"></reference>
+                  <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-3"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation3_Topic2_Category_Examination_Observation_4"></reference>
+                  <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-4"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation3_Topic2_Category_Examination_Observation_5"></reference>
+                  <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-5"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation3_Topic2_Category_Plan_Observation_1"></reference>
+                  <reference value="Observation/Consultation3-Topic2-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
             <clinicalStatus value="active"></clinicalStatus>
@@ -280,68 +307,66 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="449614009"></code>
-                  <display value="Swelling of lower limb (finding)"></display>
+                  <display value="Swelling of lower limb"></display>
                </coding>
                <text value="Swollen legs"></text>
             </code>
             <subject>
                <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
             </subject>
-            <onsetDateTime value="2019-03-28T10:30:00"></onsetDateTime>
-            <assertedDate value="2019-03-28T10:30:00"></assertedDate>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <onsetDateTime value="2019-03-28T10:30:00+00:00"></onsetDateTime>
+            <assertedDate value="2019-03-28T10:30:00+00:00"></assertedDate>
          </Condition>
       </resource>
    </entry>
    <entry>
       <resource>
          <Condition xmlns="http://hl7.org/fhir">
-            <id value="Problem_D_URTI"></id>
+            <id value="Problem-D-URTI"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
             </meta>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Encounter/Encounter1"></reference>
+                  <reference value="List/Consultation1-Topic4"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="List/Consultation1_Topic4"></reference>
+                  <reference value="Observation/Consultation1-Topic4-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic4_Category_History_Observation_1"></reference>
+                  <reference value="Observation/Consultation1-Topic4-Category-History-Observation-2"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic4_Category_History_Observation_2"></reference>
+                  <reference value="Observation/Consultation1-Topic4-Category-History-Observation-3"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic4_Category_History_Observation_3"></reference>
+                  <reference value="Observation/Consultation1-Topic4-Category-History-Observation-4"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic4_Category_History_Observation_4"></reference>
+                  <reference value="Observation/Consultation1-Topic4-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1_Topic4_Category_Plan_Observation_1"></reference>
+                  <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="MedicationRequest/MedicationRequest/Consultation1_Topic4_Category_Plan_Medication_Plan_1"></reference>
-               </valueReference>
-            </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
-                  <reference value="MedicationRequest/MedicationRequest/Consultation1_Topic4_Category_Plan_Medication_Order_1"></reference>
+                  <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Order-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
@@ -351,17 +376,17 @@
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="List/Consultation2_Topic2"></reference>
+                  <reference value="List/Consultation2-Topic2"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation2_Topic2_Category_History_Observation_1"></reference>
+                  <reference value="Observation/Consultation2-Topic2-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation2_Topic2_Category_Plan_Observation_1"></reference>
+                  <reference value="Observation/Consultation2-Topic2-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
             <clinicalStatus value="active"></clinicalStatus>
@@ -377,15 +402,62 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="54150009"></code>
-                  <display value="Upper respiratory infection (disorder)"></display>
+                  <display value="Upper respiratory infection"></display>
                </coding>
             </code>
             <subject>
                <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
             </subject>
-            <onsetDateTime value="2019-03-28T10:30:00"></onsetDateTime>
-            <assertedDate value="2019-03-28T10:30:00"></assertedDate>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <onsetDateTime value="2019-03-28T10:30:00+00:00"></onsetDateTime>
+            <assertedDate value="2019-03-28T10:30:00+00:00"></assertedDate>
          </Condition>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
+            <title value="Consultation"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="325851000000107"></code>
+                  <display value="Consultation"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+            </subject>
+            <date value="2019-03-28T10:57:34+00:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="event-date"></code>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Encounter/Encounter1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Encounter/Encounter2"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Encounter/Encounter3"></reference>
+               </item>
+            </entry>
+         </List>
       </resource>
    </entry>
    <entry>
@@ -426,6 +498,16 @@
                   <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
                </individual>
             </participant>
+            <period>
+               <start value="2019-03-28T10:30:00+00:00"></start>
+               <end value="2019-03-28T10:38:00+00:00"></end>
+            </period>
+            <length>
+               <value value="8"></value>
+               <unit value="m"></unit>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="min"></code>
+            </length>
          </Encounter>
       </resource>
    </entry>
@@ -443,7 +525,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="325851000000107"></code>
-                  <display value="Consultation encounter type (record artifact)"></display>
+                  <display value="Consultation encounter type"></display>
                </coding>
             </code>
             <subject>
@@ -452,7 +534,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -462,27 +544,27 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic1"></reference>
+                  <reference value="List/Consultation1-Topic1"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic2"></reference>
+                  <reference value="List/Consultation1-Topic2"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic3"></reference>
+                  <reference value="List/Consultation1-Topic3"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic4"></reference>
+                  <reference value="List/Consultation1-Topic4"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic5"></reference>
+                  <reference value="List/Consultation1-Topic5"></reference>
                </item>
             </entry>
          </List>
@@ -491,13 +573,13 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1"></id>
+            <id value="Consultation1-Topic1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
                <valueReference>
-                  <reference value="Condition/Problem_A_Anxiety_With_Depression"></reference>
+                  <reference value="Condition/Problem-A-Anxiety-With-Depression"></reference>
                </valueReference>
             </extension>
             <status value="current"></status>
@@ -507,7 +589,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="25851000000105"></code>
-                  <display value="Topic (EHR) (record artifact)"></display>
+                  <display value="Topic (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -516,7 +598,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -526,22 +608,22 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic1_Category_History"></reference>
+                  <reference value="List/Consultation1-Topic1-Category-History"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic1_Category_Examination"></reference>
+                  <reference value="List/Consultation1-Topic1-Category-Examination"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic1_Category_Social"></reference>
+                  <reference value="List/Consultation1-Topic1-Category-Social"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic1_Category_Plan"></reference>
+                  <reference value="List/Consultation1-Topic1-Category-Plan"></reference>
                </item>
             </entry>
          </List>
@@ -550,7 +632,7 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1_Category_History"></id>
+            <id value="Consultation1-Topic1-Category-History"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -560,8 +642,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -570,7 +652,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -578,13 +660,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic1-Category-History-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1_Category_Examination"></id>
+            <id value="Consultation1-Topic1-Category-Examination"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -594,8 +681,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -604,7 +691,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -612,13 +699,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic1-Category-Examination-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1_Category_Social"></id>
+            <id value="Consultation1-Topic1-Category-Social"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -628,8 +720,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -638,7 +730,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -646,13 +738,23 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic1-Category-Social-Observation-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic1-Category-Social-Observation-2"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1_Category_Plan"></id>
+            <id value="Consultation1-Topic1-Category-Plan"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -662,8 +764,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -672,7 +774,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -680,19 +782,39 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Plan"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Order"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic1-Category-Plan-Observation-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic1-Category-Plan-Observation-2"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic2"></id>
+            <id value="Consultation1-Topic2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
                <valueReference>
-                  <reference value="Condition/Problem_B_Swollen_Legs"></reference>
+                  <reference value="Condition/Problem-B-Swollen-Legs"></reference>
                </valueReference>
             </extension>
             <status value="current"></status>
@@ -702,7 +824,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="25851000000105"></code>
-                  <display value="Topic (EHR) (record artifact)"></display>
+                  <display value="Topic (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -711,7 +833,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -721,17 +843,17 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic2_Category_History"></reference>
+                  <reference value="List/Consultation1-Topic2-Category-History"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic2_Category_Examination"></reference>
+                  <reference value="List/Consultation1-Topic2-Category-Examination"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic2_Category_Plan"></reference>
+                  <reference value="List/Consultation1-Topic2-Category-Plan"></reference>
                </item>
             </entry>
          </List>
@@ -740,7 +862,7 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic2_Category_History"></id>
+            <id value="Consultation1-Topic2-Category-History"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -750,8 +872,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -760,7 +882,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -768,13 +890,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic2-Category-History-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic2_Category_Examination"></id>
+            <id value="Consultation1-Topic2-Category-Examination"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -784,8 +911,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -794,7 +921,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -802,13 +929,38 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-2"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-3"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-4"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-5"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic2_Category_Plan"></id>
+            <id value="Consultation1-Topic2-Category-Plan"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -818,8 +970,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -828,7 +980,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -836,13 +988,28 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic2-Category-Plan-Observation-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <display value="Referral items are not supported by the provider system"></display>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic2-Category-Plan-Observation-2"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic3"></id>
+            <id value="Consultation1-Topic3"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -852,7 +1019,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="25851000000105"></code>
-                  <display value="Topic (EHR) (record artifact)"></display>
+                  <display value="Topic (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -861,7 +1028,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -871,22 +1038,22 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="Observation/Consultation1_Topic3_flat_Observation_1"></reference>
+                  <reference value="Observation/Consultation1-Topic3-flat-Observation-1"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="Observation/Consultation1_Topic3_flat_Observation_2"></reference>
+                  <reference value="Observation/Consultation1-Topic3-flat-Observation-2"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation1_Topic3_flat_Medication_Plan_1"></reference>
+                  <reference value="MedicationRequest/Consultation1-Topic3-flat-Medication-Plan-1"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation1_Topic3_flat_Medication_Order_1"></reference>
+                  <reference value="MedicationRequest/Consultation1-Topic3-flat-Medication-Order-1"></reference>
                </item>
             </entry>
          </List>
@@ -895,7 +1062,7 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic4"></id>
+            <id value="Consultation1-Topic4"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -906,7 +1073,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="25851000000105"></code>
-                  <display value="Topic (EHR) (record artifact)"></display>
+                  <display value="Topic (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -915,7 +1082,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -925,37 +1092,37 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic4_Category_History"></reference>
+                  <reference value="List/Consultation1-Topic4-Category-History"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic4_Category_Plan"></reference>
+                  <reference value="List/Consultation1-Topic4-Category-Plan"></reference>
                </item>
             </entry>
          </List>
       </resource>
    </entry>
    <entry>
-      <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
-         <valueReference>
-            <reference value="Condition/Problem_D_URTI"></reference>
-         </valueReference>
-      </extension>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic4_Category_History"></id>
+            <id value="Consultation1-Topic4-Category-History"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+               <valueReference>
+                  <reference value="Condition/Problem-D-URTI"></reference>
+               </valueReference>
+            </extension>
             <status value="current"></status>
             <mode value="snapshot"></mode>
             <title value="History"></title>
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -964,7 +1131,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -972,13 +1139,33 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic4-Category-History-Observation-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic4-Category-History-Observation-2"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic4-Category-History-Observation-3"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic4-Category-History-Observation-4"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic4_Category_Plan"></id>
+            <id value="Consultation1-Topic4-Category-Plan"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -988,8 +1175,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -998,7 +1185,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -1006,13 +1193,28 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic4-Category-Plan-Observation-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Order-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic5"></id>
+            <id value="Consultation1-Topic5"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -1023,7 +1225,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="25851000000105"></code>
-                  <display value="Topic (EHR) (record artifact)"></display>
+                  <display value="Topic (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -1032,7 +1234,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -1042,17 +1244,17 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic5_Category_History"></reference>
+                  <reference value="List/Consultation1-Topic5-Category-History"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic5_Category_Examination"></reference>
+                  <reference value="List/Consultation1-Topic5-Category-Examination"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation1_Topic5_Category_Plan"></reference>
+                  <reference value="List/Consultation1-Topic5-Category-Plan"></reference>
                </item>
             </entry>
          </List>
@@ -1061,7 +1263,7 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic5_Category_History"></id>
+            <id value="Consultation1-Topic5-Category-History"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -1071,8 +1273,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -1081,7 +1283,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -1089,13 +1291,28 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic5-Category-History-Observation-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic5-Category-History-Observation-2"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic5-Category-History-Observation-3"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic5_Category_Examination"></id>
+            <id value="Consultation1-Topic5-Category-Examination"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -1105,8 +1322,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -1115,7 +1332,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -1123,13 +1340,23 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic5-Category-Examination-Observation-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic5-Category-Examination-Observation-2"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic5_Category_Plan"></id>
+            <id value="Consultation1-Topic5-Category-Plan"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -1139,8 +1366,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -1149,7 +1376,7 @@
             <encounter>
                <reference value="Encounter/Encounter1"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -1157,13 +1384,23 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic5-Category-Plan-Observation-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic5-Category-Plan-Observation-2"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1_Category_History_Observation_1"></id>
+            <id value="Consultation1-Topic1-Category-History-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1172,16 +1409,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Come for review. Overall doing better. Mood still low but improvig. More good days than bad. Energy levels ok. Motivation improving. Support from neighbour visits daily"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1_Category_Examination_Observation_1"></id>
+            <id value="Consultation1-Topic1-Category-Examination-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1190,16 +1435,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="MSE euthymic. Not anxious. No DSH/hallucinations/abnormal thoughts"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1_Category_Social_Observation_1"></id>
+            <id value="Consultation1-Topic1-Category-Social-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1216,16 +1469,23 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="266919005"></code>
-                  <display value="Never smoked tobacco (finding)"></display>
+                  <display value="Never smoked tobacco"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1_Category_Social_Observation_2"></id>
+            <id value="Consultation1-Topic1-Category-Social-Observation-2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1242,16 +1502,27 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="1082641000000106"></code>
-                  <display value="Alcohol units consumed per week (observable entity)"></display>
+                  <display value="Alcohol units consumed per week"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <valueQuantity>
+               <value value="0"></value>
+               <unit value="units/week"></unit>
+            </valueQuantity>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1_Category_Plan_Observation_1"></id>
+            <id value="Consultation1-Topic1-Category-Plan-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1268,7 +1539,7 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="308448008"></code>
-                  <display value="Referral to counselor (procedure)"></display>
+                  <display value="Referral to counselor"></display>
                </coding>
             </code>
          </Observation>
@@ -1277,7 +1548,7 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1_Category_Plan_Observation_2"></id>
+            <id value="Consultation1-Topic1-Category-Plan-Observation-2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1297,13 +1568,14 @@
                   <display value="Walking practice (regime/therapy)"></display>
                </coding>
             </code>
+            <comment value="Advised re local walking group"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <MedicationRequest xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1_Category_Plan_Medication_Plan"></id>
+            <id value="Consultation1-Topic1-Category-Plan-Medication-Plan"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
             </meta>
@@ -1397,7 +1669,7 @@
                </valueCodeableConcept>
             </extension>
             <basedOn>
-               <reference value="MedicationRequest/Consultation1_Topic1_Category_Plan_Medication_Plan"></reference>
+               <reference value="MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Plan"></reference>
             </basedOn>
             <status value="completed"></status>
             <medicationReference>
@@ -1422,7 +1694,7 @@
    <entry>
       <resource>
          <MedicationRequest xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic1_Category_Plan_Medication_Order"></id>
+            <id value="Consultation1-Topic1-Category-Plan-Medication-Order"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
             </meta>
@@ -1436,7 +1708,7 @@
                </valueCodeableConcept>
             </extension>
             <basedOn>
-               <reference value="MedicationRequest/MedicationRequest/Consultation1_Topic1_Category_Plan_Medication_Plan"></reference>
+               <reference value="MedicationRequest/MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Plan"></reference>
             </basedOn>
             <status value="completed"></status>
             <intent value="order"></intent>
@@ -1480,7 +1752,7 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic2_Category_History_Observation_1"></id>
+            <id value="Consultation1-Topic2-Category-History-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1489,16 +1761,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="2 months - bilateral swollen lower legs"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic2_Category_Examination_Observation_1"></id>
+            <id value="Consultation1-Topic2-Category-Examination-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1515,16 +1795,30 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="703421000"></code>
-                  <display value="Temperature (observable entity)"></display>
+                  <display value="Temperature"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <valueQuantity>
+               <value value="36.7"></value>
+               <unit value="C"></unit>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="Cel"></code>
+            </valueQuantity>
+            <comment value="Patient looks flushed"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic2_Category_Examination_Observation_2"></id>
+            <id value="Consultation1-Topic2-Category-Examination-Observation-2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1541,16 +1835,29 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="1097811000000106"></code>
-                  <display value="Arterial oxygen saturation breathing room air at rest (observable entity)"></display>
+                  <display value="Arterial oxygen saturation breathing room air at rest"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <valueQuantity>
+               <value value="96"></value>
+               <unit value="%"></unit>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="%"></code>
+            </valueQuantity>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic2_Category_Examination_Observation_3"></id>
+            <id value="Consultation1-Topic2-Category-Examination-Observation-3"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1566,17 +1873,31 @@
                      </extension>
                   </extension>
                   <system value="http://snomed.info/sct"></system>
-                  <code value=" 86290005"></code>
-                  <display value="Respiratory rate (observable entity)"></display>
+                  <code value="86290005"></code>
+                  <display value="Respiratory rate"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <valueQuantity>
+               <value value="16"></value>
+               <unit value="breaths per minute"></unit>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="{resps}/min"></code>
+            </valueQuantity>
+            <comment value="Chest clear"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic2_Category_Examination_Observation_4"></id>
+            <id value="Consultation1-Topic2-Category-Examination-Observation-4"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1593,16 +1914,29 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="271637005"></code>
-                  <display value="Pulse irregularly irregular (finding)"></display>
+                  <display value="Pulse irregularly irregular"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <valueQuantity>
+               <value value="70"></value>
+               <unit value="per minute"></unit>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="{beats}/min"></code>
+            </valueQuantity>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic2_Category_Examination_Observation_5"></id>
+            <id value="Consultation1-Topic2-Category-Examination-Observation-5"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1611,16 +1945,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Swelling lower legs bilaterally. Mild pitting oedema. Heart sounds normal. No distress. Abdomen normal. No cervical lymphadenopathy. Throat normal. Ears normal"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic2_Category_Plan_Observation_1"></id>
+            <id value="Consultation1-Topic2-Category-Plan-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1629,16 +1971,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Advice to mobilise more. Review with results."></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic2_Category_Plan_Observation_2"></id>
+            <id value="Consultation1-Topic2-Category-Plan-Observation-2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1655,17 +2005,17 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="46825001"></code>
-                  <display value="Electrocardiographic monitoring (procedure)"></display>
+                  <display value="Electrocardiographic monitoring"></display>
                </coding>
             </code>
-            <effectiveDateTime value="2019-03-28T10:30:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic3_flat_Observation_1"></id>
+            <id value="Consultation1-Topic3-flat-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1682,17 +2032,18 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="413153004"></code>
-                  <display value="Blood pressure recorded by patient at home (procedure)"></display>
+                  <display value="Blood pressure recorded by patient at home"></display>
                </coding>
             </code>
-            <effectiveDateTime value="2019-03-28T10:30:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="average 150/90 last six weeks"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic3_flat_Observation_2"></id>
+            <id value="Consultation1-Topic3-flat-Observation-2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1704,7 +2055,7 @@
                         <valueId value="254063019"></valueId>
                      </extension>
                      <extension url="descriptionDisplay">
-                        <valueId value="O/E - blood pressure reading"></valueId>
+                        <valueString value="O/E - blood pressure reading"></valueString>
                      </extension>
                   </extension>
                   <system value="http://snomed.info/sct"></system>
@@ -1718,6 +2069,9 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="1989-04-06T10:14:00"></effectiveDateTime>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <component>
                <code>
                   <coding>
@@ -1750,7 +2104,7 @@
    <entry>
       <resource>
          <MedicationRequest xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic3_flat_Medication_Plan_1"></id>
+            <id value="Consultation1-Topic3-flat-Medication-Plan-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
             </meta>
@@ -1844,7 +2198,7 @@
                </valueCodeableConcept>
             </extension>
             <basedOn>
-               <reference value="MedicationRequest/Consultation1_Topic3_flat_Medication_Plan_1"></reference>
+               <reference value="MedicationRequest/Consultation1-Topic3-flat-Medication-Plan-1"></reference>
             </basedOn>
             <status value="completed"></status>
             <medicationReference>
@@ -1869,7 +2223,7 @@
    <entry>
       <resource>
          <MedicationRequest xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic3_flat_Medication_Order_1"></id>
+            <id value="Consultation1-Topic3-flat-Medication-Order-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
             </meta>
@@ -1883,7 +2237,7 @@
                </valueCodeableConcept>
             </extension>
             <basedOn>
-               <reference value="MedicationRequest/Consultation1_Topic3_flat_Medication_Plan_1"></reference>
+               <reference value="MedicationRequest/Consultation1-Topic3-flat-Medication-Plan-1"></reference>
             </basedOn>
             <status value="completed"></status>
             <intent value="order"></intent>
@@ -1927,7 +2281,7 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic4_Category_History_Observation_1"></id>
+            <id value="Consultation1-Topic4-Category-History-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1936,16 +2290,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="2 weeks cough - white sputum - no blood, 1 week nose running, 5 days sore throat, No shortness of breath"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic4_Category_History_Observation_2"></id>
+            <id value="Consultation1-Topic4-Category-History-Observation-2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1962,7 +2324,7 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="49727002"></code>
-                  <display value="Cough (finding)"></display>
+                  <display value="Cough"></display>
                </coding>
             </code>
          </Observation>
@@ -1971,7 +2333,7 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic4_Category_History_Observation_3"></id>
+            <id value="Consultation1-Topic4-Category-History-Observation-3"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -1988,7 +2350,7 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="267101005"></code>
-                  <display value="Nasal discharge present (situation)"></display>
+                  <display value="Nasal discharge present"></display>
                </coding>
             </code>
          </Observation>
@@ -1997,7 +2359,7 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic4_Category_History_Observation_4"></id>
+            <id value="Consultation1-Topic4-Category-History-Observation-4"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -2014,7 +2376,7 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="162397003"></code>
-                  <display value="Pain in throat (finding)"></display>
+                  <display value="Pain in throat"></display>
                </coding>
             </code>
          </Observation>
@@ -2023,7 +2385,7 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic4_Category_Plan_Observation_1"></id>
+            <id value="Consultation1-Topic4-Category-Plan-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -2032,16 +2394,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Patient to take Amlodipine 10mg tablets and monitor blood"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <MedicationRequest xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic4_Category_Plan_Medication_Plan_1"></id>
+            <id value="Consultation1-Topic4-Category-Plan-Medication-Plan-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
             </meta>
@@ -2135,7 +2505,7 @@
                </valueCodeableConcept>
             </extension>
             <basedOn>
-               <reference value="MedicationRequest/Consultation1_Topic4_Category_Plan_Medication_Plan_1"></reference>
+               <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
             </basedOn>
             <status value="completed"></status>
             <medicationReference>
@@ -2160,7 +2530,7 @@
    <entry>
       <resource>
          <MedicationRequest xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic4_Category_Plan_Medication_Order_1"></id>
+            <id value="Consultation1-Topic4-Category-Plan-Medication-Order-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
             </meta>
@@ -2174,7 +2544,7 @@
                </valueCodeableConcept>
             </extension>
             <basedOn>
-               <reference value="Consultation1_Topic4_Category_Plan_Medication_Plan_1"></reference>
+               <reference value="Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
             </basedOn>
             <status value="completed"></status>
             <intent value="order"></intent>
@@ -2218,7 +2588,7 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic5_Category_History_Observation_1"></id>
+            <id value="Consultation1-Topic5-Category-History-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -2235,7 +2605,7 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="30989003"></code>
-                  <display value="Knee pain (finding)"></display>
+                  <display value="Knee pain"></display>
                </coding>
             </code>
          </Observation>
@@ -2244,7 +2614,7 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic5_Category_History_Observation_2"></id>
+            <id value="Consultation1-Topic5-Category-History-Observation-2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -2253,16 +2623,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Similar problem 3 months ago - settled after 2 weeks"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic5_Category_History_Observation_3"></id>
+            <id value="Consultation1-Topic5-Category-History-Observation-3"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -2271,16 +2649,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="No locking.No effusion. No giving way"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic5_Category_Examination_Observation_1"></id>
+            <id value="Consultation1-Topic5-Category-Examination-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -2289,16 +2675,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="No effusion. Full range of movement. Ligaments normal"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic5_Category_Examination_Observation_2"></id>
+            <id value="Consultation1-Topic5-Category-Examination-Observation-2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -2315,7 +2709,7 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="299373004"></code>
-                  <display value="Tenderness on medial joint lne of knee (finding)"></display>
+                  <display value="Tenderness on medial joint lne of knee"></display>
                </coding>
             </code>
          </Observation>
@@ -2324,7 +2718,7 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic5_Category_Plan_Observation_1"></id>
+            <id value="Consultation1-Topic5-Category-Plan-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -2341,7 +2735,7 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="308447003"></code>
-                  <display value="Referral to physiopherapist (procedure)"></display>
+                  <display value="Referral to physiopherapist"></display>
                </coding>
             </code>
          </Observation>
@@ -2350,7 +2744,7 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_Topic5_Category_Plan_Observation_2"></id>
+            <id value="Consultation1-Topic5-Category-Plan-Observation-2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -2359,9 +2753,17 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Analgesia advice, try knee support daytime"></comment>
          </Observation>
       </resource>
    </entry>
@@ -2403,6 +2805,16 @@
                   <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
                </individual>
             </participant>
+            <period>
+               <start value="2019-03-28T10:30:00+00:00"></start>
+               <end value="2019-03-28T10:38:00"></end>
+            </period>
+            <length>
+               <value value="8"></value>
+               <unit value="m"></unit>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="min"></code>
+            </length>
          </Encounter>
       </resource>
    </entry>
@@ -2420,7 +2832,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="325851000000107"></code>
-                  <display value="Consultation encounter type (record artifact)"></display>
+                  <display value="Consultation encounter type"></display>
                </coding>
             </code>
             <subject>
@@ -2429,7 +2841,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -2439,12 +2851,12 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="List/Consultation2_Topic1"></reference>
+                  <reference value="List/Consultation2-Topic1"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation2_Topic2"></reference>
+                  <reference value="List/Consultation2-Topic2"></reference>
                </item>
             </entry>
          </List>
@@ -2453,13 +2865,13 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic1"></id>
+            <id value="Consultation2-Topic1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
                <valueReference>
-                  <reference value="Condition/Problem_A_Anxiety_With_Depression"></reference>
+                  <reference value="Condition/Problem-A-Anxiety-With-Depression"></reference>
                </valueReference>
             </extension>
             <status value="current"></status>
@@ -2469,7 +2881,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="25851000000105"></code>
-                  <display value="Topic (EHR) (record artifact)"></display>
+                  <display value="Topic (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -2478,7 +2890,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -2488,22 +2900,22 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="List/Consultation2_Topic1_Category_History"></reference>
+                  <reference value="List/Consultation2-Topic1-Category-History"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation2_Topic1_Category_Examination"></reference>
+                  <reference value="List/Consultation2-Topic1-Category-Examination"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation2_Topic1_Category_Social"></reference>
+                  <reference value="List/Consultation2-Topic1-Category-Social"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation2_Topic1_Category_Plan"></reference>
+                  <reference value="List/Consultation2-Topic1-Category-Plan"></reference>
                </item>
             </entry>
          </List>
@@ -2512,13 +2924,13 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic2"></id>
+            <id value="Consultation2-Topic2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
                <valueReference>
-                  <reference value="Condition/Problem_D_URTI"></reference>
+                  <reference value="Condition/Problem-D-URTI"></reference>
                </valueReference>
             </extension>
             <status value="current"></status>
@@ -2528,7 +2940,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="25851000000105"></code>
-                  <display value="Topic (EHR) (record artifact)"></display>
+                  <display value="Topic (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -2537,7 +2949,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -2547,12 +2959,12 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="List/Consultation2_Topic2_Category_History"></reference>
+                  <reference value="List/Consultation2-Topic2-Category-History"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation2_Topic2_Category_Plan"></reference>
+                  <reference value="List/Consultation2-Topic2-Category-Plan"></reference>
                </item>
             </entry>
          </List>
@@ -2561,7 +2973,7 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic1_Category_History"></id>
+            <id value="Consultation2-Topic1-Category-History"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -2571,8 +2983,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -2581,7 +2993,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -2589,13 +3001,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation2-Topic1-Category-History-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic1_Category_Examination"></id>
+            <id value="Consultation2-Topic1-Category-Examination"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -2605,8 +3022,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -2615,7 +3032,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -2623,13 +3040,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation2-Topic1-Category-Examination-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic1_Category_Social"></id>
+            <id value="Consultation2-Topic1-Category-Social"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -2639,8 +3061,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -2649,7 +3071,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -2657,13 +3079,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation2-Topic1-Category-Social-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic1_Category_Plan"></id>
+            <id value="Consultation2-Topic1-Category-Plan"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -2673,8 +3100,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -2683,7 +3110,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -2691,13 +3118,28 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Plan"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Order"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation2-Topic1-Category-Plan-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic2_Category_History"></id>
+            <id value="Consultation2-Topic2-Category-History"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -2707,8 +3149,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -2717,7 +3159,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -2725,13 +3167,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation2-Topic2-Category-History-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic2_Category_Plan"></id>
+            <id value="Consultation2-Topic2-Category-Plan"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -2741,8 +3188,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -2751,7 +3198,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -2759,13 +3206,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation2-Topic2-Category-Plan-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic1_Category_History_Observation_1"></id>
+            <id value="Consultation2-Topic1-Category-History-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -2774,16 +3226,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter2"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Come for review. Overall doing better. Mood improving. Still get bad days. Energy levels ok. Motivation improving. Started to go walking twice a week. First counselor appointment in two weeks. Patient has been lightly drinking."></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic1_Category_Examination_Observation_1"></id>
+            <id value="Consultation2-Topic1-Category-Examination-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -2792,16 +3252,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter2"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="MSE euthymic. Not anxious. No DSH/hallucinations/abnormal thoughts"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic1_Category_Social_Observation_1"></id>
+            <id value="Consultation2-Topic1-Category-Social-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -2818,16 +3286,27 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="1082641000000106"></code>
-                  <display value="Alcohol units consumed per week (observable entity)"></display>
+                  <display value="Alcohol units consumed per week"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter2"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <valueQuantity>
+               <value value="2"></value>
+               <unit value="units/week"></unit>
+            </valueQuantity>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <MedicationRequest xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic1_Category_Plan_Medication_Plan"></id>
+            <id value="Consultation2-Topic1-Category-Plan-Medication-Plan"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
             </meta>
@@ -2921,7 +3400,7 @@
                </valueCodeableConcept>
             </extension>
             <basedOn>
-               <reference value="MedicationRequest/Consultation2_Topic1_Category_Plan_Medication_Plan"></reference>
+               <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Plan"></reference>
             </basedOn>
             <status value="completed"></status>
             <medicationReference>
@@ -2946,7 +3425,7 @@
    <entry>
       <resource>
          <MedicationRequest xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic1_Category_Plan_Medication_Order"></id>
+            <id value="Consultation2-Topic1-Category-Plan-Medication-Order"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
             </meta>
@@ -2960,7 +3439,7 @@
                </valueCodeableConcept>
             </extension>
             <basedOn>
-               <reference value="MedicationRequest/Consultation2_Topic1_Category_Plan_Medication_Plan"></reference>
+               <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Plan"></reference>
             </basedOn>
             <status value="completed"></status>
             <intent value="order"></intent>
@@ -3004,7 +3483,7 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic1_Category_Plan_Observation_1"></id>
+            <id value="Consultation2-Topic1-Category-Plan-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3013,16 +3492,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter2"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Continue with current actions and monitor progress"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic2_Category_History_Observation_1"></id>
+            <id value="Consultation2-Topic2-Category-History-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3031,16 +3518,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter2"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Patient reports the condition has cleared but develops cough when lies down to sleep."></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation2_Topic2_Category_Plan_Observation_1"></id>
+            <id value="Consultation2-Topic2-Category-Plan-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3049,9 +3544,17 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter2"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Recommend that before sleep, patient has a hot drink. Sleep with head in elevated position."></comment>
          </Observation>
       </resource>
    </entry>
@@ -3093,6 +3596,16 @@
                   <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
                </individual>
             </participant>
+            <period>
+               <start value="2019-03-28T10:30:00+00:00"></start>
+               <end value="2019-03-28T10:38:00+00:00"></end>
+            </period>
+            <length>
+               <value value="8"></value>
+               <unit value="m"></unit>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="min"></code>
+            </length>
          </Encounter>
       </resource>
    </entry>
@@ -3110,7 +3623,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="325851000000107"></code>
-                  <display value="Consultation encounter type (record artifact)"></display>
+                  <display value="Consultation encounter type"></display>
                </coding>
             </code>
             <subject>
@@ -3119,7 +3632,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3129,12 +3642,12 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="List/Consultation3_Topic1"></reference>
+                  <reference value="List/Consultation3-Topic1"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation3_Topic2"></reference>
+                  <reference value="List/Consultation3-Topic2"></reference>
                </item>
             </entry>
          </List>
@@ -3143,13 +3656,13 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic1"></id>
+            <id value="Consultation3-Topic1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
                <valueReference>
-                  <reference value="Condition/Problem_A_Anxiety_With_Depression"></reference>
+                  <reference value="Condition/Problem-A-Anxiety-With-Depression"></reference>
                </valueReference>
             </extension>
             <status value="current"></status>
@@ -3159,7 +3672,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="25851000000105"></code>
-                  <display value="Topic (EHR) (record artifact)"></display>
+                  <display value="Topic (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -3168,7 +3681,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3178,22 +3691,22 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="List/Consultation3_Topic1_Category_History"></reference>
+                  <reference value="List/Consultation3-Topic1-Category-History"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation3_Topic1_Category_Examination"></reference>
+                  <reference value="List/Consultation3-Topic1-Category-Examination"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation3_Topic1_Category_Social"></reference>
+                  <reference value="List/Consultation3-Topic1-Category-Social"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation3_Topic1_Category_Plan"></reference>
+                  <reference value="List/Consultation3-Topic1-Category-Plan"></reference>
                </item>
             </entry>
          </List>
@@ -3202,13 +3715,13 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic2"></id>
+            <id value="Consultation3-Topic2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
                <valueReference>
-                  <reference value="Condition/Problem_B_Swollen_Legs"></reference>
+                  <reference value="Condition/Problem-B-Swollen-Legs"></reference>
                </valueReference>
             </extension>
             <status value="current"></status>
@@ -3218,7 +3731,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="25851000000105"></code>
-                  <display value="Topic (EHR) (record artifact)"></display>
+                  <display value="Topic (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -3227,7 +3740,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3237,17 +3750,17 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="List/Consultation3_Topic2_Category_History"></reference>
+                  <reference value="List/Consultation3-Topic2-Category-History"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation3_Topic2_Category_Examination"></reference>
+                  <reference value="List/Consultation3-Topic2-Category-Examination"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="List/Consultation3_Topic2_Category_Plan"></reference>
+                  <reference value="List/Consultation3-Topic2-Category-Plan"></reference>
                </item>
             </entry>
          </List>
@@ -3256,7 +3769,7 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic1_Category_History"></id>
+            <id value="Consultation3-Topic1-Category-History"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -3266,8 +3779,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -3276,7 +3789,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3284,13 +3797,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation3-Topic1-Category-History-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic1_Category_Examination"></id>
+            <id value="Consultation3-Topic1-Category-Examination"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -3300,8 +3818,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -3310,7 +3828,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3318,13 +3836,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation3-Topic1-Category-Examination-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic1_Category_Social"></id>
+            <id value="Consultation3-Topic1-Category-Social"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -3334,8 +3857,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -3344,7 +3867,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3352,13 +3875,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation3-Topic1-Category-Social-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic1_Category_Plan"></id>
+            <id value="Consultation3-Topic1-Category-Plan"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -3368,8 +3896,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -3378,7 +3906,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3386,13 +3914,28 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Plan"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Order"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation3-Topic1-Category-Plan-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic2_Category_History"></id>
+            <id value="Consultation3-Topic2-Category-History"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -3402,8 +3945,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -3412,7 +3955,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3420,13 +3963,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation3-Topic2-Category-History-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic2_Category_Examination"></id>
+            <id value="Consultation3-Topic2-Category-Examination"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -3436,8 +3984,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -3446,7 +3994,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3454,13 +4002,48 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-2"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-3"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-4"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-5"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <display value="Referral items are not supported by the provider system"></display>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <display value="Referral items are not supported by the provider system"></display>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic2_Category_Plan"></id>
+            <id value="Consultation3-Topic2-Category-Plan"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -3470,8 +4053,8 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="24781000000107 "></code>
-                  <display value="Category (EHR) (record artifact)|"></display>
+                  <code value="24781000000107"></code>
+                  <display value="Category (EHR)"></display>
                </coding>
             </code>
             <subject>
@@ -3480,7 +4063,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00"></date>
+            <date value="2019-03-28T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3488,13 +4071,18 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation3-Topic2-Category-Plan-Observation-1"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic1_Category_History_Observation_1"></id>
+            <id value="Consultation3-Topic1-Category-History-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3503,16 +4091,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter3"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Come for review. Overall doing better. Mood improving. Still get bad days. Energy levels ok. Motivation improving. Continued to go walking twice a week. Attended first counselor appointment but not sure if it helped. Patient has been lightly drinking."></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic1_Category_Examination_Observation_1"></id>
+            <id value="Consultation3-Topic1-Category-Examination-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3521,16 +4117,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter3"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="MSE euthymic. Not anxious. No DSH/hallucinations/abnormal thoughts"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic1_Category_Social_Observation_1"></id>
+            <id value="Consultation3-Topic1-Category-Social-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3547,16 +4151,27 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="1082641000000106"></code>
-                  <display value="Alcohol units consumed per week (observable entity)"></display>
+                  <display value="Alcohol units consumed per week"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter3"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <valueQuantity>
+               <value value="2"></value>
+               <unit value="units/week"></unit>
+            </valueQuantity>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <MedicationRequest xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic1_Category_Plan_Medication_Plan"></id>
+            <id value="Consultation3-Topic1-Category-Plan-Medication-Plan"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
             </meta>
@@ -3650,7 +4265,7 @@
                </valueCodeableConcept>
             </extension>
             <basedOn>
-               <reference value="MedicationRequest/Consultation3_Topic1_Category_Plan_Medication_Plan"></reference>
+               <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Plan"></reference>
             </basedOn>
             <status value="completed"></status>
             <medicationReference>
@@ -3675,7 +4290,7 @@
    <entry>
       <resource>
          <MedicationRequest xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic1_Category_Plan_Medication_Order"></id>
+            <id value="Consultation3-Topic1-Category-Plan-Medication-Order"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1"></profile>
             </meta>
@@ -3689,7 +4304,7 @@
                </valueCodeableConcept>
             </extension>
             <basedOn>
-               <reference value="MedicationRequest/Consultation3_Topic1_Category_Plan_Medication_Plan"></reference>
+               <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Plan"></reference>
             </basedOn>
             <status value="completed"></status>
             <intent value="order"></intent>
@@ -3733,7 +4348,7 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic1_Category_Plan_Observation_1"></id>
+            <id value="Consultation3-Topic1-Category-Plan-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3742,16 +4357,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter3"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Continue with current actions and monitor progress."></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic2_Category_History_Observation_1"></id>
+            <id value="Consultation3-Topic2-Category-History-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3760,16 +4383,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter3"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="4 months - bilateral swollen lower legs"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic2_Category_Examination_Observation_1"></id>
+            <id value="Consultation3-Topic2-Category-Examination-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3786,16 +4417,29 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="703421000"></code>
-                  <display value="Temperature (observable entity)"></display>
+                  <display value="Temperature"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter3"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <valueQuantity>
+               <value value="36.7"></value>
+               <unit value="C"></unit>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="Cel"></code>
+            </valueQuantity>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic2_Category_Examination_Observation_2"></id>
+            <id value="Consultation3-Topic2-Category-Examination-Observation-2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3812,16 +4456,29 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="1097811000000106"></code>
-                  <display value="Arterial oxygen saturation breathing room air at rest (observable entity)"></display>
+                  <display value="Arterial oxygen saturation breathing room air at rest"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter3"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <valueQuantity>
+               <value value="97"></value>
+               <unit value="%"></unit>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="%"></code>
+            </valueQuantity>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic2_Category_Examination_Observation_3"></id>
+            <id value="Consultation3-Topic2-Category-Examination-Observation-3"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3837,17 +4494,31 @@
                      </extension>
                   </extension>
                   <system value="http://snomed.info/sct"></system>
-                  <code value=" 86290005"></code>
-                  <display value="Respiratory rate (observable entity)"></display>
+                  <code value="86290005"></code>
+                  <display value="Respiratory rate"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter3"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <valueQuantity>
+               <value value="16"></value>
+               <unit value="breaths per minute"></unit>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="{resps}/min"></code>
+            </valueQuantity>
+            <comment value="Heart sounds normal"></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic2_Category_Examination_Observation_4"></id>
+            <id value="Consultation3-Topic2-Category-Examination-Observation-4"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3864,16 +4535,29 @@
                   </extension>
                   <system value="http://snomed.info/sct"></system>
                   <code value="271637005"></code>
-                  <display value="Pulse irregularly irregular (finding)"></display>
+                  <display value="Pulse irregularly irregular"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter3"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <valueQuantity>
+               <value value="70"></value>
+               <unit value="per minute"></unit>
+               <system value="http://unitsofmeasure.org"></system>
+               <code value="{beats}/min"></code>
+            </valueQuantity>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic2_Category_History_Observation_5"></id>
+            <id value="Consultation3-Topic2-Category-History-Observation-5"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3882,16 +4566,24 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter3"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Swelling lower legs bilaterally. Mild pitting oedema. Chest clear. No distress. Abdomen normal. No cervical lymphadenopathy. Throat normal. Ears normal.Swelling has noticeably reduced from examiniation two months ago. Blood count and ECG have not identified any cause."></comment>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation3_Topic2_Category_Plan_Observation_1"></id>
+            <id value="Consultation3-Topic2-Category-Plan-Observation-1"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
@@ -3900,9 +4592,17 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="37331000000100"></code>
-                  <display value="Comment note (record artifact)|"></display>
+                  <display value="Comment note"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter3"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <comment value="Continue with current actions and monitor progress."></comment>
          </Observation>
       </resource>
    </entry>

@@ -39,4 +39,9 @@ public final class SystemConstants {
 
     public static final String MEDICATION_LIST = "Medications and medical devices";
     
+    // #266 Notes associated with warnings
+    public static final String CONFIDENTIAL_ITEMS_NOTE = "Items excluded due to confidentiality and/or patient preferences.";
+    public static final String DATA_IN_TRANSIT_NOTE = "Patient record transfer from previous GP practice not yet complete; information recorded before %s may be missing.";
+    public static final String DATA_AWAITING_FILING_NOTE = "Patient data may be incomplete as there is data supplied by a third party awaiting review before becoming available.";
+    
 }

@@ -29,10 +29,10 @@ import static uk.gov.hscic.SystemConstants.NO_CONTENT_RECORDED;
 import static uk.gov.hscic.SystemConstants.NO_CONTENT_RECORDED_DISPLAY;
 import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
 import static uk.gov.hscic.SystemConstants.RESOLVED_ALLERGIES_DISPLAY;
+import uk.gov.hscic.medication.statement.MedicationStatementRepository;
 
 @Component
 public class StructuredAllergyIntoleranceBuilder {
-
 
     @Autowired
     private StructuredAllergySearch structuredAllergySearch;
@@ -42,9 +42,12 @@ public class StructuredAllergyIntoleranceBuilder {
 
     @Autowired
     private PractitionerSearch practitionerSearch;
-    
+
     @Autowired
     private CodeableConceptBuilder codeableConceptBuilder;
+
+    @Autowired
+    private MedicationStatementRepository medicationStatementRepository;
 
     @Value("${datasource.patient.nhsNumber:#{null}}")
     private String patient2NhsNo;
@@ -58,8 +61,8 @@ public class StructuredAllergyIntoleranceBuilder {
         AllergyIntolerance allergyIntolerance;
 
         //If there is a 'no known' allergies code then add the necessary coding and return the bundle
-        if (allergyData.size() == 1 &&
-                allergyData.get(0).getClinicalStatus().equals(SystemConstants.NO_KNOWN)) {
+        if (allergyData.size() == 1
+                && allergyData.get(0).getClinicalStatus().equals(SystemConstants.NO_KNOWN)) {
 
             // #214 had incorrect code and value for no known allergies
             CodeableConcept noKnownAllergies = createCoding(SystemURL.VS_LIST_EMPTY_REASON_CODE, NO_CONTENT_RECORDED, NO_CONTENT_RECORDED_DISPLAY);
@@ -84,7 +87,7 @@ public class StructuredAllergyIntoleranceBuilder {
             allergyIntolerance = new AllergyIntolerance();
             allergyIntolerance.setOnset(new DateTimeType(allergyIntoleranceEntity.getOnSetDateTime()));
             allergyIntolerance.setMeta(createMeta(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
-            
+
             allergyIntolerance.setId(allergyIntoleranceEntity.getId().toString());
             List<Identifier> identifiers = new ArrayList<>();
             Identifier identifier1 = new Identifier()
@@ -109,8 +112,8 @@ public class StructuredAllergyIntoleranceBuilder {
 
             //CODE
             codeableConceptBuilder.addConceptCode(SystemConstants.SNOMED_URL, allergyIntoleranceEntity.getConceptCode(), allergyIntoleranceEntity.getConceptDisplay())
-            	   .addDescription(allergyIntoleranceEntity.getDescCode(), allergyIntoleranceEntity.getDescDisplay())
-            	   .addTranslation(allergyIntoleranceEntity.getCodeTranslationRef());
+                    .addDescription(allergyIntoleranceEntity.getDescCode(), allergyIntoleranceEntity.getDescDisplay())
+                    .addTranslation(allergyIntoleranceEntity.getCodeTranslationRef());
             allergyIntolerance.setCode(codeableConceptBuilder.build());
             codeableConceptBuilder.clear();
 
@@ -128,8 +131,8 @@ public class StructuredAllergyIntoleranceBuilder {
             // MANIFESTATION
             List<CodeableConcept> theManifestation = new ArrayList<>();
             codeableConceptBuilder.addConceptCode(SystemConstants.SNOMED_URL, allergyIntoleranceEntity.getManifestationCoding(), allergyIntoleranceEntity.getManifestationDisplay())
-            	.addDescription(allergyIntoleranceEntity.getManifestationDescCoding(), allergyIntoleranceEntity.getManifestationDescDisplay())
-            	.addTranslation(allergyIntoleranceEntity.getManTranslationRef());
+                    .addDescription(allergyIntoleranceEntity.getManifestationDescCoding(), allergyIntoleranceEntity.getManifestationDescDisplay())
+                    .addTranslation(allergyIntoleranceEntity.getManTranslationRef());
             theManifestation.add(codeableConceptBuilder.build());
             codeableConceptBuilder.clear();
             reaction.setManifestation(theManifestation);
@@ -138,12 +141,12 @@ public class StructuredAllergyIntoleranceBuilder {
 
             //SEVERITY
             try {
-				reaction.setSeverity(AllergyIntoleranceSeverity.fromCode(allergyIntoleranceEntity.getSeverity()));
-			} catch (FHIRException e) {
-				throw OperationOutcomeFactory.buildOperationOutcomeException(
-						new UnprocessableEntityException("Unknown severity: " + allergyIntoleranceEntity.getSeverity()),
-						SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-			}          
+                reaction.setSeverity(AllergyIntoleranceSeverity.fromCode(allergyIntoleranceEntity.getSeverity()));
+            } catch (FHIRException e) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("Unknown severity: " + allergyIntoleranceEntity.getSeverity()),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            }
 
             //EXPOSURE
             CodeableConcept exposureRoute = new CodeableConcept();
@@ -184,7 +187,6 @@ public class StructuredAllergyIntoleranceBuilder {
                 listResourceBuilder(resolved, allergyIntolerance, true);
                 allergyIntolerance.setLastOccurrence(allergyIntoleranceEntity.getEndDate());
 
-
                 final Extension allergyEndExtension = createAllergyEndExtension(allergyIntoleranceEntity);
                 extensions.add(allergyEndExtension);
 
@@ -193,12 +195,12 @@ public class StructuredAllergyIntoleranceBuilder {
             if (!extensions.isEmpty()) {
                 allergyIntolerance.setExtension(extensions);
             }
-            
+
             //ASSERTER
             Reference asserter = allergyIntolerance.getAsserter();
             if (asserter != null && asserter.getReference() != null && asserter.getReference().startsWith("Practitioner")) {
-            	String[] split = asserter.getReference().split("/");
-            	practitionerIds.add(split[1]);
+                String[] split = asserter.getReference().split("/");
+                practitionerIds.add(split[1]);
             }
 
         }
@@ -244,7 +246,7 @@ public class StructuredAllergyIntoleranceBuilder {
         addWarningCodeExtensions(allergyIntoleranceEntity, listResource);
         Extension clinicalSettingExtension = setClinicalSetting(allergyIntoleranceEntity);
 
-        if(clinicalSettingExtension != null) {
+        if (clinicalSettingExtension != null) {
             listResource.addExtension(clinicalSettingExtension);
         }
 
@@ -252,24 +254,24 @@ public class StructuredAllergyIntoleranceBuilder {
     }
 
     private void addWarningCodeExtensions(List<StructuredAllergyIntoleranceEntity> allergyIntolerances, ListResource list) {
-    	
-    	Set<String> warningCodes = new HashSet<>();
-    	allergyIntolerances.forEach(allergy -> {
-			if (allergy.getWarningCode() != null) {
-				warningCodes.add(allergy.getWarningCode());
-			}
-		});
-    	
-    	WarningCodeExtHelper.addWarningCodeExtensions(warningCodes, list);
+
+        Set<String> warningCodes = new HashSet<>();
+        allergyIntolerances.forEach(allergy -> {
+            if (allergy.getWarningCode() != null) {
+                warningCodes.add(allergy.getWarningCode());
+            }
+        });
+
+        WarningCodeExtHelper.addWarningCodeExtensions(warningCodes, list, patientRepository, medicationStatementRepository, structuredAllergySearch);
     }
-    
+
     private Extension setClinicalSetting(List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity) {
         String warningCode = null;
-        for(StructuredAllergyIntoleranceEntity structuredAllergyIntoleranceEntity: allergyIntoleranceEntity) {
+        for (StructuredAllergyIntoleranceEntity structuredAllergyIntoleranceEntity : allergyIntoleranceEntity) {
             warningCode = structuredAllergyIntoleranceEntity.getWarningCode();
         }
         CodeableConcept codeableConcept = new CodeableConcept();
-        Coding coding = new Coding(SystemConstants.SNOMED_URL,"1060971000000108", "General practice service");
+        Coding coding = new Coding(SystemConstants.SNOMED_URL, "1060971000000108", "General practice service");
         codeableConcept.setCoding(Collections.singletonList(coding));
 
         return warningCode != null ? new Extension(SystemURL.CLINICAL_SETTING, codeableConcept) : null;
@@ -277,7 +279,13 @@ public class StructuredAllergyIntoleranceBuilder {
     }
 
     private void addEmptyListNote(ListResource list) {
-        list.addNote(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE)));
+        // cardinality of note 0..1 #266
+        if (list.getNote().size() > 0) {
+            Annotation annotation = list.getNote().get(0);
+            annotation.setText(annotation.getText()+"\r\n"+SystemConstants.INFORMATION_NOT_AVAILABLE);
+        } else {
+            list.addNote(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE)));
+        }
     }
 
     private void addEmptyReasonCode(ListResource list) {
@@ -323,7 +331,7 @@ public class StructuredAllergyIntoleranceBuilder {
         final Extension endDate = new Extension("endDate", new DateTimeType(allergyIntoleranceEntity.getEndDate()));
 
         String strEndReason = allergyIntoleranceEntity.getEndReason();
-        final Extension endReason = new Extension("reasonEnded", new StringType(strEndReason==null || strEndReason.trim().isEmpty() ? NO_INFORMATION_AVAILABLE : strEndReason ));
+        final Extension endReason = new Extension("reasonEnded", new StringType(strEndReason == null || strEndReason.trim().isEmpty() ? NO_INFORMATION_AVAILABLE : strEndReason));
         allergyEnd.addExtension(endDate);
         allergyEnd.addExtension(endReason);
 

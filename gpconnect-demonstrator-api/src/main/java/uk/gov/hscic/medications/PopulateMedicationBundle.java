@@ -1,6 +1,5 @@
 package uk.gov.hscic.medications;
 
-import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
@@ -23,6 +22,8 @@ import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.model.patient.PatientDetails;
 import java.util.*;
 import static uk.gov.hscic.SystemConstants.*;
+import uk.gov.hscic.patient.details.PatientRepository;
+import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch;
 
 @Component
 public class PopulateMedicationBundle {
@@ -42,6 +43,11 @@ public class PopulateMedicationBundle {
 	@Autowired
 	private MedicationRequestResourceProvider medicationRequestResourceProvider;
 
+    @Autowired
+    private StructuredAllergySearch structuredAllergySearch;
+
+    @Autowired
+    private PatientRepository patientRepository;
 
     public Bundle addMedicationBundleEntries(Bundle structuredBundle, PatientDetails patientDetails, Boolean includePrescriptionIssues,
 			Period medicationPeriod, Set<String> practitionerIds, Set<String> orgIds) {
@@ -91,7 +97,7 @@ public class PopulateMedicationBundle {
 			}
 		});
 		
-		WarningCodeExtHelper.addWarningCodeExtensions(warningCodes, medicationStatementsList);
+		WarningCodeExtHelper.addWarningCodeExtensions(warningCodes, medicationStatementsList, patientRepository, medicationStatementRepository, structuredAllergySearch);
 
         return medicationStatementsList;
 	}

@@ -42,7 +42,11 @@ import org.hl7.fhir.dstu3.model.ProcedureRequest;
 import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.Specimen;
+import org.springframework.beans.factory.annotation.Autowired;
+import static uk.gov.hscic.SystemConstants.OUR_ODS_CODE;
 import static uk.gov.hscic.SystemConstants.SNOMED_URL;
+import uk.gov.hscic.model.organization.OrganizationDetails;
+import uk.gov.hscic.organization.OrganizationSearch;
 
 /**
  * appends fixed test results to a Bundle
@@ -79,20 +83,33 @@ public class StructuredBuilder {
     }
 
     /**
-     * append the entries in the xml bundle file to the response bundle
-     * can handle xml or json source
+     * append the entries in the xml bundle file to the response bundle can
+     * handle xml or json source
+     *
      * @param filename fully qualified file path to canned response file
      * @param structuredBundle
+     * @param patientLogicalID
+     * @param orgLogicalID
      * @throws DataFormatException
      * @throws ConfigurationException
      */
-    public void appendCannedResponse(String filename, Bundle structuredBundle) throws DataFormatException, ConfigurationException {
+    public void appendCannedResponse(String filename, Bundle structuredBundle, long patientLogicalID, long orgLogicalID) throws DataFormatException, ConfigurationException {
         try {
             // read from a pre prepared file
             FhirContext ctx = FhirContext.forDstu3();
             String suffix = filename.replaceFirst("^.*\\.([^\\.]+)$", "$1");
             IParser parser = null;
-            switch ( suffix.toLowerCase() ) {
+            String s = new String(Files.readAllBytes(new File(filename).toPath()));
+            // change all the references to be consistent
+            String[][] substitutions = new String[][]{
+                {"Patient", "" + patientLogicalID},
+                {"Organization", "" + orgLogicalID},
+                {"Practitioner", "1"}}; // Miss Nichole Gilbert
+
+            for (String[] substitution : substitutions) {
+                s = s.replaceAll("\"" + substitution[0] + "/.*\"", "\"" + substitution[0] + "/" + substitution[1] + "\"");
+            }
+            switch (suffix.toLowerCase()) {
                 case "xml":
                     parser = ctx.newXmlParser();
                     break;
@@ -100,9 +117,8 @@ public class StructuredBuilder {
                     parser = ctx.newJsonParser();
                     break;
                 default:
-                    System.err.println("Unrecognised file type "+suffix);
+                    System.err.println("Unrecognised file type " + suffix);
             }
-            String s = new String(Files.readAllBytes(new File(filename).toPath()));
             Bundle bundle = (Bundle) parser.parseResource(s);
 
             for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {

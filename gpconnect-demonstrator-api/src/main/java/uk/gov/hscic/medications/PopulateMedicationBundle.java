@@ -22,6 +22,7 @@ import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.model.patient.PatientDetails;
 import java.util.*;
 import static uk.gov.hscic.SystemConstants.*;
+import uk.gov.hscic.patient.details.PatientEntity;
 import uk.gov.hscic.patient.details.PatientRepository;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch;
 
@@ -74,7 +75,11 @@ public class PopulateMedicationBundle {
         medicationStatementsList.setMode(ListMode.SNAPSHOT);
         medicationStatementsList.setTitle(SystemConstants.MEDICATION_LIST);
         medicationStatementsList.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, "933361000000108", MEDICATION_LIST)));
-        medicationStatementsList.setSubject(new Reference(new IdType("Patient", 1L)).setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
+        
+        PatientEntity patient = patientRepository.findByNhsNumber(nhsNumber);
+        
+        // get the logical id for patient nhsNumber (was hard coded to 1)
+        medicationStatementsList.setSubject(new Reference(new IdType("Patient", patient.getId())).setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
         medicationStatementsList.setDate(new Date());
         medicationStatementsList.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
 

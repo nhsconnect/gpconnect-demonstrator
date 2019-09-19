@@ -95,7 +95,8 @@ public class MedicationRequestResourceProvider {
 		medicationRequest.setDispenseRequest(getDispenseRequestComponent(requestDetail));
 		//medicationRequest.setRequester(getRequesterComponent(requestDetail)); //TODO - spec needs to clarify whether this should be populated or not
 		
-		setReasonCodes(medicationRequest, requestDetail);
+        // #269 do not set MedicationRequest ReasonCode
+		//setReasonCodes(medicationRequest, requestDetail);
 		setNotes(medicationRequest, requestDetail);
 		if (medicationRequest.getIntent() != MedicationRequestIntent.ORDER) {
 			setRepeatInformation(medicationRequest, requestDetail);
@@ -147,12 +148,13 @@ public class MedicationRequestResourceProvider {
 		}
 	}
 
-	private void setReasonCodes(MedicationRequest medicationRequest, MedicationRequestDetail requestDetail) {
-		requestDetail.getReasonCodes().forEach(rc -> {
-			Coding coding = new Coding(SystemURL.VS_SNOMED, rc.getCode(), rc.getDisplay());
-			medicationRequest.addReasonCode(new CodeableConcept().addCoding(coding));
-		});
-	}
+    // #269 dont set reason code
+//	private void setReasonCodes(MedicationRequest medicationRequest, MedicationRequestDetail requestDetail) {
+//		requestDetail.getReasonCodes().forEach(rc -> {
+//			Coding coding = new Coding(SystemURL.VS_SNOMED, rc.getCode(), rc.getDisplay());
+//			medicationRequest.addReasonCode(new CodeableConcept().addCoding(coding));
+//		});
+//	}
 
 	private void setNotes(MedicationRequest medicationRequest, MedicationRequestDetail requestDetail) {
 		requestDetail.getNotes().forEach(note -> {

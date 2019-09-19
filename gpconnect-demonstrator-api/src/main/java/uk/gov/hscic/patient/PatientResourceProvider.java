@@ -460,8 +460,7 @@ public class PatientResourceProvider implements IResourceProvider {
         while (iter.hasNext()) {
             String clinicalArea = iter.next();
             if (NHS.equals(patients[PATIENT_2])) {
-                List<OrganizationDetails> orgs = organizationSearch.findOrganizationDetailsByOrgODSCode(OUR_ODS_CODE);
-                structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(clinicalArea), structuredBundle, PATIENT_2, orgs.get(0).getId());
+                structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(clinicalArea), structuredBundle, PATIENT_2);
             } else {
                 addEmptyList(clinicalArea, NHS, structuredBundle);
             }

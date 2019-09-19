@@ -4,5 +4,4 @@ INSERT INTO allergyintolerance
 VALUES
   (9658219705 ,'2016-07-01 12:00:00',"","Vomiting and diarrhoea","Major", "resolved","unconfirmed","medication","16",'2016-05-01 12:00:00','2016-06-01 12:00:00',"294716003","Biphasic insulin allergy (disorder)","49237006","Allergic diarrhea (disorder)","","", '5','confidential-items'),
 /* #263 add extra intolerances with different warning types */
-  (9658219705 ,'2016-07-02 12:00:00',"","Vomiting and diarrhoea","Major", "resolved","unconfirmed","medication","16",'2016-05-02 12:00:00','2016-06-02 12:00:00',"294716003","Biphasic insulin allergy (disorder)","49237006","Allergic diarrhea (disorder)","","", '5','data-in-transit'),
-  (9658219705 ,'2016-07-03 12:00:00',"","Vomiting and diarrhoea","Major", "resolved","unconfirmed","medication","16",'2016-05-03 12:00:00','2016-06-03 12:00:00',"294716003","Biphasic insulin allergy (disorder)","49237006","Allergic diarrhea (disorder)","","", '5','data-awaiting-filing');
+  (9658219705 ,'2016-07-02 12:00:00',"","Vomiting and diarrhoea","Major", "resolved","unconfirmed","medication","16",'2016-05-02 12:00:00','2016-06-02 12:00:00',"294716003","Biphasic insulin allergy (disorder)","49237006","Allergic diarrhea (disorder)","","", '5','data-in-transit');

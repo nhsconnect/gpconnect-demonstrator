@@ -93,7 +93,7 @@ public class StructuredBuilder {
      * @throws DataFormatException
      * @throws ConfigurationException
      */
-    public void appendCannedResponse(String filename, Bundle structuredBundle, long patientLogicalID, long orgLogicalID) throws DataFormatException, ConfigurationException {
+    public void appendCannedResponse(String filename, Bundle structuredBundle, long patientLogicalID) throws DataFormatException, ConfigurationException {
         try {
             // read from a pre prepared file
             FhirContext ctx = FhirContext.forDstu3();
@@ -102,9 +102,7 @@ public class StructuredBuilder {
             String s = new String(Files.readAllBytes(new File(filename).toPath()));
             // change all the references to be consistent
             String[][] substitutions = new String[][]{
-                {"Patient", "" + patientLogicalID},
-                {"Organization", "" + orgLogicalID},
-                {"Practitioner", "1"}}; // Miss Nichole Gilbert
+                {"Patient", "" + patientLogicalID}};
 
             for (String[] substitution : substitutions) {
                 s = s.replaceAll("\"" + substitution[0] + "/.*\"", "\"" + substitution[0] + "/" + substitution[1] + "\"");

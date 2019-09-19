@@ -59,8 +59,8 @@ public class MedicationStatementResourceProvider {
         } catch (FHIRException e) {
             throw new UnprocessableEntityException(e.getMessage());
         }
-
-        setReasonCodes(medicationStatement, statementDetail);
+        // #269 do not set MedicationStatement ReasonCode
+        //setReasonCodes(medicationStatement, statementDetail);
         setNotes(medicationStatement, statementDetail);
 
         String dosageText = statementDetail.getDosageText();
@@ -86,12 +86,13 @@ public class MedicationStatementResourceProvider {
         return medicationStatement;
     }
 
-    private void setReasonCodes(MedicationStatement medicationStatement, MedicationStatementDetail statementDetail) {
-        statementDetail.getReasonCodes().forEach(rc -> {
-            Coding coding = new Coding(SystemURL.VS_CONDITION_CODE, rc.getCode(), rc.getDisplay());
-            medicationStatement.addReasonCode(new CodeableConcept().addCoding(coding));
-        });
-    }
+    // #269 dont set reason code
+//    private void setReasonCodes(MedicationStatement medicationStatement, MedicationStatementDetail statementDetail) {
+//        statementDetail.getReasonCodes().forEach(rc -> {
+//            Coding coding = new Coding(SystemURL.VS_CONDITION_CODE, rc.getCode(), rc.getDisplay());
+//            medicationStatement.addReasonCode(new CodeableConcept().addCoding(coding));
+//        });
+//    }
 
     private void setNotes(MedicationStatement medicationStatement, MedicationStatementDetail statementDetail) {
         statementDetail.getNotes().forEach(note -> {

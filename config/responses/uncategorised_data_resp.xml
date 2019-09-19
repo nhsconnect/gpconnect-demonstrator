@@ -36,6 +36,11 @@
             </entry>
             <entry>
                <item>
+                  <reference value="Observation/Consultation1_topic2_category_Examination_Observation_2"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
                   <reference value="Observation/Consultation1_topic2_category_Examination_Observation_3"></reference>
                </item>
             </entry>
@@ -50,6 +55,10 @@
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
             <status value="final"></status>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad77"></value>
+            </identifier>
             <code>
                <coding>
                   <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
@@ -68,6 +77,10 @@
             <subject>
                <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
             </subject>
+            <issued value="2019-04-03T12:00:00+00:00"></issued>
+		   <performer>
+			  <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+		   </performer>
             <context>
                <reference value="Encounter/Encounter1"></reference>
             </context>
@@ -89,6 +102,10 @@
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
             <status value="final"></status>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad78"></value>
+            </identifier>
             <code>
                <coding>
                   <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
@@ -107,6 +124,10 @@
             <subject>
                <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
             </subject>
+            <issued value="2019-04-03T12:00:00+00:00"></issued>
+		   <performer>
+			  <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+		   </performer>
             <context>
                <reference value="Encounter/Encounter1"></reference>
             </context>
@@ -127,6 +148,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad79"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -143,9 +168,13 @@
                   <display value="Respiratory rate"></display>
                </coding>
             </code>
+            <issued value="2019-04-03T12:00:00+00:00"></issued>
             <subject>
                <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
             </subject>
+		   <performer>
+			  <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+		   </performer>
             <context>
                <reference value="Encounter/Encounter1"></reference>
             </context>

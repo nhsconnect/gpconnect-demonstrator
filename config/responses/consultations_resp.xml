@@ -31,6 +31,16 @@
             </orderedBy>
             <entry>
                <item>
+                  <reference value="Condition/Problem-A-Anxiety-With-Depression"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Condition/Problem-B-Swollen-Legs"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
                   <reference value="Condition/Problem-D-URTI"></reference>
                </item>
             </entry>

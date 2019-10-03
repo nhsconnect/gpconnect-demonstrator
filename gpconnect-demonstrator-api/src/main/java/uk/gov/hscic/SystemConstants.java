@@ -56,10 +56,14 @@ public final class SystemConstants {
     // 1.2.2
     public static final String MEDICATION_SEARCH_FROM_DATE = "medicationSearchFromDate";
 
+    // ListResource Titles
     public static final String MEDICATION_LIST = "Medications and medical devices";
-    public static final String IMMUNIZATIONS_LIST = "Immunisations";
+    public static final String IMMUNIZATIONS_LIST = "Immunisations"; // NB the s not z
     public static final String UNCATEGORISED_LIST = "Miscellaneous record";
-    
+    public static final String PROBLEMS_LIST = "Problems";
+    public static final String CONSULTATION_LIST = "Consultation";
+
+    // Parameter Parts
     public static final String UNCATEGORISED_DATA_SEARCH_PERIOD = "uncategorisedDataSearchPeriod";
     public static final String CONSULTATION_SEARCH_PERIOD = "consultationSearchPeriod";
     public static final String NUMBER_OF_MOST_RECENT = "numberOfMostRecent";

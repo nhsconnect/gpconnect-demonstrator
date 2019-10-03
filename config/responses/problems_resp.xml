@@ -304,7 +304,7 @@
                   <reference value="Observation/Consultation3-Topic2-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
-            <clinicalStatus value="active"></clinicalStatus>
+            <clinicalStatus value="inactive"></clinicalStatus>
             <code>
                <coding>
                   <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
@@ -399,7 +399,7 @@
                   <reference value="Observation/Consultation2-Topic2-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
-            <clinicalStatus value="active"></clinicalStatus>
+            <clinicalStatus value="inactive"></clinicalStatus>
             <code>
                <coding>
                   <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">

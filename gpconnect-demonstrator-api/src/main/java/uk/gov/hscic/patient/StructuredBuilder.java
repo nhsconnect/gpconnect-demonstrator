@@ -238,7 +238,9 @@ public class StructuredBuilder {
             for (ResourceType rtKey : resourceTypes.keySet()) {
                 for (String key : resourceTypes.get(rtKey).keySet()) {
                     if (refCounts.get(key) == null) {
-                        System.err.println("Warning Unreferenced key " + key);
+                        if (!key.equals(PROBLEMS_LIST) && !key.equals(CONSULTATION_LIST)) {
+                            System.err.println("Warning Unreferenced key: " + key);
+                        }
                     }
                 }
             }
@@ -246,8 +248,9 @@ public class StructuredBuilder {
     } // walkRoot
 
     /**
-     * Problems
-     * increment the ref counts for resources matching the search criteria to the response
+     * Problems increment the ref counts for resources matching the search
+     * criteria to the response
+     *
      * @param resourceTypes
      * @param parms
      * @param structuredBundle
@@ -291,8 +294,9 @@ public class StructuredBuilder {
     } // processProblemsParm
 
     /**
-     * Consultations
-     * increment the ref counts for resources matching the search criteria to the response
+     * Consultations increment the ref counts for resources matching the search
+     * criteria to the response
+     *
      * @param resourceTypes
      * @param parms
      * @param structuredBundle
@@ -408,37 +412,41 @@ public class StructuredBuilder {
      * @param indent indent level to use for tree
      */
     private void walkResource(Bundle structuredBundle, HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, String referenceStr, int indent) throws FHIRException {
-        ResourceType rt = ResourceType.valueOf(referenceStr.replaceFirst("^(.*)/.*$", "$1"));
-        DomainResource resource = (DomainResource) resourceTypes.get(rt).get(referenceStr);
+        if (referenceStr.matches("^.*/.*$")) {
+            ResourceType rt = ResourceType.valueOf(referenceStr.replaceFirst("^(.*)/.*$", "$1"));
+            DomainResource resource = (DomainResource) resourceTypes.get(rt).get(referenceStr);
 
-        if (resource instanceof ListResource) {
-            ListResource list = (ListResource) resource;
-            for (ListResource.ListEntryComponent entry : list.getEntry()) {
-                if (entry.getItem() instanceof Reference) {
-                    Reference reference = (Reference) entry.getItem();
-                    if (reference.getReference() != null) {
+            if (resource instanceof ListResource) {
+                ListResource list = (ListResource) resource;
+                for (ListResource.ListEntryComponent entry : list.getEntry()) {
+                    if (entry.getItem() instanceof Reference) {
+                        Reference reference = (Reference) entry.getItem();
+                        if (reference.getReference() != null) {
+                            countReferences(reference, indent, structuredBundle, resourceTypes);
+                        }
+                    }
+                }
+            } else if (resource instanceof MedicationRequest) {
+                MedicationRequest mr = (MedicationRequest) resource;
+                Reference reference = mr.getMedicationReference();
+                if (reference != null) {
+                    countReferences(reference, indent, structuredBundle, resourceTypes);
+                }
+                reference = mr.getRecorder();
+                if (reference != null) {
+                    countReferences(reference, indent, structuredBundle, resourceTypes);
+                }
+            } else if (resource instanceof DomainResource) {
+                DomainResource domainResource = (DomainResource) resource;
+                for (Extension extension : domainResource.getExtension()) {
+                    if (extension.getValue() instanceof Reference) {
+                        Reference reference = (Reference) extension.getValue();
                         countReferences(reference, indent, structuredBundle, resourceTypes);
                     }
                 }
             }
-        } else if (resource instanceof MedicationRequest) {
-            MedicationRequest mr = (MedicationRequest) resource;
-            Reference reference = mr.getMedicationReference();
-            if (reference != null) {
-                countReferences(reference, indent, structuredBundle, resourceTypes);
-            }
-            reference = mr.getRecorder();
-            if (reference != null) {
-                countReferences(reference, indent, structuredBundle, resourceTypes);
-            }
-        } else if (resource instanceof DomainResource) {
-            DomainResource domainResource = (DomainResource) resource;
-            for (Extension extension : domainResource.getExtension()) {
-                if (extension.getValue() instanceof Reference) {
-                    Reference reference = (Reference) extension.getValue();
-                    countReferences(reference, indent, structuredBundle, resourceTypes);
-                }
-            }
+        } else {
+            System.err.println("Warning Unexpected reference format "+referenceStr);
         }
     }
 

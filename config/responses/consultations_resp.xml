@@ -44,6 +44,11 @@
                   <reference value="Condition/Problem-D-URTI"></reference>
                </item>
             </entry>
+            <entry>
+               <item>
+                  <reference value="Condition/Problem-E-Post-viral-cough"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
@@ -54,9 +59,18 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
             </meta>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="major"></code>
+                     <display value="Major"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ActualProblem-1">
                <valueReference>
-                  <reference value="List/Consultation1-Topic1"></reference>
+                  <reference value="Observation/Consultation1-Topic1-Category-History-Observation-2"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
@@ -91,22 +105,12 @@
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1-Topic1-Category-Plan-Observation-1"></reference>
+                  <reference value="Referral items are not supported by the provider system"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic1-Category-Plan-Observation-2"></reference>
-               </valueReference>
-            </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
-                  <reference value="Encounter/Encounter1"></reference>
-               </valueReference>
-            </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
-                  <reference value="List/Consultation2-Topic1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
@@ -141,16 +145,6 @@
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Encounter/Encounter3"></reference>
-               </valueReference>
-            </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
-                  <reference value="List/Consultation3-Topic1"></reference>
-               </valueReference>
-            </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
                   <reference value="Observation/Consultation3-Topic1-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
@@ -179,7 +173,18 @@
                   <reference value="Observation/Consultation3-Topic1-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="D06C0517-4D1C-11E3-A2DD-010000000161"></value>
+            </identifier>
             <clinicalStatus value="active"></clinicalStatus>
+            <category>
+               <coding>
+                  <system value="http://hl7.org/fhir/condition-category"></system>
+                  <code value="problem-list-item"></code>
+                  <display value="Problem List Item"></display>
+               </coding>
+            </category>
             <code>
                <coding>
                   <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
@@ -204,6 +209,9 @@
             </context>
             <onsetDateTime value="2019-03-28T10:30:00+00:00"></onsetDateTime>
             <assertedDate value="2019-03-28T10:30:00+00:00"></assertedDate>
+            <asserter>
+               <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+            </asserter>
          </Condition>
       </resource>
    </entry>
@@ -214,9 +222,18 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
             </meta>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="major"></code>
+                     <display value="Major"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ActualProblem-1">
                <valueReference>
-                  <reference value="List/Consultation1-Topic2"></reference>
+                  <reference value="Observation/Consultation1-Topic2-Category-History-Observation-2"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
@@ -261,12 +278,7 @@
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Encounter/Encounter3"></reference>
-               </valueReference>
-            </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
-                  <reference value="List/Consultation3-Topic2"></reference>
+                  <reference value="Test Request items are not supported by the provider system"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
@@ -304,7 +316,18 @@
                   <reference value="Observation/Consultation3-Topic2-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="62658072-28af-47e5-b81c-bc0521d5c41c"></value>
+            </identifier>
             <clinicalStatus value="active"></clinicalStatus>
+            <category>
+               <coding>
+                  <system value="http://hl7.org/fhir/condition-category"></system>
+                  <code value="problem-list-item"></code>
+                  <display value="Problem List Item"></display>
+               </coding>
+            </category>
             <code>
                <coding>
                   <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
@@ -329,6 +352,12 @@
             </context>
             <onsetDateTime value="2019-03-28T10:30:00+00:00"></onsetDateTime>
             <assertedDate value="2019-03-28T10:30:00+00:00"></assertedDate>
+            <asserter>
+               <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+            </asserter>
+            <note>
+               <text value="due to obesity and poor mobility and previous DVT"></text>
+            </note>
          </Condition>
       </resource>
    </entry>
@@ -339,9 +368,28 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
             </meta>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
+               <extension url="type">
+                  <valueCode value="Parent"></valueCode>
+               </extension>
+               <extension url="target">
                <valueReference>
-                  <reference value="List/Consultation1-Topic4"></reference>
+                     <reference value="Condition/Problem-E-Post-viral-cough"></reference>
+                  </valueReference>
+               </extension>
+            </extension>
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="major"></code>
+                     <display value="Major"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ActualProblem-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1-Topic4-Category-History-Observation-5"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
@@ -366,27 +414,12 @@
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation1-Topic4-Category-Plan-Observation-1"></reference>
-               </valueReference>
-            </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
                   <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Order-1"></reference>
-               </valueReference>
-            </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
-                  <reference value="Encounter/Encounter2"></reference>
-               </valueReference>
-            </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
-                  <reference value="List/Consultation2-Topic2"></reference>
                </valueReference>
             </extension>
             <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
@@ -399,14 +432,25 @@
                   <reference value="Observation/Consultation2-Topic2-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="D03A94D9-4D1C-11E3-A2DD-010000000161"></value>
+            </identifier>
             <clinicalStatus value="active"></clinicalStatus>
+            <category>
+               <coding>
+                  <system value="http://hl7.org/fhir/condition-category"></system>
+                  <code value="problem-list-item"></code>
+                  <display value="Problem List Item"></display>
+               </coding>
+            </category>
             <code>
                <coding>
                   <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
                      <extension url="DescriptionID">
                         <valueId value="1231298013"></valueId>
                      </extension>
-                     <extension url="descriptionDisplay">
+                     <extension url="DescriptionDisplay">
                         <valueString value="Upper respiratory tract infection"></valueString>
                      </extension>
                   </extension>
@@ -423,6 +467,83 @@
             </context>
             <onsetDateTime value="2019-03-28T10:30:00+00:00"></onsetDateTime>
             <assertedDate value="2019-03-28T10:30:00+00:00"></assertedDate>
+            <asserter>
+               <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+            </asserter>
+         </Condition>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Condition xmlns="http://hl7.org/fhir">
+            <id value="Problem-E-Post-viral-cough"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
+            </meta>
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
+               <extension url="type">
+                  <valueCode value="Child"></valueCode>
+               </extension>
+               <extension url="target">
+                  <valueReference>
+                     <reference value="Condition/Problem-D-URTI"></reference>
+                  </valueReference>
+               </extension>
+            </extension>
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <code value="major"></code>
+                     <display value="Major"></display>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ActualProblem-1">
+               <valueReference>
+                  <reference value="Observation/Consultation1-Topic5-Category-History-Observation-4"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation2-Topic1-Category-History-Observation-1"></reference>
+               </valueReference>
+            </extension>
+            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+               <valueReference>
+                  <reference value="Observation/Consultation2-Topic1-Category-Plan-Observation-2"></reference>
+               </valueReference>
+            </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="CFE8F260-4D1C-11E3-9E6B-010000001205"></value>
+            </identifier>
+            <clinicalStatus value="active"></clinicalStatus>
+            <category>
+               <coding>
+                  <system value="http://hl7.org/fhir/condition-category"></system>
+                  <code value="problem-list-item"></code>
+                  <display value="Problem List Item"></display>
+               </coding>
+            </category>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="445241004"></code>
+                  <display value="Postviral cough"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter2"></reference>
+            </context>
+            <onsetDateTime value="2019-03-28T10:30:00+00:00"></onsetDateTime>
+            <assertedDate value="2019-03-28T10:30:00+00:00"></assertedDate>
+            <asserter>
+               <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+            </asserter>
          </Condition>
       </resource>
    </entry>
@@ -477,6 +598,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Encounter-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="b6dfd800-7e80-41ba-9f91-0a5d981271f2"></value>
+            </identifier>
             <status value="finished"></status>
             <type>
                <text value="Surgery Consultation"></text>
@@ -509,7 +634,7 @@
                </individual>
             </participant>
             <period>
-               <start value="2017-03-28T10:30:00+00:00"></start>
+               <start value="2019-03-28T10:30:00+00:00"></start>
                <end value="2019-03-28T10:38:00+00:00"></end>
             </period>
             <length>
@@ -587,7 +712,7 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
                <valueReference>
                   <reference value="Condition/Problem-A-Anxiety-With-Depression"></reference>
                </valueReference>
@@ -673,6 +798,11 @@
             <entry>
                <item>
                   <reference value="Observation/Consultation1-Topic1-Category-History-Observation-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic1-Category-History-Observation-2"></reference>
                </item>
             </entry>
          </List>
@@ -804,7 +934,7 @@
             </entry>
             <entry>
                <item>
-                  <reference value="Observation/Consultation1-Topic1-Category-Plan-Observation-1"></reference>
+                  <reference value="Referral items are not supported by the provider system"></reference>
                </item>
             </entry>
             <entry>
@@ -822,7 +952,7 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
                <valueReference>
                   <reference value="Condition/Problem-B-Swollen-Legs"></reference>
                </valueReference>
@@ -903,6 +1033,11 @@
             <entry>
                <item>
                   <reference value="Observation/Consultation1-Topic2-Category-History-Observation-1"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic2-Category-History-Observation-2"></reference>
                </item>
             </entry>
          </List>
@@ -1005,7 +1140,7 @@
             </entry>
             <entry>
                <item>
-                  <display value="Referral items are not supported by the provider system"></display>
+                  <display value="Test request items are not supported by the provider system"></display>
                </item>
             </entry>
             <entry>
@@ -1076,6 +1211,11 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
+               <valueReference>
+                  <reference value="Condition/Problem-D-URTI"></reference>
+               </valueReference>
+            </extension>
             <status value="current"></status>
             <mode value="snapshot"></mode>
             <title value="Upper respiratory tract infection"></title>
@@ -1120,7 +1260,7 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
                <valueReference>
                   <reference value="Condition/Problem-D-URTI"></reference>
                </valueReference>
@@ -1169,6 +1309,11 @@
                   <reference value="Observation/Consultation1-Topic4-Category-History-Observation-4"></reference>
                </item>
             </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic4-Category-History-Observation-5"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
@@ -1203,11 +1348,6 @@
                   <display value="Sorted by System"></display>
                </coding>
             </orderedBy>
-            <entry>
-               <item>
-                  <reference value="Observation/Consultation1-Topic4-Category-Plan-Observation-1"></reference>
-               </item>
-            </entry>
             <entry>
                <item>
                   <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Order-1"></reference>
@@ -1316,6 +1456,11 @@
                   <reference value="Observation/Consultation1-Topic5-Category-History-Observation-3"></reference>
                </item>
             </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation1-Topic5-Category-History-Observation-4"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
@@ -1401,7 +1546,7 @@
             </entry>
             <entry>
                <item>
-                  <reference value="Observation/Consultation1-Topic5-Category-Plan-Observation-2"></reference>
+                  <reference value="Referral items are not supported by the provider system"></reference>
                </item>
             </entry>
          </List>
@@ -1414,6 +1559,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="2eb8c7d2-db86-4381-a1cb-f98081bdd322"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -1429,7 +1578,53 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
-            <comment value="Come for review. Overall doing better. Mood still low but improvig. More good days than bad. Energy levels ok. Motivation improving. Support from neighbour visits daily"></comment>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
+            <comment value="Come for review. Overall doing better. Mood still low but improving. More good days than bad. Energy levels ok. Motivation improving. Support from neighbour visits daily"></comment>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1-Topic1-Category-History-Observation-2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="00d91fe6-d6c7-48c9-a3df-2576a3028e9e"></value>
+            </identifier>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="346979010"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Mixed anxiety and depressive disorder"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="231504006"></code>
+                  <display value="Mixed anxiety and depressive disorder"></display>
+               </coding>
+               <text value="Anxiety with depression"></text>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
          </Observation>
       </resource>
    </entry>
@@ -1440,6 +1635,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="9057767b-bec8-4693-9966-aeb7180273de"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -1455,6 +1654,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
             <comment value="MSE euthymic. Not anxious. No DSH/hallucinations/abnormal thoughts"></comment>
          </Observation>
       </resource>
@@ -1466,6 +1669,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="7b3241ab-3bc9-468a-b859-e9c1e83cb733"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -1489,6 +1696,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
          </Observation>
       </resource>
    </entry>
@@ -1499,6 +1710,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="f85ad281-0d1a-44e1-995f-5fd91806adb9"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -1522,6 +1737,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
             <valueQuantity>
                <value value="0"></value>
                <unit value="units/week"></unit>
@@ -1532,36 +1751,14 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1-Topic1-Category-Plan-Observation-1"></id>
-            <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
-            </meta>
-            <status value="final"></status>
-            <code>
-               <coding>
-                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
-                     <extension url="DescriptionID">
-                        <valueId value="451782016"></valueId>
-                     </extension>
-                     <extension url="descriptionDisplay">
-                        <valueString value="Referral to counsellor"></valueString>
-                     </extension>
-                  </extension>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="308448008"></code>
-                  <display value="Referral to counselor"></display>
-               </coding>
-            </code>
-         </Observation>
-      </resource>
-   </entry>
-   <entry>
-      <resource>
-         <Observation xmlns="http://hl7.org/fhir">
             <id value="Consultation1-Topic1-Category-Plan-Observation-2"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="da70bdad-4199-470a-a2a3-e2a874d51a96"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -1578,6 +1775,11 @@
                   <display value="Walking practice (regime/therapy)"></display>
                </coding>
             </code>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
             <comment value="Advised re local walking group"></comment>
          </Observation>
       </resource>
@@ -1598,6 +1800,10 @@
                   </coding>
                </valueCodeableConcept>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="a6ffc811-427a-445d-a14c-f5c4eaeea45d"></value>
+            </identifier>
             <status value="completed"></status>
             <intent value="plan"></intent>
             <medicationReference>
@@ -1620,6 +1826,7 @@
             <dispenseRequest>
                <validityPeriod>
                   <start value="2019-03-28"></start>
+                  <end value="2019-04-25"></end>
                </validityPeriod>
                <quantity>
                   <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
@@ -1685,7 +1892,10 @@
             <medicationReference>
                <reference value="Medication/c260b451-9821-42de-81f9-ba86dcea2c32"></reference>
             </medicationReference>
-            <effectiveDateTime value="2019-03-28"></effectiveDateTime>
+            <effectivePeriod>
+               <start value="2019-03-28"></start>
+               <end value="2019-04-25"></end>
+            </effectivePeriod>
             <dateAsserted value="2019-03-28"></dateAsserted>
             <subject>
                <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
@@ -1717,6 +1927,10 @@
                   </coding>
                </valueCodeableConcept>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="a8e2e70b-deae-4095-a357-948f20a2c24f"></value>
+            </identifier>
             <basedOn>
                <reference value="MedicationRequest/MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Plan"></reference>
             </basedOn>
@@ -1742,6 +1956,7 @@
             <dispenseRequest>
                <validityPeriod>
                   <start value="2019-03-28"></start>
+                  <end value="2019-04-25"></end>
                </validityPeriod>
                <quantity>
                   <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
@@ -1766,6 +1981,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="315873a1-90a3-4d67-bb77-f524597bb105"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -1781,7 +2000,52 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
             <comment value="2 months - bilateral swollen lower legs"></comment>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1-Topic2-Category-History-Observation-2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="6a655e44-3a0c-4f54-ae6d-240ede80f38c"></value>
+            </identifier>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="2729461000000110"></valueId>
+                     </extension>
+                     <extension url="descriptionDisplay">
+                        <valueString value="Swollen leg"></valueString>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="449614009"></code>
+                  <display value="Swelling of lower limb"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
          </Observation>
       </resource>
    </entry>
@@ -1792,6 +2056,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="66b3ba3a-1b48-4862-8485-91935f83e379"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -1815,6 +2083,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
             <valueQuantity>
                <value value="36.7"></value>
                <unit value="C"></unit>
@@ -1832,6 +2104,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="0a297909-f2a2-4018-8ae6-28cab9e1cfa1"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -1855,6 +2131,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
             <valueQuantity>
                <value value="96"></value>
                <unit value="%"></unit>
@@ -1871,6 +2151,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="382e30ce-94dd-4c3b-b2b6-b383aa2ad871"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -1894,6 +2178,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
             <valueQuantity>
                <value value="16"></value>
                <unit value="breaths per minute"></unit>
@@ -1911,6 +2199,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="537a8de2-19ce-4f47-8db3-2c45e50f4b4e"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -1934,6 +2226,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
             <valueQuantity>
                <value value="70"></value>
                <unit value="per minute"></unit>
@@ -1950,6 +2246,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="04839d1d-1292-40e6-a0df-6217b447d325"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -1965,6 +2265,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
             <comment value="Swelling lower legs bilaterally. Mild pitting oedema. Heart sounds normal. No distress. Abdomen normal. No cervical lymphadenopathy. Throat normal. Ears normal"></comment>
          </Observation>
       </resource>
@@ -1976,6 +2280,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="9a86a734-d738-4681-a008-d8881db2493d"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -1991,6 +2299,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
             <comment value="Advice to mobilise more. Review with results."></comment>
          </Observation>
       </resource>
@@ -2018,7 +2330,17 @@
                   <display value="Electrocardiographic monitoring"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/3ddadd9a-e64a-4b6c-bdec-45ef1fcb89e2"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
          </Observation>
       </resource>
    </entry>
@@ -2029,6 +2351,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="56d714ad-3fd3-4281-b1bb-c165352354cd"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -2045,7 +2371,17 @@
                   <display value="Blood pressure recorded by patient at home"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/3ddadd9a-e64a-4b6c-bdec-45ef1fcb89e2"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
+            </performer>
             <comment value="average 150/90 last six weeks"></comment>
          </Observation>
       </resource>
@@ -2057,6 +2393,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="ae522c81-1b93-4d45-9c57-19249031350f"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -2078,7 +2418,8 @@
             <context>
                <reference value="Encounter/Encounter1"></reference>
             </context>
-            <effectiveDateTime value="1989-04-06T10:14:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
             <performer>
                <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
             </performer>
@@ -2127,6 +2468,10 @@
                   </coding>
                </valueCodeableConcept>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="059015db-0c0d-4b12-b3fa-300abdc5e8a3"></value>
+            </identifier>
             <status value="completed"></status>
             <intent value="plan"></intent>
             <medicationReference>
@@ -2149,6 +2494,7 @@
             <dispenseRequest>
                <validityPeriod>
                   <start value="2019-03-28"></start>
+                  <end value="2019-04-25"></end>
                </validityPeriod>
                <quantity>
                   <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
@@ -2214,7 +2560,10 @@
             <medicationReference>
                <reference value="Medication/d260b451-9821-42de-81f9-ba86dcea2c32"></reference>
             </medicationReference>
-            <effectiveDateTime value="2019-03-28"></effectiveDateTime>
+            <effectivePeriod>
+               <start value="2019-03-28"></start>
+               <end value="2019-04-25"></end>
+            </effectivePeriod>
             <dateAsserted value="2019-03-28"></dateAsserted>
             <subject>
                <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
@@ -2246,6 +2595,10 @@
                   </coding>
                </valueCodeableConcept>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="c19496d1-83e2-4438-936a-c94da1ac1bfb"></value>
+            </identifier>
             <basedOn>
                <reference value="MedicationRequest/Consultation1-Topic3-flat-Medication-Plan-1"></reference>
             </basedOn>
@@ -2271,6 +2624,7 @@
             <dispenseRequest>
                <validityPeriod>
                   <start value="2019-03-28"></start>
+                  <end value="2019-04-25"></end>
                </validityPeriod>
                <quantity>
                   <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
@@ -2295,6 +2649,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="055db718-1a8e-4caf-9224-385d87e67ab9"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -2310,6 +2668,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <comment value="2 weeks cough - white sputum - no blood, 1 week nose running, 5 days sore throat, No shortness of breath"></comment>
          </Observation>
       </resource>
@@ -2321,6 +2683,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="b5a1152c-f915-4d11-a455-d650b38c9706"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -2337,6 +2703,17 @@
                   <display value="Cough"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
          </Observation>
       </resource>
    </entry>
@@ -2347,22 +2724,37 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="1809bdf0-1149-454e-8376-f5d809c922b3"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
                   <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
                      <extension url="DescriptionID">
-                        <valueId value="397999013"></valueId>
+                        <valueId value="136465014"></valueId>
                      </extension>
                      <extension url="descriptionDisplay">
-                        <valueString value="Nose running"></valueString>
+                        <valueString value="Acute coryza"></valueString>
                      </extension>
                   </extension>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="267101005"></code>
-                  <display value="Nasal discharge present"></display>
+                  <code value="82272006"></code>
+                  <display value="Common cold"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
          </Observation>
       </resource>
    </entry>
@@ -2373,6 +2765,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="1eaaab06-41b5-4333-9028-c1d90c9e9133"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -2389,22 +2785,45 @@
                   <display value="Pain in throat"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
          </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1-Topic4-Category-Plan-Observation-1"></id>
+            <id value="Consultation1-Topic4-Category-History-Observation-5"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="04168671-c28b-4096-ac5c-be703605ee9e"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
+                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="1231298013"></valueId>
+                     </extension>
+                     <extension url="DescriptionDisplay">
+                        <valueString value="Upper respiratory tract infection"></valueString>
+                     </extension>
+                  </extension>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="37331000000100"></code>
-                  <display value="Comment note"></display>
+                  <code value="54150009"></code>
+                  <display value="Upper respiratory infection"></display>
                </coding>
             </code>
             <subject>
@@ -2414,7 +2833,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
-            <comment value="Patient to take Amlodipine 10mg tablets and monitor blood"></comment>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
          </Observation>
       </resource>
    </entry>
@@ -2434,6 +2856,10 @@
                   </coding>
                </valueCodeableConcept>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="e227f7cc-dfc2-454a-8e28-0a1c71ef126c"></value>
+            </identifier>
             <status value="completed"></status>
             <intent value="plan"></intent>
             <medicationReference>
@@ -2456,6 +2882,7 @@
             <dispenseRequest>
                <validityPeriod>
                   <start value="2019-03-28"></start>
+                  <end value="2019-04-25"></end>
                </validityPeriod>
                <quantity>
                   <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
@@ -2498,7 +2925,7 @@
    <entry>
       <resource>
          <MedicationStatement xmlns="http://hl7.org/fhir">
-            <id value="7bff710a-0bdc-4c9b-b98b-40db0a107edc"></id>
+            <id value="d806d0aa-a2c7-4a4b-9121-e80e04c20693"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationStatement-1"></profile>
             </meta>
@@ -2521,7 +2948,10 @@
             <medicationReference>
                <reference value="Medication/a260b451-9821-42de-81f9-ba86dcea2c32"></reference>
             </medicationReference>
-            <effectiveDateTime value="2019-03-28"></effectiveDateTime>
+            <effectivePeriod>
+               <start value="2019-03-28"></start>
+               <end value="2019-04-25"></end>
+            </effectivePeriod>
             <dateAsserted value="2019-03-28"></dateAsserted>
             <subject>
                <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
@@ -2553,6 +2983,10 @@
                   </coding>
                </valueCodeableConcept>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="1afdd010-e1c6-470a-a8c6-450523e47c6d"></value>
+            </identifier>
             <basedOn>
                <reference value="Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
             </basedOn>
@@ -2578,6 +3012,7 @@
             <dispenseRequest>
                <validityPeriod>
                   <start value="2019-03-28"></start>
+                  <end value="2019-04-25"></end>
                </validityPeriod>
                <quantity>
                   <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
@@ -2602,6 +3037,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="0568ea1c-15ed-47f0-99c3-d3d04c48ab13"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -2618,6 +3057,17 @@
                   <display value="Knee pain"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
          </Observation>
       </resource>
    </entry>
@@ -2628,6 +3078,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="3fc884e6-a327-4076-b4c5-6b02192c5160"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -2643,6 +3097,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <comment value="Similar problem 3 months ago - settled after 2 weeks"></comment>
          </Observation>
       </resource>
@@ -2654,6 +3112,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="a2693876-dd02-4421-8575-6bd8e8e46119"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -2669,7 +3131,44 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <comment value="No locking.No effusion. No giving way"></comment>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation1-Topic5-Category-History-Observation-4"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="a2693876-dd02-4421-8575-6bd8e8e46119"></value>
+            </identifier>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="445241004"></code>
+                  <display value="Postviral cough"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
          </Observation>
       </resource>
    </entry>
@@ -2680,6 +3179,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="b5a66da1-fb5b-4c39-976f-be2c21340eb7"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -2695,6 +3198,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <comment value="No effusion. Full range of movement. Ligaments normal"></comment>
          </Observation>
       </resource>
@@ -2706,6 +3213,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="9163a07a-bcb5-402d-8124-d8cc66b87be8"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -2722,6 +3233,17 @@
                   <display value="Tenderness on medial joint lne of knee"></display>
                </coding>
             </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter1"></reference>
+            </context>
+            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
          </Observation>
       </resource>
    </entry>
@@ -2732,32 +3254,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
-            <status value="final"></status>
-            <code>
-               <coding>
-                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
-                     <extension url="DescriptionID">
-                        <valueId value="451781011"></valueId>
-                     </extension>
-                     <extension url="descriptionDisplay">
-                        <valueString value="Referral to physiopherapist"></valueString>
-                     </extension>
-                  </extension>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="308447003"></code>
-                  <display value="Referral to physiopherapist"></display>
-               </coding>
-            </code>
-         </Observation>
-      </resource>
-   </entry>
-   <entry>
-      <resource>
-         <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1-Topic5-Category-Plan-Observation-2"></id>
-            <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
-            </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="656d0ab8-6be6-4119-a538-956541e5949c"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -2773,6 +3273,10 @@
                <reference value="Encounter/Encounter1"></reference>
             </context>
             <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-03-28T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <comment value="Analgesia advice, try knee support daytime"></comment>
          </Observation>
       </resource>
@@ -2784,6 +3288,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Encounter-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="2f8f5c13-2c74-4d25-ad94-631be9e59670"></value>
+            </identifier>
             <status value="finished"></status>
             <type>
                <text value="Surgery Consultation"></text>
@@ -2807,7 +3315,7 @@
                <type>
                   <coding>
                      <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
-                     <code value="AUT"></code>
+                     <code value="AUTH"></code>
                      <display value="Author"></display>
                   </coding>
                </type>
@@ -2816,8 +3324,8 @@
                </individual>
             </participant>
             <period>
-               <start value="2018-03-28T10:30:00+00:00"></start>
-               <end value="2019-03-28T10:38:00"></end>
+               <start value="2019-05-01T10:30:00+00:00"></start>
+               <end value="2019-05-01T10:38:00"></end>
             </period>
             <length>
                <value value="8"></value>
@@ -2851,7 +3359,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-05-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -2879,7 +3387,7 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
                <valueReference>
                   <reference value="Condition/Problem-A-Anxiety-With-Depression"></reference>
                </valueReference>
@@ -2900,7 +3408,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-05-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -2938,9 +3446,9 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
                <valueReference>
-                  <reference value="Condition/Problem-D-URTI"></reference>
+                  <reference value="Condition/Problem-E-Post-viral-cough"></reference>
                </valueReference>
             </extension>
             <status value="current"></status>
@@ -2959,7 +3467,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-05-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3003,7 +3511,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-05-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3042,7 +3550,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-05-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3081,7 +3589,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-05-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3120,7 +3628,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-05-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3169,7 +3677,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-05-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3208,7 +3716,7 @@
             <encounter>
                <reference value="Encounter/Encounter2"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-05-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3231,6 +3739,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="3352c57a-a28c-4995-9826-3a8c5dbcae90"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -3245,8 +3757,12 @@
             <context>
                <reference value="Encounter/Encounter2"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
-            <comment value="Come for review. Overall doing better. Mood improving. Still get bad days. Energy levels ok. Motivation improving. Started to go walking twice a week. First counselor appointment in two weeks. Patient has been lightly drinking."></comment>
+            <effectiveDateTime value="2019-05-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-05-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
+            <comment value="Overall doing better. Mood improving. Still gets bad days. Energy levels ok. Motivation improving. Started to go walking twice a week. First counsellor appointment due in two weeks."></comment>
          </Observation>
       </resource>
    </entry>
@@ -3257,6 +3773,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="1f52c366-9638-4042-8863-a1c9c357e8b4"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -3271,8 +3791,12 @@
             <context>
                <reference value="Encounter/Encounter2"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
-            <comment value="MSE euthymic. Not anxious. No DSH/hallucinations/abnormal thoughts"></comment>
+            <effectiveDateTime value="2019-05-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-05-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
+            <comment value="MSE looks brighter. Not anxious. No DSH/hallucinations/abnormal thoughts"></comment>
          </Observation>
       </resource>
    </entry>
@@ -3283,6 +3807,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="1c388cca-8d1d-40d3-8049-bef119eeda27"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -3305,7 +3833,11 @@
             <context>
                <reference value="Encounter/Encounter2"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-05-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-05-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <valueQuantity>
                <value value="2"></value>
                <unit value="units/week"></unit>
@@ -3329,6 +3861,10 @@
                   </coding>
                </valueCodeableConcept>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="19e81871-5cad-4a0e-a387-6121b2f2bafd"></value>
+            </identifier>
             <status value="completed"></status>
             <intent value="plan"></intent>
             <medicationReference>
@@ -3337,12 +3873,12 @@
             <subject>
                <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
             </subject>
-            <authoredOn value="2019-03-28"></authoredOn>
+            <authoredOn value="2019-05-01"></authoredOn>
             <recorder>
                <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
             </recorder>
             <note>
-               <text value="Pharmacy Notes: NOTES FOR PHARMACY"></text>
+               <text value="Pharmacy Notes: NOTES FOR PHARMACY, Patient Notes: Continue citalopram 20mg od. Encourage to take every day"></text>
             </note>
             <dosageInstruction>
                <text value="TAKE ONE DAILY"></text>
@@ -3350,7 +3886,8 @@
             </dosageInstruction>
             <dispenseRequest>
                <validityPeriod>
-                  <start value="2019-03-28"></start>
+                  <start value="2019-05-01"></start>
+                  <end value="2019-05-29"></end>
                </validityPeriod>
                <quantity>
                   <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
@@ -3393,12 +3930,12 @@
    <entry>
       <resource>
          <MedicationStatement xmlns="http://hl7.org/fhir">
-            <id value="6bff710a-0bdc-4c9b-b98b-40db0a107edc"></id>
+            <id value="5a437365-7aa0-4c4f-b79e-75879bc8e14e"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationStatement-1"></profile>
             </meta>
             <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationStatementLastIssueDate-1">
-               <valueDateTime value="2019-03-28"></valueDateTime>
+               <valueDateTime value="2019-05-01"></valueDateTime>
             </extension>
             <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescribingAgency-1">
                <valueCodeableConcept>
@@ -3416,8 +3953,11 @@
             <medicationReference>
                <reference value="Medication/b260b451-9821-42de-81f9-ba86dcea2c32"></reference>
             </medicationReference>
-            <effectiveDateTime value="2019-03-28"></effectiveDateTime>
-            <dateAsserted value="2019-03-28"></dateAsserted>
+            <effectivePeriod>
+               <start value="2019-05-01"></start>
+               <end value="2019-05-29"></end>
+            </effectivePeriod>
+            <dateAsserted value="2019-05-01"></dateAsserted>
             <subject>
                <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
             </subject>
@@ -3448,6 +3988,10 @@
                   </coding>
                </valueCodeableConcept>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="3bd272e2-3002-4eed-9730-325eb61665a5"></value>
+            </identifier>
             <basedOn>
                <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Plan"></reference>
             </basedOn>
@@ -3459,7 +4003,7 @@
             <subject>
                <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
             </subject>
-            <authoredOn value="2019-03-28"></authoredOn>
+            <authoredOn value="2019-05-01"></authoredOn>
             <recorder>
                <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
             </recorder>
@@ -3472,7 +4016,8 @@
             </dosageInstruction>
             <dispenseRequest>
                <validityPeriod>
-                  <start value="2019-03-28"></start>
+                  <start value="2019-05-01"></start>
+                  <end value="2019-05-29"></end>
                </validityPeriod>
                <quantity>
                   <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
@@ -3497,6 +4042,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="0a376ee5-a69f-4056-9b46-dea04cda92ad"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -3511,8 +4060,12 @@
             <context>
                <reference value="Encounter/Encounter2"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
-            <comment value="Continue with current actions and monitor progress"></comment>
+            <effectiveDateTime value="2019-05-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-05-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
+            <comment value="Review in 4 weeks or earlier if problems"></comment>
          </Observation>
       </resource>
    </entry>
@@ -3523,6 +4076,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="1490bbdc-9c18-4631-afa5-615253b9b963"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -3537,7 +4094,11 @@
             <context>
                <reference value="Encounter/Encounter2"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-05-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-05-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <comment value="Patient reports the condition has cleared but develops cough when lies down to sleep."></comment>
          </Observation>
       </resource>
@@ -3549,6 +4110,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="2b45be94-e119-484e-9de6-66685145742e"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -3563,7 +4128,11 @@
             <context>
                <reference value="Encounter/Encounter2"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-05-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-05-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <comment value="Recommend that before sleep, patient has a hot drink. Sleep with head in elevated position."></comment>
          </Observation>
       </resource>
@@ -3575,6 +4144,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Encounter-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="f597338b-b2f0-4cab-8222-c69789045d8"></value>
+            </identifier>
             <status value="finished"></status>
             <type>
                <text value="Surgery Consultation"></text>
@@ -3598,7 +4171,7 @@
                <type>
                   <coding>
                      <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
-                     <code value="AUT"></code>
+                     <code value="AUTH"></code>
                      <display value="Author"></display>
                   </coding>
                </type>
@@ -3607,8 +4180,8 @@
                </individual>
             </participant>
             <period>
-               <start value="2019-03-28T10:30:00+00:00"></start>
-               <end value="2019-03-28T10:38:00+00:00"></end>
+               <start value="2019-06-01T10:30:00+00:00"></start>
+               <end value="2019-06-01T10:38:00+00:00"></end>
             </period>
             <length>
                <value value="8"></value>
@@ -3642,7 +4215,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-06-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3670,7 +4243,7 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
                <valueReference>
                   <reference value="Condition/Problem-A-Anxiety-With-Depression"></reference>
                </valueReference>
@@ -3691,7 +4264,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-06-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3729,7 +4302,7 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-Topic-To-Problem-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
                <valueReference>
                   <reference value="Condition/Problem-B-Swollen-Legs"></reference>
                </valueReference>
@@ -3750,7 +4323,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-06-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3799,7 +4372,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-06-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3838,7 +4411,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-06-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3877,7 +4450,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-06-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3916,7 +4489,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-06-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -3965,7 +4538,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-06-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -4004,7 +4577,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-06-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -4039,12 +4612,12 @@
             </entry>
             <entry>
                <item>
-                  <display value="Referral items are not supported by the provider system"></display>
+                  <display value="Pathology report items are not supported by the provider system"></display>
                </item>
             </entry>
             <entry>
                <item>
-                  <display value="Referral items are not supported by the provider system"></display>
+                  <display value="Pathology report items are not supported by the provider system"></display>
                </item>
             </entry>
          </List>
@@ -4073,7 +4646,7 @@
             <encounter>
                <reference value="Encounter/Encounter3"></reference>
             </encounter>
-            <date value="2019-03-28T10:30:00+00:00"></date>
+            <date value="2019-06-01T10:30:00+00:00"></date>
             <orderedBy>
                <coding>
                   <system value="http://hl7.org/fhir/list-order"></system>
@@ -4086,6 +4659,11 @@
                   <reference value="Observation/Consultation3-Topic2-Category-Plan-Observation-1"></reference>
                </item>
             </entry>
+            <entry>
+               <item>
+                  <reference value="Observation/Consultation3-Topic2-Category-Plan-Observation-2"></reference>
+               </item>
+            </entry>
          </List>
       </resource>
    </entry>
@@ -4096,6 +4674,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="8b043e08-89c1-4ba9-be15-f47acd8903bd"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -4110,8 +4692,12 @@
             <context>
                <reference value="Encounter/Encounter3"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
-            <comment value="Come for review. Overall doing better. Mood improving. Still get bad days. Energy levels ok. Motivation improving. Continued to go walking twice a week. Attended first counselor appointment but not sure if it helped. Patient has been lightly drinking."></comment>
+            <effectiveDateTime value="2019-06-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-06-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
+            <comment value="Overall doing better. Mood slowly improving. Still gets bad days. Energy levels ok. Motivation improving. Continues to go walking twice a week. Attended first counsellor appointment but not sure if it helped."></comment>
          </Observation>
       </resource>
    </entry>
@@ -4122,6 +4708,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="c67257f4-a46c-4c36-a75d-f325212755fb"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -4136,8 +4726,12 @@
             <context>
                <reference value="Encounter/Encounter3"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
-            <comment value="MSE euthymic. Not anxious. No DSH/hallucinations/abnormal thoughts"></comment>
+            <effectiveDateTime value="2019-06-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-06-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
+            <comment value="MSE smiling. Not anxious. No DSH/hallucinations/abnormal thoughts"></comment>
          </Observation>
       </resource>
    </entry>
@@ -4148,6 +4742,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="3408a795-074c-4134-8ffb-25416c07b899"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -4170,7 +4768,11 @@
             <context>
                <reference value="Encounter/Encounter3"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-06-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-06-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <valueQuantity>
                <value value="2"></value>
                <unit value="units/week"></unit>
@@ -4194,6 +4796,10 @@
                   </coding>
                </valueCodeableConcept>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="626a674a-3610-4235-8575-348119ec0367"></value>
+            </identifier>
             <status value="completed"></status>
             <intent value="plan"></intent>
             <medicationReference>
@@ -4202,7 +4808,7 @@
             <subject>
                <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
             </subject>
-            <authoredOn value="2019-03-28"></authoredOn>
+            <authoredOn value="2019-06-01"></authoredOn>
             <recorder>
                <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
             </recorder>
@@ -4215,7 +4821,8 @@
             </dosageInstruction>
             <dispenseRequest>
                <validityPeriod>
-                  <start value="2019-03-28"></start>
+                  <start value="2019-06-01"></start>
+                  <end value="2019-06-29"></end>
                </validityPeriod>
                <quantity>
                   <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
@@ -4258,12 +4865,12 @@
    <entry>
       <resource>
          <MedicationStatement xmlns="http://hl7.org/fhir">
-            <id value="6bff710a-0bdc-4c9b-b98b-40db0a107edc"></id>
+            <id value="8f78cb68-7f02-4f8c-9b85-05abc743ec7a"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationStatement-1"></profile>
             </meta>
             <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationStatementLastIssueDate-1">
-               <valueDateTime value="2019-03-28"></valueDateTime>
+               <valueDateTime value="2019-06-01"></valueDateTime>
             </extension>
             <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-PrescribingAgency-1">
                <valueCodeableConcept>
@@ -4281,8 +4888,11 @@
             <medicationReference>
                <reference value="Medication/f260b451-9821-42de-81f9-ba86dcea2c32"></reference>
             </medicationReference>
-            <effectiveDateTime value="2019-03-28"></effectiveDateTime>
-            <dateAsserted value="2019-03-28"></dateAsserted>
+            <effectivePeriod>
+               <start value="2019-06-01"></start>
+               <end value="2019-06-29"></end>
+            </effectivePeriod>
+            <dateAsserted value="2019-06-01"></dateAsserted>
             <subject>
                <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
             </subject>
@@ -4313,6 +4923,10 @@
                   </coding>
                </valueCodeableConcept>
             </extension>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="aba514c4-8e6d-470e-b12c-c93e962f00e7"></value>
+            </identifier>
             <basedOn>
                <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Plan"></reference>
             </basedOn>
@@ -4324,7 +4938,7 @@
             <subject>
                <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
             </subject>
-            <authoredOn value="2019-03-28"></authoredOn>
+            <authoredOn value="2019-06-01"></authoredOn>
             <recorder>
                <reference value="PractitionerRole/e0244de8-07ef-4274-9f7a-d7067bcc8d21"></reference>
             </recorder>
@@ -4337,7 +4951,8 @@
             </dosageInstruction>
             <dispenseRequest>
                <validityPeriod>
-                  <start value="2019-03-28"></start>
+                  <start value="2019-06-01"></start>
+                  <end value="2019-06-29"></end>
                </validityPeriod>
                <quantity>
                   <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-MedicationQuantityText-1">
@@ -4362,6 +4977,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="689d60ee-40f5-4ff9-9a35-221c2044e3e7"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -4376,8 +4995,12 @@
             <context>
                <reference value="Encounter/Encounter3"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
-            <comment value="Continue with current actions and monitor progress."></comment>
+            <effectiveDateTime value="2019-06-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-06-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
+            <comment value="Review in 2 months or earlier if problems."></comment>
          </Observation>
       </resource>
    </entry>
@@ -4388,6 +5011,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="541efff5-68a8-413b-aa70-5b4d9f2d5ccc"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -4402,7 +5029,11 @@
             <context>
                <reference value="Encounter/Encounter3"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-06-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-06-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <comment value="4 months - bilateral swollen lower legs"></comment>
          </Observation>
       </resource>
@@ -4414,6 +5045,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="8c4908e8-0236-4eab-8d59-09295bd06911"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -4436,9 +5071,13 @@
             <context>
                <reference value="Encounter/Encounter3"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-06-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-06-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <valueQuantity>
-               <value value="36.7"></value>
+               <value value="37.1"></value>
                <unit value="C"></unit>
                <system value="http://unitsofmeasure.org"></system>
                <code value="Cel"></code>
@@ -4453,6 +5092,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="a7efc48a-fd8e-4dc8-8b90-976a760d6e71"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -4475,7 +5118,11 @@
             <context>
                <reference value="Encounter/Encounter3"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-06-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-06-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <valueQuantity>
                <value value="97"></value>
                <unit value="%"></unit>
@@ -4492,6 +5139,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="f9b9b95b-1d2b-4eef-8534-be61a8a3f8a4"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -4514,14 +5165,17 @@
             <context>
                <reference value="Encounter/Encounter3"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-06-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-06-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <valueQuantity>
                <value value="16"></value>
                <unit value="breaths per minute"></unit>
                <system value="http://unitsofmeasure.org"></system>
                <code value="{resps}/min"></code>
             </valueQuantity>
-            <comment value="Heart sounds normal"></comment>
          </Observation>
       </resource>
    </entry>
@@ -4532,6 +5186,10 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="9e0bf96e-7e04-4b3e-8145-45e8bc0e0858"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -4554,7 +5212,11 @@
             <context>
                <reference value="Encounter/Encounter3"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-06-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-06-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
             <valueQuantity>
                <value value="70"></value>
                <unit value="per minute"></unit>
@@ -4567,10 +5229,14 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation3-Topic2-Category-History-Observation-5"></id>
+            <id value="Consultation3-Topic2-Category-Examination-Observation-5"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="f2aa2fa5-cceb-4ae8-bde7-5efee2601a7d"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -4585,8 +5251,12 @@
             <context>
                <reference value="Encounter/Encounter3"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
-            <comment value="Swelling lower legs bilaterally. Mild pitting oedema. Chest clear. No distress. Abdomen normal. No cervical lymphadenopathy. Throat normal. Ears normal.Swelling has noticeably reduced from examiniation two months ago. Blood count and ECG have not identified any cause."></comment>
+            <effectiveDateTime value="2019-06-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-06-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
+            <comment value="Swelling lower legs bilaterally. Mild pitting oedema. Heart sounds normal. Chest clear. No distress. Abdomen normal. No cervical lymphadenopathy. Throat normal. Ears normal. Swelling has noticeably reduced from examiniation two months ago. Blood count and ECG have not identified any cause."></comment>
          </Observation>
       </resource>
    </entry>
@@ -4597,6 +5267,44 @@
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
             </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="d2df1eed-f03e-4137-925c-8b332ef4c656"></value>
+            </identifier>
+            <status value="final"></status>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="234050002"></code>
+                  <display value="Venous insufficiency of leg"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+            </subject>
+            <context>
+               <reference value="Encounter/Encounter3"></reference>
+            </context>
+            <effectiveDateTime value="2019-06-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-06-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
+            <comment value="Likely venous insufficiency"></comment>
+         </Observation>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <Observation xmlns="http://hl7.org/fhir">
+            <id value="Consultation3-Topic2-Category-Plan-Observation-2"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            </meta>
+            <identifier>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
+               <value value="4a72cb08-baff-4ec8-a3bb-ed0f993f652e"></value>
+            </identifier>
             <status value="final"></status>
             <code>
                <coding>
@@ -4611,8 +5319,12 @@
             <context>
                <reference value="Encounter/Encounter3"></reference>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00+00:00"></effectiveDateTime>
-            <comment value="Continue with current actions and monitor progress."></comment>
+            <effectiveDateTime value="2019-06-01T10:30:00+00:00"></effectiveDateTime>
+            <issued value="2019-06-01T10:30:00+00:00"></issued>
+            <performer>
+               <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+            </performer>
+            <comment value="Refer to nurse for dopplers and if suitable support stockings."></comment>
          </Observation>
       </resource>
    </entry>

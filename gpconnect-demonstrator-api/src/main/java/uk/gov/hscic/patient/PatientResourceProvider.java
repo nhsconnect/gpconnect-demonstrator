@@ -288,10 +288,11 @@ public class PatientResourceProvider implements IResourceProvider {
                         getAllergies = true;
 
                         if (param.getPart().isEmpty()) {
-                            addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
-//                          throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                                    new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
-//                                    SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
+//                          addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
+                          // #272 fail for invalid as opposed to unrcognised  
+                          throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM),
+                                    SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                         }
 
                         for (ParametersParameterComponent paramPart : param.getPart()) {
@@ -339,10 +340,11 @@ public class PatientResourceProvider implements IResourceProvider {
                         }
 
                         if (!isIncludedPrescriptionIssuesExist) {
-                            addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
-//                           throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                                    new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-//                                    SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
+//                           addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
+                          // #272 fail for invalid as opposed to unrcognised  
+                           throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
+                                    SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
                         }
                         break;
 

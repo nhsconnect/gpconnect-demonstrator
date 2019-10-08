@@ -62,7 +62,7 @@
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
                <valueCodeableConcept>
                   <coding>
-                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ProblemSignificance-1"></system>
                      <code value="major"></code>
                      <display value="Major"></display>
                   </coding>
@@ -225,7 +225,7 @@
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
                <valueCodeableConcept>
                   <coding>
-                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ProblemSignificance-1"></system>
                      <code value="major"></code>
                      <display value="Major"></display>
                   </coding>
@@ -378,10 +378,10 @@
                   </valueReference>
                </extension>
             </extension>
-            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
                <valueCodeableConcept>
                   <coding>
-                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ProblemSignificance-1"></system>
                      <code value="major"></code>
                      <display value="Major"></display>
                   </coding>
@@ -493,7 +493,7 @@
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
                <valueCodeableConcept>
                   <coding>
-                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-PrescriptionType-1"></system>
+                     <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ProblemSignificance-1"></system>
                      <code value="major"></code>
                      <display value="Major"></display>
                   </coding>

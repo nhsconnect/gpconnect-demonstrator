@@ -295,10 +295,12 @@ public class PatientResourceProvider implements IResourceProvider {
                                     SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
                         }
 
+                        boolean includeResolvedParameterPartPresent = false;
                         for (ParametersParameterComponent paramPart : param.getPart()) {
                             if (paramPart.getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM)) {
                                 if (paramPart.getValue() instanceof BooleanType) {
                                     includeResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
+                                    includeResolvedParameterPartPresent = true;
                                 } else {
                                     throw OperationOutcomeFactory.buildOperationOutcomeException(
                                             new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM),
@@ -310,6 +312,11 @@ public class PatientResourceProvider implements IResourceProvider {
 //                                        new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
 //                                        SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                             }
+                        }
+                        if (!includeResolvedParameterPartPresent) {
+                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM),
+                                    SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
                         }
                         break;
 

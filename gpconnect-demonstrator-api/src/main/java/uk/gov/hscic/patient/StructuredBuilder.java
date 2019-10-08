@@ -183,9 +183,9 @@ public class StructuredBuilder {
                                     break;
                                 case CONSULTATION_LIST:
                                     refCounts.keySet().stream().filter((key) -> (key.startsWith("List/"))).sorted().forEachOrdered((key) -> {
-                                        ListResource listResource1 = (ListResource) resourceTypes.get(ResourceType.List).get(key);
-                                        if (listResource1.getCode().getCodingFirstRep().getCode().equals(SNOMED_CONSULTATION_ENCOUNTER_TYPE)) {
-                                            listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
+                                        ListResource listResourceConsultation = (ListResource) resourceTypes.get(ResourceType.List).get(key);
+                                        if (listResourceConsultation.getCode().getCodingFirstRep().getCode().equals(SNOMED_CONSULTATION_ENCOUNTER_TYPE)) {
+                                            listResource.addEntry(new ListResource.ListEntryComponent().setItem(listResourceConsultation.getEncounter()));
                                         }
                                     });
                                     break;

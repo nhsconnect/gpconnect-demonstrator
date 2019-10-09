@@ -559,7 +559,7 @@
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="325851000000107"></code>
+                  <code value="999999999999999"></code>
                   <display value="Consultation"></display>
                </coding>
             </code>
@@ -660,7 +660,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="325851000000107"></code>
-                  <display value="Consultation encounter type"></display>
+                  <display value="Consultation"></display>
                </coding>
             </code>
             <subject>
@@ -3350,7 +3350,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="325851000000107"></code>
-                  <display value="Consultation encounter type"></display>
+                  <display value="Consultation"></display>
                </coding>
             </code>
             <subject>
@@ -4206,7 +4206,7 @@
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="325851000000107"></code>
-                  <display value="Consultation encounter type"></display>
+                  <display value="Consultation"></display>
                </coding>
             </code>
             <subject>

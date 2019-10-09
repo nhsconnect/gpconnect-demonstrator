@@ -369,7 +369,7 @@ public class StructuredBuilder {
 
         if (searchPeriod != null) {
             for (ListResource consultation : consultations.values()) {
-                // get the strta date of the consultation from the encounter
+                // get the start date of the consultation from the encounter
                 Encounter encounter = (Encounter) encounters.get(consultation.getEncounter().getReference());
                 Date startDate = encounter.getPeriod().getStart();
                 // not sure this would ever happen

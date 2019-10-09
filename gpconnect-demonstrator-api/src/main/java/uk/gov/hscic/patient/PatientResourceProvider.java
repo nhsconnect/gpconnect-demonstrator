@@ -568,7 +568,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY)));
                 break;
             default:
-                System.err.println("addEmptyList: Unexpected clinical area: "+clinicalArea);
+                System.err.println("addEmptyList: Unexpected clinical area: " + clinicalArea);
         }
 
         PatientEntity patient = patientStore.findByNhsNumber(NHS);
@@ -1592,7 +1592,7 @@ public class PatientResourceProvider implements IResourceProvider {
      *
      * @param startDate String
      * @param endDate String (may be null if not a period
-     * @param sb STringBuilder for appending derails
+     * @param sb StringBuilder for appending derails
      * @return boolean true if ok
      */
     private boolean validateStartDateParamAndEndDateParam(String startDate, String endDate, StringBuilder sb) {
@@ -1603,7 +1603,7 @@ public class PatientResourceProvider implements IResourceProvider {
         try {
             result = checkDate(startDate, "Start", dateOnlyPattern, sb, result, now);
             result = checkDate(endDate, "End", dateOnlyPattern, sb, result, now);
-            if (result && endDate != null) {
+            if (result && startDate != null && endDate != null) {
                 Date startDt = DATE_FORMAT.parse(startDate);
                 Date endDt = DATE_FORMAT.parse(endDate);
                 if (endDt.before(startDt)) {

@@ -57,8 +57,9 @@ import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.OperationOutcome.OperationOutcomeIssueComponent;
 import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
-import static uk.gov.hscic.SystemConstants.IMMUNIZATIONS_LIST;
+import static uk.gov.hscic.SystemConstants.INCLUDE_CONSULTATIONS_PARM;
 import static uk.gov.hscic.SystemConstants.INCLUDE_IMMUNIZATIONS_PARM;
+import static uk.gov.hscic.SystemConstants.INCLUDE_PROBLEMS_PARM;
 import static uk.gov.hscic.SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM;
 import static uk.gov.hscic.SystemConstants.OUR_ODS_CODE;
 import static uk.gov.hscic.SystemConstants.VALID_PARAMETER_NAMES;
@@ -71,8 +72,15 @@ import static uk.gov.hscic.SystemConstants.PATIENT_2;
 import static uk.gov.hscic.SystemConstants.PATIENT_NOCONSENT;
 import static uk.gov.hscic.SystemConstants.PATIENT_NOTONSPINE;
 import static uk.gov.hscic.SystemConstants.PATIENT_SUPERSEDED;
-import static uk.gov.hscic.SystemConstants.UNCATEGORISED_LIST;
+import static uk.gov.hscic.SystemConstants.SNOMED_CONSULTATION_LIST_CODE;
 import uk.gov.hscic.patient.details.PatientEntity;
+import static uk.gov.hscic.SystemConstants.SNOMED_IMMUNIZATIONS_LIST_DISPLAY;
+import static uk.gov.hscic.SystemConstants.SNOMED_UNCATEGORISED_LIST_DISPLAY;
+import static uk.gov.hscic.SystemConstants.SNOMED_CONSULTATION_LIST_DISPLAY;
+import static uk.gov.hscic.SystemConstants.SNOMED_IMMUNIZATIONS_LIST_CODE;
+import static uk.gov.hscic.SystemConstants.SNOMED_PROBLEMS_LIST_CODE;
+import static uk.gov.hscic.SystemConstants.SNOMED_PROBLEMS_LIST_DISPLAY;
+import static uk.gov.hscic.SystemConstants.SNOMED_UNCATEGORISED_LIST_CODE;
 
 @Component
 public class PatientResourceProvider implements IResourceProvider {
@@ -544,13 +552,23 @@ public class PatientResourceProvider implements IResourceProvider {
 
         switch (clinicalArea) {
             case INCLUDE_IMMUNIZATIONS_PARM:
-                list.setTitle(IMMUNIZATIONS_LIST);
-                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, "1102181000000102", IMMUNIZATIONS_LIST)));
+                list.setTitle(SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
+                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY)));
                 break;
             case INCLUDE_UNCATEGORISED_DATA_PARM:
-                list.setTitle(UNCATEGORISED_LIST);
-                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, "826501000000100", UNCATEGORISED_LIST)));
+                list.setTitle(SNOMED_UNCATEGORISED_LIST_DISPLAY);
+                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_UNCATEGORISED_LIST_CODE, SNOMED_UNCATEGORISED_LIST_DISPLAY)));
                 break;
+            case INCLUDE_CONSULTATIONS_PARM:
+                list.setTitle(SNOMED_CONSULTATION_LIST_DISPLAY);
+                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_CONSULTATION_LIST_CODE, SNOMED_CONSULTATION_LIST_DISPLAY)));
+                break;
+            case INCLUDE_PROBLEMS_PARM:
+                list.setTitle(SNOMED_PROBLEMS_LIST_DISPLAY);
+                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY)));
+                break;
+            default:
+                System.err.println("addEmptyList: Unexpected clinical area: "+clinicalArea);
         }
 
         PatientEntity patient = patientStore.findByNhsNumber(NHS);

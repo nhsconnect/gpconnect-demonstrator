@@ -56,12 +56,18 @@ public final class SystemConstants {
     // 1.2.2
     public static final String MEDICATION_SEARCH_FROM_DATE = "medicationSearchFromDate";
 
-    // ListResource Titles
-    public static final String MEDICATION_LIST = "Medications and medical devices";
-    public static final String IMMUNIZATIONS_LIST = "Immunisations"; // NB the s not z
-    public static final String UNCATEGORISED_LIST = "Miscellaneous record";
-    public static final String PROBLEMS_LIST = "Problems";
-    public static final String CONSULTATION_LIST = "Consultation";
+    // SNOMED ListResource Data
+    public static final String SNOMED_MEDICATION_LIST_DISPLAY = "Medications and medical devices";
+    public static final String SNOMED_MEDICATION_LIST_CODE = "933361000000108";
+    public static final String SNOMED_IMMUNIZATIONS_LIST_DISPLAY = "Immunisations"; // NB the s not z
+    public static final String SNOMED_IMMUNIZATIONS_LIST_CODE = "1102181000000102";
+    public static final String SNOMED_UNCATEGORISED_LIST_DISPLAY = "Miscellaneous record";
+    public static final String SNOMED_UNCATEGORISED_LIST_CODE = "826501000000100";
+    public static final String SNOMED_CONSULTATION_LIST_DISPLAY = "Consultation";
+    // TODO Need the new SNOMED Code for the List of Consultations
+    public static final String SNOMED_CONSULTATION_LIST_CODE = "999999999999999";
+    public static final String SNOMED_PROBLEMS_LIST_DISPLAY = "Problems";
+    public static final String SNOMED_PROBLEMS_LIST_CODE = "717711000000103";
 
     // Parameter Parts
     public static final String UNCATEGORISED_DATA_SEARCH_PERIOD = "uncategorisedDataSearchPeriod";

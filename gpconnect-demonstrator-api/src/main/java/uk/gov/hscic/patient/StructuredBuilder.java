@@ -40,6 +40,7 @@ import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.IntegerType;
 import org.hl7.fhir.dstu3.model.ListResource;
 import org.hl7.fhir.dstu3.model.MedicationRequest;
+import org.hl7.fhir.dstu3.model.MedicationStatement;
 import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Period;
 import org.hl7.fhir.dstu3.model.Reference;
@@ -166,6 +167,21 @@ public class StructuredBuilder {
                     alreadyAdded.add(id);
                 }
             }
+            
+            // process MedicationStatements include if they reference an already referenced MedicationRequest or Medication
+            // see https://developer.nhs.uk/apis/gpconnect-1-4-0/accessrecord_structured_development_linkages.html#problems
+            for (String medicationStatementId : resourceTypes.get(ResourceType.MedicationStatement).keySet()) {
+                MedicationStatement medicationStatement = (MedicationStatement)resourceTypes.get(ResourceType.MedicationStatement).get(medicationStatementId);
+                String medicationId = medicationStatement.getMedicationReference().getReference();
+                String medicationRequestId = medicationStatement.getBasedOnFirstRep().getReference();
+                if ( (refCounts.keySet().contains(medicationId) || refCounts.keySet().contains(medicationRequestId)) && !alreadyAdded.contains(medicationStatementId) ) {
+                    structuredBundle.addEntry(new BundleEntryComponent().setResource(medicationStatement));
+                    alreadyAdded.add(medicationStatementId);
+                    // add a pseudo reference so we dont get a false warning
+                    refCounts.put(medicationStatementId,1);
+                }
+            }
+            
 
             // rebuild the problemans and consultations lists
             for (String listTitle : new String[]{PROBLEMS_LIST, CONSULTATION_LIST}) {

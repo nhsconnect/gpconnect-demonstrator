@@ -72,7 +72,7 @@ public final class SystemConstants {
     // Parameter Parts
     public static final String UNCATEGORISED_DATA_SEARCH_PERIOD = "uncategorisedDataSearchPeriod";
     public static final String CONSULTATION_SEARCH_PERIOD = "consultationSearchPeriod";
-    public static final String NUMBER_OF_MOST_RECENT = "numberOfMostRecent";
+    public static final String NUMBER_OF_MOST_RECENT = "includeNumberOfMostRecent";
     public static final String FILTER_STATUS = "filterStatus"; // renamed at 1.3.1
     public static final String FILTER_SIGNIFICANCE = "filterSignificance"; // renamed at 1.3.1
     

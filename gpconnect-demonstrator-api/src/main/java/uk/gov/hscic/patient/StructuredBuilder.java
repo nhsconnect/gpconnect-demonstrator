@@ -32,6 +32,7 @@ import java.util.List;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.CodeType;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Condition;
 import org.hl7.fhir.dstu3.model.Condition.ConditionClinicalStatus;
 import org.hl7.fhir.dstu3.model.DomainResource;
@@ -167,23 +168,38 @@ public class StructuredBuilder {
                     alreadyAdded.add(id);
                 }
             }
-            
+
+            // add any related problems/condition if this is a request for consultations
+            if (parameterName.equals(INCLUDE_CONSULTATIONS_PARM)) {
+                resourceTypes.get(ResourceType.Condition).keySet().stream().sorted().forEachOrdered((conditionId) -> {
+                    Condition condition = (Condition) resourceTypes.get(ResourceType.Condition).get(conditionId);
+                    for (Extension extension : condition.getExtension()) {
+                        if (extension.getValue() instanceof Reference) {
+                            Reference reference = (Reference) extension.getValue();
+                            // does this problem/condition reference something in the returning bundle?
+                            if (refCounts.keySet().contains(reference.getReference()) && !alreadyAdded.contains(condition.getId())) {
+                                structuredBundle.addEntry(new BundleEntryComponent().setResource(condition));
+                                alreadyAdded.add(condition.getId());
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+
             // process MedicationStatements include if they reference an already referenced MedicationRequest or Medication
             // see https://developer.nhs.uk/apis/gpconnect-1-4-0/accessrecord_structured_development_linkages.html#problems
             for (String medicationStatementId : resourceTypes.get(ResourceType.MedicationStatement).keySet()) {
-                MedicationStatement medicationStatement = (MedicationStatement)resourceTypes.get(ResourceType.MedicationStatement).get(medicationStatementId);
+                MedicationStatement medicationStatement = (MedicationStatement) resourceTypes.get(ResourceType.MedicationStatement).get(medicationStatementId);
                 String medicationId = medicationStatement.getMedicationReference().getReference();
                 String medicationRequestId = medicationStatement.getBasedOnFirstRep().getReference();
-                if ( (refCounts.keySet().contains(medicationId) || refCounts.keySet().contains(medicationRequestId)) && !alreadyAdded.contains(medicationStatementId) ) {
+                if ((refCounts.keySet().contains(medicationId) || refCounts.keySet().contains(medicationRequestId)) && !alreadyAdded.contains(medicationStatementId)) {
                     structuredBundle.addEntry(new BundleEntryComponent().setResource(medicationStatement));
                     alreadyAdded.add(medicationStatementId);
-                    // add a pseudo reference so we dont get a false warning
-                    refCounts.put(medicationStatementId,1);
                 }
             }
-            
 
-            // rebuild the problemans and consultations lists
+            // rebuild the problems and consultations lists
             for (String listTitle : new String[]{SNOMED_PROBLEMS_LIST_DISPLAY, SNOMED_CONSULTATION_LIST_DISPLAY}) {
                 for (BundleEntryComponent entry : structuredBundle.getEntry()) {
                     if (entry.getResource().getId() == null && entry.getResource() instanceof ListResource) {
@@ -214,7 +230,7 @@ public class StructuredBuilder {
 
             if (DEBUG) {
                 for (String key : duplicates.keySet()) {
-                    System.err.println("Warning duplicate id " + key + ", count = " + duplicates.get(key));
+                    System.err.println("Warning duplicate id: " + key + ", count = " + duplicates.get(key));
                 }
             }
 
@@ -293,9 +309,9 @@ public class StructuredBuilder {
 
             for (Resource resource : conditions.values()) {
                 Condition condition = (Condition) resource;
-                // TODO problemSignificance is probably not correct its just a place holder
-                List<Extension> significances = condition.getExtensionsByUrl("problemSignificance");
-                if ((filterSignificance == null || significances.isEmpty() || filterSignificance.toUpperCase().equals(significances.get(0)))
+                List<Extension> significances = condition.getExtensionsByUrl("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1");
+                if ((filterSignificance == null || significances.isEmpty() || 
+                        filterSignificance.equalsIgnoreCase(((CodeableConcept)significances.get(0).getValue()).getCodingFirstRep().getCode()))
                         && (filterStatus == null || condition.getClinicalStatus() == filterStatus)) {
                     conditionIdsToAdd.add(condition.getId());
                 }
@@ -462,7 +478,7 @@ public class StructuredBuilder {
                 }
             }
         } else {
-            System.err.println("Warning Unexpected reference format "+referenceStr);
+            System.err.println("Warning Unexpected reference format: " + referenceStr);
         }
     }
 

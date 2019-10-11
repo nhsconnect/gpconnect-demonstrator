@@ -179,7 +179,7 @@ public class StructuredBuilder {
                             if (refCounts.keySet().contains(reference.getReference()) && !alreadyAdded.contains(condition.getId())) {
                                 structuredBundle.addEntry(new BundleEntryComponent().setResource(condition));
                                 alreadyAdded.add(condition.getId());
-                                refCounts.put(condition.getId(),1);
+                                refCounts.put(condition.getId(), 1);
                                 break;
                             }
                         }
@@ -196,10 +196,11 @@ public class StructuredBuilder {
                 if ((refCounts.keySet().contains(medicationId) || refCounts.keySet().contains(medicationRequestId)) && !alreadyAdded.contains(medicationStatementId)) {
                     structuredBundle.addEntry(new BundleEntryComponent().setResource(medicationStatement));
                     alreadyAdded.add(medicationStatementId);
-                    refCounts.put(medicationStatementId,1);
+                    refCounts.put(medicationStatementId, 1);
                 }
             }
 
+            BundleEntryComponent problemsListEntry = null;
             // rebuild the problems and consultations lists
             for (String listId : new String[]{PROBLEMS_LIST_ID, CONSULTATIONS_LIST_ID}) {
                 for (BundleEntryComponent entry : structuredBundle.getEntry()) {
@@ -210,7 +211,8 @@ public class StructuredBuilder {
                             // the events are now sorted alpha which mimics sorted by event date
                             switch (listId) {
                                 case PROBLEMS_LIST_ID:
-                                    refCounts.keySet().stream().filter((key) -> (key.startsWith("Condition/"))).sorted().forEachOrdered((key) -> {
+                                    problemsListEntry = entry;
+                                    refCounts.keySet().stream().filter((key) -> (key.startsWith("Condition/"))).sorted().forEachOrdered((String key) -> {
                                         listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
                                     });
                                     break;
@@ -225,9 +227,14 @@ public class StructuredBuilder {
                             }
                             break;
                         } // if matching id
-                    } // if null id and ListResource
+                    } // if ListResource
                 } // for bundle entry
             } // for list id
+
+            // delete the problems list if it is empty
+            if (problemsListEntry != null && ((ListResource)problemsListEntry.getResource()).getEntry().isEmpty()) {
+                structuredBundle.getEntry().remove(problemsListEntry);
+            }
 
             if (DEBUG) {
                 for (String key : duplicates.keySet()) {
@@ -311,8 +318,8 @@ public class StructuredBuilder {
             for (Resource resource : conditions.values()) {
                 Condition condition = (Condition) resource;
                 List<Extension> significances = condition.getExtensionsByUrl("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1");
-                if ((filterSignificance == null || significances.isEmpty() || 
-                        filterSignificance.equalsIgnoreCase(((CodeableConcept)significances.get(0).getValue()).getCodingFirstRep().getCode()))
+                if ((filterSignificance == null || significances.isEmpty()
+                        || filterSignificance.equalsIgnoreCase(((CodeableConcept) significances.get(0).getValue()).getCodingFirstRep().getCode()))
                         && (filterStatus == null || condition.getClinicalStatus() == filterStatus)) {
                     conditionIdsToAdd.add(condition.getId());
                 }
@@ -342,7 +349,6 @@ public class StructuredBuilder {
         HashMap<String, ListResource> consultations = new HashMap<>();
         for (String key : lists.keySet()) {
             ListResource list = (ListResource) lists.get(key);
-            // There are 4 having this code but one is a top level with no id its not a consultation
             if (list.getId() != null && list.getCode().getCodingFirstRep().getCode().equals(SNOMED_CONSULTATION_ENCOUNTER_TYPE)) {
                 consultations.put(list.getId(), list);
             }
@@ -438,7 +444,8 @@ public class StructuredBuilder {
 
     /**
      * recursively descend resolving references as we go. The completer for the
-     * recursion is resources not containing references
+     * populates ref counts as it goes recursion is resources not containing
+     * references
      *
      * @param resourceTypes hashmap of resources keyed by type
      * @param referenceStr

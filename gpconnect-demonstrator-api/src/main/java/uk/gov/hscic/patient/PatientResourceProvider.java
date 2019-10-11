@@ -413,6 +413,8 @@ public class PatientResourceProvider implements IResourceProvider {
                         al = new ArrayList<>();
                         al.add(param);
                         includes.put(param.getName(), al);
+                        boolean periodSupplied = false;
+                        boolean countSupplied = false;
                         // optional part named consultationSearchPeriod with a valuePeriod
                         // optional part named numberOfMostRecent with an integer count
                         // Where both are supplied the consultations returned can match either not 1 *and* the other
@@ -425,14 +427,23 @@ public class PatientResourceProvider implements IResourceProvider {
                                 if (!validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb)) {
                                     addWarningIssue(param, paramPart, IssueType.INVALID, "Invalid date used" + sb.toString());
                                 }
+                                periodSupplied = true;
                             } else if (paramPart.getName().equals(SystemConstants.NUMBER_OF_MOST_RECENT) && paramPart.getValue() instanceof IntegerType) {
                                 int numberOfMostRecent = ((IntegerType) paramPart.getValue()).getValue();
+                                countSupplied = true;
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
 //                            throw OperationOutcomeFactory.buildOperationOutcomeException(
 //                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
 //                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                             }
+                        }
+
+                        if (countSupplied && periodSupplied) {
+                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                    new UnprocessableEntityException("Incorrect combination of parameter parts passed : both " + SystemConstants.CONSULTATION_SEARCH_PERIOD + " and "
+                                            + SystemConstants.NUMBER_OF_MOST_RECENT + " were supplied."),
+                                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
                         }
                         break;
 
@@ -447,13 +458,45 @@ public class PatientResourceProvider implements IResourceProvider {
                         // optional part named filterStatus with a valueCode eg active inactive
                         // optional part named filterSignificance with a valueCode eg major minor
                         for (ParametersParameterComponent paramPart : param.getPart()) {
+                            switch (paramPart.getName()) {
+                                case SystemConstants.FILTER_STATUS:
+                                    if (!(paramPart.getValue() instanceof CodeType)) {
+                                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                                new UnprocessableEntityException("Invalid parameter part passed : " + paramPart.getName()),
+                                                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                    } else {
+                                        try {
+                                            Condition.ConditionClinicalStatus status = Condition.ConditionClinicalStatus.valueOf(((CodeType) paramPart.getValue()).getValue().toUpperCase());
+                                        } catch (IllegalArgumentException ex) {
+                                            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                                    new UnprocessableEntityException(
+                                                            "Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue()),
+                                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                        }
+                                    }
+                                    break;
 
-                            if (paramPart.getName().equals(SystemConstants.FILTER_STATUS)
-                                    && paramPart.getValue() instanceof CodeType) {
-                            } else if (paramPart.getName().equals(SystemConstants.FILTER_SIGNIFICANCE)
-                                    && paramPart.getValue() instanceof CodeType) {
-                            } else {
-                                addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
+                                case SystemConstants.FILTER_SIGNIFICANCE:
+                                    if (!(paramPart.getValue() instanceof CodeType)) {
+                                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                                new UnprocessableEntityException("Invalid parameter part passed : " + paramPart.getName()),
+                                                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                    } else {
+                                        String significance = ((CodeType) paramPart.getValue()).getValue();
+                                        switch (significance) {
+                                            case "major":
+                                            case "minor":
+                                                break;
+                                            default:
+                                                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                                        new UnprocessableEntityException(
+                                                                "Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue()),
+                                                        SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
 //                            throw OperationOutcomeFactory.buildOperationOutcomeException(
 //                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
 //                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);

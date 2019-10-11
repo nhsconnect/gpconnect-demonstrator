@@ -467,6 +467,16 @@ public class PatientResourceProvider implements IResourceProvider {
                                     } else {
                                         try {
                                             Condition.ConditionClinicalStatus status = Condition.ConditionClinicalStatus.valueOf(((CodeType) paramPart.getValue()).getValue().toUpperCase());
+                                            switch (status) {
+                                                case ACTIVE:
+                                                case INACTIVE:
+                                                    break;
+                                                default:
+                                                    throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                                            new UnprocessableEntityException(
+                                                                    "Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue()),
+                                                            SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                            }
                                         } catch (IllegalArgumentException ex) {
                                             throw OperationOutcomeFactory.buildOperationOutcomeException(
                                                     new UnprocessableEntityException(

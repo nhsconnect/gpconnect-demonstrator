@@ -233,9 +233,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 if (mandatory) {
                     if (parameterNames.contains(parameterDefinition) == false) {
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                new InvalidRequestException("Not all mandatory parameters have been provided"),
-                                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                        throwInvalidParameterInvalidOperationalOutcome("Not all mandatory parameters have been provided");
                     }
                 }
             }
@@ -245,9 +243,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 throwInvalidRequest400_BadRequestException("Unrecognised parameters have been provided - " + parameterNames.toString());
             }
         } else {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InvalidRequestException("Not all mandatory parameters have been provided"),
-                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+            throwInvalidParameterInvalidOperationalOutcome("Not all mandatory parameters have been provided");
         }
     }
 
@@ -296,11 +292,8 @@ public class PatientResourceProvider implements IResourceProvider {
                         getAllergies = true;
 
                         if (param.getPart().isEmpty()) {
-//                          addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
-                            // #272 fail for invalid as opposed to unrcognised  
-                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                    new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM),
-                                    SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
+                            // #272 fail for invalid as opposed to unrcognised 
+                            throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
                         }
 
                         boolean includeResolvedParameterPartPresent = false;
@@ -310,21 +303,14 @@ public class PatientResourceProvider implements IResourceProvider {
                                     includeResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
                                     includeResolvedParameterPartPresent = true;
                                 } else {
-                                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                            new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM),
-                                            SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
+                                    throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
                                 }
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
-//                                throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                                        new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
-//                                        SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                             }
                         }
                         if (!includeResolvedParameterPartPresent) {
-                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                    new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM),
-                                    SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
+                            throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
                         }
                         break;
 
@@ -339,37 +325,26 @@ public class PatientResourceProvider implements IResourceProvider {
                                     includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
                                     isIncludedPrescriptionIssuesExist = true;
                                 } else {
-                                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                            new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-                                            SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
+                                    throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
                                 }
                             } else if (paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)
                                     && paramPart.getValue() instanceof DateType) {
                                 DateType startDateDt = (DateType) paramPart.getValue();
                                 String startDate = startDateDt.asStringValue();
                                 StringBuilder sb = new StringBuilder();
-                                if (validateStartDateParamAndEndDateParam(startDate, null, sb)) {
-                                    // refined at 1.3.1 only apply date if its valid.
-                                    medicationPeriod = new Period();
-                                    medicationPeriod.setStart(startDateDt.getValue());
-                                    medicationPeriod.setEnd(null);
-                                } else {
-                                    addWarningIssue(param, paramPart, IssueType.INVALID, "Invalid date used" + sb.toString());
-                                }
+                                validateStartDateParamAndEndDateParam(startDate, null, sb);
+                                // refined at 1.3.1 only apply date if its valid.
+                                medicationPeriod = new Period();
+                                medicationPeriod.setStart(startDateDt.getValue());
+                                medicationPeriod.setEnd(null);
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
-//                              throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                                        new UnprocessableEntityException("Incorrect parameter passed : " + paramPart.getName()),
-//                                        SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                             }
                         }
 
                         if (!isIncludedPrescriptionIssuesExist) {
-//                           addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
-                            // #272 fail for invalid as opposed to unrcognised  
-                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                    new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-                                    SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
+                            // #272 fail for invalid as opposed to unrecognised  
+                            throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
                         }
                         break;
 
@@ -397,13 +372,8 @@ public class PatientResourceProvider implements IResourceProvider {
                                     && paramPart.getValue() instanceof Period) {
                                 Period period = (Period) paramPart.getValue();
                                 StringBuilder sb = new StringBuilder();
-                                if (!validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb)) {
-                                    addWarningIssue(param, paramPart, IssueType.INVALID, "Invalid date used" + sb.toString());
-                                }
+                                validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb);
                             } else {
-//                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
-//                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
                             }
                         }
@@ -417,25 +387,20 @@ public class PatientResourceProvider implements IResourceProvider {
                         boolean countSupplied = false;
                         // optional part named consultationSearchPeriod with a valuePeriod
                         // optional part named numberOfMostRecent with an integer count
-                        // Where both are supplied the consultations returned can match either not 1 *and* the other
+                        // Where both are supplied iys an error
                         for (ParametersParameterComponent paramPart : param.getPart()) {
 
                             if (paramPart.getName().equals(SystemConstants.CONSULTATION_SEARCH_PERIOD)
                                     && paramPart.getValue() instanceof Period) {
                                 Period period = (Period) paramPart.getValue();
                                 StringBuilder sb = new StringBuilder();
-                                if (!validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb)) {
-                                    addWarningIssue(param, paramPart, IssueType.INVALID, "Invalid date used" + sb.toString());
-                                }
+                                validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb);
                                 periodSupplied = true;
                             } else if (paramPart.getName().equals(SystemConstants.NUMBER_OF_MOST_RECENT) && paramPart.getValue() instanceof IntegerType) {
                                 int numberOfMostRecent = ((IntegerType) paramPart.getValue()).getValue();
                                 countSupplied = true;
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
-//                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
-//                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                             }
                         }
 
@@ -461,9 +426,7 @@ public class PatientResourceProvider implements IResourceProvider {
                             switch (paramPart.getName()) {
                                 case SystemConstants.FILTER_STATUS:
                                     if (!(paramPart.getValue() instanceof CodeType)) {
-                                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                                new UnprocessableEntityException("Invalid parameter part passed : " + paramPart.getName()),
-                                                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName());
                                     } else {
                                         try {
                                             Condition.ConditionClinicalStatus status = Condition.ConditionClinicalStatus.valueOf(((CodeType) paramPart.getValue()).getValue().toUpperCase());
@@ -472,25 +435,17 @@ public class PatientResourceProvider implements IResourceProvider {
                                                 case INACTIVE:
                                                     break;
                                                 default:
-                                                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                                            new UnprocessableEntityException(
-                                                                    "Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue()),
-                                                            SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                                    throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
                                             }
                                         } catch (IllegalArgumentException ex) {
-                                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                                    new UnprocessableEntityException(
-                                                            "Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue()),
-                                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                            throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
                                         }
                                     }
                                     break;
 
                                 case SystemConstants.FILTER_SIGNIFICANCE:
                                     if (!(paramPart.getValue() instanceof CodeType)) {
-                                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                                new UnprocessableEntityException("Invalid parameter part passed : " + paramPart.getName()),
-                                                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName());
                                     } else {
                                         String significance = ((CodeType) paramPart.getValue()).getValue();
                                         switch (significance) {
@@ -498,18 +453,12 @@ public class PatientResourceProvider implements IResourceProvider {
                                             case "minor":
                                                 break;
                                             default:
-                                                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                                        new UnprocessableEntityException(
-                                                                "Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue()),
-                                                        SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                                                throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
                                         }
                                     }
                                     break;
                                 default:
                                     addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
-//                            throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                                    new UnprocessableEntityException("Incorrect parameter part passed : " + paramPart.getName()),
-//                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                             }
                         }
                         break;
@@ -1570,9 +1519,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 TokenParam tokenParam = (TokenParam) source;
 
                 if (!SystemURL.ID_NHS_NUMBER.equals(tokenParam.getSystem())) {
-                    throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new InvalidRequestException("Invalid system code"), SystemCode.INVALID_PARAMETER,
-                            IssueType.INVALID);
+                    throwInvalidParameterInvalidOperationalOutcome("Invalid system code");
                 }
 
                 nhsNumber = tokenParam.getValue();
@@ -1598,9 +1545,7 @@ public class PatientResourceProvider implements IResourceProvider {
                         nhsNumber = fromPatientResource(parameter.getResource());
                     } else {
                         // 1.2.4 now Http 422 Unprocessable Entity not Http 400 Invalid Request
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(
-                                "Unable to read parameters. Expecting one of patientNHSNumber or registerPatient both of which are case-sensitive"),
-                                SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+                        throwInvalidParameterInvalidOperationalOutcome("Unable to read parameters. Expecting one of patientNHSNumber or registerPatient both of which are case-sensitive");
                     }
                 }
             }
@@ -1642,35 +1587,32 @@ public class PatientResourceProvider implements IResourceProvider {
 
     /**
      * Checks that the dates are ok and that end is not earlier than start
+     * throws an exception on failure
      *
      * @param startDate String
      * @param endDate String (may be null if not a period
      * @param sb StringBuilder for appending derails
-     * @return boolean true if ok
      */
-    private boolean validateStartDateParamAndEndDateParam(String startDate, String endDate, StringBuilder sb) {
+    private void validateStartDateParamAndEndDateParam(String startDate, String endDate, StringBuilder sb) {
         Pattern dateOnlyPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
         boolean result = true;
-
         Date now = new Date();
         try {
-            result = checkDate(startDate, "Start", dateOnlyPattern, sb, result, now);
-            result = checkDate(endDate, "End", dateOnlyPattern, sb, result, now);
-            if (result && startDate != null && endDate != null) {
+            checkDate(startDate, "Start", dateOnlyPattern, sb, result, now);
+            checkDate(endDate, "End", dateOnlyPattern, sb, result, now);
+            if (startDate != null && endDate != null) {
                 Date startDt = DATE_FORMAT.parse(startDate);
                 Date endDt = DATE_FORMAT.parse(endDate);
                 if (endDt.before(startDt)) {
                     sb.append(" End date ").append(endDate).append(" is earlier than start date ").append(startDate);
-                    result = false;
                 }
             }
         } catch (ParseException ex) {
             result = false;
         }
         if (!result) {
-            throwInvalidParameterOperationalOutcome("Invalid date used " + sb.toString());
+            throwInvalidParameterInvalidOperationalOutcome("Invalid date used " + sb.toString());
         }
-        return result;
     }
 
     /**
@@ -1686,7 +1628,7 @@ public class PatientResourceProvider implements IResourceProvider {
      * @return boolean true => ok
      * @throws ParseException
      */
-    private boolean checkDate(String date, String dateLabel, Pattern dateOnlyPattern, StringBuilder sb, boolean result, Date now) throws ParseException {
+    private void checkDate(String date, String dateLabel, Pattern dateOnlyPattern, StringBuilder sb, boolean result, Date now) throws ParseException {
         if (date != null) {
             if (!dateOnlyPattern.matcher(date).matches()) {
                 if (sb.length() > 0) {
@@ -1707,15 +1649,21 @@ public class PatientResourceProvider implements IResourceProvider {
             }
         }
         if (!result) {
-            throwInvalidParameterOperationalOutcome("Invalid date used " + sb.toString());
+            throwInvalidParameterInvalidOperationalOutcome("Invalid date used " + sb.toString());
         }
-        return result;
     }
 
-    private void throwInvalidParameterOperationalOutcome(String error) {
+    private void throwInvalidParameterInvalidOperationalOutcome(String error) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(
                 new UnprocessableEntityException(
                         error),
                 SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+    }
+
+    private void throwInvalidParameterRequiredOperationalOutcome(String error) {
+        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                new UnprocessableEntityException(
+                        error),
+                SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
     }
 }

@@ -1654,7 +1654,8 @@ public class PatientResourceProvider implements IResourceProvider {
                 Date startDt = DATE_FORMAT.parse(startDate);
                 Date endDt = DATE_FORMAT.parse(endDate);
                 if (endDt.before(startDt)) {
-                    sb.append(" End date ").append(endDate).append(" is earlier than start date ").append(startDate);
+                    sb.append(" End date ").append(endDate).append(" is earlier than Start date ").append(startDate);
+                    result = false;
                 }
             }
         } catch (ParseException ex) {

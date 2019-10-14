@@ -300,10 +300,14 @@ public class PatientResourceProvider implements IResourceProvider {
                         for (ParametersParameterComponent paramPart : param.getPart()) {
                             if (paramPart.getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM)) {
                                 if (paramPart.getValue() instanceof BooleanType) {
-                                    includeResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
-                                    includeResolvedParameterPartPresent = true;
+                                    if (!includeResolvedParameterPartPresent) {
+                                        includeResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
+                                        includeResolvedParameterPartPresent = true;
+                                    } else {
+                                        throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
+                                    }
                                 } else {
-                                    throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
+                                    throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
                                 }
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
@@ -322,21 +326,29 @@ public class PatientResourceProvider implements IResourceProvider {
 
                             if (paramPart.getName().equals(SystemConstants.INCLUDE_PRESCRIPTION_ISSUES)) {
                                 if (paramPart.getValue() instanceof BooleanType) {
-                                    includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
-                                    isIncludedPrescriptionIssuesExist = true;
+                                    if (!isIncludedPrescriptionIssuesExist) {
+                                        includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
+                                        isIncludedPrescriptionIssuesExist = true;
+                                    } else {
+                                        throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
+                                    }
                                 } else {
                                     throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
                                 }
                             } else if (paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)
                                     && paramPart.getValue() instanceof DateType) {
-                                DateType startDateDt = (DateType) paramPart.getValue();
-                                String startDate = startDateDt.asStringValue();
-                                StringBuilder sb = new StringBuilder();
-                                validateStartDateParamAndEndDateParam(startDate, null, sb);
-                                // refined at 1.3.1 only apply date if its valid.
-                                medicationPeriod = new Period();
-                                medicationPeriod.setStart(startDateDt.getValue());
-                                medicationPeriod.setEnd(null);
+                                if (medicationPeriod == null) {
+                                    DateType startDateDt = (DateType) paramPart.getValue();
+                                    String startDate = startDateDt.asStringValue();
+                                    StringBuilder sb = new StringBuilder();
+                                    validateStartDateParamAndEndDateParam(startDate, null, sb);
+                                    // refined at 1.3.1 only apply date if its valid.
+                                    medicationPeriod = new Period();
+                                    medicationPeriod.setStart(startDateDt.getValue());
+                                    medicationPeriod.setEnd(null);
+                                } else {
+                                    throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.MEDICATION_SEARCH_FROM_DATE);
+                                }
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
                             }
@@ -366,13 +378,18 @@ public class PatientResourceProvider implements IResourceProvider {
                         al.add(param);
                         includes.put(param.getName(), al);
                         // optional part named uncategorisedDataSearchPeriod with a valuePeriod
+                        Period uncatSearchPeriod = null;
                         for (ParametersParameterComponent paramPart : param.getPart()) {
 
                             if (paramPart.getName().equals(SystemConstants.UNCATEGORISED_DATA_SEARCH_PERIOD)
                                     && paramPart.getValue() instanceof Period) {
-                                Period period = (Period) paramPart.getValue();
-                                StringBuilder sb = new StringBuilder();
-                                validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb);
+                                if (uncatSearchPeriod == null) {
+                                    uncatSearchPeriod = (Period) paramPart.getValue();
+                                    StringBuilder sb = new StringBuilder();
+                                    validateStartDateParamAndEndDateParam(uncatSearchPeriod.getStartElement().asStringValue(), uncatSearchPeriod.getEndElement().asStringValue(), sb);
+                                } else {
+                                    throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.UNCATEGORISED_DATA_SEARCH_PERIOD);
+                                }
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
                             }
@@ -392,13 +409,21 @@ public class PatientResourceProvider implements IResourceProvider {
 
                             if (paramPart.getName().equals(SystemConstants.CONSULTATION_SEARCH_PERIOD)
                                     && paramPart.getValue() instanceof Period) {
-                                Period period = (Period) paramPart.getValue();
-                                StringBuilder sb = new StringBuilder();
-                                validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb);
-                                periodSupplied = true;
+                                if (!periodSupplied) {
+                                    Period period = (Period) paramPart.getValue();
+                                    StringBuilder sb = new StringBuilder();
+                                    validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb);
+                                    periodSupplied = true;
+                                } else {
+                                    throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.CONSULTATION_SEARCH_PERIOD);
+                                }
                             } else if (paramPart.getName().equals(SystemConstants.NUMBER_OF_MOST_RECENT) && paramPart.getValue() instanceof IntegerType) {
-                                int numberOfMostRecent = ((IntegerType) paramPart.getValue()).getValue();
-                                countSupplied = true;
+                                if (!countSupplied) {
+                                    int numberOfMostRecent = ((IntegerType) paramPart.getValue()).getValue();
+                                    countSupplied = true;
+                                } else {
+                                    throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.NUMBER_OF_MOST_RECENT);
+                                }
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
                             }
@@ -421,6 +446,8 @@ public class PatientResourceProvider implements IResourceProvider {
                         }
                         al.add(param);
                         // optional part named filterStatus with a valueCode eg active inactive
+                        boolean statusSupplied = false;
+                        boolean significanceSupplied = false;
                         // optional part named filterSignificance with a valueCode eg major minor
                         for (ParametersParameterComponent paramPart : param.getPart()) {
                             switch (paramPart.getName()) {
@@ -428,17 +455,22 @@ public class PatientResourceProvider implements IResourceProvider {
                                     if (!(paramPart.getValue() instanceof CodeType)) {
                                         throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName());
                                     } else {
-                                        try {
-                                            Condition.ConditionClinicalStatus status = Condition.ConditionClinicalStatus.valueOf(((CodeType) paramPart.getValue()).getValue().toUpperCase());
-                                            switch (status) {
-                                                case ACTIVE:
-                                                case INACTIVE:
-                                                    break;
-                                                default:
-                                                    throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
+                                        if (!statusSupplied) {
+                                            try {
+                                                Condition.ConditionClinicalStatus status = Condition.ConditionClinicalStatus.valueOf(((CodeType) paramPart.getValue()).getValue().toUpperCase());
+                                                switch (status) {
+                                                    case ACTIVE:
+                                                    case INACTIVE:
+                                                        break;
+                                                    default:
+                                                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
+                                                }
+                                                statusSupplied = true;
+                                            } catch (IllegalArgumentException ex) {
+                                                throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
                                             }
-                                        } catch (IllegalArgumentException ex) {
-                                            throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
+                                        } else {
+                                            throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.FILTER_STATUS);
                                         }
                                     }
                                     break;
@@ -447,16 +479,22 @@ public class PatientResourceProvider implements IResourceProvider {
                                     if (!(paramPart.getValue() instanceof CodeType)) {
                                         throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName());
                                     } else {
-                                        String significance = ((CodeType) paramPart.getValue()).getValue();
-                                        switch (significance) {
-                                            case "major":
-                                            case "minor":
-                                                break;
-                                            default:
-                                                throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
+                                        if (!significanceSupplied) {
+                                            String significance = ((CodeType) paramPart.getValue()).getValue();
+                                            switch (significance) {
+                                                case "major":
+                                                case "minor":
+                                                    break;
+                                                default:
+                                                    throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
+                                            }
+                                            significanceSupplied = true;
+                                        } else {
+                                            throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.FILTER_SIGNIFICANCE);
                                         }
                                     }
                                     break;
+                                    
                                 default:
                                     addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
                             }
@@ -472,23 +510,29 @@ public class PatientResourceProvider implements IResourceProvider {
 
         // Add Patient
         Patient patient = patientDetailsToPatientResourceConverter(patientDetails);
-        if (patient.getIdentifierFirstRep().getValue().equals(NHS)) {
+
+        if (patient.getIdentifierFirstRep()
+                .getValue().equals(NHS)) {
             structuredBundle.addEntry().setResource(patient);
         }
 
         //Organization from patient
         Set<String> orgIds = new HashSet<>();
+
         orgIds.add(patientDetails.getManagingOrganization());
 
         //Practitioner from patient
         Set<String> practitionerIds = new HashSet<>();
         List<Reference> practitionerReferenceList = patient.getGeneralPractitioner();
-        practitionerReferenceList.forEach(practitionerReference -> {
+
+        practitionerReferenceList.forEach(practitionerReference
+                -> {
             String[] pracRef = practitionerReference.getReference().split("/");
             if (pracRef.length > 1) {
                 practitionerIds.add(pracRef[1]);
             }
-        });
+        }
+        );
 
         if (getAllergies) {
             structuredBundle = structuredAllergyIntoleranceBuilder.buildStructuredAllergyIntolerence(NHS, practitionerIds, structuredBundle, includeResolved);
@@ -499,7 +543,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
         // append the required canned responses for patient 2 only
         StructuredBuilder structureBuilder = new StructuredBuilder();
-        for (String clinicalArea : includes.keySet()) {
+        for (String clinicalArea
+                : includes.keySet()) {
             if (NHS.equals(patients[PATIENT_2])) {
                 structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(clinicalArea), structuredBundle, PATIENT_2, includes.get(clinicalArea));
             } else {
@@ -528,9 +573,12 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         structuredBundle.setType(BundleType.COLLECTION);
-        structuredBundle.getMeta().addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
 
-        if (operationOutcome != null) {
+        structuredBundle.getMeta()
+                .addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
+
+        if (operationOutcome
+                != null) {
             structuredBundle.addEntry().setResource(operationOutcome);
         }
         return structuredBundle;
@@ -893,7 +941,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
         if (gender != null) {
 
-            EnumSet<AdministrativeGender> genderList = EnumSet.allOf(AdministrativeGender.class);
+            EnumSet<AdministrativeGender> genderList = EnumSet.allOf(AdministrativeGender.class
+            );
             Boolean valid = false;
             for (AdministrativeGender genderItem : genderList) {
 
@@ -1443,6 +1492,7 @@ public class PatientResourceProvider implements IResourceProvider {
         });
 
         return name;
+
     }
 
     private class NhsNumber {

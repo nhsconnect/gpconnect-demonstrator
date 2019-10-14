@@ -6,7 +6,6 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="ProblemsList"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
@@ -551,7 +550,6 @@
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
-            <id value="ConsultationsList"></id>
             <meta>
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>

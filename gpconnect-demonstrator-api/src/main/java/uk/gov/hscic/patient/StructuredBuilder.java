@@ -66,8 +66,8 @@ public class StructuredBuilder {
     private final HashSet<String> alreadyAdded = new HashSet<>();
 
     private static final String SNOMED_CONSULTATION_ENCOUNTER_TYPE = "325851000000107";
-    private static final String CONSULTATIONS_LIST_ID = "List/ConsultationsList";
-    private static final String PROBLEMS_LIST_ID = "List/ProblemsList";
+    private static final String CONSULTATIONS_LIST_TITLE = "Consultation";
+    private static final String PROBLEMS_LIST_TITLE = "Problems";
     private static final boolean DEBUG = true;
 
     /**
@@ -120,7 +120,8 @@ public class StructuredBuilder {
                     resourceTypes.put(resourceType, new HashMap<>());
                 }
                 HashMap<String, Resource> hmResources = resourceTypes.get(resourceType);
-                String id = entry.getResource().getId();
+                // Use the list ttitle where there is no id ie List of Problems/Consultations
+                String id = entry.getResource().getId() != null ? entry.getResource().getId() : ((ListResource) entry.getResource()).getTitle();
                 if (hmResources.get(id) == null) {
                     hmResources.put(id, entry.getResource());
                 } else {
@@ -137,24 +138,24 @@ public class StructuredBuilder {
             walkRoot(structuredBundle, resourceTypes, parms);
 
             // add in the two top level ResourceLists
-            for (String listId : new String[]{PROBLEMS_LIST_ID, CONSULTATIONS_LIST_ID}) {
+            for (String listTitle : new String[]{PROBLEMS_LIST_TITLE, CONSULTATIONS_LIST_TITLE}) {
                 boolean added = false;
                 for (BundleEntryComponent entry : structuredBundle.getEntry()) {
-                    if (listId.equals(entry.getResource().getId()) && entry.getResource() instanceof ListResource) {
+                    if (entry.getResource() instanceof ListResource) {
                         ListResource listResource = (ListResource) entry.getResource();
-                        if (listResource.getId().equals(listId)) {
+                        if (listResource.getTitle().equals(listTitle)) {
                             added = true;
                             break;
                         }
                     }
                 }
 
-                if (parameterName.equals(INCLUDE_PROBLEMS_PARM) && listId.equals(PROBLEMS_LIST_ID) && !added) {
+                if (parameterName.equals(INCLUDE_PROBLEMS_PARM) && listTitle.equals(PROBLEMS_LIST_TITLE) && !added) {
                     // only add problems 
-                    structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listId)));
+                    structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
                 } else if (parameterName.equals(INCLUDE_CONSULTATIONS_PARM) && !added) {
                     // add both problems and consultations
-                    structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listId)));
+                    structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
                 }
             } // resourceLists
 
@@ -202,21 +203,21 @@ public class StructuredBuilder {
 
             BundleEntryComponent problemsListEntry = null;
             // rebuild the problems and consultations lists
-            for (String listId : new String[]{PROBLEMS_LIST_ID, CONSULTATIONS_LIST_ID}) {
+            for (String listTitle : new String[]{PROBLEMS_LIST_TITLE, CONSULTATIONS_LIST_TITLE}) {
                 for (BundleEntryComponent entry : structuredBundle.getEntry()) {
                     if (entry.getResource() instanceof ListResource) {
                         ListResource listResource = (ListResource) entry.getResource();
-                        if (listResource.getId().equals(listId)) {
+                        if (listResource.getTitle().equals(listTitle)) {
                             listResource.getEntry().clear();
                             // the events are now sorted alpha which mimics sorted by event date
-                            switch (listId) {
-                                case PROBLEMS_LIST_ID:
+                            switch (listTitle) {
+                                case PROBLEMS_LIST_TITLE:
                                     problemsListEntry = entry;
                                     refCounts.keySet().stream().filter((key) -> (key.startsWith("Condition/"))).sorted().forEachOrdered((String key) -> {
                                         listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
                                     });
                                     break;
-                                case CONSULTATIONS_LIST_ID:
+                                case CONSULTATIONS_LIST_TITLE:
                                     refCounts.keySet().stream().filter((key) -> (key.startsWith("List/"))).sorted().forEachOrdered((key) -> {
                                         ListResource listResourceConsultation = (ListResource) resourceTypes.get(ResourceType.List).get(key);
                                         if (listResourceConsultation.getCode().getCodingFirstRep().getCode().equals(SNOMED_CONSULTATION_ENCOUNTER_TYPE)) {
@@ -232,7 +233,7 @@ public class StructuredBuilder {
             } // for list id
 
             // delete the problems list if it is empty
-            if (problemsListEntry != null && ((ListResource)problemsListEntry.getResource()).getEntry().isEmpty()) {
+            if (problemsListEntry != null && ((ListResource) problemsListEntry.getResource()).getEntry().isEmpty()) {
                 structuredBundle.getEntry().remove(problemsListEntry);
             }
 
@@ -278,7 +279,7 @@ public class StructuredBuilder {
             for (ResourceType rtKey : resourceTypes.keySet()) {
                 for (String key : resourceTypes.get(rtKey).keySet()) {
                     if (refCounts.get(key) == null) {
-                        if (!key.equals(PROBLEMS_LIST_ID) && !key.equals(CONSULTATIONS_LIST_ID)) {
+                        if (!key.equals(PROBLEMS_LIST_TITLE) && !key.equals(CONSULTATIONS_LIST_TITLE)) {
                             System.err.println("Warning Unreferenced key: " + key);
                         }
                     }
@@ -416,7 +417,7 @@ public class StructuredBuilder {
             }
         }
 
-        ListResource consultationList = (ListResource) lists.get(CONSULTATIONS_LIST_ID);
+        ListResource consultationList = (ListResource) lists.get(CONSULTATIONS_LIST_TITLE);
 
         // make sure the included Consultation are added
         for (ListResource consultation : consultations.values()) {

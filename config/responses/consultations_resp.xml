@@ -625,7 +625,7 @@
                <type>
                   <coding>
                      <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
-                     <code value="AUT"></code>
+                     <code value="AUTH"></code>
                      <display value="Author"></display>
                   </coding>
                </type>

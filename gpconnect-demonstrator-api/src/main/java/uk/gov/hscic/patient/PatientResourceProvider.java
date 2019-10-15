@@ -13,6 +13,8 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import static java.lang.Integer.min;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
 import org.hl7.fhir.dstu3.model.*;
@@ -120,6 +122,8 @@ public class PatientResourceProvider implements IResourceProvider {
     private Map<String, Boolean> registerPatientParams;
 
     private OperationOutcome operationOutcome;
+
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     public static Set<String> getCustomReadOperations() {
         Set<String> customReadOperations = new HashSet<>();
@@ -270,16 +274,24 @@ public class PatientResourceProvider implements IResourceProvider {
                     getAllergies = true;
 
                     if (param.getPart().isEmpty()) {
-                        addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES);
-//                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
-//                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
+//                       addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES);
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
+                                SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
                     }
 
+                    boolean includeResolvedParameterPartPresent = false;
                     for (ParametersParameterComponent paramPart : param.getPart()) {
-                        if (paramPart.getValue() instanceof BooleanType
-                                && paramPart.getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES)) {
-                            includeResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
+                        if (paramPart.getName().equals(SystemConstants.INCLUDE_RESOLVED_ALLERGIES)) {
+                            if (paramPart.getValue() instanceof BooleanType) {
+                                includeResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
+                                includeResolvedParameterPartPresent = true;
+                            } else {
+                                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                        new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
+                                        SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
+
+                            }
                         } else {
                             addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
 //                            throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -287,26 +299,38 @@ public class PatientResourceProvider implements IResourceProvider {
 //                                    SystemCode.INVALID_PARAMETER, IssueType.INVALID);
                         }
                     }
+                    if (!includeResolvedParameterPartPresent) {
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES),
+                                SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
+                    }
                 }
+
                 if (param.getName().equals(SystemConstants.INCLUDE_MEDICATION)) {
                     getMedications = true;
 
                     boolean isIncludedPrescriptionIssuesExist = false;
                     for (ParametersParameterComponent paramPart : param.getPart()) {
 
-                        if (paramPart.getValue() instanceof BooleanType
-                                && paramPart.getName().equals(SystemConstants.INCLUDE_PRESCRIPTION_ISSUES)) {
-                            includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
-                            isIncludedPrescriptionIssuesExist = true;
-                        } else if (paramPart.getValue() instanceof DateType
-                                && paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)) {
+                        if (paramPart.getName().equals(SystemConstants.INCLUDE_PRESCRIPTION_ISSUES)) {
+                            if (paramPart.getValue() instanceof BooleanType) {
+                                includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
+                                isIncludedPrescriptionIssuesExist = true;
+                            } else {
+                                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                        new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
+                                        SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
+
+                            }
+                        } else if (paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)
+                                && paramPart.getValue() instanceof DateType) {
                             DateType startDateDt = (DateType) paramPart.getValue();
                             medicationPeriod = new Period();
                             medicationPeriod.setStart(startDateDt.getValue());
                             medicationPeriod.setEnd(null);
                             String startDate = startDateDt.asStringValue();
                             if (!validateStartDateParamAndEndDateParam(startDate, null)) {
-                                addWarningIssue(param, paramPart, IssueType.INVALID, "Invalid date used");
+                                //addWarningIssue(param, paramPart, IssueType.INVALID, "Invalid date used");
                             }
                         } else {
                             addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
@@ -317,10 +341,10 @@ public class PatientResourceProvider implements IResourceProvider {
                     }
 
                     if (!isIncludedPrescriptionIssuesExist) {
-                        addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
-//                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-//                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-//                                SystemCode.PARAMETER_NOT_FOUND, IssueType.REQUIRED);
+//                      addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
+                                SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
                     }
                 }
             } else {
@@ -1392,13 +1416,74 @@ public class PatientResourceProvider implements IResourceProvider {
         }
     }
 
+    /**
+     * Checks that the dates are ok and that end is not earlier than start
+     * @param startDate
+     * @param endDate
+     * @return 
+     */
     private boolean validateStartDateParamAndEndDateParam(String startDate, String endDate) {
         Pattern dateOnlyPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+        StringBuilder sb = new StringBuilder();
+
         boolean result = true;
-        //if only a date then match against the date regex
-        if ((startDate != null && !dateOnlyPattern.matcher(startDate).matches()) || (endDate != null && !dateOnlyPattern.matcher(endDate).matches())) {
+
+        Date now = new Date();
+        try {
+            result = checkDate(startDate, "Start", dateOnlyPattern, sb, result, now);
+            result = checkDate(endDate, "End", dateOnlyPattern, sb, result, now);
+            if (result && endDate != null) {
+                Date startDt = DATE_FORMAT.parse(startDate);
+                Date endDt = DATE_FORMAT.parse(endDate);
+                if (endDt.before(startDt)) {
+                    sb.append(" End date ").append(endDate).append(" is earlier than start date ").append(startDate);
+                    result = false;
+                }
+            }
+        } catch (ParseException ex) {
             result = false;
-//          throwInvalidParameterOperationalOutcome("Invalid date used");
+        }
+        if (!result) {
+            throwInvalidParameterOperationalOutcome("Invalid date used " + sb.toString());
+        }
+        return result;
+    }
+
+    /**
+     * checks that date is in the correct format and is not in the future
+     *
+     * @param date Date object
+     * @param dateLabel "start" or "end"
+     * @param dateOnlyPattern regex for valid date strings
+     * @param sb StringBuilder to allow appending of additional info regarding
+     * the nature of the failure
+     * @param result boolean
+     * @param now Date object
+     * @return boolean true => ok
+     * @throws ParseException
+     */
+    private boolean checkDate(String date, String dateLabel, Pattern dateOnlyPattern, StringBuilder sb, boolean result, Date now) throws ParseException {
+        if (date != null) {
+            if (!dateOnlyPattern.matcher(date).matches()) {
+                if (sb.length() > 0) {
+                    sb.append(",");
+                }
+                sb.append(" ").append(dateLabel).append(" date ").append(date).append(" does not match yyyy-mm-dd");
+                result = false;
+            } else {
+                // extra check that date is not in the future
+                Date d = DATE_FORMAT.parse(date);
+                if (d.after(now)) {
+                    if (sb.length() > 0) {
+                        sb.append(",");
+                    }
+                    sb.append(" ").append(dateLabel).append(" date ").append(date).append(" is in the future");
+                    result = false;
+                }
+            }
+        }
+        if (!result) {
+            throwInvalidParameterOperationalOutcome("Invalid date used " + sb.toString());
         }
         return result;
     }

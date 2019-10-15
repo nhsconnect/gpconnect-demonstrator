@@ -1432,7 +1432,7 @@ public class PatientResourceProvider implements IResourceProvider {
         try {
             result = checkDate(startDate, "Start", dateOnlyPattern, sb, result, now);
             result = checkDate(endDate, "End", dateOnlyPattern, sb, result, now);
-            if (result && endDate != null) {
+            if (result && startDate !=null && endDate != null) {
                 Date startDt = DATE_FORMAT.parse(startDate);
                 Date endDt = DATE_FORMAT.parse(endDate);
                 if (endDt.before(startDt)) {

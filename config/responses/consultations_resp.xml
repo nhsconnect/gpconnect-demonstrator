@@ -382,8 +382,8 @@
                <valueCodeableConcept>
                   <coding>
                      <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ProblemSignificance-1"></system>
-                     <code value="major"></code>
-                     <display value="Major"></display>
+                     <code value="minor"></code>
+                     <display value="Minor"></display>
                   </coding>
                </valueCodeableConcept>
             </extension>

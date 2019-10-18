@@ -433,15 +433,17 @@ public class PageSectionFactory {
         List<List<Object>> pastMedRows = new ArrayList<>();
 
         for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationSearch.findMedications(nhsNumber, null, null, medicationSearch.PAST)) {
-            pastMedRows.add(Arrays.asList(
-                    patientMedicationHtmlEntity.getTypeMed(),
-                    patientMedicationHtmlEntity.getLastIssued(),
-                    patientMedicationHtmlEntity.getMedicationItem(),
-                    patientMedicationHtmlEntity.getDosageInstruction(),
-                    patientMedicationHtmlEntity.getQuantity(),
-                    patientMedicationHtmlEntity.getStartDate(), // now discontinued date
-                    patientMedicationHtmlEntity.getDiscontinuationReason(),
-                    patientMedicationHtmlEntity.getDetails()));
+            if ("Repeat".equals(patientMedicationHtmlEntity.getTypeMed())) {
+                pastMedRows.add(Arrays.asList(
+                        patientMedicationHtmlEntity.getTypeMed(),
+                        patientMedicationHtmlEntity.getLastIssued(),
+                        patientMedicationHtmlEntity.getMedicationItem(),
+                        patientMedicationHtmlEntity.getDosageInstruction(),
+                        patientMedicationHtmlEntity.getQuantity(),
+                        patientMedicationHtmlEntity.getStartDate(), // now discontinued date
+                        patientMedicationHtmlEntity.getDiscontinuationReason(),
+                        patientMedicationHtmlEntity.getDetails()));
+            }
         }
 
         PageSection ps = new PageSection("Discontinued Repeat Medication",

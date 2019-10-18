@@ -315,7 +315,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 handlePageBanners(nhsNumber, page);
                 page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getMEDDiscontinuedRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDDiscontinuedRepeatPageSection(nhsNumber));
                 page.addPageSection(pageSectionFactory.getMEDAllMedicationPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDAllMedicationIssuesPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 

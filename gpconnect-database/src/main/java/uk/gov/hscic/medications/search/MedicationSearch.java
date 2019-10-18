@@ -17,7 +17,7 @@ public class MedicationSearch {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     public final static String PAST = "Past";
-    public final static String CRRENT = "Current";
+    public final static String CURRENT = "Current";
     public final static String REPEAT = "Repeat";
 
     public List<PatientMedicationHtmlEntity> findMedications(final String nhsNumber, Date fromDate, Date toDate, String currRepPast) {

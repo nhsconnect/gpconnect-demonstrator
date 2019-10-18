@@ -29,9 +29,9 @@ VALUES
 INSERT INTO medications_html
   (nhsNumber,currentRepeatPast,startDate,medicationItem,dosageInstruction,quantity,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed,discontinuationReason)
 VALUES
-  (9658220223 ,"Current",'2016-07-01',"Amoxicillin 500mg capsules Supply (42) capsule(s)","di10","q10",'2019-11-19',7,"Take every 8 hours (three times a day) with or without food",NULL,NULL,NULL,NULL,"Acute",""),
-  (9658220223 ,"Repeat",'2016-07-01',"Metformin 500mg tablets","di10a","q10a",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat",""),
-  (9658220223 ,"Past",'2016-07-01',"Metformin 500mg tablets","di10b","q10b",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat","r11");
+  (9658220223 ,"Current",'2016-07-01',"Amoxicillin 500mg capsules Supply (42) capsule(s)","three times a day","5 days",'2019-11-19',7,"Take every 8 hours (three times a day) with or without food",NULL,NULL,NULL,NULL,"Acute",""),
+  (9658220223 ,"Repeat",'2016-07-01',"Metformin 500mg tablets","one tablet 2 to 3 times daily","28 days",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat",""),
+  (9658220223 ,"Past",'2016-07-01',"Metformin 500mg tablets","one tablet 2 to 3 times daily","28 days",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat","r11");
 
 INSERT INTO observations
   (nhsNumber,observationDate,entry,value,details)

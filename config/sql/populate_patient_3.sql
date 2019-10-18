@@ -33,16 +33,20 @@ INSERT INTO investigations
 INSERT INTO medications_html
   (nhsNumber,currentRepeatPast,startDate,medicationItem,dosageInstruction,quantity,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
 VALUES
-  (9658218881 ,"Current",'1996-07-03',"Beclometasone 100 micrograms/dose breath activated inhaler","di3","q3",NULL,NULL,"2 puffs twice a day",NULL,NULL,NULL,NULL,"NHS Medication"),
-  (9658218881 ,"Current",'1996-07-03',"Salbutamol 100 mcgs/dose inhaler","di3a","q3a",NULL,NULL,"2 puffs when required",NULL,NULL,NULL,NULL,"NHS Medication"),
-  (9658218881 ,"Current",'1996-07-03',"Cetirizine 10 mg tablets","di3b","q3b",NULL,NULL,"1 to be taken twice daily",NULL,NULL,NULL,NULL,"NHS Medication"),
-  (9658218881 ,"Repeat",'1996-07-03',"Salbutamol 100 mcgs/dose inhaler","di3c","q3c",NULL,NULL,"Inhale 2 doses as needed",'2018-04-06','2019-04-20',1,20,"Repeat"),
-  (9658218881 ,"Repeat",'1996-07-01',"Cetirizine 10 mg tablets","di3d","q3d",NULL,NULL,"1 to be taken twice daily",'2018-04-06','2019-04-20',1,20,"Repeat");
+  (9658218881 ,"Current",'1996-07-03',"Beclometasone 100 micrograms/dose breath activated inhaler","Twice daily","28 days",NULL,NULL,"2 puffs twice a day",NULL,NULL,NULL,NULL,"NHS Medication"),
+  (9658218881 ,"Current",'1996-07-03',"Salbutamol 100 mcgs/dose inhaler","1 to 2 puffs when needed","28 days",NULL,NULL,"2 puffs when required",NULL,NULL,NULL,NULL,"NHS Medication"),
+  (9658218881 ,"Current",'1996-07-03',"Cetirizine 10 mg tablets","once daily","28 days",NULL,NULL,"1 to be taken twice daily",NULL,NULL,NULL,NULL,"NHS Medication"),
+  (9658218881 ,"Repeat",'1996-07-03',"Salbutamol 100 mcgs/dose inhaler","1 to 2 puffs when needed","28 days",NULL,NULL,"Inhale 2 doses as needed",'2018-04-06','2019-04-20',1,20,"Repeat"),
+  (9658218881 ,"Repeat",'1996-07-01',"Cetirizine 10 mg tablets","once daily","28 days",NULL,NULL,"1 to be taken twice daily",'2018-04-06','2019-04-20',1,20,"Repeat");
 
 INSERT INTO observations
-  (nhsNumber,observationDate,entry,value,details)
+  (nhsNumber,observationDate,entry,value,theRange,details)
 VALUES
-  (9658218881 ,'2016-03-01',"Blood pressure","123/70 mmHg","");
+  (9658218881 ,'2016-03-01',"Blood pressure","123/70 mmHg","90/60 - 120/80 (normal ranges)",""),
+  (9658218881 ,'2018-03-11',"Oxygen saturation","98%","90 to 100%",""),
+  (9658218881 ,'2018-03-11',"Body Mass Index","24.2","18-25",""),
+  (9658218881 ,'2018-03-11',"FEV1","75%","Equal to or greater than 70%",""),
+  (9658218881 ,'2018-03-11',"Pulse","82","60 - 100 beats per minute","");
 
 INSERT INTO problems
   (nhsNumber,activeOrInactive,startDate,endDate,entry,significance,details)

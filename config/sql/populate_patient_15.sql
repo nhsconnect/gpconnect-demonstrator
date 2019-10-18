@@ -41,12 +41,12 @@ VALUES
 INSERT INTO medications_html
   (nhsNumber,currentRepeatPast,startDate,medicationItem,dosageInstruction,quantity,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed,discontinuationReason)
 VALUES
-  (9658220169 ,"Current",'2015-05-01',"Lansoprazole 15mg gastro-resistant capsules","di15","q15",'2019-11-19',2,"Take your doses 30 minutes before breakfast when your stomach is empty",NULL,NULL,NULL,NULL,"Acute",""),
-  (9658220169 ,"Current",'2016-07-01',"Amoxicillin 500mg capsules Supply (42) capsule(s)","di15a","q15a",'2019-11-19',7,"Take every 8 hours (three times a day) with or without food",NULL,NULL,NULL,NULL,"Acute",""),
-  (9658220169 ,"Repeat",'2015-05-01',"Metformin 500mg tablets","di15b","q15b",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat",""),
-  (9658220169 ,"Repeat",'2016-07-01',"Metformin 500mg tablets","di15c","q15c",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat",""),
-  (9658220169 ,"Past",'2015-05-01',"Metformin 500mg tablets","di15d","q15d",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat","r15"),
-  (9658220169 ,"Past",'2016-07-01',"Metformin 500mg tablets","di15e","q15e",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat","r15a");
+  (9658220169 ,"Current",'2015-05-01',"Lansoprazole 15mg gastro-resistant capsules","one tablet daily","28 days",'2019-11-19',2,"Take your doses 30 minutes before breakfast when your stomach is empty",NULL,NULL,NULL,NULL,"Acute",""),
+  (9658220169 ,"Current",'2016-07-01',"Amoxicillin 500mg capsules Supply (42) capsule(s)","three times per day","14 days",'2019-11-19',7,"Take every 8 hours (three times a day) with or without food",NULL,NULL,NULL,NULL,"Acute",""),
+  (9658220169 ,"Repeat",'2015-05-01',"Metformin 500mg tablets","one tablet 2 to 3 time daily","28 days",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat",""),
+  (9658220169 ,"Repeat",'2016-07-01',"Metformin 500mg tablets","one tablet 2 to 3 time daily","28 days",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat",""),
+  (9658220169 ,"Past",'2015-05-01',"Metformin 500mg tablets","one tablet 2 to 3 time daily","28 days",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat","r15"),
+  (9658220169 ,"Past",'2016-07-01',"Metformin 500mg tablets","one tablet 2 to 3 time daily","28 days",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat","r15a");
 
 INSERT INTO observations
   (nhsNumber,observationDate,entry,value,details)

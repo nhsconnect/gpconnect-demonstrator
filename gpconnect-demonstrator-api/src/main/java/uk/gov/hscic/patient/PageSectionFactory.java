@@ -91,10 +91,10 @@ public class PageSectionFactory {
      *
      * @param pageSection
      */
-    private void addDateRangeBanners(PageSection pageSection, boolean isDateRange) {
+    private void addDateRangeBanners(PageSection pageSection, boolean isNotDateRange) {
 
         StringBuilder sb = new StringBuilder();
-        if (isDateRange) {
+        if (isNotDateRange) {
             sb.append("Date filter not applied"); // #251 for subsections not applying a date range
         } else {
             // Date Range Banner
@@ -427,14 +427,12 @@ public class PageSectionFactory {
      * does not apply
      *
      * @param nhsNumber
-     * @param requestedFromDate as in the original request
-     * @param requestedToDate as in the original request
      * @return PageSection
      */
-    public PageSection getMEDDiscontinuedRepeatPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
+    public PageSection getMEDDiscontinuedRepeatPageSection(String nhsNumber) {
         List<List<Object>> pastMedRows = new ArrayList<>();
 
-        for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationSearch.findMedications(nhsNumber, requestedFromDate, requestedToDate, medicationSearch.PAST)) {
+        for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationSearch.findMedications(nhsNumber, null, null, medicationSearch.PAST)) {
             pastMedRows.add(Arrays.asList(
                     patientMedicationHtmlEntity.getTypeMed(),
                     patientMedicationHtmlEntity.getLastIssued(),
@@ -458,7 +456,8 @@ public class PageSectionFactory {
                         "Discontinuation Reason",
                         "Additional Information"), pastMedRows),
                 null, null);
-        addDateRangeBanners(ps, requestedFromDate != null || requestedToDate != null);
+        addDateRangeBanners(ps, true); // true means not a date range
+        ps.addBanner("All repeat medication ended by a clinician action");
         return ps;
     }
 
@@ -500,7 +499,9 @@ public class PageSectionFactory {
                     patientMedicationHtmlEntity.getQuantity(),
                     patientMedicationHtmlEntity.getLastIssued(),
                     patientMedicationHtmlEntity.getNumberIssued(),
-                    patientMedicationHtmlEntity.getDiscontinuationReason(),
+                    // # 273 Correct population of Discontinuation Details Column
+                    patientMedicationHtmlEntity.getCurrentRepeatPast().equals("Past") ? (patientMedicationHtmlEntity.getTypeMed().equals("Acute") ? "CANCELLED" : "DISCONTINUED" + ":<BR/>"
+                    + DATE_FORMAT.format(patientMedicationHtmlEntity.getLastIssued()) + "<BR/>" + patientMedicationHtmlEntity.getDiscontinuationReason()) : "",
                     patientMedicationHtmlEntity.getDetails()));
         }
 

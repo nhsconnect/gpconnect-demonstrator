@@ -51,9 +51,9 @@ VALUES
 INSERT INTO problems
   (nhsNumber,activeOrInactive,startDate,endDate,entry,significance,details)
 VALUES
-  (9658218881 ,"Active",'1996-07-03',null,"Asthma","Major Active",""),
-  (9658218881 ,"Active",'2016-07-01',null,"Urticaria","Minor Active",""),
-  (9658218881 ,"Inactive",'2010-11-02','2010-11-02',"Urinary Tract Infection","Minor Past","");
+  (9658218881 ,"Active",'1996-07-03',null,"Asthma","Major",""),
+  (9658218881 ,"Active",'2016-07-01',null,"Urticaria","Minor",""),
+  (9658218881 ,"Inactive",'2010-11-02','2010-11-02',"Urinary Tract Infection","Minor","");
 
 INSERT INTO referrals
   (nhsNumber,sectionDate,referral_from,referral_to,priority,details,lastUpdated)

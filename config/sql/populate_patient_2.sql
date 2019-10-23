@@ -51,12 +51,12 @@ VALUES
 INSERT INTO problems
   (nhsNumber,activeOrInactive,startDate,endDate,entry,significance,details)
 VALUES
-  (9658218873 ,"Active",'2015-05-01',null,"Type II Diabetes mellitus","Major Active","Diabetes type II blood glucose management"),
+  (9658218873 ,"Active",'2015-05-01',null,"Type II Diabetes mellitus","Major","Diabetes type II blood glucose management"),
   /* #262 replaced a major active with a major inactive having an end date */
-  (9658218873 ,"Inactive",'2006-03-01','2010-08-03',"Essential hypertension","Major Past",""),
-  (9658218873 ,"Active",'2018-04-25',null,"Lower back pain","Minor Active",""),
-  (9658218873 ,"Inactive",'1958-08-04','1958-10-14',"Fracture of Clavicle","Minor Past","Fell off bicycle"),
-  (9658218873 ,"Inactive",'1978-09-03','1978-09-15',"Conjunctivitus","Minor Past","");
+  (9658218873 ,"Inactive",'2006-03-01','2010-08-03',"Essential hypertension","Major",""),
+  (9658218873 ,"Active",'2018-04-25',null,"Lower back pain","Minor",""),
+  (9658218873 ,"Inactive",'1958-08-04','1958-10-14',"Fracture of Clavicle","Minor","Fell off bicycle"),
+  (9658218873 ,"Inactive",'1978-09-03','1978-09-15',"Conjunctivitus","Minor","");
 
 INSERT INTO referrals
   (nhsNumber,sectionDate,referral_from,referral_to,priority,details,lastUpdated)

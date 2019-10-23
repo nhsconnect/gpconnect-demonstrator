@@ -502,8 +502,8 @@ public class PageSectionFactory {
                     patientMedicationHtmlEntity.getLastIssued(),
                     patientMedicationHtmlEntity.getNumberIssued(),
                     // # 273 Correct population of Discontinuation Details Column
-                    patientMedicationHtmlEntity.getCurrentRepeatPast().equals("Past") ? (patientMedicationHtmlEntity.getTypeMed().equals("Acute") ? "CANCELLED" : "DISCONTINUED" + ":<BR/>"
-                    + DATE_FORMAT.format(patientMedicationHtmlEntity.getLastIssued()) + "<BR/>" + patientMedicationHtmlEntity.getDiscontinuationReason()) : "",
+                    patientMedicationHtmlEntity.getCurrentRepeatPast().equals("Past") ? (patientMedicationHtmlEntity.getTypeMed().equals("Acute") ? "CANCELLED" : "DISCONTINUED" + ":<br/>"
+                    + DATE_FORMAT.format(patientMedicationHtmlEntity.getLastIssued()) + "<br/>" + patientMedicationHtmlEntity.getDiscontinuationReason()) : "",
                     patientMedicationHtmlEntity.getDetails()));
         }
 

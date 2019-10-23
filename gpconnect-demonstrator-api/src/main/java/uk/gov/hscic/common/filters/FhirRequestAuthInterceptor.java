@@ -126,8 +126,8 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                 throw new InvalidRequestException("Not Base 64", OperationOutcomeFactory.buildOperationOutcome(
                         SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Not Base 64", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             } catch (IOException ex) {
-                throw new InvalidRequestException("Invalid WebToken", OperationOutcomeFactory.buildOperationOutcome(
-                        SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Invalid WebToken", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
+                throw new InvalidRequestException("Invalid WebToken " + ex.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
+                        SYSTEM_WARNING_CODE, CODE_INVALID_IDENTIFIER_SYSTEM, "Invalid WebToken " + ex.getMessage(), META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.INVALID_CONTENT));
             }
 
             RequestedRecord requestedRecord = webToken.getRequestedRecord();
@@ -215,11 +215,11 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             parser.parseResource(jsonNode.get("requesting_device").toString());
             parser.parseResource(jsonNode.get("requesting_organization").toString());
         } catch (DataFormatException e) {
-            throw new UnprocessableEntityException("Invalid Resource Present", OperationOutcomeFactory.buildOperationOutcome(
-                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Present", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.STRUCTURAL_ISSUE));
+            throw new UnprocessableEntityException("Invalid Resource Present "+e.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Invalid Resource Present "+e.getMessage(), META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.STRUCTURAL_ISSUE));
         } catch (IOException ex) {
-            throw new InvalidRequestException("Unparsable JSON", OperationOutcomeFactory.buildOperationOutcome(
-                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Unparsable JSON", META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.STRUCTURAL_ISSUE));
+            throw new InvalidRequestException("Unparsable JSON "+ex.getMessage(), OperationOutcomeFactory.buildOperationOutcome(
+                    SYSTEM_WARNING_CODE, CODE_BAD_REQUEST, "Unparsable JSON "+ex.getMessage(), META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.STRUCTURAL_ISSUE));
         }
     }
 

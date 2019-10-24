@@ -46,11 +46,11 @@ public final class FhirSectionBuilder {
 
         // add page banners #261 gp in transit
         if (!page.getBanners().isEmpty()) {
-            stringBuilder.append("<div class=\"gptransfer-banner\">");
             for (String banner : page.getBanners()) {
+                stringBuilder.append("<div class=\"gptransfer-banner\">");
                 stringBuilder.append("<p>").append(banner).append("</p>");
+                stringBuilder.append("</div>");
             }
-            stringBuilder.append("</div>");
         }
 
         // Add sections
@@ -64,22 +64,21 @@ public final class FhirSectionBuilder {
 
             if (!pageSection.getBanners().isEmpty()) {
                 // currently all date-banners
-                stringBuilder.append("<div class=\"date-banner\">");
-
                 for (String banner : pageSection.getBanners()) {
+                    stringBuilder.append("<div class=\"date-banner\">");
                     stringBuilder.append("<p>").append(banner).append("</p>");
+                    stringBuilder.append("</div>");
                 }
 
-                stringBuilder.append("</div>");
             }
 
             // Table
             Table table = pageSection.getTable();
 
             if (table == null || table.getRows().isEmpty()) {
-                stringBuilder.append("<div><p>No '").append(pageSection.getHeader()).append("' data is recorded for this patient.</p></div>");
+                stringBuilder.append("<p>No '").append(pageSection.getHeader()).append("' data is recorded for this patient.</p>");
             } else {
-                stringBuilder.append("<div><table");
+                stringBuilder.append("<table");
                 if (VERSION.getMinor() > 5) {
                     stringBuilder.append(" id=\"").append(pageSection.getId()).append("\"");
                 }
@@ -102,9 +101,9 @@ public final class FhirSectionBuilder {
                     stringBuilder.append("</tr>");
                 }
 
-                stringBuilder.append("</tbody></table></div>");
+                stringBuilder.append("</tbody></table>");
             }
-            stringBuilder.append("</div>");
+            stringBuilder.append("</div>"); // section div
         }
 
         return stringBuilder.append("</div>").toString();

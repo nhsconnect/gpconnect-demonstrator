@@ -1,4 +1,4 @@
-USE gpconnect0;
+USE gpconnect0_7;
 
 INSERT INTO appointment_schedules
   (id,practitionerId,identifier,typeCode,typeDescription,locationId,startDateTime,endDateTime,scheduleComment,lastUpdated)

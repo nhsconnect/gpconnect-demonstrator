@@ -1,4 +1,4 @@
-USE gpconnect0;
+USE gpconnect0_7;
 
 INSERT INTO adminitems
   (nhsNumber,sectionDate,adminDate,Entry,Details)
@@ -31,7 +31,7 @@ INSERT INTO medications_html
 VALUES
   (9000000149,"Current",'2016-07-01',"Amoxicillin 500mg capsules Supply (42) capsule(s)","3 times per day","14 days",'2019-11-19',7,"Take every 8 hours (three times a day) with or without food",NULL,NULL,NULL,NULL,"Acute",""),
   (9000000149,"Repeat",'2016-07-01',"Metformin 500mg tablets","one tablet 2 to 3 time daily","28 days",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat",""),
-  (9000000149,"Past",'2016-07-01',"Metformin 500mg tablets","one tablet 2 to 3 time daily","28 days",'2019-11-19',4,"Take with food and water",NULL,NULL,NULL,NULL,"Repeat","Patient felt queasy");
+  (9000000149,"Past",'2016-07-01',"Metformin 500mg tablets","one tablet 2 to 3 time daily","28 days",'2016-07-01',4,"Take with food and water",'2016-07-01',NULL,NULL,NULL,"Repeat","Patient felt queasy");
 
 INSERT INTO observations
   (nhsNumber,observationDate,entry,value,details)

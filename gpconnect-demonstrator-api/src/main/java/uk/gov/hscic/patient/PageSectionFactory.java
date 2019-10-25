@@ -440,7 +440,7 @@ public class PageSectionFactory {
                         patientMedicationHtmlEntity.getMedicationItem(),
                         patientMedicationHtmlEntity.getDosageInstruction(),
                         patientMedicationHtmlEntity.getQuantity(),
-                        patientMedicationHtmlEntity.getStartDate(), // now discontinued date
+                        patientMedicationHtmlEntity.getScheduledEnd(), // now discontinued date for discontinued repeat meds 
                         patientMedicationHtmlEntity.getDiscontinuationReason(),
                         patientMedicationHtmlEntity.getDetails()));
             }

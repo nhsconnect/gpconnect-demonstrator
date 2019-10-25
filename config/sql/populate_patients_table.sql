@@ -1,4 +1,4 @@
-USE gpconnect0;
+USE gpconnect0_7;
 
 LOCK TABLES patients WRITE;
 INSERT INTO patients

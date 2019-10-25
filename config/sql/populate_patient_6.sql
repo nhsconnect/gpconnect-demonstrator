@@ -1,4 +1,4 @@
-INSERT INTO gpconnect0.medications_html
+INSERT INTO gpconnect0_7.medications_html
   (nhsNumber,currentRepeatPast,startDate,medicationItem,dosageInstruction,quantity,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed)
 VALUES
   (9658218997 ,"Current",'2015-05-01',"Lansoprazole 15mg gastro-resistant capsules","one tablet daily","28 days",'2019-11-19',2,"Take your doses 30 minutes before breakfast when your stomach is empty",NULL,NULL,NULL,NULL,"Acute"),

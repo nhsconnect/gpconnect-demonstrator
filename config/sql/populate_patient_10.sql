@@ -1,4 +1,4 @@
-USE gpconnect0;
+USE gpconnect0_7;
 
 INSERT INTO allergies
   (nhsNumber,currentOrHistoric,startDate,endDate,details)

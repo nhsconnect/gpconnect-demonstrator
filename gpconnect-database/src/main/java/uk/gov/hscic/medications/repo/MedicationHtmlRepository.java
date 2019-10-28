@@ -45,7 +45,10 @@ public interface MedicationHtmlRepository extends JpaRepository<PatientMedicatio
 
     // see https://developer.nhs.uk/apis/gpconnect-0-7-2/accessrecord_view_medications.html for search date selection rules 
     // all medication items grouped
-    @Query(value = "SELECT max(md.id) as id, md.typeMed, min(md.startDate) as startDate, md.medicationItem, md.dosageInstruction, md.quantity, md.currentRepeatPast, count(*) as numberIssued, max(md.startDate) as lastIssued, md.daysDuration, md.details, md.discontinuationReason, md.maxIssues, md.nhsNumber, md.reviewDate, md.scheduledEnd FROM medications_html md"
+    
+    // the final NULL as discontinuationDate is necessary due to a possible defect in hibernate see
+    // https://stackoverflow.com/questions/39918918/getting-java-sql-sqlexception-in-my-code-while-i-am-fetching-particular-columns
+    @Query(value = "SELECT max(md.id) as id, md.typeMed, min(md.startDate) as startDate, md.medicationItem, md.dosageInstruction, md.quantity, md.currentRepeatPast, count(*) as numberIssued, max(md.startDate) as lastIssued, md.daysDuration, md.details, md.discontinuationReason, md.maxIssues, md.nhsNumber, md.reviewDate, md.scheduledEnd, NULL as discontinuationDate FROM medications_html md"
             + " where md.nhsNumber = :nhsNr "
             + " and ("
             + "(:from is null and :to is null) or "

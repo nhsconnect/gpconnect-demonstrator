@@ -62,6 +62,9 @@ public class PatientMedicationHtmlEntity {
     @Column(name = "discontinuationReason")
     private String discontinuationReason;
 
+    @Column(name = "discontinuationDate")
+    private Date discontinuationDate;
+
     public Long getId() {
         return id;
     }
@@ -189,6 +192,20 @@ public class PatientMedicationHtmlEntity {
 
     public void setDiscontinuationReason(String discontinuationReason) {
         this.discontinuationReason = discontinuationReason;
+    }
+
+    /**
+     * @return the discontinuationDate
+     */
+    public Date getDiscontinuationDate() {
+        return convertTimestamp2Date(discontinuationDate);
+    }
+
+    /**
+     * @param discontinuationDate the discontinuationDate to set
+     */
+    public void setDiscontinuationDate(Date discontinuationDate) {
+        this.discontinuationDate = discontinuationDate;
     }
 
 }

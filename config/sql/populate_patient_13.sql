@@ -27,11 +27,11 @@ VALUES
   (9658219691 ,'2016-07-01',"HIV Injection",NULL,NULL,"Dont Know");
 
 INSERT INTO medications_html
-  (nhsNumber,currentRepeatPast,startDate,medicationItem,dosageInstruction,quantity,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed,discontinuationReason)
+  (nhsNumber,currentRepeatPast,startDate,medicationItem,dosageInstruction,quantity,scheduledEnd,daysDuration,details,lastIssued,reviewDate,numberIssued,maxIssues,typeMed,discontinuationReason,discontinuationDate)
 VALUES
-  (9658219691 ,"Current",'2016-07-01',"Amoxicillin 500mg capsules Supply (42) capsule(s)","three times per day","14 days",'2019-11-19',7,"Take every 8 hours (three times a day) with or without food",NULL,NULL,NULL,NULL,"Acute",""),
-  (9658219691 ,"Repeat",'2016-07-01',"Metformin 500mg tablets","one tablet 2 to 3 time daily","28 days",'2019-11-19',4,"Take wth food and water",NULL,NULL,NULL,NULL,"Repeat",""),
-  (9658219691 ,"Past",'2016-07-01',"Metformin 500mg tablets","one tablet 2 to 3 time daily","28 days",'2016-07-01',4,"Take with food and water",'2016-07-01',NULL,NULL,NULL,"Repeat","Patient felt queasy");
+  (9658219691 ,"Current",'2016-07-01',"Amoxicillin 500mg capsules Supply (42) capsule(s)","three times per day","14 days",'2019-11-19',7,"Take every 8 hours (three times a day) with or without food",NULL,NULL,NULL,NULL,"Acute","",NULL),
+  (9658219691 ,"Repeat",'2016-07-01',"Metformin 500mg tablets","one tablet 2 to 3 time daily","28 days",'2019-11-19',4,"Take wth food and water",NULL,NULL,NULL,NULL,"Repeat","",NULL),
+  (9658219691 ,"Past",'2016-07-01',"Metformin 500mg tablets","one tablet 2 to 3 time daily","28 days",NULL,4,"Take with food and water",'2016-07-01',NULL,NULL,NULL,"Repeat","Patient felt queasy",'2016-07-01');
 
 INSERT INTO observations
   (nhsNumber,observationDate,entry,value,details)

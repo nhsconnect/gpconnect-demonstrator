@@ -55,10 +55,10 @@ public final class FhirSectionBuilder {
 
         // Add sections
         for (PageSection pageSection : page.getPageSections()) {
-            stringBuilder.append("<div>");
 
             // Sub Section Header #252
             if (!pageSection.isSingleTable()) {
+                stringBuilder.append("<div>");
                 stringBuilder.append("<h2>").append(pageSection.getHeader()).append("</h2>");
             }
 
@@ -103,7 +103,11 @@ public final class FhirSectionBuilder {
 
                 stringBuilder.append("</tbody></table>");
             }
-            stringBuilder.append("</div>"); // section div
+            
+            if (!pageSection.isSingleTable()) {
+                stringBuilder.append("</div>"); // section div
+            }
+
         }
 
         return stringBuilder.append("</div>").toString();

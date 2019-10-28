@@ -179,6 +179,7 @@ CREATE TABLE medications_html (
   maxIssues         BIGINT NULL,
   typeMed           VARCHAR(100) NULL,
   discontinuationReason           VARCHAR(100) NULL,
+  discontinuationDate      DATETIME NULL,
   PRIMARY KEY (id)
 );
 

@@ -47,7 +47,7 @@
             <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ParentPresent-1">
                <valueBoolean value="true"></valueBoolean>
             </extension>
-            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-DateRecorded-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-DateRecorded-1">
                <valueDateTime value="2019-06-28T10:00:00+01:00"></valueDateTime>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-VaccinationProcedure-1">

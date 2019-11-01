@@ -111,7 +111,7 @@ public class PageSectionFactory {
                 sb.append("All relevant items");
             }
         }
-        pageSection.addBanner(sb.toString());
+        pageSection.addBanner("date-banner",sb.toString());
     }
 
     /**
@@ -459,7 +459,7 @@ public class PageSectionFactory {
                         "Additional Information"), pastMedRows),
                 null, null);
         addDateRangeBanners(ps, true); // true means not a date range
-        ps.addBanner("All repeat medication ended by a clinician action");
+        ps.addBanner("content-banner","All repeat medication ended by a clinician action");
         return ps;
     }
 

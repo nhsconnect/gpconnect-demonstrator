@@ -9,16 +9,17 @@ public class PageSection {
     private final String header;
     private Date fromDate;
     private Date toDate;
-    private final List<String> sectionBanners;
+    private final List<String[]> sectionBanners;
     private Table table;
     private String id; // html id
     private boolean isSingleTable = false; // #252
 
     /**
      * overload
+     *
      * @param header
      * @param id
-     * @param table 
+     * @param table
      */
     public PageSection(String header, String id, Table table) {
         this(header, id, table, null, null, false);
@@ -26,18 +27,19 @@ public class PageSection {
 
     /**
      * overload
+     *
      * @param header
      * @param id
      * @param table
      * @param fromDate
-     * @param toDate 
+     * @param toDate
      */
     public PageSection(String header, String id, Table table, Date fromDate, Date toDate) {
         this(header, id, table, fromDate, toDate, false);
     }
 
     /**
-     * 
+     *
      * @param header
      * @param id
      * @param table
@@ -55,15 +57,20 @@ public class PageSection {
         this.isSingleTable = isSingleTable;
     }
 
-    public void addBanner(String bannerString) {
-        sectionBanners.add(bannerString);
+    /**
+     *
+     * @param clarse html class text
+     * @param bannerString
+     */
+    public void addBanner(String clarse, String bannerString) {
+        sectionBanners.add(new String[]{clarse, bannerString});
     }
 
     public String getHeader() {
         return header;
     }
 
-    public List<String> getBanners() {
+    public List<String[]> getBanners() {
         return sectionBanners;
     }
 

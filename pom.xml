@@ -37,7 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <fhir.version>3.0.0</fhir.version>
+        <fhir.version>4.0.3</fhir.version>
     </properties>
 
     <modules>

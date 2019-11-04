@@ -627,7 +627,8 @@ public class PatientResourceProvider implements IResourceProvider {
         list.setSubject(new Reference(new IdType("Patient", patient.getId())).setIdentifier(new Identifier().setValue(NHS).setSystem(SystemURL.ID_NHS_NUMBER)));
         list.setDate(new Date());
         list.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
-        list.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT));
+        // #283 change of emptyReason.text
+        list.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT_RECORDED));
         list.setNote(Arrays.asList(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE))));
 
         // TODO call the warnings helper here?

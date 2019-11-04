@@ -86,7 +86,8 @@ public class PopulateMedicationBundle {
         medicationStatementsList.addExtension(setClinicalSetting());
 
         if (medicationStatements.isEmpty()) {
-            medicationStatementsList.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT));
+            // #283 change of emptyReason.text
+            medicationStatementsList.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT_RECORDED));
             medicationStatementsList.setNote(Arrays.asList(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE))));
         }
 

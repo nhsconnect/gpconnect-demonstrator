@@ -23,7 +23,7 @@ public class MedicationStatementDetail {
     private List<MedicationNote> notes;
     private String dosageText;
     private String dosagePatientInstruction;
-    private Date lastUpdated;
+    private Date dosageLastChanged;
     private String prescribingAgency;
     private String guid;
     private String warningCode;
@@ -204,12 +204,12 @@ public class MedicationStatementDetail {
         this.dosagePatientInstruction = dosagePatientInstruction;
     }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public Date getDosageLastChanged() {
+        return dosageLastChanged;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setDosageLastChanged(Date dosageLastChanged) {
+        this.dosageLastChanged = dosageLastChanged;
     }
 
     public String getWarningCode() {

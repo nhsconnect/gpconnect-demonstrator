@@ -3,6 +3,7 @@ package uk.gov.hscic.medication.statement;
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import java.util.ArrayList;
+import java.util.Date;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.MedicationStatement.MedicationStatementStatus;
 import org.hl7.fhir.dstu3.model.MedicationStatement.MedicationStatementTaken;
@@ -81,6 +82,12 @@ public class MedicationStatementResourceProvider {
 
             CodeableConcept codeableConcept = new CodeableConcept().addCoding(coding);
             medicationStatement.addExtension(new Extension(SystemURL.SD_EXTENSION_CC_PRESCRIBING_AGENCY, codeableConcept));
+        }
+        
+        // #281 1.2.5 add dosageLastChanged
+        Date dosageLastChanged = statementDetail.getDosageLastChanged();
+        if (dosageLastChanged != null) {
+            medicationStatement.addExtension(new Extension(SystemURL.SD_EXTENSION_CC_DOSAGE_LAST_CHANGED, new DateTimeType(dosageLastChanged)));
         }
         
         return medicationStatement;

@@ -122,7 +122,7 @@ public class MedicationResourceProvider implements IResourceProvider {
 		medicationStatementEntity.setDosageText("Take 2 tablets every 4 hours");
 		medicationStatementEntity.setEndDate(simpleDateFormat.parse("2018-06-12"));
 		medicationStatementEntity.setLastIssueDate(simpleDateFormat.parse("2017-06-12"));
-		medicationStatementEntity.setLastUpdated(simpleDateFormat.parse("2018-03-15"));
+		medicationStatementEntity.setDosageLastChanged(simpleDateFormat.parse("2018-03-15"));
         medicationStatementEntity.setMedicationRequestId("1");
 		medicationStatementEntity.setMedicationId(medicationRepository.getMedicationIdByName((String) data.get("medication"))); // get from frontend
 		medicationStatementEntity.setPatientId(patientRepository.getPatientIdByNhsNumbwer(String.valueOf(data.get("nhsNumber")))); // get from frontend

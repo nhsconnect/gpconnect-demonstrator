@@ -1,7 +1,7 @@
 USE gpconnect1;
 INSERT INTO medication_statements
  (id,lastIssueDate,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
-    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, warningCode, prescribingAgency)
+    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,dosageLastChanged, warningCode, prescribingAgency)
 VALUES
  (1,'2018-08-17','active','Active',20,'2017-11-10','2018-09-14','2017-11-10',2,'unk','Unknown','1 tablet once a day','Take in the morning','2018-08-17','confidential-items','prescribed-at-gp-practice'),
  (9,'2018-08-29','active','Active',21,'2017-11-22','2018-09-26','2017-11-22',2,'unk','Unknown','2 tablets a day','With evening meal','2018-08-29','confidential-items','prescribed-at-gp-practice'),

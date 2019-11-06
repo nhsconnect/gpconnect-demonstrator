@@ -98,7 +98,7 @@ public class MedicationRequestResourceProvider {
         // #269 do not set MedicationRequest ReasonCode
         //setReasonCodes(medicationRequest, requestDetail);
         setNotes(medicationRequest, requestDetail);
-		if (medicationRequest.getIntent() != MedicationRequestIntent.ORDER) {
+	if (medicationRequest.getIntent() != MedicationRequestIntent.ORDER) {
             setRepeatInformation(medicationRequest, requestDetail);
         }
         setPrescriptionType(medicationRequest, requestDetail);

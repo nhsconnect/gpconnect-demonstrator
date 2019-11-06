@@ -214,7 +214,7 @@ CREATE TABLE medication_statements (
   takenDisplay        VARCHAR(50)  NULL,
   dosageText          VARCHAR(250) NULL,
   dosageInstruction   VARCHAR(250) NULL,
-  lastUpdated         DATETIME     NULL,
+  dosageLastChanged   DATETIME     NULL,
   prescribingAgency   VARCHAR(250) NULL,
   guid                VARCHAR(250) NULL,
   warningCode         VARCHAR(250) NULL,

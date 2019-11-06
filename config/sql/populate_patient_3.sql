@@ -1,7 +1,7 @@
 USE gpconnect1;
 INSERT INTO medication_statements
   (id,lastIssueDate,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
-    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, prescribingAgency)
+    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,dosageLastChanged, prescribingAgency)
 VALUES
  (2,'2018-01-04','completed','Completed',5,'2018-01-04',null,'2018-01-04',3,'unk','Yes','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15','prescribed-at-gp-practice');
 

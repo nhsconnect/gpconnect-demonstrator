@@ -300,7 +300,8 @@ public class StructuredAllergyIntoleranceBuilder {
     public static void addEmptyReasonCode(ListResource list) {
         CodeableConcept noContent = new CodeableConcept();
         noContent.setCoding(Arrays.asList(new Coding(SystemURL.VS_LIST_EMPTY_REASON_CODE, SystemConstants.NO_CONTENT_RECORDED, SystemConstants.NO_CONTENT_RECORDED_DISPLAY)));
-        noContent.setText(SystemConstants.INFORMATION_NOT_AVAILABLE);
+        // #284 remove text lement form codeable concept
+        //noContent.setText(SystemConstants.INFORMATION_NOT_AVAILABLE);
         list.setEmptyReason(noContent);
     }
 

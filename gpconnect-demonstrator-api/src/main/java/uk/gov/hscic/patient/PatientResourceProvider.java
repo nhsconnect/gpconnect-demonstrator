@@ -81,6 +81,8 @@ import static uk.gov.hscic.SystemConstants.SNOMED_IMMUNIZATIONS_LIST_CODE;
 import static uk.gov.hscic.SystemConstants.SNOMED_PROBLEMS_LIST_CODE;
 import static uk.gov.hscic.SystemConstants.SNOMED_PROBLEMS_LIST_DISPLAY;
 import static uk.gov.hscic.SystemConstants.SNOMED_UNCATEGORISED_LIST_CODE;
+import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
+import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
 
 @Component
 public class PatientResourceProvider implements IResourceProvider {
@@ -627,9 +629,13 @@ public class PatientResourceProvider implements IResourceProvider {
         list.setSubject(new Reference(new IdType("Patient", patient.getId())).setIdentifier(new Identifier().setValue(NHS).setSystem(SystemURL.ID_NHS_NUMBER)));
         list.setDate(new Date());
         list.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
+
+        // #284 align behaviour with meds and allergies
+        addEmptyListNote(list);
+        addEmptyReasonCode(list);
         // #283 change of emptyReason.text
-        list.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT_RECORDED));
-        list.setNote(Arrays.asList(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE))));
+        //list.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT_RECORDED));
+        //list.setNote(Arrays.asList(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE))));
 
         // TODO call the warnings helper here?
         BundleEntryComponent entry = new BundleEntryComponent();

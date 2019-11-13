@@ -279,7 +279,11 @@ public class StructuredAllergyIntoleranceBuilder {
 
     }
 
-    private void addEmptyListNote(ListResource list) {
+    /**
+     * 
+     * @param list 
+     */
+    public static void addEmptyListNote(ListResource list) {
         // cardinality of note 0..1 #266
         if (list.getNote().size() > 0) {
             Annotation annotation = list.getNote().get(0);
@@ -289,7 +293,11 @@ public class StructuredAllergyIntoleranceBuilder {
         }
     }
 
-    private void addEmptyReasonCode(ListResource list) {
+    /**
+     * 
+     * @param list 
+     */
+    public static void addEmptyReasonCode(ListResource list) {
         CodeableConcept noContent = new CodeableConcept();
         noContent.setCoding(Arrays.asList(new Coding(SystemURL.VS_LIST_EMPTY_REASON_CODE, SystemConstants.NO_CONTENT_RECORDED, SystemConstants.NO_CONTENT_RECORDED_DISPLAY)));
         noContent.setText(SystemConstants.INFORMATION_NOT_AVAILABLE);

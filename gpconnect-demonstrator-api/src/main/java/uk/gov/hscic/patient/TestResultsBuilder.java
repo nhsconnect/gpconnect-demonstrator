@@ -41,6 +41,7 @@ import static uk.gov.hscic.SystemConstants.SNOMED_URL;
 /** 
  * Place holder for initial test Results Synthesis (Not currently used)
  * @author simonfarrow
+ * @deprecated
  */
 public class TestResultsBuilder {
         private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss");

@@ -22,6 +22,8 @@ import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.model.patient.PatientDetails;
 import java.util.*;
 import static uk.gov.hscic.SystemConstants.*;
+import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
+import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
 import uk.gov.hscic.patient.details.PatientEntity;
 import uk.gov.hscic.patient.details.PatientRepository;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch;
@@ -75,9 +77,9 @@ public class PopulateMedicationBundle {
         medicationStatementsList.setMode(ListMode.SNAPSHOT);
         medicationStatementsList.setTitle(SystemConstants.SNOMED_MEDICATION_LIST_DISPLAY);
         medicationStatementsList.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY)));
-        
+
         PatientEntity patient = patientRepository.findByNhsNumber(nhsNumber);
-        
+
         // get the logical id for patient nhsNumber (was hard coded to 1)
         medicationStatementsList.setSubject(new Reference(new IdType("Patient", patient.getId())).setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
         medicationStatementsList.setDate(new Date());
@@ -86,9 +88,12 @@ public class PopulateMedicationBundle {
         medicationStatementsList.addExtension(setClinicalSetting());
 
         if (medicationStatements.isEmpty()) {
+            // #284 align behaviour with allergies
+            addEmptyListNote(medicationStatementsList);
+            addEmptyReasonCode(medicationStatementsList);
             // #283 change of emptyReason.text
-            medicationStatementsList.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT_RECORDED));
-            medicationStatementsList.setNote(Arrays.asList(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE))));
+            //medicationStatementsList.setEmptyReason(new CodeableConcept().setText(SystemConstants.NO_CONTENT_RECORDED));
+            //medicationStatementsList.setNote(Arrays.asList(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE))));
         }
 
         Set<String> warningCodes = new HashSet<>();

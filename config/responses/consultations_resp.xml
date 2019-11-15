@@ -57,7 +57,7 @@
          <Condition xmlns="http://hl7.org/fhir">
             <id value="Problem-A-Anxiety-With-Depression"></id>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProblemHeader-Condition-1"></profile>
             </meta>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
                <valueCodeableConcept>
@@ -220,7 +220,7 @@
          <Condition xmlns="http://hl7.org/fhir">
             <id value="Problem-B-Swollen-Legs"></id>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProblemHeader-Condition-1"></profile>
             </meta>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
                <valueCodeableConcept>
@@ -366,7 +366,7 @@
          <Condition xmlns="http://hl7.org/fhir">
             <id value="Problem-D-URTI"></id>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProblemHeader-Condition-1"></profile>
             </meta>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
                <extension url="type">
@@ -478,7 +478,7 @@
          <Condition xmlns="http://hl7.org/fhir">
             <id value="Problem-E-Post-viral-cough"></id>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ProblemHeader-Condition-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProblemHeader-Condition-1"></profile>
             </meta>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
                <extension url="type">

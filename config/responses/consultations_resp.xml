@@ -596,7 +596,7 @@
          <Encounter xmlns="http://hl7.org/fhir">
             <id value="Encounter1"></id>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Encounter-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Encounter-1  "></profile>
             </meta>
             <identifier>
                <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
@@ -3286,7 +3286,7 @@
          <Encounter xmlns="http://hl7.org/fhir">
             <id value="Encounter2"></id>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Encounter-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Encounter-1  "></profile>
             </meta>
             <identifier>
                <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
@@ -4142,7 +4142,7 @@
          <Encounter xmlns="http://hl7.org/fhir">
             <id value="Encounter3"></id>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-Encounter-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Encounter-1  "></profile>
             </meta>
             <identifier>
                <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>

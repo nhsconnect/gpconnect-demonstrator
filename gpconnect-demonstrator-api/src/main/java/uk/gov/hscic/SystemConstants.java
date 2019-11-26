@@ -57,15 +57,16 @@ public final class SystemConstants {
     public static final String MEDICATION_SEARCH_FROM_DATE = "medicationSearchFromDate";
 
     // SNOMED ListResource Data
+    // https://developer.nhs.uk/apis/gpconnect-1-3-1/accessrecord_structured_development_list.html
     public static final String SNOMED_MEDICATION_LIST_DISPLAY = "Medications and medical devices";
     public static final String SNOMED_MEDICATION_LIST_CODE = "933361000000108";
     public static final String SNOMED_IMMUNIZATIONS_LIST_DISPLAY = "Immunisations"; // NB the s not z
     public static final String SNOMED_IMMUNIZATIONS_LIST_CODE = "1102181000000102";
     public static final String SNOMED_UNCATEGORISED_LIST_DISPLAY = "Miscellaneous record";
     public static final String SNOMED_UNCATEGORISED_LIST_CODE = "826501000000100";
-    public static final String SNOMED_CONSULTATION_LIST_DISPLAY = "Consultation";
-    // TODO Need the new SNOMED Code for the List of Consultations
-    public static final String SNOMED_CONSULTATION_LIST_CODE = "999999999999999";
+    // #289 new snomed code and display for list of consultations
+    public static final String SNOMED_CONSULTATION_LIST_DISPLAY = "List of consultations";
+    public static final String SNOMED_CONSULTATION_LIST_CODE = "1149501000000101";
     public static final String SNOMED_PROBLEMS_LIST_DISPLAY = "Problems";
     public static final String SNOMED_PROBLEMS_LIST_CODE = "717711000000103";
 

@@ -266,24 +266,35 @@ public class PatientResourceProvider implements IResourceProvider {
         // Build requested section
         Page page;
 
+        final boolean IN_SUMMARY = true;
+
         switch (sectionName) {
             case "SUM":
+                // #287 related changes to banners and filtering
+                if (requestedFromDate != null || requestedToDate != null) {
+                    throw new InvalidRequestException("Date Ranges not allowed to be set",
+                            OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,
+                                    OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER, OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME,
+                                    IssueTypeEnum.BUSINESS_RULE_VIOLATION));
+                }
+
                 page = new Page("Summary", sectionName);
                 handlePageBanners(nhsNumber, page);
 
                 page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, 3));
-                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, null, null, IN_SUMMARY));
+                // default for this Consumer supplied filter is assumed to be all
+                page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, null, null, null, null, IN_SUMMARY));
+                page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, null, null, IN_SUMMARY));
+                page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, null, null, IN_SUMMARY));
+                page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, null, null, IN_SUMMARY));
                 break;
 
             case "PRB":
                 page = new Page("Problems and Issues", sectionName);
                 handlePageBanners(nhsNumber, page);
-                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, requestedFromDate, requestedToDate, !IN_SUMMARY));
+                page.addPageSection(pageSectionFactory.getPRBMajorInactivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, !IN_SUMMARY));
                 page.addPageSection(pageSectionFactory.getPRBOtherInactivePageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
 
                 break;
@@ -298,7 +309,7 @@ public class PatientResourceProvider implements IResourceProvider {
             case "ALL":
                 page = new Page("Allergies and Adverse Reactions", sectionName);
                 handlePageBanners(nhsNumber, page);
-                page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getALLCurrentPageSection(nhsNumber, requestedFromDate, requestedToDate, !IN_SUMMARY));
                 page.addPageSection(pageSectionFactory.getALLHistoricalPageSection(nhsNumber, requestedFromDate, requestedToDate));
 
                 break;
@@ -313,8 +324,8 @@ public class PatientResourceProvider implements IResourceProvider {
             case "MED":
                 page = new Page("Medications", sectionName);
                 handlePageBanners(nhsNumber, page);
-                page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, requestedFromDate, requestedToDate));
-                page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate));
+                page.addPageSection(pageSectionFactory.getMEDAcuteMedicationSection(nhsNumber, requestedFromDate, requestedToDate, !IN_SUMMARY));
+                page.addPageSection(pageSectionFactory.getMEDRepeatPageSection(nhsNumber, requestedFromDate, requestedToDate, !IN_SUMMARY));
                 page.addPageSection(pageSectionFactory.getMEDDiscontinuedRepeatPageSection(nhsNumber));
                 page.addPageSection(pageSectionFactory.getMEDAllMedicationPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
                 page.addPageSection(pageSectionFactory.getMEDAllMedicationIssuesPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate));
@@ -398,7 +409,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
         // Build the Care Record Composition
         Bundle bundle = new Bundle()
-                .setType(BundleTypeEnum.DOCUMENT)
+                // #288 change bundle type to searchset
+                .setType(BundleTypeEnum.SEARCH_RESULTS)
                 .addEntry(new Bundle.Entry().setResource(careRecordComposition));
 
         List<ResourceReferenceDt> careProviderPractitionerList = ((Patient) patientEntry.getResource()).getCareProvider();
@@ -446,14 +458,15 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     /**
-     * #261 add in transfer banner
-     * should be registration date at new GP but default to a week ago
-     * spec says may not be populated not will not be populated
+     * #261 add in transfer banner should be registration date at new GP but
+     * default to a week ago spec says may not be populated not will not be
+     * populated
+     *
      * @param nhsNumber
-     * @param page 
+     * @param page
      */
     private void handlePageBanners(String nhsNumber, Page page) {
-        if ( nhsNumber.equals(patientInTransit)) {
+        if (nhsNumber.equals(patientInTransit)) {
             Calendar cal = new GregorianCalendar();
             Date now = new Date();
             cal.setTime(now);

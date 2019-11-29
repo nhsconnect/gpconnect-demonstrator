@@ -63,10 +63,9 @@ public final class FhirSectionBuilder {
             }
 
             if (!pageSection.getBanners().isEmpty()) {
-                // currently all date-banners
-                for (String banner : pageSection.getBanners()) {
-                    stringBuilder.append("<div class=\"date-banner\">");
-                    stringBuilder.append("<p>").append(banner).append("</p>");
+                for (String[] banner : pageSection.getBanners()) {
+                    stringBuilder.append("<div class=\""+banner[0]+"\">");
+                    stringBuilder.append("<p>").append(banner[1]).append("</p>");
                     stringBuilder.append("</div>");
                 }
 

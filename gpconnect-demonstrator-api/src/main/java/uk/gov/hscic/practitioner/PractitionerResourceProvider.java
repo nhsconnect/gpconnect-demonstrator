@@ -63,10 +63,11 @@ public class PractitionerResourceProvider implements IResourceProvider {
         List<Practitioner> practitioners =  practitionerSearch.findPractitionerByUserId(practitionerId.getValue()).stream()
                 .map(this::practitionerDetailsToPractitionerResourceConverter).collect(Collectors.toList());
         
-        if (practitioners.isEmpty()) {
-            practitioners.add(new Practitioner());
-            return practitioners;
-        }
+        // #294 return an empty bundle if the search fails to find any valid records 
+        //if (practitioners.isEmpty()) {
+            //practitioners.add(new Practitioner());
+            //return practitioners;
+        //}
         
         if(sort != null && sort.getParamName().equalsIgnoreCase(Location.SP_STATUS)){
             Collections.sort(practitioners, (Practitioner a, Practitioner b) -> {

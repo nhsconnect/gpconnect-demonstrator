@@ -60,7 +60,7 @@
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProblemHeader-Condition-1"></profile>
             </meta>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
-               <valueCode value="Major"></valueCode>
+               <valueCode value="major"></valueCode>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ActualProblem-1">
                <valueReference>
@@ -217,7 +217,7 @@
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProblemHeader-Condition-1"></profile>
             </meta>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
-               <valueCode value="Major"></valueCode>
+               <valueCode value="major"></valueCode>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ActualProblem-1">
                <valueReference>
@@ -367,7 +367,7 @@
                </extension>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
-               <valueCode value="Major"></valueCode>
+               <valueCode value="major"></valueCode>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ActualProblem-1">
                <valueReference>
@@ -473,7 +473,7 @@
                </extension>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
-               <valueCode value="Major"></valueCode>
+               <valueCode value="minor"></valueCode>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ActualProblem-1">
                <valueReference>

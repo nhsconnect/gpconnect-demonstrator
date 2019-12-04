@@ -60,13 +60,7 @@
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProblemHeader-Condition-1"></profile>
             </meta>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
-               <valueCodeableConcept>
-                  <coding>
-                     <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ProblemSignificance-1"></system>
-                     <code value="major"></code>
-                     <display value="Major"></display>
-                  </coding>
-               </valueCodeableConcept>
+               <valueCode value="Major"></valueCode>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ActualProblem-1">
                <valueReference>
@@ -223,13 +217,7 @@
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProblemHeader-Condition-1"></profile>
             </meta>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
-               <valueCodeableConcept>
-                  <coding>
-                     <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ProblemSignificance-1"></system>
-                     <code value="major"></code>
-                     <display value="Major"></display>
-                  </coding>
-               </valueCodeableConcept>
+               <valueCode value="Major"></valueCode>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ActualProblem-1">
                <valueReference>
@@ -373,19 +361,13 @@
                   <valueCode value="Parent"></valueCode>
                </extension>
                <extension url="target">
-               <valueReference>
+                  <valueReference>
                      <reference value="Condition/Problem-E-Post-viral-cough"></reference>
                   </valueReference>
                </extension>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
-               <valueCodeableConcept>
-                  <coding>
-                     <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ProblemSignificance-1"></system>
-                     <code value="major"></code>
-                     <display value="Major"></display>
-                  </coding>
-               </valueCodeableConcept>
+               <valueCode value="Major"></valueCode>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ActualProblem-1">
                <valueReference>
@@ -491,13 +473,7 @@
                </extension>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1">
-               <valueCodeableConcept>
-                  <coding>
-                     <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ProblemSignificance-1"></system>
-                     <code value="minor"></code>
-                     <display value="Minor"></display>
-                  </coding>
-               </valueCodeableConcept>
+               <valueCode value="Major"></valueCode>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ActualProblem-1">
                <valueReference>

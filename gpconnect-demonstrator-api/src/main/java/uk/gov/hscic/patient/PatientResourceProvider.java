@@ -234,6 +234,15 @@ public class PatientResourceProvider implements IResourceProvider {
                 requestedFromDate = period.getStart();
                 requestedToDate = period.getEnd();
 
+                // #302 if both are empty this is an invalid parameter
+                if (fromDate == null && toDate == null ) {
+                    // TODO These messages are not propagated to the diagnostics field
+                    throw new UnprocessableEntityException("From date and to date are both empty",
+                            OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
+                                    OperationConstants.CODE_INVALID_PARAMETER, OperationConstants.COD_CONCEPT_RECORD_INVALID_PARAMETER,
+                                    OperationConstants.META_GP_CONNECT_OPERATIONOUTCOME, IssueTypeEnum.NOT_FOUND));
+                }
+
                 if (fromDate != null && toDate != null && fromDate.after(toDate)) {
                     throw new UnprocessableEntityException("Dates are invalid: " + fromDate + ", " + toDate,
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,

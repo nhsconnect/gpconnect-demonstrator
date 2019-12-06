@@ -338,7 +338,8 @@ public class StructuredBuilder {
                 Condition condition = (Condition) resource;
                 List<Extension> significances = condition.getExtensionsByUrl("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1");
                 if ((filterSignificance == null || significances.isEmpty()
-                        || filterSignificance.equalsIgnoreCase(((CodeableConcept) significances.get(0).getValue()).getCodingFirstRep().getCode()))
+                        // #300 significance changed from CodeableConcept to Code
+                        || filterSignificance.equalsIgnoreCase(significances.get(0).getValue().toString()))
                         && (filterStatus == null || condition.getClinicalStatus() == filterStatus)) {
                     conditionIdsToAdd.add(condition.getId());
                 }

@@ -689,9 +689,11 @@
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
-               <valueReference>
-                  <reference value="Condition/Problem-A-Anxiety-With-Depression"></reference>
-               </valueReference>
+               <extension url="target">
+                  <valueReference>
+                     <reference value="Condition/Problem-A-Anxiety-With-Depression"></reference>
+                  </valueReference>
+               </extension>
             </extension>
             <status value="current"></status>
             <mode value="snapshot"></mode>
@@ -929,9 +931,11 @@
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
-               <valueReference>
-                  <reference value="Condition/Problem-B-Swollen-Legs"></reference>
-               </valueReference>
+               <extension url="target">
+                  <valueReference>
+                     <reference value="Condition/Problem-B-Swollen-Legs"></reference>
+                  </valueReference>
+               </extension>
             </extension>
             <status value="current"></status>
             <mode value="snapshot"></mode>
@@ -1188,9 +1192,11 @@
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
-               <valueReference>
-                  <reference value="Condition/Problem-D-URTI"></reference>
-               </valueReference>
+               <extension url="target">
+                  <valueReference>
+                     <reference value="Condition/Problem-D-URTI"></reference>
+                  </valueReference>
+               </extension>
             </extension>
             <status value="current"></status>
             <mode value="snapshot"></mode>
@@ -1237,9 +1243,11 @@
                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
             </meta>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1">
-               <valueReference>
-                  <reference value="Condition/Problem-D-URTI"></reference>
-               </valueReference>
+               <extension url="target">
+                  <valueReference>
+                     <reference value="Condition/Problem-D-URTI"></reference>
+                  </valueReference>
+               </extension>
             </extension>
             <status value="current"></status>
             <mode value="snapshot"></mode>

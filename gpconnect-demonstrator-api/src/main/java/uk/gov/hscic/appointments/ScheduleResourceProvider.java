@@ -47,7 +47,7 @@ public class ScheduleResourceProvider implements IResourceProvider {
         if (scheduleDetail == null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InternalErrorException("No schedule details found for ID: " + scheduleId.getIdPart()),
-                    SystemCode.BAD_REQUEST, IssueType.NOTFOUND);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         }
 
         return scheduleDetailToScheduleResourceConverter(scheduleDetail);

@@ -112,7 +112,7 @@ public class ValueSetValidator {
         if(valSet == null){
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnprocessableEntityException(String.format("Could not find or parse Value Set [SystemUrl: %s] at: %s. See system log for details.", systemUrl, valueSetFilename)),
-                    SystemCode.REFERENCE_NOT_FOUND, IssueType.NOTFOUND); 
+                    SystemCode.REFERENCE_NOT_FOUND, IssueType.INVALID); 
         }
         
         return valSet;

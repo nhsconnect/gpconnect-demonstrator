@@ -98,7 +98,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
                 if(!NhsCodeValidator.nhsNumberValid(requestIdentifierValue)) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
                             new InvalidRequestException("Invalid NHS number in request: " + requestIdentifierValue),
-                            SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
+                            SystemCode.INVALID_NHS_NUMBER, IssueType.VALUE);
                 }
             }
         }

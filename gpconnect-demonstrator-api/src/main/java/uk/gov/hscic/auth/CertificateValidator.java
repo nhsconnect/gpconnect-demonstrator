@@ -87,7 +87,7 @@ public final class CertificateValidator {
 
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new UnclassifiedServerFailureException(certificateException.getStatusCode(), warningMsg),
-                    SystemCode.BAD_REQUEST, IssueType.FORBIDDEN);
+                    SystemCode.BAD_REQUEST, IssueType.INVALID);
         } catch (InvalidNameException ex) {
             java.util.logging.Logger.getLogger(CertificateValidator.class.getName()).log(Level.SEVERE, null, ex);
         }

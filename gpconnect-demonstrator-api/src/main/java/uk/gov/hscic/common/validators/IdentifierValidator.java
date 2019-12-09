@@ -17,7 +17,7 @@ public class IdentifierValidator {
             String requestedVersion = id.getVersionIdPart();
             if(!requestedVersion.equals(resource.getMeta().getVersionId())){
                 String msg = String.format("No matching resource found with version ID: %s", requestedVersion);
-                throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(msg), SystemCode.REFERENCE_NOT_FOUND, IssueType.NOTFOUND);
+                throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(msg), SystemCode.REFERENCE_NOT_FOUND, IssueType.INVALID);
             }
         }
         return resource;

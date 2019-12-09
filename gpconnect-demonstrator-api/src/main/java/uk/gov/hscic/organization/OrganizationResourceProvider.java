@@ -82,13 +82,13 @@ public class OrganizationResourceProvider implements IResourceProvider {
             if (organizationDetails == null) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
-                        SystemCode.ORGANISATION_NOT_FOUND, IssueType.INVALID);
+                        SystemCode.ORGANISATION_NOT_FOUND, IssueType.NOTFOUND);
             }
         } catch (NumberFormatException nfe) {
 
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No organization details found for organization ID: " + idPart),
-                    SystemCode.ORGANISATION_NOT_FOUND, IssueType.INVALID);
+                    SystemCode.ORGANISATION_NOT_FOUND, IssueType.NOTFOUND);
 
         }
 

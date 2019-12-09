@@ -64,7 +64,7 @@ public class LocationResourceProvider implements IResourceProvider {
         if (locationDetails == null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No location details found for location ID: "+locationId.getIdPart())
-                    ,SystemCode.REFERENCE_NOT_FOUND, IssueType.INCOMPLETE);
+                    ,SystemCode.REFERENCE_NOT_FOUND, IssueType.INVALID);
             
         }
 

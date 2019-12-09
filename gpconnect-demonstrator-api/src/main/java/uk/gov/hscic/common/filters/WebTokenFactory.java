@@ -76,7 +76,7 @@ public class WebTokenFactory {
                 // NB Issue type is Incomplete not Invalid
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new UnclassifiedServerFailureException(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "No content media type set"),
-                        SystemCode.BAD_REQUEST, IssueType.INCOMPLETE);
+                        SystemCode.BAD_REQUEST, IssueType.INVALID);
             }
         } else if (!CONTENT_TYPES.contains(contentType.split(";")[0])) {
             throwUnsupportedMedia415_BadRequestException("Unsupported content media type");

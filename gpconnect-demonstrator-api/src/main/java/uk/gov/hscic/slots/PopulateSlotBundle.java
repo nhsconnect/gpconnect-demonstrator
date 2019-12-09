@@ -254,7 +254,7 @@ public class PopulateSlotBundle {
                                 CodeableConcept errorCodableConcept = new CodeableConcept().addCoding(errorCoding);
                                 errorCodableConcept.setText("Invalid Reference");
                                 operationOutcome.addIssue().setSeverity(IssueSeverity.ERROR)
-                                        .setCode(IssueType.NOTFOUND).setDetails(errorCodableConcept);
+                                        .setCode(IssueType.INVALID).setDetails(errorCodableConcept);
                                 throw new ResourceNotFoundException("Practitioner Reference returning null");
                             }
                             if (actorPractitioner) {

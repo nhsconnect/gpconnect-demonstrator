@@ -19,6 +19,7 @@ import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.AuthenticationException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 import org.hl7.fhir.dstu3.model.Bundle;
+import static org.hl7.fhir.dstu3.model.Bundle.BundleType.SEARCHSET;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
 /**
@@ -36,6 +37,11 @@ class PostProcessor extends InterceptorAdapter {
             throws AuthenticationException {
         if (theResponseDetails instanceof Bundle) {
             Bundle bundle = (Bundle) theResponseDetails;
+            // #299 remove total and link from searchset result bundles
+            if (bundle.getType() == SEARCHSET) {
+                bundle.setTotalElement(null);
+                bundle.setLink(null);
+            }
             for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {
                 if (entry.hasFullUrl()) {
                     // #215 don't populate Bundle.entry.fullurl

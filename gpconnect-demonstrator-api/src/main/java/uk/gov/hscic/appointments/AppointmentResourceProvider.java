@@ -120,7 +120,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                         String msg = String.format("No appointment details found for ID: %s with versionId %s",
                                 appointmentId.getIdPart(), versionId);
                         throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(msg),
-                                SystemCode.REFERENCE_NOT_FOUND, IssueType.NOTFOUND);
+                                SystemCode.REFERENCE_NOT_FOUND, IssueType.INVALID);
                     }
                 } catch (NumberFormatException nfe) {
                     // 404 resource not found - the versionId is valid according
@@ -129,7 +129,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     String msg = String.format("The version ID %s of the Appointment (ID - %s) is not valid",
                             appointmentId.getVersionIdPart(), id);
                     throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(msg),
-                            SystemCode.REFERENCE_NOT_FOUND, IssueType.NOTFOUND);
+                            SystemCode.REFERENCE_NOT_FOUND, IssueType.INVALID);
                 }
             } else {
                 appointmentDetail = appointmentSearch.findAppointmentByID(id);
@@ -138,7 +138,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
                     // 404 resource not found
                     String msg = String.format("No appointment details found for ID: %s", appointmentId.getIdPart());
                     throw OperationOutcomeFactory.buildOperationOutcomeException(new ResourceNotFoundException(msg),
-                            SystemCode.REFERENCE_NOT_FOUND, IssueType.NOTFOUND);
+                            SystemCode.REFERENCE_NOT_FOUND, IssueType.INVALID);
                 }
             }
 
@@ -149,7 +149,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             // however we have no entities matching that identifier
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No appointment details found for ID: " + appointmentId.getIdPart()),
-                    SystemCode.REFERENCE_NOT_FOUND, IssueType.NOTFOUND);
+                    SystemCode.REFERENCE_NOT_FOUND, IssueType.INVALID);
         }
 
         return appointment;

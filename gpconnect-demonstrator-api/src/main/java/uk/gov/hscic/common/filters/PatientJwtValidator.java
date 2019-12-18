@@ -51,7 +51,7 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
             if(requestNhsNumber == null){
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("NHS number missing from request"),
-                        SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
+                        SystemCode.INVALID_NHS_NUMBER, IssueType.VALUE);
             }
         }
     }
@@ -89,13 +89,13 @@ public class PatientJwtValidator extends AuthorizationInterceptor {
                 if (RequestTypeEnum.GET == requestDetails.getRequestType()) {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
                             new ResourceNotFoundException("No patient details found for patient ID: " + parameterValue),
-                            SystemCode.PATIENT_NOT_FOUND, IssueType.INVALID);
+                            SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
                 }
 
                 // Otherwise, there should have been an identifier header
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("No NHS number submitted: " + parameterValue),
-                        SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
+                        SystemCode.INVALID_NHS_NUMBER, IssueType.VALUE);
             }
         }
 

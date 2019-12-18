@@ -38,7 +38,7 @@ public class PractitionerRoleResourceProvider implements IResourceProvider {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException(
                             "No practitioner details found for practitioner ID: " + practitionerId.getIdPart()),
-                    SystemCode.PRACTITIONER_NOT_FOUND, IssueType.INVALID);
+                    SystemCode.PRACTITIONER_NOT_FOUND, IssueType.NOTFOUND);
         }
 
         return practitionerDetailsToPractitionerRoleList(practitionerDetails);

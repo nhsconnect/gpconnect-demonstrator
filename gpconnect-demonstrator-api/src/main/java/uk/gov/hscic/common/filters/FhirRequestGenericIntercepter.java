@@ -172,7 +172,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
      * @param exceptionMessage 
      */
     private static void throwInvalidRequest400_InvalidIdentifierSystemException(String exceptionMessage) {
-        throwInvalidRequest400Exception(SystemCode.INVALID_IDENTIFIER_SYSTEM, exceptionMessage);
+        throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(exceptionMessage),
+                SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueType.VALUE);
     }
 
     /**
@@ -362,7 +363,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                 && theException.getMessage().contains("Slot is already in use.")) {
             ResourceVersionConflictException exception = (ResourceVersionConflictException) theException;
 
-            return OperationOutcomeFactory.buildOperationOutcomeException(exception, SystemCode.DUPLICATE_REJECTED, IssueType.CONFLICT);
+            return OperationOutcomeFactory.buildOperationOutcomeException(exception, SystemCode.DUPLICATE_REJECTED, IssueType.DUPLICATE);
         }
 
         if (theException instanceof ResourceVersionConflictException) {

@@ -295,7 +295,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                         if (param.getPart().isEmpty()) {
                             // #272 fail for invalid as opposed to unrcognised 
-                            throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
+                            throwInvalidParameterInvalidOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
                         }
 
                         boolean includeResolvedParameterPartPresent = false;
@@ -306,17 +306,17 @@ public class PatientResourceProvider implements IResourceProvider {
                                         includeResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
                                         includeResolvedParameterPartPresent = true;
                                     } else {
-                                        throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
+                                        throwInvalidParameterInvalidOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
                                     }
                                 } else {
-                                    throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
+                                    throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
                                 }
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
                             }
                         }
                         if (!includeResolvedParameterPartPresent) {
-                            throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
+                            throwInvalidParameterInvalidOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_RESOLVED_ALLERGIES_PARM);
                         }
                         break;
 
@@ -332,10 +332,10 @@ public class PatientResourceProvider implements IResourceProvider {
                                         includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
                                         isIncludedPrescriptionIssuesExist = true;
                                     } else {
-                                        throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
+                                        throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
                                     }
                                 } else {
-                                    throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
+                                    throwInvalidParameterInvalidOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
                                 }
                             } else if (paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)
                                     && paramPart.getValue() instanceof DateType) {
@@ -349,7 +349,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     medicationPeriod.setStart(startDateDt.getValue());
                                     medicationPeriod.setEnd(null);
                                 } else {
-                                    throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.MEDICATION_SEARCH_FROM_DATE);
+                                    throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + SystemConstants.MEDICATION_SEARCH_FROM_DATE);
                                 }
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
@@ -358,7 +358,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                         if (!isIncludedPrescriptionIssuesExist) {
                             // #272 fail for invalid as opposed to unrecognised  
-                            throwInvalidParameterRequiredOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
+                            throwInvalidParameterInvalidOperationalOutcome("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
                         }
                         break;
 
@@ -390,7 +390,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     StringBuilder sb = new StringBuilder();
                                     validateStartDateParamAndEndDateParam(uncatSearchPeriod.getStartElement().asStringValue(), uncatSearchPeriod.getEndElement().asStringValue(), sb);
                                 } else {
-                                    throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.UNCATEGORISED_DATA_SEARCH_PERIOD);
+                                    throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + SystemConstants.UNCATEGORISED_DATA_SEARCH_PERIOD);
                                 }
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
@@ -417,14 +417,14 @@ public class PatientResourceProvider implements IResourceProvider {
                                     validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb);
                                     periodSupplied = true;
                                 } else {
-                                    throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.CONSULTATION_SEARCH_PERIOD);
+                                    throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + SystemConstants.CONSULTATION_SEARCH_PERIOD);
                                 }
                             } else if (paramPart.getName().equals(SystemConstants.NUMBER_OF_MOST_RECENT) && paramPart.getValue() instanceof IntegerType) {
                                 if (!countSupplied) {
                                     int numberOfMostRecent = ((IntegerType) paramPart.getValue()).getValue();
                                     countSupplied = true;
                                 } else {
-                                    throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.NUMBER_OF_MOST_RECENT);
+                                    throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + SystemConstants.NUMBER_OF_MOST_RECENT);
                                 }
                             } else {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
@@ -472,7 +472,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                                 throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
                                             }
                                         } else {
-                                            throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.FILTER_STATUS);
+                                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + SystemConstants.FILTER_STATUS);
                                         }
                                     }
                                     break;
@@ -492,7 +492,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                             }
                                             significanceSupplied = true;
                                         } else {
-                                            throwInvalidParameterRequiredOperationalOutcome("Repeated Parameter Part : " + SystemConstants.FILTER_SIGNIFICANCE);
+                                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + SystemConstants.FILTER_SIGNIFICANCE);
                                         }
                                     }
                                     break;
@@ -760,11 +760,11 @@ public class PatientResourceProvider implements IResourceProvider {
         if (nnn.equals(patients[PATIENT_NOTONSPINE])) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(String.format("Patient (NHS number - %s) not present on PDS", nnn)),
-                    SystemCode.INVALID_PATIENT_DEMOGRAPHICS, IssueType.INVALID);
+                    SystemCode.INVALID_PATIENT_DEMOGRAPHICS, IssueType.BUSINESSRULE);
         } else if (nnn.equals(patients[PATIENT_SUPERSEDED])) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(String.format("Patient (NHS number - %s) is superseded", nnn)),
-                    SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
+                    SystemCode.INVALID_NHS_NUMBER, IssueType.VALUE);
         }
 
         if (unregisteredPatient != null) {
@@ -799,12 +799,12 @@ public class PatientResourceProvider implements IResourceProvider {
             } else if (patientDetails.isDeceased() || patientDetails.isSensitive()) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException(String.format("Patient (NHS number - %s) has invalid demographics", nnn)),
-                        SystemCode.INVALID_PATIENT_DEMOGRAPHICS, IssueType.INVALID);
+                        SystemCode.INVALID_PATIENT_DEMOGRAPHICS, IssueType.BUSINESSRULE);
 
             } else {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new UnclassifiedServerFailureException(409, String.format("Patient (NHS number - %s) already exists", nnn)),
-                        SystemCode.DUPLICATE_REJECTED, IssueType.INVALID);
+                        SystemCode.DUPLICATE_REJECTED, IssueType.DUPLICATE);
             }
         } else {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -1526,7 +1526,7 @@ public class PatientResourceProvider implements IResourceProvider {
             if (nhsNumber != null && !NhsCodeValidator.nhsNumberValid(nhsNumber)) {
                 throw OperationOutcomeFactory.buildOperationOutcomeException(
                         new InvalidRequestException("Invalid NHS number submitted: " + nhsNumber),
-                        SystemCode.INVALID_NHS_NUMBER, IssueType.INVALID);
+                        SystemCode.INVALID_NHS_NUMBER, IssueType.VALUE);
             }
 
             return nhsNumber;
@@ -1547,7 +1547,7 @@ public class PatientResourceProvider implements IResourceProvider {
                             identifierSystem, SystemURL.ID_NHS_NUMBER);
 
                     throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(message),
-                            SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueType.INVALID);
+                            SystemCode.INVALID_IDENTIFIER_SYSTEM, IssueType.VALUE);
                 }
             }
 
@@ -1718,10 +1718,10 @@ public class PatientResourceProvider implements IResourceProvider {
                 SystemCode.INVALID_PARAMETER, IssueType.INVALID);
     }
 
-    private void throwInvalidParameterRequiredOperationalOutcome(String error) {
-        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                new UnprocessableEntityException(
-                        error),
-                SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
-    }
+//    private void throwInvalidParameterRequiredOperationalOutcome(String error) {
+//        throw OperationOutcomeFactory.buildOperationOutcomeException(
+//                new UnprocessableEntityException(
+//                        error),
+//                SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
+//    }
 }

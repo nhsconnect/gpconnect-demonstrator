@@ -44,6 +44,12 @@ public final class InteractionId {
     public static final String REST_UPDATE_APPOINTMENT                 = BASE + "rest:update:appointment-1";   
     public static final String REST_CANCEL_APPOINTMENT                 = BASE + "rest:cancel:appointment-1";
 
+    // documents api
+    private static final String DOCUMENTS_BASE = "urn:nhs:names:services:gpconnect:documents:fhir:";
+    
+    public static final String REST_SEARCH_DOCUMENT_REFERENCE          = DOCUMENTS_BASE + "rest:search:documentreference-1";
+    public static final String REST_READ_BINARY                        = DOCUMENTS_BASE + "rest:read:binary-1";
+
     public static final List<String> IDENTIFIER_INTERACTIONS = Arrays.asList(
             REST_SEARCH_LOCATION,
             REST_SEARCH_ORGANIZATION,

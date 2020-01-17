@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -32,9 +33,9 @@ import java.util.List;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.CodeType;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Condition;
 import org.hl7.fhir.dstu3.model.Condition.ConditionClinicalStatus;
+import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.DomainResource;
 import org.hl7.fhir.dstu3.model.Encounter;
 import org.hl7.fhir.dstu3.model.Extension;
@@ -45,6 +46,7 @@ import org.hl7.fhir.dstu3.model.MedicationStatement;
 import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Period;
 import org.hl7.fhir.dstu3.model.Reference;
+import org.hl7.fhir.dstu3.model.ReferralRequest;
 import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.exceptions.FHIRException;
@@ -53,11 +55,17 @@ import static uk.gov.hscic.SystemConstants.FILTER_SIGNIFICANCE;
 import static uk.gov.hscic.SystemConstants.FILTER_STATUS;
 import static uk.gov.hscic.SystemConstants.INCLUDE_CONSULTATIONS_PARM;
 import static uk.gov.hscic.SystemConstants.INCLUDE_PROBLEMS_PARM;
+import static uk.gov.hscic.SystemConstants.INCLUDE_REFERRALS_PARM;
 import static uk.gov.hscic.SystemConstants.NUMBER_OF_MOST_RECENT;
 import static uk.gov.hscic.SystemConstants.SNOMED_CONSULTATION_LIST_DISPLAY;
 import static uk.gov.hscic.SystemConstants.SNOMED_PROBLEMS_LIST_DISPLAY;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
+import static uk.gov.hscic.SystemConstants.INCLUDE_INVESTIGATIONS_PARM;
+import static uk.gov.hscic.SystemConstants.INVESTIGATION_SEARCH_PERIOD;
+import static uk.gov.hscic.SystemConstants.REFERRAL_SEARCH_PERIOD;
+import static uk.gov.hscic.SystemConstants.SNOMED_INVESTIGATIONS_LIST_DISPLAY;
+import static uk.gov.hscic.SystemConstants.SNOMED_REFERRALS_LIST_DISPLAY;
 
 /**
  * Appends canned responses to a Bundle
@@ -71,7 +79,20 @@ public class StructuredBuilder {
 
     private static final String SNOMED_CONSULTATION_ENCOUNTER_TYPE = "325851000000107";
 
-    private static final boolean DEBUG = true;
+    private static final String[] SNOMED_LISTS = {SNOMED_PROBLEMS_LIST_DISPLAY, // 1.3
+        SNOMED_CONSULTATION_LIST_DISPLAY, // 1.3
+        SNOMED_REFERRALS_LIST_DISPLAY, // 1.4
+        SNOMED_INVESTIGATIONS_LIST_DISPLAY}; // 1.4
+
+    // add any new clinical areas supported as canned responses here
+    private final static String[] STRUCTURED_CLINICAL_AREAS = {INCLUDE_PROBLEMS_PARM,
+        INCLUDE_CONSULTATIONS_PARM,
+        INCLUDE_REFERRALS_PARM,
+        INCLUDE_INVESTIGATIONS_PARM
+// add new clinical area here
+    };
+
+    private static final int DEBUG_LEVEL = 2;
 
     /**
      * append the entries in the xml bundle file to the response bundle can
@@ -92,13 +113,28 @@ public class StructuredBuilder {
         String suffix = filename.replaceFirst("^.*\\.([^\\.]+)$", "$1");
         IParser parser = null;
         String s = new String(Files.readAllBytes(new File(filename).toPath()));
-        // change all the references to be consistent
-        String[][] substitutions = new String[][]{
-            {"Patient", "" + patientLogicalID}};
+        // change all the references of the form .*/.* to be consistent
+        String[][] referenceSubstitutions = new String[][]{
+            {"Patient", "" + patientLogicalID},
+            {"Practitioner", "1"},
+            {"Organization", "7"}
+        };
 
-        for (String[] substitution : substitutions) {
+        for (String[] substitution : referenceSubstitutions) {
             s = s.replaceAll("\"" + substitution[0] + "/.*\"", "\"" + substitution[0] + "/" + substitution[1] + "\"");
         }
+
+        String[][] quotedSubstitutions = new String[][]{
+            {"REARDON, John", "MEAKIN, Mike"},
+            {"SMITH", "GILBERT"},
+            {"GREENTOWN GENERAL HOSPITAL", "Dr Legg's Surgery"}
+        };
+
+        // standard reg exp substitutions
+        for (String[] substitution : quotedSubstitutions) {
+            s = s.replaceAll("\"" + substitution[0] + "\"", "\"" + substitution[1] + "\"");
+        }
+
         switch (suffix.toLowerCase()) {
             case "xml":
                 parser = ctx.newXmlParser();
@@ -114,7 +150,7 @@ public class StructuredBuilder {
         HashMap<String, Integer> duplicates = new HashMap<>();
         String parameterName = parms.get(0).getName();
 
-        if (parameterName.equals(INCLUDE_PROBLEMS_PARM) || parameterName.equals(INCLUDE_CONSULTATIONS_PARM)) {
+        if (Arrays.asList(STRUCTURED_CLINICAL_AREAS).contains(parameterName)) {
             // populate resource types
             HashMap<ResourceType, HashMap<String, Resource>> resourceTypes = new HashMap<>();
             for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
@@ -137,11 +173,13 @@ public class StructuredBuilder {
                 }
             }
 
-//              dumpResources(resourceTypes);
+            if (DEBUG_LEVEL > 1) {
+                dumpResources(resourceTypes);
+            }
             walkRoot(structuredBundle, resourceTypes, parms);
 
             // add in the two top level ResourceLists
-            for (String listTitle : new String[]{SNOMED_PROBLEMS_LIST_DISPLAY, SNOMED_CONSULTATION_LIST_DISPLAY}) {
+            for (String listTitle : SNOMED_LISTS) {
 //                boolean added = false;
 //                for (BundleEntryComponent entry : structuredBundle.getEntry()) {
 //                    if (entry.getResource() instanceof ListResource) {
@@ -154,12 +192,36 @@ public class StructuredBuilder {
 //                }
 
                 // #290 only have the list returned that is relevant to the query.
-                if (parameterName.equals(INCLUDE_PROBLEMS_PARM) && listTitle.equals(SNOMED_PROBLEMS_LIST_DISPLAY) /*&& !added*/) {
-                    // only add problems if problems requested
-                    structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
-                } else if (parameterName.equals(INCLUDE_CONSULTATIONS_PARM) && listTitle.equals(SNOMED_CONSULTATION_LIST_DISPLAY)/* && !added*/) {
-                    // only add consultations if consultations requested
-                    structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
+                switch (parameterName) {
+                    case INCLUDE_PROBLEMS_PARM:
+                        // only add problems if problems requested
+                        if (listTitle.equals(SNOMED_PROBLEMS_LIST_DISPLAY)) {
+                            structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
+                        }
+                        break;
+
+                    case INCLUDE_CONSULTATIONS_PARM:
+                        // only add consultations if consultations requested
+                        if (listTitle.equals(SNOMED_CONSULTATION_LIST_DISPLAY)) {
+                            structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
+                        }
+                        break;
+
+                    case INCLUDE_REFERRALS_PARM:
+                        // only add referrals if referrals requested
+                        if (listTitle.equals(SNOMED_REFERRALS_LIST_DISPLAY)) {
+                            structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
+                        }
+                        break;
+
+                    case INCLUDE_INVESTIGATIONS_PARM:
+                        // only add investigations if investigations requested
+                        if (listTitle.equals(SNOMED_INVESTIGATIONS_LIST_DISPLAY)) {
+                            structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
+                        }
+                        break;
+
+                    // extension point
                 }
             } // resourceLists
 
@@ -194,21 +256,22 @@ public class StructuredBuilder {
 
             // process MedicationStatements include if they reference an already referenced MedicationRequest or Medication
             // see https://developer.nhs.uk/apis/gpconnect-1-4-0/accessrecord_structured_development_linkages.html#problems
-            for (String medicationStatementId : resourceTypes.get(ResourceType.MedicationStatement).keySet()) {
-                MedicationStatement medicationStatement = (MedicationStatement) resourceTypes.get(ResourceType.MedicationStatement).get(medicationStatementId);
-                String medicationId = medicationStatement.getMedicationReference().getReference();
-                String medicationRequestId = medicationStatement.getBasedOnFirstRep().getReference();
-                if ((refCounts.keySet().contains(medicationId) || refCounts.keySet().contains(medicationRequestId)) && !alreadyAdded.contains(medicationStatementId)) {
-                    structuredBundle.addEntry(new BundleEntryComponent().setResource(medicationStatement));
-                    alreadyAdded.add(medicationStatementId);
-                    refCounts.put(medicationStatementId, 1);
+            if (resourceTypes.get(ResourceType.MedicationStatement) != null) {
+                for (String medicationStatementId : resourceTypes.get(ResourceType.MedicationStatement).keySet()) {
+                    MedicationStatement medicationStatement = (MedicationStatement) resourceTypes.get(ResourceType.MedicationStatement).get(medicationStatementId);
+                    String medicationId = medicationStatement.getMedicationReference().getReference();
+                    String medicationRequestId = medicationStatement.getBasedOnFirstRep().getReference();
+                    if ((refCounts.keySet().contains(medicationId) || refCounts.keySet().contains(medicationRequestId)) && !alreadyAdded.contains(medicationStatementId)) {
+                        structuredBundle.addEntry(new BundleEntryComponent().setResource(medicationStatement));
+                        alreadyAdded.add(medicationStatementId);
+                        refCounts.put(medicationStatementId, 1);
+                    }
                 }
             }
 
-            ListResource problemsListResource = null;
-            ListResource consultationsListResource = null;
+            HashMap<String, ListResource> listResources = new HashMap<>();
             // rebuild the problems and consultations lists
-            for (String listTitle : new String[]{SNOMED_PROBLEMS_LIST_DISPLAY, SNOMED_CONSULTATION_LIST_DISPLAY}) {
+            for (String listTitle : SNOMED_LISTS) {
                 for (BundleEntryComponent entry : structuredBundle.getEntry()) {
                     if (entry.getResource() instanceof ListResource) {
                         ListResource listResource = (ListResource) entry.getResource();
@@ -217,13 +280,15 @@ public class StructuredBuilder {
                             // the events are now sorted alpha which mimics sorted by event date
                             switch (listTitle) {
                                 case SNOMED_PROBLEMS_LIST_DISPLAY:
-                                    problemsListResource = (ListResource) entry.getResource();
+                                    //problemsListResource = listResource;
+                                    listResources.put(listTitle, listResource);
                                     refCounts.keySet().stream().filter((key) -> (key.startsWith("Condition/"))).sorted().forEachOrdered((String key) -> {
                                         listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
                                     });
                                     break;
                                 case SNOMED_CONSULTATION_LIST_DISPLAY:
-                                    consultationsListResource = (ListResource) entry.getResource();
+                                    //consultationsListResource = listResource;
+                                    listResources.put(listTitle, listResource);
                                     refCounts.keySet().stream().filter((key) -> (key.startsWith("List/"))).sorted().forEachOrdered((key) -> {
                                         ListResource listResourceConsultation = (ListResource) resourceTypes.get(ResourceType.List).get(key);
                                         if (listResourceConsultation.getCode().getCodingFirstRep().getCode().equals(SNOMED_CONSULTATION_ENCOUNTER_TYPE)) {
@@ -231,6 +296,21 @@ public class StructuredBuilder {
                                         }
                                     });
                                     break;
+                                case SNOMED_REFERRALS_LIST_DISPLAY:
+                                    //referralsListResource = listResource;
+                                    listResources.put(listTitle, listResource);
+                                    refCounts.keySet().stream().filter((key) -> (key.startsWith("ReferralRequest/"))).sorted().forEachOrdered((String key) -> {
+                                        listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
+                                    });
+                                    break;
+                                case SNOMED_INVESTIGATIONS_LIST_DISPLAY:
+                                    //investigationsListResource = listResource;
+                                    listResources.put(listTitle, listResource);
+                                    refCounts.keySet().stream().filter((key) -> (key.startsWith("DiagnosticReport/"))).sorted().forEachOrdered((String key) -> {
+                                        listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
+                                    });
+                                    break;
+                                // extension point add new clinical area list types here
                             }
                             break;
                         } // if matching id
@@ -238,24 +318,18 @@ public class StructuredBuilder {
                 } // for bundle entry
             } // for list id
 
-            // annotate the problems list if it is empty
-            if (problemsListResource != null && problemsListResource.getEntry().isEmpty()) {
-                if (!problemsListResource.hasNote()) { // only do this once
-                    addEmptyListNote(problemsListResource);
-                    addEmptyReasonCode(problemsListResource);
+            for (String listTitle : listResources.keySet()) {
+                // annotate the list if it is present but empty
+                ListResource listResource = listResources.get(listTitle);
+                if (listResource.getEntry().isEmpty()) {
+                    if (!listResource.hasNote()) {
+                        addEmptyListNote(listResource);
+                        addEmptyReasonCode(listResource);
+                    }
                 }
-                //structuredBundle.getEntry().remove(problemsListEntry);
-            }
-            // annotate the consultations list if it is empty
-            if (consultationsListResource != null && consultationsListResource.getEntry().isEmpty()) {
-                if (!consultationsListResource.hasNote()) { // only do this once
-                    addEmptyListNote(consultationsListResource);
-                    addEmptyReasonCode(consultationsListResource);
-                }
-                //structuredBundle.getEntry().remove(consultationsListEntry);
             }
 
-            if (DEBUG) {
+            if (DEBUG_LEVEL > 0) {
                 for (String key : duplicates.keySet()) {
                     System.err.println("Warning duplicate id: " + key + ", count = " + duplicates.get(key));
                 }
@@ -290,14 +364,21 @@ public class StructuredBuilder {
             case INCLUDE_CONSULTATIONS_PARM:
                 processConsultationsParm(resourceTypes, parms, structuredBundle);
                 break;
+            case INCLUDE_REFERRALS_PARM:
+                processReferralsParm(resourceTypes, parms, structuredBundle);
+                break;
+            case INCLUDE_INVESTIGATIONS_PARM:
+                processInvestigationsParm(resourceTypes, parms, structuredBundle);
+                break;
+            // extension point
         }
 
-        if (DEBUG) {
+        if (DEBUG_LEVEL > 0) {
             // show all unreferenced resources
             for (ResourceType rtKey : resourceTypes.keySet()) {
                 for (String key : resourceTypes.get(rtKey).keySet()) {
                     if (refCounts.get(key) == null) {
-                        if (!key.equals(SNOMED_PROBLEMS_LIST_DISPLAY) && !key.equals(SNOMED_CONSULTATION_LIST_DISPLAY)) {
+                        if (!Arrays.asList(SNOMED_LISTS).contains(key)) {
                             System.err.println("Warning Unreferenced key: " + key);
                         }
                     }
@@ -415,17 +496,7 @@ public class StructuredBuilder {
                 // get the start date of the consultation from the encounter
                 Encounter encounter = (Encounter) encounters.get(consultation.getEncounter().getReference());
                 Date startDate = encounter.getPeriod().getStart();
-                // not sure this would ever happen
-                if (searchPeriod.getStart() == null && searchPeriod.getEnd() == null) {
-                    encounterIdsToAdd.add(encounter.getId());
-                } else if (searchPeriod.getStart() != null && searchPeriod.getEnd() == null && startDate.compareTo(searchPeriod.getStart()) >= 0) {
-                    encounterIdsToAdd.add(encounter.getId());
-                } else if (searchPeriod.getStart() == null && searchPeriod.getEnd() != null && startDate.compareTo(searchPeriod.getEnd()) <= 0) {
-                    encounterIdsToAdd.add(encounter.getId());
-                } else if (searchPeriod.getStart() != null && searchPeriod.getEnd() != null
-                        && startDate.compareTo(searchPeriod.getStart()) >= 0 && startDate.compareTo(searchPeriod.getEnd()) <= 0) {
-                    encounterIdsToAdd.add(encounter.getId());
-                }
+                addIdIfInPeriod(searchPeriod, encounterIdsToAdd, encounter, startDate);
             }
         }
 
@@ -463,9 +534,131 @@ public class StructuredBuilder {
     } // processConsultationsParm
 
     /**
-     * recursively descend resolving references as we go. The completer for the
-     * populates ref counts as it goes recursion is resources not containing
-     * references
+     * process a period and start date and decide whether to add the id to the
+     * hashset
+     *
+     * @param searchPeriod
+     * @param idsToAdd
+     * @param resource
+     * @param startDate
+     */
+    private void addIdIfInPeriod(Period searchPeriod, HashSet<String> idsToAdd, Resource resource, Date startDate) {
+        // not sure this would ever happen
+        if (searchPeriod.getStart() == null && searchPeriod.getEnd() == null) {
+            idsToAdd.add(resource.getId());
+        } else if (searchPeriod.getStart() != null && searchPeriod.getEnd() == null && startDate.compareTo(searchPeriod.getStart()) >= 0) {
+            idsToAdd.add(resource.getId());
+        } else if (searchPeriod.getStart() == null && searchPeriod.getEnd() != null && startDate.compareTo(searchPeriod.getEnd()) <= 0) {
+            idsToAdd.add(resource.getId());
+        } else if (searchPeriod.getStart() != null && searchPeriod.getEnd() != null
+                && startDate.compareTo(searchPeriod.getStart()) >= 0 && startDate.compareTo(searchPeriod.getEnd()) <= 0) {
+            idsToAdd.add(resource.getId());
+        }
+    }
+
+    /**
+     * Referrals increment the ref counts for resources matching the search
+     * criteria to the response
+     *
+     * @param resourceTypes
+     * @param parms
+     * @param structuredBundle
+     * @throws FHIRException
+     */
+    private void processReferralsParm(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms, Bundle structuredBundle) throws FHIRException {
+        HashMap<String, Resource> referrals = resourceTypes.get(ResourceType.ReferralRequest);
+
+        Period searchPeriod = null;
+        for (Parameters.ParametersParameterComponent parm : parms) {
+
+            for (Parameters.ParametersParameterComponent paramPart : parm.getPart()) {
+                switch (paramPart.getName()) {
+                    case REFERRAL_SEARCH_PERIOD:
+                        searchPeriod = (Period) paramPart.getValue();
+                        break;
+                }
+            }
+
+        } // for Parameters
+
+        HashSet<String> referralsIdsToAdd = new HashSet<>();
+        if (searchPeriod != null) {
+            for (Resource referralResource : referrals.values()) {
+                // get the start date of the consultation from the encounter
+                ReferralRequest referralRequest = (ReferralRequest) referralResource;
+                Date startDate = referralRequest.getAuthoredOn();
+                // not sure this would ever happen
+                addIdIfInPeriod(searchPeriod, referralsIdsToAdd, referralRequest, startDate);
+            }
+        }
+
+        // no filters - add everything
+        if (searchPeriod == null) {
+            for (Resource referral : referrals.values()) {
+                referralsIdsToAdd.add(referral.getId());
+            }
+        }
+
+        for (String referralId : referralsIdsToAdd) {
+            refCounts.put(referralId, 1);
+            walkResource(structuredBundle, resourceTypes, referralId, 1);
+        }
+
+    } // processReferralsParm
+
+    /**
+     * Investigations increment the ref counts for resources matching the search
+     * criteria to the response
+     *
+     * @param resourceTypes
+     * @param parms
+     * @param structuredBundle
+     * @throws FHIRException
+     */
+    private void processInvestigationsParm(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms, Bundle structuredBundle) throws FHIRException {
+        HashMap<String, Resource> diagnosticReports = resourceTypes.get(ResourceType.DiagnosticReport);
+
+        Period searchPeriod = null;
+        for (Parameters.ParametersParameterComponent parm : parms) {
+
+            for (Parameters.ParametersParameterComponent paramPart : parm.getPart()) {
+                switch (paramPart.getName()) {
+                    case INVESTIGATION_SEARCH_PERIOD:
+                        searchPeriod = (Period) paramPart.getValue();
+                        break;
+                }
+            }
+
+        } // for Parameters
+
+        HashSet<String> diagnosticReportIdsToAdd = new HashSet<>();
+        if (searchPeriod != null) {
+            for (Resource diagnosticReportResource : diagnosticReports.values()) {
+                // get the start date of the consultation from the encounter
+                DiagnosticReport diagnosticReport = (DiagnosticReport) diagnosticReportResource;
+                Date startDate = diagnosticReport.getIssued();
+                addIdIfInPeriod(searchPeriod, diagnosticReportIdsToAdd, diagnosticReport, startDate);
+            }
+        }
+
+        // no filters - add everything
+        if (searchPeriod == null) {
+            for (Resource diagnosticReport : diagnosticReports.values()) {
+                diagnosticReportIdsToAdd.add(diagnosticReport.getId());
+            }
+        }
+
+        for (String diagnosticReportId : diagnosticReportIdsToAdd) {
+            refCounts.put(diagnosticReportId, 1);
+            walkResource(structuredBundle, resourceTypes, diagnosticReportId, 1);
+        }
+
+    } // processInvestigationsParm
+
+    /**
+     * populates ref counts as it goes recursion recursively descend resolving
+     * references as we go. The completer for the is resources not containing
+     * references For extensions add new Resource types here
      *
      * @param resourceTypes hashmap of resources keyed by type
      * @param referenceStr
@@ -496,7 +689,23 @@ public class StructuredBuilder {
                 if (reference != null) {
                     countReferences(reference, indent, structuredBundle, resourceTypes);
                 }
-            } else if (resource instanceof DomainResource) {
+            } else if (resource instanceof ReferralRequest) {
+                // This clause intentionally left blank
+            } else if (resource instanceof DiagnosticReport) {
+                DiagnosticReport diagnosticReport = (DiagnosticReport) resource;
+                for (Reference reference : diagnosticReport.getBasedOn()) {
+                    countReferences(reference, indent, structuredBundle, resourceTypes);
+                }
+
+                for (Reference reference : diagnosticReport.getSpecimen()) {
+                    countReferences(reference, indent, structuredBundle, resourceTypes);
+                }
+
+                for (Reference reference : diagnosticReport.getResult()) {
+                    countReferences(reference, indent, structuredBundle, resourceTypes);
+                }
+
+            } else if (resource instanceof DomainResource) { // catch all
                 DomainResource domainResource = (DomainResource) resource;
                 for (Extension extension : domainResource.getExtension()) {
                     if (extension.getValue() instanceof Reference) {
@@ -505,6 +714,7 @@ public class StructuredBuilder {
                     }
                 }
             }
+
         } else {
             System.err.println("Warning Unexpected reference format: " + referenceStr);
         }

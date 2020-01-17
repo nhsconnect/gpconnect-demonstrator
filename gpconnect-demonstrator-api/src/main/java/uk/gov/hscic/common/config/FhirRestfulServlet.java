@@ -21,12 +21,10 @@ import ca.uhn.fhir.rest.server.interceptor.CorsInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hscic.SystemHeader;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
-import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.common.filters.FhirRequestAuthInterceptor;
 import uk.gov.hscic.common.filters.FhirRequestGenericIntercepter;
 import uk.gov.hscic.common.filters.PatientJwtValidator;
 import uk.gov.hscic.location.LocationResourceProvider;
-import uk.gov.hscic.medications.MedicationResourceProvider;
 import uk.gov.hscic.metadata.GpConnectServerCapabilityStatementProvider;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.PatientResourceProvider;
@@ -71,7 +69,9 @@ public class FhirRestfulServlet extends RestfulServer {
                 applicationContext.getBean(AppointmentResourceProvider.class),
                 //applicationContext.getBean(ScheduleResourceProvider.class), // #183
                 applicationContext.getBean(SlotResourceProvider.class)
-             
+				// Documents
+                //applicationContext.getBean(DocumentReferenceResourceProvider.class),
+                //applicationContext.getBean(BinaryResourceProvider.class)
         ));
 
         CorsConfiguration config = new CorsConfiguration();

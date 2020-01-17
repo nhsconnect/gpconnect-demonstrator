@@ -49,7 +49,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     /**
      * allows access to command line parameters
-     * @return 
+     *
+     * @return
      */
     public static String getConfigPath() {
         return sConfigPath;
@@ -127,7 +128,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         if (StringUtils.isBlank(interactionIdHeader)) {
             throwInvalidRequest400_InvalidParameterException(SystemHeader.SSP_INTERACTIONID + " header blank");
         }
-        
+
         Interaction interaction = interactions.getInteraction(interactionIdHeader);
 
         if (interaction != null) {
@@ -152,8 +153,9 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     }
 
     /**
-     * 400 Invalid Request - Bad Request 
-     * @param exceptionMessage 
+     * 400 Invalid Request - Bad Request
+     *
+     * @param exceptionMessage
      */
     public static void throwInvalidRequest400_BadRequestException(String exceptionMessage) {
         throwInvalidRequest400Exception(SystemCode.BAD_REQUEST, exceptionMessage);
@@ -161,15 +163,17 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     /**
      * 400 Invalid Request - Invalid Parameter NB Invalid Request
-     * @param exceptionMessage 
+     *
+     * @param exceptionMessage
      */
     public static void throwInvalidRequest400_InvalidParameterException(String exceptionMessage) {
         throwInvalidRequest400Exception(SystemCode.INVALID_PARAMETER, exceptionMessage);
     }
 
     /**
-     * 400 Invalid Request - Invalid Identifier 
-     * @param exceptionMessage 
+     * 400 Invalid Request - Invalid Identifier
+     *
+     * @param exceptionMessage
      */
     private static void throwInvalidRequest400_InvalidIdentifierSystemException(String exceptionMessage) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(exceptionMessage),
@@ -178,43 +182,45 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     /**
      * 400 Invalid Request
-     * @param exceptionMessage 
+     *
+     * @param exceptionMessage
      */
     private static void throwInvalidRequest400Exception(String code, String exceptionMessage) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(exceptionMessage),
                 code, IssueType.INVALID);
     }
-    
 
     /**
      * 422 Unprocessable Entity InvalidParameter
-     * @param exceptionMessage 
+     *
+     * @param exceptionMessage
      */
     public static void throwUnprocessableEntityInvalid422_ParameterException(String exceptionMessage) {
-        throwUnprocessableEntity422Exception(SystemCode.INVALID_PARAMETER,exceptionMessage);
+        throwUnprocessableEntity422Exception(SystemCode.INVALID_PARAMETER, exceptionMessage);
     }
-    
+
     /**
      * 422 Bad Request
-     * @param message
+     *
+     * @param exceptionMessage
      */
     public static void throwUnprocessableEntity422_BadRequestException(String exceptionMessage) {
-        throwUnprocessableEntity422Exception(SystemCode.BAD_REQUEST,exceptionMessage);
+        throwUnprocessableEntity422Exception(SystemCode.BAD_REQUEST, exceptionMessage);
     }
 
     /**
      * 422 Invalid Resource
      *
-     * @param message
+     * @param exceptionMessage
      */
     public static void throwUnprocessableEntity422_InvalidResourceException(String exceptionMessage) {
-        throwUnprocessableEntity422Exception(SystemCode.INVALID_RESOURCE,exceptionMessage);
+        throwUnprocessableEntity422Exception(SystemCode.INVALID_RESOURCE, exceptionMessage);
     }
-    
 
     /**
      * 422 Unprocessable Entity
-     * @param exceptionMessage 
+     *
+     * @param exceptionMessage
      */
     private static void throwUnprocessableEntity422Exception(String code, String exceptionMessage) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(exceptionMessage),
@@ -223,6 +229,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     /**
      * 404 Resource Not Found
+     *
      * @param exceptionMessage
      * @param resource String name of resource type
      */
@@ -395,11 +402,11 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
         if (interactionResource == null) {
             throwInvalidRequest400_BadRequestException(
-                    String.format("Interaction containts invalid resource (%s)", interaction.getResource()));
+                    String.format("Interaction contains invalid resource (%s)", interaction.getResource()));
         }
         if (requestResource == null) {
             // error bad request
-            throwResourceNotFoundException(String.format("Request containts invalid resource (%s)", requestURI),
+            throwResourceNotFoundException(String.format("Request contains invalid resource (%s)", requestURI),
                     requestURI);
         }
         if (interactionResource != requestResource) {
@@ -548,7 +555,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private enum Resource {
 
-        AllergyIntolerance, Appointment, Condition, DiagnosticOrder, DiagnosticReport, Flag, MedicationAdministration, MedicationDispense, MedicationOrder, Patient, Organization, Order, Location, metadata, Practitioner, Slot;
+        AllergyIntolerance, Appointment, Condition, DiagnosticOrder, DiagnosticReport, Flag, MedicationAdministration, MedicationDispense, MedicationOrder, Patient, Organization, Order, Location, metadata, Practitioner, Slot /*, DocumentReference, Binary */;
 
         private static final Map<String, Resource> mappings = new HashMap<>();
 

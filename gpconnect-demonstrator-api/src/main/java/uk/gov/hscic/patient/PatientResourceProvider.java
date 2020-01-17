@@ -59,7 +59,9 @@ import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
 import static uk.gov.hscic.SystemConstants.INCLUDE_CONSULTATIONS_PARM;
 import static uk.gov.hscic.SystemConstants.INCLUDE_IMMUNIZATIONS_PARM;
+import static uk.gov.hscic.SystemConstants.INCLUDE_INVESTIGATIONS_PARM;
 import static uk.gov.hscic.SystemConstants.INCLUDE_PROBLEMS_PARM;
+import static uk.gov.hscic.SystemConstants.INCLUDE_REFERRALS_PARM;
 import static uk.gov.hscic.SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM;
 import static uk.gov.hscic.SystemConstants.OUR_ODS_CODE;
 import static uk.gov.hscic.SystemConstants.VALID_PARAMETER_NAMES;
@@ -78,8 +80,12 @@ import static uk.gov.hscic.SystemConstants.SNOMED_IMMUNIZATIONS_LIST_DISPLAY;
 import static uk.gov.hscic.SystemConstants.SNOMED_UNCATEGORISED_LIST_DISPLAY;
 import static uk.gov.hscic.SystemConstants.SNOMED_CONSULTATION_LIST_DISPLAY;
 import static uk.gov.hscic.SystemConstants.SNOMED_IMMUNIZATIONS_LIST_CODE;
+import static uk.gov.hscic.SystemConstants.SNOMED_INVESTIGATIONS_LIST_CODE;
+import static uk.gov.hscic.SystemConstants.SNOMED_INVESTIGATIONS_LIST_DISPLAY;
 import static uk.gov.hscic.SystemConstants.SNOMED_PROBLEMS_LIST_CODE;
 import static uk.gov.hscic.SystemConstants.SNOMED_PROBLEMS_LIST_DISPLAY;
+import static uk.gov.hscic.SystemConstants.SNOMED_REFERRALS_LIST_CODE;
+import static uk.gov.hscic.SystemConstants.SNOMED_REFERRALS_LIST_DISPLAY;
 import static uk.gov.hscic.SystemConstants.SNOMED_UNCATEGORISED_LIST_CODE;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
@@ -286,6 +292,10 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         operationOutcome = null;
+
+        // list of parameter instances for each parameter, required for clinical areas which have cardinality 0..*
+        // all but problems will have only one rray entry in the parameter list
+        ArrayList<ParametersParameterComponent> parameters = null;
         for (ParametersParameterComponent param : params.getParameter()) {
             if (validateParametersName(param.getName())) {
 
@@ -362,11 +372,10 @@ public class PatientResourceProvider implements IResourceProvider {
                         }
                         break;
 
-                    case SystemConstants.INCLUDE_TEST_RESULTS_PARM: // currently not a valid parameter
+                    // start of canned responses handled by includes
                     case SystemConstants.INCLUDE_IMMUNIZATIONS_PARM:
-                        ArrayList<ParametersParameterComponent> al = new ArrayList<>();
-                        al.add(param);
-                        includes.put(param.getName(), al);
+                        addNewParameterListToIncludes(param, includes);
+
                         if (!param.getPart().isEmpty()) {
                             for (ParametersParameterComponent paramPart : param.getPart()) {
                                 addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
@@ -376,9 +385,8 @@ public class PatientResourceProvider implements IResourceProvider {
                         break;
 
                     case SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM:
-                        al = new ArrayList<>();
-                        al.add(param);
-                        includes.put(param.getName(), al);
+                        addNewParameterListToIncludes(param, includes);
+
                         // optional part named uncategorisedDataSearchPeriod with a valuePeriod
                         Period uncatSearchPeriod = null;
                         for (ParametersParameterComponent paramPart : param.getPart()) {
@@ -399,9 +407,8 @@ public class PatientResourceProvider implements IResourceProvider {
                         break;
 
                     case SystemConstants.INCLUDE_CONSULTATIONS_PARM:
-                        al = new ArrayList<>();
-                        al.add(param);
-                        includes.put(param.getName(), al);
+                        addNewParameterListToIncludes(param, includes);
+
                         boolean periodSupplied = false;
                         boolean countSupplied = false;
                         // optional part named consultationSearchPeriod with a valuePeriod
@@ -440,13 +447,15 @@ public class PatientResourceProvider implements IResourceProvider {
                         break;
 
                     case SystemConstants.INCLUDE_PROBLEMS_PARM:
+                        // this is different from other parameters in that it can appear more than once
+                        // hence includes may already have an allocated array of parameters
                         if (includes.get(param.getName()) == null) {
-                            al = new ArrayList<>();
-                            includes.put(param.getName(), al);
+                            addNewParameterListToIncludes(param, includes);
                         } else {
-                            al = includes.get(param.getName());
+                            parameters = includes.get(param.getName());
+                            parameters.add(param);
                         }
-                        al.add(param);
+
                         // optional part named filterStatus with a valueCode eg active inactive
                         boolean statusSupplied = false;
                         boolean significanceSupplied = false;
@@ -496,13 +505,61 @@ public class PatientResourceProvider implements IResourceProvider {
                                         }
                                     }
                                     break;
-                                    
+
                                 default:
                                     addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
                             }
                         }
                         break;
 
+                    // 1.4 add investigations and referrals
+                    case SystemConstants.INCLUDE_INVESTIGATIONS_PARM:
+                        addNewParameterListToIncludes(param, includes);
+
+                        // optional parameter investigationsSearchPeriod of type period
+                        periodSupplied = false;
+                        for (ParametersParameterComponent paramPart : param.getPart()) {
+
+                            if (paramPart.getName().equals(SystemConstants.INVESTIGATION_SEARCH_PERIOD)
+                                    && paramPart.getValue() instanceof Period) {
+                                if (!periodSupplied) {
+                                    Period period = (Period) paramPart.getValue();
+                                    StringBuilder sb = new StringBuilder();
+                                    validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb);
+                                    periodSupplied = true;
+                                } else {
+                                    throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + SystemConstants.INVESTIGATION_SEARCH_PERIOD);
+                                }
+                            } else {
+                                addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
+                            }
+                        }
+                        break;
+
+                    case SystemConstants.INCLUDE_REFERRALS_PARM:
+                        addNewParameterListToIncludes(param, includes);
+
+                        // optional parameter referralSearchPeriod of type period
+                        periodSupplied = false;
+                        for (ParametersParameterComponent paramPart : param.getPart()) {
+
+                            if (paramPart.getName().equals(SystemConstants.REFERRAL_SEARCH_PERIOD)
+                                    && paramPart.getValue() instanceof Period) {
+                                if (!periodSupplied) {
+                                    Period period = (Period) paramPart.getValue();
+                                    StringBuilder sb = new StringBuilder();
+                                    validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb);
+                                    periodSupplied = true;
+                                } else {
+                                    throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + SystemConstants.REFERRAL_SEARCH_PERIOD);
+                                }
+                            } else {
+                                addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
+                            }
+                        }
+                        break;
+
+                    // extension point for new clinical areas
                 }  //switch
             } else {
                 // invalid parameter
@@ -579,11 +636,16 @@ public class PatientResourceProvider implements IResourceProvider {
         structuredBundle.getMeta()
                 .addProfile(SystemURL.SD_GPC_STRUCTURED_BUNDLE);
 
-        if (operationOutcome
-                != null) {
+        if (operationOutcome != null) {
             structuredBundle.addEntry().setResource(operationOutcome);
         }
         return structuredBundle;
+    }
+
+    private void addNewParameterListToIncludes(ParametersParameterComponent param, HashMap<String, ArrayList<ParametersParameterComponent>> includes) {
+        ArrayList<ParametersParameterComponent> parameters = new ArrayList<>();
+        parameters.add(param);
+        includes.put(param.getName(), parameters);
     }
 
     /**
@@ -619,6 +681,17 @@ public class PatientResourceProvider implements IResourceProvider {
                 list.setTitle(SNOMED_PROBLEMS_LIST_DISPLAY);
                 list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY)));
                 break;
+            // 1.4
+            case INCLUDE_INVESTIGATIONS_PARM:
+                list.setTitle(SNOMED_INVESTIGATIONS_LIST_DISPLAY);
+                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_INVESTIGATIONS_LIST_CODE, SNOMED_INVESTIGATIONS_LIST_DISPLAY)));
+                break;
+            case INCLUDE_REFERRALS_PARM:
+                list.setTitle(SNOMED_REFERRALS_LIST_DISPLAY);
+                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_REFERRALS_LIST_CODE, SNOMED_REFERRALS_LIST_DISPLAY)));
+                break;
+
+            // extension point for new clinical areas
             default:
                 System.err.println("addEmptyList: Unexpected clinical area: " + clinicalArea);
         }

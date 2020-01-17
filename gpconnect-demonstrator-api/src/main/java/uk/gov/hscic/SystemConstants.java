@@ -33,11 +33,12 @@ public final class SystemConstants {
     public static final String PATIENT_NHS_NUMBER_PARM = "patientNHSNumber";
     public static final String INCLUDE_RESOLVED_ALLERGIES_PARM = "includeResolvedAllergies";
     public static final String INCLUDE_ALLERGIES_PARM = "includeAllergies";
-    public static final String INCLUDE_TEST_RESULTS_PARM = "includeTestResults";
     public static final String INCLUDE_IMMUNIZATIONS_PARM = "includeImmunisations";
     public static final String INCLUDE_UNCATEGORISED_DATA_PARM = "includeUncategorisedData"; // Changed at 1.3.1
     public static final String INCLUDE_CONSULTATIONS_PARM = "includeConsultations";
     public static final String INCLUDE_PROBLEMS_PARM = "includeProblems";
+    public static final String INCLUDE_INVESTIGATIONS_PARM = "includeInvestigations";
+    public static final String INCLUDE_REFERRALS_PARM = "includeReferrals";
 
     public static final String INCLUDE_MEDICATION_PARM = "includeMedication";
     public static final List VALID_PARAMETER_NAMES = Arrays.asList(SystemConstants.PATIENT_NHS_NUMBER_PARM,
@@ -46,8 +47,10 @@ public final class SystemConstants {
             SystemConstants.INCLUDE_IMMUNIZATIONS_PARM,
             SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM,
             SystemConstants.INCLUDE_CONSULTATIONS_PARM,
-            SystemConstants.INCLUDE_PROBLEMS_PARM/*,
-            SystemConstants.INCLUDE_TEST_RESULTS_PARM */
+            SystemConstants.INCLUDE_PROBLEMS_PARM//,
+            // 1.4
+            //SystemConstants.INCLUDE_INVESTIGATIONS_PARM,
+            //SystemConstants.INCLUDE_REFERRALS_PARM
     );
 
     public static final String INCLUDE_PRESCRIPTION_ISSUES = "includePrescriptionIssues";
@@ -69,10 +72,19 @@ public final class SystemConstants {
     public static final String SNOMED_CONSULTATION_LIST_CODE = "1149501000000101";
     public static final String SNOMED_PROBLEMS_LIST_DISPLAY = "Problems";
     public static final String SNOMED_PROBLEMS_LIST_CODE = "717711000000103";
+    // 1.4
+    public static final String SNOMED_REFERRALS_LIST_DISPLAY = "Referral details";
+    public static final String SNOMED_REFERRALS_LIST_CODE = "886721000000107";
+    public static final String SNOMED_INVESTIGATIONS_LIST_DISPLAY = "Investigations and Results";
+    public static final String SNOMED_INVESTIGATIONS_LIST_CODE = "887191000000108";
+    
+    // extension point
 
     // Parameter Parts
     public static final String UNCATEGORISED_DATA_SEARCH_PERIOD = "uncategorisedDataSearchPeriod";
     public static final String CONSULTATION_SEARCH_PERIOD = "consultationSearchPeriod";
+    public static final String INVESTIGATION_SEARCH_PERIOD = "investigationsSearchPeriod";
+    public static final String REFERRAL_SEARCH_PERIOD = "referralSearchPeriod";
     public static final String NUMBER_OF_MOST_RECENT = "includeNumberOfMostRecent";
     public static final String FILTER_STATUS = "filterStatus"; // renamed at 1.3.1
     public static final String FILTER_SIGNIFICANCE = "filterSignificance"; // renamed at 1.3.1

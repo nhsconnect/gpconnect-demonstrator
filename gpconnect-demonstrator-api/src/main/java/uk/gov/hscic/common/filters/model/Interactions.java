@@ -14,10 +14,12 @@ import uk.gov.hscic.SystemURL;
 
 @Component
 public class Interactions {
-  
+
+    private final static boolean IS_DOCUMENTS = false;
+
     private enum RequestMethod {
         GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE;
-        
+
         private static final Map<String, RequestMethod> mappings = new HashMap<>();
 
         static {
@@ -28,144 +30,163 @@ public class Interactions {
 
         public static RequestMethod resolve(String method) {
             return (method != null ? mappings.get(method) : null);
-        }        
+        }
     }
-    
-	private final Map<String, Interaction> interactions = new HashMap<String, Interaction>() {{
-        put(InteractionId.CLAIM_PATIENT_ALLERGY_INTOLERANCE, new Interaction("AllergyIntolerance").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_APPOINTMENT, new Interaction("Appointment").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_CONDITION, new Interaction("Condition").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_DIAGNOSTIC_ORDER, new Interaction("DiagnosticOrder").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_DIAGNOSTIC_REPORT, new Interaction("DiagnosticReport").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_FLAG, new Interaction("Flag").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_MEDICATION_ADMINISTRATION, new Interaction("MedicationAdministration").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_MEDICATION_DISPENSE, new Interaction("MedicationDispense").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_MEDICATION_ORDER, new Interaction("MedicationOrder").httpVerb(RequestMethod.GET));
-        put(InteractionId.CLAIM_PATIENT_OBSERVATION, new Interaction("Observation").httpVerb(RequestMethod.GET));
-        put(InteractionId.OPERATION_GPC_GET_CARE_RECORD, new Interaction("Patient").operation("$gpc.getcarerecord").httpVerb(RequestMethod.POST));
-        put(InteractionId.OPERATION_GPC_GET_STRUCTURED_RECORD, new Interaction("Patient").operation("$gpc.getstructuredrecord").httpVerb(RequestMethod.POST));
-        put(InteractionId.REST_SEARCH_SLOT, new Interaction("Slot").httpVerb(RequestMethod.GET));
-        put(InteractionId.OPERATION_GPC_REGISTER_PATIENT, new Interaction("Patient").operation("$gpc.registerpatient").httpVerb(RequestMethod.POST));
-        put(InteractionId.REST_CREATE_APPOINTMENT, new Interaction("Appointment").httpVerb(RequestMethod.POST));
-        put(InteractionId.REST_CREATE_ORDER, new Interaction("Order").httpVerb(RequestMethod.POST));
-        put(InteractionId.REST_READ_APPOINTMENT, new Interaction("Appointment").identifier().httpVerb(RequestMethod.GET));
-        put(InteractionId.REST_READ_LOCATION, new Interaction("Location").identifier().httpVerb(RequestMethod.GET));
-        put(InteractionId.REST_READ_METADATA, new Interaction("metadata").httpVerb(RequestMethod.GET));
-        put(InteractionId.REST_READ_ORGANIZATION, new Interaction("Organization").identifier().httpVerb(RequestMethod.GET));
-        put(InteractionId.REST_READ_PATIENT, new Interaction("Patient").identifier().httpVerb(RequestMethod.GET));
-        put(InteractionId.REST_READ_PRACTITIONER, new Interaction("Practitioner").identifier().httpVerb(RequestMethod.GET));
-        put(InteractionId.REST_SEARCH_LOCATION, new Interaction("Location").addIdentifierSystems(SystemURL.ID_ODS_SITE_CODE).httpVerb(RequestMethod.GET));
-        put(InteractionId.REST_SEARCH_ORGANIZATION, new Interaction("Organization").addIdentifierSystems(SystemURL.ID_ODS_ORGANIZATION_CODE,SystemURL.ID_ODS_OLD_ORGANIZATION_CODE,  SystemURL.ID_ODS_SITE_CODE).httpVerb(RequestMethod.GET));
-        put(InteractionId.REST_SEARCH_PATIENT, new Interaction("Patient").addIdentifierSystems(SystemURL.ID_NHS_NUMBER).httpVerb(RequestMethod.GET));
-        put(InteractionId.REST_SEARCH_PATIENT_APPOINTMENTS, new Interaction("Patient").identifier().containedResource("Appointment").httpVerb(RequestMethod.GET));
-        put(InteractionId.REST_SEARCH_PRACTITIONER, new Interaction("Practitioner").addIdentifierSystems(SystemURL.ID_SDS_USER_ID).httpVerb(RequestMethod.GET));
-        put(InteractionId.REST_UPDATE_APPOINTMENT, new Interaction("Appointment").identifier().httpVerb(RequestMethod.PUT));       
-        put(InteractionId.REST_CANCEL_APPOINTMENT, new Interaction("Appointment").identifier().httpVerb(RequestMethod.PUT));
-    }};
 
-	public Interaction getInteraction(String interactionId) {
-		return interactions.get(interactionId);
-	}
+    private final Map<String, Interaction> interactions = new HashMap<String, Interaction>() {
+        {
+            put(InteractionId.CLAIM_PATIENT_ALLERGY_INTOLERANCE, new Interaction("AllergyIntolerance").httpVerb(RequestMethod.GET));
+            put(InteractionId.CLAIM_PATIENT_APPOINTMENT, new Interaction("Appointment").httpVerb(RequestMethod.GET));
+            put(InteractionId.CLAIM_PATIENT_CONDITION, new Interaction("Condition").httpVerb(RequestMethod.GET));
+            put(InteractionId.CLAIM_PATIENT_DIAGNOSTIC_ORDER, new Interaction("DiagnosticOrder").httpVerb(RequestMethod.GET));
+            put(InteractionId.CLAIM_PATIENT_DIAGNOSTIC_REPORT, new Interaction("DiagnosticReport").httpVerb(RequestMethod.GET));
+            put(InteractionId.CLAIM_PATIENT_FLAG, new Interaction("Flag").httpVerb(RequestMethod.GET));
+            put(InteractionId.CLAIM_PATIENT_MEDICATION_ADMINISTRATION, new Interaction("MedicationAdministration").httpVerb(RequestMethod.GET));
+            put(InteractionId.CLAIM_PATIENT_MEDICATION_DISPENSE, new Interaction("MedicationDispense").httpVerb(RequestMethod.GET));
+            put(InteractionId.CLAIM_PATIENT_MEDICATION_ORDER, new Interaction("MedicationOrder").httpVerb(RequestMethod.GET));
+            put(InteractionId.CLAIM_PATIENT_OBSERVATION, new Interaction("Observation").httpVerb(RequestMethod.GET));
+            put(InteractionId.OPERATION_GPC_GET_CARE_RECORD, new Interaction("Patient").operation("$gpc.getcarerecord").httpVerb(RequestMethod.POST));
+            put(InteractionId.OPERATION_GPC_GET_STRUCTURED_RECORD, new Interaction("Patient").operation("$gpc.getstructuredrecord").httpVerb(RequestMethod.POST));
+            put(InteractionId.REST_SEARCH_SLOT, new Interaction("Slot").httpVerb(RequestMethod.GET));
+            put(InteractionId.OPERATION_GPC_REGISTER_PATIENT, new Interaction("Patient").operation("$gpc.registerpatient").httpVerb(RequestMethod.POST));
+            put(InteractionId.REST_CREATE_APPOINTMENT, new Interaction("Appointment").httpVerb(RequestMethod.POST));
+            put(InteractionId.REST_CREATE_ORDER, new Interaction("Order").httpVerb(RequestMethod.POST));
+            put(InteractionId.REST_READ_APPOINTMENT, new Interaction("Appointment").identifier().httpVerb(RequestMethod.GET));
+            put(InteractionId.REST_READ_LOCATION, new Interaction("Location").identifier().httpVerb(RequestMethod.GET));
+            put(InteractionId.REST_READ_METADATA, new Interaction("metadata").httpVerb(RequestMethod.GET));
+            put(InteractionId.REST_READ_ORGANIZATION, new Interaction("Organization").identifier().httpVerb(RequestMethod.GET));
+            put(InteractionId.REST_READ_PATIENT, new Interaction("Patient").identifier().httpVerb(RequestMethod.GET));
+            put(InteractionId.REST_READ_PRACTITIONER, new Interaction("Practitioner").identifier().httpVerb(RequestMethod.GET));
+            put(InteractionId.REST_SEARCH_LOCATION, new Interaction("Location").addIdentifierSystems(SystemURL.ID_ODS_SITE_CODE).httpVerb(RequestMethod.GET));
+            put(InteractionId.REST_SEARCH_ORGANIZATION, new Interaction("Organization").addIdentifierSystems(SystemURL.ID_ODS_ORGANIZATION_CODE, SystemURL.ID_ODS_OLD_ORGANIZATION_CODE, SystemURL.ID_ODS_SITE_CODE).httpVerb(RequestMethod.GET));
+            put(InteractionId.REST_SEARCH_PATIENT, new Interaction("Patient").addIdentifierSystems(SystemURL.ID_NHS_NUMBER).httpVerb(RequestMethod.GET));
+            put(InteractionId.REST_SEARCH_PATIENT_APPOINTMENTS, new Interaction("Patient").identifier().containedResource("Appointment").httpVerb(RequestMethod.GET));
+            put(InteractionId.REST_SEARCH_PRACTITIONER, new Interaction("Practitioner").addIdentifierSystems(SystemURL.ID_SDS_USER_ID).httpVerb(RequestMethod.GET));
+            put(InteractionId.REST_UPDATE_APPOINTMENT, new Interaction("Appointment").identifier().httpVerb(RequestMethod.PUT));
+            put(InteractionId.REST_CANCEL_APPOINTMENT, new Interaction("Appointment").identifier().httpVerb(RequestMethod.PUT));
 
-	public static class Interaction  {
-		private static final Pattern WILDCARD = Pattern.compile(".+");
+            if (IS_DOCUMENTS) {
+                // Documemts interface
+                put(InteractionId.REST_SEARCH_DOCUMENT_REFERENCE, new Interaction("DocumentReference").identifier().httpVerb(RequestMethod.GET));
+                put(InteractionId.REST_READ_BINARY, new Interaction("Binary").identifier().httpVerb(RequestMethod.GET));
+            }
 
-		private String resource = null;
-		private String operation = null;
-		
-		private Pattern resourcePattern = null;
-		private Pattern containedResourcePattern = null;
-		private Pattern identifierPattern = null;
-		private Pattern operationPattern = null;
-		private final Set<String> identifierSystems = new HashSet<>();
-		private RequestMethod httpVerb;
+        }
+    };
 
-		private String currentRegex = ".*/fhir";
+    public Interaction getInteraction(String interactionId) {
+        return interactions.get(interactionId);
+    }
 
-		private Interaction(String resource) {
-			this.resource = resource;
+    public static class Interaction {
 
-			resourcePattern = buildPattern(resource);
-			containedResourcePattern = WILDCARD;
-			identifierPattern = WILDCARD;
-			operationPattern = WILDCARD;
-		}
-		
-		private Interaction httpVerb(RequestMethod httpVerb) {
-		    this.httpVerb = httpVerb;
-		    
-		    return this;
-		}
+        private static final Pattern WILDCARD = Pattern.compile(".+");
 
-		private Interaction containedResource(String containedResource) {
-			containedResourcePattern = buildPattern(containedResource);
+        private String resource = null;
+        private String operation = null;
 
-			return this;
-		}
+        private Pattern resourcePattern = null;
+        private Pattern containedResourcePattern = null;
+        private Pattern identifierPattern = null;
+        private Pattern operationPattern = null;
+        private final Set<String> identifierSystems = new HashSet<>();
+        private RequestMethod httpVerb;
 
-		private Interaction operation(String operation) {
-			this.operation = operation;
-		    this.operationPattern = buildPattern("\\" + operation);
+        private String currentRegex = ".*/fhir";
 
-			return this;
-		}
+        private Interaction(String resource) {
+            this.resource = resource;
 
-		private Interaction identifier() {
-			// from http://hl7.org/fhir/resource.html#id -
-			// Ids can be up to 64 characters long, and contain any combination of upper and lowercase ASCII letters, numerals, "-" and "."
-			this.identifierPattern = buildPattern("[A-Za-z0-9\\-\\.]{1,64}");
+            resourcePattern = buildPattern(resource);
+            containedResourcePattern = WILDCARD;
+            identifierPattern = WILDCARD;
+            operationPattern = WILDCARD;
+        }
 
-			return this;
-		}
+        private Interaction httpVerb(RequestMethod httpVerb) {
+            this.httpVerb = httpVerb;
 
-		private Interaction addIdentifierSystems(String... identifierSystem) {
-		    this.identifierSystems.addAll(Arrays.asList(identifierSystem));
+            return this;
+        }
 
-		    return this;
-		}
+        private Interaction containedResource(String containedResource) {
+            containedResourcePattern = buildPattern(containedResource);
 
-		private Pattern buildPattern(String end) {
-			currentRegex = currentRegex + "/" + end;
+            return this;
+        }
 
-			return Pattern.compile(currentRegex + ".*");
-		}
+        private Interaction operation(String operation) {
+            this.operation = operation;
+            this.operationPattern = buildPattern("\\" + operation);
 
-		public String getResource() {
-			return resource;
-		}
-		
-		public String getOperation() {
-		    return operation;
-		}
+            return this;
+        }
 
-		public Set<String> getIdentifierSystems() {
-		    return this.identifierSystems;
-		}
+        private Interaction identifier() {
+            // from http://hl7.org/fhir/resource.html#id -
+            // Ids can be up to 64 characters long, and contain any combination of upper and lowercase ASCII letters, numerals, "-" and "."
+            // changed 1,64 to 0,64 for Documents
+            if (IS_DOCUMENTS) {
+                identifierPattern = buildPattern("[A-Za-z0-9\\-\\.]{0,64}");
+            } else {
+                identifierPattern = buildPattern("[A-Za-z0-9\\-\\.]{1,64}");
+            }
 
-		public boolean validateResource(String uri) {
-			return resourcePattern.matcher(uri).matches();
-		}
+            return this;
+        }
 
-		public boolean validateContainedResource(String uri) {
-			return containedResourcePattern.matcher(uri).matches();
-		}
+        private Interaction addIdentifierSystems(String... identifierSystem) {
+            this.identifierSystems.addAll(Arrays.asList(identifierSystem));
 
-		public boolean validateIdentifier(String uri) {
-			return identifierPattern.matcher(uri).matches();
-		}
+            return this;
+        }
 
-		public boolean validateOperation(String uri) {
-			return operationPattern.matcher(uri).matches();
-		}
+        private Pattern buildPattern(String end) {
+            // made / optional for Documents
+            if (IS_DOCUMENTS) {
+                currentRegex = currentRegex + "/?" + end;
+            } else {
+                currentRegex = currentRegex + "/" + end;
+            }
+            return Pattern.compile(currentRegex + ".*");
+        }
 
-		public boolean validateIdentifierSystem(String identifierSystem) {
+        public String getResource() {
+            return resource;
+        }
+
+        public String getOperation() {
+            return operation;
+        }
+
+        public Set<String> getIdentifierSystems() {
+            return this.identifierSystems;
+        }
+
+        public boolean validateResource(String uri) {
+            return resourcePattern.matcher(uri).matches();
+        }
+
+        public boolean validateContainedResource(String uri) {
+            return containedResourcePattern.matcher(uri).matches();
+        }
+
+        public boolean validateIdentifier(String uri) {
+            return identifierPattern.matcher(uri).matches();
+        }
+
+        public boolean validateOperation(String uri) {
+            return operationPattern.matcher(uri).matches();
+        }
+
+        public boolean validateIdentifierSystem(String identifierSystem) {
             return null == identifierSystem
                     ? true
                     : identifierSystems.contains(identifierSystem);
-		}
-		
-		public boolean validateHttpVerb(String httpVerb) {
-		    return this.httpVerb.equals(RequestMethod.resolve(httpVerb));
-		}
-	}
+        }
+
+        public boolean validateHttpVerb(String httpVerb) {
+            return this.httpVerb.equals(RequestMethod.resolve(httpVerb));
+        }
+    }
 }

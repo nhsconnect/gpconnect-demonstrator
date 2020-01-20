@@ -316,11 +316,6 @@ public class PatientResourceProvider implements IResourceProvider {
                             if (paramPart.getValue() instanceof BooleanType) {
                                 includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
                                 isIncludedPrescriptionIssuesExist = true;
-                            } else {
-                                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                        new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-                                        SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
-
                             }
                         } else if (paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)
                                 && paramPart.getValue() instanceof DateType) {
@@ -341,10 +336,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     }
 
                     if (!isIncludedPrescriptionIssuesExist) {
-//                      addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-                                SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
+                        // # 1.2.6 now defaults to true if not provided
+                        includePrescriptionIssues = true;
                     }
                 }
             } else {
@@ -1418,9 +1411,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
     /**
      * Checks that the dates are ok and that end is not earlier than start
+     *
      * @param startDate
      * @param endDate
-     * @return 
+     * @return
      */
     private boolean validateStartDateParamAndEndDateParam(String startDate, String endDate) {
         Pattern dateOnlyPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
@@ -1432,7 +1426,7 @@ public class PatientResourceProvider implements IResourceProvider {
         try {
             result = checkDate(startDate, "Start", dateOnlyPattern, sb, result, now);
             result = checkDate(endDate, "End", dateOnlyPattern, sb, result, now);
-            if (result && startDate !=null && endDate != null) {
+            if (result && startDate != null && endDate != null) {
                 Date startDt = DATE_FORMAT.parse(startDate);
                 Date endDt = DATE_FORMAT.parse(endDate);
                 if (endDt.before(startDt)) {

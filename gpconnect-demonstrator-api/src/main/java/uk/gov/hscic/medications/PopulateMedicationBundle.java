@@ -21,6 +21,7 @@ import uk.gov.hscic.medication.statement.MedicationStatementResourceProvider;
 import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import uk.gov.hscic.model.patient.PatientDetails;
 import java.util.*;
+import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
 import static uk.gov.hscic.SystemConstants.*;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
@@ -52,16 +53,46 @@ public class PopulateMedicationBundle {
     @Autowired
     private PatientRepository patientRepository;
 
-    public Bundle addMedicationBundleEntries(Bundle structuredBundle, PatientDetails patientDetails, Boolean includePrescriptionIssues,
-            Period medicationPeriod, Set<String> practitionerIds, Set<String> orgIds) {
+    /**
+     * 
+     * @param structuredBundle
+     * @param param
+     * @param patientDetails
+     * @param practitionerIds
+     * @param orgIds 
+     */
+    public void addMedicationBundleEntries(Bundle structuredBundle, ParametersParameterComponent param, PatientDetails patientDetails,
+            Set<String> practitionerIds, Set<String> orgIds) {
+        // mandatory
+        Boolean includePrescriptionIssues = false;
+        // optional 
+        Period medicationPeriod = null;
+        
+        for (Parameters.ParametersParameterComponent paramPart : param.getPart()) {
+            String paramPartName = paramPart.getName();
+            switch (paramPartName) {
+                case INCLUDE_PRESCRIPTION_ISSUES:
+                    includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
+                    break;
+                case MEDICATION_SEARCH_FROM_DATE:
+                    // refined at 1.3.1 only apply date if its valid.
+                    medicationPeriod = new Period();
+                    DateType startDateDt = (DateType) paramPart.getValue();
+                    medicationPeriod.setStart(startDateDt.getValue());
+                    medicationPeriod.setEnd(null);
+                    break;
+            }
+        } // for
+
+        final Boolean fIncludePrescriptionIssues = includePrescriptionIssues;
+
         BundleEntryComponent listEntry = new BundleEntryComponent();
         List<MedicationStatementDetail> medicationStatements = findMedicationStatements(Long.valueOf(patientDetails.getId()), medicationPeriod);
         structuredBundle.addEntry(listEntry.setResource(createListEntry(medicationStatements, patientDetails.getNhsNumber())));
         medicationStatements.forEach(medicationStatement -> {
-            createBundleEntries(medicationStatement, includePrescriptionIssues, patientDetails, practitionerIds, orgIds)
+            createBundleEntries(medicationStatement, fIncludePrescriptionIssues, patientDetails, practitionerIds, orgIds)
                     .forEach(bundleEntry -> structuredBundle.addEntry(bundleEntry));
         });
-        return structuredBundle;
     }
 
     private ListResource createListEntry(List<MedicationStatementDetail> medicationStatements, String nhsNumber) {

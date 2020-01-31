@@ -11,7 +11,7 @@ public class StructuredAllergySearch {
 	 @Autowired
 	    private StructuredAllergyRepository structuredAllergyRepository;
 	 
-	 public List<StructuredAllergyIntoleranceEntity> getAllergyIntollerence(String NhsNumber) 
+	 public List<StructuredAllergyIntoleranceEntity> getAllergyIntolerance(String NhsNumber) 
 	 {
 		 return structuredAllergyRepository.findByNhsNumber(NhsNumber);
 	 }

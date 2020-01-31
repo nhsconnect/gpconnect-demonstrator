@@ -22,6 +22,7 @@ import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergyIntole
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch;
 import uk.gov.hscic.practitioner.PractitionerSearch;
 import java.util.*;
+import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
 import org.springframework.beans.factory.annotation.Value;
 import static uk.gov.hscic.SystemConstants.ACTIVE_ALLERGIES_DISPLAY;
 import static uk.gov.hscic.SystemConstants.ACTIVE_ALLERGIES_TITLE;
@@ -53,8 +54,21 @@ public class StructuredAllergyIntoleranceBuilder {
     @Value("${datasource.patients:#{null}}")
     private String[] patients;
 
-    public Bundle buildStructuredAllergyIntolerence(String NHS, Set<String> practitionerIds, Bundle bundle, Boolean includedResolved) {
-        List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntollerence(NHS);
+    /**
+     * 
+     * @param bundle
+     * @param param
+     * @param NHS
+     * @param practitionerIds 
+     */
+    public void buildStructuredAllergyIntolerance(Bundle bundle, ParametersParameterComponent param, String NHS, Set<String> practitionerIds  ) {
+        Boolean includedResolved = false;
+        if (param.getPart().size() > 0) {
+            Parameters.ParametersParameterComponent paramPart = param.getPart().get(0);
+            includedResolved = Boolean.valueOf(paramPart.getValue().primitiveValue());
+        }
+
+        List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntolerance(NHS);
 
         ListResource active = initiateListResource(NHS, ACTIVE_ALLERGIES_DISPLAY, allergyData);
         ListResource resolved = initiateListResource(NHS, RESOLVED_ALLERGIES_DISPLAY, allergyData);
@@ -81,7 +95,7 @@ public class StructuredAllergyIntoleranceBuilder {
                 bundle.addEntry().setResource(resolved);
             }
 
-            return bundle;
+            return;
         }
 
         for (StructuredAllergyIntoleranceEntity allergyIntoleranceEntity : allergyData) {
@@ -221,9 +235,6 @@ public class StructuredAllergyIntoleranceBuilder {
         if (includedResolved) {
             bundle.addEntry().setResource(resolved);
         }
-
-        return bundle;
-
     }
 
     private ListResource initiateListResource(String NHS, String display, List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity) {
@@ -280,8 +291,8 @@ public class StructuredAllergyIntoleranceBuilder {
     }
 
     /**
-     * 
-     * @param list 
+     *
+     * @param list
      */
     public static void addEmptyListNote(ListResource list) {
         // cardinality of note 0..1 #266
@@ -294,8 +305,8 @@ public class StructuredAllergyIntoleranceBuilder {
     }
 
     /**
-     * 
-     * @param list 
+     *
+     * @param list
      */
     public static void addEmptyReasonCode(ListResource list) {
         CodeableConcept noContent = new CodeableConcept();

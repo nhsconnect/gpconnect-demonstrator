@@ -50,22 +50,9 @@ import org.hl7.fhir.dstu3.model.ReferralRequest;
 import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.exceptions.FHIRException;
-import static uk.gov.hscic.SystemConstants.CONSULTATION_SEARCH_PERIOD;
-import static uk.gov.hscic.SystemConstants.FILTER_SIGNIFICANCE;
-import static uk.gov.hscic.SystemConstants.FILTER_STATUS;
-import static uk.gov.hscic.SystemConstants.INCLUDE_CONSULTATIONS_PARM;
-import static uk.gov.hscic.SystemConstants.INCLUDE_PROBLEMS_PARM;
-import static uk.gov.hscic.SystemConstants.INCLUDE_REFERRALS_PARM;
-import static uk.gov.hscic.SystemConstants.NUMBER_OF_MOST_RECENT;
-import static uk.gov.hscic.SystemConstants.SNOMED_CONSULTATION_LIST_DISPLAY;
-import static uk.gov.hscic.SystemConstants.SNOMED_PROBLEMS_LIST_DISPLAY;
+import static uk.gov.hscic.SystemConstants.*;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
-import static uk.gov.hscic.SystemConstants.INCLUDE_INVESTIGATIONS_PARM;
-import static uk.gov.hscic.SystemConstants.INVESTIGATION_SEARCH_PERIOD;
-import static uk.gov.hscic.SystemConstants.REFERRAL_SEARCH_PERIOD;
-import static uk.gov.hscic.SystemConstants.SNOMED_INVESTIGATIONS_LIST_DISPLAY;
-import static uk.gov.hscic.SystemConstants.SNOMED_REFERRALS_LIST_DISPLAY;
 
 /**
  * Appends canned responses to a Bundle
@@ -79,17 +66,17 @@ public class StructuredBuilder {
 
     private static final String SNOMED_CONSULTATION_ENCOUNTER_TYPE = "325851000000107";
 
-    private static final String[] SNOMED_LISTS = {SNOMED_PROBLEMS_LIST_DISPLAY, // 1.3
+    private static final String[] SNOMED_CANNED_LIST_TITLES = {SNOMED_PROBLEMS_LIST_DISPLAY, // 1.3
         SNOMED_CONSULTATION_LIST_DISPLAY, // 1.3
         SNOMED_REFERRALS_LIST_DISPLAY, // 1.4
         SNOMED_INVESTIGATIONS_LIST_DISPLAY}; // 1.4
 
     // add any new clinical areas supported as canned responses here
-    private final static String[] STRUCTURED_CLINICAL_AREAS = {INCLUDE_PROBLEMS_PARM,
+    private final static String[] STRUCTURED_CANNED_CLINICAL_AREAS = {INCLUDE_PROBLEMS_PARM,
         INCLUDE_CONSULTATIONS_PARM,
         INCLUDE_REFERRALS_PARM,
         INCLUDE_INVESTIGATIONS_PARM
-// add new clinical area here
+// extension point add new clinical areas here
     };
 
     private static final int DEBUG_LEVEL = 2;
@@ -111,30 +98,139 @@ public class StructuredBuilder {
         // read from a pre prepared file
         FhirContext ctx = FhirContext.forDstu3();
         String suffix = filename.replaceFirst("^.*\\.([^\\.]+)$", "$1");
-        IParser parser = null;
         String s = new String(Files.readAllBytes(new File(filename).toPath()));
-        // change all the references of the form .*/.* to be consistent
-        String[][] referenceSubstitutions = new String[][]{
-            {"Patient", "" + patientLogicalID},
-            {"Practitioner", "1"},
-            {"Organization", "7"}
-        };
 
-        for (String[] substitution : referenceSubstitutions) {
-            s = s.replaceAll("\"" + substitution[0] + "/.*\"", "\"" + substitution[0] + "/" + substitution[1] + "\"");
+        s = editResponse(patientLogicalID, s);
+
+        IParser parser = getParser(suffix, ctx);
+
+        Bundle parsedBundle = (Bundle) parser.parseResource(s);
+        HashMap<String, Integer> duplicates = new HashMap<>();
+        String parameterName = parms.get(0).getName();
+
+        if (Arrays.asList(STRUCTURED_CANNED_CLINICAL_AREAS).contains(parameterName)) {
+            handleCannedClinicalArea(parsedBundle, duplicates, structuredBundle, parms, parameterName);
+        } else {
+            // for other than canned just transcribe as is
+            // TODO Don't think this will ever get called
+            for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
+                structuredBundle.addEntry(entry);
+            }
+        }
+    } // appendCannedResponse
+
+    /**
+     *
+     * @param parsedBundle
+     * @param duplicates
+     * @param structuredBundle
+     * @param parms
+     * @param parameterName
+     * @throws FHIRException
+     */
+    private void handleCannedClinicalArea(Bundle parsedBundle, HashMap<String, Integer> duplicates, Bundle structuredBundle, ArrayList<Parameters.ParametersParameterComponent> parms, String parameterName) throws FHIRException {
+        // populate resource types
+        HashMap<ResourceType, HashMap<String, Resource>> resourceTypes = new HashMap<>();
+        for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
+            ResourceType resourceType = entry.getResource().getResourceType();
+            if (resourceTypes.get(resourceType) == null) {
+                resourceTypes.put(resourceType, new HashMap<>());
+            }
+            HashMap<String, Resource> hmResources = resourceTypes.get(resourceType);
+            // Use the list title where there is no id ie List of Problems/Consultations
+            String id = entry.getResource().getId() != null ? entry.getResource().getId() : ((ListResource) entry.getResource()).getTitle();
+            if (hmResources.get(id) == null) {
+                hmResources.put(id, entry.getResource());
+            } else {
+                // count duplicates
+                if (duplicates.get(id) == null) {
+                    duplicates.put(id, 2);
+                } else {
+                    duplicates.put(id, duplicates.get(id) + 1);
+                }
+            }
         }
 
-        String[][] quotedSubstitutions = new String[][]{
-            {"REARDON, John", "MEAKIN, Mike"},
-            {"SMITH", "GILBERT"},
-            {"GREENTOWN GENERAL HOSPITAL", "Dr Legg's Surgery"}
-        };
+        if (DEBUG_LEVEL > 1) {
+            dumpResources(resourceTypes);
+        }
+        walkRoot(structuredBundle, resourceTypes, parms);
 
-        // standard reg exp substitutions
-        for (String[] substitution : quotedSubstitutions) {
-            s = s.replaceAll("\"" + substitution[0] + "\"", "\"" + substitution[1] + "\"");
+        addInTopLevelResourceLists(parameterName, structuredBundle, resourceTypes);
+
+        // add in all referenced resources if not already present
+        for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
+            String id = entry.getResource().getId();
+            // if the refs count is not null then include the resource.
+            if (refCounts.keySet().contains(id) && !alreadyAdded.contains(id)) {
+                structuredBundle.addEntry(entry);
+                alreadyAdded.add(id);
+            }
         }
 
+        // add any related problems/conditions if this is a request for consultations
+        if (parameterName.equals(INCLUDE_CONSULTATIONS_PARM)) {
+            resourceTypes.get(ResourceType.Condition).keySet().stream().sorted().forEachOrdered((conditionId) -> {
+                Condition condition = (Condition) resourceTypes.get(ResourceType.Condition).get(conditionId);
+                for (Extension extension : condition.getExtension()) {
+                    if (extension.getValue() instanceof Reference) {
+                        Reference reference = (Reference) extension.getValue();
+                        // does this problem/condition reference something in the returning bundle?
+                        if (refCounts.keySet().contains(reference.getReference()) && !alreadyAdded.contains(condition.getId())) {
+                            structuredBundle.addEntry(new BundleEntryComponent().setResource(condition));
+                            alreadyAdded.add(condition.getId());
+                            refCounts.put(condition.getId(), 1);
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
+        // process MedicationStatements include if they reference an already referenced MedicationRequest or Medication
+        // see https://developer.nhs.uk/apis/gpconnect-1-4-0/accessrecord_structured_development_linkages.html#problems
+        if (resourceTypes.get(ResourceType.MedicationStatement) != null) {
+            for (String medicationStatementId : resourceTypes.get(ResourceType.MedicationStatement).keySet()) {
+                MedicationStatement medicationStatement = (MedicationStatement) resourceTypes.get(ResourceType.MedicationStatement).get(medicationStatementId);
+                String medicationId = medicationStatement.getMedicationReference().getReference();
+                String medicationRequestId = medicationStatement.getBasedOnFirstRep().getReference();
+                if ((refCounts.keySet().contains(medicationId) || refCounts.keySet().contains(medicationRequestId)) && !alreadyAdded.contains(medicationStatementId)) {
+                    structuredBundle.addEntry(new BundleEntryComponent().setResource(medicationStatement));
+                    alreadyAdded.add(medicationStatementId);
+                    refCounts.put(medicationStatementId, 1);
+                }
+            }
+        }
+
+        HashMap<String, ListResource> listResources = new HashMap<>();
+        rebuildBundledLists(listResources, structuredBundle, resourceTypes);
+
+        // annotate the list if it is present but empty
+        for (String listTitle : listResources.keySet()) {
+            ListResource listResource = listResources.get(listTitle);
+            if (listResource.getEntry().isEmpty()) {
+                if (!listResource.hasNote()) {
+                    addEmptyListNote(listResource);
+                    addEmptyReasonCode(listResource);
+                }
+            }
+        }
+
+        if (DEBUG_LEVEL > 0) {
+            for (String key : duplicates.keySet()) {
+                System.err.println("Warning duplicate id: " + key + ", count = " + duplicates.get(key));
+            }
+        }
+    }
+
+    /**
+     * get the correct parser for the input format
+     * @param suffix
+     * @param ctx
+     * @return the correct parser
+     */
+    private IParser getParser(String suffix, FhirContext ctx) {
+        IParser parser = null;
         switch (suffix.toLowerCase()) {
             case "xml":
                 parser = ctx.newXmlParser();
@@ -145,203 +241,144 @@ public class StructuredBuilder {
             default:
                 System.err.println("StructuredBuilder Unrecognised file type " + suffix);
         }
+        return parser;
+    }
 
-        Bundle parsedBundle = (Bundle) parser.parseResource(s);
-        HashMap<String, Integer> duplicates = new HashMap<>();
-        String parameterName = parms.get(0).getName();
-
-        if (Arrays.asList(STRUCTURED_CLINICAL_AREAS).contains(parameterName)) {
-            // populate resource types
-            HashMap<ResourceType, HashMap<String, Resource>> resourceTypes = new HashMap<>();
-            for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
-                ResourceType resourceType = entry.getResource().getResourceType();
-                if (resourceTypes.get(resourceType) == null) {
-                    resourceTypes.put(resourceType, new HashMap<>());
-                }
-                HashMap<String, Resource> hmResources = resourceTypes.get(resourceType);
-                // Use the list title where there is no id ie List of Problems/Consultations
-                String id = entry.getResource().getId() != null ? entry.getResource().getId() : ((ListResource) entry.getResource()).getTitle();
-                if (hmResources.get(id) == null) {
-                    hmResources.put(id, entry.getResource());
-                } else {
-                    // count duplicates
-                    if (duplicates.get(id) == null) {
-                        duplicates.put(id, 2);
-                    } else {
-                        duplicates.put(id, duplicates.get(id) + 1);
-                    }
-                }
-            }
-
-            if (DEBUG_LEVEL > 1) {
-                dumpResources(resourceTypes);
-            }
-            walkRoot(structuredBundle, resourceTypes, parms);
-
-            // add in the two top level ResourceLists
-            for (String listTitle : SNOMED_LISTS) {
-//                boolean added = false;
-//                for (BundleEntryComponent entry : structuredBundle.getEntry()) {
-//                    if (entry.getResource() instanceof ListResource) {
-//                        ListResource listResource = (ListResource) entry.getResource();
-//                        if (listResource.getTitle().equals(listTitle)) {
-//                            added = true;
-//                            break;
-//                        }
-//                    }
-//                }
-
-                // #290 only have the list returned that is relevant to the query.
-                switch (parameterName) {
-                    case INCLUDE_PROBLEMS_PARM:
-                        // only add problems if problems requested
-                        if (listTitle.equals(SNOMED_PROBLEMS_LIST_DISPLAY)) {
-                            structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
-                        }
-                        break;
-
-                    case INCLUDE_CONSULTATIONS_PARM:
-                        // only add consultations if consultations requested
-                        if (listTitle.equals(SNOMED_CONSULTATION_LIST_DISPLAY)) {
-                            structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
-                        }
-                        break;
-
-                    case INCLUDE_REFERRALS_PARM:
-                        // only add referrals if referrals requested
-                        if (listTitle.equals(SNOMED_REFERRALS_LIST_DISPLAY)) {
-                            structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
-                        }
-                        break;
-
-                    case INCLUDE_INVESTIGATIONS_PARM:
-                        // only add investigations if investigations requested
-                        if (listTitle.equals(SNOMED_INVESTIGATIONS_LIST_DISPLAY)) {
-                            structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
-                        }
-                        break;
-
-                    // extension point
-                }
-            } // resourceLists
-
-            // add in all referenced resources if not already present
-            for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
-                String id = entry.getResource().getId();
-                // if the refs count is not null then include the resource.
-                if (refCounts.keySet().contains(id) && !alreadyAdded.contains(id)) {
-                    structuredBundle.addEntry(entry);
-                    alreadyAdded.add(id);
-                }
-            }
-
-            // add any related problems/condition if this is a request for consultations
-            if (parameterName.equals(INCLUDE_CONSULTATIONS_PARM)) {
-                resourceTypes.get(ResourceType.Condition).keySet().stream().sorted().forEachOrdered((conditionId) -> {
-                    Condition condition = (Condition) resourceTypes.get(ResourceType.Condition).get(conditionId);
-                    for (Extension extension : condition.getExtension()) {
-                        if (extension.getValue() instanceof Reference) {
-                            Reference reference = (Reference) extension.getValue();
-                            // does this problem/condition reference something in the returning bundle?
-                            if (refCounts.keySet().contains(reference.getReference()) && !alreadyAdded.contains(condition.getId())) {
-                                structuredBundle.addEntry(new BundleEntryComponent().setResource(condition));
-                                alreadyAdded.add(condition.getId());
-                                refCounts.put(condition.getId(), 1);
-                                break;
-                            }
-                        }
-                    }
-                });
-            }
-
-            // process MedicationStatements include if they reference an already referenced MedicationRequest or Medication
-            // see https://developer.nhs.uk/apis/gpconnect-1-4-0/accessrecord_structured_development_linkages.html#problems
-            if (resourceTypes.get(ResourceType.MedicationStatement) != null) {
-                for (String medicationStatementId : resourceTypes.get(ResourceType.MedicationStatement).keySet()) {
-                    MedicationStatement medicationStatement = (MedicationStatement) resourceTypes.get(ResourceType.MedicationStatement).get(medicationStatementId);
-                    String medicationId = medicationStatement.getMedicationReference().getReference();
-                    String medicationRequestId = medicationStatement.getBasedOnFirstRep().getReference();
-                    if ((refCounts.keySet().contains(medicationId) || refCounts.keySet().contains(medicationRequestId)) && !alreadyAdded.contains(medicationStatementId)) {
-                        structuredBundle.addEntry(new BundleEntryComponent().setResource(medicationStatement));
-                        alreadyAdded.add(medicationStatementId);
-                        refCounts.put(medicationStatementId, 1);
-                    }
-                }
-            }
-
-            HashMap<String, ListResource> listResources = new HashMap<>();
-            // rebuild the problems and consultations lists
-            for (String listTitle : SNOMED_LISTS) {
-                for (BundleEntryComponent entry : structuredBundle.getEntry()) {
-                    if (entry.getResource() instanceof ListResource) {
-                        ListResource listResource = (ListResource) entry.getResource();
-                        if (listResource.getTitle() != null && listResource.getTitle().equals(listTitle)) {
-                            listResource.getEntry().clear();
-                            // the events are now sorted alpha which mimics sorted by event date
-                            switch (listTitle) {
-                                case SNOMED_PROBLEMS_LIST_DISPLAY:
-                                    //problemsListResource = listResource;
-                                    listResources.put(listTitle, listResource);
-                                    refCounts.keySet().stream().filter((key) -> (key.startsWith("Condition/"))).sorted().forEachOrdered((String key) -> {
-                                        listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
-                                    });
-                                    break;
-                                case SNOMED_CONSULTATION_LIST_DISPLAY:
-                                    //consultationsListResource = listResource;
-                                    listResources.put(listTitle, listResource);
-                                    refCounts.keySet().stream().filter((key) -> (key.startsWith("List/"))).sorted().forEachOrdered((key) -> {
-                                        ListResource listResourceConsultation = (ListResource) resourceTypes.get(ResourceType.List).get(key);
-                                        if (listResourceConsultation.getCode().getCodingFirstRep().getCode().equals(SNOMED_CONSULTATION_ENCOUNTER_TYPE)) {
-                                            listResource.addEntry(new ListResource.ListEntryComponent().setItem(listResourceConsultation.getEncounter()));
-                                        }
-                                    });
-                                    break;
-                                case SNOMED_REFERRALS_LIST_DISPLAY:
-                                    //referralsListResource = listResource;
-                                    listResources.put(listTitle, listResource);
-                                    refCounts.keySet().stream().filter((key) -> (key.startsWith("ReferralRequest/"))).sorted().forEachOrdered((String key) -> {
-                                        listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
-                                    });
-                                    break;
-                                case SNOMED_INVESTIGATIONS_LIST_DISPLAY:
-                                    //investigationsListResource = listResource;
-                                    listResources.put(listTitle, listResource);
-                                    refCounts.keySet().stream().filter((key) -> (key.startsWith("DiagnosticReport/"))).sorted().forEachOrdered((String key) -> {
-                                        listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
-                                    });
-                                    break;
-                                // extension point add new clinical area list types here
-                            }
-                            break;
-                        } // if matching id
-                    } // if ListResource
-                } // for bundle entry
-            } // for list id
-
-            for (String listTitle : listResources.keySet()) {
-                // annotate the list if it is present but empty
-                ListResource listResource = listResources.get(listTitle);
-                if (listResource.getEntry().isEmpty()) {
-                    if (!listResource.hasNote()) {
-                        addEmptyListNote(listResource);
-                        addEmptyReasonCode(listResource);
-                    }
-                }
-            }
-
-            if (DEBUG_LEVEL > 0) {
-                for (String key : duplicates.keySet()) {
-                    System.err.println("Warning duplicate id: " + key + ", count = " + duplicates.get(key));
-                }
-            }
-
-        } else {
-            // for other than problems and consultations just transcribe as is
-            for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
-                structuredBundle.addEntry(entry);
-            }
+    /**
+     * modify the canned response to be consistent with demonstrator data
+     */
+    private String editResponse(long patientLogicalID, String s) {
+        // change all the references of the form .*/.* to be consistent
+        String[][] referenceSubstitutions = new String[][]{
+            {"Patient", "" + patientLogicalID},
+            {"Practitioner", "1"},
+            {"Organization", "7"}
+        };
+        // nb refernce substitions
+        for (String[] substitution : referenceSubstitutions) {
+            s = s.replaceAll("\"" + substitution[0] + "/.*\"", "\"" + substitution[0] + "/" + substitution[1] + "\"");
         }
-    } // appendCannedResponse
+
+        // do other substitutions
+        String[][] quotedSubstitutions = new String[][]{
+            {"REARDON, John", "MEAKIN, Mike"},
+            {"SMITH", "GILBERT"},
+            {"GREENTOWN GENERAL HOSPITAL", "Dr Legg's Surgery"}
+        };
+        // nb straight substitutions
+        // standard reg exp substitutions
+        for (String[] substitution : quotedSubstitutions) {
+            s = s.replaceAll("\"" + substitution[0] + "\"", "\"" + substitution[1] + "\"");
+        }
+        return s;
+    }
+
+    /**
+     *
+     * @param parameterName name of query parameter
+     * @param structuredBundle target bundle to which lists are added
+     * @param resourceTypes hash of parsed resource objects
+     */
+    private void addInTopLevelResourceLists(String parameterName, Bundle structuredBundle, HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
+        for (String listTitle : SNOMED_CANNED_LIST_TITLES) {
+            // #290 only have the list returned that is relevant to the query.
+            switch (parameterName) {
+                // 1.3
+                case INCLUDE_PROBLEMS_PARM:
+                    // only add problems if problems requested
+                    if (listTitle.equals(SNOMED_PROBLEMS_LIST_DISPLAY)) {
+                        structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
+                    }
+                    break;
+
+                // 1.3
+                case INCLUDE_CONSULTATIONS_PARM:
+                    // only add consultations if consultations requested
+                    if (listTitle.equals(SNOMED_CONSULTATION_LIST_DISPLAY)) {
+                        structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
+                    }
+                    break;
+
+                // 1.4
+                case INCLUDE_REFERRALS_PARM:
+                    // only add referrals if referrals requested
+                    if (listTitle.equals(SNOMED_REFERRALS_LIST_DISPLAY)) {
+                        structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
+                    }
+                    break;
+
+                // 1.4
+                case INCLUDE_INVESTIGATIONS_PARM:
+                    // only add investigations if investigations requested
+                    if (listTitle.equals(SNOMED_INVESTIGATIONS_LIST_DISPLAY)) {
+                        structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
+                    }
+                    break;
+
+                // extension point
+            }
+        } // resourceLists
+    }
+
+    /**
+     * rebuild all the canned bundled lists
+     * @param structuredBundle
+     * @param resourceTypes
+     * @return
+     */
+    private void rebuildBundledLists(HashMap<String, ListResource> listResources, Bundle structuredBundle, HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
+        for (String listTitle : SNOMED_CANNED_LIST_TITLES) {
+            for (BundleEntryComponent entry : structuredBundle.getEntry()) {
+                if (entry.getResource() instanceof ListResource) {
+                    ListResource listResource = (ListResource) entry.getResource();
+                    if (listResource.getTitle() != null && listResource.getTitle().equals(listTitle)) {
+                        listResource.getEntry().clear();
+                        // the events are now sorted alpha which mimics sorted by event date
+                        switch (listTitle) {
+                            // 1.3
+                            case SNOMED_PROBLEMS_LIST_DISPLAY:
+                                listResources.put(listTitle, listResource);
+                                refCounts.keySet().stream().filter((key) -> (key.startsWith("Condition/"))).sorted().forEachOrdered((String key) -> {
+                                    listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
+                                });
+                                break;
+
+                            // 1.3
+                            case SNOMED_CONSULTATION_LIST_DISPLAY:
+                                listResources.put(listTitle, listResource);
+                                refCounts.keySet().stream().filter((key) -> (key.startsWith("List/"))).sorted().forEachOrdered((key) -> {
+                                    ListResource listResourceConsultation = (ListResource) resourceTypes.get(ResourceType.List).get(key);
+                                    if (listResourceConsultation.getCode().getCodingFirstRep().getCode().equals(SNOMED_CONSULTATION_ENCOUNTER_TYPE)) {
+                                        listResource.addEntry(new ListResource.ListEntryComponent().setItem(listResourceConsultation.getEncounter()));
+                                    }
+                                });
+                                break;
+
+                            // 1.4
+                            case SNOMED_REFERRALS_LIST_DISPLAY:
+                                //referralsListResource = listResource;
+                                listResources.put(listTitle, listResource);
+                                refCounts.keySet().stream().filter((key) -> (key.startsWith("ReferralRequest/"))).sorted().forEachOrdered((String key) -> {
+                                    listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
+                                });
+                                break;
+
+                            // 1.4
+                            case SNOMED_INVESTIGATIONS_LIST_DISPLAY:
+                                //investigationsListResource = listResource;
+                                listResources.put(listTitle, listResource);
+                                refCounts.keySet().stream().filter((key) -> (key.startsWith("DiagnosticReport/"))).sorted().forEachOrdered((String key) -> {
+                                    listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
+                                });
+                                break;
+                            // extension point add new clinical area list types here
+                        }
+                        break;
+                    } // if matching id
+                } // if ListResource
+            } // for bundle entry
+        } // for list id
+    }
 
     /**
      * enumerate the top level items for Problems or Consultation see
@@ -349,7 +386,8 @@ public class StructuredBuilder {
      * and
      * https://structured-1-4-0.netlify.com/accessrecord_structured_development_problems_guidance.html
      *
-     * @param root Problems or Consultation
+     * @param root Clinical area list Problems, Consultations, Referrals,
+     * Investigations
      * @param structuredBundle response bundle to be appended to
      * @param resourceTypes hashmap of resources keyed by type
      * @param parms List of Parameters for this clinical area
@@ -357,16 +395,19 @@ public class StructuredBuilder {
     private void walkRoot(Bundle structuredBundle, HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms) throws FHIRException {
 
         switch (parms.get(0).getName()) {
-            // Problems can have > 1 cardinality queries
+            // 1.3 Problems can have > 1 cardinality queries
             case INCLUDE_PROBLEMS_PARM:
                 processProblemsParm(resourceTypes, parms, structuredBundle);
                 break;
+            // 1.3
             case INCLUDE_CONSULTATIONS_PARM:
                 processConsultationsParm(resourceTypes, parms, structuredBundle);
                 break;
+            // 1.4
             case INCLUDE_REFERRALS_PARM:
                 processReferralsParm(resourceTypes, parms, structuredBundle);
                 break;
+            // 1.4
             case INCLUDE_INVESTIGATIONS_PARM:
                 processInvestigationsParm(resourceTypes, parms, structuredBundle);
                 break;
@@ -378,7 +419,7 @@ public class StructuredBuilder {
             for (ResourceType rtKey : resourceTypes.keySet()) {
                 for (String key : resourceTypes.get(rtKey).keySet()) {
                     if (refCounts.get(key) == null) {
-                        if (!Arrays.asList(SNOMED_LISTS).contains(key)) {
+                        if (!Arrays.asList(SNOMED_CANNED_LIST_TITLES).contains(key)) {
                             System.err.println("Warning Unreferenced key: " + key);
                         }
                     }
@@ -390,7 +431,7 @@ public class StructuredBuilder {
     /**
      * Problems increment the ref counts for resources matching the search
      * criteria to the response
-     *
+     * NB All the parameters have been validated by now so qwe don't need to do any further checks
      * @param resourceTypes
      * @param parms
      * @param structuredBundle
@@ -534,29 +575,6 @@ public class StructuredBuilder {
     } // processConsultationsParm
 
     /**
-     * process a period and start date and decide whether to add the id to the
-     * hashset
-     *
-     * @param searchPeriod
-     * @param idsToAdd
-     * @param resource
-     * @param startDate
-     */
-    private void addIdIfInPeriod(Period searchPeriod, HashSet<String> idsToAdd, Resource resource, Date startDate) {
-        // not sure this would ever happen
-        if (searchPeriod.getStart() == null && searchPeriod.getEnd() == null) {
-            idsToAdd.add(resource.getId());
-        } else if (searchPeriod.getStart() != null && searchPeriod.getEnd() == null && startDate.compareTo(searchPeriod.getStart()) >= 0) {
-            idsToAdd.add(resource.getId());
-        } else if (searchPeriod.getStart() == null && searchPeriod.getEnd() != null && startDate.compareTo(searchPeriod.getEnd()) <= 0) {
-            idsToAdd.add(resource.getId());
-        } else if (searchPeriod.getStart() != null && searchPeriod.getEnd() != null
-                && startDate.compareTo(searchPeriod.getStart()) >= 0 && startDate.compareTo(searchPeriod.getEnd()) <= 0) {
-            idsToAdd.add(resource.getId());
-        }
-    }
-
-    /**
      * Referrals increment the ref counts for resources matching the search
      * criteria to the response
      *
@@ -654,6 +672,30 @@ public class StructuredBuilder {
         }
 
     } // processInvestigationsParm
+
+    // extension point for process methods
+    /**
+     * process a period and start date and decide whether to add the id to the
+     * hashset
+     *
+     * @param searchPeriod
+     * @param idsToAdd
+     * @param resource
+     * @param startDate
+     */
+    private void addIdIfInPeriod(Period searchPeriod, HashSet<String> idsToAdd, Resource resource, Date startDate) {
+        // not sure this would ever happen
+        if (searchPeriod.getStart() == null && searchPeriod.getEnd() == null) {
+            idsToAdd.add(resource.getId());
+        } else if (searchPeriod.getStart() != null && searchPeriod.getEnd() == null && startDate.compareTo(searchPeriod.getStart()) >= 0) {
+            idsToAdd.add(resource.getId());
+        } else if (searchPeriod.getStart() == null && searchPeriod.getEnd() != null && startDate.compareTo(searchPeriod.getEnd()) <= 0) {
+            idsToAdd.add(resource.getId());
+        } else if (searchPeriod.getStart() != null && searchPeriod.getEnd() != null
+                && startDate.compareTo(searchPeriod.getStart()) >= 0 && startDate.compareTo(searchPeriod.getEnd()) <= 0) {
+            idsToAdd.add(resource.getId());
+        }
+    }
 
     /**
      * populates ref counts as it goes recursion recursively descend resolving

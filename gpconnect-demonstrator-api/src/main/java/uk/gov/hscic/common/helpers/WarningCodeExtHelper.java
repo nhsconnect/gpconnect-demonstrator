@@ -54,7 +54,7 @@ public class WarningCodeExtHelper {
             setFlags(medicationStatement.getWarningCode());
         }
 
-        List<StructuredAllergyIntoleranceEntity> allergies = structuredAllergySearch.getAllergyIntollerence(NHS);
+        List<StructuredAllergyIntoleranceEntity> allergies = structuredAllergySearch.getAllergyIntolerance(NHS);
         for (StructuredAllergyIntoleranceEntity allergy : allergies) {
             setFlags(allergy.getWarningCode());
         }

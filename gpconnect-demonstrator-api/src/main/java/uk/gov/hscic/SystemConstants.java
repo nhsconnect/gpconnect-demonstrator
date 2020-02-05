@@ -31,19 +31,24 @@ public final class SystemConstants {
 
     // Parameter Names
     public static final String PATIENT_NHS_NUMBER_PARM = "patientNHSNumber";
-    public static final String INCLUDE_RESOLVED_ALLERGIES_PARM = "includeResolvedAllergies";
+
+    public static final String INCLUDE_MEDICATION_PARM = "includeMedication";
     public static final String INCLUDE_ALLERGIES_PARM = "includeAllergies";
+
+    // 1.3
     public static final String INCLUDE_IMMUNIZATIONS_PARM = "includeImmunisations";
     public static final String INCLUDE_UNCATEGORISED_DATA_PARM = "includeUncategorisedData"; // Changed at 1.3.1
     public static final String INCLUDE_CONSULTATIONS_PARM = "includeConsultations";
     public static final String INCLUDE_PROBLEMS_PARM = "includeProblems";
+
+    // 1.4
     public static final String INCLUDE_INVESTIGATIONS_PARM = "includeInvestigations";
     public static final String INCLUDE_REFERRALS_PARM = "includeReferrals";
 
-    public static final String INCLUDE_MEDICATION_PARM = "includeMedication";
     public static final List VALID_PARAMETER_NAMES = Arrays.asList(SystemConstants.PATIENT_NHS_NUMBER_PARM,
             SystemConstants.INCLUDE_ALLERGIES_PARM,
             SystemConstants.INCLUDE_MEDICATION_PARM,
+            // 1.3
             SystemConstants.INCLUDE_IMMUNIZATIONS_PARM,
             SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM,
             SystemConstants.INCLUDE_CONSULTATIONS_PARM,
@@ -53,11 +58,13 @@ public final class SystemConstants {
             //SystemConstants.INCLUDE_REFERRALS_PARM
     );
 
-    public static final String INCLUDE_PRESCRIPTION_ISSUES = "includePrescriptionIssues";
+    // parameter part names
+    public static final String INCLUDE_RESOLVED_ALLERGIES_PARM_PART = "includeResolvedAllergies";
+    public static final String INCLUDE_PRESCRIPTION_ISSUES_PARAM_PART = "includePrescriptionIssues";
     // 1.2.1
-    public static final String MEDICATION_DATE_PERIOD = "medicationDatePeriod";
+    public static final String MEDICATION_DATE_PERIOD_PARAM_PART = "medicationDatePeriod";
     // 1.2.2
-    public static final String MEDICATION_SEARCH_FROM_DATE = "medicationSearchFromDate";
+    public static final String MEDICATION_SEARCH_FROM_DATE_PARAM_PART = "medicationSearchFromDate";
 
     // SNOMED ListResource Data
     // https://developer.nhs.uk/apis/gpconnect-1-3-1/accessrecord_structured_development_list.html
@@ -81,13 +88,13 @@ public final class SystemConstants {
     // extension point
 
     // Parameter Parts
-    public static final String UNCATEGORISED_DATA_SEARCH_PERIOD = "uncategorisedDataSearchPeriod";
-    public static final String CONSULTATION_SEARCH_PERIOD = "consultationSearchPeriod";
-    public static final String INVESTIGATION_SEARCH_PERIOD = "investigationsSearchPeriod";
-    public static final String REFERRAL_SEARCH_PERIOD = "referralSearchPeriod";
-    public static final String NUMBER_OF_MOST_RECENT = "includeNumberOfMostRecent";
-    public static final String FILTER_STATUS = "filterStatus"; // renamed at 1.3.1
-    public static final String FILTER_SIGNIFICANCE = "filterSignificance"; // renamed at 1.3.1
+    public static final String UNCATEGORISED_DATA_SEARCH_PERIOD_PARAM_PART = "uncategorisedDataSearchPeriod";
+    public static final String CONSULTATION_SEARCH_PERIOD_PARAM_PART = "consultationSearchPeriod";
+    public static final String INVESTIGATION_SEARCH_PERIOD_PARAM_PART = "investigationsSearchPeriod";
+    public static final String REFERRAL_SEARCH_PERIOD_PARAM_PART = "referralSearchPeriod";
+    public static final String NUMBER_OF_MOST_RECENT_PARAM_PART = "includeNumberOfMostRecent";
+    public static final String FILTER_STATUS_PARAM_PART = "filterStatus"; // renamed at 1.3.1
+    public static final String FILTER_SIGNIFICANCE_PARAM_PART = "filterSignificance"; // renamed at 1.3.1
     
     // offsets into the patients property array. See the provider prerequsites spreadsheet for more details
     // https://github.com/nhsconnect/gpconnect-provider-testing/blob/master/Data/Test%20Suite%20Prerequisites.xlsx

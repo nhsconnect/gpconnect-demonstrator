@@ -27,6 +27,7 @@ public final class SystemURL {
     public static final String ID_SDS_USER_ID = "https://fhir.nhs.uk/Id/sds-user-id";
     public static final String ID_MARITAL_STATUS = "http://fhir.nhs.net/ValueSet/marital-status-1";
 
+    
     // FHIR StructureDefinition Constants
     public static final String SD_GPC_CARERECORD_COMPOSITION = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-CareRecord-Composition-1";
     public static final String SD_GPC_OPERATIONOUTCOME = "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-OperationOutcome-1";
@@ -49,6 +50,8 @@ public final class SystemURL {
     public static final String SD_GPC_MEDICATION_REQUEST = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1";
     public static final String SD_GPC_MEDICATION = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Medication-1";
     public static final String SD_GPC_PRACTITIONER_ROLE = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-PractitionerRole-1";
+
+    // https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1
 
     // FHIR StructureDefinition Extension
     public static final String SD_CC_EXT_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1";
@@ -76,6 +79,7 @@ public final class SystemURL {
     public static final String SD_CC_EXT_RESIDENTIAL_STATUS = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ResidentialStatus-1";   
     public static final String SD_CC_EXT_TREATMENT_CAT = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-TreatmentCategory-1";   
     public static final String SD_CC_EXT_NHS_COMMUNICATION = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSCommunication-1";   
+    public static final String SD_CC_EXT_PROBLEM_SIGNIFICANCE = "https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1";
     public static final String SD_CC_EXT_COMM_LANGUAGE = "language";   // # 177
     public static final String SD_CC_COMM_PREFERRED = "preferred";   // # 177
     public static final String SD_CC_MODE_OF_COMM = "modeOfCommunication";   

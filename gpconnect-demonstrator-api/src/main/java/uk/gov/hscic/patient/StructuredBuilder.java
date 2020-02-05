@@ -21,6 +21,7 @@ import ca.uhn.fhir.parser.DataFormatException;
 import ca.uhn.fhir.parser.IParser;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,20 +30,26 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.CodeType;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Condition;
 import org.hl7.fhir.dstu3.model.Condition.ConditionClinicalStatus;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.DomainResource;
 import org.hl7.fhir.dstu3.model.Encounter;
 import org.hl7.fhir.dstu3.model.Extension;
+import org.hl7.fhir.dstu3.model.IdType;
+import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.IntegerType;
 import org.hl7.fhir.dstu3.model.ListResource;
 import org.hl7.fhir.dstu3.model.MedicationRequest;
 import org.hl7.fhir.dstu3.model.MedicationStatement;
+import org.hl7.fhir.dstu3.model.Meta;
 import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Period;
 import org.hl7.fhir.dstu3.model.Reference;
@@ -51,11 +58,16 @@ import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.exceptions.FHIRException;
 import static uk.gov.hscic.SystemConstants.*;
+import uk.gov.hscic.SystemURL;
+import static uk.gov.hscic.SystemURL.SD_CC_EXT_PROBLEM_SIGNIFICANCE;
+import static uk.gov.hscic.medications.PopulateMedicationBundle.setClinicalSetting;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
 
 /**
- * Appends canned responses to a Bundle
+ * Appends canned responses to a Bundle Note that the Clinical Item List
+ * Resources do not have an id so where these are referenced in collections we
+ * use the list title to identify them
  *
  * @author simonfarrow
  */
@@ -67,15 +79,16 @@ public class StructuredBuilder {
     private static final String SNOMED_CONSULTATION_ENCOUNTER_TYPE = "325851000000107";
 
     private static final String[] SNOMED_CANNED_LIST_TITLES = {SNOMED_PROBLEMS_LIST_DISPLAY, // 1.3
-        SNOMED_CONSULTATION_LIST_DISPLAY, // 1.3
+        SNOMED_CONSULTATION_LIST_DISPLAY,// 1.3
+        SNOMED_MEDICATION_LIST_DISPLAY /*
         SNOMED_REFERRALS_LIST_DISPLAY, // 1.4
-        SNOMED_INVESTIGATIONS_LIST_DISPLAY}; // 1.4
+        SNOMED_INVESTIGATIONS_LIST_DISPLAY*/}; // 1.4
 
     // add any new clinical areas supported as canned responses here
     private final static String[] STRUCTURED_CANNED_CLINICAL_AREAS = {INCLUDE_PROBLEMS_PARM,
-        INCLUDE_CONSULTATIONS_PARM,
+        INCLUDE_CONSULTATIONS_PARM/*,
         INCLUDE_REFERRALS_PARM,
-        INCLUDE_INVESTIGATIONS_PARM
+        INCLUDE_INVESTIGATIONS_PARM*/
 // extension point add new clinical areas here
     };
 
@@ -94,7 +107,7 @@ public class StructuredBuilder {
      * @throws org.hl7.fhir.exceptions.FHIRException
      * @throws java.io.IOException
      */
-    public void appendCannedResponse(String filename, Bundle structuredBundle, long patientLogicalID, ArrayList<Parameters.ParametersParameterComponent> parms) throws DataFormatException, ConfigurationException, FHIRException, IOException {
+    public void appendCannedResponse(String filename, Bundle structuredBundle, long patientLogicalID, ArrayList<Parameters.ParametersParameterComponent> parms, String[] patients) throws DataFormatException, ConfigurationException, FHIRException, IOException {
         // read from a pre prepared file
         FhirContext ctx = FhirContext.forDstu3();
         String suffix = filename.replaceFirst("^.*\\.([^\\.]+)$", "$1");
@@ -106,13 +119,15 @@ public class StructuredBuilder {
 
         Bundle parsedBundle = (Bundle) parser.parseResource(s);
         HashMap<String, Integer> duplicates = new HashMap<>();
+        // This is an array but the parameter name is the same even for multiple entries
+        // which only happens for problems
         String parameterName = parms.get(0).getName();
 
         if (Arrays.asList(STRUCTURED_CANNED_CLINICAL_AREAS).contains(parameterName)) {
-            handleCannedClinicalArea(parsedBundle, duplicates, structuredBundle, parms, parameterName);
+            // this handles canned responses that need reprocessing ie problems and consultations at 1.3
+            handleCannedClinicalArea(parsedBundle, duplicates, structuredBundle, parms, parameterName, patientLogicalID, patients);
         } else {
-            // for other than canned just transcribe as is
-            // TODO Don't think this will ever get called
+            // for other canned responses just transcribe as is ie uncat and imm for 1.3
             for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
                 structuredBundle.addEntry(entry);
             }
@@ -128,7 +143,7 @@ public class StructuredBuilder {
      * @param parameterName
      * @throws FHIRException
      */
-    private void handleCannedClinicalArea(Bundle parsedBundle, HashMap<String, Integer> duplicates, Bundle structuredBundle, ArrayList<Parameters.ParametersParameterComponent> parms, String parameterName) throws FHIRException {
+    private void handleCannedClinicalArea(Bundle parsedBundle, HashMap<String, Integer> duplicates, Bundle structuredBundle, ArrayList<Parameters.ParametersParameterComponent> parms, String parameterName, long patientLogicalID, String[] patients) throws FHIRException {
         // populate resource types
         HashMap<ResourceType, HashMap<String, Resource>> resourceTypes = new HashMap<>();
         for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
@@ -162,25 +177,65 @@ public class StructuredBuilder {
         for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
             String id = entry.getResource().getId();
             // if the refs count is not null then include the resource.
-            if (refCounts.keySet().contains(id) && !alreadyAdded.contains(id)) {
-                structuredBundle.addEntry(entry);
-                alreadyAdded.add(id);
+            if (refCounts.keySet().contains(id)) {
+                addEntryToBundleOnlyOnce(structuredBundle, id, entry);
             }
         }
 
-        // add any related problems/conditions if this is a request for consultations
-        if (parameterName.equals(INCLUDE_CONSULTATIONS_PARM)) {
+        switch (parameterName) {
+
+            case INCLUDE_PROBLEMS_PARM:
+                // add any related consultations/encounters
+                ArrayList<String> conditionsIdsInResponse = new ArrayList<>();
+
+                Iterator<String> iter = alreadyAdded.iterator();
+                while (iter.hasNext()) {
+                    String conditionId = iter.next();
+                    if (conditionId.startsWith("Condition/")) {
+                        conditionsIdsInResponse.add(conditionId);
+                    }
+                }
+
+                // NB This ignores encounters referenced by Observations
+                for (String conditionId : conditionsIdsInResponse) {
+                    Condition condition = (Condition) resourceTypes.get(ResourceType.Condition).get(conditionId);
+                    Reference encounterReference = condition.getContext();
+                    // does this problem/condition reference an encounter in the returning bundle?
+                    // NB email from Matt only return Encounters, not Consultations nor a List of Consultations
+                    Encounter encounter = (Encounter) resourceTypes.get(ResourceType.Encounter).get(encounterReference.getReference());
+                    if (addEntryToBundleOnlyOnce(structuredBundle, encounter.getId(), new BundleEntryComponent().setResource(encounter))) {
+                        refCounts.put(encounter.getId(), 1);
+                    }
+                }
+
+                // TODO add List (Allergies)
+                // TODO add List (Immunisations)
+                // TODO add List (Uncategorised)
+                break;
+
+            default:
+        } // switch Parameter Name
+
+        // add any problems reagrdless of whether problems were rqeuested
+        if (resourceTypes.get(ResourceType.Condition) != null) {
+            // for already added problems add any related problems/conditions
             resourceTypes.get(ResourceType.Condition).keySet().stream().sorted().forEachOrdered((conditionId) -> {
                 Condition condition = (Condition) resourceTypes.get(ResourceType.Condition).get(conditionId);
                 for (Extension extension : condition.getExtension()) {
                     if (extension.getValue() instanceof Reference) {
                         Reference reference = (Reference) extension.getValue();
                         // does this problem/condition reference something in the returning bundle?
-                        if (refCounts.keySet().contains(reference.getReference()) && !alreadyAdded.contains(condition.getId())) {
-                            structuredBundle.addEntry(new BundleEntryComponent().setResource(condition));
-                            alreadyAdded.add(condition.getId());
-                            refCounts.put(condition.getId(), 1);
-                            break;
+                        if (refCounts.keySet().contains(reference.getReference())) {
+                            if (addEntryToBundleOnlyOnce(structuredBundle, condition.getId(), new BundleEntryComponent().setResource(condition))) {
+                                refCounts.put(condition.getId(), 1);
+
+                                // #314 re add the problems list because there are some!
+                                ListResource problemList = (ListResource) resourceTypes.get(ResourceType.List).get(SNOMED_PROBLEMS_LIST_DISPLAY);
+                                if (problemList != null) {
+                                    addEntryToBundleOnlyOnce(structuredBundle, SNOMED_PROBLEMS_LIST_DISPLAY, new BundleEntryComponent().setResource(problemList));
+                                }
+                                break;
+                            }
                         }
                     }
                 }
@@ -194,10 +249,29 @@ public class StructuredBuilder {
                 MedicationStatement medicationStatement = (MedicationStatement) resourceTypes.get(ResourceType.MedicationStatement).get(medicationStatementId);
                 String medicationId = medicationStatement.getMedicationReference().getReference();
                 String medicationRequestId = medicationStatement.getBasedOnFirstRep().getReference();
-                if ((refCounts.keySet().contains(medicationId) || refCounts.keySet().contains(medicationRequestId)) && !alreadyAdded.contains(medicationStatementId)) {
-                    structuredBundle.addEntry(new BundleEntryComponent().setResource(medicationStatement));
-                    alreadyAdded.add(medicationStatementId);
-                    refCounts.put(medicationStatementId, 1);
+                if ((refCounts.keySet().contains(medicationId) || refCounts.keySet().contains(medicationRequestId))) {
+                    if (addEntryToBundleOnlyOnce(structuredBundle, medicationStatementId, new BundleEntryComponent().setResource(medicationStatement))) {
+                        refCounts.put(medicationStatementId, 1);
+                    }
+                }
+
+                // #314
+                if (parameterName.equals(INCLUDE_PROBLEMS_PARM)) {
+                    Iterator iter = alreadyAdded.iterator();
+                    boolean medicationsStatmentsPresent = false;
+                    while (iter.hasNext()) {
+                        String s = (String) iter.next();
+                        if (s.startsWith("MedicationStatement/")) {
+                            medicationsStatmentsPresent = true;
+                            break;
+                        }
+                    }
+                    if (medicationsStatmentsPresent) { // check to see if there are any medications statements that have been added 
+                        // add a medications list (only when problems are requested)
+                        addEntryToBundleOnlyOnce(structuredBundle, SNOMED_MEDICATION_LIST_DISPLAY,
+                                new BundleEntryComponent().setResource(
+                                        createListEntry(SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY, patients[(int) patientLogicalID], "" + patientLogicalID)));
+                    }
                 }
             }
         }
@@ -224,7 +298,25 @@ public class StructuredBuilder {
     }
 
     /**
+     *
+     * @param bundle
+     * @param id
+     * @param entry
+     * @return boolean indicating whether entry was added
+     */
+    private boolean addEntryToBundleOnlyOnce(Bundle bundle, String id, BundleEntryComponent entry) {
+        boolean retval = false;
+        if (!alreadyAdded.contains(id)) {
+            retval = true;
+            bundle.addEntry(entry);
+            alreadyAdded.add(id);
+        }
+        return retval;
+    }
+
+    /**
      * get the correct parser for the input format
+     *
      * @param suffix
      * @param ctx
      * @return the correct parser
@@ -242,6 +334,36 @@ public class StructuredBuilder {
                 System.err.println("StructuredBuilder Unrecognised file type " + suffix);
         }
         return parser;
+    }
+
+    /**
+     * Generic List creator
+     *
+     * @param snomed code
+     * @param snodem display
+     * @param nhsNumber
+     * @param patientId
+     * @return populated ListResource
+     */
+    private ListResource createListEntry(String snomedCode, String snomedDisplay, String nhsNumber, String patientId) {
+        ListResource listResource = new ListResource();
+
+        listResource.setMeta(new Meta().addProfile(SystemURL.SD_GPC_LIST));
+        listResource.setStatus(ListResource.ListStatus.CURRENT);
+
+        listResource.setMode(ListResource.ListMode.SNAPSHOT);
+        listResource.setTitle(snomedDisplay);
+        listResource.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, snomedCode, snomedDisplay)));
+
+        listResource.setSubject(
+                new Reference(new IdType("Patient", patientId)).setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
+        listResource.setDate(new Date());
+        listResource.setOrderedBy(
+                new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
+
+        listResource.addExtension(setClinicalSetting());
+
+        return listResource;
     }
 
     /**
@@ -280,51 +402,20 @@ public class StructuredBuilder {
      * @param resourceTypes hash of parsed resource objects
      */
     private void addInTopLevelResourceLists(String parameterName, Bundle structuredBundle, HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
-        for (String listTitle : SNOMED_CANNED_LIST_TITLES) {
+        AbstractListManager list = instantiateList(parameterName, resourceTypes);
+        if (list != null) {
             // #290 only have the list returned that is relevant to the query.
-            switch (parameterName) {
-                // 1.3
-                case INCLUDE_PROBLEMS_PARM:
-                    // only add problems if problems requested
-                    if (listTitle.equals(SNOMED_PROBLEMS_LIST_DISPLAY)) {
-                        structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
-                    }
-                    break;
-
-                // 1.3
-                case INCLUDE_CONSULTATIONS_PARM:
-                    // only add consultations if consultations requested
-                    if (listTitle.equals(SNOMED_CONSULTATION_LIST_DISPLAY)) {
-                        structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
-                    }
-                    break;
-
-                // 1.4
-                case INCLUDE_REFERRALS_PARM:
-                    // only add referrals if referrals requested
-                    if (listTitle.equals(SNOMED_REFERRALS_LIST_DISPLAY)) {
-                        structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
-                    }
-                    break;
-
-                // 1.4
-                case INCLUDE_INVESTIGATIONS_PARM:
-                    // only add investigations if investigations requested
-                    if (listTitle.equals(SNOMED_INVESTIGATIONS_LIST_DISPLAY)) {
-                        structuredBundle.addEntry(new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(listTitle)));
-                    }
-                    break;
-
-                // extension point
-            }
-        } // resourceLists
+            addEntryToBundleOnlyOnce(
+                    structuredBundle, list.getListTitle(), new BundleEntryComponent().setResource(resourceTypes.get(ResourceType.List).get(list.getListTitle())));
+        }
     }
 
     /**
      * rebuild all the canned bundled lists
+     *
      * @param structuredBundle
      * @param resourceTypes
-     * @return
+     * @return HashMap of ListResource
      */
     private void rebuildBundledLists(HashMap<String, ListResource> listResources, Bundle structuredBundle, HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
         for (String listTitle : SNOMED_CANNED_LIST_TITLES) {
@@ -333,45 +424,41 @@ public class StructuredBuilder {
                     ListResource listResource = (ListResource) entry.getResource();
                     if (listResource.getTitle() != null && listResource.getTitle().equals(listTitle)) {
                         listResource.getEntry().clear();
+
+                        AbstractListManager list = null;
                         // the events are now sorted alpha which mimics sorted by event date
                         switch (listTitle) {
                             // 1.3
                             case SNOMED_PROBLEMS_LIST_DISPLAY:
-                                listResources.put(listTitle, listResource);
-                                refCounts.keySet().stream().filter((key) -> (key.startsWith("Condition/"))).sorted().forEachOrdered((String key) -> {
-                                    listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
-                                });
+                                list = new ProblemsListManager(resourceTypes);
                                 break;
 
                             // 1.3
                             case SNOMED_CONSULTATION_LIST_DISPLAY:
-                                listResources.put(listTitle, listResource);
-                                refCounts.keySet().stream().filter((key) -> (key.startsWith("List/"))).sorted().forEachOrdered((key) -> {
-                                    ListResource listResourceConsultation = (ListResource) resourceTypes.get(ResourceType.List).get(key);
-                                    if (listResourceConsultation.getCode().getCodingFirstRep().getCode().equals(SNOMED_CONSULTATION_ENCOUNTER_TYPE)) {
-                                        listResource.addEntry(new ListResource.ListEntryComponent().setItem(listResourceConsultation.getEncounter()));
-                                    }
-                                });
+                                list = new ConsultationsListManager(resourceTypes);
                                 break;
 
                             // 1.4
                             case SNOMED_REFERRALS_LIST_DISPLAY:
-                                //referralsListResource = listResource;
-                                listResources.put(listTitle, listResource);
-                                refCounts.keySet().stream().filter((key) -> (key.startsWith("ReferralRequest/"))).sorted().forEachOrdered((String key) -> {
-                                    listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
-                                });
+                                list = new ReferralsListManager(resourceTypes);
                                 break;
 
                             // 1.4
                             case SNOMED_INVESTIGATIONS_LIST_DISPLAY:
-                                //investigationsListResource = listResource;
-                                listResources.put(listTitle, listResource);
-                                refCounts.keySet().stream().filter((key) -> (key.startsWith("DiagnosticReport/"))).sorted().forEachOrdered((String key) -> {
-                                    listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
-                                });
+                                list = new InvestigationsListManager(resourceTypes);
                                 break;
+
+                            //  #314 This isnt a canned response type but problems and consultations can generate these
+                            case SNOMED_MEDICATION_LIST_DISPLAY:
+                                list = new MedicationListManager(resourceTypes);
+                                break;
+
                             // extension point add new clinical area list types here
+                            default:
+                                System.err.println("rebuildBundledLists: Unhandled list type " + listTitle);
+                        }
+                        if (list != null) {
+                            list.populateListResoure(listResources, listResource);
                         }
                         break;
                     } // if matching id
@@ -394,24 +481,9 @@ public class StructuredBuilder {
      */
     private void walkRoot(Bundle structuredBundle, HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms) throws FHIRException {
 
-        switch (parms.get(0).getName()) {
-            // 1.3 Problems can have > 1 cardinality queries
-            case INCLUDE_PROBLEMS_PARM:
-                processProblemsParm(resourceTypes, parms, structuredBundle);
-                break;
-            // 1.3
-            case INCLUDE_CONSULTATIONS_PARM:
-                processConsultationsParm(resourceTypes, parms, structuredBundle);
-                break;
-            // 1.4
-            case INCLUDE_REFERRALS_PARM:
-                processReferralsParm(resourceTypes, parms, structuredBundle);
-                break;
-            // 1.4
-            case INCLUDE_INVESTIGATIONS_PARM:
-                processInvestigationsParm(resourceTypes, parms, structuredBundle);
-                break;
-            // extension point
+        AbstractListManager list = instantiateList(parms.get(0).getName(), resourceTypes);
+        if (list != null) {
+            list.processParm(resourceTypes, parms, structuredBundle);
         }
 
         if (DEBUG_LEVEL > 0) {
@@ -427,251 +499,6 @@ public class StructuredBuilder {
             }
         }
     } // walkRoot
-
-    /**
-     * Problems increment the ref counts for resources matching the search
-     * criteria to the response
-     * NB All the parameters have been validated by now so qwe don't need to do any further checks
-     * @param resourceTypes
-     * @param parms
-     * @param structuredBundle
-     * @throws FHIRException
-     */
-    private void processProblemsParm(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms, Bundle structuredBundle) throws FHIRException {
-        HashMap<String, Resource> conditions = resourceTypes.get(ResourceType.Condition);
-        HashSet<String> conditionIdsToAdd = new HashSet<>();
-
-        for (Parameters.ParametersParameterComponent parm : parms) {
-            String filterSignificance = null;
-            ConditionClinicalStatus filterStatus = null;
-
-            for (Parameters.ParametersParameterComponent paramPart : parm.getPart()) {
-                switch (paramPart.getName()) {
-                    case FILTER_SIGNIFICANCE:
-                        filterSignificance = ((CodeType) paramPart.getValue()).getValue();
-                        break;
-                    case FILTER_STATUS:
-                        filterStatus = ConditionClinicalStatus.valueOf(((CodeType) paramPart.getValue()).getValue().toUpperCase());
-                        break;
-                }
-            }
-
-            for (Resource resource : conditions.values()) {
-                Condition condition = (Condition) resource;
-                List<Extension> significances = condition.getExtensionsByUrl("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-ProblemSignificance-1");
-                if ((filterSignificance == null || significances.isEmpty()
-                        // #300 significance changed from CodeableConcept to Code
-                        || filterSignificance.equalsIgnoreCase(significances.get(0).getValue().toString()))
-                        && (filterStatus == null || condition.getClinicalStatus() == filterStatus)) {
-                    conditionIdsToAdd.add(condition.getId());
-                }
-            }
-        } // for Parameters
-
-        for (String conditionId : conditionIdsToAdd) {
-            refCounts.put(conditionId, 1);
-            walkResource(structuredBundle, resourceTypes, conditionId, 1);
-        }
-
-    } // processProblemsParm
-
-    /**
-     * Consultations increment the ref counts for resources matching the search
-     * criteria to the response
-     *
-     * @param resourceTypes
-     * @param parms
-     * @param structuredBundle
-     * @throws FHIRException
-     */
-    private void processConsultationsParm(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms, Bundle structuredBundle) throws FHIRException {
-        HashMap<String, Resource> encounters = resourceTypes.get(ResourceType.Encounter);
-        HashMap<String, Resource> lists = resourceTypes.get(ResourceType.List);
-
-        HashMap<String, ListResource> consultations = new HashMap<>();
-        for (String key : lists.keySet()) {
-            ListResource list = (ListResource) lists.get(key);
-            if (list.getId() != null && list.getCode().getCodingFirstRep().getCode().equals(SNOMED_CONSULTATION_ENCOUNTER_TYPE)) {
-                consultations.put(list.getId(), list);
-            }
-        }
-
-        Period searchPeriod = null;
-        int numberofMostRecent = -1;
-        for (Parameters.ParametersParameterComponent parm : parms) {
-
-            for (Parameters.ParametersParameterComponent paramPart : parm.getPart()) {
-                switch (paramPart.getName()) {
-                    case CONSULTATION_SEARCH_PERIOD:
-                        searchPeriod = (Period) paramPart.getValue();
-                        break;
-                    case NUMBER_OF_MOST_RECENT:
-                        numberofMostRecent = ((IntegerType) paramPart.getValue()).getValue();
-                        break;
-                }
-            }
-
-        } // for Parameters
-
-        HashSet<String> encounterIdsToAdd = new HashSet<>();
-
-        // Consultations are basically 1 - 1 with encounters
-        List<Resource> se = new ArrayList<>(encounters.values());
-        // sorts descending on encounter start date
-        Comparator<Resource> comparator
-                = (Resource left, Resource right) -> ((Encounter) right).getPeriod().getStart().compareTo(((Encounter) left).getPeriod().getStart());
-        // add the most recent n encounters
-        Collections.sort(se, comparator);
-        int addedCount = 0;
-        if (numberofMostRecent > 0) {
-            for (Resource e : se) {
-                encounterIdsToAdd.add(e.getId());
-                if (++addedCount >= numberofMostRecent) {
-                    break;
-                }
-            }
-        }
-
-        if (searchPeriod != null) {
-            for (ListResource consultation : consultations.values()) {
-                // get the start date of the consultation from the encounter
-                Encounter encounter = (Encounter) encounters.get(consultation.getEncounter().getReference());
-                Date startDate = encounter.getPeriod().getStart();
-                addIdIfInPeriod(searchPeriod, encounterIdsToAdd, encounter, startDate);
-            }
-        }
-
-        // no filters - add everything
-        if (numberofMostRecent < 0 && searchPeriod == null) {
-            for (Resource encounter : encounters.values()) {
-                encounterIdsToAdd.add(encounter.getId());
-            }
-        }
-
-        ListResource consultationList = (ListResource) lists.get(SNOMED_CONSULTATION_LIST_DISPLAY);
-
-        // make sure the included Consultation are added
-        for (ListResource consultation : consultations.values()) {
-            String referencedEncounter = consultation.getEncounter().getReference();
-            if (encounterIdsToAdd.contains(referencedEncounter)) {
-                for (ListResource.ListEntryComponent encounterEntry : consultationList.getEntry()) {
-                    // check the entries in Consultations and add consultation if it has a references to the same encounter
-                    if (encounterEntry.getItem().getReference().equals(referencedEncounter)) {
-                        refCounts.put(consultation.getId(), 1);
-                        walkResource(structuredBundle, resourceTypes, consultation.getId(), 1);
-
-                        // and for the corresponding encounter
-                        refCounts.put(referencedEncounter, 1);
-                        walkResource(structuredBundle, resourceTypes, referencedEncounter, 1);
-                    }
-                }
-            }
-        }
-
-        for (String encounterId : encounterIdsToAdd) {
-            walkResource(structuredBundle, resourceTypes, encounterId, 1);
-        }
-
-    } // processConsultationsParm
-
-    /**
-     * Referrals increment the ref counts for resources matching the search
-     * criteria to the response
-     *
-     * @param resourceTypes
-     * @param parms
-     * @param structuredBundle
-     * @throws FHIRException
-     */
-    private void processReferralsParm(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms, Bundle structuredBundle) throws FHIRException {
-        HashMap<String, Resource> referrals = resourceTypes.get(ResourceType.ReferralRequest);
-
-        Period searchPeriod = null;
-        for (Parameters.ParametersParameterComponent parm : parms) {
-
-            for (Parameters.ParametersParameterComponent paramPart : parm.getPart()) {
-                switch (paramPart.getName()) {
-                    case REFERRAL_SEARCH_PERIOD:
-                        searchPeriod = (Period) paramPart.getValue();
-                        break;
-                }
-            }
-
-        } // for Parameters
-
-        HashSet<String> referralsIdsToAdd = new HashSet<>();
-        if (searchPeriod != null) {
-            for (Resource referralResource : referrals.values()) {
-                // get the start date of the consultation from the encounter
-                ReferralRequest referralRequest = (ReferralRequest) referralResource;
-                Date startDate = referralRequest.getAuthoredOn();
-                // not sure this would ever happen
-                addIdIfInPeriod(searchPeriod, referralsIdsToAdd, referralRequest, startDate);
-            }
-        }
-
-        // no filters - add everything
-        if (searchPeriod == null) {
-            for (Resource referral : referrals.values()) {
-                referralsIdsToAdd.add(referral.getId());
-            }
-        }
-
-        for (String referralId : referralsIdsToAdd) {
-            refCounts.put(referralId, 1);
-            walkResource(structuredBundle, resourceTypes, referralId, 1);
-        }
-
-    } // processReferralsParm
-
-    /**
-     * Investigations increment the ref counts for resources matching the search
-     * criteria to the response
-     *
-     * @param resourceTypes
-     * @param parms
-     * @param structuredBundle
-     * @throws FHIRException
-     */
-    private void processInvestigationsParm(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms, Bundle structuredBundle) throws FHIRException {
-        HashMap<String, Resource> diagnosticReports = resourceTypes.get(ResourceType.DiagnosticReport);
-
-        Period searchPeriod = null;
-        for (Parameters.ParametersParameterComponent parm : parms) {
-
-            for (Parameters.ParametersParameterComponent paramPart : parm.getPart()) {
-                switch (paramPart.getName()) {
-                    case INVESTIGATION_SEARCH_PERIOD:
-                        searchPeriod = (Period) paramPart.getValue();
-                        break;
-                }
-            }
-
-        } // for Parameters
-
-        HashSet<String> diagnosticReportIdsToAdd = new HashSet<>();
-        if (searchPeriod != null) {
-            for (Resource diagnosticReportResource : diagnosticReports.values()) {
-                // get the start date of the consultation from the encounter
-                DiagnosticReport diagnosticReport = (DiagnosticReport) diagnosticReportResource;
-                Date startDate = diagnosticReport.getIssued();
-                addIdIfInPeriod(searchPeriod, diagnosticReportIdsToAdd, diagnosticReport, startDate);
-            }
-        }
-
-        // no filters - add everything
-        if (searchPeriod == null) {
-            for (Resource diagnosticReport : diagnosticReports.values()) {
-                diagnosticReportIdsToAdd.add(diagnosticReport.getId());
-            }
-        }
-
-        for (String diagnosticReportId : diagnosticReportIdsToAdd) {
-            refCounts.put(diagnosticReportId, 1);
-            walkResource(structuredBundle, resourceTypes, diagnosticReportId, 1);
-        }
-
-    } // processInvestigationsParm
 
     // extension point for process methods
     /**
@@ -814,4 +641,456 @@ public class StructuredBuilder {
             }
         } // for
     }
+
+    /**
+     * Base class for List Managers
+     * @param paramName
+     * @return AbstractList
+     */
+    private StructuredBuilder.AbstractListManager instantiateList(String paramName, HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
+        StructuredBuilder.AbstractListManager list = null;
+        try {
+            // map from name of clinical area parameter to appropriate class name
+            Class<?> toRun = Class.forName("uk.gov.hscic.patient.StructuredBuilder$" + paramName.replaceFirst("include", "") + "ListManager");
+            Constructor<?> ctor = toRun.getDeclaredConstructor(StructuredBuilder.class, resourceTypes.getClass());
+            list = (AbstractListManager) ctor.newInstance(this, resourceTypes);
+        } catch (Exception ex) {
+            System.err.println("Failed to instantiate ListManager " + paramName + "" + ex.getMessage());
+        }
+        return list;
+    }
+
+    /**
+     * encapsulates parameter specific handling related to lists
+     */
+    abstract public class AbstractListManager {
+
+        protected HashMap<ResourceType, HashMap<String, Resource>> resourceTypes = null;
+
+        /**
+         * public constructor
+         * @param resourceTypes 
+         */
+        public AbstractListManager(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
+            this.resourceTypes = resourceTypes;
+        }
+
+        public void processParm(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms, Bundle structuredBundle) throws FHIRException {
+        }
+
+        public void populateListResoure(HashMap<String, ListResource> listResources, ListResource listResource) {
+            listResources.put(getListTitle(), listResource);
+            refCounts.keySet().stream().filter((key) -> (key.startsWith(getKeyFilter()))).sorted().forEachOrdered((String key) -> {
+                listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(key)));
+            });
+        }
+
+        abstract public String getListTitle();
+
+        protected String getKeyFilter() {
+            return "";
+        }
+    }
+
+    /**
+     * Allergies
+     */
+    public class AllergiesListManager extends AbstractListManager {
+
+        /**
+         * public constructor
+         * @param resourceTypes 
+         */
+        public AllergiesListManager(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
+            super(resourceTypes);
+        }
+
+        @Override
+        public String getListTitle() {
+            return "";
+        }
+
+    }
+
+    /**
+     * Medication
+     */
+    public class MedicationListManager extends AbstractListManager {
+
+        /**
+         * public constructor
+         * @param resourceTypes 
+         */
+        public MedicationListManager(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
+            super(resourceTypes);
+        }
+
+        @Override
+        public String getListTitle() {
+            return SNOMED_MEDICATION_LIST_DISPLAY;
+        }
+
+        @Override
+        protected String getKeyFilter() {
+            return "MedicationStatement/";
+        }
+    }
+
+    /**
+     * Problems
+     */
+    public class ProblemsListManager extends AbstractListManager {
+
+        /**
+         * public constructor
+         * @param resourceTypes 
+         */
+        public ProblemsListManager(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
+            super(resourceTypes);
+        }
+
+        @Override
+        /**
+         * Problems increment the ref counts for resources matching the search
+         * criteria to the response NB All the parameters have been validated by
+         * now so we don't need to do any further checks
+         *
+         * @param resourceTypes
+         * @param parms
+         * @param structuredBundle
+         * @throws FHIRException
+         */
+        public void processParm(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms, Bundle structuredBundle) throws FHIRException {
+            HashMap<String, Resource> conditions = resourceTypes.get(ResourceType.Condition);
+            HashSet<String> conditionIdsToAdd = new HashSet<>();
+
+            for (Parameters.ParametersParameterComponent parm : parms) {
+                String filterSignificance = null;
+                ConditionClinicalStatus filterStatus = null;
+
+                for (Parameters.ParametersParameterComponent paramPart : parm.getPart()) {
+                    switch (paramPart.getName()) {
+                        case FILTER_SIGNIFICANCE_PARAM_PART:
+                            filterSignificance = ((CodeType) paramPart.getValue()).getValue();
+                            break;
+                        case FILTER_STATUS_PARAM_PART:
+                            filterStatus = ConditionClinicalStatus.valueOf(((CodeType) paramPart.getValue()).getValue().toUpperCase());
+                            break;
+                    }
+                }
+
+                for (Resource resource : conditions.values()) {
+                    Condition condition = (Condition) resource;
+                    List<Extension> significances = condition.getExtensionsByUrl(SD_CC_EXT_PROBLEM_SIGNIFICANCE);
+                    if ((filterSignificance == null || significances.isEmpty()
+                            // #300 significance changed from CodeableConcept to Code
+                            || filterSignificance.equalsIgnoreCase(significances.get(0).getValue().toString()))
+                            && (filterStatus == null || condition.getClinicalStatus() == filterStatus)) {
+                        conditionIdsToAdd.add(condition.getId());
+                    }
+                }
+            } // for Parameters
+
+            for (String conditionId : conditionIdsToAdd) {
+                refCounts.put(conditionId, 1);
+                walkResource(structuredBundle, resourceTypes, conditionId, 1);
+            }
+
+        } // processParm
+
+        @Override
+        public String getListTitle() {
+            return SNOMED_PROBLEMS_LIST_DISPLAY;
+        }
+
+        @Override
+        protected String getKeyFilter() {
+            return "Condition/";
+        }
+    } // Problems
+
+    /**
+     * Consultations
+     */
+    public class ConsultationsListManager extends AbstractListManager {
+
+        /**
+         * public constructor
+         * @param resourceTypes 
+         */
+        public ConsultationsListManager(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
+            super(resourceTypes);
+        }
+
+        @Override
+        /**
+         * Consultations increment the ref counts for resources matching the
+         * search criteria to the response
+         *
+         * @param resourceTypes
+         * @param parms
+         * @param structuredBundle
+         * @throws FHIRException
+         */
+        public void processParm(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms, Bundle structuredBundle) throws FHIRException {
+            HashMap<String, Resource> encounters = resourceTypes.get(ResourceType.Encounter);
+            HashMap<String, Resource> lists = resourceTypes.get(ResourceType.List);
+
+            HashMap<String, ListResource> consultations = new HashMap<>();
+            for (String key : lists.keySet()) {
+                ListResource list = (ListResource) lists.get(key);
+                if (list.getId() != null && list.getCode().getCodingFirstRep().getCode().equals(SNOMED_CONSULTATION_ENCOUNTER_TYPE)) {
+                    consultations.put(list.getId(), list);
+                }
+            }
+
+            Period searchPeriod = null;
+            int numberofMostRecent = -1;
+            for (Parameters.ParametersParameterComponent parm : parms) {
+
+                for (Parameters.ParametersParameterComponent paramPart : parm.getPart()) {
+                    switch (paramPart.getName()) {
+                        case CONSULTATION_SEARCH_PERIOD_PARAM_PART:
+                            searchPeriod = (Period) paramPart.getValue();
+                            break;
+                        case NUMBER_OF_MOST_RECENT_PARAM_PART:
+                            numberofMostRecent = ((IntegerType) paramPart.getValue()).getValue();
+                            break;
+                    }
+                }
+
+            } // for Parameters
+
+            HashSet<String> encounterIdsToAdd = new HashSet<>();
+
+            // Consultations are basically 1 - 1 with encounters
+            List<Resource> se = new ArrayList<>(encounters.values());
+            // sorts descending on encounter start date
+            Comparator<Resource> comparator
+                    = (Resource left, Resource right) -> ((Encounter) right).getPeriod().getStart().compareTo(((Encounter) left).getPeriod().getStart());
+            // add the most recent n encounters
+            Collections.sort(se, comparator);
+            int addedCount = 0;
+            if (numberofMostRecent > 0) {
+                for (Resource e : se) {
+                    encounterIdsToAdd.add(e.getId());
+                    if (++addedCount >= numberofMostRecent) {
+                        break;
+                    }
+                }
+            }
+
+            if (searchPeriod != null) {
+                for (ListResource consultation : consultations.values()) {
+                    // get the start date of the consultation from the encounter
+                    Encounter encounter = (Encounter) encounters.get(consultation.getEncounter().getReference());
+                    Date startDate = encounter.getPeriod().getStart();
+                    addIdIfInPeriod(searchPeriod, encounterIdsToAdd, encounter, startDate);
+                }
+            }
+
+            // no filters - add everything
+            if (numberofMostRecent < 0 && searchPeriod == null) {
+                for (Resource encounter : encounters.values()) {
+                    encounterIdsToAdd.add(encounter.getId());
+                }
+            }
+
+            ListResource consultationList = (ListResource) lists.get(SNOMED_CONSULTATION_LIST_DISPLAY);
+
+            // make sure the included Consultation are added
+            for (ListResource consultation : consultations.values()) {
+                String referencedEncounter = consultation.getEncounter().getReference();
+                if (encounterIdsToAdd.contains(referencedEncounter)) {
+                    for (ListResource.ListEntryComponent encounterEntry : consultationList.getEntry()) {
+                        // check the entries in Consultations and add consultation if it has a references to the same encounter
+                        if (encounterEntry.getItem().getReference().equals(referencedEncounter)) {
+                            refCounts.put(consultation.getId(), 1);
+                            walkResource(structuredBundle, resourceTypes, consultation.getId(), 1);
+
+                            // and for the corresponding encounter
+                            refCounts.put(referencedEncounter, 1);
+                            walkResource(structuredBundle, resourceTypes, referencedEncounter, 1);
+                        }
+                    }
+                }
+            }
+
+            for (String encounterId : encounterIdsToAdd) {
+                walkResource(structuredBundle, resourceTypes, encounterId, 1);
+            }
+
+        } // processParm
+
+        @Override
+        public String getListTitle() {
+            return SNOMED_CONSULTATION_LIST_DISPLAY;
+        }
+
+        @Override
+        public void populateListResoure(HashMap<String, ListResource> listResources, ListResource listResource) {
+            listResources.put(getListTitle(), listResource);
+            refCounts.keySet().stream().filter((key) -> (key.startsWith(getKeyFilter()))).sorted().forEachOrdered((key) -> {
+                ListResource listResourceConsultation = (ListResource) resourceTypes.get(ResourceType.List).get(key);
+                if (listResourceConsultation.getCode().getCodingFirstRep().getCode().equals(SNOMED_CONSULTATION_ENCOUNTER_TYPE)) {
+                    listResource.addEntry(new ListResource.ListEntryComponent().setItem(listResourceConsultation.getEncounter()));
+                }
+            });
+        }
+
+        @Override
+        protected String getKeyFilter() {
+            return "List/";
+        }
+    } // Consultations
+
+    /**
+     * Investigations
+     */
+    public class InvestigationsListManager extends AbstractListManager {
+
+        /**
+         * public constructor
+         * @param resourceTypes 
+         */
+        public InvestigationsListManager(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
+            super(resourceTypes);
+        }
+
+        @Override
+        /**
+         * Investigations increment the ref counts for resources matching the
+         * search criteria to the response
+         *
+         * @param resourceTypes
+         * @param parms
+         * @param structuredBundle
+         * @throws FHIRException
+         */
+        public void processParm(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms, Bundle structuredBundle) throws FHIRException {
+            HashMap<String, Resource> diagnosticReports = resourceTypes.get(ResourceType.DiagnosticReport);
+
+            Period searchPeriod = null;
+            for (Parameters.ParametersParameterComponent parm : parms) {
+
+                for (Parameters.ParametersParameterComponent paramPart : parm.getPart()) {
+                    switch (paramPart.getName()) {
+                        case INVESTIGATION_SEARCH_PERIOD_PARAM_PART:
+                            searchPeriod = (Period) paramPart.getValue();
+                            break;
+                    }
+                }
+
+            } // for Parameters
+
+            HashSet<String> diagnosticReportIdsToAdd = new HashSet<>();
+            if (searchPeriod != null) {
+                for (Resource diagnosticReportResource : diagnosticReports.values()) {
+                    // get the start date of the consultation from the encounter
+                    DiagnosticReport diagnosticReport = (DiagnosticReport) diagnosticReportResource;
+                    Date startDate = diagnosticReport.getIssued();
+                    addIdIfInPeriod(searchPeriod, diagnosticReportIdsToAdd, diagnosticReport, startDate);
+                }
+            }
+
+            // no filters - add everything
+            if (searchPeriod == null) {
+                for (Resource diagnosticReport : diagnosticReports.values()) {
+                    diagnosticReportIdsToAdd.add(diagnosticReport.getId());
+                }
+            }
+
+            for (String diagnosticReportId : diagnosticReportIdsToAdd) {
+                refCounts.put(diagnosticReportId, 1);
+                walkResource(structuredBundle, resourceTypes, diagnosticReportId, 1);
+            }
+
+        } // processParm
+
+        @Override
+        public String getListTitle() {
+            return SNOMED_INVESTIGATIONS_LIST_DISPLAY;
+        }
+
+        @Override
+        protected String getKeyFilter() {
+            return "DiagnosticReport/";
+        }
+
+    } // Investigations
+
+    /**
+     * Referrals
+     */
+    public class ReferralsListManager extends AbstractListManager {
+
+        /**
+         * public constructor
+         * @param resourceTypes 
+         */
+        public ReferralsListManager(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
+            super(resourceTypes);
+        }
+
+        @Override
+        /**
+         * Referrals increment the ref counts for resources matching the search
+         * criteria to the response
+         *
+         * @param resourceTypes
+         * @param parms
+         * @param structuredBundle
+         * @throws FHIRException
+         */
+        public void processParm(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes, ArrayList<Parameters.ParametersParameterComponent> parms, Bundle structuredBundle) throws FHIRException {
+            HashMap<String, Resource> referrals = resourceTypes.get(ResourceType.ReferralRequest);
+
+            Period searchPeriod = null;
+            for (Parameters.ParametersParameterComponent parm : parms) {
+
+                for (Parameters.ParametersParameterComponent paramPart : parm.getPart()) {
+                    switch (paramPart.getName()) {
+                        case REFERRAL_SEARCH_PERIOD_PARAM_PART:
+                            searchPeriod = (Period) paramPart.getValue();
+                            break;
+                    }
+                }
+
+            } // for Parameters
+
+            HashSet<String> referralsIdsToAdd = new HashSet<>();
+            if (searchPeriod != null) {
+                for (Resource referralResource : referrals.values()) {
+                    // get the start date of the consultation from the encounter
+                    ReferralRequest referralRequest = (ReferralRequest) referralResource;
+                    Date startDate = referralRequest.getAuthoredOn();
+                    // not sure this would ever happen
+                    addIdIfInPeriod(searchPeriod, referralsIdsToAdd, referralRequest, startDate);
+                }
+            }
+
+            // no filters - add everything
+            if (searchPeriod == null) {
+                for (Resource referral : referrals.values()) {
+                    referralsIdsToAdd.add(referral.getId());
+                }
+            }
+
+            for (String referralId : referralsIdsToAdd) {
+                refCounts.put(referralId, 1);
+                walkResource(structuredBundle, resourceTypes, referralId, 1);
+            }
+
+        } // processParm
+
+        @Override
+        public String getListTitle() {
+            return SNOMED_REFERRALS_LIST_DISPLAY;
+        }
+
+        @Override
+        protected String getKeyFilter() {
+            return "ReferralRequest/";
+        }
+    } // Referrals
 }

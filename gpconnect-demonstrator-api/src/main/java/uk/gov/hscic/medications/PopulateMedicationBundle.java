@@ -71,10 +71,10 @@ public class PopulateMedicationBundle {
         for (Parameters.ParametersParameterComponent paramPart : param.getPart()) {
             String paramPartName = paramPart.getName();
             switch (paramPartName) {
-                case INCLUDE_PRESCRIPTION_ISSUES:
+                case INCLUDE_PRESCRIPTION_ISSUES_PARAM_PART:
                     includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
                     break;
-                case MEDICATION_SEARCH_FROM_DATE:
+                case MEDICATION_SEARCH_FROM_DATE_PARAM_PART:
                     // refined at 1.3.1 only apply date if its valid.
                     medicationPeriod = new Period();
                     DateType startDateDt = (DateType) paramPart.getValue();
@@ -143,7 +143,7 @@ public class PopulateMedicationBundle {
         return medicationStatementsList;
     }
 
-    private Extension setClinicalSetting() {
+    public static Extension setClinicalSetting() {
         CodeableConcept codeableConcept = new CodeableConcept();
         Coding coding = new Coding(SystemConstants.SNOMED_URL, "1060971000000108", "General practice service");
         codeableConcept.setCoding(Collections.singletonList(coding));

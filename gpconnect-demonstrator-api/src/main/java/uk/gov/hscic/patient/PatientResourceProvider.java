@@ -15,6 +15,7 @@ import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import java.io.IOException;
 import static java.lang.Integer.min;
+import java.lang.reflect.Constructor;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import org.hl7.fhir.dstu3.model.Address.AddressType;
@@ -63,9 +64,9 @@ import static uk.gov.hscic.SystemURL.VS_GPC_ERROR_WARNING_CODE;
 import uk.gov.hscic.model.telecom.TelecomDetails;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
-import uk.gov.hscic.patient.details.PatientEntity;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
+import uk.gov.hscic.patient.details.PatientEntity;
 
 @Component
 public class PatientResourceProvider implements IResourceProvider {
@@ -313,8 +314,9 @@ public class PatientResourceProvider implements IResourceProvider {
         StructuredBuilder structureBuilder = new StructuredBuilder();
         for (String cannedClinicalArea
                 : cannedCLinicalAreaParameters.keySet()) {
-            if (NHS.equals(patients[PATIENT_2])) {
-                structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(cannedClinicalArea), structuredBundle, PATIENT_2, cannedCLinicalAreaParameters.get(cannedClinicalArea));
+            final int  logicalId = PATIENT_2;
+            if (NHS.equals(patients[logicalId])) {
+                structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(cannedClinicalArea), structuredBundle, logicalId, cannedCLinicalAreaParameters.get(cannedClinicalArea), patients);
             } else {
                 addEmptyList(cannedClinicalArea, NHS, structuredBundle);
             }
@@ -363,54 +365,41 @@ public class PatientResourceProvider implements IResourceProvider {
             String paramName = param.getName();
             if (validateParametersName(paramName)) {
 
+                AbstractClinicalArea clinicalArea = null;
+
+                // list of parameter instances for each parameter, required for clinical areas which have cardinality 0..*
+                // all but problems will have only one array entry in the parameter list
+                // hence includes may already have an allocated array of parameters
                 switch (paramName) {
+                    case PATIENT_NHS_NUMBER_PARM:
+                        break;
                     case INCLUDE_ALLERGIES_PARM:
-                        uncannedClinicalAreaParameters.put(paramName, param);
-                        validateAllergyParameter(param);
-                        break;
-
                     case INCLUDE_MEDICATION_PARM:
-                        uncannedClinicalAreaParameters.put(paramName, param);
-                        validateMedicationParameter(param);
+                        if (uncannedClinicalAreaParameters.get(paramName) == null) {
+                            uncannedClinicalAreaParameters.put(paramName, param);
+                        } else {
+                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter : " + paramName);
+                        }
+                        clinicalArea = instantiateClinicalArea(paramName);
                         break;
-
-                    // start of canned responses handled by includes
-                    // 1.3
-                    case INCLUDE_IMMUNIZATIONS_PARM:
-                        addNewParameterListToIncludes(param, cannedClinicalAreaParameters);
-                        validateImmunizationsParameter(param);
-
+                    default:
+                        // this is different from other parameters in that it can appear more than once
+                        if (cannedClinicalAreaParameters.get(paramName) == null) {
+                            addNewParameterListToIncludes(param, cannedClinicalAreaParameters);
+                        } else {
+                            if (paramName.equals(INCLUDE_PROBLEMS_PARM)) {
+                                cannedClinicalAreaParameters.get(paramName).add(param);
+                            } else {
+                                throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter : " + paramName);
+                            }
+                        }
+                        clinicalArea = instantiateClinicalArea(paramName);
                         break;
+                }
 
-                    case INCLUDE_UNCATEGORISED_DATA_PARM:
-                        addNewParameterListToIncludes(param, cannedClinicalAreaParameters);
-                        validateUncategorisedDataParameter(param);
-                        break;
-
-                    case INCLUDE_CONSULTATIONS_PARM:
-                        addNewParameterListToIncludes(param, cannedClinicalAreaParameters);
-                        validateConsultationsParameter(param);
-                        break;
-
-                    case INCLUDE_PROBLEMS_PARM:
-                        addNewParameterListToIncludes(param, cannedClinicalAreaParameters);
-                        validateProblemsParameters(cannedClinicalAreaParameters, paramName, param);
-                        break;
-
-                    // 1.4 add investigations and referrals
-                    case INCLUDE_INVESTIGATIONS_PARM:
-                        addNewParameterListToIncludes(param, cannedClinicalAreaParameters);
-                        validateInvestigationsParameter(param);
-                        break;
-
-                    // 1.4
-                    case INCLUDE_REFERRALS_PARM:
-                        addNewParameterListToIncludes(param, cannedClinicalAreaParameters);
-                        validateReferralsParameter(param);
-                        break;
-
-                    // extension point for new clinical areas
-                }  //switch
+                if (clinicalArea != null) {
+                    clinicalArea.validateParameterParts(param);
+                }
             } else {
                 // invalid parameter
                 addWarningIssue(param, IssueType.NOTSUPPORTED);
@@ -418,317 +407,22 @@ public class PatientResourceProvider implements IResourceProvider {
         } // for parameter
     }
 
-     /**
-     * 
-     * @param param 
-     */
-    private void validateAllergyParameter(ParametersParameterComponent param) {
-        HashSet<String> parameterPartsSupplied;
-        if (param.getPart().isEmpty()) {
-            // #272 fail for invalid as opposed to unrecognised
-            throwInvalidParameterInvalidOperationalOutcome("Miss parameter : " + INCLUDE_RESOLVED_ALLERGIES_PARM);
-        }
-        parameterPartsSupplied = new HashSet<>();
-        for (ParametersParameterComponent paramPart : param.getPart()) {
-            String paramPartName = paramPart.getName();
-            switch (paramPartName) {
-                case INCLUDE_RESOLVED_ALLERGIES_PARM:
-                    if (paramPart.getValue() instanceof BooleanType) {
-                        if (!parameterPartsSupplied.contains(paramPartName)) {
-                            parameterPartsSupplied.add(paramPartName);
-                        } else {
-                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + paramPartName);
-                        }
-                    } else {
-                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part type : " + paramPartName);
-                    }
-                    break;
-                default:
-                    addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
-            }
-        }
-        if (!parameterPartsSupplied.contains(INCLUDE_RESOLVED_ALLERGIES_PARM)) {
-            throwInvalidParameterInvalidOperationalOutcome("Miss parameter : " + INCLUDE_RESOLVED_ALLERGIES_PARM);
-        }
-    }
-   
     /**
-     * 
-     * @param param 
-     */
-    private void validateMedicationParameter(ParametersParameterComponent param) {
-        HashSet<String> parameterPartsSupplied;
-        parameterPartsSupplied = new HashSet<>();
-        for (ParametersParameterComponent paramPart : param.getPart()) {
-            String paramPartName = paramPart.getName();
-            switch (paramPartName) {
-                case INCLUDE_PRESCRIPTION_ISSUES:
-                    if (paramPart.getValue() instanceof BooleanType) {
-                        if (!parameterPartsSupplied.contains(paramPartName)) {
-                            parameterPartsSupplied.add(paramPartName);
-                        } else {
-                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + paramPartName);
-                        }
-                    } else {
-                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part type : " + paramPartName);
-                    }
-                    break;
-
-                case MEDICATION_SEARCH_FROM_DATE:
-                    if (paramPart.getValue() instanceof DateType) {
-                        if (!parameterPartsSupplied.contains(paramPartName)) {
-                            DateType startDateDt = (DateType) paramPart.getValue();
-                            String startDate = startDateDt.asStringValue();
-                            StringBuilder sb = new StringBuilder();
-                            validateStartDateParamAndEndDateParam(startDate, null, sb);
-                            parameterPartsSupplied.add(paramPartName);
-                        } else {
-                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + paramPartName);
-                        }
-                    } else {
-                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part type : " + paramPartName);
-                    }
-                    break;
-                default:
-                    addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
-            }
-        }
-        if (!parameterPartsSupplied.contains(INCLUDE_PRESCRIPTION_ISSUES)) {
-            // #272 fail for invalid as opposed to unrecognised
-            throwInvalidParameterInvalidOperationalOutcome("Miss parameter : " + INCLUDE_PRESCRIPTION_ISSUES);
-        }
-    }
-
-    /**
-     * 
-     * @param param 
-     */
-    private void validateImmunizationsParameter(ParametersParameterComponent param) {
-        for (ParametersParameterComponent paramPart : param.getPart()) {
-            addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
-        }
-    }
-    
-    /**
-     * 
-     * @param param 
-     */
-    private void validateUncategorisedDataParameter(ParametersParameterComponent param) {
-        // optional part named uncategorisedDataSearchPeriod with a valuePeriod
-        Period uncatSearchPeriod = null;
-        for (ParametersParameterComponent paramPart : param.getPart()) {
-            String paramPartName = paramPart.getName();
-            switch (paramPartName) {
-                case UNCATEGORISED_DATA_SEARCH_PERIOD:
-                    if (paramPart.getValue() instanceof Period) {
-                        if (uncatSearchPeriod == null) {
-                            uncatSearchPeriod = (Period) paramPart.getValue();
-                            StringBuilder sb = new StringBuilder();
-                            validateStartDateParamAndEndDateParam(uncatSearchPeriod.getStartElement().asStringValue(), uncatSearchPeriod.getEndElement().asStringValue(), sb);
-                        } else {
-                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + paramPartName);
-                        }
-                    } else {
-                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part type : " + paramPartName);
-                    }
-                    break;
-                default:
-                    addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
-            }
-        }
-    }
-
-    /**
-     * 
-     * @param param
-     * @throws BaseServerResponseException 
-     */
-    private void validateConsultationsParameter(ParametersParameterComponent param) throws BaseServerResponseException {
-        HashSet<String> parameterPartsSupplied;
-        parameterPartsSupplied = new HashSet<>();
-        // optional part named consultationSearchPeriod with a valuePeriod
-        // optional part named numberOfMostRecent with a positive integer count
-        // Where both are supplied is an error
-        for (ParametersParameterComponent paramPart : param.getPart()) {
-            String paramPartName = paramPart.getName();
-            switch (paramPartName) {
-                case CONSULTATION_SEARCH_PERIOD:
-                    if (paramPart.getValue() instanceof Period) {
-                        if (!parameterPartsSupplied.contains(paramPartName)) {
-                            Period period = (Period) paramPart.getValue();
-                            StringBuilder sb = new StringBuilder();
-                            validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb);
-                            parameterPartsSupplied.add(paramPartName);
-                        } else {
-                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + paramPartName);
-                        }
-                    } else {
-                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part type : " + paramPartName);
-                    }
-                    break;
-
-                case NUMBER_OF_MOST_RECENT:
-                    if (paramPart.getValue() instanceof IntegerType) {
-                        if (!parameterPartsSupplied.contains(paramPartName)) {
-                            int numberOfMostRecent = ((IntegerType) paramPart.getValue()).getValue();
-                            // #312 value is a positive :integer
-                            if (numberOfMostRecent <= 0) {
-                                throwInvalidParameterInvalidOperationalOutcome("ParameterPart " + paramPartName + " must be greater than 0 : " + numberOfMostRecent);
-                            }
-                            parameterPartsSupplied.add(paramPartName);
-                        } else {
-                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + paramPartName);
-                        }
-                    } else {
-                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part type : " + paramPartName);
-                    }
-                    break;
-                default:
-                    addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
-            } // switch
-        } // for
-        if (parameterPartsSupplied.size() > 1) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new UnprocessableEntityException("Incorrect combination of parameter parts passed : both " + CONSULTATION_SEARCH_PERIOD + " and "
-                            + NUMBER_OF_MOST_RECENT + " were supplied."),
-                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-        }
-    }
-
-    /**
-     * 
-     * @param cannedCLinicalAreaParameters
+     *
      * @param paramName
-     * @param param 
+     * @return parameterValidator
      */
-    private void validateProblemsParameters(HashMap<String, ArrayList<ParametersParameterComponent>> cannedCLinicalAreaParameters, String paramName, ParametersParameterComponent param) {
-        HashSet<String> parameterPartsSupplied;
-        // this is different from other parameters in that it can appear more than once
-        // hence includes may already have an allocated array of parameters
-        if (cannedCLinicalAreaParameters.get(paramName) == null) {
-            addNewParameterListToIncludes(param, cannedCLinicalAreaParameters);
-        } else {
-            // list of parameter instances for each parameter, required for clinical areas which have cardinality 0..*
-            // all but problems will have only one array entry in the parameter list
-            cannedCLinicalAreaParameters.get(paramName).add(param);
+    private AbstractClinicalArea instantiateClinicalArea(String paramName) {
+        AbstractClinicalArea clinicalArea = null;
+        try {
+            // map from name of clinical area parameter to appropriate class name
+            Class<?> toRun = Class.forName("uk.gov.hscic.patient.PatientResourceProvider$" + paramName.replaceFirst("include", "") + "ClinicalArea");
+            Constructor<?> ctor = toRun.getDeclaredConstructor(PatientResourceProvider.class);
+            clinicalArea = (AbstractClinicalArea) ctor.newInstance(this);
+        } catch (Exception ex) {
+            System.err.println("Failed to instantiate ClinicalArea " + paramName + "" + ex.getMessage());
         }
-        // optional part named filterStatus with a valueCode eg active inactive
-        parameterPartsSupplied = new HashSet<>();
-        // optional part named filterSignificance with a valueCode eg major minor
-        for (ParametersParameterComponent paramPart : param.getPart()) {
-            String paramPartName = paramPart.getName();
-            switch (paramPartName) {
-                case FILTER_STATUS:
-                    if ((paramPart.getValue() instanceof CodeType)) {
-                        if (!parameterPartsSupplied.contains(paramPartName)) {
-                            try {
-                                Condition.ConditionClinicalStatus status = Condition.ConditionClinicalStatus.valueOf(((CodeType) paramPart.getValue()).getValue().toUpperCase());
-                                switch (status) {
-                                    case ACTIVE:
-                                    case INACTIVE:
-                                        break;
-                                    default:
-                                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPartName + " invalid value " + paramPart.getValue());
-                                }
-                                parameterPartsSupplied.add(paramPartName);
-                            } catch (IllegalArgumentException ex) {
-                                throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPartName + " invalid value " + paramPart.getValue());
-                            }
-                        } else {
-                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + paramPartName);
-                        }
-                    } else {
-                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part type : " + paramPartName);
-                    }
-                    break;
-
-                case FILTER_SIGNIFICANCE:
-                    if ((paramPart.getValue() instanceof CodeType)) {
-                        if (!parameterPartsSupplied.contains(paramPartName)) {
-                            String significance = ((CodeType) paramPart.getValue()).getValue();
-                            switch (significance) {
-                                case "major":
-                                case "minor":
-                                    break;
-                                default:
-                                    throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPartName + " invalid value " + paramPart.getValue());
-                            }
-                            parameterPartsSupplied.add(paramPartName);
-                        } else {
-                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + paramPartName);
-                        }
-                    } else {
-                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part type : " + paramPartName);
-                    }
-                    break;
-
-                default:
-                    addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
-            }
-        }
-    }
-
-
-    /**
-     * 
-     * @param param 
-     */
-    private void validateInvestigationsParameter(ParametersParameterComponent param) {
-        HashSet<String> parameterPartsSupplied;
-        // optional parameter investigationsSearchPeriod of type period
-        parameterPartsSupplied = new HashSet<>();
-        for (ParametersParameterComponent paramPart : param.getPart()) {
-            String paramPartName = paramPart.getName();
-            switch (paramPartName) {
-                case INVESTIGATION_SEARCH_PERIOD:
-                    if (paramPart.getValue() instanceof Period) {
-                        if (!parameterPartsSupplied.contains(paramPartName)) {
-                            Period period = (Period) paramPart.getValue();
-                            StringBuilder sb = new StringBuilder();
-                            validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb);
-                            parameterPartsSupplied.add(paramPartName);
-                        } else {
-                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + paramPartName);
-                        }
-                    } else {
-                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part type : " + paramPartName);
-                    }
-                    break;
-                default:
-                    addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
-            }
-        }
-    }
-
-    /**
-     * 
-     * @param param 
-     */
-    private void validateReferralsParameter(ParametersParameterComponent param) {
-        HashSet<String> parameterPartsSupplied;
-        // optional parameter referralSearchPeriod of type period
-        parameterPartsSupplied = new HashSet<>();
-        for (ParametersParameterComponent paramPart : param.getPart()) {
-            String paramPartName = paramPart.getName();
-            switch (paramPartName) {
-                case REFERRAL_SEARCH_PERIOD:
-                    if (paramPart.getValue() instanceof Period) {
-                        if (!parameterPartsSupplied.contains(paramPartName)) {
-                            Period period = (Period) paramPart.getValue();
-                            StringBuilder sb = new StringBuilder();
-                            validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb);
-                            parameterPartsSupplied.add(paramPartName);
-                        } else {
-                            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + paramPartName);
-                        }
-                    } else {
-                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part type : " + paramPartName);
-                    }
-                    break;
-                default:
-                    addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
-            }
-        }
+        return clinicalArea;
     }
 
     private void addNewParameterListToIncludes(ParametersParameterComponent param, HashMap<String, ArrayList<ParametersParameterComponent>> includes) {
@@ -741,11 +435,11 @@ public class PatientResourceProvider implements IResourceProvider {
      * add a list item with empty flags set. No data returned for this clinical
      * area.
      *
-     * @param clinicalArea
+     * @param clinicalAreaName
      * @param NHS
      * @param structuredBundle
      */
-    private void addEmptyList(String clinicalArea, String NHS, Bundle structuredBundle) {
+    private void addEmptyList(String clinicalAreaName, String NHS, Bundle structuredBundle) {
         // see https://gpc-structured-futures.netlify.com/accessrecord_structured_development_list.html#emptyreason
         // if its not patient 2 add an empty list for the requested include
         ListResource list = new ListResource();
@@ -753,36 +447,11 @@ public class PatientResourceProvider implements IResourceProvider {
         list.setStatus(ListResource.ListStatus.CURRENT);
         list.setMode(ListResource.ListMode.SNAPSHOT);
 
-        switch (clinicalArea) {
-            case INCLUDE_IMMUNIZATIONS_PARM:
-                list.setTitle(SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
-                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_IMMUNIZATIONS_LIST_CODE, list.getTitle())));
-                break;
-            case INCLUDE_UNCATEGORISED_DATA_PARM:
-                list.setTitle(SNOMED_UNCATEGORISED_LIST_DISPLAY);
-                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_UNCATEGORISED_LIST_CODE, list.getTitle())));
-                break;
-            case INCLUDE_CONSULTATIONS_PARM:
-                list.setTitle(SNOMED_CONSULTATION_LIST_DISPLAY);
-                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_CONSULTATION_LIST_CODE, list.getTitle())));
-                break;
-            case INCLUDE_PROBLEMS_PARM:
-                list.setTitle(SNOMED_PROBLEMS_LIST_DISPLAY);
-                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_PROBLEMS_LIST_CODE, list.getTitle())));
-                break;
-            // 1.4
-            case INCLUDE_INVESTIGATIONS_PARM:
-                list.setTitle(SNOMED_INVESTIGATIONS_LIST_DISPLAY);
-                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_INVESTIGATIONS_LIST_CODE, list.getTitle())));
-                break;
-            case INCLUDE_REFERRALS_PARM:
-                list.setTitle(SNOMED_REFERRALS_LIST_DISPLAY);
-                list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_REFERRALS_LIST_CODE, list.getTitle())));
-                break;
-
-            // extension point for new clinical areas
-            default:
-                System.err.println("addEmptyList: Unexpected clinical area: " + clinicalArea);
+        AbstractClinicalArea clinicalArea = instantiateClinicalArea(clinicalAreaName);
+        if (clinicalArea != null) {
+            clinicalArea.setListMetaData(list);
+        } else {
+            System.err.println("Unrecognised Clinical Area " + clinicalAreaName);
         }
 
         PatientEntity patient = patientStore.findByNhsNumber(NHS);
@@ -1878,5 +1547,421 @@ public class PatientResourceProvider implements IResourceProvider {
                 new UnprocessableEntityException(
                         error),
                 SystemCode.INVALID_PARAMETER, IssueType.INVALID);
+    }
+
+    /**
+     * base class for Clinical Area classes Supports parameter part validation
+     * Initialisation of associated List resource
+     */
+    public abstract class AbstractClinicalArea {
+
+        protected HashSet<String> parameterPartsSupplied;
+        protected ParametersParameterComponent param = null;
+        protected ParametersParameterComponent paramPart = null;
+
+        /**
+         * public constructor
+         */
+        public AbstractClinicalArea() {
+            parameterPartsSupplied = new HashSet<>();
+        }
+
+        /**
+         * default no parameter parts expected add an unsupported issue for each
+         * parameter part
+         *
+         * @param param
+         */
+        public void validateParameterParts(ParametersParameterComponent param) {
+            for (ParametersParameterComponent paramPart : param.getPart()) {
+                addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
+            }
+        }
+
+        protected void notSupported() {
+            addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
+        }
+
+        protected void repeated() {
+            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + paramPart.getName());
+        }
+
+        protected void invalidType() {
+            throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part type : " + paramPart.getName());
+        }
+
+        /**
+         * This needs a parameter (java!) because we are explicitly naming a
+         * ParameterPart thats not been passed
+         *
+         * @param paramPartName
+         */
+        protected void missParameterPart(String paramPartName) {
+            throwInvalidParameterInvalidOperationalOutcome("Miss parameter : " + paramPartName);
+        }
+
+        protected void noValue() {
+            throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part : " + paramPart.getName() + " no value element");
+        }
+
+        protected void checkMissingMandatory(String paramPartName) {
+            if (!parameterPartsSupplied.contains(paramPartName)) {
+                missParameterPart(paramPartName);
+            }
+        }
+
+        protected String getListDisplay() {
+            return ("");
+        }
+
+        protected String getListCode() {
+            return ("");
+        }
+
+        public void setListMetaData(ListResource list) {
+            list.setTitle(getListDisplay());
+            list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, getListCode(), getListDisplay())));
+        }
+
+        /**
+         * @param cls expected parameter type
+         */
+        protected void checkParameterPart(Class cls) {
+            if (paramPart.getValue() != null) {
+                if (paramPart.getValue().getClass() == cls) {
+                    if (!parameterPartsSupplied.contains(paramPart.getName())) {
+                        // type specific checking
+                        if (cls == DateType.class) {
+                            DateType startDateDt = (DateType) paramPart.getValue();
+                            String startDate = startDateDt.asStringValue();
+                            StringBuilder sb = new StringBuilder();
+                            validateStartDateParamAndEndDateParam(startDate, null, sb);
+                        } else if (cls == Period.class) {
+                            Period uncatSearchPeriod = (Period) paramPart.getValue();
+                            StringBuilder sb = new StringBuilder();
+                            validateStartDateParamAndEndDateParam(uncatSearchPeriod.getStartElement().asStringValue(), uncatSearchPeriod.getEndElement().asStringValue(), sb);
+                        }
+                        parameterPartsSupplied.add(paramPart.getName());
+                    } else {
+                        repeated();
+                    }
+                } else {
+                    invalidType();
+                }
+            } else {
+                noValue();
+            }
+        }
+    }
+
+    /**
+     * Allergies 1.2 Not canned
+     */
+    public class AllergiesClinicalArea extends AbstractClinicalArea {
+
+        @Override
+        public void validateParameterParts(ParametersParameterComponent param) {
+            this.param = param;
+            for (ParametersParameterComponent pParamPart : param.getPart()) {
+                paramPart = pParamPart;
+                switch (paramPart.getName()) {
+                    case INCLUDE_RESOLVED_ALLERGIES_PARM_PART:
+                        checkParameterPart(BooleanType.class);
+                        break;
+                    default:
+                        notSupported();
+                }
+            }
+
+            checkMissingMandatory(INCLUDE_RESOLVED_ALLERGIES_PARM_PART);
+        }
+    }
+
+    /**
+     * Medication 1.2 Not canned
+     */
+    public class MedicationClinicalArea extends AbstractClinicalArea {
+
+        @Override
+        public void validateParameterParts(ParametersParameterComponent pParam) {
+            this.param = pParam;
+            for (ParametersParameterComponent pParamPart : param.getPart()) {
+                paramPart = pParamPart;
+                switch (paramPart.getName()) {
+                    case INCLUDE_PRESCRIPTION_ISSUES_PARAM_PART:
+                        checkParameterPart(BooleanType.class);
+                        break;
+
+                    case MEDICATION_SEARCH_FROM_DATE_PARAM_PART:
+                        checkParameterPart(DateType.class);
+                        break;
+                    default:
+                        notSupported();
+                }
+            }
+
+            // #272 fail for invalid as opposed to unrecognised
+            checkMissingMandatory(INCLUDE_PRESCRIPTION_ISSUES_PARAM_PART);
+        }
+
+    }
+
+    /**
+     * Immunisations 1.3 canned but not post processed
+     */
+    public class ImmunisationsClinicalArea extends AbstractClinicalArea {
+
+        public ImmunisationsClinicalArea() {
+        }
+
+        @Override
+        protected String getListDisplay() {
+            return SNOMED_IMMUNIZATIONS_LIST_DISPLAY;
+        }
+
+        @Override
+        protected String getListCode() {
+            return SNOMED_IMMUNIZATIONS_LIST_CODE;
+        }
+    }
+
+    /**
+     * Uncategorised Data 1.3 canned but not post processed
+     */
+    public class UncategorisedDataClinicalArea extends AbstractClinicalArea {
+
+        @Override
+        public void validateParameterParts(ParametersParameterComponent param) {
+            this.param = param;
+            // optional part named uncategorisedDataSearchPeriod with a valuePeriod
+            for (ParametersParameterComponent pParamPart : param.getPart()) {
+                paramPart = pParamPart;
+                switch (paramPart.getName()) {
+                    case UNCATEGORISED_DATA_SEARCH_PERIOD_PARAM_PART:
+                        checkParameterPart(Period.class);
+                        break;
+                    default:
+                        notSupported();
+                }
+            }
+        }
+
+        @Override
+        protected String getListDisplay() {
+            return SNOMED_UNCATEGORISED_LIST_DISPLAY;
+        }
+
+        @Override
+        protected String getListCode() {
+            return SNOMED_UNCATEGORISED_LIST_CODE;
+        }
+    }
+
+    /**
+     * Consultations 1.3 canned and post processed
+     */
+    public class ConsultationsClinicalArea extends AbstractClinicalArea {
+
+        @Override
+        public void validateParameterParts(ParametersParameterComponent pParam) {
+            this.param = pParam;
+            // optional part named consultationSearchPeriod with a valuePeriod
+            // optional part named numberOfMostRecent with a positive integer count
+            // Where both are supplied is an error
+            for (ParametersParameterComponent pParamPart : param.getPart()) {
+                paramPart = pParamPart;
+                switch (paramPart.getName()) {
+                    case CONSULTATION_SEARCH_PERIOD_PARAM_PART:
+                        checkParameterPart(Period.class);
+                        break;
+
+                    case NUMBER_OF_MOST_RECENT_PARAM_PART:
+                        if (paramPart.getValue() != null) {
+                            if (paramPart.getValue() instanceof IntegerType) {
+                                if (!parameterPartsSupplied.contains(paramPart.getName())) {
+                                    int numberOfMostRecent = ((IntegerType) paramPart.getValue()).getValue();
+                                    // #312 value is a positive :integer
+                                    if (numberOfMostRecent <= 0) {
+                                        throwInvalidParameterInvalidOperationalOutcome("ParameterPart " + paramPart.getName() + " must be greater than 0 : " + numberOfMostRecent);
+                                    }
+                                    parameterPartsSupplied.add(paramPart.getName());
+                                } else {
+                                    repeated();
+                                }
+                            } else {
+                                invalidType();
+                            }
+                        } else {
+                            noValue();
+                        }
+                        break;
+                    default:
+                        notSupported();
+                } // switch
+            } // for
+
+            if (parameterPartsSupplied.size() > 1) {
+                throw OperationOutcomeFactory.buildOperationOutcomeException(
+                        new UnprocessableEntityException("Incorrect combination of parameter parts passed : both " + CONSULTATION_SEARCH_PERIOD_PARAM_PART + " and "
+                                + NUMBER_OF_MOST_RECENT_PARAM_PART + " were supplied."),
+                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+            }
+        }
+
+        @Override
+        protected String getListDisplay() {
+            return SNOMED_CONSULTATION_LIST_DISPLAY;
+        }
+
+        @Override
+        protected String getListCode() {
+            return SNOMED_CONSULTATION_LIST_CODE;
+        }
+    }
+
+    /**
+     * Problems 1.3 canned and post processed
+     */
+    public class ProblemsClinicalArea extends AbstractClinicalArea {
+
+        @Override
+        public void validateParameterParts(ParametersParameterComponent pParam) {
+            this.param = pParam;
+            // optional part named filterStatus with a valueCode eg active inactive
+            // optional part named filterSignificance with a valueCode eg major minor
+            for (ParametersParameterComponent pParamPart : param.getPart()) {
+                paramPart = pParamPart;
+                switch (paramPart.getName()) {
+                    case FILTER_STATUS_PARAM_PART:
+                        if (paramPart.getValue() != null) {
+                            if ((paramPart.getValue() instanceof CodeType)) {
+                                if (!parameterPartsSupplied.contains(paramPart.getName())) {
+                                    try {
+                                        Condition.ConditionClinicalStatus status = Condition.ConditionClinicalStatus.valueOf(((CodeType) paramPart.getValue()).getValue().toUpperCase());
+                                        switch (status) {
+                                            case ACTIVE:
+                                            case INACTIVE:
+                                                break;
+                                            default:
+                                                throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
+                                        }
+                                        parameterPartsSupplied.add(paramPart.getName());
+                                    } catch (IllegalArgumentException ex) {
+                                        throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
+                                    }
+                                } else {
+                                    repeated();
+                                }
+                            } else {
+                                invalidType();
+                            }
+                        } else {
+                            noValue();
+                        }
+                        break;
+
+                    case FILTER_SIGNIFICANCE_PARAM_PART:
+                        if (paramPart.getValue() != null) {
+                            if ((paramPart.getValue() instanceof CodeType)) {
+                                if (!parameterPartsSupplied.contains(paramPart.getName())) {
+                                    String significance = ((CodeType) paramPart.getValue()).getValue();
+                                    switch (significance) {
+                                        case "major":
+                                        case "minor":
+                                            break;
+                                        default:
+                                            throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
+                                    }
+                                    parameterPartsSupplied.add(paramPart.getName());
+                                } else {
+                                    repeated();
+                                }
+                            } else {
+                                invalidType();
+                            }
+                        } else {
+                            noValue();
+                        }
+                        break;
+
+                    default:
+                        notSupported();
+                }
+            }
+        }
+
+        @Override
+        protected String getListDisplay() {
+            return SNOMED_PROBLEMS_LIST_DISPLAY;
+        }
+
+        @Override
+        protected String getListCode() {
+            return SNOMED_PROBLEMS_LIST_CODE;
+        }
+    }
+
+    /**
+     * Investigations 1.4
+     */
+    public class InvestigationsClinicalArea extends AbstractClinicalArea {
+
+        @Override
+        public void validateParameterParts(ParametersParameterComponent pParam) {
+            this.param = pParam;
+            // optional parameter investigationsSearchPeriod of type period
+            for (ParametersParameterComponent pParamPart : param.getPart()) {
+                paramPart = pParamPart;
+                switch (paramPart.getName()) {
+                    case INVESTIGATION_SEARCH_PERIOD_PARAM_PART:
+                        checkParameterPart(Period.class);
+                        break;
+                    default:
+                        notSupported();
+                }
+            }
+        }
+
+        @Override
+        protected String getListDisplay() {
+            return SNOMED_INVESTIGATIONS_LIST_DISPLAY;
+        }
+
+        @Override
+        protected String getListCode() {
+            return SNOMED_INVESTIGATIONS_LIST_CODE;
+        }
+    }
+
+    /**
+     * Referrals 1.4
+     */
+    public class ReferralsClinicalArea extends AbstractClinicalArea {
+
+        @Override
+        public void validateParameterParts(ParametersParameterComponent pParam) {
+            this.param = pParam;
+            // optional parameter referralSearchPeriod of type period
+            for (ParametersParameterComponent pParamPart : param.getPart()) {
+                paramPart = pParamPart;
+                switch (paramPart.getName()) {
+                    case REFERRAL_SEARCH_PERIOD_PARAM_PART:
+                        checkParameterPart(Period.class);
+                        break;
+                    default:
+                        notSupported();
+                }
+            }
+        }
+
+        @Override
+        protected String getListDisplay() {
+            return SNOMED_REFERRALS_LIST_DISPLAY;
+        }
+
+        @Override
+        protected String getListCode() {
+            return SNOMED_REFERRALS_LIST_CODE;
+        }
     }
 }

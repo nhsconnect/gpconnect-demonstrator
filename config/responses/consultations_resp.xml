@@ -5343,4 +5343,26 @@
          </PractitionerRole>
       </resource>
    </entry>
+   <entry>
+      <resource>
+         <Medication xmlns="http://hl7.org/fhir">
+            <id value="a60b451-9821-42de-81f9-ba86dcea2c32"></id>
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Medication-1"></profile>
+            </meta>
+            <code>
+               <coding>
+                  <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                     <extension url="DescriptionID">
+                        <valueId value="56992301000001116"></valueId>
+                     </extension>
+                  </extension>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="321987003"></code>
+                  <display value="Citalopram 20mg tablets"></display>
+               </coding>
+            </code>
+         </Medication>
+      </resource>
+   </entry>
 </Bundle>

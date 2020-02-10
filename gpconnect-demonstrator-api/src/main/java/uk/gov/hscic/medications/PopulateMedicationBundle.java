@@ -63,8 +63,8 @@ public class PopulateMedicationBundle {
      */
     public void addMedicationBundleEntries(Bundle structuredBundle, ParametersParameterComponent param, PatientDetails patientDetails,
             Set<String> practitionerIds, Set<String> orgIds) {
-        // mandatory
-        Boolean includePrescriptionIssues = false;
+        // #310 includePrescriptionIssues is now optional defaulting to true
+        Boolean includePrescriptionIssues = null;
         // optional 
         Period medicationPeriod = null;
         
@@ -83,6 +83,11 @@ public class PopulateMedicationBundle {
                     break;
             }
         } // for
+        
+        // #310 includePrescriptionIssues is now optional defaulting to true
+        if (includePrescriptionIssues == null) {
+            includePrescriptionIssues = true;
+        }
 
         final Boolean fIncludePrescriptionIssues = includePrescriptionIssues;
 

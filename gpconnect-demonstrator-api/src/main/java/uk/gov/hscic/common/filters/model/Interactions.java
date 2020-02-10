@@ -65,6 +65,10 @@ public class Interactions {
             put(InteractionId.REST_UPDATE_APPOINTMENT, new Interaction("Appointment").identifier().httpVerb(RequestMethod.PUT));
             put(InteractionId.REST_CANCEL_APPOINTMENT, new Interaction("Appointment").identifier().httpVerb(RequestMethod.PUT));
 
+			// 1.2.6 #316
+            put(InteractionId.REST_READ_STRUCTURED_METADATA, new Interaction("metadata").httpVerb(RequestMethod.GET));
+			
+
             if (IS_DOCUMENTS) {
                 // Documemts interface
                 put(InteractionId.REST_SEARCH_DOCUMENT_REFERENCE, new Interaction("DocumentReference").identifier().httpVerb(RequestMethod.GET));

@@ -72,8 +72,8 @@ public final class SystemConstants {
     public static final String SNOMED_MEDICATION_LIST_CODE = "933361000000108";
     public static final String SNOMED_IMMUNIZATIONS_LIST_DISPLAY = "Immunisations"; // NB the s not z
     public static final String SNOMED_IMMUNIZATIONS_LIST_CODE = "1102181000000102";
-    public static final String SNOMED_UNCATEGORISED_LIST_DISPLAY = "Miscellaneous record";
-    public static final String SNOMED_UNCATEGORISED_LIST_CODE = "826501000000100";
+    public static final String SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY = "Miscellaneous record";
+    public static final String SNOMED_UNCATEGORISED_DATA_LIST_CODE = "826501000000100";
     // #289 new snomed code and display for list of consultations
     public static final String SNOMED_CONSULTATION_LIST_DISPLAY = "List of consultations";
     public static final String SNOMED_CONSULTATION_LIST_CODE = "1149501000000101";
@@ -99,6 +99,7 @@ public final class SystemConstants {
     // offsets into the patients property array. See the provider prerequsites spreadsheet for more details
     // https://github.com/nhsconnect/gpconnect-provider-testing/blob/master/Data/Test%20Suite%20Prerequisites.xlsx
     public static final int PATIENT_2 = 2; // patient 2 contains majority of structured test data
+    public static final int PATIENT_3 = 3; // patient 3 contains majority of structured test data without returning problems and hence problems list
     public static final int PATIENT_SUPERSEDED = 11; // patient 11 Superseded NHS Number
     public static final int PATIENT_NOTONSPINE = 14; // patient 14 Not on PDS
     public static final int PATIENT_NOCONSENT = 15; // patient 15 No consent to share

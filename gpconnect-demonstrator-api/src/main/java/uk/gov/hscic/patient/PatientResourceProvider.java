@@ -314,10 +314,10 @@ public class PatientResourceProvider implements IResourceProvider {
         StructuredBuilder structureBuilder = new StructuredBuilder();
         for (String cannedClinicalArea
                 : cannedCLinicalAreaParameters.keySet()) {
-            final int  logicalId = PATIENT_2;
-            if (NHS.equals(patients[logicalId])) {
-                structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(cannedClinicalArea), structuredBundle, logicalId, cannedCLinicalAreaParameters.get(cannedClinicalArea), patients);
+            if (Arrays.asList(new String[]{patients[PATIENT_2],patients[PATIENT_3]}).contains(NHS)) {
+                structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(cannedClinicalArea), structuredBundle, patient, cannedCLinicalAreaParameters.get(cannedClinicalArea));
             } else {
+                // only patients 2 and 3 have canned repsonses all the rest not.
                 addEmptyList(cannedClinicalArea, NHS, structuredBundle);
             }
         }
@@ -408,6 +408,9 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     /**
+     * There is some magic required here to invoke an inner class constructor
+     * see
+     * https://stackoverflow.com/questions/17485297/how-to-instantiate-an-inner-class-with-reflection-in-java
      *
      * @param paramName
      * @return parameterValidator
@@ -416,7 +419,7 @@ public class PatientResourceProvider implements IResourceProvider {
         AbstractClinicalArea clinicalArea = null;
         try {
             // map from name of clinical area parameter to appropriate class name
-            Class<?> toRun = Class.forName("uk.gov.hscic.patient.PatientResourceProvider$" + paramName.replaceFirst("include", "") + "ClinicalArea");
+            Class<?> toRun = Class.forName(getClass().getName() + "$" + paramName.replaceFirst("include", "") + "ClinicalArea");
             Constructor<?> ctor = toRun.getDeclaredConstructor(PatientResourceProvider.class);
             clinicalArea = (AbstractClinicalArea) ctor.newInstance(this);
         } catch (Exception ex) {
@@ -826,7 +829,7 @@ public class PatientResourceProvider implements IResourceProvider {
         // see https://nhsconnect.github.io/gpconnect/foundations_use_case_register_a_patient.html
         extensionURLs.remove(SystemURL.SD_EXTENSION_CC_REG_DETAILS);
 
-        // these commented out enties are not allowed at 1.2.2 so don't get removed from the list
+        // these commented out entries are not allowed at 1.2.2 so don't get removed from the list
         //extensionURLs.remove(SystemURL.SD_CC_EXT_ETHNIC_CATEGORY);
         //extensionURLs.remove(SystemURL.SD_CC_EXT_RELIGIOUS_AFFILI);
         //extensionURLs.remove(SystemURL.SD_PATIENT_CADAVERIC_DON);
@@ -1701,7 +1704,8 @@ public class PatientResourceProvider implements IResourceProvider {
             }
 
             // #272 fail for invalid as opposed to unrecognised
-            checkMissingMandatory(INCLUDE_PRESCRIPTION_ISSUES_PARAM_PART);
+            // #310 this parameter is now optional defaulting to true
+            //checkMissingMandatory(INCLUDE_PRESCRIPTION_ISSUES_PARAM_PART);
         }
 
     }
@@ -1748,12 +1752,12 @@ public class PatientResourceProvider implements IResourceProvider {
 
         @Override
         protected String getListDisplay() {
-            return SNOMED_UNCATEGORISED_LIST_DISPLAY;
+            return SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY;
         }
 
         @Override
         protected String getListCode() {
-            return SNOMED_UNCATEGORISED_LIST_CODE;
+            return SNOMED_UNCATEGORISED_DATA_LIST_CODE;
         }
     }
 

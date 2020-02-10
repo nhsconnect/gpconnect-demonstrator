@@ -47,6 +47,9 @@ public final class InteractionId {
     // documents api
     private static final String DOCUMENTS_BASE = "urn:nhs:names:services:gpconnect:documents:fhir:";
     
+    // 1.2.6 #316
+    public static final String REST_READ_STRUCTURED_METADATA                      = BASE + "rest:read:structured_metadata-1";
+
     public static final String REST_SEARCH_DOCUMENT_REFERENCE          = DOCUMENTS_BASE + "rest:search:documentreference-1";
     public static final String REST_READ_BINARY                        = DOCUMENTS_BASE + "rest:read:binary-1";
 

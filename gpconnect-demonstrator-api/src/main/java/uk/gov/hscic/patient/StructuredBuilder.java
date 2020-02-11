@@ -30,7 +30,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +41,6 @@ import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Condition;
 import org.hl7.fhir.dstu3.model.Condition.ConditionClinicalStatus;
 import org.hl7.fhir.dstu3.model.DateTimeType;
-import static org.hl7.fhir.dstu3.model.DeviceRequest.EVENT_DATE;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.DomainResource;
 import org.hl7.fhir.dstu3.model.Encounter;
@@ -56,7 +54,6 @@ import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
 import org.hl7.fhir.dstu3.model.MedicationRequest;
 import org.hl7.fhir.dstu3.model.MedicationStatement;
 import org.hl7.fhir.dstu3.model.Meta;
-import org.hl7.fhir.dstu3.model.Narrative;
 import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Period;
@@ -65,7 +62,6 @@ import org.hl7.fhir.dstu3.model.ReferralRequest;
 import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.exceptions.FHIRException;
-import uk.gov.hscic.SystemConstants;
 import static uk.gov.hscic.SystemConstants.*;
 import uk.gov.hscic.SystemURL;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_PROBLEM_SIGNIFICANCE;
@@ -83,7 +79,7 @@ import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyR
 public class StructuredBuilder {
 
     private final HashMap<String, Integer> refCounts = new HashMap<>();
-    private final HashSet<String> alreadyAdded = new HashSet<>();
+    private final HashMap<String, Resource> addedToResponse = new HashMap<>();
 
     private static final String SNOMED_CONSULTATION_ENCOUNTER_TYPE = "325851000000107";
 
@@ -133,24 +129,60 @@ public class StructuredBuilder {
         // which only happens for problems
         String parameterName = parms.get(0).getName();
         if (Arrays.asList(STRUCTURED_CANNED_CLINICAL_AREAS).contains(parameterName)) {
-            // this handles canned responses that need reprocessing ie problems and consultations at 1.3
-            handleCannedClinicalArea(parsedBundle, duplicates, structuredBundle, parms, parameterName, patient);
+            if (patient.getIdElement().getIdPartAsLong() != PATIENT_3 || !parameterName.equals(INCLUDE_PROBLEMS_PARM)) {
+                // this handles canned responses that need reprocessing ie problems and consultations at 1.3
+                handleCannedClinicalArea(parsedBundle, duplicates, structuredBundle, parms, parameterName, patient);
+            } else {
+                addEmptyProblemsList(patient, structuredBundle);
+            }
         } else {
             // for other canned responses just transcribe as is ie uncat and imm for 1.3
             for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
                 structuredBundle.addEntry(entry);
             }
+
+            // patient 2 specific add a created problem
             if (patient.getIdElement().getIdPartAsLong() == PATIENT_2) {
-                structuredBundle.addEntry().setResource(createProblem(parameterName, patient, structuredBundle));
-                ListResource problemList = createList(SystemConstants.SNOMED_PROBLEMS_LIST_CODE, SystemConstants.SNOMED_PROBLEMS_LIST_DISPLAY ,patient);
-                problemList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/"+parameterName.replaceFirst("^include(.*)$", "$1Problem"))));
-                structuredBundle.addEntry().setResource(problemList);
+                // add a problem to the bundle
+                structuredBundle.addEntry().setResource(createProblem(parameterName, patient));
+
+                ListResource problemList = (ListResource) addedToResponse.get(SNOMED_PROBLEMS_LIST_DISPLAY);
+                if (problemList == null) {
+                    // create a new problem list
+                    problemList = createList(SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY, patient);
+                    // add it to the bundle
+                    if (addEntryToBundleOnlyOnce(structuredBundle, SNOMED_PROBLEMS_LIST_DISPLAY, new BundleEntryComponent().setResource(problemList))) {
+                        refCounts.put(SNOMED_PROBLEMS_LIST_DISPLAY, 1);
+                    }
+                }
+                // add the problem (Condition) to the problem list
+                problemList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + parameterName.replaceFirst("^include(.*)$", "$1Problem"))));
             }
         }
     } // appendCannedResponse
 
-    private Condition createProblem(String parameterName, Patient patient, Bundle structuredBundle) {
-        // add a dummy problem for patient 2 but not for patient 3
+    private void addEmptyProblemsList(Patient patient, Bundle structuredBundle) {
+        // this for patient three when problems are requested
+        // add an empty problems list
+        ListResource problemList = createList(SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY, patient);
+        // add it to the bundle
+        if (addEntryToBundleOnlyOnce(structuredBundle, SNOMED_PROBLEMS_LIST_DISPLAY, new BundleEntryComponent().setResource(problemList))) {
+            refCounts.put(SNOMED_PROBLEMS_LIST_DISPLAY, 1);
+            // make it an empty list
+            addEmptyListNote(problemList);
+            addEmptyReasonCode(problemList);
+        }
+    }
+
+    /**
+     * add a dummy problem for patient 2 but not for patient 3
+     *
+     * @param parameterName
+     * @param patient
+     * @param structuredBundle
+     * @return The Condition Resource object
+     */
+    private Condition createProblem(String parameterName, Patient patient) {
         Condition condition = new Condition();
         condition.setId(parameterName.replaceFirst("^include(.*)$", "$1Problem"));
         condition.setMeta(new Meta().addProfile("https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProblemHeader-Condition-1"));
@@ -188,11 +220,11 @@ public class StructuredBuilder {
     }
 
     /**
-     * 
+     *
      * @param code
      * @param display
      * @param patient
-     * @return 
+     * @return
      */
     private ListResource createList(String code, String display, Patient patient) {
         ListResource problemList = new ListResource();
@@ -213,7 +245,7 @@ public class StructuredBuilder {
                 setSystem("http://hl7.org/fhir/list-order").
                 setCode("event-date"));
         problemList.setOrderedBy(cc);
-        
+
         return problemList;
     }
 
@@ -268,7 +300,7 @@ public class StructuredBuilder {
         }
 
         if (DEBUG_LEVEL > 1) {
-            compareRefCountsAndAlreadyAdded();
+            compareRefCountsAndAddedToResponse();
         }
 
         switch (parameterName) {
@@ -277,9 +309,7 @@ public class StructuredBuilder {
                 // add any related consultations/encounters
                 ArrayList<String> conditionsIdsInResponse = new ArrayList<>();
 
-                Iterator<String> iter = alreadyAdded.iterator();
-                while (iter.hasNext()) {
-                    String id = iter.next();
+                for (String id : addedToResponse.keySet()) {
                     if (id.startsWith("Condition/")) {
                         conditionsIdsInResponse.add(id);
                     }
@@ -346,10 +376,8 @@ public class StructuredBuilder {
 
                 // #314
                 if (parameterName.equals(INCLUDE_PROBLEMS_PARM)) {
-                    Iterator<String> iter = alreadyAdded.iterator();
                     boolean medicationsStatmentsPresent = false;
-                    while (iter.hasNext()) {
-                        String s = iter.next();
+                    for (String s : addedToResponse.keySet()) {
                         if (s.startsWith("MedicationStatement/")) {
                             medicationsStatmentsPresent = true;
                             break;
@@ -389,34 +417,31 @@ public class StructuredBuilder {
     }
 
     /**
-     * Compare alreadyAdded set and refCounts Hash keys
+     * Compare addedToResponse set and refCounts Hash keys
      */
-    private void compareRefCountsAndAlreadyAdded() {
-        System.out.println("alreadyAdded count = " + alreadyAdded.size());
+    private void compareRefCountsAndAddedToResponse() {
+        System.out.println("addedToResponse count = " + addedToResponse.size());
         System.out.println("refCounts key count = " + refCounts.size());
 
-        Iterator<String> iter = alreadyAdded.iterator();
         int matching = 0;
-        while (iter.hasNext()) {
-            String id = iter.next();
+        for (String id : addedToResponse.keySet()) {
             if (!id.endsWith("are not supported by the provider system")) {
                 if (!refCounts.keySet().contains(id)) {
-                    System.out.println("Present in alreadyAdded but not refCounts: " + id);
+                    System.out.println("Present in addedToResponse but not refCounts: " + id);
                 } else {
                     matching++;
                 }
             } else {
-                System.out.println("Excluding from alreadyAdded: " + id);
+                System.out.println("Excluding from addedToResponse: " + id);
             }
         }
         System.out.println("Also present in refCounts " + matching);
 
         matching = 0;
-        for (Object key : refCounts.keySet()) {
-            String id = (String) key;
+        for (String id : refCounts.keySet()) {
             if (!id.endsWith("are not supported by the provider system")) {
-                if (!alreadyAdded.contains(id)) {
-                    System.out.println("Present in refCounts but not alreadyAdded: " + id);
+                if (!addedToResponse.keySet().contains(id)) {
+                    System.out.println("Present in refCounts but not addedToResponse: " + id);
                 } else {
                     matching++;
                 }
@@ -424,7 +449,7 @@ public class StructuredBuilder {
                 System.out.println("Excluding from refCounts: " + id);
             }
         }
-        System.out.println("Also present in alreadyAdded " + matching);
+        System.out.println("Also present in addedToResponse " + matching);
     }
 
     /**
@@ -436,10 +461,10 @@ public class StructuredBuilder {
      */
     private boolean addEntryToBundleOnlyOnce(Bundle bundle, String id, BundleEntryComponent entry) {
         boolean retval = false;
-        if (!alreadyAdded.contains(id)) {
+        if (!addedToResponse.keySet().contains(id)) {
             retval = true;
             bundle.addEntry(entry);
-            alreadyAdded.add(id);
+            addedToResponse.put(id, entry.getResource());
         }
         return retval;
     }

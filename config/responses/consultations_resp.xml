@@ -67,102 +67,102 @@
                   <reference value="Observation/Consultation1-Topic1-Category-History-Observation-2"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic1-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic1-Category-Examination-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic1-Category-Social-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic1-Category-Social-Observation-2"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Plan"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Order"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Referral items are not supported by the provider system"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic1-Category-Plan-Observation-2"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation2-Topic1-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation2-Topic1-Category-Examination-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation2-Topic1-Category-Social-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Plan"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Order"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation2-Topic1-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation3-Topic1-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation3-Topic1-Category-Examination-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation3-Topic1-Category-Social-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Plan"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Order"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation3-Topic1-Category-Plan-Observation-1"></reference>
                </valueReference>
@@ -224,82 +224,82 @@
                   <reference value="Observation/Consultation1-Topic2-Category-History-Observation-2"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic2-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-2"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-3"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-4"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic2-Category-Examination-Observation-5"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic2-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic2-Category-Plan-Observation-2"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Test Request items are not supported by the provider system"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation3-Topic2-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-2"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-3"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-4"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation3-Topic2-Category-Examination-Observation-5"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation3-Topic2-Category-Plan-Observation-1"></reference>
                </valueReference>
@@ -374,42 +374,42 @@
                   <reference value="Observation/Consultation1-Topic4-Category-History-Observation-5"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic4-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic4-Category-History-Observation-2"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic4-Category-History-Observation-3"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation1-Topic4-Category-History-Observation-4"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Order-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation2-Topic2-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation2-Topic2-Category-Plan-Observation-1"></reference>
                </valueReference>
@@ -480,12 +480,12 @@
                   <reference value="Observation/Consultation1-Topic5-Category-History-Observation-4"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation2-Topic1-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
-            <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
+            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
                   <reference value="Observation/Consultation2-Topic1-Category-Plan-Observation-2"></reference>
                </valueReference>

@@ -24,13 +24,7 @@ import uk.gov.hscic.practitioner.PractitionerSearch;
 import java.util.*;
 import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
 import org.springframework.beans.factory.annotation.Value;
-import static uk.gov.hscic.SystemConstants.ACTIVE_ALLERGIES_DISPLAY;
-import static uk.gov.hscic.SystemConstants.ACTIVE_ALLERGIES_TITLE;
-import static uk.gov.hscic.SystemConstants.NO_CONTENT_RECORDED;
-import static uk.gov.hscic.SystemConstants.NO_CONTENT_RECORDED_DISPLAY;
-import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
-import static uk.gov.hscic.SystemConstants.RESOLVED_ALLERGIES_DISPLAY;
-import static uk.gov.hscic.SystemConstants.PATIENT_2;
+import static uk.gov.hscic.SystemConstants.*;
 import uk.gov.hscic.medication.statement.MedicationStatementRepository;
 
 @Component
@@ -70,8 +64,8 @@ public class StructuredAllergyIntoleranceBuilder {
 
         List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntolerance(NHS);
 
-        ListResource active = initiateListResource(NHS, ACTIVE_ALLERGIES_DISPLAY, allergyData);
-        ListResource resolved = initiateListResource(NHS, RESOLVED_ALLERGIES_DISPLAY, allergyData);
+        ListResource active = initiateListResource(NHS, SNOMED_ACTIVE_ALLERGIES_DISPLAY, allergyData);
+        ListResource resolved = initiateListResource(NHS, SNOMED_RESOLVED_ALLERGIES_DISPLAY, allergyData);
 
         AllergyIntolerance allergyIntolerance;
 
@@ -240,12 +234,12 @@ public class StructuredAllergyIntoleranceBuilder {
     private ListResource initiateListResource(String NHS, String display, List<StructuredAllergyIntoleranceEntity> allergyIntoleranceEntity) {
         ListResource listResource = new ListResource();
 
-        if (display.equals(ACTIVE_ALLERGIES_DISPLAY)) {
-            listResource.setCode(createCoding(SystemConstants.SNOMED_URL, "886921000000105", display));
+        if (display.equals(SNOMED_ACTIVE_ALLERGIES_DISPLAY)) {
+            listResource.setCode(createCoding(SNOMED_URL, SNOMED_ACTIVE_ALLERGIES_CODE, display));
             listResource.setTitle(ACTIVE_ALLERGIES_TITLE);
-        } else if (display.equals(RESOLVED_ALLERGIES_DISPLAY)) {
-            listResource.setCode(createCoding(SystemConstants.SNOMED_URL, "1103671000000101", display));
-            listResource.setTitle(SystemConstants.RESOLVED_ALLERGIES_TIILE);
+        } else if (display.equals(SNOMED_RESOLVED_ALLERGIES_DISPLAY)) {
+            listResource.setCode(createCoding(SNOMED_URL, SNOMED_RESOLVED_ALLERGIES_CODE, display));
+            listResource.setTitle(display);
         }
 
         listResource.setMeta(createMeta(SystemURL.SD_GPC_LIST));
@@ -380,3 +374,4 @@ public class StructuredAllergyIntoleranceBuilder {
     }
 
 }
+    

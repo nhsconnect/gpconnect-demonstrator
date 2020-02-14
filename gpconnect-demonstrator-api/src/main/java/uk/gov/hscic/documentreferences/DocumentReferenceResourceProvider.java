@@ -25,6 +25,7 @@ import org.hl7.fhir.dstu3.model.DocumentReference.DocumentReferenceContextCompon
 import org.hl7.fhir.dstu3.model.Enumerations.DocumentReferenceStatus;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
+import static uk.gov.hscic.SystemConstants.SNOMED_URL;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntityInvalid422_ParameterException;
 import uk.gov.hscic.patient.PatientResourceProvider;
 
@@ -158,7 +159,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         // type
         CodeableConcept codeableConcept = new CodeableConcept();
         Coding coding = new Coding();
-        coding.setSystem("http://snomed.info/sct");
+        coding.setSystem(SNOMED_URL);
         coding.setCode("824331000000106");
         coding.setDisplay("Inpatient final discharge letter");
         codeableConcept.setCoding(Arrays.asList(coding));

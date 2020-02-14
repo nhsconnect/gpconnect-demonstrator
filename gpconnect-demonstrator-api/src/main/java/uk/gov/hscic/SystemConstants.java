@@ -9,14 +9,6 @@ public final class SystemConstants {
     public static final String MEDICATION = "medication";
     public static final String ACTIVE = "active";
 
-    public static final String ACTIVE_ALLERGIES_DISPLAY = "Active Allergies";
-    // #175
-    public static final String ACTIVE_ALLERGIES_TITLE = "Allergies and adverse reactions";
-
-    public static final String RESOLVED_ALLERGIES_DISPLAY = "Ended allergies";
-    // #175
-    public static final String RESOLVED_ALLERGIES_TIILE = "Ended allergies";
-
     public static final String RESOLVED = "resolved";
     public static final String NO_KNOWN = "no known";
     public static final String NO_CONTENT_RECORDED_DISPLAY = "No Content Recorded";
@@ -68,20 +60,33 @@ public final class SystemConstants {
 
     // SNOMED ListResource Data
     // https://developer.nhs.uk/apis/gpconnect-1-3-1/accessrecord_structured_development_list.html
+    public static final String SNOMED_ACTIVE_ALLERGIES_DISPLAY = "Active Allergies";
+    public static final String SNOMED_ACTIVE_ALLERGIES_CODE = "886921000000105";
+    // #175 NB This is not typical normally the list title is the same as the display
+    public static final String ACTIVE_ALLERGIES_TITLE = "Allergies and adverse reactions";
+
+    public static final String SNOMED_RESOLVED_ALLERGIES_DISPLAY = "Ended allergies";
+    public static final String SNOMED_RESOLVED_ALLERGIES_CODE = "1103671000000101";
+
     public static final String SNOMED_MEDICATION_LIST_DISPLAY = "Medications and medical devices";
     public static final String SNOMED_MEDICATION_LIST_CODE = "933361000000108";
+    
     public static final String SNOMED_IMMUNIZATIONS_LIST_DISPLAY = "Immunisations"; // NB the s not z
     public static final String SNOMED_IMMUNIZATIONS_LIST_CODE = "1102181000000102";
+    
     public static final String SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY = "Miscellaneous record";
     public static final String SNOMED_UNCATEGORISED_DATA_LIST_CODE = "826501000000100";
+  
     // #289 new snomed code and display for list of consultations
     public static final String SNOMED_CONSULTATION_LIST_DISPLAY = "List of consultations";
     public static final String SNOMED_CONSULTATION_LIST_CODE = "1149501000000101";
+    
     public static final String SNOMED_PROBLEMS_LIST_DISPLAY = "Problems";
     public static final String SNOMED_PROBLEMS_LIST_CODE = "717711000000103";
     // 1.4
     public static final String SNOMED_REFERRALS_LIST_DISPLAY = "Referral details";
     public static final String SNOMED_REFERRALS_LIST_CODE = "886721000000107";
+    
     public static final String SNOMED_INVESTIGATIONS_LIST_DISPLAY = "Investigations and Results";
     public static final String SNOMED_INVESTIGATIONS_LIST_CODE = "887191000000108";
     

@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hl7.fhir.dstu3.model.AllergyIntolerance;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.CodeType;
@@ -48,12 +49,14 @@ import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
+import org.hl7.fhir.dstu3.model.Immunization;
 import org.hl7.fhir.dstu3.model.IntegerType;
 import org.hl7.fhir.dstu3.model.ListResource;
 import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
 import org.hl7.fhir.dstu3.model.MedicationRequest;
 import org.hl7.fhir.dstu3.model.MedicationStatement;
 import org.hl7.fhir.dstu3.model.Meta;
+import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Period;
@@ -65,27 +68,67 @@ import org.hl7.fhir.exceptions.FHIRException;
 import static uk.gov.hscic.SystemConstants.*;
 import uk.gov.hscic.SystemURL;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_PROBLEM_SIGNIFICANCE;
+import static uk.gov.hscic.SystemURL.SD_GPC_LIST;
 import static uk.gov.hscic.medications.PopulateMedicationBundle.setClinicalSetting;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
 
 /**
- * Appends canned responses to a Bundle Note that the Clinical Item List
- * Resources do not have an id so where these are referenced in collections we
- * use the list title to identify them
+ * Appends canned responses to a StructuredBundle response. Note that the
+ * Clinical Item List Resources do not have an id so where these are referenced
+ * in collections we use the list *title* to identify them. NB for Allergies the
+ * title may not be the same as the Snomed display.
  *
  * @author simonfarrow
  */
 public class StructuredBuilder {
 
-    private final HashMap<String, Integer> refCounts = new HashMap<>();
-    private final HashMap<String, Resource> addedToResponse = new HashMap<>();
+    /**
+     * This map is critical it guides what resources will be added into the
+     * canned response. It should only contain references of the form
+     * ResourceName/ResourceId plus some list title
+     */
+    private final HashMap<String, Integer> refCounts = new HashMap<String, Integer>() {
+        // Anonymous class overriding put behaviour.
+        @Override
+        public Integer put(String reference, Integer i) {
+            if (!Arrays.asList(SNOMED_CANNED_LIST_TITLES).contains(reference) && !reference.matches("^[^/]+/[^/]+$")) {
+                System.err.println("WARNING: StructuredBuilder - Adding non reference format key to refCounts " + reference);
+            }
+            if (get(reference) != null && get(reference) != i - 1) {
+                System.err.println("WARNING: StructuredBuilder - Non incrememntal change to refCounts " + reference + " current value " + get(reference) + " value to set " + i);
+            }
+            return super.put(reference, i);
+        }
+    };
+
+    // This also tracks what has been added but allows access via id to the resource
+    private final HashMap<String, Resource> addedToResponse = new HashMap<String, Resource>() {
+        // Anonymous class overriding put behaviour.
+        @Override
+        public Resource put(String reference, Resource r) {
+            if (!Arrays.asList(SNOMED_CANNED_LIST_TITLES).contains(reference) && !reference.matches("^[^/]+/[^/]+$")) {
+                System.err.println("WARNING: StructuredBuilder - Adding non reference format key to addedToResponse " + reference);
+            } else {
+                //System.err.println("StructuredBuilder - Adding reference format key to addedToResponse " + key);
+            }
+            if (get(reference) != null) {
+                System.err.println("WARNING: StructuredBuilder - Setting an existing addedToResponse entry " + reference);
+            }
+            return super.put(reference, r);
+        }
+    };
 
     private static final String SNOMED_CONSULTATION_ENCOUNTER_TYPE = "325851000000107";
 
-    private static final String[] SNOMED_CANNED_LIST_TITLES = {SNOMED_PROBLEMS_LIST_DISPLAY, // 1.3
-        SNOMED_CONSULTATION_LIST_DISPLAY,// 1.3
-        SNOMED_MEDICATION_LIST_DISPLAY /*
+    private static final String[] SNOMED_CANNED_LIST_TITLES = {
+        SNOMED_MEDICATION_LIST_DISPLAY,
+        SNOMED_RESOLVED_ALLERGIES_DISPLAY,
+        ACTIVE_ALLERGIES_TITLE,
+        SNOMED_PROBLEMS_LIST_DISPLAY, // 1.3
+        SNOMED_CONSULTATION_LIST_DISPLAY,
+        SNOMED_IMMUNIZATIONS_LIST_DISPLAY,
+        SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY /*
         SNOMED_REFERRALS_LIST_DISPLAY, // 1.4
         SNOMED_INVESTIGATIONS_LIST_DISPLAY*/}; // 1.4
 
@@ -107,7 +150,6 @@ public class StructuredBuilder {
      * @param structuredBundle
      * @param patient
      * @param parms
-     * @param patients
      * @throws DataFormatException
      * @throws ConfigurationException
      * @throws org.hl7.fhir.exceptions.FHIRException
@@ -128,6 +170,9 @@ public class StructuredBuilder {
         // This is an array but the parameter name is the same even for multiple entries
         // which only happens for problems
         String parameterName = parms.get(0).getName();
+
+        // Tis list idenmtifies those canned clinical ares that need some processing 
+        // rather simply transcibing into the reponse as is
         if (Arrays.asList(STRUCTURED_CANNED_CLINICAL_AREAS).contains(parameterName)) {
             if (patient.getIdElement().getIdPartAsLong() != PATIENT_3 || !parameterName.equals(INCLUDE_PROBLEMS_PARM)) {
                 // this handles canned responses that need reprocessing ie problems and consultations at 1.3
@@ -136,7 +181,7 @@ public class StructuredBuilder {
                 addEmptyProblemsList(patient, structuredBundle);
             }
         } else {
-            // for other canned responses just transcribe as is ie uncat and imm for 1.3
+            // for other canned responses just transcribe as is eg uncat and imm for 1.3
             for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
                 structuredBundle.addEntry(entry);
             }
@@ -144,9 +189,17 @@ public class StructuredBuilder {
             // patient 2 specific add a created problem
             if (patient.getIdElement().getIdPartAsLong() == PATIENT_2) {
                 // add a problem to the bundle
-                structuredBundle.addEntry().setResource(createProblem(parameterName, patient));
+                Condition condition = createCondition(parameterName.replaceFirst("^include(.*)$", "$1Problem"), patient, "Observation/obs1");
+                if (addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition))) {
+                    refCounts.put(condition.getResourceType() + "/" + condition.getId(), 1);
+                }
 
-                ListResource problemList = (ListResource) addedToResponse.get(SNOMED_PROBLEMS_LIST_DISPLAY);
+                structuredBundle.addEntry().setResource(condition);
+
+                ListResource problemList = null;
+                if (addedToResponse.get(SNOMED_PROBLEMS_LIST_DISPLAY) != null) {
+                    problemList = (ListResource) addedToResponse.get(SNOMED_PROBLEMS_LIST_DISPLAY);
+                }
                 if (problemList == null) {
                     // create a new problem list
                     problemList = createList(SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY, patient);
@@ -175,27 +228,32 @@ public class StructuredBuilder {
     }
 
     /**
-     * add a dummy problem for patient 2 but not for patient 3
+     * create a dummy problem
      *
-     * @param parameterName
+     * @param id problem id
+     * @param reference resource id to which this problem refers
      * @param patient
-     * @param structuredBundle
      * @return The Condition Resource object
      */
-    private Condition createProblem(String parameterName, Patient patient) {
+    public static Condition createCondition(String id, Patient patient, String reference) {
         Condition condition = new Condition();
-        condition.setId(parameterName.replaceFirst("^include(.*)$", "$1Problem"));
+        condition.setId(id);
         condition.setMeta(new Meta().addProfile("https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProblemHeader-Condition-1"));
 
-        // add a reference to an observation
-        condition.addExtension(new Extension("").setValue(new Reference("Observation/obs1")));
+        // add a problem significance extension
+        condition.addExtension(new Extension(SD_CC_EXT_PROBLEM_SIGNIFICANCE).
+                setValue(new CodeType("major")));
+
+        // add the reference to a resource
+        condition.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1").
+                setValue(new Reference(reference)));
 
         condition.addIdentifier(new Identifier().
                 setValue("D06C0517-4D1C-11E3-A2DD-010000000161").
                 setSystem("https://fhir.nhs.uk/Id/cross-care-setting-identifier"));
 
         CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
-                setSystem("http://snomed.info/sct").
+                setSystem(SNOMED_URL).
                 setCode("231504006").
                 setDisplay("Mixed anxiety and depressive disorder"));
         cc.setText("Anxiety with depression");
@@ -226,15 +284,15 @@ public class StructuredBuilder {
      * @param patient
      * @return
      */
-    private ListResource createList(String code, String display, Patient patient) {
+    public static ListResource createList(String code, String display, Patient patient) {
         ListResource problemList = new ListResource();
 
-        problemList.setMeta(new Meta().addProfile("https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"));
+        problemList.setMeta(new Meta().addProfile(SD_GPC_LIST));
         problemList.setStatus(ListResource.ListStatus.CURRENT);
         problemList.setMode(ListResource.ListMode.SNAPSHOT);
         problemList.setTitle(display);
         CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
-                setSystem("http://snomed.info/sct").
+                setSystem(SNOMED_URL).
                 setCode(code).
                 setDisplay(display));
         problemList.setCode(cc);
@@ -270,6 +328,7 @@ public class StructuredBuilder {
             }
             HashMap<String, Resource> hmResources = resourceTypes.get(resourceType);
             // Use the list title where there is no id ie List of Problems/Consultations
+            // NB There is major misnomer here the id is in fact a fully qualified reference
             String id = entry.getResource().getId() != null ? entry.getResource().getId() : ((ListResource) entry.getResource()).getTitle();
             if (hmResources.get(id) == null) {
                 hmResources.put(id, entry.getResource());
@@ -292,10 +351,11 @@ public class StructuredBuilder {
 
         // add in all referenced resources if not already present
         for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
-            String id = entry.getResource().getId();
+            // NB get id actually returns fully qualified references
+            String reference = entry.getResource().getId();
             // if the refs count is not null then include the resource.
-            if (refCounts.keySet().contains(id)) {
-                addEntryToBundleOnlyOnce(structuredBundle, id, entry);
+            if (refCounts.keySet().contains(reference)) {
+                addEntryToBundleOnlyOnce(structuredBundle, reference, entry);
             }
         }
 
@@ -318,18 +378,20 @@ public class StructuredBuilder {
                 // NB This ignores encounters referenced by Observations
                 for (String conditionId : conditionsIdsInResponse) {
                     Condition condition = (Condition) resourceTypes.get(ResourceType.Condition).get(conditionId);
-                    Reference encounterReference = condition.getContext();
-                    // does this problem/condition reference an encounter in the returning bundle?
-                    // NB email from Matt only return Encounters, not Consultations nor a List of Consultations
-                    Encounter encounter = (Encounter) resourceTypes.get(ResourceType.Encounter).get(encounterReference.getReference());
-                    if (addEntryToBundleOnlyOnce(structuredBundle, encounter.getId(), new BundleEntryComponent().setResource(encounter))) {
-                        refCounts.put(encounter.getId(), 1);
+                    if (condition != null && condition.getContext() != null) {
+                        Reference encounterReference = condition.getContext();
+                        // does this problem/condition reference an encounter in the returning bundle?
+                        // NB email from Matt only return Encounters, not Consultations nor a List of Consultations
+                        Encounter encounter = (Encounter) resourceTypes.get(ResourceType.Encounter).get(encounterReference.getReference());
+                        // NB the id is actually a reference
+                        if (addEntryToBundleOnlyOnce(structuredBundle, encounter.getId(), new BundleEntryComponent().setResource(encounter))) {
+                            refCounts.put(encounter.getId(), 1);
+                        }
+                    } else {
+                        System.err.println("WARNING condition " + conditionId + " is null or missing an encounter context");
                     }
                 }
 
-                // TODO add List (Allergies)
-                // TODO add List (Immunisations)
-                // TODO add List (Uncategorised)
                 break;
 
             default:
@@ -346,6 +408,7 @@ public class StructuredBuilder {
                         // does this problem/condition reference something in the returning bundle?
                         if (refCounts.keySet().contains(reference.getReference())) {
                             if (addEntryToBundleOnlyOnce(structuredBundle, condition.getId(), new BundleEntryComponent().setResource(condition))) {
+                                // NB the id is actually a reference
                                 refCounts.put(condition.getId(), 1);
 
                                 // #314 re add the problems list because there are some!
@@ -364,21 +427,21 @@ public class StructuredBuilder {
         // process MedicationStatements include if they reference an already referenced MedicationRequest or Medication
         // see https://developer.nhs.uk/apis/gpconnect-1-4-0/accessrecord_structured_development_linkages.html#problems
         if (resourceTypes.get(ResourceType.MedicationStatement) != null) {
-            for (String medicationStatementId : resourceTypes.get(ResourceType.MedicationStatement).keySet()) {
-                MedicationStatement medicationStatement = (MedicationStatement) resourceTypes.get(ResourceType.MedicationStatement).get(medicationStatementId);
-                String medicationId = medicationStatement.getMedicationReference().getReference();
-                String medicationRequestId = medicationStatement.getBasedOnFirstRep().getReference();
-                if ((refCounts.keySet().contains(medicationId) || refCounts.keySet().contains(medicationRequestId))) {
-                    if (addEntryToBundleOnlyOnce(structuredBundle, medicationStatementId, new BundleEntryComponent().setResource(medicationStatement))) {
-                        refCounts.put(medicationStatementId, 1);
+            for (String medicationStatementReference : resourceTypes.get(ResourceType.MedicationStatement).keySet()) {
+                MedicationStatement medicationStatement = (MedicationStatement) resourceTypes.get(ResourceType.MedicationStatement).get(medicationStatementReference);
+                String medicationReference = medicationStatement.getMedicationReference().getReference();
+                String medicationRequestReference = medicationStatement.getBasedOnFirstRep().getReference();
+                if ((refCounts.keySet().contains(medicationReference) || refCounts.keySet().contains(medicationRequestReference))) {
+                    if (addEntryToBundleOnlyOnce(structuredBundle, medicationStatementReference, new BundleEntryComponent().setResource(medicationStatement))) {
+                        refCounts.put(medicationStatementReference, 1);
                     }
                 }
 
                 // #314
                 if (parameterName.equals(INCLUDE_PROBLEMS_PARM)) {
                     boolean medicationsStatmentsPresent = false;
-                    for (String s : addedToResponse.keySet()) {
-                        if (s.startsWith("MedicationStatement/")) {
+                    for (String reference : addedToResponse.keySet()) {
+                        if (reference.startsWith("MedicationStatement/")) {
                             medicationsStatmentsPresent = true;
                             break;
                         }
@@ -395,8 +458,15 @@ public class StructuredBuilder {
             }
         }
 
-        HashMap<String, ListResource> listResources = new HashMap<>();
-        rebuildBundledLists(listResources, structuredBundle, resourceTypes);
+        if (parameterName.equals(INCLUDE_PROBLEMS_PARM) && patient.getIdElement().getIdPartAsLong() == PATIENT_2) {
+            handlePatient2ProblemsRequest(patient, structuredBundle);
+        }
+
+        if (parameterName.equals(INCLUDE_CONSULTATIONS_PARM) && patient.getIdElement().getIdPartAsLong() == PATIENT_2) {
+            handlePatient2ConsultationsRequest(patient, structuredBundle);
+        }
+
+        HashMap<String, ListResource> listResources = rebuildBundledLists(structuredBundle, resourceTypes);
 
         // annotate the list if it is present but empty
         for (String listTitle : listResources.keySet()) {
@@ -417,6 +487,192 @@ public class StructuredBuilder {
     }
 
     /**
+     *
+     * @param patient
+     * @param structuredBundle
+     */
+    private void handlePatient2ProblemsRequest(Patient patient, Bundle structuredBundle) {
+        // add a medications statement and a list
+        // TODO There appears to be an empty list here for some reason
+        ListResource medicationStatementList = getOrCreateList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
+        ListResource allergyList = getOrCreateList(patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
+        // this is  a typical hence we have set set a title that is not the same as the display
+        allergyList.setTitle(ACTIVE_ALLERGIES_TITLE);
+
+        ListResource immunizationsList = getOrCreateList(patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
+        ListResource uncategorisedDataList = getOrCreateList(patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
+
+        ListResource problemsList = getOrCreateList(patient, structuredBundle, SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY);
+
+        // add any extants ca entries to the appropriate CA list
+        // make a copy because this collection will be modified.
+        String[] keys = addedToResponse.keySet().toArray(new String[0]);
+        HashSet<String> hs = new HashSet<>();
+        final String[] CLINICAL_AREAS = new String[]{"MedicationStatement", "AllergyIntolerance", "Immunization", "Observation"};
+        for (String id : keys) {
+            String itemType = id.replaceFirst("/.*$", "");
+            for (String ca : CLINICAL_AREAS) {
+                if (id.startsWith(ca) && !hs.contains(itemType)) {
+                    ListResource listResource = null;
+                    switch (ca) {
+                        case "MedicationStatement":
+                            listResource = medicationStatementList;
+                            break;
+
+                        case "AllergyIntolerance":
+                            listResource = allergyList;
+                            break;
+
+                        case "Immunization":
+                            listResource = immunizationsList;
+                            break;
+
+                        case "Observation":
+                            listResource = uncategorisedDataList;
+                            break;
+                    }
+
+                    if (listResource != null) {
+                        addExistingResourceReferenceToList(patient, listResource, id, structuredBundle, problemsList);
+                        hs.add(itemType);
+                    }
+                    break;
+                }
+            }
+        } // for id
+
+        //======================================================================
+        // handle cases where we know there are no Clinical Areas
+        // we know patient 2 does not have any of these so add some
+        if (!hs.contains("AllergyIntolerance")) {
+            addDummyResourceAndProblem(patient, new AllergyIntolerance(), allergyList, structuredBundle, problemsList);
+        }
+        if (!hs.contains("Immunization")) {
+            addDummyResourceAndProblem(patient, new Immunization(), immunizationsList, structuredBundle, problemsList);
+        }
+        if (!hs.contains("Observation")) {
+            // Uncategorised Data
+            addDummyResourceAndProblem(patient, new Observation(), uncategorisedDataList, structuredBundle, problemsList);
+        }
+    }
+
+    /**
+     *
+     * @param patient
+     * @param structuredBundle
+     */
+    private void handlePatient2ConsultationsRequest(Patient patient, Bundle structuredBundle) {
+        // add an allergy into the bundle and add a reference entry to Consultation1
+        addDummyResourceForConsultation(new AllergyIntolerance(), patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
+        addDummyResourceForConsultation(new Immunization(), patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
+        addDummyResourceForConsultation(new Observation(), patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
+    }
+
+    /**
+     *
+     * @param resource
+     * @param patient
+     * @param structuredBundle
+     * @param code
+     * @param display
+     */
+    private void addDummyResourceForConsultation(Resource resource, Patient patient, Bundle structuredBundle, String code, String display) {
+        resource.setId("Added" + resource.getResourceType());
+        // add the resource reference to the topic
+        ((ListResource) addedToResponse.get("List/Consultation1-Topic1")).
+                addEntry(new ListResource.ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
+
+        // add the resource to the resource list
+        ListResource list = getOrCreateList(patient, structuredBundle, code, display);
+        // this is  a typical hence we have set set a title that is not the same as the display
+        if (resource instanceof AllergyIntolerance) {
+            list.setTitle(ACTIVE_ALLERGIES_TITLE);
+        }
+
+        // add the resource reference to the list
+        list.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
+
+        // add the resource to the bundle
+        if (addEntryToBundleOnlyOnce(structuredBundle, resource.getResourceType() + "/" + resource.getId(), new BundleEntryComponent().setResource(resource))) {
+            refCounts.put(resource.getResourceType() + "/" + resource.getId(), 1);
+        }
+    }
+
+    /**
+     * This should only be called once per resource type Created resource has
+     * minimal content
+     *
+     * @param patient
+     * @param resource resource object to be populated
+     * @param listResource associated list eg Allergies, Meds etc
+     * @param structuredBundle
+     * @param problemsList
+     */
+    private void addDummyResourceAndProblem(Patient patient, Resource resource, ListResource listResource, Bundle structuredBundle, ListResource problemsList) {
+
+        // the resource to the appropriate list
+        resource.setId(resource.getResourceType() + "ForAddedProblem");
+        listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
+        if (addEntryToBundleOnlyOnce(structuredBundle, resource.getResourceType() + "/" + resource.getId(), new BundleEntryComponent().setResource(resource))) {
+            refCounts.put(resource.getResourceType() + "/" + resource.getId(), 1);
+        }
+
+        // add the problem
+        Condition condition = createCondition(resource.getId().replaceFirst("^.*/", ""), patient, resource.fhirType() + "/" + resource.getId());
+        if (addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition))) {
+            refCounts.put(condition.getResourceType() + "/" + condition.getId(), 1);
+        }
+
+        // add the problem to the problem list
+        problemsList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + condition.getId())));
+    }
+
+    /**
+     *
+     * @param patient
+     * @param listResource associated resource list eg Medications, Allergies
+     * etc
+     * @param reference resource id that is going be added to lists
+     * @param structuredBundle
+     * @param problemsList
+     */
+    private void addExistingResourceReferenceToList(Patient patient, ListResource listResource, String reference, Bundle structuredBundle, ListResource problemsList) {
+
+        // add to resource list
+        listResource.addEntry(new ListEntryComponent().setItem(new Reference(reference)));
+
+        // create a condition, add it to the response
+        Condition condition = createCondition(reference.replaceFirst("^(.*)/", ""), patient, reference);
+        if (addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition))) {
+            refCounts.put(condition.getResourceType() + "/" + condition.getId(), 1);
+        }
+
+        // add a reference to the condition to the problem list
+        problemsList.addEntry(new ListEntryComponent().setItem(new Reference(condition.getResourceType() + "/" + condition.getId())));
+    }
+
+    /**
+     *
+     * @param patient to whom query relates
+     * @param structuredBundle to add to
+     * @param code for list
+     * @param display for list
+     * @return populated ListResource
+     */
+    private ListResource getOrCreateList(Patient patient, Bundle structuredBundle, String code, String display) {
+        ListResource listResource = null;
+        if (addedToResponse.get(display) != null) {
+            listResource = (ListResource) addedToResponse.get(display);
+        } else {
+            listResource = createList(code, display, patient);
+            if (addEntryToBundleOnlyOnce(structuredBundle, display, new BundleEntryComponent().setResource(listResource))) {
+                refCounts.put(display, 1);
+            }
+        }
+        return listResource;
+    }
+
+    /**
      * Compare addedToResponse set and refCounts Hash keys
      */
     private void compareRefCountsAndAddedToResponse() {
@@ -424,29 +680,29 @@ public class StructuredBuilder {
         System.out.println("refCounts key count = " + refCounts.size());
 
         int matching = 0;
-        for (String id : addedToResponse.keySet()) {
-            if (!id.endsWith("are not supported by the provider system")) {
-                if (!refCounts.keySet().contains(id)) {
-                    System.out.println("Present in addedToResponse but not refCounts: " + id);
+        for (String reference : addedToResponse.keySet()) {
+            if (!reference.endsWith("are not supported by the provider system")) {
+                if (!refCounts.keySet().contains(reference)) {
+                    System.out.println("Present in addedToResponse but not refCounts: " + reference);
                 } else {
                     matching++;
                 }
             } else {
-                System.out.println("Excluding from addedToResponse: " + id);
+                System.out.println("Excluding from addedToResponse: " + reference);
             }
         }
         System.out.println("Also present in refCounts " + matching);
 
         matching = 0;
-        for (String id : refCounts.keySet()) {
-            if (!id.endsWith("are not supported by the provider system")) {
-                if (!addedToResponse.keySet().contains(id)) {
-                    System.out.println("Present in refCounts but not addedToResponse: " + id);
+        for (String reference : refCounts.keySet()) {
+            if (!reference.endsWith("are not supported by the provider system")) {
+                if (!addedToResponse.keySet().contains(reference)) {
+                    System.out.println("Present in refCounts but not addedToResponse: " + reference);
                 } else {
                     matching++;
                 }
             } else {
-                System.out.println("Excluding from refCounts: " + id);
+                System.out.println("Excluding from refCounts: " + reference);
             }
         }
         System.out.println("Also present in addedToResponse " + matching);
@@ -455,16 +711,16 @@ public class StructuredBuilder {
     /**
      *
      * @param bundle
-     * @param id
+     * @param reference
      * @param entry
      * @return boolean indicating whether entry was added
      */
-    private boolean addEntryToBundleOnlyOnce(Bundle bundle, String id, BundleEntryComponent entry) {
+    private boolean addEntryToBundleOnlyOnce(Bundle bundle, String reference, BundleEntryComponent entry) {
         boolean retval = false;
-        if (!addedToResponse.keySet().contains(id)) {
+        if (!addedToResponse.keySet().contains(reference)) {
             retval = true;
             bundle.addEntry(entry);
-            addedToResponse.put(id, entry.getResource());
+            addedToResponse.put(reference, entry.getResource());
         }
         return retval;
     }
@@ -575,13 +831,20 @@ public class StructuredBuilder {
      * @param resourceTypes
      * @return HashMap of ListResource
      */
-    private void rebuildBundledLists(HashMap<String, ListResource> listResources, Bundle structuredBundle, HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
+    private HashMap<String, ListResource> rebuildBundledLists(Bundle structuredBundle, HashMap<ResourceType, HashMap<String, Resource>> resourceTypes) {
+        HashMap<String, ListResource> listResources = new HashMap<>();
         for (BundleEntryComponent entry : structuredBundle.getEntry()) {
             if (entry.getResource() instanceof ListResource) {
                 ListResource listResource = (ListResource) entry.getResource();
                 if (listResource.getTitle() != null) {
                     String listTitle = listResource.getTitle();
+                    System.out.println("Checking " + listTitle);
                     if (Arrays.asList(SNOMED_CANNED_LIST_TITLES).contains(listTitle)) {
+                        System.out.println("Rebuilding " + listTitle + " record count = " + listResource.getEntry().size());
+                        for (ListEntryComponent listEntry : listResource.getEntry()) {
+                            System.out.println("\t" + listEntry.getItem().getReference());
+                        }
+
                         listResource.getEntry().clear();
 
                         // This is a reverse lookup
@@ -590,11 +853,18 @@ public class StructuredBuilder {
                         if (listManager != null) {
                             listManager.populateListResoure(listResources, listResource);
                         }
+                        System.out.println("After - record count = " + listResource.getEntry().size());
+                        for (ListEntryComponent listEntry : listResource.getEntry()) {
+                            System.out.println("\t" + listEntry.getItem().getReference());
+                        }
+
                         break;
                     } // if matching id
                 } // if non null listTitle
             } // if ListResource
         } // for entry
+
+        return listResources;
     }
 
     /**
@@ -909,7 +1179,12 @@ public class StructuredBuilder {
 
         @Override
         public String getListTitle() {
-            return "";
+            return ACTIVE_ALLERGIES_TITLE;
+        }
+
+        @Override
+        protected String getFhirResourceName() {
+            return "AllergyIntolerance";
         }
 
     } // Allergies
@@ -967,7 +1242,6 @@ public class StructuredBuilder {
         public void processParm(HashMap<ResourceType, HashMap<String, Resource>> resourceTypes,
                 ArrayList<Parameters.ParametersParameterComponent> parms, Bundle structuredBundle) throws FHIRException {
             HashMap<String, Resource> conditions = resourceTypes.get(ResourceType.Condition);
-            HashSet<String> conditionIdsToAdd = new HashSet<>();
 
             for (Parameters.ParametersParameterComponent parm : parms) {
                 String filterSignificance = null;
@@ -984,22 +1258,19 @@ public class StructuredBuilder {
                     }
                 }
 
-                for (Resource resource : conditions.values()) {
+                Resource[] resources = conditions.values().toArray(new Resource[0]);
+                for (Resource resource : resources) {
                     Condition condition = (Condition) resource;
                     List<Extension> significances = condition.getExtensionsByUrl(SD_CC_EXT_PROBLEM_SIGNIFICANCE);
                     if ((filterSignificance == null || significances.isEmpty()
                             // #300 significance changed from CodeableConcept to Code
                             || filterSignificance.equalsIgnoreCase(significances.get(0).getValue().toString()))
                             && (filterStatus == null || condition.getClinicalStatus() == filterStatus)) {
-                        conditionIdsToAdd.add(condition.getId());
+                        refCounts.put(condition.getId(), 1);
+                        walkResource(structuredBundle, resourceTypes, condition.getId(), 1);
                     }
                 }
             } // for Parameters
-
-            for (String conditionId : conditionIdsToAdd) {
-                refCounts.put(conditionId, 1);
-                walkResource(structuredBundle, resourceTypes, conditionId, 1);
-            }
 
         } // processParm
 

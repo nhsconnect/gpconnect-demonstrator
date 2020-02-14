@@ -55,6 +55,7 @@ import java.util.stream.Collectors;
 import static org.hl7.fhir.dstu3.model.Address.AddressUse.OLD;
 import static org.hl7.fhir.dstu3.model.Address.AddressUse.WORK;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
 import org.hl7.fhir.dstu3.model.OperationOutcome.OperationOutcomeIssueComponent;
 import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,6 +68,7 @@ import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnp
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
 import uk.gov.hscic.patient.details.PatientEntity;
+import static uk.gov.hscic.patient.StructuredBuilder.createCondition;
 
 @Component
 public class PatientResourceProvider implements IResourceProvider {
@@ -308,13 +310,14 @@ public class PatientResourceProvider implements IResourceProvider {
                     populateMedicationBundle.addMedicationBundleEntries(structuredBundle, param, patientDetails, practitionerIds, orgIds);
                     break;
             }
+            addProblemEntryForUncanned(NHS, structuredBundle, patient, uncannedClinicalArea);
         }
 
         // append the required canned responses for patient 2 only
         StructuredBuilder structureBuilder = new StructuredBuilder();
         for (String cannedClinicalArea
                 : cannedCLinicalAreaParameters.keySet()) {
-            if (Arrays.asList(new String[]{patients[PATIENT_2],patients[PATIENT_3]}).contains(NHS)) {
+            if (Arrays.asList(new String[]{patients[PATIENT_2], patients[PATIENT_3]}).contains(NHS)) {
                 structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(cannedClinicalArea), structuredBundle, patient, cannedCLinicalAreaParameters.get(cannedClinicalArea));
             } else {
                 // only patients 2 and 3 have canned repsonses all the rest not.
@@ -351,6 +354,77 @@ public class PatientResourceProvider implements IResourceProvider {
             structuredBundle.addEntry().setResource(operationOutcome);
         }
         return structuredBundle;
+    }
+
+    /**
+     *
+     * adds an entry to the problem list pointing at a problem/Condition This
+     * handles the case where an uncanned clinical area is requested and a
+     * problem needs adding for patient 2 for testing purposes.
+     *
+     * @param NHS
+     * @param structuredBundle
+     * @param patient
+     * @param uncannedClinicalArea
+     */
+    private void addProblemEntryForUncanned(String NHS, Bundle structuredBundle, Patient patient, String uncannedClinicalArea) {
+        // if patient 2 add a dummy allergy problem and list (if required)
+        if (NHS.equals(patients[PATIENT_2])) {
+
+            ListResource problemList = null;
+            Resource resource = null;
+            for (BundleEntryComponent entry : structuredBundle.getEntry()) {
+                if (entry.getResource() instanceof ListResource) {
+                    ListResource listResource = (ListResource) entry.getResource();
+                    if (listResource.getId() != null) {
+                        switch (listResource.getId()) {
+                            case SNOMED_PROBLEMS_LIST_DISPLAY:
+                                problemList = listResource;
+                                break;
+                        }
+                    }
+                } else if ((uncannedClinicalArea.equals(INCLUDE_ALLERGIES_PARM) && entry.getResource() instanceof AllergyIntolerance)
+                        || (uncannedClinicalArea.equals(INCLUDE_MEDICATION_PARM) && entry.getResource() instanceof MedicationStatement)) {
+                    if (resource == null) {
+                        resource = entry.getResource();
+                    }
+                }
+
+                if (problemList != null && resource != null) {
+                    break;
+                }
+            }
+            if (problemList == null) {
+                problemList = StructuredBuilder.createList(SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY, patient);
+                structuredBundle.addEntry(new BundleEntryComponent().setResource(problemList));
+            }
+
+            // create the named problem and add that to the response
+            String problemId = uncannedClinicalArea.replaceFirst("^include(.*)$", "$1Problem");
+
+            if (resource != null) {
+                Condition condition = null;
+                switch (uncannedClinicalArea) {
+                    case INCLUDE_ALLERGIES_PARM:
+                        condition = createCondition(problemId, patient, "AllergyIntolerance/" + resource.getId());
+                        break;
+
+                    case INCLUDE_MEDICATION_PARM:
+                        condition = createCondition(problemId, patient, "MedicationStatement/" + resource.getId());
+                        break;
+                }
+
+                if (condition != null) {
+                    structuredBundle.addEntry(new BundleEntryComponent().setResource(condition));
+
+                    // add the reference to the problem (Condition) to the problem list named for the parameter eg includeMedications
+                    // TODO are these still in order? get these to be generated automatically?
+                    problemList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + problemId)));
+                }
+            } else {
+                System.err.println("No resource found to insert for uncanned clinical area "+uncannedClinicalArea);
+            }
+        }
     }
 
     /**

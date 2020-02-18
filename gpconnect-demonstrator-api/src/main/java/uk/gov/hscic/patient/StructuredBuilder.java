@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance;
+import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceCategory;
+import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceReactionComponent;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.CodeType;
@@ -50,6 +52,7 @@ import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Immunization;
+import org.hl7.fhir.dstu3.model.Immunization.ImmunizationVaccinationProtocolComponent;
 import org.hl7.fhir.dstu3.model.IntegerType;
 import org.hl7.fhir.dstu3.model.ListResource;
 import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
@@ -65,10 +68,13 @@ import org.hl7.fhir.dstu3.model.ReferralRequest;
 import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.exceptions.FHIRException;
+import uk.gov.hscic.SystemConstants;
 import static uk.gov.hscic.SystemConstants.*;
 import uk.gov.hscic.SystemURL;
+import static uk.gov.hscic.SystemURL.ID_CROSS_CARE_SETTIING;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_PROBLEM_SIGNIFICANCE;
 import static uk.gov.hscic.SystemURL.SD_GPC_LIST;
+import static uk.gov.hscic.SystemURL.SD_GPC_OBSERVATION;
 import static uk.gov.hscic.medications.PopulateMedicationBundle.setClinicalSetting;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
@@ -92,11 +98,13 @@ public class StructuredBuilder {
         // Anonymous class overriding put behaviour.
         @Override
         public Integer put(String reference, Integer i) {
-            if (!Arrays.asList(SNOMED_CANNED_LIST_TITLES).contains(reference) && !reference.matches("^[^/]+/[^/]+$")) {
-                System.err.println("WARNING: StructuredBuilder - Adding non reference format key to refCounts " + reference);
-            }
-            if (get(reference) != null && get(reference) != i - 1) {
-                System.err.println("WARNING: StructuredBuilder - Non incrememntal change to refCounts " + reference + " current value " + get(reference) + " value to set " + i);
+            if (DEBUG_LEVEL > 0) {
+                if (!Arrays.asList(SNOMED_LIST_TITLES).contains(reference) && !reference.matches("^[^/]+/[^/]+$")) {
+                    System.err.println("WARNING: StructuredBuilder - Adding non reference format key to refCounts " + reference);
+                }
+                if (get(reference) != null && get(reference) != i - 1) {
+                    System.err.println("WARNING: StructuredBuilder - Non incrememntal change to refCounts " + reference + " current value " + get(reference) + " value to set " + i);
+                }
             }
             return super.put(reference, i);
         }
@@ -107,13 +115,15 @@ public class StructuredBuilder {
         // Anonymous class overriding put behaviour.
         @Override
         public Resource put(String reference, Resource r) {
-            if (!Arrays.asList(SNOMED_CANNED_LIST_TITLES).contains(reference) && !reference.matches("^[^/]+/[^/]+$")) {
-                System.err.println("WARNING: StructuredBuilder - Adding non reference format key to addedToResponse " + reference);
-            } else {
-                //System.err.println("StructuredBuilder - Adding reference format key to addedToResponse " + key);
-            }
-            if (get(reference) != null) {
-                System.err.println("WARNING: StructuredBuilder - Setting an existing addedToResponse entry " + reference);
+            if (DEBUG_LEVEL > 0) {
+                if (!Arrays.asList(SNOMED_LIST_TITLES).contains(reference) && !reference.matches("^[^/]+/[^/]+$")) {
+                    System.err.println("WARNING: StructuredBuilder - Adding non reference format key to addedToResponse " + reference);
+                } else {
+                    //System.err.println("StructuredBuilder - Adding reference format key to addedToResponse " + key);
+                }
+                if (get(reference) != null) {
+                    System.err.println("WARNING: StructuredBuilder - Setting an existing addedToResponse entry " + reference);
+                }
             }
             return super.put(reference, r);
         }
@@ -121,7 +131,7 @@ public class StructuredBuilder {
 
     private static final String SNOMED_CONSULTATION_ENCOUNTER_TYPE = "325851000000107";
 
-    private static final String[] SNOMED_CANNED_LIST_TITLES = {
+    private static final String[] SNOMED_LIST_TITLES = {
         SNOMED_MEDICATION_LIST_DISPLAY,
         SNOMED_RESOLVED_ALLERGIES_DISPLAY,
         ACTIVE_ALLERGIES_TITLE,
@@ -133,7 +143,7 @@ public class StructuredBuilder {
         SNOMED_INVESTIGATIONS_LIST_DISPLAY*/}; // 1.4
 
     // add any new clinical areas supported as canned responses here
-    private final static String[] STRUCTURED_CANNED_CLINICAL_AREAS = {INCLUDE_PROBLEMS_PARM,
+    private final static String[] PROCESSED_CANNED_CLINICAL_AREAS = {INCLUDE_PROBLEMS_PARM,
         INCLUDE_CONSULTATIONS_PARM/*,
         INCLUDE_REFERRALS_PARM,
         INCLUDE_INVESTIGATIONS_PARM*/
@@ -173,7 +183,7 @@ public class StructuredBuilder {
 
         // Tis list idenmtifies those canned clinical ares that need some processing 
         // rather simply transcibing into the reponse as is
-        if (Arrays.asList(STRUCTURED_CANNED_CLINICAL_AREAS).contains(parameterName)) {
+        if (Arrays.asList(PROCESSED_CANNED_CLINICAL_AREAS).contains(parameterName)) {
             if (patient.getIdElement().getIdPartAsLong() != PATIENT_3 || !parameterName.equals(INCLUDE_PROBLEMS_PARM)) {
                 // this handles canned responses that need reprocessing ie problems and consultations at 1.3
                 handleCannedClinicalArea(parsedBundle, duplicates, structuredBundle, parms, parameterName, patient);
@@ -228,7 +238,7 @@ public class StructuredBuilder {
     }
 
     /**
-     * create a dummy problem
+     * create a dummy problem/Condition
      *
      * @param id problem id
      * @param reference resource id to which this problem refers
@@ -250,7 +260,7 @@ public class StructuredBuilder {
 
         condition.addIdentifier(new Identifier().
                 setValue("D06C0517-4D1C-11E3-A2DD-010000000161").
-                setSystem("https://fhir.nhs.uk/Id/cross-care-setting-identifier"));
+                setSystem(ID_CROSS_CARE_SETTIING));
 
         CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
                 setSystem(SNOMED_URL).
@@ -545,15 +555,171 @@ public class StructuredBuilder {
         // handle cases where we know there are no Clinical Areas
         // we know patient 2 does not have any of these so add some
         if (!hs.contains("AllergyIntolerance")) {
-            addDummyResourceAndProblem(patient, new AllergyIntolerance(), allergyList, structuredBundle, problemsList);
+            addDummyResourceAndProblem(patient, createAllergyIntolerance(), allergyList, structuredBundle, problemsList);
         }
         if (!hs.contains("Immunization")) {
-            addDummyResourceAndProblem(patient, new Immunization(), immunizationsList, structuredBundle, problemsList);
+            addDummyResourceAndProblem(patient, createImmunization(), immunizationsList, structuredBundle, problemsList);
         }
         if (!hs.contains("Observation")) {
             // Uncategorised Data
-            addDummyResourceAndProblem(patient, new Observation(), uncategorisedDataList, structuredBundle, problemsList);
+            addDummyResourceAndProblem(patient, createObservation(), uncategorisedDataList, structuredBundle, problemsList);
         }
+    }
+
+    /**
+     * minimal allergy with just mandatory elements
+     *
+     * @return instantiated object
+     */
+    private AllergyIntolerance createAllergyIntolerance() {
+        AllergyIntolerance allergyIntolerance = new AllergyIntolerance();
+
+        allergyIntolerance.setMeta(new Meta().addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
+
+        // identifier
+        allergyIntolerance.setIdentifier(Collections.singletonList(new Identifier().
+                setSystem(ID_CROSS_CARE_SETTIING).
+                setValue("f827590b-5193-11ea-8153-1002b58598b5")));
+
+        // clinical status
+        allergyIntolerance.setClinicalStatus(AllergyIntolerance.AllergyIntoleranceClinicalStatus.ACTIVE);
+
+        // verification status unconfirmed
+        allergyIntolerance.setVerificationStatus(AllergyIntolerance.AllergyIntoleranceVerificationStatus.UNCONFIRMED);
+
+        // category Code value environment
+        allergyIntolerance.addCategory(AllergyIntoleranceCategory.ENVIRONMENT);
+
+        // code CodeableConcept
+        CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
+                setSystem(SNOMED_URL).
+                setCode("89707004").
+                setDisplay("Sesame oil (substance)"));
+        allergyIntolerance.setCode(cc);
+
+        // patient
+        allergyIntolerance.setPatient(new Reference("Patient/2"));
+
+        // recorder practitioner/1
+        allergyIntolerance.setRecorder(new Reference("Practitioner/1"));
+
+        // reaction.manifestation
+        AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
+        cc = new CodeableConcept().addCoding(new Coding().
+                setSystem(SNOMED_URL).
+                setCode("230145002").
+                setDisplay("Difficulty breathing"));
+        reaction.setManifestation(Collections.singletonList(cc));
+        allergyIntolerance.setReaction(Collections.singletonList(reaction));
+
+        return allergyIntolerance;
+    }
+
+    /**
+     * minimal Immunization with just mandatory elements
+     *
+     * @return instantiated object
+     */
+    private Immunization createImmunization() {
+        Immunization immunization = new Immunization();
+
+        // meta
+        immunization.setMeta(new Meta().addProfile("https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Immunization-1"));
+
+        // ext recordedDate
+        immunization.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-DateRecorded-1").
+                setValue(new DateTimeType(new Date())));
+
+        CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
+                setSystem(SNOMED_URL).
+                setCode("170378007").
+                setDisplay("First hepatitis A vaccination"));
+
+        // ext vaccinationProcedure
+        immunization.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-VaccinationProcedure-1").
+                setValue(cc));
+
+        // identifier
+        immunization.setIdentifier(Collections.singletonList(new Identifier().
+                setSystem(ID_CROSS_CARE_SETTIING).
+                setValue("urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad76")));
+
+        // status
+        immunization.setStatus(Immunization.ImmunizationStatus.COMPLETED);
+
+        // notgiven
+        immunization.setNotGiven(false);
+
+        // vaccineCode
+        cc = new CodeableConcept().addCoding(new Coding().
+                setSystem("http://hl7.org/fhir/v3/NullFlavor").
+                setCode("UNK"));
+        cc.setText("Unknown");
+        immunization.setVaccineCode(cc);
+
+        // patient
+        immunization.setPatient(new Reference("Patient/2"));
+
+        // primarySource
+        immunization.setPrimarySource(true);
+
+        // vaccinationProtocol
+        ImmunizationVaccinationProtocolComponent component = new ImmunizationVaccinationProtocolComponent();
+
+        //  targetDisease
+        cc = new CodeableConcept().addCoding(new Coding().
+                setSystem(SNOMED_URL).
+                setCode("40468003").
+                setDisplay("Viral hepatitis, type A"));
+        component.setTargetDisease(Collections.singletonList(cc));
+
+        //  dosestatus
+        cc = new CodeableConcept().addCoding(new Coding().
+                setSystem("http://hl7.org/fhir/stu3/valueset-vaccination-protocol-dose-status.html").
+                setCode("count").
+                setDisplay("Counts"));
+        component.setDoseStatus(cc);
+
+        immunization.setVaccinationProtocol(Collections.singletonList(component));
+
+        return immunization;
+    }
+
+    /**
+     * minimal Observation with just mandatory elements
+     *
+     * @return instantiated object
+     */
+    private Observation createObservation() {
+        Observation observation = new Observation();
+
+        // meta
+        observation.setMeta(new Meta().addProfile(SD_GPC_OBSERVATION));
+
+        // identifier
+        observation.setIdentifier(Collections.singletonList(new Identifier().
+                setSystem(ID_CROSS_CARE_SETTIING).
+                setValue("urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad77")));
+        
+        observation.setStatus(Observation.ObservationStatus.FINAL);
+        
+        // code 
+        CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
+                setSystem(SNOMED_URL).
+                setCode("37331000000100").
+                setDisplay("Comment note"));
+        observation.setCode(cc);
+        
+        // subject
+        observation.setSubject(new Reference("Patient/2"));
+        
+        // issued
+        observation.setIssued(new Date());
+        
+        // performer
+        observation.setPerformer(Collections.singletonList(new Reference("Practitioner/1")));
+
+        return observation;
     }
 
     /**
@@ -563,9 +729,9 @@ public class StructuredBuilder {
      */
     private void handlePatient2ConsultationsRequest(Patient patient, Bundle structuredBundle) {
         // add an allergy into the bundle and add a reference entry to Consultation1
-        addDummyResourceForConsultation(new AllergyIntolerance(), patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
-        addDummyResourceForConsultation(new Immunization(), patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
-        addDummyResourceForConsultation(new Observation(), patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
+        addDummyResourceForConsultation(createAllergyIntolerance(), patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
+        addDummyResourceForConsultation(createImmunization(), patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
+        addDummyResourceForConsultation(createObservation(), patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
     }
 
     /**
@@ -577,7 +743,7 @@ public class StructuredBuilder {
      * @param display
      */
     private void addDummyResourceForConsultation(Resource resource, Patient patient, Bundle structuredBundle, String code, String display) {
-        resource.setId("Added" + resource.getResourceType());
+        resource.setId("Added" + resource.getResourceType() + "ForConsultation");
         // add the resource reference to the topic
         ((ListResource) addedToResponse.get("List/Consultation1-Topic1")).
                 addEntry(new ListResource.ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
@@ -764,7 +930,7 @@ public class StructuredBuilder {
 
         listResource.setMode(ListResource.ListMode.SNAPSHOT);
         listResource.setTitle(snomedDisplay);
-        listResource.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, snomedCode, snomedDisplay)));
+        listResource.setCode(new CodeableConcept().addCoding(new Coding(SystemConstants.SNOMED_URL, snomedCode, snomedDisplay)));
 
         listResource.setSubject(
                 new Reference(new IdType("Patient", patientId)).setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
@@ -839,7 +1005,7 @@ public class StructuredBuilder {
                 if (listResource.getTitle() != null) {
                     String listTitle = listResource.getTitle();
                     System.out.println("Checking " + listTitle);
-                    if (Arrays.asList(SNOMED_CANNED_LIST_TITLES).contains(listTitle)) {
+                    if (Arrays.asList(SNOMED_LIST_TITLES).contains(listTitle)) {
                         System.out.println("Rebuilding " + listTitle + " record count = " + listResource.getEntry().size());
                         for (ListEntryComponent listEntry : listResource.getEntry()) {
                             System.out.println("\t" + listEntry.getItem().getReference());
@@ -892,7 +1058,7 @@ public class StructuredBuilder {
             for (ResourceType rtKey : resourceTypes.keySet()) {
                 for (String key : resourceTypes.get(rtKey).keySet()) {
                     if (refCounts.get(key) == null) {
-                        if (!Arrays.asList(SNOMED_CANNED_LIST_TITLES).contains(key)) {
+                        if (!Arrays.asList(SNOMED_LIST_TITLES).contains(key)) {
                             System.err.println("Warning Unreferenced key: " + key);
                         }
                     }

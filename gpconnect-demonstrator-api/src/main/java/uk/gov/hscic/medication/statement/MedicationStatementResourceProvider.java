@@ -14,6 +14,7 @@ import uk.gov.hscic.model.medication.MedicationStatementDetail;
 
 import java.util.List;
 import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
+import static uk.gov.hscic.SystemURL.ID_CROSS_CARE_SETTIING;
 
 @Component
 public class MedicationStatementResourceProvider {
@@ -24,7 +25,7 @@ public class MedicationStatementResourceProvider {
         medicationStatement.setId(statementDetail.getId().toString());
         List<Identifier> identifiers = new ArrayList<>();
         Identifier identifier = new Identifier()
-                .setSystem("https://fhir.nhs.uk/Id/cross-care-setting-identifier")
+                .setSystem(ID_CROSS_CARE_SETTIING)
                 .setValue(statementDetail.getGuid());
         identifiers.add(identifier);
         medicationStatement.setIdentifier(identifiers);

@@ -26,6 +26,7 @@ import org.hl7.fhir.dstu3.model.Enumerations.DocumentReferenceStatus;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import static uk.gov.hscic.SystemConstants.SNOMED_URL;
+import static uk.gov.hscic.SystemURL.ID_CROSS_CARE_SETTIING;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntityInvalid422_ParameterException;
 import uk.gov.hscic.patient.PatientResourceProvider;
 
@@ -150,7 +151,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         documentReference.setMasterIdentifier(masterId);
 
         Identifier identifier = new Identifier();
-        identifier.setSystem("https://fhir.nhs.uk/Id/cross-care-setting-identifier");
+        identifier.setSystem(ID_CROSS_CARE_SETTIING);
         identifier.setValue("bb237762-dde2-11e9-9d36-2a2ae2dbcce4");
         documentReference.addIdentifier(identifier);
 

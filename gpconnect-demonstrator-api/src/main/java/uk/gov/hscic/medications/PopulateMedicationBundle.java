@@ -112,7 +112,7 @@ public class PopulateMedicationBundle {
 
         medicationStatementsList.setMode(ListMode.SNAPSHOT);
         medicationStatementsList.setTitle(SystemConstants.SNOMED_MEDICATION_LIST_DISPLAY);
-        medicationStatementsList.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY)));
+        medicationStatementsList.setCode(new CodeableConcept().addCoding(new Coding(SystemConstants.SNOMED_URL, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY)));
 
         PatientEntity patient = patientRepository.findByNhsNumber(nhsNumber);
 

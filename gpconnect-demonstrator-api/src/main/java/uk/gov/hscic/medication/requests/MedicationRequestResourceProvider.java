@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
+import static uk.gov.hscic.SystemURL.ID_CROSS_CARE_SETTIING;
 
 @Component
 public class MedicationRequestResourceProvider {
@@ -53,7 +54,7 @@ public class MedicationRequestResourceProvider {
         medicationRequest.setId(requestDetail.getId().toString());
         List<Identifier> identifiers = new ArrayList<>();
         Identifier identifier = new Identifier()
-                .setSystem("https://fhir.nhs.uk/Id/cross-care-setting-identifier")
+                .setSystem(ID_CROSS_CARE_SETTIING)
                 .setValue(requestDetail.getGuid());
         identifiers.add(identifier);
         medicationRequest.setIdentifier(identifiers);

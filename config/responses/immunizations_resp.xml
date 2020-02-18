@@ -67,7 +67,7 @@
             <notGiven value="false"></notGiven>
             <vaccineCode>
                <coding>
-                  <system value="http://hl7.org/fhir/v3/NullFlavor "></system>
+                  <system value="http://hl7.org/fhir/v3/NullFlavor"></system>
                   <code value="UNK"></code>
                </coding>
                <text value="Unknown"></text>

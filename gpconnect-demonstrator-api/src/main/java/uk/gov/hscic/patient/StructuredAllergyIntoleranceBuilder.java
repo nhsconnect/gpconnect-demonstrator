@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient;
 
+import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance.*;
 import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
@@ -25,6 +26,7 @@ import java.util.*;
 import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
 import org.springframework.beans.factory.annotation.Value;
 import static uk.gov.hscic.SystemConstants.*;
+import static uk.gov.hscic.SystemURL.ID_CROSS_CARE_SETTIING;
 import uk.gov.hscic.medication.statement.MedicationStatementRepository;
 
 @Component
@@ -49,13 +51,13 @@ public class StructuredAllergyIntoleranceBuilder {
     private String[] patients;
 
     /**
-     * 
+     *
      * @param bundle
      * @param param
      * @param NHS
-     * @param practitionerIds 
+     * @param practitionerIds
      */
-    public void buildStructuredAllergyIntolerance(Bundle bundle, ParametersParameterComponent param, String NHS, Set<String> practitionerIds  ) {
+    public void buildStructuredAllergyIntolerance(Bundle bundle, ParametersParameterComponent param, String NHS, Set<String> practitionerIds) {
         Boolean includedResolved = false;
         if (param.getPart().size() > 0) {
             Parameters.ParametersParameterComponent paramPart = param.getPart().get(0);
@@ -66,8 +68,6 @@ public class StructuredAllergyIntoleranceBuilder {
 
         ListResource active = initiateListResource(NHS, SNOMED_ACTIVE_ALLERGIES_DISPLAY, allergyData);
         ListResource resolved = initiateListResource(NHS, SNOMED_RESOLVED_ALLERGIES_DISPLAY, allergyData);
-
-        AllergyIntolerance allergyIntolerance;
 
         //If there is a 'no known' allergies code then add the necessary coding and return the bundle
         if (allergyData.size() == 1
@@ -93,125 +93,7 @@ public class StructuredAllergyIntoleranceBuilder {
         }
 
         for (StructuredAllergyIntoleranceEntity allergyIntoleranceEntity : allergyData) {
-            allergyIntolerance = new AllergyIntolerance();
-            allergyIntolerance.setOnset(new DateTimeType(allergyIntoleranceEntity.getOnSetDateTime()));
-            allergyIntolerance.setMeta(createMeta(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
-
-            allergyIntolerance.setId(allergyIntoleranceEntity.getId().toString());
-            List<Identifier> identifiers = new ArrayList<>();
-            Identifier identifier1 = new Identifier()
-                    .setSystem("https://fhir.nhs.uk/Id/cross-care-setting-identifier")
-                    .setValue(allergyIntoleranceEntity.getGuid());
-            identifiers.add(identifier1);
-            allergyIntolerance.setIdentifier(identifiers);
-
-            if (allergyIntoleranceEntity.getClinicalStatus().equals(SystemConstants.ACTIVE)) {
-                allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.ACTIVE);
-            } else {
-                allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.RESOLVED);
-            }
-
-            if (allergyIntoleranceEntity.getCategory().equals(SystemConstants.MEDICATION)) {
-                allergyIntolerance.addCategory(AllergyIntoleranceCategory.MEDICATION);
-            } else {
-                allergyIntolerance.addCategory(AllergyIntoleranceCategory.ENVIRONMENT);
-            }
-
-            allergyIntolerance.setVerificationStatus(AllergyIntoleranceVerificationStatus.UNCONFIRMED);
-
-            //CODE
-            codeableConceptBuilder.addConceptCode(SystemConstants.SNOMED_URL, allergyIntoleranceEntity.getConceptCode(), allergyIntoleranceEntity.getConceptDisplay())
-                    .addDescription(allergyIntoleranceEntity.getDescCode(), allergyIntoleranceEntity.getDescDisplay())
-                    .addTranslation(allergyIntoleranceEntity.getCodeTranslationRef());
-            allergyIntolerance.setCode(codeableConceptBuilder.build());
-            codeableConceptBuilder.clear();
-
-            allergyIntolerance.setAssertedDate(allergyIntoleranceEntity.getAssertedDate());
-
-            Reference patient = new Reference(
-                    SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
-            allergyIntolerance.setPatient(patient);
-
-            Annotation noteAnnotation = new Annotation(new StringType(allergyIntoleranceEntity.getNote()));
-            allergyIntolerance.setNote(Collections.singletonList(noteAnnotation));
-
-            AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
-
-            // MANIFESTATION
-            List<CodeableConcept> theManifestation = new ArrayList<>();
-            codeableConceptBuilder.addConceptCode(SystemConstants.SNOMED_URL, allergyIntoleranceEntity.getManifestationCoding(), allergyIntoleranceEntity.getManifestationDisplay())
-                    .addDescription(allergyIntoleranceEntity.getManifestationDescCoding(), allergyIntoleranceEntity.getManifestationDescDisplay())
-                    .addTranslation(allergyIntoleranceEntity.getManTranslationRef());
-            theManifestation.add(codeableConceptBuilder.build());
-            codeableConceptBuilder.clear();
-            reaction.setManifestation(theManifestation);
-
-            reaction.setDescription(allergyIntoleranceEntity.getNote());
-
-            //SEVERITY
-            try {
-                reaction.setSeverity(AllergyIntoleranceSeverity.fromCode(allergyIntoleranceEntity.getSeverity()));
-            } catch (FHIRException e) {
-                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                        new UnprocessableEntityException("Unknown severity: " + allergyIntoleranceEntity.getSeverity()),
-                        SystemCode.INVALID_RESOURCE, IssueType.INVALID);
-            }
-
-            //EXPOSURE
-            CodeableConcept exposureRoute = new CodeableConcept();
-            reaction.setExposureRoute(exposureRoute);
-            allergyIntolerance.addReaction(reaction);
-
-            //RECORDER
-            final Reference refValue = new Reference();
-            final Identifier identifier = new Identifier();
-            final String recorder = allergyIntoleranceEntity.getRecorder();
-
-            //This is just an example to demonstrate using Reference element instead of Identifier element
-            if (recorder.equals(patients[PATIENT_2].trim())) {
-                Reference rec = new Reference(
-                        SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
-                allergyIntolerance.setRecorder(rec);
-            } else if (patientRepository.findByNhsNumber(recorder) != null) {
-                identifier.setSystem(SystemURL.ID_NHS_NUMBER);
-                identifier.setValue(recorder);
-
-                refValue.setIdentifier(identifier);
-                allergyIntolerance.setRecorder(refValue);
-            } else if (practitionerSearch.findPractitionerByUserId(recorder) != null) {
-                refValue.setReference("Practitioner/" + recorder);
-                allergyIntolerance.setRecorder(refValue);
-
-                practitionerIds.add(recorder);
-            }
-
-            //CLINICAL STATUS
-            List<Extension> extensions = new ArrayList<>();
-            if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {
-                listResourceBuilder(active, allergyIntolerance, false);
-
-                bundle.addEntry().setResource(allergyIntolerance);
-            } else if (allergyIntolerance.getClinicalStatus().getDisplay().equals("Resolved")
-                    && includedResolved.equals(true)) {
-                listResourceBuilder(resolved, allergyIntolerance, true);
-                allergyIntolerance.setLastOccurrence(allergyIntoleranceEntity.getEndDate());
-
-                final Extension allergyEndExtension = createAllergyEndExtension(allergyIntoleranceEntity);
-                extensions.add(allergyEndExtension);
-
-            }
-
-            if (!extensions.isEmpty()) {
-                allergyIntolerance.setExtension(extensions);
-            }
-
-            //ASSERTER
-            Reference asserter = allergyIntolerance.getAsserter();
-            if (asserter != null && asserter.getReference() != null && asserter.getReference().startsWith("Practitioner")) {
-                String[] split = asserter.getReference().split("/");
-                practitionerIds.add(split[1]);
-            }
-
+            createAllergy(allergyIntoleranceEntity, practitionerIds, active, bundle, includedResolved, resolved);
         }
 
         if (!active.hasEntry()) {
@@ -228,6 +110,140 @@ public class StructuredAllergyIntoleranceBuilder {
 
         if (includedResolved) {
             bundle.addEntry().setResource(resolved);
+        }
+    }
+
+    /**
+     *
+     * @param allergyIntoleranceEntity
+     * @param practitionerIds
+     * @param active
+     * @param bundle
+     * @param includedResolved
+     * @param resolved
+     * @throws BaseServerResponseException
+     */
+    private void createAllergy(StructuredAllergyIntoleranceEntity allergyIntoleranceEntity, Set<String> practitionerIds, ListResource active, Bundle bundle, 
+            Boolean includedResolved, ListResource resolved) throws BaseServerResponseException {
+        
+        AllergyIntolerance allergyIntolerance;
+        allergyIntolerance = new AllergyIntolerance();
+        allergyIntolerance.setOnset(new DateTimeType(allergyIntoleranceEntity.getOnSetDateTime()));
+        allergyIntolerance.setMeta(createMeta(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
+
+        allergyIntolerance.setId(allergyIntoleranceEntity.getId().toString());
+        List<Identifier> identifiers = new ArrayList<>();
+        Identifier identifier1 = new Identifier()
+                .setSystem(ID_CROSS_CARE_SETTIING)
+                .setValue(allergyIntoleranceEntity.getGuid());
+        identifiers.add(identifier1);
+        allergyIntolerance.setIdentifier(identifiers);
+
+        if (allergyIntoleranceEntity.getClinicalStatus().equals(SystemConstants.ACTIVE)) {
+            allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.ACTIVE);
+        } else {
+            allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.RESOLVED);
+        }
+
+        if (allergyIntoleranceEntity.getCategory().equals(SystemConstants.MEDICATION)) {
+            allergyIntolerance.addCategory(AllergyIntoleranceCategory.MEDICATION);
+        } else {
+            allergyIntolerance.addCategory(AllergyIntoleranceCategory.ENVIRONMENT);
+        }
+
+        allergyIntolerance.setVerificationStatus(AllergyIntoleranceVerificationStatus.UNCONFIRMED);
+
+        //CODE
+        codeableConceptBuilder.addConceptCode(SystemConstants.SNOMED_URL, allergyIntoleranceEntity.getConceptCode(), allergyIntoleranceEntity.getConceptDisplay())
+                .addDescription(allergyIntoleranceEntity.getDescCode(), allergyIntoleranceEntity.getDescDisplay())
+                .addTranslation(allergyIntoleranceEntity.getCodeTranslationRef());
+        allergyIntolerance.setCode(codeableConceptBuilder.build());
+        codeableConceptBuilder.clear();
+
+        allergyIntolerance.setAssertedDate(allergyIntoleranceEntity.getAssertedDate());
+
+        Reference patient = new Reference(
+                SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
+        allergyIntolerance.setPatient(patient);
+
+        Annotation noteAnnotation = new Annotation(new StringType(allergyIntoleranceEntity.getNote()));
+        allergyIntolerance.setNote(Collections.singletonList(noteAnnotation));
+
+        AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
+
+        // MANIFESTATION
+        List<CodeableConcept> theManifestation = new ArrayList<>();
+        codeableConceptBuilder.addConceptCode(SystemConstants.SNOMED_URL, allergyIntoleranceEntity.getManifestationCoding(), allergyIntoleranceEntity.getManifestationDisplay())
+                .addDescription(allergyIntoleranceEntity.getManifestationDescCoding(), allergyIntoleranceEntity.getManifestationDescDisplay())
+                .addTranslation(allergyIntoleranceEntity.getManTranslationRef());
+        theManifestation.add(codeableConceptBuilder.build());
+        codeableConceptBuilder.clear();
+        reaction.setManifestation(theManifestation);
+
+        reaction.setDescription(allergyIntoleranceEntity.getNote());
+
+        //SEVERITY
+        try {
+            reaction.setSeverity(AllergyIntoleranceSeverity.fromCode(allergyIntoleranceEntity.getSeverity()));
+        } catch (FHIRException e) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new UnprocessableEntityException("Unknown severity: " + allergyIntoleranceEntity.getSeverity()),
+                    SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+        }
+
+        //EXPOSURE
+        CodeableConcept exposureRoute = new CodeableConcept();
+        reaction.setExposureRoute(exposureRoute);
+        allergyIntolerance.addReaction(reaction);
+
+        //RECORDER
+        final Reference refValue = new Reference();
+        final Identifier identifier = new Identifier();
+        final String recorder = allergyIntoleranceEntity.getRecorder();
+
+        //This is just an example to demonstrate using Reference element instead of Identifier element
+        if (recorder.equals(patients[PATIENT_2].trim())) {
+            Reference rec = new Reference(
+                    SystemConstants.PATIENT_REFERENCE_URL + allergyIntoleranceEntity.getPatientRef());
+            allergyIntolerance.setRecorder(rec);
+        } else if (patientRepository.findByNhsNumber(recorder) != null) {
+            identifier.setSystem(SystemURL.ID_NHS_NUMBER);
+            identifier.setValue(recorder);
+
+            refValue.setIdentifier(identifier);
+            allergyIntolerance.setRecorder(refValue);
+        } else if (practitionerSearch.findPractitionerByUserId(recorder) != null) {
+            refValue.setReference("Practitioner/" + recorder);
+            allergyIntolerance.setRecorder(refValue);
+
+            practitionerIds.add(recorder);
+        }
+
+        //CLINICAL STATUS
+        List<Extension> extensions = new ArrayList<>();
+        if (allergyIntolerance.getClinicalStatus().getDisplay().contains("Active")) {
+            listResourceBuilder(active, allergyIntolerance, false);
+
+            bundle.addEntry().setResource(allergyIntolerance);
+        } else if (allergyIntolerance.getClinicalStatus().getDisplay().equals("Resolved")
+                && includedResolved.equals(true)) {
+            listResourceBuilder(resolved, allergyIntolerance, true);
+            allergyIntolerance.setLastOccurrence(allergyIntoleranceEntity.getEndDate());
+
+            final Extension allergyEndExtension = createAllergyEndExtension(allergyIntoleranceEntity);
+            extensions.add(allergyEndExtension);
+
+        }
+
+        if (!extensions.isEmpty()) {
+            allergyIntolerance.setExtension(extensions);
+        }
+
+        //ASSERTER
+        Reference asserter = allergyIntolerance.getAsserter();
+        if (asserter != null && asserter.getReference() != null && asserter.getReference().startsWith("Practitioner")) {
+            String[] split = asserter.getReference().split("/");
+            practitionerIds.add(split[1]);
         }
     }
 
@@ -374,4 +390,3 @@ public class StructuredAllergyIntoleranceBuilder {
     }
 
 }
-    

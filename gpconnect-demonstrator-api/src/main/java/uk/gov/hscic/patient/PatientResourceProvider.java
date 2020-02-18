@@ -59,6 +59,7 @@ import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
 import org.hl7.fhir.dstu3.model.OperationOutcome.OperationOutcomeIssueComponent;
 import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
+import uk.gov.hscic.SystemConstants;
 import static uk.gov.hscic.SystemConstants.*;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_NHS_COMMUNICATION;
 import static uk.gov.hscic.SystemURL.VS_GPC_ERROR_WARNING_CODE;
@@ -1697,7 +1698,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         public void setListMetaData(ListResource list) {
             list.setTitle(getListDisplay());
-            list.setCode(new CodeableConcept().addCoding(new Coding(SystemURL.VS_SNOMED, getListCode(), getListDisplay())));
+            list.setCode(new CodeableConcept().addCoding(new Coding(SystemConstants.SNOMED_URL, getListCode(), getListDisplay())));
         }
 
         /**

@@ -26,6 +26,7 @@ public final class SystemURL {
     public static final String ID_SDS_ROLE_PROFILE_ID = "https://fhir.nhs.uk/Id/sds-role-profile-id";
     public static final String ID_SDS_USER_ID = "https://fhir.nhs.uk/Id/sds-user-id";
     public static final String ID_MARITAL_STATUS = "http://fhir.nhs.net/ValueSet/marital-status-1";
+    public static final String ID_CROSS_CARE_SETTIING = "https://fhir.nhs.uk/Id/cross-care-setting-identifier";
 
     
     // FHIR StructureDefinition Constants
@@ -164,7 +165,6 @@ public final class SystemURL {
     public static final String DEFAULTREASONURL = "DefaultReasonURL";
     
     //CodeSystem URLs
-    public static final String VS_SNOMED = "http://snomed.info/sct";
     public static final String CS_UNITS_OF_MEASURE = "http://unitsofmeasure.org";
 
     //Include Allergies Constant

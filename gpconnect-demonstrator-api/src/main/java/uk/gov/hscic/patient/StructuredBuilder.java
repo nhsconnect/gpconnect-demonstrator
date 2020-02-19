@@ -198,8 +198,16 @@ public class StructuredBuilder {
 
             // patient 2 specific add a created problem
             if (patient.getIdElement().getIdPartAsLong() == PATIENT_2) {
+                
+                // a an observation to be referenced
+                Observation observation = createObservation();
+                observation.setId("AddedObservation");
+                if (addEntryToBundleOnlyOnce(structuredBundle, observation.getResourceType() + "/" + observation.getId(), new BundleEntryComponent().setResource(observation))) {
+                    refCounts.put(observation.getResourceType() + "/" + observation.getId(), 1);
+                }
+                
                 // add a problem to the bundle
-                Condition condition = createCondition(parameterName.replaceFirst("^include(.*)$", "$1Problem"), patient, "Observation/obs1");
+                Condition condition = createCondition(parameterName.replaceFirst("^include(.*)$", "$1Problem"), patient, "Observation/AddedObservation");
                 if (addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition))) {
                     refCounts.put(condition.getResourceType() + "/" + condition.getId(), 1);
                 }
@@ -239,8 +247,8 @@ public class StructuredBuilder {
      * create a dummy problem/Condition
      *
      * @param id problem id
-     * @param reference resource id to which this problem refers
      * @param patient
+     * @param reference resource id to which this problem refers (may be null)
      * @return The Condition Resource object
      */
     public static Condition createCondition(String id, Patient patient, String reference) {
@@ -252,20 +260,16 @@ public class StructuredBuilder {
         condition.addExtension(new Extension(SD_CC_EXT_PROBLEM_SIGNIFICANCE).
                 setValue(new CodeType("major")));
 
-        // add the reference to a resource
-        condition.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1").
-                setValue(new Reference(reference)));
+        if (reference != null) {
+            // not mandatory but required for certains test conditions
+            // add the reference to a resource
+            condition.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1").
+                    setValue(new Reference(reference)));
+        }
 
         condition.addIdentifier(new Identifier().
                 setValue("D06C0517-4D1C-11E3-A2DD-010000000161").
                 setSystem(ID_CROSS_CARE_SETTIING));
-
-        CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
-                setSystem(SNOMED_URL).
-                setCode("231504006").
-                setDisplay("Mixed anxiety and depressive disorder"));
-        cc.setText("Anxiety with depression");
-        condition.setCode(cc);
 
         condition.setClinicalStatus(ConditionClinicalStatus.ACTIVE);
 
@@ -276,12 +280,21 @@ public class StructuredBuilder {
                         setDisplay("Problem List Item")
                 ));
 
+        CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
+                setSystem(SNOMED_URL).
+                setCode("231504006").
+                setDisplay("Mixed anxiety and depressive disorder"));
+        cc.setText("Anxiety with depression");
+        condition.setCode(cc);
+
         condition.setSubject(new Reference("Patient/" + patient.getIdElement().getIdPartAsLong()));
 
-        condition.setContext(new Reference("Encounter/Encounter1"));
-        condition.setOnset(new DateTimeType(new Date()));
+        // not mandatory
+//      condition.setOnset(new DateTimeType(new Date()));
         condition.setAssertedDate(new Date());
+
         condition.setAsserter(new Reference("Practitioner/1"));
+
         return condition;
     }
 
@@ -698,22 +711,22 @@ public class StructuredBuilder {
         observation.setIdentifier(Collections.singletonList(new Identifier().
                 setSystem(ID_CROSS_CARE_SETTIING).
                 setValue("urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad77")));
-        
+
         observation.setStatus(Observation.ObservationStatus.FINAL);
-        
+
         // code 
         CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
                 setSystem(SNOMED_URL).
                 setCode("37331000000100").
                 setDisplay("Comment note"));
         observation.setCode(cc);
-        
+
         // subject
         observation.setSubject(new Reference("Patient/2"));
-        
+
         // issued
         observation.setIssued(new Date());
-        
+
         // performer
         observation.setPerformer(Collections.singletonList(new Reference("Practitioner/1")));
 

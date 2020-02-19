@@ -204,8 +204,6 @@ public class StructuredBuilder {
                     refCounts.put(condition.getResourceType() + "/" + condition.getId(), 1);
                 }
 
-                structuredBundle.addEntry().setResource(condition);
-
                 ListResource problemList = null;
                 if (addedToResponse.get(SNOMED_PROBLEMS_LIST_DISPLAY) != null) {
                     problemList = (ListResource) addedToResponse.get(SNOMED_PROBLEMS_LIST_DISPLAY);

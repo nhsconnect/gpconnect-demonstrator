@@ -514,15 +514,15 @@ public class StructuredBuilder {
     private void handlePatient2ProblemsRequest(Patient patient, Bundle structuredBundle) {
         // add a medications statement and a list
         // TODO There appears to be an empty list here for some reason
-        ListResource medicationStatementList = getOrCreateList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
-        ListResource allergyList = getOrCreateList(patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
+        ListResource medicationStatementList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
+        ListResource allergyList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
         // this is  a typical hence we have set set a title that is not the same as the display
         allergyList.setTitle(ACTIVE_ALLERGIES_TITLE);
 
-        ListResource immunizationsList = getOrCreateList(patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
-        ListResource uncategorisedDataList = getOrCreateList(patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
+        ListResource immunizationsList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
+        ListResource uncategorisedDataList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
 
-        ListResource problemsList = getOrCreateList(patient, structuredBundle, SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY);
+        ListResource problemsList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY);
 
         // add any extants ca entries to the appropriate CA list
         // make a copy because this collection will be modified.
@@ -715,6 +715,15 @@ public class StructuredBuilder {
      * @param structuredBundle
      */
     private void handlePatient2ConsultationsRequest(Patient patient, Bundle structuredBundle) {
+        // there are medications statements but not yet a list with enries
+        ListResource medicationStatementList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
+        // add the references to the list
+        for (BundleEntryComponent entry : structuredBundle.getEntry()){
+            if (entry.getResource() instanceof MedicationStatement ) {
+                medicationStatementList.addEntry(new ListEntryComponent().setItem(new Reference(entry.getResource().getResourceType() + "/" + entry.getResource().getId())));
+            }
+        }
+
         // add an allergy into the bundle and add a reference entry to Consultation1
         addDummyResourceForConsultation(createAllergyIntolerance(), patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
         addDummyResourceForConsultation(createImmunization(), patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
@@ -733,17 +742,17 @@ public class StructuredBuilder {
         resource.setId("Added" + resource.getResourceType() + "ForConsultation");
         // add the resource reference to the topic
         ((ListResource) addedToResponse.get("List/Consultation1-Topic1")).
-                addEntry(new ListResource.ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
+                addEntry(new ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
 
         // add the resource to the resource list
-        ListResource list = getOrCreateList(patient, structuredBundle, code, display);
+        ListResource list = getOrCreateThenAddList(patient, structuredBundle, code, display);
         // this is  a typical hence we have set set a title that is not the same as the display
         if (resource instanceof AllergyIntolerance) {
             list.setTitle(ACTIVE_ALLERGIES_TITLE);
         }
 
         // add the resource reference to the list
-        list.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
+        list.addEntry(new ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
 
         // add the resource to the bundle
         addEntryToBundleOnlyOnce(structuredBundle, resource.getResourceType() + "/" + resource.getId(), new BundleEntryComponent().setResource(resource));
@@ -806,7 +815,7 @@ public class StructuredBuilder {
      * @param display for list
      * @return populated ListResource
      */
-    private ListResource getOrCreateList(Patient patient, Bundle structuredBundle, String code, String display) {
+    private ListResource getOrCreateThenAddList(Patient patient, Bundle structuredBundle, String code, String display) {
         ListResource listResource = null;
         if (addedToResponse.get(display) != null) {
             listResource = (ListResource) addedToResponse.get(display);

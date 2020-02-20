@@ -28,6 +28,7 @@ import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyR
 import uk.gov.hscic.patient.details.PatientEntity;
 import uk.gov.hscic.patient.details.PatientRepository;
 import uk.gov.hscic.patient.structuredAllergyIntolerance.StructuredAllergySearch;
+import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 
 @Component
 public class PopulateMedicationBundle {
@@ -112,14 +113,14 @@ public class PopulateMedicationBundle {
 
         medicationStatementsList.setMode(ListMode.SNAPSHOT);
         medicationStatementsList.setTitle(SystemConstants.SNOMED_MEDICATION_LIST_DISPLAY);
-        medicationStatementsList.setCode(new CodeableConcept().addCoding(new Coding(SystemConstants.SNOMED_URL, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY)));
+        medicationStatementsList.setCode(createCodeableConcept(SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY,SystemConstants.SNOMED_URL));
 
         PatientEntity patient = patientRepository.findByNhsNumber(nhsNumber);
 
         // get the logical id for patient nhsNumber (was hard coded to 1)
         medicationStatementsList.setSubject(new Reference(new IdType("Patient", patient.getId())).setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
         medicationStatementsList.setDate(new Date());
-        medicationStatementsList.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
+        medicationStatementsList.setOrderedBy(createCodeableConcept("event-date", "Sorted by Event Date",SystemURL.CS_LIST_ORDER));
 
         medicationStatementsList.addExtension(setClinicalSetting());
 
@@ -149,10 +150,7 @@ public class PopulateMedicationBundle {
     }
 
     public static Extension setClinicalSetting() {
-        CodeableConcept codeableConcept = new CodeableConcept();
-        Coding coding = new Coding(SystemConstants.SNOMED_URL, "1060971000000108", "General practice service");
-        codeableConcept.setCoding(Collections.singletonList(coding));
-
+        CodeableConcept codeableConcept = createCodeableConcept("1060971000000108","General practice service",SNOMED_URL);
         return new Extension(SystemURL.CLINICAL_SETTING, codeableConcept);
     }
 

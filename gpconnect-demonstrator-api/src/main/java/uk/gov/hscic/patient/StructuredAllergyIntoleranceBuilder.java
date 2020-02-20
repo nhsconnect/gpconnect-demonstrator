@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Value;
 import static uk.gov.hscic.SystemConstants.*;
 import static uk.gov.hscic.SystemURL.ID_CROSS_CARE_SETTIING;
 import uk.gov.hscic.medication.statement.MedicationStatementRepository;
+import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 
 @Component
 public class StructuredAllergyIntoleranceBuilder {
@@ -74,7 +75,7 @@ public class StructuredAllergyIntoleranceBuilder {
                 && allergyData.get(0).getClinicalStatus().equals(SystemConstants.NO_KNOWN)) {
 
             // #214 had incorrect code and value for no known allergies
-            CodeableConcept noKnownAllergies = createCoding(SystemURL.VS_LIST_EMPTY_REASON_CODE, NO_CONTENT_RECORDED, NO_CONTENT_RECORDED_DISPLAY);
+            CodeableConcept noKnownAllergies = createCodeableConcept(NO_CONTENT_RECORDED, NO_CONTENT_RECORDED_DISPLAY, SystemURL.VS_LIST_EMPTY_REASON_CODE);
             noKnownAllergies.setText("No Known Allergies");
             active.setEmptyReason(noKnownAllergies);
 
@@ -123,9 +124,9 @@ public class StructuredAllergyIntoleranceBuilder {
      * @param resolved
      * @throws BaseServerResponseException
      */
-    private void createAllergy(StructuredAllergyIntoleranceEntity allergyIntoleranceEntity, Set<String> practitionerIds, ListResource active, Bundle bundle, 
+    private void createAllergy(StructuredAllergyIntoleranceEntity allergyIntoleranceEntity, Set<String> practitionerIds, ListResource active, Bundle bundle,
             Boolean includedResolved, ListResource resolved) throws BaseServerResponseException {
-        
+
         AllergyIntolerance allergyIntolerance;
         allergyIntolerance = new AllergyIntolerance();
         allergyIntolerance.setOnset(new DateTimeType(allergyIntoleranceEntity.getOnSetDateTime()));
@@ -251,10 +252,10 @@ public class StructuredAllergyIntoleranceBuilder {
         ListResource listResource = new ListResource();
 
         if (display.equals(SNOMED_ACTIVE_ALLERGIES_DISPLAY)) {
-            listResource.setCode(createCoding(SNOMED_URL, SNOMED_ACTIVE_ALLERGIES_CODE, display));
+            listResource.setCode(createCodeableConcept(SNOMED_ACTIVE_ALLERGIES_CODE, display, SNOMED_URL));
             listResource.setTitle(ACTIVE_ALLERGIES_TITLE);
         } else if (display.equals(SNOMED_RESOLVED_ALLERGIES_DISPLAY)) {
-            listResource.setCode(createCoding(SNOMED_URL, SNOMED_RESOLVED_ALLERGIES_CODE, display));
+            listResource.setCode(createCodeableConcept(SNOMED_RESOLVED_ALLERGIES_CODE, display, SNOMED_URL));
             listResource.setTitle(display);
         }
 
@@ -292,9 +293,7 @@ public class StructuredAllergyIntoleranceBuilder {
         for (StructuredAllergyIntoleranceEntity structuredAllergyIntoleranceEntity : allergyIntoleranceEntity) {
             warningCode = structuredAllergyIntoleranceEntity.getWarningCode();
         }
-        CodeableConcept codeableConcept = new CodeableConcept();
-        Coding coding = new Coding(SystemConstants.SNOMED_URL, "1060971000000108", "General practice service");
-        codeableConcept.setCoding(Collections.singletonList(coding));
+        CodeableConcept codeableConcept = createCodeableConcept("1060971000000108", "General practice service", SystemConstants.SNOMED_URL);
 
         return warningCode != null ? new Extension(SystemURL.CLINICAL_SETTING, codeableConcept) : null;
 
@@ -319,8 +318,7 @@ public class StructuredAllergyIntoleranceBuilder {
      * @param list
      */
     public static void addEmptyReasonCode(ListResource list) {
-        CodeableConcept noContent = new CodeableConcept();
-        noContent.setCoding(Arrays.asList(new Coding(SystemURL.VS_LIST_EMPTY_REASON_CODE, SystemConstants.NO_CONTENT_RECORDED, SystemConstants.NO_CONTENT_RECORDED_DISPLAY)));
+        CodeableConcept noContent = createCodeableConcept(SystemConstants.NO_CONTENT_RECORDED, SystemConstants.NO_CONTENT_RECORDED_DISPLAY, SystemURL.VS_LIST_EMPTY_REASON_CODE);
         // #284 remove text lement form codeable concept
         //noContent.setText(SystemConstants.INFORMATION_NOT_AVAILABLE);
         list.setEmptyReason(noContent);
@@ -334,17 +332,6 @@ public class StructuredAllergyIntoleranceBuilder {
 
         value.setIdentifier(identifier);
         active.setSubject(value);
-    }
-
-    private CodeableConcept createCoding(String system, String code, String display) {
-        final CodeableConcept codeableConcept = new CodeableConcept();
-        codeableConcept.setCoding(Arrays.asList(new Coding(
-                system,
-                code,
-                display
-        )));
-
-        return codeableConcept;
     }
 
     private Meta createMeta(String profile) {

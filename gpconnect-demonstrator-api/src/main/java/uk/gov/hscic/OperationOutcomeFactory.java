@@ -8,6 +8,7 @@ import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.hl7.fhir.dstu3.model.OperationOutcome.OperationOutcomeIssueComponent;
 
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
+import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 
 public class OperationOutcomeFactory {
 
@@ -37,9 +38,7 @@ public class OperationOutcomeFactory {
      */
     public static BaseServerResponseException buildOperationOutcomeException(BaseServerResponseException exception,
             String code, IssueType issueType, String diagnostics) {
-        CodeableConcept codeableConcept = new CodeableConcept();
-        Coding coding = new Coding(SystemURL.VS_GPC_ERROR_WARNING_CODE, code, code);
-        codeableConcept.addCoding(coding);
+        CodeableConcept codeableConcept = createCodeableConcept(code, code,SystemURL.VS_GPC_ERROR_WARNING_CODE);
         
         OperationOutcome operationOutcome = new OperationOutcome();
 

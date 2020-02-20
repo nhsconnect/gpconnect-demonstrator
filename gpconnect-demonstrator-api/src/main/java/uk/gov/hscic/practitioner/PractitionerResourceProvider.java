@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 
 @Component
 public class PractitionerResourceProvider implements IResourceProvider {
@@ -54,39 +55,36 @@ public class PractitionerResourceProvider implements IResourceProvider {
 
     @Search
     public List<Practitioner> getPractitionerByPractitionerUserId(
-            @RequiredParam(name = Practitioner.SP_IDENTIFIER) TokenParam practitionerId, 
+            @RequiredParam(name = Practitioner.SP_IDENTIFIER) TokenParam practitionerId,
             @Sort SortSpec sort,
             @Count Integer count) {
-        
-    
-        
-        List<Practitioner> practitioners =  practitionerSearch.findPractitionerByUserId(practitionerId.getValue()).stream()
+
+        List<Practitioner> practitioners = practitionerSearch.findPractitionerByUserId(practitionerId.getValue()).stream()
                 .map(this::practitionerDetailsToPractitionerResourceConverter).collect(Collectors.toList());
-        
+
         // #294 return an empty bundle if the search fails to find any valid records 
         //if (practitioners.isEmpty()) {
-            //practitioners.add(new Practitioner());
-            //return practitioners;
+        //practitioners.add(new Practitioner());
+        //return practitioners;
         //}
-        
-        if(sort != null && sort.getParamName().equalsIgnoreCase(Location.SP_STATUS)){
+        if (sort != null && sort.getParamName().equalsIgnoreCase(Location.SP_STATUS)) {
             Collections.sort(practitioners, (Practitioner a, Practitioner b) -> {
-                
+
                 String aStatus = a.getGender().toString();
                 String bStatus = b.getGender().toString();
-                
-                if(aStatus == null && bStatus == null){
+
+                if (aStatus == null && bStatus == null) {
                     return 0;
                 }
-                
-                if(aStatus == null && bStatus != null){
+
+                if (aStatus == null && bStatus != null) {
                     return -1;
                 }
-                
-                if(aStatus != null && bStatus == null){
+
+                if (aStatus != null && bStatus == null) {
                     return 1;
                 }
-                
+
                 return aStatus.compareToIgnoreCase(bStatus);
             });
         }
@@ -96,14 +94,14 @@ public class PractitionerResourceProvider implements IResourceProvider {
     }
 
     private Practitioner practitionerDetailsToPractitionerResourceConverter(PractitionerDetails practitionerDetails) {
-    	
+
         Identifier identifier = new Identifier()
                 .setSystem(SystemURL.ID_SDS_USER_ID)
                 .setValue(practitionerDetails.getUserId());
-        
+
         Practitioner practitioner = new Practitioner()
                 .addIdentifier(identifier);
-        
+
         practitionerDetails
                 .getRoleIds()
                 .stream()
@@ -114,12 +112,12 @@ public class PractitionerResourceProvider implements IResourceProvider {
         String resourceId = String.valueOf(practitionerDetails.getId());
         String versionId = String.valueOf(practitionerDetails.getLastUpdated().getTime());
         String resourceType = practitioner.getResourceType().toString();
-        
+
         IdType id = new IdType(resourceType, resourceId, versionId);
 
         practitioner.setId(id);
         practitioner.getMeta().setVersionId(versionId);
-        practitioner.getMeta().setLastUpdated(practitionerDetails.getLastUpdated());       
+        practitioner.getMeta().setLastUpdated(practitionerDetails.getLastUpdated());
         practitioner.getMeta().addProfile(SystemURL.SD_GPC_PRACTITIONER);
 
         HumanName name = new HumanName()
@@ -129,7 +127,7 @@ public class PractitionerResourceProvider implements IResourceProvider {
                 .setUse(NameUse.USUAL);
 
         practitioner.addName(name);
-        
+
         switch (practitionerDetails.getGender().toLowerCase(Locale.UK)) {
             case "male":
                 practitioner.setGender(AdministrativeGender.MALE);
@@ -144,28 +142,22 @@ public class PractitionerResourceProvider implements IResourceProvider {
                 practitioner.setGender(AdministrativeGender.UNKNOWN);
                 break;
         }
-        
-        
+
         // #164 modify returned structure for practitioner language
         for (int i = 0; i < practitionerDetails.getComCode().size(); i++) {
 
-            CodeableConcept languages = new CodeableConcept();
-            Coding comCoding = new Coding(SystemURL.CS_CC_HUMAN_LANG_STU3, practitionerDetails.getComCode().get(i), null)
-                    .setDisplay(practitionerDetails.getComDisplay().get(i));
-
-            languages.addCoding(comCoding);
-        	Extension language = new Extension("language", languages);
-        	Extension nhsCommunication = new Extension("https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSCommunication-1");
-        	nhsCommunication.addExtension(language);
-        	practitioner.addExtension(nhsCommunication);
+            CodeableConcept languages = createCodeableConcept(practitionerDetails.getComCode().get(i), practitionerDetails.getComDisplay().get(i), SystemURL.CS_CC_HUMAN_LANG_STU3);
+            Extension language = new Extension("language", languages);
+            Extension nhsCommunication = new Extension("https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSCommunication-1");
+            nhsCommunication.addExtension(language);
+            practitioner.addExtension(nhsCommunication);
         }
-        
 
         return practitioner;
     }
-    
+
     public List<Extension> getPractitionerRoleReferences(Practitioner practitioner) {
         return practitioner.getExtensionsByUrl(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE);
     }
-    
+
 }

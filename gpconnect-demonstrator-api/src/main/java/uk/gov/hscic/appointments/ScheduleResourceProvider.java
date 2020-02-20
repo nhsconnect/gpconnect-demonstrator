@@ -25,6 +25,7 @@ import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.appointment.schedule.ScheduleSearch;
 import uk.gov.hscic.model.appointment.ScheduleDetail;
+import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 import uk.gov.hscic.slots.PopulateSlotBundle;
 
 @Component
@@ -102,9 +103,7 @@ public class ScheduleResourceProvider implements IResourceProvider {
 //        identifier.setValue(scheduleDetail.getIdentifier());
 //        schedule.addIdentifier(identifier);
                 
-        Coding coding = new Coding().setSystem(SystemURL.HL7_VS_C80_PRACTICE_CODES)
-                .setCode(scheduleDetail.getTypeCode()).setDisplay(scheduleDetail.getTypeDescription());
-        CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
+        CodeableConcept codableConcept = createCodeableConcept(scheduleDetail.getTypeCode(),scheduleDetail.getTypeDescription(),SystemURL.HL7_VS_C80_PRACTICE_CODES);
         codableConcept.setText(scheduleDetail.getTypeDescription());
         
         schedule.addActor(new Reference("Location/" + scheduleDetail.getLocationId()));    

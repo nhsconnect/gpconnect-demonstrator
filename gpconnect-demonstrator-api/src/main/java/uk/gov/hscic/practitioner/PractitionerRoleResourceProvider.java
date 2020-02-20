@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 
 @Component
 public class PractitionerRoleResourceProvider implements IResourceProvider {
@@ -48,15 +49,8 @@ public class PractitionerRoleResourceProvider implements IResourceProvider {
     private List<PractitionerRole> practitionerDetailsToPractitionerRoleList(PractitionerDetails practitionerDetails) {
         final List<String> roleIds = practitionerDetails.getRoleIds();
 
-        final CodeableConcept codeableConcept = new CodeableConcept();
+        final CodeableConcept codeableConcept = createCodeableConcept(practitionerDetails.getRoleCode(), practitionerDetails.getRoleDisplay(),SystemURL.CS_CC_JOB_ROLE);
 
-        codeableConcept.setCoding(Arrays.asList(new Coding(
-                        SystemURL.CS_CC_JOB_ROLE,
-                        practitionerDetails.getRoleCode(),
-                        practitionerDetails.getRoleDisplay()
-                )
-        ));
-        
         List<PractitionerRole> practitionerRoleList = new ArrayList<>();
         for(String roleId : roleIds) {
         	PractitionerRole role = new PractitionerRole();

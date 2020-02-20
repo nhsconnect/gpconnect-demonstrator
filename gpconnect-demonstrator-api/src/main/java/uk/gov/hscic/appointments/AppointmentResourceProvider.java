@@ -61,6 +61,7 @@ import uk.gov.hscic.model.appointment.ScheduleDetail;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntityInvalid422_ParameterException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
+import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 
 @Component
 public class AppointmentResourceProvider implements IResourceProvider {
@@ -959,11 +960,8 @@ public class AppointmentResourceProvider implements IResourceProvider {
         if (practitionerID != null) {
             // #195 we need to get this detail from the schedule not the practitioner table
             if (scheduleDetail != null) {
-                Coding roleCoding = new Coding(SystemURL.VS_GPC_PRACTITIONER_ROLE, scheduleDetail.getPractitionerRoleCode(),
-                        scheduleDetail.getPractitionerRoleDisplay());
-
                 Extension practitionerRoleExtension = new Extension(SystemURL.SD_EXTENSION_GPC_PRACTITIONER_ROLE,
-                        new CodeableConcept().addCoding(roleCoding));
+                        createCodeableConcept(scheduleDetail.getPractitionerRoleCode(),scheduleDetail.getPractitionerRoleDisplay(),SystemURL.VS_GPC_PRACTITIONER_ROLE));
                 appointment.addExtension(practitionerRoleExtension);
             }
         }

@@ -1,6 +1,5 @@
 package uk.gov.hscic.patient.html;
 
-
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import org.hl7.fhir.dstu3.model.Narrative;
 import org.hl7.fhir.dstu3.model.Narrative.NarrativeStatus;
 
 import uk.gov.hscic.SystemURL;
+import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 
 public final class FhirSectionBuilder {
 
@@ -20,23 +20,18 @@ public final class FhirSectionBuilder {
     }
 
     public static SectionComponent buildFhirSection(Page page) {
-        Coding coding = new Coding()
-                .setSystem(SystemURL.VS_GPC_RECORD_SECTION)
-                .setCode(page.getCode())
-                .setDisplay(page.getName());
-        
-        CodeableConcept codableConcept = new CodeableConcept().addCoding(coding);
+        CodeableConcept codableConcept = createCodeableConcept(page.getCode(), page.getName(), SystemURL.VS_GPC_RECORD_SECTION);
         codableConcept.setText(page.getName());
 
         Narrative narrative = new Narrative();
         narrative.setStatus(NarrativeStatus.GENERATED);
-        narrative.setDivAsString(createHtmlContent(page));      
-        
+        narrative.setDivAsString(createHtmlContent(page));
+
         SectionComponent sectionComponent = new SectionComponent();
-        
+
         sectionComponent.setCode(codableConcept);
         sectionComponent.setTitle(page.getName()).setCode(codableConcept).setText(narrative);
-        
+
         return sectionComponent;
     }
 
@@ -54,16 +49,13 @@ public final class FhirSectionBuilder {
             if (pageSection.getFromDate() != null && pageSection.getToDate() != null) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                 stringBuilder.append("<div><p>For the period '").append(dateFormat.format(pageSection.getFromDate())).append("' to '").append(dateFormat.format(pageSection.getToDate())).append("'</p></div>");
-            }   
-            else if(pageSection.getFromDate() != null && pageSection.getToDate() == null){
+            } else if (pageSection.getFromDate() != null && pageSection.getToDate() == null) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                 stringBuilder.append("<div><p>All Data Items from ").append(dateFormat.format(pageSection.getFromDate())).append("'</p></div>");
-            }
-            else if(pageSection.getFromDate() == null && pageSection.getToDate() != null){
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-                    stringBuilder.append("<div><p>All Data Items until ").append(dateFormat.format(pageSection.getToDate())).append("'</p></div>");
-               
-           
+            } else if (pageSection.getFromDate() == null && pageSection.getToDate() != null) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                stringBuilder.append("<div><p>All Data Items until ").append(dateFormat.format(pageSection.getToDate())).append("'</p></div>");
+
             } else {
                 stringBuilder.append("<div><p>All relevant items</p></div>");
             }

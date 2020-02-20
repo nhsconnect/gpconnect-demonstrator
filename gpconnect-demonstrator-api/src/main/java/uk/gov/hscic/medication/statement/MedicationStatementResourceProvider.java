@@ -15,6 +15,7 @@ import uk.gov.hscic.model.medication.MedicationStatementDetail;
 import java.util.List;
 import static uk.gov.hscic.SystemConstants.NO_INFORMATION_AVAILABLE;
 import static uk.gov.hscic.SystemURL.ID_CROSS_CARE_SETTIING;
+import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 
 @Component
 public class MedicationStatementResourceProvider {
@@ -79,9 +80,8 @@ public class MedicationStatementResourceProvider {
         	} else if (prescribingAgency.equalsIgnoreCase("prescribed-by-another-organisation")) {
         		prescribingAgencyDisplay = "Prescribed by another organisation";
         	}
-            Coding coding = new Coding(SystemURL.CS_CC_PRESCRIBING_AGENCY_STU3, prescribingAgency, prescribingAgencyDisplay);
 
-            CodeableConcept codeableConcept = new CodeableConcept().addCoding(coding);
+            CodeableConcept codeableConcept = createCodeableConcept(prescribingAgency,prescribingAgencyDisplay,SystemURL.CS_CC_PRESCRIBING_AGENCY_STU3);
             medicationStatement.addExtension(new Extension(SystemURL.SD_EXTENSION_CC_PRESCRIBING_AGENCY, codeableConcept));
         }
         

@@ -78,6 +78,7 @@ import static uk.gov.hscic.SystemURL.SD_GPC_OBSERVATION;
 import static uk.gov.hscic.medications.PopulateMedicationBundle.setClinicalSetting;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
+import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 
 /**
  * Appends canned responses to a StructuredBundle response. Note that the
@@ -191,26 +192,32 @@ public class StructuredBuilder {
                 addEmptyProblemsList(patient, structuredBundle);
             }
         } else {
+
+            Resource pickedResource = null;
             // for other canned responses just transcribe as is eg uncat and imm for 1.3
             for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
                 structuredBundle.addEntry(entry);
+                switch (parameterName) {
+                    case INCLUDE_IMMUNIZATIONS_PARM:
+                        if (pickedResource == null && entry.getResource().getResourceType().toString().equals("Immunization")) {
+                            pickedResource = entry.getResource();
+                        }
+                        break;
+                    case INCLUDE_UNCATEGORISED_DATA_PARM:
+                        if (pickedResource == null && entry.getResource().getResourceType().toString().equals("Observation")) {
+                            pickedResource = entry.getResource();
+                        }
+                        break;
+                }
             }
 
             // patient 2 specific add a created problem
             if (patient.getIdElement().getIdPartAsLong() == PATIENT_2) {
-                
-                // a an observation to be referenced
-                Observation observation = createObservation();
-                observation.setId("AddedObservation");
-                if (addEntryToBundleOnlyOnce(structuredBundle, observation.getResourceType() + "/" + observation.getId(), new BundleEntryComponent().setResource(observation))) {
-                    refCounts.put(observation.getResourceType() + "/" + observation.getId(), 1);
-                }
-                
+
+                //addEntryToBundleOnlyOnce(structuredBundle, resource.getResourceType() + "/" + resource.getId(), new BundleEntryComponent().setResource(resource));
                 // add a problem to the bundle
-                Condition condition = createCondition(parameterName.replaceFirst("^include(.*)$", "$1Problem"), patient, "Observation/AddedObservation");
-                if (addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition))) {
-                    refCounts.put(condition.getResourceType() + "/" + condition.getId(), 1);
-                }
+                Condition condition = createCondition(parameterName.replaceFirst("^include(.*)$", "$1Problem"), patient, pickedResource.getResourceType() + "/" + pickedResource.getId());
+                addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition));
 
                 ListResource problemList = null;
                 if (addedToResponse.get(SNOMED_PROBLEMS_LIST_DISPLAY) != null) {
@@ -220,9 +227,7 @@ public class StructuredBuilder {
                     // create a new problem list
                     problemList = createList(SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY, patient);
                     // add it to the bundle
-                    if (addEntryToBundleOnlyOnce(structuredBundle, SNOMED_PROBLEMS_LIST_DISPLAY, new BundleEntryComponent().setResource(problemList))) {
-                        refCounts.put(SNOMED_PROBLEMS_LIST_DISPLAY, 1);
-                    }
+                    addEntryToBundleOnlyOnce(structuredBundle, SNOMED_PROBLEMS_LIST_DISPLAY, new BundleEntryComponent().setResource(problemList));
                 }
                 // add the problem (Condition) to the problem list
                 problemList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + parameterName.replaceFirst("^include(.*)$", "$1Problem"))));
@@ -236,11 +241,22 @@ public class StructuredBuilder {
         ListResource problemList = createList(SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY, patient);
         // add it to the bundle
         if (addEntryToBundleOnlyOnce(structuredBundle, SNOMED_PROBLEMS_LIST_DISPLAY, new BundleEntryComponent().setResource(problemList))) {
-            refCounts.put(SNOMED_PROBLEMS_LIST_DISPLAY, 1);
             // make it an empty list
             addEmptyListNote(problemList);
             addEmptyReasonCode(problemList);
         }
+    }
+    
+    /**
+     * overload for single reference
+     * @param id
+     * @param patient
+     * @param reference
+     * @return The Condition Resource object
+     */
+
+    public static Condition createCondition(String id, Patient patient, String reference) {
+        return createCondition(id, patient, new String[]{reference});
     }
 
     /**
@@ -248,10 +264,10 @@ public class StructuredBuilder {
      *
      * @param id problem id
      * @param patient
-     * @param reference resource id to which this problem refers (may be null)
+     * @param references array of resource id to which this problem refers (may be null)
      * @return The Condition Resource object
      */
-    public static Condition createCondition(String id, Patient patient, String reference) {
+    public static Condition createCondition(String id, Patient patient, String[] references) {
         Condition condition = new Condition();
         condition.setId(id);
         condition.setMeta(new Meta().addProfile("https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProblemHeader-Condition-1"));
@@ -260,11 +276,13 @@ public class StructuredBuilder {
         condition.addExtension(new Extension(SD_CC_EXT_PROBLEM_SIGNIFICANCE).
                 setValue(new CodeType("major")));
 
-        if (reference != null) {
-            // not mandatory but required for certains test conditions
-            // add the reference to a resource
-            condition.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1").
-                    setValue(new Reference(reference)));
+        if (references != null) {
+            for (String reference : references) {
+                // not mandatory but required for certains test conditions
+                // add the reference to a resource
+                condition.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1").
+                        setValue(new Reference(reference)));
+            }
         }
 
         condition.addIdentifier(new Identifier().
@@ -273,17 +291,9 @@ public class StructuredBuilder {
 
         condition.setClinicalStatus(ConditionClinicalStatus.ACTIVE);
 
-        condition.addCategory(new CodeableConcept().
-                addCoding(new Coding().
-                        setSystem("http://hl7.org/fhir/condition-category").
-                        setCode("problem-list-item").
-                        setDisplay("Problem List Item")
-                ));
+        condition.addCategory(createCodeableConcept("problem-list-item", "Problem List Item", "http://hl7.org/fhir/condition-category"));
 
-        CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
-                setSystem(SNOMED_URL).
-                setCode("231504006").
-                setDisplay("Mixed anxiety and depressive disorder"));
+        CodeableConcept cc = createCodeableConcept("231504006", "Mixed anxiety and depressive disorder", SNOMED_URL);
         cc.setText("Anxiety with depression");
         condition.setCode(cc);
 
@@ -312,17 +322,12 @@ public class StructuredBuilder {
         problemList.setStatus(ListResource.ListStatus.CURRENT);
         problemList.setMode(ListResource.ListMode.SNAPSHOT);
         problemList.setTitle(display);
-        CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
-                setSystem(SNOMED_URL).
-                setCode(code).
-                setDisplay(display));
+        CodeableConcept cc = createCodeableConcept(code, display, SNOMED_URL);
         problemList.setCode(cc);
         problemList.setSubject(new Reference("Patient/" + patient.getIdElement().getIdPartAsLong()));
         problemList.setDate(new Date());
 
-        cc = new CodeableConcept().addCoding(new Coding().
-                setSystem("http://hl7.org/fhir/list-order").
-                setCode("event-date"));
+        cc = createCodeableConcept("event-date", null, "http://hl7.org/fhir/list-order");
         problemList.setOrderedBy(cc);
 
         return problemList;
@@ -405,9 +410,7 @@ public class StructuredBuilder {
                         // NB email from Matt only return Encounters, not Consultations nor a List of Consultations
                         Encounter encounter = (Encounter) resourceTypes.get(ResourceType.Encounter).get(encounterReference.getReference());
                         // NB the id is actually a reference
-                        if (addEntryToBundleOnlyOnce(structuredBundle, encounter.getId(), new BundleEntryComponent().setResource(encounter))) {
-                            refCounts.put(encounter.getId(), 1);
-                        }
+                        addEntryToBundleOnlyOnce(structuredBundle, encounter.getId(), new BundleEntryComponent().setResource(encounter));
                     } else {
                         System.err.println("WARNING condition " + conditionId + " is null or missing an encounter context");
                     }
@@ -429,8 +432,6 @@ public class StructuredBuilder {
                         // does this problem/condition reference something in the returning bundle?
                         if (refCounts.keySet().contains(reference.getReference())) {
                             if (addEntryToBundleOnlyOnce(structuredBundle, condition.getId(), new BundleEntryComponent().setResource(condition))) {
-                                // NB the id is actually a reference
-                                refCounts.put(condition.getId(), 1);
 
                                 // #314 re add the problems list because there are some!
                                 ListResource problemList = (ListResource) resourceTypes.get(ResourceType.List).get(SNOMED_PROBLEMS_LIST_DISPLAY);
@@ -453,9 +454,7 @@ public class StructuredBuilder {
                 String medicationReference = medicationStatement.getMedicationReference().getReference();
                 String medicationRequestReference = medicationStatement.getBasedOnFirstRep().getReference();
                 if ((refCounts.keySet().contains(medicationReference) || refCounts.keySet().contains(medicationRequestReference))) {
-                    if (addEntryToBundleOnlyOnce(structuredBundle, medicationStatementReference, new BundleEntryComponent().setResource(medicationStatement))) {
-                        refCounts.put(medicationStatementReference, 1);
-                    }
+                    addEntryToBundleOnlyOnce(structuredBundle, medicationStatementReference, new BundleEntryComponent().setResource(medicationStatement));
                 }
 
                 // #314
@@ -602,10 +601,7 @@ public class StructuredBuilder {
         allergyIntolerance.addCategory(AllergyIntoleranceCategory.ENVIRONMENT);
 
         // code CodeableConcept
-        CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
-                setSystem(SNOMED_URL).
-                setCode("89707004").
-                setDisplay("Sesame oil (substance)"));
+        CodeableConcept cc = createCodeableConcept("89707004", "Sesame oil (substance)", SNOMED_URL);
         allergyIntolerance.setCode(cc);
 
         // patient
@@ -616,10 +612,7 @@ public class StructuredBuilder {
 
         // reaction.manifestation
         AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
-        cc = new CodeableConcept().addCoding(new Coding().
-                setSystem(SNOMED_URL).
-                setCode("230145002").
-                setDisplay("Difficulty breathing"));
+        cc = createCodeableConcept("230145002", "Difficulty breathing", SNOMED_URL);
         reaction.setManifestation(Collections.singletonList(cc));
         allergyIntolerance.setReaction(Collections.singletonList(reaction));
 
@@ -641,10 +634,7 @@ public class StructuredBuilder {
         immunization.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-DateRecorded-1").
                 setValue(new DateTimeType(new Date())));
 
-        CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
-                setSystem(SNOMED_URL).
-                setCode("170378007").
-                setDisplay("First hepatitis A vaccination"));
+        CodeableConcept cc = createCodeableConcept("170378007", "First hepatitis A vaccination", SNOMED_URL);
 
         // ext vaccinationProcedure
         immunization.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-VaccinationProcedure-1").
@@ -662,9 +652,7 @@ public class StructuredBuilder {
         immunization.setNotGiven(false);
 
         // vaccineCode
-        cc = new CodeableConcept().addCoding(new Coding().
-                setSystem("http://hl7.org/fhir/v3/NullFlavor").
-                setCode("UNK"));
+        cc = createCodeableConcept("UNK", null, "http://hl7.org/fhir/v3/NullFlavor");
         cc.setText("Unknown");
         immunization.setVaccineCode(cc);
 
@@ -678,18 +666,10 @@ public class StructuredBuilder {
         ImmunizationVaccinationProtocolComponent component = new ImmunizationVaccinationProtocolComponent();
 
         //  targetDisease
-        cc = new CodeableConcept().addCoding(new Coding().
-                setSystem(SNOMED_URL).
-                setCode("40468003").
-                setDisplay("Viral hepatitis, type A"));
-        component.setTargetDisease(Collections.singletonList(cc));
+        component.setTargetDisease(Collections.singletonList(createCodeableConcept("40468003", "Viral hepatitis, type A", SNOMED_URL)));
 
         //  dosestatus
-        cc = new CodeableConcept().addCoding(new Coding().
-                setSystem("http://hl7.org/fhir/stu3/valueset-vaccination-protocol-dose-status.html").
-                setCode("count").
-                setDisplay("Counts"));
-        component.setDoseStatus(cc);
+        component.setDoseStatus(createCodeableConcept("count", "Counts", "http://hl7.org/fhir/stu3/valueset-vaccination-protocol-dose-status.html"));
 
         immunization.setVaccinationProtocol(Collections.singletonList(component));
 
@@ -715,11 +695,7 @@ public class StructuredBuilder {
         observation.setStatus(Observation.ObservationStatus.FINAL);
 
         // code 
-        CodeableConcept cc = new CodeableConcept().addCoding(new Coding().
-                setSystem(SNOMED_URL).
-                setCode("37331000000100").
-                setDisplay("Comment note"));
-        observation.setCode(cc);
+        observation.setCode(createCodeableConcept("37331000000100", "Comment note", SNOMED_URL));
 
         // subject
         observation.setSubject(new Reference("Patient/2"));
@@ -770,9 +746,7 @@ public class StructuredBuilder {
         list.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
 
         // add the resource to the bundle
-        if (addEntryToBundleOnlyOnce(structuredBundle, resource.getResourceType() + "/" + resource.getId(), new BundleEntryComponent().setResource(resource))) {
-            refCounts.put(resource.getResourceType() + "/" + resource.getId(), 1);
-        }
+        addEntryToBundleOnlyOnce(structuredBundle, resource.getResourceType() + "/" + resource.getId(), new BundleEntryComponent().setResource(resource));
     }
 
     /**
@@ -796,9 +770,7 @@ public class StructuredBuilder {
 
         // add the problem
         Condition condition = createCondition(resource.getId().replaceFirst("^.*/", ""), patient, resource.fhirType() + "/" + resource.getId());
-        if (addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition))) {
-            refCounts.put(condition.getResourceType() + "/" + condition.getId(), 1);
-        }
+        addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition));
 
         // add the problem to the problem list
         problemsList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + condition.getId())));
@@ -820,9 +792,7 @@ public class StructuredBuilder {
 
         // create a condition, add it to the response
         Condition condition = createCondition(reference.replaceFirst("^(.*)/", ""), patient, reference);
-        if (addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition))) {
-            refCounts.put(condition.getResourceType() + "/" + condition.getId(), 1);
-        }
+        addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition));
 
         // add a reference to the condition to the problem list
         problemsList.addEntry(new ListEntryComponent().setItem(new Reference(condition.getResourceType() + "/" + condition.getId())));
@@ -842,9 +812,7 @@ public class StructuredBuilder {
             listResource = (ListResource) addedToResponse.get(display);
         } else {
             listResource = createList(code, display, patient);
-            if (addEntryToBundleOnlyOnce(structuredBundle, display, new BundleEntryComponent().setResource(listResource))) {
-                refCounts.put(display, 1);
-            }
+            addEntryToBundleOnlyOnce(structuredBundle, display, new BundleEntryComponent().setResource(listResource));
         }
         return listResource;
     }
@@ -898,6 +866,7 @@ public class StructuredBuilder {
             retval = true;
             bundle.addEntry(entry);
             addedToResponse.put(reference, entry.getResource());
+            refCounts.put(reference, 1);
         }
         return retval;
     }
@@ -941,13 +910,12 @@ public class StructuredBuilder {
 
         listResource.setMode(ListResource.ListMode.SNAPSHOT);
         listResource.setTitle(snomedDisplay);
-        listResource.setCode(new CodeableConcept().addCoding(new Coding(SystemConstants.SNOMED_URL, snomedCode, snomedDisplay)));
+        listResource.setCode(createCodeableConcept(snomedCode, snomedDisplay, SystemConstants.SNOMED_URL));
 
         listResource.setSubject(
                 new Reference(new IdType("Patient", patientId)).setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
         listResource.setDate(new Date());
-        listResource.setOrderedBy(
-                new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
+        listResource.setOrderedBy(createCodeableConcept("event-date", "Sorted by Event Date", SystemURL.CS_LIST_ORDER));
 
         listResource.addExtension(setClinicalSetting());
 

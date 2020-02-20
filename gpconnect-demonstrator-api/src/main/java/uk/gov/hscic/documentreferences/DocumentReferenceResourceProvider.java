@@ -29,6 +29,7 @@ import static uk.gov.hscic.SystemConstants.SNOMED_URL;
 import static uk.gov.hscic.SystemURL.ID_CROSS_CARE_SETTIING;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntityInvalid422_ParameterException;
 import uk.gov.hscic.patient.PatientResourceProvider;
+import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 
 @Component
 public class DocumentReferenceResourceProvider implements IResourceProvider {
@@ -158,12 +159,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         documentReference.setStatus(DocumentReferenceStatus.CURRENT);
 
         // type
-        CodeableConcept codeableConcept = new CodeableConcept();
-        Coding coding = new Coding();
-        coding.setSystem(SNOMED_URL);
-        coding.setCode("824331000000106");
-        coding.setDisplay("Inpatient final discharge letter");
-        codeableConcept.setCoding(Arrays.asList(coding));
+        CodeableConcept codeableConcept = createCodeableConcept("824331000000106","Inpatient final discharge letter",SNOMED_URL);
         documentReference.setType(codeableConcept);
 
         // subject

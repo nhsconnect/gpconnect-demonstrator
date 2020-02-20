@@ -353,6 +353,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
         if (operationOutcome != null) {
             structuredBundle.addEntry().setResource(operationOutcome);
+        } else {
+            removeDuplicateResources(structuredBundle);
         }
         return structuredBundle;
     }
@@ -374,6 +376,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
             ListResource problemList = null;
             Resource resource = null;
+            Resource medicationsRequest = null;
             for (BundleEntryComponent entry : structuredBundle.getEntry()) {
                 if (entry.getResource() instanceof ListResource) {
                     ListResource listResource = (ListResource) entry.getResource();
@@ -389,9 +392,14 @@ public class PatientResourceProvider implements IResourceProvider {
                     if (resource == null) {
                         resource = entry.getResource();
                     }
+                } else if (uncannedClinicalArea.equals(INCLUDE_MEDICATION_PARM) && entry.getResource() instanceof MedicationRequest) {
+                    if (medicationsRequest == null) {
+                        medicationsRequest = entry.getResource();
+                    }
                 }
 
-                if (problemList != null && resource != null) {
+                if (problemList != null && resource != null
+                        && (uncannedClinicalArea.equals(INCLUDE_ALLERGIES_PARM) || uncannedClinicalArea.equals(INCLUDE_MEDICATION_PARM) && medicationsRequest != null)) {
                     break;
                 }
             }
@@ -407,11 +415,14 @@ public class PatientResourceProvider implements IResourceProvider {
                 Condition condition = null;
                 switch (uncannedClinicalArea) {
                     case INCLUDE_ALLERGIES_PARM:
-                        condition = createCondition(problemId, patient, "AllergyIntolerance/" + resource.getId());
+                        condition = createCondition(problemId, patient, resource.getResourceType() + "/" + resource.getId());
                         break;
-
                     case INCLUDE_MEDICATION_PARM:
-                        condition = createCondition(problemId, patient, "MedicationStatement/" + resource.getId());
+                        
+                        // ensure the problem references both a medication statment and a medication request.
+                        condition = createCondition(problemId, patient, 
+                                new String[]{resource.getResourceType() + "/" + resource.getId(),
+                                    medicationsRequest.getResourceType() + "/" + medicationsRequest.getId()});
                         break;
                 }
 
@@ -423,7 +434,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     problemList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + problemId)));
                 }
             } else {
-                System.err.println("No resource found to insert for uncanned clinical area "+uncannedClinicalArea);
+                System.err.println("No resource found to insert for uncanned clinical area " + uncannedClinicalArea);
             }
         }
     }
@@ -537,7 +548,7 @@ public class PatientResourceProvider implements IResourceProvider {
         // was hardcoded to patient 1
         list.setSubject(new Reference(new IdType("Patient", patient.getId())).setIdentifier(new Identifier().setValue(NHS).setSystem(SystemURL.ID_NHS_NUMBER)));
         list.setDate(new Date());
-        list.setOrderedBy(new CodeableConcept().addCoding(new Coding(SystemURL.CS_LIST_ORDER, "event-date", "Sorted by Event Date")));
+        list.setOrderedBy(createCodeableConcept("event-date", "Sorted by Event Date", SystemURL.CS_LIST_ORDER));
 
         // #284 align behaviour with meds and allergies
         addEmptyListNote(list);
@@ -1085,13 +1096,7 @@ public class PatientResourceProvider implements IResourceProvider {
         localIdentifier.setSystem(SystemURL.ID_LOCAL_PATIENT_IDENTIFIER);
         localIdentifier.setValue("123456");
 
-        CodeableConcept liType = new CodeableConcept();
-        Coding liTypeCoding = new Coding();
-        liTypeCoding.setCode("EN");
-        liTypeCoding.setDisplay("Employer number");
-        liTypeCoding.setSystem(SystemURL.VS_IDENTIFIER_TYPE);
-        liType.addCoding(liTypeCoding);
-        localIdentifier.setType(liType);
+        localIdentifier.setType(createCodeableConcept("EN", "Employer number", SystemURL.VS_IDENTIFIER_TYPE));
 
         localIdentifier.setAssigner(new Reference("Organization/1"));
         patient.addIdentifier(localIdentifier);
@@ -1145,16 +1150,25 @@ public class PatientResourceProvider implements IResourceProvider {
 
     private Extension createCodingExtension(String code, String display, String vsSystem, String extSystem) {
 
-        Extension ext = new Extension(extSystem, createCoding(code, display, vsSystem));
+        Extension ext = new Extension(extSystem, createCodeableConcept(code, display, vsSystem));
 
         return ext;
     }
 
-    private CodeableConcept createCoding(String code, String display, String vsSystem) {
+    /**
+     *
+     * @param code
+     * @param display
+     * @param vsSystem
+     * @return CodeableConcept
+     */
+    public static CodeableConcept createCodeableConcept(String code, String display, String vsSystem) {
 
         Coding coding = new Coding();
         coding.setCode(code);
-        coding.setDisplay(display);
+        if (display != null) {
+            coding.setDisplay(display);
+        }
         coding.setSystem(vsSystem);
         CodeableConcept concept = new CodeableConcept();
         concept.addCoding(coding);
@@ -1242,13 +1256,7 @@ public class PatientResourceProvider implements IResourceProvider {
         String registrationTypeValue = patientDetails.getRegistrationType();
         if (registrationTypeValue != null) {
 
-            Coding regTypeCode = new Coding();
-            regTypeCode.setCode(registrationTypeValue);
-            regTypeCode.setDisplay("Temporary"); // Should always be Temporary
-            regTypeCode.setSystem(SystemURL.CS_REGISTRATION_TYPE);
-            CodeableConcept regTypeConcept = new CodeableConcept();
-            regTypeConcept.addCoding(regTypeCode);
-
+            CodeableConcept regTypeConcept = createCodeableConcept(registrationTypeValue, "Temporary", SystemURL.CS_REGISTRATION_TYPE);
             Extension regTypeExt = new Extension(SystemURL.SD_CC_EXT_REGISTRATION_TYPE, regTypeConcept);
             regDetailsExtension.addExtension(regTypeExt);
         }
@@ -1409,6 +1417,30 @@ public class PatientResourceProvider implements IResourceProvider {
 
         return name;
 
+    }
+
+    /**
+     * This is a temporary sticking plaster to ensure no duplicates are returned
+     * It was spotted when patient 12 was found to be returning two Medication/2
+     * resources.
+     *
+     * @param structuredBundle
+     */
+    private void removeDuplicateResources(Bundle structuredBundle) {
+        // take a copy into an array so we are not accused of modifying a collection while iterating through it.
+        BundleEntryComponent[] entries = structuredBundle.getEntry().toArray(new BundleEntryComponent[0]);
+        HashSet<String> hs = new HashSet<>();
+        for (BundleEntryComponent entry : entries) {
+            if (entry.getResource().getId() != null) {
+                String reference = entry.getResource().getResourceType().toString() + "/" + entry.getResource().getId();
+                if (!hs.contains(reference)) {
+                    hs.add(reference);
+                } else {
+                    System.out.println("Removing duplicate entry " + reference);
+                    structuredBundle.getEntry().remove(entry);
+                }
+            }
+        }
     }
 
     private class NhsNumber {
@@ -1698,7 +1730,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         public void setListMetaData(ListResource list) {
             list.setTitle(getListDisplay());
-            list.setCode(new CodeableConcept().addCoding(new Coding(SystemConstants.SNOMED_URL, getListCode(), getListDisplay())));
+            list.setCode(createCodeableConcept(getListCode(), getListDisplay(), SystemConstants.SNOMED_URL));
         }
 
         /**

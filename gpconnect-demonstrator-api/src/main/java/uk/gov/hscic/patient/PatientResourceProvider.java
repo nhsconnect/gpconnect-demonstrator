@@ -398,6 +398,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
         if (operationOutcome != null) {
             structuredBundle.addEntry().setResource(operationOutcome);
+        } else {
+            removeDuplicateResources(structuredBundle);
         }
         return structuredBundle;
     }
@@ -1263,6 +1265,30 @@ public class PatientResourceProvider implements IResourceProvider {
         });
 
         return name;
+    }
+
+    /**
+     * This is a temporary sticking plaster to ensure no duplicates are returned
+     * It was spotted when patient 12 was found to be returning two Medication/2
+     * resources.
+     *
+     * @param structuredBundle
+     */
+    private void removeDuplicateResources(Bundle structuredBundle) {
+        // take a copy into an array so we are not accused of modifying a collection while iterating through it.
+        Bundle.BundleEntryComponent[] entries = structuredBundle.getEntry().toArray(new Bundle.BundleEntryComponent[0]);
+        HashSet<String> hs = new HashSet<>();
+        for (Bundle.BundleEntryComponent entry : entries) {
+            if (entry.getResource().getId() != null) {
+                String reference = entry.getResource().getResourceType().toString() + "/" + entry.getResource().getId();
+                if (!hs.contains(reference)) {
+                    hs.add(reference);
+                } else {
+                    System.out.println("Removing duplicate entry " + reference);
+                    structuredBundle.getEntry().remove(entry);
+                }
+            }
+        }
     }
 
     private class NhsNumber {

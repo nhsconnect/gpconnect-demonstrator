@@ -401,20 +401,21 @@ public class StructuredBuilder {
                     }
                 }
 
+                // #320 remove encounters
                 // NB This ignores encounters referenced by Observations
-                for (String conditionId : conditionsIdsInResponse) {
-                    Condition condition = (Condition) resourceTypes.get(ResourceType.Condition).get(conditionId);
-                    if (condition != null && condition.getContext() != null) {
-                        Reference encounterReference = condition.getContext();
-                        // does this problem/condition reference an encounter in the returning bundle?
-                        // NB email from Matt only return Encounters, not Consultations nor a List of Consultations
-                        Encounter encounter = (Encounter) resourceTypes.get(ResourceType.Encounter).get(encounterReference.getReference());
-                        // NB the id is actually a reference
-                        addEntryToBundleOnlyOnce(structuredBundle, encounter.getId(), new BundleEntryComponent().setResource(encounter));
-                    } else {
-                        System.err.println("WARNING condition " + conditionId + " is null or missing an encounter context");
-                    }
-                }
+//                for (String conditionId : conditionsIdsInResponse) {
+//                    Condition condition = (Condition) resourceTypes.get(ResourceType.Condition).get(conditionId);
+//                    if (condition != null && condition.getContext() != null) {
+//                        Reference encounterReference = condition.getContext();
+//                        // does this problem/condition reference an encounter in the returning bundle?
+//                        // NB email from Matt only return Encounters, not Consultations nor a List of Consultations
+//                        Encounter encounter = (Encounter) resourceTypes.get(ResourceType.Encounter).get(encounterReference.getReference());
+//                        // NB the id is actually a reference
+//                        addEntryToBundleOnlyOnce(structuredBundle, encounter.getId(), new BundleEntryComponent().setResource(encounter));
+//                    } else {
+//                        System.err.println("WARNING condition " + conditionId + " is null or missing an encounter context");
+//                    }
+//                }
 
                 break;
 

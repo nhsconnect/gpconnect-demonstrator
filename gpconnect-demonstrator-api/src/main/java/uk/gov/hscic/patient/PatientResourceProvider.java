@@ -418,9 +418,9 @@ public class PatientResourceProvider implements IResourceProvider {
                         condition = createCondition(problemId, patient, resource.getResourceType() + "/" + resource.getId());
                         break;
                     case INCLUDE_MEDICATION_PARM:
-                        
+
                         // ensure the problem references both a medication statment and a medication request.
-                        condition = createCondition(problemId, patient, 
+                        condition = createCondition(problemId, patient,
                                 new String[]{resource.getResourceType() + "/" + resource.getId(),
                                     medicationsRequest.getResourceType() + "/" + medicationsRequest.getId()});
                         break;
@@ -1652,6 +1652,10 @@ public class PatientResourceProvider implements IResourceProvider {
         }
     }
 
+    /**
+     * 422 Invalid Parameter
+     * @param error String
+     */
     private void throwInvalidParameterInvalidOperationalOutcome(String error) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(
                 new UnprocessableEntityException(
@@ -1659,6 +1663,17 @@ public class PatientResourceProvider implements IResourceProvider {
                 SystemCode.INVALID_PARAMETER, IssueType.INVALID);
     }
 
+    /**
+     * 422 Invalid Resource
+     * @param error String
+     */
+    private void throwInvalidResourceInvalidOperationalOutcome(String error) {
+        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                new UnprocessableEntityException(
+                        error),
+                SystemCode.INVALID_RESOURCE, IssueType.INVALID);
+    }
+    
     /**
      * base class for Clinical Area classes Supports parameter part validation
      * Initialisation of associated List resource
@@ -1683,8 +1698,8 @@ public class PatientResourceProvider implements IResourceProvider {
          * @param param
          */
         public void validateParameterParts(ParametersParameterComponent param) {
-            for (ParametersParameterComponent paramPart : param.getPart()) {
-                addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
+            for (ParametersParameterComponent pParamPart : param.getPart()) {
+                addWarningIssue(param, pParamPart, IssueType.NOTSUPPORTED);
             }
         }
 
@@ -1692,10 +1707,17 @@ public class PatientResourceProvider implements IResourceProvider {
             addWarningIssue(param, paramPart, IssueType.NOTSUPPORTED);
         }
 
-        protected void repeated() {
-            throwInvalidParameterInvalidOperationalOutcome("Repeated Parameter Part : " + paramPart.getName());
+        /**
+         * 422 Invalid Resource
+         * #321 return INVALID_RESOURCE on repeated Parameter Part
+         */
+        protected void repeatedParameterPart() {
+            throwInvalidResourceInvalidOperationalOutcome("Repeated Parameter Part : " + paramPart.getName());
         }
 
+        /**
+         * 422 Invalid Parameter
+         */
         protected void invalidType() {
             throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part type : " + paramPart.getName());
         }
@@ -1753,7 +1775,7 @@ public class PatientResourceProvider implements IResourceProvider {
                         }
                         parameterPartsSupplied.add(paramPart.getName());
                     } else {
-                        repeated();
+                        repeatedParameterPart();
                     }
                 } else {
                     invalidType();
@@ -1897,7 +1919,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     }
                                     parameterPartsSupplied.add(paramPart.getName());
                                 } else {
-                                    repeated();
+                                    repeatedParameterPart();
                                 }
                             } else {
                                 invalidType();
@@ -1961,7 +1983,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                         throwInvalidParameterInvalidOperationalOutcome("Invalid parameter part passed : " + paramPart.getName() + " invalid value " + paramPart.getValue());
                                     }
                                 } else {
-                                    repeated();
+                                    repeatedParameterPart();
                                 }
                             } else {
                                 invalidType();
@@ -1985,7 +2007,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     }
                                     parameterPartsSupplied.add(paramPart.getName());
                                 } else {
-                                    repeated();
+                                    repeatedParameterPart();
                                 }
                             } else {
                                 invalidType();

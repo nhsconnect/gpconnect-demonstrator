@@ -44,10 +44,10 @@ public final class SystemConstants {
             SystemConstants.INCLUDE_IMMUNIZATIONS_PARM,
             SystemConstants.INCLUDE_UNCATEGORISED_DATA_PARM,
             SystemConstants.INCLUDE_CONSULTATIONS_PARM,
-            SystemConstants.INCLUDE_PROBLEMS_PARM//,
+            SystemConstants.INCLUDE_PROBLEMS_PARM,
             // 1.4
-            //SystemConstants.INCLUDE_INVESTIGATIONS_PARM,
-            //SystemConstants.INCLUDE_REFERRALS_PARM
+            SystemConstants.INCLUDE_INVESTIGATIONS_PARM,
+            SystemConstants.INCLUDE_REFERRALS_PARM
     );
 
     // parameter part names

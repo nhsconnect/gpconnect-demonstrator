@@ -40,7 +40,6 @@ import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.CodeType;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Condition;
 import org.hl7.fhir.dstu3.model.Condition.ConditionClinicalStatus;
 import org.hl7.fhir.dstu3.model.DateTimeType;
@@ -139,15 +138,15 @@ public class StructuredBuilder {
         SNOMED_PROBLEMS_LIST_DISPLAY, // 1.3
         SNOMED_CONSULTATION_LIST_DISPLAY,
         SNOMED_IMMUNIZATIONS_LIST_DISPLAY,
-        SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY /*
+        SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY,
         SNOMED_REFERRALS_LIST_DISPLAY, // 1.4
-        SNOMED_INVESTIGATIONS_LIST_DISPLAY*/}; // 1.4
+        SNOMED_INVESTIGATIONS_LIST_DISPLAY}; // 1.4
 
     // add any new clinical areas supported as canned responses here
     private final static String[] PROCESSED_CANNED_CLINICAL_AREAS = {INCLUDE_PROBLEMS_PARM,
-        INCLUDE_CONSULTATIONS_PARM/*,
+        INCLUDE_CONSULTATIONS_PARM,
         INCLUDE_REFERRALS_PARM,
-        INCLUDE_INVESTIGATIONS_PARM*/
+        INCLUDE_INVESTIGATIONS_PARM
 // extension point add new clinical areas here
     };
 

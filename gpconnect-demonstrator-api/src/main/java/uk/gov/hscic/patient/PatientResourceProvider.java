@@ -316,11 +316,6 @@ public class PatientResourceProvider implements IResourceProvider {
                             if (paramPart.getValue() instanceof BooleanType) {
                                 includePrescriptionIssues = Boolean.valueOf(paramPart.getValue().primitiveValue());
                                 isIncludedPrescriptionIssuesExist = true;
-                            } else {
-                                throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                        new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-                                        SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
-
                             }
                         } else if (paramPart.getName().equals(SystemConstants.MEDICATION_SEARCH_FROM_DATE)
                                 && paramPart.getValue() instanceof DateType) {
@@ -341,10 +336,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     }
 
                     if (!isIncludedPrescriptionIssuesExist) {
-//                      addWarningIssue(param, IssueType.REQUIRED, "Miss parameter part : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES);
-                        throw OperationOutcomeFactory.buildOperationOutcomeException(
-                                new UnprocessableEntityException("Miss parameter : " + SystemConstants.INCLUDE_PRESCRIPTION_ISSUES),
-                                SystemCode.INVALID_PARAMETER, IssueType.REQUIRED);
+                        // # 1.2.6 now defaults to true if not provided
+                        includePrescriptionIssues = true;
                     }
                 }
             } else {
@@ -405,6 +398,8 @@ public class PatientResourceProvider implements IResourceProvider {
 
         if (operationOutcome != null) {
             structuredBundle.addEntry().setResource(operationOutcome);
+        } else {
+            removeDuplicateResources(structuredBundle);
         }
         return structuredBundle;
     }
@@ -1272,6 +1267,30 @@ public class PatientResourceProvider implements IResourceProvider {
         return name;
     }
 
+    /**
+     * This is a temporary sticking plaster to ensure no duplicates are returned
+     * It was spotted when patient 12 was found to be returning two Medication/2
+     * resources.
+     *
+     * @param structuredBundle
+     */
+    private void removeDuplicateResources(Bundle structuredBundle) {
+        // take a copy into an array so we are not accused of modifying a collection while iterating through it.
+        Bundle.BundleEntryComponent[] entries = structuredBundle.getEntry().toArray(new Bundle.BundleEntryComponent[0]);
+        HashSet<String> hs = new HashSet<>();
+        for (Bundle.BundleEntryComponent entry : entries) {
+            if (entry.getResource().getId() != null) {
+                String reference = entry.getResource().getResourceType().toString() + "/" + entry.getResource().getId();
+                if (!hs.contains(reference)) {
+                    hs.add(reference);
+                } else {
+                    System.out.println("Removing duplicate entry " + reference);
+                    structuredBundle.getEntry().remove(entry);
+                }
+            }
+        }
+    }
+
     private class NhsNumber {
 
         private NhsNumber() {
@@ -1418,9 +1437,10 @@ public class PatientResourceProvider implements IResourceProvider {
 
     /**
      * Checks that the dates are ok and that end is not earlier than start
+     *
      * @param startDate
      * @param endDate
-     * @return 
+     * @return
      */
     private boolean validateStartDateParamAndEndDateParam(String startDate, String endDate) {
         Pattern dateOnlyPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
@@ -1432,7 +1452,7 @@ public class PatientResourceProvider implements IResourceProvider {
         try {
             result = checkDate(startDate, "Start", dateOnlyPattern, sb, result, now);
             result = checkDate(endDate, "End", dateOnlyPattern, sb, result, now);
-            if (result && startDate !=null && endDate != null) {
+            if (result && startDate != null && endDate != null) {
                 Date startDt = DATE_FORMAT.parse(startDate);
                 Date endDt = DATE_FORMAT.parse(endDate);
                 if (endDt.before(startDt)) {

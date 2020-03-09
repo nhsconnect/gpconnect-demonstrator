@@ -1,7 +1,7 @@
 USE gpconnect1;
 INSERT INTO medication_statements
  (id,lastIssueDate,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
-    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, warningCode, prescribingAgency)
+    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,dosageLastChanged, warningCode, prescribingAgency)
 VALUES
  (1,'2018-08-17','active','Active',20,'2017-11-10','2018-09-14','2017-11-10',2,'unk','Unknown','1 tablet once a day','Take in the morning','2018-08-17','confidential-items','prescribed-at-gp-practice'),
  (9,'2018-08-29','active','Active',21,'2017-11-22','2018-09-26','2017-11-22',2,'unk','Unknown','2 tablets a day','With evening meal','2018-08-29','confidential-items','prescribed-at-gp-practice'),
@@ -292,7 +292,7 @@ VALUES
   (1, 'http://read.info/ctv3', 'Xa1no', 'Peanut allergy');
 
 INSERT INTO allergyintolerance
-  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,concept_code,concept_display,code_translation_ref,manCoding,manDisplay,manDescCoding,manDescDisplay, recorder, severity)
+  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,concept_code,concept_display,desc_code,code_translation_ref,manCoding,manDisplay,manDescCoding,manDescDisplay, recorder, severity)
 VALUES
-  (9658218873 ,'2016-11-01',"Desensitised to Peanuts","","Major", "resolved","unconfirmed","environmental","2",'1962-08-12','2016-11-01',"91935009","Allergy to peanuts","1","249519007","Diarrhoea and vomiting","372285017","D&V – Diarrhoea and vomiting", '1', "mild"),
-  (9658218873 ,null,"","","Major", "active","unconfirmed","food","2",'1963-07-27 12:00:00','1963-07-27 12:00:00',"89707004","Sesame oil (substance)","","230145002", "Difficulty breathing", "","",'1', "severe");
+  (9658218873 ,'2016-11-01',"Desensitised to Peanuts","","Major", "resolved","unconfirmed","environmental","2",'1962-08-12','2016-11-01',"91935009","Allergy to peanuts","152306018","1","249519007","Diarrhoea and vomiting","372285017","", '1', "mild"),
+  (9658218873 ,null,"","","Major", "active","unconfirmed","food","2",'1963-07-27 12:00:00','1963-07-27 12:00:00',"89707004","Sesame oil (substance)","148720012","","230145002", "Difficulty breathing","344917018","",'1', "severe");

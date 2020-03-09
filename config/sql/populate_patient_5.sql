@@ -1,12 +1,12 @@
 USE gpconnect1;
 INSERT INTO allergyintolerance
-  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,concept_code,concept_display,manCoding,manDisplay,manDescCoding,manDescDisplay, recorder)
+  (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,concept_code,concept_display,desc_code,manCoding,manDisplay,manDescCoding,manDescDisplay, recorder)
 VALUES
-  (9658218989 ,'2018-03-14',"","","", "no known","unconfirmed","","5",'2010-07-22','2010-07-22',"716186003","No known allergy","","","","",'3');
+  (9658218989 ,'2018-03-14',"","","", "no known","unconfirmed","","5",'2010-07-22','2010-07-22',"716186003","No known allergy","3304950010","","","","",'3');
 
 INSERT INTO medication_statements
  (id,lastIssueDate,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
-    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,lastUpdated, prescribingAgency)
+    patientId,takenCode,takenDisplay,dosageText,dosageInstruction,dosageLastChanged, prescribingAgency)
 VALUES
  (3,'2018-03-14','active','Active',5,'2018-01-12','2020-07-12','2018-01-12',5,'unk','Unknown','Use as often as required','Apply the medication after cleaning and drying the affected area','2018-03-15', 'prescribed-at-gp-practice');
 

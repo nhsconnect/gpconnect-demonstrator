@@ -53,7 +53,7 @@ public class MedicationStatementEntityToDetailTransformer implements Transformer
 		
 		statementDetail.setDosageText(statementEntity.getDosageText());
 		statementDetail.setDosagePatientInstruction(statementEntity.getDosageInstruction());
-		statementDetail.setLastUpdated(statementEntity.getLastUpdated());
+		statementDetail.setDosageLastChanged(statementEntity.getDosageLastChanged());
         statementDetail.setPrescribingAgency(statementEntity.getPrescribingAgency());
         statementDetail.setGuid(statementEntity.getGuid());
 

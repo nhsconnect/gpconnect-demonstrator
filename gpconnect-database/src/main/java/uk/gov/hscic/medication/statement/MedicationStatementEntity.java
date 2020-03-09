@@ -78,8 +78,9 @@ public class MedicationStatementEntity {
     @Column(name = "dosageInstruction")
     private String dosageInstruction;
     
-    @Column(name = "lastUpdated")
-    private Date lastUpdated;
+    // # 281 renamed unused lastUpdated as dosageLastChanged
+    @Column(name = "dosageLastChanged")
+    private Date dosageLastChanged;
 
     @Column(name = "prescribingAgency")
     private String prescribingAgency;
@@ -242,12 +243,12 @@ public class MedicationStatementEntity {
 		this.dosageInstruction = dosageInstruction;
 	}
 
-	public Date getLastUpdated() {
-		return lastUpdated;
+	public Date getDosageLastChanged() {
+		return dosageLastChanged;
 	}
 
-	public void setLastUpdated(Date lastUpdated) {
-		this.lastUpdated = lastUpdated;
+	public void setDosageLastChanged(Date dosageLastChanged) {
+		this.dosageLastChanged = dosageLastChanged;
 	}
 
 	public String getWarningCode() {

@@ -12,6 +12,8 @@ import ca.uhn.fhir.rest.server.RestfulServer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import static uk.gov.hscic.InteractionId.REST_READ_STRUCTURED_METADATA;
+import static uk.gov.hscic.SystemHeader.SSP_INTERACTIONID;
 import static uk.gov.hscic.SystemURL.OD_GPC_GET_STRUCTURED_RECORD;
 import static uk.gov.hscic.SystemURL.OD_GPC_REGISTER_PATIENT;
 import uk.gov.hscic.SystemVariable;
@@ -51,8 +53,18 @@ public class GpConnectServerCapabilityStatementProvider extends ServerCapability
 
         } else {
             try {
+                // 1.2.6 #316
+                String interactionId = theRequest.getHeader(SSP_INTERACTIONID);
+                String capabilityFile = null;
+                switch (interactionId) {
+                    case REST_READ_STRUCTURED_METADATA:
+                        capabilityFile ="structured_capability.json";
+                        break;
+                    default:
+                        capabilityFile ="capability.json";
+                }
                 // read a json capability file
-                String capabilityJson = new String(Files.readAllBytes(Paths.get(FhirRequestGenericIntercepter.getConfigPath() + "/capability.json")));
+                String capabilityJson = new String(Files.readAllBytes(Paths.get(FhirRequestGenericIntercepter.getConfigPath() + "/"+capabilityFile)));
                 FhirContext ctx = FhirContext.forDstu3();
                 capabilityStatement = (CapabilityStatement) ctx.newJsonParser().parseResource(capabilityJson);
             } catch (IOException ex) {

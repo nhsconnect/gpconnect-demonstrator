@@ -21,7 +21,7 @@ ENV DATABASE_ADDRESS 10.100.100.61
 ENV DATABASE_PORT 3306
 ENV DATABASE_USERNAME gpconnectdbuser
 ENV DATABASE_PASSWORD gpc0nn3ct
-ENV DATABASE_SCHEMA gpconnect
+ENV DATABASE_SCHEMA gpconnect1
 ENV SERVER_BASE_URL https://data.developer.nhs.uk/gpconnect-demonstrator/v1/fhir
 ENV CONTEXT_PATH /gpconnect-demonstrator/v1/
 ENTRYPOINT java -jar /app/app.war \
@@ -30,4 +30,4 @@ ENTRYPOINT java -jar /app/app.war \
 --server.ssl.key-store-password=password --server.ssl.trust-store=/app/config/server.jks \
 --server.ssl.trust-store-password=password --server.ssl.client-auth=want --datasource.host=$DATABASE_ADDRESS \
 --datasource.port=$DATABASE_PORT --datasource.username=$DATABASE_USERNAME --datasource.password=gpc0nn3ct \
---datasource.schema=$DATABASE_SCHEMA --serverBaseUrl=$SERVER_BASE_URL ==server.contextPath=$CONTEXT_PATH
+--datasource.schema=$DATABASE_SCHEMA --serverBaseUrl=$SERVER_BASE_URL --server.contextPath=$CONTEXT_PATH

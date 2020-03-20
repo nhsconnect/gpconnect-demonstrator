@@ -95,7 +95,7 @@ public final class SystemConstants {
     // Parameter Parts
     public static final String UNCATEGORISED_DATA_SEARCH_PERIOD_PARAM_PART = "uncategorisedDataSearchPeriod";
     public static final String CONSULTATION_SEARCH_PERIOD_PARAM_PART = "consultationSearchPeriod";
-    public static final String INVESTIGATION_SEARCH_PERIOD_PARAM_PART = "investigationsSearchPeriod";
+    public static final String INVESTIGATION_SEARCH_PERIOD_PARAM_PART = "investigationSearchPeriod";
     public static final String REFERRAL_SEARCH_PERIOD_PARAM_PART = "referralSearchPeriod";
     public static final String NUMBER_OF_MOST_RECENT_PARAM_PART = "includeNumberOfMostRecent";
     public static final String FILTER_STATUS_PARAM_PART = "filterStatus"; // renamed at 1.3.1

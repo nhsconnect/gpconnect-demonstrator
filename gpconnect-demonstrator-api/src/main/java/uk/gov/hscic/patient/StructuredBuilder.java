@@ -144,10 +144,8 @@ public class StructuredBuilder {
 
     // add any new clinical areas supported as canned responses here
     private final static String[] PROCESSED_CANNED_CLINICAL_AREAS = {INCLUDE_PROBLEMS_PARM,
-        INCLUDE_CONSULTATIONS_PARM,
-        INCLUDE_REFERRALS_PARM,
-        INCLUDE_INVESTIGATIONS_PARM
-// extension point add new clinical areas here
+        INCLUDE_CONSULTATIONS_PARM
+        // extension point add new clinical areas *that need processing* here
     };
 
     private static final int DEBUG_LEVEL = 2;
@@ -181,7 +179,7 @@ public class StructuredBuilder {
         // which only happens for problems
         String parameterName = parms.get(0).getName();
 
-        // Tis list idenmtifies those canned clinical ares that need some processing 
+        // This list identifies those canned clinical areas that need some processing 
         // rather simply transcibing into the reponse as is
         if (Arrays.asList(PROCESSED_CANNED_CLINICAL_AREAS).contains(parameterName)) {
             if (patient.getIdElement().getIdPartAsLong() != PATIENT_3 || !parameterName.equals(INCLUDE_PROBLEMS_PARM)) {
@@ -204,6 +202,16 @@ public class StructuredBuilder {
                         break;
                     case INCLUDE_UNCATEGORISED_DATA_PARM:
                         if (pickedResource == null && entry.getResource().getResourceType().toString().equals("Observation")) {
+                            pickedResource = entry.getResource();
+                        }
+                        break;
+                    case INCLUDE_INVESTIGATIONS_PARM:
+                        if (pickedResource == null && entry.getResource().getResourceType().toString().equals("DiagnosticReport")) {
+                            pickedResource = entry.getResource();
+                        }
+                        break;
+                    case INCLUDE_REFERRALS_PARM:
+                        if (pickedResource == null && entry.getResource().getResourceType().toString().equals("ReferralRequest")) {
                             pickedResource = entry.getResource();
                         }
                         break;

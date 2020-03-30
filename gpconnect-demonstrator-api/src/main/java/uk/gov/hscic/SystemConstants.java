@@ -84,8 +84,8 @@ public final class SystemConstants {
     public static final String SNOMED_PROBLEMS_LIST_DISPLAY = "Problems";
     public static final String SNOMED_PROBLEMS_LIST_CODE = "717711000000103";
     // 1.4
-    public static final String SNOMED_REFERRALS_LIST_DISPLAY = "Referral details";
-    public static final String SNOMED_REFERRALS_LIST_CODE = "886721000000107";
+    public static final String SNOMED_REFERRALS_LIST_DISPLAY = "Outbound referral";
+    public static final String SNOMED_REFERRALS_LIST_CODE = "792931000000107";
     
     public static final String SNOMED_INVESTIGATIONS_LIST_DISPLAY = "Investigations and Results";
     public static final String SNOMED_INVESTIGATIONS_LIST_CODE = "887191000000108";

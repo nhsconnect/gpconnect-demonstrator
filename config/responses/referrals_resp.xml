@@ -11,12 +11,12 @@
             </meta>
             <status value="current"></status>
             <mode value="snapshot"></mode>
-            <title value="Referral details"></title>
+            <title value="Outbound referral"></title>
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
-                  <code value="886721000000107"></code>
-                  <display value="Referral details"></display>
+                  <code value="792931000000107"></code>
+                  <display value="Outbound referral"></display>
                </coding>
             </code>
             <subject>

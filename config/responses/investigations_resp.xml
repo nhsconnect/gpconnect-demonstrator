@@ -119,9 +119,44 @@
                <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
             </specimen>
             <result>
+               <reference value="Observation/7ec12071-b737-4ce8-8a91-2ea36d94464f"></reference>
+            </result>
+            <result>
                <reference value="Observation/dacb177a-9501-4dcc-8b22-b941791ae0db"></reference>
             </result>
          </DiagnosticReport>
+      </resource>
+   </entry>
+   <entry>
+       <resource>
+       <Observation xmlns="http://hl7.org/fhir">
+         <id value="7ec12071-b737-4ce8-8a91-2ea36d94464f"></id>
+         <meta>
+            <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+         </meta>
+         <identifier>
+            <system value="https://tools.ietf.org/html/rfc4122"></system>
+            <value value="f29457fd-eb4c-48d5-a911-8c2badd6e2bc"></value>
+         </identifier>
+         <status value="unknown"></status>
+         <code>
+            <coding>
+              <system value="http://snomed.info/sct"></system>
+              <code value="37331000000100"></code>
+              <display value="Comment note"></display>
+            </coding>
+         </code>
+         <subject>
+            <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
+            <display value="REARDON, John"></display>
+         </subject>
+         <issued value="2019-04-06T12:00:00+00:00"></issued>
+         <performer>
+            <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
+            <display value="GREENTOWN GENERAL HOSPITAL"></display>
+         </performer>
+         <comment value="Some filing comments added at the GP practice"></comment>
+       </Observation>
       </resource>
    </entry>
    <entry>

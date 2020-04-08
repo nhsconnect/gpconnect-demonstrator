@@ -223,7 +223,7 @@ public class StructuredBuilder {
 
                 //addEntryToBundleOnlyOnce(structuredBundle, resource.getResourceType() + "/" + resource.getId(), new BundleEntryComponent().setResource(resource));
                 // add a problem to the bundle
-                Condition condition = createCondition(parameterName.replaceFirst("^include(.*)$", "$1Problem"), patient, pickedResource.getResourceType() + "/" + pickedResource.getId());
+                Condition condition = createCondition(parameterName.replaceFirst("^include(.*)$", "$1Problem"), patient, pickedResource.getId());
                 addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition));
 
                 ListResource problemList = null;

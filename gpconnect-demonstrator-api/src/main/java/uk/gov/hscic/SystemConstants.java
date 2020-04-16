@@ -101,6 +101,10 @@ public final class SystemConstants {
     public static final String FILTER_STATUS_PARAM_PART = "filterStatus"; // renamed at 1.3.1
     public static final String FILTER_SIGNIFICANCE_PARAM_PART = "filterSignificance"; // renamed at 1.3.1
     
+    // 1.5
+    public static final String IMMUNIZATIONS_INCLUDE_NOT_GIVEN_PARAM_PART = "includeNotGiven";
+    public static final String IMMUNIZATIONS_INCLUDE_DISSENT_CONSENT_PARAM_PART = "includeDissentConsent";
+    
     // offsets into the patients property array. See the provider prerequsites spreadsheet for more details
     // https://github.com/nhsconnect/gpconnect-provider-testing/blob/master/Data/Test%20Suite%20Prerequisites.xlsx
     public static final int PATIENT_2 = 2; // patient 2 contains majority of structured test data

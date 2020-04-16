@@ -1764,14 +1764,16 @@ public class PatientResourceProvider implements IResourceProvider {
                     if (!parameterPartsSupplied.contains(paramPart.getName())) {
                         // type specific checking
                         if (cls == DateType.class) {
-                            DateType startDateDt = (DateType) paramPart.getValue();
-                            String startDate = startDateDt.asStringValue();
+                            DateType dateDt = (DateType) paramPart.getValue();
+                            String startDate = dateDt.asStringValue();
                             StringBuilder sb = new StringBuilder();
                             validateStartDateParamAndEndDateParam(startDate, null, sb);
                         } else if (cls == Period.class) {
-                            Period uncatSearchPeriod = (Period) paramPart.getValue();
+                            Period period = (Period) paramPart.getValue();
                             StringBuilder sb = new StringBuilder();
-                            validateStartDateParamAndEndDateParam(uncatSearchPeriod.getStartElement().asStringValue(), uncatSearchPeriod.getEndElement().asStringValue(), sb);
+                            validateStartDateParamAndEndDateParam(period.getStartElement().asStringValue(), period.getEndElement().asStringValue(), sb);
+                        } else if (cls == BooleanType.class) {
+                            BooleanType bool = (BooleanType) paramPart.getValue();
                         }
                         parameterPartsSupplied.add(paramPart.getName());
                     } else {
@@ -1845,6 +1847,23 @@ public class PatientResourceProvider implements IResourceProvider {
     public class ImmunisationsClinicalArea extends AbstractClinicalArea {
 
         public ImmunisationsClinicalArea() {
+        }
+
+        @Override
+        public void validateParameterParts(ParametersParameterComponent param) {
+            this.param = param;
+            // optional parts named includeNotGiven and includeDissentConsent with a boolean
+            for (ParametersParameterComponent pParamPart : param.getPart()) {
+                paramPart = pParamPart;
+                switch (paramPart.getName()) {
+                    case IMMUNIZATIONS_INCLUDE_NOT_GIVEN_PARAM_PART:
+                    case IMMUNIZATIONS_INCLUDE_DISSENT_CONSENT_PARAM_PART:
+                        checkParameterPart(BooleanType.class);
+                        break;
+                    default:
+                        notSupported();
+                }
+            }
         }
 
         @Override

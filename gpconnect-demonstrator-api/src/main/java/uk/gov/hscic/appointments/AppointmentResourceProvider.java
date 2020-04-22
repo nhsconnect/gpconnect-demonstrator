@@ -269,8 +269,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
             // #157 refers to typeCode but means specialty  (name was changed)
             new VC(() -> !appointment.getSpecialty().isEmpty(), () -> "Appointment speciality shouldn't be provided!"),
             // #203
-            new VC(() -> !appointment.getServiceCategory().isEmpty(), () -> "Appointment service category shouldn't be provided!"),
-            new VC(() -> !appointment.getServiceType().isEmpty(), () -> "Appointment service type shouldn't be provided!"),
+            // 1.2.7 Accept these two now
+            //new VC(() -> !appointment.getServiceCategory().isEmpty(), () -> "Appointment service category shouldn't be provided!"),
+            //new VC(() -> !appointment.getServiceType().isEmpty(), () -> "Appointment service type shouldn't be provided!"),
             new VC(() -> !appointment.getAppointmentType().isEmpty(), () -> "Appointment type shouldn't be provided!"),
             new VC(() -> !appointment.getIndication().isEmpty(), () -> "Appointment indication shouldn't be provided!"),
             new VC(() -> !appointment.getSupportingInformation().isEmpty(), () -> "Appointment supporting information shouldn't be provided!"),
@@ -347,6 +348,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
         String practitionerRoleCode = null;
         String practitionerRoleDisplay = null;
         ScheduleDetail schedule = null;
+        String serviceType = null;
         for (Long slotId : appointmentDetail.getSlotIds()) {
             SlotDetail slotDetail = slotSearch.findSlotByID(slotId);
 
@@ -365,6 +367,15 @@ public class AppointmentResourceProvider implements IResourceProvider {
                 // added at 1.2.2
                 throwUnprocessableEntity422_InvalidResourceException(String.format("Subsequent slot (Slot/%s) delivery channel (%s) is not equal to initial slot delivery channel (%s).",
                         slotId, deliveryChannel, slotDetail.getDeliveryChannelCode()));
+            }
+
+            // 1.2.7 check service type is the same as initial service type
+            if (serviceType == null) {
+                serviceType = slotDetail.getTypeDisply();
+            } else if (!serviceType.equals(slotDetail.getTypeDisply())) {
+                // added at 1.2.2
+                throwUnprocessableEntity422_InvalidResourceException(String.format("Subsequent slot (Slot/%s) service type (%s) is not equal to initial slot service type (%s).",
+                        slotId, serviceType, slotDetail.getTypeDisply()));
             }
 
             if (schedule == null) {
@@ -577,8 +588,9 @@ public class AppointmentResourceProvider implements IResourceProvider {
             // #203
             new VC(() -> !appointment.getReason().isEmpty(), () -> "Appointment reason shouldn't be provided!"),
             new VC(() -> !appointment.getSpecialty().isEmpty(), () -> "Appointment speciality shouldn't be provided!"),
-            new VC(() -> !appointment.getServiceCategory().isEmpty(), () -> "Appointment service category shouldn't be provided!"),
-            new VC(() -> !appointment.getServiceType().isEmpty(), () -> "Appointment service type shouldn't be provided!"),
+            // 1.2.7 we now allow these two attributes
+            // new VC(() -> !appointment.getServiceCategory().isEmpty(), () -> "Appointment service category shouldn't be provided!"),
+            // new VC(() -> !appointment.getServiceType().isEmpty(), () -> "Appointment service type shouldn't be provided!"),
             new VC(() -> !appointment.getAppointmentType().isEmpty(), () -> "Appointment type shouldn't be provided!"),
             new VC(() -> !appointment.getIndication().isEmpty(), () -> "Appointment indication shouldn't be provided!"),
             new VC(() -> !appointment.getSupportingInformation().isEmpty(), () -> "Appointment supporting information shouldn't be provided!"),
@@ -600,6 +612,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
             methodOutcome.setOperationOutcome(operationalOutcome);
             return methodOutcome;
         }
+
+        // 1.2.7 set the old service type and service category for comparison with incoming update/cancel content values
+        SlotDetail slotDetail1 = slotSearch.findSlotByID(oldAppointmentDetail.getSlotIds().get(0));
+        oldAppointmentDetail.setServiceType(slotDetail1.getTypeDisply());
+        ScheduleDetail scheduleDetail = scheduleSearch.findScheduleByID(slotDetail1.getScheduleReference());
+        oldAppointmentDetail.setServiceCategory(scheduleDetail.getTypeDescription());
 
         String oldAppointmentVersionId = String.valueOf(oldAppointmentDetail.getLastUpdated().getTime());
         String newAppointmentVersionId = appointmentId.getVersionIdPart();
@@ -751,7 +769,6 @@ public class AppointmentResourceProvider implements IResourceProvider {
             () -> String.format("Start date '%s' must lexically match start date of first slot '%s'", appointment.getStartElement().getValueAsString(), firstSlotStartStr)),
             new VC(() -> !appointment.getEndElement().getValueAsString().equals(lastSlotEndStr),
             () -> String.format("End date '%s' must lexically match end date of last slot '%s'", appointment.getEndElement().getValueAsString(), lastSlotEndStr)),
-
             new VC(() -> appointment.getSlot().size() != slots.size(),
             () -> String.format("Slot count mismatch %d provided appointment has %d", appointment.getSlot().size(), slots.size())),});
 
@@ -843,6 +860,17 @@ public class AppointmentResourceProvider implements IResourceProvider {
             results.put("duration", Objects.equals(oldAppointmentDetail.getMinutesDuration(), appointmentDetail.getMinutesDuration()));
         }
         results.put("priority", Objects.equals(oldAppointmentDetail.getPriority(), appointmentDetail.getPriority()));
+
+        // 1.2.7 check no update to service category or service type that makes a change
+        // this is an optional field so only compare if a value is supplied
+        if (appointmentDetail.getServiceCategory() != null) {
+            results.put("serviceCategory", Objects.equals(oldAppointmentDetail.getServiceCategory(), appointmentDetail.getServiceCategory()));
+        }
+        // this is an optional field so only compare if a value is supplied
+        if (appointmentDetail.getServiceType() != null) {
+            results.put("serviceType", Objects.equals(oldAppointmentDetail.getServiceType(), appointmentDetail.getServiceType()));
+        }
+
         switch (operation) {
             case AMEND:
                 // comment and description are allowed to change
@@ -1064,6 +1092,12 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         appointment.setMinutesDuration(appointmentDetail.getMinutesDuration());
 
+        // 1.2.7 set service category from schedule type description
+        appointment.setServiceCategory(new CodeableConcept().setText(scheduleDetail.getTypeDescription()));
+
+        // 1.2.7 set service type from slot type description
+        appointment.addServiceType(new CodeableConcept().setText(slotSearch.findSlotByID(sids.get(0)).getTypeDisply()));
+
         return appointment;
     } // appointmentDetailToAppointmentResourceConverter
 
@@ -1223,6 +1257,10 @@ public class AppointmentResourceProvider implements IResourceProvider {
             }
             bookingOrgDetail.setAppointmentDetail(appointmentDetail);
             appointmentDetail.setBookingOrganization(bookingOrgDetail);
+
+            // 1.2.7
+            appointmentDetail.setServiceCategory(appointment.getServiceCategory().getText());
+            appointmentDetail.setServiceType(appointment.getServiceTypeFirstRep().getText());
         }
 
         return appointmentDetail;

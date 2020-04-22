@@ -35,6 +35,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import java.util.TimeZone;
 import org.hl7.fhir.dstu3.model.CodeType;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Extension;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.SystemVariable;
@@ -258,6 +259,9 @@ public class SlotResourceProvider implements IResourceProvider {
             al.add(deliveryChannelExtension);
         }
         slot.setExtension(al);
+        
+        // 1.2.7 add slot type description as service type
+        slot.addServiceType(new CodeableConcept().setText(slotDetail.getTypeDisply()));
 
         return slot;
     }

@@ -1,57 +1,56 @@
-1,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,, ,T
-1,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,, ,T
-1,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,, ,T
-1,9,30,0,9,40,0,408443003,General medical practice,2,FREE,false,, ,T
-1,9,40,0,9,50,0,408443003,General medical practice,2,FREE,true,, ,T
-1,9,50,0,10,0,0,408443003,General medical practice,2,FREE,true,, ,T
-1,10,0,0,10,10,0,408443003,General medical practice,2,FREE,true,, ,T
-1,10,10,0,10,20,0,408443003,General medical practice,2,FREE,true,, ,T
-1,10,20,0,10,30,0,408443003,General medical practice,2,FREE,true,, ,T
-1,10,30,0,10,40,0,408443003,General medical practice,2,FREE,true,, ,T
-1,10,40,0,10,50,0,408443003,General medical practice,2,FREE,true,, ,T
-1,10,50,0,11,0,0,408443003,General medical practice,2,FREE,true,, ,T
-1,11,0,0,11,10,0,408443003,General medical practice,2,FREE,true,, ,T
-1,11,10,0,11,20,0,408443003,General medical practice,2,FREE,true,, ,T
-1,11,20,0,11,30,0,408443003,General medical practice,2,FREE,true,, ,T
-1,11,30,0,11,40,0,408443003,General medical practice,2,FREE,true,, ,T
-1,11,40,0,11,50,0,408443003,General medical practice,2,FREE,true,, ,T
-1,11,50,0,12,0,0,408443003,General medical practice,2,FREE,true,, ,T
-1,12,0,0,12,10,0,408443003,General medical practice,2,FREE,true,, ,T
-1,12,10,0,12,20,0,408443003,General medical practice,2,FREE,true,, ,T
-1,12,20,0,12,30,0,408443003,General medical practice,2,FREE,true,, ,T
-1,12,30,0,12,40,0,408443003,General medical practice,2,FREE,true,, ,T
-1,12,40,0,12,50,0,408443003,General medical practice,2,FREE,true,, ,T
-1,12,50,0,13,0,0,408443003,General medical practice,2,FREE,true,, ,T
-1,13,0,0,13,10,0,408443003,General medical practice,2,FREE,true,, ,T
-1,13,10,0,13,20,0,408443003,General medical practice,2,FREE,true,, ,T
-1,13,20,0,13,30,0,408443003,General medical practice,2,FREE,true,, ,T
-1,13,30,0,13,40,0,408443003,General medical practice,2,FREE,true,, ,T
-1,13,40,0,13,50,0,408443003,General medical practice,2,FREE,true,, ,T
-1,13,50,0,14,0,0,408443003,General medical practice,2,FREE,true,, ,T
-1,14,0,0,14,10,0,408443003,General medical practice,2,FREE,true,, ,T
-1,14,10,0,14,20,0,408443003,General medical practice,2,FREE,true,, ,T
-1,14,20,0,14,30,0,408443003,General medical practice,2,FREE,true,, ,T
-1,14,30,0,14,40,0,408443003,General medical practice,2,FREE,true,,,V
-1,14,40,0,14,50,0,408443003,General medical practice,2,FREE,true,,,V
-1,14,50,0,15,0,0,408443003,General medical practice,2,FREE,true,,,V
-1,15,0,0,15,10,0,408443003,General medical practice,2,FREE,true,,,V
-1,15,10,0,15,20,0,408443003,General medical practice,2,FREE,true,,,V
-1,15,20,0,15,30,0,408443003,General medical practice,2,FREE,true,,,V
-1,15,30,0,15,40,0,408443003,General medical practice,2,FREE,true,,,V
-1,15,40,0,15,50,0,408443003,General medical practice,2,FREE,true,,,V
-1,15,50,0,16,0,0,408443003,General medical practice,2,FREE,true,,,V
-1,16,0,0,16,10,0,408443003,General medical practice,2,FREE,true,,,V
-1,16,10,0,16,20,0,408443003,General medical practice,2,FREE,true,,,V
-1,16,20,0,16,30,0,408443003,General medical practice,2,FREE,true,,,V
-1,16,30,0,16,40,0,408443003,General medical practice,2,FREE,true,,,V
-1,16,40,0,16,50,0,408443003,General medical practice,2,FREE,true,,,V
-1,16,50,0,17,0,0,408443003,General medical practice,2,FREE,true,,,V
-1,17,0,0,17,10,0,408443003,General medical practice,2,FREE,true,7,,P
-1,17,10,0,17,20,0,408443003,General medical practice,2,FREE,true,,urgent-care,P
-1,17,20,0,17,30,0,408443003,General medical practice,2,FREE,true,7,urgent-care,P
-1,17,30,0,17,40,0,408443003,General medical practice,2,FREE,true,7,,P
-1,17,40,0,17,50,0,408443003,General medical practice,2,FREE,true,,gp-practice,P
-1,17,50,0,18,00,0,408443003,General medical practice,2,FREE,true,7,gp-practice,P
+1,9,0,0,9,10,0,,,1,FREE,false,, ,T
+1,9,20,0,9,30,0,,,1,FREE,false,, ,T
+1,9,30,0,9,40,0,,,1,FREE,false,, ,T
+1,9,40,0,9,50,0,,,1,FREE,true,, ,T
+1,9,50,0,10,0,0,,,1,FREE,true,, ,T
+1,10,0,0,10,10,0,,,1,FREE,true,, ,T
+1,10,10,0,10,20,0,,,1,FREE,true,, ,T
+1,10,20,0,10,30,0,,,1,FREE,true,, ,T
+1,10,30,0,10,40,0,,,1,FREE,true,, ,T
+1,10,40,0,10,50,0,,,1,FREE,true,, ,T
+1,10,50,0,11,0,0,,,1,FREE,true,, ,T
+1,11,0,0,11,10,0,,,1,FREE,true,, ,T
+1,11,10,0,11,20,0,,,1,FREE,true,, ,T
+1,11,20,0,11,30,0,,,1,FREE,true,, ,T
+1,11,30,0,11,40,0,,,1,FREE,true,, ,T
+1,11,40,0,11,50,0,,,1,FREE,true,, ,T
+1,11,50,0,12,0,0,,,1,FREE,true,, ,T
+1,12,0,0,12,10,0,,,1,FREE,true,, ,T
+1,12,10,0,12,20,0,,,1,FREE,true,, ,T
+1,12,20,0,12,30,0,,,1,FREE,true,, ,T
+1,12,30,0,12,40,0,,,1,FREE,true,, ,T
+1,12,40,0,12,50,0,,,1,FREE,true,, ,T
+1,12,50,0,13,0,0,,,1,FREE,true,, ,T
+1,13,0,0,13,10,0,,,1,FREE,true,, ,T
+1,13,10,0,13,20,0,,,1,FREE,true,, ,T
+1,13,20,0,13,30,0,,,1,FREE,true,, ,T
+1,13,30,0,13,40,0,,,1,FREE,true,, ,T
+1,13,40,0,13,50,0,,,1,FREE,true,, ,T
+1,13,50,0,14,0,0,,,1,FREE,true,, ,T
+1,14,0,0,14,10,0,,,1,FREE,true,, ,T
+1,14,10,0,14,20,0,,,1,FREE,true,, ,T
+1,14,20,0,14,30,0,,,1,FREE,true,, ,T
+1,14,30,0,14,40,0,,,1,FREE,true,,,V
+1,14,40,0,14,50,0,,,1,FREE,true,,,V
+1,14,50,0,15,0,0,,,1,FREE,true,,,V
+1,15,0,0,15,10,0,,,1,FREE,true,,,V
+1,15,10,0,15,20,0,,,1,FREE,true,,,V
+1,15,20,0,15,30,0,,,1,FREE,true,,,V
+1,15,30,0,15,40,0,,,1,FREE,true,,,V
+1,15,40,0,15,50,0,,,1,FREE,true,,,V
+1,15,50,0,16,0,0,,,1,FREE,true,,,V
+1,16,0,0,16,10,0,,,1,FREE,true,,,V
+1,16,10,0,16,20,0,,,1,FREE,true,,,V
+1,16,20,0,16,30,0,,,1,FREE,true,,,V
+1,16,30,0,16,40,0,,,1,FREE,true,,,V
+1,16,40,0,16,50,0,,,1,FREE,true,,,V
+1,16,50,0,17,0,0,,,1,FREE,true,,,V
+1,17,0,0,17,10,0,,,1,FREE,true,7,,P
+1,17,10,0,17,20,0,,,1,FREE,true,,urgent-care,P
+1,17,20,0,17,30,0,,,1,FREE,true,7,urgent-care,P
+1,17,30,0,17,40,0,,,1,FREE,true,7,,P
+1,17,40,0,17,50,0,,,1,FREE,true,,gp-practice,P
+1,17,50,0,18,00,0,,,1,FREE,true,7,gp-practice,P
 2,9,0,0,9,10,0,408443003,General medical practice,2,FREE,false,, ,T
 2,9,10,0,9,20,0,408443003,General medical practice,2,FREE,false,, ,T
 2,9,20,0,9,30,0,408443003,General medical practice,2,FREE,false,, ,T
@@ -292,486 +291,438 @@
 6,16,30,0,16,40,0,408443003,General medical practice,2,FREE,true,,,V
 6,16,40,0,16,50,0,408443003,General medical practice,2,FREE,true,,,V
 6,16,50,0,17,0,0,408443003,General medical practice,2,FREE,true,,,V
-1,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,, ,P
-1,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,, ,P
-1,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,, ,P
-1,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,, ,P
-1,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,13,30,0,13,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,13,40,0,13,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,13,50,0,14,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,14,0,0,14,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,14,10,0,14,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,14,20,0,14,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-1,14,30,0,14,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,14,40,0,14,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,14,50,0,15,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,15,0,0,15,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,15,10,0,15,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,15,20,0,15,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,15,30,0,15,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,15,40,0,15,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,15,50,0,16,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,16,0,0,16,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,16,10,0,16,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,16,20,0,16,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,, ,P
-2,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,, ,P
-2,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,, ,P
-2,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,, ,P
-2,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,13,30,0,13,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,13,40,0,13,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,13,50,0,14,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,14,0,0,14,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,14,10,0,14,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,14,20,0,14,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-2,14,30,0,14,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,14,40,0,14,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,14,50,0,15,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,15,0,0,15,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,15,10,0,15,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,15,20,0,15,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,15,30,0,15,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,15,40,0,15,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,15,50,0,16,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,16,0,0,16,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,16,10,0,16,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,16,20,0,16,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-2,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,, ,P
-3,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,, ,P
-3,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,, ,P
-3,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,, ,P
-3,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,13,30,0,13,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,13,40,0,13,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,13,50,0,14,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,14,0,0,14,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,14,10,0,14,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,14,20,0,14,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-3,14,30,0,14,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,14,40,0,14,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,14,50,0,15,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,15,0,0,15,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,15,10,0,15,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,15,20,0,15,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,15,30,0,15,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,15,40,0,15,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,15,50,0,16,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,16,0,0,16,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,16,10,0,16,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,16,20,0,16,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-3,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,, ,P
-4,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,, ,P
-4,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,, ,P
-4,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,, ,P
-4,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,13,30,0,13,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,13,40,0,13,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,13,50,0,14,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,14,0,0,14,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,14,10,0,14,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,14,20,0,14,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-4,14,30,0,14,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,14,40,0,14,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,14,50,0,15,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,15,0,0,15,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,15,10,0,15,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,15,20,0,15,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,15,30,0,15,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,15,40,0,15,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,15,50,0,16,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,16,0,0,16,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,16,10,0,16,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,16,20,0,16,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-4,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,, ,P
-5,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,, ,P
-5,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,, ,P
-5,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,, ,P
-5,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,13,30,0,13,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,13,40,0,13,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,13,50,0,14,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,14,0,0,14,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,14,10,0,14,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,14,20,0,14,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-5,14,30,0,14,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,14,40,0,14,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,14,50,0,15,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,15,0,0,15,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,15,10,0,15,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,15,20,0,15,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,15,30,0,15,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,15,40,0,15,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,15,50,0,16,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,16,0,0,16,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,16,10,0,16,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,16,20,0,16,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-5,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,, ,P
-6,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,, ,P
-6,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,, ,P
-6,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,, ,P
-6,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,13,30,0,13,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,13,40,0,13,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,13,50,0,14,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,14,0,0,14,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,14,10,0,14,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,14,20,0,14,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-6,14,30,0,14,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,14,40,0,14,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,14,50,0,15,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,15,0,0,15,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,15,10,0,15,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,15,20,0,15,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,15,30,0,15,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,15,40,0,15,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,15,50,0,16,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,16,0,0,16,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,16,10,0,16,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,16,20,0,16,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-6,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,, ,P
-7,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,, ,P
-7,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,, ,P
-7,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,, ,P
-7,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,13,30,0,13,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,13,40,0,13,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,13,50,0,14,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,14,0,0,14,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,14,10,0,14,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,14,20,0,14,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-7,14,30,0,14,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,14,40,0,14,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,14,50,0,15,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,15,0,0,15,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,15,10,0,15,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,15,20,0,15,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,15,30,0,15,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,15,40,0,15,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,15,50,0,16,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,16,0,0,16,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,16,10,0,16,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,16,20,0,16,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-7,16,50,0,17,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,, ,P
-8,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,, ,P
-8,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,, ,P
-8,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,, ,P
-8,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,13,30,0,13,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,13,40,0,13,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,13,50,0,14,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,14,0,0,14,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,14,10,0,14,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,14,20,0,14,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-8,14,30,0,14,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,14,40,0,14,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,14,50,0,15,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,15,0,0,15,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,15,10,0,15,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,15,20,0,15,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,15,30,0,15,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,15,40,0,15,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,15,50,0,16,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,16,0,0,16,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,16,10,0,16,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,16,20,0,16,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-8,16,50,0,18,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,9,0,0,9,10,0,394592004,Clinical oncology,1,FREE,false,, ,P
-9,9,10,0,9,20,0,394592004,Clinical oncology,1,FREE,false,, ,P
-9,9,20,0,9,30,0,394592004,Clinical oncology,1,FREE,false,, ,P
-9,9,30,0,9,40,0,394592004,Clinical oncology,1,FREE,false,, ,P
-9,9,40,0,9,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,9,50,0,10,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,10,0,0,10,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,10,10,0,10,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,10,20,0,10,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,10,30,0,10,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,10,40,0,10,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,10,50,0,11,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,11,0,0,11,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,11,10,0,11,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,11,20,0,11,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,11,30,0,11,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,11,40,0,11,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,11,50,0,12,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,12,0,0,12,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,12,10,0,12,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,12,20,0,12,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,12,30,0,12,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,12,40,0,12,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,12,50,0,13,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,13,0,0,13,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,13,10,0,13,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,13,20,0,13,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,13,30,0,13,40,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,13,40,0,13,50,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,13,50,0,14,0,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,14,0,0,14,10,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,14,10,0,14,20,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,14,20,0,14,30,0,394592004,Clinical oncology,1,FREE,true,, ,P
-9,14,30,0,14,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,14,40,0,14,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,14,50,0,15,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,15,0,0,15,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,15,10,0,15,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,15,20,0,15,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,15,30,0,15,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,15,40,0,15,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,15,50,0,16,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,16,0,0,16,10,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,16,10,0,16,20,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,16,20,0,16,30,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,16,30,0,16,40,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,16,40,0,16,50,0,394592004,Clinical oncology,1,FREE,true,,,V
-9,16,50,0,19,0,0,394592004,Clinical oncology,1,FREE,true,,,V
-1,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,, ,T
-1,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,, ,T
-1,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,, ,T
-1,9,30,0,9,40,0,408443003,General medical practice,12,FREE,false,, ,T
-1,9,40,0,9,50,0,408443003,General medical practice,12,FREE,true,, ,T
-1,9,50,0,10,0,0,408443003,General medical practice,12,FREE,true,, ,T
-1,10,0,0,10,10,0,408443003,General medical practice,12,FREE,true,, ,T
-1,10,10,0,10,20,0,408443003,General medical practice,12,FREE,true,, ,T
-1,10,20,0,10,30,0,408443003,General medical practice,12,FREE,true,, ,T
-1,10,30,0,10,40,0,408443003,General medical practice,12,FREE,true,, ,T
-1,10,40,0,10,50,0,408443003,General medical practice,12,FREE,true,, ,T
-1,10,50,0,11,0,0,408443003,General medical practice,12,FREE,true,, ,T
-1,11,0,0,11,10,0,408443003,General medical practice,12,FREE,true,, ,T
-1,11,10,0,11,20,0,408443003,General medical practice,12,FREE,true,, ,T
-1,11,20,0,11,30,0,408443003,General medical practice,12,FREE,true,, ,T
-1,11,30,0,11,40,0,408443003,General medical practice,12,FREE,true,, ,T
-1,11,40,0,11,50,0,408443003,General medical practice,12,FREE,true,, ,T
-1,11,50,0,12,0,0,408443003,General medical practice,12,FREE,true,, ,T
-1,12,0,0,12,10,0,408443003,General medical practice,12,FREE,true,, ,T
-1,12,10,0,12,20,0,408443003,General medical practice,12,FREE,true,, ,T
-1,12,20,0,12,30,0,408443003,General medical practice,12,FREE,true,, ,T
-1,12,30,0,12,40,0,408443003,General medical practice,12,FREE,true,, ,T
-1,12,40,0,12,50,0,408443003,General medical practice,12,FREE,true,, ,T
-1,12,50,0,13,0,0,408443003,General medical practice,12,FREE,true,, ,T
-1,13,0,0,13,10,0,408443003,General medical practice,12,FREE,true,, ,T
-1,13,10,0,13,20,0,408443003,General medical practice,12,FREE,true,, ,T
-1,13,20,0,13,30,0,408443003,General medical practice,12,FREE,true,, ,T
-1,13,30,0,13,40,0,408443003,General medical practice,12,FREE,true,, ,T
-1,13,40,0,13,50,0,408443003,General medical practice,12,FREE,true,, ,T
-1,13,50,0,14,0,0,408443003,General medical practice,12,FREE,true,, ,T
-1,14,0,0,14,10,0,408443003,General medical practice,12,FREE,true,, ,T
-1,14,10,0,14,20,0,408443003,General medical practice,12,FREE,true,, ,T
-1,14,20,0,14,30,0,408443003,General medical practice,12,FREE,true,, ,T
-1,14,30,0,14,40,0,408443003,General medical practice,12,FREE,true,,,V
-1,14,40,0,14,50,0,408443003,General medical practice,12,FREE,true,,,V
-1,14,50,0,15,0,0,408443003,General medical practice,12,FREE,true,,,V
-1,15,0,0,15,10,0,408443003,General medical practice,12,FREE,true,,,V
-1,15,10,0,15,20,0,408443003,General medical practice,12,FREE,true,,,V
-1,15,20,0,15,30,0,408443003,General medical practice,12,FREE,true,,,V
-1,15,30,0,15,40,0,408443003,General medical practice,12,FREE,true,,,V
-1,15,40,0,15,50,0,408443003,General medical practice,12,FREE,true,,,V
-1,15,50,0,16,0,0,408443003,General medical practice,12,FREE,true,,,V
-1,16,0,0,16,10,0,408443003,General medical practice,12,FREE,true,,,V
-1,16,10,0,16,20,0,408443003,General medical practice,12,FREE,true,,,V
-1,16,20,0,16,30,0,408443003,General medical practice,12,FREE,true,,,V
-1,16,30,0,16,40,0,408443003,General medical practice,12,FREE,true,,,V
-1,16,40,0,16,50,0,408443003,General medical practice,12,FREE,true,,,V
-1,16,50,0,17,0,0,408443003,General medical practice,12,FREE,true,,,V
+1,9,0,0,9,10,0,,,1,FREE,false,, ,P
+1,9,10,0,9,20,0,,,1,FREE,false,, ,P
+1,9,20,0,9,30,0,,,1,FREE,false,, ,P
+1,9,30,0,9,40,0,,,1,FREE,false,, ,P
+1,9,40,0,9,50,0,,,1,FREE,true,, ,P
+1,9,50,0,10,0,0,,,1,FREE,true,, ,P
+1,10,0,0,10,10,0,,,1,FREE,true,, ,P
+1,10,10,0,10,20,0,,,1,FREE,true,, ,P
+1,10,20,0,10,30,0,,,1,FREE,true,, ,P
+1,10,30,0,10,40,0,,,1,FREE,true,, ,P
+1,10,40,0,10,50,0,,,1,FREE,true,, ,P
+1,10,50,0,11,0,0,,,1,FREE,true,, ,P
+1,11,0,0,11,10,0,,,1,FREE,true,, ,P
+1,11,10,0,11,20,0,,,1,FREE,true,, ,P
+1,11,20,0,11,30,0,,,1,FREE,true,, ,P
+1,11,30,0,11,40,0,,,1,FREE,true,, ,P
+1,11,40,0,11,50,0,,,1,FREE,true,, ,P
+1,11,50,0,12,0,0,,,1,FREE,true,, ,P
+1,12,0,0,12,10,0,,,1,FREE,true,, ,P
+1,12,10,0,12,20,0,,,1,FREE,true,, ,P
+1,12,20,0,12,30,0,,,1,FREE,true,, ,P
+1,12,30,0,12,40,0,,,1,FREE,true,, ,P
+1,12,40,0,12,50,0,,,1,FREE,true,, ,P
+1,12,50,0,13,0,0,,,1,FREE,true,, ,P
+1,13,0,0,13,10,0,,,1,FREE,true,, ,P
+1,13,10,0,13,20,0,,,1,FREE,true,, ,P
+1,13,20,0,13,30,0,,,1,FREE,true,, ,P
+1,13,30,0,13,40,0,,,1,FREE,true,, ,P
+1,13,40,0,13,50,0,,,1,FREE,true,, ,P
+1,13,50,0,14,0,0,,,1,FREE,true,, ,P
+1,14,0,0,14,10,0,,,1,FREE,true,, ,P
+1,14,10,0,14,20,0,,,1,FREE,true,, ,P
+1,14,20,0,14,30,0,,,1,FREE,true,, ,P
+1,14,30,0,14,40,0,,,1,FREE,true,,,V
+1,14,40,0,14,50,0,,,1,FREE,true,,,V
+1,14,50,0,15,0,0,,,1,FREE,true,,,V
+1,15,0,0,15,10,0,,,1,FREE,true,,,V
+1,15,10,0,15,20,0,,,1,FREE,true,,,V
+1,15,20,0,15,30,0,,,1,FREE,true,,,V
+1,15,30,0,15,40,0,,,1,FREE,true,,,V
+1,15,40,0,15,50,0,,,1,FREE,true,,,V
+1,15,50,0,16,0,0,,,1,FREE,true,,,V
+1,16,0,0,16,10,0,,,1,FREE,true,,,V
+1,16,10,0,16,20,0,,,1,FREE,true,,,V
+1,16,20,0,16,30,0,,,1,FREE,true,,,V
+1,16,30,0,16,40,0,,,1,FREE,true,,,V
+1,16,40,0,16,50,0,,,1,FREE,true,,,V
+1,16,50,0,17,0,0,,,1,FREE,true,,,V
+2,9,0,0,9,10,0,394592004,Clinical oncology,4,FREE,false,, ,P
+2,9,10,0,9,20,0,394592004,Clinical oncology,4,FREE,false,, ,P
+2,9,20,0,9,30,0,394592004,Clinical oncology,4,FREE,false,, ,P
+2,9,30,0,9,40,0,394592004,Clinical oncology,4,FREE,false,, ,P
+2,9,40,0,9,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,9,50,0,10,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,10,0,0,10,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,10,10,0,10,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,10,20,0,10,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,10,30,0,10,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,10,40,0,10,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,10,50,0,11,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,11,0,0,11,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,11,10,0,11,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,11,20,0,11,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,11,30,0,11,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,11,40,0,11,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,11,50,0,12,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,12,0,0,12,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,12,10,0,12,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,12,20,0,12,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,12,30,0,12,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,12,40,0,12,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,12,50,0,13,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,13,0,0,13,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,13,10,0,13,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,13,20,0,13,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,13,30,0,13,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,13,40,0,13,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,13,50,0,14,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,14,0,0,14,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,14,10,0,14,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,14,20,0,14,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+2,14,30,0,14,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,14,40,0,14,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,14,50,0,15,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,15,0,0,15,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,15,10,0,15,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,15,20,0,15,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,15,30,0,15,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,15,40,0,15,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,15,50,0,16,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,16,0,0,16,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,16,10,0,16,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,16,20,0,16,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,16,30,0,16,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,16,40,0,16,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+2,16,50,0,17,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,9,0,0,9,10,0,394592004,Clinical oncology,4,FREE,false,, ,P
+3,9,10,0,9,20,0,394592004,Clinical oncology,4,FREE,false,, ,P
+3,9,20,0,9,30,0,394592004,Clinical oncology,4,FREE,false,, ,P
+3,9,30,0,9,40,0,394592004,Clinical oncology,4,FREE,false,, ,P
+3,9,40,0,9,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,9,50,0,10,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,10,0,0,10,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,10,10,0,10,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,10,20,0,10,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,10,30,0,10,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,10,40,0,10,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,10,50,0,11,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,11,0,0,11,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,11,10,0,11,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,11,20,0,11,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,11,30,0,11,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,11,40,0,11,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,11,50,0,12,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,12,0,0,12,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,12,10,0,12,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,12,20,0,12,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,12,30,0,12,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,12,40,0,12,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,12,50,0,13,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,13,0,0,13,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,13,10,0,13,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,13,20,0,13,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,13,30,0,13,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,13,40,0,13,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,13,50,0,14,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,14,0,0,14,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,14,10,0,14,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,14,20,0,14,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+3,14,30,0,14,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,14,40,0,14,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,14,50,0,15,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,15,0,0,15,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,15,10,0,15,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,15,20,0,15,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,15,30,0,15,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,15,40,0,15,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,15,50,0,16,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,16,0,0,16,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,16,10,0,16,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,16,20,0,16,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,16,30,0,16,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,16,40,0,16,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+3,16,50,0,17,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,9,0,0,9,10,0,394592004,Clinical oncology,4,FREE,false,, ,P
+4,9,10,0,9,20,0,394592004,Clinical oncology,4,FREE,false,, ,P
+4,9,20,0,9,30,0,394592004,Clinical oncology,4,FREE,false,, ,P
+4,9,30,0,9,40,0,394592004,Clinical oncology,4,FREE,false,, ,P
+4,9,40,0,9,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,9,50,0,10,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,10,0,0,10,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,10,10,0,10,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,10,20,0,10,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,10,30,0,10,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,10,40,0,10,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,10,50,0,11,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,11,0,0,11,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,11,10,0,11,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,11,20,0,11,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,11,30,0,11,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,11,40,0,11,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,11,50,0,12,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,12,0,0,12,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,12,10,0,12,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,12,20,0,12,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,12,30,0,12,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,12,40,0,12,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,12,50,0,13,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,13,0,0,13,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,13,10,0,13,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,13,20,0,13,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,13,30,0,13,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,13,40,0,13,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,13,50,0,14,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,14,0,0,14,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,14,10,0,14,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,14,20,0,14,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+4,14,30,0,14,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,14,40,0,14,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,14,50,0,15,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,15,0,0,15,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,15,10,0,15,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,15,20,0,15,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,15,30,0,15,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,15,40,0,15,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,15,50,0,16,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,16,0,0,16,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,16,10,0,16,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,16,20,0,16,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,16,30,0,16,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,16,40,0,16,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+4,16,50,0,17,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,9,0,0,9,10,0,394592004,Clinical oncology,4,FREE,false,, ,P
+5,9,10,0,9,20,0,394592004,Clinical oncology,4,FREE,false,, ,P
+5,9,20,0,9,30,0,394592004,Clinical oncology,4,FREE,false,, ,P
+5,9,30,0,9,40,0,394592004,Clinical oncology,4,FREE,false,, ,P
+5,9,40,0,9,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,9,50,0,10,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,10,0,0,10,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,10,10,0,10,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,10,20,0,10,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,10,30,0,10,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,10,40,0,10,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,10,50,0,11,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,11,0,0,11,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,11,10,0,11,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,11,20,0,11,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,11,30,0,11,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,11,40,0,11,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,11,50,0,12,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,12,0,0,12,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,12,10,0,12,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,12,20,0,12,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,12,30,0,12,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,12,40,0,12,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,12,50,0,13,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,13,0,0,13,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,13,10,0,13,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,13,20,0,13,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,13,30,0,13,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,13,40,0,13,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,13,50,0,14,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,14,0,0,14,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,14,10,0,14,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,14,20,0,14,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+5,14,30,0,14,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,14,40,0,14,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,14,50,0,15,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,15,0,0,15,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,15,10,0,15,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,15,20,0,15,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,15,30,0,15,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,15,40,0,15,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,15,50,0,16,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,16,0,0,16,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,16,10,0,16,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,16,20,0,16,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,16,30,0,16,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,16,40,0,16,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+5,16,50,0,17,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,9,0,0,9,10,0,394592004,Clinical oncology,4,FREE,false,, ,P
+6,9,10,0,9,20,0,394592004,Clinical oncology,4,FREE,false,, ,P
+6,9,20,0,9,30,0,394592004,Clinical oncology,4,FREE,false,, ,P
+6,9,30,0,9,40,0,394592004,Clinical oncology,4,FREE,false,, ,P
+6,9,40,0,9,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,9,50,0,10,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,10,0,0,10,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,10,10,0,10,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,10,20,0,10,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,10,30,0,10,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,10,40,0,10,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,10,50,0,11,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,11,0,0,11,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,11,10,0,11,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,11,20,0,11,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,11,30,0,11,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,11,40,0,11,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,11,50,0,12,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,12,0,0,12,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,12,10,0,12,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,12,20,0,12,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,12,30,0,12,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,12,40,0,12,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,12,50,0,13,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,13,0,0,13,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,13,10,0,13,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,13,20,0,13,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,13,30,0,13,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,13,40,0,13,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,13,50,0,14,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,14,0,0,14,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,14,10,0,14,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,14,20,0,14,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+6,14,30,0,14,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,14,40,0,14,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,14,50,0,15,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,15,0,0,15,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,15,10,0,15,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,15,20,0,15,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,15,30,0,15,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,15,40,0,15,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,15,50,0,16,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,16,0,0,16,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,16,10,0,16,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,16,20,0,16,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,16,30,0,16,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,16,40,0,16,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+6,16,50,0,17,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,9,0,0,9,10,0,394592004,Clinical oncology,4,FREE,false,, ,P
+7,9,10,0,9,20,0,394592004,Clinical oncology,4,FREE,false,, ,P
+7,9,20,0,9,30,0,394592004,Clinical oncology,4,FREE,false,, ,P
+7,9,30,0,9,40,0,394592004,Clinical oncology,4,FREE,false,, ,P
+7,9,40,0,9,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,9,50,0,10,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,10,0,0,10,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,10,10,0,10,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,10,20,0,10,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,10,30,0,10,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,10,40,0,10,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,10,50,0,11,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,11,0,0,11,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,11,10,0,11,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,11,20,0,11,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,11,30,0,11,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,11,40,0,11,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,11,50,0,12,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,12,0,0,12,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,12,10,0,12,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,12,20,0,12,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,12,30,0,12,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,12,40,0,12,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,12,50,0,13,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,13,0,0,13,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,13,10,0,13,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,13,20,0,13,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,13,30,0,13,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,13,40,0,13,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,13,50,0,14,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,14,0,0,14,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,14,10,0,14,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,14,20,0,14,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+7,14,30,0,14,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,14,40,0,14,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,14,50,0,15,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,15,0,0,15,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,15,10,0,15,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,15,20,0,15,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,15,30,0,15,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,15,40,0,15,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,15,50,0,16,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,16,0,0,16,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,16,10,0,16,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,16,20,0,16,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,16,30,0,16,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,16,40,0,16,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+7,16,50,0,17,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,9,0,0,9,10,0,394592004,Clinical oncology,4,FREE,false,, ,P
+8,9,10,0,9,20,0,394592004,Clinical oncology,4,FREE,false,, ,P
+8,9,20,0,9,30,0,394592004,Clinical oncology,4,FREE,false,, ,P
+8,9,30,0,9,40,0,394592004,Clinical oncology,4,FREE,false,, ,P
+8,9,40,0,9,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,9,50,0,10,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,10,0,0,10,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,10,10,0,10,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,10,20,0,10,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,10,30,0,10,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,10,40,0,10,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,10,50,0,11,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,11,0,0,11,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,11,10,0,11,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,11,20,0,11,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,11,30,0,11,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,11,40,0,11,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,11,50,0,12,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,12,0,0,12,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,12,10,0,12,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,12,20,0,12,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,12,30,0,12,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,12,40,0,12,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,12,50,0,13,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,13,0,0,13,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,13,10,0,13,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,13,20,0,13,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,13,30,0,13,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,13,40,0,13,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,13,50,0,14,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,14,0,0,14,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,14,10,0,14,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,14,20,0,14,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+8,14,30,0,14,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,14,40,0,14,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,14,50,0,15,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,15,0,0,15,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,15,10,0,15,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,15,20,0,15,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,15,30,0,15,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,15,40,0,15,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,15,50,0,16,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,16,0,0,16,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,16,10,0,16,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,16,20,0,16,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,16,30,0,16,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,16,40,0,16,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+8,16,50,0,18,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,9,0,0,9,10,0,394592004,Clinical oncology,4,FREE,false,, ,P
+9,9,10,0,9,20,0,394592004,Clinical oncology,4,FREE,false,, ,P
+9,9,20,0,9,30,0,394592004,Clinical oncology,4,FREE,false,, ,P
+9,9,30,0,9,40,0,394592004,Clinical oncology,4,FREE,false,, ,P
+9,9,40,0,9,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,9,50,0,10,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,10,0,0,10,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,10,10,0,10,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,10,20,0,10,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,10,30,0,10,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,10,40,0,10,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,10,50,0,11,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,11,0,0,11,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,11,10,0,11,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,11,20,0,11,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,11,30,0,11,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,11,40,0,11,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,11,50,0,12,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,12,0,0,12,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,12,10,0,12,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,12,20,0,12,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,12,30,0,12,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,12,40,0,12,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,12,50,0,13,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,13,0,0,13,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,13,10,0,13,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,13,20,0,13,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,13,30,0,13,40,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,13,40,0,13,50,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,13,50,0,14,0,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,14,0,0,14,10,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,14,10,0,14,20,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,14,20,0,14,30,0,394592004,Clinical oncology,4,FREE,true,, ,P
+9,14,30,0,14,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,14,40,0,14,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,14,50,0,15,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,15,0,0,15,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,15,10,0,15,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,15,20,0,15,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,15,30,0,15,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,15,40,0,15,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,15,50,0,16,0,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,16,0,0,16,10,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,16,10,0,16,20,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,16,20,0,16,30,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,16,30,0,16,40,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,16,40,0,16,50,0,394592004,Clinical oncology,4,FREE,true,,,V
+9,16,50,0,19,0,0,394592004,Clinical oncology,4,FREE,true,,,V
 2,9,0,0,9,10,0,408443003,General medical practice,12,FREE,false,, ,T
 2,9,10,0,9,20,0,408443003,General medical practice,12,FREE,false,, ,T
 2,9,20,0,9,30,0,408443003,General medical practice,12,FREE,false,, ,T

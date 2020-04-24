@@ -27,9 +27,9 @@ import uk.gov.hscic.model.appointment.BookingOrgDetail;
 
 @Service
 public class RefreshData {
-    
+
     private static final int SLOT_FIELDS = 15;
-    
+
     private static final int SLOT_INDEX_DAY_OFFSET = 0;
     private static final int SLOT_INDEX_START_H = 1;
     private static final int SLOT_INDEX_START_M = 2;
@@ -88,7 +88,7 @@ public class RefreshData {
                 Calendar calendar = Calendar.getInstance();
 
                 calendar.setTime(currentDate);
-                calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(element[SLOT_INDEX_DAY_OFFSET]));
+                calendar.add(Calendar.DAY_OF_YEAR, Integer.parseInt(element[SLOT_INDEX_DAY_OFFSET]));
                 calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(element[SLOT_INDEX_START_H]));
                 calendar.set(Calendar.MINUTE, Integer.parseInt(element[SLOT_INDEX_START_M]));
                 calendar.set(Calendar.SECOND, Integer.parseInt(element[SLOT_INDEX_START_S]));
@@ -96,7 +96,7 @@ public class RefreshData {
                 Date startDate = calendar.getTime();
 
                 calendar.setTime(currentDate);
-                calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(element[SLOT_INDEX_DAY_OFFSET]));
+                calendar.add(Calendar.DAY_OF_YEAR, Integer.parseInt(element[SLOT_INDEX_DAY_OFFSET]));
                 calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(element[SLOT_INDEX_END_H]));
                 calendar.set(Calendar.MINUTE, Integer.parseInt(element[SLOT_INDEX_END_M]));
                 calendar.set(Calendar.SECOND, Integer.parseInt(element[SLOT_INDEX_END_S]));
@@ -104,7 +104,7 @@ public class RefreshData {
                 Date endDate = calendar.getTime();
 
                 // handle trailing comma on last entry
-                String deliveryChannelCode = element.length >= SLOT_FIELDS ? element[SLOT_FIELDS-1] : "";
+                String deliveryChannelCode = element.length >= SLOT_FIELDS ? element[SLOT_FIELDS - 1] : "";
                 // 0 number of days to add to today
                 // 1 start hours
                 // 2 start minutes
@@ -122,18 +122,24 @@ public class RefreshData {
                 // 14 sequence of PVT delivery channel codes String P In-person, T Telephone, V Video eg TVP
 
                 // The Collections.singletonList idiom is a way of converting a single item into a list containing one item
-                slotStore.saveSlot(createSlot(Long.parseLong(element[SLOT_INDEX_SLOT_TYPE_CODE]), 
-                        element[SLOT_INDEX_DESCRIPTION], 
-                        Long.parseLong(element[SLOT_INDEX_PRACTITIONER_ID]), 
-                        element[SLOT_INDEX_FREE_BUSY], 
-                        startDate, 
-                        endDate, 
+                // 1.2.7 allow null service type and code
+                Long slotType = null;
+                try {
+                    slotType = Long.parseLong(element[SLOT_INDEX_SLOT_TYPE_CODE]);
+                } catch (NumberFormatException ex) {
+                }
+                slotStore.saveSlot(createSlot(slotType,
+                        element[SLOT_INDEX_DESCRIPTION],
+                        Long.parseLong(element[SLOT_INDEX_PRACTITIONER_ID]),
+                        element[SLOT_INDEX_FREE_BUSY],
+                        startDate,
+                        endDate,
                         currentDate,
-                        Boolean.parseBoolean(element[SLOT_INDEX_BOOKABLE]), 
-                        element[SLOT_INDEX_ORG_ID].isEmpty() ? Collections.EMPTY_LIST : Collections.singletonList(Long.parseLong(element[SLOT_INDEX_ORG_ID])), 
-                        element[SLOT_INDEX_ORG_TYPE].trim().isEmpty() ? Collections.EMPTY_LIST : Collections.singletonList(element[SLOT_INDEX_ORG_TYPE].trim()), 
+                        Boolean.parseBoolean(element[SLOT_INDEX_BOOKABLE]),
+                        element[SLOT_INDEX_ORG_ID].isEmpty() ? Collections.EMPTY_LIST : Collections.singletonList(Long.parseLong(element[SLOT_INDEX_ORG_ID])),
+                        element[SLOT_INDEX_ORG_TYPE].trim().isEmpty() ? Collections.EMPTY_LIST : Collections.singletonList(element[SLOT_INDEX_ORG_TYPE].trim()),
                         deliveryChannelCode));
-                
+
             }
         } catch (IOException e) {
             LOG.error("Error reading slots file", e);
@@ -179,7 +185,7 @@ public class RefreshData {
                     deliveryChannel = "Video";
                     break;
                 default:
-                    LOG.error("Unrecognised delivery channel code "+deliveryChannelCode);
+                    LOG.error("Unrecognised delivery channel code " + deliveryChannelCode);
             }
         }
         slot.setDeliveryChannelCode(deliveryChannel);
@@ -188,9 +194,10 @@ public class RefreshData {
 
     /**
      * only used to set up the first two appointments on start up
+     *
      * @param slot
      * @param description
-     * @return 
+     * @return
      */
     private AppointmentDetail createAppointment(SlotDetail slot, String description) {
         AppointmentDetail appointment = new AppointmentDetail();
@@ -210,7 +217,7 @@ public class RefreshData {
         appointment.setLocationId(schedule.getLocationId());
 
         appointment.setLastUpdated(new Date());
-        
+
         BookingOrgDetail bookingOrgDetail = new BookingOrgDetail();
         bookingOrgDetail.setOrgCode("A20047");
         bookingOrgDetail.setName("Dr Legg's Surgery");

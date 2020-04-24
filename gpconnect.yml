@@ -1,0 +1,61 @@
+#
+#  docker-compose file supporting a docker stack comprised of a 
+#  gpconnect demonstrator instance behind a tkw simulator running in http interceptor
+#  mode
+#
+version: "3"
+services:
+  gpconnect-db:
+    image: mariadb
+    networks: 
+      - gpconnect-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=gpconnectdbuser
+      - MYSQL_PASSWORD=gpc0nn3ct
+      - MYSQL_DATABASE=gpconnect1
+    command: [
+        '--wait_timeout=28800',
+    ]
+  gpconnect-api:
+    image: simonfarrow/mait:gpconnect 
+    #image: gpconnect 
+    restart : always
+    networks: 
+      - gpconnect-network
+    environment:
+      - TZ=Europe/London
+      - DATABASE_ADDRESS=gpconnect-db
+      - DATABASE_USERNAME=gpconnectdbuser
+      - DATABASE_PASSWORD=gpc0nn3ct
+      - DATABASE_SCHEMA=gpconnect1
+      - SERVER_BASE_URL=https://data.developer.nhs.uk/gpconnect-demonstrator/v1/fhir
+      - CONTEXT_PATH=/gpconnect-demonstrator/v1/
+    links:
+      - gpconnect-db
+    depends_on:
+      - gpconnect-db
+  tkw:
+    image: simonfarrow/mait:tkw
+    #image: tkw
+    restart : always
+    # change 4850 to whatever port the stack is required to be exposed on
+    ports:
+        - 4850:4848
+    networks: 
+      - gpconnect-network
+    environment:
+      - TZ=Europe/London
+    # tkw forwards to gpconnect-api:19191
+    links:
+      - gpconnect-api
+    depends_on:
+      - gpconnect-api
+        #volumes:
+        # <host path to mount> : <mount point within docker>
+        #- /mnt/encrypted/home/simonfarrow/Documents/gpconnect/validator_reports:/TKW/config/GP_CONNECT/validator_reports
+        # optional volume for simulator recieved messages logs
+        #- /mnt/encrypted/home/simonfarrow/Documents/gpconnect/simulator_saved_messages:/TKW/config/GP_CONNECT/simulator_saved_messages
+networks: 
+  gpconnect-network:
+    driver: bridge

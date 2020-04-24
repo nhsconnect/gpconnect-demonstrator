@@ -122,16 +122,22 @@ public class RefreshData {
                 // 14 sequence of PVT delivery channel codes String P In-person, T Telephone, V Video eg TVP
 
                 // The Collections.singletonList idiom is a way of converting a single item into a list containing one item
-                slotStore.saveSlot(createSlot(Long.parseLong(element[SLOT_INDEX_SLOT_TYPE_CODE]), 
-                        element[SLOT_INDEX_DESCRIPTION], 
-                        Long.parseLong(element[SLOT_INDEX_PRACTITIONER_ID]), 
-                        element[SLOT_INDEX_FREE_BUSY], 
-                        startDate, 
-                        endDate, 
+                // 1.2.7 allow null service type and code
+                Long slotType = null;
+                try {
+                    slotType = Long.parseLong(element[SLOT_INDEX_SLOT_TYPE_CODE]);
+                } catch (NumberFormatException ex) {
+                }
+                slotStore.saveSlot(createSlot(slotType,
+                        element[SLOT_INDEX_DESCRIPTION],
+                        Long.parseLong(element[SLOT_INDEX_PRACTITIONER_ID]),
+                        element[SLOT_INDEX_FREE_BUSY],
+                        startDate,
+                        endDate,
                         currentDate,
-                        Boolean.parseBoolean(element[SLOT_INDEX_BOOKABLE]), 
-                        element[SLOT_INDEX_ORG_ID].isEmpty() ? Collections.EMPTY_LIST : Collections.singletonList(Long.parseLong(element[SLOT_INDEX_ORG_ID])), 
-                        element[SLOT_INDEX_ORG_TYPE].trim().isEmpty() ? Collections.EMPTY_LIST : Collections.singletonList(element[SLOT_INDEX_ORG_TYPE].trim()), 
+                        Boolean.parseBoolean(element[SLOT_INDEX_BOOKABLE]),
+                        element[SLOT_INDEX_ORG_ID].isEmpty() ? Collections.EMPTY_LIST : Collections.singletonList(Long.parseLong(element[SLOT_INDEX_ORG_ID])),
+                        element[SLOT_INDEX_ORG_TYPE].trim().isEmpty() ? Collections.EMPTY_LIST : Collections.singletonList(element[SLOT_INDEX_ORG_TYPE].trim()),
                         deliveryChannelCode));
                 
             }

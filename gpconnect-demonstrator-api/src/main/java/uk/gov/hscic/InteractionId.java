@@ -44,8 +44,10 @@ public final class InteractionId {
     public static final String REST_UPDATE_APPOINTMENT                 = BASE + "rest:update:appointment-1";   
     public static final String REST_CANCEL_APPOINTMENT                 = BASE + "rest:cancel:appointment-1";
     
+    // #326 fix structured metadata interaction id
+    private static final String STRUCTURED_BASE = "urn:nhs:names:services:gpconnect:structured:fhir:";
     // 1.2.6 #316
-    public static final String REST_READ_STRUCTURED_METADATA                      = BASE + "rest:read:structured_metadata-1";
+    public static final String REST_READ_STRUCTURED_METADATA                      = STRUCTURED_BASE + "rest:read:metadata-1";
 
     public static final List<String> IDENTIFIER_INTERACTIONS = Arrays.asList(
             REST_SEARCH_LOCATION,

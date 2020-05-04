@@ -15,8 +15,6 @@ import uk.gov.hscic.SystemURL;
 @Component
 public class Interactions {
 
-    private final static boolean IS_DOCUMENTS = false;
-
     private enum RequestMethod {
         GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE;
 
@@ -67,14 +65,6 @@ public class Interactions {
 
 			// 1.2.6 #316
             put(InteractionId.REST_READ_STRUCTURED_METADATA, new Interaction("metadata").httpVerb(RequestMethod.GET));
-			
-
-            if (IS_DOCUMENTS) {
-                // Documemts interface
-                put(InteractionId.REST_SEARCH_DOCUMENT_REFERENCE, new Interaction("DocumentReference").identifier().httpVerb(RequestMethod.GET));
-                put(InteractionId.REST_READ_BINARY, new Interaction("Binary").identifier().httpVerb(RequestMethod.GET));
-            }
-
         }
     };
 
@@ -129,12 +119,7 @@ public class Interactions {
         private Interaction identifier() {
             // from http://hl7.org/fhir/resource.html#id -
             // Ids can be up to 64 characters long, and contain any combination of upper and lowercase ASCII letters, numerals, "-" and "."
-            // changed 1,64 to 0,64 for Documents
-            if (IS_DOCUMENTS) {
-                identifierPattern = buildPattern("[A-Za-z0-9\\-\\.]{0,64}");
-            } else {
-                identifierPattern = buildPattern("[A-Za-z0-9\\-\\.]{1,64}");
-            }
+			identifierPattern = buildPattern("[A-Za-z0-9\\-\\.]{1,64}");
 
             return this;
         }
@@ -146,12 +131,7 @@ public class Interactions {
         }
 
         private Pattern buildPattern(String end) {
-            // made / optional for Documents
-            if (IS_DOCUMENTS) {
-                currentRegex = currentRegex + "/?" + end;
-            } else {
-                currentRegex = currentRegex + "/" + end;
-            }
+			currentRegex = currentRegex + "/" + end;
             return Pattern.compile(currentRegex + ".*");
         }
 

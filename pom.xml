@@ -24,7 +24,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>GPConnect 1.2.6</name>
+    <name>GPConnect 1.2.7</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

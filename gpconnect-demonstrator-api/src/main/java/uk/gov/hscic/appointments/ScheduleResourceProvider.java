@@ -113,7 +113,13 @@ public class ScheduleResourceProvider implements IResourceProvider {
         period.setStart(scheduleDetail.getStartDateTime());
         period.setEnd(scheduleDetail.getEndDateTime());
         schedule.setPlanningHorizon(period);
-        schedule.setComment(scheduleDetail.getComment());
+        
+        // 1.2.7 remove comment
+        //schedule.setComment(scheduleDetail.getComment());
+        
+        // 1.2.7 add schedule type description as service category
+        schedule.setServiceCategory(new CodeableConcept().setText(scheduleDetail.getTypeDescription()));
+        
         return schedule;
     }
 

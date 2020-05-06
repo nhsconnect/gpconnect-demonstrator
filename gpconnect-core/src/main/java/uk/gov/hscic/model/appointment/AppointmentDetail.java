@@ -21,7 +21,11 @@ public class AppointmentDetail {
     private String status;
     private BookingOrgDetail bookingOrganization;
     private Date created;
-
+    
+    // transient derived fields but required for comparison
+    private String serviceType = null;
+    private String serviceCategory = null;
+    
     public String getCancellationReason() {
         return cancellationReason;
     }
@@ -148,5 +152,24 @@ public class AppointmentDetail {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+  
+    // for 1.2.7 transient;
+    public void setServiceCategory(String serviceCategory){
+        this.serviceCategory = serviceCategory;
+    }
+
+    public String getServiceCategory(){
+        // ensure comparisons work correctly when theres no attribute on the message
+        return serviceCategory;
+    }
+    
+    public void setServiceType(String serviceType){
+        this.serviceType = serviceType;
+    }
+
+    public String getServiceType(){
+        // ensure comparisons work correctly when theres no attribute on the message
+        return serviceType;
     }
 }

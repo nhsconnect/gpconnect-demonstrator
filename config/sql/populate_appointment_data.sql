@@ -2,7 +2,7 @@ USE gpconnect1;
 INSERT INTO appointment_schedules
   (id,practitionerId,identifier,typeCode,typeDescription,locationId,practitionerRoleCode,practitionerRoleDisplay,startDateTime,endDateTime,scheduleComment,lastUpdated)
 VALUES
-  (1,1,'Schedule001','','',16,'R0260','General Medical Practitioner','2016-03-22 10:00:00','2030-12-22 17:59:59','Schedule 1 for general appointments','2016-07-25 12:00:00'),
+  (1,1,'Schedule001','394802001','General medicine',16,'R0260','General Medical Practitioner','2016-03-22 10:00:00','2030-12-22 17:59:59','Schedule 1 for general appointments','2016-07-25 12:00:00'),
   (2,2,'Schedule002','394814009','General practice',17,'R1480','Healthcare Assistant','2016-06-24 09:00:00','2034-06-22 09:00:00','Schedule 2 for general appointments','2016-07-25 12:00:00'),
   (3,3,'Schedule003','394593009','Medical oncology',2,'R0260','General Medical Practitioner','2013-12-22 11:46:22','2040-12-22 11:46:22','Schedule 3 for general appointments','2016-07-25 12:00:00'),
   (4,1,'Schedule004','394814009','General practice',16,'R0260','General Medical Practitioner','2013-12-22 11:46:22','2040-12-22 11:46:22','Schedule 4 for general appointments with practitioner Goff, Carolyn D. @ The Hepworth Surgery Main Building','2016-07-25 12:00:00'),

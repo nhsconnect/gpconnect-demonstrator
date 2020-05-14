@@ -65,6 +65,10 @@ public class Interactions {
 
 			// 1.2.6 #316
             put(InteractionId.REST_READ_STRUCTURED_METADATA, new Interaction("metadata").httpVerb(RequestMethod.GET));
+            
+            // for documents
+            put(InteractionId.REST_SEARCH_PATIENTS_DOCUMENTS, new Interaction("Patient").addIdentifierSystems(SystemURL.ID_NHS_NUMBER).httpVerb(RequestMethod.GET));
+            
         }
     };
 

@@ -46,8 +46,13 @@ public final class InteractionId {
     
     // #326 fix structured metadata interaction id
     private static final String STRUCTURED_BASE = "urn:nhs:names:services:gpconnect:structured:fhir:";
+
+    private static final String DOCUMENTS_BASE = "urn:nhs:names:services:gpconnect:documents:fhir:";
+
     // 1.2.6 #316
     public static final String REST_READ_STRUCTURED_METADATA                      = STRUCTURED_BASE + "rest:read:metadata-1";
+    
+    public static final String REST_SEARCH_PATIENTS_DOCUMENTS                     = DOCUMENTS_BASE + "rest:search:patient-1";
 
     public static final List<String> IDENTIFIER_INTERACTIONS = Arrays.asList(
             REST_SEARCH_LOCATION,

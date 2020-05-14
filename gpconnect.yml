@@ -51,10 +51,10 @@ services:
       - gpconnect-api
     depends_on:
       - gpconnect-api
-        #volumes:
+    #volumes:
         # <host path to mount> : <mount point within docker>
         #- /mnt/encrypted/home/simonfarrow/Documents/gpconnect/validator_reports:/TKW/config/GP_CONNECT/validator_reports
-        # optional volume for simulator recieved messages logs
+        # optional volume for simulator received messages logs
         #- /mnt/encrypted/home/simonfarrow/Documents/gpconnect/simulator_saved_messages:/TKW/config/GP_CONNECT/simulator_saved_messages
 networks: 
   gpconnect-network:

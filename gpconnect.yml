@@ -35,6 +35,9 @@ services:
       - gpconnect-db
     depends_on:
       - gpconnect-db
+    #volumes:
+        # external environment properties file location
+        #- /mnt/encrypted/home/simonfarrow/Documents/git_repositories/gpconnect-demonstrator-develop/config/:/app/config/external
   tkw:
     image: simonfarrow/mait:tkw
     #image: tkw
@@ -56,6 +59,8 @@ services:
         #- /mnt/encrypted/home/simonfarrow/Documents/gpconnect/validator_reports:/TKW/config/GP_CONNECT/validator_reports
         # optional volume for simulator received messages logs
         #- /mnt/encrypted/home/simonfarrow/Documents/gpconnect/simulator_saved_messages:/TKW/config/GP_CONNECT/simulator_saved_messages
+        # external environment properties file location
+        #- /mnt/encrypted/home/simonfarrow/Documents/git_repositories/gpconnect-demonstrator-develop/config/:/TKW/config/GP_CONNECT/external
 networks: 
   gpconnect-network:
     driver: bridge

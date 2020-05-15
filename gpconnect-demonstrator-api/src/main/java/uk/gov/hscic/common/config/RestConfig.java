@@ -41,7 +41,9 @@ import org.springframework.context.annotation.Bean;
 @ComponentScan(basePackages = "uk.gov.hscic")
 @PropertySource(ignoreResourceNotFound = true, value = {
     "file:${config.path}/gpconnect-demonstrator-api.properties",
-    "file:${config.path}/gpconnect-demonstrator-api.environment.properties"
+    "file:${config.path}/gpconnect-demonstrator-api.environment.properties",
+    // allow use of an external file from a docker instance
+    "file:${config.path}/external/gpconnect-demonstrator-api.environment.properties"
 })
 public class RestConfig {
 

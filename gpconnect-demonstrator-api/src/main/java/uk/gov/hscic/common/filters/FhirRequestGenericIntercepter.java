@@ -77,11 +77,14 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     public void postConstruct() {
         if (providerRoutingFilename != null) {
             Path providerRoutingFilePath = new File(configPath + providerRoutingFilename).toPath();
+            LOG.info("config.path = "+configPath);
+            LOG.info("providerRoutingFilePath = "+providerRoutingFilePath);
 
             if (providerRoutingFilePath.toFile().exists()) {
                 try {
                     systemSspToHeader = new ObjectMapper()
                             .readValue(Files.readAllBytes(providerRoutingFilePath), ProviderRouting.class).getAsid();
+                    LOG.info("System asid = "+systemSspToHeader);
                 } catch (IOException ex) {
                     LOG.error("Error reading providerRoutingFile.");
                 }

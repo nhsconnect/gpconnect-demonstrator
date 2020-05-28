@@ -25,9 +25,9 @@ ENV DATABASE_SCHEMA gpconnect1
 ENV SERVER_BASE_URL https://data.developer.nhs.uk/gpconnect-demonstrator/v1/fhir
 ENV CONTEXT_PATH /gpconnect-demonstrator/v1/
 ENTRYPOINT java -jar /app/app.war \
---spring.config.location=file:/app/config/gpconnect-demonstrator-api.properties --server.port=19192 \
+--spring.config.location=file:/app/config/gpconnect-demonstrator-api.properties,file:/app/config/gpconnect-demonstrator-api.environment.properties,file:/app/config/external/gpconnect-demonstrator-api.environment.properties --server.port=19192 \
 --server.port.http=19191 --config.path=/app/config/ --server.ssl.key-store=/app/config/server.jks \
 --server.ssl.key-store-password=password --server.ssl.trust-store=/app/config/server.jks \
 --server.ssl.trust-store-password=password --server.ssl.client-auth=want --datasource.host=$DATABASE_ADDRESS \
---datasource.port=$DATABASE_PORT --datasource.username=$DATABASE_USERNAME --datasource.password=gpc0nn3ct \
+--datasource.port=$DATABASE_PORT --datasource.username=$DATABASE_USERNAME --datasource.password=$DATABASE_PASSWORD \
 --datasource.schema=$DATABASE_SCHEMA --serverBaseUrl=$SERVER_BASE_URL --server.contextPath=$CONTEXT_PATH

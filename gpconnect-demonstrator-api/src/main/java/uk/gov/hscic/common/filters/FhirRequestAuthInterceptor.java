@@ -3,6 +3,7 @@ package uk.gov.hscic.common.filters;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.auth.AuthorizationInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.auth.IAuthRule;
 import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
@@ -39,7 +40,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     private static final String ORDER_RESOURCE_NAME = "Order";
     private static final String SCHEDULE_RESOURCE_NAME = "Schedule";
     private static final String SLOT_RESOURCE_NAME = "Slot";
-     
+
     private static final List<String> PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS = Arrays.asList(SystemURL.ID_ODS_ORGANIZATION_CODE, SystemURL.ID_ODS_OLD_ORGANIZATION_CODE);
 
     @Value("${request.leeway:5}")
@@ -60,14 +61,14 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
         // in this map the key is the JWT resource type and the value is a set of permitted request resources
         validResourceCombinations = new HashMap<>();
         validResourceCombinations.put(PATIENT_RESOURCE_NAME, new HashSet<>(Arrays.asList(new String[]{PATIENT_RESOURCE_NAME, APPOINTMENT_RESOURCE_NAME})));
-        validResourceCombinations.put(ORGANIZATION_RESOURCE_NAME, new HashSet<>(Arrays.asList(new String[]{ORGANIZATION_RESOURCE_NAME, PRACTITIONER_RESOURCE_NAME, LOCATION_RESOURCE_NAME, ORDER_RESOURCE_NAME,SCHEDULE_RESOURCE_NAME,SLOT_RESOURCE_NAME})));
+        validResourceCombinations.put(ORGANIZATION_RESOURCE_NAME, new HashSet<>(Arrays.asList(new String[]{ORGANIZATION_RESOURCE_NAME, PRACTITIONER_RESOURCE_NAME, LOCATION_RESOURCE_NAME, ORDER_RESOURCE_NAME, SCHEDULE_RESOURCE_NAME, SLOT_RESOURCE_NAME})));
     }
 
     @Override
     public List<IAuthRule> buildRuleList(RequestDetails requestDetails) {
         WebToken webToken = webTokenFactory.getWebToken(requestDetails, futureRequestLeeway);
 
-         validateClaim(webToken, requestDetails);
+        validateClaim(webToken, requestDetails);
         validateIdentifier(webToken, requestDetails);
 
         return new RuleBuilder().allowAll().build();
@@ -75,12 +76,12 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
     private void validateOrganizationIdentifier(RequestDetails requestDetails) {
         Map<String, String[]> parameters = requestDetails.getParameters();
-        
+
         if (parameters != null && parameters.containsKey(SystemParameter.IDENTIFIER)) {
             String[] identifierParts = parameters.get(SystemParameter.IDENTIFIER)[0].split("\\|");
-            
+
             String identifierSystem = identifierParts[0];
-            
+
             if (!PERMITTED_ORGANIZATION_IDENTIFIER_SYSTEMS.contains(identifierSystem)) {
                 throwInvalidRequest400_BadRequestException("Invalid organization identifier system: " + identifierSystem);
             }
@@ -90,25 +91,31 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     private void validatePatientIdentifier(RequestDetails requestDetails) {
         Map<String, String[]> parameters = requestDetails.getParameters();
 
-        if(parameters != null && parameters.isEmpty() == false) {
+        if (parameters != null && parameters.isEmpty() == false) {
             String[] requestIdentifiers = parameters.get(SystemParameter.IDENTIFIER);
 
-            if(requestIdentifiers != null && requestIdentifiers.length > 0) {
-                String requestIdentifierValue = requestIdentifiers[0].split("\\|")[1];
-                if(!NhsCodeValidator.nhsNumberValid(requestIdentifierValue)) {
+            if (requestIdentifiers != null && requestIdentifiers.length > 0) {
+                String[] splitIdentifier = requestIdentifiers[0].split("\\|");
+                if (splitIdentifier.length == 2) {
+                    String requestIdentifierValue = splitIdentifier[1];
+                    if (!NhsCodeValidator.nhsNumberValid(requestIdentifierValue)) {
+                        throw OperationOutcomeFactory.buildOperationOutcomeException(
+                                new InvalidRequestException("Invalid NHS number in request: " + requestIdentifierValue),
+                                SystemCode.INVALID_NHS_NUMBER, IssueType.VALUE);
+                    }
+                } else {
                     throw OperationOutcomeFactory.buildOperationOutcomeException(
-                            new InvalidRequestException("Invalid NHS number in request: " + requestIdentifierValue),
-                            SystemCode.INVALID_NHS_NUMBER, IssueType.VALUE);
+                            new UnprocessableEntityException("Malformed NHSNumber Identifier in request: " + requestIdentifiers[0]),
+                            SystemCode.INVALID_PARAMETER, IssueType.VALUE);
                 }
             }
         }
     }
 
     private void validateIdentifier(WebToken webToken, RequestDetails requestDetails) {
-        if(PATIENT_RESOURCE_NAME.equals(requestDetails.getResourceName())) {
+        if (PATIENT_RESOURCE_NAME.equals(requestDetails.getResourceName())) {
             validatePatientIdentifier(requestDetails);
-        }
-        else if(ORGANIZATION_RESOURCE_NAME.equals(requestDetails.getResourceName())) {
+        } else if (ORGANIZATION_RESOURCE_NAME.equals(requestDetails.getResourceName())) {
             validateOrganizationIdentifier(requestDetails);
         }
     }
@@ -158,9 +165,9 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             RestOperationTypeEnum restOperationType = requestDetails.getRestOperationType();
 
             isRead = readOperations.contains(restOperationType);
-            if(isRead == false) {
-                  String operation = requestDetails.getOperation();
-                  isRead = customReadOperations.contains(operation);
+            if (isRead == false) {
+                String operation = requestDetails.getOperation();
+                isRead = customReadOperations.contains(operation);
             }
 
             return isRead;
@@ -172,7 +179,7 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
             RestOperationTypeEnum restOperationType = requestDetails.getRestOperationType();
 
             isWrite = writeOperations.contains(restOperationType);
-            if(isWrite == false) {
+            if (isWrite == false) {
                 String operation = requestDetails.getOperation();
                 isWrite = customWriteOperations.contains(operation);
             }

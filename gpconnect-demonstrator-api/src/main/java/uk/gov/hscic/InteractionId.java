@@ -58,7 +58,8 @@ public final class InteractionId {
             REST_SEARCH_LOCATION,
             REST_SEARCH_ORGANIZATION,
             REST_SEARCH_PATIENT,
-            REST_SEARCH_PRACTITIONER
+            REST_SEARCH_PRACTITIONER,
+            REST_SEARCH_PATIENTS_DOCUMENTS
             );
 
 }

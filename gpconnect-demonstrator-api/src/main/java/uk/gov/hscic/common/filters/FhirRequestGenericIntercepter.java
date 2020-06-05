@@ -431,8 +431,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         // otherwise we pass it in?
         // if(interaction != null) {
         if (interaction.validateIdentifier(requestURI) == false) {
-            throwResourceNotFoundException(String.format("Unexpected resource identifier in URI - %s", requestURI),
-                    interaction.getResource());
+            throwInvalidRequest400_BadRequestException(String.format("Unexpected resource identifier in URI - %s", requestURI));
         }
 
         if (interaction.validateContainedResource(requestURI) == false) {

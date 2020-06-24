@@ -61,7 +61,7 @@
             </identifier>
             <code>
                <coding>
-                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                  <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
                      <extension url="DescriptionID">
                         <valueId value="3008650016"></valueId>
                      </extension>
@@ -108,7 +108,7 @@
             </identifier>
             <code>
                <coding>
-                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                  <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
                      <extension url="DescriptionID">
                         <valueId value="2748921000000116"></valueId>
                      </extension>
@@ -155,7 +155,7 @@
             <status value="final"></status>
             <code>
                <coding>
-                  <extension url="http://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
+                  <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
                      <extension url="DescriptionID">
                         <valueId value="143107019"></valueId>
                      </extension>

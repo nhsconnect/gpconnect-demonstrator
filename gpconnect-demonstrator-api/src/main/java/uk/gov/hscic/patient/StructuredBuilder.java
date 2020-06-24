@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.nio.file.Files;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -89,6 +91,18 @@ import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept
  */
 public class StructuredBuilder {
 
+    private final static String BASE_DATE_STR = "2020-06-01";
+    private final static SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
+
+    static {
+        try {
+            BASE_DATE = FORMATTER.parse(BASE_DATE_STR);
+        } catch (ParseException pe) {
+        }
+    }
+
+    private static Date BASE_DATE; // supplies a consistent date to the resources created (replaces multiple calls to new Date())
+    
     /**
      * This map is critical it guides what resources will be added into the
      * canned response. It should only contain references of the form
@@ -145,7 +159,7 @@ public class StructuredBuilder {
     // add any new clinical areas supported as canned responses here
     private final static String[] PROCESSED_CANNED_CLINICAL_AREAS = {INCLUDE_PROBLEMS_PARM,
         INCLUDE_CONSULTATIONS_PARM
-        // extension point add new clinical areas *that need processing* here
+// extension point add new clinical areas *that need processing* here
     };
 
     private static final int DEBUG_LEVEL = 2;
@@ -253,15 +267,15 @@ public class StructuredBuilder {
             addEmptyReasonCode(problemList);
         }
     }
-    
+
     /**
      * overload for single reference
+     *
      * @param id
      * @param patient
      * @param reference
      * @return The Condition Resource object
      */
-
     public static Condition createCondition(String id, Patient patient, String reference) {
         return createCondition(id, patient, new String[]{reference});
     }
@@ -271,7 +285,8 @@ public class StructuredBuilder {
      *
      * @param id problem id
      * @param patient
-     * @param references array of resource id to which this problem refers (may be null)
+     * @param references array of resource id to which this problem refers (may
+     * be null)
      * @return The Condition Resource object
      */
     public static Condition createCondition(String id, Patient patient, String[] references) {
@@ -282,6 +297,17 @@ public class StructuredBuilder {
         // add a problem significance extension
         condition.addExtension(new Extension(SD_CC_EXT_PROBLEM_SIGNIFICANCE).
                 setValue(new CodeType("major")));
+
+        // add in some relatedProblemHeader content
+        switch (id) {
+            case "ImmunizationForAddedProblem":
+                addRelatedProblemHeader(condition, "Condition/AllergyIntoleranceForAddedProblem", "child");
+                break;
+            case "AllergyIntoleranceForAddedProblem":
+                addRelatedProblemHeader(condition, "Condition/ImmunizationForAddedProblem", "parent");
+                break;
+            default:
+        }
 
         if (references != null) {
             for (String reference : references) {
@@ -307,12 +333,19 @@ public class StructuredBuilder {
         condition.setSubject(new Reference("Patient/" + patient.getIdElement().getIdPartAsLong()));
 
         // not mandatory
-//      condition.setOnset(new DateTimeType(new Date()));
-        condition.setAssertedDate(new Date());
+//      condition.setOnset(new DateTimeType(BASE_DATE));
+        condition.setAssertedDate(BASE_DATE);
 
         condition.setAsserter(new Reference("Practitioner/1"));
 
         return condition;
+    }
+
+    private static void addRelatedProblemHeader(Condition condition, String target, String type) {
+        Extension relatedProblemHeader = new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedProblemHeader-1");
+        relatedProblemHeader.addExtension(new Extension("target").setValue(new Reference(target)));
+        relatedProblemHeader.addExtension(new Extension("type").setValue(new CodeType(type)));
+        condition.addExtension(relatedProblemHeader);
     }
 
     /**
@@ -332,7 +365,7 @@ public class StructuredBuilder {
         CodeableConcept cc = createCodeableConcept(code, display, SNOMED_URL);
         problemList.setCode(cc);
         problemList.setSubject(new Reference("Patient/" + patient.getIdElement().getIdPartAsLong()));
-        problemList.setDate(new Date());
+        problemList.setDate(BASE_DATE);
 
         cc = createCodeableConcept("event-date", null, "http://hl7.org/fhir/list-order");
         problemList.setOrderedBy(cc);
@@ -423,7 +456,6 @@ public class StructuredBuilder {
 //                        System.err.println("WARNING condition " + conditionId + " is null or missing an encounter context");
 //                    }
 //                }
-
                 break;
 
             default:
@@ -640,7 +672,7 @@ public class StructuredBuilder {
 
         // ext recordedDate
         immunization.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-DateRecorded-1").
-                setValue(new DateTimeType(new Date())));
+                setValue(new DateTimeType(BASE_DATE)));
 
         CodeableConcept cc = createCodeableConcept("170378007", "First hepatitis A vaccination", SNOMED_URL);
 
@@ -709,7 +741,7 @@ public class StructuredBuilder {
         observation.setSubject(new Reference("Patient/2"));
 
         // issued
-        observation.setIssued(new Date());
+        observation.setIssued(BASE_DATE);
 
         // performer
         observation.setPerformer(Collections.singletonList(new Reference("Practitioner/1")));
@@ -726,8 +758,8 @@ public class StructuredBuilder {
         // there are medications statements but not yet a list with enries
         ListResource medicationStatementList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
         // add the references to the list
-        for (BundleEntryComponent entry : structuredBundle.getEntry()){
-            if (entry.getResource() instanceof MedicationStatement ) {
+        for (BundleEntryComponent entry : structuredBundle.getEntry()) {
+            if (entry.getResource() instanceof MedicationStatement) {
                 medicationStatementList.addEntry(new ListEntryComponent().setItem(new Reference(entry.getResource().getResourceType() + "/" + entry.getResource().getId())));
             }
         }
@@ -931,7 +963,7 @@ public class StructuredBuilder {
 
         listResource.setSubject(
                 new Reference(new IdType("Patient", patientId)).setIdentifier(new Identifier().setValue(nhsNumber).setSystem(SystemURL.ID_NHS_NUMBER)));
-        listResource.setDate(new Date());
+        listResource.setDate(BASE_DATE);
         listResource.setOrderedBy(createCodeableConcept("event-date", "Sorted by Event Date", SystemURL.CS_LIST_ORDER));
 
         listResource.addExtension(setClinicalSetting());

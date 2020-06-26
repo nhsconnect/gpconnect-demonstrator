@@ -76,11 +76,14 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     public void postConstruct() {
         if (providerRoutingFilename != null) {
             Path providerRoutingFilePath = new File(configPath + providerRoutingFilename).toPath();
+            LOG.info("config.path = " + configPath);
+            LOG.info("providerRoutingFilePath = " + providerRoutingFilePath);
 
             if (providerRoutingFilePath.toFile().exists()) {
                 try {
                     systemSspToHeader = new ObjectMapper()
                             .readValue(Files.readAllBytes(providerRoutingFilePath), ProviderRouting.class).getAsid();
+                    LOG.info("System asid = " + systemSspToHeader);
                 } catch (IOException ex) {
                     LOG.error("Error reading providerRoutingFile.");
                 }
@@ -431,8 +434,13 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         // otherwise we pass it in?
         // if(interaction != null) {
         if (interaction.validateIdentifier(requestURI) == false) {
-            throwResourceNotFoundException(String.format("Unexpected resource identifier in URI - %s", requestURI),
-                    interaction.getResource());
+            if (requestURI.endsWith("/Appointment/")) {
+                // #337 404 only for read appointment not as per spec but as deployed
+                throwResourceNotFoundException(String.format("Unexpected resource identifier in URI - %s", requestURI),
+                        interaction.getResource());
+            } else {
+                throwInvalidRequest400_BadRequestException(String.format("Unexpected resource identifier in URI - %s", requestURI));
+            }
         }
 
         if (interaction.validateContainedResource(requestURI) == false) {

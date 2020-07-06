@@ -10,6 +10,7 @@
             From :
             <button type="button" class="btn btn-default btn-sm" ng-click="openDatePicker($event, 'fromDate')">
                 <i class="fa fa-calendar"></i>
+                <span class="screen-reader">open from date picker</span>
             </button>
             <input type="text" class="datepicker form-control input-sm popupinputs" ui-date id="fromDate"
                    name="fromDate" ng-model="fromDateValue" ng-click="openDatePicker($event, 'fromDate')"
@@ -19,6 +20,7 @@
             To :
             <button type="button" class="btn btn-default btn-sm" ng-click="openDatePicker($event, 'toDate')">
                 <i class="fa fa-calendar"></i>
+                <span class="screen-reader">open to date picker</span>
             </button>
             <input type="text" class="datepicker form-control input-sm popupinputs" ui-date id="toDate" name="toDate"
                    ng-model="toDateValue" ng-click="openDatePicker($event, 'toDate')" ng-change='dateChanged()'

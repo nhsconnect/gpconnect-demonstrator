@@ -167,6 +167,8 @@ public class StructuredBuilder {
     /**
      * append the entries in the xml bundle file to the response bundle can
      * handle xml or json source
+     * 
+     * This method is only invoked for patients 2 or 3
      *
      * @param filename fully qualified file path to canned response file
      * @param structuredBundle
@@ -195,11 +197,14 @@ public class StructuredBuilder {
 
         // This list identifies those canned clinical areas that need some processing 
         // rather simply transcibing into the reponse as is
+        // ie if problems or consultations, for patient 2 or 3
         if (Arrays.asList(PROCESSED_CANNED_CLINICAL_AREAS).contains(parameterName)) {
-            if (patient.getIdElement().getIdPartAsLong() != PATIENT_3 || !parameterName.equals(INCLUDE_PROBLEMS_PARM)) {
+            // ie if patient 2 or (patient 3 && consultations)
+            if (patient.getIdElement().getIdPartAsLong() == PATIENT_2 || parameterName.equals(INCLUDE_CONSULTATIONS_PARM)) {
                 // this handles canned responses that need reprocessing ie problems and consultations at 1.3
                 handleCannedClinicalArea(parsedBundle, duplicates, structuredBundle, parms, parameterName, patient);
             } else {
+                // for patient 3 when problems are requested return an empty list
                 addEmptyProblemsList(patient, structuredBundle);
             }
         } else {
@@ -353,28 +358,28 @@ public class StructuredBuilder {
      * @param code
      * @param display
      * @param patient
-     * @return
+     * @return populated list
      */
     public static ListResource createList(String code, String display, Patient patient) {
-        ListResource problemList = new ListResource();
+        ListResource list = new ListResource();
 
-        problemList.setMeta(new Meta().addProfile(SD_GPC_LIST));
-        problemList.setStatus(ListResource.ListStatus.CURRENT);
-        problemList.setMode(ListResource.ListMode.SNAPSHOT);
-        problemList.setTitle(display);
+        list.setMeta(new Meta().addProfile(SD_GPC_LIST));
+        list.setStatus(ListResource.ListStatus.CURRENT);
+        list.setMode(ListResource.ListMode.SNAPSHOT);
+        list.setTitle(display);
         CodeableConcept cc = createCodeableConcept(code, display, SNOMED_URL);
-        problemList.setCode(cc);
-        problemList.setSubject(new Reference("Patient/" + patient.getIdElement().getIdPartAsLong()));
-        problemList.setDate(BASE_DATE);
+        list.setCode(cc);
+        list.setSubject(new Reference("Patient/" + patient.getIdElement().getIdPartAsLong()));
+        list.setDate(BASE_DATE);
 
         cc = createCodeableConcept("event-date", null, "http://hl7.org/fhir/list-order");
-        problemList.setOrderedBy(cc);
+        list.setOrderedBy(cc);
 
-        return problemList;
+        return list;
     }
 
     /**
-     *
+     * This method is only invoked for patients 2 or 3
      * @param parsedBundle
      * @param duplicates
      * @param structuredBundle
@@ -461,8 +466,9 @@ public class StructuredBuilder {
             default:
         } // switch Parameter Name
 
-        // add any problems reagrdless of whether problems were requested
-        if (resourceTypes.get(ResourceType.Condition) != null) {
+        // for patient 2 add any problems regardless of whether problems were requested
+        // #347 only return problems for patient 2 and not for patient 3
+        if (patient.getIdElement().getIdPartAsLong() == PATIENT_2 && resourceTypes.get(ResourceType.Condition) != null) {
             // for already added problems add any related problems/conditions
             resourceTypes.get(ResourceType.Condition).keySet().stream().sorted().forEachOrdered((conditionId) -> {
                 Condition condition = (Condition) resourceTypes.get(ResourceType.Condition).get(conditionId);

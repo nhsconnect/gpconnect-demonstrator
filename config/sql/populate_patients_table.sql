@@ -29,3 +29,9 @@ VALUES
 (14,'MS','Georgina','HOPLEY','103 ENDERBY ROAD','','SCUNTHORPE','DN17 2JL','01454587554','1927-05-15','Female',9476718943,000014,1,3,'2016-07-25 12:00:00',FALSE,FALSE,NULL,'S','1','1935-11-05'),
 (19,'PNA','PNA','PNA','PNA','PNA','','PNA','PNA','2017-05-20','Male',9866105660,000019,1,3,'2017-05-23 12:00:00',FALSE,FALSE,NULL,'M','1','2017-05-13');
 UNLOCK TABLES;
+
+/* mobile required for a specific supplier */
+INSERT INTO patient_telecoms
+ (patientId,system,usetype,value)
+VALUES
+ (2,'PHONE','MOBILE','+447401254880');

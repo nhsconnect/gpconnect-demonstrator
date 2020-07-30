@@ -8,7 +8,7 @@ services:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_USER=gpconnectdbuser
       - MYSQL_PASSWORD=gpc0nn3ct
-      - MYSQL_DATABASE=gpconnect
+      - MYSQL_DATABASE=gpconnect0
   gpconnect-api:
     image: gpconnect # rename to whatever you tagged the GP Connect build is
     ports:
@@ -20,7 +20,7 @@ services:
       - DATABASE_ADDRESS=gpconnect-db
       - DATABASE_USERNAME=gpconnectdbuser
       - DATABASE_PASSWORD=gpc0nn3ct
-      - DATABASE_SCHEMA=gpconnect
+      - DATABASE_SCHEMA=gpconnect0
       - CONTEXT_PATH=/gpconnect-demonstrator/v0/
     links:
       - gpconnect-db

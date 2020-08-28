@@ -1,4 +1,4 @@
-USE gpconnect1;
+USE gpconnect1_5;
 INSERT INTO translations
   (id, system, code, display)
 VALUES

@@ -1,4 +1,5 @@
-USE gpconnect1;
+USE gpconnect1_5;
+
 INSERT INTO medical_departments
   (id,department,lastUpdated)
 VALUES
@@ -17,4 +18,4 @@ VALUES
   (4,'R1A14','The Hockey Surgery','2016-07-25 12:00:00'),
   (5,'R1A15','Test GP Care Trust Site B','2016-07-25 12:00:00'),
   (6,'R3B46','New GP Practice','2016-07-25 12:00:00'),
-  (7,'A20047','Dr Legg''s Surgery','2016-07-25 12:00:00');
+  (7,'B82617','COXWOLD SURGERY','2016-07-25 12:00:00');

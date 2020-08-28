@@ -1,4 +1,4 @@
-USE gpconnect1;
+USE gpconnect1_5;
 INSERT INTO medication_statements
  (id,lastIssueDate,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,dosageLastChanged, warningCode, prescribingAgency)
@@ -294,5 +294,5 @@ VALUES
 INSERT INTO allergyintolerance
   (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,concept_code,concept_display,desc_code,code_translation_ref,manCoding,manDisplay,manDescCoding,manDescDisplay, recorder, severity)
 VALUES
-  (9658218873 ,'2016-11-01',"Desensitised to Peanuts","","Major", "resolved","unconfirmed","environmental","2",'1962-08-12','2016-11-01',"91935009","Allergy to peanuts","152306018","1","249519007","Diarrhoea and vomiting","372285017","", '1', "mild"),
-  (9658218873 ,null,"","","Major", "active","unconfirmed","food","2",'1963-07-27 12:00:00','1963-07-27 12:00:00',"89707004","Sesame oil (substance)","148720012","","230145002", "Difficulty breathing","344917018","",'1', "severe");
+  (9690937286 ,'2016-11-01',"Desensitised to Peanuts","","Major", "resolved","unconfirmed","environmental","2",'1962-08-12','2016-11-01',"91935009","Allergy to peanuts","152306018","1","249519007","Diarrhoea and vomiting","372285017","", '1', "mild"),
+  (9690937286 ,null,"","","Major", "active","unconfirmed","food","2",'1963-07-27 12:00:00','1963-07-27 12:00:00',"89707004","Sesame oil (substance)","148720012","","230145002", "Difficulty breathing","344917018","",'1', "severe");

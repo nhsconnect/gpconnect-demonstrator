@@ -1,4 +1,4 @@
-USE gpconnect1;
+USE gpconnect1_5;
 INSERT INTO appointment_schedules
   (id,practitionerId,identifier,typeCode,typeDescription,locationId,practitionerRoleCode,practitionerRoleDisplay,startDateTime,endDateTime,scheduleComment,lastUpdated)
 VALUES
@@ -64,5 +64,5 @@ VALUES
   (13,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',13),
   (14,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',14),
   (15,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',15),
-  (16,'Dr Legg''s Main Surgery','A20047','BUILDING Z','Z55555','ANNEX','active','2016-07-25 12:00:00',16),
-  (17,'Dr Legg''s Branch Surgery','A20047','BUILDING X','Z55556','ANNEX','active','2016-07-25 12:00:00',17);
+  (16,'COXWOLD Surgery','B82617','BUILDING Z','Z55555','ANNEX','active','2016-07-25 12:00:00',16),
+  (17,'COCWOLD Surgery','B82617','BUILDING X','Z55556','ANNEX','active','2016-07-25 12:00:00',17);

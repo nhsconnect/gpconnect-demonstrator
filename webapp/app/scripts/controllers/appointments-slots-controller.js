@@ -457,7 +457,7 @@ angular.module('gpConnect')
                 $scope.appointmentBookingParameters.type = $scope.selectedSlots[0].model.name;
 
                 // Check the patient is on the remote system
-                PatientService.getPatientFhirId($stateParams.patientId, "A20047").then(function (patientFhirIDResult) {
+                PatientService.getPatientFhirId($stateParams.patientId, "B82617").then(function (patientFhirIDResult) {
 
                     if (patientFhirIDResult == undefined) {
                         // The patient does not exist on the remote system so needs to be created

@@ -1,4 +1,4 @@
-USE gpconnect1;
+USE gpconnect1_5;
 
 /* Destroy all existing data */
 DROP TABLE IF EXISTS appointment_slots_organizations;
@@ -181,7 +181,7 @@ CREATE TABLE patients (
   marital_status      VARCHAR(10)  NULL,
   managing_organization BIGINT     NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES medical_departments(id),
+/*  FOREIGN KEY (department_id) REFERENCES medical_departments(id), */
   FOREIGN KEY (gp_id) REFERENCES practitioners(id)
 );
 
@@ -413,6 +413,6 @@ CREATE TABLE patient_telecoms (
   system      VARCHAR(250) NULL,
   usetype      VARCHAR(250) NULL,
   value      VARCHAR(250) NULL,
-  PRIMARY KEY (id),
-  FOREIGN KEY (patientId) REFERENCES patients(id)
+  PRIMARY KEY (id)  /*,
+  FOREIGN KEY (patientId) REFERENCES patients(id) */
 );

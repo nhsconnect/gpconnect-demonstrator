@@ -4,8 +4,8 @@
     "practices": [
         {
             "id": "1",
-            "odsCode": "A20047",
-            "name": "Dr Legg's Surgery",
+            "odsCode": "B82617",
+            "name": "COXWOLD Surgery",
             "interactionIds": ["*"],
             "endpointURL": "fhir",
             "apiEndpointURL": "api",

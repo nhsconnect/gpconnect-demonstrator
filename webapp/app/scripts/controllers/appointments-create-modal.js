@@ -34,10 +34,10 @@ angular.module('gpConnect')
                     "identifier": [
                         {
                             "system": "https://fhir.nhs.uk/Id/ods-organization-code",
-                            "value": "A20047"
+                            "value": "B82617"
                         }
                     ],
-                    "name": "Dr Legg's Surgery",
+                    "name": "COXWOLD Surgery",
                     "telecom": [
                         {
                             "system": "phone",

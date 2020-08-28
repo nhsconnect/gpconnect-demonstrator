@@ -218,8 +218,8 @@ public class RefreshData {
         appointment.setLastUpdated(new Date());
         
         BookingOrgDetail bookingOrgDetail = new BookingOrgDetail();
-        bookingOrgDetail.setOrgCode("A20047");
-        bookingOrgDetail.setName("Dr Legg's Surgery");
+        bookingOrgDetail.setOrgCode("B82617");
+        bookingOrgDetail.setName("COXWOLD Surgery");
         bookingOrgDetail.setTelephone("0300 303 5678");
         bookingOrgDetail.setSystem("PHONE");
         appointment.setBookingOrganization(bookingOrgDetail);

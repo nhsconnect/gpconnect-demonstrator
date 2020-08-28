@@ -998,7 +998,7 @@ public class StructuredBuilder {
         String[][] quotedSubstitutions = new String[][]{
             {"REARDON, John", name.getFamily().toUpperCase() + ", " + name.getGiven().get(0)}, // Patient Name
             {"SMITH", "GILBERT"}, // GP
-            {"GREENTOWN GENERAL HOSPITAL", "Dr Legg's Surgery"} // Site
+            {"GREENTOWN GENERAL HOSPITAL", "COXWOLD Surgery"} // Site
         };
         // nb straight substitutions
         // standard reg exp substitutions

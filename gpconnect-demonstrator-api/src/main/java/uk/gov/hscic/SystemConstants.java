@@ -114,7 +114,7 @@ public final class SystemConstants {
     public static final int PATIENT_NOCONSENT = 15; // patient 15 No consent to share
     
     // TODO remove hard coding pick up from providerRouting.json ?
-    public static final String OUR_ODS_CODE = "A20047";
+    public static final String OUR_ODS_CODE = "B82617";
 
     // #266 Notes associated with warnings
     public static final String CONFIDENTIAL_ITEMS_NOTE = "Items excluded due to confidentiality and/or patient preferences.";

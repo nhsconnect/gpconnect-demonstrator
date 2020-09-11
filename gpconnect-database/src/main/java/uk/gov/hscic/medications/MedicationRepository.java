@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface MedicationRepository extends JpaRepository<MedicationEntity, Long> {
 
     // TODO there's a harcoded schema name here not sure it can be easily removed though
-    @Query(value="SELECT m.id FROM gpconnect1.medications m WHERE m.display=?1", nativeQuery = true)
+    @Query(value="SELECT m.id FROM gpconnect1_5.medications m WHERE m.display=?1", nativeQuery = true)
     Long getMedicationIdByName(String name);
 }

@@ -2,7 +2,7 @@
   window.__env = window.__env || {};
 
   // Base url
-  window.__env.baseUrl = '/gpconnect-demonstrator/v1_5/';
+  window.__env.baseUrl = '/B82617/STU3/1/gpconnect/';
 
   // for something behind a reverse proxy this is the base *before* the proxy has remapped it ie the externally visible url
   //window.__env.baseUrl = '/v1/';

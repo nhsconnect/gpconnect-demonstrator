@@ -65,4 +65,4 @@ VALUES
   (14,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',14),
   (15,'Building 6','ORG112','BUILDING A','Z33433','ANNEX','suspended','2016-07-25 12:00:00',15),
   (16,'COXWOLD Surgery','B82617','BUILDING Z','Z55555','ANNEX','active','2016-07-25 12:00:00',16),
-  (17,'COCWOLD Surgery','B82617','BUILDING X','Z55556','ANNEX','active','2016-07-25 12:00:00',17);
+  (17,'COXWOLD Surgery','B82617','BUILDING X','Z55556','ANNEX','active','2016-07-25 12:00:00',17);

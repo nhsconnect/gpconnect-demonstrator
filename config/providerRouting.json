@@ -1,6 +1,6 @@
 {
     "spineProxy": "",
-    "ASID": "918999198993",
+    "ASID": "918999198738",
     "practices": [
         {
             "id": "1",
@@ -9,7 +9,7 @@
             "interactionIds": ["*"],
             "endpointURL": "fhir",
             "apiEndpointURL": "api",
-            "ASID": "918999198993",
+            "ASID": "918999198738",
 			"orgType": "GP Practice"
         }
     ]

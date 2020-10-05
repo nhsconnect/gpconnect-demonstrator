@@ -11,12 +11,12 @@
             </meta>
             <status value="current"></status>
             <mode value="snapshot"></mode>
-            <title value="Investigations and Results"></title>
+            <title value="Investigations and results"></title>
             <code>
                <coding>
                   <system value="http://snomed.info/sct"></system>
                   <code value="887191000000108"></code>
-                  <display value="Investigations and Results"></display>
+                  <display value="Investigations and results"></display>
                </coding>
             </code>
             <subject>

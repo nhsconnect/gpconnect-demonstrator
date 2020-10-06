@@ -102,7 +102,7 @@ public class StructuredBuilder {
     }
 
     private static Date BASE_DATE; // supplies a consistent date to the resources created (replaces multiple calls to new Date())
-    
+
     /**
      * This map is critical it guides what resources will be added into the
      * canned response. It should only contain references of the form
@@ -167,7 +167,7 @@ public class StructuredBuilder {
     /**
      * append the entries in the xml bundle file to the response bundle can
      * handle xml or json source
-     * 
+     *
      * This method is only invoked for patients 2 or 3
      *
      * @param filename fully qualified file path to canned response file
@@ -380,6 +380,7 @@ public class StructuredBuilder {
 
     /**
      * This method is only invoked for patients 2 or 3
+     *
      * @param parsedBundle
      * @param duplicates
      * @param structuredBundle
@@ -526,10 +527,20 @@ public class StructuredBuilder {
 
         if (parameterName.equals(INCLUDE_PROBLEMS_PARM) && patient.getIdElement().getIdPartAsLong() == PATIENT_2) {
             handlePatient2ProblemsRequest(patient, structuredBundle);
+            // add the secondary lists for problems
+            for (String title : new String[]{SNOMED_PROBLEMS_MEDS_LIST_DISPLAY, SNOMED_PROBLEMS_UNCATEGORISED_LIST_DISPLAY}) {
+                ListResource secondaryList = (ListResource) resourceTypes.get(ResourceType.List).get(title);
+                addEntryToBundleOnlyOnce(structuredBundle, title, new BundleEntryComponent().setResource(secondaryList));
+            }
         }
 
         if (parameterName.equals(INCLUDE_CONSULTATIONS_PARM) && patient.getIdElement().getIdPartAsLong() == PATIENT_2) {
             handlePatient2ConsultationsRequest(patient, structuredBundle);
+            // add the secondary lists for consultations
+            for (String title : new String[]{SNOMED_CONSULTATION_MEDS_LIST_DISPLAY, SNOMED_CONSULTATION_UNCATEGORISED_LIST_DISPLAY}) {
+                ListResource secondaryList = (ListResource) resourceTypes.get(ResourceType.List).get(title);
+                addEntryToBundleOnlyOnce(structuredBundle, title, new BundleEntryComponent().setResource(secondaryList));
+            }
         }
 
         HashMap<String, ListResource> listResources = rebuildBundledLists(structuredBundle, resourceTypes);
@@ -562,7 +573,7 @@ public class StructuredBuilder {
         // TODO There appears to be an empty list here for some reason
         ListResource medicationStatementList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
         ListResource allergyList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
-        // this is  a typical hence we have set set a title that is not the same as the display
+        // this is atypical hence we have set set a title that is not the same as the display
         allergyList.setTitle(ACTIVE_ALLERGIES_TITLE);
 
         ListResource immunizationsList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);

@@ -87,8 +87,16 @@ public final class SystemConstants {
     public static final String SNOMED_REFERRALS_LIST_DISPLAY = "Outbound referral";
     public static final String SNOMED_REFERRALS_LIST_CODE = "792931000000107";
     
-    public static final String SNOMED_INVESTIGATIONS_LIST_DISPLAY = "Investigations and Results";
+    public static final String SNOMED_INVESTIGATIONS_LIST_DISPLAY = "Investigations and results";
     public static final String SNOMED_INVESTIGATIONS_LIST_CODE = "887191000000108";
+
+    // 1.5 consultation secondary lists - these do not currently have snomed codes associated
+    public static final String SNOMED_CONSULTATION_MEDS_LIST_DISPLAY = "Consultations - medications contained in consultations";
+    public static final String SNOMED_CONSULTATION_UNCATEGORISED_LIST_DISPLAY = "Consultations - uncategorised data contained in consultations";
+
+    // 1.5 problems secondary lists - these do not currently have snomed codes associated
+    public static final String SNOMED_PROBLEMS_MEDS_LIST_DISPLAY = "Problems - medications related to problems";
+    public static final String SNOMED_PROBLEMS_UNCATEGORISED_LIST_DISPLAY = "Problems - uncategorised data related to problems";
     
     // extension point
 

@@ -1222,11 +1222,60 @@
             </meta>
             <status value="current"></status>
             <mode value="snapshot"></mode>
+            <title value="Consultations - problems contained in consultations"></title>
+            <code>
+               <coding>
+                  <system value="http://snomed.info/sct"></system>
+                  <code value="consultations-problems-contained-in-consultations"></code>
+                  <display value="Consultations - problems contained in consultations"></display>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+            </subject>
+            <date value="2019-03-01T10:57:34+00:00"></date>
+            <orderedBy>
+               <coding>
+                  <system value="http://hl7.org/fhir/list-order"></system>
+                  <code value="event-date"></code>
+               </coding>
+            </orderedBy>
+            <entry>
+               <item>
+                  <reference value="Condition/Problem-A-Anxiety-With-Depression"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Condition/Problem-B-Swollen-Legs"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Condition/Problem-D-URTI"></reference>
+               </item>
+            </entry>
+            <entry>
+               <item>
+                  <reference value="Condition/Problem-E-Post-viral-cough"></reference>
+               </item>
+            </entry>
+         </List>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
+         <List xmlns="http://hl7.org/fhir">
+            <meta>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+            </meta>
+            <status value="current"></status>
+            <mode value="snapshot"></mode>
             <title value="Consultations - medications contained in consultations"></title>
             <code>
                <coding>
                   <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
-                  <code value="Consultations - medications contained in consultations"></code>
+                  <code value="consultations-medications-contained-in-consultations"></code>
                   <display value="Consultations - medications contained in consultations"></display>
                </coding>
             </code>
@@ -1305,7 +1354,7 @@
             <code>
                <coding>
                   <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
-                  <code value="Consultations - uncategorised data contained in consultations"></code>
+                  <code value="consultations-uncategorised-data-contained-in-consultations"></code>
                   <display value="Consultations - uncategorised data contained in consultations"></display>
                </coding>
             </code>
@@ -1569,7 +1618,7 @@
             <code>
                <coding>
                   <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
-                  <code value="Problems - medications related to problems"></code>
+                  <code value="problems-medications-related-to-problems"></code>
                   <display value="Problems - medications related to problems"></display>
                </coding>
             </code>
@@ -1638,7 +1687,7 @@
             <code>
                <coding>
                   <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
-                  <code value="Problems - uncategorised data related to problems"></code>
+                  <code value="problems-uncategorised-data-related-to-problems"></code>
                   <display value="Problems - uncategorised data related to problems"></display>
                </coding>
             </code>

@@ -482,7 +482,7 @@ public class StructuredBuilder {
 
                                 // #314 re add the problems list because there are some!
                                 ListResource problemList = (ListResource) resourceTypes.get(ResourceType.List).get(SNOMED_PROBLEMS_LIST_DISPLAY);
-                                if (problemList != null) {
+                                if (parameterName.equals(INCLUDE_PROBLEMS_PARM) && problemList != null) {
                                     addEntryToBundleOnlyOnce(structuredBundle, SNOMED_PROBLEMS_LIST_DISPLAY, new BundleEntryComponent().setResource(problemList));
                                 }
                                 break;

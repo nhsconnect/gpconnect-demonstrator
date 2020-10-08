@@ -93,6 +93,7 @@ public final class SystemConstants {
     // 1.5 consultation secondary lists
     public static final String CONSULTATION_MEDS_SECONDARY_LIST_TITLE = "Consultations - medications contained in consultations";
     public static final String CONSULTATION_UNCATEGORISED_SECONDARY_LIST_TITLE = "Consultations - uncategorised data contained in consultations";
+    public static final String CONSULTATION_PROBLEMS_SECONDARY_LIST_TITLE = "Consultations - problems contained in consultations";
 
     // 1.5 problems secondary lists
     public static final String PROBLEMS_MEDS_SECONDARY_LIST_TITLE = "Problems - medications related to problems";

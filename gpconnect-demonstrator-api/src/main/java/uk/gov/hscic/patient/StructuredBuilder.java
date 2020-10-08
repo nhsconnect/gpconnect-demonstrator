@@ -528,7 +528,9 @@ public class StructuredBuilder {
         if (parameterName.equals(INCLUDE_PROBLEMS_PARM) && patient.getIdElement().getIdPartAsLong() == PATIENT_2) {
             handlePatient2ProblemsRequest(patient, structuredBundle);
             // add the secondary lists for problems
-            for (String title : new String[]{PROBLEMS_MEDS_SECONDARY_LIST_TITLE, PROBLEMS_UNCATEGORISED_SECONDARY_LIST_TITLE}) {
+            for (String title : new String[]{
+                PROBLEMS_MEDS_SECONDARY_LIST_TITLE, 
+                PROBLEMS_UNCATEGORISED_SECONDARY_LIST_TITLE}) {
                 ListResource secondaryList = (ListResource) resourceTypes.get(ResourceType.List).get(title);
                 addEntryToBundleOnlyOnce(structuredBundle, title, new BundleEntryComponent().setResource(secondaryList));
             }
@@ -537,7 +539,10 @@ public class StructuredBuilder {
         if (parameterName.equals(INCLUDE_CONSULTATIONS_PARM) && patient.getIdElement().getIdPartAsLong() == PATIENT_2) {
             handlePatient2ConsultationsRequest(patient, structuredBundle);
             // add the secondary lists for consultations
-            for (String title : new String[]{CONSULTATION_MEDS_SECONDARY_LIST_TITLE, CONSULTATION_UNCATEGORISED_SECONDARY_LIST_TITLE}) {
+            for (String title : new String[]{
+                CONSULTATION_MEDS_SECONDARY_LIST_TITLE, 
+                CONSULTATION_UNCATEGORISED_SECONDARY_LIST_TITLE,
+                CONSULTATION_PROBLEMS_SECONDARY_LIST_TITLE}) {
                 ListResource secondaryList = (ListResource) resourceTypes.get(ResourceType.List).get(title);
                 addEntryToBundleOnlyOnce(structuredBundle, title, new BundleEntryComponent().setResource(secondaryList));
             }
@@ -562,7 +567,7 @@ public class StructuredBuilder {
             }
         }
     }
-
+    
     /**
      *
      * @param patient

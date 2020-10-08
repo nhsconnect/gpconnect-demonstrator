@@ -537,7 +537,7 @@ public class StructuredBuilder {
         }
 
         if (parameterName.equals(INCLUDE_CONSULTATIONS_PARM) && patient.getIdElement().getIdPartAsLong() == PATIENT_2) {
-            handlePatient2ConsultationsRequest(patient, structuredBundle);
+            //handlePatient2ConsultationsRequest(patient, structuredBundle);
             // add the secondary lists for consultations
             for (String title : new String[]{
                 CONSULTATION_MEDS_SECONDARY_LIST_TITLE, 
@@ -575,14 +575,18 @@ public class StructuredBuilder {
      */
     private void handlePatient2ProblemsRequest(Patient patient, Bundle structuredBundle) {
         // add a medications statement and a list
-        // TODO There appears to be an empty list here for some reason
+        // There appears to be an empty list here but it does get populated since Medications are a special case for problems
         ListResource medicationStatementList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
-        ListResource allergyList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
+       
+        // Much of this code is commented out since Pete G has requested the dummy resources which were previously added should now be removed.
+        // Following Pete S new sample message which includes secondary lists
+        
+        //ListResource allergyList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
         // this is atypical hence we have set set a title that is not the same as the display
-        allergyList.setTitle(ACTIVE_ALLERGIES_TITLE);
+        //allergyList.setTitle(ACTIVE_ALLERGIES_TITLE);
 
-        ListResource immunizationsList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
-        ListResource uncategorisedDataList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
+        //ListResource immunizationsList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
+        //ListResource uncategorisedDataList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
 
         ListResource problemsList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY);
 
@@ -590,7 +594,7 @@ public class StructuredBuilder {
         // make a copy because this collection will be modified.
         String[] keys = addedToResponse.keySet().toArray(new String[0]);
         HashSet<String> hs = new HashSet<>();
-        final String[] CLINICAL_AREAS = new String[]{"MedicationStatement", "AllergyIntolerance", "Immunization", "Observation"};
+        final String[] CLINICAL_AREAS = new String[]{"MedicationStatement"/*, "AllergyIntolerance", "Immunization", "Observation"*/};
         for (String id : keys) {
             String itemType = id.replaceFirst("/.*$", "");
             for (String ca : CLINICAL_AREAS) {
@@ -602,15 +606,15 @@ public class StructuredBuilder {
                             break;
 
                         case "AllergyIntolerance":
-                            listResource = allergyList;
+                            //listResource = allergyList;
                             break;
 
                         case "Immunization":
-                            listResource = immunizationsList;
+                            //listResource = immunizationsList;
                             break;
 
                         case "Observation":
-                            listResource = uncategorisedDataList;
+                            //listResource = uncategorisedDataList;
                             break;
                     }
 
@@ -627,14 +631,14 @@ public class StructuredBuilder {
         // handle cases where we know there are no Clinical Areas
         // we know patient 2 does not have any of these so add some
         if (!hs.contains("AllergyIntolerance")) {
-            addDummyResourceAndProblem(patient, createAllergyIntolerance(), allergyList, structuredBundle, problemsList);
+            //addDummyResourceAndProblem(patient, createAllergyIntolerance(), allergyList, structuredBundle, problemsList);
         }
         if (!hs.contains("Immunization")) {
-            addDummyResourceAndProblem(patient, createImmunization(), immunizationsList, structuredBundle, problemsList);
+            //addDummyResourceAndProblem(patient, createImmunization(), immunizationsList, structuredBundle, problemsList);
         }
         if (!hs.contains("Observation")) {
             // Uncategorised Data
-            addDummyResourceAndProblem(patient, createObservation(), uncategorisedDataList, structuredBundle, problemsList);
+            //addDummyResourceAndProblem(patient, createObservation(), uncategorisedDataList, structuredBundle, problemsList);
         }
     }
 

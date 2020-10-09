@@ -719,16 +719,6 @@
                   <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Order-1"></reference>
                </valueReference>
             </extension>
-            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
-                  <reference value="Observation/Consultation2-Topic2-Category-History-Observation-1"></reference>
-               </valueReference>
-            </extension>
-            <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
-               <valueReference>
-                  <reference value="Observation/Consultation2-Topic2-Category-Plan-Observation-1"></reference>
-               </valueReference>
-            </extension>
             <identifier>
                <system value="https://provider.nhs.uk/data-identifier"></system>
                <value value="D03A94D9-4D1C-11E3-A2DD-010000000161"></value>
@@ -797,12 +787,12 @@
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation2-Topic1-Category-History-Observation-1"></reference>
+                  <reference value="Observation/Consultation2-Topic2-Category-History-Observation-1"></reference>
                </valueReference>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Observation/Consultation2-Topic1-Category-Plan-Observation-2"></reference>
+                  <reference value="Observation/Consultation2-Topic2-Category-Plan-Observation-1"></reference>
                </valueReference>
             </extension>
             <identifier>
@@ -1893,7 +1883,7 @@
             </entry>
             <entry>
                <item>
-                  <reference value="Observation/Consultation2-Topic1-Category-Plan-Observation-2"></reference>
+                  <reference value="Observation/Consultation2-Topic1-Category-Plan-Observation-1"></reference>
                </item>
             </entry>
          </List>

@@ -1281,52 +1281,52 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Plan"></reference>
+                  <reference value="MedicationStatement/Consultation1-Topic1-Category-Plan-Medication-Plan"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Order"></reference>
+                  <reference value="MedicationStatement/Consultation1-Topic1-Category-Plan-Medication-Order"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation1-Topic3-flat-Medication-Plan-1"></reference>
+                  <reference value="MedicationStatement/Consultation1-Topic3-flat-Medication-Plan-1"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation1-Topic3-flat-Medication-Order-1"></reference>
+                  <reference value="MedicationStatement/Consultation1-Topic3-flat-Medication-Order-1"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Order-1"></reference>
+                  <reference value="MedicationStatement/Consultation1-Topic4-Category-Plan-Medication-Order-1"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
+                  <reference value="MedicationStatement/Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Plan"></reference>
+                  <reference value="MedicationStatement/Consultation2-Topic1-Category-Plan-Medication-Plan"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Order"></reference>
+                  <reference value="MedicationStatement/Consultation2-Topic1-Category-Plan-Medication-Order"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Plan"></reference>
+                  <reference value="MedicationStatement/Consultation3-Topic1-Category-Plan-Medication-Plan"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Order"></reference>
+                  <reference value="MedicationStatement/Consultation3-Topic1-Category-Plan-Medication-Order"></reference>
                </item>
             </entry>
          </List>
@@ -1624,42 +1624,42 @@
             </orderedBy>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Plan"></reference>
+                  <reference value="MedicationStatement/Consultation1-Topic1-Category-Plan-Medication-Plan"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation1-Topic1-Category-Plan-Medication-Order"></reference>
+                  <reference value="MedicationStatement/Consultation1-Topic1-Category-Plan-Medication-Order"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Plan"></reference>
+                  <reference value="MedicationStatement/Consultation2-Topic1-Category-Plan-Medication-Plan"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation2-Topic1-Category-Plan-Medication-Order"></reference>
+                  <reference value="MedicationStatement/Consultation2-Topic1-Category-Plan-Medication-Order"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Plan"></reference>
+                  <reference value="MedicationStatement/Consultation3-Topic1-Category-Plan-Medication-Plan"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation3-Topic1-Category-Plan-Medication-Order"></reference>
+                  <reference value="MedicationStatement/Consultation3-Topic1-Category-Plan-Medication-Order"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
+                  <reference value="MedicationStatement/Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Order-1"></reference>
+                  <reference value="MedicationStatement/Consultation1-Topic4-Category-Plan-Medication-Order-1"></reference>
                </item>
             </entry>
          </List>

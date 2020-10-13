@@ -514,7 +514,8 @@ public class StructuredBuilder {
                         }
                     }
 
-                    if (medicationsStatmentsPresent) { // check to see if there are any medications statements that have been added 
+                    // Do not constrcut primary meds lists for problems or comnsultations
+                    if (false && medicationsStatmentsPresent) { // check to see if there are any medications statements that have been added 
                         long patientLogicalID = patient.getIdElement().getIdPartAsLong();
                         // add a medications list (only when problems are requested)
                         addEntryToBundleOnlyOnce(structuredBundle, SNOMED_MEDICATION_LIST_DISPLAY,
@@ -576,7 +577,7 @@ public class StructuredBuilder {
     private void handlePatient2ProblemsRequest(Patient patient, Bundle structuredBundle) {
         // add a medications statement and a list
         // There appears to be an empty list here but it does get populated since Medications are a special case for problems
-        ListResource medicationStatementList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
+        //ListResource medicationStatementList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
        
         // Much of this code is commented out since Pete G has requested the dummy resources which were previously added should now be removed.
         // Following Pete S new sample message which includes secondary lists
@@ -602,7 +603,7 @@ public class StructuredBuilder {
                     ListResource listResource = null;
                     switch (ca) {
                         case "MedicationStatement":
-                            listResource = medicationStatementList;
+                            //listResource = medicationStatementList;
                             break;
 
                         case "AllergyIntolerance":

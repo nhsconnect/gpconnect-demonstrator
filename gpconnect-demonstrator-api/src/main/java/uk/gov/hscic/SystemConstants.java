@@ -112,7 +112,7 @@ public final class SystemConstants {
     
     // 1.5
     public static final String IMMUNIZATIONS_INCLUDE_NOT_GIVEN_PARAM_PART = "includeNotGiven";
-    public static final String IMMUNIZATIONS_INCLUDE_DISSENT_CONSENT_PARAM_PART = "includeDissentConsent";
+    public static final String IMMUNIZATIONS_INCLUDE_DISSENT_CONSENT_PARAM_PART = "includeStatus";
     
     // offsets into the patients property array. See the provider prerequsites spreadsheet for more details
     // https://github.com/nhsconnect/gpconnect-provider-testing/blob/master/Data/Test%20Suite%20Prerequisites.xlsx

@@ -854,9 +854,9 @@
             <participant>
                <type>
                   <coding>
-                     <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-ParticipantType-1"></system>
                      <code value="PPRF"></code>
-                     <display value="Primary Performer"></display>
+                     <display value="primary performer"></display>
                   </coding>
                </type>
                <individual>
@@ -866,9 +866,9 @@
             <participant>
                <type>
                   <coding>
-                     <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
-                     <code value="AUTH"></code>
-                     <display value="Author"></display>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-ParticipantType-1"></system>
+                     <code value="REC"></code>
+                     <display value="recorder"></display>
                   </coding>
                </type>
                <individual>
@@ -4302,9 +4302,9 @@
             <participant>
                <type>
                   <coding>
-                     <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-ParticipantType-1"></system>
                      <code value="PPRF"></code>
-                     <display value="Primary Performer"></display>
+                     <display value="primary performer"></display>
                   </coding>
                </type>
                <individual>
@@ -4314,9 +4314,9 @@
             <participant>
                <type>
                   <coding>
-                     <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
-                     <code value="AUTH"></code>
-                     <display value="Author"></display>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-ParticipantType-1"></system>
+                     <code value="REC"></code>
+                     <display value="recorder"></display>
                   </coding>
                </type>
                <individual>
@@ -5224,9 +5224,9 @@
             <participant>
                <type>
                   <coding>
-                     <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-ParticipantType-1"></system>
                      <code value="PPRF"></code>
-                     <display value="Primary Performer"></display>
+                     <display value="primary performer"></display>
                   </coding>
                </type>
                <individual>
@@ -5236,9 +5236,9 @@
             <participant>
                <type>
                   <coding>
-                     <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"></system>
-                     <code value="AUTH"></code>
-                     <display value="Author"></display>
+                     <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-ParticipantType-1"></system>
+                     <code value="REC"></code>
+                     <display value="recorder"></display>
                   </coding>
                </type>
                <individual>

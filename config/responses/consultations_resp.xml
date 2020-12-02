@@ -860,7 +860,7 @@
                   </coding>
                </type>
                <individual>
-                  <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+                  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
                </individual>
             </participant>
             <participant>
@@ -872,7 +872,7 @@
                   </coding>
                </type>
                <individual>
-                  <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+                  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
                </individual>
             </participant>
             <period>
@@ -4308,7 +4308,7 @@
                   </coding>
                </type>
                <individual>
-                  <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+                  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
                </individual>
             </participant>
             <participant>
@@ -4320,7 +4320,7 @@
                   </coding>
                </type>
                <individual>
-                  <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+                  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
                </individual>
             </participant>
             <period>
@@ -5230,7 +5230,7 @@
                   </coding>
                </type>
                <individual>
-                  <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+                  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
                </individual>
             </participant>
             <participant>
@@ -5242,7 +5242,7 @@
                   </coding>
                </type>
                <individual>
-                  <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+                  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
                </individual>
             </participant>
             <period>

@@ -79,7 +79,7 @@
             </subject>
             <issued value="2019-04-03T12:00:00+00:00"></issued>
 		   <performer>
-			  <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+			  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
 		   </performer>
             <context>
                <reference value="Encounter/Encounter1"></reference>
@@ -126,7 +126,7 @@
             </subject>
             <issued value="2019-04-03T12:00:00+00:00"></issued>
 		   <performer>
-			  <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+			  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
 		   </performer>
             <context>
                <reference value="Encounter/Encounter1"></reference>
@@ -173,7 +173,7 @@
                <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
             </subject>
 		   <performer>
-			  <reference value="Practioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+			  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
 		   </performer>
             <context>
                <reference value="Encounter/Encounter1"></reference>

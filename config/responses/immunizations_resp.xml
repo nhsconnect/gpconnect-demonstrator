@@ -39,6 +39,29 @@
    </entry>
    <entry>
       <resource>
+         <Location xmlns="http://hl7.org/fhir">
+            <id value="17"></id>
+            <meta>
+               <versionId value="636064088100870233"></versionId>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Location-1"></profile>
+            </meta>
+			  <name value="COXWOLD Surgery"/>
+			  <address>
+				<line value="NHS Digital Test Data Manager"/>
+				<line value="Whitehall 2"/>
+				<city value="Leeds"/>
+				<district value="West Yorkshire"/>
+				<postalCode value="LS1 4HR"/>
+				<country value="UK"/>
+			  </address>
+			  <managingOrganization>
+				<reference value="Organization/7"/>
+			  </managingOrganization>
+         </Location>
+      </resource>
+   </entry>
+   <entry>
+      <resource>
          <Immunization xmlns="http://hl7.org/fhir">
             <id value="eba25af1-5b74-4790-aa5a-2134fd27ad45"></id>
             <meta>

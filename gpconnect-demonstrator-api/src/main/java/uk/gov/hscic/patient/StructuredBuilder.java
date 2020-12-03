@@ -35,16 +35,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.hl7.fhir.dstu3.model.AllergyIntolerance;
-import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceCategory;
-import org.hl7.fhir.dstu3.model.AllergyIntolerance.AllergyIntoleranceReactionComponent;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.CodeType;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Condition;
 import org.hl7.fhir.dstu3.model.Condition.ConditionClinicalStatus;
-import org.hl7.fhir.dstu3.model.DateTimeType;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.DomainResource;
 import org.hl7.fhir.dstu3.model.Encounter;
@@ -52,15 +48,12 @@ import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
-import org.hl7.fhir.dstu3.model.Immunization;
-import org.hl7.fhir.dstu3.model.Immunization.ImmunizationVaccinationProtocolComponent;
 import org.hl7.fhir.dstu3.model.IntegerType;
 import org.hl7.fhir.dstu3.model.ListResource;
 import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
 import org.hl7.fhir.dstu3.model.MedicationRequest;
 import org.hl7.fhir.dstu3.model.MedicationStatement;
 import org.hl7.fhir.dstu3.model.Meta;
-import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Period;
@@ -75,7 +68,6 @@ import uk.gov.hscic.SystemURL;
 import static uk.gov.hscic.SystemURL.ID_CROSS_CARE_SETTIING;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_PROBLEM_SIGNIFICANCE;
 import static uk.gov.hscic.SystemURL.SD_GPC_LIST;
-import static uk.gov.hscic.SystemURL.SD_GPC_OBSERVATION;
 import static uk.gov.hscic.medications.PopulateMedicationBundle.setClinicalSetting;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
@@ -91,7 +83,7 @@ import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept
  */
 public class StructuredBuilder {
 
-    private final static String BASE_DATE_STR = "2020-06-01";
+    private final static String BASE_DATE_STR = "2020-12-01";
     private final static SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
 
     static {
@@ -448,20 +440,21 @@ public class StructuredBuilder {
                 }
 
                 // #320 remove encounters
+                // #357 reinstate encounters related to problems
                 // NB This ignores encounters referenced by Observations
-//                for (String conditionId : conditionsIdsInResponse) {
-//                    Condition condition = (Condition) resourceTypes.get(ResourceType.Condition).get(conditionId);
-//                    if (condition != null && condition.getContext() != null) {
-//                        Reference encounterReference = condition.getContext();
-//                        // does this problem/condition reference an encounter in the returning bundle?
-//                        // NB email from Matt only return Encounters, not Consultations nor a List of Consultations
-//                        Encounter encounter = (Encounter) resourceTypes.get(ResourceType.Encounter).get(encounterReference.getReference());
-//                        // NB the id is actually a reference
-//                        addEntryToBundleOnlyOnce(structuredBundle, encounter.getId(), new BundleEntryComponent().setResource(encounter));
-//                    } else {
-//                        System.err.println("WARNING condition " + conditionId + " is null or missing an encounter context");
-//                    }
-//                }
+                for (String conditionId : conditionsIdsInResponse) {
+                    Condition condition = (Condition) resourceTypes.get(ResourceType.Condition).get(conditionId);
+                    if (condition != null && condition.getContext() != null) {
+                        Reference encounterReference = condition.getContext();
+                        // does this problem/condition reference an encounter in the returning bundle?
+                        // NB email from Matt only return Encounters, not Consultations nor a List of Consultations
+                        Encounter encounter = (Encounter) resourceTypes.get(ResourceType.Encounter).get(encounterReference.getReference());
+                        // NB the id is actually a reference
+                        addEntryToBundleOnlyOnce(structuredBundle, encounter.getId(), new BundleEntryComponent().setResource(encounter));
+                    } else {
+                        System.err.println("WARNING condition " + conditionId + " is null or missing an encounter context");
+                    }
+                }
                 break;
 
             default:
@@ -527,7 +520,7 @@ public class StructuredBuilder {
         }
 
         if (parameterName.equals(INCLUDE_PROBLEMS_PARM) && patient.getIdElement().getIdPartAsLong() == PATIENT_2) {
-            handlePatient2ProblemsRequest(patient, structuredBundle);
+            //handlePatient2ProblemsRequest(patient, structuredBundle);
             // add the secondary lists for problems
             for (String title : new String[]{
                 PROBLEMS_MEDS_SECONDARY_LIST_TITLE, 
@@ -569,329 +562,329 @@ public class StructuredBuilder {
         }
     }
     
-    /**
-     *
-     * @param patient
-     * @param structuredBundle
-     */
-    private void handlePatient2ProblemsRequest(Patient patient, Bundle structuredBundle) {
-        // add a medications statement and a list
-        // There appears to be an empty list here but it does get populated since Medications are a special case for problems
-        //ListResource medicationStatementList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
-       
-        // Much of this code is commented out since Pete G has requested the dummy resources which were previously added should now be removed.
-        // Following Pete S new sample message which includes secondary lists
-        
-        //ListResource allergyList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
-        // this is atypical hence we have set set a title that is not the same as the display
-        //allergyList.setTitle(ACTIVE_ALLERGIES_TITLE);
+//    /**
+//     *
+//     * @param patient
+//     * @param structuredBundle
+//     */
+//    private void handlePatient2ProblemsRequest(Patient patient, Bundle structuredBundle) {
+//        // add a medications statement and a list
+//        // There appears to be an empty list here but it does get populated since Medications are a special case for problems
+//        //ListResource medicationStatementList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
+//       
+//        // Much of this code is commented out since Pete G has requested the dummy resources which were previously added should now be removed.
+//        // Following Pete S new sample message which includes secondary lists
+//        
+//        //ListResource allergyList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
+//        // this is atypical hence we have set set a title that is not the same as the display
+//        //allergyList.setTitle(ACTIVE_ALLERGIES_TITLE);
+//
+//        //ListResource immunizationsList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
+//        //ListResource uncategorisedDataList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
+//
+//        ListResource problemsList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY);
+//
+//        // add any extants ca entries to the appropriate CA list
+//        // make a copy because this collection will be modified.
+//        String[] keys = addedToResponse.keySet().toArray(new String[0]);
+//        HashSet<String> hs = new HashSet<>();
+//        final String[] CLINICAL_AREAS = new String[]{"MedicationStatement"/*, "AllergyIntolerance", "Immunization", "Observation"*/};
+//        for (String id : keys) {
+//            String itemType = id.replaceFirst("/.*$", "");
+//            for (String ca : CLINICAL_AREAS) {
+//                if (id.startsWith(ca) && !hs.contains(itemType)) {
+//                    ListResource listResource = null;
+//                    switch (ca) {
+//                        case "MedicationStatement":
+//                            //listResource = medicationStatementList;
+//                            break;
+//
+//                        case "AllergyIntolerance":
+//                            //listResource = allergyList;
+//                            break;
+//
+//                        case "Immunization":
+//                            //listResource = immunizationsList;
+//                            break;
+//
+//                        case "Observation":
+//                            //listResource = uncategorisedDataList;
+//                            break;
+//                    }
+//
+//                    if (listResource != null) {
+//                        //addExistingResourceReferenceToList(patient, listResource, id, structuredBundle, problemsList);
+//                        hs.add(itemType);
+//                    }
+//                    break;
+//                }
+//            }
+//        } // for id
+//
+//        //======================================================================
+//        // handle cases where we know there are no Clinical Areas
+//        // we know patient 2 does not have any of these so add some
+//        if (!hs.contains("AllergyIntolerance")) {
+//            //addDummyResourceAndProblem(patient, createAllergyIntolerance(), allergyList, structuredBundle, problemsList);
+//        }
+//        if (!hs.contains("Immunization")) {
+//            //addDummyResourceAndProblem(patient, createImmunization(), immunizationsList, structuredBundle, problemsList);
+//        }
+//        if (!hs.contains("Observation")) {
+//            // Uncategorised Data
+//            //addDummyResourceAndProblem(patient, createObservation(), uncategorisedDataList, structuredBundle, problemsList);
+//        }
+//    }
 
-        //ListResource immunizationsList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
-        //ListResource uncategorisedDataList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
+//    /**
+//     * minimal allergy with just mandatory elements
+//     *
+//     * @return instantiated object
+//     */
+//    private AllergyIntolerance createAllergyIntolerance() {
+//        AllergyIntolerance allergyIntolerance = new AllergyIntolerance();
+//
+//        allergyIntolerance.setMeta(new Meta().addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
+//
+//        // identifier
+//        allergyIntolerance.setIdentifier(Collections.singletonList(new Identifier().
+//                setSystem(ID_CROSS_CARE_SETTIING).
+//                setValue("f827590b-5193-11ea-8153-1002b58598b5")));
+//
+//        // clinical status
+//        allergyIntolerance.setClinicalStatus(AllergyIntolerance.AllergyIntoleranceClinicalStatus.ACTIVE);
+//
+//        // verification status unconfirmed
+//        allergyIntolerance.setVerificationStatus(AllergyIntolerance.AllergyIntoleranceVerificationStatus.UNCONFIRMED);
+//
+//        // category Code value environment
+//        allergyIntolerance.addCategory(AllergyIntoleranceCategory.ENVIRONMENT);
+//
+//        // code CodeableConcept
+//        CodeableConcept cc = createCodeableConcept("89707004", "Sesame oil (substance)", SNOMED_URL);
+//        allergyIntolerance.setCode(cc);
+//
+//        // patient
+//        allergyIntolerance.setPatient(new Reference("Patient/2"));
+//
+//        // recorder practitioner/1
+//        allergyIntolerance.setRecorder(new Reference("Practitioner/1"));
+//
+//        // reaction.manifestation
+//        AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
+//        cc = createCodeableConcept("230145002", "Difficulty breathing", SNOMED_URL);
+//        reaction.setManifestation(Collections.singletonList(cc));
+//        allergyIntolerance.setReaction(Collections.singletonList(reaction));
+//
+//        return allergyIntolerance;
+//    }
 
-        ListResource problemsList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY);
+//    /**
+//     * minimal Immunization with just mandatory elements
+//     *
+//     * @return instantiated object
+//     */
+//    private Immunization createImmunization() {
+//        Immunization immunization = new Immunization();
+//
+//        // meta
+//        immunization.setMeta(new Meta().addProfile("https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Immunization-1"));
+//
+//        // ext recordedDate
+//        immunization.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-DateRecorded-1").
+//                setValue(new DateTimeType(BASE_DATE)));
+//
+//        CodeableConcept cc = createCodeableConcept("170378007", "First hepatitis A vaccination", SNOMED_URL);
+//
+//        // ext vaccinationProcedure
+//        immunization.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-VaccinationProcedure-1").
+//                setValue(cc));
+//
+//        // identifier
+//        immunization.setIdentifier(Collections.singletonList(new Identifier().
+//                setSystem(ID_CROSS_CARE_SETTIING).
+//                setValue("urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad76")));
+//
+//        // status
+//        immunization.setStatus(Immunization.ImmunizationStatus.COMPLETED);
+//
+//        // notgiven
+//        immunization.setNotGiven(false);
+//
+//        // vaccineCode
+//        cc = createCodeableConcept("UNK", null, "http://hl7.org/fhir/v3/NullFlavor");
+//        cc.setText("Unknown");
+//        immunization.setVaccineCode(cc);
+//
+//        // patient
+//        immunization.setPatient(new Reference("Patient/2"));
+//
+//        // primarySource
+//        immunization.setPrimarySource(true);
+//
+//        // vaccinationProtocol
+//        ImmunizationVaccinationProtocolComponent component = new ImmunizationVaccinationProtocolComponent();
+//
+//        //  targetDisease
+//        component.setTargetDisease(Collections.singletonList(createCodeableConcept("40468003", "Viral hepatitis, type A", SNOMED_URL)));
+//
+//        //  dosestatus
+//        component.setDoseStatus(createCodeableConcept("count", "Counts", "http://hl7.org/fhir/stu3/valueset-vaccination-protocol-dose-status.html"));
+//
+//        immunization.setVaccinationProtocol(Collections.singletonList(component));
+//
+//        return immunization;
+//    }
 
-        // add any extants ca entries to the appropriate CA list
-        // make a copy because this collection will be modified.
-        String[] keys = addedToResponse.keySet().toArray(new String[0]);
-        HashSet<String> hs = new HashSet<>();
-        final String[] CLINICAL_AREAS = new String[]{"MedicationStatement"/*, "AllergyIntolerance", "Immunization", "Observation"*/};
-        for (String id : keys) {
-            String itemType = id.replaceFirst("/.*$", "");
-            for (String ca : CLINICAL_AREAS) {
-                if (id.startsWith(ca) && !hs.contains(itemType)) {
-                    ListResource listResource = null;
-                    switch (ca) {
-                        case "MedicationStatement":
-                            //listResource = medicationStatementList;
-                            break;
+//    /**
+//     * minimal Observation with just mandatory elements
+//     *
+//     * @return instantiated object
+//     */
+//    private Observation createObservation() {
+//        Observation observation = new Observation();
+//
+//        // meta
+//        observation.setMeta(new Meta().addProfile(SD_GPC_OBSERVATION));
+//
+//        // identifier
+//        observation.setIdentifier(Collections.singletonList(new Identifier().
+//                setSystem(ID_CROSS_CARE_SETTIING).
+//                setValue("urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad77")));
+//
+//        observation.setStatus(Observation.ObservationStatus.FINAL);
+//
+//        // code 
+//        observation.setCode(createCodeableConcept("37331000000100", "Comment note", SNOMED_URL));
+//
+//        // subject
+//        observation.setSubject(new Reference("Patient/2"));
+//
+//        // issued
+//        observation.setIssued(BASE_DATE);
+//
+//        // performer
+//        observation.setPerformer(Collections.singletonList(new Reference("Practitioner/1")));
+//
+//        return observation;
+//    }
 
-                        case "AllergyIntolerance":
-                            //listResource = allergyList;
-                            break;
+//    /**
+//     *
+//     * @param patient
+//     * @param structuredBundle
+//     */
+//    private void handlePatient2ConsultationsRequest(Patient patient, Bundle structuredBundle) {
+//        // there are medications statements but not yet a list with enries
+//        ListResource medicationStatementList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
+//        // add the references to the list
+//        for (BundleEntryComponent entry : structuredBundle.getEntry()) {
+//            if (entry.getResource() instanceof MedicationStatement) {
+//                medicationStatementList.addEntry(new ListEntryComponent().setItem(new Reference(entry.getResource().getResourceType() + "/" + entry.getResource().getId())));
+//            }
+//        }
+//
+//        // add an allergy into the bundle and add a reference entry to Consultation1
+//        addDummyResourceForConsultation(createAllergyIntolerance(), patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
+//        addDummyResourceForConsultation(createImmunization(), patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
+//        addDummyResourceForConsultation(createObservation(), patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
+//    }
 
-                        case "Immunization":
-                            //listResource = immunizationsList;
-                            break;
+//    /**
+//     *
+//     * @param resource
+//     * @param patient
+//     * @param structuredBundle
+//     * @param code
+//     * @param display
+//     */
+//    private void addDummyResourceForConsultation(Resource resource, Patient patient, Bundle structuredBundle, String code, String display) {
+//        resource.setId("Added" + resource.getResourceType() + "ForConsultation");
+//        // add the resource reference to the topic
+//        ((ListResource) addedToResponse.get("List/Consultation1-Topic1")).
+//                addEntry(new ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
+//
+//        // add the resource to the resource list
+//        ListResource list = getOrCreateThenAddList(patient, structuredBundle, code, display);
+//        // this is  a typical hence we have set set a title that is not the same as the display
+//        if (resource instanceof AllergyIntolerance) {
+//            list.setTitle(ACTIVE_ALLERGIES_TITLE);
+//        }
+//
+//        // add the resource reference to the list
+//        list.addEntry(new ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
+//
+//        // add the resource to the bundle
+//        addEntryToBundleOnlyOnce(structuredBundle, resource.getResourceType() + "/" + resource.getId(), new BundleEntryComponent().setResource(resource));
+//    }
 
-                        case "Observation":
-                            //listResource = uncategorisedDataList;
-                            break;
-                    }
+//    /**
+//     * This should only be called once per resource type Created resource has
+//     * minimal content
+//     *
+//     * @param patient
+//     * @param resource resource object to be populated
+//     * @param listResource associated list eg Allergies, Meds etc
+//     * @param structuredBundle
+//     * @param problemsList
+//     */
+//    private void addDummyResourceAndProblem(Patient patient, Resource resource, ListResource listResource, Bundle structuredBundle, ListResource problemsList) {
+//
+//        // the resource to the appropriate list
+//        resource.setId(resource.getResourceType() + "ForAddedProblem");
+//        listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
+//        if (addEntryToBundleOnlyOnce(structuredBundle, resource.getResourceType() + "/" + resource.getId(), new BundleEntryComponent().setResource(resource))) {
+//            refCounts.put(resource.getResourceType() + "/" + resource.getId(), 1);
+//        }
+//
+//        // add the problem
+//        Condition condition = createCondition(resource.getId().replaceFirst("^.*/", ""), patient, resource.fhirType() + "/" + resource.getId());
+//        addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition));
+//
+//        // add the problem to the problem list
+//        problemsList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + condition.getId())));
+//    }
 
-                    if (listResource != null) {
-                        addExistingResourceReferenceToList(patient, listResource, id, structuredBundle, problemsList);
-                        hs.add(itemType);
-                    }
-                    break;
-                }
-            }
-        } // for id
+//    /**
+//     *
+//     * @param patient
+//     * @param listResource associated resource list eg Medications, Allergies
+//     * etc
+//     * @param reference resource id that is going be added to lists
+//     * @param structuredBundle
+//     * @param problemsList
+//     */
+//    private void addExistingResourceReferenceToList(Patient patient, ListResource listResource, String reference, Bundle structuredBundle, ListResource problemsList) {
+//
+//        // add to resource list
+//        listResource.addEntry(new ListEntryComponent().setItem(new Reference(reference)));
+//
+//        // create a condition, add it to the response
+//        Condition condition = createCondition(reference.replaceFirst("^(.*)/", ""), patient, reference);
+//        addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition));
+//
+//        // add a reference to the condition to the problem list
+//        problemsList.addEntry(new ListEntryComponent().setItem(new Reference(condition.getResourceType() + "/" + condition.getId())));
+//    }
 
-        //======================================================================
-        // handle cases where we know there are no Clinical Areas
-        // we know patient 2 does not have any of these so add some
-        if (!hs.contains("AllergyIntolerance")) {
-            //addDummyResourceAndProblem(patient, createAllergyIntolerance(), allergyList, structuredBundle, problemsList);
-        }
-        if (!hs.contains("Immunization")) {
-            //addDummyResourceAndProblem(patient, createImmunization(), immunizationsList, structuredBundle, problemsList);
-        }
-        if (!hs.contains("Observation")) {
-            // Uncategorised Data
-            //addDummyResourceAndProblem(patient, createObservation(), uncategorisedDataList, structuredBundle, problemsList);
-        }
-    }
-
-    /**
-     * minimal allergy with just mandatory elements
-     *
-     * @return instantiated object
-     */
-    private AllergyIntolerance createAllergyIntolerance() {
-        AllergyIntolerance allergyIntolerance = new AllergyIntolerance();
-
-        allergyIntolerance.setMeta(new Meta().addProfile(SystemURL.SD_CC_ALLERGY_INTOLERANCE));
-
-        // identifier
-        allergyIntolerance.setIdentifier(Collections.singletonList(new Identifier().
-                setSystem(ID_CROSS_CARE_SETTIING).
-                setValue("f827590b-5193-11ea-8153-1002b58598b5")));
-
-        // clinical status
-        allergyIntolerance.setClinicalStatus(AllergyIntolerance.AllergyIntoleranceClinicalStatus.ACTIVE);
-
-        // verification status unconfirmed
-        allergyIntolerance.setVerificationStatus(AllergyIntolerance.AllergyIntoleranceVerificationStatus.UNCONFIRMED);
-
-        // category Code value environment
-        allergyIntolerance.addCategory(AllergyIntoleranceCategory.ENVIRONMENT);
-
-        // code CodeableConcept
-        CodeableConcept cc = createCodeableConcept("89707004", "Sesame oil (substance)", SNOMED_URL);
-        allergyIntolerance.setCode(cc);
-
-        // patient
-        allergyIntolerance.setPatient(new Reference("Patient/2"));
-
-        // recorder practitioner/1
-        allergyIntolerance.setRecorder(new Reference("Practitioner/1"));
-
-        // reaction.manifestation
-        AllergyIntoleranceReactionComponent reaction = new AllergyIntoleranceReactionComponent();
-        cc = createCodeableConcept("230145002", "Difficulty breathing", SNOMED_URL);
-        reaction.setManifestation(Collections.singletonList(cc));
-        allergyIntolerance.setReaction(Collections.singletonList(reaction));
-
-        return allergyIntolerance;
-    }
-
-    /**
-     * minimal Immunization with just mandatory elements
-     *
-     * @return instantiated object
-     */
-    private Immunization createImmunization() {
-        Immunization immunization = new Immunization();
-
-        // meta
-        immunization.setMeta(new Meta().addProfile("https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Immunization-1"));
-
-        // ext recordedDate
-        immunization.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-DateRecorded-1").
-                setValue(new DateTimeType(BASE_DATE)));
-
-        CodeableConcept cc = createCodeableConcept("170378007", "First hepatitis A vaccination", SNOMED_URL);
-
-        // ext vaccinationProcedure
-        immunization.addExtension(new Extension("https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-VaccinationProcedure-1").
-                setValue(cc));
-
-        // identifier
-        immunization.setIdentifier(Collections.singletonList(new Identifier().
-                setSystem(ID_CROSS_CARE_SETTIING).
-                setValue("urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad76")));
-
-        // status
-        immunization.setStatus(Immunization.ImmunizationStatus.COMPLETED);
-
-        // notgiven
-        immunization.setNotGiven(false);
-
-        // vaccineCode
-        cc = createCodeableConcept("UNK", null, "http://hl7.org/fhir/v3/NullFlavor");
-        cc.setText("Unknown");
-        immunization.setVaccineCode(cc);
-
-        // patient
-        immunization.setPatient(new Reference("Patient/2"));
-
-        // primarySource
-        immunization.setPrimarySource(true);
-
-        // vaccinationProtocol
-        ImmunizationVaccinationProtocolComponent component = new ImmunizationVaccinationProtocolComponent();
-
-        //  targetDisease
-        component.setTargetDisease(Collections.singletonList(createCodeableConcept("40468003", "Viral hepatitis, type A", SNOMED_URL)));
-
-        //  dosestatus
-        component.setDoseStatus(createCodeableConcept("count", "Counts", "http://hl7.org/fhir/stu3/valueset-vaccination-protocol-dose-status.html"));
-
-        immunization.setVaccinationProtocol(Collections.singletonList(component));
-
-        return immunization;
-    }
-
-    /**
-     * minimal Observation with just mandatory elements
-     *
-     * @return instantiated object
-     */
-    private Observation createObservation() {
-        Observation observation = new Observation();
-
-        // meta
-        observation.setMeta(new Meta().addProfile(SD_GPC_OBSERVATION));
-
-        // identifier
-        observation.setIdentifier(Collections.singletonList(new Identifier().
-                setSystem(ID_CROSS_CARE_SETTIING).
-                setValue("urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad77")));
-
-        observation.setStatus(Observation.ObservationStatus.FINAL);
-
-        // code 
-        observation.setCode(createCodeableConcept("37331000000100", "Comment note", SNOMED_URL));
-
-        // subject
-        observation.setSubject(new Reference("Patient/2"));
-
-        // issued
-        observation.setIssued(BASE_DATE);
-
-        // performer
-        observation.setPerformer(Collections.singletonList(new Reference("Practitioner/1")));
-
-        return observation;
-    }
-
-    /**
-     *
-     * @param patient
-     * @param structuredBundle
-     */
-    private void handlePatient2ConsultationsRequest(Patient patient, Bundle structuredBundle) {
-        // there are medications statements but not yet a list with enries
-        ListResource medicationStatementList = getOrCreateThenAddList(patient, structuredBundle, SNOMED_MEDICATION_LIST_CODE, SNOMED_MEDICATION_LIST_DISPLAY);
-        // add the references to the list
-        for (BundleEntryComponent entry : structuredBundle.getEntry()) {
-            if (entry.getResource() instanceof MedicationStatement) {
-                medicationStatementList.addEntry(new ListEntryComponent().setItem(new Reference(entry.getResource().getResourceType() + "/" + entry.getResource().getId())));
-            }
-        }
-
-        // add an allergy into the bundle and add a reference entry to Consultation1
-        addDummyResourceForConsultation(createAllergyIntolerance(), patient, structuredBundle, SNOMED_ACTIVE_ALLERGIES_CODE, SNOMED_ACTIVE_ALLERGIES_DISPLAY);
-        addDummyResourceForConsultation(createImmunization(), patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
-        addDummyResourceForConsultation(createObservation(), patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
-    }
-
-    /**
-     *
-     * @param resource
-     * @param patient
-     * @param structuredBundle
-     * @param code
-     * @param display
-     */
-    private void addDummyResourceForConsultation(Resource resource, Patient patient, Bundle structuredBundle, String code, String display) {
-        resource.setId("Added" + resource.getResourceType() + "ForConsultation");
-        // add the resource reference to the topic
-        ((ListResource) addedToResponse.get("List/Consultation1-Topic1")).
-                addEntry(new ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
-
-        // add the resource to the resource list
-        ListResource list = getOrCreateThenAddList(patient, structuredBundle, code, display);
-        // this is  a typical hence we have set set a title that is not the same as the display
-        if (resource instanceof AllergyIntolerance) {
-            list.setTitle(ACTIVE_ALLERGIES_TITLE);
-        }
-
-        // add the resource reference to the list
-        list.addEntry(new ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
-
-        // add the resource to the bundle
-        addEntryToBundleOnlyOnce(structuredBundle, resource.getResourceType() + "/" + resource.getId(), new BundleEntryComponent().setResource(resource));
-    }
-
-    /**
-     * This should only be called once per resource type Created resource has
-     * minimal content
-     *
-     * @param patient
-     * @param resource resource object to be populated
-     * @param listResource associated list eg Allergies, Meds etc
-     * @param structuredBundle
-     * @param problemsList
-     */
-    private void addDummyResourceAndProblem(Patient patient, Resource resource, ListResource listResource, Bundle structuredBundle, ListResource problemsList) {
-
-        // the resource to the appropriate list
-        resource.setId(resource.getResourceType() + "ForAddedProblem");
-        listResource.addEntry(new ListResource.ListEntryComponent().setItem(new Reference(resource.getResourceType() + "/" + resource.getId())));
-        if (addEntryToBundleOnlyOnce(structuredBundle, resource.getResourceType() + "/" + resource.getId(), new BundleEntryComponent().setResource(resource))) {
-            refCounts.put(resource.getResourceType() + "/" + resource.getId(), 1);
-        }
-
-        // add the problem
-        Condition condition = createCondition(resource.getId().replaceFirst("^.*/", ""), patient, resource.fhirType() + "/" + resource.getId());
-        addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition));
-
-        // add the problem to the problem list
-        problemsList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + condition.getId())));
-    }
-
-    /**
-     *
-     * @param patient
-     * @param listResource associated resource list eg Medications, Allergies
-     * etc
-     * @param reference resource id that is going be added to lists
-     * @param structuredBundle
-     * @param problemsList
-     */
-    private void addExistingResourceReferenceToList(Patient patient, ListResource listResource, String reference, Bundle structuredBundle, ListResource problemsList) {
-
-        // add to resource list
-        listResource.addEntry(new ListEntryComponent().setItem(new Reference(reference)));
-
-        // create a condition, add it to the response
-        Condition condition = createCondition(reference.replaceFirst("^(.*)/", ""), patient, reference);
-        addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition));
-
-        // add a reference to the condition to the problem list
-        problemsList.addEntry(new ListEntryComponent().setItem(new Reference(condition.getResourceType() + "/" + condition.getId())));
-    }
-
-    /**
-     *
-     * @param patient to whom query relates
-     * @param structuredBundle to add to
-     * @param code for list
-     * @param display for list
-     * @return populated ListResource
-     */
-    private ListResource getOrCreateThenAddList(Patient patient, Bundle structuredBundle, String code, String display) {
-        ListResource listResource = null;
-        if (addedToResponse.get(display) != null) {
-            listResource = (ListResource) addedToResponse.get(display);
-        } else {
-            listResource = createList(code, display, patient);
-            addEntryToBundleOnlyOnce(structuredBundle, display, new BundleEntryComponent().setResource(listResource));
-        }
-        return listResource;
-    }
+//    /**
+//     *
+//     * @param patient to whom query relates
+//     * @param structuredBundle to add to
+//     * @param code for list
+//     * @param display for list
+//     * @return populated ListResource
+//     */
+//    private ListResource getOrCreateThenAddList(Patient patient, Bundle structuredBundle, String code, String display) {
+//        ListResource listResource = null;
+//        if (addedToResponse.get(display) != null) {
+//            listResource = (ListResource) addedToResponse.get(display);
+//        } else {
+//            listResource = createList(code, display, patient);
+//            addEntryToBundleOnlyOnce(structuredBundle, display, new BundleEntryComponent().setResource(listResource));
+//        }
+//        return listResource;
+//    }
 
     /**
      * Compare addedToResponse set and refCounts Hash keys

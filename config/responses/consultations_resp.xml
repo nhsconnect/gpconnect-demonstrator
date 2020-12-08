@@ -1168,12 +1168,12 @@
             </meta>
             <status value="current"></status>
             <mode value="snapshot"></mode>
-            <title value="Consultations - problems contained in consultations"></title>
+            <title value="Problems - linked problems not relating to the primary query"></title>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="consultations-problems-contained-in-consultations"></code>
-                  <display value="Consultations - problems contained in consultations"></display>
+                  <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
+                  <code value="problems-linked-problems-not-relating-to-the-primary-query"></code>
+                  <display value="Problems - linked problems not relating to the primary query"></display>
                </coding>
             </code>
             <subject>

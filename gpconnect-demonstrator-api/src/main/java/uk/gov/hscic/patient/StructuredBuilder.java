@@ -239,14 +239,14 @@ public class StructuredBuilder {
 
                 // #359 new secondary list
                 ListResource problemsLinkedNotRelatedToPrimaryQueryList = null;
-                if (addedToResponse.get(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY) != null) {
-                    problemsLinkedNotRelatedToPrimaryQueryList = (ListResource) addedToResponse.get(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY);
+                if (addedToResponse.get(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE) != null) {
+                    problemsLinkedNotRelatedToPrimaryQueryList = (ListResource) addedToResponse.get(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE);
                 }
                 if (problemsLinkedNotRelatedToPrimaryQueryList == null) {
                     // create a new problem linked list
-                    problemsLinkedNotRelatedToPrimaryQueryList = createList(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_CODE, PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY, SECONDARY_LIST_URL, patient);
+                    problemsLinkedNotRelatedToPrimaryQueryList = createList(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_CODE, PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE, SECONDARY_LIST_URL, patient);
                     // add it to the bundle
-                    addEntryToBundleOnlyOnce(structuredBundle, PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY, new BundleEntryComponent().setResource(problemsLinkedNotRelatedToPrimaryQueryList));
+                    addEntryToBundleOnlyOnce(structuredBundle, PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE, new BundleEntryComponent().setResource(problemsLinkedNotRelatedToPrimaryQueryList));
                 }
                 // add the problem (Condition) to the problem list
                 problemsLinkedNotRelatedToPrimaryQueryList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + parameterName.replaceFirst("^include(.*)$", "$1Problem"))));
@@ -549,7 +549,8 @@ public class StructuredBuilder {
             for (String title : new String[]{
                 CONSULTATION_MEDS_SECONDARY_LIST_TITLE, 
                 CONSULTATION_UNCATEGORISED_SECONDARY_LIST_TITLE,
-                CONSULTATION_PROBLEMS_SECONDARY_LIST_TITLE}) {
+                // #359 different secondary list for problems
+                PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE}) {
                 ListResource secondaryList = (ListResource) resourceTypes.get(ResourceType.List).get(title);
                 addEntryToBundleOnlyOnce(structuredBundle, title, new BundleEntryComponent().setResource(secondaryList));
             }

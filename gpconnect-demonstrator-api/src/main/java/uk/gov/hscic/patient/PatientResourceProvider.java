@@ -383,7 +383,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     ListResource listResource = (ListResource) entry.getResource();
                     if (listResource.getId() != null) {
                         switch (listResource.getId()) {
-                            case PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY:
+                            case PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE:
                                 problemsLinkedNotRelatedToPrimaryQueryList = listResource;
                                 break;
                         }
@@ -405,7 +405,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 }
             }
             if (problemsLinkedNotRelatedToPrimaryQueryList == null) {
-                problemsLinkedNotRelatedToPrimaryQueryList = StructuredBuilder.createList(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_CODE, PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY, SECONDARY_LIST_URL, patient);
+                problemsLinkedNotRelatedToPrimaryQueryList = StructuredBuilder.createList(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_CODE, PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE, SECONDARY_LIST_URL, patient);
                 structuredBundle.addEntry(new BundleEntryComponent().setResource(problemsLinkedNotRelatedToPrimaryQueryList));
             }
 
@@ -1432,7 +1432,7 @@ public class PatientResourceProvider implements IResourceProvider {
         BundleEntryComponent[] entries = structuredBundle.getEntry().toArray(new BundleEntryComponent[0]);
         HashSet<String> hs = new HashSet<>();
         for (BundleEntryComponent entry : entries) {
-            if (entry.getResource().getId() != null) {
+            if ( entry.getResource() != null && entry.getResource().getId() != null) {
                 String reference = entry.getResource().getResourceType().toString() + "/" + entry.getResource().getId();
                 if (!hs.contains(reference)) {
                     hs.add(reference);

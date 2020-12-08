@@ -237,22 +237,23 @@ public class StructuredBuilder {
                 Condition condition = createCondition(parameterName.replaceFirst("^include(.*)$", "$1Problem"), patient, pickedResource.getId());
                 addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition));
 
-                ListResource problemList = null;
-                if (addedToResponse.get(SNOMED_PROBLEMS_LIST_DISPLAY) != null) {
-                    problemList = (ListResource) addedToResponse.get(SNOMED_PROBLEMS_LIST_DISPLAY);
+                // #359 new secondary list
+                ListResource problemsLinkedNotRelatedToPrimaryQueryList = null;
+                if (addedToResponse.get(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY) != null) {
+                    problemsLinkedNotRelatedToPrimaryQueryList = (ListResource) addedToResponse.get(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY);
                 }
-                if (problemList == null) {
-                    // create a new problem list
-                    problemList = createList(SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY, patient);
+                if (problemsLinkedNotRelatedToPrimaryQueryList == null) {
+                    // create a new problem linked list
+                    problemsLinkedNotRelatedToPrimaryQueryList = createList(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_CODE, PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY, SECONDARY_LIST_URL, patient);
                     // add it to the bundle
-                    addEntryToBundleOnlyOnce(structuredBundle, SNOMED_PROBLEMS_LIST_DISPLAY, new BundleEntryComponent().setResource(problemList));
+                    addEntryToBundleOnlyOnce(structuredBundle, PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY, new BundleEntryComponent().setResource(problemsLinkedNotRelatedToPrimaryQueryList));
                 }
                 // add the problem (Condition) to the problem list
-                problemList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + parameterName.replaceFirst("^include(.*)$", "$1Problem"))));
+                problemsLinkedNotRelatedToPrimaryQueryList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + parameterName.replaceFirst("^include(.*)$", "$1Problem"))));
             }
         }
     } // appendCannedResponse
-
+    
     private void addEmptyProblemsList(Patient patient, Bundle structuredBundle) {
         // this for patient three when problems are requested
         // add an empty problems list
@@ -345,7 +346,7 @@ public class StructuredBuilder {
         condition.addExtension(relatedProblemHeader);
     }
 
-    /**
+        /**
      *
      * @param code
      * @param display
@@ -353,13 +354,25 @@ public class StructuredBuilder {
      * @return populated list
      */
     public static ListResource createList(String code, String display, Patient patient) {
+        return createList(code, display, SNOMED_URL, patient);
+    }
+    
+    /**
+     *
+     * @param code
+     * @param display
+     * @param url
+     * @param patient
+     * @return populated list
+     */
+    public static ListResource createList(String code, String display, String url, Patient patient) {
         ListResource list = new ListResource();
 
         list.setMeta(new Meta().addProfile(SD_GPC_LIST));
         list.setStatus(ListResource.ListStatus.CURRENT);
         list.setMode(ListResource.ListMode.SNAPSHOT);
         list.setTitle(display);
-        CodeableConcept cc = createCodeableConcept(code, display, SNOMED_URL);
+        CodeableConcept cc = createCodeableConcept(code, display, url);
         list.setCode(cc);
         list.setSubject(new Reference("Patient/" + patient.getIdElement().getIdPartAsLong()));
         list.setDate(BASE_DATE);
@@ -561,7 +574,7 @@ public class StructuredBuilder {
             }
         }
     }
-    
+// <editor-fold defaultstate="collapsed" desc="commented out but not used code">    
 //    /**
 //     *
 //     * @param patient
@@ -885,6 +898,7 @@ public class StructuredBuilder {
 //        }
 //        return listResource;
 //    }
+// </editor-fold>
 
     /**
      * Compare addedToResponse set and refCounts Hash keys
@@ -1256,7 +1270,8 @@ public class StructuredBuilder {
             }
         } // for
     }
-
+    
+// <editor-fold defaultstate="collapsed" desc="List manager classes">  
     /**
      * Base class for List Managers There is some magic required here to invoke
      * an inner class constructor see
@@ -1796,4 +1811,5 @@ public class StructuredBuilder {
             return "ReferralRequest";
         }
     } // Referrals
+// </editor-fold>
 }

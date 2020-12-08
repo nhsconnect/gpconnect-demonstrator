@@ -374,7 +374,8 @@ public class PatientResourceProvider implements IResourceProvider {
         // if patient 2 add a dummy allergy problem and list (if required)
         if (NHS.equals(patients[PATIENT_2])) {
 
-            ListResource problemList = null;
+            // #359 new secondary list
+            ListResource problemsLinkedNotRelatedToPrimaryQueryList = null;
             Resource resource = null;
             Resource medicationsRequest = null;
             for (BundleEntryComponent entry : structuredBundle.getEntry()) {
@@ -382,8 +383,8 @@ public class PatientResourceProvider implements IResourceProvider {
                     ListResource listResource = (ListResource) entry.getResource();
                     if (listResource.getId() != null) {
                         switch (listResource.getId()) {
-                            case SNOMED_PROBLEMS_LIST_DISPLAY:
-                                problemList = listResource;
+                            case PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY:
+                                problemsLinkedNotRelatedToPrimaryQueryList = listResource;
                                 break;
                         }
                     }
@@ -398,14 +399,14 @@ public class PatientResourceProvider implements IResourceProvider {
                     }
                 }
 
-                if (problemList != null && resource != null
+                if (problemsLinkedNotRelatedToPrimaryQueryList != null && resource != null
                         && (uncannedClinicalArea.equals(INCLUDE_ALLERGIES_PARM) || uncannedClinicalArea.equals(INCLUDE_MEDICATION_PARM) && medicationsRequest != null)) {
                     break;
                 }
             }
-            if (problemList == null) {
-                problemList = StructuredBuilder.createList(SNOMED_PROBLEMS_LIST_CODE, SNOMED_PROBLEMS_LIST_DISPLAY, patient);
-                structuredBundle.addEntry(new BundleEntryComponent().setResource(problemList));
+            if (problemsLinkedNotRelatedToPrimaryQueryList == null) {
+                problemsLinkedNotRelatedToPrimaryQueryList = StructuredBuilder.createList(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_CODE, PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY, SECONDARY_LIST_URL, patient);
+                structuredBundle.addEntry(new BundleEntryComponent().setResource(problemsLinkedNotRelatedToPrimaryQueryList));
             }
 
             // create the named problem and add that to the response
@@ -431,7 +432,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
                     // add the reference to the problem (Condition) to the problem list named for the parameter eg includeMedications
                     // TODO are these still in order? get these to be generated automatically?
-                    problemList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + problemId)));
+                    problemsLinkedNotRelatedToPrimaryQueryList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + problemId)));
                 }
             } else {
                 System.err.println("No resource found to insert for uncanned clinical area " + uncannedClinicalArea);
@@ -1654,6 +1655,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
     /**
      * 422 Invalid Parameter
+     *
      * @param error String
      */
     private void throwInvalidParameterInvalidOperationalOutcome(String error) {
@@ -1665,6 +1667,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
     /**
      * 422 Invalid Resource
+     *
      * @param error String
      */
     private void throwInvalidResourceInvalidOperationalOutcome(String error) {
@@ -1673,7 +1676,7 @@ public class PatientResourceProvider implements IResourceProvider {
                         error),
                 SystemCode.INVALID_RESOURCE, IssueType.INVALID);
     }
-    
+
     /**
      * base class for Clinical Area classes Supports parameter part validation
      * Initialisation of associated List resource
@@ -1708,8 +1711,8 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         /**
-         * 422 Invalid Resource
-         * #321 return INVALID_RESOURCE on repeated Parameter Part
+         * 422 Invalid Resource #321 return INVALID_RESOURCE on repeated
+         * Parameter Part
          */
         protected void repeatedParameterPart() {
             throwInvalidResourceInvalidOperationalOutcome("Repeated Parameter Part : " + paramPart.getName());

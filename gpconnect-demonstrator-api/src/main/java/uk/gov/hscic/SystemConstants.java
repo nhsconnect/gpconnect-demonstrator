@@ -91,6 +91,8 @@ public final class SystemConstants {
     public static final String SNOMED_INVESTIGATIONS_LIST_CODE = "887191000000108";
 
     // 1.5 consultation secondary lists
+    public static final String SECONDARY_LIST_URL = "https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1";
+
     public static final String CONSULTATION_MEDS_SECONDARY_LIST_TITLE = "Consultations - medications contained in consultations";
     public static final String CONSULTATION_UNCATEGORISED_SECONDARY_LIST_TITLE = "Consultations - uncategorised data contained in consultations";
     public static final String CONSULTATION_PROBLEMS_SECONDARY_LIST_TITLE = "Consultations - problems contained in consultations";
@@ -98,6 +100,10 @@ public final class SystemConstants {
     // 1.5 problems secondary lists
     public static final String PROBLEMS_MEDS_SECONDARY_LIST_TITLE = "Problems - medications related to problems";
     public static final String PROBLEMS_UNCATEGORISED_SECONDARY_LIST_TITLE = "Problems - uncategorised data related to problems";
+    
+    // #359 new secondary list NB These are not snomed codes. They have their own secondary list url
+    public static final String PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_DISPLAY = "Problems - linked problems not relating to the primary query";
+    public static final String PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_CODE = "problems-linked-problems-not-relating-to-the-primary-query";
     
     // extension point
 

@@ -1171,7 +1171,7 @@
             <title value="Problems - linked problems not relating to the primary query"></title>
             <code>
                <coding>
-                  <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
+                  <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
                   <code value="problems-linked-problems-not-relating-to-the-primary-query"></code>
                   <display value="Problems - linked problems not relating to the primary query"></display>
                </coding>
@@ -1220,7 +1220,7 @@
             <title value="Consultations - medications contained in consultations"></title>
             <code>
                <coding>
-                  <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
+                  <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
                   <code value="consultations-medications-contained-in-consultations"></code>
                   <display value="Consultations - medications contained in consultations"></display>
                </coding>
@@ -1274,7 +1274,7 @@
             <title value="Consultations - uncategorised data contained in consultations"></title>
             <code>
                <coding>
-                  <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
+                  <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
                   <code value="consultations-uncategorised-data-contained-in-consultations"></code>
                   <display value="Consultations - uncategorised data contained in consultations"></display>
                </coding>
@@ -1538,7 +1538,7 @@
             <title value="Problems - medications related to problems"></title>
             <code>
                <coding>
-                  <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
+                  <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
                   <code value="problems-medications-related-to-problems"></code>
                   <display value="Problems - medications related to problems"></display>
                </coding>
@@ -1587,7 +1587,7 @@
             <title value="Problems - uncategorised data related to problems"></title>
             <code>
                <coding>
-                  <system value="https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
+                  <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1"></system>
                   <code value="problems-uncategorised-data-related-to-problems"></code>
                   <display value="Problems - uncategorised data related to problems"></display>
                </coding>

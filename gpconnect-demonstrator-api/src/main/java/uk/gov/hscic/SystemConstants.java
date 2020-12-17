@@ -91,7 +91,7 @@ public final class SystemConstants {
     public static final String SNOMED_INVESTIGATIONS_LIST_CODE = "887191000000108";
 
     // 1.5 consultation secondary lists
-    public static final String SECONDARY_LIST_URL = "https://fhir.nhs.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1";
+    public static final String SECONDARY_LIST_URL = "https://fhir.hl7.org.uk/STU3/CodeSystem/GPConnect-SecondaryListValues-1";
 
     public static final String CONSULTATION_MEDS_SECONDARY_LIST_TITLE = "Consultations - medications contained in consultations";
     public static final String CONSULTATION_UNCATEGORISED_SECONDARY_LIST_TITLE = "Consultations - uncategorised data contained in consultations";

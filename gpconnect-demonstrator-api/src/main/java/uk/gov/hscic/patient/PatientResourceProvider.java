@@ -235,7 +235,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 requestedToDate = period.getEnd();
 
                 // #302 if both are empty this is an invalid parameter
-                if (fromDate == null && toDate == null ) {
+                if (fromDate == null && toDate == null) {
                     // TODO These messages are not propagated to the diagnostics field
                     throw new UnprocessableEntityException("From date and to date are both empty",
                             OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE,
@@ -252,18 +252,41 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 // its not clear what is going on here we end up with toDate being a day later than requestedToDate and requestedToDate being rounded?
                 // both fromDate and  requestedFromDate appear to always be identical..
+                
+
+                // #358 update this is complicated. The from and to date are transferred in a period structure comprised of two datetimes
+                // we are storing the start date and time as requested but also copying and modifying the actual date/times as submitted to the query
+                // the demonstrator validation checks against both a date regexp and timestamp regexp
+                // hence the precision element can be either DAY or SECOND
+                // jpa pseudo english queries where the query is derived from the method name only support the words Before or After
+                // see eg EncounterSearch.findAllEncounterHTMLTables for examples of the queries
+                // see https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference section 6.3.2 Table 2 for supported keywords
+                
+                // what we actually require for these queries is OnOrAfter and OnOrBefore
+                // these adjustments compensate so we get the same effect.
+                // if the start/end is a time subtract/add a second, if its a date subtract/add a day
+                
                 if (toDate != null) {
-                    // add a day to toDate
+                    // add a day/second to toDate depending on whether its a date or a timestamp
                     toDate = period.getEndElement().getPrecision().add(toDate, 1);
 
-                    // add a day to requestedToDate
-                    requestedToDate = period.getEndElement().getPrecision().add(requestedToDate, 1);
-                    Calendar toDateCalendar = Calendar.getInstance();
-                    toDateCalendar.setTime(requestedToDate);
-                    toDateCalendar.add(Calendar.DATE, -1);
+                    // add a day/second to the requestedToDate
+                    //requestedToDate = period.getEndElement().getPrecision().add(requestedToDate, 1);
+
                     // subtract a day from requestedToDate
-                    requestedToDate = toDateCalendar.getTime();
+                    //Calendar toDateCalendar = Calendar.getInstance();
+                    //toDateCalendar.setTime(requestedToDate);
+                    //toDateCalendar.add(Calendar.DATE, -1);
+                    //requestedToDate = toDateCalendar.getTime();
                 }
+
+                if (fromDate != null) {
+                    // subtract a day/second depending on whether its a date or a timestamp
+                    fromDate = period.getStartElement().getPrecision().add(fromDate, -1);
+                }
+
+//                System.out.println("fromDate " + fromDate + " toDate " + toDate);
+//                System.out.println("requestedFromDate " + requestedFromDate + " requestedToDate " + requestedToDate);
             } else {
                 throw new InvalidRequestException("Invalid datatype",
                         OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,

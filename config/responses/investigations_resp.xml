@@ -212,6 +212,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -342,6 +343,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -394,6 +396,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -441,6 +444,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -493,6 +497,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -540,6 +545,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -592,6 +598,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -644,6 +651,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -696,6 +704,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -748,6 +757,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -800,6 +810,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="ST JAMES'S UNIVERSITY HOSPITAL"></display>
@@ -844,6 +855,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -896,6 +908,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -940,6 +953,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -987,6 +1001,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -1031,6 +1046,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -1078,6 +1094,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -1122,6 +1139,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>
@@ -1174,6 +1192,7 @@
                <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
                <display value="REARDON, John"></display>
             </subject>
+            <issued value="2019-04-06T12:00:00+00:00"></issued>
             <performer>
                <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
                <display value="GREENTOWN GENERAL HOSPITAL"></display>

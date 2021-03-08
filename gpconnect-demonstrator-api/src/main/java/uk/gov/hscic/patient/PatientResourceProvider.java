@@ -52,6 +52,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
 import static org.hl7.fhir.dstu3.model.Address.AddressUse.OLD;
 import static org.hl7.fhir.dstu3.model.Address.AddressUse.WORK;
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
@@ -61,6 +62,7 @@ import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hscic.SystemConstants;
 import static uk.gov.hscic.SystemConstants.*;
+import static uk.gov.hscic.SystemHeader.SSP_TRACEID;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_NHS_COMMUNICATION;
 import static uk.gov.hscic.SystemURL.VS_GPC_ERROR_WARNING_CODE;
 import uk.gov.hscic.model.telecom.TelecomDetails;
@@ -243,7 +245,7 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     @Operation(name = GET_STRUCTURED_RECORD_OPERATION_NAME)
-    public Bundle StructuredRecordOperation(@ResourceParam Parameters params) throws FHIRException, IOException {
+    public Bundle StructuredRecordOperation(@ResourceParam Parameters params, HttpServletRequest theRequest) throws FHIRException, IOException {
 
         String NHS = getNhsNumber(params);
 
@@ -273,6 +275,12 @@ public class PatientResourceProvider implements IResourceProvider {
         validateParameters(params, uncannedClinicalAreaParameters, cannedCLinicalAreaParameters);
 
         Bundle structuredBundle = new Bundle();
+        
+        // #366 add the trace id as the Bundle id
+        String traceId = theRequest.getHeader(SSP_TRACEID);
+        if (traceId != null) {
+            structuredBundle.setId(traceId);
+        }
 
         // Add Patient
         Patient patient = patientDetailsToPatientResourceConverter(patientDetails);

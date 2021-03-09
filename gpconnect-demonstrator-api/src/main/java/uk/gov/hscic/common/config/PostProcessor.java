@@ -21,6 +21,9 @@ import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 import org.hl7.fhir.dstu3.model.Bundle;
 import static org.hl7.fhir.dstu3.model.Bundle.BundleType.SEARCHSET;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import static uk.gov.hscic.InteractionId.REST_SEARCH_PATIENTS_DOCUMENTS;
+import static uk.gov.hscic.SystemHeader.SSP_INTERACTIONID;
+import static uk.gov.hscic.SystemHeader.SSP_TRACEID;
 
 /**
  * Post processes the response
@@ -41,6 +44,11 @@ class PostProcessor extends InterceptorAdapter {
             if (bundle.getType() == SEARCHSET) {
                 bundle.setTotalElement(null);
                 bundle.setLink(null);
+                
+                // #367  set bundle id to trace id for docuement patient search but not for foundation patient search
+                if ( theServletRequest.getHeader(SSP_INTERACTIONID).equals(REST_SEARCH_PATIENTS_DOCUMENTS) ) {
+                    bundle.setId(theServletRequest.getHeader(SSP_TRACEID));
+                }
             }
             for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {
                 if (entry.hasFullUrl()) {

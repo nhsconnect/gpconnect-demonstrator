@@ -67,51 +67,94 @@ public class StructuredAllergyIntoleranceBuilder {
 
         List<StructuredAllergyIntoleranceEntity> allergyData = structuredAllergySearch.getAllergyIntolerance(NHS);
 
-        ListResource active = initiateListResource(NHS, SNOMED_ACTIVE_ALLERGIES_DISPLAY, allergyData);
-        ListResource resolved = initiateListResource(NHS, SNOMED_RESOLVED_ALLERGIES_DISPLAY, allergyData);
+        ListResource activeList = initiateListResource(NHS, SNOMED_ACTIVE_ALLERGIES_DISPLAY, allergyData);
+        ListResource resolvedList = initiateListResource(NHS, SNOMED_RESOLVED_ALLERGIES_DISPLAY, allergyData);
 
         //If there is a 'no known' allergies code then add the necessary coding and return the bundle
+        // This is patient 5 example 2 only
         if (allergyData.size() == 1
                 && allergyData.get(0).getClinicalStatus().equals(SystemConstants.NO_KNOWN)) {
+            StructuredAllergyIntoleranceEntity noKnownAllergy = allergyData.get(0);
 
             // #214 had incorrect code and value for no known allergies
-            CodeableConcept noKnownAllergies = createCodeableConcept(NO_CONTENT_RECORDED, NO_CONTENT_RECORDED_DISPLAY, SystemURL.VS_LIST_EMPTY_REASON_CODE);
-            noKnownAllergies.setText("No Known Allergies");
-            active.setEmptyReason(noKnownAllergies);
+            CodeableConcept noKnownAllergiesCodeableConcept = createCodeableConcept(NO_CONTENT_RECORDED, NO_CONTENT_RECORDED_DISPLAY, SystemURL.VS_LIST_EMPTY_REASON_CODE);
+            noKnownAllergiesCodeableConcept.setText("No Known Allergies");
+//          active.setEmptyReason(noKnownAllergies);
 
+            // see spec example 2 no known allergies positively asserted
             Reference patient = new Reference(SystemConstants.PATIENT_REFERENCE_URL + allergyData.get(0).getPatientRef());
+            String noKnownAllergyId = noKnownAllergy.getGuid();
+            Reference allergyIntolerance = new Reference("AllergyIntolerance/" + noKnownAllergyId);
+            Resource noKnownAllergyResource = createNoKnownAllergy(noKnownAllergy);
 
-            active.setSubject(patient);
-            bundle.addEntry().setResource(active);
+            activeList.setSubject(patient);
+            activeList.addEntry().setItem(allergyIntolerance); // reference to AllergyIntolerance item
+            activeList.setOrderedBy(createCodeableConcept("event-date", "Sorted by Event Date",SystemURL.CS_LIST_ORDER));
+            bundle.addEntry().setResource(activeList);
+            bundle.addEntry().setResource(noKnownAllergyResource);
 
             if (includedResolved) {
-                resolved.setSubject(patient);
-                resolved.setEmptyReason(noKnownAllergies);
-                bundle.addEntry().setResource(resolved);
+                resolvedList.setSubject(patient);
+                resolvedList.setEmptyReason(noKnownAllergiesCodeableConcept);
+                bundle.addEntry().setResource(resolvedList);
             }
-
             return;
         }
 
         for (StructuredAllergyIntoleranceEntity allergyIntoleranceEntity : allergyData) {
-            createAllergy(allergyIntoleranceEntity, practitionerIds, active, bundle, includedResolved, resolved);
+            createAllergy(allergyIntoleranceEntity, practitionerIds, activeList, bundle, includedResolved, resolvedList);
         }
 
-        if (!active.hasEntry()) {
-            addEmptyListNote(active);
-            addEmptyReasonCode(active);
+        if (!activeList.hasEntry()) {
+            addEmptyListNoAllergiesNote(activeList);
+            addEmptyReasonCode(activeList);
         }
 
-        bundle.addEntry().setResource(active);
+        bundle.addEntry().setResource(activeList);
 
-        if (includedResolved && !resolved.hasEntry()) {
-            addEmptyListNote(resolved);
-            addEmptyReasonCode(resolved);
+        if (includedResolved && !resolvedList.hasEntry()) {
+            addEmptyListNoAllergiesNote(resolvedList);
+            addEmptyReasonCode(resolvedList);
         }
 
         if (includedResolved) {
-            bundle.addEntry().setResource(resolved);
+            bundle.addEntry().setResource(resolvedList);
         }
+    }
+
+    /**
+     * This relates to the positively  asserted this patient has no know allergies
+     * as opposed to the the negatively asserted no allergies recorded
+     * patient 5  example 2 from the spec
+     * @param allergyIntoleranceEntity object from the db
+     * @return the allergy intolerance resource
+     */
+    private AllergyIntolerance createNoKnownAllergy(StructuredAllergyIntoleranceEntity allergyIntoleranceEntity) {
+        AllergyIntolerance allergyIntolerance = new AllergyIntolerance();
+        allergyIntolerance.setId(allergyIntoleranceEntity.getGuid());
+        allergyIntolerance.setAssertedDate(allergyIntoleranceEntity.getAssertedDate());
+        // db has clinical status of "no known" which is not a valid value
+        allergyIntolerance.setClinicalStatus(AllergyIntoleranceClinicalStatus.ACTIVE);
+        allergyIntolerance.setVerificationStatus(AllergyIntoleranceVerificationStatus.valueOf(allergyIntoleranceEntity.getVerificationStatus().toUpperCase()));
+        allergyIntolerance.setType(AllergyIntoleranceType.ALLERGY);
+        
+        CodeableConcept codeableConcept = new CodeableConcept();
+        Coding coding = new Coding();
+        coding.setDisplay(allergyIntoleranceEntity.getConceptDisplay());
+        // That's as in db under concept code 716186003
+        coding.setCode(allergyIntoleranceEntity.getConceptCode());
+        coding.setSystem(SystemConstants.SNOMED_URL);
+        
+        Extension extension = new Extension(SystemURL.SD_EXT_SCT_DESC_ID);
+        // 3305010017
+        extension.addExtension("descriptionId", new StringType(allergyIntoleranceEntity.getDescCode()));
+        // NKA - No known allergy
+        extension.addExtension("descriptionDisplay", new StringType(allergyIntoleranceEntity.getDescDisplay()));
+        coding.addExtension(extension);
+
+        codeableConcept.addCoding(coding);
+        allergyIntolerance.setCode(codeableConcept);
+        return allergyIntolerance;
     }
 
     /**
@@ -253,7 +296,7 @@ public class StructuredAllergyIntoleranceBuilder {
 
         if (display.equals(SNOMED_ACTIVE_ALLERGIES_DISPLAY)) {
             listResource.setCode(createCodeableConcept(SNOMED_ACTIVE_ALLERGIES_CODE, display, SNOMED_URL));
-            listResource.setTitle(ACTIVE_ALLERGIES_TITLE);
+            listResource.setTitle(display);
         } else if (display.equals(SNOMED_RESOLVED_ALLERGIES_DISPLAY)) {
             listResource.setCode(createCodeableConcept(SNOMED_RESOLVED_ALLERGIES_CODE, display, SNOMED_URL));
             listResource.setTitle(display);
@@ -310,6 +353,20 @@ public class StructuredAllergyIntoleranceBuilder {
             annotation.setText(annotation.getText() + "\r\n" + SystemConstants.INFORMATION_NOT_AVAILABLE);
         } else {
             list.addNote(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE)));
+        }
+    }
+
+    /**
+     *
+     * @param list
+     */
+    private static void addEmptyListNoAllergiesNote(ListResource list) {
+        // cardinality of note 0..1 #266
+        if (list.getNote().size() > 0) {
+            Annotation annotation = list.getNote().get(0);
+            annotation.setText(annotation.getText() + "\r\n" + SystemConstants.NO_ALLERGIES_IN_RECORD);
+        } else {
+            list.addNote(new Annotation(new StringType(SystemConstants.NO_ALLERGIES_IN_RECORD)));
         }
     }
 

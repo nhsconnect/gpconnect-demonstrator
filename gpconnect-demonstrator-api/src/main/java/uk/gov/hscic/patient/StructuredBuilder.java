@@ -140,7 +140,7 @@ public class StructuredBuilder {
     private static final String[] SNOMED_LIST_TITLES = {
         SNOMED_MEDICATION_LIST_DISPLAY,
         SNOMED_RESOLVED_ALLERGIES_DISPLAY,
-        ACTIVE_ALLERGIES_TITLE,
+        SNOMED_ACTIVE_ALLERGIES_DISPLAY,
         SNOMED_PROBLEMS_LIST_DISPLAY, // 1.3
         SNOMED_CONSULTATION_LIST_DISPLAY,
         SNOMED_IMMUNIZATIONS_LIST_DISPLAY,
@@ -1409,7 +1409,7 @@ public class StructuredBuilder {
 
         @Override
         public String getListTitle() {
-            return ACTIVE_ALLERGIES_TITLE;
+            return SNOMED_ACTIVE_ALLERGIES_DISPLAY;
         }
 
         @Override

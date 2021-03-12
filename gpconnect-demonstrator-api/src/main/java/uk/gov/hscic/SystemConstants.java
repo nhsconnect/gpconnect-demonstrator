@@ -18,6 +18,7 @@ public final class SystemConstants {
     public static final String NO_CONTENT = "noContent";
     public static final String NO_CONTENT_RECORDED = "no-content-recorded";
     public static final String INFORMATION_NOT_AVAILABLE = "Information not available";
+    public static final String NO_ALLERGIES_IN_RECORD = "There are no allergies in the patient record but it has not been confirmed with the patient that they have no allergies (that is, a ‘no known allergies’ code has not been recorded).";
     public static final String NO_INFORMATION_AVAILABLE = "No information available"; // required structured
     public static final String PATIENT_REFERENCE_URL = "Patient/";
 
@@ -60,10 +61,12 @@ public final class SystemConstants {
 
     // SNOMED ListResource Data
     // https://developer.nhs.uk/apis/gpconnect-1-3-1/accessrecord_structured_development_list.html
-    public static final String SNOMED_ACTIVE_ALLERGIES_DISPLAY = "Active Allergies";
+    public static final String SNOMED_ACTIVE_ALLERGIES_DISPLAY = "Allergies and adverse reactions";
     public static final String SNOMED_ACTIVE_ALLERGIES_CODE = "886921000000105";
+    
     // #175 NB This is not typical normally the list title is the same as the display
-    public static final String ACTIVE_ALLERGIES_TITLE = "Allergies and adverse reactions";
+    // #365 active allergies display and title should be the same this supersedes #175
+    //public static final String ACTIVE_ALLERGIES_TITLE = "Allergies and adverse reactions";
 
     public static final String SNOMED_RESOLVED_ALLERGIES_DISPLAY = "Ended allergies";
     public static final String SNOMED_RESOLVED_ALLERGIES_CODE = "1103671000000101";

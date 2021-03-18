@@ -106,14 +106,14 @@ public class StructuredAllergyIntoleranceBuilder {
         }
 
         if (!activeList.hasEntry()) {
-            addEmptyListNoAllergiesNote(activeList);
+            addEmptyListNote(activeList);
             addEmptyReasonCode(activeList);
         }
 
         bundle.addEntry().setResource(activeList);
 
         if (includedResolved && !resolvedList.hasEntry()) {
-            addEmptyListNoAllergiesNote(resolvedList);
+            addEmptyListNote(resolvedList);
             addEmptyReasonCode(resolvedList);
         }
 
@@ -353,20 +353,6 @@ public class StructuredAllergyIntoleranceBuilder {
             annotation.setText(annotation.getText() + "\r\n" + SystemConstants.INFORMATION_NOT_AVAILABLE);
         } else {
             list.addNote(new Annotation(new StringType(SystemConstants.INFORMATION_NOT_AVAILABLE)));
-        }
-    }
-
-    /**
-     *
-     * @param list
-     */
-    private static void addEmptyListNoAllergiesNote(ListResource list) {
-        // cardinality of note 0..1 #266
-        if (list.getNote().size() > 0) {
-            Annotation annotation = list.getNote().get(0);
-            annotation.setText(annotation.getText() + "\r\n" + SystemConstants.NO_ALLERGIES_IN_RECORD);
-        } else {
-            list.addNote(new Annotation(new StringType(SystemConstants.NO_ALLERGIES_IN_RECORD)));
         }
     }
 

@@ -18,7 +18,6 @@ public final class SystemConstants {
     public static final String NO_CONTENT = "noContent";
     public static final String NO_CONTENT_RECORDED = "no-content-recorded";
     public static final String INFORMATION_NOT_AVAILABLE = "Information not available";
-    public static final String NO_ALLERGIES_IN_RECORD = "There are no allergies in the patient record but it has not been confirmed with the patient that they have no allergies (that is, a ‘no known allergies’ code has not been recorded).";
     public static final String NO_INFORMATION_AVAILABLE = "No information available"; // required structured
     public static final String PATIENT_REFERENCE_URL = "Patient/";
 

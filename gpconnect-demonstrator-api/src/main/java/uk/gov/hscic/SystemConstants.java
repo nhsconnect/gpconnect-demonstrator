@@ -7,7 +7,7 @@ public final class SystemConstants {
     public static final String MEDICATION = "medication";
     public static final String ACTIVE = "active";
     
-    public static final String ACTIVE_ALLERGIES_DISPLAY = "Active Allergies";
+    public static final String ACTIVE_ALLERGIES_DISPLAY = "Allergies and adverse reactions";
     // #175
     public static final String ACTIVE_ALLERGIES_TITLE = "Allergies and adverse reactions";
     

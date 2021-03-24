@@ -69,16 +69,15 @@ public class StructuredAllergyIntoleranceBuilder {
             noKnownAllergies.setText("No Known Allergies");
             //activeList.setEmptyReason(noKnownAllergies);
 
+            // see spec example 2 no known allergies positively asserted
             Reference patient = new Reference(SystemConstants.PATIENT_REFERENCE_URL + allergyData.get(0).getPatientRef());
             String noKnownAllergyId = noKnownAllergy.getGuid();
             Reference allergyIntolerance = new Reference("AllergyIntolerance/" + noKnownAllergyId);
             Resource noKnownAllergyResource = createNoKnownAllergy(noKnownAllergy);
 
             activeList.setSubject(patient);
-            bundle.addEntry().setResource(activeList);
             activeList.addEntry().setItem(allergyIntolerance); // reference to AllergyIntolerance item
-            
-            activeList.setOrderedBy(createCoding("event-date", "Sorted by Event Date",SystemURL.CS_LIST_ORDER));
+            activeList.setOrderedBy(createCoding(SystemURL.CS_LIST_ORDER, "event-date","Sorted by Event Date"));
             bundle.addEntry().setResource(activeList);
             bundle.addEntry().setResource(noKnownAllergyResource);
 

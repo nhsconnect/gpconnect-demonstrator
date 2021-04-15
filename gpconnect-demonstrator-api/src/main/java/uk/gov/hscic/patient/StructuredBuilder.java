@@ -253,7 +253,7 @@ public class StructuredBuilder {
             }
         }
     } // appendCannedResponse
-    
+
     private void addEmptyProblemsList(Patient patient, Bundle structuredBundle) {
         // this for patient three when problems are requested
         // add an empty problems list
@@ -346,7 +346,7 @@ public class StructuredBuilder {
         condition.addExtension(relatedProblemHeader);
     }
 
-        /**
+    /**
      *
      * @param code
      * @param display
@@ -356,7 +356,7 @@ public class StructuredBuilder {
     public static ListResource createList(String code, String display, Patient patient) {
         return createList(code, display, SNOMED_URL, patient);
     }
-    
+
     /**
      *
      * @param code
@@ -430,6 +430,13 @@ public class StructuredBuilder {
         for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
             // NB get id actually returns fully qualified references
             String reference = entry.getResource().getId();
+            
+            // #368 Now there are no references to PractitionerRole we have to force the addition of this
+            // but we dont have to do this for referrals for some reason
+            if (reference != null && reference.startsWith("PractitionerRole") && (parameterName.equals(INCLUDE_CONSULTATIONS_PARM) || parameterName.equals(INCLUDE_PROBLEMS_PARM))) {
+                refCounts.put(reference, 1);
+            }
+
             // if the refs count is not null then include the resource.
             if (refCounts.keySet().contains(reference)) {
                 addEntryToBundleOnlyOnce(structuredBundle, reference, entry);
@@ -536,7 +543,7 @@ public class StructuredBuilder {
             //handlePatient2ProblemsRequest(patient, structuredBundle);
             // add the secondary lists for problems
             for (String title : new String[]{
-                PROBLEMS_MEDS_SECONDARY_LIST_TITLE, 
+                PROBLEMS_MEDS_SECONDARY_LIST_TITLE,
                 PROBLEMS_UNCATEGORISED_SECONDARY_LIST_TITLE}) {
                 ListResource secondaryList = (ListResource) resourceTypes.get(ResourceType.List).get(title);
                 addEntryToBundleOnlyOnce(structuredBundle, title, new BundleEntryComponent().setResource(secondaryList));
@@ -547,7 +554,7 @@ public class StructuredBuilder {
             //handlePatient2ConsultationsRequest(patient, structuredBundle);
             // add the secondary lists for consultations
             for (String title : new String[]{
-                CONSULTATION_MEDS_SECONDARY_LIST_TITLE, 
+                CONSULTATION_MEDS_SECONDARY_LIST_TITLE,
                 CONSULTATION_UNCATEGORISED_SECONDARY_LIST_TITLE,
                 // #359 different secondary list for problems
                 PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE}) {
@@ -692,7 +699,6 @@ public class StructuredBuilder {
 //
 //        return allergyIntolerance;
 //    }
-
 //    /**
 //     * minimal Immunization with just mandatory elements
 //     *
@@ -749,7 +755,6 @@ public class StructuredBuilder {
 //
 //        return immunization;
 //    }
-
 //    /**
 //     * minimal Observation with just mandatory elements
 //     *
@@ -782,7 +787,6 @@ public class StructuredBuilder {
 //
 //        return observation;
 //    }
-
 //    /**
 //     *
 //     * @param patient
@@ -803,7 +807,6 @@ public class StructuredBuilder {
 //        addDummyResourceForConsultation(createImmunization(), patient, structuredBundle, SNOMED_IMMUNIZATIONS_LIST_CODE, SNOMED_IMMUNIZATIONS_LIST_DISPLAY);
 //        addDummyResourceForConsultation(createObservation(), patient, structuredBundle, SNOMED_UNCATEGORISED_DATA_LIST_CODE, SNOMED_UNCATEGORISED_DATA_LIST_DISPLAY);
 //    }
-
 //    /**
 //     *
 //     * @param resource
@@ -831,7 +834,6 @@ public class StructuredBuilder {
 //        // add the resource to the bundle
 //        addEntryToBundleOnlyOnce(structuredBundle, resource.getResourceType() + "/" + resource.getId(), new BundleEntryComponent().setResource(resource));
 //    }
-
 //    /**
 //     * This should only be called once per resource type Created resource has
 //     * minimal content
@@ -858,7 +860,6 @@ public class StructuredBuilder {
 //        // add the problem to the problem list
 //        problemsList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + condition.getId())));
 //    }
-
 //    /**
 //     *
 //     * @param patient
@@ -880,7 +881,6 @@ public class StructuredBuilder {
 //        // add a reference to the condition to the problem list
 //        problemsList.addEntry(new ListEntryComponent().setItem(new Reference(condition.getResourceType() + "/" + condition.getId())));
 //    }
-
 //    /**
 //     *
 //     * @param patient to whom query relates
@@ -900,7 +900,6 @@ public class StructuredBuilder {
 //        return listResource;
 //    }
 // </editor-fold>
-
     /**
      * Compare addedToResponse set and refCounts Hash keys
      */
@@ -1166,54 +1165,57 @@ public class StructuredBuilder {
             String referenceStr, int indent) throws FHIRException {
         if (referenceStr.matches("^.*/.*$")) {
             ResourceType rt = ResourceType.valueOf(referenceStr.replaceFirst("^(.*)/.*$", "$1"));
-            DomainResource resource = (DomainResource) resourceTypes.get(rt).get(referenceStr);
-
-            if (resource instanceof ListResource) {
-                ListResource list = (ListResource) resource;
-                for (ListResource.ListEntryComponent entry : list.getEntry()) {
-                    if (entry.getItem() instanceof Reference) {
-                        Reference reference = (Reference) entry.getItem();
-                        if (reference.getReference() != null) {
+            HashMap<String, Resource> hm = resourceTypes.get(rt);
+            if (hm != null) {
+                DomainResource resource = (DomainResource) hm.get(referenceStr);
+                if (resource != null) {
+                    if (resource instanceof ListResource) {
+                        ListResource list = (ListResource) resource;
+                        for (ListResource.ListEntryComponent entry : list.getEntry()) {
+                            if (entry.getItem() instanceof Reference) {
+                                Reference reference = (Reference) entry.getItem();
+                                if (reference.getReference() != null) {
+                                    countReferences(reference, indent, structuredBundle, resourceTypes);
+                                }
+                            }
+                        }
+                    } else if (resource instanceof MedicationRequest) {
+                        MedicationRequest mr = (MedicationRequest) resource;
+                        Reference reference = mr.getMedicationReference();
+                        if (reference != null) {
                             countReferences(reference, indent, structuredBundle, resourceTypes);
+                        }
+                        reference = mr.getRecorder();
+                        if (reference != null) {
+                            countReferences(reference, indent, structuredBundle, resourceTypes);
+                        }
+                    } else if (resource instanceof ReferralRequest) {
+                        // This clause intentionally left blank
+                    } else if (resource instanceof DiagnosticReport) {
+                        DiagnosticReport diagnosticReport = (DiagnosticReport) resource;
+                        for (Reference reference : diagnosticReport.getBasedOn()) {
+                            countReferences(reference, indent, structuredBundle, resourceTypes);
+                        }
+
+                        for (Reference reference : diagnosticReport.getSpecimen()) {
+                            countReferences(reference, indent, structuredBundle, resourceTypes);
+                        }
+
+                        for (Reference reference : diagnosticReport.getResult()) {
+                            countReferences(reference, indent, structuredBundle, resourceTypes);
+                        }
+
+                    } else if (resource instanceof DomainResource) { // catch all
+                        DomainResource domainResource = (DomainResource) resource;
+                        for (Extension extension : domainResource.getExtension()) {
+                            if (extension.getValue() instanceof Reference) {
+                                Reference reference = (Reference) extension.getValue();
+                                countReferences(reference, indent, structuredBundle, resourceTypes);
+                            }
                         }
                     }
                 }
-            } else if (resource instanceof MedicationRequest) {
-                MedicationRequest mr = (MedicationRequest) resource;
-                Reference reference = mr.getMedicationReference();
-                if (reference != null) {
-                    countReferences(reference, indent, structuredBundle, resourceTypes);
-                }
-                reference = mr.getRecorder();
-                if (reference != null) {
-                    countReferences(reference, indent, structuredBundle, resourceTypes);
-                }
-            } else if (resource instanceof ReferralRequest) {
-                // This clause intentionally left blank
-            } else if (resource instanceof DiagnosticReport) {
-                DiagnosticReport diagnosticReport = (DiagnosticReport) resource;
-                for (Reference reference : diagnosticReport.getBasedOn()) {
-                    countReferences(reference, indent, structuredBundle, resourceTypes);
-                }
-
-                for (Reference reference : diagnosticReport.getSpecimen()) {
-                    countReferences(reference, indent, structuredBundle, resourceTypes);
-                }
-
-                for (Reference reference : diagnosticReport.getResult()) {
-                    countReferences(reference, indent, structuredBundle, resourceTypes);
-                }
-
-            } else if (resource instanceof DomainResource) { // catch all
-                DomainResource domainResource = (DomainResource) resource;
-                for (Extension extension : domainResource.getExtension()) {
-                    if (extension.getValue() instanceof Reference) {
-                        Reference reference = (Reference) extension.getValue();
-                        countReferences(reference, indent, structuredBundle, resourceTypes);
-                    }
-                }
             }
-
         } else {
             System.err.println("Warning Unexpected reference format: " + referenceStr);
         }
@@ -1271,7 +1273,7 @@ public class StructuredBuilder {
             }
         } // for
     }
-    
+
 // <editor-fold defaultstate="collapsed" desc="List manager classes">  
     /**
      * Base class for List Managers There is some magic required here to invoke

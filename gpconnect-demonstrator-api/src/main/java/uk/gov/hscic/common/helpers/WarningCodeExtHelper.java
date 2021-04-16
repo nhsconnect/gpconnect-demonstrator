@@ -34,6 +34,14 @@ public class WarningCodeExtHelper {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy");
 
     /**
+     * These are static so need resetting for each query
+     */
+    public static void resetWarningFlags() {
+        dataInTransit = false;
+        dataAwaitingFiling = false;
+    }
+
+    /**
      * confidential items are per record but the other two are global values per
      * patient
      *
@@ -47,7 +55,7 @@ public class WarningCodeExtHelper {
             PatientRepository patientRepository, MedicationStatementRepository medicationStatementRepository, StructuredAllergySearch structuredAllergySearch) {
 
         String NHS = list.getSubject().getIdentifier().getValue();
-
+        
         PatientEntity patientEntity = patientRepository.findByNhsNumber(NHS);
         List<MedicationStatementEntity> medicationStatements = medicationStatementRepository.findByPatientId(patientEntity.getId());
         for (MedicationStatementEntity medicationStatement : medicationStatements) {
@@ -121,6 +129,7 @@ public class WarningCodeExtHelper {
 
     /**
      * set flags
+     *
      * @param code
      */
     private static void setFlags(String code) {

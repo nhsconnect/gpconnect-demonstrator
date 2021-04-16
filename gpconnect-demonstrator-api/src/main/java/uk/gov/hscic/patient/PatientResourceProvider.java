@@ -68,6 +68,7 @@ import static uk.gov.hscic.SystemURL.VS_GPC_ERROR_WARNING_CODE;
 import uk.gov.hscic.model.telecom.TelecomDetails;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
+import uk.gov.hscic.common.helpers.WarningCodeExtHelper;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
 import uk.gov.hscic.patient.details.PatientEntity;
@@ -275,7 +276,7 @@ public class PatientResourceProvider implements IResourceProvider {
         validateParameters(params, uncannedClinicalAreaParameters, cannedCLinicalAreaParameters);
 
         Bundle structuredBundle = new Bundle();
-        
+
         // #366 add the trace id as the Bundle id
         String traceId = theRequest.getHeader(SSP_TRACEID);
         if (traceId != null) {
@@ -307,6 +308,9 @@ public class PatientResourceProvider implements IResourceProvider {
             }
         }
         );
+        
+        // ensure the flags in the static helper class are reset every time we do a query
+        WarningCodeExtHelper.resetWarningFlags();
 
         for (String uncannedClinicalArea : uncannedClinicalAreaParameters.keySet()) {
             ParametersParameterComponent param = uncannedClinicalAreaParameters.get(uncannedClinicalArea);
@@ -1440,7 +1444,7 @@ public class PatientResourceProvider implements IResourceProvider {
         BundleEntryComponent[] entries = structuredBundle.getEntry().toArray(new BundleEntryComponent[0]);
         HashSet<String> hs = new HashSet<>();
         for (BundleEntryComponent entry : entries) {
-            if ( entry.getResource() != null && entry.getResource().getId() != null) {
+            if (entry.getResource() != null && entry.getResource().getId() != null) {
                 String reference = entry.getResource().getResourceType().toString() + "/" + entry.getResource().getId();
                 if (!hs.contains(reference)) {
                     hs.add(reference);

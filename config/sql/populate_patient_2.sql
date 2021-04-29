@@ -70,7 +70,7 @@ VALUES
  
  (32,'M-2a','active','Active','plan','Plan',21,2,'2017-11-22',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
- '2017-11-22','2018-12-27','56',null,'56','28',1,null,12,1,'2018-12-27','repeat-dispensing','Repeat dispensing',null,null,'2018-08-29'),
+ '2017-11-22','2018-12-27','56',null,'56','28',1,null,12,12,'2018-12-27','repeat-dispensing','Repeat dispensing',null,null,'2018-08-29'),
   (33,'M-2a','completed','Completed','order','Order',21,2,'2017-11-22',
  'https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Practitioner-1',1,1,'2 tablets a day','With evening meal',
  '2017-11-22','2017-12-19','56',null,'56','28',1,null,12,1,'2017-12-19','repeat-dispensing','Repeat dispensing',null,null,'2017-11-22'),

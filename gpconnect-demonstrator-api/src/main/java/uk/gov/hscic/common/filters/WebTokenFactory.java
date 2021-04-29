@@ -104,10 +104,10 @@ public class WebTokenFactory {
 
             String[] jWTParts = authorizationHeaderComponents[1].split("\\.");
             if (jWTParts.length == 2) {
-                String headerJsonString = new String(Base64.getDecoder().decode(jWTParts[0]));
+                String headerJsonString = new String(Base64.getUrlDecoder().decode(jWTParts[0]));
                 validateJWTHeader(headerJsonString);
 
-                String claimsJsonString = new String(Base64.getDecoder().decode(jWTParts[1]));
+                String claimsJsonString = new String(Base64.getUrlDecoder().decode(jWTParts[1]));
 
                 // This magically populates the WebToken data object
                 webToken = new ObjectMapper().readValue(claimsJsonString, WebToken.class);

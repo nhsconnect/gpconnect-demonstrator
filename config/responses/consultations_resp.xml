@@ -3966,7 +3966,7 @@
                <value value="1afdd010-e1c6-470a-a8c6-450523e47c6d"></value>
             </identifier>
             <basedOn>
-               <reference value="Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
+               <reference value="MedicationRequest/Consultation1-Topic4-Category-Plan-Medication-Plan-1"></reference>
             </basedOn>
             <status value="completed"></status>
             <intent value="order"></intent>

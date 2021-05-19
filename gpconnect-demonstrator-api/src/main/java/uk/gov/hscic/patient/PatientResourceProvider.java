@@ -308,7 +308,7 @@ public class PatientResourceProvider implements IResourceProvider {
             }
         }
         );
-        
+
         // ensure the flags in the static helper class are reset every time we do a query
         WarningCodeExtHelper.resetWarningFlags();
 
@@ -433,9 +433,9 @@ public class PatientResourceProvider implements IResourceProvider {
                     case INCLUDE_MEDICATION_PARM:
 
                         // ensure the problem references both a medication statment and a medication request.
+                        // #371 removed the reference to the MedicationStatement
                         condition = createCondition(problemId, patient,
-                                new String[]{resource.getResourceType() + "/" + resource.getId(),
-                                    medicationsRequest.getResourceType() + "/" + medicationsRequest.getId()});
+                                new String[]{medicationsRequest.getResourceType() + "/" + medicationsRequest.getId()});
                         break;
                 }
 

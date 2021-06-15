@@ -393,8 +393,8 @@ public class PatientResourceProvider implements IResourceProvider {
             for (BundleEntryComponent entry : structuredBundle.getEntry()) {
                 if (entry.getResource() instanceof ListResource) {
                     ListResource listResource = (ListResource) entry.getResource();
-                    if (listResource.getId() != null) {
-                        switch (listResource.getId()) {
+                    if (listResource.getTitle() != null) {
+                        switch (listResource.getTitle()) {
                             case PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE:
                                 problemsLinkedNotRelatedToPrimaryQueryList = listResource;
                                 break;
@@ -402,6 +402,7 @@ public class PatientResourceProvider implements IResourceProvider {
                     }
                 } else if ((uncannedClinicalArea.equals(INCLUDE_ALLERGIES_PARM) && entry.getResource() instanceof AllergyIntolerance)
                         || (uncannedClinicalArea.equals(INCLUDE_MEDICATION_PARM) && entry.getResource() instanceof MedicationStatement)) {
+                    // pick the first appropiately typed resource
                     if (resource == null) {
                         resource = entry.getResource();
                     }
@@ -411,11 +412,13 @@ public class PatientResourceProvider implements IResourceProvider {
                     }
                 }
 
+                // if everything is populated stop looping
                 if (problemsLinkedNotRelatedToPrimaryQueryList != null && resource != null
-                        && (uncannedClinicalArea.equals(INCLUDE_ALLERGIES_PARM) || uncannedClinicalArea.equals(INCLUDE_MEDICATION_PARM) && medicationsRequest != null)) {
+                        && (uncannedClinicalArea.equals(INCLUDE_ALLERGIES_PARM) || (uncannedClinicalArea.equals(INCLUDE_MEDICATION_PARM) && medicationsRequest != null))) {
                     break;
                 }
-            }
+            } // loop through entries
+            
             if (problemsLinkedNotRelatedToPrimaryQueryList == null) {
                 problemsLinkedNotRelatedToPrimaryQueryList = StructuredBuilder.createList(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_CODE, PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE, SECONDARY_LIST_URL, patient);
                 structuredBundle.addEntry(new BundleEntryComponent().setResource(problemsLinkedNotRelatedToPrimaryQueryList));
@@ -1872,7 +1875,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 paramPart = pParamPart;
                 switch (paramPart.getName()) {
                     case IMMUNIZATIONS_INCLUDE_NOT_GIVEN_PARAM_PART:
-                    case IMMUNIZATIONS_INCLUDE_DISSENT_CONSENT_PARAM_PART:
+                    case IMMUNIZATIONS_INCLUDE_STATUS_PARAM_PART:
                         checkParameterPart(BooleanType.class);
                         break;
                     default:

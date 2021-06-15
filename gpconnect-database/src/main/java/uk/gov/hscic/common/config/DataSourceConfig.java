@@ -50,7 +50,7 @@ public class DataSourceConfig {
         final DataSource dataSource = new DataSource();
 
         dataSource.setDriverClassName(Driver.class.getName());
-        dataSource.setUrl("jdbc:" + vendor + "://" + host + ":" + port + "/" + schema);
+        dataSource.setUrl("jdbc:" + vendor + "://" + host + ":" + port + "/" + schema + "?useSSL=false");
         dataSource.setUsername(username);
         dataSource.setPassword(password);
 

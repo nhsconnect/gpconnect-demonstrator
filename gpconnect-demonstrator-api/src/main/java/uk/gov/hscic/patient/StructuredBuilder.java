@@ -237,9 +237,39 @@ public class StructuredBuilder {
                 Condition condition = createCondition(parameterName.replaceFirst("^include(.*)$", "$1Problem"), patient, pickedResource.getId());
                 addEntryToBundleOnlyOnce(structuredBundle, condition.getResourceType() + "/" + condition.getId(), new BundleEntryComponent().setResource(condition));
 
-                // #359 new secondary list
+                // #359 new secondary list which may have been created earlier in the uncanned meds and allergies
+                // if there is more than one of these lists then copy further entries into the first list
+                // and note subsequent lists for deletion after we exit the iteration
+                // this ensures that we only work on a single list and there are no copies
                 ListResource problemsLinkedNotRelatedToPrimaryQueryList = null;
-                if (addedToResponse.get(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE) != null) {
+                ArrayList<BundleEntryComponent> toBeDeleted = new ArrayList<>();
+                for (BundleEntryComponent entry : structuredBundle.getEntry()) {
+                    if (entry.getResource().getResourceType() == ResourceType.List) {
+                        ListResource list = (ListResource) entry.getResource();
+                        if (list.getTitle() != null && list.getTitle().equals(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE)) {
+                            if (problemsLinkedNotRelatedToPrimaryQueryList == null) {
+                                problemsLinkedNotRelatedToPrimaryQueryList = list;
+                            } else {
+                                // we have found another instance of this list 
+                                // so copy the entries in the second list to the first list and mark subsequent ones for removal
+                                for (ListEntryComponent entry1 : list.getEntry()) {
+                                    problemsLinkedNotRelatedToPrimaryQueryList.addEntry(entry1);
+                                }
+                                // rename so we don't end up performing multiple copies because this code
+                                // can be invoked several times
+                                list.setTitle("deleteme");
+                                toBeDeleted.add(entry);
+                            } // second or later copy
+                        } // its a problems not linked list
+                    } // its a list
+                }  // for each bundle
+
+                // delete any second or subsequent lists 
+                for (BundleEntryComponent entry : toBeDeleted) {
+                    structuredBundle.getEntry().remove(entry);
+                }
+
+                if (problemsLinkedNotRelatedToPrimaryQueryList == null && addedToResponse.get(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE) != null) {
                     problemsLinkedNotRelatedToPrimaryQueryList = (ListResource) addedToResponse.get(PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE);
                 }
                 if (problemsLinkedNotRelatedToPrimaryQueryList == null) {
@@ -249,9 +279,38 @@ public class StructuredBuilder {
                     addEntryToBundleOnlyOnce(structuredBundle, PROBLEMS_LINKED_NOT_RELATING_TO_PRIMARY_QUERY_LIST_TITLE, new BundleEntryComponent().setResource(problemsLinkedNotRelatedToPrimaryQueryList));
                 }
                 // add the problem (Condition) to the problem list
-                problemsLinkedNotRelatedToPrimaryQueryList.addEntry(new ListEntryComponent().setItem(new Reference("Condition/" + parameterName.replaceFirst("^include(.*)$", "$1Problem"))));
-            }
-        }
+                String ref = "Condition/" + parameterName.replaceFirst("^include(.*)$", "$1Problem");
+                problemsLinkedNotRelatedToPrimaryQueryList.addEntry(new ListEntryComponent().setItem(new Reference(ref)));
+
+                // remove any entries that are references other prime queries
+                if (problemsLinkedNotRelatedToPrimaryQueryList != null) {
+
+                    // foind the problems list and add the list items to the entry arrayy
+                    ArrayList<ListEntryComponent> problemReferences = new ArrayList<>();
+                    for (BundleEntryComponent entry : structuredBundle.getEntry()) {
+                        if (entry.getResource().getResourceType() == ResourceType.List) {
+                            ListResource list = (ListResource) entry.getResource();
+                            if (list.getTitle() != null && list.getTitle().equals("Problems")) {
+                                for (ListEntryComponent problemEntry : list.getEntry()) {
+                                    // list entries in the not relating list
+                                    for (ListEntryComponent problemNotRelatedEntry : problemsLinkedNotRelatedToPrimaryQueryList.getEntry()) {
+                                        if (problemNotRelatedEntry.getItem().getReference().equals(problemEntry.getItem().getReference())) {
+                                            problemReferences.add(problemNotRelatedEntry);
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    // finally renove the entries..
+                    for (ListEntryComponent entry : problemReferences) {
+                        problemsLinkedNotRelatedToPrimaryQueryList.getEntry().remove(entry);
+                    }
+                }
+            }  // patient 2
+        } // uncanned
     } // appendCannedResponse
 
     private void addEmptyProblemsList(Patient patient, Bundle structuredBundle) {
@@ -430,7 +489,7 @@ public class StructuredBuilder {
         for (Bundle.BundleEntryComponent entry : parsedBundle.getEntry()) {
             // NB get id actually returns fully qualified references
             String reference = entry.getResource().getId();
-            
+
             // #368 Now there are no references to PractitionerRole we have to force the addition of this
             // but we dont have to do this for referrals for some reason
             if (reference != null && reference.startsWith("PractitionerRole") && (parameterName.equals(INCLUDE_CONSULTATIONS_PARM) || parameterName.equals(INCLUDE_PROBLEMS_PARM))) {
@@ -1067,7 +1126,9 @@ public class StructuredBuilder {
                 if (listResource.getTitle() != null) {
                     String listTitle = listResource.getTitle();
                     System.out.println("Checking " + listTitle);
-                    if (Arrays.asList(SNOMED_LIST_TITLES).contains(listTitle)) {
+                    if (Arrays.asList(SNOMED_LIST_TITLES).contains(listTitle) && 
+                            // dont rebuild uncanned lists here, (only happens when canned are mixed with uncanned)
+                            !Arrays.asList(new String[]{SNOMED_ACTIVE_ALLERGIES_DISPLAY, SNOMED_RESOLVED_ALLERGIES_DISPLAY,SNOMED_MEDICATION_LIST_DISPLAY}).contains(listTitle)) {
                         System.out.println("Rebuilding " + listTitle + " record count = " + listResource.getEntry().size());
                         for (ListEntryComponent listEntry : listResource.getEntry()) {
                             System.out.println("\t" + listEntry.getItem().getReference());
@@ -1320,13 +1381,17 @@ public class StructuredBuilder {
                                 if (listManager != null) {
                                     String pTitle = listManager.getListTitle();
                                     listTitleToParameterName.put(pTitle, name.replaceFirst("^" + getClass().getName() + "\\$(.*)" + LIST_MANAGER_SUFFIX + "$", "include$1"));
+
                                 }
                             } catch (Exception ex) {
-                                Logger.getLogger(StructuredBuilder.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(StructuredBuilder.class
+                                        .getName()).log(Level.SEVERE, null, ex);
+
                             }
                         }
                     } catch (NoSuchMethodException | SecurityException ex) {
-                        Logger.getLogger(StructuredBuilder.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(StructuredBuilder.class
+                                .getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }

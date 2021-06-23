@@ -37,7 +37,7 @@ services:
       - gpconnect-db
     depends_on:
       - gpconnect-db
-        #volumes:
+    #volumes:
         # external environment properties file location
         #- /mnt/encrypted/home/simonfarrow/Documents/git_repositories/gpconnect-demonstrator-develop/config/external/:/app/config/external
 
@@ -56,13 +56,13 @@ services:
       - gpconnect-api
     depends_on:
       - gpconnect-api
-        #volumes:
+    #volumes:
         # <host path to mount> : <mount point within docker>
         #- /mnt/encrypted/home/simonfarrow/Documents/gpconnect/validator_reports:/home/service/TKW/config/GP_CONNECT/validator_reports
         # optional volume for simulator received messages logs
         #- /mnt/encrypted/home/simonfarrow/Documents/gpconnect/simulator_saved_messages:/home/service/TKW/config/GP_CONNECT/simulator_saved_messages
         # internal environment properties file location
-        #- /mnt/encrypted/home/simonfarrow/Documents/git_repositories/gpconnect-demonstrator-develop/config:/home/service/TKW/config/GP_CONNECT/internal
+        #- /mnt/encrypted/home/simonfarrow/Documents/git_repositories/gpconnect-demonstrator-develop/config:/home/service/TKW/config/GP_CONNECT/external
 networks: 
   gpconnect-network-1.5:
     driver: bridge

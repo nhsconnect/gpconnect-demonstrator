@@ -1,0 +1,68 @@
+#
+#  docker-compose file supporting a docker stack comprised of a 
+#  gpconnect demonstrator instance behind a tkw simulator running in http interceptor
+#  mode. The TKW front end supports version 1.6.0  which adds a migration capability
+#
+version: "3"
+services:
+  gpconnect-db:
+    image: mariadb
+    networks: 
+      - gpconnect-network-1.5
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=gpconnectdbuser
+      - MYSQL_PASSWORD=gpc0nn3ct
+      - MYSQL_DATABASE=gpconnect1_5
+    command: [
+        '--wait_timeout=28800',
+    ]
+
+  gpconnect-api:
+    image: nhsdigitalmait/gpconnect:1.5.1
+    restart : always
+    ports:
+        - 5000:19191
+    networks: 
+      - gpconnect-network-1.5
+    environment:
+      - TZ=Europe/London
+      - DATABASE_ADDRESS=gpconnect-db
+      - DATABASE_USERNAME=gpconnectdbuser
+      - DATABASE_PASSWORD=gpc0nn3ct
+      - DATABASE_SCHEMA=gpconnect1_5
+      - SERVER_BASE_URL=https://data.developer.nhs.uk/B82617/STU3/1/gpconnect/fhir
+      - CONTEXT_PATH=/B82617/STU3/1/gpconnect/
+    links:
+      - gpconnect-db
+    depends_on:
+      - gpconnect-db
+    #volumes:
+        # external environment properties file location
+        #- /mnt/encrypted/home/simonfarrow/Documents/git_repositories/gpconnect-demonstrator-develop/config/external/:/app/config/external
+
+  tkw:
+    image: nhsdigitalmait/tkw_gpconnect_simulator:1.6.0
+    restart : always
+    # change 4854 to whatever port the stack is required to be exposed on
+    ports:
+        - 4854:4854
+    networks: 
+      - gpconnect-network-1.5
+    environment:
+      - TZ=Europe/London
+    # tkw forwards to gpconnect-api:19191
+    links:
+      - gpconnect-api
+    depends_on:
+      - gpconnect-api
+    #volumes:
+        # <host path to mount> : <mount point within docker>
+        #- /mnt/encrypted/home/simonfarrow/Documents/gpconnect/validator_reports:/home/service/TKW/config/GP_CONNECT/validator_reports
+        # optional volume for simulator received messages logs
+        #- /mnt/encrypted/home/simonfarrow/Documents/gpconnect/simulator_saved_messages:/home/service/TKW/config/GP_CONNECT/simulator_saved_messages
+        # internal environment properties file location
+        #- /mnt/encrypted/home/simonfarrow/Documents/git_repositories/gpconnect-demonstrator-develop/config:/home/service/TKW/config/GP_CONNECT/external
+networks: 
+  gpconnect-network-1.5:
+    driver: bridge

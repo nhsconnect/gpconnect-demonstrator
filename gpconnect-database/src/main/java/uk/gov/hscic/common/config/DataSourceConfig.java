@@ -20,8 +20,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableScheduling
 @EnableTransactionManagement
 @EnableJpaRepositories(entityManagerFactoryRef = "entityManagerFactory",
-                       transactionManagerRef = "transactionManager",
-                       basePackages = "uk.gov.hscic")
+        transactionManagerRef = "transactionManager",
+        basePackages = "uk.gov.hscic")
 public class DataSourceConfig {
 
     @Value("${datasource.vendor:mysql}")
@@ -50,7 +50,7 @@ public class DataSourceConfig {
         final DataSource dataSource = new DataSource();
 
         dataSource.setDriverClassName(Driver.class.getName());
-        dataSource.setUrl("jdbc:" + vendor + "://" + host + ":" + port + "/" + schema);
+        dataSource.setUrl("jdbc:" + vendor + "://" + host + ":" + port + "/" + schema + "?useSSL=false");
         dataSource.setUsername(username);
         dataSource.setPassword(password);
 

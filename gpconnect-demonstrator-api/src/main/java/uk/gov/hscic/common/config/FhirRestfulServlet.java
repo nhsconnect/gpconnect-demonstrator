@@ -21,6 +21,7 @@ import ca.uhn.fhir.rest.server.interceptor.CorsInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hscic.SystemHeader;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
+import uk.gov.hscic.appointments.HealthcareServiceResourceProvider;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.common.filters.FhirRequestAuthInterceptor;
 import uk.gov.hscic.common.filters.FhirRequestGenericIntercepter;
@@ -62,6 +63,7 @@ public class FhirRestfulServlet extends RestfulServer {
        
         setServerAddressStrategy(new HardcodedServerAddressStrategy(serverBaseUrl));
         
+        // add resource extension point
         setResourceProviders(Arrays.asList(
                 applicationContext.getBean(PatientResourceProvider.class),
                 applicationContext.getBean(OrganizationResourceProvider.class),
@@ -70,7 +72,8 @@ public class FhirRestfulServlet extends RestfulServer {
                 applicationContext.getBean(LocationResourceProvider.class),
                 applicationContext.getBean(AppointmentResourceProvider.class),
                 //applicationContext.getBean(ScheduleResourceProvider.class), // #183
-                applicationContext.getBean(SlotResourceProvider.class)
+                applicationContext.getBean(SlotResourceProvider.class),
+                applicationContext.getBean(HealthcareServiceResourceProvider.class)
              
         ));
 

@@ -84,6 +84,10 @@ public class ScheduleResourceProvider implements IResourceProvider {
         if(scheduleDetail.getPractitionerId() != null) {
         	schedule.addActor(new Reference("Practitioner/" + scheduleDetail.getPractitionerId()));
         }
+
+        if(scheduleDetail.getServiceId() != null) {
+        	schedule.addActor(new Reference("HealthcareService/" + scheduleDetail.getServiceId()));
+        }
         
         if(scheduleDetail.getPractitionerRoleCode() != null) {
             

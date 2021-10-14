@@ -64,6 +64,10 @@ public class Interactions {
 
         // 1.2.6 #312
         put(InteractionId.REST_READ_STRUCTURED_METADATA, new Interaction("metadata").httpVerb(RequestMethod.GET));
+        
+        // 1.2.8
+        put(InteractionId.REST_READ_HEALTHCARE_SERVICE, new Interaction("HealthcareService").identifier().httpVerb(RequestMethod.GET));
+        put(InteractionId.REST_SEARCH_HEALTHCARE_SERVICE, new Interaction("HealthcareService").addIdentifierSystems(SystemURL.CS_DOS_SERVICE).httpVerb(RequestMethod.GET));
 
     }};
 

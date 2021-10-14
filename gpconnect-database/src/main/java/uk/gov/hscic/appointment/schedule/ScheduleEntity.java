@@ -49,6 +49,9 @@ public class ScheduleEntity {
     @Column(name = "lastUpdated")
     private Date lastUpdated;
 
+    @Column(name = "serviceId")
+    private Long serviceId;
+
     public Long getId() {
         return id;
     }
@@ -144,4 +147,13 @@ public class ScheduleEntity {
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+
+    public Long getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(Long serviceId) {
+        this.serviceId = serviceId;
+    }
+
 }

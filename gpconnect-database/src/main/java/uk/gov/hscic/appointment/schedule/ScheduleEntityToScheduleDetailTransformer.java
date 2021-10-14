@@ -20,6 +20,7 @@ public class ScheduleEntityToScheduleDetailTransformer implements Transformer<Sc
         scheduleDetail.setEndDateTime(item.getEndDateTime());
         scheduleDetail.setComment(item.getComment());
         scheduleDetail.setLastUpdated(item.getLastUpdated());
+        scheduleDetail.setServiceId(item.getServiceId());
         return scheduleDetail;
     }
 }

@@ -43,6 +43,11 @@ public final class InteractionId {
     public static final String REST_SEARCH_PRACTITIONER                = BASE + "rest:search:practitioner-1";
     public static final String REST_UPDATE_APPOINTMENT                 = BASE + "rest:update:appointment-1";   
     public static final String REST_CANCEL_APPOINTMENT                 = BASE + "rest:cancel:appointment-1";
+
+    // 1.2.8
+    public static final String REST_READ_HEALTHCARE_SERVICE            = BASE + "rest:read:healthcareservice-1";
+    public static final String REST_SEARCH_HEALTHCARE_SERVICE          = BASE + "rest:search:healthcareservice-1";
+    // extension point
     
     // #326 fix structured metadata interaction id
     private static final String STRUCTURED_BASE = "urn:nhs:names:services:gpconnect:structured:fhir:";
@@ -53,7 +58,8 @@ public final class InteractionId {
             REST_SEARCH_LOCATION,
             REST_SEARCH_ORGANIZATION,
             REST_SEARCH_PATIENT,
-            REST_SEARCH_PRACTITIONER
+            REST_SEARCH_PRACTITIONER,
+            REST_SEARCH_HEALTHCARE_SERVICE
             );
 
 }

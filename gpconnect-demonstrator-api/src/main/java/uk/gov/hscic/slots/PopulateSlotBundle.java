@@ -22,16 +22,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.annotation.PostConstruct;
+import org.hl7.fhir.dstu3.model.HealthcareService;
+import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
+import static uk.gov.hscic.SystemURL.CS_DOS_SERVICE;
+import static uk.gov.hscic.SystemURL.SD_GPC_HEALTHCARE_SERVICE;
+import uk.gov.hscic.appointment.healthcareservice.HealthcareServiceSearch;
 import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.location.LocationSearch;
+import uk.gov.hscic.model.appointment.HealthcareServiceDetail;
 import uk.gov.hscic.model.appointment.SlotDetail;
 import uk.gov.hscic.model.location.LocationDetails;
 import uk.gov.hscic.model.organization.OrganizationDetails;
@@ -66,6 +73,9 @@ public class PopulateSlotBundle {
 
     @Autowired
     private LocationSearch locationSearch;
+
+    @Autowired
+    private HealthcareServiceSearch healthcareServiceSearch;
 
     @Autowired
     private SlotSearch slotSearch;
@@ -138,6 +148,7 @@ public class PopulateSlotBundle {
         HashSet<BundleEntryComponent> addedLocation = new HashSet<>();
         HashSet<String> addedPractitioner = new HashSet<>();
         HashSet<String> addedOrganization = new HashSet<>();
+        Long healthcareServiceId = null;
         // issue #165 don't add duplicate slots, hashSet contains slot id as String
         HashSet<String> addedSlot = new HashSet<>();
 
@@ -227,6 +238,20 @@ public class PopulateSlotBundle {
                             // only add a schedule if there's a reference to it and only add it once
                             bundle.addEntry(scheduleEntry);
                             addedSchedule.add(scheduleEntry);
+
+                            if (healthcareServiceId == null) {
+                                List<Reference> actors = schedule.getActor();
+                                for (Reference actor : actors) {
+                                    /* does the schedule include a healthcare service actor?*/
+                                    if (actor.getReference().startsWith("HealthcareService")) {
+                                        healthcareServiceId = Long.parseLong(actor.getReference().replaceFirst("HealthcareService/", ""));
+                                        if (healthcareServiceId != null) {
+                                            addHealthcareService(healthcareServiceId, bundle);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
                         }
 
                         if (actorLocation == true) {
@@ -303,5 +328,35 @@ public class PopulateSlotBundle {
         // #215 full url removed completely
         //organizationEntry.setFullUrl(serverBaseUrl + "Organization/" + organization.getId());
         bundle.addEntry(organizationEntry);
+    }
+
+    /**
+     * Add HealthcareServiceResource to Bundle
+     * TOTO see also healthcareServiceDetailToHealthcareServiceResourceConverter
+     * @param healthcareServiceId local id
+     * @param bundle Bundle Resource to add healthcare service  to
+     */
+    private void addHealthcareService(Long healthcareServiceId, Bundle bundle) {
+        BundleEntryComponent healthcareServiceEntry = new BundleEntryComponent();
+        HealthcareServiceDetail healthcareServiceDetail = healthcareServiceSearch.findHealthcareServiceByID(healthcareServiceId);
+
+        HealthcareService healthcareServiceResource = new HealthcareService();
+
+        healthcareServiceResource.setId("" + healthcareServiceDetail.getId());
+        healthcareServiceResource.getMeta().setVersionId("636064088100870233");
+        healthcareServiceResource.getMeta().addProfile(SD_GPC_HEALTHCARE_SERVICE);
+
+        List<Identifier> identifiers = new ArrayList<>();
+        Identifier identifier = new Identifier()
+                .setSystem(CS_DOS_SERVICE)
+                .setValue(healthcareServiceDetail.getIdentifier());
+        identifiers.add(identifier);
+        healthcareServiceResource.setIdentifier(identifiers);
+
+        healthcareServiceResource.setName(healthcareServiceDetail.getName());
+        healthcareServiceResource.setProvidedBy(new Reference("Organization/" + healthcareServiceDetail.getOrganizationId()));
+
+        healthcareServiceEntry.setResource(healthcareServiceResource);
+        bundle.addEntry(healthcareServiceEntry);
     }
 }

@@ -32,9 +32,11 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 import uk.gov.hscic.InteractionId;
+import static uk.gov.hscic.InteractionId.REST_SEARCH_HEALTHCARE_SERVICE;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemHeader;
+import static uk.gov.hscic.SystemHeader.SSP_INTERACTIONID;
 import uk.gov.hscic.SystemParameter;
 import uk.gov.hscic.auth.CertificateValidator;
 import uk.gov.hscic.common.filters.model.Interactions;
@@ -49,7 +51,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     /**
      * allows access to command line parameters
-     * @return 
+     *
+     * @return
      */
     public static String getConfigPath() {
         return sConfigPath;
@@ -130,7 +133,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         if (StringUtils.isBlank(interactionIdHeader)) {
             throwInvalidRequest400_InvalidParameterException(SystemHeader.SSP_INTERACTIONID + " header blank");
         }
-        
+
         Interaction interaction = interactions.getInteraction(interactionIdHeader);
 
         if (interaction != null) {
@@ -139,7 +142,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
                 validateURIAgainstInteraction(interaction, httpRequest.getRequestURI());
 
                 if (InteractionId.IDENTIFIER_INTERACTIONS.contains(interactionIdHeader)) {
-                    validateIdentifierSystemAgainstInteraction(interaction,
+                    validateIdentifierSystemAgainstInteraction(httpRequest, interaction,
                             httpRequest.getParameterMap().get(SystemParameter.IDENTIFIER));
                 }
             } else {
@@ -155,8 +158,9 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     }
 
     /**
-     * 400 Invalid Request - Bad Request 
-     * @param exceptionMessage 
+     * 400 Invalid Request - Bad Request
+     *
+     * @param exceptionMessage
      */
     public static void throwInvalidRequest400_BadRequestException(String exceptionMessage) {
         throwInvalidRequest400Exception(SystemCode.BAD_REQUEST, exceptionMessage);
@@ -164,15 +168,17 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     /**
      * 400 Invalid Request - Invalid Parameter NB Invalid Request
-     * @param exceptionMessage 
+     *
+     * @param exceptionMessage
      */
     public static void throwInvalidRequest400_InvalidParameterException(String exceptionMessage) {
         throwInvalidRequest400Exception(SystemCode.INVALID_PARAMETER, exceptionMessage);
     }
 
     /**
-     * 400 Invalid Request - Invalid Identifier 
-     * @param exceptionMessage 
+     * 400 Invalid Request - Invalid Identifier
+     *
+     * @param exceptionMessage
      */
     private static void throwInvalidRequest400_InvalidIdentifierSystemException(String exceptionMessage) {
         throwInvalidRequest400Exception(SystemCode.INVALID_IDENTIFIER_SYSTEM, exceptionMessage);
@@ -180,28 +186,30 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     /**
      * 400 Invalid Request
-     * @param exceptionMessage 
+     *
+     * @param exceptionMessage
      */
     private static void throwInvalidRequest400Exception(String code, String exceptionMessage) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(new InvalidRequestException(exceptionMessage),
                 code, IssueType.INVALID);
     }
-    
 
     /**
      * 422 Unprocessable Entity InvalidParameter
-     * @param exceptionMessage 
+     *
+     * @param exceptionMessage
      */
     public static void throwUnprocessableEntityInvalid422_ParameterException(String exceptionMessage) {
-        throwUnprocessableEntity422Exception(SystemCode.INVALID_PARAMETER,exceptionMessage);
+        throwUnprocessableEntity422Exception(SystemCode.INVALID_PARAMETER, exceptionMessage);
     }
-    
+
     /**
      * 422 Bad Request
+     *
      * @param message
      */
     public static void throwUnprocessableEntity422_BadRequestException(String exceptionMessage) {
-        throwUnprocessableEntity422Exception(SystemCode.BAD_REQUEST,exceptionMessage);
+        throwUnprocessableEntity422Exception(SystemCode.BAD_REQUEST, exceptionMessage);
     }
 
     /**
@@ -210,13 +218,13 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
      * @param message
      */
     public static void throwUnprocessableEntity422_InvalidResourceException(String exceptionMessage) {
-        throwUnprocessableEntity422Exception(SystemCode.INVALID_RESOURCE,exceptionMessage);
+        throwUnprocessableEntity422Exception(SystemCode.INVALID_RESOURCE, exceptionMessage);
     }
-    
 
     /**
      * 422 Unprocessable Entity
-     * @param exceptionMessage 
+     *
+     * @param exceptionMessage
      */
     private static void throwUnprocessableEntity422Exception(String code, String exceptionMessage) {
         throw OperationOutcomeFactory.buildOperationOutcomeException(new UnprocessableEntityException(exceptionMessage),
@@ -225,6 +233,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     /**
      * 404 Resource Not Found
+     *
      * @param exceptionMessage
      * @param resource String name of resource type
      */
@@ -458,36 +467,39 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
         // }
     }
 
-    private void validateIdentifierSystemAgainstInteraction(Interaction interaction, String[] identifiers) {
+    private void validateIdentifierSystemAgainstInteraction(HttpServletRequest httpRequest, Interaction interaction, String[] identifiers) {
 
-        if (null == identifiers) {
-            throwInvalidRequest400_BadRequestException("No identifier parameter found!");
-        }
+        // healthcare search can take zero params
+        if (httpRequest.getHeader(SSP_INTERACTIONID) == null || !httpRequest.getHeader(SSP_INTERACTIONID).equals(REST_SEARCH_HEALTHCARE_SERVICE)) {
+            if (null == identifiers) {
+                throwInvalidRequest400_BadRequestException("No identifier parameter found!");
+            }
 
-        if (1 != identifiers.length) {
-            throwInvalidRequest400_BadRequestException("Invalid quantity of identifier parameter found: " + identifiers.length);
-        }
+            if (1 != identifiers.length) {
+                throwInvalidRequest400_BadRequestException("Invalid quantity of identifier parameter found: " + identifiers.length);
+            }
 
-        String[] identifierParts = identifiers[0].split("\\|");
+            String[] identifierParts = identifiers[0].split("\\|");
 
-        if (identifierParts.length == 2) {
-            String identifierSystem = identifierParts[0];
-            String identifierValue = identifierParts[1];
+            if (identifierParts.length == 2) {
+                String identifierSystem = identifierParts[0];
+                String identifierValue = identifierParts[1];
 
-            if (StringUtils.isNotBlank(identifierSystem) && StringUtils.isNotBlank(identifierValue)) {
-                if (interaction.validateIdentifierSystem(identifierSystem) == false) {
-                    throwInvalidRequest400_InvalidIdentifierSystemException(
-                            String.format("The given identifier system code (%s) is not an expected code - %s",
-                                    identifierSystem, interaction.getIdentifierSystems().toString()));
+                if (StringUtils.isNotBlank(identifierSystem) && StringUtils.isNotBlank(identifierValue)) {
+                    if (interaction.validateIdentifierSystem(identifierSystem) == false) {
+                        throwInvalidRequest400_InvalidIdentifierSystemException(
+                                String.format("The given identifier system code (%s) is not an expected code - %s",
+                                        identifierSystem, interaction.getIdentifierSystems().toString()));
+                    }
+                } else {
+                    throwUnprocessableEntityInvalid422_ParameterException(String.format("The identifier is invalid. System - %s Value - %s",
+                            identifierSystem, identifierValue));
                 }
             } else {
-                throwUnprocessableEntityInvalid422_ParameterException(String.format("The identifier is invalid. System - %s Value - %s",
-                        identifierSystem, identifierValue));
+                throwUnprocessableEntityInvalid422_ParameterException(
+                        "One or both of the identifier system and value are missing from given identifier : "
+                        + identifiers[0]);
             }
-        } else {
-            throwUnprocessableEntityInvalid422_ParameterException(
-                    "One or both of the identifier system and value are missing from given identifier : "
-                    + identifiers[0]);
         }
     }
 
@@ -555,7 +567,8 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
     private enum Resource {
 
-        AllergyIntolerance, Appointment, Condition, DiagnosticOrder, DiagnosticReport, Flag, MedicationAdministration, MedicationDispense, MedicationOrder, Patient, Organization, Order, Location, metadata, Practitioner, Slot;
+        // extension point
+        AllergyIntolerance, Appointment, Condition, DiagnosticOrder, DiagnosticReport, Flag, MedicationAdministration, MedicationDispense, MedicationOrder, Patient, Organization, Order, Location, metadata, Practitioner, Slot, HealthcareService;
 
         private static final Map<String, Resource> mappings = new HashMap<>();
 

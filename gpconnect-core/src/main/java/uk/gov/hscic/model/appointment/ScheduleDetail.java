@@ -15,6 +15,7 @@ public class ScheduleDetail {
     private Date endDateTime;
     private String comment;
     private Date lastUpdated;
+    private Long serviceId;
 
     public Long getId() {
         return id;
@@ -110,5 +111,13 @@ public class ScheduleDetail {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public Long getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(Long serviceId) {
+        this.serviceId = serviceId;
     }
 }

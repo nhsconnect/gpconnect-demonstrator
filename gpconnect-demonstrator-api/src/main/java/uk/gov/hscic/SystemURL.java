@@ -49,6 +49,7 @@ public final class SystemURL {
     public static final String SD_GPC_MEDICATION_REQUEST = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-MedicationRequest-1";
     public static final String SD_GPC_MEDICATION = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Medication-1";
     public static final String SD_GPC_PRACTITIONER_ROLE = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-PractitionerRole-1";
+    public static final String SD_GPC_HEALTHCARE_SERVICE = "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-HealthcareService-1";
 
     // FHIR StructureDefinition Extension
     public static final String SD_CC_EXT_NHS_NUMBER_VERIF = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-NHSNumberVerificationStatus-1";
@@ -162,6 +163,7 @@ public final class SystemURL {
     //CodeSystem URLs
     public static final String VS_SNOMED = "http://snomed.info/sct";
     public static final String CS_UNITS_OF_MEASURE = "http://unitsofmeasure.org";
+    public static final String CS_DOS_SERVICE = "https://fhir.nhs.uk/Id/uec-dos-service-id";
 
     //Include Allergies Constant
     public static final String INCLUDE_ALLERGIES = "includeAllergies";

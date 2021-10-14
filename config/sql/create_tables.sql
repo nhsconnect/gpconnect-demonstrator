@@ -33,6 +33,7 @@ DROP TABLE IF EXISTS medical_departments;
 DROP TABLE IF EXISTS allergyintolerance;
 DROP TABLE IF EXISTS addresses;
 DROP TABLE IF EXISTS translations;
+DROP TABLE IF EXISTS appointment_healthcareservices;
 
 /* Create new table schemas */
 
@@ -82,6 +83,7 @@ CREATE TABLE appointment_schedules (
   endDateTime     DATETIME  NULL,
   scheduleComment TEXT(300) NULL,
   lastUpdated     DATETIME  NULL,
+  serviceId      BIGINT  NULL,
   PRIMARY KEY (id)
 );
 
@@ -415,4 +417,12 @@ CREATE TABLE patient_telecoms (
   value      VARCHAR(250) NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (patientId) REFERENCES patients(id)
+);
+
+CREATE TABLE appointment_healthcareservices (
+  id              BIGINT    NOT NULL,
+  identifier      TEXT(50)  NULL,
+  healthcareservice_name        TEXT(50)  NULL,
+  organizationId  BIGINT    NULL,
+  PRIMARY KEY (id)
 );

@@ -98,12 +98,15 @@ public class PopulateSlotBundle {
      * @param planningHorizonEnd Date
      * @param actorPractitioner boolean
      * @param actorLocation boolean
+     * @param actorHealthcareService
      * @param managingOrganisation boolean
      * @param bookingOdsCode String
      * @param bookingOrgType String eg "urgent-care"
+     * @param requestedServiceIdentifier eg 99999
      */
     public void populateBundle(Bundle bundle, OperationOutcome operationOutcome, Date planningHorizonStart,
-            Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation, boolean managingOrganisation, String bookingOdsCode, String bookingOrgType) {
+            Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation, boolean actorHealthcareService,
+            boolean managingOrganisation, String bookingOdsCode, String bookingOrgType, Long requestedServiceId) {
         bundle.getMeta().addProfile(SystemURL.SD_GPC_SRCHSET_BUNDLE);
 
         // TODO remove hard coding pick up from providerRouting.json ?
@@ -148,15 +151,32 @@ public class PopulateSlotBundle {
         HashSet<BundleEntryComponent> addedLocation = new HashSet<>();
         HashSet<String> addedPractitioner = new HashSet<>();
         HashSet<String> addedOrganization = new HashSet<>();
-        Long healthcareServiceId = null;
         // issue #165 don't add duplicate slots, hashSet contains slot id as String
         HashSet<String> addedSlot = new HashSet<>();
+
+        boolean healthcareServiceAdded = false;
 
         // #144 process all locations
         for (String locationId : locationEntries.keySet()) {
 
             // process the schedules
             for (Schedule schedule : scheduleResourceProvider.getSchedulesForLocationId(locationId, planningHorizonStart, planningHorizonEnd)) {
+                Long scheduleServiceId = null;
+                
+                // get the schedule hcs rfererence if there is one
+                List<Reference> actors = schedule.getActor();
+                for (Reference actor : actors) {
+                    /* does the schedule include a healthcare service actor?*/
+                    if (actor.getReference().startsWith("HealthcareService")) {
+                        scheduleServiceId = Long.parseLong(actor.getReference().replaceFirst("HealthcareService/", ""));
+                        break;
+                    }
+                }
+
+                // if we requested a service id and theres not an exact match skip the schedule
+                if (requestedServiceId != null && !requestedServiceId.equals(scheduleServiceId)) {
+                    continue;
+                }
                 boolean slotsAdded = false;
 
                 schedule.getMeta().addProfile(SystemURL.SD_GPC_SCHEDULE);
@@ -239,18 +259,9 @@ public class PopulateSlotBundle {
                             bundle.addEntry(scheduleEntry);
                             addedSchedule.add(scheduleEntry);
 
-                            if (healthcareServiceId == null) {
-                                List<Reference> actors = schedule.getActor();
-                                for (Reference actor : actors) {
-                                    /* does the schedule include a healthcare service actor?*/
-                                    if (actor.getReference().startsWith("HealthcareService")) {
-                                        healthcareServiceId = Long.parseLong(actor.getReference().replaceFirst("HealthcareService/", ""));
-                                        if (healthcareServiceId != null) {
-                                            addHealthcareService(healthcareServiceId, bundle);
-                                        }
-                                        break;
-                                    }
-                                }
+                            if (actorHealthcareService && scheduleServiceId != null && !healthcareServiceAdded) {
+                                addHealthcareService(scheduleServiceId, bundle);
+                                healthcareServiceAdded = true;
                             }
                         }
 
@@ -289,7 +300,7 @@ public class PopulateSlotBundle {
                                     addedPractitioner.add(practitioner.getIdElement().getIdPart());
                                 }
                             }
-                        } // for practitioner
+                        } // for practitionerActor
                     } // if non empty practitioner list
                 } // if slots added
             } // for schedules
@@ -331,10 +342,11 @@ public class PopulateSlotBundle {
     }
 
     /**
-     * Add HealthcareServiceResource to Bundle
-     * TOTO see also healthcareServiceDetailToHealthcareServiceResourceConverter
+     * Add HealthcareServiceResource to Bundle TOTO see also
+     * healthcareServiceDetailToHealthcareServiceResourceConverter
+     *
      * @param healthcareServiceId local id
-     * @param bundle Bundle Resource to add healthcare service  to
+     * @param bundle Bundle Resource to add healthcare service to
      */
     private void addHealthcareService(Long healthcareServiceId, Bundle bundle) {
         BundleEntryComponent healthcareServiceEntry = new BundleEntryComponent();

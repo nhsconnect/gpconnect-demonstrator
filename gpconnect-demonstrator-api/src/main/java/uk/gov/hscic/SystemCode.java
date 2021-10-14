@@ -19,5 +19,6 @@ public final class SystemCode {
     public static final String DUPLICATE_REJECTED = "DUPLICATE_REJECTED";
     public static final String INVALID_PATIENT_DEMOGRAPHICS = "INVALID_PATIENT_DEMOGRAPHICS";
     public static final String NOT_IMPLEMENTED = "NOT_IMPLEMENTED";
+    public static final String NO_RECORD_FOUND = "NO_RECORD_FOUND";
 }
     

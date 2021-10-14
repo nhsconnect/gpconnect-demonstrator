@@ -74,6 +74,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
     private static final String PRACTITIONER_RESOURCE_NAME = "Practitioner";
     private static final String ORGANIZATION_RESOURCE_NAME = "Organization";
     private static final String PATIENT_RESOURCE_NAME = "Patient";
+    private static final String HEALTHCARE_SERVICE_RESOURCE_NAME = "HealthcareService";
 
     @PostConstruct
     public void postConstruct() {
@@ -237,7 +238,7 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
      * @param exceptionMessage
      * @param resource String name of resource type
      */
-    private static void throwResourceNotFoundException(String exceptionMessage, String resource) {
+    public static void throwResourceNotFoundException(String exceptionMessage, String resource) {
         String systemCode = null;
 
         switch (resource) {
@@ -251,6 +252,10 @@ public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
             case PRACTITIONER_RESOURCE_NAME:
                 systemCode = SystemCode.PRACTITIONER_NOT_FOUND;
+                break;
+
+            case HEALTHCARE_SERVICE_RESOURCE_NAME:
+                systemCode = SystemCode.NO_RECORD_FOUND;
                 break;
 
             default:

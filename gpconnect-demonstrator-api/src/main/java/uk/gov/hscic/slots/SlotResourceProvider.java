@@ -40,11 +40,14 @@ import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Extension;
 import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.SystemVariable;
+import uk.gov.hscic.appointment.healthcareservice.HealthcareServiceSearch;
 import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.model.appointment.SlotDetail;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwResourceNotFoundException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntityInvalid422_ParameterException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_BadRequestException;
+import uk.gov.hscic.model.appointment.HealthcareServiceDetail;
 
 @Component
 public class SlotResourceProvider implements IResourceProvider {
@@ -56,6 +59,9 @@ public class SlotResourceProvider implements IResourceProvider {
 
     @Autowired
     public PopulateSlotBundle getScheduleOperation;
+
+    @Autowired
+    private HealthcareServiceSearch healthcareSearch;
 
     @Override
     public Class<Slot> getResourceType() {
@@ -81,9 +87,11 @@ public class SlotResourceProvider implements IResourceProvider {
             @RequiredParam(name = "end") DateParam endDate,
             @RequiredParam(name = "status") String status,
             @OptionalParam(name = "searchFilter") TokenAndListParam searchFilters,
+            @OptionalParam(name = "service.identifier") TokenParam serviceFilters,
             @IncludeParam(allow = {"Slot:schedule",
         "Schedule:actor:Practitioner",
         "Schedule:actor:Location",
+        "Schedule:actor:HealthcareService",
         "Location:managingOrganization"
     }) Set<Include> theIncludes) {
 
@@ -135,10 +143,24 @@ public class SlotResourceProvider implements IResourceProvider {
                 }
             }
         }
+        
+        // 1.2.8
+        String serviceIdentifier = null;
+        Long serviceId = null;
+        if  (serviceFilters != null ) {
+            String system = serviceFilters.getSystem();
+            if (system.equals(SystemURL.CS_DOS_SERVICE)) {
+                serviceIdentifier = serviceFilters.getValue();
+                serviceId= validateServiceId(serviceIdentifier);
+            } else {
+                throwUnprocessableEntityInvalid422_ParameterException("Invalid service id system code");
+            }
+        }
 
         boolean actorPractitioner = false;
         boolean actorLocation = false;
         boolean managingOrganisation = false;
+        boolean actorHealthcareService = false;
         for (Include include : theIncludes) {
 
             switch (include.getValue()) {
@@ -151,11 +173,14 @@ public class SlotResourceProvider implements IResourceProvider {
                 case "Location:managingOrganization":
                     managingOrganisation = true;
                     break;
+                case "Schedule:actor:HealthcareService":
+                    actorHealthcareService = true;
+                    break;
             }
         }
         startDate.getValueAsInstantDt().getValue();
         getScheduleOperation.populateBundle(bundle, new OperationOutcome(), startDate.getValueAsInstantDt().getValue(),
-                endDate.getValueAsInstantDt().getValue(), actorPractitioner, actorLocation, managingOrganisation, bookingOdsCode, bookingOrgType);
+                endDate.getValueAsInstantDt().getValue(), actorPractitioner, actorLocation, actorHealthcareService, managingOrganisation, bookingOdsCode, bookingOrgType, serviceId);
 
         return bundle;
 
@@ -331,5 +356,20 @@ public class SlotResourceProvider implements IResourceProvider {
                 }
             }
         }
+    }
+
+    /**
+     * if its not in the list throw 404 record not found
+     * @param serviceIdentifier 
+     */
+    private Long validateServiceId(String serviceIdentifier) {
+        List<HealthcareServiceDetail> healthcareServices = healthcareSearch.findAllHealthcareServices();
+        for (HealthcareServiceDetail healthcareServiceDetail : healthcareServices) {
+            if (healthcareServiceDetail.getIdentifier().equals(serviceIdentifier)) {
+                return healthcareServiceDetail.getId();
+            }
+        }
+        throwResourceNotFoundException("The HealthcareService identified by the service.identifier parameter was not found", "HealthcareService");
+        return null;
     }
 }

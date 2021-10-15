@@ -1099,6 +1099,14 @@ public class AppointmentResourceProvider implements IResourceProvider {
 
         // 1.2.7 set service type from slot type description
         appointment.addServiceType(new CodeableConcept().setText(slotSearch.findSlotByID(sids.get(0)).getTypeDisply()));
+        
+        // 1.2.8 add HealthcareService id if there's one in the schedule
+        if ( scheduleDetail.getServiceId() != null) {
+            AppointmentParticipantComponent participant = new AppointmentParticipantComponent();
+            participant.setActor(new Reference("HealthcareService/"+scheduleDetail.getServiceId()));
+            participant.setStatus(ParticipationStatus.ACCEPTED);
+            appointment.addParticipant(participant);
+        }
 
         return appointment;
     } // appointmentDetailToAppointmentResourceConverter
@@ -1264,7 +1272,7 @@ public class AppointmentResourceProvider implements IResourceProvider {
             appointmentDetail.setServiceCategory(appointment.getServiceCategory().getText());
             appointmentDetail.setServiceType(appointment.getServiceTypeFirstRep().getText());
         }
-
+        
         return appointmentDetail;
     } // appointmentResourceConverterToAppointmentDetail
 

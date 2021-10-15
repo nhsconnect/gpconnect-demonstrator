@@ -1,4 +1,4 @@
-USE gpconnect1;
+USE gpconnect1_2_8;
 INSERT INTO practitioners
   (id,userid,p_role_ids,p_name_family,p_name_given,p_name_prefix,p_gender,p_organization_id,p_role_code,p_role_display,p_com_code,p_com_display,lastUpdated)
 VALUES

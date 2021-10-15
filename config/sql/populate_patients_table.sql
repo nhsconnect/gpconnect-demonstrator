@@ -1,4 +1,4 @@
-USE gpconnect1;
+USE gpconnect1_2_8;
 LOCK TABLES patients WRITE;
 INSERT INTO patients
 	   (id,title,first_name,last_name,address_1,address_2,address_3,address_4,address_5,postcode,phone,date_of_birth,gender,nhs_number,pas_number,department_id,gp_id,lastUpdated,sensitive_flag,multiple_birth,deceased,marital_status,managing_organization,registration_start, registration_status)

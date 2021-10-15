@@ -1,4 +1,4 @@
-USE gpconnect1;
+USE gpconnect1_2_8;
 INSERT INTO medication_statements
  (id,lastIssueDate,statusCode,statusDisplay,medicationId,startDate,endDate,dateAsserted,
     patientId,takenCode,takenDisplay,dosageText,dosageInstruction,dosageLastChanged, warningCode, prescribingAgency)

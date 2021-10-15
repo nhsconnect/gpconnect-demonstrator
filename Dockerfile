@@ -36,7 +36,7 @@ ENV DATABASE_ADDRESS 10.100.100.61
 ENV DATABASE_PORT 3306
 ENV DATABASE_USERNAME gpconnectdbuser
 ENV DATABASE_PASSWORD gpc0nn3ct
-ENV DATABASE_SCHEMA gpconnect1
+ENV DATABASE_SCHEMA gpconnect1_2_8
 ENV SERVER_BASE_URL https://data.developer.nhs.uk/gpconnect-demonstrator/v1/fhir
 ENV CONTEXT_PATH /gpconnect-demonstrator/v1/
 ENV PROPERTIES_PATHS file:/app/config/gpconnect-demonstrator-api.properties,file:/app/config/gpconnect-demonstrator-api.environment.properties,file:/app/config/external/gpconnect-demonstrator-api.environment.properties

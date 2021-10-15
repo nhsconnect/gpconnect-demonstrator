@@ -1,4 +1,4 @@
-USE gpconnect1;
+USE gpconnect1_2_8;
 INSERT INTO allergyintolerance
   (nhsNumber,endDate,endReason,note,reactionDescription, clinicalStatus,verificationStatus,category,patientRef,onSetDateTime,assertedDate,concept_code,concept_display,desc_code,desc_display,manCoding,manDisplay,manDescCoding,manDescDisplay, recorder)
 VALUES

@@ -70,5 +70,5 @@ VALUES
 INSERT INTO appointment_healthcareservices
   (id,identifier,healthcareservice_name,organizationId)
 VALUES
-  (1,'99998','Dr Legg''s Surgery',7),
-  (2,'99999','Dr Legg''s Surgery Hub',7);
+  (1,'9999999998','Dr Legg''s Surgery',7),
+  (2,'9999999999','Dr Legg''s Surgery Hub',7);

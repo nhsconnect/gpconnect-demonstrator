@@ -1,8 +1,6 @@
 package uk.gov.hscic.appointments;
 
-import ca.uhn.fhir.rest.annotation.Count;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.dstu3.model.IdType;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Component;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -69,10 +66,9 @@ public class HealthcareServiceResourceProvider implements IResourceProvider {
     }
 
     /**
-     * TODO this seems duplicated at PopulateSlotBundle
-     *
-     * @param healthcareServiceDetail
-     * @return
+     * Convert detail to resource
+     * @param HealthcareServiceDetail
+     * @return HealthcareService
      */
     private HealthcareService healthcareServiceDetailToHealthcareServiceResourceConverter(HealthcareServiceDetail healthcareServiceDetail) {
         HealthcareService healthcareService = new HealthcareService();

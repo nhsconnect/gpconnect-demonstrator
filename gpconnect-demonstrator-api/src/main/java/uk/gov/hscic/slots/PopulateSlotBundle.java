@@ -22,19 +22,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import javax.annotation.PostConstruct;
 import org.hl7.fhir.dstu3.model.HealthcareService;
-import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
-import static uk.gov.hscic.SystemURL.CS_DOS_SERVICE;
-import static uk.gov.hscic.SystemURL.SD_GPC_HEALTHCARE_SERVICE;
 import uk.gov.hscic.appointment.healthcareservice.HealthcareServiceSearch;
 import uk.gov.hscic.appointment.slot.SlotSearch;
+import uk.gov.hscic.appointments.HealthcareServiceResourceProvider;
 import uk.gov.hscic.appointments.ScheduleResourceProvider;
 import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.location.LocationSearch;
@@ -73,9 +70,12 @@ public class PopulateSlotBundle {
 
     @Autowired
     private LocationSearch locationSearch;
-
+    
     @Autowired
     private HealthcareServiceSearch healthcareServiceSearch;
+
+    @Autowired
+    private HealthcareServiceResourceProvider healthcareServiceResourceProvider;
 
     @Autowired
     private SlotSearch slotSearch;
@@ -342,33 +342,16 @@ public class PopulateSlotBundle {
     }
 
     /**
-     * Add HealthcareServiceResource to Bundle TOTO see also
-     * healthcareServiceDetailToHealthcareServiceResourceConverter
-     *
      * @param healthcareServiceId local id
      * @param bundle Bundle Resource to add healthcare service to
      */
     private void addHealthcareService(Long healthcareServiceId, Bundle bundle) {
         BundleEntryComponent healthcareServiceEntry = new BundleEntryComponent();
+        // lookup the hcs identifier;
         HealthcareServiceDetail healthcareServiceDetail = healthcareServiceSearch.findHealthcareServiceByID(healthcareServiceId);
+        List<HealthcareService> healthcareServices = healthcareServiceResourceProvider.getHealthcareServiceForServiceId(healthcareServiceDetail.getIdentifier());
 
-        HealthcareService healthcareServiceResource = new HealthcareService();
-
-        healthcareServiceResource.setId("" + healthcareServiceDetail.getId());
-        healthcareServiceResource.getMeta().setVersionId("636064088100870233");
-        healthcareServiceResource.getMeta().addProfile(SD_GPC_HEALTHCARE_SERVICE);
-
-        List<Identifier> identifiers = new ArrayList<>();
-        Identifier identifier = new Identifier()
-                .setSystem(CS_DOS_SERVICE)
-                .setValue(healthcareServiceDetail.getIdentifier());
-        identifiers.add(identifier);
-        healthcareServiceResource.setIdentifier(identifiers);
-
-        healthcareServiceResource.setName(healthcareServiceDetail.getName());
-        healthcareServiceResource.setProvidedBy(new Reference("Organization/" + healthcareServiceDetail.getOrganizationId()));
-
-        healthcareServiceEntry.setResource(healthcareServiceResource);
+        healthcareServiceEntry.setResource(healthcareServices.get(0));
         bundle.addEntry(healthcareServiceEntry);
     }
 }

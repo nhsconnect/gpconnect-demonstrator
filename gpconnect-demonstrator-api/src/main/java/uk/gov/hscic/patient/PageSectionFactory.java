@@ -33,6 +33,7 @@ import uk.gov.hscic.patient.referrals.search.ReferralSearch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -117,7 +118,7 @@ public class PageSectionFactory {
 
     /**
      * Active Problems date range does not apply also appears in SUM
-     * 
+     *
      * @param nhsNumber
      * @param requestedFromDate as in the original request
      * @param requestedToDate as in the original request
@@ -366,15 +367,24 @@ public class PageSectionFactory {
 
         for (PatientMedicationHtmlEntity patientMedicationHtmlEntity : medicationHtmlRepository.findBynhsNumberOrderByStartDateDesc(nhsNumber)) {
             if ("Current".equals(patientMedicationHtmlEntity.getCurrentRepeatPast())) {
-                currentMedRows.add(Arrays.asList(
-                        patientMedicationHtmlEntity.getTypeMed(),
-                        patientMedicationHtmlEntity.getStartDate(),
-                        patientMedicationHtmlEntity.getMedicationItem(),
-                        patientMedicationHtmlEntity.getDosageInstruction(),
-                        patientMedicationHtmlEntity.getQuantity(),
-                        patientMedicationHtmlEntity.getScheduledEnd(),
-                        patientMedicationHtmlEntity.getDaysDuration(),
-                        patientMedicationHtmlEntity.getDetails()));
+                Date startDate = patientMedicationHtmlEntity.getStartDate();
+                Date endDate = patientMedicationHtmlEntity.getScheduledEnd();
+                Calendar cal = Calendar.getInstance();
+                Date now = new Date();
+                cal.setTime(now);
+                cal.add(Calendar.DATE, -365);
+                Date dateBefore365Days = cal.getTime();
+                if (startDate.after(dateBefore365Days)) {
+                    currentMedRows.add(Arrays.asList(
+                            patientMedicationHtmlEntity.getTypeMed(),
+                            startDate,
+                            patientMedicationHtmlEntity.getMedicationItem(),
+                            patientMedicationHtmlEntity.getDosageInstruction(),
+                            patientMedicationHtmlEntity.getQuantity(),
+                            endDate,
+                            patientMedicationHtmlEntity.getDaysDuration(),
+                            patientMedicationHtmlEntity.getDetails()));
+                }
             }
         }
 

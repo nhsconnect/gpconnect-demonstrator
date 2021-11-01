@@ -35,7 +35,7 @@ public class LegacyDataConfig {
         final BasicDataSource dataSource = new BasicDataSource();
 
         dataSource.setDriverClassName(Driver.class.getName());
-        dataSource.setUrl("jdbc:" + vendor + "://" + host + ":" + port + "/" + schema);
+        dataSource.setUrl("jdbc:" + vendor + "://" + host + ":" + port + "/" + schema + "?useSSL=false");
         dataSource.setUsername(username);
         dataSource.setPassword(password);
 

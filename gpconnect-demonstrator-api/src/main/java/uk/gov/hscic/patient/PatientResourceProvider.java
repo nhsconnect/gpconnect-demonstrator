@@ -117,10 +117,10 @@ public class PatientResourceProvider implements IResourceProvider {
     public Bundle getPatientCareRecord(@ResourceParam Parameters params) throws UnsupportedDataTypeException {
         String nhsNumber = null;
         String sectionName = null;
-        Date fromDate = null;
-        Date toDate = null;
-        Date requestedFromDate = null;
-        Date requestedToDate = null;
+        Date fromDate = null; // used for actual search rounded down because search start is exclusive 
+        Date toDate = null; // user for actual search  end time is rounded up eg 206 means end 2016, May 2016 means end of May 2016 aso search end is exlcusive
+        Date requestedFromDate = null; // used for banner
+        Date requestedToDate = null; // user for banner end time is rounded up eg 206 means end 2016, May 2016 means end of May 2016
 
         List<String> parameters = params.getParameter()
                 .stream()
@@ -252,8 +252,6 @@ public class PatientResourceProvider implements IResourceProvider {
 
                 // its not clear what is going on here we end up with toDate being a day later than requestedToDate and requestedToDate being rounded?
                 // both fromDate and  requestedFromDate appear to always be identical..
-                
-
                 // #358 update this is complicated. The from and to date are transferred in a period structure comprised of two datetimes
                 // we are storing the start date and time as requested but also copying and modifying the actual date/times as submitted to the query
                 // the demonstrator validation checks against both a date regexp and timestamp regexp
@@ -261,32 +259,48 @@ public class PatientResourceProvider implements IResourceProvider {
                 // jpa pseudo english queries where the query is derived from the method name only support the words Before or After
                 // see eg EncounterSearch.findAllEncounterHTMLTables for examples of the queries
                 // see https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference section 6.3.2 Table 2 for supported keywords
-                
                 // what we actually require for these queries is OnOrAfter and OnOrBefore
                 // these adjustments compensate so we get the same effect.
                 // if the start/end is a time subtract/add a second, if its a date subtract/add a day
-                
                 if (toDate != null) {
                     // add a day/second to toDate depending on whether its a date or a timestamp
-                    toDate = period.getEndElement().getPrecision().add(toDate, 1);
+                    switch (period.getEndElement().getPrecision()) {
+                        case DAY:
+                            toDate = TemporalPrecisionEnum.DAY.add(toDate, 1);
+                            break;
+                        case MONTH:
+                            // add a month subtract a day
+                            requestedToDate = TemporalPrecisionEnum.MONTH.add(requestedToDate, 1);
+                            requestedToDate = TemporalPrecisionEnum.DAY.add(requestedToDate, -1);
+                            toDate = TemporalPrecisionEnum.MONTH.add(toDate, 1);
+                            break;
+                        case YEAR:
+                            // add a year subtract a day
+                            requestedToDate = TemporalPrecisionEnum.YEAR.add(requestedToDate, 1);
+                            requestedToDate = TemporalPrecisionEnum.DAY.add(requestedToDate, -1);
+                            toDate = TemporalPrecisionEnum.YEAR.add(toDate, 1);
+                            break;
+                        default:
+                    }
+                    
 
                     // add a day/second to the requestedToDate
                     //requestedToDate = period.getEndElement().getPrecision().add(requestedToDate, 1);
-
                     // subtract a day from requestedToDate
                     //Calendar toDateCalendar = Calendar.getInstance();
                     //toDateCalendar.setTime(requestedToDate);
                     //toDateCalendar.add(Calendar.DATE, -1);
                     //requestedToDate = toDateCalendar.getTime();
                 }
-
-                if (fromDate != null) {
-                    // subtract a day/second depending on whether its a date or a timestamp
-                    fromDate = period.getStartElement().getPrecision().add(fromDate, -1);
+                
+                if ( fromDate != null ) {
+                    fromDate = TemporalPrecisionEnum.SECOND.add(fromDate, -1);
                 }
 
-//                System.out.println("fromDate " + fromDate + " toDate " + toDate);
-//                System.out.println("requestedFromDate " + requestedFromDate + " requestedToDate " + requestedToDate);
+
+//                System.err.println("fromDate Precision " + period.getStartElement().getPrecision() + " toDate Precision " + period.getEndElement().getPrecision());
+//                System.err.println("requestedFromDate " + requestedFromDate + " requestedToDate " + requestedToDate);
+//                System.err.println("fromDate (after)" + fromDate + " toDate (before)" + toDate);
             } else {
                 throw new InvalidRequestException("Invalid datatype",
                         OperationOutcomeFactory.buildOperationOutcome(OperationConstants.SYSTEM_WARNING_CODE, OperationConstants.CODE_INVALID_PARAMETER,

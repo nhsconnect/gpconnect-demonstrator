@@ -23,73 +23,75 @@ UNLOCK TABLES;
 
 SET @MonthOffset = (SELECT TIMESTAMPDIFF(MONTH, '2018-10-01', now()));
 
-UPDATE allergies
-SET startDate = DATE_ADD(startDate, INTERVAL @MonthOffset MONTH),
-    endDate = DATE_ADD(endDate, INTERVAL @MonthOffset MONTH)
-WHERE 1=1;
+-- NB Multiline comments are not parsed correctlty by the demonstrator
 
-UPDATE medications
-SET lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH)
-WHERE 1=1;
+-- UPDATE allergies
+-- SET startDate = DATE_ADD(startDate, INTERVAL @MonthOffset MONTH),
+--     endDate = DATE_ADD(endDate, INTERVAL @MonthOffset MONTH)
+-- WHERE 1=1;
 
-UPDATE medication_orders
-SET date_written = DATE_ADD(date_written, INTERVAL @MonthOffset MONTH),
-    dispense_review_date = DATE_ADD(dispense_review_date, INTERVAL @MonthOffset MONTH),
-    lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH)
-WHERE 1=1;
+-- UPDATE medications
+-- SET lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH)
+-- WHERE 1=1;
 
-UPDATE medication_dispenses
-SET lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH)
-WHERE 1=1;
+-- UPDATE medication_orders
+-- SET date_written = DATE_ADD(date_written, INTERVAL @MonthOffset MONTH),
+--     dispense_review_date = DATE_ADD(dispense_review_date, INTERVAL @MonthOffset MONTH),
+--     lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH)
+-- WHERE 1=1;
 
-UPDATE medication_administrations
-SET administrationDate = DATE_ADD(administrationDate, INTERVAL @MonthOffset MONTH), 
-    lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH)
-WHERE 1=1;
+-- UPDATE medication_dispenses
+-- SET lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH)
+-- WHERE 1=1;
 
-UPDATE problems
-SET startDate = DATE_ADD(startDate, INTERVAL @MonthOffset MONTH), 
-    endDate = DATE_ADD(endDate, INTERVAL @MonthOffset MONTH)
-WHERE 1=1;
+-- UPDATE medication_administrations
+-- SET administrationDate = DATE_ADD(administrationDate, INTERVAL @MonthOffset MONTH), 
+--     lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH)
+-- WHERE 1=1;
 
-UPDATE referrals
-SET sectionDate = DATE_ADD(sectionDate, INTERVAL @MonthOffset MONTH),
-    lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH)
-WHERE 1=1;
+-- UPDATE problems
+-- SET startDate = DATE_ADD(startDate, INTERVAL @MonthOffset MONTH), 
+--     endDate = DATE_ADD(endDate, INTERVAL @MonthOffset MONTH)
+-- WHERE 1=1;
 
-UPDATE encounters
-SET sectionDate = DATE_ADD(sectionDate, INTERVAL @MonthOffset MONTH), 
-    encounterDate = DATE_ADD(encounterDate, INTERVAL @MonthOffset MONTH)
-WHERE 1=1;
+-- UPDATE referrals
+-- SET sectionDate = DATE_ADD(sectionDate, INTERVAL @MonthOffset MONTH),
+--     lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH)
+-- WHERE 1=1;
 
-UPDATE procedures
-SET lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH) 
-WHERE 1=1;
+-- UPDATE encounters
+-- SET sectionDate = DATE_ADD(sectionDate, INTERVAL @MonthOffset MONTH), 
+--     encounterDate = DATE_ADD(encounterDate, INTERVAL @MonthOffset MONTH)
+-- WHERE 1=1;
 
-UPDATE observations
-SET observationDate = DATE_ADD(observationDate, INTERVAL @MonthOffset MONTH) 
-WHERE 1=1;
+-- UPDATE procedures
+-- SET lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH) 
+-- WHERE 1=1;
 
-UPDATE immunisations
-SET dateOfVac = DATE_ADD(dateOfVac, INTERVAL @MonthOffset MONTH) 
-WHERE 1=1;
+-- UPDATE observations
+-- SET observationDate = DATE_ADD(observationDate, INTERVAL @MonthOffset MONTH) 
+-- WHERE 1=1;
 
-UPDATE adminitems
-SET sectionDate = DATE_ADD(sectionDate, INTERVAL @MonthOffset MONTH) 
-WHERE 1=1;
+-- UPDATE immunisations
+-- SET dateOfVac = DATE_ADD(dateOfVac, INTERVAL @MonthOffset MONTH) 
+-- WHERE 1=1;
 
-UPDATE clinicalitems
-SET sectionDate = DATE_ADD(sectionDate, INTERVAL @MonthOffset MONTH) 
-WHERE 1=1;
+-- UPDATE adminitems
+-- SET sectionDate = DATE_ADD(sectionDate, INTERVAL @MonthOffset MONTH) 
+-- WHERE 1=1;
 
-UPDATE investigations
-SET sectionDate = DATE_ADD(sectionDate, INTERVAL @MonthOffset MONTH), 
-    lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH) 
-WHERE 1=1;
+-- UPDATE clinicalitems
+-- SET sectionDate = DATE_ADD(sectionDate, INTERVAL @MonthOffset MONTH) 
+-- WHERE 1=1;
 
-UPDATE orders
-SET orderDate = DATE_ADD(orderDate, INTERVAL @MonthOffset MONTH)
-WHERE 1=1;
+-- UPDATE investigations
+-- SET sectionDate = DATE_ADD(sectionDate, INTERVAL @MonthOffset MONTH), 
+--     lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH) 
+-- WHERE 1=1;
+
+-- UPDATE orders
+-- SET orderDate = DATE_ADD(orderDate, INTERVAL @MonthOffset MONTH)
+-- WHERE 1=1;
 
 UPDATE medications_html
 SET startDate = DATE_ADD(startDate, INTERVAL @MonthOffset MONTH), 

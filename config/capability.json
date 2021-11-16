@@ -177,9 +177,8 @@
                     "updateCreate": false,
                     "searchParam": [
                         {
-                            "name": "identifier",
-                            "type": "token",
-                            "documentation": "NHS Number (i.e. https://fhir.nhs.uk/Id/nhs-number|123456789)"
+                            "name": "start",
+                            "type": "date"
                         }
                     ]
                 },
@@ -200,11 +199,11 @@
                     "searchParam": [
                         {
                             "name": "start",
-                            "type": "date"
+                            "type": "dateTime"
                         },
                         {
                             "name": "end",
-                            "type": "date"
+                            "type": "dateTime"
                         },
                         {
                             "name": "status",

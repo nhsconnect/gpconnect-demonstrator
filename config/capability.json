@@ -199,11 +199,11 @@
                     "searchParam": [
                         {
                             "name": "start",
-                            "type": "dateTime"
+                            "type": "date"
                         },
                         {
                             "name": "end",
-                            "type": "dateTime"
+                            "type": "date"
                         },
                         {
                             "name": "status",

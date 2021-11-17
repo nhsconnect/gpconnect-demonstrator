@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import java.util.HashMap;
 import javax.annotation.PostConstruct;
+import org.hl7.fhir.dstu3.model.CodeType;
+import org.hl7.fhir.dstu3.model.Extension;
 import org.hl7.fhir.dstu3.model.HealthcareService;
 import org.hl7.fhir.dstu3.model.Organization;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,7 +72,7 @@ public class PopulateSlotBundle {
 
     @Autowired
     private LocationSearch locationSearch;
-    
+
     @Autowired
     private HealthcareServiceSearch healthcareServiceSearch;
 
@@ -102,7 +104,7 @@ public class PopulateSlotBundle {
      * @param managingOrganisation boolean
      * @param bookingOdsCode String
      * @param bookingOrgType String eg "urgent-care"
-     * @param requestedServiceIdentifier eg 99999
+     * @param requestedServiceId
      */
     public void populateBundle(Bundle bundle, OperationOutcome operationOutcome, Date planningHorizonStart,
             Date planningHorizonEnd, boolean actorPractitioner, boolean actorLocation, boolean actorHealthcareService,
@@ -162,7 +164,7 @@ public class PopulateSlotBundle {
             // process the schedules
             for (Schedule schedule : scheduleResourceProvider.getSchedulesForLocationId(locationId, planningHorizonStart, planningHorizonEnd)) {
                 Long scheduleServiceId = null;
-                
+
                 // get the schedule hcs rfererence if there is one
                 List<Reference> actors = schedule.getActor();
                 for (Reference actor : actors) {
@@ -235,6 +237,11 @@ public class PopulateSlotBundle {
                 if (slots.size() > 0 && ourOrganizationDetails != null && !addedOrganization.contains(ourOrganizationDetails.getOrgCode())) {
                     addOrganisation(ourOrganizationDetails, bundle);
                     addedOrganization.add(ourOrganizationDetails.getOrgCode());
+                }
+
+                if (requestedServiceId != null) {
+                    // if the request includes a service id then add the filtering status extension 
+                    addServiceFilteringStatus("organization-disabled", bundle);
                 }
 
                 String freeBusyType = "FREE";
@@ -353,5 +360,17 @@ public class PopulateSlotBundle {
 
         healthcareServiceEntry.setResource(healthcareServices.get(0));
         bundle.addEntry(healthcareServiceEntry);
+    }
+
+    /**
+     *
+     * @param status
+     * @param bundle
+     */
+    private void addServiceFilteringStatus(String status, Bundle bundle) {
+        // add an extension array to the bundle in the meta section
+        // NB adding a new CodeType results in a bare valueCode being added with given text
+        Extension serviceFilteringExtension = new Extension(SystemURL.SD_CC_EXT_SERVICE_FILTERING_STATUS, new CodeType(status));
+        bundle.getMeta().addExtension(serviceFilteringExtension);
     }
 }

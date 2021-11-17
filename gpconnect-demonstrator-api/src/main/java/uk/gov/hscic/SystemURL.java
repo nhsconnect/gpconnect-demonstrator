@@ -172,4 +172,7 @@ public final class SystemURL {
     public static final String CC_WARNING_CODE = "https://fhir.nhs.uk/STU3/CodeSystem/CareConnect-ListWarningCode-1";
     public static final String CLINICAL_SETTING = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ClinicalSetting-1";
 
+    // 1.2.8 service filtering
+    public static final String SD_CC_EXT_SERVICE_FILTERING_STATUS = "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-ServiceFilteringStatus-1";
+    
 }

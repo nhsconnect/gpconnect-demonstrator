@@ -16,6 +16,7 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.dstu3.model.HealthcareService;
@@ -42,11 +43,11 @@ public class HealthcareServiceResourceProvider implements IResourceProvider {
 
     @Read()
     public HealthcareService getHealthcareServiceById(@IdParam IdType serviceId) {
-        HealthcareServiceDetail healthcareServiceDetail = healthcareServiceSearch.findHealthcareServiceByID(serviceId.getIdPartAsLong());
+        HealthcareServiceDetail healthcareServiceDetail = healthcareServiceSearch.findHealthcareServiceByID(serviceId.getIdPart());
         if (healthcareServiceDetail == null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new InternalErrorException("No HealthcareService details found for ID: " + serviceId.getIdPart()),
-                    SystemCode.BAD_REQUEST, IssueType.NOTFOUND);
+                    new ResourceNotFoundException("No HealthcareService details found for ID: " + serviceId.getIdPart()),
+                    SystemCode.REFERENCE_NOT_FOUND, IssueType.INCOMPLETE);
         }
 
         return healthcareServiceDetailToHealthcareServiceResourceConverter(healthcareServiceDetail);

@@ -8,17 +8,21 @@ import uk.gov.hscic.model.appointment.HealthcareServiceDetail;
 
 @Service
 public class HealthcareServiceSearch {
+
     private final HealthcareServiceEntityToHealthcareServiceDetailTransformer transformer = new HealthcareServiceEntityToHealthcareServiceDetailTransformer();
 
     @Autowired
     private HealthcareServiceRepository healthcareServiceRepository;
 
-    public HealthcareServiceDetail findHealthcareServiceByID(Long id) {
-        final HealthcareServiceEntity item = healthcareServiceRepository.findOne(id);
+    public HealthcareServiceDetail findHealthcareServiceByID(String healthcareServiceId) {
+        final HealthcareServiceEntity item;
+        try {
+            item = healthcareServiceRepository.findOne(Long.parseLong(healthcareServiceId));
+        } catch (NumberFormatException e) {
+            return null;
+        }
 
-        return item == null
-                ? null
-                : transformer.transform(item);
+        return item == null ? null : transformer.transform(item);
     }
 
     public List<HealthcareServiceDetail> findHealthcareServiceForIdentifier(String identifier) {

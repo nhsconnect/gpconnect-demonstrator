@@ -355,7 +355,7 @@ public class PopulateSlotBundle {
     private void addHealthcareService(Long healthcareServiceId, Bundle bundle) {
         BundleEntryComponent healthcareServiceEntry = new BundleEntryComponent();
         // lookup the hcs identifier;
-        HealthcareServiceDetail healthcareServiceDetail = healthcareServiceSearch.findHealthcareServiceByID(healthcareServiceId);
+        HealthcareServiceDetail healthcareServiceDetail = healthcareServiceSearch.findHealthcareServiceByID(""+healthcareServiceId);
         List<HealthcareService> healthcareServices = healthcareServiceResourceProvider.getHealthcareServiceForServiceId(healthcareServiceDetail.getIdentifier());
 
         healthcareServiceEntry.setResource(healthcareServices.get(0));

@@ -157,6 +157,7 @@ public class PopulateSlotBundle {
         HashSet<String> addedSlot = new HashSet<>();
 
         boolean healthcareServiceAdded = false;
+        boolean filteringStatusAdded = false;
 
         // #144 process all locations
         for (String locationId : locationEntries.keySet()) {
@@ -239,9 +240,10 @@ public class PopulateSlotBundle {
                     addedOrganization.add(ourOrganizationDetails.getOrgCode());
                 }
 
-                if (requestedServiceId != null) {
+                if (requestedServiceId != null && ! filteringStatusAdded) {
                     // if the request includes a service id then add the filtering status extension 
                     addServiceFilteringStatus("organization-disabled", bundle);
+                    filteringStatusAdded = true;
                 }
 
                 String freeBusyType = "FREE";

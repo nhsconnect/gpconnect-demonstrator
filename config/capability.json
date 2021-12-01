@@ -223,7 +223,7 @@
                     "extension": [
                         {
                             "url": "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-GPConnect-ServiceFilteringStatus-1",
-                            "valueCode": "organization-disabled"
+                            "valueCode": "enabled"
                         }
                     ]
                 }

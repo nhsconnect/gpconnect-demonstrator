@@ -242,7 +242,7 @@ public class PopulateSlotBundle {
 
                 if (requestedServiceId != null && ! filteringStatusAdded) {
                     // if the request includes a service id then add the filtering status extension 
-                    addServiceFilteringStatus("organization-disabled", bundle);
+                    addServiceFilteringStatus("enabled", bundle);
                     filteringStatusAdded = true;
                 }
 

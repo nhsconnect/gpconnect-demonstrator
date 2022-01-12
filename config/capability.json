@@ -75,6 +75,9 @@
         },
         {
             "reference": "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1"
+        },
+        {
+            "reference": "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-HealthcareService-1"
         }
     ],
     "rest": [
